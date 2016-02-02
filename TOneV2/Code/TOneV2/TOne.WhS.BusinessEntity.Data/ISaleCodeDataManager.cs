@@ -24,5 +24,7 @@ namespace TOne.WhS.BusinessEntity.Data
         List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate);
         bool AreZonesUpdated(ref object updateHandle);
         List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate);
+
+        bool AreSaleCodesUpdated(ref object updateHandle);
     }
 }

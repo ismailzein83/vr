@@ -12,13 +12,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 {
     public class SaleCodeDataManager : BaseTOneDataManager, ISaleCodeDataManager
     {
-   
+
         #region ctor/Local Variables
 
         private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
         static SaleCodeDataManager()
         {
-             _mapper = new Dictionary<string, string>();
+            _mapper = new Dictionary<string, string>();
             _mapper.Add("Entity.SaleCodeId", "ID");
             _mapper.Add("ZoneName", "ZoneID");
             _mapper.Add("Entity.Code", "Code");
@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public SaleCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
-         
+
         }
         #endregion
 
@@ -84,6 +84,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCountry", SaleCodeMapper, countryId, effectiveDate);
         }
+
+        public bool AreSaleCodesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SaleCode", ref updateHandle);
+        }
+
         #endregion
 
         #region Private Methods
@@ -108,6 +114,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return reader["CodePrefix"].ToString();
         }
         #endregion
-           
     }
 }

@@ -75,6 +75,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return RetrieveData(input, createTempTableAction, SupplierCodeMapper, _columnMapper);
         }
+
+        public bool AreSupplierCodesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SupplierCode", ref updateHandle);
+        }
+
         #endregion
 
         #region Private Methods
@@ -100,6 +106,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-
     }
 }
