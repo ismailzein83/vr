@@ -24,7 +24,9 @@
             // Note that parameters are always passed to this editor
             if (parameters != undefined) {
                 criteriaFieldName = parameters.genericRuleDefinitionCriteriaFieldName;
-                criteriaFields = parameters.genericRuleDefinitionCriteriaFields;
+                // setCriteriaFieldEntityFromParameters removes criteriaFieldEntity from criteriaFields
+                // Therefore, parameters.genericRuleDefinitionCriteriaFields is cloned to avoid modifiying the original array
+                criteriaFields = UtilsService.cloneObject(parameters.genericRuleDefinitionCriteriaFields);
             }
 
             isEditMode = (criteriaFieldName != undefined);
@@ -51,13 +53,9 @@
                 if (criteriaFields == undefined) {
                     return null;
                 }
-
                 for (var i = 0; i < criteriaFields.length; i++) {
-                    if ($scope.name != undefined && criteriaFields[i].FieldName == $scope.name) {
+                    if (criteriaFields[i].FieldName == $scope.fieldName) {
                         return 'Invalid name';
-                    }
-                    if ($scope.priority != undefined && criteriaFields[i].Priority == Number($scope.priority)) {
-                        return 'Invalid priority';
                     }
                 }
             };
@@ -82,7 +80,9 @@
         }
 
         function setCriteriaFieldEntityFromParameters() {
-            criteriaFieldEntity = UtilsService.getItemByValue(criteriaFields, criteriaFieldName, 'FieldName');
+            var index = UtilsService.getItemIndexByVal(criteriaFields, criteriaFieldName, 'FieldName');
+            criteriaFieldEntity = criteriaFields[index];
+            criteriaFields.splice(index, 1);
 
             var deferred = UtilsService.createPromiseDeferred();
             deferred.resolve();
@@ -107,17 +107,16 @@
                 }
                 $scope.fieldName = criteriaFieldEntity.FieldName;
                 $scope.fieldTitle = criteriaFieldEntity.Title;
+                $scope.selectedBehaviorType = UtilsService.getItemByVal($scope.behaviorTypes, criteriaFieldEntity.RuleStructureBehaviorType, 'value');
             }
             function loadDataRecordFieldTypeSelective() {
                 var dataRecordFieldTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 dataRecordFieldTypeSelectiveReadyDeferred.promise.then(function () {
                     var payload;
-
-                    if (criteriaFieldEntity != undefined && criteriaFieldEntity.CriteriaDefinition != null) {
-                        payload.configId = criteriaFieldEntity.FieldType;
+                    if (criteriaFieldEntity != undefined) {
+                        payload = criteriaFieldEntity.FieldType;
                     }
-
                     VRUIUtilsService.callDirectiveLoad(dataRecordFieldTypeSelectiveAPI, payload, dataRecordFieldTypeSelectiveLoadDeferred);
                 });
 
@@ -127,31 +126,25 @@
 
         function insertCriteriaField() {
             var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
-            
-            console.log($scope.onGenericRuleDefinitionCriteriaFieldAdded);
-            if ($scope.onGenericRuleDefinitionCriteriaFieldAdded != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldAdded) == 'fucnction') {
-                $scope.onGenericRuleDefinitionCriteriaFieldAdded(criteriaFieldObject);
-                $scope.modalContext.closeModal();
-            }
+            $scope.onGenericRuleDefinitionCriteriaFieldAdded(criteriaFieldObject);
+            VRNotificationService.showSuccess('Criteria field added');
+            $scope.modalContext.closeModal();
         }
 
         function updateCriteriaField() {
             var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
-            VRNotificationService.showSuccess('Generic rule definition criteria field updated');
-
-            if ($scope.onGenericRuleDefinitionCriteriaFieldUpdated != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldUpdated) == 'fucnction') {
-                $scope.onGenericRuleDefinitionCriteriaFieldUpdated(criteriaFieldObject);
-                $scope.modalContext.closeModal();
-            }
+            $scope.onGenericRuleDefinitionCriteriaFieldUpdated(criteriaFieldObject);
+            VRNotificationService.showSuccess('Criteria field updated');
+            $scope.modalContext.closeModal();
         }
 
         function buildCriteriaFieldObjectFromScope() {
             return {
-                FieldName: $scope.name,
+                $type: "Vanrise.GenericData.Entities.GenericRuleDefinitionCriteriaField, Vanrise.GenericData.Entities",
+                FieldName: $scope.fieldName,
                 Title: $scope.fieldTitle,
-                FieldType: dataRecordTypeSelectorAPI.getSelectedIds(),
-                RuleStructureBehaviorType: $scope.selectedBehaviorType,
-                Priority: $scope.priority
+                FieldType: dataRecordFieldTypeSelectiveAPI.getData(),
+                RuleStructureBehaviorType: $scope.selectedBehaviorType.value
             };
         }
     }

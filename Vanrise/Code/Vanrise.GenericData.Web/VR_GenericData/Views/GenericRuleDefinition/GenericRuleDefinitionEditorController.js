@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    GenericRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function GenericRuleDefinitionController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var isEditMode;
 
@@ -109,7 +109,6 @@
         function insertGenericRuleDefinition() {
             $scope.isLoading = true;
             var genericRuleDefinitionObject = buildGenericRuleDefinitionObjectFromScope();
-
             return VR_GenericData_GenericRuleDefinitionAPIService.AddGenericRuleDefinition(genericRuleDefinitionObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Generic Rule Definition', response, 'Name')) {
                     if ($scope.onGenericRuleDefinitionAdded != undefined && typeof ($scope.onGenericRuleDefinitionAdded) == 'function') {

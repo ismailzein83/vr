@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionCriteriaDirective.$inject = ['VR_GenericData_GenericRuleDefinitionCriteriaFieldService'];
+    GenericRuleDefinitionCriteriaDirective.$inject = ['VR_GenericData_GenericRuleDefinitionCriteriaFieldService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionCriteriaDirective(VR_GenericData_GenericRuleDefinitionCriteriaFieldService) {
+    function GenericRuleDefinitionCriteriaDirective(VR_GenericData_GenericRuleDefinitionCriteriaFieldService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRNotificationService) {
 
         return {
             restrict: 'E',
@@ -32,6 +32,7 @@
             this.initializeController = initializeController;
 
             var gridAPI;
+            var dataRecordFieldTypeConfigs;
 
             function initializeController() {
                 ctrl.criteriaFields = [];
@@ -45,7 +46,7 @@
                 };
                 ctrl.addCriteriaField = function () {
                     var onGenericRuleDefinitionCriteriaFieldAdded = function (addedCriteriaField) {
-                        console.log(addedCriteriaField);
+                        extendCriteriaFieldObject(addedCriteriaField);
                         ctrl.criteriaFields.push(addedCriteriaField);
                     };
                     VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, onGenericRuleDefinitionCriteriaFieldAdded);
@@ -62,16 +63,46 @@
 
             function getDirectiveAPI() {
                 var api = {};
+
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        for (var i = 0; i < payload.CriteriaFields.length; i++) {
-                            ctrl.criteriaFields.push(payload.CriteriaFields[i]);
+                    return loadDataRecordFieldTypeConfigs().then(function () {
+                        if (payload != undefined) {
+                            for (var i = 0; i < payload.GenericRuleDefinitionCriteriaFields.length; i++) {
+                                extendCriteriaFieldObject(payload.GenericRuleDefinitionCriteriaFields[i]);
+                                ctrl.criteriaFields.push(payload.GenericRuleDefinitionCriteriaFields[i]);
+                            }
                         }
+                    });
+
+                    function loadDataRecordFieldTypeConfigs() {
+                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                            if (response != null) {
+                                dataRecordFieldTypeConfigs = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    dataRecordFieldTypeConfigs.push(response[i]);
+                                }
+                            }
+                        });
                     }
                 };
+
                 api.getData = function () {
-                    return (ctrl.criteriaFields.length > 0) ? ctrl.criteriaFields : null;
+                    var data = null;
+                    
+                    if (ctrl.criteriaFields.length > 0) {
+                        var fields = [];
+                        for (var i = 0; i < ctrl.criteriaFields.length; i++) {
+                            ctrl.criteriaFields[i].Priority = i + 1;
+                            fields.push(ctrl.criteriaFields[i]);
+                        }
+                        data = {
+                            Fields: fields
+                        };
+                    }
+
+                    return data;
                 };
+
                 return api;
             }
 
@@ -85,12 +116,39 @@
                 }];
             }
 
-            function editCriteriaField() {
-
+            function editCriteriaField(criteriaField) {
+                var onGenericRuleDefinitionCriteriaFieldUpdated = function (updatedCriteriaField) {
+                    extendCriteriaFieldObject(updatedCriteriaField);
+                    var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
+                    ctrl.criteriaFields[index] = updatedCriteriaField;
+                };
+                VR_GenericData_GenericRuleDefinitionCriteriaFieldService.editGenericRuleDefinitionCriteriaField(criteriaField.FieldName, ctrl.criteriaFields, onGenericRuleDefinitionCriteriaFieldUpdated);
             }
 
-            function deleteCriteriaField() {
+            function extendCriteriaFieldObject(criteriaField) {
+                var behaviorTypeObject = UtilsService.getEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum, 'value', criteriaField.RuleStructureBehaviorType);
+                if (behaviorTypeObject != undefined) {
+                    criteriaField.RuleStructureBehaviorTypeDescription = behaviorTypeObject.description;
+                }
+                var fieldTypeConfigObject = UtilsService.getItemByVal(dataRecordFieldTypeConfigs, criteriaField.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                if (fieldTypeConfigObject != undefined) {
+                    criteriaField.FieldTypeDescription = fieldTypeConfigObject.Name;
+                }
+            }
 
+            function deleteCriteriaField(criteriaField) {
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
+                        if (index != undefined && index >= 0) {
+                            ctrl.criteriaFields.splice(index, 1);
+                            VRNotificationService.showSuccess('Criteria field deleted');
+                        }
+                        else {
+                            VRNotificationService.showError('Criteria field was not deleted');
+                        }
+                    }
+                });
             }
         }
     }
