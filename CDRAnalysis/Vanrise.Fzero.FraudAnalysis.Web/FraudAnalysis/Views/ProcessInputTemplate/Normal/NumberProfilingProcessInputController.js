@@ -121,7 +121,7 @@ function NumberProfilingProcessInputController($scope, UtilsService, CDRAnalysis
         $scope.isGettingData = true;
         loadPeriods();
 
-        UtilsService.waitMultipleAsyncOperations([getPrefixesInfo]).then(function () {
+        UtilsService.waitMultipleAsyncOperations([getPrefixes]).then(function () {
         }).finally(function () {
             $scope.isGettingData = false;
         });
@@ -135,7 +135,7 @@ function NumberProfilingProcessInputController($scope, UtilsService, CDRAnalysis
         });
     }
 
-    function getPrefixesInfo() {
+    function getPrefixes() {
         var prefixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
         prefixReadyPromiseDeferred.promise

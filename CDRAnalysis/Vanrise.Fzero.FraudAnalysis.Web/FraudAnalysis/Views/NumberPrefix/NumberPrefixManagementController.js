@@ -75,7 +75,6 @@
         }
 
         function applyNumberPrefixes() {
-            console.log(numberPrefixes)
             return FraudAnalysis_NumberPrefixAPIService.UpdatePrefixes(numberPrefixes).then(function (response) {
                 if (response) {
                     $scope.nodesUpdated = false;
@@ -95,10 +94,6 @@
             };
 
             VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/Dialogs/NewNumberPrefixDialog.html", parameters, settings);
-        }
-
-        function mapPrefixtoInfo(prefix) {
-            return { $type: "Vanrise.Fzero.FraudAnalysis.Entities.NumberPrefix, Vanrise.Fzero.FraudAnalysis.Entities", Prefix: prefix }
         }
 
         function splitNumberPrefix() {
@@ -159,7 +154,7 @@
         }
 
         function getNumberPrefixes() {
-            return FraudAnalysis_NumberPrefixAPIService.GetPrefixesInfo().then(function (response) {
+            return FraudAnalysis_NumberPrefixAPIService.GetPrefixes().then(function (response) {
                 angular.forEach(response, function (itm) {
                     numberPrefixes.push(itm);
                 });
@@ -218,13 +213,17 @@
                 return 0;
         }
 
-        function mapNumberPrefixToNode(numberPrefixInfo) {
+        function mapNumberPrefixToNode(numberPrefix) {
             return {
-                nodeId: numberPrefixInfo.Prefix,
-                nodeName: numberPrefixInfo.Prefix,
+                nodeId: numberPrefix.Prefix,
+                nodeName: numberPrefix.Prefix,
                 hasRemoteChildren: false,
-                effectiveNumberPrefixes: numberPrefixInfo.effectiveNumberPrefixes
+                effectiveNumberPrefixes: numberPrefix.effectiveNumberPrefixes
             };
+        }
+
+        function mapPrefixtoInfo(prefix) {
+            return { $type: "Vanrise.Fzero.FraudAnalysis.Entities.NumberPrefix, Vanrise.Fzero.FraudAnalysis.Entities", Prefix: prefix }
         }
 
         function contains(a, obj) {

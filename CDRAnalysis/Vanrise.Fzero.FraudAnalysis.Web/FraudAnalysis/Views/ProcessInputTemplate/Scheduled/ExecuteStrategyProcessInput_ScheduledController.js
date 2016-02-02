@@ -114,7 +114,7 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, CDRAnalysis_FA_Per
                 }
             )
             }
-            getPrefixesInfo();
+            getPrefixes();
         }).catch(function (error) {
 
             VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -124,7 +124,7 @@ function ExecuteStrategyProcessInput_Scheduled($scope, $http, CDRAnalysis_FA_Per
 
     }
 
-    function getPrefixesInfo() {
+    function getPrefixes() {
         var prefixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         prefixReadyPromiseDeferred.promise
             .then(function () {

@@ -82,7 +82,7 @@ function ExecuteStrategyProcessInputController($scope, CDRAnalysis_FA_PeriodAPIS
 
     }
 
-    function getPrefixesInfo() {
+    function getPrefixes() {
         var prefixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
         prefixReadyPromiseDeferred.promise
@@ -115,7 +115,7 @@ function ExecuteStrategyProcessInputController($scope, CDRAnalysis_FA_PeriodAPIS
         $scope.isGettingData = true;
         loadPeriods();
 
-        UtilsService.waitMultipleAsyncOperations([getPrefixesInfo]).then(function () {
+        UtilsService.waitMultipleAsyncOperations([getPrefixes]).then(function () {
         }).finally(function () {
             $scope.isGettingData = false;
         });

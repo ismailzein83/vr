@@ -5,8 +5,8 @@
 
     function numberPrefixesAPIService(BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig, VRModalService) {
 
-        function GetPrefixesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, "NumberPrefix", "GetPrefixesInfo"));
+        function GetPrefixes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, "NumberPrefix", "GetPrefixes"));
         }
 
 
@@ -15,7 +15,7 @@
         }
 
         return ({
-            GetPrefixesInfo: GetPrefixesInfo,
+            GetPrefixes: GetPrefixes,
             UpdatePrefixes: UpdatePrefixes
         });
     }

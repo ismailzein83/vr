@@ -11,14 +11,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class NumberPrefixesManager : GenericConfigurationManager<NumberPrefixes>
     {
-        private NumberPrefixInfo NumberPrefixInfoMapper(NumberPrefix numberPrefix)
-        {
-            return new NumberPrefixInfo()
-            {
-                Prefix = numberPrefix.Prefix
-            };
-        }
-
         private NumberPrefixes GetCachedNumberPrefixes()
         {
             var numberPrefixes = base.GetConfiguration(null);
@@ -30,10 +22,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
 
 
-        public IEnumerable<NumberPrefixInfo> GetPrefixesInfo()
+        public IEnumerable<NumberPrefix> GetPrefixes()
         {
             var cachedPrefixes = GetCachedNumberPrefixes();
-            return cachedPrefixes.Prefixes.MapRecords(NumberPrefixInfoMapper);
+            return cachedPrefixes.Prefixes;
         }
 
         public bool UpdatePrefixes(List<NumberPrefix> prefixes)

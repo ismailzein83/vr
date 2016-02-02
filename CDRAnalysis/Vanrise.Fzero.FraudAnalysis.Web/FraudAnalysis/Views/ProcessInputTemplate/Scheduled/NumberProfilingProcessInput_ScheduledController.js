@@ -98,7 +98,7 @@ function NumberProfilingProcessInput_Scheduled($scope, $http, CDRAnalysis_FA_Per
                     $scope.selectedPeakHours.push(UtilsService.getItemByVal($scope.hours, peakHour, "id"));
                 });
             }
-            getPrefixesInfo();
+            getPrefixes();
         }).catch(function (error) {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         }).finally(function () {
@@ -107,7 +107,7 @@ function NumberProfilingProcessInput_Scheduled($scope, $http, CDRAnalysis_FA_Per
 
     }
 
-    function getPrefixesInfo() {
+    function getPrefixes() {
         var prefixLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         prefixReadyPromiseDeferred.promise
             .then(function () {

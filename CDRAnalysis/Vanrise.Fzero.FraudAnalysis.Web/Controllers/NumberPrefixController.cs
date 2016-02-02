@@ -15,11 +15,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
         
          [HttpGet]
-         [Route("GetPrefixesInfo")]
-         public IEnumerable<NumberPrefixInfo> GetPrefixesInfo()
+         [Route("GetPrefixes")]
+         public IEnumerable<NumberPrefix> GetPrefixes()
          {
              NumberPrefixesManager manager = new NumberPrefixesManager();
-             return manager.GetPrefixesInfo();
+             return manager.GetPrefixes();
          }
 
 
