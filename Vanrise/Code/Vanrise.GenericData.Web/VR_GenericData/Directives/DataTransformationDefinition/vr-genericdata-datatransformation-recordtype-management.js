@@ -54,15 +54,15 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                 var api = {};
 
                 api.getData = function () {
-                    var values = {};
-                    if (ctrl.datasource.length > 0) {
-                        for (var i = 0; i < ctrl.datasource.length; i++) {
-                            values[ ctrl.datasource[i].key]=ctrl.datasource[i].value;
+                   // var values = {};
+                    //if (ctrl.datasource.length > 0) {
+                    //    for (var i = 0; i < ctrl.datasource.length; i++) {
+                    //        values[ ctrl.datasource[i].key]=ctrl.datasource[i].value;
                            
-                        }
-                    }
+                    //    }
+                    //}
                     var obj = {
-                        RecordTypes: values,
+                        RecordTypes: ctrl.datasource,
                     }
                     return obj;
                 }

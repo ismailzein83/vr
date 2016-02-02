@@ -25,19 +25,23 @@
                 <vr-row>
                     <vr-columns width="1/3row">
                         <vr-section title="Toolbox">
-
+                            <vr-datagrid  datasource="scopeModal.steps" norowhighlightonclick="true"
+                                         on-ready="scopeModal.onGridReady"  hidegridmenu>
+                                <vr-datagridcolumn headertext="'Steps'" field="'Title'" widthfactor="5" isclickable="true" onclicked="scopeModal.addStep"></vr-datagridcolumn>
+                            </vr-datagrid>
                         </vr-section>
                     </vr-columns>
                     <vr-columns width="1/3row">
                         <vr-section title="Steps">
-                            <vr-datalist maxitemsperrow="1" datasource="steps" isitemdraggable autoremoveitem="true">
-                                {{dataItem.Name}}
+                            <vr-datalist maxitemsperrow="1" datasource="scopeModal.stepsAdded" isitemdraggable autoremoveitem="true">
+                                <vr-label >{{dataItem.Title}}</vr-label><span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span> 
+                                <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady"></vr-directivewrapper>
                             </vr-datalist>
                         </vr-section>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-section title="Properties">
-                            <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onDirectiveReady"></vr-directivewrapper>
+                        <vr-section title="Properties" vr-loader="scopeModal.isLoadingDirective">
+                            <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onEditorDirectiveReady"></vr-directivewrapper>
                         </vr-section>
                     </vr-columns>
                 </vr-row>

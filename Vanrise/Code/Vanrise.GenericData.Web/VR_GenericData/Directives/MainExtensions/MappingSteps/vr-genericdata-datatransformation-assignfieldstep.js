@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService','VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -32,43 +32,24 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
         };
 
         function AssignFieldStepCtor(ctrl, $scope) {
-            var sourceRecordNameDirectiveReadyAPI;
-            var sourceRecordNameDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var sourceDirectiveReadyAPI;
+            var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var sourceFieldNameDirectiveReadyAPI;
-            var sourceFieldNameDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var targetRecordNameDirectiveReadyAPI;
-            var targetRecordNameDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var targetFieldNameDirectiveReadyAPI;
-            var targetFieldNameDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var targetDirectiveReadyAPI;
+            var targetDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
-            var mainPayload;
+
+
             function initializeController() {
-                $scope.onSourceRecordNameReady = function (api) {
-                    sourceRecordNameDirectiveReadyAPI = api;
-                    sourceRecordNameDirectiveReadyPromiseDeferred.resolve();
+                $scope.onSourceReady = function (api) {
+                    sourceDirectiveReadyAPI = api;
+                    sourceDirectiveReadyPromiseDeferred.resolve();
                 }
-                $scope.onSourceFieldNameReady = function (api) {
-                    sourceFieldNameDirectiveReadyAPI = api;
-                    var setLoader = function (value) { $scope.isLoadingSourceFieldNameDirective = value };
-                    var payload = { DataSource: mainPayload.getFieldsByRecordName($scope.selectedSourceRecordName) }
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceFieldNameDirectiveReadyAPI, payload, setLoader, sourceFieldNameDirectiveReadyPromiseDeferred);
+                $scope.onTargetReady = function (api) {
+                    targetDirectiveReadyAPI = api;
+                    targetDirectiveReadyPromiseDeferred.resolve();
                 }
-                $scope.onTargetRecordName = function (api) {
-                    targetRecordNameDirectiveReadyAPI = api;
-                    targetRecordNameDirectiveReadyPromiseDeferred.resolve();
-                }
-
-                $scope.onTargetFieldNameReady = function (api) {
-                    targetFieldNameDirectiveReadyAPI = api;
-                    var setLoader = function (value) { $scope.isLoadingTargetFieldNameDirective = value };
-                    var payload = { DataSource: mainPayload.getFieldsByRecordName($scope.selectedSourceRecordName) }
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, targetFieldNameDirectiveReadyAPI, payload, setLoader, targetFieldNameDirectiveReadyPromiseDeferred);
-                }
-
                 defineAPI();
             }
 
@@ -76,24 +57,23 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    mainPayload = payload;
                     var promises = [];
 
-                        var loadTargetRecordNameDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        var loadTargetDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                       
-                        targetRecordNameDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadTargetRecordName={DataSource:payload.RecordTypes};
-                            VRUIUtilsService.callDirectiveLoad(targetRecordNameDirectiveReadyAPI, payloadTargetRecordName, loadTargetRecordNameDirectivePromiseDeferred);
+                        targetDirectiveReadyPromiseDeferred.promise.then(function () {
+                            var payloadTarget = payload.Context;
+                            VRUIUtilsService.callDirectiveLoad(targetDirectiveReadyAPI, payloadTarget, loadTargetDirectivePromiseDeferred);
                         });
-                        promises.push(loadTargetRecordNameDirectivePromiseDeferred.promise);
+                        promises.push(loadTargetDirectivePromiseDeferred.promise);
 
-                        var loadSourceRecordNameDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        var loadSourceDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                       
-                        sourceRecordNameDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadSourceRecordName={DataSource:payload.RecordTypes};
-                            VRUIUtilsService.callDirectiveLoad(sourceRecordNameDirectiveReadyAPI, payloadSourceRecordName, loadSourceRecordNameDirectivePromiseDeferred);
+                        sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+                            var payloadSource = payload.Context;
+                            VRUIUtilsService.callDirectiveLoad(sourceDirectiveReadyAPI, payloadSource, loadSourceDirectivePromiseDeferred);
                         });
-                        promises.push(loadSourceRecordNameDirectivePromiseDeferred.promise);
+                        promises.push(loadSourceDirectivePromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -102,10 +82,9 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.AssignFieldStep, Vanrise.GenericData.Transformation.MainExtensions",
-                        SourceRecordName: $scope.selectedSourceRecordName != undefined ? $scope.selectedSourceRecordName.Name : undefined,
-                        SourceFieldName: $scope.selectedSourceFieldName != undefined ? $scope.selectedSourceFieldName.Name : undefined,
-                        TargetRecordName: $scope.selectedTargetRecordName != undefined ? $scope.selectedTargetRecordName.Name : undefined,
-                        TargetFieldName: $scope.selectedTargetFieldName != undefined ? $scope.selectedTargetFieldName.Name : undefined,
+                        Source: sourceDirectiveReadyAPI.getData(),
+                        Target: targetDirectiveReadyAPI.getData(),
+                        
                     };
                 }
 
