@@ -79,17 +79,31 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteGenericRuleDefinition(int genericRuleDefinitionId)
+        {
+            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
+            
+            IGenericRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericRuleDefinitionDataManager>();
+            bool deleted = dataManager.DeleteGenericRuleDefinition(genericRuleDefinitionId);
+
+            deleteOperationOutput.Result = (deleted) ? DeleteOperationResult.Succeeded : DeleteOperationResult.Failed;
+            return deleteOperationOutput;
+        }
+
         #endregion
 
         #region Private Methods
 
         private Dictionary<int, GenericRuleDefinition> GetCachedGenericRuleDefinitions()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetGenericRuleDefinitions", () => {
-                IGenericRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericRuleDefinitionDataManager>();
-                IEnumerable<GenericRuleDefinition> genericRuleDefinitions = dataManager.GetGenericRuleDefinitions();
-                return genericRuleDefinitions.ToDictionary(genericRuleDefinition => genericRuleDefinition.GenericRuleDefinitionId, genericRuleDefinition => genericRuleDefinition);
-            });
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetGenericRuleDefinitions",
+                () =>
+                {
+                    IGenericRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericRuleDefinitionDataManager>();
+                    IEnumerable<GenericRuleDefinition> genericRuleDefinitions = dataManager.GetGenericRuleDefinitions();
+                    var dictionary = genericRuleDefinitions.ToDictionary(genericRuleDefinition => genericRuleDefinition.GenericRuleDefinitionId, genericRuleDefinition => genericRuleDefinition);
+                    return dictionary;
+                });
         }
 
         #endregion

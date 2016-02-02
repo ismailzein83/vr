@@ -9,7 +9,8 @@
             GetFilteredGenericRuleDefinitions: GetFilteredGenericRuleDefinitions,
             GetGenericRuleDefinition: GetGenericRuleDefinition,
             AddGenericRuleDefinition: AddGenericRuleDefinition,
-            UpdateGenericRuleDefinition: UpdateGenericRuleDefinition
+            UpdateGenericRuleDefinition: UpdateGenericRuleDefinition,
+            DeleteGenericRuleDefinition: DeleteGenericRuleDefinition
         };
 
         function GetFilteredGenericRuleDefinitions(input) {
@@ -28,6 +29,12 @@
 
         function UpdateGenericRuleDefinition(genericRuleDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'UpdateGenericRuleDefinition'), genericRuleDefinition);
+        }
+
+        function DeleteGenericRuleDefinition(genericRuleDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'DeleteGenericRuleDefinition'), {
+                genericRuleDefinitionId: genericRuleDefinitionId
+            });
         }
     }
 

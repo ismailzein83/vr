@@ -45,14 +45,27 @@ namespace Vanrise.GenericData.Data.SQL
             return (affectedRows == 1);
         }
 
+        public bool DeleteGenericRuleDefinition(int genericRuleDefinitionId)
+        {
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Delete", genericRuleDefinitionId);
+            return (affectedRows == 1);
+        }
+
         #endregion
 
         #region Mappers
 
         GenericRuleDefinition GenericRuleDefinitionMapper(IDataReader reader)
         {
-            GenericRuleDefinition genericRuleDefinition = Vanrise.Common.Serializer.Deserialize<GenericRuleDefinition>((string)reader["Details"]);
-            return genericRuleDefinition;
+            // The Details column doesn't allow null values
+            GenericRuleDefinition details = Vanrise.Common.Serializer.Deserialize<GenericRuleDefinition>((string)reader["Details"]);
+            return new GenericRuleDefinition()
+            {
+                GenericRuleDefinitionId = (int)reader["ID"],
+                Name = (string)reader["Name"],
+                CriteriaDefinition = details.CriteriaDefinition,
+                SettingsDefinition = details.SettingsDefinition
+            };
         }
 
         #endregion

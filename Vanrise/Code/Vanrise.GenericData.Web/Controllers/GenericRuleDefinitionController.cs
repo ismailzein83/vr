@@ -41,5 +41,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.UpdateGenericRuleDefinition(genericRuleDefinition);
         }
+
+        [HttpGet]
+        [Route("DeleteGenericRuleDefinition")]
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteGenericRuleDefinition(int genericRuleDefinitionId)
+        {
+            return _manager.DeleteGenericRuleDefinition(genericRuleDefinitionId);
+        }
     }
 }

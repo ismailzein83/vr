@@ -127,7 +127,6 @@
         function updateGenericRuleDefinition() {
             $scope.isLoading = true;
             var genericRuleDefinitionObject = buildGenericRuleDefinitionObjectFromScope();
-            console.log(genericRuleDefinitionObject);
 
             return VR_GenericData_GenericRuleDefinitionAPIService.UpdateGenericRuleDefinition(genericRuleDefinitionObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Generic Rule Definition', response, 'Name')) {

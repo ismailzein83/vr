@@ -2,12 +2,13 @@
 
     'use strict';
 
-    GenericRuleDefinitionService.$inject = ['VRModalService'];
+    GenericRuleDefinitionService.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'VRModalService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionService(VRModalService) {
+    function GenericRuleDefinitionService(VR_GenericData_GenericRuleDefinitionAPIService, VRModalService, VRNotificationService) {
         return {
             addGenericRuleDefinition: addGenericRuleDefinition,
-            editGenericRuleDefinition: editGenericRuleDefinition
+            editGenericRuleDefinition: editGenericRuleDefinition,
+            deleteGenericRuleDefinition: deleteGenericRuleDefinition
         };
 
         function addGenericRuleDefinition(onGenericRuleDefinitionAdded) {
@@ -32,6 +33,23 @@
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html', modalParameters, modalSettings);
+        }
+
+        function deleteGenericRuleDefinition(scope, genericRuleDefinitionId, onGenericRuleDefinitionDeleted) {
+            VRNotificationService.showConfirmation().then(function (confirmed) {
+                if (confirmed) {
+                    VR_GenericData_GenericRuleDefinitionAPIService.DeleteGenericRuleDefinition(genericRuleDefinitionId).then(function (response) {
+                        if (response) {
+                            var deleted = VRNotificationService.notifyOnItemDeleted('Generic Rule Definition', response);
+                            if (deleted && onGenericRuleDefinitionDeleted != undefined && typeof (onGenericRuleDefinitionDeleted) == 'function') {
+                                onGenericRuleDefinitionDeleted();
+                            }
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, scope);
+                    });
+                }
+            });
         }
     }
 

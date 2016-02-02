@@ -11,11 +11,6 @@
         var criteriaFieldName;
         var criteriaFieldEntity;
 
-        var dataRecordTypeSelectorAPI;
-        var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var behaviorTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
         load();
@@ -34,14 +29,6 @@
 
         function defineScope() {
             $scope.behaviorTypes = UtilsService.getArrayEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum);
-
-            $scope.onDataRecordTypeSelectorReady = function (api) {
-                dataRecordTypeSelectorAPI = api;
-                dataRecordTypeSelectorReadyDeferred.resolve();
-            };
-            $scope.onBehaviorTypeSelectorReady = function (api) {
-                behaviorTypeSelectorReadyDeferred.resolve();
-            };
 
             $scope.save = function () {
                 if (isEditMode)
@@ -95,7 +82,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadBehaviorTypeDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -110,38 +97,8 @@
                 if (criteriaFieldEntity == undefined) {
                     return;
                 }
-                $scope.name = criteriaFieldEntity.FieldName;
+                $scope.fieldName = criteriaFieldEntity.FieldName;
                 $scope.fieldTitle = criteriaFieldEntity.Title;
-                $scope.priority = criteriaFieldEntity.Priority;
-            }
-            function loadDataRecordTypeSelector() {
-                var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                dataRecordTypeSelectorReadyDeferred.promise.then(function () {
-                    var dataRecordTypeSelectorPayload;
-                    
-                    if (criteriaFieldEntity != undefined) {
-                        dataRecordTypeSelectorPayload = {
-                            selectedIds: criteriaFieldEntity.FieldType
-                        };
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypeSelectorPayload, dataRecordTypeSelectorLoadDeferred);
-                });
-
-                return dataRecordTypeSelectorLoadDeferred.promise;
-            }
-            function loadBehaviorTypeDirective() {
-                var behaviorTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                behaviorTypeSelectorReadyDeferred.promise.then(function () {
-                    if (criteriaFieldEntity != undefined) {
-                        $scope.selectedBehaviorType = UtilsService.getItemByValue($scope.behaviorTypes, criteriaFieldEntity.RuleStructureBehaviorType, 'value');
-                    }
-                    behaviorTypeSelectorLoadDeferred.resolve();
-                });
-
-                return behaviorTypeSelectorLoadDeferred.promise;
             }
         }
 

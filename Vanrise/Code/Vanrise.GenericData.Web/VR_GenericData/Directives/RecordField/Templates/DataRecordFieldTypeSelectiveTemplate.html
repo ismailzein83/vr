@@ -1,0 +1,17 @@
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-select on-ready="ctrl.onSelectorReady"
+                   datasource="dataRecordFieldTypeTemplates"
+                   selectedvalues="selectedDataRecordFieldTypeTemplate"
+                   datavaluefield="TemplateConfigID"
+                   datatextfield="Name"
+                   label="Type"
+                   text="None"
+                   isrequired
+                   hideremoveicon>
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="2/3row" vr-loader="isLoadingDirective" ng-if="selectedDataRecordFieldTypeTemplate != undefined">
+        <vr-directivewrapper directive="selectedDataRecordFieldTypeTemplate.Editor" on-ready="onDirectiveReady"></vr-directivewrapper>
+    </vr-columns>
+</vr-row>

@@ -51,7 +51,6 @@
                     VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, onGenericRuleDefinitionCriteriaFieldAdded);
                 };
                 ctrl.validateCriteriaFields = function () {
-                    return null;
                     if (ctrl.criteriaFields.length == 0) {
                         return 'No fields added';
                     }

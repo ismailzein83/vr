@@ -176,8 +176,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\vr-genericdata-datatransformation-assignfieldstep.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\vr-genericdata-datatransformation-executemappingrulestep.js" />
     <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldManagement.html" />
+    <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldTypeSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-management.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationRecordTypeManagement.html" />
+    <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfieldtype-selective.js" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />

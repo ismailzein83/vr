@@ -78,9 +78,6 @@
             }
 
             function editGenericRuleDefinition(genericRuleDefinition) {
-                console.log(genericRuleDefinition);
-                console.log(genericRuleDefinition.GenericRuleDefinitionId);
-
                 var onGenericRuleDefinitionUpdated = function (updatedGenericRuleDefinition) {
                     gridAPI.itemUpdated(updatedGenericRuleDefinition);
                 };
@@ -88,7 +85,10 @@
             }
 
             function deleteGenericRuleDefinition(genericRuleDefinition) {
-
+                var onGenericRuleDefinitionDeleted = function () {
+                    gridAPI.itemDeleted(genericRuleDefinition);
+                };
+                VR_GenericData_GenericRuleDefinitionService.deleteGenericRuleDefinition($scope, genericRuleDefinition.GenericRuleDefinitionId, onGenericRuleDefinitionDeleted);
             }
         }
 

@@ -1,20 +1,16 @@
-﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericRuleDefinitionCriteriaFieldEditorController" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericRuleDefinitionCriteriaFieldEditorController" width="'45%'" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formGenericRuleDefinitionCriteriaFieldEditor">
             <vr-validator validate="validateCriteriaField()">
                 <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-textbox type="text" label="Name" value="name" isrequired></vr-textbox>
+                    <vr-columns width="1/3row">
+                        <vr-textbox type="text" label="Name" value="fieldName" isrequired></vr-textbox>
                     </vr-columns>
-                    <vr-columns width="1/2row">
+                    <vr-columns width="1/3row">
                         <vr-textbox type="text" label="Title" value="fieldTitle" isrequired></vr-textbox>
                     </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"></vr-genericdata-datarecordtype-selector>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-select on-ready="onBehaviorTypeSelectorReady"
-                                   label="Behavior Type"
+                    <vr-columns width="1/3row">
+                        <vr-select label="Behavior Type"
                                    datasource="behaviorTypes"
                                    selectedvalues="selectedBehaviorType"
                                    datavaluefield="value"
@@ -22,9 +18,9 @@
                                    isrequired>
                         </vr-select>
                     </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox type="number" label="Priority" value="priority" isrequired></vr-textbox>
-                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    
                 </vr-row>
             </vr-validator>
         </vr-form>
