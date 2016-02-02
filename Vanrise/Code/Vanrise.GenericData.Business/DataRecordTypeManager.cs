@@ -99,24 +99,46 @@ namespace Vanrise.GenericData.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.DataRecordFieldConfigType);
         }
-       
+
+        public Type GetDataRecordRuntimeType(int dataRecordTypeId)
+        {
+            string cacheName = String.Format("GetDataRecordRuntimeTypeById_{0}", dataRecordTypeId);
+            var runtimeType = CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    DataRecordType dataRecordType = GetCachedDataRecordTypes().GetRecord(dataRecordTypeId);
+                    if (dataRecordType != null)
+                        return GetOrCreateRuntimeType(dataRecordType);
+                    else
+                        return null;
+                });
+            if (runtimeType == null)
+                throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type Id '{0}'", dataRecordTypeId));
+            return runtimeType;
+        }
+
+        public Type GetDataRecordRuntimeType(string dataRecordTypeName)
+        {
+            string cacheName = String.Format("GetDataRecordRuntimeTypeByName_{0}", dataRecordTypeName);
+            var runtimeType = CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    DataRecordType dataRecordType = GetCachedDataRecordTypes().FindRecord(itm => itm.Name == dataRecordTypeName);
+                    if (dataRecordType != null)
+                        return GetDataRecordRuntimeType(dataRecordType.DataRecordTypeId);
+                    else
+                        return null;
+                });
+            if (runtimeType == null)
+                throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type Name '{0}'", dataRecordTypeName));
+            return runtimeType;
+        }
+
         public dynamic CreateDataRecordObject(string dataRecordTypeName)
         {
             Type dataRecordRuntimeType = GetDataRecordRuntimeType(dataRecordTypeName);
             if (dataRecordRuntimeType != null)
                 return Activator.CreateInstance(dataRecordRuntimeType);
-            return null;
-        }
-
-        public Type GetDataRecordFieldRuntimeType(string dataRecordTypeName, string fieldName)
-        {
-            DataRecordType dataRecordType = GetCachedDataRecordTypes().FindRecord(itm => itm.Name == dataRecordTypeName);
-            if (dataRecordType != null)
-            {
-                var field = dataRecordType.Fields.FindRecord(itm => itm.Name == fieldName);
-                if (field != null)
-                    return field.Type.GetRuntimeType();
-            }
             return null;
         }
     
@@ -134,23 +156,6 @@ namespace Vanrise.GenericData.Business
                });
         }
         
-        private Type GetDataRecordRuntimeType(string dataRecordTypeName)
-        {
-            string cacheName = String.Format("GetDataRecordRuntimeType_{0}", dataRecordTypeName);
-            var runtimeType = CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(dataRecordTypeName,
-                () =>
-                {
-                    DataRecordType dataRecordType = GetCachedDataRecordTypes().FindRecord(itm => itm.Name == dataRecordTypeName);
-                    if (dataRecordType != null)
-                        return GetOrCreateRuntimeType(dataRecordType);
-                    else
-                        return null;
-                });
-            if (runtimeType == null)
-                throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type '{0}'", dataRecordTypeName));
-            return runtimeType;
-        }
-
         private Type GetOrCreateRuntimeType(DataRecordType dataRecordType)
         {
             string typeSignature = String.Format("DRT_{0}_{1:yyyyMMdd_HHmmss}", dataRecordType.DataRecordTypeId, DateTime.Now);

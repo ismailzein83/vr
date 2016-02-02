@@ -14,13 +14,13 @@ namespace Vanrise.GenericData.Pricing
 
         public string RatesByRateType { get; set; }
 
-        public override void GenerateExecutionCode(IDataTransformationCodeContext context)
+        public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             string ruleTargetVariableName;
             base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
-            var ruleContextVariableName = context.GenerateUniqueMemberName();
+            var ruleContextVariableName = context.GenerateUniqueMemberName("ruleContext");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateValueRuleContext();", ruleContextVariableName);
-            var ruleManagerVariableName = context.GenerateUniqueMemberName();
+            var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateValueRuleManager();", ruleManagerVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateValueRule({1}, {2}, {3});", 
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);

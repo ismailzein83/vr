@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 
         public string Target { get; set; }
 
-        public override void GenerateExecutionCode(IDataTransformationCodeContext context)
+        public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1};", 
                 this.Target, this.Source);

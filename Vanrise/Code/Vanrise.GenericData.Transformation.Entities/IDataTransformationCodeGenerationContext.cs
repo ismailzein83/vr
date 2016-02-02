@@ -7,18 +7,13 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Transformation.Entities
 {
-    public interface IMappingStepExecutionContext
+    public interface IDataTransformationCodeGenerationContext
     {
-        DataRecord GetDataRecord(string recordName);
-    }
-
-    public interface IDataTransformationCodeContext
-    {
-        string GenerateUniqueMemberName();
+        string GenerateUniqueMemberName(string memberName);
 
         void AddGlobalMember(string memberDeclarationCode);
 
-        void AddCodeToDefinitionExecutionBlock(string codeLineTemplate, params object[] placeholders);
+        //void AddCodeToDefinitionExecutionBlock(string codeLineTemplate, params object[] placeholders);
 
         void AddCodeToCurrentInstanceExecutionBlock(string codeLineTemplate, params object[] placeholders);
     }

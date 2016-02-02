@@ -9,8 +9,6 @@ namespace Vanrise.GenericData.Transformation.Entities
 {
     public interface IDataTransformationExecutionContext
     {
-        int DataTransformationDefinitionId { get; }
-
-        Dictionary<string, Object> DataRecords { get; }
+        void SetRecordValue(string recordName, Object recordValue);
     }
 }

@@ -18,16 +18,16 @@ namespace Vanrise.GenericData.Pricing
 
         public string RateTypeId { get; set; }
 
-        public override void GenerateExecutionCode(IDataTransformationCodeContext context)
+        public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             string ruleTargetVariableName;
             base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
-            var ruleContextVariableName = context.GenerateUniqueMemberName();
+            var ruleContextVariableName = context.GenerateUniqueMemberName("ruleContext");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateTypeRuleContext();", ruleContextVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.NormalRate = {1};", ruleContextVariableName, this.NormalRate);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.RatesByRateType = {1};", ruleContextVariableName, this.RatesByRateType);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetTime = {1};", ruleContextVariableName, base.EffectiveTime);
-            var ruleManagerVariableName = context.GenerateUniqueMemberName();
+            var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateTypeRuleManager();", ruleManagerVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateTypeRule({1}, {2}, {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);

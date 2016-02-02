@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Transformation.Entities
 {
     public abstract class MappingStep
     {
-        public abstract void GenerateExecutionCode(IDataTransformationCodeContext context);
+        public abstract void GenerateExecutionCode(IDataTransformationCodeGenerationContext context);
     }
 }

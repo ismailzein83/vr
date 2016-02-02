@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
     {
         public string Target { get; set; }
 
-        public override void GenerateExecutionCode(IDataTransformationCodeContext context)
+        public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
             var genericRuleDefinitionManager = new GenericRuleDefinitionManager();
             var genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(base.RuleDefinitionId);
@@ -27,9 +27,9 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             
             string ruleTargetVariableName;
             base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
-            var ruleManagerVariableName = context.GenerateUniqueMemberName();
+            var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Transformation.MappingRuleManager();", ruleManagerVariableName);
-            var ruleVariableName = context.GenerateUniqueMemberName();
+            var ruleVariableName = context.GenerateUniqueMemberName("rule");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = {1}.GetMatchRule({2}, {3});",
                 ruleVariableName, ruleManagerVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null", ruleVariableName);

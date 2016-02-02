@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.Caching;
 using Vanrise.GenericData.Transformation.Data;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Business;
 namespace Vanrise.GenericData.Transformation
 {
     public class DataTransformationDefinitionManager
@@ -101,8 +102,13 @@ namespace Vanrise.GenericData.Transformation
               () =>
               {
                   var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
-                  throw new NotImplementedException();
-                  return new DataTransformationRuntimeType();
+                  
+                  DataTransformationCodeGenerationContext codeGenerationContext = new DataTransformationCodeGenerationContext(dataTransformationDefinition);
+                  
+                  return new DataTransformationRuntimeType
+                      {
+                          ExecutorType = codeGenerationContext.GetExecutorType()
+                      };
               });
         }
 

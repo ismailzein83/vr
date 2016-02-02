@@ -15,10 +15,10 @@ namespace Vanrise.GenericData.Transformation.Entities
 
         public List<GenericRuleCriteriaFieldMapping> RuleFieldsMappings { get; set; }
         
-        protected void GenerateRuleTargetExecutionCode<T>(IDataTransformationCodeContext context, out string ruleTargetVariableName) 
+        protected void GenerateRuleTargetExecutionCode<T>(IDataTransformationCodeGenerationContext context, out string ruleTargetVariableName) 
             where T : GenericRuleTarget
         {
-            ruleTargetVariableName = context.GenerateUniqueMemberName();
+            ruleTargetVariableName = context.GenerateUniqueMemberName("ruleTarget");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new {1}();", ruleTargetVariableName, typeof(T).FullName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1};", ruleTargetVariableName, this.EffectiveTime);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetFieldValues = new Dictionary<string, object>();", ruleTargetVariableName);
