@@ -6,7 +6,7 @@
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-executionflowdefinition-selector on-ready="onExecutionFlowDefinitionSelectorReady" ismultipleselection selectedvalues="selectedExecutionFlowDefinition"></vr-executionflowdefinition-selector>
+                    <vr-queueing-executionflowdefinition-selector on-ready="onExecutionFlowDefinitionSelectorReady" ismultipleselection selectedvalues="selectedExecutionFlowDefinition"></vr-queueing-executionflowdefinition-selector>
                 </vr-columns>
                 
             </vr-row>
@@ -21,7 +21,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-executionflow-grid on-ready="onGridReady"></vr-executionflow-grid>
+                <vr-queueing-executionflow-grid on-ready="onGridReady"></vr-queueing-executionflow-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

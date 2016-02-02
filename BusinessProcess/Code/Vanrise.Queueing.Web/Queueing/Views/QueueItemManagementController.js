@@ -4,9 +4,9 @@
 
     appControllers.controller('Queueing_QueueItemManagementController', queueItemManagementController);
 
-    queueItemManagementController.$inject = ['$scope', 'VR_Queueing_QueueingAPIService', 'UtilsService', 'QueueItemStatusEnum', 'LabelColorsEnum'];
+    queueItemManagementController.$inject = ['$scope', 'VR_Queueing_QueueingAPIService', 'UtilsService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum'];
 
-    function queueItemManagementController($scope, VR_Queueing_QueueingAPIService, UtilsService, QueueItemStatusEnum, LabelColorsEnum) {
+    function queueItemManagementController($scope, VR_Queueing_QueueingAPIService, UtilsService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
 
         var mainGridApi;
         
@@ -65,10 +65,10 @@
             };
             $scope.getStatusColor = function (dataItem, colDef) {
 
-                if (dataItem.Status === QueueItemStatusEnum.New.value) return LabelColorsEnum.Primary.Color;
-                if (dataItem.Status === QueueItemStatusEnum.Processing.value) return LabelColorsEnum.Info.Color;
-                if (dataItem.Status === QueueItemStatusEnum.Failed.value) return LabelColorsEnum.Error.Color;
-                if (dataItem.Status === QueueItemStatusEnum.Processed.value) return LabelColorsEnum.Success.Color;
+                if (dataItem.Status === VR_Queueing_QueueItemStatusEnum.New.value) return LabelColorsEnum.Primary.Color;
+                if (dataItem.Status === VR_Queueing_QueueItemStatusEnum.Processing.value) return LabelColorsEnum.Info.Color;
+                if (dataItem.Status === VR_Queueing_QueueItemStatusEnum.Failed.value) return LabelColorsEnum.Error.Color;
+                if (dataItem.Status === VR_Queueing_QueueItemStatusEnum.Processed.value) return LabelColorsEnum.Success.Color;
 
                 return LabelColorsEnum.Info.Color;
             };

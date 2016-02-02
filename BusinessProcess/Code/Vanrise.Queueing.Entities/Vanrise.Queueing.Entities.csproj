@@ -62,6 +62,7 @@
     <Compile Include="QueueItem.cs" />
     <Compile Include="QueueItemHeader.cs" />
     <Compile Include="QueueItemHeaderDetails.cs" />
+    <Compile Include="QueueItemStatusSummary.cs" />
     <Compile Include="QueueItemType.cs" />
     <Compile Include="QueueSettings.cs" />
     <Compile Include="QueueSubscription.cs" />

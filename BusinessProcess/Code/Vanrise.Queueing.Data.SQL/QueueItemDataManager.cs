@@ -38,10 +38,17 @@ namespace Vanrise.Queueing.Data.SQL
             : base(GetConnectionStringName("QueueItemDBConnStringKey", "QueueItemDBConnString"))
         {
         }
-  
+
         #endregion
 
         #region Public Methods
+
+        public List<QueueItemStatusSummary> GetItemStatusSummary()
+        {
+            return GetItemsSP("queue.sp_QueueItemHeader_GetItemStatusSummary", QueueItemStatusSummaryMapper);
+        }
+
+
         public void CreateQueue(int queueId)
         {
             ExecuteNonQueryText(String.Format(query_CreateQueueTable, queueId), null);
@@ -233,6 +240,18 @@ namespace Vanrise.Queueing.Data.SQL
                 LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime")
             };
         }
+
+
+        private QueueItemStatusSummary QueueItemStatusSummaryMapper(IDataReader reader)
+        {
+            return new QueueItemStatusSummary
+            {
+                QueueId = (int)reader["QueueId"],
+                Status = (QueueItemStatus)reader["Status"],
+                Count = (int)reader["Count"]
+            };
+        }
+
         #endregion
 
         #region Queries
@@ -275,7 +294,7 @@ namespace Vanrise.Queueing.Data.SQL
                                                                    ,@Status
                                                                    ,GETDATE()
                                                                    ,GETDATE())";
-      
+
 
         const string query_UnlockItem = @"UPDATE queue.QueueItem_{0} SET LockedByProcessID = NULL, [IsSuspended] = @IsSuspended WHERE [ID] = @ItemID";
 
@@ -316,7 +335,7 @@ namespace Vanrise.Queueing.Data.SQL
 
                                         SELECT @ID ID, @Content Content, @ExecutionFlowTriggerItemID ExecutionFlowTriggerItemID WHERE @ID IS NOT NULL";
 
-        const string query_DeleteFromQueue = "DELETE queue.QueueItem_{0} WHERE ID = @ID";     
+        const string query_DeleteFromQueue = "DELETE queue.QueueItem_{0} WHERE ID = @ID";
 
         #endregion
 

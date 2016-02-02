@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Queueing_QueueInstanceAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrQueueingExecutionflowSelector', ['VR_Queueing_ExecutionFlowAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Queueing_ExecutionFlowAPIService, UtilsService, VRUIUtilsService) {
 
 
 
@@ -53,9 +53,9 @@ app.directive('vrQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService'
 
             var multipleselection = "";
 
-            var label = "Stage Name";
+            var label = "Execution Flow";
             if (attrs.ismultipleselection != undefined) {
-                label = "Stage Names";
+                label = "Execution Flows";
                 multipleselection = "ismultipleselection";
             }
 
@@ -67,8 +67,8 @@ app.directive('vrQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService'
                 addCliked = 'onaddclicked="addNewExecutionFlow"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Name" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Stage Name" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="ExecutionFlowId" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
@@ -97,17 +97,17 @@ app.directive('vrQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService'
 
                     }
 
-                    return VR_Queueing_QueueInstanceAPIService.GetStageNames(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Queueing_ExecutionFlowAPIService.GetExecutionFlows(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push({ Name: response[i] });
+                                ctrl.datasource.push(response[i]);
                             }
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'ExecutionFlowId', attrs, ctrl);
                         }
 
 
@@ -115,10 +115,10 @@ app.directive('vrQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService'
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('ExecutionFlowId', attrs, ctrl);
                 }
 
-
+                
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

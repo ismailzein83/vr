@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Queueing_ExecutionFlowAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrQueueingQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Queueing_QueueInstanceAPIService, UtilsService, VRUIUtilsService) {
 
 
 
@@ -43,19 +43,19 @@ app.directive('vrExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAP
                 }
             },
             template: function (element, attrs) {
-                return getExecutionFlowDefinitionTemplate(attrs);
+                return getExecutionFlowTemplate(attrs);
             }
 
         };
 
 
-        function getExecutionFlowDefinitionTemplate(attrs) {
+        function getExecutionFlowTemplate(attrs) {
 
             var multipleselection = "";
 
-            var label = "Execution Flow Definition";
+            var label = "Stage Name";
             if (attrs.ismultipleselection != undefined) {
-                label = "Execution Flow Definitions";
+                label = "Stage Names";
                 multipleselection = "ismultipleselection";
             }
 
@@ -67,8 +67,8 @@ app.directive('vrExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAP
                 addCliked = 'onaddclicked="addNewExecutionFlow"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="ID" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow Definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Name" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Stage Name" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
@@ -93,34 +93,31 @@ app.directive('vrExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAP
                     if (payload) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
-                        
+
 
                     }
 
-                    return VR_Queueing_ExecutionFlowAPIService.GetExecutionFlowDefinitions(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Queueing_QueueInstanceAPIService.GetStageNames(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
+                                ctrl.datasource.push({ Name: response[i] });
                             }
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                         }
 
-                        
+
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
                 }
 
-                api.setDisabled = function (isDisabled) {
-                    ctrl.isdisabled = isDisabled;
-                }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

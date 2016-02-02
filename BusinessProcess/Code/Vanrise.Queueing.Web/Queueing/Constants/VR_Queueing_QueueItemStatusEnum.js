@@ -1,4 +1,4 @@
-﻿app.constant('QueueItemStatusEnum', {
+﻿app.constant('VR_Queueing_QueueItemStatusEnum', {
     New: { value: 0, description: "New" },
     Processing: { value: 10, description: "Processing" },
     Failed: { value: 20, description: "Failed" },

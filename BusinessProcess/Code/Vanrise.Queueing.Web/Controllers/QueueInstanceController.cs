@@ -27,7 +27,7 @@ namespace Vanrise.Queueing.Web.Controllers
 
         [HttpGet]
         [Route("GetItemTypes")]
-        public List<QueueItemType> GetItemTypes() 
+        public List<QueueItemType> GetItemTypes()
         {
             QueueItemTypeManager manager = new QueueItemTypeManager();
             return manager.GetItemTypes();
@@ -35,11 +35,21 @@ namespace Vanrise.Queueing.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredQueueInstances")]
-        public object GetFilteredQueueInstances(Vanrise.Entities.DataRetrievalInput<QueueInstanceQuery> input) {
+        public object GetFilteredQueueInstances(Vanrise.Entities.DataRetrievalInput<QueueInstanceQuery> input)
+        {
 
             return GetWebResponse(input, _manager.GetFilteredQueueInstances(input));
         }
-       
+
+
+        [HttpGet]
+        [Route("GetItemStatusSummary")]
+        public List<QueueItemStatusSummary> GetItemStatusSummary()
+        {
+            QueueItemManager manager = new QueueItemManager();
+            return manager.GetItemStatusSummary();
+        }
+
 
     }
 }

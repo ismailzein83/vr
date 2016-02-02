@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService',
+app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService',
     function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -50,6 +50,7 @@ app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR
                     }
 
                     directiveAPI.onExecutionFlowAdded = function (executionFlowObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(executionFlowObject);
                         gridAPI.itemAdded(executionFlowObject);
                     }
 
@@ -89,6 +90,7 @@ app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR
 
         function editExecutionFlow(executionFlowObj) {
             var onExecutionFlowUpdated = function (executionFlowObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(executionFlowObj);
                 gridAPI.itemUpdated(executionFlowObj);
             }
 

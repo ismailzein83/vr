@@ -6,16 +6,16 @@
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-executionflow-selector on-ready="onExecutionFlowSelectorReady" ismultipleselection selectedvalues="selectedExecutionFlow"></vr-executionflow-selector>
+                    <vr-queueing-executionflow-selector on-ready="onExecutionFlowSelectorReady" ismultipleselection selectedvalues="selectedExecutionFlow"></vr-queueing-executionflow-selector>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-queuestagename-selector on-ready="onStageNameSelectorReady" ismultipleselection selectedvalues="selectedStageName"></vr-queuestagename-selector>
+                    <vr-queueing-queuestagename-selector on-ready="onStageNameSelectorReady" ismultipleselection selectedvalues="selectedStageName"></vr-queueing-queuestagename-selector>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox value="title" label="Title"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-queueitemtype-selector on-ready="onQueueItemTypeSelectorReady" ismultipleselection selectedvalues="selectedQueueItemType"></vr-queueitemtype-selector>
+                    <vr-queueing-queueitemtype-selector on-ready="onQueueItemTypeSelectorReady" ismultipleselection selectedvalues="selectedQueueItemType"></vr-queueing-queueitemtype-selector>
                 </vr-columns>
             </vr-row>
         </div>
@@ -28,7 +28,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-queueinstance-grid on-ready="onGridReady"></vr-queueinstance-grid>
+                <vr-queueing-queueinstance-grid on-ready="onGridReady"></vr-queueing-queueinstance-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

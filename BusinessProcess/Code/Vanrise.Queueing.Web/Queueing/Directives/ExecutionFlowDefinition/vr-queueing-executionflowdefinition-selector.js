@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Queueing_QueueInstanceAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Queueing_ExecutionFlowAPIService, UtilsService, VRUIUtilsService) {
 
 
 
@@ -43,19 +43,19 @@ app.directive('vrQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIService',
                 }
             },
             template: function (element, attrs) {
-                return getExecutionFlowTemplate(attrs);
+                return getExecutionFlowDefinitionTemplate(attrs);
             }
 
         };
 
 
-        function getExecutionFlowTemplate(attrs) {
+        function getExecutionFlowDefinitionTemplate(attrs) {
 
             var multipleselection = "";
 
-            var label = "Item Type";
+            var label = "Execution Flow Definition";
             if (attrs.ismultipleselection != undefined) {
-                label = "Item Types";
+                label = "Execution Flow Definitions";
                 multipleselection = "ismultipleselection";
             }
 
@@ -67,8 +67,8 @@ app.directive('vrQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIService',
                 addCliked = 'onaddclicked="addNewExecutionFlow"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="Id" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Item Type" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="ID" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow Definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
@@ -93,11 +93,11 @@ app.directive('vrQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIService',
                     if (payload) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
-
+                        
 
                     }
 
-                    return VR_Queueing_QueueInstanceAPIService.GetItemTypes(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Queueing_ExecutionFlowAPIService.GetExecutionFlowDefinitions(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {
@@ -107,17 +107,20 @@ app.directive('vrQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIService',
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
                         }
 
-
+                        
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
                 }
 
+                api.setDisabled = function (isDisabled) {
+                    ctrl.isdisabled = isDisabled;
+                }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

@@ -14,7 +14,7 @@
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Queue Instances";
-            drillDownDefinition.directive = "vr-queueinstance-grid";
+            drillDownDefinition.directive = "vr-queueing-queueinstance-grid";
 
             drillDownDefinition.loadDirective = function (directiveAPI, ExecutionFlowItem) {
                 ExecutionFlowItem.queueInstanceGridAPI = directiveAPI;

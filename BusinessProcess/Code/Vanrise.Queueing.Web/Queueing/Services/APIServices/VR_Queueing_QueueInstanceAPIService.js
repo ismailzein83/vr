@@ -8,7 +8,8 @@
         return ({
             GetFilteredQueueInstances: GetFilteredQueueInstances,
             GetStageNames: GetStageNames,
-            GetItemTypes: GetItemTypes
+            GetItemTypes: GetItemTypes,
+            GetItemStatusSummary: GetItemStatusSummary
         });
 
         function GetFilteredQueueInstances(input) {
@@ -23,8 +24,12 @@
         function GetItemTypes() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetItemTypes'));
         }
-       
 
+        function GetItemStatusSummary() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetItemStatusSummary'));
+        }
+       
+        
     }
 
     appControllers.service('VR_Queueing_QueueInstanceAPIService', QueueInstanceAPIService);
