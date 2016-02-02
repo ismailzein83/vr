@@ -157,6 +157,8 @@
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationDefinitionGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\DynamicUIControls\Templates\NumericEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DynamicUIControls\vr-genericdata-dynamiccontrols-numeric.js" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\Criteria\Templates\GenericRuleDefinitionCriteriaTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\Criteria\vr-genericdata-genericruledefinitioncriteria.js" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\Templates\GenericRuleDefinitionGridTemplate.html" />
@@ -185,8 +187,8 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
-    <Content Include="VR_GenericData\Directives\DynamicUIControls\Templates\MultipleInputEditorTemplate.html" />
-    <Content Include="VR_GenericData\Directives\DynamicUIControls\vr-genericdata-dynamicUIControl-multipleInput.js" />
+    <Content Include="VR_GenericData\Directives\DynamicUIControls\Templates\TextEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DynamicUIControls\vr-genericdata-dynamiccontrols-text.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />

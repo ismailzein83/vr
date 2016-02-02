@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataRenderText', ['UtilsService', function (UtilsService) {
+app.directive('vrGenericdataDynamicuicontrolsMultipleinput', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -21,7 +21,7 @@ app.directive('vrGenericdataRenderText', ['UtilsService', function (UtilsService
                 }
             }
         },
-        templateUrl: "/Client/Modules/VR_GenericData/Directives/RenderDirectives/Templates/TextEditorTemplate.html"
+        templateUrl: "/Client/Modules/VR_GenericData/Directives/DynamicUIControls/Templates/TextEditorTemplate.html"
     };
     
     function textCtor(ctrl, $scope, $attrs) {
@@ -36,8 +36,14 @@ app.directive('vrGenericdataRenderText', ['UtilsService', function (UtilsService
 
             api.load = function (payload) {
 
+                var fieldType;
                 if (payload != undefined) {
-                    
+                    fieldType = payload.fieldType;
+                }
+
+                if(fieldType != undefined)
+                {
+
                 }
             }
 
