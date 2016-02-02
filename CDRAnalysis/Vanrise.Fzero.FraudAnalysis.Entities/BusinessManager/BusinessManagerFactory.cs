@@ -14,7 +14,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         static FraudManagerFactory()
         {
-            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Fzero.FraudAnalysis.Data.Business"));
+            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Fzero.FraudAnalysis.Business"));
         }
 
         public static T GetManager<T>() where T : class, IBusinessManager

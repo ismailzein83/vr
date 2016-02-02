@@ -1,11 +1,6 @@
-﻿using System;
+﻿using System.Activities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
-using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Business;
-using Vanrise.Common.Business;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
@@ -18,7 +13,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             List<string> prefixes = new List<string>();
             NumberPrefixesManager manager = new NumberPrefixesManager();
-            prefixes = manager.GetPrefixes().Select(x => x.Prefix).ToList(); 
+            prefixes = manager.GetLeafPrefixes(); 
             this.NumberPrefixes.Set(context, prefixes);
 
         }

@@ -28,6 +28,24 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return cachedPrefixes.Prefixes;
         }
 
+        public List<string> GetLeafPrefixes()
+        {
+            var cachedPrefixes = GetCachedNumberPrefixes();
+            List<NumberPrefix> prefixes = cachedPrefixes.Prefixes;
+            foreach (var i in cachedPrefixes.Prefixes)
+            {
+                foreach (var j in cachedPrefixes.Prefixes)
+                {
+                    if (j.Prefix.StartsWith(i.Prefix) && i.Prefix != j.Prefix)
+                    {
+                        prefixes.Remove(i);
+                    }
+                }
+            }
+
+            return prefixes.Select(x => x.Prefix).ToList();
+        }
+
         public bool UpdatePrefixes(List<NumberPrefix> prefixes)
         {
             var cachedPrefixes = GetCachedNumberPrefixes();
