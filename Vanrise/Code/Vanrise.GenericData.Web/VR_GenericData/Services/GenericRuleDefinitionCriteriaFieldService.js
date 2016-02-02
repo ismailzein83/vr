@@ -13,7 +13,7 @@
 
         function addGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFields, onGenericRuleDefinitionCriteriaFieldAdded) {
             var modalParameters = {
-                genericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
+                GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
             };
 
             var modalSettings = {};
@@ -27,8 +27,8 @@
 
         function editGenericRuleDefinitionCriteriaField(genericRuleDefinitionCriteriaFieldName, genericRuleDefinitionCriteriaFields, onGenericRuleDefinitionCriteriaFieldUpdated) {
             var modalParameters = {
-                genericRuleDefinitionCriteriaFieldName: genericRuleDefinitionCriteriaFieldName,
-                genericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
+                GenericRuleDefinitionCriteriaFieldName: genericRuleDefinitionCriteriaFieldName,
+                GenericRuleDefinitionCriteriaFields: genericRuleDefinitionCriteriaFields
             };
 
             var modalSettings = {};

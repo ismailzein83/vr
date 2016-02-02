@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    GenericRuleDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function GenericRuleDefinitionEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var isEditMode;
 
@@ -22,7 +22,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                genericRuleDefinitionId = parameters.genericRuleDefinitionId;
+                genericRuleDefinitionId = parameters.GenericRuleDefinitionId;
             }
 
             isEditMode = (genericRuleDefinitionId != undefined);
@@ -86,7 +86,6 @@
                 if (genericRuleDefinitionEntity == undefined) {
                     return;
                 }
-
                 $scope.scopeModel.name = genericRuleDefinitionEntity.Name;
             }
             function loadCriteriaDirective() {
@@ -94,11 +93,13 @@
 
                 criteriaDirectiveReadyDeferred.promise.then(function () {
                     var criteriaDirectivePayload;
+
                     if (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.CriteriaDefinition != null) {
                         criteriaDirectivePayload = {
                             GenericRuleDefinitionCriteriaFields: genericRuleDefinitionEntity.CriteriaDefinition.Fields
                         };
                     }
+
                     VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriaDirectivePayload, criteriaDirectiveLoadDeferred);
                 });
                 
@@ -126,7 +127,6 @@
         function updateGenericRuleDefinition() {
             $scope.isLoading = true;
             var genericRuleDefinitionObject = buildGenericRuleDefinitionObjectFromScope();
-
             return VR_GenericData_GenericRuleDefinitionAPIService.UpdateGenericRuleDefinition(genericRuleDefinitionObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Generic Rule Definition', response, 'Name')) {
                     if ($scope.onGenericRuleDefinitionUpdated != undefined && typeof ($scope.onGenericRuleDefinitionUpdated)) {
@@ -151,6 +151,6 @@
         }
     }
 
-    appControllers.controller('VR_GenericData_GenericRuleDefinitionController', GenericRuleDefinitionController);
+    appControllers.controller('VR_GenericData_GenericRuleDefinitionEditorController', GenericRuleDefinitionEditorController);
 
 })(appControllers);

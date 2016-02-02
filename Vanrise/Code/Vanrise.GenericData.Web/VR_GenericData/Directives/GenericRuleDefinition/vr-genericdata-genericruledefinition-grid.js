@@ -5,8 +5,7 @@
     GenericRuleDefinitionGridDirective.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRuleDefinitionService', 'VRNotificationService'];
 
     function GenericRuleDefinitionGridDirective(VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRuleDefinitionService, VRNotificationService) {
-
-        var directiveDefinitionObject = {
+        return {
             restrict: 'E',
             scope: {
                 onReady: '='
@@ -30,7 +29,6 @@
             var gridAPI;
 
             function initializeController() {
-
                 $scope.genericRuleDefinitions = [];
 
                 $scope.onGridReady = function (api) {
@@ -53,18 +51,17 @@
             }
 
             function getDirectiveAPI() {
+                var api = {};
 
-                var directiveAPI = {};
-
-                directiveAPI.loadGrid = function (query) {
+                api.loadGrid = function (query) {
                     return gridAPI.retrieveData(query);
                 };
 
-                directiveAPI.onGenericRuleDefinitionAdded = function (addedGenericRuleDefinition) {
+                api.onGenericRuleDefinitionAdded = function (addedGenericRuleDefinition) {
                     gridAPI.itemAdded(addedGenericRuleDefinition);
                 };
 
-                return directiveAPI;
+                return api;
             }
 
             function defineMenuActions() {
@@ -91,8 +88,6 @@
                 VR_GenericData_GenericRuleDefinitionService.deleteGenericRuleDefinition($scope, genericRuleDefinition.GenericRuleDefinitionId, onGenericRuleDefinitionDeleted);
             }
         }
-
-        return directiveDefinitionObject;
     }
 
     app.directive('vrGenericdataGenericruledefinitionGrid', GenericRuleDefinitionGridDirective);

@@ -23,7 +23,7 @@
 
         function editGenericRuleDefinition(genericRuleDefinitionId, onGenericRuleDefinitionUpdated) {
             var modalParameters = {
-                genericRuleDefinitionId: genericRuleDefinitionId
+                GenericRuleDefinitionId: genericRuleDefinitionId
             };
 
             var modalSettings = {};

@@ -7,9 +7,10 @@
     function GenericRuleDefinitionCriteriaFieldEditorController($scope, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
-        var criteriaFields;
+        
         var criteriaFieldName;
         var criteriaFieldEntity;
+        var criteriaFields; // criteriaFields are passed for validation
 
         var dataRecordFieldTypeSelectiveAPI;
         var dataRecordFieldTypeSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -21,12 +22,11 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            // Note that parameters are always passed to this editor
             if (parameters != undefined) {
-                criteriaFieldName = parameters.genericRuleDefinitionCriteriaFieldName;
+                criteriaFieldName = parameters.GenericRuleDefinitionCriteriaFieldName;
                 // setCriteriaFieldEntityFromParameters removes criteriaFieldEntity from criteriaFields
-                // Therefore, parameters.genericRuleDefinitionCriteriaFields is cloned to avoid modifiying the original array
-                criteriaFields = UtilsService.cloneObject(parameters.genericRuleDefinitionCriteriaFields);
+                // Therefore, parameters.GenericRuleDefinitionCriteriaFields is cloned to avoid modifiying the original array
+                criteriaFields = UtilsService.cloneObject(parameters.GenericRuleDefinitionCriteriaFields, true);
             }
 
             isEditMode = (criteriaFieldName != undefined);
@@ -50,7 +50,7 @@
                 $scope.modalContext.closeModal();
             };
             $scope.validateCriteriaField = function () {
-                if (criteriaFields == undefined) {
+                if (criteriaFields == undefined || criteriaFields.length == 0) {
                     return null;
                 }
                 for (var i = 0; i < criteriaFields.length; i++) {
@@ -114,9 +114,11 @@
 
                 dataRecordFieldTypeSelectiveReadyDeferred.promise.then(function () {
                     var payload;
+
                     if (criteriaFieldEntity != undefined) {
                         payload = criteriaFieldEntity.FieldType;
                     }
+
                     VRUIUtilsService.callDirectiveLoad(dataRecordFieldTypeSelectiveAPI, payload, dataRecordFieldTypeSelectiveLoadDeferred);
                 });
 
@@ -126,15 +128,17 @@
 
         function insertCriteriaField() {
             var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
-            $scope.onGenericRuleDefinitionCriteriaFieldAdded(criteriaFieldObject);
-            VRNotificationService.showSuccess('Criteria field added');
+            if ($scope.onGenericRuleDefinitionCriteriaFieldAdded != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldAdded) == 'function') {
+                $scope.onGenericRuleDefinitionCriteriaFieldAdded(criteriaFieldObject);
+            }
             $scope.modalContext.closeModal();
         }
 
         function updateCriteriaField() {
             var criteriaFieldObject = buildCriteriaFieldObjectFromScope();
-            $scope.onGenericRuleDefinitionCriteriaFieldUpdated(criteriaFieldObject);
-            VRNotificationService.showSuccess('Criteria field updated');
+            if ($scope.onGenericRuleDefinitionCriteriaFieldUpdated != undefined && typeof ($scope.onGenericRuleDefinitionCriteriaFieldUpdated) == 'function') {
+                $scope.onGenericRuleDefinitionCriteriaFieldUpdated(criteriaFieldObject);
+            }
             $scope.modalContext.closeModal();
         }
 

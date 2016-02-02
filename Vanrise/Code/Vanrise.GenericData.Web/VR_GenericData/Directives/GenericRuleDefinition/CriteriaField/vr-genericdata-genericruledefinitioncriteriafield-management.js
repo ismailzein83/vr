@@ -2,10 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionCriteriaDirective.$inject = ['VR_GenericData_GenericRuleDefinitionCriteriaFieldService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRNotificationService'];
+    GenericRuleDefinitionCriteriaFieldManagementDirective.$inject = ['VR_GenericData_GenericRuleDefinitionCriteriaFieldService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_GenericData_MappingRuleStructureBehaviorTypeEnum', 'UtilsService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionCriteriaDirective(VR_GenericData_GenericRuleDefinitionCriteriaFieldService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRNotificationService) {
-
+    function GenericRuleDefinitionCriteriaFieldManagementDirective(VR_GenericData_GenericRuleDefinitionCriteriaFieldService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_MappingRuleStructureBehaviorTypeEnum, UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,7 +24,7 @@
                     }
                 }
             },
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRuleDefinition/Criteria/Templates/GenericRuleDefinitionCriteriaTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRuleDefinition/CriteriaField/Templates/GenericRuleDefinitionCriteriaFieldManagementTemplate.html'
         };
 
         function GenericRuleDefinitionCriteria($scope, ctrl) {
@@ -45,11 +44,11 @@
                     }
                 };
                 ctrl.addCriteriaField = function () {
-                    var onGenericRuleDefinitionCriteriaFieldAdded = function (addedCriteriaField) {
+                    var onCriteriaFieldAdded = function (addedCriteriaField) {
                         extendCriteriaFieldObject(addedCriteriaField);
                         ctrl.criteriaFields.push(addedCriteriaField);
                     };
-                    VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, onGenericRuleDefinitionCriteriaFieldAdded);
+                    VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, onCriteriaFieldAdded);
                 };
                 ctrl.validateCriteriaFields = function () {
                     if (ctrl.criteriaFields.length == 0) {
@@ -117,12 +116,12 @@
             }
 
             function editCriteriaField(criteriaField) {
-                var onGenericRuleDefinitionCriteriaFieldUpdated = function (updatedCriteriaField) {
+                var onCriteriaFieldUpdated = function (updatedCriteriaField) {
                     extendCriteriaFieldObject(updatedCriteriaField);
                     var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
                     ctrl.criteriaFields[index] = updatedCriteriaField;
                 };
-                VR_GenericData_GenericRuleDefinitionCriteriaFieldService.editGenericRuleDefinitionCriteriaField(criteriaField.FieldName, ctrl.criteriaFields, onGenericRuleDefinitionCriteriaFieldUpdated);
+                VR_GenericData_GenericRuleDefinitionCriteriaFieldService.editGenericRuleDefinitionCriteriaField(criteriaField.FieldName, ctrl.criteriaFields, onCriteriaFieldUpdated);
             }
 
             function extendCriteriaFieldObject(criteriaField) {
@@ -130,8 +129,9 @@
                 if (behaviorTypeObject != undefined) {
                     criteriaField.RuleStructureBehaviorTypeDescription = behaviorTypeObject.description;
                 }
+
                 var fieldTypeConfigObject = UtilsService.getItemByVal(dataRecordFieldTypeConfigs, criteriaField.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
-                if (fieldTypeConfigObject != undefined) {
+                if (fieldTypeConfigObject != null) {
                     criteriaField.FieldTypeDescription = fieldTypeConfigObject.Name;
                 }
             }
@@ -140,19 +140,13 @@
                 VRNotificationService.showConfirmation().then(function (confirmed) {
                     if (confirmed) {
                         var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
-                        if (index != undefined && index >= 0) {
-                            ctrl.criteriaFields.splice(index, 1);
-                            VRNotificationService.showSuccess('Criteria field deleted');
-                        }
-                        else {
-                            VRNotificationService.showError('Criteria field was not deleted');
-                        }
+                        ctrl.criteriaFields.splice(index, 1);
                     }
                 });
             }
         }
     }
 
-    app.directive('vrGenericdataGenericruledefinitioncriteria', GenericRuleDefinitionCriteriaDirective);
+    app.directive('vrGenericdataGenericruledefinitioncriteriafieldManagement', GenericRuleDefinitionCriteriaFieldManagementDirective);
 
 })(app);
