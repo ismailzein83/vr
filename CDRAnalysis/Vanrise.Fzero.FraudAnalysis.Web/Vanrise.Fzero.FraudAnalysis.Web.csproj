@@ -216,10 +216,13 @@
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\ExcuteStrategyManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\NumberProfilingManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-assignstrategy-manual.js" />
+    <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-excutestrategy-manual.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-filldatawarehouse-manual.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-findrelatednumbers-manual.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-numberprofiling-manual.js" />
+    <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\Templates\ExcuteStrategyTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\Templates\NumberProfilingTemplate.html" />
+    <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-excutestrategy.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-filldatawarehouse.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-findrelatednumbers.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-assignstrategy.js" />
