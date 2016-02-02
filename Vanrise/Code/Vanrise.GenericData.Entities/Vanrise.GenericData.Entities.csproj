@@ -51,6 +51,7 @@
     <Compile Include="DataRecords\DataRecordFieldDetail.cs" />
     <Compile Include="DataRecords\DataRecordFieldQuery.cs" />
     <Compile Include="DataRecords\DataRecordFieldType.cs" />
+    <Compile Include="DataRecords\DataRecordFieldTypeConfig.cs" />
     <Compile Include="DataRecords\DataRecordType.cs" />
     <Compile Include="DataRecords\DataRecordTypeDetail.cs" />
     <Compile Include="DataRecords\DataRecordTypeInfo.cs" />

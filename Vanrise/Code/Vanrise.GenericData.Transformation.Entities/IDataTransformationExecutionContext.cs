@@ -11,6 +11,6 @@ namespace Vanrise.GenericData.Transformation.Entities
     {
         int DataTransformationDefinitionId { get; }
 
-        Dictionary<string, DataRecord> DataRecords { get; }
+        Dictionary<string, Object> DataRecords { get; }
     }
 }

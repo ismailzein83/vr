@@ -107,7 +107,19 @@ namespace Vanrise.GenericData.Business
                 return Activator.CreateInstance(dataRecordRuntimeType);
             return null;
         }
-                
+
+        public Type GetDataRecordFieldRuntimeType(string dataRecordTypeName, string fieldName)
+        {
+            DataRecordType dataRecordType = GetCachedDataRecordTypes().FindRecord(itm => itm.Name == dataRecordTypeName);
+            if (dataRecordType != null)
+            {
+                var field = dataRecordType.Fields.FindRecord(itm => itm.Name == fieldName);
+                if (field != null)
+                    return field.Type.GetRuntimeType();
+            }
+            return null;
+        }
+    
         #endregion
       
         #region Private Methods

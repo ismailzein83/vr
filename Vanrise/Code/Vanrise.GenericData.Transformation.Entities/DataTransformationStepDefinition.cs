@@ -6,19 +6,14 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Transformation.Entities
 {
-    public class DataTransformationStepDefinition
+    public class DataTransformationStepConfig
     {
-        public int DataTransformationStepDefinitionId { get; set; }
+        public int DataTransformationStepConfigId { get; set; }
 
         public string Name { get; set; }
 
         public string Title { get; set; }
 
-        public DataTransformationStepDefinitionSettings Settings { get; set; }
-    }
-
-    public class DataTransformationStepDefinitionSettings
-    {
         public string Editor { get; set; }
 
         public string StepPreviewUIControl { get; set; }

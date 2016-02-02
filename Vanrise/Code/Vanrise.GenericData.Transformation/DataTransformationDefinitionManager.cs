@@ -93,6 +93,18 @@ namespace Vanrise.GenericData.Transformation
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.MappingStepConfigType);
         }
+
+        public DataTransformationRuntimeType GetTransformationRuntimeType(int dataTransformationDefinitionId)
+        {
+            string cacheName = String.Format("GetTransformationRuntimeType_{0}", dataTransformationDefinitionId);
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+              () =>
+              {
+                  throw new NotImplementedException();
+                  return new DataTransformationRuntimeType();
+              });
+        }
+
         #endregion
 
         #region Private Methods

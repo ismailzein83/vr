@@ -23,5 +23,7 @@ namespace Vanrise.GenericData.Transformation.Entities
         void AddCodeToCurrentInstanceExecutionBlock(string codeLineTemplate, params object[] placeholders);
 
         string DataRecordsVariableName { get; }
+
+
     }
 }

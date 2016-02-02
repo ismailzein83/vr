@@ -12,27 +12,27 @@ namespace Vanrise.GenericData.Transformation
     {
         public void ExecuteDataTransformation(IDataTransformationExecutionContext context)
         {
-            DataTransformationDefinition dataTransformationDefinition = GetDataTransformationDefinition(context.DataTransformationDefinitionId);
-            var stepExecutionContext = new MappingStepExecutionContext
+            DataTransformationDefinitionManager definitionManager = new DataTransformationDefinitionManager();
+            DataTransformationRuntimeType dataTransformationRuntimeType = definitionManager.GetTransformationRuntimeType(context.DataTransformationDefinitionId);
+            var executor = Activator.CreateInstance(dataTransformationRuntimeType.ExecutorType) as IDataTransformationExecutor;
+            if(context.DataRecords != null)
             {
-                DataRecords = context.DataRecords
-            };
-            if (stepExecutionContext.DataRecords == null)
-                stepExecutionContext.DataRecords = new Dictionary<string, DataRecord>();
-            foreach(var dataRecordType in dataTransformationDefinition.RecordTypes)
-            {
-                if (!stepExecutionContext.DataRecords.ContainsKey(dataRecordType.Key))
-                    stepExecutionContext.DataRecords.Add(dataRecordType.Key, new DataRecord() { FieldsValues = new Dictionary<string, object>() });
+                foreach(var dataRecordEntry in context.DataRecords)
+                {
+                    executor.AddDataRecord(dataRecordEntry.Key, dataRecordEntry.Value);
+                }
             }
-            foreach (var step in dataTransformationDefinition.MappingSteps)
+            if(dataTransformationRuntimeType.DataRecordTypes != null)
             {
-                step.Execute(stepExecutionContext);
+                foreach(var dataRecordTypeEntry in dataTransformationRuntimeType.DataRecordTypes)
+                {
+                    if(context.DataRecords == null || !context.DataRecords.ContainsKey(dataRecordTypeEntry.Key))
+                    {
+                        executor.AddDataRecord(dataRecordTypeEntry.Key, Activator.CreateInstance(dataRecordTypeEntry.Value));
+                    }
+                }
             }
-        }
-
-        private DataTransformationDefinition GetDataTransformationDefinition(int dataTransformationDefinitionId)
-        {
-            throw new NotImplementedException();
+            executor.Execute();
         }
     }
 }
