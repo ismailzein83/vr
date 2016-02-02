@@ -1,0 +1,14 @@
+﻿
+-- =============================================
+-- Author:		<Mostafa Jawhari>
+-- Create date: <02-02-2016>
+-- Description:	<Get Count of Queue Intances per Status>
+-- =============================================
+CREATE PROCEDURE [queue].[sp_QueueItemHeader_GetItemStatusSummary]
+AS
+BEGIN
+  SELECT QueueID, Status, COUNT(*) as Count
+  FROM [queue].[QueueItemHeader]
+  WHERE Status <> 30
+  GROUP BY QueueID, Status
+END

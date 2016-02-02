@@ -58,14 +58,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                     var allResult = [];
                     return VR_Queueing_QueueInstanceAPIService.GetFilteredQueueInstances(dataRetrievalInput)
                         .then(function (queueInstancesResponse) {
-                            for (var i = 0; i < queueInstancesResponse.Data.length; i++) {
-
-                                queueInstancesResponse.Data[i].notProcessedCount = 0;
-                                queueInstancesResponse.Data[i].suspendedCount = 0;
-
-                            }
-                            var result = { Data: queueInstancesResponse.Data };
-                            onResponseReady(result);
+                            onResponseReady(queueInstancesResponse);
                             RefreshDataGrid();
                         })
                         .catch(function (error) {
