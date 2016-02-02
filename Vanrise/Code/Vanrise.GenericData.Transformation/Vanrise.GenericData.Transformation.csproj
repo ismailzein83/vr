@@ -46,6 +46,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataTransformationDefinitionManager.cs" />
     <Compile Include="DataTransformationRuntimeType.cs" />
+    <Compile Include="DataTransformationStepConfigManager.cs" />
     <Compile Include="DataTransformer.cs" />
     <Compile Include="MappingRuleManager.cs" />
     <Compile Include="MappingStepExecutionContext.cs" />

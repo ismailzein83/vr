@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="BusinessEntityGroupContext.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DataRecordFieldTypeConfigManager.cs" />
     <Compile Include="DataRecordTypeManager.cs" />
     <Compile Include="GenericRuleDefinitionManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />

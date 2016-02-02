@@ -112,11 +112,11 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\DataRecordFieldTypeConfigController.cs" />
+    <Compile Include="Controllers\DataTransformationStepConfigController.cs" />
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordTypeController.cs" />
     <Compile Include="Controllers\DataTransformationDefinitionController.cs" />
@@ -171,6 +171,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datetime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-number.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\AssignFieldStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\ExecuteMappingRuleStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\vr-genericdata-datatransformation-assignfieldstep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\vr-genericdata-datatransformation-executemappingrulestep.js" />
     <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldManagement.html" />
     <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-management.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationRecordTypeManagement.html" />
@@ -182,7 +186,9 @@
     <Content Include="VR_GenericData\Directives\RenderDirectives\Templates\TextEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\RenderDirectives\vr-genericdata-render-numeric.js" />
     <Content Include="VR_GenericData\Directives\RenderDirectives\vr-genericdata-render-text.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\DataTransformationDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
