@@ -1,9 +1,11 @@
 ﻿"use strict";
 
-StrategyExecutionManagementController.$inject = ['$scope', 'CDRAnalysis_FA_PeriodAPIService', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
+StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'CDRAnalysis_FA_PeriodAPIService', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
 
-function StrategyExecutionManagementController($scope, CDRAnalysis_FA_PeriodAPIService, StrategyExecutionAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
+function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_PeriodAPIService, StrategyExecutionAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
 
+    var strategySelectorAPI;
+    var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
     var mainGridAPI;
     var arrMenuAction = [];
 
@@ -11,6 +13,11 @@ function StrategyExecutionManagementController($scope, CDRAnalysis_FA_PeriodAPIS
     load();
 
     function defineScope() {
+
+        $scope.onStrategySelectorReady = function (api) {
+            strategySelectorAPI = api;
+            strategySelectorReadyDeferred.resolve();
+        };
 
         var Now = new Date();
 
@@ -46,11 +53,10 @@ function StrategyExecutionManagementController($scope, CDRAnalysis_FA_PeriodAPIS
         };
 
 
+
+
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
-
-            if (!$scope.isInitializing) // if the filters are loaded
-                return retrieveData();
         };
 
         $scope.searchClicked = function () {
@@ -73,30 +79,18 @@ function StrategyExecutionManagementController($scope, CDRAnalysis_FA_PeriodAPIS
         defineMenuActions();
     }
 
-
-    function loadStrategies() {
-        return StrategyAPIService.GetStrategies(0, "") // get all the enabled and disabled strategies (2nd arg) for all periods (1st arg)
-           .then(function (response) {
-               angular.forEach(response, function (item) {
-                   $scope.strategies.push({
-                       id: item.Id,
-                       name: item.Name
-                   });
-               });
-           })
-        ;
+    function loadStrategySelector() {
+        var strategySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        strategySelectorReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, undefined, strategySelectorLoadDeferred);
+        });
+        return strategySelectorLoadDeferred.promise;
     }
-
-
 
     function load() {
         $scope.isInitializing = true;
 
-        return UtilsService.waitMultipleAsyncOperations([loadPeriods, loadStrategies])
-            .then(function () {
-                if (mainGridAPI != undefined)
-                    return retrieveData();
-            })
+        return UtilsService.waitMultipleAsyncOperations([loadPeriods, loadStrategySelector])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -119,12 +113,11 @@ function StrategyExecutionManagementController($scope, CDRAnalysis_FA_PeriodAPIS
             ToCDRDate: ($scope.selectedFilterDateType.id == 1 ? $scope.toDate : null),
             FromExecutionDate: ($scope.selectedFilterDateType.id == 2 ? $scope.fromDate : null),
             ToExecutionDate: ($scope.selectedFilterDateType.id == 2 ? $scope.toDate : null),
-            StrategyIDs: ($scope.selectedStrategies.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedStrategies, "id") : null,
+            StrategyIds: strategySelectorAPI.getSelectedIds()
         };
 
         return mainGridAPI.retrieveData(query);
     }
-
 
     function loadPeriods() {
         return CDRAnalysis_FA_PeriodAPIService.GetPeriods()

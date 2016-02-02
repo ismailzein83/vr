@@ -28,8 +28,7 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Strategy" ng-show="advancedSelected" datasource="strategies" selectedvalues="selectedStrategies" datavaluefield="id" datatextfield="name" ismultipleselection>
-                    </vr-select>
+                    <cdranalysis-fa-strategy-selector ng-show="advancedSelected" on-ready="onStrategySelectorReady" ismultipleselection></cdranalysis-fa-strategy-selector>
                 </vr-columns>
 
             </vr-row>
