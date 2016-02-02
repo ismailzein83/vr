@@ -37,5 +37,11 @@ namespace Vanrise.GenericData.Pricing
             targetRecord[this.EffectiveRateFieldName] = ruleContext.EffectiveRate;
             targetRecord[this.RateTypeFieldName] = ruleContext.RateTypeId;
         }
+
+        public override void GenerateExecutionCode(IDataTransformationCodeContext context)
+        {
+            string ruleTargetVariableName;
+            base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
+        }
     }
 }

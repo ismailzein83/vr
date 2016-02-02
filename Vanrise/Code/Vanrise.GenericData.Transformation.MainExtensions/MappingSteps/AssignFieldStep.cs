@@ -24,5 +24,11 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             DataRecord targetRecord = context.GetDataRecord(this.TargetRecordName);
             targetRecord[this.TargetFieldName] = sourceRecord[this.SourceFieldName];
         }
+
+        public override void GenerateExecutionCode(IDataTransformationCodeContext context)
+        {
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.{1}.{2} = {0}.{3}.{4};", 
+                context.DataRecordsVariableName, this.TargetRecordName, this.TargetFieldName, this.SourceRecordName, this.SourceFieldName);
+        }
     }
 }

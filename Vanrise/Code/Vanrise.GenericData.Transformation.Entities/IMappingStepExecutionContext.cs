@@ -11,4 +11,17 @@ namespace Vanrise.GenericData.Transformation.Entities
     {
         DataRecord GetDataRecord(string recordName);
     }
+
+    public interface IDataTransformationCodeContext
+    {
+        string GenerateUniqueMemberName();
+
+        void AddGlobalMember(string memberDeclarationCode);
+
+        void AddCodeToDefinitionExecutionBlock(string codeLineTemplate, params object[] placeholders);
+
+        void AddCodeToCurrentInstanceExecutionBlock(string codeLineTemplate, params object[] placeholders);
+
+        string DataRecordsVariableName { get; }
+    }
 }

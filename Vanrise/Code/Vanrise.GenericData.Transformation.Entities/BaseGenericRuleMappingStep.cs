@@ -13,6 +13,8 @@ namespace Vanrise.GenericData.Transformation.Entities
 
         public string EffectiveTimeRecordName { get; set; }
 
+        public string EffectiveTimeFieldName { get; set; }
+
         public List<GenericRuleCriteriaFieldMapping> RuleFieldsMappings { get; set; }
 
         protected GenericRuleTarget CreateGenericRuleTarget(IMappingStepExecutionContext context)
@@ -35,6 +37,21 @@ namespace Vanrise.GenericData.Transformation.Entities
                 EffectiveOn = effectiveTimeRecord.Time
             };
             return target;
+        }
+
+        protected void GenerateRuleTargetExecutionCode<T>(IDataTransformationCodeContext context, out string ruleTargetVariableName) 
+            where T : GenericRuleTarget
+        {
+            ruleTargetVariableName = context.GenerateUniqueMemberName();
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new {1}();", ruleTargetVariableName, typeof(T).FullName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1}.{2};", ruleTargetVariableName, this.EffectiveTimeRecordName, this.EffectiveTimeFieldName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetFieldValues = new Dictionary<string, object>();", ruleTargetVariableName);
+
+            foreach (var ruleFieldMapping in this.RuleFieldsMappings)
+            {
+                context.AddCodeToCurrentInstanceExecutionBlock(@"if({0}.{1}.{2} != null) {3}.TargetFieldValues.Add({4}, {0}.{1}.{2});",
+                    context.DataRecordsVariableName, ruleFieldMapping.TargetRecordName, ruleFieldMapping.TargetFieldName, ruleTargetVariableName, ruleFieldMapping.RuleCriteriaFieldName);
+            }            
         }
     }
 }
