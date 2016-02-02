@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService'];
+    genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, UtilsService, VRNavigationService, VRNotificationService) {
+    function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
 
@@ -125,19 +125,25 @@
             if (genericRuleDefintion == undefined || genericRuleDefintion.CriteriaDefinition == null)
                 return;
 
-            angular.forEach(genericRuleDefintion.CriteriaDefinition.Fields, function (item) {
-                if(item.FieldType.ConfigId == 34)
-                {
-                    item.TempDirectiveNameHolder = 'vr-genericdata-render-text';
-                }
-                else if(item.FieldType.ConfigId == 36)
-                {
-                    item.TempDirectiveNameHolder = 'vr-genericdata-render-numeric';
-                }
+            var promises = [];
+
+            var dataFieldTypesConfig = [];
+
+            var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                dataFieldTypesConfig = response;
+
+                angular.forEach(genericRuleDefintion.CriteriaDefinition.Fields, function (field) {
+                    var dataFieldTypeConfig = UtilsService.getItemByVal(dataFieldTypesConfig, field.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                    field.DynamicGroupUIControl = dataFieldTypeConfig.DynamicGroupUIControl;
+                });
+
+                $scope.scopeModel.criteriaFields = genericRuleDefintion.CriteriaDefinition.Fields;
+
             });
 
-            $scope.scopeModel.criteriaFields = genericRuleDefintion.CriteriaDefinition.Fields;
+            promises.push(loadFieldTypeConfigPromise);
             
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function buildRouteRuleObjFromScope() {

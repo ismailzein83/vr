@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.Business
 {
@@ -18,6 +19,13 @@ namespace Vanrise.GenericData.Business
             var cachedDataRecordFieldTypes = GetCachedDataRecordFieldTypes();
             return cachedDataRecordFieldTypes.Values;
         }
+
+        public DataRecordFieldTypeConfig GetDataRecordFieldType(int configId)
+        {
+            var cachedDataRecordFieldTypes = GetCachedDataRecordFieldTypes();
+            return cachedDataRecordFieldTypes.GetRecord(configId);
+        }
+
         #endregion
 
         #region Private Methods
