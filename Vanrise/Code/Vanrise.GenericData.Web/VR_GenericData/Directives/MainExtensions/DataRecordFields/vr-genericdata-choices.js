@@ -11,7 +11,7 @@ app.directive('vrGenericdataChoices', ['UtilsService',
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
-
+                ctrl.values = [];
                 var ctor = new choicesTypeCtor(ctrl, $scope);
                 ctor.initializeController();
 
@@ -34,8 +34,8 @@ app.directive('vrGenericdataChoices', ['UtilsService',
         function choicesTypeCtor(ctrl, $scope) {
 
             function initializeController() {
-                ctrl.values = [];
-                ctrl.Id = ctrl.values.length + 1;
+                
+                ctrl.Id = ctrl.values.length+1;
                 ctrl.isValid = function () {
                     if (ctrl.values !=undefined && ctrl.values.length > 0)
                         return null;
@@ -67,7 +67,7 @@ app.directive('vrGenericdataChoices', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
+                    if (payload != undefined && payload.Choices != undefined && payload.Choices.length>0) {
                         ctrl.values = payload.Choices;
                     }
                 }

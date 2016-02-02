@@ -179,6 +179,7 @@
     <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldTypeSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-management.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationRecordTypeManagement.html" />
+    <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-field-selector.js" />
     <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfieldtype-selective.js" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />

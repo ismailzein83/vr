@@ -1,12 +1,14 @@
 ﻿<vr-row>
     <vr-columns width="1/4row">
-        <vr-genericdata-datarecordtype-selector on-ready="onSourceRecordNameReady"></vr-genericdata-datarecordtype-selector>
+        <vr-genericdata-datatransformation-field-selector on-ready="onSourceRecordNameReady" selectedvalues="selectedSourceRecordName" isrequired="true"></vr-genericdata-datatransformation-field-selector>
     </vr-columns>
     <vr-columns width="1/4row">
+        <vr-genericdata-datatransformation-field-selector on-ready="onSourceFieldNameReady" selectedvalues="selectedSourceFieldName" isrequired="true"></vr-genericdata-datatransformation-field-selector>
     </vr-columns>
     <vr-columns width="1/4row">
-        <vr-genericdata-datarecordtype-selector on-ready="onTargetRecordName"></vr-genericdata-datarecordtype-selector>
+        <vr-genericdata-datatransformation-field-selector on-ready="onTargetRecordName" selectedvalues="selectedTargetRecordName" isrequired="true"></vr-genericdata-datatransformation-field-selector>
     </vr-columns>
     <vr-columns width="1/4row">
+        <vr-genericdata-datatransformation-field-selector on-ready="onTargetFieldNameReady" selectedvalues="selectedTargetFieldName" isrequired="true"></vr-genericdata-datatransformation-field-selector>
     </vr-columns>
 </vr-row>

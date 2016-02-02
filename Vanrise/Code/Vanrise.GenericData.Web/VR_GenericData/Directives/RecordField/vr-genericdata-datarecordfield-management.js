@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldService","VR_GenericData_DataRecordTypeAPIService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldService, VR_GenericData_DataRecordTypeAPIService) {
+app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordFieldService", "VR_GenericData_DataRecordFieldTypeConfigAPIService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordFieldService, VR_GenericData_DataRecordFieldTypeConfigAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -32,7 +32,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
 
             function initializeController() {
                 ctrl.datasource = [];
-                ctrl.dataRecordFieldTypeTemplates = [];
+                ctrl.fieldTypeConfigs = [];
                 ctrl.isValid = function () {
                     if (ctrl.datasource !=undefined && ctrl.datasource.length > 0)
                         return null;
@@ -62,9 +62,9 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                 }
                 api.load = function (payload) {
 
-                      return  VR_GenericData_DataRecordTypeAPIService.GetDataRecordFieldTypeTemplates().then(function (response) {
+                    return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
                             angular.forEach(response, function (item) {
-                                ctrl.dataRecordFieldTypeTemplates.push(item);
+                                ctrl.fieldTypeConfigs.push(item);
                             });
                             if(payload != undefined)
                             {
@@ -84,7 +84,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
             }
             function addNeededFields(dataItem)
             {
-                var template = UtilsService.getItemByVal(ctrl.dataRecordFieldTypeTemplates, dataItem.Type.ConfigId, "TemplateConfigID");
+                var template = UtilsService.getItemByVal(ctrl.fieldTypeConfigs, dataItem.Type.ConfigId, "DataRecordFieldTypeConfigId");
                 dataItem.TypeDescription = template != undefined ? template.Name : "";
             }
             function defineMenuActions() {

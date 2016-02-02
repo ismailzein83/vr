@@ -1,9 +1,9 @@
 ﻿<vr-row>
     <vr-columns width="1/3row">
-        <vr-select on-ready="onSelectorReady"
-                   datasource="fieldTypeConfigs"
-                   selectedvalues="selectedFieldTypeConfig"
-                   onselectionchanged="onSelectionChanged"
+        <vr-select on-ready="scopeModal.onSelectorReady"
+                   datasource="scopeModal.fieldTypeConfigs"
+                   selectedvalues="scopeModal.selectedFieldTypeConfig"
+                   onselectionchanged="scopeModal.onSelectionChanged"
                    datavaluefield="DataRecordFieldTypeConfigId"
                    datatextfield="Title"
                    label="Type"
@@ -12,7 +12,7 @@
                    hideremoveicon>
         </vr-select>
     </vr-columns>
-    <vr-columns width="2/3row" ng-if="selectedFieldTypeConfig != undefined" vr-loader="isLoadingDirective">
-        <vr-directivewrapper directive="selectedFieldTypeConfig.Editor" on-ready="onDirectiveReady"></vr-directivewrapper>
+    <vr-columns width="2/3row" ng-if="scopeModal.selectedFieldTypeConfig != undefined" vr-loader="scopeModal.isLoadingDirective">
+        <vr-directivewrapper directive="scopeModal.selectedFieldTypeConfig.Editor" on-ready="scopeModal.onDirectiveReady"></vr-directivewrapper>
     </vr-columns>
 </vr-row>

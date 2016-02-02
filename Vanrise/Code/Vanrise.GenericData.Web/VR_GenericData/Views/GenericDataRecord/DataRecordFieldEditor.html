@@ -9,14 +9,7 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/3row">
-                            <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Field Type" datasource="scopeModal.dataRecordFieldTypeTemplates" text="None"
-                                        selectedvalues="scopeModal.selectedDataRecordFieldTypeTemplate" isrequired>
-                            </vr-select>
-                        </vr-columns>
-                        <vr-columns width="2/3row" vr-loader="scopeModal.isLoadingDirective" ng-if="scopeModal.selectedDataRecordFieldTypeTemplate!=undefined">
-                            <vr-directivewrapper directive="scopeModal.selectedDataRecordFieldTypeTemplate.Editor" on-ready="scopeModal.onDirectiveReady"></vr-directivewrapper>
-                        </vr-columns>
+                        <vr-genericdata-datarecordfieldtype-selective on-ready="scopeModal.onDirectiveReady"></vr-genericdata-datarecordfieldtype-selective>
                     </vr-row>
 
                 </vr-tab>

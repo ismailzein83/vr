@@ -32,12 +32,13 @@
             var directiveAPI;
             var directiveReadyDeferred;
 
+            var payloadObj;
             function initializeController() {
+                $scope.scopeModal = {};
+                $scope.scopeModal.fieldTypeConfigs = [];
+                $scope.scopeModal.selectedFieldTypeConfig;
 
-                $scope.fieldTypeConfigs = [];
-                $scope.selectedFieldTypeConfig;
-
-                $scope.onSelectorReady = function (api) {
+                $scope.scopeModal.onSelectorReady = function (api) {
                     selectorAPI = api;
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -45,12 +46,12 @@
                     }
                 };
 
-                $scope.onDirectiveReady = function (api) {
+                $scope.scopeModal.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) {
-                        $scope.isLoadingDirective = value;
+                        $scope.scopeModal.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, $scope.selectedFieldTypeConfig.DataRecordFieldTypeConfigId, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, directiveAPI, payloadObj, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -59,20 +60,14 @@
                 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-                    var configId;
-
-                    if (payload != undefined) {
-                        configId = payload.configId;
-                    }
-
                     return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
-                                $scope.fieldTypeConfigs.push(response[i]);
+                                $scope.scopeModal.fieldTypeConfigs.push(response[i]);
                             }
-
-                            if (configId != undefined) {
-                                $scope.selectedFieldTypeConfig = UtilsService.getItemByValue($scope.fieldTypeConfigs, configId, 'DataRecordFieldTypeConfigId');
+                            if (payload != undefined && payload.ConfigId != undefined) {
+                                payloadObj = payload;
+                                $scope.scopeModal.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModal.fieldTypeConfigs, payload.ConfigId, 'DataRecordFieldTypeConfigId');
                             }
                         }
                     });
@@ -81,9 +76,9 @@
                 api.getData = function () {
                     var data = null;
 
-                    if ($scope.selectedFieldTypeConfig != undefined) {
+                    if ($scope.scopeModal.selectedFieldTypeConfig != undefined) {
                         data = directiveAPI.getData();
-                        data.DataRecordFieldTypeConfigId = $scope.selectedFieldTypeConfig.DataRecordFieldTypeConfigId;
+                        data.ConfigId = $scope.scopeModal.selectedFieldTypeConfig.DataRecordFieldTypeConfigId;
                     }
 
                     return data;
