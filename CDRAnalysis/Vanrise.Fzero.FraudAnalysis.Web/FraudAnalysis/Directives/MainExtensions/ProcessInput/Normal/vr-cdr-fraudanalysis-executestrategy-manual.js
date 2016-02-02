@@ -1,6 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisExcutestrategy", ["UtilsService", "VRUIUtilsService", "StrategyAPIService", "CDRAnalysis_FA_PeriodAPIService", function (UtilsService, VRUIUtilsService, StrategyAPIService, CDRAnalysis_FA_PeriodAPIService) {
+app.directive("vrCdrFraudanalysisExecutestrategyManual", ["UtilsService", "StrategyAPIService", "VRValidationService", "CDRAnalysis_FA_PeriodAPIService", function (UtilsService, StrategyAPIService, VRValidationService, CDRAnalysis_FA_PeriodAPIService) {
+
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -21,23 +22,32 @@ app.directive("vrCdrFraudanalysisExcutestrategy", ["UtilsService", "VRUIUtilsSer
                 }
             }
         },
-        templateUrl: "/Client/Modules/FraudAnalysis/Directives/MainExtensions/ProcessInput/Scheduled/Templates/ExcuteStrategyTemplate.html"
+        templateUrl: "/Client/Modules/FraudAnalysis/Directives/MainExtensions/ProcessInput/Normal/Templates/ExecuteStrategyManualTemplate.html"
     };
-
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
- 
         var firstTimeToload = false;
         function initializeController() {
+
+            var yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            $scope.fromDate = yesterday;
+            $scope.toDate = new Date();
+
+            $scope.validateTimeRange = function () {
+                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            }
+
+            $scope.createProcessInputObjects = [];
+
             $scope.strategies = [];
             $scope.selectedStrategies = [];
             $scope.selectedStrategyIds = [];
             $scope.periods = [];
-          
-           
-            $scope.selectedPeriodChanged = function () {
 
+            $scope.selectedPeriodChanged = function () {
 
                 if ($scope.selectedPeriod != undefined && firstTimeToload == true) {
                     $scope.isLoadingData = true;
@@ -45,7 +55,6 @@ app.directive("vrCdrFraudanalysisExcutestrategy", ["UtilsService", "VRUIUtilsSer
                     $scope.selectedStrategies.length = 0;
                     loadStrategies($scope.selectedPeriod.Id);
                 }
-
             }
 
             defineAPI();
@@ -53,24 +62,44 @@ app.directive("vrCdrFraudanalysisExcutestrategy", ["UtilsService", "VRUIUtilsSer
 
         function defineAPI() {
 
-          
+
             var api = {};
             api.getData = function () {
+
                 angular.forEach($scope.selectedStrategies, function (itm) {
                     $scope.selectedStrategyIds.push(itm.id);
                 });
 
-                return {
-                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                    StrategyIds: $scope.selectedStrategyIds,
-                    IncludeWhiteList: false
-                };
 
-            };
+                var runningDate = new Date($scope.fromDate);
 
-            api.getExpressionsData = function () {
-                
-                return { "ScheduleTime": "ScheduleTime" };
+                $scope.createProcessInputObjects.length = 0;
+
+
+                if ($scope.selectedPeriod.Id == 1)//Hourly
+                {
+                    while (runningDate < $scope.toDate) {
+                        var fromDate = new Date(runningDate);
+                        var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
+                        createProcessInputObjects(fromDate, toDate);
+                        runningDate = new Date(toDate);
+                    }
+
+                }
+
+                else if ($scope.selectedPeriod.Id == 2) //Daily
+                {
+                    while (runningDate < $scope.toDate) {
+                        var fromDate = new Date(runningDate);
+                        var toDate = new Date(runningDate.setHours(runningDate.getHours() + 24));
+                        createProcessInputObjects(fromDate, toDate);
+                        runningDate = new Date(toDate);
+                    }
+
+
+                }
+
+                return $scope.createProcessInputObjects;
 
             };
 
@@ -85,57 +114,37 @@ app.directive("vrCdrFraudanalysisExcutestrategy", ["UtilsService", "VRUIUtilsSer
                     });
                 })
                 promises.push(loadPeriods);
-                var strategy;
-                if (data != undefined && data.StrategyIds!= undefined) {
-                    var firstStrategyLoad = loadStrategies(0).then(function () {
-                        var promises = [];
-                        strategy = UtilsService.getItemByVal($scope.strategies, data.StrategyIds[0], "id");
-
-                        if (strategy != null) {
-                            $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, strategy.periodId, "Id");
-                           
-                        }
-                        if ($scope.selectedPeriod != undefined) {
-                            loadStrategies($scope.selectedPeriod.Id).then(function () {
-                                firstTimeToload = true;
-                                angular.forEach(data.StrategyIds, function (strategyId) {
-                                    $scope.selectedStrategies.push(UtilsService.getItemByVal($scope.strategies, strategyId, "id"));
-                                });
-                            })
-                        }
-                        else {
-                            firstTimeToload = true;
-
-                        }
-                       
-                       
-                    })
-                    promises.push(firstStrategyLoad)
-                }
-                else {
-                    firstTimeToload = true;
-                }
-                
+                firstTimeToload = true;
                 return UtilsService.waitMultiplePromises(promises);
 
             }
 
-            
+
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+        function createProcessInputObjects(fromDate, toDate) {
+            $scope.createProcessInputObjects.push({
+                InputArguments: {
+                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                    StrategyIds: $scope.selectedStrategyIds,
+                    FromDate: new Date(fromDate),
+                    ToDate: new Date(toDate),
+                    IncludeWhiteList: $scope.includeWhiteList
+                }
+            });
+        }
 
         function loadStrategies(periodId) {
-
             return StrategyAPIService.GetStrategies(periodId, true).then(function (response) {
                 $scope.strategies.length = 0;
                 angular.forEach(response, function (itm) {
                     $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
-                })
+                });
             }).finally(function () {
                 $scope.isLoadingData = false;
-            });;
+            });
         }
     }
 
