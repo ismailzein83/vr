@@ -246,10 +246,6 @@
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
     <Content Include="FraudAnalysis\Views\NumberPrefix\NumberPrefixManagement.html" />
     <Content Include="FraudAnalysis\Views\NumberPrefix\NumberPrefixManagementController.js" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FillDataWarehouseProcessInput.html" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Normal\FillDataWarehouseProcessInputController.js" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\FillDataWarehouseProcessInput_Scheduled.html" />
-    <Content Include="FraudAnalysis\Views\ProcessInputTemplate\Scheduled\FillDataWarehouseProcessInput_ScheduledController.js" />
     <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionEditor.html" />
     <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionEditorController.js" />
     <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionManagement.html" />
