@@ -10,38 +10,45 @@ namespace Vanrise.GenericData.Pricing
 {
     public class RateTypeMappingStep : BaseGenericRuleMappingStep
     {
-        public string SourceRecordName { get; set; }
+        public string NormalRate { get; set; }
 
-        public string NormalRateFieldName { get; set; }
+        public string RatesByRateType { get; set; }
 
-        public string RatesByRateTypeFieldName { get; set; }
+        public string EffectiveRate { get; set; }
 
-        public string TargetRecordName { get; set; }
-
-        public string EffectiveRateFieldName { get; set; }
-
-        public string RateTypeFieldName { get; set; }
+        public string RateTypeId { get; set; }
 
         public override void Execute(IMappingStepExecutionContext context)
         {
-            var ruleTarget = CreateGenericRuleTarget(context);
-            var sourceRecord = context.GetDataRecord(this.SourceRecordName);
-            var ruleContext = new RateTypeRuleContext
-            {
-                NormalRate = sourceRecord.GetFieldValue<Decimal>(this.NormalRateFieldName),
-                RatesByRateType = sourceRecord.GetFieldValue<Dictionary<int, Decimal>>(this.RatesByRateTypeFieldName)
-            };
-            var ruleManager = new RateTypeRuleManager();
-            ruleManager.ApplyRateTypeRule(ruleContext, this.RuleDefinitionId, ruleTarget);
-            var targetRecord = context.GetDataRecord(this.TargetRecordName);
-            targetRecord[this.EffectiveRateFieldName] = ruleContext.EffectiveRate;
-            targetRecord[this.RateTypeFieldName] = ruleContext.RateTypeId;
+            //var ruleTarget = CreateGenericRuleTarget(context);
+            //var sourceRecord = context.GetDataRecord(this.SourceRecordName);
+            //var ruleContext = new RateTypeRuleContext
+            //{
+            //    NormalRate = sourceRecord.GetFieldValue<Decimal>(this.NormalRateFieldName),
+            //    RatesByRateType = sourceRecord.GetFieldValue<Dictionary<int, Decimal>>(this.RatesByRateTypeFieldName)
+            //};
+            //var ruleManager = new RateTypeRuleManager();
+            //ruleManager.ApplyRateTypeRule(ruleContext, this.RuleDefinitionId, ruleTarget);
+            //var targetRecord = context.GetDataRecord(this.TargetRecordName);
+            //targetRecord[this.EffectiveRateFieldName] = ruleContext.EffectiveRate;
+            //targetRecord[this.RateTypeFieldName] = ruleContext.RateTypeId;
         }
 
         public override void GenerateExecutionCode(IDataTransformationCodeContext context)
         {
             string ruleTargetVariableName;
             base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
+            var ruleContextVariableName = context.GenerateUniqueMemberName();
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateTypeRuleContext();", ruleContextVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.NormalRate = {1};", ruleContextVariableName, this.NormalRate);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.RatesByRateType = {1};", ruleContextVariableName, this.RatesByRateType);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetTime = {1};", ruleContextVariableName, base.EffectiveTime);
+            var ruleManagerVariableName = context.GenerateUniqueMemberName();
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateTypeRuleManager();", ruleManagerVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateTypeRule({1}, {2}, {3});",
+                ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveRate;", this.EffectiveRate, ruleContextVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RateTypeId;", this.RateTypeId, ruleContextVariableName);
         }
     }
 }

@@ -11,37 +11,36 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
     public class ExecuteMappingRuleStep : BaseGenericRuleMappingStep
     {
-        public string TargetRecordName { get; set; }
-
-        public string TargetFieldName { get; set; }
+        public string Target { get; set; }
 
         public override void Execute(IMappingStepExecutionContext context)
         {
-            GenericRuleTarget ruleTarget = CreateGenericRuleTarget(context);
-
-            MappingRuleManager ruleManager = new MappingRuleManager();
-            var rule = ruleManager.GetMatchRule(this.RuleDefinitionId, ruleTarget);
-            if (rule != null)
-            {
-                var targetRecord = context.GetDataRecord(this.TargetFieldName);
-                targetRecord[this.TargetFieldName] = rule.Settings.Value;
-            }
+            
         }
 
         public override void GenerateExecutionCode(IDataTransformationCodeContext context)
         {
-            var dataRecordTypeManager = new DataRecordTypeManager();
-            var targetFieldRuntimeType = dataRecordTypeManager.GetDataRecordFieldRuntimeType(this.TargetFieldName, this.TargetRecordName);
+            var genericRuleDefinitionManager = new GenericRuleDefinitionManager();
+            var genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(base.RuleDefinitionId);
+            if (genericRuleDefinition == null)
+                throw new NullReferenceException("genericRuleDefinition");
+            var mappingRuleSettingsDefinition = genericRuleDefinition.SettingsDefinition as MappingRuleDefinitionSettings;
+            if (mappingRuleSettingsDefinition == null)
+                throw new NullReferenceException("mappingSettings");
+
+            Type ruleValueRuntimeType = mappingRuleSettingsDefinition.FieldType.GetRuntimeType();
             
             string ruleTargetVariableName;
             base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
             var ruleManagerVariableName = context.GenerateUniqueMemberName();
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Transformation.MappingRuleManager();", ruleManagerVariableName);
             var ruleVariableName = context.GenerateUniqueMemberName();
-            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = {1}.GetMatchRule({2}, {3});", ruleVariableName, ruleManagerVariableName, this.RuleDefinitionId, ruleTargetVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = {1}.GetMatchRule({2}, {3});",
+                ruleVariableName, ruleManagerVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null", ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.{1}.{2} = ({3}){4}.Settings.Value;", context.DataRecordsVariableName, this.TargetRecordName, this.TargetFieldName, targetFieldRuntimeType.FullName, ruleVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = ({1}){2}.Settings.Value;",
+                this.Target, ruleValueRuntimeType.FullName, ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("}");
         }
     }

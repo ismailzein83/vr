@@ -10,9 +10,6 @@ namespace Vanrise.GenericData.Transformation.Entities
     {
         public abstract void Execute(IMappingStepExecutionContext context);
 
-        public virtual void GenerateExecutionCode(IDataTransformationCodeContext context)
-        {
-
-        }
+        public abstract void GenerateExecutionCode(IDataTransformationCodeContext context);
     }
 }

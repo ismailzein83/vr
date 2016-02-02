@@ -10,8 +10,6 @@ namespace Vanrise.GenericData.Transformation.Entities
     {
         public string RuleCriteriaFieldName { get; set; }
 
-        public string TargetRecordName { get; set; }
-
-        public string TargetFieldName { get; set; }
+        public string Value { get; set; }
     }
 }
