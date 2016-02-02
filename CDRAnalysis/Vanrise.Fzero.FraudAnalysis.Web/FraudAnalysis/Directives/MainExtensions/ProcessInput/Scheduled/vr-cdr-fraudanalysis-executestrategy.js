@@ -128,7 +128,12 @@ app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsSe
 
         function loadStrategies(periodId) {
 
-            return StrategyAPIService.GetStrategies(periodId, true).then(function (response) {
+            return StrategyAPIService.GetStrategiesInfo(
+                    {
+                        PeriodId: periodId,
+                        IsEnabled: true
+                    }
+                ).then(function (response) {
                 $scope.strategies.length = 0;
                 angular.forEach(response, function (itm) {
                     $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
