@@ -4,7 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.BusinessEntity.Business;
 using TOne.BusinessEntity.Data;
+using TOne.BusinessEntity.Entities;
 using TOne.Data.SQL;
 using TOne.LCR.Entities.Routing;
 
@@ -17,22 +19,22 @@ namespace TOne.LCR.Data.SQL
             return new List<Entities.Routing.RouteInfo>();
         }
 
-        private readonly ICarrierAccountDataManager _carrierAccountDataManager;
-        private readonly IZoneDataManager _zoneDataManager;
-        private readonly IFlaggedServiceDataManager _flaggedServiceDataManager;
+        //private readonly ICarrierAccountDataManager _carrierAccountDataManager;
+        //private readonly IZoneDataManager _zoneDataManager;
 
         public OldRoutingDataManager()
         {
-            _carrierAccountDataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-            _zoneDataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
-            _flaggedServiceDataManager = BEDataManagerFactory.GetDataManager<IFlaggedServiceDataManager>();
+
         }
         const string query = @"";
 
         #region Mobile
         public List<RouteInfo> GetRoutes(char showBlocksChar, char? isBlockChar, int topValue, int from, int to, string customerId, string supplierId, string code, string zone)
         {
-            Dictionary<int, BusinessEntity.Entities.Zone> Zones = _zoneDataManager.GetAllZones();
+            FlaggedServiceManager flaggedServiceManager = new FlaggedServiceManager();
+            ZoneManager zoneManager = new ZoneManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            Dictionary<int, BusinessEntity.Entities.Zone> Zones = zoneManager.GetAllZones();
             List<RouteInfo> routesInfo = new List<RouteInfo>();
             ExecuteReaderSP("LCR.sp_Route_GetRoutes", (reader) =>
             {
@@ -40,12 +42,14 @@ namespace TOne.LCR.Data.SQL
                 {
                     while (reader.Read())
                     {
+                        FlaggedServiceInput input = new FlaggedServiceInput() { FlaggedServiceID = (Int16)reader["OurServicesFlag"] };
+                        flaggedServiceManager.AssignFlaggedServiceInfo(input);
                         RouteInfo routeInfo = new RouteInfo();
                         routeInfo.RouteID = (int)reader["RouteID"];
-                        routeInfo.CustomerID = _carrierAccountDataManager.GetCarrierAccount(reader["CustomerID"] as string);
+                        routeInfo.CustomerID = carrierAccountManager.GetCarrierAccount(reader["CustomerID"] as string);
                         routeInfo.Code = reader["Code"] as string;
                         routeInfo.OurZoneID = Zones.Where(z => z.Key == (int)reader["OurZoneID"]).FirstOrDefault().Value;
-                        routeInfo.OurServicesFlag = _flaggedServiceDataManager.GetServiceFlag((short)reader["OurServicesFlag"]);
+                        routeInfo.OurServicesFlag = new FlaggedService() { FlaggedServiceID = input.FlaggedServiceID, ServiceColor = input.FlaggedServiceColor, Symbol = input.FlaggedServiceSymbol };
                         routeInfo.OurActiveRate = (float)reader["OurActiveRate"];
                         routeInfo.State = (byte)reader["State"] == 0 ? RouteState.Blocked : RouteState.Enabled;
                         routeInfo.Updated = (DateTime)reader["Updated"];
@@ -62,11 +66,13 @@ namespace TOne.LCR.Data.SQL
                 {
                     while (reader.Read())
                     {
+                        FlaggedServiceInput input = new FlaggedServiceInput() { FlaggedServiceID = (Int16)reader["SupplierServicesFlag"] };
+                        flaggedServiceManager.AssignFlaggedServiceInfo(input);
                         RouteOptionInfo routeOption = new RouteOptionInfo();
                         routeOption.RouteID = (int)reader["RouteID"];
-                        routeOption.SupplierID = _carrierAccountDataManager.GetCarrierAccount(reader["SupplierID"] as string);
+                        routeOption.SupplierID = carrierAccountManager.GetCarrierAccount(reader["SupplierID"] as string);
                         routeOption.SupplierZoneID = Zones.Where(z => z.Key == (int)reader["SupplierZoneID"]).FirstOrDefault().Value;
-                        routeOption.SupplierServicesFlag = _flaggedServiceDataManager.GetServiceFlag((Int16)reader["SupplierServicesFlag"]);
+                        routeOption.SupplierServicesFlag = new FlaggedService() { FlaggedServiceID = input.FlaggedServiceID, ServiceColor = input.FlaggedServiceColor, Symbol = input.FlaggedServiceSymbol };
                         routeOption.SupplierActiveRate = (float)reader["SupplierActiveRate"];
                         routeOption.Priority = (byte)reader["Priority"];
                         routeOption.NumberOfTries = (byte)reader["NumberOfTries"];
