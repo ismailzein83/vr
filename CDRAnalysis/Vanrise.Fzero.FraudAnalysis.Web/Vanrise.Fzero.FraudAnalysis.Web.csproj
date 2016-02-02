@@ -211,18 +211,19 @@
     <Content Include="FraudAnalysis\Constants\StatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\CallTypeEnum.js" />
     <Content Include="FraudAnalysis\Constants\SuspicionLevelEnum.js" />
+    <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\FillDataWarehouseTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\FindRelatedNumbersManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\ExcuteStrategyManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\Templates\NumberProfilingManualTemplate.html" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-assignstrategy-manual.js" />
-    <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-executestrategy-manual.js" />
+    <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-filldatawarehouse-manual.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-findrelatednumbers-manual.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-fraudanalysis-numberprofiling-manual.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\Templates\NumberProfilingTemplate.html" />
+    <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-filldatawarehouse.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-findrelatednumbers.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-assignstrategy.js" />
     <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-numberprofiling.js" />
-    <Content Include="FraudAnalysis\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-fraudanalysis-executestrategy.js" />
     <Content Include="FraudAnalysis\Directives\Period\cdranalysis-fa-period-selector.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-grid.js" />
     <Content Include="FraudAnalysis\Directives\Strategy\cdranalysis-fa-strategy-selector.js" />
@@ -289,7 +290,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60664</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
