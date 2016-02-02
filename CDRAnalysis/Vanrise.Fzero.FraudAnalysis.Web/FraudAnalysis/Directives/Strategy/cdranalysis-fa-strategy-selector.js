@@ -100,7 +100,7 @@
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('UserId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('Id', attrs, ctrl);
                 };
 
                 if (ctrl.onReady != null && typeof ctrl.onReady == 'function') {
