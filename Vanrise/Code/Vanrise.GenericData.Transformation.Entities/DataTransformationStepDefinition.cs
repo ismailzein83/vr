@@ -20,5 +20,7 @@ namespace Vanrise.GenericData.Transformation.Entities
     public class DataTransformationStepDefinitionSettings
     {
         public string Editor { get; set; }
+
+        public string StepPreviewUIControl { get; set; }
     }
 }
