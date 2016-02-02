@@ -109,6 +109,7 @@
     <Content Include="Queueing\Directives\QueueInstance\vr-queuestagename-selector.js" />
     <Content Include="Queueing\Directives\QueueItemHeader\Templates\QueueItemHeaderGridTemplate.html" />
     <Content Include="Queueing\Directives\QueueItemHeader\vr-queueing-queueitemheader-grid.js" />
+    <Content Include="Queueing\ModuleInitialization.js" />
     <Content Include="Queueing\Services\APIServices\ExecutionFlowAPIService.js" />
     <Content Include="Queueing\Services\APIServices\QueueingAPIService.js" />
     <Content Include="Queueing\Services\APIServices\QueueInstanceAPIService.js" />

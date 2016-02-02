@@ -5,9 +5,12 @@
     ExecutionFlowService.$inject = ['VRModalService'];
 
     function ExecutionFlowService(VRModalService) {
+        var drillDownDefinitions = [];
         return ({
             addExecutionFlow: addExecutionFlow,
-            editExecutionFlow: editExecutionFlow
+            editExecutionFlow: editExecutionFlow,
+            addDrillDownDefinition: addDrillDownDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addExecutionFlow(onExecutionFlowAdded) {
@@ -32,6 +35,14 @@
             };
 
             VRModalService.showModal('/Client/Modules/Queueing/Views/ExecutionFlow/ExecutionFlowEditor.html', modalParameters, modalSettings);
+        }
+
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
         }
  
     };

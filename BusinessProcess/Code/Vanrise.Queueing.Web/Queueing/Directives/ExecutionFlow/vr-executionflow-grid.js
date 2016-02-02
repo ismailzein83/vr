@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService',
-    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService) {
+app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService',
+    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -26,6 +26,7 @@ app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR
     function ExecutionFlowGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -33,6 +34,9 @@ app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR
             $scope.executionFlows = [];
             $scope.ongridReady = function (api) {
                 gridAPI = api;
+
+                var drillDownDefinitions = VR_Queueing_ExecutionFlowService.getDrillDownDefinition();
+                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -58,6 +62,12 @@ app.directive("vrExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VR_Queueing_ExecutionFlowAPIService.GetFilteredExecutionFlows(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
+
                         onResponseReady(response);
                     })
                     .catch(function (error) {
