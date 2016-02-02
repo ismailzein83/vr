@@ -134,7 +134,14 @@
 
                 angular.forEach(genericRuleDefintion.CriteriaDefinition.Fields, function (field) {
                     var dataFieldTypeConfig = UtilsService.getItemByVal(dataFieldTypesConfig, field.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
-                    field.DynamicGroupUIControl = dataFieldTypeConfig.DynamicGroupUIControl;
+                    field.dynamicGroupUIControl.directive = dataFieldTypeConfig.DynamicGroupUIControl;
+                    field.dynamicGroupUIControl.onDirectiveReady = function(api)
+                        {
+                            field.dynamicGroupUIControl.directiveAPI = api;
+                            field.dynamicGroupUIControl.directiveAPI.load(field)
+                        }
+                    }
+                    
                 });
 
                 $scope.scopeModel.criteriaFields = genericRuleDefintion.CriteriaDefinition.Fields;
