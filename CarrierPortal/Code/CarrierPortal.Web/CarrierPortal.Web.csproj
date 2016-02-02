@@ -256,6 +256,10 @@
       <Project>{168d3bea-bde1-47e2-8a35-ed3ed9e65547}</Project>
       <Name>CP.SupplierPricelist.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CP.SupplierPriceList.TOneV1Integration\CP.SupplierPriceList.TOneV1Integration.csproj">
+      <Project>{031e385d-9222-4e25-9c0e-3ecb12675667}</Project>
+      <Name>CP.SupplierPriceList.TOneV1Integration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CP.SupplierPricelist.Web\CP.SupplierPricelist.Web.csproj">
       <Project>{862acf40-050c-423f-bae1-66cdd06e5eb0}</Project>
       <Name>CP.SupplierPricelist.Web</Name>

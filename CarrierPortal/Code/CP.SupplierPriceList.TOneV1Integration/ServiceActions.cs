@@ -7,10 +7,20 @@ namespace CP.SupplierPriceList.TOneV1Integration
 {
     public class ServiceActions
     {
+        public string Url { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+
+        public ServiceActions(string url, string password, string userName)
+        {
+            Url = url;
+            UserName = userName;
+            Password = password;
+        }
         public RootObject GetAuthenticated()
         {
             RootObject tokenObject = null;
-            string urls = "http://localhost:7676/api/Security/authenticate?username=development@vanrise.com&password=123456";
+            string urls = string.Format("{0}/api/Security/authenticate?username={1}&password={2}", Url, UserName, Password);
             HttpWebRequest requests = (HttpWebRequest)WebRequest.Create(urls);
             requests.Method = "GET";
             try
@@ -31,7 +41,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
         public string ping(string token, string tokenName)
         {
             string res = "";
-            string urls = "http://localhost:7676/api/SupplierPriceList/ping";
+            string urls = string.Format("{0}/api/SupplierPriceList/ping", Url);
             HttpWebRequest requests = (HttpWebRequest)WebRequest.Create(urls);
             requests.Method = "GET";
             requests.Headers.Add(tokenName, token);
@@ -53,7 +63,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
             int insertedId;
             try
             {
-                string URL = "http://localhost:7676/api/SupplierPriceList/UploadPriceList";
+                string URL = string.Format("{0}/api/SupplierPriceList/UploadPriceList", Url);
                 string jSOnData = JsonConvert.SerializeObject(userInput);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
                 request.Method = "POST";
@@ -95,8 +105,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
             int result;
             try
             {
-                string URL = "http://localhost:7676/api/SupplierPriceList/GetResults?QueueId=" + queueId;
-                // string jSOnData = JsonConvert.SerializeObject(queueId);
+                string URL = string.Format("{0}/api/SupplierPriceList/GetResults?QueueId={1}", Url, queueId);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
                 request.Method = "GET";
                 request.Headers.Add(tokenName, token);

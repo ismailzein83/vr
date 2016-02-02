@@ -39,9 +39,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarrierPortal.DevRuntime", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.SupplierPriceList.TOneV1Integration", "CP.SupplierPriceList.TOneV1Integration\CP.SupplierPriceList.TOneV1Integration.csproj", "{031E385D-9222-4E25-9C0E-3ECB12675667}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.SupplierPricelist.MainExtensions", "CP.SupplierPricelist.MainExtensions\CP.SupplierPricelist.MainExtensions.csproj", "{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -93,6 +95,10 @@ Global
 		SccProjectTopLevelParentUniqueName12 = CarrierPortal.sln
 		SccProjectName12 = CP.SupplierPriceList.TOneV1Integration
 		SccLocalPath12 = CP.SupplierPriceList.TOneV1Integration
+		SccProjectUniqueName13 = CP.SupplierPricelist.MainExtensions\\CP.SupplierPricelist.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName13 = CarrierPortal.sln
+		SccProjectName13 = CP.SupplierPricelist.MainExtensions
+		SccLocalPath13 = CP.SupplierPricelist.MainExtensions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +155,10 @@ Global
 		{031E385D-9222-4E25-9C0E-3ECB12675667}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{031E385D-9222-4E25-9C0E-3ECB12675667}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{031E385D-9222-4E25-9C0E-3ECB12675667}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +176,7 @@ Global
 		{168D3BEA-BDE1-47E2-8A35-ED3ED9E65547} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{862ACF40-050C-423F-BAE1-66CDD06E5EB0} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{031E385D-9222-4E25-9C0E-3ECB12675667} = {73B89280-7691-435A-98E3-F5F84801BE36}
+		{4B86F69C-C6FD-4599-8FA6-690DA0A5665F} = {73B89280-7691-435A-98E3-F5F84801BE36}
 		{197126C1-BC0D-4BD0-8016-811FC8DD41D5} = {48718904-3FAE-427C-8D91-693120859DDC}
 	EndGlobalSection
 EndGlobal

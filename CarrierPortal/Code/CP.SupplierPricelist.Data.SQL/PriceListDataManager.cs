@@ -82,5 +82,12 @@ namespace CP.SupplierPricelist.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdateInitiatePriceList]", id, result, queueId);
             return (recordsEffected > 0);
         }
+
+
+        public bool UpdatePriceListProgress(long id, int status)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdatePriceListProgress]", id, status);
+            return (recordsEffected > 0);
+        }
     }
 }

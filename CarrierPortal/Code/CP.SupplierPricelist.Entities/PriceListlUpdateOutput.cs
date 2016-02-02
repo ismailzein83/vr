@@ -8,7 +8,7 @@ namespace CP.SupplierPricelist.Entities
 {
     public class PriceListlUpdateOutput
     {
-        public List<PriceList> PriceLists { get; set; }
+        public List<PriceListDetail> ListPriceListDetails { get; set; }
         public byte[] MaxTimeStamp { get; set; }
     }
 }

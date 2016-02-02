@@ -10,5 +10,6 @@ namespace CP.SupplierPricelist.Data
         List<PriceList> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int userId);
         List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses);
         bool UpdateInitiatePriceList(long id, int result, int queueId);
+        bool UpdatePriceListProgress(long id, int result);
     }
 }

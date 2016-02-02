@@ -2,6 +2,11 @@
 using CP.SupplierPricelist.Entities;
 using System.Collections.Generic;
 using Vanrise.Common.Business;
+using Vanrise.Common;
+using System.ComponentModel;
+using System.Linq;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace CP.SupplierPricelist.Business
 {
@@ -20,11 +25,27 @@ namespace CP.SupplierPricelist.Business
             PriceListlUpdateOutput priceListUpdateOutputs = new PriceListlUpdateOutput();
             IPriceListDataManager dataManager =
              ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            priceListUpdateOutputs.PriceLists = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId());
+            List<PriceList> listPriceLists = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, SecurityContext.Current.GetLoggedInUserId());
+            List<PriceListDetail> listPriceListDetails = listPriceLists.Select(priceListDetailMapper).ToList();
+            priceListUpdateOutputs.ListPriceListDetails = listPriceListDetails;
             priceListUpdateOutputs.MaxTimeStamp = maxTimeStamp;
             return priceListUpdateOutputs;
         }
 
+        PriceListDetail priceListDetailMapper(PriceList priceList)
+        {
+            UserManager userManager = new UserManager();
+            User user = userManager.GetUserbyId(priceList.UserId);
+            var priceListDetail = new PriceListDetail()
+            {
+                Entity = priceList,
+                PriceListStatusDescription = Utilities.GetEnumDescription(priceList.Status),
+                PriceListResultDescription = Utilities.GetEnumDescription(priceList.Result),
+                PriceListTypeValue = Utilities.GetEnumDescription(priceList.PriceListType),
+                UserName = user != null ? user.Name : ""
+            };
+            return priceListDetail;
+        }
         public List<PriceList> GetPriceLists(List<PriceListStatus> listPriceListStatuses)
         {
             IPriceListDataManager dataManager =
@@ -44,5 +65,12 @@ namespace CP.SupplierPricelist.Business
             return manager.GetTemplateConfigurations(Constants.SupplierPriceListConnectorInitiateTest);
         }
 
+        public bool UpdatePriceListProgress(long id, int result)
+        {
+            IPriceListDataManager dataManager =
+                   ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
+            return dataManager.UpdatePriceListProgress(id, result);
+            
+        }
     }
 }

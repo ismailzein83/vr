@@ -12,11 +12,11 @@ namespace CP.SupplierPricelist.Entities
         [Description("Not Completed")]
         NotCompleted = 0,
 
-        [Description("Succeeded")]
-        Succeeded = 1,
+        Approved = 10,
 
-        [Description("Failed")]
-        Failed = 3
+        PartiallyApproved = 20,
+
+        Rejected = 30
 
     }
 }

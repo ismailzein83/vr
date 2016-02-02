@@ -31,18 +31,18 @@ function (UtilsService, SupplierPriceListAPIService, SupplierPriceListService) {
                         SupplierPriceListAPIService.GetUpdated(input).then(function (response) {
                          
                             if (response != undefined) {
-                                for (var i = 0; i < response.PriceLists.length; i++) {
-                                    var pricelist = response.PriceLists[i];
+                                for (var i = 0; i < response.ListPriceListDetails.length; i++) {
+                                    var pricelist = response.ListPriceListDetails[i];
                                     var findpricelist = false;
                                     for (var j = 0; j < $scope.pricelist.length; j++) {
 
                                         //Get the minimun ID Test Call to send as parameter to getData();
                                         if (i == 0) {//just in the first check all test calls list
                                             if (j == 0)
-                                                minId = $scope.pricelist[j].PriceListId;
+                                                minId = $scope.pricelist[j].Entity.PriceListId;
                                             else {
-                                                if ($scope.pricelist[j].PriceListId < minId) {
-                                                    minId = $scope.pricelist[j].PriceListId;
+                                                if ($scope.pricelist[j].Entity.PriceListId < minId) {
+                                                    minId = $scope.pricelist[j].Entity.PriceListId;
                                                 }
                                             }
                                         }
@@ -50,7 +50,7 @@ function (UtilsService, SupplierPriceListAPIService, SupplierPriceListService) {
 
                                         //Check if this test call exist in test call Details, if a new call
                                         // then unshift in the list(put the item in the top of the list)
-                                        if ($scope.pricelist[j].PriceListId == pricelist.PriceListId) {
+                                        if ($scope.pricelist[j].Entity.PriceListId == pricelist.Entity.PriceListId) {
                                             $scope.pricelist[j] = pricelist;
                                             findpricelist = true;
                                         }
@@ -100,11 +100,11 @@ function (UtilsService, SupplierPriceListAPIService, SupplierPriceListService) {
             return getData();
         }
         $scope.getColorStatus = function (dataItem) {
-            return SupplierPriceListService.getSupplierPriceListStatusColor(dataItem.Status);
+            return SupplierPriceListService.getSupplierPriceListStatusColor(dataItem.Entity.Status);
         };
 
         $scope.getColorResult = function (dataItem) {
-            return SupplierPriceListService.getSupplierPriceListResultColor(dataItem.Result);
+            return SupplierPriceListService.getSupplierPriceListResultColor(dataItem.Entity.Result);
         };
     }
 

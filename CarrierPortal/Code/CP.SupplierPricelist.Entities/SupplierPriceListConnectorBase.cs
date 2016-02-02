@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using Vanrise.Entities;
 
 namespace CP.SupplierPricelist.Entities
@@ -9,18 +8,22 @@ namespace CP.SupplierPricelist.Entities
         public int ConfigId { get; set; }
         public abstract InitiatePriceListOutput InitiatePriceList(IInitiateUploadContext context);
         public abstract PriceListProgressOutput GetPriceListProgressOutput(IPriceListProgressContext context);
+        public string Url { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
     public enum InitiateSupplierResult { Uploaded, Failed }
-    public enum PriceListProgressResult { Received, Processing,AwaitingSaveConfirmationbySystemparam, SuspendedDueToBusinessErrors, SuspendedToProcessingErrors, AwaitingWarningsConfirmation, AwaitingSaveConfirmation, WarningsConfirmed, SaveConfirmed, ProcessedSuccessfuly, FailedDuetoSheetError,Rejected,SuspendedDueToConfigurationErrors,ProcessedSuccessfulyByImport,Processedwithnochanges, Failed }
+    public enum PriceListProgressResult { NotCompleted, Approved, PartiallyApproved, Rejected }
 
     public class InitiatePriceListOutput
     {
         public int QueueId { get; set; }
         public InitiateSupplierResult Result { get; set; }
 
-        public Object InitiateTestInformation { get; set; }
+        public Object InitiateUploadInformation { get; set; }
 
         public string FailureMessage { get; set; }
+
     }
 
     public interface IInitiateUploadContext

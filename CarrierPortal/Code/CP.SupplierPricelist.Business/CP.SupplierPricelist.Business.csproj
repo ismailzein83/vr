@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
@@ -58,12 +61,18 @@
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="ImportPriceListManager.cs" />
     <Compile Include="InitiateUploadContext.cs" />
     <Compile Include="PriceListProgressContext.cs" />
+    <Compile Include="PriceListTasks\ResultTaskAction.cs" />
+    <Compile Include="PriceListTasks\ResultTaskActionArgument.cs" />
     <Compile Include="PriceListTasks\UploadPriceListTaskAction.cs" />
     <Compile Include="PriceListTasks\UploadPriceListTaskActionArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

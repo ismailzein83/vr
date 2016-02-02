@@ -1,5 +1,6 @@
 ﻿using System;
 using CP.SupplierPricelist.Entities;
+using CP.SupplierPricelist.Business;
 
 namespace CP.SupplierPriceList.TOneV1Integration
 {
@@ -8,17 +9,18 @@ namespace CP.SupplierPriceList.TOneV1Integration
         public override InitiatePriceListOutput InitiatePriceList(IInitiateUploadContext context)
         {
             InitiatePriceListOutput priceListOutput = new InitiatePriceListOutput();
-            ServiceActions serviceActions = new ServiceActions();
+            var cont = (InitiateUploadContext)context;
+            ServiceActions serviceActions = new ServiceActions(cont.Url, cont.Password, cont.UserName);
             RootObject tokenObject = serviceActions.GetAuthenticated();
             if (tokenObject != null)
             {
                 SupplierPriceListUserInput userInput = new SupplierPriceListUserInput()
                 {
-                    UserId = context.UserId,
-                    PriceListType = context.PriceListType,
-                    FileName = context.File.Name,
-                    EffectiveOnDateTime = context.EffectiveOnDateTime,
-                    ContentFile = context.File.Content
+                    UserId = cont.UserId,
+                    PriceListType = cont.PriceListType,
+                    FileName = cont.File.Name,
+                    EffectiveOnDateTime = cont.EffectiveOnDateTime,
+                    ContentFile = cont.File.Content
                 };
                 // Vanrise.Common.Compressor.Compress(context.File.Content)
                 int insertedId = serviceActions.UploadOnline(tokenObject.Token, tokenObject.TokenName, userInput);
@@ -39,45 +41,46 @@ namespace CP.SupplierPriceList.TOneV1Integration
         {
             int queueResult = 0;
             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
-            ServiceActions serviceActions = new ServiceActions();
+            var progressContext = (PriceListProgressContext)context;
+            ServiceActions serviceActions = new ServiceActions(progressContext.Url, progressContext.Password, progressContext.UserName);
             RootObject tokenObject = serviceActions.GetAuthenticated();
             if (tokenObject != null)
             {
-                queueResult = serviceActions.GetResults(context.QueueId, tokenObject.Token, tokenObject.TokenName);
+                queueResult = serviceActions.GetResults(progressContext.QueueId, tokenObject.Token, tokenObject.TokenName);
             }
             switch (queueResult)
             {
-                case 0: priceListProgressOutput.Result = PriceListProgressResult.Received;
+                case 0: priceListProgressOutput.Result = PriceListProgressResult.Approved;
                     break;
-                case 1: priceListProgressOutput.Result = PriceListProgressResult.Processing;
+                case 1: priceListProgressOutput.Result = PriceListProgressResult.Approved;
                     break;
-                case 2: priceListProgressOutput.Result = PriceListProgressResult.SuspendedDueToBusinessErrors;
+                case 2: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
                     break;
-                case 3: priceListProgressOutput.Result = PriceListProgressResult.SuspendedToProcessingErrors;
+                case 3: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
                     break;
-                case 4: priceListProgressOutput.Result = PriceListProgressResult.AwaitingWarningsConfirmation;
+                case 4: priceListProgressOutput.Result = PriceListProgressResult.PartiallyApproved;
                     break;
-                case 5: priceListProgressOutput.Result = PriceListProgressResult.AwaitingSaveConfirmation;
+                case 5: priceListProgressOutput.Result = PriceListProgressResult.PartiallyApproved;
                     break;
-                case 6: priceListProgressOutput.Result = PriceListProgressResult.WarningsConfirmed;
+                case 6: priceListProgressOutput.Result = PriceListProgressResult.PartiallyApproved;
                     break;
-                case 7: priceListProgressOutput.Result = PriceListProgressResult.SaveConfirmed;
+                case 7: priceListProgressOutput.Result = PriceListProgressResult.Approved;
                     break;
-                case 8: priceListProgressOutput.Result = PriceListProgressResult.ProcessedSuccessfuly;
+                case 8: priceListProgressOutput.Result = PriceListProgressResult.Approved;
                     break;
-                case 9: priceListProgressOutput.Result = PriceListProgressResult.FailedDuetoSheetError;
+                case 9: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
                     break;
                 case 10: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
                     break;
-                case 11: priceListProgressOutput.Result = PriceListProgressResult.SuspendedDueToConfigurationErrors;
+                case 11: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
                     break;
-                case 12: priceListProgressOutput.Result = PriceListProgressResult.ProcessedSuccessfulyByImport;
+                case 12: priceListProgressOutput.Result = PriceListProgressResult.Approved;
                     break;
-                case 13: priceListProgressOutput.Result = PriceListProgressResult.AwaitingSaveConfirmationbySystemparam;
+                case 13: priceListProgressOutput.Result = PriceListProgressResult.PartiallyApproved;
                     break;
-                case 14: priceListProgressOutput.Result = PriceListProgressResult.Processedwithnochanges;
+                case 14: priceListProgressOutput.Result = PriceListProgressResult.Approved;
                     break;
-                default: priceListProgressOutput.Result = PriceListProgressResult.Failed;
+                default: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
                     break;
             }
             return priceListProgressOutput;

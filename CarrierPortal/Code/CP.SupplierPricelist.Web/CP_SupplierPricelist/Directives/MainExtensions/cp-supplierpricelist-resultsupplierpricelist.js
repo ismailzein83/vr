@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VRUIUtilsService', 'CP_SupplierPricelist_SupplierPriceListAPIService', function (UtilsService, VRUIUtilsService, CP_SupplierPricelist_SupplierPriceListAPIService) {
+app.directive("cpSupplierpricelistResultsupplierpricelist", ['UtilsService', 'VRUIUtilsService', 'CP_SupplierPricelist_SupplierPriceListAPIService', function (UtilsService, VRUIUtilsService, CP_SupplierPricelist_SupplierPriceListAPIService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -22,7 +22,7 @@ app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VR
                 }
             }
         },
-        templateUrl: "/Client/Modules/CP_SupplierPricelist/Directives/MainExtensions/Templates/UploadPriceListTemplate.html"
+        templateUrl: "/Client/Modules/CP_SupplierPricelist/Directives/MainExtensions/Templates/ResultPriceListTemplate.html"
     };
 
 
@@ -47,7 +47,7 @@ app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VR
             var api = {};
             api.getData = function () {
                 return {
-                    $type: "CP.SupplierPricelist.Business.PriceListTasks.UploadPriceListTaskActionArgument, CP.SupplierPricelist.Business",
+                    $type: "CP.SupplierPricelist.Business.PriceListTasks.ResultTaskActionArgument, CP.SupplierPricelist.Business",
                     SupplierPriceListConnector: sourceTypeDirectiveAPI.getData()
                 };
             };

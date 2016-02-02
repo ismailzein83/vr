@@ -66,15 +66,42 @@
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Logging.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

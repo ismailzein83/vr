@@ -2,7 +2,7 @@
 
 namespace CP.SupplierPricelist.Business.PriceListTasks
 {
-    public class UploadPriceListTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
+    public class ResultTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
         public SupplierPriceListConnectorBase SupplierPriceListConnector { get; set; }
 

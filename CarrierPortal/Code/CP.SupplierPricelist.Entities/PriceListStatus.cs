@@ -9,10 +9,20 @@ namespace CP.SupplierPricelist.Entities
         New = 0,
 
         [Description("Uploaded")]
-        Uploaded = 1,
+        Uploaded = 10,
 
         [Description("Failed")]
-        Failed = 2
+        UploadFailedWithRetry = 20,
+        WaitingReview = 30,
+        GetStatusFailedWithRetry = 40,
+
+        Completed = 50,
+
+        [Description("Suspended")]
+        UploadFailedWithNoRetry = 60,
+
+        [Description("Suspended")]
+        GetStatusFailedWithNoRetry = 70
     }
 
     public enum PriceListType

@@ -19,7 +19,7 @@ namespace CarrierPortal.DevRuntime
             //  thread.Start();
             GetResult();
         }
-        private SupplierPriceListConnectorBase SupplierPriceListConnector =
+        private SupplierPriceListConnectorBase _supplierPriceListConnector =
            new CP.SupplierPriceList.TOneV1Integration.SupplierPriceListConnector();
 
         private void GetResult()
@@ -45,13 +45,13 @@ namespace CarrierPortal.DevRuntime
                             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
                             try
                             {
-                                SupplierPriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
+                                _supplierPriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
                             }
                             catch (Exception ex)
                             {
-                                priceListProgressOutput.Result = PriceListProgressResult.Failed;
+                                priceListProgressOutput.Result = PriceListProgressResult.Rejected;
                             }
-
+                            manager.UpdatePriceListProgress(pricelist.PriceListId, (int)priceListProgressOutput.Result);
                         }
                     }
                 }
