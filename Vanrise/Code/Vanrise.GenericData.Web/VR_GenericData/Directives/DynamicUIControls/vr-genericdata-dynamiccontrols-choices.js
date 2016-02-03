@@ -1,12 +1,11 @@
 ﻿'use strict';
-app.directive('vrGenericdataDynamiccontrolsSelector', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '=',
-                selectedvalues: '=',
                 selectionmode: '@'
             },
             controller: function ($scope, $element, $attrs) {
