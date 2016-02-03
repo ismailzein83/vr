@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationExecutemappingrulestep', ['UtilsService',
+app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -26,7 +26,7 @@ app.directive('vrGenericdataDatatransformationExecutemappingrulestep', ['UtilsSe
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/TextDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/AssignValueRuleStepTemplate.html';
             }
 
         };

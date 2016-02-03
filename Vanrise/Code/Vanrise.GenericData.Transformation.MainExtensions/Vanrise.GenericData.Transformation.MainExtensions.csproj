@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MappingSteps\AssignFieldStep.cs" />
-    <Compile Include="MappingSteps\ExecuteMappingRuleStep.cs" />
+    <Compile Include="MappingSteps\AssignValueRuleStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

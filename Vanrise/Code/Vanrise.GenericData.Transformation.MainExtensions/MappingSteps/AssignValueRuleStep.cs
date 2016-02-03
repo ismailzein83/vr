@@ -9,7 +9,7 @@ using Vanrise.GenericData.Transformation.Entities;
 
 namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 {
-    public class ExecuteMappingRuleStep : BaseGenericRuleMappingStep
+    public class AssignValueRuleStep : BaseGenericRuleMappingStep
     {
         public string Target { get; set; }
 
