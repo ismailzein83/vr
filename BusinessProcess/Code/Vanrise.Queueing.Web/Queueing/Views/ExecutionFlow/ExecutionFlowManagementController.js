@@ -86,6 +86,6 @@
         }
     }
 
-    appControllers.controller('ExecutionFlowController', ExecutionFlowController);
+    appControllers.controller('VR_Queueing_ExecutionFlowController', ExecutionFlowController);
 
 })(appControllers);

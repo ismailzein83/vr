@@ -41,6 +41,8 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
+                
+
                 function getDirectiveAPI() {
 
                     var directiveAPI = {};
@@ -89,10 +91,11 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
                         suspendedCount = 0;
                         for (var j = 0; j < response.length; j++) {
                             if ($scope.executionFlows[i].Entity.ExecutionFlowId == response[j].ExecutionFlowId) {
-                                if (response[j].Status == VR_Queueing_QueueItemStatusEnum.New.value || response[j].Status == VR_Queueing_QueueItemStatusEnum.Processing.value || response[j].Status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
+                                var Status = response[j].Status;
+                                if (Status == VR_Queueing_QueueItemStatusEnum.New.value || Status == VR_Queueing_QueueItemStatusEnum.Processing.value || Status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
                                     notProcessedCount += response[j].Count;
                                 }
-                                else if (response[j].Status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
+                                else if (Status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
                                     suspendedCount += response[j].Count;
                                 }
 

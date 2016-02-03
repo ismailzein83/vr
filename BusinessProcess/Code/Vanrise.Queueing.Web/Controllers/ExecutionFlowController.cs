@@ -20,22 +20,21 @@ namespace Vanrise.Queueing.Web.Controllers
 
         [HttpGet]
         [Route("GetExecutionFlowDefinitions")]
-        public IEnumerable<QueueExecutionFlowDefinition> GetExecutionFlowDefinitions()
+        public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitions(string filter = null)
         {
             QueueExecutionFlowDefinitionManager manager = new QueueExecutionFlowDefinitionManager();
-
-            return manager.GetExecutionFlowDefinitions();
+            QueueExecutionFlowDefinitionFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueExecutionFlowDefinitionFilter>(filter) : null;
+            return manager.GetExecutionFlowDefinitions(deserializedFilter);
 
         }
 
 
         [HttpGet]
         [Route("GetExecutionFlows")]
-        public IEnumerable<QueueExecutionFlow> GetExecutionFlows()
+        public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlows(string filter = null)
         {
-            QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
-
-            return manager.GetExecutionFlows();
+            QueueExecutionFlowFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueExecutionFlowFilter>(filter) : null;
+            return _manager.GetExecutionFlows(deserializedFilter);
 
         }
 
@@ -45,8 +44,8 @@ namespace Vanrise.Queueing.Web.Controllers
         [Route("GetExecutionFlow")]
         public QueueExecutionFlow GetExecutionFlow(int executionFlowId)
         {
-            QueueExecutionFlowManager manager = new QueueExecutionFlowManager();
-            return manager.GetExecutionFlow(executionFlowId);
+           
+            return _manager.GetExecutionFlow(executionFlowId);
 
         }
 
@@ -82,9 +81,9 @@ namespace Vanrise.Queueing.Web.Controllers
 
         [HttpGet]
         [Route("GetExecutionFlowStatusSummary")]
-        public IEnumerable<ExecutionFlowStatusSummary> GetExecutionFlowStatusSummary() 
+        public IEnumerable<ExecutionFlowStatusSummary> GetExecutionFlowStatusSummary()
         {
-           return  _manager.GetExecutionFlowStatusSummary();
+            return _manager.GetExecutionFlowStatusSummary();
         }
 
     }

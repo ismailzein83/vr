@@ -12,10 +12,10 @@ namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowDefinitionManager
     {
-        public IEnumerable<QueueExecutionFlowDefinition> GetExecutionFlowDefinitions()
+        public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitions(QueueExecutionFlowDefinitionFilter filter)
         {
             var executionFlowDefinitions = GetCachedExecutionFlowDefinitions();
-            return executionFlowDefinitions.Values;
+            return executionFlowDefinitions.MapRecords(QueueExecutionFlowDefinitionInfoMapper, null);
         }
 
        
@@ -71,6 +71,20 @@ namespace Vanrise.Queueing
             }
         }
 
+
+        #endregion
+
+
+        #region Mappers
+
+        private QueueExecutionFlowDefinitionInfo QueueExecutionFlowDefinitionInfoMapper(QueueExecutionFlowDefinition queueExecutionFlowDefinition)
+        {
+            QueueExecutionFlowDefinitionInfo queueExecutionFlowDefinitionInfo=new QueueExecutionFlowDefinitionInfo();
+            queueExecutionFlowDefinitionInfo.ID = queueExecutionFlowDefinition.ID;
+            queueExecutionFlowDefinitionInfo.Title = queueExecutionFlowDefinition.Title;
+            return queueExecutionFlowDefinitionInfo;
+        
+        }
 
         #endregion
 

@@ -15,21 +15,23 @@ namespace Vanrise.Queueing
         public IEnumerable<ExecutionFlowStatusSummary> GetExecutionFlowStatusSummary()
         {
             QueueItemManager queueItemManager = new QueueItemManager();
-            QueueingManager queueingManager = new QueueingManager();
+            QueueInstanceManager queueInstanceManager = new QueueInstanceManager();
             List<QueueItemStatusSummary> queueItemStatusSummary = queueItemManager.GetItemStatusSummary();
-            IEnumerable<QueueInstance> queueInstances = queueingManager.GetAllQueueInstances();
+            IEnumerable<QueueInstance> queueInstances = queueInstanceManager.GetAllQueueInstances();
 
             IEnumerable<ExecutionFlowStatusSummary> result = from qInstances in queueInstances
                                                              join qItemStatusSummary in queueItemStatusSummary
                                                              on qInstances.QueueInstanceId equals qItemStatusSummary.QueueId
-                                                             group new { qInstances, qItemStatusSummary, qInstances.ExecutionFlowId, qItemStatusSummary.Status }
-                                                             by new { qInstances.ExecutionFlowId, qItemStatusSummary.Count, qItemStatusSummary.Status } into res
+                                                             group new { qItemStatusSummary, qInstances, qItemStatusSummary.Count }
+                                                             by new { qItemStatusSummary, qItemStatusSummary.Status, qInstances.ExecutionFlowId } into res
                                                              select new ExecutionFlowStatusSummary
                                                              {
                                                                  ExecutionFlowId = (int)res.Key.ExecutionFlowId,
                                                                  Status = res.Key.Status,
-                                                                 Count = res.Sum(x => x.qItemStatusSummary.Count)
+                                                                 Count = res.Key.qItemStatusSummary.Count
                                                              };
+
+
 
             IEnumerable<ExecutionFlowStatusSummary> filteredResult = from c in result
                                                                      group c by new { c.ExecutionFlowId, c.Status } into item
@@ -115,13 +117,16 @@ namespace Vanrise.Queueing
             return String.Format("{1} ({0})", executionFlow.Name, queueStage.QueueTitle);
         }
 
-        public List<QueueExecutionFlow> GetExecutionFlows()
+        public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlows(QueueExecutionFlowFilter filter)
         {
             var cachedFlows = GetCachedQueueExecutionFlows();
-            if (cachedFlows != null)
-                return cachedFlows.Values.ToList();
-            else
-                return null;
+            //if (cachedFlows != null)
+            //    return cachedFlows.Values.ToList();
+            //else
+            //    return null;
+
+            return cachedFlows.MapRecords(QueueExecutionFlowInfoMapper, null);
+
         }
 
 
@@ -194,6 +199,14 @@ namespace Vanrise.Queueing
             executionFlowDetail.Entity = executionFlow;
             executionFlowDetail.Title = executionFlowDefinitionManager.GetExecutionFlowDefinitionTitle(executionFlow.DefinitionId);
             return executionFlowDetail;
+        }
+
+        private QueueExecutionFlowInfo QueueExecutionFlowInfoMapper(QueueExecutionFlow executionFlow)
+        {
+            QueueExecutionFlowInfo executionFlowInfo = new QueueExecutionFlowInfo();
+            executionFlowInfo.ExecutionFlowId = executionFlow.ExecutionFlowId;
+            executionFlowInfo.Name = executionFlow.Name;
+            return executionFlowInfo;
         }
 
         #endregion

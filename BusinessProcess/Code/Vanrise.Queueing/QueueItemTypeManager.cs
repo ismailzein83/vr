@@ -11,13 +11,14 @@ namespace Vanrise.Queueing
 {
     public class QueueItemTypeManager
     {
-        public List<QueueItemType> GetItemTypes()
+        public IEnumerable<QueueItemTypeInfo> GetItemTypes(QueueItemTypeFilter filter)
         {
             IQueueItemTypeDataManager manager = QDataManagerFactory.GetDataManager<IQueueItemTypeDataManager>();
-            return manager.GetItemTypes();
-            
-        }
+            IEnumerable<QueueItemType> itemTypes = manager.GetItemTypes();
 
+            return itemTypes.MapRecords(ItemTypesInfoMapper, null);
+
+        }
 
         Dictionary<int, QueueItemType> GetCachedQueueItemTypes()
         {
@@ -25,7 +26,7 @@ namespace Vanrise.Queueing
                () =>
                {
                    IQueueItemTypeDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueItemTypeDataManager>();
-                   List<QueueItemType>  queueItemTypes = dataManager.GetItemTypes();
+                   IEnumerable<QueueItemType> queueItemTypes = dataManager.GetItemTypes();
                    return queueItemTypes.ToDictionary(kvp => kvp.Id, kvp => kvp);
                });
         }
@@ -58,8 +59,22 @@ namespace Vanrise.Queueing
 
         #endregion
 
-        
+
+
+        #region Mappers
+
+        private QueueItemTypeInfo ItemTypesInfoMapper(QueueItemType itemType)
+        {
+            QueueItemTypeInfo itemTypeInfo = new QueueItemTypeInfo();
+            itemTypeInfo.Id = itemType.Id;
+            itemTypeInfo.Title = itemType.Title;
+            return itemTypeInfo;
+        }
+
+        #endregion
+
+
     }
 
-     
+
 }

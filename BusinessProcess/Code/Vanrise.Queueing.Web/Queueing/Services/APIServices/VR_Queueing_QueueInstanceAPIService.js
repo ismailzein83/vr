@@ -16,13 +16,16 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetFilteredQueueInstances'),input);
         }
 
-        function GetStageNames() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetStageNames'));
+        function GetStageNames(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetStageNames'),
+                {filter:filter});
         }
 
         
-        function GetItemTypes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetItemTypes'));
+        function GetItemTypes(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetItemTypes'), {
+                filter:filter
+            });
         }
 
         function GetItemStatusSummary() {

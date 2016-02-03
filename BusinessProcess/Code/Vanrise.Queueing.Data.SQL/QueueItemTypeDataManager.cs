@@ -19,7 +19,7 @@ namespace Vanrise.Queueing.Data.SQL
         {
         }
 
-        public List<QueueItemType> GetItemTypes()
+        public IEnumerable<QueueItemType> GetItemTypes()
         {
             return GetItemsSP("queue.sp_QueueItemTypes_GetAll", QueueItemTypeMapper);
         }

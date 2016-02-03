@@ -102,7 +102,7 @@ app.directive('vrQueueingQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPI
 
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push({ Name: response[i] });
+                                ctrl.datasource.push(response[i]);
                             }
                         }
 

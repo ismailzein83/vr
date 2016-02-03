@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="ExecutionFlowController">
+﻿<vr-panel ng-controller="VR_Queueing_ExecutionFlowController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -8,14 +8,14 @@
                 <vr-columns width="normal">
                     <vr-queueing-executionflowdefinition-selector on-ready="onExecutionFlowDefinitionSelectorReady" ismultipleselection selectedvalues="selectedExecutionFlowDefinition"></vr-queueing-executionflowdefinition-selector>
                 </vr-columns>
-                
+
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="Add"  data-onclick="addExecutionFlow"></vr-button>
+                    <vr-button type="Add" data-onclick="addExecutionFlow"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

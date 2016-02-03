@@ -15,8 +15,10 @@
             GetExecutionFlowStatusSummary:GetExecutionFlowStatusSummary
         });
 
-        function GetExecutionFlowDefinitions() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'GetExecutionFlowDefinitions'));
+        function GetExecutionFlowDefinitions(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'GetExecutionFlowDefinitions'), {
+                filter:filter
+            });
         }
 
         function GetFilteredExecutionFlows(input) {
@@ -35,8 +37,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'AddExecutionFlow'), executionFlowObject);
         }
 
-        function GetExecutionFlows() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'GetExecutionFlows'));
+        function GetExecutionFlows(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'GetExecutionFlows'), {
+                filter:filter
+            });
         }
 
         function GetExecutionFlowStatusSummary() {

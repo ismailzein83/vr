@@ -12,25 +12,27 @@ namespace Vanrise.Queueing.Web.Controllers
     public class QueueInstanceController : Vanrise.Web.Base.BaseAPIController
     {
 
-        private QueueingManager _manager;
+        private QueueInstanceManager _manager;
         public QueueInstanceController()
         {
-            this._manager = new QueueingManager();
+            this._manager = new QueueInstanceManager();
         }
 
         [HttpGet]
         [Route("GetStageNames")]
-        public List<string> GetStageNames()
+        public IEnumerable<QueueStageNameInfo> GetStageNames(string filter = null)
         {
-            return _manager.GetStageNames();
+            QueueStageFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueStageFilter>(filter) : null;
+            return _manager.GetStageNames(deserializedFilter);
         }
 
         [HttpGet]
         [Route("GetItemTypes")]
-        public List<QueueItemType> GetItemTypes()
+        public IEnumerable<QueueItemTypeInfo> GetItemTypes(string filter = null)
         {
             QueueItemTypeManager manager = new QueueItemTypeManager();
-            return manager.GetItemTypes();
+            QueueItemTypeFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueItemTypeFilter>(filter) : null;
+            return manager.GetItemTypes(deserializedFilter);
         }
 
         [HttpPost]

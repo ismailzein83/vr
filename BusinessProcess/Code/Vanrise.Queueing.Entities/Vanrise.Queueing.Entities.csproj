@@ -54,7 +54,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueExecutionFlow.cs" />
     <Compile Include="QueueExecutionFlowDefinition.cs" />
+    <Compile Include="QueueExecutionFlowDefinitionFilter.cs" />
+    <Compile Include="QueueExecutionFlowDefinitionInfo.cs" />
     <Compile Include="QueueExecutionFlowDetail.cs" />
+    <Compile Include="QueueExecutionFlowFilter.cs" />
+    <Compile Include="QueueExecutionFlowInfo.cs" />
     <Compile Include="QueueExecutionFlowQuery.cs" />
     <Compile Include="QueueInstance.cs" />
     <Compile Include="QueueInstanceDetail.cs" />
@@ -65,7 +69,11 @@
     <Compile Include="ExecutionFlowStatusSummary.cs" />
     <Compile Include="QueueItemStatusSummary.cs" />
     <Compile Include="QueueItemType.cs" />
+    <Compile Include="QueueItemTypeFilter.cs" />
+    <Compile Include="QueueItemTypeInfo.cs" />
     <Compile Include="QueueSettings.cs" />
+    <Compile Include="QueueStageFilter.cs" />
+    <Compile Include="QueueStageNameInfo.cs" />
     <Compile Include="QueueSubscription.cs" />
     <Compile Include="StageQueue.cs" />
   </ItemGroup>

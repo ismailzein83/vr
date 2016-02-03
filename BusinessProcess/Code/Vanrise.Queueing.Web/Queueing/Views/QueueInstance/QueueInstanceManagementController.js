@@ -130,6 +130,6 @@
         }
     }
 
-    appControllers.controller('QueueInstanceController', QueueInstanceController);
+    appControllers.controller('VR_Queueing_QueueInstanceController', QueueInstanceController);
 
 })(appControllers);

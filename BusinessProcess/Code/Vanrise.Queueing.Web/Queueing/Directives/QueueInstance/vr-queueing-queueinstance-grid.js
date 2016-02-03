@@ -78,11 +78,12 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                                 notProcessedCount = 0;
                                 suspendedCount = 0;
                                 for (var j = 0; j < itemStatusSummaryResponse.length; j++) {
+                                    var Status = itemStatusSummaryResponse[j].Status;
                                     if (itemStatusSummaryResponse[j].QueueId == $scope.queueInstances[i].Entity.QueueInstanceId) {
-                                        if (itemStatusSummaryResponse[j].Status == VR_Queueing_QueueItemStatusEnum.New.value || itemStatusSummaryResponse[j].Status == VR_Queueing_QueueItemStatusEnum.Processing.value || itemStatusSummaryResponse[j].Status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
+                                        if (Status == VR_Queueing_QueueItemStatusEnum.New.value || Status == VR_Queueing_QueueItemStatusEnum.Processing.value || Status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
                                             notProcessedCount += itemStatusSummaryResponse[j].Count;
                                         }
-                                        else if (itemStatusSummaryResponse[j].Status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
+                                        else if (Status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
                                             suspendedCount += itemStatusSummaryResponse[j].Count;
                                         }
                                     }

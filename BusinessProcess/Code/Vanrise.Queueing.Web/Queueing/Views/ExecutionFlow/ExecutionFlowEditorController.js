@@ -172,6 +172,6 @@
         }
     }
 
-    appControllers.controller('ExecutionFlowEditorController', ExecutionFlowEditorController);
+    appControllers.controller('VR_Queueing_ExecutionFlowEditorController', ExecutionFlowEditorController);
 
 })(appControllers);
