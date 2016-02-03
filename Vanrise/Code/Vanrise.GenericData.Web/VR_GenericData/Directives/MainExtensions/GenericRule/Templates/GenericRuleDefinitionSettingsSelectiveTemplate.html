@@ -1,1 +1,21 @@
-﻿
+﻿<div>
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-select on-ready="scopeModel.onSelectorReady"
+                       datasource="scopeModel.settingsTemplates"
+                       selectedvalues="scopeModel.selectedSettingsTemplate"
+                       datavaluefield="TemplateConfigID"
+                       datatextfield="Name"
+                       label="Generic Rule Definition Settings"
+                       text="None"
+                       isrequired
+                       hideremoveicon>
+            </vr-select>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow" ng-if="scopeModel.selectedSettingsTemplate != undefined" vr-loader="scopeModel.isLoadingDirective">
+            <vr-directivewrapper directive="scopeModel.selectedSettingsTemplate.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
+        </vr-columns>
+    </vr-row>
+</div>

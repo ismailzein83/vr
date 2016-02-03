@@ -43,12 +43,15 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var fieldTypeSelectivePayload = {};
+
                     if (payload != undefined) {
                         ctrl.fieldName = payload.FieldName;
+                        fieldTypeSelectivePayload = payload.FieldType;
                     }
 
-                    var fieldTypeSelectiveLoadDeferred = UtilsService.createPomiseDeferred();
-                    VRUIUtilsService.callDirectiveLoad(fieldTypeSelectiveAPI, payload, fieldTypeSelectiveLoadDeferred);
+                    var fieldTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    VRUIUtilsService.callDirectiveLoad(fieldTypeSelectiveAPI, fieldTypeSelectivePayload, fieldTypeSelectiveLoadDeferred);
                     return fieldTypeSelectiveLoadDeferred.promise;
                 };
 

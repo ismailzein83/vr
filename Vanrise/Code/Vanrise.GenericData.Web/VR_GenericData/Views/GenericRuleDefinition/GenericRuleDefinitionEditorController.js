@@ -11,6 +11,9 @@
         var criteriaDirectiveAPI;
         var criteriaDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
         
+        var settingsDirectiveAPI;
+        var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         var genericRuleDefinitionId;
         var genericRuleDefinitionEntity;
 
@@ -35,6 +38,11 @@
                 criteriaDirectiveAPI = api;
                 criteriaDirectiveReadyDeferred.resolve();
             };
+            $scope.scopeModel.onSettingsDirectiveReady = function (api) {
+                settingsDirectiveAPI = api;
+                settingsDirectiveReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.save = function () {
                 if (isEditMode)
                     return updateGenericRuleDefinition();
@@ -71,7 +79,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCriteriaDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCriteriaDirective, loadSettingsDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -104,6 +112,16 @@
                 });
                 
                 return criteriaDirectiveLoadDeferred.promise;
+            }
+            function loadSettingsDirective() {
+                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                settingsDirectiveReadyDeferred.promise.then(function () {
+                    var payload = (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.SettingsDefinition != null) ? genericRuleDefinitionEntity.SettingsDefinition : undefined;
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, settingsDirectiveLoadDeferred);
+                });
+
+                return settingsDirectiveLoadDeferred.promise;
             }
         }
 
@@ -146,7 +164,7 @@
                 GenericRuleDefinitionId: genericRuleDefinitionId,
                 Name: $scope.scopeModel.name,
                 CriteriaDefinition: criteriaDirectiveAPI.getData(),
-                SettingsDefinition: null
+                SettingsDefinition: settingsDirectiveAPI.getData()
             };
         }
     }

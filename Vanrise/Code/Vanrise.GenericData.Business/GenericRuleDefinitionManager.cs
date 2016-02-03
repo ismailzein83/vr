@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
@@ -19,7 +20,7 @@ namespace Vanrise.GenericData.Business
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
             Func<GenericRuleDefinition, bool> filterExpression = (genericRuleDefinition) => (input.Query.Name == null || genericRuleDefinition.Name.ToUpper().Contains(input.Query.Name.ToUpper()));
-            return cachedGenericRuleDefinitions.ToBigResult(input, filterExpression);
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericRuleDefinitions.ToBigResult(input, filterExpression));
         }
         
         public GenericRuleDefinition GetGenericRuleDefinition(int genericRuleDefinitionId)
@@ -88,6 +89,12 @@ namespace Vanrise.GenericData.Business
 
             deleteOperationOutput.Result = (deleted) ? DeleteOperationResult.Succeeded : DeleteOperationResult.Failed;
             return deleteOperationOutput;
+        }
+
+        public IEnumerable<Vanrise.Entities.TemplateConfig> GetGenericRuleDefinitionSettingsTemplates()
+        {
+            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.GenericRuleDefinitionSettingsTemplateConfigType);
         }
 
         #endregion
