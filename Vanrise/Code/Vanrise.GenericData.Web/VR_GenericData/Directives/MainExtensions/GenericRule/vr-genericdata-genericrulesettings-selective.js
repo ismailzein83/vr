@@ -50,9 +50,7 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    // directivePayload is cloned in case the next statement is executed before the directive has loaded
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, UtilsService.cloneObject(directivePayload, true), setLoader, undefined);
-                    directivePayload = undefined;
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, undefined);
                 };
             }
 
