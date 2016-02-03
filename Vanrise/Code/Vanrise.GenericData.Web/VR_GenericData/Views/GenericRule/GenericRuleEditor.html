@@ -1,15 +1,12 @@
-﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericRuleEditorController" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericRuleEditorController" width="'50%'" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formGenericRuleEditor">
             <vr-tabs>
                 <vr-tab header="'Criteria'">
                     <div ng-repeat="field in scopeModel.criteriaFields">
-                        <vr-columns width="1/4row">
-                            <vr-label>{{field.Title}}</vr-label>
-                        </vr-columns>
-                        <vr-columns width="3/4row">
+                        <vr-section title="{{field.Title}}">
                             <vr-directivewrapper directive="field.dynamicGroupUIControl.directive" on-ready="field.dynamicGroupUIControl.onDirectiveReady"></vr-directivewrapper>
-                        </vr-columns>
+                        </vr-section>
                     </div>
                 </vr-tab>
                 <vr-tab header="'Settings'">

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDynamicuicontrolsMultipleinput', ['UtilsService', function (UtilsService) {
+app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -8,6 +8,7 @@ app.directive('vrGenericdataDynamicuicontrolsMultipleinput', ['UtilsService', fu
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+            ctrl.values = [];
 
             var ctor = new textCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
@@ -27,6 +28,22 @@ app.directive('vrGenericdataDynamicuicontrolsMultipleinput', ['UtilsService', fu
     function textCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
+            ctrl.isValid = function () {
+                if (ctrl.values != undefined && ctrl.values.length > 0)
+                    return null;
+                return "You should add at least one choice."
+            }
+
+            ctrl.disableAddButton = true;
+            ctrl.addValue = function () {
+                ctrl.values.push(ctrl.value);
+                ctrl.value = undefined;
+                ctrl.disableAddButton = true;
+            }
+
+            ctrl.onValueChange = function (value) {
+                ctrl.disableAddButton = (value == undefined);
+            }
 
             defineAPI();
         }
@@ -39,11 +56,6 @@ app.directive('vrGenericdataDynamicuicontrolsMultipleinput', ['UtilsService', fu
                 var fieldType;
                 if (payload != undefined) {
                     fieldType = payload.fieldType;
-                }
-
-                if(fieldType != undefined)
-                {
-
                 }
             }
 
