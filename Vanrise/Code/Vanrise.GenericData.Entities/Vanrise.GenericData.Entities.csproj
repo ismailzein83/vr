@@ -67,6 +67,8 @@
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionCriteriaField.cs" />
     <Compile Include="GenericRules\GenericRuleTarget.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityGroup.cs" />
+    <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionInfo.cs" />
+    <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionInfoFilter.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionQuery.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

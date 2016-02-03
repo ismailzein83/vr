@@ -97,6 +97,19 @@ namespace Vanrise.GenericData.Business
             return templateConfigManager.GetTemplateConfigurations(Constants.GenericRuleDefinitionSettingsTemplateConfigType);
         }
 
+        public IEnumerable<GenericRuleDefinitionInfo> GetGenericRuleDefinitionsInfo(GenericRuleDefinitionInfoFilter filter)
+        {
+            var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
+            Func<GenericRuleDefinition, bool> filterExpression = null;
+
+            if (filter != null)
+            {
+                // Set filterExpression
+            }
+
+            return cachedGenericRuleDefinitions.MapRecords(GenericRuleDefinitionInfoMapper, filterExpression);
+        }
+
         #endregion
 
         #region Private Methods
@@ -126,6 +139,19 @@ namespace Vanrise.GenericData.Business
             {
                 return _dataManager.AreGenericRuleDefinitionsUpdated(ref _updateHandle);
             }
+        }
+
+        #endregion
+
+        #region Mappers
+
+        public GenericRuleDefinitionInfo GenericRuleDefinitionInfoMapper(GenericRuleDefinition genericRuleDefinition)
+        {
+            return new GenericRuleDefinitionInfo()
+            {
+                GenericRuleDefinitionId = genericRuleDefinition.GenericRuleDefinitionId,
+                Name = genericRuleDefinition.Name
+            };
         }
 
         #endregion
