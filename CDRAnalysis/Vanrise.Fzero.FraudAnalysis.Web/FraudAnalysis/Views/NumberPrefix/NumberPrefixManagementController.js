@@ -69,7 +69,7 @@
         function onNumberPrefixAdded(addedNumberPrefix) {
             if (addedNumberPrefix != undefined) {
                 $scope.nodesUpdated = true;
-                numberPrefixes.push(mapPrefixtoInfo(addedNumberPrefix.prefix));
+                numberPrefixes.push(mapPrefixtoNumberPrefix(addedNumberPrefix.prefix));
                 buildNumberPrefixesTree();
             }
         }
@@ -100,12 +100,21 @@
 
             var currentPrefix = $scope.currentNode.nodeName;
             for (var i = 0; i <= 9; i++) {
-                var mapped = mapPrefixtoInfo(currentPrefix + i);
-                if (!contains(numberPrefixes, mapped))
-                    numberPrefixes.push(mapPrefixtoInfo(currentPrefix + i));
+                var numberPrefix = mapPrefixtoNumberPrefix(currentPrefix + i);
+                if (!contains(numberPrefixes, numberPrefix)) {
+                    numberPrefixes.push(numberPrefix);
+
+                    var node = mapNumberPrefixToNode(numberPrefix);
+                    treeAPI.createNode(node);
+                    for (var j = 0; j < $scope.nodes.length; j++) {
+                        if ($scope.nodes[j].nodeId == $scope.currentNode.nodeId) {
+                            $scope.nodes[j].effectiveNumberPrefixes.push(node);
+                        }
+                    }
+                }
             }
+
             $scope.nodesUpdated = true;
-            buildNumberPrefixesTree();
         }
 
         function mergeNumberPrefix() {
@@ -126,6 +135,16 @@
                         numberPrefixes.splice(j, 1);
                     }
                 }
+
+
+            //for (var i = 0; i < $scope.nodes.length; i++) {
+            //    if ($scope.nodes[i].nodeId == $scope.currentNode.nodeId) {
+            //        if ($scope.nodes[i].effectiveNumberPrefixes != undefined) {
+            //            $scope.nodes[i].effectiveNumberPrefixes.length = 0;
+            //        }
+            //    }
+            //}
+
 
             $scope.nodesUpdated = true;
             buildNumberPrefixesTree();
@@ -150,6 +169,7 @@
                 }
 
             $scope.nodesUpdated = true;
+            $scope.currentNode = undefined;
             buildNumberPrefixesTree();
         }
 
@@ -222,7 +242,7 @@
             };
         }
 
-        function mapPrefixtoInfo(prefix) {
+        function mapPrefixtoNumberPrefix(prefix) {
             return { $type: "Vanrise.Fzero.FraudAnalysis.Entities.NumberPrefix, Vanrise.Fzero.FraudAnalysis.Entities", Prefix: prefix }
         }
 
