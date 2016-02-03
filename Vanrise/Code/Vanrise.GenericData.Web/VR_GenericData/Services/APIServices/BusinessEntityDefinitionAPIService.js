@@ -1,0 +1,28 @@
+﻿(function (appControllers) {
+
+    'use strict';
+
+    BusinessEntityDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
+
+    function BusinessEntityDefinitionAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
+        return {
+            GetBusinessEntityDefinitionsInfo: GetBusinessEntityDefinitionsInfo,
+            GetBusinessEntityDefinition: GetBusinessEntityDefinition
+        };
+
+        function GetBusinessEntityDefinitionsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetBusinessEntityDefinitionsInfo'), {
+                filter: filter
+            });
+        }
+
+        function GetBusinessEntityDefinition(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetBusinessEntityDefinition'), {
+                businessEntityDefinitionId: businessEntityDefinitionId
+            });
+        }
+    }
+
+    appControllers.service('VR_GenericData_BusinessEntityDefinitionAPIService', BusinessEntityDefinitionAPIService);
+
+})(appControllers);
