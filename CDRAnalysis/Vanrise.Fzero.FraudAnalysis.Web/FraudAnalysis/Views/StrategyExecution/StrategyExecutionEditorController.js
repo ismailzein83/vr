@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyExecutionEditorController.$inject = ['$scope', 'StrategyExecutionAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_SuspicionLevelEnum', 'VRCommon_HourEnum'];
+StrategyExecutionEditorController.$inject = ['$scope', 'StrategyExecutionAPIService',  'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_SuspicionLevelEnum', 'VRCommon_HourEnum'];
 
-function StrategyExecutionEditorController($scope, StrategyExecutionAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_SuspicionLevelEnum, VRCommon_HourEnum) {
+function StrategyExecutionEditorController($scope, StrategyExecutionAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_SuspicionLevelEnum, VRCommon_HourEnum) {
 
     var editMode;
     loadParameters();

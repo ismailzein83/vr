@@ -187,7 +187,7 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
                 getScheduledTasksData();
             };
         };
-        VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, settings);
+        VRModalService.showModal('/Client/Modules/Runtime/Views/NewSchedulerTaskEditor/NewSchedulerTaskEditor.html', parameters, settings);
     }
 
     function showEditTaskModal(taskObj) {
@@ -203,7 +203,7 @@ function BPDefinitionManagementController($scope, BusinessProcessService, Busine
                 getScheduledTasksData();
             };
         };
-        VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, settings);
+        VRModalService.showModal('/Client/Modules/Runtime/Views/NewSchedulerTaskEditor/NewSchedulerTaskEditor.html', parameters, settings);
     }
 
     function retrieveData() {

@@ -4,7 +4,7 @@
     </vr-columns>
 
     <vr-columns width="1/4row" vr-loader="isLoadingData">
-        <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" ismultipleselection selectedvalues="selectedStrategies" isrequired>  </vr-select>
+        <cdranalysis-fa-strategy-selector isrequired on-ready="onStrategySelectorReady" ismultipleselection></cdranalysis-fa-strategy-selector>
     </vr-columns>
 
     <vr-columns width="1/4row">

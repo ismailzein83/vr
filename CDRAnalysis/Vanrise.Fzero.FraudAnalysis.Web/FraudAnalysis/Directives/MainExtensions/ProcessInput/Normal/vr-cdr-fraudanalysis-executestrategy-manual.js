@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisExecutestrategyManual", ["UtilsService", "StrategyAPIService", "VRValidationService", "CDRAnalysis_FA_PeriodAPIService", function (UtilsService, StrategyAPIService, VRValidationService, CDRAnalysis_FA_PeriodAPIService) {
+app.directive("vrCdrFraudanalysisExecutestrategyManual", ["VRUIUtilsService", "UtilsService", "StrategyAPIService", "VRValidationService", "CDRAnalysis_FA_PeriodAPIService", function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationService, CDRAnalysis_FA_PeriodAPIService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -26,9 +26,17 @@ app.directive("vrCdrFraudanalysisExecutestrategyManual", ["UtilsService", "Strat
     };
 
     function DirectiveConstructor($scope, ctrl) {
+
         this.initializeController = initializeController;
-        var firstTimeToload = false;
+        var strategySelectorAPI;
+        var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
+
+            $scope.onStrategySelectorReady = function (api) {
+                strategySelectorAPI = api;
+                strategySelectorReadyDeferred.resolve();
+            };
 
             var yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
@@ -42,18 +50,13 @@ app.directive("vrCdrFraudanalysisExecutestrategyManual", ["UtilsService", "Strat
 
             $scope.createProcessInputObjects = [];
 
-            $scope.strategies = [];
-            $scope.selectedStrategies = [];
-            $scope.selectedStrategyIds = [];
             $scope.periods = [];
 
             $scope.selectedPeriodChanged = function () {
 
-                if ($scope.selectedPeriod != undefined && firstTimeToload == true) {
+                if ($scope.selectedPeriod != undefined) {
                     $scope.isLoadingData = true;
-                    $scope.strategies.length = 0;
-                    $scope.selectedStrategies.length = 0;
-                    loadStrategies($scope.selectedPeriod.Id);
+                    loadStrategySelector($scope.selectedPeriod.Id);
                 }
             }
 
@@ -65,11 +68,6 @@ app.directive("vrCdrFraudanalysisExecutestrategyManual", ["UtilsService", "Strat
 
             var api = {};
             api.getData = function () {
-
-                angular.forEach($scope.selectedStrategies, function (itm) {
-                    $scope.selectedStrategyIds.push(itm.id);
-                });
-
 
                 var runningDate = new Date($scope.fromDate);
 
@@ -114,9 +112,7 @@ app.directive("vrCdrFraudanalysisExecutestrategyManual", ["UtilsService", "Strat
                     });
                 })
                 promises.push(loadPeriods);
-                firstTimeToload = true;
                 return UtilsService.waitMultiplePromises(promises);
-
             }
 
 
@@ -128,7 +124,8 @@ app.directive("vrCdrFraudanalysisExecutestrategyManual", ["UtilsService", "Strat
             $scope.createProcessInputObjects.push({
                 InputArguments: {
                     $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                    StrategyIds: $scope.selectedStrategyIds,
+                    StrategyIds: strategySelectorAPI.getSelectedIds(),
+                    PeriodId: $scope.selectedPeriod.Id,
                     FromDate: new Date(fromDate),
                     ToDate: new Date(toDate),
                     IncludeWhiteList: $scope.includeWhiteList
@@ -136,21 +133,24 @@ app.directive("vrCdrFraudanalysisExecutestrategyManual", ["UtilsService", "Strat
             });
         }
 
-        function loadStrategies(periodId) {
-            return StrategyAPIService.GetStrategiesInfo(
-                    {
-                        PeriodId: periodId,
-                        IsEnabled: true
-                    }
-                ).then(function (response) {
-                $scope.strategies.length = 0;
-                angular.forEach(response, function (itm) {
-                    $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
-                });
-            }).finally(function () {
-                $scope.isLoadingData = false;
-            });
+
+        function loadStrategySelector(periodId) {
+            var strategySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            var payload = {
+            };
+            var filter = {};
+            filter.PeriodId = periodId;
+
+            payload.filter = filter;
+
+            strategySelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, payload, strategySelectorLoadDeferred);
+            }).finally(function () { $scope.isLoadingData = false; });
+
+            return strategySelectorLoadDeferred.promise;
         }
+
+
     }
 
     return directiveDefinitionObject;

@@ -1,9 +1,11 @@
 ﻿"use strict";
 
-BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService'];
+BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'VRUIUtilsService'];
 
-function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService) {
+function BlockedLinesController($scope, ReportingAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, VRUIUtilsService) {
 
+    var strategySelectorAPI;
+    var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
     var mainGridAPI;
     var arrMenuAction = [];
     var accountNumbers = [];
@@ -12,6 +14,12 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
     load();
 
     function defineScope() {
+
+        $scope.onStrategySelectorReady = function (api) {
+            strategySelectorAPI = api;
+            strategySelectorReadyDeferred.resolve();
+        };
+
         $scope.gridMenuActions = [];
 
         var Yesterday = new Date();
@@ -23,9 +31,6 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
         $scope.validateTimeRange = function () {
             return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
         }
-
-        $scope.strategies = [];
-        $scope.selectedStrategies = [];
 
         $scope.blockedLines = [];
 
@@ -52,15 +57,10 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
     }
 
     function load() {
+
         $scope.isInitializing = true;
 
-        var periodId = 0; // all periods
-        return StrategyAPIService.GetStrategies(periodId, '')
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.strategies.push({ id: item.Id, name: item.Name });
-                });
-            })
+        return UtilsService.waitMultipleAsyncOperations([loadStrategySelector])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -68,6 +68,15 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
                 $scope.isInitializing = false;
             });
     }
+
+    function loadStrategySelector() {
+        var strategySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        strategySelectorReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, undefined, strategySelectorLoadDeferred);
+        });
+        return strategySelectorLoadDeferred.promise;
+    }
+
 
     function defineMenuActions() {
         $scope.gridMenuActions = [{
@@ -100,12 +109,12 @@ function BlockedLinesController($scope, ReportingAPIService, StrategyAPIService,
     function retrieveData() {
 
         var query = {
-            StrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "id"),
+            StrategyIDs: strategySelectorAPI.getSelectedIds(),
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
             GroupDaily: $scope.groupDaily
         };
-
+        console.log(query)
         return mainGridAPI.retrieveData(query);
     }
 

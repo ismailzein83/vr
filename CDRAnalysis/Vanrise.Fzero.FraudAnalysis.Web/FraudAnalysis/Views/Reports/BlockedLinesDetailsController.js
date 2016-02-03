@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-BlockedLinesDetailsController.$inject = ['$scope', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+BlockedLinesDetailsController.$inject = ['$scope', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function BlockedLinesDetailsController($scope,  $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function BlockedLinesDetailsController($scope, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
 
     loadParameters();
     defineScope();
@@ -20,6 +20,6 @@ function BlockedLinesDetailsController($scope,  $routeParams, notify, VRModalSer
             $scope.modalContext.closeModal()
         };
     }
-   
+
 }
 appControllers.controller('BlockedLinesDetailsController', BlockedLinesDetailsController);

@@ -4,14 +4,14 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="validateTimeRange()"   ></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="fromDate" label="From" isrequired customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" value="toDate" label="To" isrequired customvalidate="validateTimeRange()"> </vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select datasource="strategies" datatextfield="name" datavaluefield="id" label="Strategy" selectedvalues="selectedStrategies" ismultipleselection></vr-select>
+                    <cdranalysis-fa-strategy-selector on-ready="onStrategySelectorReady" ismultipleselection></cdranalysis-fa-strategy-selector>
                 </vr-columns>
 
                 <vr-columns width="normal">
@@ -32,8 +32,7 @@
 
     <div>
         <vr-row>
-            <vr-columns width="fullrow" >
-
+            <vr-columns width="fullrow">
                 <vr-datagrid datasource="blockedLines" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'Pager'" on-ready="onMainGridReady" menuactions="gridMenuActions">
                     <vr-datagridcolumn headertext="'Strategy Name'" field="'StrategyName'"></vr-datagridcolumn>
                     <vr-datagridcolumn ng-show="groupDaily" headertext="'Date Day'" field="'DateDay'" type="'Date'"></vr-datagridcolumn>

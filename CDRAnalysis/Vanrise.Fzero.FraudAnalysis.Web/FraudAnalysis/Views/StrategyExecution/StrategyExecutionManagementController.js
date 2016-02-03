@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'CDRAnalysis_FA_PeriodAPIService', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
+StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'CDRAnalysis_FA_PeriodAPIService', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
 
-function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_PeriodAPIService, StrategyExecutionAPIService, VR_Sec_UserAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
+function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_PeriodAPIService, StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -33,12 +33,9 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
 
         $scope.gridMenuActions = [];
 
-
-        $scope.strategies = [];
         $scope.periods = [];
 
         $scope.strategyExecutions = [];
-        $scope.selectedStrategies = [];
         $scope.selectedPeriods = [];
 
         $scope.filterDateTypes = [];
@@ -47,13 +44,9 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
 
         $scope.selectedFilterDateType = $scope.filterDateTypes[0];
 
-
         $scope.getStatusColor = function (dataItem, colDef) {
             return BusinessProcessService.getStatusColor(dataItem.Status);
         };
-
-
-
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -62,8 +55,6 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
         $scope.searchClicked = function () {
             return retrieveData();
         }
-
-
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 

@@ -1,9 +1,11 @@
 ﻿"use strict";
 
-CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'StrategyAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService'];
+CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'VRUIUtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService'];
 
-function CasesProductivityController($scope, ReportingAPIService, StrategyAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService) {
+function CasesProductivityController($scope, ReportingAPIService, VRUIUtilsService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService) {
 
+    var strategySelectorAPI;
+    var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
     var mainGridAPI;
     var arrMenuAction = [];
 
@@ -12,6 +14,10 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
 
     function defineScope() {
 
+        $scope.onStrategySelectorReady = function (api) {
+            strategySelectorAPI = api;
+            strategySelectorReadyDeferred.resolve();
+        };
 
         var Now = new Date();
 
@@ -54,16 +60,10 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
     }
 
     function load() {
+
         $scope.isInitializing = true;
 
-        var periodId = 0; // all periods
-        var isEnabled = ''; // all enabled and disabled
-        return StrategyAPIService.GetStrategies(periodId, isEnabled)
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.strategies.push({ id: item.Id, name: item.Name });
-                });
-            })
+        return UtilsService.waitMultipleAsyncOperations([loadStrategySelector])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -72,10 +72,18 @@ function CasesProductivityController($scope, ReportingAPIService, StrategyAPISer
             });
     }
 
+    function loadStrategySelector() {
+        var strategySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        strategySelectorReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, undefined, strategySelectorLoadDeferred);
+        });
+        return strategySelectorLoadDeferred.promise;
+    }
+
     function retrieveData() {
 
         var query = {
-            StrategyIDs: UtilsService.getPropValuesFromArray($scope.selectedStrategies, "id"),
+            StrategyIDs: strategySelectorAPI.getSelectedIds(),
             FromDate: $scope.fromDate,
             ToDate: $scope.toDate,
             GroupDaily: $scope.groupDaily

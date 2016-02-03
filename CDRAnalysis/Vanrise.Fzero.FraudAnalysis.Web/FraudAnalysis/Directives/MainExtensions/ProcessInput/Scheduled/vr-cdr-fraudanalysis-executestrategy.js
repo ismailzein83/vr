@@ -27,49 +27,44 @@ app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsSe
 
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
- 
-        var firstTimeToload = false;
+        var strategySelectorAPI;
+        var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var selectedStrategyIds;
+
         function initializeController() {
+
+            $scope.onStrategySelectorReady = function (api) {
+                strategySelectorAPI = api;
+                strategySelectorReadyDeferred.resolve();
+            };
+
             $scope.strategies = [];
-            $scope.selectedStrategies = [];
-            $scope.selectedStrategyIds = [];
             $scope.periods = [];
-          
-           
+
             $scope.selectedPeriodChanged = function () {
-
-
-                if ($scope.selectedPeriod != undefined && firstTimeToload == true) {
-                    $scope.isLoadingData = true;
-                    $scope.strategies.length = 0;
-                    $scope.selectedStrategies.length = 0;
-                    loadStrategies($scope.selectedPeriod.Id);
+                if ($scope.selectedPeriod != undefined) {
+                    loadStrategySelector($scope.selectedPeriod.Id);
                 }
-
             }
-
             defineAPI();
         }
 
         function defineAPI() {
-
-          
+            
             var api = {};
             api.getData = function () {
-                angular.forEach($scope.selectedStrategies, function (itm) {
-                    $scope.selectedStrategyIds.push(itm.id);
-                });
-
+                console.log($scope.selectedPeriod.Id)
                 return {
                     $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                    StrategyIds: $scope.selectedStrategyIds,
+                    StrategyIds: strategySelectorAPI.getSelectedIds(),
+                    PeriodId: $scope.selectedPeriod.Id,
                     IncludeWhiteList: false
                 };
 
             };
 
             api.getExpressionsData = function () {
-                
+
                 return { "ScheduleTime": "ScheduleTime" };
 
             };
@@ -83,65 +78,45 @@ app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsSe
                     angular.forEach(response, function (itm) {
                         $scope.periods.push(itm);
                     });
+
+                    if (data != undefined && data.StrategyIds != undefined) {
+                        selectedStrategyIds = data.StrategyIds;
+                        $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, data.PeriodId, "Id");
+                    }
+
                 })
                 promises.push(loadPeriods);
-                var strategy;
-                if (data != undefined && data.StrategyIds!= undefined) {
-                    var firstStrategyLoad = loadStrategies(0).then(function () {
-                        var promises = [];
-                        strategy = UtilsService.getItemByVal($scope.strategies, data.StrategyIds[0], "id");
-
-                        if (strategy != null) {
-                            $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, strategy.periodId, "Id");
-                           
-                        }
-                        if ($scope.selectedPeriod != undefined) {
-                            loadStrategies($scope.selectedPeriod.Id).then(function () {
-                                firstTimeToload = true;
-                                angular.forEach(data.StrategyIds, function (strategyId) {
-                                    $scope.selectedStrategies.push(UtilsService.getItemByVal($scope.strategies, strategyId, "id"));
-                                });
-                            })
-                        }
-                        else {
-                            firstTimeToload = true;
-
-                        }
-                       
-                       
-                    })
-                    promises.push(firstStrategyLoad)
-                }
-                else {
-                    firstTimeToload = true;
-                }
-                
                 return UtilsService.waitMultiplePromises(promises);
 
             }
-
-            
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
-        function loadStrategies(periodId) {
 
-            return StrategyAPIService.GetStrategiesInfo(
-                    {
-                        PeriodId: periodId,
-                        IsEnabled: true
-                    }
-                ).then(function (response) {
-                $scope.strategies.length = 0;
-                angular.forEach(response, function (itm) {
-                    $scope.strategies.push({ id: itm.Id, name: itm.Name, periodId: itm.PeriodId });
-                })
-            }).finally(function () {
-                $scope.isLoadingData = false;
-            });;
+        function loadStrategySelector(periodId) {
+            $scope.isLoadingData = true;
+            var strategySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            var payload = {
+            };
+
+            if (selectedStrategyIds != undefined)
+                payload.selectedIds = selectedStrategyIds;
+
+            var filter = {};
+            if (periodId != undefined)
+                filter.PeriodId = periodId;
+
+            payload.filter = filter;
+
+            strategySelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, payload, strategySelectorLoadDeferred);
+            }).finally(function () { $scope.isLoadingData = false; });
+
+            return strategySelectorLoadDeferred.promise;
         }
+
     }
 
     return directiveDefinitionObject;
