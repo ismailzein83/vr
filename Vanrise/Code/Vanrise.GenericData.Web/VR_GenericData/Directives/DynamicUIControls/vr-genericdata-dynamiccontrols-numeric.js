@@ -28,6 +28,8 @@ app.directive('vrGenericdataDynamiccontrolsNumeric', ['UtilsService', function (
     function textCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
+            ctrl.showInMultipleMode = ($attrs.selectionmode == "multiple");
+
             ctrl.isValid = function () {
                 if (ctrl.values != undefined && ctrl.values.length > 0)
                     return null;

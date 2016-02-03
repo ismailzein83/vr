@@ -6,20 +6,15 @@ app.directive('vrGenericdataDynamiccontrolsSelector', ['UtilsService', 'VRUIUtil
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: "@",
-                onselectionchanged: '=',
-                isrequired: "@",
                 selectedvalues: '=',
-                hideremoveicon: "@",
-                onselectitem: "=",
-                ondeselectitem: "="
+                selectionmode: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
 
                 ctrl.selectedvalues;
-                if ($attrs.ismultipleselection != undefined)
+                if ($attrs.selectionmode == "multiple")
                     ctrl.selectedvalues = [];
 
                 ctrl.datasource = [];
@@ -44,23 +39,23 @@ app.directive('vrGenericdataDynamiccontrolsSelector', ['UtilsService', 'VRUIUtil
 
         function getTemplate(attrs) {
             var multipleselection = "";
-            var label = "";
-            if (attrs.ismultipleselection != undefined) {
-                label = "";
+            //var label = "";
+            if (attrs.selectionmode == "multiple") {
+                //label = "";
                 multipleselection = "ismultipleselection";
             }
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = "isrequired";
+            //var required = "";
+            //if (attrs.isrequired != undefined)
+            //    required = "isrequired";
 
-            var hideremoveicon = "";
-            if (attrs.hideremoveicon != undefined)
-                hideremoveicon = "hideremoveicon";
+            //var hideremoveicon = "";
+            //if (attrs.hideremoveicon != undefined)
+            //    hideremoveicon = "hideremoveicon";
 
-            return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Text" datavaluefield="Value" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
-            + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + '></vr-select>'
-               + '</div>'
+            return '<vr-columns width="1/4row">'
+                + '<vr-select datatextfield="Text" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" '
+                + multipleselection + '></vr-select>'
+                + '</vr-columns>'
         }
 
         function selectorCtor(ctrl, $scope, $attrs) {

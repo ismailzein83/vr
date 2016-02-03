@@ -160,7 +160,7 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\DynamicUIControls\Templates\NumericEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\DynamicUIControls\vr-genericdata-dynamiccontrols-numeric.js" />
-    <Content Include="VR_GenericData\Directives\DynamicUIControls\vr-genericdata-dynamicuicontrols-selector.js" />
+    <Content Include="VR_GenericData\Directives\DynamicUIControls\vr-genericdata-dynamiccontrols-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\CriteriaField\Templates\GenericRuleDefinitionCriteriaFieldManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\CriteriaField\vr-genericdata-genericruledefinitioncriteriafield-management.js" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\Templates\GenericRuleDefinitionGridTemplate.html" />

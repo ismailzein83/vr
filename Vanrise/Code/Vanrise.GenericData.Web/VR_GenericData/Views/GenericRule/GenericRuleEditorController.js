@@ -2,9 +2,11 @@
 
     "use strict";
 
-    genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService'];
+    genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
+        'UtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRNavigationService, VRNotificationService) {
+    function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService,
+        UtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
 
