@@ -5,19 +5,28 @@
         </vr-columns>
     </vr-row>
     <vr-row>
-        <vr-columns width="fullrow">
+        <vr-columns width="2/3row">
             <vr-validator validate="ctrl.validateCriteriaFields()">
                 <vr-datagrid on-ready="ctrl.onGridReady"
-                             datasource="ctrl.criteriaFields"
-                             menuactions="ctrl.menuActions"
-                             enabledraggablerow="true"
-                             hidegridmenu>
+                                datasource="ctrl.criteriaFields"
+                                menuactions="ctrl.menuActions"
+                                enabledraggablerow="true"
+                                hidegridmenu>
                     <vr-datagridcolumn headertext="'Field Name'" type="'Text'" field="'FieldName'" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Title'" type="'Text'" field="'Title'" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Field Type'" type="'Text'" field="'FieldTypeDescription'" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Rule Structure Behavior Type'" type="'Text'" field="'RuleStructureBehaviorTypeDescription'" disablesorting></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-validator>
+        </vr-columns>
+        <vr-columns width="1/3row" simplecol>
+            <vr-section title="Priority">
+                <vr-datagrid datasource="ctrl.priorities"
+                             enabledraggablerow="true"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Field Name'" type="'Text'" field="'FieldName'" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-section>
         </vr-columns>
     </vr-row>
 </div>

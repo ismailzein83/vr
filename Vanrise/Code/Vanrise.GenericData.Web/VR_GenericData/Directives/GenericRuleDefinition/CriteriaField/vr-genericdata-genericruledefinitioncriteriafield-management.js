@@ -35,6 +35,7 @@
 
             function initializeController() {
                 ctrl.criteriaFields = [];
+                ctrl.priorities = [];
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
@@ -47,6 +48,7 @@
                     var onCriteriaFieldAdded = function (addedCriteriaField) {
                         extendCriteriaFieldObject(addedCriteriaField);
                         ctrl.criteriaFields.push(addedCriteriaField);
+                        addPriorityDataItem(addedCriteriaField);
                     };
                     VR_GenericData_GenericRuleDefinitionCriteriaFieldService.addGenericRuleDefinitionCriteriaField(ctrl.criteriaFields, onCriteriaFieldAdded);
                 };
@@ -67,9 +69,11 @@
                     return loadDataRecordFieldTypeConfigs().then(function () {
                         if (payload != undefined) {
                             for (var i = 0; i < payload.GenericRuleDefinitionCriteriaFields.length; i++) {
-                                extendCriteriaFieldObject(payload.GenericRuleDefinitionCriteriaFields[i]);
-                                ctrl.criteriaFields.push(payload.GenericRuleDefinitionCriteriaFields[i]);
+                                var criteriaField = payload.GenericRuleDefinitionCriteriaFields[i];
+                                extendCriteriaFieldObject(criteriaField);
+                                ctrl.criteriaFields.push(criteriaField);
                             }
+                            loadPriorityDataItemsFromPayload();
                         }
                     });
 
@@ -83,6 +87,16 @@
                             }
                         });
                     }
+
+                    function loadPriorityDataItemsFromPayload() {
+                        var clonedCriteriaFields = UtilsService.cloneObject(ctrl.criteriaFields, true);
+                        clonedCriteriaFields.sort(function (first, second) {
+                            return first.Priority - second.Priority;
+                        });
+                        for (var j = 0; j < clonedCriteriaFields.length; j++) {
+                            addPriorityDataItem(clonedCriteriaFields[j]);
+                        }
+                    }
                 };
 
                 api.getData = function () {
@@ -91,8 +105,12 @@
                     if (ctrl.criteriaFields.length > 0) {
                         var fields = [];
                         for (var i = 0; i < ctrl.criteriaFields.length; i++) {
-                            ctrl.criteriaFields[i].Priority = i + 1;
-                            fields.push(ctrl.criteriaFields[i]);
+                            var criteriaField = ctrl.criteriaFields[i];
+
+                            var index = UtilsService.getItemIndexByVal(ctrl.priorities, criteriaField.FieldName, 'FieldName');
+                            criteriaField.Priority = index + 1;
+
+                            fields.push(criteriaField);
                         }
                         data = {
                             Fields: fields
@@ -104,7 +122,6 @@
 
                 return api;
             }
-
             function defineMenuActions() {
                 ctrl.menuActions = [{
                     name: 'Edit',
@@ -123,7 +140,15 @@
                 };
                 VR_GenericData_GenericRuleDefinitionCriteriaFieldService.editGenericRuleDefinitionCriteriaField(criteriaField.FieldName, ctrl.criteriaFields, onCriteriaFieldUpdated);
             }
-
+            function deleteCriteriaField(criteriaField) {
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
+                        ctrl.criteriaFields.splice(index, 1);
+                        deletePriorityDataItem(criteriaField);
+                    }
+                });
+            }
             function extendCriteriaFieldObject(criteriaField) {
                 var behaviorTypeObject = UtilsService.getEnum(VR_GenericData_MappingRuleStructureBehaviorTypeEnum, 'value', criteriaField.RuleStructureBehaviorType);
                 if (behaviorTypeObject != undefined) {
@@ -136,13 +161,14 @@
                 }
             }
 
-            function deleteCriteriaField(criteriaField) {
-                VRNotificationService.showConfirmation().then(function (confirmed) {
-                    if (confirmed) {
-                        var index = UtilsService.getItemIndexByVal(ctrl.criteriaFields, criteriaField.FieldName, 'FieldName');
-                        ctrl.criteriaFields.splice(index, 1);
-                    }
+            function addPriorityDataItem(criteriaField) {
+                ctrl.priorities.push({
+                    FieldName: criteriaField.FieldName
                 });
+            }
+            function deletePriorityDataItem(criteriaField) {
+                var index = UtilsService.getItemIndexByVal(ctrl.priorities, criteriaField.FieldName, 'FieldName');
+                ctrl.priorities.splice(index, 1);
             }
         }
     }
