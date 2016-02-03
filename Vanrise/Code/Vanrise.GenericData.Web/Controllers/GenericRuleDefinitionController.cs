@@ -59,9 +59,9 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericRuleDefinitionsInfo")]
-        public IEnumerable<GenericRuleDefinitionInfo> GetGenericRuleDefinitionsInfo(string filter)
+        public IEnumerable<GenericRuleDefinitionInfo> GetGenericRuleDefinitionsInfo(string filter = null)
         {
-            GenericRuleDefinitionInfoFilter deserializedFilter = Vanrise.Common.Serializer.Deserialize<GenericRuleDefinitionInfoFilter>(filter);
+            GenericRuleDefinitionInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<GenericRuleDefinitionInfoFilter>(filter) : null;
             return _manager.GetGenericRuleDefinitionsInfo(deserializedFilter);
         }
     }

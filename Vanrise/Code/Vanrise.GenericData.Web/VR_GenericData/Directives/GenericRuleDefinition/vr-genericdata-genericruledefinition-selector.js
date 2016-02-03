@@ -9,23 +9,19 @@
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: "@",
-                onselectionchanged: '=',
                 selectedvalues: '=',
-                isrequired: "=",
                 onselectitem: "=",
                 ondeselectitem: "=",
+                onselectionchanged: '=',
+                ismultipleselection: "@",
+                isrequired: "=",
                 isdisabled: "=",
                 customlabel: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.datasource = [];
-
-                ctrl.selectedvalues;
-                if ($attrs.ismultipleselection != undefined) {
-                    ctrl.selectedvalues = [];
-                }
+                ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
                 var genericRuleDefinitionSelector = new GenericRuleDefinitionSelector(ctrl, $scope, $attrs);
                 genericRuleDefinitionSelector.initializeController();
@@ -96,21 +92,40 @@
 
         function getDirectiveTemplate(attrs) {
 
-            var multipleselection = "";
+            var multipleselection = '';
 
-            var label = "Generic Rule Definition";
+            var label = 'Generic Rule Definition';
             if (attrs.ismultipleselection != undefined) {
-                label = "Generic Rule Definitions";
-                multipleselection = "ismultipleselection";
+                label = 'Generic Rule Definitions';
+                multipleselection = 'ismultipleselection';
             }
 
-            if (attrs.customlabel != undefined)
+            if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
+            }
+
+            var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
+
+            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="UserId" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="User" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '<vr-select on-ready="ctrl.onSelectorReady"'
+                    + ' datasource="ctrl.datasource"'
+                    + ' selectedvalues="ctrl.selectedvalues"'
+                    + ' onselectionchanged="ctrl.onselectionchanged"'
+                    + ' onselectitem="ctrl.onselectitem"'
+                    + ' ondeselectitem="ctrl.ondeselectitem"'
+                    + ' datavaluefield="GenericRuleDefinitionId"'
+                    + ' datatextfield="Name"'
+                    + ' ' + multipleselection
+                    + ' ' + hideselectedvaluessection
+                    + ' isrequired="ctrl.isrequired"'
+                    + ' ' + hideremoveicon
+                    + ' vr-disabled="ctrl.isdisabled"'
+                    + ' label="' + label + '"'
+                    + ' entityName="' + label + '"'
+                + '</vr-select>'
+            + '</div>';
         }
     }
 
