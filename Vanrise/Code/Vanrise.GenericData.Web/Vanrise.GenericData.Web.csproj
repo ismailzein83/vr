@@ -165,6 +165,7 @@
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\CriteriaField\vr-genericdata-genericruledefinitioncriteriafield-management.js" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\Templates\GenericRuleDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\vr-genericdata-genericruledefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\GenericRuleDefinition\vr-genericdata-genericruledefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\BooleanDirectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\ChoicesDirectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\DateTimeDirectiveTemplate.html" />
