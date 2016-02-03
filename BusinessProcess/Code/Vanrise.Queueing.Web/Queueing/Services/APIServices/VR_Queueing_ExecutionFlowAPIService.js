@@ -11,7 +11,8 @@
             GetExecutionFlow: GetExecutionFlow,
             UpdateExecutionFlow: UpdateExecutionFlow,
             AddExecutionFlow: AddExecutionFlow,
-            GetExecutionFlows: GetExecutionFlows
+            GetExecutionFlows: GetExecutionFlows,
+            GetExecutionFlowStatusSummary:GetExecutionFlowStatusSummary
         });
 
         function GetExecutionFlowDefinitions() {
@@ -38,6 +39,9 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'GetExecutionFlows'));
         }
 
+        function GetExecutionFlowStatusSummary() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionFlow', 'GetExecutionFlowStatusSummary'));
+        }
         
         
     }

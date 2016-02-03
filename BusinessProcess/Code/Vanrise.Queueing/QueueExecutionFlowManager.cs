@@ -12,6 +12,37 @@ namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowManager
     {
+        public IEnumerable<ExecutionFlowStatusSummary> GetExecutionFlowStatusSummary()
+        {
+            QueueItemManager queueItemManager = new QueueItemManager();
+            QueueingManager queueingManager = new QueueingManager();
+            List<QueueItemStatusSummary> queueItemStatusSummary = queueItemManager.GetItemStatusSummary();
+            IEnumerable<QueueInstance> queueInstances = queueingManager.GetAllQueueInstances();
+
+            IEnumerable<ExecutionFlowStatusSummary> result = from qInstances in queueInstances
+                                                             join qItemStatusSummary in queueItemStatusSummary
+                                                             on qInstances.QueueInstanceId equals qItemStatusSummary.QueueId
+                                                             group new { qInstances, qItemStatusSummary, qInstances.ExecutionFlowId, qItemStatusSummary.Status }
+                                                             by new { qInstances.ExecutionFlowId, qItemStatusSummary.Count, qItemStatusSummary.Status } into res
+                                                             select new ExecutionFlowStatusSummary
+                                                             {
+                                                                 ExecutionFlowId = (int)res.Key.ExecutionFlowId,
+                                                                 Status = res.Key.Status,
+                                                                 Count = res.Sum(x => x.qItemStatusSummary.Count)
+                                                             };
+
+            IEnumerable<ExecutionFlowStatusSummary> filteredResult = from c in result
+                                                                     group c by new { c.ExecutionFlowId, c.Status } into item
+                                                                     select new ExecutionFlowStatusSummary
+                                                                     {
+                                                                         ExecutionFlowId = item.Key.ExecutionFlowId,
+                                                                         Status = item.Key.Status,
+                                                                         Count = item.Sum(x => x.Count)
+                                                                     };
+
+            return filteredResult;
+        }
+
         public QueuesByStages GetQueuesByStages(int executionFlowId)
         {
             string cacheName = String.Format("QueueExecutionFlowManager_GetQueuesByStages_{0}", executionFlowId);
@@ -45,7 +76,7 @@ namespace Vanrise.Queueing
                    }
                    return queuesByStages;
                });
-            
+
         }
 
         public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlowDetail> AddExecutionFlow(QueueExecutionFlow executionFlowObj)
@@ -121,21 +152,20 @@ namespace Vanrise.Queueing
                       (input.Query.Name == null || priceList.Name.Contains(input.Query.Name));
 
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input,queueExecutionFlows.ToBigResult(input,filterExpression,QueueExecutionFlowMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, queueExecutionFlows.ToBigResult(input, filterExpression, QueueExecutionFlowMapper));
 
         }
 
 
 
-
-        public QueueExecutionFlow GetExecutionFlow(int executionFlowId) 
+        public QueueExecutionFlow GetExecutionFlow(int executionFlowId)
         {
             var executionFlows = GetCachedQueueExecutionFlows();
             return executionFlows.GetRecord(executionFlowId);
         }
 
 
-        public Vanrise.Entities.UpdateOperationOutput<QueueExecutionFlowDetail> UpdateExecutionFlow(QueueExecutionFlow executionFlowObject) 
+        public Vanrise.Entities.UpdateOperationOutput<QueueExecutionFlowDetail> UpdateExecutionFlow(QueueExecutionFlow executionFlowObject)
         {
             IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
             bool updateActionSucc = dataManager.UpdateExecutionFlow(executionFlowObject);
@@ -151,7 +181,7 @@ namespace Vanrise.Queueing
                 updateOperationOutput.UpdatedObject = QueueExecutionFlowMapper(executionFlowObject);
             }
             return updateOperationOutput;
-            
+
         }
 
 

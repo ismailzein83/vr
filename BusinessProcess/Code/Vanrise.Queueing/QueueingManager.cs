@@ -153,6 +153,12 @@ namespace Vanrise.Queueing
             else
                 return null;
         }
+
+        public IEnumerable<QueueInstance> GetAllQueueInstances()
+        {
+            return GetCachedQueueInstances().Values;
+        }
+
         #endregion
 
         #region Private Classes

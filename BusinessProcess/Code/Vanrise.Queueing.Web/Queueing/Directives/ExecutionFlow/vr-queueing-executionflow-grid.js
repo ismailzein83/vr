@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService',
-    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService','VR_Queueing_QueueItemStatusEnum',
+    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService, VR_Queueing_QueueItemStatusEnum) {
 
     var directiveDefinitionObject = {
 
@@ -70,6 +70,7 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
                         }
 
                         onResponseReady(response);
+                        refreshExecutionFlowGrid();
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -78,8 +79,35 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
             defineMenuActions();
         }
         
+        function refreshExecutionFlowGrid() {
+            VR_Queueing_ExecutionFlowAPIService.GetExecutionFlowStatusSummary().then(function (response) {
+                if ($scope.executionFlows != undefined) {
+                    var notProcessedCount;
+                    var suspendedCount;
+                    for (var i = 0; i < $scope.executionFlows.length; i++) {
+                        notProcessedCount = 0;
+                        suspendedCount = 0;
+                        for (var j = 0; j < response.length; j++) {
+                            if ($scope.executionFlows[i].Entity.ExecutionFlowId == response[j].ExecutionFlowId) {
+                                if (response[j].Status == VR_Queueing_QueueItemStatusEnum.New.value || response[j].Status == VR_Queueing_QueueItemStatusEnum.Processing.value || response[j].Status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
+                                    notProcessedCount += response[j].Count;
+                                }
+                                else if (response[j].Status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
+                                    suspendedCount += response[j].Count;
+                                }
 
-    
+                            }
+                        }
+                        $scope.executionFlows[i].notProcessedCount = notProcessedCount;
+                        $scope.executionFlows[i].suspendedCount = suspendedCount;
+
+                    }
+                }
+            })
+
+            setTimeout(refreshExecutionFlowGrid, 5000);
+
+        }
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{

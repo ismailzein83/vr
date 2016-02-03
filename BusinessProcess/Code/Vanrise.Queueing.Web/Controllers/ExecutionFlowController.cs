@@ -79,5 +79,13 @@ namespace Vanrise.Queueing.Web.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("GetExecutionFlowStatusSummary")]
+        public IEnumerable<ExecutionFlowStatusSummary> GetExecutionFlowStatusSummary() 
+        {
+           return  _manager.GetExecutionFlowStatusSummary();
+        }
+
     }
 }
