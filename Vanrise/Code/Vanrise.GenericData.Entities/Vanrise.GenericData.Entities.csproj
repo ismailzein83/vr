@@ -71,6 +71,7 @@
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionInfoFilter.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionQuery.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionSettings.cs" />
+    <Compile Include="GenericRules\RuleDefinition\GenericRuleTypeConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

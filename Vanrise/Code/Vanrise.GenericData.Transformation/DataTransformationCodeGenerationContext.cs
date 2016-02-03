@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Transformation.Entities;
 
@@ -22,6 +23,8 @@ namespace Vanrise.GenericData.Transformation
 
         StringBuilder _globalMembersBuilder;
         StringBuilder _instanceExecutionBlockBuilder;
+
+        #region IDataTransformationCodeGenerationContext
 
         string IDataTransformationCodeGenerationContext.GenerateUniqueMemberName(string memberName)
         {
@@ -40,7 +43,9 @@ namespace Vanrise.GenericData.Transformation
             _instanceExecutionBlockBuilder.AppendLine();
         }
 
-        public Type GetExecutorType()
+        #endregion
+
+        public DataTransformationRuntimeType BuildRuntimeType()
         {
             _globalMembersBuilder = new StringBuilder();
             _instanceExecutionBlockBuilder = new StringBuilder();
@@ -48,53 +53,33 @@ namespace Vanrise.GenericData.Transformation
             {
                 step.GenerateExecutionCode(this);
             }
+            string fullTypeName;
+            string classDefinition = BuildClassDefinition(out fullTypeName);
 
-            string classDefinition = BuildClassDefinition();
-
-            string assemblyName = String.Format("GenericData.Transformation_{0}_{1:yyyyMMdd_HHmmss}", _dataTransformationDefinition.DataTransformationDefinitionId, DateTime.Now);
-
-            Dictionary<string, string> providerOptions = new Dictionary<string, string>();
-            providerOptions["CompilerVersion"] = "v4.0";
-            Microsoft.CSharp.CSharpCodeProvider provider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);
-
-            CompilerParameters parameters = new CompilerParameters();
-            parameters.OutputAssembly = assemblyName;
-            parameters.GenerateExecutable = false;
-            parameters.GenerateInMemory = true;
-            parameters.IncludeDebugInformation = true;
-            parameters.ReferencedAssemblies.Add("System.dll");
-            parameters.ReferencedAssemblies.Add("System.Data.dll");
-
-            parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
-            parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
-
-            string path = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-            foreach (string fileName in Directory.GetFiles(path, "*.dll"))
+            CSharpCompilationOutput compilationOutput;
+            if(!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
             {
-                FileInfo info = new FileInfo(fileName);
-                parameters.ReferencedAssemblies.Add(info.FullName);
-            }
-
-            CompilerResults results = provider.CompileAssemblyFromSource(parameters, classDefinition);
-
-            StringBuilder errorsBuilder = new StringBuilder();
-            if(results.Errors != null && results.Errors.Count > 0)
-            {
-                foreach(CompilerError error in results.Errors)
+                StringBuilder errorsBuilder = new StringBuilder();
+                if(compilationOutput.ErrorMessages != null)
                 {
-                    if(!error.IsWarning)
+                    foreach(var errorMessage in compilationOutput.ErrorMessages)
                     {
-                        errorsBuilder.AppendFormat("Error {0}: {1}. Line Number {2}", error.ErrorNumber, error.ErrorText, error.Line);
-                        errorsBuilder.AppendLine();
+                        errorsBuilder.AppendLine(errorMessage);
                     }
                 }
+                throw new Exception(String.Format("Compile Error when building executor type for data transformation definition Id '{0}'. Errors: {1}", 
+                    _dataTransformationDefinition.DataTransformationDefinitionId, errorsBuilder));
             }
-            if (errorsBuilder.Length > 0)
-                throw new Exception(String.Format("Compile Error when building executor type for data transformation definition Id '{0}'. Errors: {1}", _dataTransformationDefinition.DataTransformationDefinitionId, errorsBuilder));
-            return results.CompiledAssembly.GetType("Vanrise.GenericData.Transformation.Runtime.DataTransformationExecutor");
+            var executorType = compilationOutput.OutputAssembly.GetType(fullTypeName);
+            if (executorType == null)
+                throw new NullReferenceException("executorType");
+            return new DataTransformationRuntimeType
+            {
+                ExecutorType = executorType
+            };
         }
 
-        private string BuildClassDefinition()
+        private string BuildClassDefinition(out string fullTypeName)
         {           
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             foreach (var recordType in _dataTransformationDefinition.RecordTypes)
@@ -107,15 +92,14 @@ namespace Vanrise.GenericData.Transformation
                 using System.Collections.Generic;
                 using System.IO;
                 using System.Data;
-                using Vanrise.Integration.Entities;
-                using Vanrise.Integration.Mappers;
 
-                namespace Vanrise.GenericData.Transformation.Runtime
+                namespace #NAMESPACE#
                 {
-                    public class DataTransformationExecutor : #EXECUTORBASE#
+                    public class #CLASSNAME# : #EXECUTORBASE#
                     {                        
                         #GLOBALMEMBERS#
-                        public void Execute()
+
+                        void #EXECUTORBASE#.Execute()
                         {
                             #EXECUTIONCODE#
                         }
@@ -125,8 +109,14 @@ namespace Vanrise.GenericData.Transformation
 
             classDefinitionBuilder.Replace("#EXECUTORBASE#", typeof(IDataTransformationExecutor).FullName);
             classDefinitionBuilder.Replace("#GLOBALMEMBERS#", _globalMembersBuilder.ToString());
-            classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());         
-
+            classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
+            
+            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Transformation.Runtime");
+            string className = "DataTransformationExecutor";
+            classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
+            classDefinitionBuilder.Replace("#CLASSNAME#", className);
+            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+            
             return classDefinitionBuilder.ToString();
         }
     }

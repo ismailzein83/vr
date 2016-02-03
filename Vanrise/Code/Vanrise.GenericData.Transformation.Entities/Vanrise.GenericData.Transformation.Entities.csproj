@@ -47,6 +47,7 @@
     <Compile Include="DataTransformationDefinition.cs" />
     <Compile Include="DataTransformationDefinitionDetail.cs" />
     <Compile Include="DataTransformationDefinitionQuery.cs" />
+    <Compile Include="DataTransformationExecutionOutput.cs" />
     <Compile Include="DataTransformationRecordType.cs" />
     <Compile Include="DataTransformationStepConfig.cs" />
     <Compile Include="GenericRuleCriteriaFieldMapping.cs" />

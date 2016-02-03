@@ -95,7 +95,7 @@ namespace Vanrise.GenericData.Transformation
             return manager.GetTemplateConfigurations(Constants.MappingStepConfigType);
         }
 
-        public DataTransformationRuntimeType GetTransformationRuntimeType(int dataTransformationDefinitionId)
+        internal DataTransformationRuntimeType GetTransformationRuntimeType(int dataTransformationDefinitionId)
         {
             string cacheName = String.Format("GetTransformationRuntimeType_{0}", dataTransformationDefinitionId);
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -104,11 +104,8 @@ namespace Vanrise.GenericData.Transformation
                   var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
                   
                   DataTransformationCodeGenerationContext codeGenerationContext = new DataTransformationCodeGenerationContext(dataTransformationDefinition);
-                  
-                  return new DataTransformationRuntimeType
-                      {
-                          ExecutorType = codeGenerationContext.GetExecutorType()
-                      };
+
+                  return codeGenerationContext.BuildRuntimeType();
               });
         }
 

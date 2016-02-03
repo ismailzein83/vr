@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Transformation
 {
     public class DataTransformer
     {
-        public void ExecuteDataTransformation(int dataTransformationDefinitionId, Action<IDataTransformationExecutionContext> onContextReady)
+        public DataTransformationExecutionOutput ExecuteDataTransformation(int dataTransformationDefinitionId, Action<IDataTransformationExecutionContext> onContextReady)
         {
             DataTransformationDefinitionManager definitionManager = new DataTransformationDefinitionManager();
             DataTransformationRuntimeType dataTransformationRuntimeType = definitionManager.GetTransformationRuntimeType(dataTransformationDefinitionId);
@@ -18,6 +18,24 @@ namespace Vanrise.GenericData.Transformation
             if (onContextReady != null)
                 onContextReady(executionContext);
             executionContext.Executor.Execute();
+            return new DataTransformationExecutionOutput
+            {
+                DataRecords = executionContext.Executor
+            };
+        }
+
+        public DataTransformationExecutionOutput ExecuteDataTransformation(DataTransformationDefinition transformationDefinition, Action<IDataTransformationExecutionContext> onContextReady)
+        {
+            DataTransformationCodeGenerationContext codeGenerationContext = new DataTransformationCodeGenerationContext(transformationDefinition);
+            var dataTransformationRuntimeType = codeGenerationContext.BuildRuntimeType();
+            var executionContext = new DataTransformationExecutionContext(dataTransformationRuntimeType.ExecutorType);
+            if (onContextReady != null)
+                onContextReady(executionContext);
+            executionContext.Executor.Execute();
+            return new DataTransformationExecutionOutput
+            {
+                DataRecords = executionContext.Executor
+            };
         }
     }
 

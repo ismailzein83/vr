@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Compressor.cs" />
     <Compile Include="Cryptography.cs" />
+    <Compile Include="CSharpCompiler.cs" />
     <Compile Include="DataRetrievalManager.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Logging\HandleLoggerException.cs" />

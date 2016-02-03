@@ -158,65 +158,58 @@ namespace Vanrise.GenericData.Business
         
         private Type GetOrCreateRuntimeType(DataRecordType dataRecordType)
         {
-            string typeSignature = String.Format("DRT_{0}_{1:yyyyMMdd_HHmmss}", dataRecordType.DataRecordTypeId, DateTime.Now);
-            var assemblyName = new AssemblyName(typeSignature);
-            AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
-            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature, TypeAttributes.Public |
-                                TypeAttributes.Class |
-                                TypeAttributes.AutoClass |
-                                TypeAttributes.AnsiClass |
-                                TypeAttributes.BeforeFieldInit |
-                                TypeAttributes.AutoLayout
-                                , null);
-
-            ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
-
-            if (dataRecordType.Fields != null)
+            string fullTypeName;
+            var classDefinition = BuildClassDefinition(dataRecordType, out fullTypeName);
+            CSharpCompilationOutput compilationOutput;
+            if(!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
             {
-                foreach (var field in dataRecordType.Fields)
+                StringBuilder errorsBuilder = new StringBuilder();
+                if (compilationOutput.ErrorMessages != null)
                 {
-                    CreateProperty(typeBuilder, field.Name, field.Type.GetRuntimeType());
+                    foreach (var errorMessage in compilationOutput.ErrorMessages)
+                    {
+                        errorsBuilder.AppendLine(errorMessage);
+                    }
                 }
+                throw new Exception(String.Format("Compile Error when building Data Record Type '{0}'. Errors: {1}",
+                    dataRecordType.Name, errorsBuilder));
             }
-
-            return typeBuilder.CreateType();
+            else
+                return compilationOutput.OutputAssembly.GetType(fullTypeName);
         }
 
-        private void CreateProperty(TypeBuilder tb, string propertyName, Type propertyType)
-        {
-            FieldBuilder fieldBuilder = tb.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
+        private string BuildClassDefinition(DataRecordType dataRecordType, out string fullTypeName)
+        {            
+            StringBuilder classDefinitionBuilder = new StringBuilder(@" 
+                using System;
+                using System.Collections.Generic;
+                using System.IO;
+                using System.Data;
 
-            PropertyBuilder propertyBuilder = tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
-            MethodBuilder getPropMthdBldr = tb.DefineMethod("get_" + propertyName, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType, Type.EmptyTypes);
-            ILGenerator getIl = getPropMthdBldr.GetILGenerator();
+                namespace #NAMESPACE#
+                {
+                    public class #CLASSNAME#
+                    {                        
+                        #GLOBALMEMBERS#
+                    }
+                }
+                ");
 
-            getIl.Emit(OpCodes.Ldarg_0);
-            getIl.Emit(OpCodes.Ldfld, fieldBuilder);
-            getIl.Emit(OpCodes.Ret);
+            StringBuilder globalMembersBuilder = new StringBuilder();
+            foreach(var field in dataRecordType.Fields)
+            {
+                globalMembersBuilder.AppendFormat("public {0} {1};", field.Type.GetRuntimeType().FullName, field.Name);
+            }
+  
+            classDefinitionBuilder.Replace("#GLOBALMEMBERS#", globalMembersBuilder.ToString());
 
-            MethodBuilder setPropMthdBldr =
-                tb.DefineMethod("set_" + propertyName,
-                  MethodAttributes.Public |
-                  MethodAttributes.SpecialName |
-                  MethodAttributes.HideBySig,
-                  null, new[] { propertyType });
+            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
+            string className = "DataRecord";
+            classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
+            classDefinitionBuilder.Replace("#CLASSNAME#", className);
+            fullTypeName = String.Format("{0}.{1}", classNamespace, className);  
 
-            ILGenerator setIl = setPropMthdBldr.GetILGenerator();
-            Label modifyProperty = setIl.DefineLabel();
-            Label exitSet = setIl.DefineLabel();
-
-            setIl.MarkLabel(modifyProperty);
-            setIl.Emit(OpCodes.Ldarg_0);
-            setIl.Emit(OpCodes.Ldarg_1);
-            setIl.Emit(OpCodes.Stfld, fieldBuilder);
-
-            setIl.Emit(OpCodes.Nop);
-            setIl.MarkLabel(exitSet);
-            setIl.Emit(OpCodes.Ret);
-
-            propertyBuilder.SetGetMethod(getPropMthdBldr);
-            propertyBuilder.SetSetMethod(setPropMthdBldr);
+            return classDefinitionBuilder.ToString();
         }
 
         #endregion

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Transformation
 {
-    public class DataTransformationRuntimeType
+    internal class DataTransformationRuntimeType
     {
         public Type ExecutorType { get; set; }
     }
