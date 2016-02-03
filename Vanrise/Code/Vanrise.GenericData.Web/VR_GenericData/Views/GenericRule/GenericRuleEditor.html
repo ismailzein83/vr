@@ -6,7 +6,7 @@
                     <div ng-repeat="field in scopeModel.criteriaFields">
                         <vr-section title="{{field.Title}}">
                             <vr-directivewrapper directive="field.dynamicGroupUIControl.directive" on-ready="field.dynamicGroupUIControl.onDirectiveReady" 
-                                                 selectionmode="multiple"></vr-directivewrapper>
+                                                 selectionmode="single"></vr-directivewrapper>
                         </vr-section>
                     </div>
                 </vr-tab>

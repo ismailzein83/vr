@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDynamiccontrolsBusinessEntity', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDynamiccontrolsBusinessentity', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -51,9 +51,9 @@ app.directive('vrGenericdataDynamiccontrolsBusinessEntity', ['UtilsService', 'VR
             //if (attrs.hideremoveicon != undefined)
             //    hideremoveicon = "hideremoveicon";
 
-            return '<vr-directivewrapper directive="field.dynamicGroupUIControl.directive" on-ready="field.dynamicGroupUIControl.onDirectiveReady" ng-if="ctrl.showSelector" '
+            return '<vr-directivewrapper directive="selector.directive" on-ready="selector.onDirectiveReady"'
                 + multipleselection + '></vr-directivewrapper>'
-                + '<vr-directivewrapper directive="field.dynamicGroupUIControl.directive" on-ready="field.dynamicGroupUIControl.onDirectiveReady" ng-if="!ctrl.showSelector"></vr-directivewrapper>'
+                + '<vr-directivewrapper directive="dynamic.directive" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>'
         }
 
         function selectorCtor(ctrl, $scope, $attrs) {
@@ -61,7 +61,7 @@ app.directive('vrGenericdataDynamiccontrolsBusinessEntity', ['UtilsService', 'VR
             var selectorApi;
 
             function initializeController() {
-                ctrl.showSelector = ($attrs.selectionmode == "dynamic");
+                //ctrl.showSelector = ($attrs.selectionmode == "dynamic");
 
                 defineAPI();
             }
@@ -79,16 +79,28 @@ app.directive('vrGenericdataDynamiccontrolsBusinessEntity', ['UtilsService', 'VR
 
                     if (fieldType != undefined) {
                         //fieldType.BusinessEntityDefinitionId;
-                        var businessEntityDef = { Settings: { SelectorUIControl: 'vr-whs-be-salezone-selector', GroupSelectorUIControl: '' } }
+                        var businessEntityDef = { Settings: { SelectorUIControl: 'vr-whs-be-salezone-selector', GroupSelectorUIControl: 'vr-whs-be-salezonegroup' } };
+                        if (businessEntityDef.Settings != null)
+                        {
+                            if ($attrs.selectionmode == "dynamic") {
+                                $scope.dynamic = {};
+                                $scope.dynamic.directive = businessEntityDef.Settings.GroupSelectorUIControl;
+                                $scope.dynamic.onDirectiveReady = function (api) {
+                                    $scope.dynamic.directiveAPI = api;
+                                    $scope.dynamic.directiveAPI.load(undefined);
+                                }
+                            }
+                            else
+                            {
+                                $scope.selector = {};
+                                $scope.selector.directive = businessEntityDef.Settings.SelectorUIControl;
+                                $scope.selector.onDirectiveReady = function (api) {
+                                    $scope.selector.directiveAPI = api;
+                                    $scope.selector.directiveAPI.load(undefined);
+                                }
+                            }
+                        }
                     }
-                }
-
-                api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('Value', $attrs, ctrl);
-                }
-
-                api.getSelectedValues = function () {
-                    return ctrl.selectedvalues;
                 }
 
                 if (ctrl.onReady != null)
