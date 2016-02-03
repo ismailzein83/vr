@@ -181,5 +181,6 @@
     <None Include="CDRAnalysis.PostDeployment.sql" />
     <None Include="Common.PostDeployment.sql" />
     <None Include="QualityMeasurement.PostDeployment.sql" />
+    <None Include="CarrierPortal.PostDeployment.sql" />
   </ItemGroup>
 </Project>
