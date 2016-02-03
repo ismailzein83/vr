@@ -64,7 +64,7 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                         var loadTargetDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                       
                         targetDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadTarget = payload.Context;
+                            var payloadTarget = { context: payload.Context, selectedRecords: payload.stepDetails.Target };
                             VRUIUtilsService.callDirectiveLoad(targetDirectiveReadyAPI, payloadTarget, loadTargetDirectivePromiseDeferred);
                         });
                         promises.push(loadTargetDirectivePromiseDeferred.promise);
@@ -72,7 +72,7 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                         var loadSourceDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                       
                         sourceDirectiveReadyPromiseDeferred.promise.then(function () {
-                            var payloadSource = payload.Context;
+                            var payloadSource = { context: payload.Context, selectedRecords: payload.stepDetails.Source };
                             VRUIUtilsService.callDirectiveLoad(sourceDirectiveReadyAPI, payloadSource, loadSourceDirectivePromiseDeferred);
                         });
                         promises.push(loadSourceDirectivePromiseDeferred.promise);

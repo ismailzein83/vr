@@ -52,6 +52,7 @@
     <Compile Include="DataRecordTypeManager.cs" />
     <Compile Include="GenericRuleDefinitionManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />
+    <Compile Include="GenericRules\GenericRuleTypeConfigManager.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByKey.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByPrefix.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\IGenericRuleStructureBehavior.cs" />

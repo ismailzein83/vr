@@ -5,6 +5,8 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
         restrict: 'E',
         scope: {
             onReady: '=',
+            recordlabel: '@',
+            fieldlabel:'@',
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -29,9 +31,45 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
                 }
             }
         },
-        templateUrl: "/Client/Modules/VR_GenericData/Directives/DataTransformationDefinition/Templates/ExpressionBuilderTemplate.html"
-
+        template: function (element, attrs) {
+            return getTemplate(attrs);
+        }
     };
+
+    function getTemplate(attrs)
+    {
+        var recordlabel = attrs.recordlabel;
+        var fieldlabel = attrs.fieldlabel;
+
+        var template =
+        '<vr-row>'
+           + '<vr-columns width="1/2row">'
+             + '<vr-select selectedvalues="ctrl.selectedRecordName"'
+               + 'isrequired="true"'
+               + 'label="' + recordlabel + '"'
+               + 'onselectionchanged="ctrl.onselectionchanged"'
+               + 'hidelabel'
+               + 'hideselectedvaluessection'
+               + 'entityname="' + recordlabel + '"'
+               + 'datasource="ctrl.recordNames"'
+               + 'datatextfield="Name"'
+               + 'datavaluefield="Name"></vr-select>'
+            + '</vr-columns>'
+           + '<vr-columns width="1/2row" vr-loader="ctrl.loadingFields">'
+             + ' <vr-select selectedvalues="ctrl.selectedFieldName"'
+               + 'isrequired="true"'
+               + 'label="' + fieldlabel + '"'
+               + 'hidelabel'
+               + 'hideselectedvaluessection'
+               + 'entityname="' + fieldlabel + '"'
+               + 'datasource="ctrl.fieldNames"'
+               + 'datatextfield="Name"'
+               + 'datavaluefield="Name"></vr-select>'
+           + '</vr-columns>'
+       + '</vr-row>';
+        return template;
+    }
+
     function recordFieldCtor(ctrl, $scope, $attrs) {
         var mainPayload;
         function initializeController() {
@@ -44,12 +82,16 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
                 if (ctrl.selectedRecordName != undefined)
                 {
                     ctrl.loadingFields = true;
-                    mainPayload.getRecordFields(ctrl.selectedRecordName.Name).then(function (response) {
+                    mainPayload.context.getRecordFields(ctrl.selectedRecordName.Name).then(function (response) {
                         ctrl.fieldNames = response;
+                        if (mainPayload.selectedRecords != undefined) {
+                            ctrl.selectedFieldName = UtilsService.getItemByVal(ctrl.fieldNames, mainPayload.selectedRecords.split('.')[1], "Name");
+                        }
+                     
                         ctrl.loadingFields = false;
                     });
                 }
-                   
+
             }
 
             defineAPI();
@@ -59,16 +101,16 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
             var api = {};
 
             api.getData = function () {
-                return ctrl.selectedRecordName + "." + ctrl.selectedFieldName;
+                return ctrl.selectedRecordName.Name + "." + ctrl.selectedFieldName.Name;
             }
             api.load = function (payload) {
                 mainPayload = payload;
-                var selectedIds;
+                var selectedRecordName;
                 if (payload != undefined) {
-                    ctrl.recordNames = payload.getRecordNames();
-                    if(payload.selectedIds !=undefined)
+                    ctrl.recordNames = payload.context.getRecordNames();
+                    if (payload.selectedRecords != undefined)
                     {
-                        VRUIUtilsService.setSelectedValues(payload.selectedIds, 'Name', $attrs, ctrl);
+                        ctrl.selectedRecordName = UtilsService.getItemByVal(ctrl.recordNames, payload.selectedRecords.split('.')[0],"Name");
                     }
                 }
             }

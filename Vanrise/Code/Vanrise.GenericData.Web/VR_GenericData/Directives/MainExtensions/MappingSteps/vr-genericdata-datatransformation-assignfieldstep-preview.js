@@ -45,8 +45,12 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                 api.load = function (payload) {
                     if(payload != undefined)
                     {
-                        if(payload.stepDetails != undefined)
-                            stepObj.stepDetails = payload.stepDetails; 
+                        if (payload.stepDetails != undefined)
+                        {
+                            stepObj.stepDetails = payload.stepDetails;
+                            stepObj.configId = payload.stepDetails.ConfigId;
+                        }
+                            
                     }
                  
                 }
@@ -59,7 +63,8 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                 }
 
                 api.getData = function () {
-                    return stepObj.stepDetails;
+                    stepObj.stepDetails.ConfigId = stepObj.configId;
+                    return stepObj.stepDetails      
                 }
 
                 if (ctrl.onReady != null)

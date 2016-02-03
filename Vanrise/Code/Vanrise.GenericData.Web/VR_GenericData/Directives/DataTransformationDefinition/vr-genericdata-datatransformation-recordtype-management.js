@@ -54,13 +54,6 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                 var api = {};
 
                 api.getData = function () {
-                   // var values = {};
-                    //if (ctrl.datasource.length > 0) {
-                    //    for (var i = 0; i < ctrl.datasource.length; i++) {
-                    //        values[ ctrl.datasource[i].key]=ctrl.datasource[i].value;
-                           
-                    //    }
-                    //}
                     var obj = {
                         RecordTypes: ctrl.datasource,
                     }
@@ -69,17 +62,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                 api.load = function (payload) {
                     if (payload != undefined) {
                         if (payload.RecordTypes) {
-                            for (var type in payload.RecordTypes) {
-                                // addNeededTypes(dataItem);
-                                if (type != '$type')
-                                {
-                                    ctrl.datasource.push(
-                                 {
-                                     key: type,
-                                     value: payload.RecordTypes[type]
-                                 });
-                                }
-                           }
+                            ctrl.datasource = payload.RecordTypes
                         }
                     }
                 }
@@ -111,7 +94,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
             function editDataRecordType(dataRecordTypeObj) {
                 var onDataRecordTypeUpdated = function (dataRecordType) {
                    // addNeededTypes(dataRecordType);
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordTypeObj.key, 'key');
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordTypeObj.RecordName, 'RecordName');
                     ctrl.datasource[index] = dataRecordType;
                 }
 
@@ -120,7 +103,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
 
             function deleteDataRecordType(dataRecordTypeObj) {
                 var onDataRecordTypeDeleted = function (dataRecordType) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordTypeObj.key, 'key');
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordTypeObj.RecordName, 'RecordName');
                     ctrl.datasource.splice(index, 1);
                 };
 

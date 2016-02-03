@@ -9,7 +9,7 @@
         var isEditMode;
         var dataRecordTypeEntity;
         var existingTypes;
-
+        var existingRecordNames;
         var directiveReadyAPI;
         var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -23,6 +23,11 @@
             if (parameters != undefined && parameters != null) {
                 dataRecordTypeEntity = parameters.DataRecordType;
                 existingTypes = parameters.ExistingTypes;
+                existingRecordNames = [];
+                for(var i=0; i<existingTypes.length;i++)
+                {
+                    existingRecordNames.push({ RecordName: existingTypes[i].RecordName.toLowerCase() });
+                }
             }
             isEditMode = (dataRecordTypeEntity != undefined);
         }
@@ -70,7 +75,7 @@
 
         function loadFilterBySection() {
             if (dataRecordTypeEntity != undefined) {
-                $scope.scopeModal.name = dataRecordTypeEntity.key;
+                $scope.scopeModal.name = dataRecordTypeEntity.RecordName;
             }
         }
 
@@ -86,7 +91,7 @@
 
             directiveReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = (dataRecordTypeEntity != undefined) ? {selectedIds: dataRecordTypeEntity.value } : undefined
+                    var directivePayload = (dataRecordTypeEntity != undefined) ? {selectedIds: dataRecordTypeEntity.DataRecordTypeId } : undefined
                     VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, directivePayload, loadDataRecordTypePromiseDeferred);
                 });
 
@@ -94,29 +99,26 @@
         }
 
         function validateName() {
-            if (isEditMode && $scope.scopeModal.name == dataRecordTypeEntity.key)
+            if (isEditMode && $scope.scopeModal.name.toLowerCase() == dataRecordTypeEntity.RecordName.toLowerCase())
                 return null;
-            else if (UtilsService.getItemIndexByVal(existingTypes, $scope.scopeModal.name, 'key') != -1)
+            else if (UtilsService.getItemIndexByVal(existingRecordNames, $scope.scopeModal.name.toLowerCase(), 'RecordName') != -1)
                 return 'Same Name Exist.';
             return null;
         }
 
         function buildDataRecordTypeObjectObjFromScope() {
             var dataRecordType = {};
-            dataRecordType.key = $scope.scopeModal.name;
-            dataRecordType.value = $scope.scopeModal.selectedRecordType != undefined? $scope.scopeModal.selectedRecordType.DataRecordTypeId:undefined
+            dataRecordType.RecordName = $scope.scopeModal.name;
+            dataRecordType.DataRecordTypeId = $scope.scopeModal.selectedRecordType != undefined ? $scope.scopeModal.selectedRecordType.DataRecordTypeId : undefined
             return dataRecordType;
         }
 
         function insertDataRecordType() {
 
             var dataRecordTypeObject = buildDataRecordTypeObjectObjFromScope();
-            //  if (VRNotificationService.notifyOnItemAdded("Data Record Type",undefined, "Name")) {
             if ($scope.onDataRecordTypeAdded != undefined)
                 $scope.onDataRecordTypeAdded(dataRecordTypeObject);
             $scope.modalContext.closeModal();
-            //   }
-
         }
 
         function updateDataRecordType() {
