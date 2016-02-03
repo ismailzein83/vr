@@ -29,7 +29,9 @@ app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsSe
         this.initializeController = initializeController;
         var strategySelectorAPI;
         var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        var selectedStrategyIds;
+        var periodSelectorAPI;
+        var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var execStrategyEntity;
 
         function initializeController() {
 
@@ -38,26 +40,31 @@ app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsSe
                 strategySelectorReadyDeferred.resolve();
             };
 
-            $scope.strategies = [];
-            $scope.periods = [];
+            $scope.onPeriodSelectorReady = function (api) {
+                periodSelectorAPI = api;
+                periodSelectorReadyDeferred.resolve();
+            };
 
-            $scope.selectedPeriodChanged = function () {
-                if ($scope.selectedPeriod != undefined) {
-                    loadStrategySelector($scope.selectedPeriod.Id);
+
+
+            $scope.onPeriodSelectionChanged = function (selectedPeriod) {
+                if (selectedPeriod != undefined) {
+                    $scope.isLoadingData = true;
+                    loadStrategySelector(selectedPeriod.Id);
                 }
-            }
+            };
             defineAPI();
         }
 
         function defineAPI() {
-            
+
             var api = {};
             api.getData = function () {
-                console.log($scope.selectedPeriod.Id)
+
                 return {
                     $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                     StrategyIds: strategySelectorAPI.getSelectedIds(),
-                    PeriodId: $scope.selectedPeriod.Id,
+                    PeriodId: periodSelectorAPI.getSelectedIds(),
                     IncludeWhiteList: false
                 };
 
@@ -70,22 +77,13 @@ app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsSe
             };
 
             api.load = function (payload) {
+
                 var promises = [];
-                var data;
-                if (payload != undefined && payload.data != undefined)
-                    data = payload.data;
-                var loadPeriods = CDRAnalysis_FA_PeriodAPIService.GetPeriods().then(function (response) {
-                    angular.forEach(response, function (itm) {
-                        $scope.periods.push(itm);
-                    });
+                if (payload != undefined && payload.data != undefined) {
+                    execStrategyEntity = payload.data;
+                }
 
-                    if (data != undefined && data.StrategyIds != undefined) {
-                        selectedStrategyIds = data.StrategyIds;
-                        $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, data.PeriodId, "Id");
-                    }
-
-                })
-                promises.push(loadPeriods);
+                promises.push(loadPeriodSelector());
                 return UtilsService.waitMultiplePromises(promises);
 
             }
@@ -95,14 +93,32 @@ app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsSe
         }
 
 
+        function loadPeriodSelector() {
+
+            var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            periodSelectorReadyDeferred.promise.then(function () {
+
+                var payload = {
+                };
+                if (execStrategyEntity != undefined && execStrategyEntity.PeriodId != undefined)
+                    payload.selectedIds = execStrategyEntity.PeriodId;
+
+                VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, payload, periodSelectorLoadDeferred);
+            });
+
+            return periodSelectorLoadDeferred.promise;
+        }
+
+
         function loadStrategySelector(periodId) {
             $scope.isLoadingData = true;
             var strategySelectorLoadDeferred = UtilsService.createPromiseDeferred();
             var payload = {
             };
 
-            if (selectedStrategyIds != undefined)
-                payload.selectedIds = selectedStrategyIds;
+            if (execStrategyEntity != undefined && execStrategyEntity.StrategyIds != undefined)
+                payload.selectedIds = execStrategyEntity.StrategyIds;
 
             var filter = {};
             if (periodId != undefined)
