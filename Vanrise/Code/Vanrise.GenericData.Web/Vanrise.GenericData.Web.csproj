@@ -177,6 +177,8 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericruledefinitionsettings-mapping.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Templates\GenericRuleDefinitionSettingsSelectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\vr-genericdata-genericrulesettings-selective.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\AssignFieldStepPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\AssignFieldStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\ExecuteMappingRuleStepTemplate.html" />
