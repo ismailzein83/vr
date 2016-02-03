@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessEntityDefinitionDataManager.cs" />
     <Compile Include="DataRecordFieldTypeConfigDataManager.cs" />
     <Compile Include="DataRecordTypeDataManager.cs" />
     <Compile Include="GenericRuleDefinitionDataManager.cs" />

@@ -6,19 +6,19 @@
 
     function BusinessEntityDefinitionAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return {
-            GetBusinessEntityDefinitionsInfo: GetBusinessEntityDefinitionsInfo,
-            GetBusinessEntityDefinition: GetBusinessEntityDefinition
+            GetBusinessEntityDefinition: GetBusinessEntityDefinition,
+            GetBusinessEntityDefinitionsInfo: GetBusinessEntityDefinitionsInfo
         };
-
-        function GetBusinessEntityDefinitionsInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetBusinessEntityDefinitionsInfo'), {
-                filter: filter
-            });
-        }
 
         function GetBusinessEntityDefinition(businessEntityDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetBusinessEntityDefinition'), {
                 businessEntityDefinitionId: businessEntityDefinitionId
+            });
+        }
+
+        function GetBusinessEntityDefinitionsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetBusinessEntityDefinitionsInfo'), {
+                filter: filter
             });
         }
     }

@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntityGroupContext.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordFieldTypeConfigManager.cs" />

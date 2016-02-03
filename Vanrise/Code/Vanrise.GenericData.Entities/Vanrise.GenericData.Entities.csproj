@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessEntities\BusinessEntityDefinition.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinitionInfo.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinitionInfoFilter.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityGroupContext.cs" />
     <Compile Include="DataRecords\DataRecord.cs" />
