@@ -175,8 +175,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datetime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-number.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\AssignFieldStepPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\AssignFieldStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\ExecuteMappingRuleStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\vr-genericdata-datatransformation-assignfieldstep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\vr-genericdata-datatransformation-assignfieldstep.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\vr-genericdata-datatransformation-executemappingrulestep.js" />
     <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldManagement.html" />

@@ -30,6 +30,11 @@
         function defineScope() {
             $scope.scopeModal = {}
 
+            $scope.scopeModal.onEditorRemove= function()
+            {
+                $scope.scopeModal.selectedStep = undefined;
+            }
+
             $scope.scopeModal.steps = [];
 
             $scope.scopeModal.stepsAdded = [];
@@ -47,6 +52,10 @@
                         getRecordNames: getRecordNames,
                         getRecordFields: getRecordFields
                     }
+                    dataItem.onPreviewDirectiveReady = function(api)
+                    {
+                        dataItem.previewAPI = api;
+                    }
                     $scope.scopeModal.stepsAdded.push(dataItem);  
                 }
                   
@@ -55,6 +64,11 @@
             $scope.scopeModal.onEditStepClick = function (dataItem)
             {
                 $scope.scopeModal.selectedStep = dataItem;
+            }
+
+            $scope.scopeModal.applyChanges = function ()
+            {
+                applyChanges();
             }
 
             $scope.scopeModal.onDataRecordTypeDirectiveReady = function (api) {
@@ -129,7 +143,7 @@
                 Title: $scope.scopeModal.title,
                 DataTransformationDefinitionId: dataTransformationDefinitionId,
                 RecordTypes: obj != undefined ? obj.RecordTypes : undefined,
-                MappingSteps: editorDirectiveAPI.getData()
+                MappingSteps: buildStepsData()
             }
             return dataTransformationDefinition;
         }
@@ -163,6 +177,23 @@
                     $scope.scopeModal.steps.push(response[i]);
                 }
             });
+        }
+
+        function buildStepsData()
+        {
+            var steps = [];
+            for(var i=0;i<$scope.steps.length;i++)
+            {
+                if($scope.steps[i].previewAPI !=undefined)
+                    steps.push($scope.steps[i].previewAPI.getData())
+            }
+            return steps;
+        }
+
+        function applyChanges() {
+            if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI != undefined) {
+                $scope.scopeModal.selectedStep.previewAPI.applyChanges(editorDirectiveAPI.getData());
+            }
         }
 
         function setTitle() {

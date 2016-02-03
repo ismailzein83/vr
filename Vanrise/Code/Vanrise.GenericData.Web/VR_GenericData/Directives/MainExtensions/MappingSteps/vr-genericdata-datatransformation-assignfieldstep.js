@@ -32,6 +32,7 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
         };
 
         function AssignFieldStepCtor(ctrl, $scope) {
+            var stepPayload;
             var sourceDirectiveReadyAPI;
             var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -57,6 +58,7 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+                    stepPayload = payload;
                     var promises = [];
 
                         var loadTargetDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -91,7 +93,6 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

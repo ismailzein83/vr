@@ -41,7 +41,15 @@
                     </vr-columns>
                     <vr-columns width="1/3row">
                         <vr-section title="Properties" vr-loader="scopeModal.isLoadingDirective">
-                            <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onEditorDirectiveReady"></vr-directivewrapper>
+                            <vr-row removeline>
+                                <i class="glyphicon glyphicon-remove hand-cursor" style="width:10px; float:right; cursor :default" ng-click="scopeModal.onEditorRemove()" ng-show="scopeModal.selectedStep !=undefined"></i>
+                                <vr-columns width="fullrow">
+                                    <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onEditorDirectiveReady"></vr-directivewrapper>                                
+                                </vr-columns>
+                                <vr-columns width="fullrow">
+                                    <vr-button type="Apply" data-onclick="scopeModal.applyChanges" standalone ng-show="scopeModal.selectedStep !=undefined"></vr-button>
+                                </vr-columns>
+                            </vr-row>
                         </vr-section>
                     </vr-columns>
                 </vr-row>
