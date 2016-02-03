@@ -14,10 +14,14 @@
         function GetUploadPriceListTemplates() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "GetUploadPriceListTemplates"));
         }
+        function GetResultPriceListTemplates() {
+            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "GetResultPriceListTemplates"));
+        }
         return ({
             importPriceList: importPriceList,
             GetUpdated: GetUpdated,
-            GetUploadPriceListTemplates: GetUploadPriceListTemplates
+            GetUploadPriceListTemplates: GetUploadPriceListTemplates,
+            GetResultPriceListTemplates: GetResultPriceListTemplates
         });
 
     }

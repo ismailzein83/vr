@@ -46,9 +46,13 @@ app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VR
 
             var api = {};
             api.getData = function () {
+                var obj;
+                if (sourceTypeDirectiveAPI != undefined)
+                    obj = sourceTypeDirectiveAPI.getData();
+                obj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
                 return {
                     $type: "CP.SupplierPricelist.Business.PriceListTasks.UploadPriceListTaskActionArgument, CP.SupplierPricelist.Business",
-                    SupplierPriceListConnector: sourceTypeDirectiveAPI.getData()
+                    SupplierPriceListConnector: obj
                 };
             };
 
@@ -64,20 +68,25 @@ app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VR
 
                     if (sourceConfigId != undefined)
                         $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                    //else
+                    //    $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, $scope.sourceTypeTemplates[0].TemplateConfigID, "TemplateConfigID");
                 });
 
                 promises.push(pricelistTemplatesLoad);
 
-                if (sourceTypeDirectiveAPI) {
+                if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined) {
+
                     sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
                     sourceDirectiveReadyPromiseDeferred.promise.then(function () {
                         sourceDirectiveReadyPromiseDeferred = undefined;
                         var obj;
-                        //if (payload != undefined && payload.data != undefined && payload.data.SourceZoneReader != undefined)
-                        //    obj = {
-                        //        connectionString: payload.data.SourceZoneReader.ConnectionString
-                        //    };
+                        if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined)
+                            obj = {
+                                Url: payload.data.SupplierPriceListConnector.Url,
+                                Username: payload.data.SupplierPriceListConnector.Username,
+                                Password: payload.data.SupplierPriceListConnector.Password
+                            };
                         VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, obj, loadSourceTemplatePromiseDeferred);
                     });
                     promises.push(loadSourceTemplatePromiseDeferred.promise);

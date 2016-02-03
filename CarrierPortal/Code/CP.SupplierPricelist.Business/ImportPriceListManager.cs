@@ -64,7 +64,12 @@ namespace CP.SupplierPricelist.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SupplierPriceListConnectorInitiateTest);
         }
-
+        public List<Vanrise.Entities.TemplateConfig> GetResultPriceListTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SupplierPriceListResult);
+        }
+        
         public bool UpdatePriceListProgress(long id, int result)
         {
             IPriceListDataManager dataManager =

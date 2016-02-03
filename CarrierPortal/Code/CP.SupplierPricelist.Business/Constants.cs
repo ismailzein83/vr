@@ -9,5 +9,6 @@ namespace CP.SupplierPricelist.Business
     public class Constants
     {
         public const string SupplierPriceListConnectorInitiateTest = "CP_SupplierPriceList_ConnectorUploadPriceList";
+        public const string SupplierPriceListResult = "CP_SupplierPriceList_SupplierPriceListResult";
     }
 }

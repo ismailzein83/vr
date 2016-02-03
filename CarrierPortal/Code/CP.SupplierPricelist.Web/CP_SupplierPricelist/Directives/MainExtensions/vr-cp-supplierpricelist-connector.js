@@ -26,9 +26,12 @@ app.directive("vrCpSupplierpricelistConnector", [function () {
 
         function getAPI() {
             var api = {};
-
             api.load = function (payload) {
-
+                if (payload != undefined) {
+                    $scope.url = payload.Url;
+                    $scope.username = payload.Username;
+                    $scope.password = payload.Password;
+                }
             }
             api.getData = function () {
                 return {

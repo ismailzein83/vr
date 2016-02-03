@@ -34,6 +34,15 @@ namespace CP.SupplierPricelist.Web.Controllers
             ImportPriceListManager manager = new ImportPriceListManager();
             return manager.GetUploadPriceListTemplates();
         }
+          [HttpGet]
+          [Route("GetResultPriceListTemplates")]
+        public List<TemplateConfig> GetResultPriceListTemplates()
+        {
+            ImportPriceListManager manager = new ImportPriceListManager();
+            return manager.GetResultPriceListTemplates();
+        }
+        
+
 
     }
 }

@@ -35,6 +35,8 @@ app.directive("cpSupplierpricelistResultsupplierpricelist", ['UtilsService', 'VR
         function initializeController() {
             $scope.sourceTypeTemplates = [];
             $scope.onSourceTypeDirectiveReady = function (api) {
+                console.log('---1---');
+                console.log(api);
                 sourceTypeDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
@@ -43,19 +45,22 @@ app.directive("cpSupplierpricelistResultsupplierpricelist", ['UtilsService', 'VR
         }
 
         function defineAPI() {
-
             var api = {};
             api.getData = function () {
+                var obj;
+                if (sourceTypeDirectiveAPI != undefined)
+                    obj = sourceTypeDirectiveAPI.getData();
+                obj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
                 return {
                     $type: "CP.SupplierPricelist.Business.PriceListTasks.ResultTaskActionArgument, CP.SupplierPricelist.Business",
-                    SupplierPriceListConnector: sourceTypeDirectiveAPI.getData()
+                    SupplierPriceListConnector: obj
                 };
             };
 
 
             api.load = function (payload) {
                 var promises = [];
-                var pricelistTemplatesLoad = CP_SupplierPricelist_SupplierPriceListAPIService.GetUploadPriceListTemplates().then(function (response) {
+                var pricelistTemplatesLoad = CP_SupplierPricelist_SupplierPriceListAPIService.GetResultPriceListTemplates().then(function (response) {
                     if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined)
                         var sourceConfigId = payload.data.SupplierPriceListConnector.ConfigId;
                     angular.forEach(response, function (item) {
@@ -64,26 +69,33 @@ app.directive("cpSupplierpricelistResultsupplierpricelist", ['UtilsService', 'VR
 
                     if (sourceConfigId != undefined)
                         $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+                    //else 
+                    //    $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, $scope.sourceTypeTemplates[0].TemplateConfigID, "TemplateConfigID");
+
                 });
-
                 promises.push(pricelistTemplatesLoad);
-
-                if (sourceTypeDirectiveAPI) {
+                if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined) {
                     sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
-                    sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+                    sourceDirectiveReadyPromiseDeferred.promise.then(function() {
                         sourceDirectiveReadyPromiseDeferred = undefined;
                         var obj;
-                        //if (payload != undefined && payload.data != undefined && payload.data.SourceZoneReader != undefined)
-                        //    obj = {
-                        //        connectionString: payload.data.SourceZoneReader.ConnectionString
-                        //    };
+                        console.log(payload);
+                        console.log(payload.data);
+                        console.log(payload.data.SupplierPriceListConnector);
+                        if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined) {
+                            console.log(payload.data.SupplierPriceListConnector);
+                            obj = {
+                                Url: payload.data.SupplierPriceListConnector.Url,
+                                Username: payload.data.SupplierPriceListConnector.Username,
+                                Password: payload.data.SupplierPriceListConnector.Password
+                            };
+                        }
                         VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, obj, loadSourceTemplatePromiseDeferred);
                     });
                     promises.push(loadSourceTemplatePromiseDeferred.promise);
+
                 }
-
-
                 return UtilsService.waitMultiplePromises(promises);
             }
 
