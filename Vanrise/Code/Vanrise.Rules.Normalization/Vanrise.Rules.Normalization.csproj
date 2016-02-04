@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="INormalizeNumberActionContext.cs" />
+    <Compile Include="INormalizeRuleContext.cs" />
     <Compile Include="MainExtensions\AddPrefixActionSettings.cs" />
     <Compile Include="MainExtensions\ReplaceStringActionSettings.cs" />
     <Compile Include="MainExtensions\SubstringActionSettings.cs" />

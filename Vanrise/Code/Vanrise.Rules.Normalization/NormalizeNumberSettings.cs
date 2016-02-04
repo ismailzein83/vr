@@ -23,5 +23,18 @@ namespace Vanrise.Rules.Normalization
 
             return descriptions;
         }
+
+        public void ApplyNormalizationRule(INormalizeRuleContext context)
+        {
+            var target = new NormalizeNumberTarget
+            {
+                PhoneNumber = context.Value
+            };
+            foreach (var action in this.Actions)
+            {
+                action.Execute(null, target);
+            }
+            context.NormalizedValue = target.PhoneNumber;
+        }
     }
 }
