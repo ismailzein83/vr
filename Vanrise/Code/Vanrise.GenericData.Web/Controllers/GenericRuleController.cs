@@ -18,8 +18,14 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("AddGenericRule")]
         public Vanrise.Entities.InsertOperationOutput<GenericRule> AddGenericRule(GenericRule rule)
         {
-            GenericRuleManager<GenericRule> manager = new GenericRuleManager<GenericRule>();
-            return manager.AddRule(rule);
+            var manager = GetManager(rule);
+            return manager.AddGenericRule(rule);
+        }
+
+        IGenericRuleManager GetManager(GenericRule rule)
+        {
+            Type managerType = Type.GetType("Vanrise.GenericData.Transformation.MappingRuleManager,Vanrise.GenericData.Transformation");
+            return Activator.CreateInstance(managerType) as IGenericRuleManager;
         }
     }
 }

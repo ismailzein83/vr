@@ -8,7 +8,7 @@ using Vanrise.Rules;
 
 namespace Vanrise.GenericData.Business
 {
-    public class GenericRuleManager<T> : Vanrise.Rules.RuleManager<T> where T : GenericRule
+    public class GenericRuleManager<T> : Vanrise.Rules.RuleManager<T>, IGenericRuleManager where T : GenericRule
     {
         public T GetMatchRule(int ruleDefinitionId, GenericRuleTarget target)
         {
@@ -70,6 +70,11 @@ namespace Vanrise.GenericData.Business
         private IEnumerable<GenericRuleDefinitionCriteriaField> GetRuleDefinitionCriteriaFields(int ruleDefinitionId)
         {
             throw new NotImplementedException();
+        }
+
+        public Vanrise.Entities.InsertOperationOutput<GenericRule> AddGenericRule(GenericRule rule)
+        {
+            return this.AddRule(rule as T) as Vanrise.Entities.InsertOperationOutput<GenericRule>;
         }
     }
 }
