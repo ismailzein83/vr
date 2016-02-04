@@ -1,5 +1,10 @@
 ﻿<vr-row>
     <vr-columns width="1/3row">
+        <vr-textbox label="Maximum Retry Count" type="number" decimalprecision="0" value="maximumRetryCount" minvalue="0" maxvalue="10" isrequired></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/3row">
         <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Connector" datasource="sourceTypeTemplates" text="None"
                    selectedvalues="selectedSourceTypeTemplate" isrequired="true">
         </vr-select>

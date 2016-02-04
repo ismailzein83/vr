@@ -55,6 +55,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         break;
                     case PriceListSupplierUploadResult.FailedWithRetry:
                         priceListstatus = PriceListStatus.GetStatusFailedWithRetry;
+
                         break;
                     default:
                         priceListstatus = PriceListStatus.GetStatusFailedWithRetry;

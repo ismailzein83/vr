@@ -52,12 +52,15 @@ app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VR
                 obj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
                 return {
                     $type: "CP.SupplierPricelist.Business.PriceListTasks.UploadPriceListTaskActionArgument, CP.SupplierPricelist.Business",
-                    SupplierPriceListConnector: obj
+                    SupplierPriceListConnector: obj,
+                    MaximumRetryCount: $scope.maximumRetryCount
                 };
             };
 
 
             api.load = function (payload) {
+                if (payload != undefined && payload.data != undefined)
+                    $scope.maximumRetryCount = payload.data.MaximumRetryCount;
                 var promises = [];
                 var pricelistTemplatesLoad = CP_SupplierPricelist_SupplierPriceListAPIService.GetUploadPriceListTemplates().then(function (response) {
                     if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined)
