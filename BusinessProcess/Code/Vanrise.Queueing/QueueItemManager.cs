@@ -12,16 +12,32 @@ namespace Vanrise.Queueing
 {
     public class QueueItemManager
     {
-       
+
+
+        private static DateTime LastTimeCalled = new DateTime();
+
+        private static List<QueueItemStatusSummary> ItemStatusSummary;
+
+        private Object thisLock = new Object();
 
         public List<QueueItemStatusSummary> GetItemStatusSummary()
         {
-            IQueueItemDataManager manager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
-            return manager.GetItemStatusSummary();
+            lock (thisLock)
+            {
+                if ((DateTime.Now - LastTimeCalled).TotalSeconds >2) 
+                {
+                    IQueueItemDataManager manager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
+                    ItemStatusSummary = manager.GetItemStatusSummary();
+                    LastTimeCalled = DateTime.Now;
+                    return ItemStatusSummary;
+                
+                }
+                else
+                    return ItemStatusSummary;
         
+            }
+
         }
-
-
 
 
         public IEnumerable<ExecutionFlowStatusSummary> GetExecutionFlowStatusSummary()
