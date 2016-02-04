@@ -180,6 +180,7 @@
                 RecordTypes: obj != undefined ? obj.RecordTypes : undefined,
                 MappingSteps: buildStepsData()
             }
+            console.log(dataTransformationDefinition);
             return dataTransformationDefinition;
         }
 
