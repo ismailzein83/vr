@@ -65,6 +65,13 @@ app.directive('vrGenericdataDynamiccontrolsNumeric', ['UtilsService', function (
                 }
             }
 
+            api.getData = function () {
+                return {
+                    $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                    Values: ctrl.values
+                }
+            }
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

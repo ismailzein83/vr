@@ -3,18 +3,19 @@
     "use strict";
 
     genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
-        'UtilsService', 'VRNavigationService', 'VRNotificationService'];
+        'VR_GenericData_GenericRuleAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService'];
 
     function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService,
-        UtilsService, VRNavigationService, VRNotificationService) {
+        VR_GenericData_GenericRuleAPIService, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService) {
 
         var isEditMode;
 
-        //var routeRuleId;
+        var genericRuleId;
         var genericRuleDefinitionId;
         var genericRuleDefintion;
         var genericRuleEntity;
 
+        var criteriaDefinitionFields;
 
         loadParameters();
         defineScope();
@@ -35,12 +36,12 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.saveGenericRule = function () {
-                //if (isEditMode) {
-                //    return updateRouteRule();
-                //}
-                //else {
-                //    return insertRouteRule();
-                //}
+                if (isEditMode) {
+                    return updateRouteRule();
+                }
+                else {
+                    return insertRouteRule();
+                }
             };
 
             $scope.scopeModel.close = function () {
@@ -80,6 +81,7 @@
         function getGenericRuleDefinition() {
             return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionId).then(function (response) {
                 genericRuleDefintion = response;
+                criteriaDefinitionFields = (genericRuleDefintion != null && genericRuleDefintion.CriteriaDefinition != null) ? genericRuleDefintion.CriteriaDefinition.Fields : undefined;
             });
         }
 
@@ -124,31 +126,47 @@
 
         function loadCriteriaSection()
         {
-            if (genericRuleDefintion == undefined || genericRuleDefintion.CriteriaDefinition == null)
+            if (criteriaDefinitionFields == undefined)
                 return;
 
             var promises = [];
 
-            var dataFieldTypesConfig = [];
+            var loadAllFieldsPromiseDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadAllFieldsPromiseDeferred.promise);
 
-            var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
-                dataFieldTypesConfig = response;
+            var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (allConfigs) {
 
-                angular.forEach(genericRuleDefintion.CriteriaDefinition.Fields, function (field) {
-                    var dataFieldTypeConfig = UtilsService.getItemByVal(dataFieldTypesConfig, field.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                var criteriaFieldsPromises = [];
+
+                angular.forEach(criteriaDefinitionFields, function (field) {
+                    var dataFieldTypeConfig = UtilsService.getItemByVal(allConfigs, field.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
                     field.dynamicGroupUIControl = {};
                     field.dynamicGroupUIControl.directive = dataFieldTypeConfig.DynamicGroupUIControl;
+                    field.dynamicGroupUIControl.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     field.dynamicGroupUIControl.onDirectiveReady = function (api) {
                         field.dynamicGroupUIControl.directiveAPI = api;
+                        field.dynamicGroupUIControl.onReadyPromiseDeferred.resolve();
+                    };
+
+                    field.dynamicGroupUIControl.loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    criteriaFieldsPromises.push(field.dynamicGroupUIControl.loadPromiseDeferred.promise);
+                    
+                    field.dynamicGroupUIControl.onReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             fieldType: field.FieldType
                         };
-                        field.dynamicGroupUIControl.directiveAPI.load(payload);
-                    };
+
+                        VRUIUtilsService.callDirectiveLoad(field.dynamicGroupUIControl.directiveAPI, payload, field.dynamicGroupUIControl.loadPromiseDeferred);
+                    });
+
+                    UtilsService.waitMultiplePromises(criteriaFieldsPromises).then(function () {
+                        loadAllFieldsPromiseDeferred.resolve;
+                    }).catch(function (error) {
+                        loadAllFieldsPromiseDeferred.reject(error);
+                    });
                 });
 
                 $scope.scopeModel.criteriaFields = genericRuleDefintion.CriteriaDefinition.Fields;
-
             });
 
             promises.push(loadFieldTypeConfigPromise);
@@ -156,37 +174,44 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        function buildRouteRuleObjFromScope() {
+        function buildGenericRuleObjFromScope() {
+            var genericRuleCriteria = {};
+            
+            if (criteriaDefinitionFields != undefined) {
+                genericRuleCriteria.FieldsValues = {};
 
-            //var routeRule = {
-            //    RuleId: (routeRuleId != null) ? routeRuleId : 0,
-            //    Criteria: {
-            //        RoutingProductId: routingProductId,
-            //        ExcludedCodes: $scope.scopeModal.excludedCodes,
-            //        SaleZoneGroupSettings: saleZoneGroupSettingsAPI.getData(),//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
-            //        CustomerGroupSettings: customerGroupSettingsAPI.getData(),
-            //        CodeCriteriaGroupSettings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate')
-            //    },
-            //    Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, routeRuleSettingsAPI, 'selectedrouteRuleSettingsTemplate'),
-            //    BeginEffectiveTime: $scope.scopeModal.beginEffectiveDate,
-            //    EndEffectiveTime: $scope.scopeModal.endEffectiveDate
-            //};
+                angular.forEach(criteriaDefinitionFields, function (field) {
+                    genericRuleCriteria.FieldsValues[field.FieldName] = field.dynamicGroupUIControl.directiveAPI.getData();
+                });
+            }
 
-            //return routeRule;
+            var genericRule = {
+                $type: "Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities",
+                RuleId: (genericRuleId != null) ? genericRuleId : 1,
+                Criteria: genericRuleCriteria,
+                Settings: {
+                    //$type: "Vanrise.GenericData.Transformation.Entities.MappingRuleSettings, Vanrise.GenericData.Transformation.Entities",
+                    Value: 'Test Value Settings'
+                },
+                BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,
+                EndEffectiveTime: $scope.scopeModel.endEffectiveDate
+            };
+
+            return genericRule;
         }
 
         function insertRouteRule() {
-            //var routeRuleObject = buildRouteRuleObjFromScope();
-            //return WhS_Routing_RouteRuleAPIService.AddRule(routeRuleObject)
-            //.then(function (response) {
-            //    if (VRNotificationService.notifyOnItemAdded("Route Rule", response)) {
-            //        if ($scope.onRouteRuleAdded != undefined)
-            //            $scope.onRouteRuleAdded(response.InsertedObject);
-            //        $scope.modalContext.closeModal();
-            //    }
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyException(error, $scope);
-            //});
+            var genericRuleObj = buildGenericRuleObjFromScope();
+            return VR_GenericData_GenericRuleAPIService.AddGenericRule(genericRuleObj)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Generic Rule", response)) {
+                    if ($scope.onRouteRuleAdded != undefined)
+                        $scope.onRouteRuleAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
 
         }
 
