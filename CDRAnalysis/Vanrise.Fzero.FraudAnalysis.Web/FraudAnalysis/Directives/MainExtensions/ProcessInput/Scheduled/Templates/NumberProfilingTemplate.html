@@ -1,6 +1,6 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/3row">
-        <vr-select datasource="periods" datatextfield="Name" datavaluefield="Id" label="Period" selectedvalues="selectedPeriod" isrequired></vr-select>
+        <cdranalysis-fa-period-selector on-ready="onPeriodSelectorReady" isrequired="true" hideremoveicon></cdranalysis-fa-period-selector>
     </vr-columns>
 
     <vr-columns width="fullrow">

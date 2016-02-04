@@ -1,6 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsService", "VRNotificationService", "CDRAnalysis_FA_PeriodAPIService", "VRCommon_HourEnum", function (UtilsService, VRUIUtilsService, VRNotificationService, CDRAnalysis_FA_PeriodAPIService, VRCommon_HourEnum) {
+app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsService", "VRNotificationService", "CDRAnalysis_FA_PeriodAPIService", "VRCommon_HourEnum", "CDRAnalysis_FA_PeriodEnum",
+function (UtilsService, VRUIUtilsService, VRNotificationService, CDRAnalysis_FA_PeriodAPIService, VRCommon_HourEnum, CDRAnalysis_FA_PeriodEnum) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -28,10 +29,17 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
     function DirectiveConstructor($scope, ctrl) {
 
         this.initializeController = initializeController;
+        var periodSelectorAPI;
+        var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var createNumberProfileEntity;
+
 
         function initializeController() {
 
-            $scope.periods = [];
+            $scope.onPeriodSelectorReady = function (api) {
+                periodSelectorAPI = api;
+                periodSelectorReadyDeferred.resolve();
+            };
 
             $scope.hours = [];
             angular.forEach(VRCommon_HourEnum, function (itm) {
@@ -52,9 +60,26 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
             defineAPI();
         }
 
+        function loadPeriodSelector() {
+
+            var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            periodSelectorReadyDeferred.promise.then(function () {
+
+                var payload = {
+                };
+                if (createNumberProfileEntity != undefined && createNumberProfileEntity.PeriodId != undefined)
+                    payload.selectedIds = createNumberProfileEntity.PeriodId;
+
+                VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, payload, periodSelectorLoadDeferred);
+            });
+
+            return periodSelectorLoadDeferred.promise;
+        }
+
         function defineAPI() {
 
-           
+
             var api = {};
             api.getData = function () {
 
@@ -66,7 +91,7 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
 
                 return {
                     $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-                    PeriodId: $scope.selectedPeriod.Id,
+                    PeriodId: periodSelectorAPI.getSelectedIds(),
                     IncludeWhiteList: false,
                     Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
                 };
@@ -74,7 +99,7 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
             };
 
             api.getExpressionsData = function () {
-                
+
                 return { "ScheduleTime": "ScheduleTime" };
 
             };
@@ -103,6 +128,18 @@ app.directive("vrCdrFraudanalysisNumberprofiling", ["UtilsService", "VRUIUtilsSe
                         });
                     }
                 });
+
+            }
+
+            api.load = function (payload) {
+
+                var promises = [];
+                if (payload != undefined && payload.data != undefined) {
+                    createNumberProfileEntity = payload.data;
+                }
+
+                promises.push(loadPeriodSelector());
+                return UtilsService.waitMultiplePromises(promises);
 
             }
 
