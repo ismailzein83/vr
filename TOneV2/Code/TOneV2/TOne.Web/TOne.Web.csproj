@@ -205,6 +205,9 @@
     <Reference Include="Vanrise.GenericData.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Normalization">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Pricing">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
     </Reference>
