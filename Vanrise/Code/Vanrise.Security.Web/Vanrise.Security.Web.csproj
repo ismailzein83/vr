@@ -116,6 +116,7 @@
     <Content Include="Security\Constants\HolderTypeEnum.js" />
     <Content Include="Security\Constants\ModuleConfig.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
+    <Content Include="Security\Constants\ViewTypeEnum.js" />
     <Content Include="Security\Constants\WidgetSectionEnum.js" />
     <Content Include="Security\Directives\DynamicPage\Templates\DynamicPageViewer.html" />
     <Content Include="Security\Directives\DynamicPage\Templates\DynamicPagesGrid.html" />
