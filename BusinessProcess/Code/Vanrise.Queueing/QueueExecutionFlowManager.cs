@@ -136,6 +136,15 @@ namespace Vanrise.Queueing
             return executionFlow != null ? executionFlow.Name : null;
         }
 
+        public List<QueueExecutionFlow> GetExecutionFlows()
+        {
+            var cachedExecFlows = GetCachedQueueExecutionFlows();
+            if (cachedExecFlows != null)
+                return cachedExecFlows.Values.ToList();
+            else
+                return null;
+        }
+
         Dictionary<int, QueueExecutionFlow> GetCachedQueueExecutionFlows()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlows",

@@ -154,7 +154,7 @@ namespace Vanrise.BusinessProcess
         {
             List<long> loadedInstanceIds = new List<long>();
             lock (_loadedInstanceIds)
-                loadedInstanceIds.AddRange(loadedInstanceIds);
+                loadedInstanceIds.AddRange(_loadedInstanceIds);
             _dataManager.LoadPendingProcesses(loadedInstanceIds, s_acceptableBPStatusesToRun, (bp) =>
             {
                 BPDefinitionInitiator processInitiator = _processDefinitionInitiators.Values.First(itm => itm.Definition.BPDefinitionID == bp.DefinitionID);
