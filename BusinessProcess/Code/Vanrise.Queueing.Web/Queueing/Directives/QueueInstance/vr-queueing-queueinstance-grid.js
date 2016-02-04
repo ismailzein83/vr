@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VR_Queueing_QueueItemStatusEnum',
-    function (VR_Queueing_QueueInstanceAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VR_Queueing_QueueItemStatusEnum) {
+app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VR_Queueing_QueueItemStatusEnum','LabelColorsEnum',
+    function (VR_Queueing_QueueInstanceAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
 
         var directiveDefinitionObject = {
 
@@ -31,6 +31,37 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
 
             function initializeController() {
 
+
+                $scope.getNotProcessedColor = function (dataItem) {
+                    var color = undefined;
+                    var queueStatus = dataItem.notProcessedCount;
+                    if (queueStatus != undefined) {
+                        switch (true) {
+                            case queueStatus >=5 && queueStatus < 15:
+                                color = LabelColorsEnum.Warning.color;
+                                break;
+                            case queueStatus > 15:
+                                color = LabelColorsEnum.Error.color;
+                                break;
+                        }
+                    }
+
+                    return color;
+                }
+
+
+                $scope.getSuspendedColor = function (dataItem) {
+                    var color = undefined;
+                    var queueStatus = dataItem.suspendedCount;
+                    if (queueStatus != undefined) {
+                        if (queueStatus > 0)
+                            color = LabelColorsEnum.Error.color;
+                    }
+
+                    return color;
+                }
+
+                
 
 
                 $scope.queueInstances = [];

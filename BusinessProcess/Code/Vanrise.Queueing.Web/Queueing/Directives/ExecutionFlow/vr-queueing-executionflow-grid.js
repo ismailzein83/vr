@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService','VR_Queueing_QueueItemStatusEnum','UtilsService',
-    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService, VR_Queueing_QueueItemStatusEnum, UtilsService) {
+app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum',
+    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService, VR_Queueing_QueueItemStatusEnum,LabelColorsEnum) {
 
     var directiveDefinitionObject = {
 
@@ -31,6 +31,37 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
         this.initializeController = initializeController;
 
         function initializeController() {
+
+
+            $scope.getNotProcessedColor = function (dataItem) {
+                var color = undefined;
+                var queueStatus = dataItem.notProcessedCount;
+                if (queueStatus != undefined) {
+                    switch (true) {
+                        case queueStatus >= 15 && queueStatus < 30:
+                            color = LabelColorsEnum.Warning.color;
+                            break;
+                        case queueStatus >= 30:
+                            color = LabelColorsEnum.Error.color;
+                            break;
+                    }
+                }
+
+                return color;
+            }
+
+
+            $scope.getSuspendedColor = function (dataItem) {
+                var color = undefined;
+                var queueStatus = dataItem.suspendedCount;
+                if (queueStatus != undefined) {
+                    if(queueStatus>0)
+                        color = LabelColorsEnum.Error.color;
+                }
+
+                return color;
+            }
+
 
             $scope.executionFlows = [];
             $scope.ongridReady = function (api) {
