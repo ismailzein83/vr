@@ -69,7 +69,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="ImportPriceListManager.cs" />
-    <Compile Include="InitiateUploadContext.cs" />
+    <Compile Include="PriceListUploadContext.cs" />
     <Compile Include="PriceListProgressContext.cs" />
     <Compile Include="PriceListTasks\ResultTaskAction.cs" />
     <Compile Include="PriceListTasks\ResultTaskActionArgument.cs" />

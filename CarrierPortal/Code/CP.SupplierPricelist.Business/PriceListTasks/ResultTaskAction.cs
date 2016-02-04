@@ -16,19 +16,16 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 throw new Exception("SupplierPriceListConnector is null");
 
             ImportPriceListManager manager = new ImportPriceListManager();
-            List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>()
+            List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
             {
                 PriceListStatus.Uploaded
             };
-            var priceListProgressContext = new PriceListProgressContext()
-            {
-                Url = resultTaskActionArgument.SupplierPriceListConnector.Url,
-                UserName = resultTaskActionArgument.SupplierPriceListConnector.Username,
-                Password = resultTaskActionArgument.SupplierPriceListConnector.Password
-            };
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
             {
-                priceListProgressContext.QueueId = pricelist.QueueId;
+                var priceListProgressContext = new PriceListProgressContext
+                {
+                    UploadInformation = pricelist.UploadedInformation
+                };
                 PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
                 try
                 {

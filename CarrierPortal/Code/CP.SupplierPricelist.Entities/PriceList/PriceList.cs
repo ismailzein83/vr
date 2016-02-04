@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CP.SupplierPricelist.Entities
 {
@@ -14,10 +10,9 @@ namespace CP.SupplierPricelist.Entities
         public PriceListType PriceListType { get; set; }
         public PriceListStatus Status { get; set; }
         public PriceListResult Result { get; set; }
-        public string UploadedInformation { get; set; }
-        public string PriceListProgress { get; set; }
+        public object UploadedInformation { get; set; }
+        public object PriceListProgress { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime EffectiveOnDate { get; set; }
-        public int QueueId { get; set; }
     }
 }

@@ -42,31 +42,31 @@ namespace CarrierPortal.DevRuntime
                         VRFileManager fileManager = new VRFileManager();
                         foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
                         {
-                            var initiateUploadContext = new InitiateUploadContext()
+                            var priceListUploadContext = new PriceListUploadContext()
                             {
                                 UserId = pricelist.UserId,
                                 PriceListType = pricelist.PriceListType.ToString(),
                                 File = fileManager.GetFile(pricelist.FileId),
                                 EffectiveOnDateTime = pricelist.EffectiveOnDate
                             };
-                            InitiatePriceListOutput initiatePriceListOutput = new InitiatePriceListOutput();
+                            PriceListUploadOutput initiatePriceListOutput = new PriceListUploadOutput();
                             try
                             {
                                 initiatePriceListOutput =
-                                    SupplierPriceListConnector.InitiatePriceList(initiateUploadContext);
+                                    SupplierPriceListConnector.PriceListUploadOutput(priceListUploadContext);
                             }
                             catch (Exception ex)
                             {
-                                initiatePriceListOutput.Result = InitiateSupplierResult.Failed;
+                                initiatePriceListOutput.Result = PriceListSupplierUploadResult.Failed;
                                 initiatePriceListOutput.FailureMessage = ex.Message;
                             }
                             PriceListStatus priceListstatus;
                             switch (initiatePriceListOutput.Result)
                             {
-                                case InitiateSupplierResult.Uploaded:
+                                case PriceListSupplierUploadResult.Uploaded:
                                     priceListstatus = PriceListStatus.Uploaded;
                                     break;
-                                case InitiateSupplierResult.Failed:
+                                case PriceListSupplierUploadResult.Failed:
                                     priceListstatus = PriceListStatus.GetStatusFailedWithNoRetry;
                                     break;
                                 default:

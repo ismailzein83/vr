@@ -3,7 +3,6 @@ using CP.SupplierPricelist.Entities;
 using System.Collections.Generic;
 using Vanrise.Common.Business;
 using Vanrise.Common;
-using System.ComponentModel;
 using System.Linq;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
@@ -16,6 +15,7 @@ namespace CP.SupplierPricelist.Business
         {
             IPriceListDataManager dataManager =
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
+            priceList.UserId = SecurityContext.Current.GetLoggedInUserId();
             dataManager.Insert(priceList);
 
             return true;
@@ -53,11 +53,11 @@ namespace CP.SupplierPricelist.Business
             return dataManager.GetPriceLists(listPriceListStatuses);
         }
 
-        public bool UpdateInitiatePriceList(long id, int result, int queueId)
+        public bool UpdateInitiatePriceList(long id, int result, object uploadInformation)
         {
             IPriceListDataManager dataManager =
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            return dataManager.UpdateInitiatePriceList(id, result, queueId);
+            return dataManager.UpdateInitiatePriceList(id, result, uploadInformation);
         }
         public List<Vanrise.Entities.TemplateConfig> GetUploadPriceListTemplates()
         {
@@ -69,13 +69,13 @@ namespace CP.SupplierPricelist.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.SupplierPriceListResult);
         }
-        
+
         public bool UpdatePriceListProgress(long id, int result)
         {
             IPriceListDataManager dataManager =
                    ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
             return dataManager.UpdatePriceListProgress(id, result);
-            
+
         }
     }
 }

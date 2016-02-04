@@ -6,11 +6,14 @@ namespace CP.SupplierPriceList.TOneV1Integration
 {
     public class SupplierPriceListConnector : SupplierPriceListConnectorBase
     {
-        public override InitiatePriceListOutput InitiatePriceList(IInitiateUploadContext context)
+        public string Url { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public override PriceListUploadOutput PriceListUploadOutput(IPriceListUploadContext context)
         {
-            InitiatePriceListOutput priceListOutput = new InitiatePriceListOutput();
-            var cont = (InitiateUploadContext)context;
-            ServiceActions serviceActions = new ServiceActions(cont.Url, cont.Password, cont.UserName);
+            PriceListUploadOutput priceListOutput = new PriceListUploadOutput();
+            var cont = (PriceListUploadContext)context;
+            ServiceActions serviceActions = new ServiceActions(Url, Password, UserName);
             RootObject tokenObject = serviceActions.GetAuthenticated();
             if (tokenObject != null)
             {
@@ -24,8 +27,12 @@ namespace CP.SupplierPriceList.TOneV1Integration
                 };
                 // Vanrise.Common.Compressor.Compress(context.File.Content)
                 int insertedId = serviceActions.UploadOnline(tokenObject.Token, tokenObject.TokenName, userInput);
-                priceListOutput.QueueId = insertedId;
-                priceListOutput.Result = insertedId != 0 ? InitiateSupplierResult.Uploaded : InitiateSupplierResult.Failed;
+                var uploadInformation = new UploadInformation
+                {
+                    QueueId = insertedId
+                };
+                priceListOutput.UploadPriceListInformation = uploadInformation;
+                priceListOutput.Result = insertedId != 0 ? PriceListSupplierUploadResult.Uploaded : PriceListSupplierUploadResult.Failed;
             }
             return priceListOutput;
         }
@@ -41,12 +48,13 @@ namespace CP.SupplierPriceList.TOneV1Integration
         {
             int queueResult = 0;
             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
-            var progressContext = (PriceListProgressContext)context;
-            ServiceActions serviceActions = new ServiceActions(progressContext.Url, progressContext.Password, progressContext.UserName);
+            int queueId = ((UploadInformation)((PriceListProgressContext)context).UploadInformation).QueueId;
+            ServiceActions serviceActions = new ServiceActions(Url, Password, UserName);
             RootObject tokenObject = serviceActions.GetAuthenticated();
+
             if (tokenObject != null)
             {
-                queueResult = serviceActions.GetResults(progressContext.QueueId, tokenObject.Token, tokenObject.TokenName);
+                queueResult = serviceActions.GetResults(queueId, tokenObject.Token, tokenObject.TokenName);
             }
             switch (queueResult)
             {

@@ -23,47 +23,46 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                     {
                         PriceListStatus.New
                     };
-
             VRFileManager fileManager = new VRFileManager();
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
             {
-                var initiateUploadContext = new InitiateUploadContext()
+                var priceListUploadContext = new PriceListUploadContext
                 {
                     UserId = pricelist.UserId,
                     PriceListType = pricelist.PriceListType.ToString(),
                     File = fileManager.GetFile(pricelist.FileId),
-                    EffectiveOnDateTime = pricelist.EffectiveOnDate,
-                    Url = uploadPriceListTaskActionArgument.SupplierPriceListConnector.Url,
-                    UserName = uploadPriceListTaskActionArgument.SupplierPriceListConnector.Username,
-                    Password = uploadPriceListTaskActionArgument.SupplierPriceListConnector.Password
+                    EffectiveOnDateTime = pricelist.EffectiveOnDate
                 };
-                InitiatePriceListOutput initiatePriceListOutput = new InitiatePriceListOutput();
+                PriceListUploadOutput priceListUploadOutput = new PriceListUploadOutput();
                 try
                 {
-                    initiatePriceListOutput =
-                      uploadPriceListTaskActionArgument.SupplierPriceListConnector.InitiatePriceList(initiateUploadContext);
+                    priceListUploadOutput =
+                      uploadPriceListTaskActionArgument.SupplierPriceListConnector.PriceListUploadOutput(priceListUploadContext);
                 }
                 catch (Exception ex)
                 {
-                    initiatePriceListOutput.Result = InitiateSupplierResult.Failed;
-                    initiatePriceListOutput.FailureMessage = ex.Message;
+                    priceListUploadOutput.Result = PriceListSupplierUploadResult.FailedWithRetry;
+                    priceListUploadOutput.FailureMessage = ex.Message;
                 }
                 PriceListStatus priceListstatus;
-                switch (initiatePriceListOutput.Result)
+                switch (priceListUploadOutput.Result)
                 {
-                    case InitiateSupplierResult.Uploaded:
+                    case PriceListSupplierUploadResult.Uploaded:
                         priceListstatus = PriceListStatus.Uploaded;
                         break;
-                    case InitiateSupplierResult.Failed:
+                    case PriceListSupplierUploadResult.Failed:
                         priceListstatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                        break;
+                    case PriceListSupplierUploadResult.FailedWithRetry:
+                        priceListstatus = PriceListStatus.GetStatusFailedWithRetry;
                         break;
                     default:
                         priceListstatus = PriceListStatus.GetStatusFailedWithRetry;
                         break;
                 }
-                manager.UpdateInitiatePriceList(pricelist.PriceListId, (int)priceListstatus, initiatePriceListOutput.QueueId);
+                manager.UpdateInitiatePriceList(pricelist.PriceListId, (int)priceListstatus, priceListUploadOutput.UploadPriceListInformation);
             }
-            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
+            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
             {
                 Result = ExecuteOutputResult.Completed
             };

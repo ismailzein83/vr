@@ -57,6 +57,7 @@
     <Compile Include="RootObject.cs" />
     <Compile Include="ServiceActions.cs" />
     <Compile Include="SupplierPriceListConnector.cs" />
+    <Compile Include="UploadInformation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CP.SupplierPricelist.Business\CP.SupplierPricelist.Business.csproj">

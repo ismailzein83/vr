@@ -40,7 +40,7 @@ namespace CarrierPortal.DevRuntime
                         {
                             var priceListProgressContext = new PriceListProgressContext()
                             {
-                                QueueId = pricelist.QueueId
+                                UploadInformation = pricelist.UploadedInformation
                             };
                             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
                             try

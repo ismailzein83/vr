@@ -77,7 +77,7 @@ app.directive("cpSupplierpricelistResultsupplierpricelist", ['UtilsService', 'VR
                 if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined) {
                     sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
-                    sourceDirectiveReadyPromiseDeferred.promise.then(function() {
+                    sourceDirectiveReadyPromiseDeferred.promise.then(function () {
                         sourceDirectiveReadyPromiseDeferred = undefined;
                         var obj;
                         console.log(payload);
@@ -87,7 +87,7 @@ app.directive("cpSupplierpricelistResultsupplierpricelist", ['UtilsService', 'VR
                             console.log(payload.data.SupplierPriceListConnector);
                             obj = {
                                 Url: payload.data.SupplierPriceListConnector.Url,
-                                Username: payload.data.SupplierPriceListConnector.Username,
+                                Username: payload.data.SupplierPriceListConnector.UserName,
                                 Password: payload.data.SupplierPriceListConnector.Password
                             };
                         }

@@ -8,19 +8,19 @@ namespace CP.SupplierPriceList.TOneV1Integration
     public class ServiceActions
     {
         public string Url { get; set; }
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public string Password { get; set; }
 
         public ServiceActions(string url, string password, string userName)
         {
             Url = url;
-            UserName = userName;
+            Username = userName;
             Password = password;
         }
         public RootObject GetAuthenticated()
         {
             RootObject tokenObject = null;
-            string urls = string.Format("{0}/api/Security/authenticate?username={1}&password={2}", Url, UserName, Password);
+            string urls = string.Format("{0}/api/Security/authenticate?username={1}&password={2}", Url, Username, Password);
             HttpWebRequest requests = (HttpWebRequest)WebRequest.Create(urls);
             requests.Method = "GET";
             try

@@ -84,7 +84,7 @@ app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VR
                         if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined)
                             obj = {
                                 Url: payload.data.SupplierPriceListConnector.Url,
-                                Username: payload.data.SupplierPriceListConnector.Username,
+                                Username: payload.data.SupplierPriceListConnector.UserName,
                                 Password: payload.data.SupplierPriceListConnector.Password
                             };
                         VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, obj, loadSourceTemplatePromiseDeferred);

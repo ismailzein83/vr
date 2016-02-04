@@ -4,6 +4,7 @@ using System.Linq;
 using Vanrise.Data.SQL;
 using CP.SupplierPricelist.Entities;
 using System.Data;
+using Vanrise.Common;
 
 namespace CP.SupplierPricelist.Data.SQL
 {
@@ -17,7 +18,7 @@ namespace CP.SupplierPricelist.Data.SQL
 
         public bool Insert(PriceList priceList)
         {
-            int recordEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_Insert]", 1, priceList.FileId, priceList.PriceListType, 0, priceList.EffectiveOnDate);
+            int recordEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_Insert]", priceList.UserId, priceList.FileId, priceList.PriceListType, 0, priceList.EffectiveOnDate);
             return (recordEffected > 0);
         }
 
@@ -52,17 +53,16 @@ namespace CP.SupplierPricelist.Data.SQL
                 UserId = (int)reader["UserID"],
                 Result = GetReaderValue<PriceListResult>(reader, "Result"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-                EffectiveOnDate = GetReaderValue<DateTime>(reader, "EffectiveOnDate"),
-                QueueId = GetReaderValue<int>(reader, "QueueId")
+                EffectiveOnDate = GetReaderValue<DateTime>(reader, "EffectiveOnDate")
             };
 
-            //string uploadedInformationSerialized = reader["UploadedInformation"] as string;
-            //if (uploadedInformationSerialized != null)
-            //    pricelist.UploadedInformation = Serializer.Deserialize(uploadedInformationSerialized);
+            string uploadedInformationSerialized = reader["UploadInformation"] as string;
+            if (uploadedInformationSerialized != null)
+                pricelist.UploadedInformation = Serializer.Deserialize(uploadedInformationSerialized);
 
-            // string pricelistProgressSerialized = reader["pricelistProgressSerialized"] as string;
-            // if (pricelistProgressSerialized != null)
-            //    pricelist.PriceListProgress = Serializer.Deserialize(testProgressSerialized);
+            string pricelistProgressSerialized = reader["PriceListProgress"] as string;
+            if (pricelistProgressSerialized != null)
+                pricelist.PriceListProgress = Serializer.Deserialize(pricelistProgressSerialized);
 
             return pricelist;
         }
@@ -77,9 +77,10 @@ namespace CP.SupplierPricelist.Data.SQL
         }
 
 
-        public bool UpdateInitiatePriceList(long id, int result, int queueId)
+        public bool UpdateInitiatePriceList(long id, int result, object uploadInformation)
         {
-            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdateInitiatePriceList]", id, result, queueId);
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdateInitiatePriceList]",
+                id, result, uploadInformation != null ? Serializer.Serialize(uploadInformation) : null);
             return (recordsEffected > 0);
         }
 
