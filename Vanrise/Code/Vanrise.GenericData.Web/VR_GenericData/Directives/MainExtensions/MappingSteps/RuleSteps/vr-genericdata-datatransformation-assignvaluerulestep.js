@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsService','VR_GenericData_GenericRuleTypeConfigAPIService','VRUIUtilsService',
+    function (UtilsService, VR_GenericData_GenericRuleTypeConfigAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
 
                 var ctrl = this;
 
-                var ctor = new textTypeCtor(ctrl, $scope);
+                var ctor = new assignvaluerulestepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,25 +26,45 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/AssignValueRuleStepTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/AssignValueRuleStepTemplate.html';
             }
 
         };
 
-        function textTypeCtor(ctrl, $scope) {
+        function assignvaluerulestepCtor(ctrl, $scope) {
+            var ruleTypeName = "GenericRuleMapping";
+            var ruleTypeEntity;
 
+            var ruleStepCommonDirectiveAPI;
+            var ruleStepCommonDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
+                $scope.onRuleStepCommonReady = function (api)
+                {
+                    ruleStepCommonDirectiveAPI = api;
+                    ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
+                }
                 defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) { }
+                api.load = function (payload) {
+                    var promises = [];
+                    var loadRuleStepCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        ruleStepCommonDirectiveReadyPromiseDeferred.promise.then(function () {
+                            var payload = { ruleTypeName: ruleTypeName };
+                            VRUIUtilsService.callDirectiveLoad(ruleStepCommonDirectiveAPI, payload, loadRuleStepCommonDirectivePromiseDeferred);
+                        });
 
+                    promises.push(loadRuleStepCommonDirectivePromiseDeferred.promise);
+
+                    return UtilsService.waitMultiplePromises(promises);
+                }
+               
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions",
+                        $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.AssignValueRuleStep, Vanrise.GenericData.Transformation.MainExtensions",
                     };
                 }
 

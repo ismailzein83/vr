@@ -60,7 +60,7 @@ app.directive('vrDatalist', [function () {
 
             var template = '<vr-list maxitemsperrow="{{VRDatalistCtrl.maxitemsperrow}}">'
                             + '<div ng-sortable="VRDatalistCtrl.itemsSortable">'
-                             + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
+                             + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource track by $index" ' + onRemoveAttr + '>'
                              + draggableIconTemplate
                              + '<div style="width: ' + contentWidth + '; display:inline-block;">' + element.html() + '</div>'
                              + '</vr-listitem>'

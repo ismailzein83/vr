@@ -23,28 +23,28 @@
             </vr-tab>
             <vr-tab header="'Transformation Steps'">
                 <vr-row>
-                    <vr-columns width="1/3row">
+                    <vr-columns colnum="2">
                         <vr-section title="Toolbox">
-                            <vr-datagrid  datasource="scopeModal.steps" norowhighlightonclick="true"
-                                         on-ready="scopeModal.onGridReady"  hidegridmenu>
+                            <vr-datagrid datasource="scopeModal.steps" norowhighlightonclick="true"
+                                         on-ready="scopeModal.onGridReady" hidegridmenu>
                                 <vr-datagridcolumn headertext="'Steps'" field="'Title'" widthfactor="5" isclickable="true" onclicked="scopeModal.addStep"></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-section>
                     </vr-columns>
-                    <vr-columns width="1/3row">
+                    <vr-columns colnum="4">
                         <vr-section title="Steps">
                             <vr-datalist maxitemsperrow="1" datasource="scopeModal.stepsAdded" isitemdraggable autoremoveitem="true">
-                                <vr-label >{{dataItem.Title}}</vr-label><span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span> 
+                                <vr-label>{{dataItem.Title}}</vr-label><span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span>
                                 <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
                             </vr-datalist>
                         </vr-section>
                     </vr-columns>
-                    <vr-columns width="1/3row">
+                    <vr-columns colnum="6">
                         <vr-section title="Properties" vr-loader="scopeModal.isLoadingDirective">
                             <vr-row removeline>
                                 <i class="glyphicon glyphicon-remove hand-cursor" style="width:10px; float:right; cursor :default" ng-click="scopeModal.onEditorRemove()" ng-show="scopeModal.selectedStep !=undefined"></i>
                                 <vr-columns width="fullrow">
-                                    <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onEditorDirectiveReady"></vr-directivewrapper>                                
+                                    <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onEditorDirectiveReady"></vr-directivewrapper>
                                 </vr-columns>
                                 <vr-columns width="fullrow">
                                     <vr-button type="Apply" data-onclick="scopeModal.applyChanges" standalone ng-show="scopeModal.selectedStep !=undefined"></vr-button>

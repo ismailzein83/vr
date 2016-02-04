@@ -104,7 +104,7 @@ namespace Vanrise.GenericData.Business
 
             if (filter != null)
             {
-                // Set filterExpression
+                filterExpression = (item) => (item.SettingsDefinition != null && item.SettingsDefinition.ConfigId == filter.RuleTypeId);
             }
 
             return cachedGenericRuleDefinitions.MapRecords(GenericRuleDefinitionInfoMapper, filterExpression);

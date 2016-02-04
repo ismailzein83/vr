@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "GenericRuleTypeConfig")]
-    public class GenericRuleTypeConfigController
+    public class GenericRuleTypeConfigController:BaseAPIController
     {
         [HttpGet]
         [Route("GetGenericRuleTypes")]
@@ -22,11 +22,11 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetGenericRuleType")]
-        public GenericRuleTypeConfig GetGenericRuleType(int configId)
+        [Route("GetGenericRuleTypeByName")]
+        public GenericRuleTypeConfig GetGenericRuleTypeByName(string ruleTypeName)
         {
             GenericRuleTypeConfigManager manager = new GenericRuleTypeConfigManager();
-            return manager.GetGenericRuleType(configId);
+            return manager.GetGenericRuleTypeByName(ruleTypeName);
         }
 
     }

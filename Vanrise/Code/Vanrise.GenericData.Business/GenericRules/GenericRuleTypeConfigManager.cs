@@ -18,10 +18,10 @@ namespace Vanrise.GenericData.Business
             return cachedGenericRuleTypes.Values;
         }
 
-        public GenericRuleTypeConfig GetGenericRuleType(int configId)
+        public GenericRuleTypeConfig GetGenericRuleTypeByName(string ruleTypeName)
         {
             var cachedGenericRuleTypes = GetCachedGenericRuleTypes();
-            return cachedGenericRuleTypes.GetRecord(configId);
+            return cachedGenericRuleTypes.FindRecord(x=>x.Name == ruleTypeName);
         }
 
         #endregion

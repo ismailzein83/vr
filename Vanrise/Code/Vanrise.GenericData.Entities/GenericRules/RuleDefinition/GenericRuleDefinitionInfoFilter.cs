@@ -8,5 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericRuleDefinitionInfoFilter
     {
+        public int RuleTypeId { get; set; }
     }
 }

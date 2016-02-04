@@ -55,8 +55,19 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                 var api = {};
 
                 api.getData = function () {
+                    var fields;
+                    if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
+                        fields = [];
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            fields.push({
+                                Name: ctrl.datasource[i].Name,
+                                Type: ctrl.datasource[i].Type,
+                            });
+                        }
+
+                    }
                     var obj = {
-                        Fields: ctrl.datasource,
+                        Fields: fields,
                     }
                     return obj;
                 }

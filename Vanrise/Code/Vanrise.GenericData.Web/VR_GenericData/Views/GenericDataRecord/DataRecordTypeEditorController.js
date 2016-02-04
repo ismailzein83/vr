@@ -84,11 +84,12 @@
         }
 
         function buildDataRecordTypeObjFromScope() {
-            var obj =  dataRecordFieldAPI.getData();
+            var obj = dataRecordFieldAPI.getData();
+
             var dataRecordType = {
                 Name: $scope.scopeModal.name,
                 DataRecordTypeId: dataRecordTypeId,
-                Fields: obj != undefined? obj.Fields:undefined
+                Fields: obj !=undefined ? obj.Fields:undefined
             }
             return dataRecordType;
         }
