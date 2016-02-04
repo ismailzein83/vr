@@ -1,15 +1,28 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    genericRuleManagementController.$inject = ['$scope', 'VR_GenericData_GenericRule'];
+    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule'];
 
-    function genericRuleManagementController($scope, VR_GenericData_GenericRule) {
+    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule) {
 
         var gridAPI;
         var filter = {};
 
+        loadParameters();
         defineScope();
         load();
+
+        var ruleDefinitionId
+
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+          
+            if (parameters != null) {
+                ruleDefinitionId = parameters.ruleDefinitionId;
+            }
+            else
+                ruleDefinitionId = 49;
+        }
 
         function defineScope() {
             $scope.onGridReady = function (api) {
@@ -27,7 +40,7 @@
                     gridAPI.onGenericRuleAdded(ruleObj);
                 };
 
-                VR_GenericData_GenericRule.addGenericRule(49, onGenericRuleAdded);
+                VR_GenericData_GenericRule.addGenericRule(ruleDefinitionId, onGenericRuleAdded);
             };
 
             //function getFilterObject() {
