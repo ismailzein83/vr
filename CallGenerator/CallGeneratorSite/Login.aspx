@@ -124,10 +124,25 @@
 	<script src="assets/scripts/login.js" type="text/javascript"></script> 
 	<!-- END PAGE LEVEL SCRIPTS --> 
 	<script>
-	    jQuery(document).ready(function () {
-	        App.init();
-	        Login.init();
 
+	    var enterKeyLogin = function (txtId) {
+	        $(txtId).bind("enterKey", function (e) {
+	            $('#<%=btnLogin.ClientID %>').trigger('click');
+	        });
+
+	        $(txtId).keyup(function (e) {
+	            if (e.keyCode == 13) {
+	                $(this).trigger("enterKey");
+	            }
+	        });
+	    };
+
+	        jQuery(document).ready(function () {
+	            App.init();
+	            //Login.init();
+
+	            enterKeyLogin('#<%=txtPassword.ClientID %>');
+	        enterKeyLogin('#<%=txtUsername.ClientID %>');
 
 
 	    });

@@ -219,7 +219,7 @@
                                 </th>
                                 <th>Edit
                                 </th>
-                                <th style="display: none;">Delete
+                                <th>Delete
                                 </th>
                             </tr>
                         </thead>
@@ -255,7 +255,7 @@
                                         <td class="center">
                                             <a href="#" onclick='editRow(<%# Eval("Id") %> ,<%# "\"" + Eval("DisplayName") + "\"" %> , <%# "\"" + Eval("OccursEvery") + "\""  %> , <%# "\"" + Eval("SipAccount.Id") + "\""  %>  , <%#  "\"" +  ((DateTime)Eval("StartDate")).ToString("dd-MM-yyyy") +"\""%> ,<%#  "\"" + ((DateTime)Eval("EndDate")).ToString("dd-MM-yyyy") + "\"" %> , <%# "\"" + Eval("TestGroupId")  + "\""  %> ,  <%# "\"" + Eval("IsEnabled")  + "\""  %> )'>Edit</a>
                                         </td>
-                                        <td class="center" style="display: none;">
+                                        <td class="center">
                                             <asp:LinkButton class="delete" ID="lnkDelete" OnClientClick="return confirm('Are you sure you want to delete?');"
                                                 OnClick="btnDelete_Click" CommandArgument='<%# Eval("Id") %>' runat="server">Delete</asp:LinkButton>
                                         </td>
@@ -409,8 +409,7 @@
                         days: -29
                     }),
                     endDate: Date.today(),
-                    minDate: '01/01/2014',
-                    maxDate: '12/31/2016',
+                    minDate: '01/01/2014'
                 }
             );
         }
