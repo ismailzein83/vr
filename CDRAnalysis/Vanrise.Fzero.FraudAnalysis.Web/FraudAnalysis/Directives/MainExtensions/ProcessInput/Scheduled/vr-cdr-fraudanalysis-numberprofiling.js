@@ -105,37 +105,19 @@ function (UtilsService, VRUIUtilsService, VRNotificationService, CDRAnalysis_FA_
             };
 
             api.load = function (payload) {
-                var data;
-                if (payload != undefined && payload.data != undefined) {
-                    data = payload.data;
-                }
-                return CDRAnalysis_FA_PeriodAPIService.GetPeriods().then(function (response) {
-                    $scope.periods.length = 0;
-                    angular.forEach(response, function (itm) {
-                        $scope.periods.push(itm);
-                    });
-                    if (data != undefined) {
-                        $scope.isGettingData = true;
-                        $scope.gapBetweenConsecutiveCalls = data.Parameters.GapBetweenConsecutiveCalls;
-                        $scope.gapBetweenFailedConsecutiveCalls = data.Parameters.GapBetweenFailedConsecutiveCalls;
-                        $scope.maxLowDurationCall = data.Parameters.MaxLowDurationCall;
-                        $scope.minCountofCallsinActiveHour = data.Parameters.MinimumCountofCallsinActiveHour;
-                        $scope.selectedPeriod = UtilsService.getItemByVal($scope.periods, data.PeriodId, "Id");
-                        $scope.selectedPeakHours.length = 0;
-
-                        angular.forEach(data.Parameters.PeakHoursIds, function (peakHour) {
-                            $scope.selectedPeakHours.push(UtilsService.getItemByVal($scope.hours, peakHour, "id"));
-                        });
-                    }
-                });
-
-            }
-
-            api.load = function (payload) {
 
                 var promises = [];
                 if (payload != undefined && payload.data != undefined) {
                     createNumberProfileEntity = payload.data;
+                    $scope.gapBetweenConsecutiveCalls = createNumberProfileEntity.Parameters.GapBetweenConsecutiveCalls;
+                    $scope.gapBetweenFailedConsecutiveCalls = createNumberProfileEntity.Parameters.GapBetweenFailedConsecutiveCalls;
+                    $scope.maxLowDurationCall = createNumberProfileEntity.Parameters.MaxLowDurationCall;
+                    $scope.minCountofCallsinActiveHour = createNumberProfileEntity.Parameters.MinimumCountofCallsinActiveHour;
+                    $scope.selectedPeakHours.length = 0;
+
+                    angular.forEach(createNumberProfileEntity.Parameters.PeakHoursIds, function (peakHour) {
+                        $scope.selectedPeakHours.push(UtilsService.getItemByVal($scope.hours, peakHour, "id"));
+                    });
                 }
 
                 promises.push(loadPeriodSelector());
