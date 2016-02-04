@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrQueueingQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Queueing_QueueInstanceAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrQueueingQueuestagenameSelector', ['VR_Queueing_QueueStageAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Queueing_QueueStageAPIService, UtilsService, VRUIUtilsService) {
 
 
 
@@ -97,7 +97,7 @@ app.directive('vrQueueingQueuestagenameSelector', ['VR_Queueing_QueueInstanceAPI
 
                     }
 
-                    return VR_Queueing_QueueInstanceAPIService.GetStageNames(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Queueing_QueueStageAPIService.GetStageNames(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {

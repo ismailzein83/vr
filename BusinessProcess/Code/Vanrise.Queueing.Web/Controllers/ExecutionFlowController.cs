@@ -18,17 +18,7 @@ namespace Vanrise.Queueing.Web.Controllers
             this._manager = new QueueExecutionFlowManager();
         }
 
-        [HttpGet]
-        [Route("GetExecutionFlowDefinitions")]
-        public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitions(string filter = null)
-        {
-            QueueExecutionFlowDefinitionManager manager = new QueueExecutionFlowDefinitionManager();
-            QueueExecutionFlowDefinitionFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueExecutionFlowDefinitionFilter>(filter) : null;
-            return manager.GetExecutionFlowDefinitions(deserializedFilter);
-
-        }
-
-
+        
         [HttpGet]
         [Route("GetExecutionFlows")]
         public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlows(string filter = null)
@@ -44,7 +34,7 @@ namespace Vanrise.Queueing.Web.Controllers
         [Route("GetExecutionFlow")]
         public QueueExecutionFlow GetExecutionFlow(int executionFlowId)
         {
-           
+
             return _manager.GetExecutionFlow(executionFlowId);
 
         }

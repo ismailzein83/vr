@@ -9,7 +9,7 @@ namespace Vanrise.Queueing.Data
 {
    public interface IQueueItemTypeDataManager:IDataManager
     {
-       IEnumerable<QueueItemType> GetItemTypes();
+       IEnumerable<QueueItemType> GetQueueItemTypes();
 
        bool AreItemTypeUpdated(ref object updateHandle);
 

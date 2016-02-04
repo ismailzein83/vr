@@ -71,6 +71,7 @@
     <Compile Include="QueueActivationService.cs" />
     <Compile Include="QueueExecutionFlowDefinitionManager.cs" />
     <Compile Include="QueueInstanceManager.cs" />
+    <Compile Include="QueueStageManager.cs" />
     <Compile Include="QueueItemManager.cs" />
     <Compile Include="QueueExecutionFlowManager.cs" />
     <Compile Include="QueueingManager.cs" />

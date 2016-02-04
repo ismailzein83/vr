@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Queueing_ExecutionFlowAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_ExecutionFlowDefinitionAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Queueing_ExecutionFlowDefinitionAPIService, UtilsService, VRUIUtilsService) {
 
 
 
@@ -97,7 +97,7 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
 
                     }
 
-                    return VR_Queueing_ExecutionFlowAPIService.GetExecutionFlowDefinitions(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Queueing_ExecutionFlowDefinitionAPIService.GetExecutionFlowDefinitions(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {

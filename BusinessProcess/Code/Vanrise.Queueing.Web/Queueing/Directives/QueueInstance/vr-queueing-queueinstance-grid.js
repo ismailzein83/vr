@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VR_Queueing_QueueItemStatusEnum','LabelColorsEnum',
-    function (VR_Queueing_QueueInstanceAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
+app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService", "VR_Queueing_QueueItemTypeAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum',
+    function (VR_Queueing_QueueInstanceAPIService, VR_Queueing_QueueItemTypeAPIService,VR_Queueing_ExecutionFlowService, VRNotificationService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
 
         var directiveDefinitionObject = {
 
@@ -26,7 +26,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
         function ExecutionFlowGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
-            var isFirstTimeLoaded = 0;
+            var isFirstTimeLoaded = false;
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -34,16 +34,15 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
 
                 $scope.getNotProcessedColor = function (dataItem) {
                     var color = undefined;
-                    var queueStatus = dataItem.notProcessedCount;
-                    if (queueStatus != undefined) {
-                        switch (true) {
-                            case queueStatus >=5 && queueStatus < 15:
+                    var notProcessedCount = dataItem.notProcessedCount;
+                    if (notProcessedCount != undefined) {
+                       
+                        if( notProcessedCount >=5 && notProcessedCount < 15)
                                 color = LabelColorsEnum.Warning.color;
-                                break;
-                            case queueStatus > 15:
+
+                        else if(notProcessedCount> 15)
                                 color = LabelColorsEnum.Error.color;
-                                break;
-                        }
+                       
                     }
 
                     return color;
@@ -52,9 +51,9 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
 
                 $scope.getSuspendedColor = function (dataItem) {
                     var color = undefined;
-                    var queueStatus = dataItem.suspendedCount;
-                    if (queueStatus != undefined) {
-                        if (queueStatus > 0)
+                    var suspendedCount = dataItem.suspendedCount;
+                    if (suspendedCount != undefined) {
+                        if (suspendedCount > 0)
                             color = LabelColorsEnum.Error.color;
                     }
 
@@ -91,10 +90,18 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                     return VR_Queueing_QueueInstanceAPIService.GetFilteredQueueInstances(dataRetrievalInput)
                         .then(function (queueInstancesResponse) {
                             onResponseReady(queueInstancesResponse);
-                            if (isFirstTimeLoaded == 0) {
-                                isFirstTimeLoaded += 1;
+                            var timer;
+                            if (!isFirstTimeLoaded) {
+                                isFirstTimeLoaded = true;
                                 RefreshDataGrid();
+                                timer = setInterval(function(){
+                                    RefreshDataGrid();                                
+                                }, 5000);
                             }
+
+                            $scope.$on('$destroy', function () {                               
+                                clearInterval(timer);
+                            });
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -105,7 +112,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
             function RefreshDataGrid() {
 
                 if ($scope.queueInstances != undefined) {
-                    VR_Queueing_QueueInstanceAPIService.GetItemStatusSummary().then(function (itemStatusSummaryResponse) {
+                    VR_Queueing_QueueItemTypeAPIService.GetItemStatusSummary().then(function (itemStatusSummaryResponse) {
                         var notProcessedCount = 0;
                         var suspendedCount = 0;
                         if ($scope.queueInstances != undefined) {
@@ -113,12 +120,12 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                                 notProcessedCount = 0;
                                 suspendedCount = 0;
                                 for (var j = 0; j < itemStatusSummaryResponse.length; j++) {
-                                    var Status = itemStatusSummaryResponse[j].Status;
+                                    var status = itemStatusSummaryResponse[j].Status;
                                     if (itemStatusSummaryResponse[j].QueueId == $scope.queueInstances[i].Entity.QueueInstanceId) {
-                                        if (Status == VR_Queueing_QueueItemStatusEnum.New.value || Status == VR_Queueing_QueueItemStatusEnum.Processing.value || Status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
+                                        if (status == VR_Queueing_QueueItemStatusEnum.New.value || status == VR_Queueing_QueueItemStatusEnum.Processing.value || status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
                                             notProcessedCount += itemStatusSummaryResponse[j].Count;
                                         }
-                                        else if (Status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
+                                        else if (status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
                                             suspendedCount += itemStatusSummaryResponse[j].Count;
                                         }
                                     }
@@ -130,7 +137,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                         }
                     })
                 }
-                setTimeout(RefreshDataGrid, 5000)
+              
 
             }
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrQueueingQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_Queueing_QueueInstanceAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrQueueingQueueitemtypeSelector', ['VR_Queueing_QueueItemTypeAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (VR_Queueing_QueueItemTypeAPIService, UtilsService, VRUIUtilsService) {
 
 
 
@@ -97,7 +97,7 @@ app.directive('vrQueueingQueueitemtypeSelector', ['VR_Queueing_QueueInstanceAPIS
 
                     }
 
-                    return VR_Queueing_QueueInstanceAPIService.GetItemTypes(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Queueing_QueueItemTypeAPIService.GetItemTypes(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {

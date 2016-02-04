@@ -8,33 +8,27 @@ using Vanrise.Queueing.Web.Models;
 
 namespace Vanrise.Queueing.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "QueueInstance")]
-    public class QueueInstanceController : Vanrise.Web.Base.BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "QueueItemType")]
+    public class QueueItemTypeController : Vanrise.Web.Base.BaseAPIController
     {
 
-        private QueueInstanceManager _manager;
-        public QueueInstanceController()
+        private QueueItemTypeManager _manager;
+        public QueueItemTypeController()
         {
-            this._manager = new QueueInstanceManager();
+            this._manager = new QueueItemTypeManager();
         }
 
-       
+        
+
         [HttpGet]
         [Route("GetItemTypes")]
         public IEnumerable<QueueItemTypeInfo> GetItemTypes(string filter = null)
         {
-            QueueItemTypeManager manager = new QueueItemTypeManager();
             QueueItemTypeFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueItemTypeFilter>(filter) : null;
-            return manager.GetItemTypes(deserializedFilter);
+            return _manager.GetItemTypes(deserializedFilter);
         }
 
-        [HttpPost]
-        [Route("GetFilteredQueueInstances")]
-        public object GetFilteredQueueInstances(Vanrise.Entities.DataRetrievalInput<QueueInstanceQuery> input)
-        {
 
-            return GetWebResponse(input, _manager.GetFilteredQueueInstances(input));
-        }
 
 
         [HttpGet]

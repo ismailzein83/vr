@@ -43,12 +43,7 @@ namespace Vanrise.Queueing
                });
         }
         
-        public IEnumerable<QueueStageNameInfo> GetStageNames(QueueStageFilter filter)
-        {
-            IEnumerable<string> filteredStageNames = GetCachedQueueInstances().Values.Select(x => x.StageName).Distinct().ToList();
-            return filteredStageNames.MapRecords(QueueStageInfoMapper, null);
-
-        }
+  
 
         #region Mappers
         private QueueInstanceDetail QueueInstanceDetailMapper(QueueInstance queueInstance)
@@ -73,13 +68,7 @@ namespace Vanrise.Queueing
         }
 
 
-        private QueueStageNameInfo QueueStageInfoMapper(string queueStageName)
-        {
-            QueueStageNameInfo queueStageNameInfo = new QueueStageNameInfo();
-            queueStageNameInfo.Name = queueStageName;
-            return queueStageNameInfo;
-        }
-
+       
         #endregion
     }
 }
