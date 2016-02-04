@@ -11,7 +11,6 @@
             AddGenericRuleDefinition: AddGenericRuleDefinition,
             UpdateGenericRuleDefinition: UpdateGenericRuleDefinition,
             DeleteGenericRuleDefinition: DeleteGenericRuleDefinition,
-            GetGenericRuleDefinitionSettingsTemplates: GetGenericRuleDefinitionSettingsTemplates,
             GetGenericRuleDefinitionsInfo: GetGenericRuleDefinitionsInfo
         };
 
@@ -37,10 +36,6 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'DeleteGenericRuleDefinition'), {
                 genericRuleDefinitionId: genericRuleDefinitionId
             });
-        }
-
-        function GetGenericRuleDefinitionSettingsTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'GetGenericRuleDefinitionSettingsTemplates'));
         }
 
         function GetGenericRuleDefinitionsInfo(filter) {

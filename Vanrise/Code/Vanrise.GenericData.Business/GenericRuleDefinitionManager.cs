@@ -62,7 +62,6 @@ namespace Vanrise.GenericData.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = genericRuleDefinition;
-            int genericRuleDefinitionId = -1;
 
             IGenericRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericRuleDefinitionDataManager>();
             bool added = dataManager.UpdateGenericRuleDefinition(genericRuleDefinition);
@@ -89,12 +88,6 @@ namespace Vanrise.GenericData.Business
 
             deleteOperationOutput.Result = (deleted) ? DeleteOperationResult.Succeeded : DeleteOperationResult.Failed;
             return deleteOperationOutput;
-        }
-
-        public IEnumerable<Vanrise.Entities.TemplateConfig> GetGenericRuleDefinitionSettingsTemplates()
-        {
-            TemplateConfigManager templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.GenericRuleDefinitionSettingsTemplateConfigType);
         }
 
         public IEnumerable<GenericRuleDefinitionInfo> GetGenericRuleDefinitionsInfo(GenericRuleDefinitionInfoFilter filter)

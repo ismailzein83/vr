@@ -51,13 +51,6 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetGenericRuleDefinitionSettingsTemplates")]
-        public IEnumerable<Vanrise.Entities.TemplateConfig> GetGenericRuleDefinitionSettingsTemplates()
-        {
-            return _manager.GetGenericRuleDefinitionSettingsTemplates();
-        }
-
-        [HttpGet]
         [Route("GetGenericRuleDefinitionsInfo")]
         public IEnumerable<GenericRuleDefinitionInfo> GetGenericRuleDefinitionsInfo(string filter = null)
         {

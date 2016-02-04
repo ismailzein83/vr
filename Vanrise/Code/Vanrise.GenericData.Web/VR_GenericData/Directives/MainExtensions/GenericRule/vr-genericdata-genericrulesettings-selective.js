@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionSettingsSelectiveDirective.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    GenericRuleDefinitionSettingsSelectiveDirective.$inject = ['VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function GenericRuleDefinitionSettingsSelectiveDirective(VR_GenericData_GenericRuleDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function GenericRuleDefinitionSettingsSelectiveDirective(VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope:
@@ -59,15 +59,15 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-
-                    return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinitionSettingsTemplates().then(function (response) {
+                    
+                    return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypes().then(function (response) {
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 $scope.scopeModel.settingsTemplates.push(response[i]);
                             }
                             if (payload != undefined && payload.ConfigId != undefined) {
                                 directivePayload = payload;
-                                $scope.scopeModel.selectedSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.settingsTemplates, payload.ConfigId, 'TemplateConfigID');
+                                $scope.scopeModel.selectedSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.settingsTemplates, payload.ConfigId, 'GenericRuleTypeConfigId');
                             }
                         }
                     });
@@ -75,7 +75,7 @@
 
                 api.getData = function () {
                     var data = directiveAPI.getData();
-                    data.ConfigId = $scope.scopeModel.selectedSettingsTemplate.TemplateConfigID;
+                    data.ConfigId = $scope.scopeModel.selectedSettingsTemplate.GenericRuleTypeConfigId;
                     return data;
                 };
 
