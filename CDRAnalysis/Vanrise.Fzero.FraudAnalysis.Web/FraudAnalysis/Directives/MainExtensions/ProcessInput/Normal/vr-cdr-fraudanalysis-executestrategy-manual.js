@@ -35,7 +35,11 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
         var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
-
+            $scope.toDate = new Date();
+            $scope.fromDate = new Date();
+            $scope.toDateHour = new Date();
+            $scope.fromDateHour = new Date();
+            $scope.showDateHour = false;
             $scope.onStrategySelectorReady = function (api) {
                 strategySelectorAPI = api;
                 strategySelectorReadyDeferred.resolve();
@@ -46,16 +50,12 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
                 periodSelectorReadyDeferred.resolve();
             };
 
-
-
-            var yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-
-            $scope.fromDate = yesterday;
-            $scope.toDate = new Date();
-
-            $scope.validateTimeRange = function () {
+            $scope.validateDateRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            }
+
+            $scope.validateHourRange = function () {
+                return VRValidationService.validateTimeRange($scope.fromDateHour, $scope.toDateHour);
             }
 
             $scope.createProcessInputObjects = [];
@@ -63,6 +63,11 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
             $scope.onPeriodSelectionChanged = function (selectedPeriod) {
                 if (selectedPeriod != undefined) {
                     $scope.isLoadingData = true;
+                    $scope.showDateHour = (selectedPeriod.Id == CDRAnalysis_FA_PeriodEnum.Hourly.value);
+                    $scope.toDate = new Date();
+                    $scope.fromDate = new Date();
+                    $scope.toDateHour = new Date();
+                    $scope.fromDateHour = new Date();
                     loadStrategySelector(selectedPeriod.Id);
                 }
             };
@@ -75,19 +80,19 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
             var api = {};
             api.getData = function () {
 
-                var runningDate = new Date($scope.fromDate);
-
                 $scope.createProcessInputObjects.length = 0;
                 if (periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Hourly.value) {
-                    while (runningDate < $scope.toDate) {
-                        var fromDate = new Date(runningDate);
-                        var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
-                        createProcessInputObjects(fromDate, toDate);
-                        runningDate = new Date(toDate);
+                    var runningDate = new Date($scope.fromDateHour);
+                    while (runningDate < $scope.toDateHour) {
+                        var fromDateHour = new Date(runningDate);
+                        var toDateHour = new Date(runningDate.setHours(runningDate.getHours() + 1));
+                        createProcessInputObjects(fromDateHour, toDateHour);
+                        runningDate = new Date(toDateHour);
                     }
                 }
 
                 else if (periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Daily.value) {
+                    var runningDate = new Date($scope.fromDate);
                     while (runningDate < $scope.toDate) {
                         var fromDate = new Date(runningDate);
                         var toDate = new Date(runningDate.setHours(runningDate.getHours() + 24));

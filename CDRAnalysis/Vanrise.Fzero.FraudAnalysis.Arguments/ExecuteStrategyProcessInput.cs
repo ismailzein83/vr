@@ -30,12 +30,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
             {
                 if (PeriodId == (int)PeriodEnum.Hourly)
                 {
-                    FromDate = ((DateTime)evaluatedExpressions["ScheduleTime"]).AddDays(-1);
+                    FromDate = ((DateTime)evaluatedExpressions["ScheduleTime"]).AddHours(-1);
                     ToDate = (DateTime)evaluatedExpressions["ScheduleTime"];
                 }
                 else if (PeriodId == (int)PeriodEnum.Daily)
                 {
-                    FromDate = ((DateTime)evaluatedExpressions["ScheduleTime"]).AddHours(-1);
+                    FromDate = ((DateTime)evaluatedExpressions["ScheduleTime"]).AddDays(-1);
                     ToDate = (DateTime)evaluatedExpressions["ScheduleTime"];
                 }
 
