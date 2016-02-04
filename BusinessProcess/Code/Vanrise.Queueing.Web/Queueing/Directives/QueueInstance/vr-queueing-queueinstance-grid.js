@@ -26,6 +26,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
         function ExecutionFlowGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
+            var isFirstTimeLoaded = 0;
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -59,7 +60,10 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                     return VR_Queueing_QueueInstanceAPIService.GetFilteredQueueInstances(dataRetrievalInput)
                         .then(function (queueInstancesResponse) {
                             onResponseReady(queueInstancesResponse);
-                            RefreshDataGrid();
+                            if (isFirstTimeLoaded == 0) {
+                                isFirstTimeLoaded += 1;
+                                RefreshDataGrid();
+                            }
                         })
                         .catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);

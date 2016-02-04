@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService','VR_Queueing_QueueItemStatusEnum',
-    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService, VR_Queueing_QueueItemStatusEnum) {
+app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService','VR_Queueing_QueueItemStatusEnum','UtilsService',
+    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService, VR_Queueing_QueueItemStatusEnum, UtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -27,6 +27,7 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
 
         var gridAPI;
         var gridDrillDownTabsObj;
+        var isFirstTimeLoaded = 0;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -47,7 +48,6 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                     
                         return gridAPI.retrieveData(query);
                     }
 
@@ -72,7 +72,10 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
                         }
 
                         onResponseReady(response);
-                        refreshExecutionFlowGrid();
+                        if (isFirstTimeLoaded == 0) {
+                            isFirstTimeLoaded += 1;
+                            refreshExecutionFlowGrid();
+                        }
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -127,7 +130,7 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
 
             VR_Queueing_ExecutionFlowService.editExecutionFlow(executionFlowObj.Entity.ExecutionFlowId, onExecutionFlowUpdated);
         }
-
+        
         
     }
 
