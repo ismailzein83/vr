@@ -74,12 +74,17 @@
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionQuery.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionSettings.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleTypeConfig.cs" />
+    <Compile Include="GenericRules\RuleDefinition\GenericRuleViewSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
       <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
       <Name>Vanrise.Rules</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

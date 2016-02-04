@@ -34,10 +34,11 @@ namespace Vanrise.Security.Data.SQL
             string serialziedAudience = null;
             if ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0))
                 serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
+            string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
             object viewId;
             string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Name, url, view.ModuleId, null,
-               serialziedAudience, serialziedContent, ViewType.Dynamic);
+               serialziedAudience, serialziedContent, serializedSettings, ViewType.Dynamic);
             insertedId = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);
             //  return false;
@@ -50,9 +51,10 @@ namespace Vanrise.Security.Data.SQL
             string serialziedAudience = null;
             if ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0))
                 serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
-            string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
+            string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
+            string url = view.Type == ViewType.Dynamic ? "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview" : view.Url;
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name, url, view.ModuleId, null,
-               serialziedAudience, serialziedContent, ViewType.Dynamic);
+               serialziedAudience, serialziedContent, serializedSettings, ViewType.Dynamic);
             return (recordesEffected > 0);
             //  return false;
         }
@@ -88,6 +90,7 @@ namespace Vanrise.Security.Data.SQL
                 RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
+                Settings = reader["Settings"] != DBNull.Value ? Common.Serializer.Deserialize(reader["Settings"] as string) as ViewSettings : null,
                 Rank = GetReaderValue<int>(reader, "Rank"),
                 Type = (ViewType)reader["Type"],
 
