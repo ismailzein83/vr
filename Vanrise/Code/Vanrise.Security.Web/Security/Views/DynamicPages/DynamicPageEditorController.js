@@ -1,6 +1,10 @@
-﻿DynamicPageEditorController.$inject = ['$scope', 'VR_Sec_MenuAPIService', 'VR_Sec_WidgetAPIService', 'VR_Sec_ViewAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_Sec_WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum', 'ColumnWidthEnum', 'VRModalService', 'VRUIUtilsService'];
+﻿DynamicPageEditorController.$inject = ['$scope', 'VR_Sec_MenuAPIService', 'VR_Sec_WidgetAPIService', 'VR_Sec_ViewAPIService',
+    'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_Sec_WidgetSectionEnum', 'PeriodEnum', 'TimeDimensionTypeEnum',
+    'ColumnWidthEnum', 'VRModalService', 'VRUIUtilsService', 'VR_Sec_ViewTypeEnum'];
 
-function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_WidgetAPIService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, VRNavigationService, VR_Sec_WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum, ColumnWidthEnum, VRModalService, VRUIUtilsService) {
+function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_WidgetAPIService, VR_Sec_ViewAPIService,
+    UtilsService, VRNotificationService, VRNavigationService, VR_Sec_WidgetSectionEnum, PeriodEnum, TimeDimensionTypeEnum,
+    ColumnWidthEnum, VRModalService, VRUIUtilsService, VR_Sec_ViewTypeEnum) {
     $scope.scopeModal = {};
     var viewId;
     var viewEntity;
@@ -424,6 +428,8 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         }
         $scope.scopeModal.View = {
             Name: $scope.scopeModal.pageName,
+            Type: VR_Sec_ViewTypeEnum.Dynamic.value,
+            Url: "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview",
             ModuleId: $scope.scopeModal.selectedMenuNode.Id,
             Audience: Audiences,
             ViewContent: ViewContent

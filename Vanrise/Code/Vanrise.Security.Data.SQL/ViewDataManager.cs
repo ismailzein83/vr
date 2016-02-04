@@ -41,12 +41,10 @@ namespace Vanrise.Security.Data.SQL
             }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
             object viewId;
-            string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Name, url, view.ModuleId, null,
-               serialziedAudience, serialziedContent, serializedSettings, ViewType.Dynamic);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Name, view.Url, view.ModuleId, null,
+               serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
             insertedId = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);
-            //  return false;
         }
         public bool UpdateView(View view)
         {
@@ -63,11 +61,9 @@ namespace Vanrise.Security.Data.SQL
                     serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
             }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
-            string url = view.Type == ViewType.Dynamic ? "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview" : view.Url;
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name, url, view.ModuleId, null,
-               serialziedAudience, serialziedContent, serializedSettings, ViewType.Dynamic);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name, view.Url, view.ModuleId, null,
+               serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
             return (recordesEffected > 0);
-            //  return false;
         }
         public bool DeleteView(int viewId)
         {
