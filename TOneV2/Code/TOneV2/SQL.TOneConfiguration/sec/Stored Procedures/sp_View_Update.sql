@@ -12,6 +12,7 @@ CREATE PROCEDURE [sec].[sp_View_Update]
 	@RequiredPermissions NVARCHAR(1000),
 	@Audience NVARCHAR(255),
 	@Content NVARCHAR(max),
+	@Settings nvarchar(max),
 	@Type INT
 	
 AS
@@ -27,6 +28,7 @@ IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName and Id!=@pageID)
 				RequiredPermissions=@RequiredPermissions,
 				Audience=@Audience,
 				[Content]=@Content,
+				Settings = @Settings,
 				[Type]=@Type
 			
 		WHERE	Id = @pageID

@@ -22,6 +22,7 @@ BEGIN
       ,v.[Audience]
       ,v.[Type]
       ,v.[Content]
+      ,v.[Settings]
       ,v.[Rank]
       FROM [sec].[View] v
       ORDER BY v.[Module],v.[Rank]

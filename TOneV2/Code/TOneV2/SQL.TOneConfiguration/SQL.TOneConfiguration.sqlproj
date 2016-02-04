@@ -82,6 +82,9 @@
     <Folder Include="StatisticManagement\Functions\" />
     <Folder Include="StatisticManagement\Stored Procedures\" />
     <Folder Include="common\Functions\" />
+    <Folder Include="genericdata\" />
+    <Folder Include="genericdata\Tables\" />
+    <Folder Include="genericdata\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -120,7 +123,6 @@
     <Build Include="sec\Stored Procedures\sp_Widget_Update.sql" />
     <Build Include="sec\Stored Procedures\sp_Widget_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_Widget_Insert.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_GetById.sql" />
     <Build Include="sec\Stored Procedures\sp_View_Insert.sql" />
     <Build Include="BI\Stored Procedures\SP_SchemaConfiguration_GetByType.sql" />
     <Build Include="sec\User Defined Types\IntIDType.sql" />
@@ -147,8 +149,6 @@
     <Build Include="Security\common.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CheckUserPassword.sql" />
     <Build Include="sec\Stored Procedures\sp_Widget_CreateTempByFiltered.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_GetByType.sql" />
-    <Build Include="sec\Stored Procedures\sp_View_CreateTempByFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdatePassword.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdateName.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CreateTempByFiltered.sql" />
@@ -212,6 +212,28 @@
     <Build Include="common\Stored Procedures\sp_DataRecordField_Delete.sql" />
     <Build Include="sec\Stored Procedures\sp_UserGroup_GetAll.sql" />
     <Build Include="sec\Stored Procedures\sp_User_GetPassword.sql" />
+    <Build Include="genericdata\Tables\GenericRuleTypeConfig.sql" />
+    <Build Include="genericdata\Tables\DataRecordFieldTypeConfig.sql" />
+    <Build Include="genericdata\Tables\DataTransformationStepConfig.sql" />
+    <Build Include="genericdata\Tables\BusinessEntityDefinition.sql" />
+    <Build Include="genericdata\Tables\DataRecordType.sql" />
+    <Build Include="genericdata\Tables\GenericRuleDefinition.sql" />
+    <Build Include="genericdata\Tables\DataTransformationDefinition.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityDefinition_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericRuleTypeConfig_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordFieldTypeConfig_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataTransformationStepConfig_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericRuleDefinition_Delete.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericRuleDefinition_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericRuleDefinition_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataTransformationDefinition_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataTransformationDefinition_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataTransformationDefinition_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericRuleDefinition_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordType_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordType_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordType_GetAll.sql" />
+    <Build Include="Security\genericdata.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
