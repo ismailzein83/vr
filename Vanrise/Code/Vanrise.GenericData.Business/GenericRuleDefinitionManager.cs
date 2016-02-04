@@ -103,6 +103,13 @@ namespace Vanrise.GenericData.Business
             return cachedGenericRuleDefinitions.MapRecords(GenericRuleDefinitionInfoMapper, filterExpression);
         }
 
+        public Vanrise.Security.Entities.View GetRuleDefinitionView(int ruleDefinitionId)
+        {
+            var viewManager = new Vanrise.Security.Business.ViewManager();
+            var allViews = viewManager.GetViews();
+            return allViews.FirstOrDefault(v => (v.Settings as GenericRuleViewSettings) != null && (v.Settings as GenericRuleViewSettings).RuleDefinitionId == ruleDefinitionId);
+        }
+
         #endregion
 
         #region Private Methods
