@@ -112,6 +112,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -198,7 +202,6 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericruledefinitionsettings-mapping.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\NormalizationRule\vr-genericdata-genericruledefinitionsettings-normalization.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Templates\GenericRuleDefinitionSettingsSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\vr-genericdata-genericrulesettings-selective.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\Templates\AssignFieldStepPreviewTemplate.html" />
