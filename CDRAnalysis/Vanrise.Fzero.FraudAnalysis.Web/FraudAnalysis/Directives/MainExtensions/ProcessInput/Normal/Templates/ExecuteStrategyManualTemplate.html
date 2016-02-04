@@ -7,22 +7,21 @@
         <cdranalysis-fa-strategy-selector on-ready="onStrategySelectorReady" ismultipleselection isrequired="true"></cdranalysis-fa-strategy-selector>
     </vr-columns>
 
-    <vr-columns width="1/4row">
-        <vr-datetimepicker value="fromDate" label="From Date" customvalidate="validateDateRange()" isrequired ng-show="!showDateHour" type="date"></vr-datetimepicker>
+    <vr-columns width="1/4row" ng-show="!showDateHour">
+        <vr-datetimepicker value="fromDate" label="From Date" customvalidate="validateDateRange()" isrequired type="date"></vr-datetimepicker>
     </vr-columns>
 
-    <vr-columns width="1/4row">
-        <vr-datetimepicker value="toDate" label="To Date" customvalidate="validateDateRange()" isrequired ng-show="!showDateHour" type="date"></vr-datetimepicker>
+    <vr-columns width="1/4row" ng-show="!showDateHour">
+        <vr-datetimepicker value="toDate" label="To Date" customvalidate="validateDateRange()" isrequired type="date"></vr-datetimepicker>
     </vr-columns>
 
-    <vr-columns width="1/4row">
-        <vr-datetimepicker value="fromDateHour" label="From Time" customvalidate="validateHourRange()" isrequired ng-show="showDateHour" type="dateHour"></vr-datetimepicker>
+    <vr-columns width="1/4row" ng-show="showDateHour">
+        <vr-datetimepicker value="fromDateHour" label="From Time" customvalidate="validateHourRange()" isrequired type="dateHour"></vr-datetimepicker>
     </vr-columns>
 
-    <vr-columns width="1/4row">
-        <vr-datetimepicker value="toDateHour" label="To Time" customvalidate="validateHourRange()" isrequired ng-show="showDateHour" type="dateHour"></vr-datetimepicker>
+    <vr-columns width="1/4row" ng-show="showDateHour">
+        <vr-datetimepicker value="toDateHour" label="To Time" customvalidate="validateHourRange()" isrequired type="dateHour"></vr-datetimepicker>
     </vr-columns>
-
 
 </vr-row>
 <vr-row removeline>

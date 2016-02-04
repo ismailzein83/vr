@@ -1,6 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_PeriodAPIService", "VRCommon_HourEnum", "VRValidationService", function (CDRAnalysis_FA_PeriodAPIService, VRCommon_HourEnum, VRValidationService) {
+app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_PeriodAPIService", "UtilsService", "VRCommon_HourEnum", "VRValidationService", "CDRAnalysis_FA_PeriodEnum", "VRUIUtilsService",
+function (CDRAnalysis_FA_PeriodAPIService, UtilsService, VRCommon_HourEnum, VRValidationService, CDRAnalysis_FA_PeriodEnum, VRUIUtilsService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -27,23 +28,41 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_Period
     function DirectiveConstructor($scope, ctrl) {
 
         this.initializeController = initializeController;
-        
+        $scope.toDate = new Date();
+        $scope.fromDate = new Date();
+        $scope.toDateHour = new Date();
+        $scope.fromDateHour = new Date();
+        $scope.showDateHour = false;
+        var periodSelectorAPI;
+        var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
 
-            var yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
+            $scope.onPeriodSelectorReady = function (api) {
+                periodSelectorAPI = api;
+                periodSelectorReadyDeferred.resolve();
+            };
 
-            $scope.fromDate = yesterday;
-            $scope.toDate = new Date();
+            $scope.onPeriodSelectionChanged = function (selectedPeriod) {
+                if (selectedPeriod != undefined) {
+                    $scope.showDateHour = (selectedPeriod.Id == CDRAnalysis_FA_PeriodEnum.Hourly.value);
+                    $scope.toDate = new Date();
+                    $scope.fromDate = new Date();
+                    $scope.toDateHour = new Date();
+                    $scope.fromDateHour = new Date();
+                }
+            };
 
-            $scope.validateTimeRange = function () {
+
+            $scope.validateDateRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
             }
 
-            $scope.createProcessInputObjects = [];
+            $scope.validateHourRange = function () {
+                return VRValidationService.validateTimeRange($scope.fromDateHour, $scope.toDateHour);
+            }
 
-            $scope.periods = [];
+            $scope.createProcessInputObjects = [];
 
 
             $scope.hours = [];
@@ -66,8 +85,17 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_Period
             defineAPI();
         }
 
+        function loadPeriodSelector() {
+            var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            periodSelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, undefined, periodSelectorLoadDeferred);
+            });
+
+            return periodSelectorLoadDeferred.promise;
+        }
+
         function defineAPI() {
-          
+
             var api = {};
             api.getData = function () {
 
@@ -76,14 +104,14 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_Period
                     $scope.PeakHoursIds.push(itm.id)
                 });
 
-                var runningDate = new Date($scope.fromDate);
 
                 $scope.createProcessInputObjects.length = 0;
 
 
-                if ($scope.selectedPeriod.Id == 1)//Hourly
+                if (periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Hourly.value)//Hourly
                 {
-                    while (runningDate < $scope.toDate) {
+                    var runningDate = new Date($scope.fromDateHour);
+                    while (runningDate < $scope.toDateHour) {
                         var fromDate = new Date(runningDate);
                         var toDate = new Date(runningDate.setHours(runningDate.getHours() + 1));
 
@@ -94,7 +122,7 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_Period
                                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                                 FromDate: new Date(fromDate),
                                 ToDate: new Date(toDate),
-                                PeriodId: $scope.selectedPeriod.Id,
+                                PeriodId: periodSelectorAPI.getSelectedIds(),
                                 IncludeWhiteList: $scope.includeWhiteList,
                                 Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
                             }
@@ -104,8 +132,9 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_Period
 
                 }
 
-                else if ($scope.selectedPeriod.Id == 2) //Daily
+                else if (periodSelectorAPI.getSelectedIds() == CDRAnalysis_FA_PeriodEnum.Daily.value)//Daily
                 {
+                    var runningDate = new Date($scope.fromDate);
                     while (runningDate < $scope.toDate) {
                         var fromDate = new Date(runningDate);
                         var toDate = new Date(runningDate.setHours(runningDate.getHours() + 24));
@@ -115,7 +144,7 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_Period
                                 $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
                                 FromDate: new Date(fromDate),
                                 ToDate: new Date(toDate),
-                                PeriodId: $scope.selectedPeriod.Id,
+                                PeriodId: periodSelectorAPI.getSelectedIds(),
                                 IncludeWhiteList: $scope.includeWhiteList,
                                 Parameters: { GapBetweenConsecutiveCalls: $scope.gapBetweenConsecutiveCalls, GapBetweenFailedConsecutiveCalls: $scope.gapBetweenFailedConsecutiveCalls, MaxLowDurationCall: $scope.maxLowDurationCall, MinimumCountofCallsinActiveHour: $scope.minCountofCallsinActiveHour, PeakHoursIds: $scope.PeakHoursIds }
                             }
@@ -130,16 +159,11 @@ app.directive("vrCdrFraudanalysisNumberprofilingManual", ["CDRAnalysis_FA_Period
                 return $scope.createProcessInputObjects;
 
             };
-            
-            api.load = function (payload) {
-               
-                return CDRAnalysis_FA_PeriodAPIService.GetPeriods().then(function (response) {
-                    $scope.periods.length = 0;
-                    angular.forEach(response, function (itm) {
-                        $scope.periods.push(itm);
-                    });  
-                });
 
+            api.load = function (payload) {
+                var promises = [];
+                promises.push(loadPeriodSelector());
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)
