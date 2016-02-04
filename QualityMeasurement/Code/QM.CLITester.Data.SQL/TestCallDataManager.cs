@@ -148,7 +148,7 @@ namespace QM.CLITester.Data.SQL
             {
                 Pdd = GetReaderValue<decimal>(reader, "PDD"),
                 Mos = GetReaderValue<decimal>(reader, "MOS"),
-                Duration = reader["Duration"] as string,
+                Duration =  GetReaderValue<DateTime?>(reader, "Duration"),
                 ReleaseCode = reader["ReleaseCode"] as string,
                 ReceivedCli = reader["ReceivedCLI"] as string,
                 RingDuration = reader["RingDuration"] as string,

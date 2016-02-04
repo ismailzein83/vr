@@ -85,15 +85,17 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                             isGettingData = true;
                             if (response != undefined) {
                                 for (var i = 0; i < response.ListTestCallDetails.length; i++) {
+                                    
                                     var testCall = response.ListTestCallDetails[i];
-
+                                    
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(testCall);
                                     var findTestCall = false;
+                                    
                                     for (var j = 0; j < $scope.testcalls.length; j++) {
-
                                         //Get the minimun ID Test Call to send as parameter to getData();
-                                        if (i == 0) {//just in the first check all test calls list
-                                            if (j == 0)
+                                        if (i === 1) {//just in the first check all test calls list
+                                            
+                                            if (j === 0)
                                                 minId = $scope.testcalls[j].Entity.ID;
                                             else {
                                                 if ($scope.testcalls[j].Entity.ID < minId) {
@@ -140,7 +142,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
             input.LessThanID = minId;
             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
             return Qm_CliTester_TestCallAPIService.GetBeforeId(input).then(function (response) {
-                if (response != undefined) {
+                if (response != undefined && response.ListTestCallDetails != undefined) {
                     for (var i = 0; i < response.ListTestCallDetails.length; i++) {
                         var testCall = response.ListTestCallDetails[i];
                         $scope.testcalls.push(testCall);

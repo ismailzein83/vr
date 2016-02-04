@@ -81,7 +81,7 @@ namespace QM.CLITester.iTestIntegration
         {
             ServiceActions serviceActions = new ServiceActions();
             return ResponseTestProgress(
-                serviceActions.PostRequest("3011", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
+                serviceActions.PostRequest("https://api-now.i-test.net", "3024", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
                 ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
         }
 
@@ -120,7 +120,7 @@ namespace QM.CLITester.iTestIntegration
             return testOutput;
         }
 
-        private GetTestProgressOutput ResponseTestProgress(string response, string testId, Object recentTestProgress, Measure recentMeasure)
+        private GetTestProgressOutput ResponseTestProgressOld(string response, string testId, Object recentTestProgress, Measure recentMeasure)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
 
@@ -142,7 +142,7 @@ namespace QM.CLITester.iTestIntegration
                     {
                         Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
                         Mos = 0,
-                        Duration = null,
+                        Duration = DateTime.MinValue,
                         ReleaseCode = null,
                         ReceivedCli = null,
                         RingDuration = null
@@ -187,8 +187,77 @@ namespace QM.CLITester.iTestIntegration
             testProgressOutput.Result = GetTestProgressResult.FailedWithRetry;
             return testProgressOutput;
         }
+        private GetTestProgressOutput ResponseTestProgress(string response, string testId, Object recentTestProgress, Measure recentMeasure)
+        {
+            GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
 
-        private bool CompareTestProgress(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
+            XmlDocument xml = new XmlDocument();
+            if (!String.IsNullOrEmpty(response))
+            {
+                xml.LoadXml(response);
+
+                XmlNodeList xnList = xml.SelectNodes("/Test_Status/Call");
+                XmlNodeList xnList2 = xml.SelectNodes("/Test_Status/Test_Overview");
+                if (xnList != null && xnList2!= null)
+                {
+                    string xmlResponse = Regex.Replace(response, @"\t|\n|\r", "");
+                    
+                    var node = xnList[0];
+                    var node2 = xnList2[0];
+                    
+                    var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                    long unixTime = node["Start"] != null ? long.Parse(node["Start"].InnerText) : 0;
+
+                    Measure resultTestProgress = new Measure
+                    {
+                        Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
+                        Mos = node["MOS"] != null ? Decimal.Parse(node["MOS"].InnerText) : 0,
+                        Duration = epoch.AddSeconds(unixTime),
+                        ReleaseCode = node["Last_Code"] != null ? node["Last_Code"].InnerText : "",
+                        ReceivedCli = node["CLI"] != null ? node["CLI"].InnerText : "",
+                        RingDuration = null
+                    };
+
+                    TestProgress testProgress = new TestProgress
+                    {
+                        Name = node2["Name"] != null ? node2["Name"].InnerText : "",
+                        Source = node["Source"] != null ? node["Source"].InnerText : "",
+                        Destination = node["Destination"] != null ? node["Destination"].InnerText : "",
+                        Ring = node["Ring"] != null ? node["Ring"].InnerText : "",
+                        Call = node["Call"] != null ? node["Call"].InnerText : "",
+                        Result = node["Result"] != null ? node["Result"].InnerText : "",
+                        XmlResponse = xmlResponse
+                    };
+
+                    testProgressOutput.Measure = resultTestProgress;
+                    testProgressOutput.TestProgress = testProgress;
+                    if (testProgress.Result != "Processing")
+                    {
+                        testProgressOutput.Result = GetTestProgressResult.TestCompleted;
+
+                        testProgressOutput.CallTestResult = (testProgress.Result == "CLI Failure") ? CallTestResult.Failed :
+                            (testProgress.Result == "CLI Success") ? CallTestResult.Succeeded :
+                            (testProgress.Result == "Call Failure" ? CallTestResult.NotAnswered : CallTestResult.PartiallySucceeded);
+
+                        return testProgressOutput;
+                    }
+
+                    if (recentTestProgress != null || recentMeasure != null)
+                        testProgressOutput.Result = CompareTestProgress((TestProgress)recentTestProgress, (TestProgress)testProgressOutput.TestProgress, recentMeasure, testProgressOutput.Measure) ?
+                            GetTestProgressResult.ProgressNotChanged : GetTestProgressResult.ProgressChanged;
+                    else
+                        testProgressOutput.Result = (testProgressOutput.TestProgress == null && testProgressOutput.Measure == null) ? GetTestProgressResult.ProgressNotChanged :
+                        GetTestProgressResult.ProgressChanged;
+
+                    return testProgressOutput;
+                }
+            }
+
+            testProgressOutput.Result = GetTestProgressResult.FailedWithRetry;
+            return testProgressOutput;
+        }
+
+        private bool CompareTestProgressOld(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
         {
             bool same = true;
             if (recentTestProgress != null)
@@ -196,6 +265,28 @@ namespace QM.CLITester.iTestIntegration
                 same = ((recentTestProgress.CliFail == testProgress.CliFail) && (recentTestProgress.CliNoResult == testProgress.CliNoResult) &&
                     (recentTestProgress.CliSuccess == testProgress.CliSuccess) && (recentTestProgress.CompletedCalls == testProgress.CompletedCalls)
                     && (recentTestProgress.TotalCalls == testProgress.TotalCalls)
+                    );
+            }
+
+            if (recentMeasure != null)
+            {
+                same = ((recentMeasure.Pdd == measure.Pdd) && (recentMeasure.Mos == measure.Mos) &&
+
+                    (recentMeasure.Duration == measure.Duration) && (recentMeasure.ReleaseCode == measure.ReleaseCode) &&
+                    (recentMeasure.ReceivedCli == measure.ReceivedCli) && (recentMeasure.RingDuration == measure.RingDuration)
+                    );
+            }
+
+            return same;
+        }
+        private bool CompareTestProgress(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
+        {
+            bool same = true;
+            if (recentTestProgress != null)
+            {
+                same = ((recentTestProgress.Source == testProgress.Source) && (recentTestProgress.Destination == testProgress.Destination) &&
+                    (recentTestProgress.Ring == testProgress.Ring) && (recentTestProgress.Call == testProgress.Call)
+                    && (recentTestProgress.Result == testProgress.Result)
                     );
             }
 

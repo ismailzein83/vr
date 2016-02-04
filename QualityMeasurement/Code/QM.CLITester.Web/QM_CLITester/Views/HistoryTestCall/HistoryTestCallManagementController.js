@@ -40,6 +40,7 @@
             $scope.testStatus = [];
             $scope.testResult = [];
             $scope.users = [];
+            $scope.fromDate = new Date();
 
             $scope.selectedSuppliers = [];
             $scope.selectedProfiles = [];

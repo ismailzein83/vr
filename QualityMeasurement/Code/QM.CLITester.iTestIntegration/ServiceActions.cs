@@ -36,6 +36,29 @@ namespace QM.CLITester.iTestIntegration
             return CleanResponse(responseString);
         }
 
+        public string PostRequest(string url, string functionCode, string parameters)
+        {
+            var request = (HttpWebRequest)WebRequest.Create(String.Format("{0}/?t={1}{2}", String.IsNullOrEmpty(url) ?  ConfigurationSettings.AppSettings["CliTester_ITest_Url"] : url, functionCode, (parameters ?? "")));
+
+            var postData = String.Format("email={0}&pass={1}", ConfigurationSettings.AppSettings["CliTester_ITest_Email"], ConfigurationSettings.AppSettings["CliTester_ITest_Password"]);
+
+            var data = Encoding.ASCII.GetBytes(postData);
+
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = data.Length;
+
+            using (var stream = request.GetRequestStream())
+            {
+                stream.Write(data, 0, data.Length);
+            }
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            string responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+            return CleanResponse(responseString);
+        }
+
         const string GoodAmpersand = "&amp;";
 
         public string CleanResponse(string response)
