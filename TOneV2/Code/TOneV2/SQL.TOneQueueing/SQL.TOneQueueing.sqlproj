@@ -141,7 +141,10 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetItemStatusSummary_1.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetItemStatusSummary_1.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
