@@ -35,7 +35,6 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
             var stepObj = {};
 
             function initializeController() {
-              
                 defineAPI();
             }
 
@@ -49,28 +48,40 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                         {
                             stepObj.stepDetails = payload.stepDetails;
                             stepObj.configId = payload.stepDetails.ConfigId;
+                            ctrl.target = payload.stepDetails.Target;
+                            ctrl.source = payload.stepDetails.Source;
                         }
-                            
+                       checkValidation();
                     }
                  
                 }
+
                 api.applyChanges = function (changes) {
+                    ctrl.target = changes.Target;
+                    ctrl.source = changes.Source;
                     stepObj.stepDetails = changes;
                 }
-                api.checkValidation= function()
-                {
 
+                api.checkValidation = function ()
+                {
+                  return  checkValidation();
                 }
 
                 api.getData = function () {
                     stepObj.stepDetails.ConfigId = stepObj.configId;
                     return stepObj.stepDetails      
                 }
-
+                
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
+            function checkValidation() {
+                if (ctrl.target == undefined || ctrl.source == undefined) {
+                    return "Error";
+                }
+                return null;
+            }
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

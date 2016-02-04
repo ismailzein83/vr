@@ -35,7 +35,9 @@
                         <vr-section title="Steps">
                             <vr-datalist maxitemsperrow="1" datasource="scopeModal.stepsAdded" isitemdraggable autoremoveitem="true">
                                 <vr-label>{{dataItem.Title}}</vr-label><span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span>
-                                <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
+                                <vr-validator validate="dataItem.validationMessage">
+                                    <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
+                                </vr-validator>
                             </vr-datalist>
                         </vr-section>
                     </vr-columns>

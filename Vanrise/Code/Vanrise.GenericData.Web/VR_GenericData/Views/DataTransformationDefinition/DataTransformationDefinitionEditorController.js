@@ -75,16 +75,11 @@
             {
                 if ($scope.scopeModal.selectedStep != undefined)
                 {
-                    VRNotificationService.showConfirmation().then(function (response) {
-                        if (response) {
-                            applyChanges();
-                            
-                        }
+                        applyChanges();
                         $scope.scopeModal.selectedStep = undefined;
                         setTimeout(function () { $scope.scopeModal.selectedStep = dataItem; UtilsService.safeApply($scope)})
-
-                    });
-                }else
+                }
+                else
                 {
                     $scope.scopeModal.selectedStep = dataItem;
                 }
@@ -280,6 +275,7 @@
         function applyChanges() {
             if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI != undefined) {
                 $scope.scopeModal.selectedStep.previewAPI.applyChanges(editorDirectiveAPI.getData());
+                checkValidation();
             }
         }
 
@@ -322,6 +318,13 @@
                         applyChanges();
                     }
                 });
+            }
+        }
+
+        function checkValidation()
+        {
+            if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI != undefined) {
+                $scope.scopeModal.selectedStep.validationMessage = $scope.scopeModal.selectedStep.previewAPI.checkValidation();
             }
         }
 

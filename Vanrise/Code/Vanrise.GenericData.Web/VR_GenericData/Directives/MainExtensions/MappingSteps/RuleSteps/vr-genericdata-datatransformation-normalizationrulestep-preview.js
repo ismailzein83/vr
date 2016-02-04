@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -26,7 +26,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/AssignValueRuleStepPreviewTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/NormalizationRuleStepPreviewTemplate.html';
             }
 
         };
@@ -48,8 +48,8 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
                             stepObj.configId = payload.stepDetails.ConfigId;
-                            ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
-                            ctrl.target = payload.stepDetails.Target;
+                            ctrl.value = payload.stepDetails.Value;
+                            ctrl.normalizationValue = payload.stepDetails.NormalizedValue;
                         }
 
                     }
@@ -57,8 +57,8 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                 }
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
-                    ctrl.ruleFieldsMappings = changes.RuleFieldsMappings;
-                    ctrl.target = changes.Target;
+                    ctrl.value = changes.Value;
+                    ctrl.normalizationValue = changes.NormalizedValue;
                 }
                 api.checkValidation = function () {
 

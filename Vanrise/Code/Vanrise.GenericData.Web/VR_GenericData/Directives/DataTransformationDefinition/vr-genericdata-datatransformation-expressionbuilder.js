@@ -6,7 +6,8 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
         scope: {
             onReady: '=',
             recordlabel: '@',
-            fieldlabel:'@',
+            fieldlabel: '@',
+            hidelabel:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -38,30 +39,34 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
 
     function getTemplate(attrs)
     {
-        var recordlabel = attrs.recordlabel;
-        var fieldlabel = attrs.fieldlabel;
-
+        var recordlabel=" ";
+        var fieldlabel=" ";
+        if (attrs.hidelabel == undefined)
+        {
+            recordlabel =' label="' +  attrs.recordlabel + '"';
+            fieldlabel = ' label="' +  attrs.fieldlabel + '"';
+        }
+            
         var template =
+
         '<vr-row>'
            + '<vr-columns width="1/2row">'
              + '<vr-select selectedvalues="ctrl.selectedRecordName"'
-               + 'isrequired="true"'
-               + 'label="' + recordlabel + '"'
+               + 'isrequired="true" hidelabel'
+                + recordlabel  
                + 'onselectionchanged="ctrl.onselectionchanged"'
-               + 'hidelabel'
                + 'hideselectedvaluessection'
-               + 'entityname="' + recordlabel + '"'
+               + 'entityname="' + attrs.recordlabel + '"'
                + 'datasource="ctrl.recordNames"'
                + 'datatextfield="Name"'
                + 'datavaluefield="Name"></vr-select>'
             + '</vr-columns>'
            + '<vr-columns width="1/2row" vr-loader="ctrl.loadingFields">'
              + ' <vr-select selectedvalues="ctrl.selectedFieldName"'
-               + 'isrequired="true"'
-               + 'label="' + fieldlabel + '"'
-               + 'hidelabel'
+               + 'isrequired="true" hidelabel'
+              + fieldlabel 
                + 'hideselectedvaluessection'
-               + 'entityname="' + fieldlabel + '"'
+               + 'entityname="' + attrs.fieldlabel + '"'
                + 'datasource="ctrl.fieldNames"'
                + 'datatextfield="Name"'
                + 'datavaluefield="Name"></vr-select>'
@@ -101,7 +106,12 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
             var api = {};
 
             api.getData = function () {
-                return ctrl.selectedRecordName.Name + "." + ctrl.selectedFieldName.Name;
+                var value;
+                if (ctrl.selectedRecordName != undefined)
+                    value = ctrl.selectedRecordName.Name +".";
+                if (ctrl.selectedFieldName != undefined)
+                    value += ctrl.selectedFieldName.Name;
+                return value;
             }
             api.load = function (payload) {
                 mainPayload = payload;

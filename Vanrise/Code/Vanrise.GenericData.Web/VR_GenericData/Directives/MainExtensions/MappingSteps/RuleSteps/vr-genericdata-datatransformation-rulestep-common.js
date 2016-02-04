@@ -33,7 +33,8 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
 
         function rulestepCommonCtor(ctrl, $scope) {
             var ruleTypeEntity;
-
+            var isSecondSelection = false;
+            var firstTimeload = true;
             var mainPayload;
             var ruleDefinitionDirectiveAPI;
             var ruleDefinitionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -55,36 +56,45 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                 }
 
                 $scope.onRuleSelectionChanged = function () {
-                    if ($scope.selectedRuleDefinition != undefined)
+                    if ($scope.selectedRuleDefinition == undefined)
                     {
+                        $scope.ruleFieldsMappings.length = 0;
+                    }
+                    else
+                    {
+                        if (isSecondSelection && firstTimeload)
+                        {
+                            $scope.onRuleSelectionItem($scope.selectedRuleDefinition);
+                        }
+                        isSecondSelection = true;
+                    }
+                }
+                $scope.onRuleSelectionItem= function(selectedItem) {
+                
                         $scope.isLoadingMappingData = true;
                         $scope.ruleFieldsMappings.length = 0;
-                        loadRuleDefinition($scope.selectedRuleDefinition.GenericRuleDefinitionId).then(function (response) {
-                            if (response.CriteriaDefinition.Fields)
-                            {
+                        loadRuleDefinition(selectedItem.GenericRuleDefinitionId).then(function (response) {
+                            console.log(response);
+                            if (response.CriteriaDefinition.Fields) {
                                 for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
                                     var filterItem = {
-                                        RuleFields:response.CriteriaDefinition.Fields[i],
+                                        RuleFields: response.CriteriaDefinition.Fields[i],
                                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                         loadPromiseDeferred: UtilsService.createPromiseDeferred()
                                     };
                                     var payload;
-                                    if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined)
+                                    if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined && firstTimeload)
                                         payload = mainPayload.ruleFieldsMappings[i].Value;
                                     addFilterItemToGrid(filterItem, payload);
                                 }
                             }
                         }).finally(function () {
                             $scope.isLoadingMappingData = false;
+                            isSecondSelection = false;
+                            firstTimeload = false;
                         });
-                    }
-                    else
-                    {
-                        $scope.ruleFieldsMappings.length = 0;
-                    }
                     
                 }
-
                 function addFilterItemToGrid(filterItem, payload) {
 
                     var dataItem = {
