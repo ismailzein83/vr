@@ -11,7 +11,6 @@ namespace Vanrise.Security.Data.SQL
 {
     public class ViewDataManager : BaseSQLDataManager, IViewDataManager
     {
-    
         #region ctor
         public ViewDataManager()
             : base(GetConnectionStringName("SecurityDBConnStringKey", "SecurityDBConnString"))
@@ -29,11 +28,17 @@ namespace Vanrise.Security.Data.SQL
         public bool AddView(View view, out int insertedId)
         {
             string serialziedContent = null;
-            if (view.ViewContent.BodyContents.Count > 0 || view.ViewContent.SummaryContents.Count > 0)
-                serialziedContent = Common.Serializer.Serialize(view.ViewContent, true);
+            if (view.ViewContent != null)
+            {
+                if ((view.ViewContent.BodyContents != null && view.ViewContent.BodyContents.Count > 0) || (view.ViewContent.SummaryContents != null && view.ViewContent.SummaryContents.Count > 0))
+                    serialziedContent = Common.Serializer.Serialize(view.ViewContent, true);
+            }
             string serialziedAudience = null;
-            if ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0))
-                serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
+            if (view.Audience != null)
+            {
+                if ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0))
+                    serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
+            }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
             object viewId;
             string url = "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview";
@@ -46,11 +51,17 @@ namespace Vanrise.Security.Data.SQL
         public bool UpdateView(View view)
         {
             string serialziedContent = null;
-            if (view.ViewContent.BodyContents.Count > 0 || view.ViewContent.SummaryContents.Count > 0)
-                serialziedContent = Common.Serializer.Serialize(view.ViewContent, true);
+            if (view.ViewContent != null)
+            {
+                if ((view.ViewContent.BodyContents != null && view.ViewContent.BodyContents.Count > 0) || (view.ViewContent.SummaryContents != null && view.ViewContent.SummaryContents.Count > 0))
+                    serialziedContent = Common.Serializer.Serialize(view.ViewContent, true);
+            }
             string serialziedAudience = null;
-            if ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0))
-                serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
+            if (view.Audience != null)
+            {
+                if ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0))
+                    serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
+            }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
             string url = view.Type == ViewType.Dynamic ? "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview" : view.Url;
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name, url, view.ModuleId, null,
@@ -100,10 +111,5 @@ namespace Vanrise.Security.Data.SQL
             return instance;
         }
         #endregion
-      
-    
-      
     }
-
-
 }
