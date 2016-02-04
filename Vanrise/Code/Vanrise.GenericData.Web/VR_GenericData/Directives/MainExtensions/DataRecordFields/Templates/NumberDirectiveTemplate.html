@@ -1,1 +1,14 @@
-﻿
+﻿<vr-row removeline>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="ctrl.onSelectorReady"
+                   datasource="ctrl.numberDataTypes"
+                   selectedvalues="ctrl.selectedNumberDataType"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   label="Data Type"
+                   text="None"
+                   isrequired
+                   hideremoveicon>
+        </vr-select>
+    </vr-columns>
+</vr-row>
