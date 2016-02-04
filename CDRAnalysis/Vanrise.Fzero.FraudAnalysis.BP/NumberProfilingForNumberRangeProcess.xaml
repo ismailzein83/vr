@@ -115,7 +115,7 @@
           </InArgument>
         </vfcba:LoadCDRs.ToDate>
       </vfcba:LoadCDRs>
-      <vffba1:CreateNumberProfiles Parameters="{x:Null}" StrategiesExecutionInfo="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateNumberProfiles_2">
+      <vffba1:CreateNumberProfiles StrategiesExecutionInfo="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateNumberProfiles_2">
         <vffba1:CreateNumberProfiles.FromDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
@@ -146,6 +146,11 @@
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>
           </InOutArgument>
         </vffba1:CreateNumberProfiles.OutputQueue>
+        <vffba1:CreateNumberProfiles.Parameters>
+          <InArgument x:TypeArguments="vffe:NumberProfileParameters">
+            <mca:CSharpValue x:TypeArguments="vffe:NumberProfileParameters">Input.Parameters</mca:CSharpValue>
+          </InArgument>
+        </vffba1:CreateNumberProfiles.Parameters>
         <vffba1:CreateNumberProfiles.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
@@ -212,7 +217,7 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sHkcD2AEOAgEBTAXHARACAQ3IAQXWAQ4CAQJWB3UYAwHFAXYHpAElAgFYpQEHugEwAgEnuwEHxgEoAgEO0AEL0wEgAgEIywELywF/AgEDXg1eXwMBggJjDWNpAwH2AVkNWVsDAeoBbQ1tbwMB3gFoDWhuAwHSAXINclkDAcYBiAENiAFlAwG5AZcBDZcBZwMBrQGDAQ2DAW4DAaEBjQENjQFpAwGVAXkNeVsDAYkBnAENnAF7AgF9kgENkgGCAQIBcX4NfmICAWWhAQ2hAVkCAVmyAQ2yAXMCAUyoAQ2oAXoCAUC3AQ23AXwCATStAQ2tAXwCASjDAQ3DAXQCARu+AQ2+AXQCAQ8=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sH0cD3QEOAgEBTAXMARACAQ3NAQXbAQ4CAQJWB3UYAwHRAXYHqQElAgFYqgEHvwEwAgEnwAEHywEoAgEO1QEL2AEgAgEI0AEL0AF/AgEDXg1eXwMBjgJjDWNpAwGCAlkNWVsDAfYBbQ1tbwMB6gFoDWhuAwHeAXINclkDAdIBlwENlwFvAwHFAYgBDYgBZQMBuQGcAQ2cAWcDAa0BgwENgwFuAwGhAY0BDY0BaQMBlQF5DXlbAwGJAaEBDaEBewIBfZIBDZIBggECAXF+DX5iAgFlpgENpgFZAgFZtwENtwFzAgFMrQENrQF6AgFAvAENvAF8AgE0sgENsgF8AgEoyAENyAF0AgEbwwENwwF0AgEP</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
