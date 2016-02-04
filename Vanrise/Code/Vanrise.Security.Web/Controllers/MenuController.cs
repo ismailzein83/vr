@@ -28,9 +28,9 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("GetAllMenuItems")]
-        public IEnumerable<MenuItem> GetAllMenuItems()
+        public IEnumerable<MenuItem> GetAllMenuItems(bool getOnlyAllowDynamic = true)
         {
-            return _manager.GetMenuItems();
+            return _manager.GetMenuItems(getOnlyAllowDynamic);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Vanrise.Security.Business
         #endregion
 
         #region Public Methods
-        public List<MenuItem> GetMenuItems()
+        public List<MenuItem> GetMenuItems(bool getOnlyAllowDynamic)
         {
             List<Module> modules = _moduleManager.GetModules();
             List<MenuItem> retVal = new List<MenuItem>();
@@ -33,8 +33,8 @@ namespace Vanrise.Security.Business
             {
                 if (item.ParentId == 0)
                 {
-                    MenuItem rootItem = GetModuleMenu(item, modules);
-                    if (rootItem.AllowDynamic || rootItem.Childs != null)
+                    MenuItem rootItem = GetModuleMenu(item, modules, getOnlyAllowDynamic);
+                    if ((rootItem.AllowDynamic || !getOnlyAllowDynamic) || rootItem.Childs != null)
                         retVal.Add(rootItem);
                 }
             }
@@ -151,20 +151,20 @@ namespace Vanrise.Security.Business
 
             return false;
         }
-        private MenuItem GetModuleMenu(Module module, List<Module> modules)
+        private MenuItem GetModuleMenu(Module module, List<Module> modules, bool getOnlyAllowDynamic )
         {
 
 
             MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon, AllowDynamic = module.AllowDynamic };
 
-            List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId && x.AllowDynamic);
+            List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId && (x.AllowDynamic || !getOnlyAllowDynamic));
 
             if (subModules.Count > 0)
             {
                 menu.Childs = new List<MenuItem>();
                 foreach (Module item in subModules)
                 {
-                    menu.Childs.Add(GetModuleMenu(item, modules));
+                    menu.Childs.Add(GetModuleMenu(item, modules, getOnlyAllowDynamic));
                 }
             }
 

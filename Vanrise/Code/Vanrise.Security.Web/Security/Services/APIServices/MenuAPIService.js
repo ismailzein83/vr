@@ -14,8 +14,11 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Menu', 'GetMenuItems'));
         }
 
-        function GetAllMenuItems() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Menu', 'GetAllMenuItems'));
+        function GetAllMenuItems(getOnlyAllowDynamic) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Menu', 'GetAllMenuItems'),
+                {
+                    getOnlyAllowDynamic: getOnlyAllowDynamic
+                });
         }
     }
 
