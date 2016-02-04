@@ -7,35 +7,41 @@ using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
+using System.Configuration;
 
 namespace Vanrise.Queueing
 {
     public class QueueItemManager
     {
+        static QueueItemManager()
+        {
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Queueing_GetItemStatusSummaryTimeInterval"], out s_GetItemStatusSummaryTimeInterval))
+                s_GetItemStatusSummaryTimeInterval = new TimeSpan(0, 0, 2);
+        }
 
+        private static TimeSpan s_GetItemStatusSummaryTimeInterval;
 
-        private static DateTime LastTimeCalled = new DateTime();
+        private static DateTime s_lastTimeCalled = new DateTime();
 
-        private static List<QueueItemStatusSummary> ItemStatusSummary;
+        private static List<QueueItemStatusSummary> s_itemStatusSummary;
 
-        private Object thisLock = new Object();
+        private static Object s_thisLock = new Object();
 
         public List<QueueItemStatusSummary> GetItemStatusSummary()
         {
-            lock (thisLock)
+            if (DateTime.Now - s_lastTimeCalled > s_GetItemStatusSummaryTimeInterval)
             {
-                if ((DateTime.Now - LastTimeCalled).TotalSeconds >2) 
+                lock (s_thisLock)
                 {
-                    IQueueItemDataManager manager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
-                    ItemStatusSummary = manager.GetItemStatusSummary();
-                    LastTimeCalled = DateTime.Now;
-                    return ItemStatusSummary;
-                
+                    if (DateTime.Now - s_lastTimeCalled > s_GetItemStatusSummaryTimeInterval)
+                    {
+                        IQueueItemDataManager manager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
+                        s_itemStatusSummary = manager.GetItemStatusSummary();
+                        s_lastTimeCalled = DateTime.Now;
+                    }
                 }
-                else
-                    return ItemStatusSummary;
-        
             }
+            return s_itemStatusSummary;
 
         }
 
