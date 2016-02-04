@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Entities
 
         public override string GetURL(Security.Entities.View view)
         {
-            return String.Format("#/view/VR_GenericData/Views/GenericRule/GenericRuleManagement/{{\"ruleDefinitionId\":\"{0}\"}}", this.RuleDefinitionId);
+            return String.Format("#/viewwithparams/VR_GenericData/Views/GenericRule/GenericRuleManagement/{{\"ruleDefinitionId\":\"{0}\"}}", this.RuleDefinitionId);
         }
     }
 }
