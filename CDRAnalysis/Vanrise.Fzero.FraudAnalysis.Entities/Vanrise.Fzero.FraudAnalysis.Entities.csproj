@@ -90,7 +90,6 @@
     <Compile Include="RelatedNumber.cs" />
     <Compile Include="Query\AccountCaseLogQuery.cs" />
     <Compile Include="Query\RelatedNumberQuery.cs" />
-    <Compile Include="Query\CancelAccountCasesQuery.cs" />
     <Compile Include="Query\AccountCaseQuery.cs" />
     <Compile Include="AccountSuspicionDetail.cs" />
     <Compile Include="AccountSuspicionSummary.cs" />

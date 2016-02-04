@@ -8,9 +8,6 @@
         return {
             GetLastAccountCase: GetLastAccountCase,
             GetFilteredAccountSuspicionSummaries: GetFilteredAccountSuspicionSummaries,
-            GetFilteredCasesByFilters: GetFilteredCasesByFilters,
-            CancelSelectedAccountCases: CancelSelectedAccountCases,
-            CancelAccountCases: CancelAccountCases,
             UpdateAccountCase: UpdateAccountCase,
             GetAccountCase: GetAccountCase,
             GetFilteredCasesByAccountNumber: GetFilteredCasesByAccountNumber
@@ -21,19 +18,11 @@
                 accountNumber: accountNumber
             });
         }
+
         function GetFilteredAccountSuspicionSummaries(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'AccountCase', 'GetFilteredAccountSuspicionSummaries'), input);
         }
-        function GetFilteredCasesByFilters(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'AccountCase', 'GetFilteredCasesByFilters'), input);
-        }
 
-        function CancelSelectedAccountCases(caseIds) {
-            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'AccountCase', 'CancelSelectedAccountCases'), caseIds);
-        }
-        function CancelAccountCases(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'AccountCase', 'CancelAccountCases'), input);
-        }
         function UpdateAccountCase(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'AccountCase', 'UpdateAccountCase'), input);
         }

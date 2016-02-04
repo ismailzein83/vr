@@ -30,30 +30,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredAccountSuspicionSummaries(input));
         }
 
-
-        [HttpPost]
-        [Route("GetFilteredCasesByFilters")]
-        public object GetFilteredCasesByFilters(DataRetrievalInput<CancelAccountCasesQuery> input)
-        {
-            AccountCaseManager manager = new AccountCaseManager();
-            return GetWebResponse(input, manager.GetFilteredCasesByFilters(input));
-        }
-
-        [HttpPost]
-        [Route("CancelSelectedAccountCases")]
-        public UpdateOperationOutput<AccountCase> CancelSelectedAccountCases(List<int> caseIds)
-        {
-            AccountCaseManager manager = new AccountCaseManager();
-            return manager.CancelSelectedAccountCases(caseIds);
-        }
-        [HttpPost]
-        [Route("CancelAccountCases")]
-        public UpdateOperationOutput<AccountCase> CancelAccountCases(CancelAccountCasesQuery input)
-        {
-            AccountCaseManager manager = new AccountCaseManager();
-            return manager.CancelAccountCases(input);
-        }
-
         [HttpPost]
         [Route("UpdateAccountCase")]
         public UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateQuery input)

@@ -27,35 +27,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetFilteredCasesByAccountNumber(input));
         }
-        public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredCasesByFilters(Vanrise.Entities.DataRetrievalInput<CancelAccountCasesQuery> input)
-        {
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, _dataManager.GetFilteredCasesByFilters(input));
-        }
+        
         public AccountCase GetAccountCase(int caseID)
         {
             return _dataManager.GetAccountCase(caseID);
-        }
-        public Vanrise.Entities.UpdateOperationOutput<AccountCase> CancelAccountCases(CancelAccountCasesQuery input)
-        {
-            Vanrise.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountCase>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-
-            List<int> CaseIDs = strategyExecutionDataManager.GetCasesIDsofStrategyExecutionItem(input.AccountNumber, input.From, input.To, input.StrategyIDs);
-
-            if (CaseIDs != null && CaseIDs.Count > 0)
-            {
-                strategyExecutionDataManager.DeleteStrategyExecutionItem_ByFilters(input.AccountNumber, input.From, input.To, input.StrategyIDs);
-
-                _dataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
-            }
-
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-            return updateOperationOutput;
         }
 
         public Vanrise.Entities.UpdateOperationOutput<AccountSuspicionSummary> UpdateAccountCase(AccountCaseUpdateQuery input)
@@ -89,20 +64,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return updateOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<AccountCase> CancelSelectedAccountCases(List<int> CaseIDs)
-        {
-            Vanrise.Entities.UpdateOperationOutput<AccountCase> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountCase>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-            IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-            strategyExecutionDataManager.DeleteStrategyExecutionItem_ByCaseIDs(CaseIDs);
-            _dataManager.DeleteAccountCases_ByCaseIDs(CaseIDs);
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-            return updateOperationOutput;
-        }
-
+       
         public bool AssignAccountCase(string accountNumber, HashSet<string> imeis)
         {
             AccountCaseHistoryManager accountCaseHistoryManager = new AccountCaseHistoryManager();

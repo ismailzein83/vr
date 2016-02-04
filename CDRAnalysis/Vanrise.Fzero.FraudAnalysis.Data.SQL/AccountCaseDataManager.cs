@@ -51,21 +51,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountCaseMapper, _columnMapper);
         }
 
-        public BigResult<AccountCase> GetFilteredCasesByFilters(Vanrise.Entities.DataRetrievalInput<CancelAccountCasesQuery> input)
-        {
-
-            string strategyIDsString = null;
-            if (input.Query.StrategyIDs != null)
-                strategyIDsString = string.Join(",", input.Query.StrategyIDs);
-
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempByFilters", tempTableName, input.Query.AccountNumber, input.Query.From, input.Query.To, strategyIDsString);
-            };
-
-            return RetrieveData(input, createTempTableAction, AccountCaseMapper, _columnMapper);
-        }
-
         public AccountSuspicionSummary GetAccountSuspicionSummaryByCaseId(int caseID)
         {
             return GetItemSP("FraudAnalysis.sp_AccountCase_GetDetailsByID", AccountSuspicionSummaryMapper, caseID);
@@ -96,11 +81,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, userID, statusID, validTill, reason);
             return (recordsAffected > 0);
-        }
-
-        public List<int> DeleteAccountCases_ByCaseIDs(List<int> caseIDs)
-        {
-            return GetItemsSP("FraudAnalysis.sp_AccountCase_DeleteByCaseIDs", CaseMapper, string.Join(",", caseIDs));
         }
 
         #endregion

@@ -253,8 +253,6 @@
     <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionEditorController.js" />
     <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionManagementController.js" />
-    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CancelCases.html" />
-    <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\CancelCasesController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\Includes\CaseOccuranceGrid.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\Includes\CaseOccuranceGridController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysis.html" />

@@ -18,10 +18,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady);
 
-        List<int> GetCasesIDsofStrategyExecutionItem(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs);
-
-        void DeleteStrategyExecutionItem_ByFilters(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs);
-
         void DeleteStrategyExecutionItem_ByCaseIDs(List<int> caseIds);
 
     }

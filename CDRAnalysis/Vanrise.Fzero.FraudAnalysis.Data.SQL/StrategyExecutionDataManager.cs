@@ -169,28 +169,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                );
         }
 
-
-        public List<int> GetCasesIDsofStrategyExecutionItem(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
-        {
-            string StrategiesCommaSeperatedList = null;
-
-            if (strategyIDs != null)
-                StrategiesCommaSeperatedList = string.Join(",", strategyIDs);
-
-            return GetItemsSP("FraudAnalysis.sp_StrategyExecutionItem_GetCaseIDs", CaseMapper, accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
-        }
-
-
-        public void DeleteStrategyExecutionItem_ByFilters(string accountNumber, DateTime? fromDate, DateTime? toDate, List<int> strategyIDs)
-        {
-            string StrategiesCommaSeperatedList = null;
-
-            if (strategyIDs != null)
-                StrategiesCommaSeperatedList = string.Join(",", strategyIDs);
-
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_DeleteByFilters", accountNumber, fromDate, toDate, StrategiesCommaSeperatedList);
-        }
-
         public void DeleteStrategyExecutionItem_ByCaseIDs(List<int> caseIds)
         {
             string CasesCommaSeperatedList = null;
