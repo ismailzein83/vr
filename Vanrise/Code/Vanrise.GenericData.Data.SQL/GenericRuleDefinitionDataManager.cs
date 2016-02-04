@@ -45,12 +45,6 @@ namespace Vanrise.GenericData.Data.SQL
             return (affectedRows == 1);
         }
 
-        public bool DeleteGenericRuleDefinition(int genericRuleDefinitionId)
-        {
-            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericRuleDefinition_Delete", genericRuleDefinitionId);
-            return (affectedRows == 1);
-        }
-
         #endregion
 
         #region Mappers

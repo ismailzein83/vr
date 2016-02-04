@@ -10,8 +10,8 @@
             GetGenericRuleDefinition: GetGenericRuleDefinition,
             AddGenericRuleDefinition: AddGenericRuleDefinition,
             UpdateGenericRuleDefinition: UpdateGenericRuleDefinition,
-            DeleteGenericRuleDefinition: DeleteGenericRuleDefinition,
-            GetGenericRuleDefinitionsInfo: GetGenericRuleDefinitionsInfo
+            GetGenericRuleDefinitionsInfo: GetGenericRuleDefinitionsInfo,
+            GetGenericRuleDefinitionView: GetGenericRuleDefinitionView
         };
 
         function GetFilteredGenericRuleDefinitions(input) {
@@ -32,15 +32,15 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'UpdateGenericRuleDefinition'), genericRuleDefinition);
         }
 
-        function DeleteGenericRuleDefinition(genericRuleDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'DeleteGenericRuleDefinition'), {
-                genericRuleDefinitionId: genericRuleDefinitionId
-            });
-        }
-
         function GetGenericRuleDefinitionsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'GetGenericRuleDefinitionsInfo'), {
                 filter: filter
+            });
+        }
+
+        function GetGenericRuleDefinitionView(genericRuleDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRuleDefinition', 'GetGenericRuleDefinitionView'), {
+                genericRuleDefinitionId: genericRuleDefinitionId
             });
         }
     }

@@ -44,18 +44,18 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
-        [Route("DeleteGenericRuleDefinition")]
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteGenericRuleDefinition(int genericRuleDefinitionId)
-        {
-            return _manager.DeleteGenericRuleDefinition(genericRuleDefinitionId);
-        }
-
-        [HttpGet]
         [Route("GetGenericRuleDefinitionsInfo")]
         public IEnumerable<GenericRuleDefinitionInfo> GetGenericRuleDefinitionsInfo(string filter = null)
         {
             GenericRuleDefinitionInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<GenericRuleDefinitionInfoFilter>(filter) : null;
             return _manager.GetGenericRuleDefinitionsInfo(deserializedFilter);
+        }
+
+        [HttpGet]
+        [Route("GetGenericRuleDefinitionView")]
+        public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(int genericRuleDefinitionId)
+        {
+            return _manager.GetGenericRuleDefinitionView(genericRuleDefinitionId);
         }
     }
 }

@@ -79,17 +79,6 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<object> DeleteGenericRuleDefinition(int genericRuleDefinitionId)
-        {
-            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
-            
-            IGenericRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericRuleDefinitionDataManager>();
-            bool deleted = dataManager.DeleteGenericRuleDefinition(genericRuleDefinitionId);
-
-            deleteOperationOutput.Result = (deleted) ? DeleteOperationResult.Succeeded : DeleteOperationResult.Failed;
-            return deleteOperationOutput;
-        }
-
         public IEnumerable<GenericRuleDefinitionInfo> GetGenericRuleDefinitionsInfo(GenericRuleDefinitionInfoFilter filter)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
@@ -103,18 +92,20 @@ namespace Vanrise.GenericData.Business
             return cachedGenericRuleDefinitions.MapRecords(GenericRuleDefinitionInfoMapper, filterExpression);
         }
 
-        public Vanrise.Security.Entities.View GetRuleDefinitionView(int ruleDefinitionId)
+        public Vanrise.Security.Entities.View GetGenericRuleDefinitionView(int genericRuleDefinitionId)
         {
             var viewManager = new Vanrise.Security.Business.ViewManager();
             var allViews = viewManager.GetViews();
-            return allViews.FirstOrDefault(v => (v.Settings as GenericRuleViewSettings) != null && (v.Settings as GenericRuleViewSettings).RuleDefinitionId == ruleDefinitionId);
+            return allViews.FirstOrDefault(v => (v.Settings as GenericRuleViewSettings) != null && (v.Settings as GenericRuleViewSettings).RuleDefinitionId == genericRuleDefinitionId);
         }
+
+        public 
 
         #endregion
 
         #region Private Methods
 
-        private Dictionary<int, GenericRuleDefinition> GetCachedGenericRuleDefinitions()
+        Dictionary<int, GenericRuleDefinition> GetCachedGenericRuleDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetGenericRuleDefinitions",
                 () =>

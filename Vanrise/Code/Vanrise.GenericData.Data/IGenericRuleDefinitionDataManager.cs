@@ -13,6 +13,5 @@ namespace Vanrise.GenericData.Data
         bool AreGenericRuleDefinitionsUpdated(ref object updateHandle);
         bool AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition, out int insertedId);
         bool UpdateGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition);
-        bool DeleteGenericRuleDefinition(int genericRuleDefinitionId);
     }
 }
