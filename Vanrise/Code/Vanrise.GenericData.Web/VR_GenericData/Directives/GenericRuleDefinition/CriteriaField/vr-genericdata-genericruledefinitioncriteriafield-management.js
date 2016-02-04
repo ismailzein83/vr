@@ -105,12 +105,7 @@
                     if (ctrl.criteriaFields.length > 0) {
                         var fields = [];
                         for (var i = 0; i < ctrl.criteriaFields.length; i++) {
-                            var criteriaField = ctrl.criteriaFields[i];
-
-                            var index = UtilsService.getItemIndexByVal(ctrl.priorities, criteriaField.FieldName, 'FieldName');
-                            criteriaField.Priority = index + 1;
-
-                            fields.push(criteriaField);
+                            fields.push(getMappedCriteriaField(ctrl.criteriaFields[i]));
                         }
                         data = {
                             Fields: fields
@@ -118,6 +113,19 @@
                     }
 
                     return data;
+
+                    function getMappedCriteriaField(dataItem) {
+                        var index = UtilsService.getItemIndexByVal(ctrl.priorities, dataItem.FieldName, 'FieldName');
+                        var priority = index + 1;
+
+                        return {
+                            FieldName: dataItem.FieldName,
+                            Title: dataItem.Title,
+                            FieldType: dataItem.FieldType,
+                            RuleStructureBehaviorType: dataItem.RuleStructureBehaviorType,
+                            Priority: priority
+                        };
+                    }
                 };
 
                 return api;

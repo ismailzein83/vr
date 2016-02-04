@@ -24,9 +24,10 @@
 
             if (parameters != undefined) {
                 criteriaFieldName = parameters.GenericRuleDefinitionCriteriaFieldName;
-                // setCriteriaFieldEntityFromParameters removes criteriaFieldEntity from criteriaFields
-                // Therefore, parameters.GenericRuleDefinitionCriteriaFields is cloned to avoid modifiying the original array
-                criteriaFields = UtilsService.cloneObject(parameters.GenericRuleDefinitionCriteriaFields, true);
+                criteriaFields = parameters.GenericRuleDefinitionCriteriaFields;
+                for (var i = 0; i < criteriaFields.length; i++) {
+                    criteriaFields[i].FieldName = criteriaFields[i].FieldName.toUpperCase();
+                }
             }
 
             isEditMode = (criteriaFieldName != undefined);
@@ -50,14 +51,14 @@
                 $scope.modalContext.closeModal();
             };
             $scope.validateCriteriaField = function () {
-                if (criteriaFields == undefined || criteriaFields.length == 0) {
+                var fieldName = ($scope.fieldName != undefined) ? $scope.fieldName.toUpperCase() : null;
+
+                if (isEditMode && (fieldName == criteriaFieldEntity.FieldName))
                     return null;
+                else if (UtilsService.getItemIndexByVal(criteriaFields, fieldName, 'FieldName') > -1) {
+                    return 'Another criteria field with the same name already exists';
                 }
-                for (var i = 0; i < criteriaFields.length; i++) {
-                    if (criteriaFields[i].FieldName == $scope.fieldName) {
-                        return 'Invalid name';
-                    }
-                }
+                return null;
             };
         }
 
@@ -80,9 +81,7 @@
         }
 
         function setCriteriaFieldEntityFromParameters() {
-            var index = UtilsService.getItemIndexByVal(criteriaFields, criteriaFieldName, 'FieldName');
-            criteriaFieldEntity = criteriaFields[index];
-            criteriaFields.splice(index, 1);
+            criteriaFieldEntity = UtilsService.getItemByVal(criteriaFields, criteriaFieldName, 'FieldName');
 
             var deferred = UtilsService.createPromiseDeferred();
             deferred.resolve();
