@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Pricing.MainExtensions.RateValue
 {
-    public class RegularRateValueSettings : PricingRuleRateValueSettings
+    public class FixedRateValueSettings : PricingRuleRateValueSettings
     {
         public Decimal NormalRate { get; set; }
 

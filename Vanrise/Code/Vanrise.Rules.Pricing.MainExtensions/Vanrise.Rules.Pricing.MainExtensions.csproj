@@ -48,7 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateType\DaysOfWeekRateTypeSettings.cs" />
     <Compile Include="RateType\SpecificDayRateTypeSettings.cs" />
-    <Compile Include="RateValue\RegularRateValueSettings.cs" />
+    <Compile Include="RateValue\FixedRateValueSettings.cs" />
     <Compile Include="Tariff\RegularTariffSettings.cs" />
   </ItemGroup>
   <ItemGroup>
