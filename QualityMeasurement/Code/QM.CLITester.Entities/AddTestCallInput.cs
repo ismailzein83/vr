@@ -9,8 +9,12 @@ namespace QM.CLITester.Entities
     public class AddTestCallInput
     {
         public List<int> SupplierID { get; set; }
+
+        public List<string> SuppliersSourceIds { get; set; }
         public int CountryID { get; set; }
         public int ZoneID { get; set; }
+
+        public string ZoneSourceId { get; set; }
         public int ProfileID { get; set; }
         public string ListEmails { get; set; }
     }
