@@ -7,7 +7,7 @@
 	@FailureMessage nvarchar(MAX),
 	@PDD decimal(18,6),
 	@MOS decimal(18,6),
-	@Duration varchar(20),
+	@Duration datetime,
 	@ReleaseCode varchar(10),
 	@ReceivedCLI varchar(50),
 	@RingDuration varchar(20)

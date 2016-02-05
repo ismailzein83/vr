@@ -18,13 +18,15 @@
     [ScheduleID]              INT             NULL,
     [PDD]                     DECIMAL (18, 6) NULL,
     [MOS]                     DECIMAL (18, 6) NULL,
-    [Duration]                VARCHAR (20)    NULL,
-    [ReleaseCode]             VARCHAR (10)    NULL,
+    [Duration]                DATETIME        NULL,
+    [ReleaseCode]             VARCHAR (500)   NULL,
     [ReceivedCLI]             VARCHAR (50)    NULL,
     [RingDuration]            VARCHAR (20)    NULL,
     [UpdateStatusTime]        DATETIME        NULL,
     CONSTRAINT [PK_TestCall] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
