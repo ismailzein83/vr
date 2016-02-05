@@ -47,7 +47,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
     function getTemplate(attrs) {
         var label;
         if (attrs.hidelabel == undefined)
-            label = 'label="Record Type"';
+            label = 'label="Type"';
         var disabled = "";
         if (attrs.isdisabled)
             disabled = "vr-disabled='true'"
@@ -64,7 +64,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             multipleselection = "ismultipleselection"
 
         return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"'
-               + 'entityname="Record Type" ' + label + '></vr-select>';
+               + 'entityname="Type" ' + label + '></vr-select>';
 
     }
     function recordTypeCtor(ctrl, $scope, $attrs) {

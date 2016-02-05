@@ -74,7 +74,6 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                         $scope.isLoadingMappingData = true;
                         $scope.ruleFieldsMappings.length = 0;
                         loadRuleDefinition(selectedItem.GenericRuleDefinitionId).then(function (response) {
-                            console.log(response);
                             if (response.CriteriaDefinition.Fields) {
                                 for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
                                     var filterItem = {
