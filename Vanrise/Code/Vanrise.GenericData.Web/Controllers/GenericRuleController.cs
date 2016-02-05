@@ -24,7 +24,13 @@ namespace Vanrise.GenericData.Web.Controllers
 
         IGenericRuleManager GetManager(GenericRule rule)
         {
-            Type managerType = Type.GetType("Vanrise.GenericData.Transformation.MappingRuleManager,Vanrise.GenericData.Transformation");
+            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(rule.DefinitionId);
+
+            GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
+            GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);
+
+            Type managerType = Type.GetType(ruleTypeConfig.RuleManagerFQTN);
             return Activator.CreateInstance(managerType) as IGenericRuleManager;
         }
     }

@@ -66,7 +66,7 @@ app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (Uti
             {
                 return {
                     $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                    Values: ctrl.values
+                    Values: (ctrl.selectionmode == "single") ? ctrl.value : ctrl.values
                 }
             }
 

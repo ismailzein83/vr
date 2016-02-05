@@ -85,6 +85,14 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
                     }
                 }
 
+                api.getData = function()
+                {
+                    return {
+                        $type: "Vanrise.GenericData.Transformation.Entities.MappingRuleSettings, Vanrise.GenericData.Transformation.Entities",
+                        Value: fieldTypeDirectiveAPI.getData()
+                    };
+                }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

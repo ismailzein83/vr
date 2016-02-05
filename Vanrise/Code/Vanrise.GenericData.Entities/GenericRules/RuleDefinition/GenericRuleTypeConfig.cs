@@ -17,5 +17,9 @@ namespace Vanrise.GenericData.Entities
         public string Editor { get; set; }
 
         public string RuntimeEditor { get; set; }
+
+        public string RuleTypeFQTN { get; set; }
+
+        public string RuleManagerFQTN { get; set; }
     }
 }

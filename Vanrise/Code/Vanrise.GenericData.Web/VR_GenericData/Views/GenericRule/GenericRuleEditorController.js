@@ -228,13 +228,11 @@
             }
 
             var genericRule = {
-                $type: "Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities",
+                $type: genericRuleTypeConfig.RuleTypeFQTN,
                 RuleId: (genericRuleId != null) ? genericRuleId : 0,
+                DefinitionId: genericRuleDefinitionId,
                 Criteria: genericRuleCriteria,
-                Settings: {
-                    //$type: "Vanrise.GenericData.Transformation.Entities.MappingRuleSettings, Vanrise.GenericData.Transformation.Entities",
-                    Value: 'Test Value Settings'
-                },
+                Settings: settingsDirectiveAPI.getData(),
                 BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,
                 EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };
