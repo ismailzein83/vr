@@ -200,6 +200,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datetime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-number.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-nosettings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleSettingsRuntimeEditor.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericruledefinitionsettings-mapping.js" />
@@ -307,7 +308,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>17328</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
