@@ -11,5 +11,6 @@ namespace Vanrise.Rules.Pricing
         public const string PricingRuleRateTypeSettingsConfigType = "VR_Rules_PricingRuleRateTypeSettings";
         public const string PricingRuleTariffSettingsConfigType = "VR_Rules_PricingRuleTariffSettings";
         public const string PricingRuleExtraChargeSettingsConfigType = "VR_Rules_PricingRuleExtraChargeSettings";
+        public const string PricingRuleRateValueSettingsConfigType = "VR_Rules_PricingRuleRateValueSettings";
     }
 }

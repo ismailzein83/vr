@@ -19,12 +19,15 @@
 
         }
 
+        function GetPricingRuleRateValueTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Rules_ModuleConfig.moduleName, "PricingRule", "GetPricingRuleRateValueTemplates"));
+        }
 
         return ({
             GetPricingRuleRateTypeTemplates: GetPricingRuleRateTypeTemplates,
             GetPricingRuleTariffTemplates: GetPricingRuleTariffTemplates,
             GetPricingRuleExtraChargeTemplates: GetPricingRuleExtraChargeTemplates,
-
+            GetPricingRuleRateValueTemplates: GetPricingRuleRateValueTemplates
         });
     }
 

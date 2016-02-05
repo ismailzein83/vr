@@ -25,5 +25,11 @@ namespace Vanrise.Rules.Pricing
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.PricingRuleExtraChargeSettingsConfigType);
         }
+
+        public List<TemplateConfig> GetPricingRuleRateValueTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.PricingRuleRateValueSettingsConfigType);
+        }
     }
 }

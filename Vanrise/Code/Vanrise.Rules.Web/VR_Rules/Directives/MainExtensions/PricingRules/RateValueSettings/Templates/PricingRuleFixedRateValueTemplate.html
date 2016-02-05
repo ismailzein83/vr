@@ -1,9 +1,15 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-row removeline>
+    <vr-columns width="1/3row">
+        <vr-textbox type="text" value="ctrl.normalRate" label="Normal Rate" isrequired></vr-textbox>
+    </vr-columns>
+    <vr-columns width="2/3row">
+        <vr-datagrid on-ready="ctrl.onGridReady"
+                     datasource="ctrl.dataSource"
+                     hidegridmenu>
+            <vr-datagridcolumn headertext="'Rate Type'" type="'Text'" field="'RateTypeName'" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Value'" disablesorting>
+                <vr-textbox type="number" value="dataItem.RateTypeValue" minvalue="0"></vr-textbox>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
