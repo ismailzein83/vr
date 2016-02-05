@@ -145,9 +145,9 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                                 if (payload.ruleDefinitionId != undefined)
                                 {
                                     payloadRuleDefinition.selectedIds = payload.ruleDefinitionId;
-                                    payloadRuleDefinition.showaddbutton = true;
-                                    payloadRuleDefinition.specificTypeName = ruleTypeName;
                                 }
+                                payloadRuleDefinition.showaddbutton = true;
+                                payloadRuleDefinition.specificTypeName = ruleTypeName;
                                 VRUIUtilsService.callDirectiveLoad(ruleDefinitionDirectiveAPI, payloadRuleDefinition, loadRuleDefinitionDirectivePromiseDeferred);
                             });
                         })
