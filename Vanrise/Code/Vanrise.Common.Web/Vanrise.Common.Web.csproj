@@ -128,6 +128,7 @@
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\RateTypeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +185,9 @@
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-datetime-selective.js" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-choices-selective.js" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\vr-common-boolean-selective.js" />
+    <Content Include="Common\Directives\RateType\Templates\RateTypeGridTemplate.html" />
+    <Content Include="Common\Directives\RateType\vr-common-ratetype-grid.js" />
+    <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
     <Content Include="Common\Services\APIServices\CountryAPIService.js" />
@@ -191,11 +195,13 @@
     <Content Include="Common\Services\APIServices\CurrencyAPIService.js" />
     <Content Include="Common\Services\APIServices\DataRecordFieldAPIService.js" />
     <Content Include="Common\Services\APIServices\DataRecordTypeAPIService.js" />
+    <Content Include="Common\Services\APIServices\RateTypeAPIService.js" />
     <Content Include="Common\Services\CityService.js" />
     <Content Include="Common\Services\CurrencyExchangeRateService.js" />
     <Content Include="Common\Services\CurrencyService.js" />
     <Content Include="Common\Services\CountryService.js" />
     <Content Include="Common\Services\DataRecordFieldService.js" />
+    <Content Include="Common\Services\RateTypeService.js" />
     <Content Include="Common\Views\City\CityEditor.html" />
     <Content Include="Common\Views\City\CityEditorController.js" />
     <Content Include="Common\Views\City\CityManagement.html" />
@@ -222,6 +228,10 @@
     <Content Include="Common\Views\GenericDataRecord\DataRecordFieldManagementController.js" />
     <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagement.html" />
     <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagementController.js" />
+    <Content Include="Common\Views\RateType\RateTypeEditor.html" />
+    <Content Include="Common\Views\RateType\RateTypeEditorController.js" />
+    <Content Include="Common\Views\RateType\RateTypeManagement.html" />
+    <Content Include="Common\Views\RateType\RateTypeManagementController.js" />
     <Content Include="Common\Views\Samples\AppendixSample\appendix-directive.js" />
     <Content Include="Common\Views\Samples\AppendixSample\appendix-list-directive.js" />
     <Content Include="Common\Views\Samples\AppendixSample\appendix-service.js" />

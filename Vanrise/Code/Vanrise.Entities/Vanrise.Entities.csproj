@@ -88,6 +88,10 @@
     <Compile Include="CustomAttributes\IsAnonymousAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRetrievalInput.cs" />
+    <Compile Include="RateType\RateType.cs" />
+    <Compile Include="RateType\RateTypeInfo.cs" />
+    <Compile Include="RateType\RateTypeInfoFilter.cs" />
+    <Compile Include="RateType\RateTypeQuery.cs" />
     <Compile Include="StatisticManagement\IRawItem.cs" />
     <Compile Include="StatisticManagement\IStatisticBatch.cs" />
     <Compile Include="StatisticManagement\StatisticBatchLockOutput.cs" />
