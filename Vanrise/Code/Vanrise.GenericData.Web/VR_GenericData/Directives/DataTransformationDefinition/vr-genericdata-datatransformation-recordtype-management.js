@@ -32,11 +32,13 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
 
             function initializeController() {
                 ctrl.datasource = [];
+
                 ctrl.isValid = function () {
                     if (ctrl.datasource !=undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should Select at least one filter type ";
                 }
+
                 ctrl.addDataRecordType = function () {
                     var onDataRecordTypeAdded = function (dataRecordType) {
                        // addNeededTypes(dataRecordType);

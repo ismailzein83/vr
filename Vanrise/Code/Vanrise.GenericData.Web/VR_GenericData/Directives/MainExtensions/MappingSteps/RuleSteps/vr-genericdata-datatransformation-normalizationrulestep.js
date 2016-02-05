@@ -48,14 +48,17 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
                     ruleStepCommonDirectiveAPI = api;
                     ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
                 }
+
                 $scope.onValueDirectiveReady = function (api) {
                     valueDirectiveAPI = api;
                     valueDirectiveReadyPromiseDeferred.resolve();
                 }
+
                 $scope.onNormalizationValueDirectiveReady = function (api) {
                     normalizationValueDirectiveAPI = api;
                     normalizationValueDirectiveReadyPromiseDeferred.resolve();
                 }
+
                 defineAPI();
             }
 

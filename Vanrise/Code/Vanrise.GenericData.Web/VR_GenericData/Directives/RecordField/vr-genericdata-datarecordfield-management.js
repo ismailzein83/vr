@@ -33,11 +33,13 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
             function initializeController() {
                 ctrl.datasource = [];
                 ctrl.fieldTypeConfigs = [];
+
                 ctrl.isValid = function () {
                     if (ctrl.datasource !=undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should Select at least one filter type ";
                 }
+
                 ctrl.addDataRecordField = function () {
                     var onDataRecordFieldAdded = function (dataRecordField) {
                         addNeededFields(dataRecordField);
@@ -71,6 +73,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     }
                     return obj;
                 }
+
                 api.load = function (payload) {
 
                     return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
@@ -93,11 +96,13 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
             function addNeededFields(dataItem)
             {
                 var template = UtilsService.getItemByVal(ctrl.fieldTypeConfigs, dataItem.Type.ConfigId, "DataRecordFieldTypeConfigId");
                 dataItem.TypeDescription = template != undefined ? template.Name : "";
             }
+
             function defineMenuActions() {
                 var defaultMenuActions = [
                 {

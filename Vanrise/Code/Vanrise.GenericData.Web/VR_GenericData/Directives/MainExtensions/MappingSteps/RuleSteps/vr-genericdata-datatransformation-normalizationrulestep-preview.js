@@ -55,11 +55,13 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                     }
 
                 }
+
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
                     ctrl.value = changes.Value;
                     ctrl.normalizedValue = changes.NormalizedValue;
                 }
+
                 api.checkValidation = function () {
 
                 }

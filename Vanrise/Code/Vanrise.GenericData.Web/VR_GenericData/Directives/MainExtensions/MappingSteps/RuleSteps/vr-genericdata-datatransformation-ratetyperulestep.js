@@ -54,6 +54,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestep', ['UtilsService'
                     ruleStepCommonDirectiveAPI = api;
                     ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
                 }
+
                 $scope.onNormalRateDirectiveReady = function (api) {
                     normalRateDirectiveAPI = api;
                     normalRateDirectiveReadyPromiseDeferred.resolve();
@@ -73,6 +74,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestep', ['UtilsService'
                     rateTypeIdDirectiveAPI = api;
                     rateTypeIdDirectiveReadyPromiseDeferred.resolve();
                 }
+
                 defineAPI();
             }
 

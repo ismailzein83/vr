@@ -67,6 +67,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
                + 'entityname="Type" ' + label + '></vr-select>';
 
     }
+
     function recordTypeCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
@@ -80,6 +81,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('DataRecordTypeId', $attrs, ctrl);
             }
+
             api.load = function (payload) {
 
                 var selectedIds;

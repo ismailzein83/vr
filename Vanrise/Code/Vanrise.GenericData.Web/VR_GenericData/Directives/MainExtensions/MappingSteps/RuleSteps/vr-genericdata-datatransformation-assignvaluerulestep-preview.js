@@ -55,11 +55,13 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                     }
 
                 }
+
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
                     ctrl.ruleFieldsMappings = changes.RuleFieldsMappings;
                     ctrl.target = changes.Target;
                 }
+
                 api.checkValidation = function () {
 
                 }

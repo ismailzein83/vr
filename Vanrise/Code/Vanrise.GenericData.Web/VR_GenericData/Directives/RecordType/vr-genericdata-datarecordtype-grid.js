@@ -32,6 +32,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
             function initializeController() {
 
                 $scope.datarecordTypes = [];
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -49,6 +50,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                         return directiveAPI;
                     }
                 };
+
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_DataRecordTypeAPIService.GetFilteredDataRecordTypes(dataRetrievalInput)
                         .then(function (response) {
@@ -60,9 +62,9 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                             VRNotificationService.notifyException(error, $scope);
                         });
                 };
+
                 defineMenuActions();
             }
-
 
             function defineMenuActions() {
                 var defaultMenuActions = [
@@ -75,6 +77,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                     return defaultMenuActions;
                 }
             }
+
             function editDataRecordField(dataItem) {
                 var onDataRecordFieldUpdated = function (dataRecordFieldObj) {
                     gridAPI.itemUpdated(dataRecordFieldObj);

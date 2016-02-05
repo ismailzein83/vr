@@ -82,6 +82,7 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                 }
                 return null;
             }
+
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

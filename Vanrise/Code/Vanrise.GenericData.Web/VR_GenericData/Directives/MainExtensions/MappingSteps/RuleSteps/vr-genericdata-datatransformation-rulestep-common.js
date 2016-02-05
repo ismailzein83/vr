@@ -42,6 +42,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
 
             var effectiveTimeDirectiveAPI;
             var effectiveTimeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.ruleFieldsMappings = [];
 
@@ -166,6 +167,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     }
                    
                 }
+
                 function loadRuleType(ruleTypeName) {
                     return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypeByName(ruleTypeName).then(function (response) {
                         ruleTypeEntity = response;
@@ -187,12 +189,15 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     obj.RuleFieldsMappings = ruleFieldsMappings;
 
                 }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
             function loadRuleDefinition(ruleDefinitionId) {
                return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(ruleDefinitionId);
             }
+
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

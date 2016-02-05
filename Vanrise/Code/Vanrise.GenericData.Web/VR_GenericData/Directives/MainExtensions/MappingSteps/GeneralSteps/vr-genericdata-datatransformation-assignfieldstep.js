@@ -39,18 +39,17 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
             var targetDirectiveReadyAPI;
             var targetDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
-
-
             function initializeController() {
                 $scope.onSourceReady = function (api) {
                     sourceDirectiveReadyAPI = api;
                     sourceDirectiveReadyPromiseDeferred.resolve();
                 }
+
                 $scope.onTargetReady = function (api) {
                     targetDirectiveReadyAPI = api;
                     targetDirectiveReadyPromiseDeferred.resolve();
                 }
+
                 defineAPI();
             }
 

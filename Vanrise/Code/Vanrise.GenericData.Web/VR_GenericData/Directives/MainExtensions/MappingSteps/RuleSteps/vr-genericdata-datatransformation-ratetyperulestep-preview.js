@@ -57,6 +57,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                     }
 
                 }
+
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
                     ctrl.normalRate = changes.NormalRate;
@@ -64,6 +65,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                     ctrl.effectiveRate = changes.EffectiveRate;
                     ctrl.rateTypeId = changes.RateTypeId;
                 }
+
                 api.checkValidation = function () {
 
                 }

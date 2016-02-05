@@ -113,6 +113,7 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
                     value += ctrl.selectedFieldName.Name;
                 return value;
             }
+
             api.load = function (payload) {
                 mainPayload = payload;
                 var selectedRecordName;
