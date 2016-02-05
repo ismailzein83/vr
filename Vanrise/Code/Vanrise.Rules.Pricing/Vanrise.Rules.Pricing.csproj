@@ -41,13 +41,21 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="ExtraCharge\IPricingRuleExtraChargeActionContext.cs" />
     <Compile Include="ExtraCharge\IPricingRuleExtraChargeContext.cs" />
     <Compile Include="ExtraCharge\PricingRuleExtraChargeActionContext.cs" />
     <Compile Include="ExtraCharge\PricingRuleExtraChargeActionSettings.cs" />
     <Compile Include="ExtraCharge\PricingRuleExtraChargeSettings.cs" />
+    <Compile Include="PricingRuleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateType\IPricingRuleRateTypeContext.cs" />
     <Compile Include="RateType\IPricingRuleRateTypeItemContext.cs" />
@@ -60,6 +68,9 @@
     <Compile Include="Tariff\PricingRuleTariffSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

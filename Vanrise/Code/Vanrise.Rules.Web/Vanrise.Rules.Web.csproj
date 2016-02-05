@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -24,6 +25,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -118,17 +120,21 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BaseRuleController.cs" />
     <Compile Include="Controllers\NormalizationRuleController.cs" />
+    <Compile Include="Controllers\PricingRuleController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Rules.Pricing\Vanrise.Rules.Pricing.csproj">
+      <Project>{a8a1a6c8-be71-4b51-b5b8-490645c32bf2}</Project>
+      <Name>Vanrise.Rules.Pricing</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
       <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
@@ -141,6 +147,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_Rules\Constants\ModuleConfig.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRuleFixedExtraChargeTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRulePercentageExtraChargeTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\vr-rules-pricingrulesettings-extracharge-fixed.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\vr-rules-pricingrulesettings-extracharge-percentage.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateTypeSettings\Templates\PricingRuleDaysOfWeekRateTypeTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateTypeSettings\Templates\PricingRuleSpecificRateTypeTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateTypeSettings\vr-rules-pricingrulesettings-ratetype-daysofweek.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateTypeSettings\vr-rules-pricingrulesettings-ratetype-specific.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\Templates\PricingRuleRegularTariffTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\vr-rules-pricingrulesettings-tarrif-regular.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\Templates\AddPrefixDirectiveTemplate.html" />
     <Content Include="VR_Rules\Directives\NormalizationRule\Templates\NormalizeNumberSettingsDirectiveTemplate.html" />
     <Content Include="VR_Rules\Directives\NormalizationRule\Templates\ReplaceStringDirectiveTemplate.html" />
@@ -149,13 +165,22 @@
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-replacestring.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-substring.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizenumbersettings.js" />
+    <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleExtraChargeSettings.html" />
+    <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleRateTypeSettings.html" />
+    <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleTariffSettings.html" />
+    <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-extracharge.js" />
+    <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-ratetype.js" />
+    <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-tariff.js" />
     <Content Include="VR_Rules\Services\APIServices\NormalizationRuleAPIService.js" />
+    <Content Include="VR_Rules\Services\APIServices\PricingRuleAPIService.js" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
