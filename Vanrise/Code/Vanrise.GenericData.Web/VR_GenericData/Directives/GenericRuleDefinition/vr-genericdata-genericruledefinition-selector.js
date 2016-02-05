@@ -98,7 +98,7 @@
             function onAddRuleDefinition () {
                 var onRuleDefinitionAdded = function (ruleDefinitionObj) {
                     ctrl.datasource.push(ruleDefinitionObj);
-                    if ($attrs.ismultipleselection != undefined)
+                    if (attrs.ismultipleselection != undefined)
                         ctrl.selectedvalues.push(ruleDefinitionObj);
                     else
                         ctrl.selectedvalues = ruleDefinitionObj;
