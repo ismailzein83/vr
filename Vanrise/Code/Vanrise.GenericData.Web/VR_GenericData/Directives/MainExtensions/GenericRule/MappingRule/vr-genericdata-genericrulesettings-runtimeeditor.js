@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -12,13 +12,8 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
 
                 var ctrl = this;
 
-                ctrl.selectedvalues;
-                if ($attrs.selectionmode == "multiple")
-                    ctrl.selectedvalues = [];
-
-                ctrl.datasource = [];
-                var ctor = new selectorCtor(ctrl, $scope, $attrs);
-                ctor.initializeController();
+                var obj = new mappingRuleSettingRuntimeEditor(ctrl, $scope, $attrs);
+                obj.initializeController();
 
             },
             controllerAs: 'ctrl',
@@ -29,40 +24,23 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
                     }
                 }
             },
-            template: function (element, attrs) {
-                return getTemplate(attrs);
-            }
-
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/GenericRule/MappingRule/Templates/MappingRuleSettingsRuntimeEditor.html"
         };
 
+        function mappingRuleSettingRuntimeEditor(ctrl, $scope, $attrs) {
 
-        function getTemplate(attrs) {
-            var multipleselection = "";
-            //var label = "";
-            if (attrs.selectionmode == "multiple") {
-                //label = "";
-                multipleselection = "ismultipleselection";
-            }
-            //var required = "";
-            //if (attrs.isrequired != undefined)
-            //    required = "isrequired";
-
-            //var hideremoveicon = "";
-            //if (attrs.hideremoveicon != undefined)
-            //    hideremoveicon = "hideremoveicon";
-
-            return '<vr-directivewrapper directive="selector.directive" on-ready="selector.onDirectiveReady"'
-                + multipleselection + '></vr-directivewrapper>'
-                + '<vr-directivewrapper directive="dynamic.directive" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>'
-        }
-
-        function selectorCtor(ctrl, $scope, $attrs) {
-
-            var selectorApi;
+            var fieldTypeOnReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var fieldTypeDirectiveAPI;
 
             function initializeController() {
-                //ctrl.showSelector = ($attrs.selectionmode == "dynamic");
+                $scope.scopeModel = {};
 
+                $scope.scopeModel.onRuntimeEditorDirectiveReady = function (api)
+                {
+                    fieldTypeDirectiveAPI = api;
+                    fieldTypeOnReadyPromiseDeferred.resolve();
+                }
+                
                 defineAPI();
             }
 
@@ -75,29 +53,35 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
 
                     if (payload != undefined) {
                         fieldType = payload.fieldType;
+                        $scope.scopeModel.fieldName = payload.fieldName;
                     }
 
                     if (fieldType != undefined) {
-                        //fieldType.BusinessEntityDefinitionId;
-                        var businessEntityDef = { Settings: { SelectorUIControl: 'vr-whs-be-salezone-selector', GroupSelectorUIControl: 'vr-whs-be-salezonegroup' } };
-                        if (businessEntityDef.Settings != null) {
-                            if ($attrs.selectionmode == "dynamic") {
-                                $scope.dynamic = {};
-                                $scope.dynamic.directive = businessEntityDef.Settings.GroupSelectorUIControl;
-                                $scope.dynamic.onDirectiveReady = function (api) {
-                                    $scope.dynamic.directiveAPI = api;
-                                    $scope.dynamic.directiveAPI.load(undefined);
+
+                        var promises = [];
+
+                        var loadWholeSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadWholeSectionPromiseDeferred.promise);
+
+                        var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypeConfig(fieldType.ConfigId).then(function (fieldTypeConfig) {
+                            $scope.scopeModel.runtimeEditorDirective = fieldTypeConfig.DynamicGroupUIControl;
+
+                            var loadFieldTypeConfigDirective = UtilsService.createPromiseDeferred();
+
+                            fieldTypeOnReadyPromiseDeferred.promise.then(function () {
+                                var payload = {
+                                    fieldType: fieldType
                                 }
-                            }
-                            else {
-                                $scope.selector = {};
-                                $scope.selector.directive = businessEntityDef.Settings.SelectorUIControl;
-                                $scope.selector.onDirectiveReady = function (api) {
-                                    $scope.selector.directiveAPI = api;
-                                    $scope.selector.directiveAPI.load(undefined);
-                                }
-                            }
-                        }
+
+                                VRUIUtilsService.callDirectiveLoad(fieldTypeDirectiveAPI, payload, loadFieldTypeConfigDirective);
+                                loadWholeSectionPromiseDeferred.resolve();
+                            }).catch(function (error) {
+                                loadWholeSectionPromiseDeferred.reject();
+                            });
+                        });
+
+                        promises.push(loadFieldTypeConfigPromise);
+                        return UtilsService.waitMultiplePromises(promises);
                     }
                 }
 

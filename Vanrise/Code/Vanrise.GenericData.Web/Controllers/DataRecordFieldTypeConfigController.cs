@@ -22,11 +22,11 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetDataRecordFieldType")]
-        public DataRecordFieldTypeConfig GetDataRecordFieldType(int configId)
+        [Route("GetDataRecordFieldTypeConfig")]
+        public DataRecordFieldTypeConfig GetDataRecordFieldTypeConfig(int configId)
         {
             DataRecordFieldTypeConfigManager manager = new DataRecordFieldTypeConfigManager();
-            return manager.GetDataRecordFieldType(configId);
+            return manager.GetDataRecordFieldTypeConfig(configId);
         }
 
     }

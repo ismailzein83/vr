@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Business
             return cachedDataRecordFieldTypes.Values;
         }
 
-        public DataRecordFieldTypeConfig GetDataRecordFieldType(int configId)
+        public DataRecordFieldTypeConfig GetDataRecordFieldTypeConfig(int configId)
         {
             var cachedDataRecordFieldTypes = GetCachedDataRecordFieldTypes();
             return cachedDataRecordFieldTypes.GetRecord(configId);

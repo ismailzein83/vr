@@ -200,7 +200,11 @@
                 var loadSettingsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 
                 settingsDirectiveReadyPromiseDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, undefined, loadSettingsDirectiveReadyPromiseDeferred);
+                    var payload = {
+                        fieldName: genericRuleDefintion.SettingsDefinition.FieldName,
+                        fieldType: genericRuleDefintion.SettingsDefinition.FieldType
+                    };
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, loadSettingsDirectiveReadyPromiseDeferred);
                     loadSettingsSectionPromiseDeferred.resolve();
                 }).catch(function (error) {
                     loadSettingsSectionPromiseDeferred.reject();
