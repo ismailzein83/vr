@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_Sec_MenuAPIService', 'VR_Sec_ViewAPIService', 'InsertOperationResultEnum', 'UpdateOperationResultEnum', 'VR_Sec_ViewTypeEnum', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    GenericRuleDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_Sec_MenuAPIService', 'VR_Sec_ViewAPIService', 'InsertOperationResultEnum', 'VR_Sec_ViewTypeEnum', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, InsertOperationResultEnum, UpdateOperationResultEnum, VR_Sec_ViewTypeEnum, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function GenericRuleDefinitionEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, InsertOperationResultEnum, VR_Sec_ViewTypeEnum, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var isEditMode;
 
@@ -94,6 +94,7 @@
             function getGenericRuleDefinitionView() {
                 VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinitionView(genericRuleDefinitionId).then(function (response) {
                     viewEntity = response;
+                    console.log(viewEntity);
                 });
             }
         }
@@ -218,28 +219,12 @@
         function update() {
             $scope.isLoading = true;
             var promises = [];
-            var serverResponse;
+            var ruleResponse;
 
-            var updateEntityDeferred = UtilsService.createPromiseDeferred();
-            promises.push(updateEntityDeferred.promise);
-
-            var updateViewDeferred = UtilsService.createPromiseDeferred();
-            promises.push(updateViewDeferred.promise);
-
-            updateGenericRuleDefinition().then(function () {
-                if (serverResponse.Result == UpdateOperationResultEnum.Succeeded.value) {
-                    updateEntityDeferred.resolve();
-                    updateView().then(function () { updateViewDeferred.resolve(); }).catch(function (error) { updateViewDeferred.reject(error); });
-                }
-                else {
-                    updateEntityDeferred.reject();
-                }
-            });
-
-            return UtilsService.waitMultiplePromises(promises).then(function () {
-                if (VRNotificationService.notifyOnItemUpdated('Generic Rule Definition', serverResponse, 'Name')) {
+            return UtilsService.waitMultipleAsyncOperations([updateGenericRuleDefinition, updateView]).then(function () {
+                if (VRNotificationService.notifyOnItemUpdated('Generic Rule Definition', ruleResponse, 'Name')) {
                     if ($scope.onGenericRuleDefinitionUpdated != undefined && typeof ($scope.onGenericRuleDefinitionUpdated)) {
-                        $scope.onGenericRuleDefinitionUpdated(serverResponse.UpdatedObject);
+                        $scope.onGenericRuleDefinitionUpdated(ruleResponse.UpdatedObject);
                     }
                     $scope.modalContext.closeModal();
                 }
@@ -251,11 +236,14 @@
 
             function updateGenericRuleDefinition() {
                 return VR_GenericData_GenericRuleDefinitionAPIService.UpdateGenericRuleDefinition(buildGenericRuleDefinitionObjectFromScope()).then(function (response) {
-                    serverResponse = response;
+                    ruleResponse = response;
                 });
             }
             function updateView() {
-                return VR_Sec_ViewAPIService.UpdateView(buildViewObjectFromScope(serverResponse.UpdatedObject.GenericRuleDefinitionId));
+                if (viewEntity != null)
+                    return VR_Sec_ViewAPIService.UpdateView(buildViewObjectFromScope(genericRuleDefinitionId));
+                else
+                    return VR_Sec_ViewAPIService.AddView(buildViewObjectFromScope(genericRuleDefinitionId));
             }
         }
 
