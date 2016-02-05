@@ -32,7 +32,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
         };
 
         function rateValueRuleStepCtor(ctrl, $scope) {
-            var ruleTypeName = "GenericRuleMapping";
+            var ruleTypeName = "VR_RateValueRule";
             var ruleTypeEntity;
 
             var ruleStepCommonDirectiveAPI;
