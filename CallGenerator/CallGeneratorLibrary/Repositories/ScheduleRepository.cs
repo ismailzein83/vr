@@ -86,7 +86,7 @@ namespace CallGeneratorLibrary.Repositories
                     options.LoadWith<Schedule>(c => c.SipAccount);
                     context.LoadOptions = options;
 
-                    LstSchedules = context.Schedules.ToList<Schedule>();
+                    LstSchedules = context.Schedules.Where(l => l.MonthDay == null).ToList<Schedule>();
                 }
             }
             catch (System.Exception ex)
@@ -128,9 +128,12 @@ namespace CallGeneratorLibrary.Repositories
                     //context.ScheduleOperators.DeleteAllOnSubmit(LstOperators);
 
                     Schedule schedule = context.Schedules.Where(u => u.Id == Id).Single<Schedule>();
-                    context.Schedules.DeleteOnSubmit(schedule);
-                    context.SubmitChanges();
-                    success = true;
+                    schedule.MonthDay = 1;
+                    schedule.IsEnabled = false;
+                    return Update(schedule);
+                    //context.Schedules.DeleteOnSubmit(schedule);
+                    //context.SubmitChanges();
+                    //success = true;
                 }
             }
             catch (System.Exception ex)
