@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'VRUIUtilsService','VR_GenericData_GenericRuleDefinitionAPIService',
-    function (UtilsService, VR_GenericData_GenericRuleTypeConfigAPIService, VRUIUtilsService, VR_GenericData_GenericRuleDefinitionAPIService) {
+app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'VRUIUtilsService','VR_GenericData_GenericRuleDefinitionAPIService','VR_GenericData_GenericRuleDefinitionService',
+    function (UtilsService, VR_GenericData_GenericRuleTypeConfigAPIService, VRUIUtilsService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRuleDefinitionService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -32,6 +32,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
         };
 
         function rulestepCommonCtor(ctrl, $scope) {
+            var ruleTypeName;
             var ruleTypeEntity;
             var isSecondSelection = false;
             var firstTimeload = true;
@@ -48,7 +49,6 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     ruleDefinitionDirectiveAPI = api;
                     ruleDefinitionDirectiveReadyPromiseDeferred.resolve();
                 }
-
 
                 $scope.onEffectiveTimeDirectiveReady = function (api) {
                     effectiveTimeDirectiveAPI = api;
@@ -69,7 +69,8 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                         isSecondSelection = true;
                     }
                 }
-                $scope.onRuleSelectionItem= function(selectedItem) {
+
+                $scope.onRuleSelectionItem = function (selectedItem) {
                 
                         $scope.isLoadingMappingData = true;
                         $scope.ruleFieldsMappings.length = 0;
@@ -94,6 +95,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                         });
                     
                 }
+
                 function addFilterItemToGrid(filterItem, payload) {
 
                     var dataItem = {
@@ -122,6 +124,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     $scope.ruleFieldsMappings.push(dataItem);
                 }
 
+
                 defineAPI();
             }
 
@@ -134,12 +137,15 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     {
                         var promises = [];
                         var loadRuleDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        ruleTypeName = payload.ruleTypeName;
                         loadRuleType(payload.ruleTypeName).then(function () {
                             ruleDefinitionDirectiveReadyPromiseDeferred.promise.then(function () {
                                 var payloadRuleDefinition = { filter: { RuleTypeId: ruleTypeEntity.GenericRuleTypeConfigId } };
                                 if (payload.ruleDefinitionId != undefined)
                                 {
                                     payloadRuleDefinition.selectedIds = payload.ruleDefinitionId;
+                                    payloadRuleDefinition.showaddbutton = true;
+                                    payloadRuleDefinition.specificTypeName = ruleTypeName;
                                 }
                                 VRUIUtilsService.callDirectiveLoad(ruleDefinitionDirectiveAPI, payloadRuleDefinition, loadRuleDefinitionDirectivePromiseDeferred);
                             });

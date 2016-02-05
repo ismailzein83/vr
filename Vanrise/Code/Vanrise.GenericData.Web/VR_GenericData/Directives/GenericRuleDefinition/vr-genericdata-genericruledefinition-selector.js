@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionSelectorDirective.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    GenericRuleDefinitionSelectorDirective.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'UtilsService', 'VRUIUtilsService','VR_GenericData_GenericRuleDefinitionService'];
 
-    function GenericRuleDefinitionSelectorDirective(VR_GenericData_GenericRuleDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function GenericRuleDefinitionSelectorDirective(VR_GenericData_GenericRuleDefinitionAPIService, UtilsService, VRUIUtilsService, VR_GenericData_GenericRuleDefinitionService) {
         return {
             restrict: 'E',
             scope: {
@@ -16,7 +16,7 @@
                 ismultipleselection: "@",
                 isrequired: "=",
                 isdisabled: "=",
-                customlabel: "@"
+                customlabel: "@",
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -44,8 +44,11 @@
             this.initializeController = initializeController;
 
             var selectorAPI;
-
+            var specificTypeName;
             function initializeController() {
+
+                
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
 
@@ -63,6 +66,10 @@
                     var selectedIds;
 
                     if (payload != undefined) {
+                        console.log(payload);
+                        if (payload.showaddbutton)
+                            ctrl.onAddRuleDefinition = onAddRuleDefinition;
+                        specificTypeName = payload.specificTypeName;
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
@@ -88,6 +95,16 @@
 
                 return api;
             }
+            function onAddRuleDefinition () {
+                var onRuleDefinitionAdded = function (ruleDefinitionObj) {
+                    ctrl.datasource.push(ruleDefinitionObj);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(ruleDefinitionObj);
+                    else
+                        ctrl.selectedvalues = ruleDefinitionObj;
+                };
+                VR_GenericData_GenericRuleDefinitionService.addGenericRuleDefinition(onRuleDefinitionAdded, specificTypeName);
+            }
         }
 
         function getDirectiveTemplate(attrs) {
@@ -103,7 +120,9 @@
             if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
             }
-
+            //var addCliked = '';
+            //if (attrs.onaddclicked != undefined)
+            //    addCliked = ' ';
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
@@ -113,6 +132,7 @@
                     + ' datasource="ctrl.datasource"'
                     + ' selectedvalues="ctrl.selectedvalues"'
                     + ' onselectionchanged="ctrl.onselectionchanged"'
+                    + 'onaddclicked="ctrl.onAddRuleDefinition"'
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
                     + ' datavaluefield="GenericRuleDefinitionId"'

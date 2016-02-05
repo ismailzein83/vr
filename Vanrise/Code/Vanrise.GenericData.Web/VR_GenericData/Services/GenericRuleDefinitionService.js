@@ -10,14 +10,22 @@
             editGenericRuleDefinition: editGenericRuleDefinition
         };
 
-        function addGenericRuleDefinition(onGenericRuleDefinitionAdded) {
+        function addGenericRuleDefinition(onGenericRuleDefinitionAdded, settingsTypeName) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onGenericRuleDefinitionAdded = onGenericRuleDefinitionAdded;
             };
             
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html', undefined, modalSettings);
+            var parameters;
+            if (settingsTypeName != undefined)
+            {
+                parameters = {
+                    SettingsTypeName: settingsTypeName
+                };
+            }
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html', parameters, modalSettings);
         }
 
         function editGenericRuleDefinition(genericRuleDefinitionId, onGenericRuleDefinitionUpdated) {

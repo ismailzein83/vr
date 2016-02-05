@@ -19,6 +19,7 @@
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         var genericRuleDefinitionId;
+        var settingsTypeName;
         var genericRuleDefinitionEntity;
 
         var viewEntity;
@@ -32,6 +33,7 @@
 
             if (parameters != undefined) {
                 genericRuleDefinitionId = parameters.GenericRuleDefinitionId;
+                settingsTypeName = parameters.SettingsTypeName;
             }
 
             isEditMode = (genericRuleDefinitionId != undefined);
@@ -165,7 +167,11 @@
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
-                    var payload = (genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.SettingsDefinition != null) ? genericRuleDefinitionEntity.SettingsDefinition : undefined;
+                    var payload;
+                    if(genericRuleDefinitionEntity != undefined && genericRuleDefinitionEntity.SettingsDefinition != null)
+                        payload = genericRuleDefinitionEntity.SettingsDefinition;
+                    else if (settingsTypeName != undefined)
+                        payload = { settingsTypeName: settingsTypeName }
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, settingsDirectiveLoadDeferred);
                 });
 

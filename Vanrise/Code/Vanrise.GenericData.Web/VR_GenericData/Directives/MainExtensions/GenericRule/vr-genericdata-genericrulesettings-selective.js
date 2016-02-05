@@ -33,6 +33,7 @@
             var directivePayload;
 
             function initializeController() {
+                ctrl.disableType = false;
                 $scope.scopeModel = {};
                 $scope.scopeModel.settingsTemplates = [];
                 $scope.scopeModel.selectedSettingsTemplate;
@@ -66,8 +67,12 @@
                                 $scope.scopeModel.settingsTemplates.push(response[i]);
                             }
                             if (payload != undefined && payload.ConfigId != undefined) {
+                                ctrl.disableType = true;
                                 directivePayload = payload;
                                 $scope.scopeModel.selectedSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.settingsTemplates, payload.ConfigId, 'GenericRuleTypeConfigId');
+                            } else if (payload != undefined && payload.settingsTypeName != undefined) {
+                                ctrl.disableType = true;
+                                $scope.scopeModel.selectedSettingsTemplate = UtilsService.getItemByVal($scope.scopeModel.settingsTemplates, payload.settingsTypeName, 'Name');
                             }
                         }
                     });
