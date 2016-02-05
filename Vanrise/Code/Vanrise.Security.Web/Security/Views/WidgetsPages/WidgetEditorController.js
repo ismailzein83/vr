@@ -77,12 +77,15 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
         }
 
         var settings = templateDirectiveAPI.getData();
-
+       
         for (var prop in settings)
         {
 
-            if (settings[prop] == undefined && prop != 'TimeEntity')
+            if (settings[prop] === undefined && prop != 'TimeEntity')
+            {
                 return false;
+            }
+                
         }
         var widgetSetting = {
             settings: settings,

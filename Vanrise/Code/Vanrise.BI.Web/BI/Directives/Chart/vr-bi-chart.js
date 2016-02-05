@@ -194,8 +194,10 @@ app.directive('vrBiChart', ['VR_BI_BIAPIService', 'BIUtilitiesService', 'BIVisua
             entity.length = 0;
             return VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
                 .then(function (response) {
-                    for (var i = 0; i < ctrl.settings.EntityType.length; i++)
-                        entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));
+                    if (ctrl.settings.EntityType != undefined) {
+                        for (var i = 0; i < ctrl.settings.EntityType.length; i++)
+                            entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));
+                    }
                 });
         }
 

@@ -95,6 +95,11 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
                         entityType.push(ctrl.selectedEntitiesType[i].Name);
 
                 }
+                else if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime")
+                {
+                    entityType = null;
+                }
+
 
                 return {
                     $type: "Vanrise.BI.Entities.DataGridDirectiveSetting, Vanrise.BI.Entities",

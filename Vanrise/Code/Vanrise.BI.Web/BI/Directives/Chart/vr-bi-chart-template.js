@@ -125,10 +125,12 @@ function (UtilsService, TimeDimensionTypeEnum, VRNotificationService, VRUIUtilsS
 
                 var entityType;
 
-                if (ctrl.selectedEntitiesType.length > 0 && ctrl.selectedOperationType.value != "MeasuresGroupedByTime") {
+                if (ctrl.selectedOperationType.value != "MeasuresGroupedByTime" && ctrl.selectedEntitiesType.length > 0) {
                     entityType = [];
                     for (var i = 0; i < ctrl.selectedEntitiesType.length; i++)
                         entityType.push(ctrl.selectedEntitiesType[i].Name);
+                } else if (ctrl.selectedOperationType.value == "MeasuresGroupedByTime") {
+                    entityType = null;
                 }
 
                 return {
