@@ -7,6 +7,8 @@ using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using System.Collections;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {
@@ -32,6 +34,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
             StrategyManager strategyManager = new StrategyManager();
             Strategy strategy = new Strategy();
+
+            UserManager userManager = new UserManager();
+            User executedByName = new User();
+            User cancelledByName = new User();
+
             BigResult<StrategyExecution> bigResultItems = strategyExecutionDataManager.GetFilteredStrategyExecutions(input);
             List<StrategyExecution> executions = bigResultItems.Data.ToList();
 
@@ -57,6 +64,18 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 strategy = strategyManager.GetStrategy(i.StrategyID);
                 if (strategy != null)
                     item.StrategyName = strategy.Name;
+
+
+                executedByName = userManager.GetUserbyId(i.ExecutedBy);
+                if (executedByName != null)
+                    item.ExecutedByName = executedByName.Name;
+
+                if (i.CancelledBy.HasValue)
+                {
+                    cancelledByName = userManager.GetUserbyId(i.CancelledBy.Value);
+                    if (cancelledByName != null)
+                        item.CancelledByName = cancelledByName.Name;
+                }
 
                 item.PeriodName = Vanrise.Common.Utilities.GetEnumDescription<PeriodEnum>((PeriodEnum)i.PeriodID);
 

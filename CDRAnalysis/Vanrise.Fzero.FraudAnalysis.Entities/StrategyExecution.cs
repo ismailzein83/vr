@@ -21,5 +21,20 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public DateTime ToDate { get; set; }
 
         public DateTime ExecutionDate { get; set; }
+
+        public DateTime? CancellationDate { get; set; }
+
+        public int ExecutedBy { get; set; }
+
+        public int? CancelledBy { get; set; }
+
+        public int? NumberofSubscribers { get; set; }
+
+        public int? NumberofCDRs { get; set; }
+
+        public int? NumberofCases { get; set; }
+
+        public int? ExecutionDuration { get; set; }
+
     }
 }

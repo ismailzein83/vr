@@ -16,5 +16,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public string StrategyName { get; set; }
 
         public BPInstanceStatus Status { get; set; }
+
+        public string ExecutedByName { get; set; }
+
+        public string CancelledByName { get; set; }
     }
 }

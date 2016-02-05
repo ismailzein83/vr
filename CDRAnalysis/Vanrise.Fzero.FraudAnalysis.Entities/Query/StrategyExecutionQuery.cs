@@ -19,9 +19,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public DateTime? ToExecutionDate { get; set; }
 
+        public DateTime? FromCancellationDate { get; set; }
+
+        public DateTime? ToCancellationDate { get; set; }
+
         public List<int> StrategyIds { get; set; }
 
-        public List<int> PeriodIDs { get; set; }
+        public List<int> UserIds { get; set; }
+
+        public int? PeriodId { get; set; }
 
     }
 }

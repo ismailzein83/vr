@@ -40,6 +40,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             _columnMapper.Add("Entity.ExecutionDate", "ExecutionDate");
             _columnMapper.Add("Entity.FromDate", "FromDate");
             _columnMapper.Add("Entity.ToDate", "ToDate");
+            _columnMapper.Add("ExecutedByName", "ExecutedBy");
+            _columnMapper.Add("CancelledByName", "CancelledBy");
+            _columnMapper.Add("Entity.CancellationDate", "CancellationDate");
+            _columnMapper.Add("Entity.ExecutionDuration", "ExecutionDuration");
+            _columnMapper.Add("Entity.NumberofCases", "NumberofCases");
+            _columnMapper.Add("Entity.NumberofCDRs", "NumberofCDRs");
+            _columnMapper.Add("Entity.NumberofSubscribers", "NumberofSubscribers");
         }
 
 
@@ -47,11 +54,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public BigResult<StrategyExecution> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
         {
             string strategyIDs = (input.Query.StrategyIds != null && input.Query.StrategyIds.Count > 0) ? string.Join(",", input.Query.StrategyIds) : null;
-            string periodIDs = (input.Query.PeriodIDs != null && input.Query.PeriodIDs.Count > 0) ? string.Join(",", input.Query.PeriodIDs) : null;
+            string userIDs = (input.Query.UserIds != null && input.Query.UserIds.Count > 0) ? string.Join(",", input.Query.UserIds) : null;
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_CreateTempByFilters", tempTableName, input.Query.FromCDRDate, input.Query.ToCDRDate, input.Query.FromExecutionDate, input.Query.ToExecutionDate, strategyIDs, periodIDs);
+                ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_CreateTempByFilters", tempTableName, input.Query.FromCDRDate, input.Query.ToCDRDate, input.Query.FromExecutionDate, input.Query.ToExecutionDate,
+                    input.Query.FromCancellationDate, input.Query.ToCancellationDate, strategyIDs, input.Query.PeriodId, userIDs);
             };
 
             return RetrieveData(input, createTempTableAction, StrategyExecutionMapper, _columnMapper);
@@ -67,6 +75,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             item.ToDate = (DateTime)reader["ToDate"];
             item.PeriodID = (int)reader["PeriodID"];
             item.ExecutionDate = (DateTime)reader["ExecutionDate"];
+            item.CancellationDate = GetReaderValue<DateTime?>(reader, "CancellationDate");
+            item.ExecutedBy = GetReaderValue<int>(reader, "ExecutedBy");
+            item.CancelledBy = GetReaderValue<int?>(reader, "CancelledBy");
+            item.NumberofSubscribers = GetReaderValue<int?>(reader, "NumberofSubscribers");
+            item.NumberofCDRs = GetReaderValue<int?>(reader, "NumberofCDRs");
+            item.NumberofCases = GetReaderValue<int?>(reader, "NumberofCases");
+            item.ExecutionDuration = GetReaderValue<int?>(reader, "ExecutionDuration");
+
             return item;
         }
 

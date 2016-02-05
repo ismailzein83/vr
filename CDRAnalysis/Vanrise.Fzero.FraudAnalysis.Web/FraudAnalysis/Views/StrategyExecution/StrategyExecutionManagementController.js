@@ -1,11 +1,18 @@
 ﻿"use strict";
 
-StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'CDRAnalysis_FA_PeriodAPIService', 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService'];
+StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'BPInstanceStatusEnum'];
 
-function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_PeriodAPIService, StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService) {
+function StrategyExecutionManagementController($scope, VRUIUtilsService, StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, BPInstanceStatusEnum) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+    var userSelectorAPI;
+    var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+    var periodSelectorAPI;
+    var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
     var mainGridAPI;
     var arrMenuAction = [];
 
@@ -17,6 +24,16 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
         $scope.onStrategySelectorReady = function (api) {
             strategySelectorAPI = api;
             strategySelectorReadyDeferred.resolve();
+        };
+
+        $scope.onPeriodSelectorReady = function (api) {
+            periodSelectorAPI = api;
+            periodSelectorReadyDeferred.resolve();
+        };
+
+        $scope.onUserSelectorReady = function (api) {
+            userSelectorAPI = api;
+            userSelectorReadyDeferred.resolve();
         };
 
         var Now = new Date();
@@ -33,14 +50,9 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
 
         $scope.gridMenuActions = [];
 
-        $scope.periods = [];
-
         $scope.strategyExecutions = [];
-        $scope.selectedPeriods = [];
 
-        $scope.filterDateTypes = [];
-        $scope.filterDateTypes.push({ id: 1, name: 'By CDR' })
-        $scope.filterDateTypes.push({ id: 2, name: 'By Strategy Execution' })
+        $scope.filterDateTypes = UtilsService.getArrayEnum(CDRAnalysis_FA_StrategyExecutionFilterDateTypes);
 
         $scope.selectedFilterDateType = $scope.filterDateTypes[0];
 
@@ -67,21 +79,59 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
                 });
         }
 
+        $scope.onPeriodSelectionChanged = function (selectedPeriod) {
+            if (selectedPeriod != undefined) {
+                loadStrategySelector(selectedPeriod.Id);
+            }
+            else
+                loadStrategySelector();
+        };
+
         defineMenuActions();
     }
 
-    function loadStrategySelector() {
+    function loadStrategySelector(periodId) {
         var strategySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        var payload = {
+        };
+
+        var filter = {};
+        if (periodId != undefined)
+            filter.PeriodId = periodId;
+
+        payload.filter = filter;
+
         strategySelectorReadyDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, undefined, strategySelectorLoadDeferred);
+            VRUIUtilsService.callDirectiveLoad(strategySelectorAPI, payload, strategySelectorLoadDeferred);
         });
+
         return strategySelectorLoadDeferred.promise;
+    }
+
+    function loadUserSelector() {
+        var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+        userSelectorReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(userSelectorAPI, undefined, userSelectorLoadDeferred);
+        });
+
+        return userSelectorLoadDeferred.promise;
+    }
+
+    function loadPeriodSelector() {
+        var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+        periodSelectorReadyDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, undefined, periodSelectorLoadDeferred);
+        });
+
+        return periodSelectorLoadDeferred.promise;
     }
 
     function load() {
         $scope.isInitializing = true;
 
-        return UtilsService.waitMultipleAsyncOperations([loadPeriods, loadStrategySelector])
+        return UtilsService.waitMultipleAsyncOperations([loadStrategySelector, loadUserSelector, loadPeriodSelector])
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             })
@@ -90,52 +140,69 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
             });
     }
 
-    function defineMenuActions() {
+    function defineMenuActions(item) {
         $scope.gridMenuActions = [{
-            name: "Details",
-            clicked: viewStrategyExecutionItem
+            name: "Cancel",
+            clicked: cancelStrategyExecution
         }];
+    }
+
+    function defineMenuActions() {
+
+        var menuActionsWithCancel = [{
+            name: "Cancel",
+            clicked: cancelStrategyExecution
+        }];
+
+        var defaultMenuActions = [
+
+        ];
+
+        $scope.gridMenuActions = function (dataItem) {
+            if (dataItem.Status == BPInstanceStatusEnum.New.value || dataItem.Status == BPInstanceStatusEnum.Completed.value) {
+                return menuActionsWithCancel;
+            } else {
+                return defaultMenuActions;
+            }
+        }
     }
 
     function retrieveData() {
         var query = {
-            PeriodIDs: ($scope.selectedPeriods.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedPeriods, "id") : null,
-            FromCDRDate: ($scope.selectedFilterDateType.id == 1 ? $scope.fromDate : null),
-            ToCDRDate: ($scope.selectedFilterDateType.id == 1 ? $scope.toDate : null),
-            FromExecutionDate: ($scope.selectedFilterDateType.id == 2 ? $scope.fromDate : null),
-            ToExecutionDate: ($scope.selectedFilterDateType.id == 2 ? $scope.toDate : null),
+            UserIds: userSelectorAPI.getSelectedIds(),
+            FromCDRDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCDRConnect.value ? $scope.fromDate : null),
+            ToCDRDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCDRConnect.value ? $scope.toDate : null),
+            FromExecutionDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByStrategyExecutionDate.value ? $scope.fromDate : null),
+            ToExecutionDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByStrategyExecutionDate.value ? $scope.toDate : null),
+            FromCancellationDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCancelDate.value ? $scope.fromDate : null),
+            ToCancellationDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCancelDate.value ? $scope.toDate : null),
+            PeriodId: periodSelectorAPI.getSelectedIds(),
             StrategyIds: strategySelectorAPI.getSelectedIds()
         };
 
         return mainGridAPI.retrieveData(query);
     }
 
-    function loadPeriods() {
-        return CDRAnalysis_FA_PeriodAPIService.GetPeriods()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.periods.push({
-                        id: item.Id,
-                        name: item.Name
-                    });
-                });
-            });
+    function cancelStrategyExecution(gridObject) {
+        $scope.issaving = true;
+        var createProcessInputs = {
+            $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.CancelStrategyExecutionProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+            StrategyExecutionId: gridObject.Entity.Id
+        };
+
+        BusinessProcessAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
+            if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
+                if ($scope.onProcessInputCreated != undefined)
+                    $scope.onProcessInputCreated(response.ProcessInstanceId);
+                $scope.modalContext.closeModal();
+            }
+        }).catch(function (error) {
+            VRNotificationService.notifyException(error);
+        }).finally(function () {
+            $scope.issaving = false;
+        });
     }
 
-    function viewStrategyExecutionItem(gridObject) {
-        var params = {
-            strategyExecutionId: gridObject.Entity.Id
-        };
-
-        var settings = {
-            width: '95%'
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.title = UtilsService.buildTitleForUpdateEditor("Strategy Execution on: ", gridObject.Entity.ExecutionDate);
-        };
-        VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/StrategyExecution/StrategyExecutionItem.html", params, settings);
-    }
 }
 
 appControllers.controller('FraudAnalysis_StrategyExecutionManagementController', StrategyExecutionManagementController);
