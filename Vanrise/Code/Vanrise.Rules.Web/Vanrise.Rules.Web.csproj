@@ -155,6 +155,8 @@
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateTypeSettings\Templates\PricingRuleSpecificRateTypeTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateTypeSettings\vr-rules-pricingrulesettings-ratetype-daysofweek.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateTypeSettings\vr-rules-pricingrulesettings-ratetype-specific.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateValueSettings\Templates\PricingRuleFixedRateValueTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\RateValueSettings\vr-rule-pricingrulesettings-ratevalue-fixed.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\Templates\PricingRuleRegularTariffTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\vr-rules-pricingrulesettings-tarrif-regular.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\Templates\AddPrefixDirectiveTemplate.html" />
@@ -167,9 +169,11 @@
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizenumbersettings.js" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleExtraChargeSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleRateTypeSettings.html" />
+    <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleRateValueSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleTariffSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-extracharge.js" />
     <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-ratetype.js" />
+    <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-ratevalue.js" />
     <Content Include="VR_Rules\Directives\PricingRule\vr-rules-pricingrulesettings-tariff.js" />
     <Content Include="VR_Rules\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="VR_Rules\Services\APIServices\PricingRuleAPIService.js" />
