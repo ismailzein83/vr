@@ -10,5 +10,9 @@ namespace Vanrise.Runtime
     public class SchedulerTaskCheckProgressContext : ISchedulerTaskCheckProgressContext
     {
         public object ExecutionInfo { get; set; }
+
+
+        public SchedulerTask Task { get; set; }
+
     }
 }

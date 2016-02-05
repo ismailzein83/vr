@@ -9,5 +9,7 @@ namespace Vanrise.Runtime.Entities
     public interface ISchedulerTaskCheckProgressContext
     {
         Object ExecutionInfo { get; }
+
+        SchedulerTask Task { get; }
     }
 }

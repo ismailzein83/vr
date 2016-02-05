@@ -52,6 +52,7 @@ namespace Vanrise.Runtime
                                     SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(item.ActionInfo.FQTN));
                                     var checkProgressContext = new SchedulerTaskCheckProgressContext
                                     {
+                                        Task = item,
                                         ExecutionInfo = item.ExecutionInfo
                                     };
                                     SchedulerTaskCheckProgressOutput output =
