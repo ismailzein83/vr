@@ -37,6 +37,10 @@ namespace CP.SupplierPricelist.Entities
         public Object UploadProgress { get; set; }
 
         public PriceListResult PriceListResult { get; set; }
+
+        public string AlertMessage { get; set; }
+
+        public byte[] AlertFile { get; set; }
     }
     public interface IPriceListProgressContext
     {
