@@ -42,8 +42,16 @@ namespace Vanrise.Queueing
                    return queueInstances.ToDictionary(kvp => kvp.QueueInstanceId, kvp => kvp);
                });
         }
-        
-  
+
+        public IEnumerable<QueueInstanceInfo> GetQueueInstances(QueueInstanceFilter filter)
+        {
+            IEnumerable<QueueInstance> queueInstances = GetAllQueueInstances();
+            if (filter != null)
+                return queueInstances.MapRecords(QueueInstanceInfoMapper, queueInstance => queueInstance.ExecutionFlowId == filter.ExecutionFlowId);
+
+            return queueInstances.MapRecords(QueueInstanceInfoMapper, null);
+
+        }
 
         #region Mappers
         private QueueInstanceDetail QueueInstanceDetailMapper(QueueInstance queueInstance)
@@ -67,8 +75,14 @@ namespace Vanrise.Queueing
             return queueInstanceDetail;
         }
 
+        private QueueInstanceInfo QueueInstanceInfoMapper(QueueInstance queueInstance)
+        {
+            QueueInstanceInfo queueInstanceInfo = new QueueInstanceInfo();
+            queueInstanceInfo.Id = queueInstance.QueueInstanceId;
+            queueInstanceInfo.Name = queueInstance.Name;
+            return queueInstanceInfo;
+        }
 
-       
         #endregion
     }
 }

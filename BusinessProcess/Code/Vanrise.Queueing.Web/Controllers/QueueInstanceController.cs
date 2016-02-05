@@ -18,7 +18,7 @@ namespace Vanrise.Queueing.Web.Controllers
             this._manager = new QueueInstanceManager();
         }
 
-       
+
         [HttpGet]
         [Route("GetItemTypes")]
         public IEnumerable<QueueItemTypeInfo> GetItemTypes(string filter = null)
@@ -43,6 +43,16 @@ namespace Vanrise.Queueing.Web.Controllers
         {
             QueueItemManager manager = new QueueItemManager();
             return manager.GetItemStatusSummary();
+        }
+
+      
+        [HttpGet]
+        [Route("GetQueueInstances")]
+        public IEnumerable<QueueInstanceInfo> GetQueueInstances(string filter = null)
+        {
+            
+            QueueInstanceFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueInstanceFilter>(filter) : null;
+            return _manager.GetQueueInstances(deserializedFilter);
         }
 
 

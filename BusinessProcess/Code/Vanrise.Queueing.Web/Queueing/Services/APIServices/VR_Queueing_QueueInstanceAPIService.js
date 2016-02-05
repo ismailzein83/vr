@@ -6,11 +6,16 @@
 
     function QueueInstanceAPIService(BaseAPIService, UtilsService, VR_Queueing_ModuleConfig) {
         return ({
-            GetFilteredQueueInstances: GetFilteredQueueInstances
+            GetFilteredQueueInstances: GetFilteredQueueInstances,
+            GetQueueInstances: GetQueueInstances
         });
 
         function GetFilteredQueueInstances(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetFilteredQueueInstances'),input);
+        }
+
+        function GetQueueInstances(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'QueueInstance', 'GetQueueInstances'), filter);
         }
 
         

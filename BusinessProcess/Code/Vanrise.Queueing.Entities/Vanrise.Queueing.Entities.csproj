@@ -62,11 +62,14 @@
     <Compile Include="QueueExecutionFlowQuery.cs" />
     <Compile Include="QueueInstance.cs" />
     <Compile Include="QueueInstanceDetail.cs" />
+    <Compile Include="QueueInstanceFilter.cs" />
+    <Compile Include="QueueInstanceInfo.cs" />
     <Compile Include="QueueInstanceQuery.cs" />
     <Compile Include="QueueItem.cs" />
     <Compile Include="QueueItemHeader.cs" />
     <Compile Include="QueueItemHeaderDetails.cs" />
     <Compile Include="ExecutionFlowStatusSummary.cs" />
+    <Compile Include="QueueItemHeaderQuery.cs" />
     <Compile Include="QueueItemStatusSummary.cs" />
     <Compile Include="QueueItemType.cs" />
     <Compile Include="QueueItemTypeFilter.cs" />

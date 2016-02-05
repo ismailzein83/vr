@@ -89,8 +89,9 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\ExecutionFlowDefinitionController.cs" />
-    <Compile Include="Controllers\QueueStageController.cs" />
     <Compile Include="Controllers\QueueItemTypeController.cs" />
+    <Compile Include="Controllers\QueueStageController.cs" />
+    <Compile Include="Controllers\QueueItemHeaderController.cs" />
     <Compile Include="Controllers\QueueInstanceController.cs" />
     <Compile Include="Controllers\ExecutionFlowController.cs" />
     <Compile Include="Controllers\QueueingController.cs" />
@@ -109,8 +110,12 @@
     <Content Include="Queueing\Directives\ExecutionFlow\vr-queueing-executionflow-selector.js" />
     <Content Include="Queueing\Directives\QueueInstance\Templates\QueueInstanceGrid.html" />
     <Content Include="Queueing\Directives\QueueInstance\vr-queueing-queueinstance-grid.js" />
+    <Content Include="Queueing\Directives\QueueInstance\vr-queueing-queueinstance-selector.js" />
     <Content Include="Queueing\Directives\QueueInstance\vr-queueing-queueitemtype-selector.js" />
     <Content Include="Queueing\Directives\QueueInstance\vr-queueing-queuestagename-selector.js" />
+    <Content Include="Queueing\Directives\QueueInstance\vr-queueing-queuestatus-selector.js" />
+    <Content Include="Queueing\Directives\QueueItemHeader2\Templates\QueueItemHeader2Grid.html" />
+    <Content Include="Queueing\Directives\QueueItemHeader2\vr-queueing-queueitemheader2-grid.js" />
     <Content Include="Queueing\Directives\QueueItemHeader\Templates\QueueItemHeaderGridTemplate.html" />
     <Content Include="Queueing\Directives\QueueItemHeader\vr-queueing-queueitemheader-grid.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_ExecutionFlowDefinitionAPIService.js" />

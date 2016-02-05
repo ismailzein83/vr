@@ -2,12 +2,13 @@
 
     'use strict';
 
-    QueueInstanceService.$inject = ['VR_Queueing_ExecutionFlowService'];
+    QueueInstanceService.$inject = ['VR_Queueing_ExecutionFlowService','VR_Queueing_QueueItemStatusEnum'];
 
-    function QueueInstanceService(VR_Queueing_ExecutionFlowService) {
+    function QueueInstanceService(VR_Queueing_ExecutionFlowService, VR_Queueing_QueueItemStatusEnum) {
         var drillDownDefinitions = [];
         return ({
-            registerDrillDownToExecutionFlow: registerDrillDownToExecutionFlow
+            registerDrillDownToExecutionFlow: registerDrillDownToExecutionFlow,
+            getQueueItemStatus: getQueueItemStatus
         });
 
         function registerDrillDownToExecutionFlow() {
@@ -26,6 +27,18 @@
             };
 
             VR_Queueing_ExecutionFlowService.addDrillDownDefinition(drillDownDefinition);
+        }
+
+        function getQueueItemStatus() {
+            var queueItemStatus = [];
+            for (var key in VR_Queueing_QueueItemStatusEnum) {
+                if (VR_Queueing_QueueItemStatusEnum.hasOwnProperty(key)) {
+                    queueItemStatus.push({ Id: VR_Queueing_QueueItemStatusEnum[key].value, Name: key });
+                }
+            }
+            
+            
+            return queueItemStatus;
         }
     
 

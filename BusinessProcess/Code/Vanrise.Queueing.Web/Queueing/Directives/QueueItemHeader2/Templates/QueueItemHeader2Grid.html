@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="queueItemHeader"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="ongridReady"
+             idfield="QueueId">
+
+
+    <vr-datagridcolumn headertext="'ID'" field="'QueueId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Queue Instance'" field="'ItemId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'Status'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'"></vr-datagridcolumn>
+</vr-datagrid>

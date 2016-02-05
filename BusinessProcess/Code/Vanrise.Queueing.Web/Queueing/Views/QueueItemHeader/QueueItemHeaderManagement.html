@@ -1,9 +1,38 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-panel ng-controller="VR_Queueing_QueueItemHeaderController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-queueing-executionflow-selector on-ready="onExecutionFlowSelectorReady" ismultipleselection selectedvalues="selectedExecutionFlow" onselectitem="onExecutionFlowSelectItem"></vr-queueing-executionflow-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-queueing-queueinstance-selector on-ready="onQueueInstanceSelectorReady" ismultipleselection selectedvalues="selectedQueueInstance"></vr-queueing-queueinstance-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-queueing-queuestatus-selector on-ready="onQueueStatusSelectorReady" ismultipleselection selectedvalues="selectedQueueStatus"></vr-queueing-queuestatus-selector>
+                </vr-columns>
 
-</body>
-</html>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="From" value="createdTimeFrom"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="To" value="createdTimeTo"></vr-datetimepicker>
+                </vr-columns>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-queueing-queueitemheader2-grid on-ready="onGridReady" ng-show="ShowGrid"></vr-queueing-queueitemheader2-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
