@@ -7,7 +7,8 @@
     function GenericRuleTypeConfigAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return ({
             GetGenericRuleTypes: GetGenericRuleTypes,
-            GetGenericRuleTypeByName: GetGenericRuleTypeByName
+            GetGenericRuleTypeByName: GetGenericRuleTypeByName,
+            GetGenericRuleTypeById: GetGenericRuleTypeById
         });
         function GetGenericRuleTypes() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "GenericRuleTypeConfig", "GetGenericRuleTypes"));
@@ -15,6 +16,10 @@
 
         function GetGenericRuleTypeByName(ruleTypeName) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "GenericRuleTypeConfig", "GetGenericRuleTypeByName"), { ruleTypeName: ruleTypeName });
+        }
+
+        function GetGenericRuleTypeById(ruleTypeConfigId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "GenericRuleTypeConfig", "GetGenericRuleTypeById"), { ruleTypeConfigId: ruleTypeConfigId });
         }
 
     }

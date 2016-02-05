@@ -15,5 +15,7 @@ namespace Vanrise.GenericData.Entities
         public string Title { get; set; }
 
         public string Editor { get; set; }
+
+        public string RuntimeEditor { get; set; }
     }
 }

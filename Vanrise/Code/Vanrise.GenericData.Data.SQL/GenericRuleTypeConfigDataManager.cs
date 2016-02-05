@@ -33,13 +33,13 @@ namespace Vanrise.GenericData.Data.SQL
 
         GenericRuleTypeConfig GenericRuleTypeConfigMapper(IDataReader reader)
         {
-            GenericRuleTypeConfig denericRuleTypeConfig = Vanrise.Common.Serializer.Deserialize<GenericRuleTypeConfig>(reader["Details"] as string);
-            if (denericRuleTypeConfig != null)
+            GenericRuleTypeConfig genericRuleTypeConfig = Vanrise.Common.Serializer.Deserialize<GenericRuleTypeConfig>(reader["Details"] as string);
+            if (genericRuleTypeConfig != null)
             {
-                denericRuleTypeConfig.GenericRuleTypeConfigId = Convert.ToInt32(reader["ID"]);
-                denericRuleTypeConfig.Name = reader["Name"] as string;
+                genericRuleTypeConfig.GenericRuleTypeConfigId = Convert.ToInt32(reader["ID"]);
+                genericRuleTypeConfig.Name = reader["Name"] as string;
             }
-            return denericRuleTypeConfig;
+            return genericRuleTypeConfig;
         }
 
         #endregion

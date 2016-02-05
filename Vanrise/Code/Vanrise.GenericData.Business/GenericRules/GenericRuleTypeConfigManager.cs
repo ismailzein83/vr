@@ -24,6 +24,12 @@ namespace Vanrise.GenericData.Business
             return cachedGenericRuleTypes.FindRecord(x=>x.Name == ruleTypeName);
         }
 
+        public GenericRuleTypeConfig GetGenericRuleTypeById(int ruleTypeConfigId)
+        {
+            var cachedGenericRuleTypes = GetCachedGenericRuleTypes();
+            return cachedGenericRuleTypes.FindRecord(x => x.GenericRuleTypeConfigId == ruleTypeConfigId);
+        }
+
         #endregion
 
         #region Private Methods

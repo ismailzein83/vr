@@ -3,10 +3,10 @@
     "use strict";
 
     genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
-        'VR_GenericData_GenericRuleAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService'];
+        'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService'];
 
     function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService,
-        VR_GenericData_GenericRuleAPIService, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService) {
+        VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService) {
 
         var isEditMode;
 
@@ -14,8 +14,11 @@
         var genericRuleDefinitionId;
         var genericRuleDefintion;
         var genericRuleEntity;
-
+        var genericRuleTypeConfig;
         var criteriaDefinitionFields;
+
+        var settingsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var settingsDirectiveAPI;
 
         loadParameters();
         defineScope();
@@ -50,6 +53,12 @@
 
             $scope.scopeModel.beginEffectiveDate = new Date();
             $scope.scopeModel.endEffectiveDate = undefined;
+
+            $scope.scopeModel.onSettingsDirectiveReady = function (api)
+            {
+                settingsDirectiveAPI = api;
+                settingsDirectiveReadyPromiseDeferred.resolve();
+            }
         }
 
         function load() {
@@ -86,7 +95,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadCriteriaSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadCriteriaSection, loadSettingsSection])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -174,6 +183,35 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
+        function loadSettingsSection()
+        {
+            if (genericRuleDefintion == undefined && genericRuleDefintion.SettingsDefinition != null)
+                return;
+
+            var promises = [];
+
+            var loadSettingsSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadSettingsSectionPromiseDeferred.promise);
+            
+            var loadRuleTypeConfigPromise = VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypeById(genericRuleDefintion.SettingsDefinition.ConfigId).then(function (response) {
+                genericRuleTypeConfig = response;
+                $scope.scopeModel.settingsDirective = genericRuleTypeConfig.RuntimeEditor;
+
+                var loadSettingsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                
+                settingsDirectiveReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, undefined, loadSettingsDirectiveReadyPromiseDeferred);
+                    loadSettingsSectionPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadSettingsSectionPromiseDeferred.reject();
+                });
+            });
+
+            promises.push(loadRuleTypeConfigPromise);
+
+            return UtilsService.waitMultiplePromises(promises);            
+        }
+
         function buildGenericRuleObjFromScope() {
             var genericRuleCriteria = {};
             
@@ -187,7 +225,7 @@
 
             var genericRule = {
                 $type: "Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities",
-                RuleId: (genericRuleId != null) ? genericRuleId : 1,
+                RuleId: (genericRuleId != null) ? genericRuleId : 0,
                 Criteria: genericRuleCriteria,
                 Settings: {
                     //$type: "Vanrise.GenericData.Transformation.Entities.MappingRuleSettings, Vanrise.GenericData.Transformation.Entities",
