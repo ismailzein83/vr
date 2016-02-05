@@ -72,13 +72,13 @@
                     promises.push(templatesPromise);
 
                     templatesPromise.then(function (response) {
-                        if (response) {
+                        if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 $scope.rateValueTemplates.push(response[i]);
                             }
 
                             if (configId != undefined) {
-                                $scope.selectedRateValueTemplate = UtilsService.getItemByVal($scope.rateValueSettings, configId, 'TemplateConfigID');
+                                $scope.selectedRateValueTemplate = UtilsService.getItemByVal($scope.rateValueTemplates, configId, 'TemplateConfigID');
                             }
                         }
                     });
