@@ -61,6 +61,11 @@
     <Compile Include="DataRecords\DataRecordTypeQuery.cs" />
     <Compile Include="DataRecords\DataRecordTypeReference.cs" />
     <Compile Include="DataRecords\IDataRecordTypeReferenceContext.cs" />
+    <Compile Include="DataStorage\DataRecordStorage.cs" />
+    <Compile Include="DataStorage\DataRecordStorageSettings.cs" />
+    <Compile Include="DataStorage\DataStore.cs" />
+    <Compile Include="DataStorage\DataStoreSettings.cs" />
+    <Compile Include="DataStorage\IUpdateRecordStorageSettingsContext.cs" />
     <Compile Include="GenericRules\GenericRule.cs" />
     <Compile Include="GenericRules\GenericRuleCriteria.cs" />
     <Compile Include="GenericRules\GenericRuleCriteriaFieldValues.cs" />

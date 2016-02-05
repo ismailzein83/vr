@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Vanrise.GenericData.Entities
+{
+    public class DataRecordStorage
+    {
+        public int DataRecordStorageId { get; set; }
+
+        public string Name { get; set; }
+
+        public int DataRecordTypeId { get; set; }
+
+        public DataRecordStorageSettings Settings { get; set; }
+    }
+}

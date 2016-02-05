@@ -1,71 +1,80 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_DataTransformationDefinitionEditorController" vr-loader="scopeModal.isLoading" width="'90%'">
-<vr-modalbody>
-    <vr-form validationcontext="dataTransformationDefinitionEditorGroup">
-        <vr-tabs>
-            <vr-tab header="'Definition'">
-                <vr-row>
-                    <vr-columns width="normal">
-                        <vr-textbox label="Name" value="scopeModal.name" isrequired></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-                <vr-row>
-                    <vr-columns width="normal">
-                        <vr-textbox label="Title" value="scopeModal.title" isrequired></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-            </vr-tab>
-            <vr-tab header="'Record Types'">
-                <vr-row>
-                    <vr-columns width="fullrow">
-                        <vr-genericdata-datatransformation-recordtype-management on-ready="scopeModal.onDataRecordTypeDirectiveReady" ></vr-genericdata-datatransformation-recordtype-management>
-                    </vr-columns>
-                </vr-row>
-            </vr-tab>
-            <vr-tab header="'Transformation Steps'">
-                <vr-row>
-                    <vr-columns colnum="2">
-                        <vr-section title="Toolbox">
-                            <vr-datagrid datasource="scopeModal.steps" norowhighlightonclick="true"
-                                         on-ready="scopeModal.onGridReady" hidegridmenu>
-                                <vr-datagridcolumn headertext="'Steps'" field="'Title'" widthfactor="5" isclickable="true" onclicked="scopeModal.addStep"></vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-section>
-                    </vr-columns>
-                    <vr-columns colnum="4">
-                        <vr-section title="Steps">
-                            <vr-datalist maxitemsperrow="1" datasource="scopeModal.stepsAdded" isitemdraggable autoremoveitem="true">
-                                <vr-label>{{dataItem.Title}}</vr-label> <vr-check value="dataItem.isSelected" ng-click="viewScope.scopeModal.onEditStepClick(dataItem)"></vr-check><!-- <span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span>-->
-                                <vr-validator validate="dataItem.validationMessage">
-                                    <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
-                                </vr-validator>
-                            </vr-datalist>
-                        </vr-section>
-                    </vr-columns>
-                    <vr-columns colnum="6">
-                        <vr-section title="Properties" vr-loader="scopeModal.isLoadingDirective">
-                            <vr-row removeline>
-                                <i class="glyphicon glyphicon-remove hand-cursor" style="width:10px; float:right; cursor :default" ng-click="scopeModal.onEditorRemove()" ng-show="scopeModal.selectedStep !=undefined"></i>
-                                <vr-columns width="fullrow">
-                                    <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onEditorDirectiveReady"></vr-directivewrapper>
-                                </vr-columns>
-                                <vr-columns width="fullrow">
-                                    <vr-button type="Apply" data-onclick="scopeModal.applyChanges" standalone ng-show="scopeModal.selectedStep !=undefined"></vr-button>
-                                </vr-columns>
-                            </vr-row>
-                        </vr-section>
-                    </vr-columns>
-                </vr-row>
-            </vr-tab>
-        </vr-tabs>
-    </vr-form>
-</vr-modalbody>
-<div>
-    <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-        <div transclude-to="buttons">
-            <vr-button type="Save" validationcontext="dataTransformationDefinitionEditorGroup" data-onclick="scopeModal.SaveDataTransformationDefinition"></vr-button>
-            <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
-        </div>
-    </vr-actionbar>
+    <vr-modalbody>
+        <vr-form validationcontext="dataTransformationDefinitionEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="normal">
+                            <vr-textbox label="Name" value="scopeModal.name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="normal">
+                            <vr-textbox label="Title" value="scopeModal.title" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Record Types'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-genericdata-datatransformation-recordtype-management on-ready="scopeModal.onDataRecordTypeDirectiveReady"></vr-genericdata-datatransformation-recordtype-management>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Transformation Steps'">
+                    <vr-row>
+                        <vr-columns colnum="2">
+                            <vr-section title="Toolbox">
+                                <vr-datagrid datasource="scopeModal.steps" norowhighlightonclick="true"
+                                             on-ready="scopeModal.onGridReady" hidegridmenu>
+                                    <vr-datagridcolumn headertext="'Steps'" field="'Title'" widthfactor="5" isclickable="true" onclicked="scopeModal.addStep"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns colnum="4">
+                            <vr-section title="Steps">
+                                <div style="max-height:500px;overflow-y:auto;">
+                                    <vr-datalist maxitemsperrow="1" datasource="scopeModal.stepsAdded" isitemdraggable autoremoveitem="true">
+                                        <vr-label>{{dataItem.Title}}</vr-label> <vr-check value="dataItem.isSelected" ng-click="viewScope.scopeModal.onEditStepClick(dataItem)"></vr-check><!-- <span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span>-->
+                                        <vr-validator validate="dataItem.validationMessage">
+                                            <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
+                                        </vr-validator>
+                                    </vr-datalist>
+                                </div>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns colnum="6">
+                            <vr-section title="Properties" vr-loader="scopeModal.isLoadingDirective">
+                                <vr-row removeline>
+                                    <vr-columns width="fullrow">
+                                        <i class="glyphicon glyphicon-remove hand-cursor" style="width: 10px;  cursor: default ;right: 7px; position: absolute; top: -15px;" ng-click="scopeModal.onEditorRemove()" ng-show="scopeModal.selectedStep !=undefined"></i>
+                                    </vr-columns>
+                                </vr-row>
+                                <vr-row removeline>                                  
+                                             
+                                    <div style="max-height:500px;overflow-y:auto;">
+                                        <vr-columns width="fullrow">
+                                            <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onEditorDirectiveReady"></vr-directivewrapper>
+                                        </vr-columns>
+                                        <vr-columns width="fullrow">
+                                            <vr-button type="Apply" data-onclick="scopeModal.applyChanges" standalone ng-show="scopeModal.selectedStep !=undefined"></vr-button>
+                                        </vr-columns>
+                                    </div>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="dataTransformationDefinitionEditorGroup" data-onclick="scopeModal.SaveDataTransformationDefinition"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+            </div>
+        </vr-actionbar>
 
-</div>
+    </div>
 </div>
