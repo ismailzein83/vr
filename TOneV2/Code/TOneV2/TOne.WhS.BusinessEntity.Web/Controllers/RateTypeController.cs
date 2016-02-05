@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredRateTypes")]
-        public object GetFilteredRateTypes(Vanrise.Entities.DataRetrievalInput<RateTypeQuery> input)
+        public object GetFilteredRateTypes(Vanrise.Entities.DataRetrievalInput<TOne.WhS.BusinessEntity.Entities.RateTypeQuery> input)
         {
             RateTypeManager manager = new RateTypeManager();
             return GetWebResponse(input, manager.GetFilteredRateTypes(input));
@@ -25,14 +25,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAllRateTypes")]
-        public IEnumerable<RateTypeInfo> GetAllRateTypes()
+        public IEnumerable<TOne.WhS.BusinessEntity.Entities.RateTypeInfo> GetAllRateTypes()
         {
             RateTypeManager manager = new RateTypeManager();
             return manager.GetAllRateTypes();
         }
         [HttpGet]
         [Route("GetRateType")]
-        public RateType GetRateType(int rateTypeId)
+        public TOne.WhS.BusinessEntity.Entities.RateType GetRateType(int rateTypeId)
         {
             RateTypeManager manager = new RateTypeManager();
             return manager.GetRateType(rateTypeId);
@@ -40,14 +40,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddRateType")]
-        public TOne.Entities.InsertOperationOutput<RateType> AddRateType(RateType rateType)
+        public TOne.Entities.InsertOperationOutput<TOne.WhS.BusinessEntity.Entities.RateType> AddRateType(TOne.WhS.BusinessEntity.Entities.RateType rateType)
         {
             RateTypeManager manager = new RateTypeManager();
             return manager.AddRateType(rateType);
         }
         [HttpPost]
         [Route("UpdateRateType")]
-        public TOne.Entities.UpdateOperationOutput<RateType> UpdateRateType(RateType rateType)
+        public TOne.Entities.UpdateOperationOutput<TOne.WhS.BusinessEntity.Entities.RateType> UpdateRateType(TOne.WhS.BusinessEntity.Entities.RateType rateType)
         {
             RateTypeManager manager = new RateTypeManager();
             return manager.UpdateRateType(rateType);

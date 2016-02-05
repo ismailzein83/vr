@@ -18,29 +18,29 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
-        public IDataRetrievalResult<RateTypeDetail> GetFilteredRateTypes(DataRetrievalInput<RateTypeQuery> input)
+        public IDataRetrievalResult<TOne.WhS.BusinessEntity.Entities.RateTypeDetail> GetFilteredRateTypes(DataRetrievalInput<TOne.WhS.BusinessEntity.Entities.RateTypeQuery> input)
         {
             var allRateTypes = GetCachedRateTypes();
-            Func<RateType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<TOne.WhS.BusinessEntity.Entities.RateType, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allRateTypes.ToBigResult(input, filterExpression, RateTypeDetailMapper));
 
         }
        
-        public IEnumerable<RateTypeInfo> GetAllRateTypes()
+        public IEnumerable<TOne.WhS.BusinessEntity.Entities.RateTypeInfo> GetAllRateTypes()
         {
             var allRateTypes = GetCachedRateTypes();
             if (allRateTypes == null)
                 return null;
             return allRateTypes.Values.MapRecords(RateTypeInfoMapper);
         }
-        public RateType GetRateType(int rateTypeId)
+        public TOne.WhS.BusinessEntity.Entities.RateType GetRateType(int rateTypeId)
         {
             var allRateTypes = GetCachedRateTypes();
             return allRateTypes.GetRecord(rateTypeId);
         }
-        public TOne.Entities.InsertOperationOutput<RateType> AddRateType(RateType rateType)
+        public TOne.Entities.InsertOperationOutput<TOne.WhS.BusinessEntity.Entities.RateType> AddRateType(TOne.WhS.BusinessEntity.Entities.RateType rateType)
         {
-            TOne.Entities.InsertOperationOutput<RateType> insertOperationOutput = new TOne.Entities.InsertOperationOutput<RateType>();
+            TOne.Entities.InsertOperationOutput<TOne.WhS.BusinessEntity.Entities.RateType> insertOperationOutput = new TOne.Entities.InsertOperationOutput<TOne.WhS.BusinessEntity.Entities.RateType>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -63,12 +63,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<RateType> UpdateRateType(RateType rateType)
+        public TOne.Entities.UpdateOperationOutput<TOne.WhS.BusinessEntity.Entities.RateType> UpdateRateType(TOne.WhS.BusinessEntity.Entities.RateType rateType)
         {
             IRateTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateTypeDataManager>();
 
             bool updateActionSucc = dataManager.Update(rateType);
-            TOne.Entities.UpdateOperationOutput<RateType> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RateType>();
+            TOne.Entities.UpdateOperationOutput<TOne.WhS.BusinessEntity.Entities.RateType> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<TOne.WhS.BusinessEntity.Entities.RateType>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -101,30 +101,30 @@ namespace TOne.WhS.BusinessEntity.Business
                 return dataManager.AreRateTypesUpdated(ref _updateHandle);
             }
         }
-        private Dictionary<int, RateType> GetCachedRateTypes()
+        private Dictionary<int, TOne.WhS.BusinessEntity.Entities.RateType> GetCachedRateTypes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRateTypes",
                () =>
                {
                    IRateTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<IRateTypeDataManager>();
-                   IEnumerable<RateType> rateTypes = dataManager.GetRateTypes();
+                   IEnumerable<TOne.WhS.BusinessEntity.Entities.RateType> rateTypes = dataManager.GetRateTypes();
                    return rateTypes.ToDictionary(x => x.RateTypeId, x => x);
                });
         }
         #endregion
 
         #region  Mappers
-        private RateTypeInfo RateTypeInfoMapper(RateType rateType)
+        private TOne.WhS.BusinessEntity.Entities.RateTypeInfo RateTypeInfoMapper(TOne.WhS.BusinessEntity.Entities.RateType rateType)
         {
-            return new RateTypeInfo
+            return new TOne.WhS.BusinessEntity.Entities.RateTypeInfo
             {
                 Name = rateType.Name,
                 RateTypeId = rateType.RateTypeId
             };
         }
-        private RateTypeDetail RateTypeDetailMapper(RateType rateType)
+        private TOne.WhS.BusinessEntity.Entities.RateTypeDetail RateTypeDetailMapper(TOne.WhS.BusinessEntity.Entities.RateType rateType)
         {
-            return new RateTypeDetail
+            return new TOne.WhS.BusinessEntity.Entities.RateTypeDetail
             {
                 Entity = rateType,
             };

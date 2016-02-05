@@ -9,11 +9,11 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface IRateTypeDataManager:IDataManager
     {
-        List<RateType> GetRateTypes();
+        List<TOne.WhS.BusinessEntity.Entities.RateType> GetRateTypes();
 
-        bool Update(RateType rateType);
+        bool Update(TOne.WhS.BusinessEntity.Entities.RateType rateType);
 
-        bool Insert(RateType rateType, out int insertedId);
+        bool Insert(TOne.WhS.BusinessEntity.Entities.RateType rateType, out int insertedId);
 
         bool AreRateTypesUpdated(ref object updateHandle);
 

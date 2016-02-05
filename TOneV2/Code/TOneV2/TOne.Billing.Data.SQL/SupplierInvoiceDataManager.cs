@@ -95,7 +95,7 @@ namespace TOne.Billing.Data.SQL
             
             string rateTypeString = GetReaderValue<string>(reader, "RateType");
             int? rateTypeInt = Convert.ToInt32(rateTypeString);
-            detail.RateType = (RateType)rateTypeInt;
+            detail.RateType = (RateTypeEnum)rateTypeInt;
             
             detail.Amount = GetReaderValue<decimal>(reader, "Amount");
             detail.CurrencyID = GetReaderValue<string>(reader, "CurrencyID");

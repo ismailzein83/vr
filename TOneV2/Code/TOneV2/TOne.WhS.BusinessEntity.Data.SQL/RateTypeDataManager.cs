@@ -20,18 +20,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-        public List<Entities.RateType> GetRateTypes()
+        public List<TOne.WhS.BusinessEntity.Entities.RateType> GetRateTypes()
         {
             return GetItemsSP("[TOneWhS_BE].[sp_RateType_GetAll]", RateTypeMapper);
         }
 
-        public bool Update(Entities.RateType rateType)
+        public bool Update(TOne.WhS.BusinessEntity.Entities.RateType rateType)
         {
             int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_RateType_Update]", rateType.RateTypeId, rateType.Name);
             return (recordsEffected > 0);
         }
 
-        public bool Insert(Entities.RateType rateType, out int insertedId)
+        public bool Insert(TOne.WhS.BusinessEntity.Entities.RateType rateType, out int insertedId)
         {
             object rateTypeId;
             int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_RateType_Insert]", out rateTypeId, rateType.Name);
@@ -50,9 +50,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         # region Mappers
 
-        RateType RateTypeMapper(IDataReader reader)
+        TOne.WhS.BusinessEntity.Entities.RateType RateTypeMapper(IDataReader reader)
         {
-            RateType rateType = new RateType();
+            TOne.WhS.BusinessEntity.Entities.RateType rateType = new TOne.WhS.BusinessEntity.Entities.RateType();
             rateType.Name = reader["Name"] as string;
             rateType.RateTypeId = (int)reader["ID"];
             return rateType;

@@ -16,7 +16,7 @@ namespace TOne.Billing.Entities
         public int? NumberOfCalls { get; set; }
         public decimal? Duration { get; set; }
         public decimal? Rate { get; set; }
-        public RateType? RateType { get; set; }
+        public RateTypeEnum? RateType { get; set; }
         public decimal? Amount { get; set; }
         public string CurrencyID { get; set; }
     }

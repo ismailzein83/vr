@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Entities.RateType
+namespace Vanrise.Entities
 {
-    class RateTypeQuery
+    public class RateTypeQuery
     {
+        public string Name { get; set; }
     }
 }

@@ -46,7 +46,7 @@ namespace TOne.BusinessEntity.Entities
         Null=2
     }
 
-    public enum RateType : byte
+    public enum RateTypeEnum : byte
     {
         Normal = 0,
         OffPeak = 1,

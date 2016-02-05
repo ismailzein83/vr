@@ -815,7 +815,7 @@ namespace TOne.Analytics.Business
                 DurationNetFormatted = FormatNumber(zoneSummary.DurationNet),
 
                 RateType = zoneSummary.RateType,
-                RateTypeFormatted = ((RateType)zoneSummary.RateType).ToString(),
+                RateTypeFormatted = ((RateTypeEnum)zoneSummary.RateType).ToString(),
 
                 DurationInSeconds = zoneSummary.DurationInSeconds,
                 DurationInSecondsFormatted = FormatNumber(zoneSummary.DurationInSeconds),
