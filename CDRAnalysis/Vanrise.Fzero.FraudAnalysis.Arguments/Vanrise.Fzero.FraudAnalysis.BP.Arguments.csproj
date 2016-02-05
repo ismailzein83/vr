@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CancelStrategyExecutionProcessInput.cs" />
     <Compile Include="ExecuteStrategyForNumberRangeProcessInput.cs" />
     <Compile Include="ExecuteStrategyForNumberRangeProcessOutput.cs" />
     <Compile Include="FillDataWarehouseProcessInput.cs" />

@@ -49,7 +49,8 @@
     <div>
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-datagrid datasource="strategyExecutions" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Entity.Id">
+                <vr-datagrid datasource="strategyExecutions" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Entity.ID">
+                    <vr-datagridcolumn headertext="'Id'" field="'Entity.ID'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Type'" field="'PeriodName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="getStatusColor" disablesorting></vr-datagridcolumn>

@@ -183,23 +183,29 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
         return mainGridAPI.retrieveData(query);
     }
 
-    function cancelStrategyExecution(gridObject) {
-        $scope.issaving = true;
-        var createProcessInputs = {
-            $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.CancelStrategyExecutionProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
-            StrategyExecutionId: gridObject.Entity.Id
+    function buildInstanceObjFromScope(strategyExecutionId) {
+        return {
+            InputArguments: {
+                $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.CancelStrategyExecutionProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments",
+                StrategyExecutionId: strategyExecutionId
+            }
         };
+    }
 
-        BusinessProcessAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
+    function cancelStrategyExecution(gridObject) {
+        $scope.isInitializing = true;
+        var createProcessInput = buildInstanceObjFromScope(gridObject.Entity.ID);
+
+        BusinessProcessAPIService.CreateNewProcess(createProcessInput).then(function (response) {
             if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
                 if ($scope.onProcessInputCreated != undefined)
                     $scope.onProcessInputCreated(response.ProcessInstanceId);
-                $scope.modalContext.closeModal();
             }
         }).catch(function (error) {
             VRNotificationService.notifyException(error);
-        }).finally(function () {
-            $scope.issaving = false;
+        })
+        .finally(function () {
+            $scope.isInitializing = false;
         });
     }
 
