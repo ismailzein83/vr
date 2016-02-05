@@ -20,47 +20,22 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Switch"
-                               datasource="switches"
-                               selectedvalues="selectedSwitches"
-                               datavaluefield="SwitchId"
-                               datatextfield="Name"
-                               entityname="Switch"
-                               ismultipleselection>
-                    </vr-select>
+                    <cdranalysis-pstn-switch-selector ismultipleselection on-ready="onReadySwicth"></cdranalysis-pstn-switch-selector>
                 </vr-columns>
 
-                <vr-columns width="normal">
-                    <vr-select label="Type" ng-show="advancedSelected"
-                               datasource="types"
-                               selectedvalues="selectedTypes"
-                               datavaluefield="value"
-                               datatextfield="description"
-                               entityname="Type"
-                               ismultipleselection>
-                    </vr-select>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <cdranalysis-pstn-trunktype-selector ismultipleselection on-ready="onReadyTrunkType"></cdranalysis-pstn-trunktype-selector>
+
                 </vr-columns>
 
-                <vr-columns width="normal">
-                    <vr-select label="Direction" ng-show="advancedSelected"
-                               datasource="directions"
-                               selectedvalues="selectedDirections"
-                               datavaluefield="value"
-                               datatextfield="description"
-                               entityname="Direction"
-                               ismultipleselection>
-                    </vr-select>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <cdranalysis-pstn-trunkdirection-selector ismultipleselection on-ready="onReadyTrunkDirection"></cdranalysis-pstn-trunkdirection-selector>
                 </vr-columns>
 
-                <vr-columns width="normal">
-                    <vr-select label="Linked-To Trunk" ng-show="advancedSelected"
-                               datasource="linkedToTrunkObjs"
-                               selectedvalues="selectedLinkedToTrunkObjs"
-                               datavaluefield="value"
-                               datatextfield="description"
-                               ismultipleselection>
-                    </vr-select>
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <cdranalysis-pstn-trunklink-selector ismultipleselection on-ready="onReadyTrunkLink" selectedvalues="selectedLinkedToTrunkObjs"></cdranalysis-pstn-trunklink-selector>
                 </vr-columns>
+
             </vr-row>
         </div>
         <vr-row removeline>
@@ -72,6 +47,9 @@
             </vr-actionbar>
         </vr-row>
     </vr-form>
-
-    <vr-pstn-be-trunkgrid on-ready="onTrunkGridReady"></vr-pstn-be-trunkgrid>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <cdranalysis-pstn-trunk-grid on-ready="onTrunkGridReady"></cdranalysis-pstn-trunk-grid>
+        </vr-columns>
+    </vr-row>
 </vr-panel>

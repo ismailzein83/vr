@@ -1,4 +1,4 @@
-﻿app.service("PSTN_BE_Service", ["TrunkAPIService", "NormalizationRuleAPIService", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRModalService", "VRNotificationService", function (TrunkAPIService, NormalizationRuleAPIService, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRModalService, VRNotificationService) {
+﻿app.service("PSTN_BE_Service", ["CDRAnalysis_PSTN_TrunkAPIService", "NormalizationRuleAPIService", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRModalService", "VRNotificationService", function (TrunkAPIService, NormalizationRuleAPIService, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRModalService, VRNotificationService) {
     
     return ({
         editTrunk: editTrunk,

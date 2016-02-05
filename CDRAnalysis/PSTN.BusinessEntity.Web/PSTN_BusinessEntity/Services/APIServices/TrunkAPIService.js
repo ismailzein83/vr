@@ -1,45 +1,62 @@
-﻿app.service("TrunkAPIService", function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        GetFilteredTrunks: GetFilteredTrunks,
-        GetTrunkById: GetTrunkById,
-        GetTrunksBySwitchIds: GetTrunksBySwitchIds,
-        GetTrunks: GetTrunks,
-        AddTrunk: AddTrunk,
-        UpdateTrunk: UpdateTrunk,
-        DeleteTrunk: DeleteTrunk
-    });
+    "use strict";
+    trunkAPIService.$inject = ['BaseAPIService', 'UtilsService', 'PSTN_BE_ModuleConfig'];
 
-    function GetFilteredTrunks(input) {
-        return BaseAPIService.post("/api/Trunk/GetFilteredTrunks", input);
-    }
+    function trunkAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig) {
 
-    function GetTrunkById(trunkId) {
-        return BaseAPIService.get("/api/Trunk/GetTrunkById", {
-            trunkId: trunkId
+
+        function GetFilteredTrunks(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetFilteredTrunks"), input);
+
+        }
+
+        function GetTrunkById(trunkId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetTrunkById"), {
+                trunkId: trunkId
+            });
+        }
+        function GetTrunksInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetTrunksInfo"), {
+                serializedFilter:filter
+            });
+        }
+        function GetTrunksBySwitchIds(trunkFilterObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetTrunksBySwitchIds"), trunkFilterObj);
+        }
+
+        function GetTrunks() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetTrunks"));
+        }
+
+        function AddTrunk(trunkObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "AddTrunk"), trunkObj);
+        }
+
+        function UpdateTrunk(trunkObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "UpdateTrunk"), trunkObj);
+        }
+
+        function DeleteTrunk(trunkId, linkedToTrunkId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "DeleteTrunk"), {
+                trunkId: trunkId,
+                linkedToTrunkId: linkedToTrunkId
+            });
+        }
+        
+        return ({
+            GetFilteredTrunks: GetFilteredTrunks,
+            GetTrunkById: GetTrunkById,
+            GetTrunksBySwitchIds: GetTrunksBySwitchIds,
+            GetTrunks: GetTrunks,
+            AddTrunk: AddTrunk,
+            UpdateTrunk: UpdateTrunk,
+            DeleteTrunk: DeleteTrunk,
+            GetTrunksInfo: GetTrunksInfo
         });
     }
 
-    function GetTrunksBySwitchIds(trunkFilterObj) {
-        return BaseAPIService.post("/api/Trunk/GetTrunksBySwitchIds", trunkFilterObj);
-    }
+    appControllers.service('CDRAnalysis_PSTN_TrunkAPIService', trunkAPIService);
 
-    function GetTrunks() {
-        return BaseAPIService.get("/api/Trunk/GetTrunks");
-    }
-
-    function AddTrunk(trunkObj) {
-        return BaseAPIService.post("/api/Trunk/AddTrunk", trunkObj);
-    }
-
-    function UpdateTrunk(trunkObj) {
-        return BaseAPIService.post("/api/Trunk/UpdateTrunk", trunkObj);
-    }
-
-    function DeleteTrunk(trunkId, linkedToTrunkId) {
-        return BaseAPIService.get("/api/Trunk/DeleteTrunk", {
-            trunkId: trunkId,
-            linkedToTrunkId: linkedToTrunkId
-        });
-    }
-});
+})(appControllers);

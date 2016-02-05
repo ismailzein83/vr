@@ -73,6 +73,7 @@
     <Compile Include="IRule\IRuleSwitchTarget.cs" />
     <Compile Include="Switch\Switch.cs" />
     <Compile Include="Switch\SwitchDetail.cs" />
+    <Compile Include="Switch\SwitchFilter.cs" />
     <Compile Include="Switch\SwitchInfo.cs" />
     <Compile Include="Query\SwitchQuery.cs" />
     <Compile Include="IRule\IRuleTrunkCriteria.cs" />

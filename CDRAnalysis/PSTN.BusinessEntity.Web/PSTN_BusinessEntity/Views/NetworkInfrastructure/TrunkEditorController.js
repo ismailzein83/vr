@@ -1,98 +1,94 @@
-﻿TrunkEditorController.$inject = ["$scope", "TrunkAPIService", "SwitchAPIService", "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNavigationService", "VRNotificationService"];
+﻿TrunkEditorController.$inject = ["$scope", "CDRAnalysis_PSTN_TrunkAPIService",  "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRUIUtilsService"];
 
-function TrunkEditorController($scope, TrunkAPIService, SwitchAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNavigationService, VRNotificationService) {
+function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService) {
 
     var trunkId;
     var switchId;
     var editMode;
-    var currentlyLinkedToTrunkHasBeenSet = false;
-    var currentlyLinkedToTrunkId;
+    var trunkEntity;
+    var switchDirectiveApi;
+    var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var typeDirectiveApi;
+    var typeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var directionDirectiveApi;
+    var directionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var linkSwitchDirectiveApi;
+    var linkSwitchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var linkTrunkDirectiveApi;
+    var linkTrunkReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var currentlyLinkedToTrunkId;
     loadParameters();
     defineScope();
     load();
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-
         if (parameters != undefined && parameters != null) {
             trunkId = parameters.TrunkId;
             switchId = parameters.SwitchId;
         }
-
+        $scope.disableSwitchMenu = switchId != undefined;
         editMode = (trunkId != undefined);
     }
 
     function defineScope() {
 
-        $scope.name = undefined;
-        $scope.symbol = undefined;
-        $scope.switches = [];
+       
         $scope.selectedSwitch = undefined;
-        $scope.types = UtilsService.getArrayEnum(TrunkTypeEnum);
-        $scope.selectedType = undefined;
-        $scope.directions = UtilsService.getArrayEnum(TrunkDirectionEnum);
-        $scope.selectedDirection = undefined;
-
-        $scope.switchesToLinkTo = [];
         $scope.selectedSwitchToLinkTo = undefined;
-        $scope.trunksToLinkTo = [];
         $scope.selectedTrunkToLinkTo = undefined;
+        $scope.disableSwitchMenu = switchId != undefined;
+        $scope.onReadySwicth = function (api) {
+            switchDirectiveApi = api;
+            switchReadyPromiseDeferred.resolve();
+        }
 
-        $scope.disableSwitchMenu = false;
+        $scope.onReadyTrunkType = function (api) {
+            typeDirectiveApi = api;
+            typeReadyPromiseDeferred.resolve();
+        }
+
+        $scope.onReadyTrunkDirection = function (api) {
+            directionDirectiveApi = api;
+            directionReadyPromiseDeferred.resolve();
+        }
+
+        $scope.onReadyLinkSwicth = function (api) {
+            linkSwitchDirectiveApi = api;
+            linkSwitchReadyPromiseDeferred.resolve();
+        }
+
+        $scope.onReadyLinkTrunk = function (api) {
+            linkTrunkDirectiveApi = api;
+            linkTrunkReadyPromiseDeferred.resolve();
+        }
 
         $scope.onSwitchChanged = function () {
 
-            $scope.switchesToLinkTo = [];
             $scope.selectedSwitchToLinkTo = undefined;
-
-            angular.forEach($scope.switches, function (item) {
-                $scope.switchesToLinkTo.push(item);
-            });
-
-            if ($scope.selectedSwitch != undefined) {
-                var index = UtilsService.getItemIndexByVal($scope.switchesToLinkTo, $scope.selectedSwitch.SwitchId, "SwitchId");
-                $scope.switchesToLinkTo.splice(index, 1);
+            if ($scope.selectedSwitch != undefined && $scope.selectedSwitch != null) {
+                var directivePayload = {};
+                directivePayload.filter = { ExcludedIds: [$scope.selectedSwitch.SwitchId] };
+                linkSwitchDirectiveApi.load(directivePayload)
             }
+           
         }
 
         $scope.onSwitchToLinkToChanged = function () {
-
-            $scope.trunksToLinkTo = [];
             $scope.selectedTrunkToLinkTo = undefined;
-
-            if ($scope.selectedSwitchToLinkTo != undefined) {
-                
-                $scope.isGettingData = true;
-                
-                var trunkFilterObj = {
+            if ($scope.selectedSwitchToLinkTo != undefined && $scope.selectedSwitchToLinkTo != null  ) {
+                var directivePayload = {};
+                directivePayload.filter = {
                     SwitchIds: [$scope.selectedSwitchToLinkTo.SwitchId],
                     TrunkNameFilter: null
                 };
-
-                TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj)
-                    .then(function (response) {
-
-                        angular.forEach(response, function (item) {
-                            $scope.trunksToLinkTo.push(item);
-                        });
-
-                        // remove the trunk that's being edited from the list of trunks to link to
-                        var index = UtilsService.getItemIndexByVal($scope.trunksToLinkTo, trunkId, "TrunkId");
-                        if (index >= 0)
-                            $scope.trunksToLinkTo.splice(index, 1);
-
-                        if (!currentlyLinkedToTrunkHasBeenSet && currentlyLinkedToTrunkId != null) {
-                            $scope.selectedTrunkToLinkTo = UtilsService.getItemByVal($scope.trunksToLinkTo, currentlyLinkedToTrunkId, "TrunkId");
-                            currentlyLinkedToTrunkHasBeenSet = true;
-                        }
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    })
-                    .finally(function () {
-                        $scope.isGettingData = false;
-                    });
+                directivePayload.excludedId = trunkId;
+                linkTrunkDirectiveApi.load(directivePayload)
             }
         }
 
@@ -111,67 +107,150 @@ function TrunkEditorController($scope, TrunkAPIService, SwitchAPIService, TrunkT
     function load() {
         $scope.isGettingData = true;
 
-        return SwitchAPIService.GetSwitches()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.switches.push(item);
-                });
-
-                if (editMode) {
-                    return TrunkAPIService.GetTrunkById(trunkId)
-                        .then(function (response) {
-                            fillScopeFromTrunkObj(response);
-
-                            if (response.LinkedToTrunkId != null) {
-                                return TrunkAPIService.GetTrunkById(response.LinkedToTrunkId)
-                                    .then(function (response) {
-                                        $scope.selectedSwitchToLinkTo = UtilsService.getItemByVal($scope.switchesToLinkTo, response.SwitchId, "SwitchId");
-                                    })
-                                    .catch(function (error) {
-                                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                                    })
-                                    .finally(function () {
-                                        $scope.isGettingData = false;
-                                    });
-                            }
-                            else {
-                                currentlyLinkedToTrunkHasBeenSet = true;
-                                $scope.isGettingData = false;
-                            }
-                        })
-                        .catch(function (error) {
-                            $scope.isGettingData = false;
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        });
-                }
-                else {
-                    if (switchId != undefined && switchId != null) {
-                        $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, switchId, "SwitchId");
-                        $scope.disableSwitchMenu = true;
-                    }
-
+        if (editMode) {
+            getTrunk().then(function () {
+                loadAllControls().then(function () {
+                   trunkEntity = undefined;
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isGettingData = false;
-                }
-            })
-            .catch(function (error) {
-                $scope.isGettingData = false;
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
             });
+        }
+        else {
+            loadAllControls();
+        }
+
     }
 
-    function fillScopeFromTrunkObj(trunkObj) {
-        $scope.name = trunkObj.Name;
-        $scope.symbol = trunkObj.Symbol;
-        $scope.selectedSwitch = UtilsService.getItemByVal($scope.switches, trunkObj.SwitchId, "SwitchId");
-        $scope.selectedType = UtilsService.getEnum(TrunkTypeEnum, "value", trunkObj.Type);
-        $scope.selectedDirection = UtilsService.getEnum(TrunkDirectionEnum, "value", trunkObj.Direction);
-        currentlyLinkedToTrunkId = trunkObj.LinkedToTrunkId;
+    function getTrunk() {
+        return CDRAnalysis_PSTN_TrunkAPIService.GetTrunkById(trunkId).then(function (trunk) {
+            trunkEntity = trunk;
+        });
     }
 
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSwitchSelector, loadTypeSelector, loadDirectionSelector, loadLinkSwitchSelector, loadLinkTrunkSelector])
+           .catch(function (error) {
+               VRNotificationService.notifyExceptionWithClose(error, $scope);
+           })
+          .finally(function () {
+              $scope.isGettingData = false;
+          });
+    }
+
+    
+
+    function setTitle() {
+        if (editMode && trunkEntity != undefined)
+            $scope.title = UtilsService.buildTitleForUpdateEditor(trunkEntity.Name, "Trunk");
+        else
+            $scope.title = UtilsService.buildTitleForAddEditor("Trunk");
+    }
+
+    function loadStaticData() {
+
+        if (trunkEntity == undefined)
+            return;
+
+        $scope.name = trunkEntity.Name;
+        $scope.symbol = trunkEntity.Symbol;
+    }
+
+    
+    function loadSwitchSelector() {
+        var switchLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        switchReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {
+                    selectedIds: trunkEntity != undefined ? trunkEntity.SwitchId :(switchId!=undefined)? switchId : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(switchDirectiveApi, directivePayload, switchLoadPromiseDeferred);
+            });
+        return switchLoadPromiseDeferred.promise;
+    }
+
+    function loadTypeSelector() {
+        var typeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        typeReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {
+                    selectedIds: trunkEntity != undefined ? trunkEntity.Type : undefined
+
+                };
+                VRUIUtilsService.callDirectiveLoad(typeDirectiveApi, directivePayload, typeLoadPromiseDeferred);
+            });
+        return typeLoadPromiseDeferred.promise;
+    }
+
+    function loadDirectionSelector() {
+        var directionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        directionReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {
+                    selectedIds: trunkEntity != undefined ? trunkEntity.Direction : undefined
+
+                };
+                VRUIUtilsService.callDirectiveLoad(directionDirectiveApi, directivePayload, directionLoadPromiseDeferred);
+            });
+        return directionLoadPromiseDeferred.promise;
+    }
+
+    function loadLinkSwitchSelector() {
+        var linkSwitchLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        linkSwitchReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {};
+                if (trunkEntity && trunkEntity.SwitchId)
+                    directivePayload.filter = { ExcludedIds: [trunkEntity.SwitchId] };
+                
+                VRUIUtilsService.callDirectiveLoad(linkSwitchDirectiveApi, directivePayload, linkSwitchLoadPromiseDeferred);
+            });
+        return linkSwitchLoadPromiseDeferred.promise;
+    }
+    
+    function loadLinkTrunkSelector() {
+        var linkTrunkLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        linkTrunkReadyPromiseDeferred.promise
+        .then(function () {             
+            if (trunkEntity && trunkEntity.LinkedToTrunkId != null) {
+                currentlyLinkedToTrunkId = trunkEntity.LinkedToTrunkId;
+                return CDRAnalysis_PSTN_TrunkAPIService.GetTrunkById(trunkEntity.LinkedToTrunkId)
+                   .then(function (response) {
+                       var payload = {
+                           selectedIds: response.SwitchId
+                       };
+                       payload.filter = { ExcludedIds: [trunkEntity.SwitchId] };
+                       linkSwitchDirectiveApi.load(payload).then(function () {
+                           var directivePayload = {
+                               selectedIds: trunkEntity != undefined ? trunkEntity.LinkedToTrunkId : undefined
+                           };
+                           directivePayload.filter = {
+                               SwitchIds: [response.SwitchId],
+                               TrunkNameFilter: null
+                           };
+                           directivePayload.excludedId = trunkId;
+                           VRUIUtilsService.callDirectiveLoad(linkTrunkDirectiveApi, directivePayload, linkTrunkLoadPromiseDeferred);
+                       });
+                       
+                   })
+                   .catch(function (error) {
+                       VRNotificationService.notifyExceptionWithClose(error, $scope);
+                   })
+                   .finally(function () {
+                       $scope.isGettingData = false;
+                   });
+            }
+            else {
+                VRUIUtilsService.callDirectiveLoad(linkTrunkDirectiveApi, undefined, linkTrunkLoadPromiseDeferred);
+            }
+        });
+        return linkTrunkLoadPromiseDeferred.promise;
+    }
     function updateTrunk() {
         var trunkObj = buildTrunkObjFromScope();
-
-        return TrunkAPIService.UpdateTrunk(trunkObj)
+        $scope.isGettingData = true;
+        return CDRAnalysis_PSTN_TrunkAPIService.UpdateTrunk(trunkObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Switch Trunk", response, "Name or Symbol")) {
                     if ($scope.onTrunkUpdated != undefined) {
@@ -183,13 +262,15 @@ function TrunkEditorController($scope, TrunkAPIService, SwitchAPIService, TrunkT
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
     }
 
     function insertTrunk() {
         var trunkObj = buildTrunkObjFromScope();
-
-        return TrunkAPIService.AddTrunk(trunkObj)
+        $scope.isGettingData = true;
+        return CDRAnalysis_PSTN_TrunkAPIService.AddTrunk(trunkObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Switch Trunk", response, "Name or Symbol")) {
                     if ($scope.onTrunkAdded != undefined)
@@ -200,6 +281,8 @@ function TrunkEditorController($scope, TrunkAPIService, SwitchAPIService, TrunkT
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isGettingData = false;
             });
     }
 
@@ -208,10 +291,10 @@ function TrunkEditorController($scope, TrunkAPIService, SwitchAPIService, TrunkT
             TrunkId: trunkId,
             Name: $scope.name,
             Symbol: $scope.symbol,
-            SwitchId: $scope.selectedSwitch.SwitchId,
-            Type: $scope.selectedType.value,
-            Direction: $scope.selectedDirection.value,
-            LinkedToTrunkId: ($scope.selectedTrunkToLinkTo != undefined) ? $scope.selectedTrunkToLinkTo.TrunkId : null
+            SwitchId: switchDirectiveApi.getSelectedIds(),
+            Type: typeDirectiveApi.getSelectedIds(),
+            Direction: directionDirectiveApi.getSelectedIds(),
+            LinkedToTrunkId: linkTrunkDirectiveApi.getSelectedIds()
         };
     }
 }

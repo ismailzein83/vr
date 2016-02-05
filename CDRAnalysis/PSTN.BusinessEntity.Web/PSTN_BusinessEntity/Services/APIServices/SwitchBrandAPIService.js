@@ -1,39 +1,47 @@
-﻿app.service("SwitchBrandAPIService", function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        GetBrands: GetBrands,
-        GetFilteredBrands: GetFilteredBrands,
-        GetBrandById: GetBrandById,
-        AddBrand: AddBrand,
-        UpdateBrand: UpdateBrand,
-        DeleteBrand: DeleteBrand
-    });
+    "use strict";
+    switchBrandAPIService.$inject = ['BaseAPIService', 'UtilsService', 'PSTN_BE_ModuleConfig'];
 
-    function GetBrands() {
-        return BaseAPIService.get("/api/SwitchBrand/GetBrands");
-    }
+    function switchBrandAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig) {
 
-    function GetFilteredBrands(input) {
-        return BaseAPIService.post("/api/SwitchBrand/GetFilteredBrands", input);
-    }
+        function GetBrands() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "SwitchBrand","GetBrands"));
+        }
 
-    function GetBrandById(brandId) {
-        return BaseAPIService.get("/api/SwitchBrand/GetBrandById", {
-            brandId: brandId
+        function GetFilteredBrands(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "SwitchBrand","GetFilteredBrands"), input);
+        }
+
+        function GetBrandById(brandId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "SwitchBrand","GetBrandById"), {
+                brandId: brandId
+            });
+        }
+
+        function AddBrand(brandObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "SwitchBrand","AddBrand"), brandObj);
+        }
+
+        function UpdateBrand(brandObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "SwitchBrand","UpdateBrand"), brandObj);
+        }
+
+        function DeleteBrand(brandId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "SwitchBrand","DeleteBrand"), {
+                brandId: brandId
+            });
+        }
+        return ({
+            GetBrands: GetBrands,
+            GetFilteredBrands: GetFilteredBrands,
+            GetBrandById: GetBrandById,
+            AddBrand: AddBrand,
+            UpdateBrand: UpdateBrand,
+            DeleteBrand: DeleteBrand
         });
     }
 
-    function AddBrand(brandObj) {
-        return BaseAPIService.post("/api/SwitchBrand/AddBrand", brandObj);
-    }
+    appControllers.service('CDRAnalysis_PSTN_SwitchBrandAPIService', switchBrandAPIService);
 
-    function UpdateBrand(brandObj) {
-        return BaseAPIService.post("/api/SwitchBrand/UpdateBrand", brandObj);
-    }
-
-    function DeleteBrand(brandId) {
-        return BaseAPIService.get("/api/SwitchBrand/DeleteBrand", {
-            brandId: brandId
-        });
-    }
-});
+})(appControllers);

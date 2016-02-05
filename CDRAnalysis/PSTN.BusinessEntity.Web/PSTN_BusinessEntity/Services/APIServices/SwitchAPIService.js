@@ -1,45 +1,58 @@
-﻿app.service("SwitchAPIService", function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    return ({
-        GetFilteredSwitches: GetFilteredSwitches,
-        GetSwitchById: GetSwitchById,
-        GetSwitches: GetSwitches,
-        GetSwitchAssignedDataSources: GetSwitchAssignedDataSources,
-        UpdateSwitch: UpdateSwitch,
-        AddSwitch: AddSwitch,
-        DeleteSwitch: DeleteSwitch
-     
-    });
+    "use strict";
+    switchAPIService.$inject = ['BaseAPIService', 'UtilsService', 'PSTN_BE_ModuleConfig'];
 
-    function GetFilteredSwitches(input) {
-        return BaseAPIService.post("/api/Switch/GetFilteredSwitches", input);
-    }
+    function switchAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig) {
 
-    function GetSwitchById(switchId) {
-        return BaseAPIService.get("/api/Switch/GetSwitchById", {
-            switchId: switchId
+
+        function GetFilteredSwitches(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Switch","GetFilteredSwitches"), input);
+        }
+
+        function GetSwitchById(switchId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Switch","GetSwitchById"), {
+                switchId: switchId
+            });
+        }
+        function GetSwitchesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Switch","GetSwitchesInfo"), {
+                serializedFilter: filter
+            });
+        }
+        function GetSwitches() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Switch","GetSwitches"));
+        }
+
+        function GetSwitchAssignedDataSources() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Switch","GetSwitchAssignedDataSources"));
+        }
+
+        function UpdateSwitch(switchObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Switch","UpdateSwitch"), switchObj);
+        }
+
+        function AddSwitch(switchObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Switch","AddSwitch"), switchObj);
+        }
+        function DeleteSwitch(switchId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Switch","DeleteSwitch"), {
+                switchId: switchId
+            });
+        }
+        return ({
+            GetFilteredSwitches: GetFilteredSwitches,
+            GetSwitchById: GetSwitchById,
+            GetSwitches: GetSwitches,
+            GetSwitchesInfo:GetSwitchesInfo,
+            GetSwitchAssignedDataSources: GetSwitchAssignedDataSources,
+            UpdateSwitch: UpdateSwitch,
+            AddSwitch: AddSwitch,
+            DeleteSwitch: DeleteSwitch
+
         });
     }
 
-    function GetSwitches() {
-        return BaseAPIService.get("/api/Switch/GetSwitches");
-    }
+    appControllers.service('CDRAnalysis_PSTN_SwitchAPIService', switchAPIService);
 
-    function GetSwitchAssignedDataSources() {
-        return BaseAPIService.get("/api/Switch/GetSwitchAssignedDataSources");
-    }
-
-    function UpdateSwitch(switchObj) {
-        return BaseAPIService.post("/api/Switch/UpdateSwitch", switchObj);
-    }
-
-    function AddSwitch(switchObj) {
-        return BaseAPIService.post("/api/Switch/AddSwitch", switchObj);
-    }
-
-    function DeleteSwitch(switchId) {
-        return BaseAPIService.get("/api/Switch/DeleteSwitch", {
-            switchId: switchId
-        });
-    }
-});
+})(appControllers);

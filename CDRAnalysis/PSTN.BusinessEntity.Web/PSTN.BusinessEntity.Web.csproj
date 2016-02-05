@@ -64,9 +64,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -185,10 +182,25 @@
     <Content Include="PSTN_BusinessEntity\Constants\PhoneNumberTypeEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\PSTN_BE_ModuleConfig.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkDirectionEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Constants\LinkedToTrunkEnum.js" />
     <Content Include="PSTN_BusinessEntity\Constants\TrunkTypeEnum.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\cdranalysis-pstn-ruletype-selector.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\cdranalysis-pstn-trunkdirection-selector.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\cdranalysis-pstn-trunklink-selector.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\cdranalysis-pstn-numbertype-selector.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\cdranalysis-pstn-trunktype-selector.js" />
     <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Normal\Templates\StagingToNormalCDRManualTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-pstnbe-stagingtonormalcdr-manual.js" />
     <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-pstnbe-stagingtonormalcdr.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\SwitchBrand\cdranalysis-pstn-switchbrand-grid.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\SwitchBrand\cdranalysis-pstn-switchbrand-selector.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\SwitchBrand\Templates\SwitchBrandGridTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\Switch\cdranalysis-pstn-switch-selector.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\Switch\cdranalysis-pstn-switch-grid.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\Switch\Templates\SwitchGridTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\Trunk\cdranalysis-pstn-trunk-selector.js" />
+    <Content Include="PSTN_BusinessEntity\Directives\Trunk\Templates\TrunkGridTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\Trunk\cdranalysis-pstn-trunk-grid.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\ReplaceStringDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SetAreaPrefixDirectiveTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\SetAreaDirectiveTemplate.html" />
@@ -202,13 +214,17 @@
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-setarea-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-trunkgrid-directive.js" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-substring-directive.js" />
+    <Content Include="PSTN_BusinessEntity\ModuleInitialization.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\NormalizationRuleAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\TrunkAPIService.js" />
     <Content Include="PSTN_BusinessEntity\Services\APIServices\SwitchBrandAPIService.js" />
+    <Content Include="PSTN_BusinessEntity\Services\SwitchBrandService.js" />
+    <Content Include="PSTN_BusinessEntity\Services\TrunkService.js" />
     <Content Include="PSTN_BusinessEntity\Services\PSTN_BE_Service.js" />
     <Content Include="PSTN_BusinessEntity\Directives\Templates\NormalizationRuleGridTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\vr-pstn-be-normalizationrulegrid-directive.js" />
+    <Content Include="PSTN_BusinessEntity\Services\SwitchService.js" />
     <Content Include="PSTN_BusinessEntity\Views\Normalization\NormalizationRuleEditor.html" />
     <Content Include="PSTN_BusinessEntity\Views\Normalization\NormalizationRuleEditorController.js" />
     <Content Include="PSTN_BusinessEntity\Views\Normalization\NormalizationRuleManagementController.js" />

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAPIService", "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNotificationService",
-    function (PSTN_BE_Service, CDRAnalysis_PSTN_TrunkAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNotificationService) {
+app.directive("cdranalysisPstnTrunkGrid", ["CDRAnalysis_PSTN_TrunkService", "CDRAnalysis_PSTN_TrunkAPIService", "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNotificationService",
+    function (CDRAnalysis_PSTN_TrunkService, CDRAnalysis_PSTN_TrunkAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNotificationService) {
     
     var directiveDefinitionObj = {
 
@@ -13,23 +13,23 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
             var ctrl = this;
 
             var trunkGrid = new TrunkGrid($scope, ctrl);
-            trunkGrid.defineScope();
+            trunkGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
            
         },
-        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/Templates/TrunkGridTemplate.html"
+        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/Trunk/Templates/TrunkGridTemplate.html"
 
     };
 
     function TrunkGrid($scope, ctrl) {
 
         var gridAPI;
-        this.defineScope = defineScope;
+        this.initializeController = initializeController;
 
-        function defineScope()
+        function initializeController()
         {
             $scope.trunks = [];
 
@@ -42,10 +42,9 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
                 function getDirectiveAPI() {
                     var directiveAPI = {};
 
-                    directiveAPI.retrieveData = function (query) {
+                    directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
                     }
-
                     directiveAPI.onTrunkAdded = function (trunkObj) {
                         setTrunkDescriptions(trunkObj);
                         gridAPI.itemAdded(trunkObj);
@@ -83,7 +82,18 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
 
             defineMenuActions();
         }
-
+        function defineMenuActions() {
+            $scope.gridMenuActions = [
+               {
+                   name: "Edit",
+                   clicked: editTrunk
+               },
+               {
+                   name: "Delete",
+                   clicked: deleteTrunk
+               }
+            ];
+        }
         function editTrunk(gridObj) {
 
             var onTrunkUpdated = function (firstTrunkObj, linkedToFirstTrunkId, secondTrunkId) {
@@ -102,17 +112,15 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
                 updateDataItem(secondTrunkId, firstTrunkObj.Entity.TrunkId, firstTrunkObj.Entity.Name);
             }
 
-            PSTN_BE_Service.editTrunk(gridObj, onTrunkUpdated);
+            CDRAnalysis_PSTN_TrunkService.editTrunk(gridObj.Entity.TrunkId, onTrunkUpdated);
         }               
 
         function deleteTrunk(gridObj) {
-
             var onTrunkDeleted = function (deletedTrunkObj, linkedToTrunkId) {
                 gridAPI.itemDeleted(deletedTrunkObj);
                 updateDataItem(linkedToTrunkId, null, null);
             }
-
-            PSTN_BE_Service.deleteTrunk(gridObj, onTrunkDeleted);
+            CDRAnalysis_PSTN_TrunkService.deleteTrunk(gridObj, onTrunkDeleted);
         }
         
         function updateDataItem(dataItemId, linkedToTrunkId, linkedToTrunkName) {
@@ -144,21 +152,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
             var direction = UtilsService.getEnum(TrunkDirectionEnum, "value", trunkObj.Entity.Direction);
             trunkObj.DirectionDescription = direction.description;
         }
-
-        function defineMenuActions() {
-            $scope.gridMenuActions = [
-               {
-                   name: "Edit",
-                   clicked: editTrunk
-               },
-               {
-                   name: "Delete",
-                   clicked: deleteTrunk
-               }
-            ];
-        }
     }
-
     return directiveDefinitionObj;
 
 }]);

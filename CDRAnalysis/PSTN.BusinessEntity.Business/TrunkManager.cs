@@ -43,7 +43,7 @@ namespace PSTN.BusinessEntity.Business
 
 
                  &&
-                 ((input.Query.IsLinkedToTrunk == null) || (input.Query.IsLinkedToTrunk == true && trunkObject.LinkedToTrunkId != null) || (input.Query.IsLinkedToTrunk == false && trunkObject.LinkedToTrunkId == null));
+                 ((input.Query.IsLinkedToTrunk == null) || (input.Query.IsLinkedToTrunk == true ? trunkObject.LinkedToTrunkId != null : trunkObject.LinkedToTrunkId == null ) );
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTrunks.ToBigResult(input, filterExpression, TrunkDetailMapper));
         }
@@ -52,6 +52,19 @@ namespace PSTN.BusinessEntity.Business
         {
             var trunks = GetCachedTrunks();
             return trunks.GetRecord(trunkId);
+        }
+        public IEnumerable<TrunkInfo> GetTrunksInfo(TrunkFilter filter)
+        {
+            var trunks = GetCachedTrunks();
+            Func<Trunk, bool> filterPredicate = null;
+
+            if (filter != null)
+            {
+                filterPredicate = (t) =>(filter.SwitchIds == null || filter.SwitchIds.Contains(t.SwitchId));
+            }
+
+            return trunks.MapRecords(TrunkInfoMapper, filterPredicate);
+
         }
 
         public int? GetTrunkIdBySymbol(string symbol)

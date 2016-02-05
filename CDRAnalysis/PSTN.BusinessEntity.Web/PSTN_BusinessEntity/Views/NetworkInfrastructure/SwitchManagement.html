@@ -7,19 +7,13 @@
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-select label="Brand"
-                               datasource="brands"
-                               selectedvalues="selectedBrands"
-                               datavaluefield="BrandId"
-                               datatextfield="Name"
-                               entityname="Brand"
-                               ismultipleselection>
-                    </vr-select>
+                    <cdranalysis-pstn-switchbrand-selector ismultipleselection on-ready="onSwicthBrandSelectorReady"></cdranalysis-pstn-switchbrand-selector>
                 </vr-columns>
 
                 <vr-columns width="normal">
                     <vr-textbox label="Area Code" value="areaCode" type="number" maxlength="7"></vr-textbox>
                 </vr-columns>
+
             </vr-row>
         </div>
         <vr-row removeline>
@@ -35,23 +29,7 @@
     <div>
         <vr-row>
             <vr-columns width="fullrow">
-
-                <vr-datagrid datasource="switches"
-                             on-ready="gridReady"
-                             dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'PagingOnScroll'"
-                             menuactions="gridMenuActions"
-                             idfield="Entity.SwitchId">
-
-                    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Brand'" field="'BrandName'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Area Code'" field="'Entity.AreaCode'" type="'Text'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Time Offset'" field="'Entity.TimeOffset'" type="'Text'"></vr-datagridcolumn>
-
-                    <vr-datagridexpandablerow>
-                        <vr-pstn-be-trunkgrid on-ready="dataItem.extensionObj.onTrunkGridReady"></vr-pstn-be-trunkgrid>
-                    </vr-datagridexpandablerow>
-                </vr-datagrid>
+                <cdranalysis-pstn-switch-grid on-ready="onSwitchGridReady"></cdranalysis-pstn-switch-grid>
             </vr-columns>
         </vr-row>
     </div>

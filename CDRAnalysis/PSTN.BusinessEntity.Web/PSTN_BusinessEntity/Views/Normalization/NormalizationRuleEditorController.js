@@ -2,9 +2,9 @@
 
     "use strict";
 
-    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
+    NormalizationRuleEditorController.$inject = ["$scope", "NormalizationRuleAPIService", "CDRAnalysis_PSTN_SwitchAPIService", "CDRAnalysis_PSTN_TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRUIUtilsService", "VRNavigationService", "VRNotificationService"];
 
-    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, CDRAnalysis_PSTN_SwitchAPIService, CDRAnalysis_PSTN_TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var editMode;
 
@@ -81,7 +81,7 @@
                     TrunkNameFilter: trunkNameFilter
                 };
 
-                return TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
+                return CDRAnalysis_PSTN_TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
             }
 
             $scope.validateDirectiveData = function () {
@@ -140,7 +140,7 @@
         }
 
         function loadSwitches() {
-            return SwitchAPIService.GetSwitches()
+            return CDRAnalysis_PSTN_SwitchAPIService.GetSwitches()
                 .then(function (responseArray) {
                     angular.forEach(responseArray, function (item) {
                         $scope.switches.push(item);
@@ -149,7 +149,7 @@
         }
 
         function loadTrunks() {
-            return TrunkAPIService.GetTrunks()
+            return CDRAnalysis_PSTN_TrunkAPIService.GetTrunks()
                 .then(function (responseArray) {
                     angular.forEach(responseArray, function (item) {
                         $scope.trunks.push(item);

@@ -20,16 +20,7 @@
     <div>
         <vr-row>
             <vr-columns width="fullrow">
-
-                <vr-datagrid datasource="brands"
-                             on-ready="onGridReady"
-                             dataretrievalfunction="dataRetrievalFunction"
-                             pagingtype="'PagingOnScroll'"
-                             menuactions="gridMenuActions"
-                             idfield="BrandId">
-
-                    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
-                </vr-datagrid>
+                <cdranalysis-pstn-switchbrand-grid on-ready="onGridReady"></cdranalysis-pstn-switchbrand-grid>
             </vr-columns>
         </vr-row>
     </div>

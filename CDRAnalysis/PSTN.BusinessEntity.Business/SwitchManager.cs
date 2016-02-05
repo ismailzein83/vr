@@ -35,6 +35,21 @@ namespace PSTN.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper));
         }
+
+        public IEnumerable<SwitchInfo> GetSwitchesInfo(SwitchFilter filter)
+        {
+            var switches = GetCachedSwitches();
+            Func<Switch, bool> filterPredicate = null;
+
+            if (filter != null)
+            {
+                filterPredicate = (s) => (filter.ExcludedIds == null || !filter.ExcludedIds.Contains(s.SwitchId));
+            }
+
+            return switches.MapRecords(SwitchInfoMapper, filterPredicate);
+
+        }
+
         
         public Switch GetSwitchById(int switchId)
         {
@@ -158,9 +173,9 @@ namespace PSTN.BusinessEntity.Business
         private SwitchDetail SwitchDetailMapper(Switch switchObject)
         {
             SwitchDetail switchDetail = new SwitchDetail();
-            SwitchBrandManager manager = new SwitchBrandManager();
+            SwitchBrand brand = new SwitchBrandManager().GetSwitchBrandById(switchObject.BrandId);
             switchDetail.Entity = switchObject;
-            switchDetail.BrandName = manager.GetSwitchBrandById(switchObject.BrandId).Name;
+            switchDetail.BrandName = (brand!=null)? brand.Name: string.Empty;
 
             return switchDetail;
         }

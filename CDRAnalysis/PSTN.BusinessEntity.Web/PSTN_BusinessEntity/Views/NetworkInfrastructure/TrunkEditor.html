@@ -1,88 +1,43 @@
 ﻿<div vr-modalcontent ng-controller="PSTN_BusinessEntity_TrunkEditorController" vr-loader="isGettingData">
-
     <vr-modalbody>
         <vr-form name="formSwitchTrunkEditor">
-
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-section title="Trunk Info">
                         <vr-columns width="fullrow">
                             <vr-textbox label="Name" value="name" isrequired></vr-textbox>
                         </vr-columns>
-
                         <vr-columns width="1/2row">
                             <vr-textbox label="Symbol" value="symbol" isrequired></vr-textbox>
                         </vr-columns>
-
                         <vr-columns width="1/2row">
                             <div vr-disabled="disableSwitchMenu">
-                                <vr-select label="Switch"
-                                           datasource="switches"
-                                           selectedvalues="selectedSwitch"
-                                           datavaluefield="SwitchId"
-                                           datatextfield="Name"
-                                           onselectionchanged="onSwitchChanged"
-                                           entityname="Switch"
-                                           isrequired>
-                                </vr-select>
+                                <cdranalysis-pstn-switch-selector isrequired="true" onselectionchanged="onSwitchChanged" selectedvalues="selectedSwitch" on-ready="onReadySwicth"></cdranalysis-pstn-switch-selector>
                             </div>
                         </vr-columns>
-
                         <vr-columns width="1/2row">
-                            <vr-select label="Type"
-                                       datasource="types"
-                                       selectedvalues="selectedType"
-                                       datavaluefield="value"
-                                       datatextfield="description"
-                                       entityname="Type"
-                                       isrequired>
-                            </vr-select>
+                            <cdranalysis-pstn-trunktype-selector isrequired="true" on-ready="onReadyTrunkType"></cdranalysis-pstn-trunktype-selector>
                         </vr-columns>
-
                         <vr-columns width="1/2row">
-                            <vr-select label="Direction"
-                                       datasource="directions"
-                                       selectedvalues="selectedDirection"
-                                       datavaluefield="value"
-                                       datatextfield="description"
-                                       entityname="Direction"
-                                       isrequired>
-                            </vr-select>
+                            <cdranalysis-pstn-trunkdirection-selector isrequired="true" on-ready="onReadyTrunkDirection" selectedvalues="selectedDirection"></cdranalysis-pstn-trunkdirection-selector>
                         </vr-columns>
                     </vr-section>
                 </vr-columns>
             </vr-row>
-
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-section title="Link To Trunk">
                         <vr-columns width="1/2row">
-                            <vr-select label="Switch"
-                                       datasource="switchesToLinkTo"
-                                       selectedvalues="selectedSwitchToLinkTo"
-                                       datavaluefield="SwitchId"
-                                       datatextfield="Name"
-                                       onselectionchanged="onSwitchToLinkToChanged"
-                                       entityname="Switch">
-                            </vr-select>
+                            <cdranalysis-pstn-switch-selector onselectionchanged="onSwitchToLinkToChanged" selectedvalues="selectedSwitchToLinkTo" on-ready="onReadyLinkSwicth"></cdranalysis-pstn-switch-selector>
                         </vr-columns>
-
                         <vr-columns width="1/2row">
-                            <vr-select label="Linked-To Trunk"
-                                       datasource="trunksToLinkTo"
-                                       selectedvalues="selectedTrunkToLinkTo"
-                                       datavaluefield="TrunkId"
-                                       datatextfield="Name"
-                                       entityname="Trunk">
-                            </vr-select>
+                            <cdranalysis-pstn-trunk-selector selectedvalues="selectedTrunkToLinkTo" on-ready="onReadyLinkTrunk"></cdranalysis-pstn-trunk-selector>
                         </vr-columns>
                     </vr-section>
                 </vr-columns>
             </vr-row>
-
         </vr-form>
     </vr-modalbody>
-
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">

@@ -1,14 +1,16 @@
-﻿SwitchEditorController.$inject = ["$scope", "SwitchAPIService", "SwitchBrandAPIService", "VR_Integration_DataSourceAPIService", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", 'VRUIUtilsService'];
+﻿(function (appControllers) {
 
-function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService, VR_Integration_DataSourceAPIService, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRUIUtilsService) {
+SwitchEditorController.$inject = ["$scope", "CDRAnalysis_PSTN_SwitchAPIService", "UtilsService", "VRNavigationService", "VRNotificationService", 'VRUIUtilsService'];
+
+function SwitchEditorController($scope, CDRAnalysis_PSTN_SwitchAPIService,  UtilsService, VRNavigationService, VRNotificationService,  VRUIUtilsService) {
 
     var switchId;
     var isEditMode;
     var switchEntity;
-    var allExceptDataSources;
     var dataSourceDirectiveAPI;
     var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+    var brandDirectiveAPI;
+    var brandReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     loadParameters();
     defineScope();
@@ -25,14 +27,17 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
 
     function defineScope() {
 
-        $scope.brands = [];
         $scope.timeOffset = (!isEditMode) ? "00.00:00:00" : null;
-        $scope.dataSources = [];
 
-        $scope.onDataSourceSelectorReady =function(api)
+        $scope.onDataSourceSelectorReady = function(api)
         {
             dataSourceDirectiveAPI = api;
             dataSourceReadyPromiseDeferred.resolve();
+        }
+
+        $scope.onSwicthBrandSelectorReady = function (api) {
+            brandDirectiveAPI = api;
+            brandReadyPromiseDeferred.resolve();
         }
 
         $scope.saveSwitch = function () {
@@ -75,135 +80,108 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
             return "Format: DD.HH:MM:SS";
         }
 
-        $scope.addBrand = function () {
-            var settings = {};
-
-            settings.onScopeReady = function (modalScope) {
-                modalScope.title = UtilsService.buildTitleForAddEditor("Switch Brand");;
-
-
-                modalScope.onBrandAdded = function (brandObj) {
-                    $scope.brands.push(brandObj);
-                    $scope.selectedBrand = brandObj;
-                };
-            };
-
-            VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandEditor.html", null, settings);
-        }
-
-        $scope.onDataSourceChanged = function () {
-        }
     }
 
     function load() {
         $scope.isLoading = true;
         if (isEditMode) {
             GetSwitch().then(function () {
-                loadAllControls();
+                loadAllControls().finally(function () {
+                    switchEntity = undefined;
+                });
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
             })
         }
         else {
-            loadSwitchAssignedDataSources().then(function () {
-                loadAllControls();
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isLoading = false;
-            })
+            loadAllControls();
         }
        
     }
 
-    function loadAllControls() {
-      return  UtilsService.waitMultipleAsyncOperations([loadBrands, loadDataSourceSelector]).then(function () {
-                      loadFilterBySection();
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.isLoading = false;
-            }).finally(function (error) {
-                switchEntity = undefined;
-                $scope.isLoading = false;
-            });
-      
-    }
-
-    function GetSwitch()
-    {
-        return SwitchAPIService.GetSwitchById(switchId).then(function (response) {
+    function GetSwitch() {
+        return CDRAnalysis_PSTN_SwitchAPIService.GetSwitchById(switchId).then(function (response) {
             switchEntity = response;
         });
     }
 
-    function loadBrands() {
-        return SwitchBrandAPIService.GetBrands()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.brands.push(item);
-                });
-            });
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSwitchBrandSelector, loadDataSourceSelector]).catch(function (error) {
+            VRNotificationService.notifyExceptionWithClose(error, $scope);
+        }).finally(function (error) {
+            switchEntity = undefined;
+            $scope.isLoading = false;
+        });
+      
     }
 
-    function loadDataSourceSelector()
-    {
+    function setTitle() {
+        if (isEditMode && switchEntity != undefined)
+            $scope.title = UtilsService.buildTitleForUpdateEditor(switchEntity.Name, "Switch");
+        else
+            $scope.title = UtilsService.buildTitleForAddEditor("Switch");
+    }
+
+    function loadStaticData() {
+
+        if (switchEntity == undefined)
+            return;
+
+        $scope.name = switchEntity.Name;
+        $scope.areaCode = switchEntity.AreaCode;
+        $scope.timeOffset = switchEntity.TimeOffset;
+    }
+
+    function loadSwitchBrandSelector() {
+        var brandLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        brandReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {
+                    selectedIds: switchEntity != undefined ? switchEntity.BrandId : undefined,
+                };
+                VRUIUtilsService.callDirectiveLoad(brandDirectiveAPI, directivePayload, brandLoadPromiseDeferred);
+            });
+        return brandLoadPromiseDeferred.promise;
+    }
+
+    function loadDataSourceSelector(){
         var dataSourceLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
         dataSourceReadyPromiseDeferred.promise
             .then(function () {
-
                 var directivePayload = {
                     selectedIds: switchEntity != undefined ? switchEntity.DataSourceId : undefined,
-                    filter: allExceptDataSources != undefined ? { AllExcept: allExceptDataSources } : null
+                    filter:  null
                 };
-                periodReadyPromiseDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(dataSourceDirectiveAPI, directivePayload, dataSourceLoadPromiseDeferred);
             });
         return dataSourceLoadPromiseDeferred.promise;
     }
-
-    function loadSwitchAssignedDataSources() {
-
-        return SwitchAPIService.GetSwitchAssignedDataSources()
-            .then(function (response) {
-                console.log(response);
-                allExceptDataSources=response;
-            });
-    }
-
-    function loadFilterBySection() {
-        if(switchEntity !=undefined)
-        {
-            $scope.name = switchEntity.Name;
-            $scope.selectedBrand = UtilsService.getItemByVal($scope.brands, switchEntity.BrandId, "BrandId");
-            $scope.areaCode = switchEntity.AreaCode;
-            $scope.timeOffset = switchEntity.TimeOffset;
-            $scope.selectedDataSource = UtilsService.getItemByVal($scope.dataSources, switchEntity.DataSourceId, "DataSourceID");
-        }
-       
-    }
-
+   
     function updateSwitch() {
         var switchObj = buildSwitchObjFromScope();
-        return SwitchAPIService.UpdateSwitch(switchObj)
+        $scope.isLoading = true;
+        return CDRAnalysis_PSTN_SwitchAPIService.UpdateSwitch(switchObj)
             .then(function (response) {
-                $scope.isLoading = false;
                 if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                     if ($scope.onSwitchUpdated != undefined)
                         $scope.onSwitchUpdated(response.UpdatedObject);
-
                     $scope.modalContext.closeModal();
                 }
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+            })
+            .finally(function (error) {
+                $scope.isLoading = false;
             });
     }
 
     function insertSwitch() {
         var switchObj = buildSwitchObjFromScope();
-
-        return SwitchAPIService.AddSwitch(switchObj)
+        $scope.isLoading = true;
+        return CDRAnalysis_PSTN_SwitchAPIService.AddSwitch(switchObj)
             .then(function (response) {
                 $scope.isLoading = false;
                 if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
@@ -215,18 +193,20 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            });
+            })
+            .finally(function (error) {
+                $scope.isLoading = false;
+            });;
     }
 
     function buildSwitchObjFromScope() {
-
         return {
             SwitchId: switchId,
             Name: $scope.name,
-            BrandId: ($scope.selectedBrand != undefined) ? $scope.selectedBrand.BrandId : null,
+            BrandId: brandDirectiveAPI.getSelectedIds(),
             AreaCode: $scope.areaCode,
             TimeOffset: $scope.timeOffset,
-            DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceID : null
+            DataSourceId: dataSourceDirectiveAPI.getSelectedIds()
         };
     }
 
@@ -252,6 +232,9 @@ function SwitchEditorController($scope, SwitchAPIService, SwitchBrandAPIService,
 
         return false;
     }
+
 }
 
 appControllers.controller("PSTN_BusinessEntity_SwitchEditorController", SwitchEditorController);
+
+})(appControllers);

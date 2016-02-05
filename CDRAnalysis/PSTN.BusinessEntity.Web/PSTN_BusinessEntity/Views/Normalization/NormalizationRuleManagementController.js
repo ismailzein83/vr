@@ -1,6 +1,6 @@
-﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "ValuesAPIService", "VRNotificationService"];
+﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "CDRAnalysis_PSTN_SwitchAPIService", "CDRAnalysis_PSTN_TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "ValuesAPIService", "VRNotificationService"];
 
-function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAPIService, TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, ValuesAPIService, VRNotificationService) {
+function NormalizationRuleManagementController($scope, PSTN_BE_Service, CDRAnalysis_PSTN_SwitchAPIService, CDRAnalysis_PSTN_TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, ValuesAPIService, VRNotificationService) {
 
     var gridAPI;
 
@@ -54,7 +54,7 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
     }
 
     function loadSwitches() {
-        return SwitchAPIService.GetSwitches()
+        return CDRAnalysis_PSTN_SwitchAPIService.GetSwitches()
             .then(function (responseArray) {
                 angular.forEach(responseArray, function (item) {
                     $scope.switches.push(item);
@@ -63,7 +63,7 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, SwitchAP
     }
 
     function loadTrunks() {
-        return TrunkAPIService.GetTrunks()
+        return CDRAnalysis_PSTN_TrunkAPIService.GetTrunks()
             .then(function (responseArray) {
                 angular.forEach(responseArray, function (item) {
                     $scope.trunks.push(item);

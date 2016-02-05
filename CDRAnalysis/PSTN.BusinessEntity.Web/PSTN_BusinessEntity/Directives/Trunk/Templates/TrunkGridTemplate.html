@@ -1,0 +1,15 @@
+﻿<vr-datagrid datasource="trunks"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.TrunkId">
+
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Symbol'" field="'Entity.Symbol'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Switch'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type'" field="'TypeDescription'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Direction'" field="'DirectionDescription'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Linked-To Trunk'" field="'LinkedToTrunkName'" type="'Text'"></vr-datagridcolumn>
+
+</vr-datagrid>

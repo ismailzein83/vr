@@ -1,83 +1,116 @@
-﻿TrunkManagementController.$inject = ["$scope", "PSTN_BE_Service", "SwitchAPIService", "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNotificationService", "VRModalService"];
+﻿(function (appControllers) {
 
-function TrunkManagementController($scope, PSTN_BE_Service, SwitchAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNotificationService, VRModalService) {
+ "use strict";
+TrunkManagementController.$inject = ["$scope", "CDRAnalysis_PSTN_TrunkService", "UtilsService", "VRNotificationService",  "VRUIUtilsService"];
+
+function TrunkManagementController($scope, CDRAnalysis_PSTN_TrunkService, UtilsService, VRNotificationService, VRUIUtilsService) {
     
     var trunkGridAPI;
+    var switchDirectiveApi;
+    var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var typeDirectiveApi;
+    var typeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var directionDirectiveApi;
+    var directionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var linkDirectiveApi;
+    var linkReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     defineScope();
     load();
 
     function defineScope() {
-
-        // filter vars
-        $scope.name = undefined;
-        $scope.symbol = undefined;
-        $scope.switches = [];
-        $scope.selectedSwitches = [];
-        $scope.types = UtilsService.getArrayEnum(TrunkTypeEnum);
-        $scope.selectedTypes = [];
-        $scope.directions = UtilsService.getArrayEnum(TrunkDirectionEnum);
-        $scope.selectedDirections = [];
-        $scope.linkedToTrunkObjs = [
-            { value: true, description: "Linked" },
-            { value: false, description: "Unlinked" }
-        ];
-        $scope.selectedLinkedToTrunkObjs = [];
-
-        // filter functions
+       
         $scope.searchClicked = function () {
-            if (trunkGridAPI != undefined) {
-                var query = getFilterObj();
-                trunkGridAPI.retrieveData(query);
-            }
+            var query = getFilterObj();
+            trunkGridAPI.loadGrid(query);
         }
 
         $scope.addTrunk = function () {
 
             var onTrunkAdded = function (trunkObj) {
-                if (trunkGridAPI != undefined)
                     trunkGridAPI.onTrunkAdded(trunkObj);
             }
-
-            PSTN_BE_Service.addTrunk(null, onTrunkAdded);
+            CDRAnalysis_PSTN_TrunkService.addTrunk(onTrunkAdded);
         }
-
+       
         // directive functions
         $scope.onTrunkGridReady = function (api) {
             trunkGridAPI = api;
-            trunkGridAPI.retrieveData({});
+            trunkGridAPI.loadGrid({});
         }
+
+        $scope.onReadySwicth = function (api) {
+            switchDirectiveApi = api;
+            switchReadyPromiseDeferred.resolve();
+        }
+        $scope.onReadyTrunkType = function (api) {
+            typeDirectiveApi = api;
+            typeReadyPromiseDeferred.resolve();
+        }
+        $scope.onReadyTrunkDirection = function (api) {
+            directionDirectiveApi = api;
+            directionReadyPromiseDeferred.resolve();
+        }
+
+        $scope.onReadyTrunkLink = function (api) {
+            linkDirectiveApi = api;
+            linkReadyPromiseDeferred.resolve();
+        }
+        
     }
 
     function load() {
-
-        loadFilters().then(function () {
-            setFiltersToDefaultValues();
-
-            if (trunkGridAPI != undefined)
-                trunkGridAPI.retrieveData(getFilterObj());
-        });
-    }
-
-    function loadFilters() {
-
         $scope.isLoadingFilters = true;
-
-        return SwitchAPIService.GetSwitches()
-            .then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.switches.push(item);
-                });
-            })
-            .catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            })
-            .finally(function () {
-                $scope.isLoadingFilters = false;
-            });
+        loadAllControls();
     }
 
-    function setFiltersToDefaultValues() {
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([loadSwitchSelector, loadTypeSelector, loadDirectionSelector, loadLinkSelector])
+           .catch(function (error) {
+               VRNotificationService.notifyExceptionWithClose(error, $scope);
+           })
+          .finally(function () {
+              $scope.isLoadingFilters = false;
+          });
+    }
+    function loadSwitchSelector() {
+        var switchLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        switchReadyPromiseDeferred.promise
+            .then(function () {
+                var directivePayload = {};
+
+                VRUIUtilsService.callDirectiveLoad(switchDirectiveApi, directivePayload, switchLoadPromiseDeferred);
+            });
+        return switchLoadPromiseDeferred.promise;
+    }
+    function loadTypeSelector() {
+        var typeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        typeReadyPromiseDeferred.promise.then(function () {
+            var directivePayload = {};
+            VRUIUtilsService.callDirectiveLoad(typeDirectiveApi, directivePayload, typeLoadPromiseDeferred);
+        });
+        return typeLoadPromiseDeferred.promise;
+    }
+    function loadDirectionSelector() {
+        var directionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        directionReadyPromiseDeferred.promise.then(function () {
+            var directivePayload = {};
+            VRUIUtilsService.callDirectiveLoad(directionDirectiveApi, directivePayload, directionLoadPromiseDeferred);
+        });
+        return directionLoadPromiseDeferred.promise;
+    }
+    function loadLinkSelector() {
+
+        var linkLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        linkReadyPromiseDeferred.promise.then(function () {
+            var directivePayload = {};
+            VRUIUtilsService.callDirectiveLoad(linkDirectiveApi, directivePayload, linkLoadPromiseDeferred);
+        });
+        return linkLoadPromiseDeferred.promise;
 
     }
 
@@ -85,12 +118,13 @@ function TrunkManagementController($scope, PSTN_BE_Service, SwitchAPIService, Tr
         return {
             Name: $scope.name,
             Symbol: $scope.symbol,
-            SelectedSwitchIds: UtilsService.getPropValuesFromArray($scope.selectedSwitches, "SwitchId"),
-            SelectedTypes: UtilsService.getPropValuesFromArray($scope.selectedTypes, "value"),
-            SelectedDirections: UtilsService.getPropValuesFromArray($scope.selectedDirections, "value"),
+            SelectedSwitchIds: switchDirectiveApi.getSelectedIds(),
+            SelectedTypes:typeDirectiveApi.getSelectedIds(),
+            SelectedDirections: directionDirectiveApi.getSelectedIds(), 
             IsLinkedToTrunk: ($scope.selectedLinkedToTrunkObjs.length == 1) ? $scope.selectedLinkedToTrunkObjs[0].value : null
         };
     }
 }
 
 appControllers.controller("PSTN_BusinessEntity_TrunkManagementController", TrunkManagementController);
+})(appControllers);

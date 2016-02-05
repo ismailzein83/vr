@@ -1,6 +1,9 @@
-﻿SwitchBrandEditorController.$inject = ["$scope", "SwitchBrandAPIService", "VRNavigationService", "VRNotificationService", "VRModalService"];
+﻿(function (appControllers) {
 
-function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigationService, VRNotificationService, VRModalService) {
+    "use strict";
+    SwitchBrandEditorController.$inject = ["$scope", "CDRAnalysis_PSTN_SwitchBrandAPIService", "VRNavigationService", "VRNotificationService", "UtilsService"];
+
+    function SwitchBrandEditorController($scope, CDRAnalysis_PSTN_SwitchBrandAPIService, VRNavigationService, VRNotificationService, UtilsService) {
 
     var brandId;
     var brandEntity;
@@ -20,7 +23,6 @@ function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigation
     }
 
     function defineScope() {
-
         $scope.saveBrand = function () {
             $scope.isLoading = true;
             if (isEditMode)
@@ -28,7 +30,6 @@ function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigation
             else
                 return insertBrand();
         }
-
         $scope.close = function () {
             $scope.modalContext.closeModal()
         }
@@ -38,71 +39,88 @@ function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigation
         $scope.isLoading = true;
         if (isEditMode) {
             GetBrand().then(function () {
-                loadAllControls();
-
-            }).catch(function (error) {
+                loadAllControls().finally(function () {
+                    brandEntity = undefined;
+                }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
-                })
+                });
+            });
         }
         else {
             loadAllControls();
         }
              
-
     }
 
-    function loadAllControls() {
-        loadFilterBySection();
-        brandEntity = undefined;
-        $scope.isLoading = false;
-    }
-    function GetBrand()
-    {
-        return SwitchBrandAPIService.GetBrandById(brandId).then(function (response) {
+    function GetBrand() {
+        return CDRAnalysis_PSTN_SwitchBrandAPIService.GetBrandById(brandId).then(function (response) {
             brandEntity = response;
         });
     }
-    function loadFilterBySection() {
-        if (brandEntity !=undefined)
-            $scope.name = brandEntity.Name;
+
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+           .catch(function (error) {
+               VRNotificationService.notifyExceptionWithClose(error, $scope);
+           })
+          .finally(function () {
+              $scope.isLoading = false;
+          });
+    }
+
+    function setTitle() {
+        if (isEditMode && brandEntity != undefined)
+            $scope.title = UtilsService.buildTitleForUpdateEditor(brandEntity.Name, "Brand");
+        else
+            $scope.title = UtilsService.buildTitleForAddEditor("Brand");
+    }
+
+    function loadStaticData() {
+        if (brandEntity == undefined)
+            return;
+        $scope.name = brandEntity.Name;
     }
 
     function updateBrand() {
         var brandObj = buildBrandObjFromScope();
 
-        return SwitchBrandAPIService.UpdateBrand(brandObj)
+        return CDRAnalysis_PSTN_SwitchBrandAPIService.UpdateBrand(brandObj)
             .then(function (response) {
                 $scope.isLoading = false;
                 if (VRNotificationService.notifyOnItemUpdated("Switch Brand", response, "Name")) {
 
-                    if ($scope.onBrandUpdated != undefined)
-                        $scope.onBrandUpdated(response.UpdatedObject);
+                    if ($scope.onSwitchBrandUpdated != undefined)
+                        $scope.onSwitchBrandUpdated(response.UpdatedObject);
 
                     $scope.modalContext.closeModal();
                 }
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            });
+            }).finally(function () {
+                $scope.isLoading = false;
+            });;
     }
 
     function insertBrand() {
         var brandObj = buildBrandObjFromScope();
 
-        return SwitchBrandAPIService.AddBrand(brandObj)
+        return CDRAnalysis_PSTN_SwitchBrandAPIService.AddBrand(brandObj)
             .then(function (response) {
                 $scope.isLoading = false;
                 if (VRNotificationService.notifyOnItemAdded("Switch Brand", response, "Name")) {
-                    if ($scope.onBrandAdded != undefined)
-                        $scope.onBrandAdded(response.InsertedObject);
+                    if ($scope.onSwitchBrandAdded != undefined)
+                        $scope.onSwitchBrandAdded(response.InsertedObject);
 
                     $scope.modalContext.closeModal();
                 }
             })
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            });
+            }).finally(function () {
+                $scope.isLoading = false;
+            });;
     }
 
     function buildBrandObjFromScope() {
@@ -114,3 +132,5 @@ function SwitchBrandEditorController($scope, SwitchBrandAPIService, VRNavigation
 }
 
 appControllers.controller("PSTN_BusinessEntity_SwitchBrandEditorController", SwitchBrandEditorController);
+
+})(appControllers);
