@@ -14,7 +14,7 @@
                     </vr-columns>
                 </vr-row>
             </vr-tab>
-            <vr-tab header="'Data Record Types'">
+            <vr-tab header="'Record Types'">
                 <vr-row>
                     <vr-columns width="fullrow">
                         <vr-genericdata-datatransformation-recordtype-management on-ready="scopeModal.onDataRecordTypeDirectiveReady" ></vr-genericdata-datatransformation-recordtype-management>
@@ -34,7 +34,7 @@
                     <vr-columns colnum="4">
                         <vr-section title="Steps">
                             <vr-datalist maxitemsperrow="1" datasource="scopeModal.stepsAdded" isitemdraggable autoremoveitem="true">
-                                <vr-label>{{dataItem.Title}}</vr-label><span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span>
+                                <vr-label>{{dataItem.Title}}</vr-label> <vr-check value="dataItem.isSelected" ng-click="viewScope.scopeModal.onEditStepClick(dataItem)"></vr-check><!-- <span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span>-->
                                 <vr-validator validate="dataItem.validationMessage">
                                     <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
                                 </vr-validator>

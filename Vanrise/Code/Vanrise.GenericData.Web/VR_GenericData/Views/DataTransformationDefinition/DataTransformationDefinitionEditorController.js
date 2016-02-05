@@ -75,6 +75,8 @@
             {
                 if ($scope.scopeModal.selectedStep != undefined)
                 {
+                    $scope.scopeModal.selectedStep.isSelected = false;
+                        dataItem.isSelected= true;
                         applyChanges();
                         $scope.scopeModal.selectedStep = undefined;
                         setTimeout(function () { $scope.scopeModal.selectedStep = dataItem; UtilsService.safeApply($scope)})
