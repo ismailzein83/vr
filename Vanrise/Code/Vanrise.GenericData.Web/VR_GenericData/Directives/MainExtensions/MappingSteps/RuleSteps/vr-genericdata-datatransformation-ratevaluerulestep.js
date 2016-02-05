@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
 
                 var ctrl = this;
 
-                var ctor = new ratevaluerulestepCtor(ctrl, $scope);
+                var ctor = new rateValueRuleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,28 +26,36 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/AssignValueRuleStepTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/RateValueRuleStepTemplate.html';
             }
 
         };
 
-        function ratevaluerulestepCtor(ctrl, $scope) {
+        function rateValueRuleStepCtor(ctrl, $scope) {
             var ruleTypeName = "GenericRuleMapping";
             var ruleTypeEntity;
 
             var ruleStepCommonDirectiveAPI;
             var ruleStepCommonDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var targetDirectiveAPI;
-            var targetDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var normalRateDirectiveAPI;
+            var normalRateDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var ratesByRateTypeDirectiveAPI;
+            var ratesByRateTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;
                     ruleStepCommonDirectiveReadyPromiseDeferred.resolve();
                 }
-                $scope.onTargetDirectiveReady = function (api) {
-                    targetDirectiveAPI = api;
-                    targetDirectiveReadyPromiseDeferred.resolve();
+                $scope.onNormalRateDirectiveReady = function (api) {
+                    normalRateDirectiveAPI = api;
+                    normalRateDirectiveReadyPromiseDeferred.resolve();
+                }
+
+                $scope.onRatesByRateTypeDirectiveReady = function (api) {
+                    ratesByRateTypeDirectiveAPI = api;
+                    ratesByRateTypeDirectiveReadyPromiseDeferred.resolve();
                 }
                 defineAPI();
             }
@@ -72,28 +80,43 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestep', ['UtilsService
 
                     promises.push(loadRuleStepCommonDirectivePromiseDeferred.promise);
 
-                    var loadTargetDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                    targetDirectiveReadyPromiseDeferred.promise.then(function () {
-                        var payloadtarget;
+                    var loadNormalRateDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    normalRateDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadNormalRate;
                         if (payload != undefined) {
-                            payloadtarget = {};
+                            payloadNormalRate = {};
                             if (payload != undefined && payload.Context != undefined)
-                                payloadtarget.context = payload.Context;
+                                payloadNormalRate.context = payload.Context;
                             if (payload != undefined && payload.stepDetails != undefined)
-                                payloadtarget.selectedRecords = payload.stepDetails.Target;
+                                payloadNormalRate.selectedRecords = payload.stepDetails.NormalRate;
                         }
-                        VRUIUtilsService.callDirectiveLoad(targetDirectiveAPI, payloadtarget, loadTargetDirectivePromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(normalRateDirectiveAPI, payloadNormalRate, loadNormalRateDirectivePromiseDeferred);
                     });
 
-                    promises.push(loadTargetDirectivePromiseDeferred.promise);
+                    promises.push(loadNormalRateDirectivePromiseDeferred.promise);
 
+                    var loadRatesByRateTypeDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    ratesByRateTypeDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadRatesByRateType;
+                        if (payload != undefined) {
+                            payloadRatesByRateType = {};
+                            if (payload != undefined && payload.Context != undefined)
+                                payloadRatesByRateType.context = payload.Context;
+                            if (payload != undefined && payload.stepDetails != undefined)
+                                payloadRatesByRateType.selectedRecords = payload.stepDetails.RatesByRateType;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(ratesByRateTypeDirectiveAPI, payloadRatesByRateType, loadRatesByRateTypeDirectivePromiseDeferred);
+                    });
+
+                    promises.push(loadRatesByRateTypeDirectivePromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
                 }
 
                 api.getData = function () {
                     var obj = {
-                        $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.AssignValueRuleStep, Vanrise.GenericData.Transformation.MainExtensions",
-                        Target: targetDirectiveAPI != undefined ? targetDirectiveAPI.getData() : undefined
+                        $type: "Vanrise.GenericData.Pricing.RateValueMappingStep, Vanrise.GenericData.Pricing",
+                        NormalRate: normalRateDirectiveAPI != undefined ? normalRateDirectiveAPI.getData() : undefined,
+                        RatesByRateType: ratesByRateTypeDirectiveAPI != undefined ? ratesByRateTypeDirectiveAPI.getData() : undefined,
                     }
                     ruleStepCommonDirectiveAPI.setData(obj);
                     return obj;

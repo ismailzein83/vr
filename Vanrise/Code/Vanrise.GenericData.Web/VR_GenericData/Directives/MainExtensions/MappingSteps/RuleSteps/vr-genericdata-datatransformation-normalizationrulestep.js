@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
 
                 var ctrl = this;
 
-                var ctor = new assignvaluerulestepCtor(ctrl, $scope);
+                var ctor = new normalizationruleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -31,7 +31,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
 
         };
 
-        function assignvaluerulestepCtor(ctrl, $scope) {
+        function normalizationruleStepCtor(ctrl, $scope) {
             var ruleTypeName = "VR_NormalizationRule";
             var ruleTypeEntity;
 

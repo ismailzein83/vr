@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
 
                 var ctrl = this;
 
-                var ctor = new assignvaluerulestepCtor(ctrl, $scope);
+                var ctor = new assignValueRuleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -31,7 +31,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
 
         };
 
-        function assignvaluerulestepCtor(ctrl, $scope) {
+        function assignValueRuleStepCtor(ctrl, $scope) {
             var ruleTypeName = "GenericRuleMapping";
             var ruleTypeEntity;
 

@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
 
                 var ctrl = this;
 
-                var ctor = new AssignFieldStepCtor(ctrl, $scope);
+                var ctor = new assignValueRuleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -31,7 +31,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
 
         };
 
-        function AssignFieldStepCtor(ctrl, $scope) {
+        function assignValueRuleStepCtor(ctrl, $scope) {
             var stepObj = {};
 
             function initializeController() {

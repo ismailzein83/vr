@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
 
                 var ctrl = this;
 
-                var ctor = new AssignFieldStepCtor(ctrl, $scope);
+                var ctor = new normalizationruleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -31,7 +31,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
 
         };
 
-        function AssignFieldStepCtor(ctrl, $scope) {
+        function normalizationruleStepCtor(ctrl, $scope) {
             var stepObj = {};
 
             function initializeController() {
@@ -49,7 +49,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                             stepObj.stepDetails = payload.stepDetails;
                             stepObj.configId = payload.stepDetails.ConfigId;
                             ctrl.value = payload.stepDetails.Value;
-                            ctrl.normalizationValue = payload.stepDetails.NormalizedValue;
+                            ctrl.normalizedValue = payload.stepDetails.NormalizedValue;
                         }
 
                     }
@@ -58,7 +58,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
                     ctrl.value = changes.Value;
-                    ctrl.normalizationValue = changes.NormalizedValue;
+                    ctrl.normalizedValue = changes.NormalizedValue;
                 }
                 api.checkValidation = function () {
 
