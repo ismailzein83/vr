@@ -32,6 +32,7 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
             function initializeController() {
 
                 $scope.dataTransformationDefinitions = [];
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -49,6 +50,7 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
                         return directiveAPI;
                     }
                 };
+
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_DataTransformationDefinitionAPIService.GetFilteredDataTransformationDefinitions(dataRetrievalInput)
                         .then(function (response) {
@@ -60,6 +62,7 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
                             VRNotificationService.notifyException(error, $scope);
                         });
                 };
+
                 defineMenuActions();
             }
 
@@ -75,6 +78,7 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
                     return defaultMenuActions;
                 }
             }
+
             function editDataTransformationDefinition(dataItem) {
                 var onDataTransformationDefinitionUpdated = function (onDataTransformationDefinitionObj) {
                     gridAPI.itemUpdated(onDataTransformationDefinitionObj);

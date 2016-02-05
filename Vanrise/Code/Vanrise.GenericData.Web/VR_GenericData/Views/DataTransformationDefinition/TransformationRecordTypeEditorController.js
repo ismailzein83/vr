@@ -71,31 +71,29 @@
                 .finally(function () {
                     $scope.scopeModal.isLoading = false;
                 });
-        }
 
-        function loadFilterBySection() {
-            if (dataRecordTypeEntity != undefined) {
-                $scope.scopeModal.name = dataRecordTypeEntity.RecordName;
+            function setTitle() {
+                if (isEditMode && dataRecordTypeEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(dataRecordTypeEntity.Name, 'Data Record Type');
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor('Data Record Type');
             }
-        }
+            function loadFilterBySection() {
+                if (dataRecordTypeEntity != undefined) {
+                    $scope.scopeModal.name = dataRecordTypeEntity.RecordName;
+                }
+            }
+            function loadDataRecordTypeSelector() {
+                var loadDataRecordTypePromiseDeferred = UtilsService.createPromiseDeferred();
 
-        function setTitle() {
-            if (isEditMode && dataRecordTypeEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(dataRecordTypeEntity.Name, 'Data Record Type');
-            else
-                $scope.title = UtilsService.buildTitleForAddEditor('Data Record Type');
-        }
+                directiveReadyPromiseDeferred.promise
+                    .then(function () {
+                        var directivePayload = (dataRecordTypeEntity != undefined) ? { selectedIds: dataRecordTypeEntity.DataRecordTypeId } : undefined
+                        VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, directivePayload, loadDataRecordTypePromiseDeferred);
+                    });
 
-        function loadDataRecordTypeSelector() {
-            var loadDataRecordTypePromiseDeferred = UtilsService.createPromiseDeferred();
-
-            directiveReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = (dataRecordTypeEntity != undefined) ? {selectedIds: dataRecordTypeEntity.DataRecordTypeId } : undefined
-                    VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, directivePayload, loadDataRecordTypePromiseDeferred);
-                });
-
-            return loadDataRecordTypePromiseDeferred.promise;
+                return loadDataRecordTypePromiseDeferred.promise;
+            }
         }
 
         function validateName() {

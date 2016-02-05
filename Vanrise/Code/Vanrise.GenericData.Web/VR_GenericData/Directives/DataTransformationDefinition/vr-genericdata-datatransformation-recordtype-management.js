@@ -73,6 +73,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                     }
                     return obj;
                 }
+
                 api.load = function (payload) {
                     if (payload != undefined) {
                         if (payload.RecordTypes) {
