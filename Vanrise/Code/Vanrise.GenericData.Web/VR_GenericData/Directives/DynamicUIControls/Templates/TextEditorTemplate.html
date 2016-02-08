@@ -1,15 +1,15 @@
 ﻿<vr-row>
     <vr-columns width="1/4row">
-        <vr-textbox value="ctrl.value" onvaluechanged="ctrl.onValueChange"></vr-textbox>
+        <vr-textbox label="{{scopeModel.label}}" value="scopeModel.value" onvaluechanged="scopeModel.onValueChange"></vr-textbox>
     </vr-columns>
-    <vr-columns width="normal" ng-if="ctrl.showInMultipleMode">
-        <vr-button type="Add" data-onclick="ctrl.addValue" standalone vr-disabled="ctrl.disableAddButton"></vr-button>
+    <vr-columns width="normal" ng-if="scopeModel.showInMultipleMode" withemptyline>
+        <vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.disableAddButton"></vr-button>
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-columns width="fullrow" ng-if="ctrl.showInMultipleMode">
-        <vr-validator validate="ctrl.isValid()">
-            <vr-datalist maxitemsperrow="6" datasource="ctrl.values" autoremoveitem="true">
+    <vr-columns width="fullrow" ng-if="scopeModel.showInMultipleMode">
+        <vr-validator validate="scopeModel.isValid()">
+            <vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">
                 {{dataItem}}
             </vr-datalist>
         </vr-validator>

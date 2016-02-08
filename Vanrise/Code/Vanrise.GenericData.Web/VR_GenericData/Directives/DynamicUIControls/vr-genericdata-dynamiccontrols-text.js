@@ -9,7 +9,8 @@ app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (Uti
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            ctrl.values = [];
+
+            $scope.scopeModel = {};
 
             var ctor = new textCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
@@ -29,23 +30,26 @@ app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (Uti
     function textCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
-            ctrl.showInMultipleMode = (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple");
 
-            ctrl.isValid = function () {
-                if (ctrl.values != undefined && ctrl.values.length > 0)
+            $scope.scopeModel.values = [];
+            
+            $scope.scopeModel.showInMultipleMode = (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple");
+
+            $scope.scopeModel.isValid = function () {
+                if ($scope.scopeModel.values != undefined && $scope.scopeModel.values.length > 0)
                     return null;
                 return "You should add at least one choice."
             }
 
-            ctrl.disableAddButton = true;
-            ctrl.addValue = function () {
-                ctrl.values.push(ctrl.value);
-                ctrl.value = undefined;
-                ctrl.disableAddButton = true;
+            $scope.scopeModel.disableAddButton = true;
+            $scope.scopeModel.addValue = function () {
+                $scope.scopeModel.values.push($scope.scopeModel.value);
+                $scope.scopeModel.value = undefined;
+                $scope.scopeModel.disableAddButton = true;
             }
 
-            ctrl.onValueChange = function (value) {
-                ctrl.disableAddButton = (value == undefined);
+            $scope.scopeModel.onValueChange = function (value) {
+                $scope.scopeModel.disableAddButton = (value == undefined);
             }
 
             defineAPI();
@@ -58,6 +62,7 @@ app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (Uti
 
                 var fieldType;
                 if (payload != undefined) {
+                    $scope.scopeModel.label = payload.fieldTitle;
                     fieldType = payload.fieldType;
                 }
             }
@@ -70,12 +75,12 @@ app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (Uti
                 {
                     retVal = {
                         $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                        Values: ctrl.values
+                        Values: $scope.scopeModel.values
                     }
                 }
                 else
                 {
-                    retVal = ctrl.value;
+                    retVal = $scope.scopeModel.value;
                 }
 
                 return retVal;

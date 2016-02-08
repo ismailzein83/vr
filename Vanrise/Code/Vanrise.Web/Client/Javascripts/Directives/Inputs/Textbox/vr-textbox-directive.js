@@ -16,7 +16,8 @@
                 decimalprecision: '@',
                 maxlength:'@',
                 placeholder: '@',
-                type:'@'
+                type: '@',
+                label: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -158,7 +159,7 @@
 
                 var labelTemplate = '';
                 if (attrs.label != undefined)
-                    labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
+                    labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
                 var type = 'text';
                 if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
                     type = 'password';

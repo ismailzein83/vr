@@ -50,10 +50,11 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
                 api.load = function (payload) {
 
                     var fieldType;
+                    var fieldTitle;
 
                     if (payload != undefined) {
                         fieldType = payload.fieldType;
-                        $scope.scopeModel.fieldName = payload.fieldName;
+                        fieldTitle = payload.fieldTitle;
                     }
 
                     if (fieldType != undefined) {
@@ -70,6 +71,7 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
 
                             fieldTypeOnReadyPromiseDeferred.promise.then(function () {
                                 var payload = {
+                                    fieldTitle: fieldTitle,
                                     fieldType: fieldType
                                 }
 

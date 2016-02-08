@@ -162,6 +162,7 @@
                     
                     field.dynamicGroupUIControl.onReadyPromiseDeferred.promise.then(function () {
                         var payload = {
+                            fieldTitle: field.Title,
                             fieldType: field.FieldType
                         };
 
@@ -201,7 +202,7 @@
                 
                 settingsDirectiveReadyPromiseDeferred.promise.then(function () {
                     var payload = {
-                        fieldName: genericRuleDefintion.SettingsDefinition.FieldName,
+                        fieldTitle: genericRuleDefintion.SettingsDefinition.FieldName,
                         fieldType: genericRuleDefintion.SettingsDefinition.FieldType
                     };
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, loadSettingsDirectiveReadyPromiseDeferred);

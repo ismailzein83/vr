@@ -51,10 +51,10 @@ app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtils
             //if (attrs.hideremoveicon != undefined)
             //    hideremoveicon = "hideremoveicon";
 
-            return '<vr-columns width="1/4row">'
-                + '<vr-select datatextfield="Text" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" '
-                + multipleselection + '></vr-select>'
-                + '</vr-columns>'
+            return '<vr-row><vr-columns width="1/4row">' +
+            '<vr-select datatextfield="Text" label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" '
+                + multipleselection + '></vr-select>' +
+                '</vr-columns></vr-row>'
         }
 
         function selectorCtor(ctrl, $scope, $attrs) {
@@ -79,6 +79,7 @@ app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtils
                     var fieldType;
 
                     if (payload != undefined) {
+                        ctrl.label = payload.fieldTitle;
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                         fieldType = payload.fieldType;
