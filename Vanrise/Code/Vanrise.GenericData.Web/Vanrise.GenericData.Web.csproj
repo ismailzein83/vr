@@ -255,6 +255,7 @@
     <Content Include="VR_GenericData\Services\APIServices\DataStorageAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
@@ -263,6 +264,7 @@
     <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />
+    <Content Include="VR_GenericData\Services\ExpressionBuilderService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
@@ -280,6 +282,8 @@
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionManagementController.js" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\TransformationRecordTypeEditor.html" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\TransformationRecordTypeEditorController.js" />
+    <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditor.html" />
+    <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditor.html" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditor.html" />

@@ -8,8 +8,8 @@
         return ({
             GetDataTransformationSteps: GetDataTransformationSteps,
         });
-        function GetDataTransformationSteps(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataTransformationStepConfig", "GetDataTransformationSteps"), { filter: filter });
+        function GetDataTransformationSteps() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataTransformationStepConfig", "GetDataTransformationSteps"));
         }
       
     }
