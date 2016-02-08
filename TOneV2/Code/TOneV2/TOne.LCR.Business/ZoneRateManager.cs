@@ -58,7 +58,7 @@ namespace TOne.LCR.Business
                     Currency = customerCurrency,
                     EffectiveCodes = _codeManager.GetCodes(customerSaleZone.Value.ZoneId, DateTime.Now).Select(c => c.Value).ToList(),
                     PriceListId = customerSaleZone.Value.PriceListId,
-                    Rate = customerSaleZone.Value.Rate,
+                    Rate = (decimal)_currencyManager.GetExchangeFactor(mainCurrency, customerCurrency) * customerSaleZone.Value.Rate,
                     OurServicesFlag = _flaggedServiceManager.GetServiceFlag(customerSaleZone.Value.ServiceFlag),
                     ZoneId = customerSaleZone.Value.ZoneId,
                     ZoneName = customerSaleZone.Value.ZoneName,
