@@ -155,11 +155,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Mappers
-        private int CaseMapper(IDataReader reader)
-        {
-            return (int)reader["CaseID"];
-        }
-        private AccountCase AccountCaseMapper(IDataReader reader)
+        internal AccountCase AccountCaseMapper(IDataReader reader)
         {
             AccountCase accountCase = new AccountCase();
 
