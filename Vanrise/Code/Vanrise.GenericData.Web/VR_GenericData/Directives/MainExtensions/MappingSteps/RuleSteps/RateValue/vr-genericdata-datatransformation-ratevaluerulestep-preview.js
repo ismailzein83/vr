@@ -47,7 +47,6 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
-                            stepObj.configId = payload.stepDetails.ConfigId;
                             ctrl.normalRate = payload.stepDetails.NormalRate;
                             ctrl.ratesByRateType = payload.stepDetails.RatesByRateType;
                         }
@@ -67,7 +66,6 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                 }
 
                 api.getData = function () {
-                    stepObj.stepDetails.ConfigId = stepObj.configId;
                     return stepObj.stepDetails
                 }
 

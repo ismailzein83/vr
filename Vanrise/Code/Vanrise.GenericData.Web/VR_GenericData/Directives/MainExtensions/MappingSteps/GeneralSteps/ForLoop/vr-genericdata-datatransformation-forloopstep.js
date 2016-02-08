@@ -44,14 +44,15 @@ app.directive('vrGenericdataDatatransformationForloopstep', ['UtilsService','VR_
 
                 api.load = function (payload) {
                     stepPayload = payload;
-                    
-
+                    if (payload.stepDetails != undefined) {
+                        ctrl.iterationVariableName = payload.stepDetails.IterationVariableName
+                    }
                 }
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.ForLoopStep, Vanrise.GenericData.Transformation.MainExtensions"
-
+                        $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.ForLoopStep, Vanrise.GenericData.Transformation.MainExtensions",
+                        IterationVariableName: ctrl.iterationVariableName
                     };
                 }
 

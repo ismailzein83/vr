@@ -37,7 +37,7 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
             var currentContext;
 
             function initializeController() {
-                ctrl.editStep = function (stepItem) {
+                $scope.editStep = function (stepItem) {
                     currentContext.editStep(stepItem);
                 };
 
@@ -77,10 +77,9 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                  
                 }
 
-                api.applyChanges = function (changes) {
-                    ctrl.target = changes.Target;
-                    ctrl.source = changes.Source;
+                api.applyChanges = function (changes) {                    
                     stepObj.stepDetails = changes;
+                    ctrl.iterationVariableName = changes.IterationVariableName;
                 }
 
                 api.checkValidation = function ()
@@ -89,8 +88,9 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                 }
 
                 api.getData = function () {
-                    stepObj.stepDetails.ConfigId = stepObj.configId;
-                    return stepObj.stepDetails      
+                    console.log(stepObj.stepDetails);
+               //     stepObj.stepDetails.ConfigId = stepObj.configId;
+                    return stepObj.stepDetails;
                 }
                 
                 if (ctrl.onReady != null)
@@ -107,20 +107,22 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                     getRecordNames: function () {
                         var recordNames = [];
                         if(ctrl.iterationVariableName != undefined)
-                            recordNames.push(ctrl.iterationVariableName);
+                            recordNames.push({ Name: ctrl.iterationVariableName });
                         var parentRecords = currentContext.getRecordNames();
                         if (parentRecords != null) {
                             for (var i = 0; i < parentRecords.length; i++) {
                                 recordNames.push(parentRecords[i]);
                             }
                         }
+                        return recordNames;
                     },
                     getRecordFields: function (recordName) {
 
                     },
                     createStepItem: currentContext.createStepItem,
-                    editStep: editStep
+                    editStep: currentContext.editStep
                 };
+                return childrenContext; 
             }
 
             this.initializeController = initializeController;

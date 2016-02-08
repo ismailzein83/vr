@@ -47,7 +47,6 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
-                            stepObj.configId = payload.stepDetails.ConfigId;
                             ctrl.value = payload.stepDetails.Value;
                             ctrl.normalizedValue = payload.stepDetails.NormalizedValue;
                         }
@@ -67,7 +66,6 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                 }
 
                 api.getData = function () {
-                    stepObj.stepDetails.ConfigId = stepObj.configId;
                     return stepObj.stepDetails
                 }
 

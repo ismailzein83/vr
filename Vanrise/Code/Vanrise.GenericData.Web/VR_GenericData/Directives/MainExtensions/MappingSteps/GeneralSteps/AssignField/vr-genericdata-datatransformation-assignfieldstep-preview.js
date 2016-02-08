@@ -47,7 +47,6 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                         if (payload.stepDetails != undefined)
                         {
                             stepObj.stepDetails = payload.stepDetails;
-                            stepObj.configId = payload.stepDetails.ConfigId;
                             ctrl.target = payload.stepDetails.Target;
                             ctrl.source = payload.stepDetails.Source;
                         }
@@ -68,7 +67,6 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                 }
 
                 api.getData = function () {
-                    stepObj.stepDetails.ConfigId = stepObj.configId;
                     return stepObj.stepDetails      
                 }
                 

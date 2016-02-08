@@ -46,7 +46,6 @@
 
             $scope.scopeModal.addStep = function (dataItem)
             {
-                console.log($scope.scopeModal.selectedStep);
                 if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI.isCompositeStep) {                    
                     $scope.scopeModal.selectedStep.previewAPI.addStep(dataItem);
                 }
@@ -103,10 +102,7 @@
                     $scope.scopeModal.isLoadingDirective = value;
                 };
                 var payload={
-                    Context : {
-                        getRecordNames: getRecordNames,
-                        getRecordFields: getRecordFields
-                    },
+                    Context: $scope.scopeModal.selectedStep.Context,
                     stepDetails:$scope.scopeModal.selectedStep.previewAPI != undefined? $scope.scopeModal.selectedStep.previewAPI.getData():undefined
                 }
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, editorDirectiveAPI, payload, setLoader);
@@ -191,6 +187,7 @@
                         for (var i = 0; i < dataTransformationDefinitionEntity.MappingSteps.length; i++) {
                             var stepEntity = dataTransformationDefinitionEntity.MappingSteps[i];
                             var stepItem = createStepItem(null, stepEntity, getChildrenContext());
+                            $scope.scopeModal.stepsAdded.push(stepItem);
                         }
                         
                     }
@@ -316,8 +313,12 @@
                 var steps = [];
 
                 for (var i = 0; i < $scope.scopeModal.stepsAdded.length; i++) {
-                    if ($scope.scopeModal.stepsAdded[i].previewAPI != undefined)
-                        steps.push($scope.scopeModal.stepsAdded[i].previewAPI.getData())
+                    var stepItem = $scope.scopeModal.stepsAdded[i];
+                    if (stepItem.previewAPI != undefined) {
+                        var stepEntity = stepItem.previewAPI.getData();
+                        stepEntity.ConfigId = stepItem.DataTransformationStepConfigId;
+                        steps.push(stepEntity);
+                    }
                 }
                 return steps;
             }

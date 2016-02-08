@@ -47,7 +47,6 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
-                            stepObj.configId = payload.stepDetails.ConfigId;
                             if (payload.stepDetails.RuleFieldsMappings != undefined && payload.stepDetails.RuleFieldsMappings.length>0)
                              ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                             ctrl.target = payload.stepDetails.Target;
@@ -68,7 +67,6 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                 }
 
                 api.getData = function () {
-                    stepObj.stepDetails.ConfigId = stepObj.configId;
                     return stepObj.stepDetails
                 }
 
