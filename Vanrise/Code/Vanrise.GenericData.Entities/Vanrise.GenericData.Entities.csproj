@@ -68,6 +68,7 @@
     <Compile Include="DataStorage\DataStoreSettings.cs" />
     <Compile Include="DataStorage\IDataRecordDataManager.cs" />
     <Compile Include="DataStorage\IUpdateRecordStorageSettingsContext.cs" />
+    <Compile Include="ExpressionBuilder\ExpressionBuilderConfig.cs" />
     <Compile Include="GenericRules\GenericRule.cs" />
     <Compile Include="GenericRules\GenericRuleCriteria.cs" />
     <Compile Include="GenericRules\GenericRuleCriteriaFieldValues.cs" />
