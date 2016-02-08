@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationforloopstepPreview', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -37,6 +37,10 @@ app.directive('vrGenericdataDatatransformationforloopstepPreview', ['UtilsServic
             var currentContext;
 
             function initializeController() {
+                ctrl.editStep = function (stepItem) {
+                    currentContext.editStep(stepItem);
+                };
+
                 defineAPI();
             }
 
@@ -44,9 +48,9 @@ app.directive('vrGenericdataDatatransformationforloopstepPreview', ['UtilsServic
                 var api = {};
 
                 api.isCompositeStep = true;
-                api.addStep = function (stepObj) {
-                    stepObj.Context = getChildrenContext();
-                    ctrl.childSteps.push(stepObj);
+                api.addStep = function (stepDefinition) {
+                    var stepItem = currentContext.createStepItem(stepDefinition, null, getChildrenContext())
+                    ctrl.childSteps.push(stepItem);
                 };
 
                 api.load = function (payload) {
@@ -59,7 +63,14 @@ app.directive('vrGenericdataDatatransformationforloopstepPreview', ['UtilsServic
                             stepObj.configId = payload.stepDetails.ConfigId;
                             currentContext = payload.Context;
                             ctrl.arrayVariableName = payload.stepDetails.ArrayVariableName;
-                            ctrl.iterationVariableName = payload.stepDetails.IterationVariableName;                            
+                            ctrl.iterationVariableName = payload.stepDetails.IterationVariableName;
+                            if (payload.stepDetails.Steps != null) {
+                                for (var i = 0; i < payload.stepDetails.Steps.length; i++) {
+                                    var stepEntity = payload.stepDetails.Steps[i];
+                                    var stepItem = currentContext.createStepItem(null, stepEntity, getChildrenContext())
+                                    ctrl.childSteps.push(stepItem);
+                                }
+                            }
                         }
                        checkValidation();
                     }
@@ -94,11 +105,21 @@ app.directive('vrGenericdataDatatransformationforloopstepPreview', ['UtilsServic
             {
                 var childrenContext = {
                     getRecordNames: function () {
+                        var recordNames = [];
+                        if(ctrl.iterationVariableName != undefined)
+                            recordNames.push(ctrl.iterationVariableName);
+                        var parentRecords = currentContext.getRecordNames();
+                        if (parentRecords != null) {
+                            for (var i = 0; i < parentRecords.length; i++) {
+                                recordNames.push(parentRecords[i]);
+                            }
+                        }
+                    },
+                    getRecordFields: function (recordName) {
 
                     },
-                    getRecordFields: function (typeName) {
-
-                    }
+                    createStepItem: currentContext.createStepItem,
+                    editStep: editStep
                 };
             }
 

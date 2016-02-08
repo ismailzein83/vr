@@ -225,6 +225,8 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AssignField\Templates\AssignFieldStepPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AssignField\Templates\AssignFieldStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\ForLoop\Templates\ForLoopStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\ForLoop\Templates\ForLoopStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\ForLoop\vr-genericdata-datatransformation-forloopstep.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\ForLoop\vr-genericdata-datatransformation-forloopstep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\AssignValue\Templates\AssignValueRuleStepPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\AssignValue\Templates\AssignValueRuleStepTemplate.html" />
