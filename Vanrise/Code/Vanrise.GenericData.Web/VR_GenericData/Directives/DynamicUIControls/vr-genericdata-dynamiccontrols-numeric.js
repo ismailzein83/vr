@@ -4,7 +4,8 @@ app.directive('vrGenericdataDynamiccontrolsNumeric', ['UtilsService', function (
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            onReady: '='
+            onReady: '=',
+            selectionmode: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -28,7 +29,7 @@ app.directive('vrGenericdataDynamiccontrolsNumeric', ['UtilsService', function (
     function textCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
-            ctrl.showInMultipleMode = ($attrs.selectionmode == "multiple" || $attrs.selectionmode == "dynamic");
+            ctrl.showInMultipleMode = (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple");
 
             ctrl.isValid = function () {
                 if (ctrl.values != undefined && ctrl.values.length > 0)
@@ -66,10 +67,19 @@ app.directive('vrGenericdataDynamiccontrolsNumeric', ['UtilsService', function (
             }
 
             api.getData = function () {
-                return {
-                    $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                    Values: ctrl.values
+                var retVal;
+
+                if (ctrl.selectionmode == "dynamic") {
+                    retVal = {
+                        $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                        Values: ctrl.values
+                    }
                 }
+                else {
+                    retVal = ctrl.value;
+                }
+
+                return retVal;
             }
 
             if (ctrl.onReady != null)

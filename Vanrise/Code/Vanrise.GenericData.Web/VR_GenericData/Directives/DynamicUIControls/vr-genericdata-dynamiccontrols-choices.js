@@ -13,7 +13,7 @@ app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtils
                 var ctrl = this;
 
                 ctrl.selectedvalues;
-                if ($attrs.selectionmode == "multiple")
+                if (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple")
                     ctrl.selectedvalues = [];
 
                 ctrl.datasource = [];
@@ -39,7 +39,7 @@ app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtils
         function getTemplate(attrs) {
             var multipleselection = "";
             //var label = "";
-            if (attrs.selectionmode == "multiple") {
+            if (attrs.selectionmode == "dynamic" || attrs.selectionmode == "multiple") {
                 //label = "";
                 multipleselection = "ismultipleselection";
             }
@@ -94,12 +94,25 @@ app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtils
                     }
                 }
 
-                api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('Value', $attrs, ctrl);
-                }
+                api.getData = function () {
 
-                api.getSelectedValues = function () {
-                    return ctrl.selectedvalues;
+                    var retVal;
+
+                    if (ctrl.selectionmode == "dynamic") {
+                        retVal = {
+                            $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                            Values: UtilsService.getPropValuesFromArray(ctrl.selectedvalues, 'Value')
+                        }
+                    }
+                    else if (ctrl.selectionmode == "multiple") {
+                        retVal = UtilsService.getPropValuesFromArray(ctrl.selectedvalues, 'Value');
+                    }
+                    else if (ctrl.selectionmode == "single")
+                    {
+                        retVal = ctrl.selectedvalues['Value'];
+                    }
+
+                    return retVal;
                 }
 
                 if (ctrl.onReady != null)
