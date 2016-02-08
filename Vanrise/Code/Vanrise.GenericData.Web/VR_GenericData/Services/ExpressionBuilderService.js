@@ -9,18 +9,17 @@
             openExpressionBuilder: openExpressionBuilder,
         });
 
-        function openExpressionBuilder(onSetExpressionBuilder, expressionBuilderValue, context) {
+        function openExpressionBuilder(onSetExpressionBuilder,context, expressionBuilderValue ) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onSetExpressionBuilder = onSetExpressionBuilder;
             };
-            var parameter;
+            var parameter = {
+                Context: context
+            };
             if (expressionBuilderValue != undefined)
-                parameter = {
-                    ExpressionBuilderValue: expressionBuilderValue,
-                    Context: context
-                }
+                parameter.ExpressionBuilderValue = expressionBuilderValue;
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/ExpressionBuilder/ExpressionBuilderEditor.html', parameter, modalSettings);
         }
 

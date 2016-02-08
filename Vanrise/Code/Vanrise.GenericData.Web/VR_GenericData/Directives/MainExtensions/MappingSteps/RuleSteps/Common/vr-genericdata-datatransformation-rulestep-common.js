@@ -52,7 +52,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                 }
 
                 $scope.onEffectiveTimeDirectiveReady = function (api) {
-                    effectiveTimeDirectiveAPI = api;
+                    effectiveTimeDirectiveAPI = api; 
                     effectiveTimeDirectiveReadyPromiseDeferred.resolve();
                 }
 

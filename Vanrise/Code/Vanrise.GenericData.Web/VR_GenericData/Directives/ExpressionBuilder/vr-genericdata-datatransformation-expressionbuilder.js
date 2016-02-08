@@ -38,7 +38,7 @@ app.directive('vrGenericdataExpressionbuilder', ['VR_GenericData_ExpressionBuild
                 {
                     $scope.expressionBuilderValue = expressionBuilderValue;
                 }
-                VR_GenericData_ExpressionBuilderService.openExpressionBuilder(onSetExpressionBuilder, $scope.expressionBuilderValue, context)
+                VR_GenericData_ExpressionBuilderService.openExpressionBuilder(onSetExpressionBuilder,context, $scope.expressionBuilderValue)
             }
             defineAPI();
         }

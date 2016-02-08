@@ -42,8 +42,12 @@
             }
             $scope.addData = function()
             {
+              
                 var obj = expressionBuilderDirectiveAPI.getData();
-                $scope.expressionValue += obj;
+                if ($scope.expressionValue != undefined)
+                    $scope.expressionValue += obj;
+                else
+                    $scope.expressionValue = obj;
             }
          
             $scope.saveExpressionBuilder = function () {
