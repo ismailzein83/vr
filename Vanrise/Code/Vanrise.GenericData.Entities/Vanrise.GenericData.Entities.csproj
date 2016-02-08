@@ -61,8 +61,10 @@
     <Compile Include="DataRecords\DataRecordTypeQuery.cs" />
     <Compile Include="DataRecords\DataRecordTypeReference.cs" />
     <Compile Include="DataRecords\IDataRecordTypeReferenceContext.cs" />
-    <Compile Include="DataStorage\DataRecordStorage.cs" />
-    <Compile Include="DataStorage\DataRecordStorageSettings.cs" />
+    <Compile Include="DataStorage\DataRecordStorage\DataRecordStorage.cs" />
+    <Compile Include="DataStorage\DataRecordStorage\DataRecordStorageDetail.cs" />
+    <Compile Include="DataStorage\DataRecordStorage\DataRecordStorageQuery.cs" />
+    <Compile Include="DataStorage\DataRecordStorage\DataRecordStorageSettings.cs" />
     <Compile Include="DataStorage\DataStore.cs" />
     <Compile Include="DataStorage\DataStoreConfig.cs" />
     <Compile Include="DataStorage\DataStoreSettings.cs" />

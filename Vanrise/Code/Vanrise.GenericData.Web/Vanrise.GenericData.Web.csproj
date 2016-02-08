@@ -129,6 +129,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BusinessEntityDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordFieldTypeConfigController.cs" />
+    <Compile Include="Controllers\DataRecordStorageController.cs" />
     <Compile Include="Controllers\DataTransformationStepConfigController.cs" />
     <Compile Include="Controllers\ExpressionBuilderConfigController.cs" />
     <Compile Include="Controllers\GenericRuleController.cs" />
@@ -177,6 +178,8 @@
     <Content Include="VR_GenericData\Constants\MappingRuleStructureBehaviorTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-selector.js" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\vr-genericdata-datarecordstorage-grid.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationDefinitionGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\ExpressionBuilderTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-grid.js" />
@@ -257,6 +260,10 @@
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
+    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageController.js" />
+    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditor.html" />
+    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditorController.js" />
+    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageManagement.html" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditor.html" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionManagement.html" />
