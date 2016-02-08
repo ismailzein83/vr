@@ -11,10 +11,5 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
             return String.Format("Assign Strategy Execution Cases ({0:dd-MMM-yy HH:mm})", DateTime.Now);
         }
 
-        public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
-        {
-
-        }
-
     }
 }
