@@ -136,7 +136,7 @@
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordTypeController.cs" />
     <Compile Include="Controllers\DataTransformationDefinitionController.cs" />
-    <Compile Include="Controllers\DataStorageController.cs" />
+    <Compile Include="Controllers\DataStoreController.cs" />
     <Compile Include="Controllers\GenericRuleTypeConfigController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -181,9 +181,9 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-grid.js" />
-    <Content Include="VR_GenericData\Directives\DataStorage\Templates\DataStorageGrid.html" />
-    <Content Include="VR_GenericData\Directives\DataStorage\vr-genericdata-datastorage-grid.js" />
-    <Content Include="VR_GenericData\Directives\DataStorage\vr-genericdata-datastorage-selector.js" />
+    <Content Include="VR_GenericData\Directives\DataStore\Templates\DataStoreGrid.html" />
+    <Content Include="VR_GenericData\Directives\DataStore\vr-genericdata-datastore-grid.js" />
+    <Content Include="VR_GenericData\Directives\DataStore\vr-genericdata-datastore-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationDefinitionGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\ExpressionBuilderTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-grid.js" />
@@ -253,7 +253,7 @@
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageAPIService.js" />
-    <Content Include="VR_GenericData\Services\APIServices\DataStorageAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataStoreAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
@@ -261,7 +261,7 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordStorageService.js" />
-    <Content Include="VR_GenericData\Services\DataStorageService.js" />
+    <Content Include="VR_GenericData\Services\DataStoreService.js" />
     <Content Include="VR_GenericData\Services\DataTransformationDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
@@ -274,10 +274,10 @@
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageManagement.html" />
-    <Content Include="VR_GenericData\Views\DataStorage\DataStorageEditor.html" />
-    <Content Include="VR_GenericData\Views\DataStorage\DataStorageEditorController.js" />
-    <Content Include="VR_GenericData\Views\DataStorage\DataStorageManagement.html" />
-    <Content Include="VR_GenericData\Views\DataStorage\DataStorageManagementController.js" />
+    <Content Include="VR_GenericData\Views\DataStore\DataStoreEditor.html" />
+    <Content Include="VR_GenericData\Views\DataStore\DataStoreEditorController.js" />
+    <Content Include="VR_GenericData\Views\DataStore\DataStoreManagement.html" />
+    <Content Include="VR_GenericData\Views\DataStore\DataStoreManagementController.js" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditor.html" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionManagement.html" />

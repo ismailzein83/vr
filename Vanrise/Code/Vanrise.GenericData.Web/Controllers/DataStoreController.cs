@@ -10,8 +10,8 @@ using Vanrise.Web.Base;
 namespace Vanrise.GenericData.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "DataStorage")]
-    public class DataStorageController : BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "DataStore")]
+    public class DataStoreController : BaseAPIController
     {
         
     }
