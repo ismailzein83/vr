@@ -2,12 +2,15 @@
 
     'use strict';
 
-    DataRecordStorageManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageService', 'UtilsService', 'VRUIUtilsService'];
+    DataRecordStorageManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function DataRecordStorageManagementController($scope, VR_GenericData_DataRecordStorageService, UtilsService, VRUIUtilsService) {
+    function DataRecordStorageManagementController($scope, VR_GenericData_DataRecordStorageService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataStoreSelectorAPI;
+        var dataStoreSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var gridAPI;
         var gridQuery = {};
@@ -19,6 +22,10 @@
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
+            };
+            $scope.onDataStoreSelectorReady = function (api) {
+                dataStoreSelectorAPI = api;
+                dataStoreSelectorReadyDeferred.resolve();
             };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -55,7 +62,15 @@
 
                 return dataRecordTypeSelectorLoadDeferred.promise;
             }
-            function loadDataStoreSelector() { }
+            function loadDataStoreSelector() {
+                var dataStoreSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                dataStoreSelectorReadyDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, undefined, dataStoreSelectorLoadDeferred);
+                });
+
+                return dataStoreSelectorLoadDeferred.promise;
+            }
         }
 
         function setGridQuery() {

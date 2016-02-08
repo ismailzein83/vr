@@ -13,6 +13,13 @@ namespace Vanrise.GenericData.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "DataStore")]
     public class DataStoreController : BaseAPIController
     {
-        
+        DataStoreManager _manager = new DataStoreManager();
+
+        [HttpGet]
+        [Route("GetDataStoresInfo")]
+        public IEnumerable<DataStoreInfo> GetDataStoresInfo()
+        {
+            return _manager.GetDataStoresInfo();
+        }
     }
 }

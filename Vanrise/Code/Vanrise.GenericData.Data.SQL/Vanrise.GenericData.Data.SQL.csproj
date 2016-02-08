@@ -47,6 +47,7 @@
     <Compile Include="DataRecordFieldTypeConfigDataManager.cs" />
     <Compile Include="DataRecordStorageDataManager.cs" />
     <Compile Include="DataRecordTypeDataManager.cs" />
+    <Compile Include="DataStoreDataManager.cs" />
     <Compile Include="ExpressionBuilderConfigDataManager.cs" />
     <Compile Include="GenericRuleDefinitionDataManager.cs" />
     <Compile Include="DataStoreConfigDataManager.cs" />

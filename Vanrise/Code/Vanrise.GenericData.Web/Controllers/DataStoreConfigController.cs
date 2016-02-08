@@ -21,7 +21,12 @@ namespace Vanrise.GenericData.Web.Controllers
             return manager.GetDataStoreConfigs();
         }
 
-        
-
+        [HttpGet]
+        [Route("GetDataStoreConfig")]
+        public DataStoreConfig GetDataStoreConfig(int dataStoreConfigId)
+        {
+            DataStoreConfigManager manager = new DataStoreConfigManager();
+            return manager.GeDataStoreConfigById(dataStoreConfigId);
+        }
     }
 }
