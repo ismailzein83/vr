@@ -64,10 +64,21 @@ app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (Uti
 
             api.getData = function()
             {
-                return {
-                    $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                    Values: (ctrl.selectionmode == "single") ? ctrl.value : ctrl.values
+                var retVal;
+
+                if(ctrl.selectionmode == "dynamic")
+                {
+                    retVal = {
+                        $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                        Values: ctrl.values
+                    }
                 }
+                else
+                {
+                    retVal = ctrl.value;
+                }
+
+                return retVal;
             }
 
             if (ctrl.onReady != null)
