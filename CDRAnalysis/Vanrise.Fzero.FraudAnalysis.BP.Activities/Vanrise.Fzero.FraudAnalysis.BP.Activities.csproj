@@ -121,6 +121,7 @@
     <Compile Include="GetStrategyExecutionItems.cs" />
     <Compile Include="GetAccountNumbersByIMEI.cs" />
     <Compile Include="DataWarehouse\GetDWDimensions.cs" />
+    <Compile Include="ProcessStrategyExecutionCancellation.cs" />
     <Compile Include="LoadStrategyExecutionItemSummaries.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
     <Compile Include="DataWarehouse\PrepareDWFactsForDBApply.cs" />
