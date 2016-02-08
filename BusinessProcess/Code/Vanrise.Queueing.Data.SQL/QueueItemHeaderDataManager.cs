@@ -27,15 +27,16 @@ namespace Vanrise.Queueing.Data.SQL
         static QueueItemHeaderDataManager()
         {
              _mapper.Add("Entity.ItemId", "ItemID");
-             _mapper.Add("Entity.QueueId", "QueueId");
-            _mapper.Add("Entity.ExecutionFlowTriggerItemId", "ExecutionFlowTriggerItemID");
+             _mapper.Add("QueueName", "QueueId");
+             _mapper.Add("ExecutionFlowName", "ExecutionFlowTriggerItemID");
             _mapper.Add("Entity.SourceItemId", "SourceItemID");
             _mapper.Add("Entity.Description", "Description");
-            _mapper.Add("Entity.Status", "Status");
+            _mapper.Add("StatusName", "Status");
             _mapper.Add("Entity.RetryCount", "RetryCount");
-            _mapper.Add("Entity.ErrorMessage", "ErrorMessage");
+            _mapper.Add("StageName", "ErrorMessage");
             _mapper.Add("Entity.CreatedTime", "CreatedTime");
             _mapper.Add("Entity.LastUpdatedTime", "LastUpdatedTime");
+ 
         }
 
 
@@ -47,11 +48,13 @@ namespace Vanrise.Queueing.Data.SQL
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 string queueIds = null;
+                string queueStatusIds = null;
                 if (input.Query.QueueIds != null && input.Query.QueueIds.Count() > 0)
                     queueIds = string.Join<int>(",", input.Query.QueueIds);
 
-
-                ExecuteNonQuerySP("[queue].[sp_QueueItemHeader_CreateTempByFiltered2]", tempTableName, input.Query.ExecutionFlowIds, queueIds, input.Query.QueueStatusIds, input.Query.CreatedTimeFrom, input.Query.CreatedTimeTo);
+                if (input.Query.QueueStatusIds != null && input.Query.QueueStatusIds.Count() > 0)
+                    queueStatusIds = string.Join<int>(",", input.Query.QueueStatusIds);
+                ExecuteNonQuerySP("[queue].[sp_QueueItemHeader_CreateTempByFiltered2]", tempTableName,queueIds, queueStatusIds, input.Query.CreatedTimeFrom, input.Query.CreatedTimeTo);
             };
 
             return RetrieveData(input, createTempTableAction, QueueItemHeaderMapper, _mapper);
@@ -62,20 +65,22 @@ namespace Vanrise.Queueing.Data.SQL
 
         private QueueItemHeader QueueItemHeaderMapper(IDataReader reader)
         {
-            QueueItemHeader queueItemHeader = new QueueItemHeader();
-            queueItemHeader.ItemId = (int)reader["ItemID"];
-            queueItemHeader.QueueId = (int)reader["QueueID"];
-            queueItemHeader.ExecutionFlowTriggerItemId = (int)reader["ExecutionFlowTriggerItemID"];
-            queueItemHeader.SourceItemId = (int)reader["SourceItemID"];
-            queueItemHeader.Description = reader["Description"] as string;
-            queueItemHeader.Status = (QueueItemStatus)reader["Status"];
-            queueItemHeader.RetryCount = (int)reader["RetryCount"];
-            queueItemHeader.ErrorMessage = reader["ErrorMessage"] as string;
-            queueItemHeader.CreatedTime = (DateTime)reader["CreatedTime"];
-            queueItemHeader.LastUpdatedTime = (DateTime)reader["LastUpdatedTime"];
-            return queueItemHeader;
+            return new QueueItemHeader
+            {
+                ItemId = (long)reader["ItemID"],
+                QueueId = (int)reader["QueueID"],
+                ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
+                SourceItemId = GetReaderValue<long>(reader, "SourceItemID"),
+                Description = reader["Description"] as string,
+                Status = (QueueItemStatus)reader["Status"],
+                RetryCount = GetReaderValue<int>(reader, "RetryCount"),
+                ErrorMessage = reader["ErrorMessage"] as string,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime")
+            };
         }
 
+        
 
         #endregion
 

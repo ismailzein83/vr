@@ -90,6 +90,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                     return VR_Queueing_QueueInstanceAPIService.GetFilteredQueueInstances(dataRetrievalInput)
                         .then(function (queueInstancesResponse) {
                             onResponseReady(queueInstancesResponse);
+                            RefreshDataGrid();
                             var timer;
                             if (!isFirstTimeLoaded) {
                                 isFirstTimeLoaded = true;

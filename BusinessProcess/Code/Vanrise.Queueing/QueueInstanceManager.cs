@@ -45,11 +45,29 @@ namespace Vanrise.Queueing
 
         public IEnumerable<QueueInstanceInfo> GetQueueInstances(QueueInstanceFilter filter)
         {
-            IEnumerable<QueueInstance> queueInstances = GetAllQueueInstances();
+            List<QueueInstance> queueInstances = new List<QueueInstance>();
             if (filter != null)
-                return queueInstances.MapRecords(QueueInstanceInfoMapper, queueInstance => queueInstance.ExecutionFlowId == filter.ExecutionFlowId);
-
+            {
+                List<int> filterToList = new List<int>();
+                filterToList.Add(filter.ExecutionFlowId);
+                queueInstances = GetQueueExecutionFlows(filterToList).ToList();
+                return queueInstances.MapRecords(QueueInstanceInfoMapper,null);
+            
+            }
+            queueInstances = GetAllQueueInstances().ToList();
             return queueInstances.MapRecords(QueueInstanceInfoMapper, null);
+
+        }
+
+
+        public IEnumerable<QueueInstance> GetQueueExecutionFlows(List<int> executionFlowIds)
+        {
+
+            IEnumerable<QueueInstance> queueInstances = GetCachedQueueInstances().Values.ToList();
+            List<QueueInstance> queueInstancesResult=new List<QueueInstance>();
+            for (int i = 0; i < executionFlowIds.Count(); i++)
+                queueInstancesResult.AddRange(queueInstances.Where(x => x.ExecutionFlowId == executionFlowIds[i]));
+            return queueInstancesResult;
 
         }
 

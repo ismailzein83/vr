@@ -99,6 +99,7 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
                             }
 
                             onResponseReady(response);
+                            refreshExecutionFlowGrid();
                             var timer;
                             if (!isFirstTimeLoaded) {
                                 isFirstTimeLoaded = true;

@@ -9,6 +9,13 @@ namespace Vanrise.Queueing.Entities
     public class QueueItemHeaderDetails
     {
         public QueueItemHeader Entity { get; set; }
+
         public string StageName { get; set; }
+
+        public string StatusName { get; set; }
+
+        public string QueueName { get; set; }
+ 
+        public string ExecutionFlowName { get; set; }
     }
 }

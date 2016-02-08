@@ -9,11 +9,11 @@ namespace Vanrise.Queueing.Entities
    public class QueueItemHeaderQuery
     {
          
-        public int ExecutionFlowIds { get; set; }
+        public List<int> ExecutionFlowIds { get; set; }
 
         public List<int> QueueIds { get; set; }
 
-        public int QueueStatusIds { get; set; }
+        public List<int> QueueStatusIds { get; set; }
 
         public DateTime? CreatedTimeFrom { get; set; }
 

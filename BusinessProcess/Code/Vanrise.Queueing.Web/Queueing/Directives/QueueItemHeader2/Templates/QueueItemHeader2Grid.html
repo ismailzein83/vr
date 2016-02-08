@@ -2,11 +2,13 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="ongridReady"
-             idfield="QueueId">
+             idfield="Entity.QueueId">
 
 
-    <vr-datagridcolumn headertext="'ID'" field="'QueueId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Queue Instance'" field="'ItemId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Status'" field="'Status'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.ItemId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Execution Flow'" field="'ExecutionFlowName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Queue Instance'" field="'QueueName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Stage'" field="'StageName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created Time'" field="'Entity.CreatedTime'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

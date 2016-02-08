@@ -91,12 +91,13 @@ app.directive('vrQueueingQueueinstanceSelector', ['VR_Queueing_QueueInstanceAPIS
                     var selectedIds;
 
                     if (payload) {
-                        filter = payload.executionFlowId;
+                        filter = payload.filter;
                         selectedIds = payload.selectedIds;
-
-
                     }
-
+                    if (filter == undefined && payload.ExecutionFlowId != undefined) {
+                        filter = {};
+                        filter.ExecutionFlowId = payload.ExecutionFlowId;
+                    }
                     return VR_Queueing_QueueInstanceAPIService.GetQueueInstances(UtilsService.serializetoJson(filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 

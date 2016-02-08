@@ -17,6 +17,7 @@
         var queueStatusSelectorAPI;
         var queueStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var executionFlowIds = new Array();
 
         defineScope();
         load();
@@ -28,6 +29,7 @@
             $scope.selectedQueueStatus = [];
 
             $scope.ShowGrid = false;
+            $scope.isDisabledQueueInstanceSelect = false;
 
             $scope.onExecutionFlowSelectorReady = function (api) {
                 executionFlowSelectorAPI = api;
@@ -47,14 +49,29 @@
             };
 
 
-            $scope.onExecutionFlowSelectItem = function (selectedItem) {
-                if (selectedItem != undefined) {
-                    var setLoader = function (value) { $scope.isLoading = value };
-                    var payload = {
-                        executionFlowId: selectedItem.ExecutionFlowId
-                    }
+        
 
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, queueInstanceSelectorAPI, payload,setLoader);
+            $scope.onSelectedExecutionFlowChanged = function (selectedItem) {
+                if (selectedItem != undefined) {
+
+                    var setLoader = function (value) { $scope.isLoading = value };
+                    if (executionFlowSelectorAPI.getSelectedIds() != undefined && executionFlowSelectorAPI.getSelectedIds().length > 1) {
+                        $scope.isDisabledQueueInstanceSelect = true;
+                        return;
+                    }
+                    else if (selectedItem != undefined && selectedItem.length >0) {
+                        $scope.isDisabledQueueInstanceSelect = false;
+                        var payload = {
+                            ExecutionFlowId: selectedItem[0].ExecutionFlowId,
+                        }
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, queueInstanceSelectorAPI, payload, setLoader);
+                    }
+                    else {
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, queueInstanceSelectorAPI, {}, setLoader);
+                    }
+                   
+                    
+                   
                 }
 
             }

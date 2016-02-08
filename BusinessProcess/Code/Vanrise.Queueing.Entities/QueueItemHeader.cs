@@ -1,12 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
-    public enum QueueItemStatus { New = 0, Processing = 10, Failed = 20, Processed = 30, Suspended = 40 }
+    public enum QueueItemStatus {
+       [Description("New")]
+        New = 0,
+       [Description("Processing")]
+       Processing = 10,
+       [Description("Failed")]
+       Failed = 20,
+       [Description("Processed")]
+       Processed = 30,
+       [Description("Suspended")]
+       Suspended = 40
+    }
 
     public class QueueItemHeader
     {
