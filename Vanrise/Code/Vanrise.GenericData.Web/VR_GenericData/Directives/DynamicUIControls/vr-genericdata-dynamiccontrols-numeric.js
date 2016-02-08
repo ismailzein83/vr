@@ -5,7 +5,8 @@ app.directive('vrGenericdataDynamiccontrolsNumeric', ['UtilsService', function (
         restrict: 'E',
         scope: {
             onReady: '=',
-            selectionmode: '@'
+            selectionmode: '@',
+            normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

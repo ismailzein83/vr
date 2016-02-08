@@ -6,7 +6,8 @@ app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtils
             restrict: 'E',
             scope: {
                 onReady: '=',
-                selectionmode: '@'
+                selectionmode: '@',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -51,10 +52,10 @@ app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtils
             //if (attrs.hideremoveicon != undefined)
             //    hideremoveicon = "hideremoveicon";
 
-            return '<vr-row><vr-columns width="1/4row">' +
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
             '<vr-select datatextfield="Text" label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" '
                 + multipleselection + '></vr-select>' +
-                '</vr-columns></vr-row>'
+                '</vr-columns>'
         }
 
         function selectorCtor(ctrl, $scope, $attrs) {
