@@ -12,6 +12,7 @@
             var modalScope = $rootScope.$new();
 
             var modalUrl = viewUrl;
+            var backdrop = "static";
             var modalInstance;
             modalScope.modalContext = {};
             modalScope.modalContext.closeModal = function () {
@@ -20,7 +21,6 @@
             };
 
             VRNavigationService.setParameters(modalScope, parameters);
-
             if (settings != undefined && settings != null) {
                 if (settings.useModalTemplate === true) {
                     modalUrl = '/Client/Javascripts/Services/ModalService/vr-modal-service.html';
@@ -34,13 +34,19 @@
 
                 if (settings.onScopeReady != undefined)
                     settings.onScopeReady(modalScope);
+
+               
+                if (settings.autoclose != undefined ) {
+                    backdrop = settings.autoclose;
+                }
+                   
             }
 
             modalScope.$on('modal.hide.before', function () {
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
 
-            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, show: true, animation: "am-fade-and-scale" });
+            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: "am-fade-and-scale" });
             return deferred.promise;
         }
     }
