@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.GenericData.Entities.DataStorage.DataRecordStorage
+namespace Vanrise.GenericData.Entities
 {
-    class DataRecordStorageDetail
+    public class DataRecordStorageDetail
     {
+        public DataRecordStorage Entity { get; set; }
     }
 }

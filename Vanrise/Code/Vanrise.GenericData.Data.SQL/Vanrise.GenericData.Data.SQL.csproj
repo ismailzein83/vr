@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BusinessEntityDefinitionDataManager.cs" />
     <Compile Include="DataRecordFieldTypeConfigDataManager.cs" />
+    <Compile Include="DataRecordStorageDataManager.cs" />
     <Compile Include="DataRecordTypeDataManager.cs" />
     <Compile Include="ExpressionBuilderConfigDataManager.cs" />
     <Compile Include="GenericRuleDefinitionDataManager.cs" />

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageService', 'UtilsService'];
+    DataRecordStorageManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageService', 'UtilsService', 'VRUIUtilsService'];
 
-    function DataRecordStorageManagementController($scope, VR_GenericData_DataRecordStorageService, UtilsService) {
+    function DataRecordStorageManagementController($scope, VR_GenericData_DataRecordStorageService, UtilsService, VRUIUtilsService) {
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();

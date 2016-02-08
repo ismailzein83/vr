@@ -50,6 +50,7 @@
     <Compile Include="IBusinessEntityDefinitionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IDataRecordFieldTypeConfigDataManager.cs" />
+    <Compile Include="IDataRecordStorageDataManager.cs" />
     <Compile Include="IDataRecordTypeDataManager.cs" />
     <Compile Include="IExpressionBuilderConfigDataManager.cs" />
     <Compile Include="IGenericRuleDefinitionDataManager.cs" />
