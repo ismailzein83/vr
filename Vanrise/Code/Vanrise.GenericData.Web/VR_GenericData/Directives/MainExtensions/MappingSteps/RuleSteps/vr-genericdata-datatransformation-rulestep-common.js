@@ -84,7 +84,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                                         loadPromiseDeferred: UtilsService.createPromiseDeferred()
                                     };
                                     var payload;
-                                    if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined && firstTimeload)
+                                    if (mainPayload != undefined && mainPayload.ruleFieldsMappings != undefined && mainPayload.ruleFieldsMappings.length>0 && firstTimeload)
                                         payload = mainPayload.ruleFieldsMappings[i].Value;
                                     addFilterItemToGrid(filterItem, payload);
                                 }
@@ -184,7 +184,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                         });
                     }
                     obj.ConfigId = ruleTypeEntity.GenericRuleTypeConfigId;
-                    obj.RuleDefinitionId = $scope.selectedRuleDefinition.GenericRuleDefinitionId;
+                    obj.RuleDefinitionId = $scope.selectedRuleDefinition!=undefined? $scope.selectedRuleDefinition.GenericRuleDefinitionId:undefined;
                     obj.EffectiveTime = effectiveTimeDirectiveAPI != undefined ? effectiveTimeDirectiveAPI.getData() : undefined;
                     obj.RuleFieldsMappings = ruleFieldsMappings;
 

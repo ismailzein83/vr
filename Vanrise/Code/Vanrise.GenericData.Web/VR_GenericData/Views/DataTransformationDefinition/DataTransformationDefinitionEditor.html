@@ -34,7 +34,7 @@
                         <vr-columns colnum="4">
                             <vr-section title="Steps">
                                 <div style="max-height:500px;overflow-y:auto;">
-                                    <vr-datalist maxitemsperrow="1" datasource="scopeModal.stepsAdded" isitemdraggable autoremoveitem="true">
+                                    <vr-datalist maxitemsperrow="1" datasource="scopeModal.stepsAdded" isitemdraggable onremoveitem="scopeModal.onRemoveStep">
                                         <vr-label>{{dataItem.Title}}</vr-label> <vr-check value="dataItem.isSelected" ng-click="viewScope.scopeModal.onEditStepClick(dataItem)"></vr-check><!-- <span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span>-->
                                         <vr-validator validate="dataItem.validationMessage">
                                             <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
@@ -50,8 +50,8 @@
                                         <i class="glyphicon glyphicon-remove hand-cursor" style="width: 10px;  cursor: default ;right: 7px; position: absolute; top: -15px;" ng-click="scopeModal.onEditorRemove()" ng-show="scopeModal.selectedStep !=undefined"></i>
                                     </vr-columns>
                                 </vr-row>
-                                <vr-row removeline>                                  
-                                             
+                                <vr-row removeline>
+
                                     <div style="max-height:500px;overflow-y:auto;">
                                         <vr-columns width="fullrow">
                                             <vr-directivewrapper directive="scopeModal.selectedStep.Editor" on-ready="scopeModal.onEditorDirectiveReady"></vr-directivewrapper>

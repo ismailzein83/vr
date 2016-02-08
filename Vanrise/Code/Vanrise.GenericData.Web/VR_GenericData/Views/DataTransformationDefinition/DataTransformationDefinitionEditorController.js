@@ -48,6 +48,7 @@
             {
 
                 var obj = {
+                    Id: $scope.scopeModal.stepsAdded.length + 1,
                     Editor: dataItem.Editor,
                     StepPreviewUIControl: dataItem.StepPreviewUIControl,
                     Title: dataItem.Title,
@@ -126,6 +127,17 @@
                 }
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, editorDirectiveAPI, payload, setLoader);
             }
+
+            $scope.scopeModal.onRemoveStep= function(dataItem)
+            {
+                var index = UtilsService.getItemIndexByVal($scope.scopeModal.stepsAdded, dataItem.Id, 'Id');
+                if(index != -1)
+                {
+                    $scope.scopeModal.stepsAdded.splice(index, 1);
+                    if ($scope.scopeModal.selectedStep !=undefined && $scope.scopeModal.selectedStep.Id == dataItem.Id)
+                            $scope.scopeModal.selectedStep = undefined;
+                }
+            }
         }
 
         function load() {
@@ -200,6 +212,7 @@
 
 
                             var newStepObj = {
+                                Id:$scope.scopeModal.stepsAdded.length +1,
                                 Editor: stepValue.Editor,
                                 StepPreviewUIControl: stepValue.StepPreviewUIControl,
                                 Title: stepValue.Title,

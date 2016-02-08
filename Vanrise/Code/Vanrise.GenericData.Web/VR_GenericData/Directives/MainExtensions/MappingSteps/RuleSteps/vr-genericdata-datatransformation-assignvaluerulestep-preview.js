@@ -48,7 +48,8 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
                             stepObj.configId = payload.stepDetails.ConfigId;
-                            ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
+                            if (payload.stepDetails.RuleFieldsMappings != undefined && payload.stepDetails.RuleFieldsMappings.length>0)
+                             ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                             ctrl.target = payload.stepDetails.Target;
                         }
 
@@ -63,7 +64,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                 }
 
                 api.checkValidation = function () {
-
+                    return checkValidation();
                 }
 
                 api.getData = function () {
@@ -71,10 +72,31 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                     return stepObj.stepDetails
                 }
 
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
+            function checkValidation() {
+                if (ctrl.ruleFieldsMappings != undefined)
+                {
+                    for (var i = 0 ; i < ctrl.ruleFieldsMappings.length; i++) {
+                        if(ctrl.ruleFieldsMappings[i].Value == undefined)
+                            return "All fields should be mapped.";
+                    }
+                } else
+                {
+                    return "All fields should be mapped.";
+                }
+                
+                if (ctrl.target == undefined) {
+                    return "Missing target mapping.";
+                }
+                if (stepObj.stepDetails.EffectiveTime == undefined)
+                    return "Missing effective time mapping.";
+
+                return null;
+            }
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

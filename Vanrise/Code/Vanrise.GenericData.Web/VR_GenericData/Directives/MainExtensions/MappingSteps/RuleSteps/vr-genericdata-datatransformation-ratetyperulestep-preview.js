@@ -67,7 +67,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                 }
 
                 api.checkValidation = function () {
-
+                    return checkValidation();
                 }
 
                 api.getData = function () {
@@ -78,7 +78,32 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+            function checkValidation() {
+                if (ctrl.ruleFieldsMappings != undefined) {
+                    for (var i = 0 ; i < ctrl.ruleFieldsMappings.length; i++) {
+                        if (ctrl.ruleFieldsMappings[i].Value == undefined)
+                            return "All fields should be mapped.";
+                    }
+                } else {
+                    return "All fields should be mapped.";
+                }
+                if (ctrl.normalRate == undefined) {
+                    return "Missing normal rate mapping.";
+                }
+                if (ctrl.ratesByRateType == undefined) {
+                    return "Missing rates by rate type mapping.";
+                }
+                if (ctrl.effectiveRate == undefined) {
+                    return "Missing effective rate mapping.";
+                }
+                if (ctrl.rateTypeId == undefined) {
+                    return "Missing rate type id mapping.";
+                }
+                if (stepObj.stepDetails.EffectiveTime == undefined)
+                    return "Missing effective time mapping.";
 
+                return null;
+            }
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

@@ -77,8 +77,11 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
             }
 
             function checkValidation() {
-                if (ctrl.target == undefined || ctrl.source == undefined) {
-                    return "Error";
+                if (ctrl.target == undefined) {
+                    return "Missing target mapping.";
+                }
+                if ( ctrl.source == undefined) {
+                    return "Missing source mapping.";
                 }
                 return null;
             }

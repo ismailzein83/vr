@@ -66,7 +66,6 @@
                     var selectedIds;
 
                     if (payload != undefined) {
-                        console.log(payload);
                         if (payload.showaddbutton)
                             ctrl.onAddRuleDefinition = onAddRuleDefinition;
                         specificTypeName = payload.specificTypeName;
