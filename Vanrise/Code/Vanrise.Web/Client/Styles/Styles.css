@@ -1608,10 +1608,10 @@ vr-datagrid[hideheader="true"] .vr-datagrid{
         opacity: 0.5;
     }
 
-.divDisabled {
-        pointer-events: none;
-        opacity: 0.5;
-    }
+.divDisabled > *{
+    pointer-events: none;
+    opacity: 0.5;
+}
 
 /**************START Pagination*********/
 
