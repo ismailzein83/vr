@@ -15,7 +15,7 @@
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="inputArgument" Type="InArgument(vffba:CancelStrategyExecutionProcessInput)" />
+    <x:Property Name="Input" Type="InArgument(vffba:CancelStrategyExecutionProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Fzero.FraudAnalysis.BP.CancelStrategyExecutionProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -72,7 +72,7 @@
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vffe:CancellingStrategyExecutionBatch)" Name="cancellingStrategyExecutionBatch" />
-        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="ProcessStrategyExecutionCancellationActivityStatus" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="processStrategyExecutionCancellationActivityStatus" />
       </Parallel.Variables>
       <vffba1:ProcessStrategyExecutionCancellation sap2010:WorkflowViewState.IdRef="ProcessStrategyExecutionCancellation_1">
         <vffba1:ProcessStrategyExecutionCancellation.OutputQueue>
@@ -82,12 +82,12 @@
         </vffba1:ProcessStrategyExecutionCancellation.OutputQueue>
         <vffba1:ProcessStrategyExecutionCancellation.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ProcessStrategyExecutionCancellationActivityStatus</mca:CSharpReference>
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">processStrategyExecutionCancellationActivityStatus</mca:CSharpReference>
           </OutArgument>
         </vffba1:ProcessStrategyExecutionCancellation.Status>
         <vffba1:ProcessStrategyExecutionCancellation.StrategyExecutionId>
           <InArgument x:TypeArguments="x:Int64">
-            <mca:CSharpValue x:TypeArguments="x:Int64">inputArgument.StrategyExecutionId</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="x:Int64">Input.StrategyExecutionId</mca:CSharpValue>
           </InArgument>
         </vffba1:ProcessStrategyExecutionCancellation.StrategyExecutionId>
       </vffba1:ProcessStrategyExecutionCancellation>
@@ -99,13 +99,13 @@
         </vffba1:ApplyStrategyExecutionCancellation.InputQueue>
         <vffba1:ApplyStrategyExecutionCancellation.PreviousActivityStatus>
           <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ProcessStrategyExecutionCancellationActivityStatus</mca:CSharpValue>
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">processStrategyExecutionCancellationActivityStatus</mca:CSharpValue>
           </InArgument>
         </vffba1:ApplyStrategyExecutionCancellation.PreviousActivityStatus>
       </vffba1:ApplyStrategyExecutionCancellation>
     </Parallel>
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Strategy Execution Cancellation" />
-    <sads:DebugSymbol.Symbol>d1VDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXENhbmNlbFN0cmF0ZWd5RXhlY3V0aW9uUHJvY2Vzcy54YW1sDUYDbQ4CAQFHBUegAQIBG0gFahACAQRrBWuhAQIBAkd0R50BAgEcTQddNQIBDl4HaTMCAQVrdGueAQIBA1oNWmsCARdVDVWTAQIBE1ANUJ4BAgEPZg1miwECAQphDWGWAQIBBg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1VDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXENhbmNlbFN0cmF0ZWd5RXhlY3V0aW9uUHJvY2Vzcy54YW1sDUYDbQ4CAQFHBUegAQIBG0gFahACAQRrBWuhAQIBAkd0R50BAgEcTQddNQIBDl4HaTMCAQVrdGueAQIBA1oNWmMCARdVDVWTAQIBE1ANUJ4BAgEPZg1miwECAQphDWGWAQIBBg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
