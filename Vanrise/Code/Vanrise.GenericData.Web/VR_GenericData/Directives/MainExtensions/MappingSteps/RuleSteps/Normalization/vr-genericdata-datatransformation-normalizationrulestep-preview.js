@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
 
                 var ctrl = this;
 
-                var ctor = new assignValueRuleStepCtor(ctrl, $scope);
+                var ctor = new normalizationruleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,12 +26,12 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/AssignValueRuleStepPreviewTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Normalization/Templates/NormalizationRuleStepPreviewTemplate.html';
             }
 
         };
 
-        function assignValueRuleStepCtor(ctrl, $scope) {
+        function normalizationruleStepCtor(ctrl, $scope) {
             var stepObj = {};
 
             function initializeController() {
@@ -48,9 +48,8 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                         if (payload.stepDetails != undefined) {
                             stepObj.stepDetails = payload.stepDetails;
                             stepObj.configId = payload.stepDetails.ConfigId;
-                            if (payload.stepDetails.RuleFieldsMappings != undefined && payload.stepDetails.RuleFieldsMappings.length>0)
-                             ctrl.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
-                            ctrl.target = payload.stepDetails.Target;
+                            ctrl.value = payload.stepDetails.Value;
+                            ctrl.normalizedValue = payload.stepDetails.NormalizedValue;
                         }
 
                     }
@@ -59,8 +58,8 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
 
                 api.applyChanges = function (changes) {
                     stepObj.stepDetails = changes;
-                    ctrl.ruleFieldsMappings = changes.RuleFieldsMappings;
-                    ctrl.target = changes.Target;
+                    ctrl.value = changes.Value;
+                    ctrl.normalizedValue = changes.NormalizedValue;
                 }
 
                 api.checkValidation = function () {
@@ -72,25 +71,24 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestepPreview', ['Uti
                     return stepObj.stepDetails
                 }
 
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
             function checkValidation() {
-                if (ctrl.ruleFieldsMappings != undefined)
-                {
+                if (ctrl.ruleFieldsMappings != undefined) {
                     for (var i = 0 ; i < ctrl.ruleFieldsMappings.length; i++) {
-                        if(ctrl.ruleFieldsMappings[i].Value == undefined)
+                        if (ctrl.ruleFieldsMappings[i].Value == undefined)
                             return "All fields should be mapped.";
                     }
-                } else
-                {
+                } else {
                     return "All fields should be mapped.";
                 }
-                
-                if (ctrl.target == undefined) {
-                    return "Missing target mapping.";
+
+                if (ctrl.value == undefined) {
+                    return "Missing value mapping.";
+                }
+                if (ctrl.normalizedValue == undefined) {
+                    return "Missing normalized value mapping.";
                 }
                 if (stepObj.stepDetails.EffectiveTime == undefined)
                     return "Missing effective time mapping.";

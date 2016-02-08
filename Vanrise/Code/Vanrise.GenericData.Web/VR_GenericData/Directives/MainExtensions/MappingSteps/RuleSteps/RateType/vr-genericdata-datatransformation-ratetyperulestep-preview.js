@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
 
                 var ctrl = this;
 
-                var ctor = new rateValueRuleStepCtor(ctrl, $scope);
+                var ctor = new rateTypeRuleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,12 +26,12 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/RateValueRuleStepPreviewTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/RateType/Templates/RateTypeRuleStepPreviewTemplate.html';
             }
 
         };
 
-        function rateValueRuleStepCtor(ctrl, $scope) {
+        function rateTypeRuleStepCtor(ctrl, $scope) {
             var stepObj = {};
 
             function initializeController() {
@@ -50,6 +50,8 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                             stepObj.configId = payload.stepDetails.ConfigId;
                             ctrl.normalRate = payload.stepDetails.NormalRate;
                             ctrl.ratesByRateType = payload.stepDetails.RatesByRateType;
+                            ctrl.effectiveRate = payload.stepDetails.EffectiveRate;
+                            ctrl.rateTypeId = payload.stepDetails.RateTypeId;
                         }
 
                     }
@@ -60,6 +62,8 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                     stepObj.stepDetails = changes;
                     ctrl.normalRate = changes.NormalRate;
                     ctrl.ratesByRateType = changes.RatesByRateType;
+                    ctrl.effectiveRate = changes.EffectiveRate;
+                    ctrl.rateTypeId = changes.RateTypeId;
                 }
 
                 api.checkValidation = function () {
@@ -74,7 +78,6 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
             function checkValidation() {
                 if (ctrl.ruleFieldsMappings != undefined) {
                     for (var i = 0 ; i < ctrl.ruleFieldsMappings.length; i++) {
@@ -90,7 +93,12 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                 if (ctrl.ratesByRateType == undefined) {
                     return "Missing rates by rate type mapping.";
                 }
-
+                if (ctrl.effectiveRate == undefined) {
+                    return "Missing effective rate mapping.";
+                }
+                if (ctrl.rateTypeId == undefined) {
+                    return "Missing rate type id mapping.";
+                }
                 if (stepObj.stepDetails.EffectiveTime == undefined)
                     return "Missing effective time mapping.";
 

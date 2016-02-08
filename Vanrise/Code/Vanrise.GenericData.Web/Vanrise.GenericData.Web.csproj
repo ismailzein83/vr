@@ -185,7 +185,7 @@
     <Content Include="VR_GenericData\Directives\DataStore\vr-genericdata-datastore-grid.js" />
     <Content Include="VR_GenericData\Directives\DataStore\vr-genericdata-datastore-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationDefinitionGrid.html" />
-    <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\ExpressionBuilderTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ExpressionBuilder\Templates\ExpressionBuilderTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\DynamicUIControls\Templates\NumericEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\DynamicUIControls\vr-genericdata-dynamiccontrols-businessentity.js" />
@@ -208,7 +208,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datetime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-number.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\ExpressionBuilder\vr-genericdata-datatransformation-expressionbuilder-recordvalue.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\ExpressionBuilder\vr-genericdata-expressionbuilder-recordvalue.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-nosettings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleSettingsRuntimeEditor.html" />
@@ -216,33 +216,33 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericrulesettings-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Templates\GenericRuleDefinitionSettingsSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\vr-genericdata-genericrulesettings-selective.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\Templates\AssignFieldStepPreviewTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\Templates\AssignFieldStepTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\AssignValueRuleStepPreviewTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\AssignValueRuleStepTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\vr-genericdata-datatransformation-assignfieldstep-preview.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\vr-genericdata-datatransformation-assignfieldstep.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\NormalizationRuleStepPreviewTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\NormalizationRuleStepTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\RateTypeRuleStepPreviewTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\RateTypeRuleStepTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\RateValueRuleStepPreviewTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\RateValueRuleStepTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\RuleStepCommonTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-assignvaluerulestep-preview.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-normalizationrulestep-preview.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-normalizationrulestep.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-ratetyperulestep-preview.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-ratevaluerulestep-preview.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-ratevaluerulestep.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-assignvaluerulestep.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-ratetyperulestep.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\vr-genericdata-datatransformation-rulestep-common.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AssignField\Templates\AssignFieldStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AssignField\Templates\AssignFieldStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\AssignValue\Templates\AssignValueRuleStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\AssignValue\Templates\AssignValueRuleStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AssignField\vr-genericdata-datatransformation-assignfieldstep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AssignField\vr-genericdata-datatransformation-assignfieldstep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Normalization\Templates\NormalizationRuleStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Normalization\Templates\NormalizationRuleStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\RateType\Templates\RateTypeRuleStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\RateType\Templates\RateTypeRuleStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\RateValue\Templates\RateValueRuleStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\RateValue\Templates\RateValueRuleStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\Templates\RuleStepCommonTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\AssignValue\vr-genericdata-datatransformation-assignvaluerulestep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Normalization\vr-genericdata-datatransformation-normalizationrulestep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Normalization\vr-genericdata-datatransformation-normalizationrulestep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\RateType\vr-genericdata-datatransformation-ratetyperulestep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\RateValue\vr-genericdata-datatransformation-ratevaluerulestep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\RateValue\vr-genericdata-datatransformation-ratevaluerulestep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\AssignValue\vr-genericdata-datatransformation-assignvaluerulestep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\RateType\vr-genericdata-datatransformation-ratetyperulestep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\vr-genericdata-datatransformation-rulestep-common.js" />
     <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldManagement.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\DataRecordFieldTypeSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-management.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationRecordTypeManagement.html" />
-    <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-expressionbuilder.js" />
+    <Content Include="VR_GenericData\Directives\ExpressionBuilder\vr-genericdata-datatransformation-expressionbuilder.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datarecordfieldtype-selective.js" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
@@ -304,7 +304,7 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="VR_GenericData\Directives\MainExtensions\MappingSteps\Templates\" />
+    <Folder Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

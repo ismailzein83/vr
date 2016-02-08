@@ -26,7 +26,7 @@ app.directive('vrGenericdataDatatransformationAssignvaluerulestep', ['UtilsServi
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/AssignValueRuleStepTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/AssignValue/Templates/AssignValueRuleStepTemplate.html';
             }
 
         };

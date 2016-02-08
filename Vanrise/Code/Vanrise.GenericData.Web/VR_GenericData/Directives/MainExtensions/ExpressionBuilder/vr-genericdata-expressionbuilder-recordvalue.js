@@ -1,13 +1,10 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatatransformationExpressionbuilderRecordvalue', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_DataRecordTypeAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrGenericdataExpressionbuilderRecordvalue', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_DataRecordTypeAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
             onReady: '=',
-            recordlabel: '@',
-            fieldlabel: '@',
-            hidelabel: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -38,37 +35,30 @@ app.directive('vrGenericdataDatatransformationExpressionbuilderRecordvalue', ['V
     };
 
     function getTemplate(attrs) {
-        var recordlabel = " ";
-        var fieldlabel = " ";
-        if (attrs.hidelabel == undefined) {
-            recordlabel = ' label="' + attrs.recordlabel + '"';
-            fieldlabel = ' label="' + attrs.fieldlabel + '"';
-        }
-
         var template =
 
-        '<vr-row>'
+        '<vr-row removeline>'
            + '<vr-columns width="1/2row">'
              + '<vr-select selectedvalues="ctrl.selectedRecordName"'
-               + 'isrequired="true" hidelabel'
-                + recordlabel
+               + 'isrequired="true"'
+                + 'label="Record"'
                + 'onselectionchanged="ctrl.onselectionchanged"'
                + 'hideselectedvaluessection'
-               + 'entityname="' + attrs.recordlabel + '"'
+               + 'entityname="Record"'
                + 'datasource="ctrl.recordNames"'
                + 'datatextfield="Name"'
                + 'datavaluefield="Name" hideremoveicon></vr-select>'
             + '</vr-columns>'
            + '<vr-columns width="1/2row" vr-loader="ctrl.loadingFields">'
              + ' <vr-select selectedvalues="ctrl.selectedFieldName"'
-               + 'isrequired="true" hidelabel'
-              + fieldlabel
+               + 'isrequired="true"'
+              + 'label="Field"'
                + 'hideselectedvaluessection'
-               + 'entityname="' + attrs.fieldlabel + '"'
+               + 'entityname="Field"'
                + 'datasource="ctrl.fieldNames"'
                + 'datatextfield="Name"'
                + 'datavaluefield="Name" hideremoveicon></vr-select>'
-           + '</vr-columns>'
+           + '</vr-columns >'
        + '</vr-row>';
         return template;
     }
@@ -113,6 +103,7 @@ app.directive('vrGenericdataDatatransformationExpressionbuilderRecordvalue', ['V
 
             api.load = function (payload) {
                 mainPayload = payload;
+              
                 var selectedRecordName;
                 if (payload != undefined) {
                     ctrl.recordNames = payload.context.getRecordNames();

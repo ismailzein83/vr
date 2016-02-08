@@ -26,7 +26,7 @@ app.directive('vrGenericdataDatatransformationAssignfieldstep', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/GeneralSteps/Templates/AssignFieldStepTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/GeneralSteps/AssignField/Templates/AssignFieldStepTemplate.html';
             }
 
         };

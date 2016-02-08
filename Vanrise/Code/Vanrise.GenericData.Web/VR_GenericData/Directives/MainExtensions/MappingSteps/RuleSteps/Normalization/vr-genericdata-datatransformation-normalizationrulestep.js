@@ -26,7 +26,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/NormalizationRuleStepTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Normalization/Templates/NormalizationRuleStepTemplate.html';
             }
 
         };

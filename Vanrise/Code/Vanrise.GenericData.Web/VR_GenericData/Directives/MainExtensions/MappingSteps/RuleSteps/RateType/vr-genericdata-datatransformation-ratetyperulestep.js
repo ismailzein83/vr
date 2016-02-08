@@ -26,7 +26,7 @@ app.directive('vrGenericdataDatatransformationRatetyperulestep', ['UtilsService'
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Templates/RateTypeRuleStepTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/RateType/Templates/RateTypeRuleStepTemplate.html';
             }
 
         };
