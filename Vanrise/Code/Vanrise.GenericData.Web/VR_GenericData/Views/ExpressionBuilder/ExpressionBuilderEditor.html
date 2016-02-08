@@ -10,8 +10,7 @@
                 <vr-columns colnum="6" ng-show="selectedExpressionBuilderTemplate" vr-loader="isLoadingDirective">
                     <vr-directivewrapper directive="selectedExpressionBuilderTemplate.Editor" on-ready="onExpressionBuilderTemplateDirectiveReady"></vr-directivewrapper>
                 </vr-columns>
-                <vr-columns colnum="3" ng-show="selectedExpressionBuilderTemplate" vr-loader="isLoadingDirective">
-                    <br />
+                <vr-columns colnum="3" ng-show="selectedExpressionBuilderTemplate" vr-loader="isLoadingDirective" withemptyline>
                     <vr-button type="Add" data-onclick="addData" standalone vr-disabled="isbuttonDisabled()"></vr-button>
 
                 </vr-columns>

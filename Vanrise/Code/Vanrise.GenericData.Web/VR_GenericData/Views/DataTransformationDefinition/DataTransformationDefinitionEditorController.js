@@ -46,30 +46,33 @@
 
             $scope.scopeModal.addStep = function (dataItem)
             {
-
                 var obj = {
                     Id: $scope.scopeModal.stepsAdded.length + 1,
                     Editor: dataItem.Editor,
                     StepPreviewUIControl: dataItem.StepPreviewUIControl,
                     Title: dataItem.Title,
-                    DataTransformationStepConfigId: dataItem.DataTransformationStepConfigId,
-                    Context : {
-                        getRecordNames: getRecordNames,
-                        getRecordFields: getRecordFields
-                    }
+                    DataTransformationStepConfigId: dataItem.DataTransformationStepConfigId
                 }
-               
-                obj.onPreviewDirectiveReady = function (api)
-                {
+
+                obj.onPreviewDirectiveReady = function (api) {
                     obj.previewAPI = api;
                     var setLoader = function (value) {
                         obj.isLoadingPreviewDirective = value;
                     };
-                    var payload = { stepDetails: { ConfigId: obj.DataTransformationStepConfigId } }
+                    var payload = {
+                        stepDetails: { ConfigId: obj.DataTransformationStepConfigId },
+                        Context: getChildrenContext()
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, obj.previewAPI, payload, setLoader);
                 }
-                $scope.scopeModal.stepsAdded.push(obj);
-                  
+
+                if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI.isCompositeStep) {                    
+                    $scope.scopeModal.selectedStep.previewAPI.addStep(obj);
+                }
+                else {
+                    obj.Context = getChildrenContext();
+                    $scope.scopeModal.stepsAdded.push(obj);
+                }                  
             }
 
             $scope.scopeModal.onEditStepClick = function (dataItem)
@@ -254,6 +257,13 @@
                     dataTransformationDefinitionEntity = dataTransformationDefinition;
                 });
             }
+        }
+
+        function getChildrenContext() {
+            return {
+                getRecordNames: getRecordNames,
+                getRecordFields: getRecordFields
+            };
         }
 
         function applyChanges() {
