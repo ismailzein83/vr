@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class DataRecordStorageSettings
+    public interface IDataRecordDataManager : Vanrise.Data.IBulkApplyDataManager<Object>
     {
-        public int ConfigId { get; set; }
+        void ApplyStreamToDB(object stream);
     }
 }

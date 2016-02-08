@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.Entities
 
         public int DataRecordTypeId { get; set; }
 
+        public int DataStoreId { get; set; }
+
         public DataRecordStorageSettings Settings { get; set; }
     }
 }

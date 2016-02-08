@@ -9,12 +9,16 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages
 {
     public class SQLDataRecordStorageSettings : DataRecordStorageSettings
     {
+        public string TableName { get; set; }
+
         public List<SQLDataRecordStorageColumn> Columns { get; set; }
     }
 
     public class SQLDataRecordStorageColumn
     {
         public string ColumnName { get; set; }
+
+        public string SQLDataType { get; set; }
 
         public string ValueExpression { get; set; }
     }

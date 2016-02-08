@@ -64,7 +64,9 @@
     <Compile Include="DataStorage\DataRecordStorage.cs" />
     <Compile Include="DataStorage\DataRecordStorageSettings.cs" />
     <Compile Include="DataStorage\DataStore.cs" />
+    <Compile Include="DataStorage\DataStoreConfig.cs" />
     <Compile Include="DataStorage\DataStoreSettings.cs" />
+    <Compile Include="DataStorage\IDataRecordDataManager.cs" />
     <Compile Include="DataStorage\IUpdateRecordStorageSettingsContext.cs" />
     <Compile Include="GenericRules\GenericRule.cs" />
     <Compile Include="GenericRules\GenericRuleCriteria.cs" />
@@ -83,6 +85,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
       <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
       <Name>Vanrise.Rules</Name>
