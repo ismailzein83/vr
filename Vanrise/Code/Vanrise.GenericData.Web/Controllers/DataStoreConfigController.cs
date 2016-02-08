@@ -14,10 +14,11 @@ namespace Vanrise.GenericData.Web.Controllers
     public class DataStoreConfigController:BaseAPIController
     {
         [HttpGet]
-        [Route("GetGenericRuleTypes")]
+        [Route("GetDataStoreConfigs")]
         public IEnumerable<DataStoreConfig> GetDataStoreConfigs()
         {
-            return null;
+            DataStoreConfigManager manager = new DataStoreConfigManager();
+            return manager.GetDataStoreConfigs();
         }
 
         

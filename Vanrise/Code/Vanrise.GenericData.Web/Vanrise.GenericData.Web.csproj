@@ -182,6 +182,9 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-grid.js" />
+    <Content Include="VR_GenericData\Directives\DataStoreConfig\vr-genericdata-datastoreconfig-selector.js" />
+    <Content Include="VR_GenericData\Directives\DataStoreSetting\Templates\StatisSqlTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataStoreSetting\vr-genericdata-datastoresetting-sql.js" />
     <Content Include="VR_GenericData\Directives\DataStore\Templates\DataStoreGrid.html" />
     <Content Include="VR_GenericData\Directives\DataStore\vr-genericdata-datastore-grid.js" />
     <Content Include="VR_GenericData\Directives\DataStore\vr-genericdata-datastore-selector.js" />
@@ -264,6 +267,7 @@
     <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataStoreConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordStorageService.js" />
     <Content Include="VR_GenericData\Services\DataStoreService.js" />

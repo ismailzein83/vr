@@ -1,14 +1,15 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    DataStoreEditorController.$inject = ["$scope", "VRNavigationService", "VRNotificationService", "UtilsService"];
+    DataStoreEditorController.$inject = ["$scope", "VRNavigationService", "VRNotificationService", "UtilsService", "VRUIUtilsService"];
 
-    function DataStoreEditorController($scope, VRNavigationService, VRNotificationService, UtilsService) {
+    function DataStoreEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService) {
 
         var dataStoreId;
         var dataStoreEntity;
         var isEditMode;
-
+        var dataStoreDirectiveAPI;
+        var dataStoreReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -23,13 +24,10 @@
         }
 
         function defineScope() {
-            //$scope.saveBrand = function () {
-            //    $scope.isLoading = true;
-            //    if (isEditMode)
-            //        return updateBrand();
-            //    else
-            //        return insertBrand();
-            //}
+            $scope.onReadyDataStoreConfig = function (api) {
+                dataStoreDirectiveAPI = api;
+                dataStoreReadyPromiseDeferred.resolve();
+            }
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             }
@@ -60,7 +58,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData , loadDataStoreConfig])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -81,6 +79,15 @@
                 return;
             $scope.name = dataStoreEntity.Name;
         }
+
+        function loadDataStoreConfig() {
+            var loadDataStorePromiseDeferred = UtilsService.createPromiseDeferred();
+            dataStoreReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(dataStoreDirectiveAPI, undefined, loadDataStorePromiseDeferred);
+            });
+            return loadDataStorePromiseDeferred.promise;
+        }
+
 
         //function updateBrand() {
         //    var brandObj = buildBrandObjFromScope();
