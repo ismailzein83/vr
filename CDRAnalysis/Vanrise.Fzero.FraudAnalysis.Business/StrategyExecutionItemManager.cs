@@ -21,5 +21,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             IStrategyExecutionItemDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
             return dataManager.GetFilteredDetailsByCaseID(input);
         }
+
+        public void GetStrategyExecutionbyExecutionId(int ExecutionId, out List<StrategyExecutionItem> outAllStrategyExecutionItems, out List<AccountCase> outAccountCases, out List<StrategyExecutionItem> outStrategyExecutionItemRelatedtoCases)
+        {
+            IStrategyExecutionItemDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
+            dataManager.GetStrategyExecutionbyExecutionId(ExecutionId, out outAllStrategyExecutionItems, out outAccountCases, out outStrategyExecutionItemRelatedtoCases);
+        }
     }
 }

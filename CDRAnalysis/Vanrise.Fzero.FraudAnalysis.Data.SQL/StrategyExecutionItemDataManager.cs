@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class StrategyExecutionItemDataManager : BaseSQLDataManager, IStrategyExecutionItemDataManager
     {
-   
+
         #region ctor
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         public StrategyExecutionItemDataManager()
@@ -48,9 +48,67 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
         }
+
+
+        public void GetStrategyExecutionbyExecutionId(long ExecutionId, out List<StrategyExecutionItem> outAllStrategyExecutionItems, out List<AccountCase> outAccountCases, out List<StrategyExecutionItem> outStrategyExecutionItemRelatedtoCases)
+        {
+            AccountCaseDataManager accountCaseDataManager = new AccountCaseDataManager();
+            List<StrategyExecutionItem> allStrategyExecutionItems = new List<StrategyExecutionItem>();
+            List<AccountCase> accountCases = new List<AccountCase>();
+            List<StrategyExecutionItem> strategyExecutionItemRelatedtoCases = new List<StrategyExecutionItem>();
+
+            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionItem_GetItemsAndCasesByExecutionID", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    allStrategyExecutionItems.Add(StrategyExecutionItemMapper(reader));
+                }
+                reader.NextResult();
+
+
+
+                while (reader.Read())
+                {
+                    accountCases.Add(accountCaseDataManager.AccountCaseMapper(reader));
+                }
+                reader.NextResult();
+
+
+
+                while (reader.Read())
+                {
+                    strategyExecutionItemRelatedtoCases.Add(StrategyExecutionItemMapper(reader));
+                }
+
+            }, ExecutionId);
+
+            outAllStrategyExecutionItems = allStrategyExecutionItems;
+            outAccountCases = accountCases;
+            outStrategyExecutionItemRelatedtoCases = strategyExecutionItemRelatedtoCases;
+        }
+
+
         #endregion
 
         #region  Mappers
+
+
+        private StrategyExecutionItem StrategyExecutionItemMapper(IDataReader reader)
+        {
+            var item = new StrategyExecutionItem();
+            item.ID = (long)reader["ID"];
+            item.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
+            item.FilterValues = Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(GetReaderValue<string>(reader, "FilterValues"));
+            item.IMEIs = new HashSet<string>((GetReaderValue<string>(reader, "IMEIs")).Split(','));
+            item.StrategyExecutionID = (int)reader["StrategyExecutionID"];
+            item.AccountNumber = reader["AccountNumber"] as string;
+            item.SuspicionLevelID = (int)reader["SuspicionLevelID"];
+            item.CaseID = GetReaderValue<int?>(reader, "CaseID");
+            item.SuspicionOccuranceStatus = (SuspicionOccuranceStatus)reader["SuspicionOccuranceStatus"];
+            return item;
+        }
+
+
         private AccountSuspicionDetail AccountSuspicionDetailMapper(IDataReader reader)
         {
             var detail = new AccountSuspicionDetail(); // a detail is a fraud result instance

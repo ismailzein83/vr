@@ -98,7 +98,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 strategyExecutionObject.FromDate,
                 strategyExecutionObject.ToDate,
                 strategyExecutionObject.PeriodID,
-                DateTime.Now
+                DateTime.Now,
+                strategyExecutionObject.ExecutedBy
             );
 
             if (recordsEffected > 0)
@@ -111,7 +112,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 insertedId = 0;
                 return false;
             }
-
 
         }
 

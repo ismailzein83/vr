@@ -11,6 +11,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     public interface IStrategyExecutionItemDataManager:IDataManager
     {
         bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus);
+
         BigResult<AccountSuspicionDetail> GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input);
+
+        void GetStrategyExecutionbyExecutionId(long ExecutionId, out List<StrategyExecutionItem> outAllStrategyExecutionItems, out List<AccountCase> outAccountCases, out List<StrategyExecutionItem> outStrategyExecutionItemRelatedtoCases);
     }
 }
