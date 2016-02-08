@@ -19,6 +19,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public AccountCaseHistoryDataManager()
             : base("CDRDBConnectionString")
         {
+           
+        }
+
+        static AccountCaseHistoryDataManager()
+        {
             _columnMapper.Add("UserName", "UserID");
             _columnMapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
         }
