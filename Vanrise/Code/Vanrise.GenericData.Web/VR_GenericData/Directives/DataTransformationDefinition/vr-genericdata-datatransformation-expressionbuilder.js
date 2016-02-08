@@ -43,8 +43,8 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
         var fieldlabel=" ";
         if (attrs.hidelabel == undefined)
         {
-            recordlabel =' label="' +  attrs.recordlabel + '"';
-            fieldlabel = ' label="' +  attrs.fieldlabel + '"';
+            recordlabel = ' label="' + attrs.recordlabel + '"';
+            fieldlabel = ' label="' + attrs.fieldlabel + '"';
         }
             
         var template =
@@ -59,7 +59,7 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
                + 'entityname="' + attrs.recordlabel + '"'
                + 'datasource="ctrl.recordNames"'
                + 'datatextfield="Name"'
-               + 'datavaluefield="Name"></vr-select>'
+               + 'datavaluefield="Name" hideremoveicon></vr-select>'
             + '</vr-columns>'
            + '<vr-columns width="1/2row" vr-loader="ctrl.loadingFields">'
              + ' <vr-select selectedvalues="ctrl.selectedFieldName"'
@@ -69,7 +69,7 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
                + 'entityname="' + attrs.fieldlabel + '"'
                + 'datasource="ctrl.fieldNames"'
                + 'datatextfield="Name"'
-               + 'datavaluefield="Name"></vr-select>'
+               + 'datavaluefield="Name" hideremoveicon></vr-select>'
            + '</vr-columns>'
        + '</vr-row>';
         return template;
@@ -83,20 +83,20 @@ app.directive('vrGenericdataDatatransformationExpressionbuilder', ['VR_GenericDa
 
             ctrl.onselectionchanged = function ()
             {
-               
-                if (ctrl.selectedRecordName != undefined)
-                {
+                if (ctrl.selectedRecordName != undefined) {
                     ctrl.loadingFields = true;
                     mainPayload.context.getRecordFields(ctrl.selectedRecordName.Name).then(function (response) {
                         ctrl.fieldNames = response;
                         if (mainPayload.selectedRecords != undefined) {
                             ctrl.selectedFieldName = UtilsService.getItemByVal(ctrl.fieldNames, mainPayload.selectedRecords.split('.')[1], "Name");
                         }
-                     
+
                         ctrl.loadingFields = false;
                     });
                 }
-
+                else {
+                    ctrl.selectedFieldName = undefined;
+                }
             }
 
             defineAPI();
