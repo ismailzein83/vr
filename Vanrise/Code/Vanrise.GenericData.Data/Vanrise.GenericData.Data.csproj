@@ -51,6 +51,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="IDataRecordFieldTypeConfigDataManager.cs" />
     <Compile Include="IDataRecordTypeDataManager.cs" />
+    <Compile Include="IExpressionBuilderConfigDataManager.cs" />
     <Compile Include="IGenericRuleDefinitionDataManager.cs" />
     <Compile Include="IGenericRuleTypeConfigDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -46,6 +46,7 @@
     <Compile Include="BusinessEntityDefinitionDataManager.cs" />
     <Compile Include="DataRecordFieldTypeConfigDataManager.cs" />
     <Compile Include="DataRecordTypeDataManager.cs" />
+    <Compile Include="ExpressionBuilderConfigDataManager.cs" />
     <Compile Include="GenericRuleDefinitionDataManager.cs" />
     <Compile Include="GenericRuleTypeConfigDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

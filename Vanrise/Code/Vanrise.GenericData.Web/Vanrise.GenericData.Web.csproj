@@ -130,6 +130,7 @@
     <Compile Include="Controllers\BusinessEntityDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordFieldTypeConfigController.cs" />
     <Compile Include="Controllers\DataTransformationStepConfigController.cs" />
+    <Compile Include="Controllers\ExpressionBuilderConfigController.cs" />
     <Compile Include="Controllers\GenericRuleController.cs" />
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordTypeController.cs" />
@@ -200,6 +201,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datetime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-number.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\ExpressionBuilder\vr-genericdata-datatransformation-expressionbuilder-recordvalue.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-nosettings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleSettingsRuntimeEditor.html" />
