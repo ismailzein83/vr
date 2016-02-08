@@ -208,6 +208,8 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-datetime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-number.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-text.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSQLSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-sql.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\ExpressionBuilder\vr-genericdata-expressionbuilder-recordvalue.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-nosettings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleDefinitionSettingsTemplate.html" />
