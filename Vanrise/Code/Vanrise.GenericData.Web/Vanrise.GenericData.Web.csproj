@@ -260,7 +260,7 @@
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
-    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageController.js" />
+    <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageManagementController.js" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditorController.js" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageManagement.html" />
