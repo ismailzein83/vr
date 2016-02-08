@@ -100,6 +100,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyStrategyExecutionCancellation.cs" />
     <Compile Include="ConvertStrategyExecItemsToInfos.cs" />
     <Compile Include="CreateStrategiesExecutionItems.cs" />
     <Compile Include="DataWarehouse\ApplyDWDimensionsToDB.cs" />

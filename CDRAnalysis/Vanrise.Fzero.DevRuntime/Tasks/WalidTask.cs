@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Fzero.FraudAnalysis.Business;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
 {

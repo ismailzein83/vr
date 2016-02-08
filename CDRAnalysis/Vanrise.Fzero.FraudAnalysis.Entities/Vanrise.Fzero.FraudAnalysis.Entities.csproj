@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCaseLog.cs" />
+    <Compile Include="Batches\CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManager\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManager\IBusinessManager.cs" />
     <Compile Include="BusinessManager\IStrategyManager.cs" />

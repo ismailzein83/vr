@@ -270,6 +270,7 @@
     <Compile Include="Mappers\StringIranSQLMappers.cs" />
     <Compile Include="Mappers\IranSQLMappers.cs" />
     <Compile Include="Mappers\SQLMappers.cs" />
+    <Compile Include="Tasks\CancelStrategyExecution.cs" />
     <Compile Include="Tasks\IsmailTask.cs" />
     <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\HaririTask.cs" />
