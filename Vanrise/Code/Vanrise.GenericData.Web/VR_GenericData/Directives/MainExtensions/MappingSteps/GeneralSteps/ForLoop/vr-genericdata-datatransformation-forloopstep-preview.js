@@ -40,7 +40,14 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                 $scope.editStep = function (stepItem) {
                     currentContext.editStep(stepItem);
                 };
-
+                ctrl.removeStep = function (stepItem) {
+                    var index = ctrl.childSteps.indexOf(stepItem);
+                    if (index != -1) {
+                        ctrl.childSteps.splice(index, 1);
+                        currentContext.removeStep(stepItem);
+                    }
+                  
+                };
                 defineAPI();
             }
 
@@ -56,12 +63,12 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                 api.load = function (payload) {
                     if(payload != undefined)
                     {
-                        currentContext = payload.Context;
+                        currentContext = payload.context;
                         if (payload.stepDetails != undefined)
                         {
                             stepObj.stepDetails = payload.stepDetails;
                             stepObj.configId = payload.stepDetails.ConfigId;
-                            currentContext = payload.Context;
+                            currentContext = payload.context;
                             ctrl.arrayVariableName = payload.stepDetails.ArrayVariableName;
                             ctrl.iterationVariableName = payload.stepDetails.IterationVariableName;
                             if (payload.stepDetails.Steps != null) {
@@ -79,6 +86,7 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
 
                 api.applyChanges = function (changes) {                    
                     stepObj.stepDetails = changes;
+                    ctrl.arrayVariableName = changes.ArrayVariableName;
                     ctrl.iterationVariableName = changes.IterationVariableName;
                 }
 
@@ -88,13 +96,28 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                 }
 
                 api.getData = function () {
-                    console.log(stepObj.stepDetails);
-               //     stepObj.stepDetails.ConfigId = stepObj.configId;
-                    return stepObj.stepDetails;
+                    var forLoobStepDetails = stepObj.stepDetails;
+                    if (forLoobStepDetails != undefined)
+                     forLoobStepDetails.Steps = buildStepsData();
+                    return forLoobStepDetails;
                 }
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function buildStepsData() {
+                var steps = [];
+
+                for (var i = 0; i < ctrl.childSteps.length; i++) {
+                    var stepItem = ctrl.childSteps[i];
+                    if (stepItem.previewAPI != undefined) {
+                        var stepEntity = stepItem.previewAPI.getData();
+                        stepEntity.ConfigId = stepItem.dataTransformationStepConfigId;
+                        steps.push(stepEntity);
+                    }
+                }
+                return steps;
             }
 
             function checkValidation() {                
@@ -118,9 +141,22 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                     },
                     getRecordFields: function (recordName) {
 
+                        if (recordName == ctrl.iterationVariableName)
+                        {
+                            if (ctrl.iterationVariableName != undefined)
+                            return currentContext.getRecordFields(ctrl.arrayVariableName);
+                        }
+                        else
+                        {
+                            return currentContext.getRecordFields(recordName);
+
+                        }
+                        
                     },
+                    getArrayRecordNames: currentContext.getArrayRecordNames,
                     createStepItem: currentContext.createStepItem,
-                    editStep: currentContext.editStep
+                    editStep: currentContext.editStep,
+                    removeStep:currentContext.removeStep
                 };
                 return childrenContext; 
             }

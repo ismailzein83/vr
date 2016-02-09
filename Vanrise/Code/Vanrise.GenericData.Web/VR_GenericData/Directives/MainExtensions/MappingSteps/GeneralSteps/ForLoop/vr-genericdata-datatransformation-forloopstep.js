@@ -32,8 +32,6 @@ app.directive('vrGenericdataDatatransformationForloopstep', ['UtilsService','VR_
         };
 
         function ForLoopStepCtor(ctrl, $scope) {
-            var stepPayload;
-            
 
             function initializeController() {               
                 defineAPI();
@@ -43,16 +41,21 @@ app.directive('vrGenericdataDatatransformationForloopstep', ['UtilsService','VR_
                 var api = {};
 
                 api.load = function (payload) {
-                    stepPayload = payload;
+                    if (payload != undefined && payload.context != undefined)
+                    {
+                        ctrl.arrayRecords = payload.context.getArrayRecordNames();
+                    }
                     if (payload.stepDetails != undefined) {
-                        ctrl.iterationVariableName = payload.stepDetails.IterationVariableName
+                        ctrl.iterationVariableName = payload.stepDetails.IterationVariableName;
+                        ctrl.selectedArray = UtilsService.getItemByVal(ctrl.arrayRecords, payload.stepDetails.ArrayVariableName, "Name");
                     }
                 }
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.ForLoopStep, Vanrise.GenericData.Transformation.MainExtensions",
-                        IterationVariableName: ctrl.iterationVariableName
+                        IterationVariableName: ctrl.iterationVariableName,
+                        ArrayVariableName: ctrl.selectedArray != undefined? ctrl.selectedArray.Name:undefined
                     };
                 }
 

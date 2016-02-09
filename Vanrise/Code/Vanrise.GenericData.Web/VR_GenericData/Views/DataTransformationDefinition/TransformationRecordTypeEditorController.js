@@ -64,7 +64,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadDataRecordTypeSelector, setTitle])
+            return UtilsService.waitMultipleAsyncOperations([loadScopeDataFromObj, loadDataRecordTypeSelector, setTitle])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -74,13 +74,14 @@
 
             function setTitle() {
                 if (isEditMode && dataRecordTypeEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(dataRecordTypeEntity.Name, 'Data Record Type');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(dataRecordTypeEntity.Name, 'Data Record');
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor('Data Record Type');
+                    $scope.title = UtilsService.buildTitleForAddEditor('Data Record');
             }
-            function loadFilterBySection() {
+            function loadScopeDataFromObj() {
                 if (dataRecordTypeEntity != undefined) {
                     $scope.scopeModal.name = dataRecordTypeEntity.RecordName;
+                    $scope.scopeModal.isArray = dataRecordTypeEntity.IsArray;
                 }
             }
             function loadDataRecordTypeSelector() {
@@ -97,17 +98,22 @@
         }
 
         function validateName() {
-            if (isEditMode && $scope.scopeModal.name.toLowerCase() == dataRecordTypeEntity.RecordName.toLowerCase())
+            if ($scope.scopeModal.name != undefined)
+            {
+                if (isEditMode && $scope.scopeModal.name.toLowerCase() == dataRecordTypeEntity.RecordName.toLowerCase())
+                    return null;
+                else if (UtilsService.getItemIndexByVal(existingRecordNames, $scope.scopeModal.name.toLowerCase(), 'RecordName') != -1)
+                    return 'Same Name Exist.';
                 return null;
-            else if (UtilsService.getItemIndexByVal(existingRecordNames, $scope.scopeModal.name.toLowerCase(), 'RecordName') != -1)
-                return 'Same Name Exist.';
+            }
             return null;
         }
 
         function buildDataRecordTypeObjectObjFromScope() {
             var dataRecordType = {};
             dataRecordType.RecordName = $scope.scopeModal.name;
-            dataRecordType.DataRecordTypeId = $scope.scopeModal.selectedRecordType != undefined ? $scope.scopeModal.selectedRecordType.DataRecordTypeId : undefined
+            dataRecordType.DataRecordTypeId = $scope.scopeModal.selectedRecordType != undefined ? $scope.scopeModal.selectedRecordType.DataRecordTypeId : undefined,
+            dataRecordType.IsArray = $scope.scopeModal.isArray;
             return dataRecordType;
         }
 

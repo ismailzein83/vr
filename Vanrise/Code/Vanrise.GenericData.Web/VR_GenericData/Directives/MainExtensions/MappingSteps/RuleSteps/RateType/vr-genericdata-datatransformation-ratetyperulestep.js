@@ -86,8 +86,8 @@ app.directive('vrGenericdataDatatransformationRatetyperulestep', ['UtilsService'
                     var loadRuleStepCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     ruleStepCommonDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadRuleStep = { ruleTypeName: ruleTypeName };
-                        if (payload != undefined && payload.Context != undefined)
-                            payloadRuleStep.context = payload.Context;
+                        if (payload != undefined && payload.context != undefined)
+                            payloadRuleStep.context = payload.context;
                         if (payload != undefined && payload.stepDetails) {
                             payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                             payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
@@ -103,8 +103,8 @@ app.directive('vrGenericdataDatatransformationRatetyperulestep', ['UtilsService'
                         var payloadNormalRate;
                         if (payload != undefined) {
                             payloadNormalRate = {};
-                            if (payload != undefined && payload.Context != undefined)
-                                payloadNormalRate.context = payload.Context;
+                            if (payload != undefined && payload.context != undefined)
+                                payloadNormalRate.context = payload.context;
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadNormalRate.selectedRecords = payload.stepDetails.NormalRate;
                         }
@@ -118,8 +118,8 @@ app.directive('vrGenericdataDatatransformationRatetyperulestep', ['UtilsService'
                         var payloadRatesByRateType;
                         if (payload != undefined) {
                             payloadRatesByRateType = {};
-                            if (payload != undefined && payload.Context != undefined)
-                                payloadRatesByRateType.context = payload.Context;
+                            if (payload != undefined && payload.context != undefined)
+                                payloadRatesByRateType.context = payload.context;
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadRatesByRateType.selectedRecords = payload.stepDetails.RatesByRateType;
                         }
@@ -135,8 +135,8 @@ app.directive('vrGenericdataDatatransformationRatetyperulestep', ['UtilsService'
                         var payloadEffectiveRate;
                         if (payload != undefined) {
                             payloadEffectiveRate = {};
-                            if (payload != undefined && payload.Context != undefined)
-                                payloadEffectiveRate.context = payload.Context;
+                            if (payload != undefined && payload.context != undefined)
+                                payloadEffectiveRate.context = payload.context;
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadEffectiveRate.selectedRecords = payload.stepDetails.RatesByRateType;
                         }
@@ -151,8 +151,8 @@ app.directive('vrGenericdataDatatransformationRatetyperulestep', ['UtilsService'
                         var payloadRatesByRateType;
                         if (payload != undefined) {
                             payloadRatesByRateType = {};
-                            if (payload != undefined && payload.Context != undefined)
-                                payloadRatesByRateType.context = payload.Context;
+                            if (payload != undefined && payload.context != undefined)
+                                payloadRatesByRateType.context = payload.context;
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadRatesByRateType.selectedRecords = payload.stepDetails.RatesByRateType;
                         }

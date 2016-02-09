@@ -64,6 +64,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                             recordTypes.push({
                                 RecordName: ctrl.datasource[i].RecordName,
                                 DataRecordTypeId: ctrl.datasource[i].DataRecordTypeId,
+                                IsArray: ctrl.datasource[i].IsArray,
                             });
                         }
 

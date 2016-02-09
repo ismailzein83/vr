@@ -71,8 +71,8 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
                     var loadRuleStepCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     ruleStepCommonDirectiveReadyPromiseDeferred.promise.then(function () {
                         var payloadRuleStep = { ruleTypeName: ruleTypeName };
-                        if (payload != undefined && payload.Context != undefined)
-                            payloadRuleStep.context = payload.Context;
+                        if (payload != undefined && payload.context != undefined)
+                            payloadRuleStep.context = payload.context;
                         if (payload != undefined && payload.stepDetails) {
                             payloadRuleStep.ruleFieldsMappings = payload.stepDetails.RuleFieldsMappings;
                             payloadRuleStep.effectiveTime = payload.stepDetails.EffectiveTime;
@@ -88,8 +88,8 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
                         var payloadValue;
                         if (payload != undefined) {
                             payloadValue = {};
-                            if (payload != undefined && payload.Context != undefined)
-                                payloadValue.context = payload.Context;
+                            if (payload != undefined && payload.context != undefined)
+                                payloadValue.context = payload.context;
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadValue.selectedRecords = payload.stepDetails.Value;
                         }
@@ -104,8 +104,8 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
                         var payloadValue;
                         if (payload != undefined) {
                             payloadValue = {};
-                            if (payload != undefined && payload.Context != undefined)
-                                payloadValue.context = payload.Context;
+                            if (payload != undefined && payload.context != undefined)
+                                payloadValue.context = payload.context;
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadValue.selectedRecords = payload.stepDetails.NormalizedValue;
                         }

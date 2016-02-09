@@ -11,5 +11,6 @@ namespace Vanrise.GenericData.Transformation.Entities
         public string RecordName { get; set; }
 
         public int DataRecordTypeId { get; set; }
+        public bool IsArray { get; set; }
     }
 }

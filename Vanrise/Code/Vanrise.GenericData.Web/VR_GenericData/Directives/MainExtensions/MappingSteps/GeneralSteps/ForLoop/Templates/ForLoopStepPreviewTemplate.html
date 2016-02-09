@@ -1,6 +1,8 @@
-﻿<vr-datalist maxitemsperrow="1" datasource="ctrl.childSteps" isitemdraggable onremoveitem="scopeModal.onRemoveStep">
-    <vr-label>{{dataItem.Title}}</vr-label> <vr-check value="dataItem.isSelected" ng-click="viewScope.editStep(dataItem)"></vr-check>
+﻿<vr-label>For Each: {{ctrl.iterationVariableName}} in {{ctrl.arrayVariableName}} </vr-label>
+
+<vr-datalist maxitemsperrow="1" datasource="ctrl.childSteps" isitemdraggable onremoveitem="ctrl.removeStep">
+    <vr-label>{{dataItem.title}}</vr-label> <vr-check value="dataItem.isSelected" ng-click="viewScope.editStep(dataItem)"></vr-check>
     <vr-validator validate="dataItem.validationMessage">
-        <vr-directivewrapper directive="dataItem.StepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
+        <vr-directivewrapper directive="dataItem.stepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
     </vr-validator>
 </vr-datalist>
