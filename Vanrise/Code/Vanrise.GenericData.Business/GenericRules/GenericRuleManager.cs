@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Rules;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.Business
 {
@@ -18,15 +19,21 @@ namespace Vanrise.GenericData.Business
 
         private RuleTree GetRuleTree(int ruleDefinitionId)
         {
-            GenericRuleDefinition ruleDefinition = null;
-            IEnumerable<T> rules = null;
-            List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
-            foreach (var ruleDefinitionCriteriaField in ruleDefinition.CriteriaDefinition.Fields.OrderBy(itm => itm.Priority))
+            String cacheName = String.Format("GenericRuleManager<T>_GetRuleTree_{0}", ruleDefinitionId);
+            return GetCachedOrCreate(cacheName, () =>
             {
-                BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
-                ruleStructureBehaviors.Add(ruleStructureBehavior);
-            }
-            return new RuleTree(rules, ruleStructureBehaviors);
+                GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
+                GenericRuleDefinition ruleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
+                IEnumerable<T> rules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == ruleDefinitionId);
+                List<BaseRuleStructureBehavior> ruleStructureBehaviors = new List<BaseRuleStructureBehavior>();
+                foreach (var ruleDefinitionCriteriaField in ruleDefinition.CriteriaDefinition.Fields.OrderBy(itm => itm.Priority))
+                {
+                    BaseRuleStructureBehavior ruleStructureBehavior = CreateRuleStructureBehavior(ruleDefinitionCriteriaField);
+                    ruleStructureBehaviors.Add(ruleStructureBehavior);
+                }
+                return new RuleTree(rules, ruleStructureBehaviors);
+            });
+
         }
 
         private BaseRuleStructureBehavior CreateRuleStructureBehavior(GenericRuleDefinitionCriteriaField ruleDefinitionCriteriaField)
