@@ -15,17 +15,25 @@ namespace Vanrise.GenericData.Web.Controllers
     public class GenericRuleController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
+        [Route("GetFilteredGenericRules")]
+        public object GetFilteredGenericRules(Vanrise.Entities.DataRetrievalInput<GenericRuleQuery> input)
+        {
+            var manager = GetManager(input.Query.RuleDefinitionId);
+            return GetWebResponse(input, manager.GetFilteredRules(input));
+        }
+
+        [HttpPost]
         [Route("AddGenericRule")]
         public Vanrise.Entities.InsertOperationOutput<GenericRule> AddGenericRule(GenericRule rule)
         {
-            var manager = GetManager(rule);
+            var manager = GetManager(rule.DefinitionId);
             return manager.AddGenericRule(rule);
         }
 
-        IGenericRuleManager GetManager(GenericRule rule)
+        IGenericRuleManager GetManager(int ruleDefinitionId)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(rule.DefinitionId);
+            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
 
             GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
             GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);

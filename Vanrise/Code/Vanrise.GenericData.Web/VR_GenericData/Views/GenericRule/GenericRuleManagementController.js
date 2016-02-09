@@ -6,7 +6,6 @@
     function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule) {
 
         var gridAPI;
-        var filter = {};
 
         loadParameters();
         defineScope();
@@ -20,20 +19,21 @@
             if (parameters != null) {
                 ruleDefinitionId = parameters.ruleDefinitionId;
             }
-            else
-                ruleDefinitionId = 49;
         }
 
         function defineScope() {
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid(filter);
+                var defFilter = {
+                    RuleDefinitionId: ruleDefinitionId
+                };
+                gridAPI.loadGrid(defFilter);
             };
 
-            //$scope.search = function () {
-            //    getFilterObject();
-            //    return gridAPI.loadGrid(filter);
-            //};
+            $scope.search = function () {
+                var filter = getFilterObject();
+                return gridAPI.loadGrid(filter);
+            };
 
             $scope.addGenericRule = function () {
                 var onGenericRuleAdded = function (ruleObj) {
@@ -43,19 +43,16 @@
                 VR_GenericData_GenericRule.addGenericRule(ruleDefinitionId, onGenericRuleAdded);
             };
 
-            //function getFilterObject() {
-            //    filter = {
-            //        Name: $scope.name,
-            //        Email: $scope.email
-            //    };
-            //}
+            function getFilterObject() {
+                return {
+                    RuleDefinitionId: ruleDefinitionId
+                };
+            }
         }
 
         function load() {
 
         }
-
-       
     }
 
     appControllers.controller('VR_GenericData_GenericRuleManagementController', genericRuleManagementController);

@@ -6,22 +6,17 @@
 
     function GenericRuleAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return {
-            AddGenericRule: AddGenericRule
+            AddGenericRule: AddGenericRule,
+            GetFilteredGenericRules: GetFilteredGenericRules
         };
+
+        function GetFilteredGenericRules(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'GetFilteredGenericRules'), input);
+        }
 
         function AddGenericRule(genericRule) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'AddGenericRule'), genericRule);
-        }
-
-        //function UpdateGenericRuleDefinition(genericRuleDefinition) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'UpdateGenericRuleDefinition'), genericRuleDefinition);
-        //}
-
-        //function GetGenericRuleDefinitionsInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'GetGenericRuleDefinitionsInfo'), {
-        //        filter: filter
-        //    });
-        //}
+        }       
     }
 
     appControllers.service('VR_GenericData_GenericRuleAPIService', GenericRuleAPIService);

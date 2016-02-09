@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.GenericData.Entities.GenericRules
+namespace Vanrise.GenericData.Entities
 {
-    class GenericRuleDetail
+    public class GenericRuleDetail
     {
+        public GenericRule Entity { get; set; }
     }
 }

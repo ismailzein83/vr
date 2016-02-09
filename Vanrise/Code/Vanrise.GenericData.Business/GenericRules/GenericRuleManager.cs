@@ -6,11 +6,18 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Rules;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Business
 {
     public class GenericRuleManager<T> : Vanrise.Rules.RuleManager<T>, IGenericRuleManager where T : GenericRule
     {
+        public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
+        {
+            IEnumerable<T> allRules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == input.Query.RuleDefinitionId);
+            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, GenericRuleDetailMapper));
+        }
+
         public T GetMatchRule(int ruleDefinitionId, GenericRuleTarget target)
         {
             var ruleTree = GetRuleTree(ruleDefinitionId);
@@ -82,6 +89,13 @@ namespace Vanrise.GenericData.Business
         public Vanrise.Entities.InsertOperationOutput<GenericRule> AddGenericRule(GenericRule rule)
         {
             return this.AddRule(rule as T) as Vanrise.Entities.InsertOperationOutput<GenericRule>;
+        }
+
+        private GenericRuleDetail GenericRuleDetailMapper(GenericRule genericRule)
+        {
+            GenericRuleDetail ruleDetail = new GenericRuleDetail();
+            ruleDetail.Entity = genericRule;
+            return ruleDetail;
         }
     }
 }

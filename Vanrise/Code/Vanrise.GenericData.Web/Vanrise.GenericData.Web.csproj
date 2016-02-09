@@ -184,6 +184,8 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-grid.js" />
     <Content Include="VR_GenericData\Directives\DataStoreConfig\vr-genericdata-datastoreconfig-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-recordname-selector.js" />
+    <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-grid.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\StatisSqlTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-sql.js" />
     <Content Include="VR_GenericData\Directives\DataStore\Templates\DataStoreGrid.html" />
