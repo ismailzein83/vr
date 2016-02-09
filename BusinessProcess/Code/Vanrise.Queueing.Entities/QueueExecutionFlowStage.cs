@@ -13,5 +13,14 @@ namespace Vanrise.Queueing.Entities
         public string QueueNameTemplate { get; set; }
 
         public string QueueTitleTemplate { get; set; }
+
+        public QueueActivator QueueActivator { get; set; }
+
+        public QueueExecutionFlowStageItemType QueueItemType { get; set; }
+    }
+
+    public abstract class QueueExecutionFlowStageItemType
+    {
+        public abstract Type GetQueueItemType();
     }
 }

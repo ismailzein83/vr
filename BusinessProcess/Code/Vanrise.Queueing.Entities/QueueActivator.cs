@@ -10,11 +10,27 @@ namespace Vanrise.Queueing.Entities
     {
         public abstract void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems);
 
+        public virtual void ProcessItem(IQueueActivatorExecutionContext context)
+        {
+
+        }
+
         public void Dispose()
         {
             OnDisposed();
         }
 
         public abstract void OnDisposed();
+    }
+
+    public interface IQueueActivatorExecutionContext
+    {
+        PersistentQueueItem ItemToProcess { get; }
+
+        ItemsToEnqueue OutputItems { get; }
+
+        QueueExecutionFlowStage CurrentStage { get; }
+
+        QueueInstance Queue { get; }
     }
 }
