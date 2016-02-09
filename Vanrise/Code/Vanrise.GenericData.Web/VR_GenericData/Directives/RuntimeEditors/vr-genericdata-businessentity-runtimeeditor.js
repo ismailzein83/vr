@@ -27,7 +27,7 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
                 }
                 else
                 {
-                    $scope.scopeModel.calculatedColNum = ctrl.normalColNum * 0.5;
+                    $scope.scopeModel.calculatedColNum = ctrl.normalColNum;
                 }
 
                 ctrl.datasource = [];
@@ -53,7 +53,7 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
         function getTemplate(attrs) {
             var multipleselection = "";
             //var label = "";
-            if (attrs.selectionmode == "multiple") {
+            if (attrs.selectionmode == "dynamic" || attrs.selectionmode == "multiple") {
                 //label = "";
                 multipleselection = "ismultipleselection";
             }
@@ -67,7 +67,7 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
             //    hideremoveicon = "hideremoveicon";
             
 
-            return '<vr-columns colnum="{{scopeModel.calculatedColNum * 2}}">' +
+            return '<vr-columns colnum="{{scopeModel.calculatedColNum}}">' +
             '<vr-directivewrapper directive="selector.directive" on-ready="selector.onDirectiveReady" '
                 + multipleselection + '></vr-directivewrapper>'
                 + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
@@ -76,7 +76,7 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
 
         function selectorCtor(ctrl, $scope, $attrs) {
 
-            var selectorApi;
+            var missingGroupSelectorUIControl;
 
             function initializeController() {
                 //ctrl.showSelector = ($attrs.selectionmode == "dynamic");
@@ -105,8 +105,16 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
 
                         var loadBusinessEntityDefPromiseDeferred = VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(fieldType.BusinessEntityDefinitionId).then(function (businessEntityDef) {
                             if (businessEntityDef.Settings != null) {
+
+                                if (businessEntityDef.Settings.GroupSelectorUIControl == null || businessEntityDef.Settings.GroupSelectorUIControl == "")
+                                {
+                                    $scope.scopeModel.showInDynamicMode = false;
+                                    missingGroupSelectorUIControl = true;
+                                    $scope.scopeModel.calculatedColNum = ctrl.normalColNum;
+                                }
+
                                 var innerSectionPromises = [];
-                                if ($attrs.selectionmode == "dynamic") {
+                                if ($attrs.selectionmode == "dynamic" && !missingGroupSelectorUIControl) {
                                     $scope.dynamic = {};
                                     $scope.dynamic.directive = businessEntityDef.Settings.GroupSelectorUIControl;
                                     $scope.dynamic.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -158,12 +166,23 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
                     var retVal;
 
                     if (ctrl.selectionmode == "dynamic") {
-                        retVal = {
-                            $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.BusinessEntityValues, Vanrise.GenericData.MainExtensions",
-                            BusinessEntityGroup: $scope.dynamic.directiveAPI.getData()
+
+                        if (missingGroupSelectorUIControl)
+                        {
+                            retVal = {
+                                $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                                Values: $scope.selector.directiveAPI.getSelectedIds()
+                            }
+                        }
+                        else
+                        {
+                            retVal = {
+                                $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.BusinessEntityValues, Vanrise.GenericData.MainExtensions",
+                                BusinessEntityGroup: $scope.dynamic.directiveAPI.getData()
+                            }
                         }
                     }
-                    else {
+                    else if (ctrl.selectionmode == "single" || ctrl.selectionmode == "multiple") {
                         retVal = $scope.selector.directiveAPI.getSelectedIds();
                     }
 
