@@ -5,7 +5,8 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onReady: '='
+                onReady: '=',
+                ismultipleselection: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -32,11 +33,9 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
 
         function getTemplate(attrs) {
             var multipleselection = "";
-            //var label = "";
-            if (attrs.selectionmode == "multiple") {
-                //label = "";
+
+            if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection";
-            }
 
             //var required = "";
             //if (attrs.isrequired != undefined)

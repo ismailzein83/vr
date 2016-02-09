@@ -22,7 +22,7 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
 
                 if ($attrs.selectionmode == "dynamic")
                 {
-                    $scope.scopeModel.calculatedColNum = ctrl.normalColNum * 2;
+                    $scope.scopeModel.calculatedColNum = ctrl.normalColNum * 4;
                     $scope.scopeModel.showInDynamicMode = true;
                 }
                 else
