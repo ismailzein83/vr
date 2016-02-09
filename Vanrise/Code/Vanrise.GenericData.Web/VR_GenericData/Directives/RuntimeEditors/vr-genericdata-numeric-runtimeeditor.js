@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (UtilsService) {
+app.directive('vrGenericdataNumericRuntimeeditor', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -25,15 +25,15 @@ app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (Uti
                 }
             }
         },
-        templateUrl: "/Client/Modules/VR_GenericData/Directives/DynamicUIControls/Templates/TextEditorTemplate.html"
+        templateUrl: "/Client/Modules/VR_GenericData/Directives/RuntimeEditors/Templates/NumericEditorTemplate.html"
     };
-    
+
     function textCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
             $scope.scopeModel.values = [];
-            
+
             $scope.scopeModel.showInMultipleMode = (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple");
 
             $scope.scopeModel.isValid = function () {
@@ -66,21 +66,22 @@ app.directive('vrGenericdataDynamiccontrolsText', ['UtilsService', function (Uti
                     $scope.scopeModel.label = payload.fieldTitle;
                     fieldType = payload.fieldType;
                 }
+
+                if (fieldType != undefined) {
+                    
+                }
             }
 
-            api.getData = function()
-            {
+            api.getData = function () {
                 var retVal;
 
-                if(ctrl.selectionmode == "dynamic")
-                {
+                if (ctrl.selectionmode == "dynamic") {
                     retVal = {
                         $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
                         Values: $scope.scopeModel.values
                     }
                 }
-                else
-                {
+                else {
                     retVal = $scope.scopeModel.value;
                 }
 

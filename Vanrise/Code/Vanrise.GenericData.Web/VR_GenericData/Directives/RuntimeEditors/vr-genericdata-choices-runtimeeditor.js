@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDynamiccontrolsChoices', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataChoicesRuntimeeditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
