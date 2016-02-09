@@ -371,7 +371,8 @@
                     var stepItem = $scope.scopeModal.steps[i];
                     if (stepItem.previewAPI != undefined) {
                         var stepEntity = stepItem.previewAPI.getData();
-                        stepEntity.ConfigId = stepItem.dataTransformationStepConfigId;
+                        if (stepEntity != undefined)
+                          stepEntity.ConfigId = stepItem.dataTransformationStepConfigId;
                         steps.push(stepEntity);
                     }
                 }
