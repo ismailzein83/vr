@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Vanrise.Data;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -14,11 +13,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void ApplyStrategyExecutionItemsToDB(object preparedStrategyExecutionItems);
 
-        void DeleteStrategyExecutionItem_StrategyExecutionID(int StrategyExecutionId);
-
         void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady);
 
-        void DeleteStrategyExecutionItem_ByCaseIDs(List<int> caseIds);
+        bool CancelStrategyExecution(long strategyExecutionId, int userId);
+
+        
 
     }
 }

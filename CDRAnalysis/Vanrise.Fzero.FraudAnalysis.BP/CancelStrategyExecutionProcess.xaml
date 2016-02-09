@@ -90,6 +90,11 @@
             <mca:CSharpValue x:TypeArguments="x:Int64">Input.StrategyExecutionId</mca:CSharpValue>
           </InArgument>
         </vffba1:ProcessStrategyExecutionCancellation.StrategyExecutionId>
+        <vffba1:ProcessStrategyExecutionCancellation.UserId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.UserId</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ProcessStrategyExecutionCancellation.UserId>
       </vffba1:ProcessStrategyExecutionCancellation>
       <vffba1:ApplyStrategyExecutionCancellation Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyStrategyExecutionCancellation_1">
         <vffba1:ApplyStrategyExecutionCancellation.InputQueue>
@@ -102,10 +107,15 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">processStrategyExecutionCancellationActivityStatus</mca:CSharpValue>
           </InArgument>
         </vffba1:ApplyStrategyExecutionCancellation.PreviousActivityStatus>
+        <vffba1:ApplyStrategyExecutionCancellation.UserId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.UserId</mca:CSharpValue>
+          </InArgument>
+        </vffba1:ApplyStrategyExecutionCancellation.UserId>
       </vffba1:ApplyStrategyExecutionCancellation>
     </Parallel>
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Strategy Execution Cancellation" />
-    <sads:DebugSymbol.Symbol>d1VDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXENhbmNlbFN0cmF0ZWd5RXhlY3V0aW9uUHJvY2Vzcy54YW1sDUYDbQ4CAQFHBUegAQIBG0gFahACAQRrBWuhAQIBAkd0R50BAgEcTQddNQIBDl4HaTMCAQVrdGueAQIBA1oNWmMCARdVDVWTAQIBE1ANUJ4BAgEPZg1miwECAQphDWGWAQIBBg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1VDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXENhbmNlbFN0cmF0ZWd5RXhlY3V0aW9uUHJvY2Vzcy54YW1sD0YDdw4CAQFHBUegAQIBI0gFdBACAQR1BXWhAQIBAkd0R50BAgEkTQdiNQIBEmMHczMCAQV1dHWeAQIBA1oNWmMCAR9VDVWTAQIBG1ANUJ4BAgEXXw1fVgIBE2sNa4sBAgEOZg1mlgECAQpwDXBWAgEG</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

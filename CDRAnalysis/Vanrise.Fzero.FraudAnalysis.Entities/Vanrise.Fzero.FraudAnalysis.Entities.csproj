@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountCaseHistory.cs" />
     <Compile Include="AccountCaseLog.cs" />
     <Compile Include="Batches\CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManager\BusinessManagerFactory.cs" />

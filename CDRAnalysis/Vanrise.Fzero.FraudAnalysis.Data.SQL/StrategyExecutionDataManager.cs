@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -50,8 +49,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             _columnMapper.Add("Entity.ID", "ID");
         }
 
-
-
         public BigResult<StrategyExecution> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
         {
             string strategyIDs = (input.Query.StrategyIds != null && input.Query.StrategyIds.Count > 0) ? string.Join(",", input.Query.StrategyIds) : null;
@@ -86,8 +83,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return item;
         }
-
-
 
         public bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId)
         {
@@ -155,9 +150,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedStrategyExecutionItem as BaseBulkInsertInfo);
         }
 
-        public void DeleteStrategyExecutionItem_StrategyExecutionID(int StrategyExecutionId)
+        public bool CancelStrategyExecution(long strategyExecutionId, int userId)
         {
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_DeleteByStrategyExecutionID", StrategyExecutionId);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Cancel", strategyExecutionId, userId);
+            return (recordsAffected > 0);
         }
 
         public void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady)
@@ -184,16 +180,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             }
                );
-        }
-
-        public void DeleteStrategyExecutionItem_ByCaseIDs(List<int> caseIds)
-        {
-            string CasesCommaSeperatedList = null;
-
-            if (caseIds != null)
-                CasesCommaSeperatedList = string.Join(",", caseIds);
-
-            ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_DeleteByCaseIDs", CasesCommaSeperatedList);
         }
 
 

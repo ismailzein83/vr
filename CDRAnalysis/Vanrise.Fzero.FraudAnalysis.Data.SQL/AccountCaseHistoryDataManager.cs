@@ -13,13 +13,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class AccountCaseHistoryDataManager : BaseSQLDataManager, IAccountCaseHistoryDataManager
     {
-      
+
         #region ctor
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         public AccountCaseHistoryDataManager()
             : base("CDRDBConnectionString")
         {
-           
+
         }
 
         static AccountCaseHistoryDataManager()
@@ -30,6 +30,46 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public void SavetoDB(List<AccountCaseHistory> records)
+        {
+            string[] s_Columns = new string[] {
+            "ID"
+            ,"CaseID"
+            ,"Reason"
+            ,"Status"
+            ,"StatusTime"
+            ,"UserID"
+        };
+
+
+            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+
+            foreach (AccountCaseHistory record in records)
+            {
+                stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
+                                record.CaseID,
+                                record.Reason,
+                                (int)record.Status,
+                                record.StatusTime,
+                                record.UserID.Value
+                                );
+            }
+
+            stream.Close();
+
+            InsertBulkToTable(
+                new StreamBulkInsertInfo
+                {
+                    TableName = "[FraudAnalysis].[AccountCaseHistory]",
+                    Stream = stream,
+                    TabLock = true,
+                    ColumnNames = s_Columns,
+                    KeepIdentity = false,
+                    FieldSeparator = '^'
+                });
+        }
+
         public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus, string reason)
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus, reason);
@@ -62,6 +102,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return log;
         }
         #endregion
-      
+
     }
 }

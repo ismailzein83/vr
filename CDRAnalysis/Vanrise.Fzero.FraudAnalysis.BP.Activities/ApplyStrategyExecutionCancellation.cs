@@ -17,6 +17,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     public class ApplyStrategyExecutionCancellationInput
     {
         public BaseQueue<CancellingStrategyExecutionBatch> InputQueue { get; set; }
+
+        public int UserId { get; set; }
     }
 
     #endregion
@@ -28,6 +30,11 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         [RequiredArgument]
         public InArgument<BaseQueue<CancellingStrategyExecutionBatch>> InputQueue { get; set; }
+
+
+        [RequiredArgument]
+        public InArgument<int> UserId { get; set; }
+
 
         #endregion
 
@@ -59,8 +66,20 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 index = 0;
                             }
 
-                            //foreach (var items in batch.StrategyExecutionItemIds)
-                            //manager.AssignAccountCase(items.AccountNumber, items.IMEIs);
+                            List<AccountCaseHistory> caseHistories = new List<AccountCaseHistory>();
+                            foreach (var item in batch.AccountCaseIds)
+                                caseHistories.Add(new AccountCaseHistory() { CaseID = item, UserID = inputArgument.UserId, StatusTime = DateTime.Now, Status = CaseStatus.Cancelled });
+
+                            IAccountCaseHistoryDataManager caseHistoryDataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseHistoryDataManager>();
+                            caseHistoryDataManager.SavetoDB(caseHistories);
+
+
+                            IAccountCaseDataManager caseDataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
+                            caseDataManager.UpdateAccountCaseBatch(batch.AccountCaseIds, inputArgument.UserId, CaseStatus.Cancelled);
+
+                            IStrategyExecutionItemDataManager itemDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
+                            itemDataManager.UpdateStrategyExecutionItemBatch(batch.AccountCaseIds, inputArgument.UserId, SuspicionOccuranceStatus.Deleted);
+
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
@@ -73,7 +92,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             return new ApplyStrategyExecutionCancellationInput
             {
-                InputQueue = this.InputQueue.Get(context)
+                InputQueue = this.InputQueue.Get(context),
+                UserId = this.UserId.Get(context)
             };
         }
 

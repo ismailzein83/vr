@@ -18,6 +18,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     {
         public long StrategyExecutionId { get; set; }
 
+        public int UserId { get; set; }
+
         public BaseQueue<CancellingStrategyExecutionBatch> OutputQueue { get; set; }
     }
 
@@ -30,6 +32,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<long> StrategyExecutionId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<int> UserId { get; set; }
+
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<CancellingStrategyExecutionBatch>> OutputQueue { get; set; }
@@ -40,7 +45,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<StrategyExecutionItemSummaryBatch>());
+                this.OutputQueue.Set(context, new MemoryQueue<CancellingStrategyExecutionBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
@@ -55,7 +60,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             List<AccountCase> cases = new List<AccountCase>();
             List<StrategyExecutionItem> itemsofCases = new List<StrategyExecutionItem>();
 
-            dataManager.GetStrategyExecutionbyExecutionId(inputArgument.StrategyExecutionId, out items, out cases, out itemsofCases);
+            dataManager.GetStrategyExecutionItemsbyExecutionId(inputArgument.StrategyExecutionId, out items, out cases, out itemsofCases);
 
             List<long> tobeDeletedItems = new List<long>();
             List<int> tobeDeletedCases = new List<int>();
@@ -71,12 +76,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 if (index == 1000)
                 {
-                    inputArgument.OutputQueue.Enqueue(new CancellingStrategyExecutionBatch() { AccountCaseIds = tobeDeletedCases, StrategyExecutionItemIds = tobeDeletedItems });
-                    Console.WriteLine("{0} Items Processed", totalIndex);
-                    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "{0} Items Processed", totalIndex);
-                    index = 0;
-                    tobeDeletedItems = new List<long>();
-                    tobeDeletedCases = new List<int>();
+                    BuildandEnqueueBatch(inputArgument, handle, ref tobeDeletedItems, ref tobeDeletedCases, ref index, totalIndex);
                 }
 
                 if (item.CaseID != null)
@@ -96,13 +96,25 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             if (tobeDeletedItems.Count > 0 || tobeDeletedCases.Count() > 0)
             {
-                inputArgument.OutputQueue.Enqueue(new CancellingStrategyExecutionBatch() { AccountCaseIds = tobeDeletedCases, StrategyExecutionItemIds = tobeDeletedItems });
-                tobeDeletedItems = new List<long>();
-                tobeDeletedCases = new List<int>();
+                BuildandEnqueueBatch(inputArgument, handle, ref tobeDeletedItems, ref tobeDeletedCases, ref index, totalIndex);
             }
+
+
+            IStrategyExecutionDataManager strategyExecutiondataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
+            strategyExecutiondataManager.CancelStrategyExecution(inputArgument.StrategyExecutionId, inputArgument.UserId);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Processing Strategy Execution Cancellation");
 
+        }
+
+        private static void BuildandEnqueueBatch(ProcessStrategyExecutionCancellationInput inputArgument, AsyncActivityHandle handle, ref List<long> tobeDeletedItems, ref List<int> tobeDeletedCases, ref int index, int totalIndex)
+        {
+            inputArgument.OutputQueue.Enqueue(new CancellingStrategyExecutionBatch() { AccountCaseIds = tobeDeletedCases, StrategyExecutionItemIds = tobeDeletedItems });
+            Console.WriteLine("{0} Items Processed", totalIndex);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "{0} Items Processed", totalIndex);
+            index = 0;
+            tobeDeletedItems = new List<long>();
+            tobeDeletedCases = new List<int>();
         }
 
 
@@ -110,7 +122,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             return new ProcessStrategyExecutionCancellationInput
             {
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                StrategyExecutionId = this.StrategyExecutionId.Get(context),
+                UserId = this.UserId.Get(context)
             };
         }
     }

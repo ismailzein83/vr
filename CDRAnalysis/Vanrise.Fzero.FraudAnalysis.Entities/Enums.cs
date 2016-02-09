@@ -66,6 +66,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         ClosedFraud = 3,
 
         [Description("Closed White List")]
-        ClosedWhiteList = 4
+        ClosedWhiteList = 4,
+
+        [Description("Cancelled")]
+        Cancelled = 5
     }
 }

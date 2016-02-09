@@ -22,14 +22,15 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            long strategyExecutionId = 1;
+            long strategyExecutionId = 3;
 
             BPClient bpClient = new BPClient();
             var input = new CreateProcessInput
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.CancelStrategyExecutionProcessInput
                 {
-                    StrategyExecutionId = strategyExecutionId
+                    StrategyExecutionId = strategyExecutionId,
+                    UserId = 1
                 }
             };
             bpClient.CreateNewProcess(input);

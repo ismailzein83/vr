@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -49,8 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionDetailMapper, _columnMapper);
         }
 
-
-        public void GetStrategyExecutionbyExecutionId(long ExecutionId, out List<StrategyExecutionItem> outAllStrategyExecutionItems, out List<AccountCase> outAccountCases, out List<StrategyExecutionItem> outStrategyExecutionItemRelatedtoCases)
+        public void GetStrategyExecutionItemsbyExecutionId(long ExecutionId, out List<StrategyExecutionItem> outAllStrategyExecutionItems, out List<AccountCase> outAccountCases, out List<StrategyExecutionItem> outStrategyExecutionItemRelatedtoCases)
         {
             AccountCaseDataManager accountCaseDataManager = new AccountCaseDataManager();
             List<StrategyExecutionItem> allStrategyExecutionItems = new List<StrategyExecutionItem>();
@@ -87,6 +83,43 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             outStrategyExecutionItemRelatedtoCases = strategyExecutionItemRelatedtoCases;
         }
 
+        DataTable GetStrategyExecutionItemTable()
+        {
+            DataTable dt = new DataTable("FraudAnalysis.StrategyExecutionItem");
+            dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("SuspicionOccuranceStatus", typeof(int));
+            return dt;
+        }
+
+        public bool UpdateStrategyExecutionItemBatch(List<int> CaseIds, int userId, SuspicionOccuranceStatus status)
+        {
+            DataTable dtStrategyExecutionItemsToUpdate = GetStrategyExecutionItemTable();
+            DataRow dr;
+
+            foreach (var item in CaseIds)
+            {
+                dr = dtStrategyExecutionItemsToUpdate.NewRow();
+                dr["ID"] = item;
+                dr["SuspicionOccuranceStatus"] = (int)status;
+                dtStrategyExecutionItemsToUpdate.Rows.Add(dr);
+            }
+
+            int recordsAffected = 0;
+            if (dtStrategyExecutionItemsToUpdate.Rows.Count > 0)
+            {
+                recordsAffected = ExecuteNonQuerySPCmd("[FraudAnalysis].[sp_StrategyExecutionItem_BulkUpdate]",
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@StrategyExecutionItem", SqlDbType.Structured);
+                           dtPrm.Value = dtStrategyExecutionItemsToUpdate;
+                           cmd.Parameters.Add(dtPrm);
+                       });
+            }
+
+            return (recordsAffected > 0);
+
+
+        }
 
         #endregion
 
