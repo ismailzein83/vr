@@ -60,6 +60,7 @@
     <Compile Include="DataRecords\DataRecordTypeInfoFilter.cs" />
     <Compile Include="DataRecords\DataRecordTypeQuery.cs" />
     <Compile Include="DataRecords\DataRecordTypeReference.cs" />
+    <Compile Include="DataRecords\DataRecordTypeSettings.cs" />
     <Compile Include="DataRecords\IDataRecordTypeReferenceContext.cs" />
     <Compile Include="DataStorage\DataRecordStorage\DataRecordStorage.cs" />
     <Compile Include="DataStorage\DataRecordStorage\DataRecordStorageDetail.cs" />
