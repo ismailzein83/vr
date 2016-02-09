@@ -1,19 +1,19 @@
-﻿<vr-panel ng-controller="VR_Queueing_QueueItemHeaderController">
+﻿<vr-panel ng-controller="VR_Queueing_QueueItemHeaderController" vr-loader="isLoading">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-queueing-executionflow-selector on-ready="onExecutionFlowSelectorReady" ismultipleselection onselectionchanged="onSelectedExecutionFlowChanged" selectedvalues="selectedExecutionFlow" ></vr-queueing-executionflow-selector>
+                    <vr-queueing-executionflow-selector on-ready="onExecutionFlowSelectorReady" ismultipleselection onselectionchanged="onSelectedExecutionFlowChanged" selectedvalues="selectedExecutionFlow"></vr-queueing-executionflow-selector>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-queueing-queueinstance-selector on-ready="onQueueInstanceSelectorReady"  vr-disabled="isDisabledQueueInstanceSelect" ismultipleselection selectedvalues="selectedQueueInstance"></vr-queueing-queueinstance-selector>
+                    <vr-queueing-queueinstance-selector on-ready="onQueueInstanceSelectorReady" vr-disabled="isDisabledQueueInstanceSelect" ismultipleselection selectedvalues="selectedQueueInstance"></vr-queueing-queueinstance-selector>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-queueing-queuestatus-selector on-ready="onQueueStatusSelectorReady" ismultipleselection selectedvalues="selectedQueueStatus"></vr-queueing-queuestatus-selector>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="From" value="createdTimeFrom"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="From" value="createdTimeFrom" isrequired></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns width="normal">

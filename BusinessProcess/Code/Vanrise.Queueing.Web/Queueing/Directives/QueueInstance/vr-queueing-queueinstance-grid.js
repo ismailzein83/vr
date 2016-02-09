@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService", "VR_Queueing_QueueItemTypeAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum',
-    function (VR_Queueing_QueueInstanceAPIService, VR_Queueing_QueueItemTypeAPIService,VR_Queueing_ExecutionFlowService, VRNotificationService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
+app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService","VR_Queueing_QueueInstanceService" , "VR_Queueing_QueueItemTypeAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum',
+    function (VR_Queueing_QueueInstanceAPIService,VR_Queueing_QueueInstanceService, VR_Queueing_QueueItemTypeAPIService,VR_Queueing_ExecutionFlowService, VRNotificationService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
 
         var directiveDefinitionObject = {
 
@@ -30,7 +30,6 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
             this.initializeController = initializeController;
 
             function initializeController() {
-
 
                 $scope.getNotProcessedColor = function (dataItem) {
                     var color = undefined;
@@ -108,6 +107,8 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                         });
                 };
+
+                defineMenuActions();
             }
 
             function RefreshDataGrid() {
@@ -140,6 +141,19 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                 }
               
 
+            }
+
+            function defineMenuActions() {
+                $scope.gridMenuActions = [{
+                    name: "Queue Items",
+                    clicked: function (dataItem) {
+                        var parameters = {
+                            queueID: dataItem.Entity.QueueInstanceId
+                        };
+                        VR_Queueing_QueueInstanceService.showQueueItemInstances(parameters);
+
+                    }
+                }];
             }
 
         }

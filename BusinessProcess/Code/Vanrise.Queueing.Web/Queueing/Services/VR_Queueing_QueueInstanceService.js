@@ -2,13 +2,14 @@
 
     'use strict';
 
-    QueueInstanceService.$inject = ['VR_Queueing_ExecutionFlowService','VR_Queueing_QueueItemStatusEnum'];
+    QueueInstanceService.$inject = ['VR_Queueing_ExecutionFlowService','VR_Queueing_QueueItemStatusEnum','VRModalService'];
 
-    function QueueInstanceService(VR_Queueing_ExecutionFlowService, VR_Queueing_QueueItemStatusEnum) {
+    function QueueInstanceService(VR_Queueing_ExecutionFlowService, VR_Queueing_QueueItemStatusEnum, VRModalService) {
         var drillDownDefinitions = [];
         return ({
             registerDrillDownToExecutionFlow: registerDrillDownToExecutionFlow,
-            getQueueItemStatus: getQueueItemStatus
+            getQueueItemStatus: getQueueItemStatus,
+            showQueueItemInstances: showQueueItemInstances
         });
 
         function registerDrillDownToExecutionFlow() {
@@ -39,6 +40,14 @@
             
             
             return queueItemStatus;
+        }
+
+        function showQueueItemInstances(parameters) {
+            VRModalService.showModal('/Client/Modules/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement.html', parameters, {
+                useModalTemplate: true,
+                width: "80%",
+                title: "Queue Items"
+            });
         }
     
 

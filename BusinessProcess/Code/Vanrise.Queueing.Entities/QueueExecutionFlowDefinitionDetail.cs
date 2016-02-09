@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
-    public class QueueInstanceInfo
+    public class QueueExecutionFlowDefinitionDetail
     {
-        public int Id { get; set; } 
 
-        public string Title { get; set; }
+        public QueueExecutionFlowDefinition Entity { get; set; }
+    
     }
 }

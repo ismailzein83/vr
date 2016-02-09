@@ -27,13 +27,10 @@ namespace Vanrise.Queueing.Data.SQL
         static QueueItemHeaderDataManager()
         {
              _mapper.Add("Entity.ItemId", "ItemID");
-             _mapper.Add("QueueName", "QueueId");
              _mapper.Add("ExecutionFlowName", "ExecutionFlowTriggerItemID");
             _mapper.Add("Entity.SourceItemId", "SourceItemID");
             _mapper.Add("Entity.Description", "Description");
-            _mapper.Add("StatusName", "Status");
             _mapper.Add("Entity.RetryCount", "RetryCount");
-            _mapper.Add("StageName", "ErrorMessage");
             _mapper.Add("Entity.CreatedTime", "CreatedTime");
             _mapper.Add("Entity.LastUpdatedTime", "LastUpdatedTime");
  
@@ -43,7 +40,7 @@ namespace Vanrise.Queueing.Data.SQL
         #endregion
 
 
-        public Vanrise.Entities.BigResult<Entities.QueueItemHeader> GetQueueItemHeaderFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.QueueItemHeaderQuery> input)
+        public Vanrise.Entities.BigResult<Entities.QueueItemHeader> GetFilteredQueueItemHeader(Vanrise.Entities.DataRetrievalInput<Entities.QueueItemHeaderQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -53,7 +50,7 @@ namespace Vanrise.Queueing.Data.SQL
                     queueIds = string.Join<int>(",", input.Query.QueueIds);
 
                 if (input.Query.QueueStatusIds != null && input.Query.QueueStatusIds.Count() > 0)
-                    queueStatusIds = string.Join<int>(",", input.Query.QueueStatusIds);
+                    queueStatusIds = string.Join<int>(",", input.Query.QueueStatusIds.Select(itm => (int)itm));
                 ExecuteNonQuerySP("[queue].[sp_QueueItemHeader_CreateTempByFiltered2]", tempTableName,queueIds, queueStatusIds, input.Query.CreatedTimeFrom, input.Query.CreatedTimeTo);
             };
 

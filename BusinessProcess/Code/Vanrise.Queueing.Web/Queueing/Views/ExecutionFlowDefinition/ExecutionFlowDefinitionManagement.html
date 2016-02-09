@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="VR_Queueing_ExecutionFlowController" vr-loader="isLoading">
+﻿<vr-panel ng-controller="VR_Queueing_ExecutionFlowDefinitionController" vr-loader="isLoading">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -6,7 +6,7 @@
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-queueing-executionflowdefinition-selector on-ready="onExecutionFlowDefinitionSelectorReady" ismultipleselection selectedvalues="selectedExecutionFlowDefinition"></vr-queueing-executionflowdefinition-selector>
+                    <vr-textbox value="dtitle" label="Title"></vr-textbox>
                 </vr-columns>
 
             </vr-row>
@@ -15,13 +15,13 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="Add" data-onclick="addExecutionFlow"></vr-button>
+                    <vr-button type="Add" data-onclick="addExecutionFlowDefinition"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-queueing-executionflow-grid on-ready="onGridReady"></vr-queueing-executionflow-grid>
+                <vr-queueing-executionflowdefinition-grid on-ready="onGridReady"></vr-queueing-executionflowdefinition-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

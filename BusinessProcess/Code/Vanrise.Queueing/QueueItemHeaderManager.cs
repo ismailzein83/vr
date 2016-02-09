@@ -26,7 +26,7 @@ namespace Vanrise.Queueing
             }
 
 
-            Vanrise.Entities.BigResult<QueueItemHeader> queueItemHeader = dataManager.GetQueueItemHeaderFilteredFromTemp(input);
+            Vanrise.Entities.BigResult<QueueItemHeader> queueItemHeader = dataManager.GetFilteredQueueItemHeader(input);
             BigResult<QueueItemHeaderDetails> queueItemHeaderDetailResult = new BigResult<QueueItemHeaderDetails>()
             {
                 ResultKey = queueItemHeader.ResultKey,
@@ -47,7 +47,7 @@ namespace Vanrise.Queueing
             queueItemHeaderDetail.Entity = queueItemHeader;
             queueItemHeaderDetail.StageName = instance != null ? instance.StageName : "";
             queueItemHeaderDetail.StatusName = Vanrise.Common.Utilities.GetEnumDescription(queueItemHeader.Status);
-            queueItemHeaderDetail.QueueName = instance.Name;
+            queueItemHeaderDetail.QueueTitle = instance.Title;
             queueItemHeaderDetail.ExecutionFlowName = executionFlowManager.GetExecutionFlowName((int)instance.ExecutionFlowId);
             return queueItemHeaderDetail;
         }

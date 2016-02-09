@@ -1,12 +1,14 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    QueueItemHeaderController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    QueueItemHeaderController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function QueueItemHeaderController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function QueueItemHeaderController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
 
         var gridAPI;
         var filter = {};
+        var isModalMode = false;
+        var receivedQueueId = [];
 
         var executionFlowSelectorAPI;
         var executionFlowSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -19,8 +21,19 @@
 
         var executionFlowIds = new Array();
 
+        loadParameters();
         defineScope();
+
         load();
+
+
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined && parameters != null) {
+                receivedQueueId.push(parameters.queueID);
+                isModalMode = true;
+            }
+        }
 
         function defineScope() {
 
@@ -49,7 +62,7 @@
             };
 
 
-        
+
 
             $scope.onSelectedExecutionFlowChanged = function (selectedItem) {
                 if (selectedItem != undefined) {
@@ -59,7 +72,7 @@
                         $scope.isDisabledQueueInstanceSelect = true;
                         return;
                     }
-                    else if (selectedItem != undefined && selectedItem.length >0) {
+                    else if (selectedItem != undefined && selectedItem.length > 0) {
                         $scope.isDisabledQueueInstanceSelect = false;
                         var payload = {
                             ExecutionFlowId: selectedItem[0].ExecutionFlowId,
@@ -69,16 +82,20 @@
                     else {
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, queueInstanceSelectorAPI, {}, setLoader);
                     }
-                   
-                    
-                   
+
+
+
                 }
 
             }
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-      
+                if (isModalMode && !$scope.isLoading) {
+                    filter = getFilterObject();
+                    gridAPI.loadGrid(filter);
+                    $scope.ShowGrid = true;
+                };
             };
 
             $scope.search = function () {
@@ -126,7 +143,7 @@
             queueInstanceSelectorReadyDeferred.promise.then(function () {
                 var payload = {
                     filter: null,
-                    selectedIds: null
+                    selectedIds: receivedQueueId
                 };
 
                 VRUIUtilsService.callDirectiveLoad(queueInstanceSelectorAPI, payload, queueInstanceSelectorLoadDeferred);
@@ -159,6 +176,7 @@
                 createdTimeFrom: $scope.createdTimeFrom,
                 createdTimeTo: $scope.createdTimeTo
             };
+            return filter;
         }
     }
 

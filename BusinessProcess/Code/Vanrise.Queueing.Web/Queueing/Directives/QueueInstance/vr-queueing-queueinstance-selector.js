@@ -67,7 +67,7 @@ app.directive('vrQueueingQueueinstanceSelector', ['VR_Queueing_QueueInstanceAPIS
                 addCliked = 'onaddclicked="addNewQueueInstance"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired"'
+                + '<vr-select ' + multipleselection + '  datatextfield="Title" datavaluefield="Id" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Queue Instance" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
@@ -89,7 +89,7 @@ app.directive('vrQueueingQueueinstanceSelector', ['VR_Queueing_QueueInstanceAPIS
                 api.load = function (payload) {
                     var filter = {};
                     var selectedIds;
-
+                     
                     if (payload) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;

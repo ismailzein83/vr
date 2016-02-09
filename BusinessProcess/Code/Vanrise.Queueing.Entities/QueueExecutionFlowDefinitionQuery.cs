@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
-    public class QueueInstanceInfo
+    public class QueueExecutionFlowDefinitionQuery
     {
-        public int Id { get; set; } 
+        public string Name { get; set; }
 
         public string Title { get; set; }
     }

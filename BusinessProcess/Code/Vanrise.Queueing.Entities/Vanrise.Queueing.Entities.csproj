@@ -56,9 +56,11 @@
     <Compile Include="QueueExecutionFlowDefinition.cs" />
     <Compile Include="QueueExecutionFlowDefinitionFilter.cs" />
     <Compile Include="QueueExecutionFlowDefinitionInfo.cs" />
+    <Compile Include="QueueExecutionFlowDefinitionDetail.cs" />
     <Compile Include="QueueExecutionFlowDetail.cs" />
     <Compile Include="QueueExecutionFlowFilter.cs" />
     <Compile Include="QueueExecutionFlowInfo.cs" />
+    <Compile Include="QueueExecutionFlowDefinitionQuery.cs" />
     <Compile Include="QueueExecutionFlowQuery.cs" />
     <Compile Include="QueueInstance.cs" />
     <Compile Include="QueueInstanceDetail.cs" />

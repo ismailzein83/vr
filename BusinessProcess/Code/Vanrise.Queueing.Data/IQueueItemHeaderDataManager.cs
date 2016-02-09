@@ -9,6 +9,6 @@ namespace Vanrise.Queueing.Data
 {
     public interface IQueueItemHeaderDataManager  : IDataManager
     {
-         Vanrise.Entities.BigResult<Entities.QueueItemHeader> GetQueueItemHeaderFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.QueueItemHeaderQuery> input);
+        Vanrise.Entities.BigResult<Entities.QueueItemHeader> GetFilteredQueueItemHeader(Vanrise.Entities.DataRetrievalInput<Entities.QueueItemHeaderQuery> input);
     }
 }

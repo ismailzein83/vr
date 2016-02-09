@@ -93,7 +93,7 @@ namespace Vanrise.Queueing
         {
             QueueInstanceInfo queueInstanceInfo = new QueueInstanceInfo();
             queueInstanceInfo.Id = queueInstance.QueueInstanceId;
-            queueInstanceInfo.Name = queueInstance.Name;
+            queueInstanceInfo.Title = queueInstance.Title;
             return queueInstanceInfo;
         }
 

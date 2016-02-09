@@ -14,7 +14,7 @@ namespace Vanrise.Queueing.Entities
 
         public string StatusName { get; set; }
 
-        public string QueueName { get; set; }
+        public string QueueTitle { get; set; }
  
         public string ExecutionFlowName { get; set; }
     }

@@ -13,7 +13,7 @@ namespace Vanrise.Queueing.Entities
 
         public List<int> QueueIds { get; set; }
 
-        public List<int> QueueStatusIds { get; set; }
+        public List<QueueItemStatus> QueueStatusIds { get; set; }
 
         public DateTime? CreatedTimeFrom { get; set; }
 
