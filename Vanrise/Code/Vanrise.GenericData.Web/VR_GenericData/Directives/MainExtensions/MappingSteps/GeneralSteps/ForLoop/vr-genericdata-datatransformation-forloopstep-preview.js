@@ -161,6 +161,7 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                         
                     },
                     getArrayRecordNames: currentContext.getArrayRecordNames,
+                    getAllRecordNames: currentContext.getAllRecordNames,
                     createStepItem: currentContext.createStepItem,
                     editStep: currentContext.editStep,
                     removeStep:currentContext.removeStep

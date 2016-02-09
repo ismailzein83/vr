@@ -218,7 +218,8 @@
             return {
                 getRecordNames: getRecordNames,
                 getRecordFields: getRecordFields,
-                getArrayRecordNames:getArrayRecordNames,
+                getArrayRecordNames: getArrayRecordNames,
+                getAllRecordNames:getAllRecordNames,
                 createStepItem: createStepItem,
                 editStep: function (stepItem) {
                     $scope.scopeModal.onEditStepClick(stepItem);
@@ -313,6 +314,16 @@
             if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI != undefined) {
                 $scope.scopeModal.selectedStep.validationMessage = $scope.scopeModal.selectedStep.previewAPI.checkValidation();
             }
+        }
+
+        function getAllRecordNames() {
+            var obj = dataRecordTypeAPI.getData();
+            var recordTypeNames = [];
+            for (var i = 0; i < obj.RecordTypes.length; i++) {
+                var recordType = obj.RecordTypes[i];
+                recordTypeNames.push({ Name: recordType.RecordName });
+            }
+            return recordTypeNames;
         }
 
         function getRecordNames()

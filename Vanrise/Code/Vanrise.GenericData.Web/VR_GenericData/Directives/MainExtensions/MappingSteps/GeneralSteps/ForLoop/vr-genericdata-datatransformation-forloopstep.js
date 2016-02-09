@@ -32,8 +32,14 @@ app.directive('vrGenericdataDatatransformationForloopstep', ['UtilsService','VR_
         };
 
         function ForLoopStepCtor(ctrl, $scope) {
+            var recordNameSelectorDirectiveReadyAPI;
+            var recordNameSelectorDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            function initializeController() {               
+            function initializeController() {
+                ctrl.onRecordNameSelectorReady = function (api) {
+                    recordNameSelectorDirectiveReadyAPI = api;
+                    recordNameSelectorDirectiveReadyPromiseDeferred.resolve();
+                }
                 defineAPI();
             }
 
@@ -41,14 +47,20 @@ app.directive('vrGenericdataDatatransformationForloopstep', ['UtilsService','VR_
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.context != undefined)
-                    {
-                        ctrl.arrayRecords = payload.context.getArrayRecordNames();
-                    }
                     if (payload.stepDetails != undefined) {
                         ctrl.iterationVariableName = payload.stepDetails.IterationVariableName;
-                        ctrl.selectedArray = UtilsService.getItemByVal(ctrl.arrayRecords, payload.stepDetails.ArrayVariableName, "Name");
                     }
+                    var promises = [];
+                    var loadRecordNameSelectorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    recordNameSelectorDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadRecordName = { context: payload.context, getArray: true };
+                        if (payload != undefined && payload.stepDetails != undefined)
+                            payloadRecordName.selectedIds = payload.stepDetails.ArrayVariableName;
+                        VRUIUtilsService.callDirectiveLoad(recordNameSelectorDirectiveReadyAPI, payloadRecordName, loadRecordNameSelectorDirectivePromiseDeferred);
+                    });
+                    promises.push(loadRecordNameSelectorDirectivePromiseDeferred.promise);
+                    return UtilsService.waitMultiplePromises(promises);
                 }
 
                 api.getData = function () {

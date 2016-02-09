@@ -183,6 +183,7 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-grid.js" />
     <Content Include="VR_GenericData\Directives\DataStoreConfig\vr-genericdata-datastoreconfig-selector.js" />
+    <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-recordname-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\StatisSqlTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-sql.js" />
     <Content Include="VR_GenericData\Directives\DataStore\Templates\DataStoreGrid.html" />
@@ -190,6 +191,14 @@
     <Content Include="VR_GenericData\Directives\DataStore\vr-genericdata-datastore-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationDefinitionGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AddItemToArray\Templates\AddItemToArrayStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AddItemToArray\Templates\AddItemToArrayStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AddItemToArray\vr-genericdata-datatransformation-additemtoarraystep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AddItemToArray\vr-genericdata-datatransformation-additemtoarraystep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\Templates\InitializeRecordStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\Templates\InitializeRecordStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\vr-genericdata-datatransformation-initializerecordstep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\vr-genericdata-datatransformation-initializerecordstep.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\Templates\RuleStepCommonPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\vr-genericdata-datatransformation-rulestep-common-preview.js" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\Templates\NumericEditorTemplate.html" />
