@@ -5,14 +5,14 @@
                 <vr-columns width="1/2row">
                     <vr-textbox label="Name" value="name" isrequired></vr-textbox>
                 </vr-columns>
-            </vr-row>
-            <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-genericdata-datastoreconfig-selector on-ready="onReadyDataStoreConfig" isrequired> </vr-genericdata-datastoreconfig-selector>
+                    <vr-genericdata-datastoreconfig-selector selectedvalues="selectedDataStoreConfig" on-ready="onReadyDataStoreConfigSelector" isrequired="true"> </vr-genericdata-datastoreconfig-selector>
                 </vr-columns>
             </vr-row>
             <vr-row>
-                Directive
+                <vr-columns width="fullrow" vr-loader="isLoadingCountrySourceTypeDirective" ng-if="selectedDataStoreConfig.Editor">
+                    <vr-directivewrapper directive="selectedDataStoreConfig.Editor" on-ready="onReadyDataStoreConfigDirective"></vr-directivewrapper>
+                </vr-columns>
             </vr-row>
         </vr-form>
     </vr-modalbody>

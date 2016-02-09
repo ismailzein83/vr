@@ -8,8 +8,10 @@
         var dataStoreId;
         var dataStoreEntity;
         var isEditMode;
-        var dataStoreDirectiveAPI;
+        var dataStoreSelectorAPI;
         var dataStoreReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var dataStoreDirectiveAPI;
+        var dataStoreConfigReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -24,9 +26,13 @@
         }
 
         function defineScope() {
-            $scope.onReadyDataStoreConfig = function (api) {
-                dataStoreDirectiveAPI = api;
+            $scope.onReadyDataStoreConfigSelector = function (api) {
+                dataStoreSelectorAPI = api;
                 dataStoreReadyPromiseDeferred.resolve();
+            }
+            $scope.onReadyDataStoreConfigDirective = function (api) {
+                dataStoreSelectorAPI = api;
+                dataStoreConfigReadyPromiseDeferred.resolve();
             }
             $scope.close = function () {
                 $scope.modalContext.closeModal()
@@ -58,7 +64,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData , loadDataStoreConfig])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataStoreConfigSelector, loadDataStoreConfigDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -80,12 +86,19 @@
             $scope.name = dataStoreEntity.Name;
         }
 
-        function loadDataStoreConfig() {
+        function loadDataStoreConfigSelector() {
             var loadDataStorePromiseDeferred = UtilsService.createPromiseDeferred();
             dataStoreReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(dataStoreDirectiveAPI, undefined, loadDataStorePromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, undefined, loadDataStorePromiseDeferred);
             });
             return loadDataStorePromiseDeferred.promise;
+        }
+        function loadDataStoreConfigDirective() {
+            var loadDataStoreConfigPromiseDeferred = UtilsService.createPromiseDeferred();
+            dataStoreConfigReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(dataStoreDirectiveAPI, undefined, loadDataStoreConfigPromiseDeferred);
+            });
+            return loadDataStoreConfigPromiseDeferred.promise;
         }
 
 
@@ -130,12 +143,15 @@
         //        });;
         //}
 
-        //function buildBrandObjFromScope() {
-        //    return {
-        //        BrandId: brandId,
-        //        Name: $scope.name
-        //    };
-        //}
+        function buildBrandObjFromScope() {
+            var settings = dataStoreDirectiveAPI.getData();
+            settings.ConfigId = dataStoreSelectorAPI.getSelectedIds();
+            return {
+                DataStoreId: dataStoreId,
+                Name: $scope.name,
+                Settings: settings
+            };
+        }
     }
 
     appControllers.controller("VR_GenericData_DataStoreEditorController", DataStoreEditorController);
