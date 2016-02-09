@@ -78,6 +78,8 @@
     <Compile Include="GenericRules\GenericRule.cs" />
     <Compile Include="GenericRules\GenericRuleCriteria.cs" />
     <Compile Include="GenericRules\GenericRuleCriteriaFieldValues.cs" />
+    <Compile Include="GenericRules\GenericRuleDetail.cs" />
+    <Compile Include="GenericRules\GenericRuleQuery.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinition.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionCriteria.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionCriteriaField.cs" />
