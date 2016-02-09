@@ -16,9 +16,7 @@ namespace Vanrise.GenericData.Entities
 
         public string Editor { get; set; }
 
-        public string DynamicGroupUIControl { get; set; }
-
-        public string SelectorControl { get; set; }
+        public string RuntimeEditor { get; set; }
 
         public bool IsSupportedInGenericRule { get; set; }
     }

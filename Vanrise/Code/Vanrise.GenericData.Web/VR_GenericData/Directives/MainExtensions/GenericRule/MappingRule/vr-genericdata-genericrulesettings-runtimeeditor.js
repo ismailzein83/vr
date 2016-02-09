@@ -65,7 +65,7 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
                         promises.push(loadWholeSectionPromiseDeferred.promise);
 
                         var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypeConfig(fieldType.ConfigId).then(function (fieldTypeConfig) {
-                            $scope.scopeModel.runtimeEditorDirective = fieldTypeConfig.DynamicGroupUIControl;
+                            $scope.scopeModel.runtimeEditorDirective = fieldTypeConfig.RuntimeEditor;
 
                             var loadFieldTypeConfigDirective = UtilsService.createPromiseDeferred();
 

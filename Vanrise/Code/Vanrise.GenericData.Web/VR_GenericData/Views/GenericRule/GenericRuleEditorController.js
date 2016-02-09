@@ -149,24 +149,24 @@
 
                 angular.forEach(criteriaDefinitionFields, function (field) {
                     var dataFieldTypeConfig = UtilsService.getItemByVal(allConfigs, field.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
-                    field.dynamicGroupUIControl = {};
-                    field.dynamicGroupUIControl.directive = dataFieldTypeConfig.DynamicGroupUIControl;
-                    field.dynamicGroupUIControl.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    field.dynamicGroupUIControl.onDirectiveReady = function (api) {
-                        field.dynamicGroupUIControl.directiveAPI = api;
-                        field.dynamicGroupUIControl.onReadyPromiseDeferred.resolve();
+                    field.runtimeEditor = {};
+                    field.runtimeEditor.directive = dataFieldTypeConfig.RuntimeEditor;
+                    field.runtimeEditor.onReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    field.runtimeEditor.onDirectiveReady = function (api) {
+                        field.runtimeEditor.directiveAPI = api;
+                        field.runtimeEditor.onReadyPromiseDeferred.resolve();
                     };
 
-                    field.dynamicGroupUIControl.loadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    criteriaFieldsPromises.push(field.dynamicGroupUIControl.loadPromiseDeferred.promise);
+                    field.runtimeEditor.loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    criteriaFieldsPromises.push(field.runtimeEditor.loadPromiseDeferred.promise);
                     
-                    field.dynamicGroupUIControl.onReadyPromiseDeferred.promise.then(function () {
+                    field.runtimeEditor.onReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             fieldTitle: field.Title,
                             fieldType: field.FieldType
                         };
 
-                        VRUIUtilsService.callDirectiveLoad(field.dynamicGroupUIControl.directiveAPI, payload, field.dynamicGroupUIControl.loadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
                     });
 
                     UtilsService.waitMultiplePromises(criteriaFieldsPromises).then(function () {
@@ -224,7 +224,7 @@
                 genericRuleCriteria.FieldsValues = {};
 
                 angular.forEach(criteriaDefinitionFields, function (field) {
-                    genericRuleCriteria.FieldsValues[field.FieldName] = field.dynamicGroupUIControl.directiveAPI.getData();
+                    genericRuleCriteria.FieldsValues[field.FieldName] = field.runtimeEditor.directiveAPI.getData();
                 });
             }
 
