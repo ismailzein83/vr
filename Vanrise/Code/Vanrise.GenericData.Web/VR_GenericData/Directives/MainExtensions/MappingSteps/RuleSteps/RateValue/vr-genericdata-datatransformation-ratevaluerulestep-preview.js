@@ -33,8 +33,14 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
 
         function rateValueRuleStepCtor(ctrl, $scope) {
             var stepObj = {};
+            var commonDirectiveAPI;
+            var commonDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                ctrl.onCommonDirectiveReady = function (api) {
+                    commonDirectiveAPI = api;
+                    commonDirectiveReadyPromiseDeferred.resolve();
+                }
                 ctrl.ruleFieldsMappings = [];
                 defineAPI();
             }
@@ -46,27 +52,53 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                     ctrl.ruleFieldsMappings.length = 0;
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
-                            stepObj.stepDetails = payload.stepDetails;
+                            stepObj.normalRate = payload.stepDetails.NormalRate;
+                            stepObj.ratesByRateType = payload.stepDetails.RatesByRateType;
                             ctrl.normalRate = payload.stepDetails.NormalRate;
                             ctrl.ratesByRateType = payload.stepDetails.RatesByRateType;
                         }
 
                     }
+                    var promises = [];
+                    var loadCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    commonDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadCommon;
+                        if (payload != undefined) {
+                            payloadCommon = {};
+                            if (payload != undefined)
+                                payloadCommon.stepDetails = payload.stepDetails;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(commonDirectiveAPI, payloadCommon, loadCommonDirectivePromiseDeferred);
+                    });
 
+                    promises.push(loadCommonDirectivePromiseDeferred.promise);
+
+                    return UtilsService.waitMultiplePromises(promises);
                 }
 
                 api.applyChanges = function (changes) {
-                    stepObj.stepDetails = changes;
+                    if (commonDirectiveAPI != undefined)
+                        commonDirectiveAPI.applyChanges(changes);
+                    stepObj.normalRate = changes.NormalRate;
+                    stepObj.ratesByRateType = changes.RatesByRateType;
                     ctrl.normalRate = changes.NormalRate;
                     ctrl.ratesByRateType = changes.RatesByRateType;
                 }
 
                 api.checkValidation = function () {
-                    return checkValidation();
+                    var validate = commonDirectiveAPI.checkValidation();
+                    if (validate === null)
+                        validate = checkValidation();
+                    return validate;
                 }
 
                 api.getData = function () {
-                    return stepObj.stepDetails
+                    var stepDetails = commonDirectiveAPI.getData();
+                    if (stepDetails != undefined) {
+                        stepDetails.NormalRate = stepObj.normalRate;
+                        stepDetails.RatesByRateType = stepObj.ratesByRateType;
+                    }
+                    return stepDetails;
                 }
 
                 if (ctrl.onReady != null)
@@ -74,26 +106,15 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
             }
 
             function checkValidation() {
-                if (ctrl.ruleFieldsMappings != undefined) {
-                    for (var i = 0 ; i < ctrl.ruleFieldsMappings.length; i++) {
-                        if (ctrl.ruleFieldsMappings[i].Value == undefined)
-                            return "All fields should be mapped.";
-                    }
-                } else {
-                    return "All fields should be mapped.";
-                }
                 if (ctrl.normalRate == undefined) {
                     return "Missing normal rate mapping.";
                 }
                 if (ctrl.ratesByRateType == undefined) {
                     return "Missing rates by rate type mapping.";
                 }
-
-                if (stepObj.stepDetails.EffectiveTime == undefined)
-                    return "Missing effective time mapping.";
-
                 return null;
             }
+
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;

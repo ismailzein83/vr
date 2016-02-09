@@ -6,7 +6,8 @@ app.directive('vrGenericdataExpressionbuilder', ['VR_GenericData_ExpressionBuild
         scope: {
             onReady: '=',
             label: '@',
-            hidelabel:'@'
+            hidelabel: '@',
+            isrequired:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -22,11 +23,30 @@ app.directive('vrGenericdataExpressionbuilder', ['VR_GenericData_ExpressionBuild
                 }
             }
         },
-        templateUrl: "/Client/Modules/VR_GenericData/Directives/ExpressionBuilder/Templates/ExpressionBuilderTemplate.html"
+        template: function (element, attrs) {
+            return getTamplate(attrs);
+            }
     };
 
  
-
+    function getTamplate(attrs)
+    {
+        var withemptyline = 'withemptyline';
+        if (attrs.hidelabel != undefined)
+            withemptyline = '';
+        var template =
+            '<vr-row removeline>'
+             + '<vr-columns width="3/4row">'
+             + '<vr-label ng-if="ctrl.hidelabel ==undefined">{{ctrl.label}}</vr-label>'
+             + '<vr-textbox value="expressionBuilderValue" isrequired="ctrl.isrequired"></vr-textbox>'
+             + '</vr-columns>'
+             + '<vr-columns width="1/4row" ' +withemptyline+ ' > '
+             + '   <vr-button type="Edit" data-onclick="openExpressionBuilder" standalone></vr-button>'
+             + '</vr-columns>'
+            + '</vr-row>';
+        return template;
+           
+    }
     function recordFieldCtor(ctrl, $scope, $attrs) {
         var context;
         function initializeController() {

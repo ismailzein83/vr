@@ -53,18 +53,28 @@
                 else {
                     var stepItem = createStepItem(dataItem, null, getChildrenContext());
                     $scope.scopeModal.steps.push(stepItem);
-                }                  
+                }
+               
             }
 
             $scope.scopeModal.onEditStepClick = function (dataItem)
             {
                 if ($scope.scopeModal.selectedStep != undefined)
                 {
-                    $scope.scopeModal.selectedStep.isSelected = false;
-                        dataItem.isSelected= true;
-                        applyChanges();
+                    applyChanges();
+                    if ($scope.scopeModal.selectedStep == dataItem)
+                    {
+                        $scope.scopeModal.selectedStep.isSelected = false;
                         $scope.scopeModal.selectedStep = undefined;
-                        setTimeout(function () { $scope.scopeModal.selectedStep = dataItem; UtilsService.safeApply($scope)})
+                    }
+                    else
+                    {
+                        $scope.scopeModal.selectedStep.isSelected = false;
+                        dataItem.isSelected = true;
+                        $scope.scopeModal.selectedStep = undefined;
+                        setTimeout(function () { $scope.scopeModal.selectedStep = dataItem; UtilsService.safeApply($scope) })
+                    }
+                   
                 }
                 else
                 {
@@ -240,6 +250,7 @@
             }
             stepItem.onPreviewDirectiveReady = function (api) {
                 stepItem.previewAPI = api;
+                
                 var setLoader = function (value) { stepItem.isLoadingPreviewDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stepItem.previewAPI, payload, setLoader, stepItem.readyPromiseDeferred);
             }
@@ -319,6 +330,7 @@
             }
             return recordTypeNames;
         }
+
         function getArrayRecordNames() {
             var obj = dataRecordTypeAPI.getData();
             var recordTypeNames = [];

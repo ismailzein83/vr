@@ -43,6 +43,7 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestep', ['UtilsSer
 
             var normalizationValueDirectiveAPI;
             var normalizationValueDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.onRuleStepCommonReady = function (api) {
                     ruleStepCommonDirectiveAPI = api;

@@ -1,4 +1,4 @@
-﻿<vr-label>For Each: {{ctrl.iterationVariableName}} in {{ctrl.arrayVariableName}} </vr-label>
+﻿<vr-label ng-if="ctrl.iterationVariableName != undefined && ctrl.arrayVariableName != undefined">For Each: {{ctrl.iterationVariableName}} in {{ctrl.arrayVariableName}} </vr-label>
 
 <vr-datalist maxitemsperrow="1" datasource="ctrl.childSteps" isitemdraggable onremoveitem="ctrl.removeStep">
     <vr-label>{{dataItem.title}}</vr-label> <vr-check value="dataItem.isSelected" ng-click="viewScope.editStep(dataItem)"></vr-check>

@@ -113,7 +113,8 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                     var stepItem = ctrl.childSteps[i];
                     if (stepItem.previewAPI != undefined) {
                         var stepEntity = stepItem.previewAPI.getData();
-                        stepEntity.ConfigId = stepItem.dataTransformationStepConfigId;
+                        if (stepEntity != undefined)
+                         stepEntity.ConfigId = stepItem.dataTransformationStepConfigId;
                         steps.push(stepEntity);
                     }
                 }
@@ -121,6 +122,12 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
             }
 
             function checkValidation() {                
+                if (ctrl.arrayVariableName == undefined) {
+                    return "Missing array variable name.";
+                }
+                if (ctrl.iterationVariableName == undefined) {
+                    return "Missing variable name.";
+                }
                 return null;
             }
 

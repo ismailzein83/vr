@@ -57,6 +57,13 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
+
+            $scope.validateExpression = function()
+            {
+                if ($scope.expressionValue == expressionBuilderValue)
+                    return 'No changed.';
+                return null;
+            }
         }
 
         function load() {

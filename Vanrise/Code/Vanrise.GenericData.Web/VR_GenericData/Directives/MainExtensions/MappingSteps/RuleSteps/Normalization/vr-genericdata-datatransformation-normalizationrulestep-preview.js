@@ -34,7 +34,14 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
         function normalizationruleStepCtor(ctrl, $scope) {
             var stepObj = {};
 
+            var commonDirectiveAPI;
+            var commonDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
+                ctrl.onCommonDirectiveReady = function (api) {
+                    commonDirectiveAPI = api;
+                    commonDirectiveReadyPromiseDeferred.resolve();
+                }
                 ctrl.ruleFieldsMappings = [];
                 defineAPI();
             }
@@ -46,53 +53,72 @@ app.directive('vrGenericdataDatatransformationNormalizationrulestepPreview', ['U
                     ctrl.ruleFieldsMappings.length = 0;
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
-                            stepObj.stepDetails = payload.stepDetails;
+                            stepObj.value = payload.stepDetails.Value;
+                            stepObj.normalizedValue = payload.stepDetails.NormalizedValue;
                             ctrl.value = payload.stepDetails.Value;
                             ctrl.normalizedValue = payload.stepDetails.NormalizedValue;
                         }
 
                     }
+                    var promises = [];
+                    var loadCommonDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    commonDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var payloadCommon;
+                        if (payload != undefined) {
+                            payloadCommon = {};
+                            if (payload != undefined)
+                                payloadCommon.stepDetails = payload.stepDetails;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(commonDirectiveAPI, payloadCommon, loadCommonDirectivePromiseDeferred);
+                    });
+
+                    promises.push(loadCommonDirectivePromiseDeferred.promise);
+
+                    return UtilsService.waitMultiplePromises(promises);
 
                 }
 
                 api.applyChanges = function (changes) {
-                    stepObj.stepDetails = changes;
+                    if (commonDirectiveAPI != undefined)
+                        commonDirectiveAPI.applyChanges(changes);
+                    stepObj.value = changes.Value;
+                    stepObj.normalizedValue = changes.NormalizedValue;
                     ctrl.value = changes.Value;
                     ctrl.normalizedValue = changes.NormalizedValue;
                 }
 
                 api.checkValidation = function () {
-                    return checkValidation();
+                    var validate = commonDirectiveAPI.checkValidation();
+                    if (validate === null)
+                        validate = checkValidation();
+                    return validate;
                 }
 
                 api.getData = function () {
-                    return stepObj.stepDetails
+                    var stepDetails = commonDirectiveAPI.getData();
+                    if (stepDetails != undefined)
+                    {
+                        stepDetails.Value = stepObj.value;
+                        stepDetails.NormalizedValue = stepObj.normalizedValue;
+                    }
+                    return stepDetails;
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            function checkValidation() {
-                if (ctrl.ruleFieldsMappings != undefined) {
-                    for (var i = 0 ; i < ctrl.ruleFieldsMappings.length; i++) {
-                        if (ctrl.ruleFieldsMappings[i].Value == undefined)
-                            return "All fields should be mapped.";
-                    }
-                } else {
-                    return "All fields should be mapped.";
-                }
 
+            function checkValidation() {
                 if (ctrl.value == undefined) {
                     return "Missing value mapping.";
                 }
                 if (ctrl.normalizedValue == undefined) {
                     return "Missing normalized value mapping.";
                 }
-                if (stepObj.stepDetails.EffectiveTime == undefined)
-                    return "Missing effective time mapping.";
-
+               
                 return null;
             }
+
             this.initializeController = initializeController;
         }
         return directiveDefinitionObject;
