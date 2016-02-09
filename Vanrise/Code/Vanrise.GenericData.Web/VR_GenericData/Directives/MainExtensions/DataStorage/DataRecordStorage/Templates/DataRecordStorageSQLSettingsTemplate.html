@@ -1,36 +1,40 @@
 ﻿<div>
     <vr-row removeline>
         <vr-columns width="1/3row">
-            <vr-textbox value="ctrl.tableName" label="Table Name"></vr-textbox>
+            <vr-textbox value="ctrl.tableName" label="Table Name" isrequired="true"></vr-textbox>
         </vr-columns>
     </vr-row>
-    <vr-row removeline>
+    <vr-row>
         <vr-columns width="1/3row">
             <vr-button type="Add" data-onclick="ctrl.addColumn" standalone></vr-button>
         </vr-columns>
     </vr-row>
     <vr-row removeline>
         <vr-columns width="fullrow">
-            <vr-datagrid on-ready="ctrl.onGridReady"
-                         datasource="ctrl.columns"
-                         hidegridmenu>
-                <vr-datagridcolumn headertext="'Column Name'" disablesorting>
-                    <vr-textbox value="dataItem.columnName"></vr-textbox>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'SQL Data Type'" disablesorting>
-                    <vr-textbox value="dataItem.sqlDataType"></vr-textbox>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Value Expression'" disablesorting>
-                    <vr-select on-ready="dataItem.onSelectorReady"
-                               datasource="dataItem.dataRecordTypeFields"
-                               selectedvalues="dataItem.selectedDataRecordTypeField"
-                               datavaluefield="Name"
-                               datatextfield="Name"
-                               isrequired="true"
-                               hideremoveicon>
-                    </vr-select>
-                </vr-datagridcolumn>
-            </vr-datagrid>
+            <vr-validator validate="ctrl.validateColumns()">
+                <vr-datagrid on-ready="ctrl.onGridReady"
+                             datasource="ctrl.columns"
+                             enabledraggablerow="true"
+                             ondeleterow="ctrl.removeColumn"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Column Name'" disablesorting>
+                        <vr-textbox value="dataItem.columnName" isrequired="true"></vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'SQL Data Type'" disablesorting>
+                        <vr-textbox value="dataItem.sqlDataType" isrequired="true"></vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Value Expression'" disablesorting>
+                        <vr-select on-ready="dataItem.onSelectorReady"
+                                   datasource="dataItem.dataRecordTypeFields"
+                                   selectedvalues="dataItem.selectedDataRecordTypeField"
+                                   datavaluefield="Name"
+                                   datatextfield="Name"
+                                   isrequired="true"
+                                   hideremoveicon>
+                        </vr-select>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
         </vr-columns>
     </vr-row>
 </div>

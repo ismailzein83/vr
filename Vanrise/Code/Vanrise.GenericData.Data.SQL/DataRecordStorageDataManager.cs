@@ -23,6 +23,44 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("genericdata.sp_DataRecordStorage_GetALL", DataRecordStorageMapper);
         }
 
+        public bool AddDataRecordStorage(DataRecordStorage dataRecordStorage, out int insertedId)
+        {
+            object dataRecordStorageId;
+            int affectedRows = ExecuteNonQuerySP
+                (
+                    "genericdata.sp_DataRecordStorage_Insert",
+                    out dataRecordStorageId,
+                    dataRecordStorage.Name,
+                    dataRecordStorage.DataRecordTypeId,
+                    dataRecordStorage.DataStoreId,
+                    Vanrise.Common.Serializer.Serialize(dataRecordStorage.Settings),
+                    DateTime.Now
+                );
+            
+            if (affectedRows == 1) {
+                insertedId = (int)dataRecordStorageId;
+                return true;
+            }
+            else {
+                insertedId = -1;
+                return false;
+            }
+        }
+
+        public bool UpdateDataRecordStorage(DataRecordStorage dataRecordStorage)
+        {
+            int affectedRows = ExecuteNonQuerySP
+                (
+                    "genericdata.sp_DataRecordStorage_Update",
+                    dataRecordStorage.DataRecordStorageId,
+                    dataRecordStorage.Name,
+                    dataRecordStorage.DataRecordTypeId,
+                    dataRecordStorage.DataStoreId,
+                    Vanrise.Common.Serializer.Serialize(dataRecordStorage.Settings)
+                );
+            return (affectedRows == 1);
+        }
+
         public bool AreDataRecordStoragesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("genericdata.DataRecordStorage", ref updateHandle);

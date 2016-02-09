@@ -11,6 +11,10 @@ namespace Vanrise.GenericData.Data
     {
         IEnumerable<DataRecordStorage> GetDataRecordStorages();
 
+        bool AddDataRecordStorage(DataRecordStorage dataRecordStorage, out int dataRecordStorageId);
+
+        bool UpdateDataRecordStorage(DataRecordStorage dataRecordStorage);
+
         bool AreDataRecordStoragesUpdated(ref object updateHandle);
     }
 }

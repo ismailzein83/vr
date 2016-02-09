@@ -76,8 +76,8 @@
         function setGridQuery() {
             gridQuery = {
                 Name: $scope.name,
-                DataRecordTypeIds: null,
-                DataStoreIds: null
+                DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds(),
+                DataStoreIds: dataStoreSelectorAPI.getSelectedIds()
             };
         }
     }

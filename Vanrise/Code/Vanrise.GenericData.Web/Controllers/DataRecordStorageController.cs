@@ -21,5 +21,27 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredDataRecordStorages(input));
         }
+
+        [HttpGet]
+        [Route("GetDataRecordStorage")]
+        public DataRecordStorage GetDataRecordStorage(int dataRecordStorageId)
+        {
+            return _manager.GetDataRecordStorage(dataRecordStorageId);
+        }
+
+        [HttpPost]
+        [Route("AddDataRecordStorage")]
+        public Vanrise.Entities.InsertOperationOutput<DataRecordStorageDetail> AddDataRecordStorage(DataRecordStorage dataRecordStorage)
+        {
+            return _manager.AddDataRecordStorage(dataRecordStorage);
+        }
+
+        [HttpPost]
+        [Route("UpdateDataRecordStorage")]
+        public Vanrise.Entities.UpdateOperationOutput<DataRecordStorageDetail> UpdateDataRecordStorage(DataRecordStorage dataRecordStorage)
+        {
+            return _manager.UpdateDataRecordStorage(dataRecordStorage);
+        }
+
     }
 }

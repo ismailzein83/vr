@@ -26,9 +26,10 @@
         function DataRecordStorageSQLSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var dataRecordTypeFields;
+
             function initializeController() {
                 ctrl.columns = [];
-                ctrl.dataRecordTypeFields = [];
 
                 ctrl.onGridReady = function (api) {
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -38,44 +39,75 @@
                 ctrl.addColumn = function () {
                     addColumn();
                 };
+                ctrl.removeColumn = function (dataItem) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.columns, dataItem.id, 'id');
+                    if (index > -1) {
+                        ctrl.columns.splice(index, 1);
+                    }
+                };
+                ctrl.validateColumns = function () {
+                    if (ctrl.columns.length == 0) {
+                        return null;
+                    }
+
+                    var columnNames = [];
+                    for (var i = 0; i < ctrl.columns.length; i++) {
+                        if (ctrl.columns[i].columnName != undefined) {
+                            columnNames.push(ctrl.columns[i].columnName.toUpperCase());
+                        }
+                    }
+
+                    while (columnNames.length > 0) {
+                        var nameToValidate = columnNames[0];
+                        columnNames.splice(0, 1);
+                        if (!validateName(nameToValidate, columnNames)) {
+                            return 'Two or more columns have the same name';
+                        }
+                    }
+
+                    return null;
+                    
+                    function validateName(name, array) {
+                        for (var j = 0; j < array.length; j++) {
+                            if (array[j] == name)
+                                return false;
+                        }
+                        return true;
+                    }
+                };
             }
 
             function getDirectiveAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
+                    if (payload == undefined) {
+                        return;
+                    }
+                    if (payload.Columns != undefined) {
                         ctrl.tableName = payload.TableName;
                     }
-
-                    return loadDataRecordTypeFields();
-
-                    function loadDataRecordTypeFields() {
-                        var dataRecordTypeFieldsLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        if (payload == undefined || payload.DataRecordTypeId == undefined) {
-                            dataRecordTypeFieldsLoadDeferred.reject();
-                        }
-                        else {
-                            VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(payload.DataRecordTypeId).then(function (response) {
-                                if (response != null && response.Fields != null) {
-                                    for (var i = 0; i < response.Fields.length; i++) {
-                                        ctrl.dataRecordTypeFields.push(response.Fields[i]);
-                                    }
-                                    if (payload.Columns != undefined) {
-                                        loadColumns();
-                                    }
+                    if (payload.DataRecordTypeId != undefined) {
+                        return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(payload.DataRecordTypeId).then(function (response) {
+                            if (response != null && response.Fields != null) {
+                                dataRecordTypeFields = [];
+                                for (var i = 0; i < response.Fields.length; i++) {
+                                    dataRecordTypeFields.push(response.Fields[i]);
                                 }
-                            }).catch(function (error) {
-                                dataRecordTypeFieldsLoadDeferred.reject(error);
-                            });
-                        }
+                                loadColumns();
+                            }
+                        });
+                    }
 
-                        return dataRecordTypeFieldsLoadDeferred.promise;
-
-                        function loadColumns() {
+                    function loadColumns() {
+                        if (payload.Columns != undefined) {
                             for (var i = 0; i < payload.Columns.length; i++) {
                                 addColumn(payload.Columns[i]);
+                            }
+                        }
+                        else {
+                            for (var i = 0; i < ctrl.columns.length; i++) {
+                                setDataRecordTypeFields(ctrl.columns[i]);
                             }
                         }
                     }
@@ -106,29 +138,34 @@
             }
 
             function addColumn(data) {
-                var gridItem = {};
-                setDataRecordTypeFields(gridItem);
+                var gridItem = {
+                    id: ctrl.columns.length + 1
+                };
 
                 if (data != undefined) {
-                    gridItem = {
-                        columnName: data.ColumnName,
-                        sqlDataType: data.SQLDataType,
-                        selectedDataRecordTypeFieldName: data.ValueExpression
-                    };
+                    gridItem.columnName = data.ColumnName,
+                    gridItem.sqlDataType = data.SQLDataType,
+                    gridItem.selectedDataRecordTypeFieldName = data.ValueExpression
                 }
 
                 gridItem.onSelectorReady = function (api) {
-                    gridItem.selectedDataRecordTypeField = UtilsService.getItemByVal(ctrl.dataRecordTypeFields, gridItem.selectedDataRecordTypeFieldName, 'Name');
-                    gridItem.selectedDataRecordTypeFieldName = undefined;
+                    setDataRecordTypeFields(gridItem);
                 };
 
                 ctrl.columns.push(gridItem);
+            }
 
-                function setDataRecordTypeFields(gridItem) {
-                    gridItem.dataRecordTypeFields = [];
-                    for (var i = 0; i < ctrl.dataRecordTypeFields.length; i++) {
-                        gridItem.dataRecordTypeFields.push(ctrl.dataRecordTypeFields[i]);
-                    }
+            function setDataRecordTypeFields(gridItem) {
+                gridItem.dataRecordTypeFields = [];
+                for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                    gridItem.dataRecordTypeFields.push(dataRecordTypeFields[i]);
+                }
+                if (gridItem.selectedDataRecordTypeFieldName != undefined) {
+                    gridItem.selectedDataRecordTypeField = UtilsService.getItemByVal(gridItem.dataRecordTypeFields, gridItem.selectedDataRecordTypeFieldName, 'Name');
+                    gridItem.selectedDataRecordTypeFieldName = undefined;
+                }
+                else {
+                    gridItem.selectedDataRecordTypeField = undefined;
                 }
             }
         }

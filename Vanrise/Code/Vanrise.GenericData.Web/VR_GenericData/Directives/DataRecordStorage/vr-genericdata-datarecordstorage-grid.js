@@ -57,8 +57,8 @@
                     return gridAPI.retrieveData(query);
                 };
 
-                api.onGenericRuleDefinitionAdded = function (addedGenericRuleDefinition) {
-                    gridAPI.itemAdded(addedGenericRuleDefinition);
+                api.onDataRecordStorageAdded = function (addedDataRecordStorage) {
+                    gridAPI.itemAdded(addedDataRecordStorage);
                 };
 
                 return api;
@@ -75,7 +75,7 @@
                 var onDataRecordStorageUpdated = function (updatedDataRecordStorage) {
                     gridAPI.itemUpdated(updatedDataRecordStorage);
                 };
-                VR_GenericData_DataRecordStorageService.editDataRecordStorage(dataRecordStorage.DataRecordStorageId, onDataRecordStorageUpdated);
+                VR_GenericData_DataRecordStorageService.editDataRecordStorage(dataRecordStorage.Entity.DataRecordStorageId, onDataRecordStorageUpdated);
             }
         }
     }
