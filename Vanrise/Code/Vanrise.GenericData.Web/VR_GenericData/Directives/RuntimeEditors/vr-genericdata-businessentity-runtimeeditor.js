@@ -153,6 +153,23 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
                     }
                 }
 
+                api.getData = function()
+                {
+                    var retVal;
+
+                    if (ctrl.selectionmode == "dynamic") {
+                        retVal = {
+                            $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.BusinessEntityValues, Vanrise.GenericData.MainExtensions",
+                            BusinessEntityGroup: $scope.dynamic.directiveAPI.getData()
+                        }
+                    }
+                    else {
+                        retVal = $scope.selector.directiveAPI.getSelectedIds();
+                    }
+
+                    return retVal;
+                }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
