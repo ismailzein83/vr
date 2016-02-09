@@ -5,7 +5,7 @@
 
     function DataStoreManagementController($scope, VR_GenericData_DataStoreService) {
 
-        var gridAPI;
+        var DatStoreGridAPI;
         var filter = {};
 
         defineScope();
@@ -13,18 +13,18 @@
 
         function defineScope() {
             $scope.onGridReady = function (api) {
-                gridAPI = api;
-                gridAPI.loadGrid(filter);
+                DatStoreGridAPI = api;
+                DatStoreGridAPI.loadGrid(filter);
             };
 
             $scope.search = function () {
                 getFilterObject();
-                return gridAPI.loadGrid(filter);
+                return DatStoreGridAPI.loadGrid(filter);
             };
 
             $scope.addDataStore = function () {
                 var onDataStoreAdded = function (dataStoreObj) {
-                   // gridAPI.onDataStoreAdded(dataStoreObj);
+                    DatStoreGridAPI.onDataStoreAdded(dataStoreObj);
                 };
 
                 VR_GenericData_DataStoreService.addDataStore(onDataStoreAdded);

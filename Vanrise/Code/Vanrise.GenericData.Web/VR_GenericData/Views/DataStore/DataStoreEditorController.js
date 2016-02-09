@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    DataStoreEditorController.$inject = ["$scope", "VRNavigationService", "VRNotificationService", "UtilsService", "VRUIUtilsService"];
+    DataStoreEditorController.$inject = ["$scope", "VR_GenericData_DataStoreAPIService", "VRNavigationService", "VRNotificationService", "UtilsService", "VRUIUtilsService"];
 
-    function DataStoreEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService) {
+    function DataStoreEditorController($scope, VR_GenericData_DataStoreAPIService , VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService) {
 
         var dataStoreId;
         var dataStoreEntity;
@@ -11,7 +11,7 @@
         var dataStoreSelectorAPI;
         var dataStoreReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var dataStoreDirectiveAPI;
-        var dataStoreConfigReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var dataStoreConfigReadyPromiseDeferred; // = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -26,14 +26,24 @@
         }
 
         function defineScope() {
+
             $scope.onReadyDataStoreConfigSelector = function (api) {
                 dataStoreSelectorAPI = api;
                 dataStoreReadyPromiseDeferred.resolve();
             }
             $scope.onReadyDataStoreConfigDirective = function (api) {
-                dataStoreSelectorAPI = api;
-                dataStoreConfigReadyPromiseDeferred.resolve();
+                dataStoreDirectiveAPI = api;
+                
+                var setLoader = function (value) { $scope.isLoadingConfigDirective = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataStoreDirectiveAPI, undefined, setLoader, dataStoreConfigReadyPromiseDeferred);
             }
+            $scope.saveDataStore = function () {
+                $scope.isLoading = true;
+                if (isEditMode)
+                    return updateDataStore();
+                else
+                    return insertDataStore();
+            };
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             }
@@ -42,7 +52,7 @@
         function load() {
             $scope.isLoading = true;
             if (isEditMode) {
-                GetDataStore.then(function () {
+                GetDataStore().then(function () {
                     loadAllControls().finally(function () {
                         dataStoreEntity = undefined;
                     }).catch(function (error) {
@@ -58,9 +68,9 @@
         }
 
         function GetDataStore() {
-            ////return CDRAnalysis_PSTN_SwitchBrandAPIService.GetBrandById(brandId).then(function (response) {
-            //            brandEntity = {};
-            //         //   });
+            return VR_GenericData_DataStoreAPIService.GetDataStore(dataStoreId).then(function (response) {
+                dataStoreEntity = response;
+             });
         }
 
         function loadAllControls() {
@@ -89,61 +99,72 @@
         function loadDataStoreConfigSelector() {
             var loadDataStorePromiseDeferred = UtilsService.createPromiseDeferred();
             dataStoreReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, undefined, loadDataStorePromiseDeferred);
+                if (dataStoreEntity != undefined && dataStoreEntity.Settings != undefined)
+                    var payLoad = {
+                        selectedIds: (dataStoreEntity != undefined && dataStoreEntity.Settings != undefined && dataStoreEntity.Settings.ConfigId != undefined) ? dataStoreEntity.Settings.ConfigId : undefined
+                    }
+                VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, payLoad, loadDataStorePromiseDeferred);
             });
             return loadDataStorePromiseDeferred.promise;
         }
         function loadDataStoreConfigDirective() {
-            var loadDataStoreConfigPromiseDeferred = UtilsService.createPromiseDeferred();
-            dataStoreConfigReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(dataStoreDirectiveAPI, undefined, loadDataStoreConfigPromiseDeferred);
-            });
-            return loadDataStoreConfigPromiseDeferred.promise;
+            if (dataStoreEntity != undefined && dataStoreEntity.Settings != undefined) {
+                dataStoreConfigReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                var loadDataStoreConfigPromiseDeferred = UtilsService.createPromiseDeferred();
+                dataStoreConfigReadyPromiseDeferred.promise.then(function () {
+                    dataStoreConfigReadyPromiseDeferred = undefined;
+                    var directivePayLoad = {
+                        data: dataStoreEntity.Settings
+                    }
+                    VRUIUtilsService.callDirectiveLoad(dataStoreDirectiveAPI, directivePayLoad, loadDataStoreConfigPromiseDeferred);
+                });
+                return loadDataStoreConfigPromiseDeferred.promise;
+            }
+
+         
         }
 
 
-        //function updateBrand() {
-        //    var brandObj = buildBrandObjFromScope();
+        function updateDataStore() {
+            var dataStoreObj = buildDataSToreObjFromScope();
+            return VR_GenericData_DataStoreAPIService.UpdateDataStore(dataStoreObj)
+                .then(function (response) {
+                    $scope.isLoading = false;
+                    if (VRNotificationService.notifyOnItemUpdated("Data Store", response, "Name")) {
 
-        //    return CDRAnalysis_PSTN_SwitchBrandAPIService.UpdateBrand(brandObj)
-        //        .then(function (response) {
-        //            $scope.isLoading = false;
-        //            if (VRNotificationService.notifyOnItemUpdated("Switch Brand", response, "Name")) {
+                        if ($scope.onDataStoreUpdated != undefined)
+                            $scope.onDataStoreUpdated(response.UpdatedObject);
 
-        //                if ($scope.onSwitchBrandUpdated != undefined)
-        //                    $scope.onSwitchBrandUpdated(response.UpdatedObject);
+                        $scope.modalContext.closeModal();
+                    }
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
 
-        //                $scope.modalContext.closeModal();
-        //            }
-        //        })
-        //        .catch(function (error) {
-        //            VRNotificationService.notifyException(error, $scope);
-        //        }).finally(function () {
-        //            $scope.isLoading = false;
-        //        });;
-        //}
+        function insertDataStore() {
+            var dataStoreObj = buildDataSToreObjFromScope();
+            return VR_GenericData_DataStoreAPIService.AddDataStore(dataStoreObj)
+                .then(function (response) {
+                    $scope.isLoading = false;
+                    if (VRNotificationService.notifyOnItemAdded("Data Store", response, "Name")) {
+                        if ($scope.onDataStoreAdded != undefined)
+                            $scope.onDataStoreAdded(response.InsertedObject);
 
-        //function insertBrand() {
-        //    var brandObj = buildBrandObjFromScope();
+                        $scope.modalContext.closeModal();
+                    }
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
+                });
+        }
 
-        //    return CDRAnalysis_PSTN_SwitchBrandAPIService.AddBrand(brandObj)
-        //        .then(function (response) {
-        //            $scope.isLoading = false;
-        //            if (VRNotificationService.notifyOnItemAdded("Switch Brand", response, "Name")) {
-        //                if ($scope.onSwitchBrandAdded != undefined)
-        //                    $scope.onSwitchBrandAdded(response.InsertedObject);
-
-        //                $scope.modalContext.closeModal();
-        //            }
-        //        })
-        //        .catch(function (error) {
-        //            VRNotificationService.notifyException(error, $scope);
-        //        }).finally(function () {
-        //            $scope.isLoading = false;
-        //        });;
-        //}
-
-        function buildBrandObjFromScope() {
+        function buildDataSToreObjFromScope() {
             var settings = dataStoreDirectiveAPI.getData();
             settings.ConfigId = dataStoreSelectorAPI.getSelectedIds();
             return {

@@ -1020,11 +1020,7 @@ input.ui-grid-filter-input[type="text"] {
   background-color:#CCC !important;
   border-color:initial;
 }
-.menulink:active{
-    color:#000 ;
-    text-decoration:none;
-}
-.menulink:visited{
+.menulink:hover , .menulink:visited , .menulink:active {
     color:#000 ;
     text-decoration:none;
 }

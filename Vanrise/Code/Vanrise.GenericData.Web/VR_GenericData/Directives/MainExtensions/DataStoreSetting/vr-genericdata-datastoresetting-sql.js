@@ -46,8 +46,8 @@
 
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        $scope.connectionString = payload.connectionString;
+                    if (payload != undefined && payload.data != undefined) {
+                        $scope.connectionString = payload.data.ConnectionString;
                     }
                 }
 

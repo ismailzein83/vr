@@ -23,6 +23,20 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("genericdata.sp_DataStore_GetAll", DataStoreMapper);
         }
 
+        public bool AddDataStore(DataStore dataStore, out int insertedId) 
+        {
+            object dataStoreId;
+
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataStore_Insert", out dataStoreId, dataStore.Name, Vanrise.Common.Serializer.Serialize(dataStore.Settings));
+            insertedId = (affectedRows == 1) ? (int)dataStoreId : -1;
+
+            return (affectedRows == 1);
+        }
+        public bool UpdateDataStore(DataStore dataStore)
+        {
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_DataStore_Update", dataStore.DataStoreId, dataStore.Name, Vanrise.Common.Serializer.Serialize(dataStore.Settings));
+            return (affectedRows == 1);
+        }
         public bool AreDataStoresUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("genericdata.DataStore", ref updateHandle);

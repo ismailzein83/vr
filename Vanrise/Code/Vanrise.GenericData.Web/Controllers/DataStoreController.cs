@@ -15,11 +15,40 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         DataStoreManager _manager = new DataStoreManager();
 
+        [HttpPost]
+        [Route("GetFilteredDataStores")]
+        public object GetFilteredDataStores(Vanrise.Entities.DataRetrievalInput<DataStoreQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredDataStores(input));
+        }
+
         [HttpGet]
         [Route("GetDataStoresInfo")]
         public IEnumerable<DataStoreInfo> GetDataStoresInfo()
         {
             return _manager.GetDataStoresInfo();
         }
+
+        [HttpGet]
+        [Route("GetDataStore")]
+        public DataStore GetDataStore(int dataStoreId)
+        {
+            return _manager.GeDataStore(dataStoreId);
+        }
+
+        [HttpPost]
+        [Route("AddDataStore")]
+        public Vanrise.Entities.InsertOperationOutput<DataStoreDetail> AddDataStore(DataStore dataStore)
+        {
+            return _manager.AddDataStore(dataStore);
+        }
+
+        [HttpPost]
+        [Route("UpdateDataStore")]
+        public Vanrise.Entities.UpdateOperationOutput<DataStoreDetail> UpdateDataStore(DataStore dataStore)
+        {
+            return _manager.UpdateDataStore(dataStore);
+        }
+
     }
 }

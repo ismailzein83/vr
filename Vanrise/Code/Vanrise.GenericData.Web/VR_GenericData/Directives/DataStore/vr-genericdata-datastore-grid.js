@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationService", 
-    function (UtilsService, VRNotificationService) {
+app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_DataStoreAPIService","VR_GenericData_DataStoreService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataStoreAPIService, VR_GenericData_DataStoreService) {
 
         var directiveDefinitionObject = {
 
@@ -51,15 +51,15 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    //return VR_GenericData_DataTransformationDefinitionAPIService.GetFilteredDataTransformationDefinitions(dataRetrievalInput)
-                    //    .then(function (response) {
-                    //        if (response.Data != undefined) {
-                    //        }
-                    //        onResponseReady(response);
-                    //    })
-                    //    .catch(function (error) {
-                    //        VRNotificationService.notifyException(error, $scope);
-                    //    });
+                    return VR_GenericData_DataStoreAPIService.GetFilteredDataStores(dataRetrievalInput)
+                        .then(function (response) {
+                            if (response.Data != undefined) {
+                            }
+                            onResponseReady(response);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
                 };
 
                 defineMenuActions();
@@ -69,8 +69,8 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
             function defineMenuActions() {
                 var defaultMenuActions = [
                 {
-                    name: "Edit"//,
-                   // clicked: editDataTransformationDefinition,
+                    name: "Edit",
+                   clicked: editDataStore
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -78,13 +78,12 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
                 }
             }
 
-            //function editDataTransformationDefinition(dataItem) {
-            //    var onDataTransformationDefinitionUpdated = function (onDataTransformationDefinitionObj) {
-            //        gridAPI.itemUpdated(onDataTransformationDefinitionObj);
-            //    }
-
-            //    VR_GenericData_DataTransformationDefinitionService.editDataTransformationDefinition(dataItem.Entity.DataTransformationDefinitionId, onDataTransformationDefinitionUpdated);
-            //}
+            function editDataStore(dataItem) {
+                var onDataStoreUpdated = function (dataStoreObj) {
+                    gridAPI.itemUpdated(dataStoreObj);
+                }
+                VR_GenericData_DataStoreService.editDataStore(dataItem.Entity.DataStoreId, onDataStoreUpdated);
+            }
         }
 
         return directiveDefinitionObject;

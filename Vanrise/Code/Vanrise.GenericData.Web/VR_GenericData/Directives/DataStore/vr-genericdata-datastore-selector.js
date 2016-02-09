@@ -112,7 +112,7 @@
                     + ' onselectionchanged="ctrl.onselectionchanged"'
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="GenericRuleDefinitionId"'
+                    + ' datavaluefield="DataStoreId"'
                     + ' datatextfield="Name"'
                     + ' ' + multipleselection
                     + ' ' + hideselectedvaluessection
