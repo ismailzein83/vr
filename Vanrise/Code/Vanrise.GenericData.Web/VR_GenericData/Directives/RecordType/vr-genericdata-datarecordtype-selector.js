@@ -19,9 +19,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            ctrl.selectedvalues;
-            if ($attrs.ismultipleselection != undefined)
-                ctrl.selectedvalues = [];
+            ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             ctrl.datasource = [];
 
 
@@ -63,7 +61,9 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
         if (attrs.ismultipleselection != undefined)
             multipleselection = "ismultipleselection"
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"'
+        var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
+
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"'
                + 'entityname="Type" ' + label + '></vr-select>';
 
     }
