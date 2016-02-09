@@ -94,6 +94,7 @@
             }
 
             $scope.scopeModal.SaveDataTransformationDefinition = function () {
+                applyChanges();
                 if (isEditMode) {
                     return updateDataTransformationDefinition();
                 }
