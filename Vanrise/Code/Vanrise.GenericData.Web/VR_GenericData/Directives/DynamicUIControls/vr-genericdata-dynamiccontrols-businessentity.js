@@ -1,20 +1,34 @@
 ﻿'use strict';
-app.directive('vrGenericdataDynamiccontrolsBusinessentity', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataDynamiccontrolsBusinessentity', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '=',
-                selectionmode: '@'
+                selectionmode: '@',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
 
+                $scope.scopeModel = {};
+                              
+
                 ctrl.selectedvalues;
                 if ($attrs.selectionmode == "multiple")
                     ctrl.selectedvalues = [];
+
+                if ($attrs.selectionmode == "dynamic")
+                {
+                    $scope.scopeModel.calculatedColNum = ctrl.normalColNum * 2;
+                    $scope.scopeModel.showInDynamicMode = true;
+                }
+                else
+                {
+                    $scope.scopeModel.calculatedColNum = ctrl.normalColNum * 0.5;
+                }
 
                 ctrl.datasource = [];
                 var ctor = new selectorCtor(ctrl, $scope, $attrs);
@@ -43,6 +57,7 @@ app.directive('vrGenericdataDynamiccontrolsBusinessentity', ['UtilsService', 'VR
                 //label = "";
                 multipleselection = "ismultipleselection";
             }
+
             //var required = "";
             //if (attrs.isrequired != undefined)
             //    required = "isrequired";
@@ -50,10 +65,13 @@ app.directive('vrGenericdataDynamiccontrolsBusinessentity', ['UtilsService', 'VR
             //var hideremoveicon = "";
             //if (attrs.hideremoveicon != undefined)
             //    hideremoveicon = "hideremoveicon";
+            
 
-            return '<vr-directivewrapper directive="selector.directive" on-ready="selector.onDirectiveReady"'
+            return '<vr-columns colnum="{{scopeModel.calculatedColNum * 2}}">' +
+            '<vr-directivewrapper directive="selector.directive" on-ready="selector.onDirectiveReady" '
                 + multipleselection + '></vr-directivewrapper>'
-                + '<vr-directivewrapper directive="dynamic.directive" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>'
+                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
+                '</vr-section></vr-columns>'
         }
 
         function selectorCtor(ctrl, $scope, $attrs) {
@@ -74,32 +92,64 @@ app.directive('vrGenericdataDynamiccontrolsBusinessentity', ['UtilsService', 'VR
                     var fieldType;
 
                     if (payload != undefined) {
+                        $scope.scopeModel.fieldTitle = payload.fieldTitle;
                         fieldType = payload.fieldType;
                     }
 
                     if (fieldType != undefined) {
-                        //fieldType.BusinessEntityDefinitionId;
-                        var businessEntityDef = { Settings: { SelectorUIControl: 'vr-whs-be-salezone-selector', GroupSelectorUIControl: 'vr-whs-be-salezonegroup' } };
-                        if (businessEntityDef.Settings != null)
-                        {
-                            if ($attrs.selectionmode == "dynamic") {
-                                $scope.dynamic = {};
-                                $scope.dynamic.directive = businessEntityDef.Settings.GroupSelectorUIControl;
-                                $scope.dynamic.onDirectiveReady = function (api) {
-                                    $scope.dynamic.directiveAPI = api;
-                                    $scope.dynamic.directiveAPI.load(undefined);
+
+                        var promises = [];
+
+                        var loadWholeSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadWholeSectionPromiseDeferred.promise);
+
+                        var loadBusinessEntityDefPromiseDeferred = VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(fieldType.BusinessEntityDefinitionId).then(function (businessEntityDef) {
+                            if (businessEntityDef.Settings != null) {
+                                var innerSectionPromises = [];
+                                if ($attrs.selectionmode == "dynamic") {
+                                    $scope.dynamic = {};
+                                    $scope.dynamic.directive = businessEntityDef.Settings.GroupSelectorUIControl;
+                                    $scope.dynamic.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    $scope.dynamic.onDirectiveReady = function (api) {
+                                        $scope.dynamic.directiveAPI = api;
+                                        $scope.dynamic.directiveReadyPromiseDeferred.resolve();
+                                    }
+
+                                    $scope.dynamic.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    innerSectionPromises.push($scope.dynamic.directiveLoadPromiseDeferred.promise);
+
+                                    $scope.dynamic.directiveReadyPromiseDeferred.promise.then(function () {
+                                        VRUIUtilsService.callDirectiveLoad($scope.dynamic.directiveAPI, undefined, $scope.dynamic.directiveLoadPromiseDeferred);
+                                    });
+
                                 }
-                            }
-                            else
-                            {
-                                $scope.selector = {};
-                                $scope.selector.directive = businessEntityDef.Settings.SelectorUIControl;
-                                $scope.selector.onDirectiveReady = function (api) {
-                                    $scope.selector.directiveAPI = api;
-                                    $scope.selector.directiveAPI.load(undefined);
+                                else {
+                                    $scope.selector = {};
+                                    $scope.selector.directive = businessEntityDef.Settings.SelectorUIControl;
+                                    $scope.selector.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    $scope.selector.onDirectiveReady = function (api) {
+                                        $scope.selector.directiveAPI = api;
+                                        $scope.selector.directiveReadyPromiseDeferred.resolve();
+                                    }
+
+                                    $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
+
+                                    $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
+                                        VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, undefined, $scope.selector.directiveLoadPromiseDeferred);
+                                    });
                                 }
+
+                                UtilsService.waitMultiplePromises(innerSectionPromises).then(function () {
+                                    loadWholeSectionPromiseDeferred.resolve();
+                                }).catch(function (error) {
+                                    loadWholeSectionPromiseDeferred.reject(error);
+                                });
                             }
-                        }
+                        });
+
+                        promises.push(loadBusinessEntityDefPromiseDeferred);
+                        return UtilsService.waitMultiplePromises(promises);
                     }
                 }
 
