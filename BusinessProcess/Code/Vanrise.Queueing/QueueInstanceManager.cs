@@ -62,12 +62,8 @@ namespace Vanrise.Queueing
 
         public IEnumerable<QueueInstance> GetQueueExecutionFlows(List<int> executionFlowIds)
         {
-
             IEnumerable<QueueInstance> queueInstances = GetCachedQueueInstances().Values.ToList();
-            List<QueueInstance> queueInstancesResult=new List<QueueInstance>();
-            for (int i = 0; i < executionFlowIds.Count(); i++)
-                queueInstancesResult.AddRange(queueInstances.Where(x => x.ExecutionFlowId == executionFlowIds[i]));
-            return queueInstancesResult;
+            return queueInstances.Where(x => x.ExecutionFlowId.HasValue && executionFlowIds.Contains(x.ExecutionFlowId.Value));
 
         }
 

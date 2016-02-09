@@ -13,5 +13,7 @@ namespace Vanrise.Queueing.Entities
         public string Name { get; set; }
 
         public string Title { get; set; }
+
+        public List<QueueExecutionFlowStage> Stages { get; set; }
     }
 }

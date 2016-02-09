@@ -75,6 +75,7 @@
     <Compile Include="QueueItemTypeFilter.cs" />
     <Compile Include="QueueItemTypeInfo.cs" />
     <Compile Include="QueueSettings.cs" />
+    <Compile Include="QueueExecutionFlowStage.cs" />
     <Compile Include="QueueStageFilter.cs" />
     <Compile Include="QueueStageNameInfo.cs" />
     <Compile Include="QueueSubscription.cs" />
