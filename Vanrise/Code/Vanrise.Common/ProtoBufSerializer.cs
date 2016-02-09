@@ -12,9 +12,11 @@ namespace Vanrise.Common
         static ProtoBufSerializer()
         {
             s_SerializeMethod = typeof(ProtoBuf.Serializer).GetMethod("Serialize", BindingFlags.Static);
+            s_SerializeMethod = typeof(ProtoBuf.Serializer).GetMethod("Deserialize", BindingFlags.Static);
         }
 
         static MethodInfo s_SerializeMethod;
+        static MethodInfo s_DeserializeMethod;
 
         public static void Serialize<T>(Stream destination, T instance)
         {
@@ -48,14 +50,24 @@ namespace Vanrise.Common
             return ProtoBuf.Serializer.Deserialize<T>(source);
         }
 
+        public static dynamic Deserialize(Stream source, Type type)
+        {
+            return s_DeserializeMethod.MakeGenericMethod(type).Invoke(null, new Object[] { source });
+        }
+
         public static T Deserialize<T>(byte[] serializedBytes)
         {
             return Deserialize<T>(new MemoryStream(serializedBytes));
         }
 
+        public static dynamic Deserialize(byte[] serializedBytes, Type type)
+        {
+            return s_DeserializeMethod.MakeGenericMethod(type).Invoke(null, new Object[] { serializedBytes });
+        }
+
         public static void AddSerializableType(Type type, params string[] memberNames)
         {
-             ProtoBuf.Meta.RuntimeTypeModel.Default.Add(type, false).Add(memberNames);
+            ProtoBuf.Meta.RuntimeTypeModel.Default.Add(type, false).Add(memberNames);
         }
     }
 }

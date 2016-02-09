@@ -67,6 +67,7 @@ namespace Vanrise.Common
             else
             {
                 output.OutputAssembly = results.CompiledAssembly;
+                output.AssemblyFile = File.ReadAllBytes(results.PathToAssembly);
                 return true;
             }
         }
@@ -80,6 +81,8 @@ namespace Vanrise.Common
     public class CSharpCompilationOutput
     {
         public Assembly OutputAssembly { get; set; }
+
+        public byte[] AssemblyFile { get; set; }
 
         public List<string> ErrorMessages { get; set; }
     }
