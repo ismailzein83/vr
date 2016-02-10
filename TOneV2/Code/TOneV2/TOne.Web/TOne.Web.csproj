@@ -211,6 +211,12 @@
     <Reference Include="Vanrise.GenericData.Pricing">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.QueueActivators">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.SQLDataStorage">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.SQLDataStorage.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Transformation">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.dll</HintPath>
     </Reference>
