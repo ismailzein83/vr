@@ -194,6 +194,10 @@
                 if (serverResponse.Result == InsertOperationResultEnum.Succeeded.value) {
                     insertEntityDeferred.resolve();
                     insertView().then(function () { insertViewDeferred.resolve(); }).catch(function (error) { insertViewDeferred.reject(error); });
+                }else if(serverResponse.Result == InsertOperationResultEnum.SameExists.value)
+                {
+                    insertEntityDeferred.resolve();
+                    insertViewDeferred.resolve();
                 }
                 else {
                     insertEntityDeferred.reject();
