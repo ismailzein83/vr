@@ -72,7 +72,7 @@
             }
 
             function editGenericRule(genericRule) {
-                var onGenericRuleDefinitionUpdated = function (updatedGenericRule) {
+                var onGenericRuleUpdated = function (updatedGenericRule) {
                     gridAPI.itemUpdated(updatedGenericRule);
                 };
                 VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated);

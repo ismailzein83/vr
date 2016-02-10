@@ -62,13 +62,18 @@ app.directive('vrGenericdataNumericRuntimeeditor', ['UtilsService', function (Ut
             api.load = function (payload) {
 
                 var fieldType;
+                var fieldValue;
+
                 if (payload != undefined) {
                     $scope.scopeModel.label = payload.fieldTitle;
                     fieldType = payload.fieldType;
+                    fieldValue = payload.fieldValue;
                 }
 
-                if (fieldType != undefined) {
-                    
+                if (fieldValue != undefined) {
+                    angular.forEach(fieldValue.Values, function (val) {
+                        $scope.scopeModel.values.push(val);
+                    });
                 }
             }
 

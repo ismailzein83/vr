@@ -16,6 +16,7 @@
         var genericRuleEntity;
         var genericRuleTypeConfig;
         var criteriaDefinitionFields;
+        var criteriaFieldsValues;
 
         var settingsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var settingsDirectiveAPI;
@@ -106,6 +107,7 @@
         function getGenericRule() {
             return VR_GenericData_GenericRuleAPIService.GetGenericRule(genericRuleDefinitionId, genericRuleId).then(function (genericRule) {
                 genericRuleEntity = genericRule;
+                criteriaFieldsValues = (genericRuleEntity != undefined && genericRuleEntity.Criteria != null && genericRuleEntity.Criteria.FieldsValues != null) ? genericRuleEntity.Criteria.FieldsValues : undefined;
             });
         }
 
@@ -154,7 +156,8 @@
                     field.runtimeEditor.onReadyPromiseDeferred.promise.then(function () {
                         var payload = {
                             fieldTitle: field.Title,
-                            fieldType: field.FieldType
+                            fieldType: field.FieldType,
+                            fieldValue: (criteriaFieldsValues != undefined) ? criteriaFieldsValues[field.FieldName] : undefined
                         };
 
                         VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
@@ -237,8 +240,8 @@
             return VR_GenericData_GenericRuleAPIService.AddGenericRule(genericRuleObj)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Generic Rule", response)) {
-                    if ($scope.onRouteRuleAdded != undefined)
-                        $scope.onRouteRuleAdded(response.InsertedObject);
+                    if ($scope.onGenericRuleAdded != undefined)
+                        $scope.onGenericRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -248,17 +251,17 @@
         }
 
         function updateRouteRule() {
-            //var routeRuleObject = buildRouteRuleObjFromScope();
-            //WhS_Routing_RouteRuleAPIService.UpdateRule(routeRuleObject)
-            //.then(function (response) {
-            //    if (VRNotificationService.notifyOnItemUpdated("Route Rule", response)) {
-            //        if ($scope.onRouteRuleUpdated != undefined)
-            //            $scope.onRouteRuleUpdated(response.UpdatedObject);
-            //        $scope.modalContext.closeModal();
-            //    }
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyException(error, $scope);
-            //});
+            var genericRuleObj = buildGenericRuleObjFromScope();
+            return VR_GenericData_GenericRuleAPIService.UpdateGenericRule(genericRuleObj)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Generic Rule", response)) {
+                    if ($scope.onGenericRuleUpdated != undefined)
+                        $scope.onGenericRuleUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
         }
     }
 

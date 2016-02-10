@@ -38,6 +38,14 @@ namespace Vanrise.GenericData.Web.Controllers
             return manager.AddGenericRule(rule);
         }
 
+        [HttpPost]
+        [Route("UpdateGenericRule")]
+        public Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail> UpdateGenericRule(GenericRule rule)
+        {
+            var manager = GetManager(rule.DefinitionId);
+            return manager.UpdateGenericRule(rule);
+        }
+
         IGenericRuleManager GetManager(int ruleDefinitionId)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();

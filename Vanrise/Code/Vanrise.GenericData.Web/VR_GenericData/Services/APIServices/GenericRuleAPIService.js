@@ -8,7 +8,8 @@
         return {
             GetFilteredGenericRules: GetFilteredGenericRules,
             GetGenericRule: GetGenericRule,
-            AddGenericRule: AddGenericRule
+            AddGenericRule: AddGenericRule,
+            UpdateGenericRule: UpdateGenericRule
         };
 
         function GetFilteredGenericRules(input) {
@@ -24,7 +25,11 @@
 
         function AddGenericRule(genericRule) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'AddGenericRule'), genericRule);
-        }       
+        }
+
+        function UpdateGenericRule(genericRule) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'UpdateGenericRule'), genericRule);
+        }
     }
 
     appControllers.service('VR_GenericData_GenericRuleAPIService', GenericRuleAPIService);
