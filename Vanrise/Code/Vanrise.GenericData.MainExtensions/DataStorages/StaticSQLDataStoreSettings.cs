@@ -15,7 +15,8 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
             var sqlRecordStorageSettings = context.RecordStorage.Settings as SQLDataRecordStorageSettings;
-            var sqlRecordStorageState = context.RecordStorageState as SQLDataRecordStorageState;
+            SQLDataRecordStorageState sqlRecordStorageState = null; // The line below is commented for debugging purposes
+            //var sqlRecordStorageState = context.RecordStorageState as SQLDataRecordStorageState;
             //DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             //var dataRecordType = dataRecordTypeManager.GetDataRecordType(context.RecordStorage.DataRecordTypeId);
             if (sqlRecordStorageState == null)

@@ -67,6 +67,7 @@
     <Compile Include="DataStorage\DataRecordStorage\DataRecordStorageDetail.cs" />
     <Compile Include="DataStorage\DataRecordStorage\DataRecordStorageQuery.cs" />
     <Compile Include="DataStorage\DataRecordStorage\DataRecordStorageSettings.cs" />
+    <Compile Include="DataStorage\DataRecordStorage\DataRecordStorageState.cs" />
     <Compile Include="DataStorage\DataStore.cs" />
     <Compile Include="DataStorage\DataStoreConfig.cs" />
     <Compile Include="DataStorage\DataStoreSettings.cs" />

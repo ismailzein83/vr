@@ -115,7 +115,7 @@
 
                 api.getData = function () {
                     return {
-                        $type: 'Vanrise.GenericData.MainExtensions.DataStorages.SQLDataRecordStorageSettings, Vanrise.GenericData.MainExtensions',
+                        $type: 'Vanrise.GenericData.SQLDataStorage.SQLDataRecordStorageSettings, Vanrise.GenericData.SQLDataStorage',
                         TableName: ctrl.tableName,
                         Columns: ctrl.columns.length > 0 ? getColumns() : null
                     };
@@ -124,7 +124,7 @@
                         var columns = [];
                         for (var i = 0; i < ctrl.columns.length; i++) {
                             columns.push({
-                                $type: 'Vanrise.GenericData.MainExtensions.DataStorages.SQLDataRecordStorageColumn, Vanrise.GenericData.MainExtensions',
+                                $type: 'Vanrise.GenericData.SQLDataStorage.SQLDataRecordStorageColumn, Vanrise.GenericData.SQLDataStorage',
                                 ColumnName: ctrl.columns[i].columnName,
                                 SQLDataType: ctrl.columns[i].sqlDataType,
                                 ValueExpression: ctrl.columns[i].selectedDataRecordTypeField.Name

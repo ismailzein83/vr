@@ -14,33 +14,16 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
-            var sqlRecordStorageSettings = context.RecordStorage.Settings as SQLDataRecordStorageSettings;
-            var sqlRecordStorageState = context.RecordStorageState as SQLDataRecordStorageState;
             var sqlDataStoreSettings = context.DataStore.Settings as SQLDataStoreSettings;
+            var sqlRecordStorageSettings = context.RecordStorage.Settings as SQLDataRecordStorageSettings;
+            var existingRecordStorageSettings = context.ExistingRecordSettings as SQLDataRecordStorageSettings;
 
-            if (sqlRecordStorageState == null)
-                CreateSQLTable(sqlDataStoreSettings, sqlRecordStorageSettings);
+            SQLRecordStorageDataManager dataManager = new SQLRecordStorageDataManager(sqlDataStoreSettings, sqlRecordStorageSettings);
+
+            if (existingRecordStorageSettings == null)
+                dataManager.CreateSQLRecordStorageTable();
             else
-                UpdateSQLTable(sqlRecordStorageSettings, sqlRecordStorageState);
-        }
-
-        private void CreateSQLTable(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings)
-        {
-            SQLRecordStorageDataManager dataManager = new SQLRecordStorageDataManager(dataStoreSettings, dataRecordStorageSettings);
-            dataManager.CreateSQLRecordStorageTable();
-        }
-
-        private static void UpdateSQLTable(SQLDataRecordStorageSettings sqlRecordStorageSettings, SQLDataRecordStorageState sqlRecordStorageState)
-        {
-            List<SQLDataRecordStorageColumn> columnsToAdd = new List<SQLDataRecordStorageColumn>();
-            foreach (var columnSetting in sqlRecordStorageSettings.Columns)
-            {
-                var matchExistingColumnState = sqlRecordStorageState.ExistingSettings.Columns.FirstOrDefault(itm => itm.ColumnName == columnSetting.ColumnName);
-                if (matchExistingColumnState == null)
-                    columnsToAdd.Add(columnSetting);
-                else if (columnSetting.SQLDataType != matchExistingColumnState.SQLDataType)
-                    throw new Exception(String.Format("Cannot change column type of column '{0}'", columnSetting.ColumnName));
-            }
+                dataManager.AlterSQLRecordStorageTable(existingRecordStorageSettings);
         }
 
         public override IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context)

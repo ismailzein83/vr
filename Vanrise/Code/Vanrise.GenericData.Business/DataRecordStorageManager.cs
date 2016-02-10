@@ -78,6 +78,8 @@ namespace Vanrise.GenericData.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = DataRecordStorageMapper(dataRecordStorage);
 
+            UpdateStorage(dataRecordStorage);
+
             IDataRecordStorageDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordStorageDataManager>();
 
             if (dataManager.UpdateDataRecordStorage(dataRecordStorage))
@@ -111,10 +113,16 @@ namespace Vanrise.GenericData.Business
         void UpdateStorage(DataRecordStorage dataRecordStorage)
         {
             DataStore dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
-
+            DataRecordStorage existingDataRecordStorage = GetDataRecordStorage(dataRecordStorage.DataRecordStorageId);
             if (dataStore != null && dataStore.Settings != null)
             {
-                UpdateRecordStorageContext context = new UpdateRecordStorageContext(dataStore, dataRecordStorage, null);
+                UpdateRecordStorageContext context = new UpdateRecordStorageContext()
+                {
+                    DataStore = dataStore,
+                    RecordStorage = dataRecordStorage,
+                    ExistingRecordSettings = existingDataRecordStorage != null ? existingDataRecordStorage.Settings : null,
+                    RecordStorageState = existingDataRecordStorage != null ? existingDataRecordStorage.State : null
+                };
                 dataStore.Settings.UpdateRecordStorage(context);
             }
             else

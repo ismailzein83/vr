@@ -12,6 +12,8 @@ namespace Vanrise.GenericData.Entities
 
         DataRecordStorage RecordStorage { get; }
 
-        Object RecordStorageState { get; set; }
+        DataRecordStorageSettings ExistingRecordSettings { get; }
+
+        DataRecordStorageState RecordStorageState { get; set; }
     }
 }
