@@ -123,7 +123,6 @@
     <Content Include="Queueing\Directives\QueueItemHeader\Templates\QueueItemHeaderGridTemplate.html" />
     <Content Include="Queueing\Directives\QueueItemHeader\vr-queueing-queueitemheader-grid.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_ExecutionFlowDefinitionAPIService.js" />
-    <Content Include="Queueing\Services\APIServices\VR_Queueing_ExecutionFlowStageAPIService.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_QueueItemHeaderAPIService.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_QueueItemTypeAPIService.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_QueueStageAPIService.js" />

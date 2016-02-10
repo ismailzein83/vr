@@ -58,7 +58,8 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
                             fields.push({
                                 StageName: ctrl.datasource[i].StageName,
                                 QueueNameTemplate: ctrl.datasource[i].QueueNameTemplate,
-                                QueueTitleTemplate: ctrl.datasource[i].QueueTitleTemplate
+                                QueueTitleTemplate: ctrl.datasource[i].QueueTitleTemplate,
+                                QueueItemType: ctrl.datasource[i].QueueItemType
                             });
                         }
 

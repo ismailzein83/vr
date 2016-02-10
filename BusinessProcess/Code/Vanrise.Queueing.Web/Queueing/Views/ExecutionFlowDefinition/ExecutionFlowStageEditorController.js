@@ -8,7 +8,6 @@
 
         var isEditMode;
         var ExecutionFlowStageEntity;
-        var receivedDataRecordId;
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
