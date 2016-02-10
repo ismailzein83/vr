@@ -16,8 +16,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             var sqlRecordStorageSettings = context.RecordStorage.Settings as SQLDataRecordStorageSettings;
             var sqlRecordStorageState = context.RecordStorageState as SQLDataRecordStorageState;
-            //DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            //var dataRecordType = dataRecordTypeManager.GetDataRecordType(context.RecordStorage.DataRecordTypeId);
+            
             if (sqlRecordStorageState == null)
                 CreateSQLTable(context.DataStore, context.RecordStorage);
             else

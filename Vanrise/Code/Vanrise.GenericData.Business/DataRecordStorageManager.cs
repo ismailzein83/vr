@@ -51,7 +51,7 @@ namespace Vanrise.GenericData.Business
             insertOperationOutput.InsertedObject = null;
             int dataRecordStorageId = -1;
 
-            //UpdateDataStore(dataRecordStorage);
+            UpdateStorage(dataRecordStorage);
 
             IDataRecordStorageDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordStorageDataManager>();
 
@@ -108,19 +108,17 @@ namespace Vanrise.GenericData.Business
                 });
         }
 
-        void UpdateDataStore(DataRecordStorage dataRecordStorage)
+        void UpdateStorage(DataRecordStorage dataRecordStorage)
         {
             DataStore dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
 
             if (dataStore != null && dataStore.Settings != null)
             {
-                UpdateRecordStorageContext context = new UpdateRecordStorageContext(dataStore, dataRecordStorage) { RecordStorageState = null };
+                UpdateRecordStorageContext context = new UpdateRecordStorageContext(dataStore, dataRecordStorage, null);
                 dataStore.Settings.UpdateRecordStorage(context);
             }
             else
-            {
-                throw new ArgumentNullException("dataStoreSettings");
-            }
+                throw new ArgumentNullException("dataStore.Settings");
         }
 
         #endregion
