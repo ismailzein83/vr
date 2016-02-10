@@ -40,8 +40,15 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
 
             $scope.onCheckedChanged =function()
             {
-                if ($scope.checkedSequence && currentContext != undefined)
-                    currentContext.setSelectedComposite(api);
+                if(currentContext != undefined)
+                {
+                    if ($scope.checkedSequence)
+                      currentContext.setSelectedComposite(api);
+                    else
+                      currentContext.setSelectedComposite();
+                }
+               
+
             }
 
             $scope.onRemoveStep = function (dataItem) {
@@ -115,8 +122,11 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
                 if (stepItem.previewAPI != undefined) {
                     var stepEntity = stepItem.previewAPI.getData();
                     if (stepEntity != undefined)
+                    {
                         stepEntity.ConfigId = stepItem.dataTransformationStepConfigId;
-                    steps.push(stepEntity);
+                        steps.push(stepEntity);
+                    }
+                        
                 }
             }
             return steps;

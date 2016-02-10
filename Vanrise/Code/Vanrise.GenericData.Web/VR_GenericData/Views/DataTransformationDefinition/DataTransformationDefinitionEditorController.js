@@ -329,8 +329,18 @@
         function setSelectedComposite(api)
         {
             if (selectedComposite != undefined && selectedComposite != api)
-              selectedComposite.setCheckedSequence(false);
-            selectedComposite = api;
+            {
+                selectedComposite.setCheckedSequence(false);
+            }
+            if (api == undefined)
+            {
+                selectedComposite = sequenceDirectiveAPI;
+                selectedComposite.setCheckedSequence(true);
+            }   
+            else 
+            {
+                selectedComposite = api;
+            }
         }
 
         function editStep(dataItem)
