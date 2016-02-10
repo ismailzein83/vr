@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataStoreSelectorDirective.$inject = ['VR_GenericData_DataStoreAPIService', 'UtilsService', 'VRUIUtilsService'];
+    DataStoreSelectorDirective.$inject = ['VR_GenericData_DataStoreAPIService', 'VR_GenericData_DataStoreService', 'UtilsService', 'VRUIUtilsService'];
 
-    function DataStoreSelectorDirective(VR_GenericData_DataStoreAPIService, UtilsService, VRUIUtilsService) {
+    function DataStoreSelectorDirective(VR_GenericData_DataStoreAPIService, VR_GenericData_DataStoreService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -62,6 +62,8 @@
                     var selectedIds;
 
                     if (payload != undefined) {
+                        if (payload.showaddbutton)
+                            ctrl.onAddDataStore = onAddDataStore;
                         selectedIds = payload.selectedIds;
                     }
 
@@ -85,6 +87,16 @@
                 };
 
                 return api;
+            }
+            function onAddDataStore() {
+                var onDataStoreAdded = function (dataStoreObj) {
+                    ctrl.datasource.push(dataStoreObj.Entity);
+                    if (attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(dataStoreObj.Entity);
+                    else
+                        ctrl.selectedvalues = dataStoreObj.Entity;
+                };
+                VR_GenericData_DataStoreService.addDataStore(onDataStoreAdded);
             }
         }
 
@@ -110,6 +122,7 @@
                     + ' datasource="ctrl.datasource"'
                     + ' selectedvalues="ctrl.selectedvalues"'
                     + ' onselectionchanged="ctrl.onselectionchanged"'
+                    + 'onaddclicked="ctrl.onAddDataStore"'
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
                     + ' datavaluefield="DataStoreId"'
