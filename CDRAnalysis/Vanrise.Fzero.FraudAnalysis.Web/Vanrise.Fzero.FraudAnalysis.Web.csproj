@@ -238,7 +238,6 @@
     <Content Include="FraudAnalysis\Services\APIServices\RelatedNumberAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionItemAPIService.js" />
-    <Content Include="FraudAnalysis\Services\MainService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberPrefixAPIService.js" />
     <Content Include="FraudAnalysis\Services\ParametersService.js" />
     <Content Include="FraudAnalysis\Services\StrategyService.js" />

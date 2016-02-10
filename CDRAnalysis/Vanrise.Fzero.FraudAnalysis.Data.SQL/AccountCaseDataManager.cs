@@ -130,7 +130,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
                 BEGIN
                 
-                    SELECT ac.ID AS CaseID, ac.AccountNumber, ac.[Status], 
+                    SELECT ac.ID , ac.AccountNumber, ac.[Status], 
 	                       COUNT(sed.ID) AS NumberOfOccurances,
 	                       MAX(sed.SuspicionLevelID) AS SuspicionLevelID, 
 	                       MAX(se.ExecutionDate) AS LastOccurance
