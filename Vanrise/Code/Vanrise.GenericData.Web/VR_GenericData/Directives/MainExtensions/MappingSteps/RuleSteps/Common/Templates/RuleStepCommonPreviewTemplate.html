@@ -1,9 +1,9 @@
-﻿<vr-row>
+﻿<vr-row removeline>
     <vr-columns width="fullrow">
         <vr-label ng-show="ctrl.effectiveTime!=undefined">Effective Time = {{ctrl.effectiveTime}}</vr-label>
     </vr-columns>
 </vr-row>
-<vr-row>
+<vr-row removeline>
     <vr-columns width="fullrow">
         <vr-datagrid datasource="ctrl.ruleFieldsMappings"
                      hidegridmenu norowhighlightonclick="true">
