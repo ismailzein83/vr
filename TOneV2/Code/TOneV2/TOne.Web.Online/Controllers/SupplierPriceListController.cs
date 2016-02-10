@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using TOne.WhS.BusinessEntity.Business;
-using Vanrise.Entities;
+using TOne.BusinessEntity.Business;
 
 namespace TOne.Web.Online.Controllers
 {
@@ -16,7 +11,7 @@ namespace TOne.Web.Online.Controllers
         {
             //return true;
             int insertedId;
-            SupplierPriceListManager manager = new SupplierPriceListManager();
+            SupplierPricelistsManager manager = new SupplierPricelistsManager();
             manager.SavePriceList(0, userInput.EffectiveOnDateTime, "C159", userInput.PriceListType, "portal@vanrise.com", userInput.ContentFile, userInput.FileName, out insertedId);
             return insertedId;
         }
@@ -24,8 +19,7 @@ namespace TOne.Web.Online.Controllers
         [HttpGet]
         public int GetResults(int queueId)
         {
-            int id;
-            SupplierPriceListManager manager = new SupplierPriceListManager();
+            SupplierPricelistsManager manager = new SupplierPricelistsManager();
             return manager.GetQueueStatus(queueId);
         }
 
