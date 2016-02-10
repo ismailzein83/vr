@@ -91,7 +91,7 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                 var promises = [];
 
                 var filterItems;
-                if (payload != undefined) {
+                if (payload != undefined && payload.Actions !=undefined) {
                     filterItems = [];
                     for (var i = 0; i < payload.Actions.length; i++) {
                         var filterItem = {
