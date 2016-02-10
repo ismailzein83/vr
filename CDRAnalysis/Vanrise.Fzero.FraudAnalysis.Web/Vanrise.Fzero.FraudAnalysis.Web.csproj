@@ -204,6 +204,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FraudAnalysis\Constants\SuspicionOccuranceStatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\StrategyExecutionFilterDateTypeEnum.js" />
     <Content Include="FraudAnalysis\Constants\CaseStatusEnum.js" />
     <Content Include="FraudAnalysis\Constants\KindEnum.js" />

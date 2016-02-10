@@ -29,5 +29,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int? PeriodId { get; set; }
 
+        public List<int> StatusIds { get; set; }
+
     }
 }

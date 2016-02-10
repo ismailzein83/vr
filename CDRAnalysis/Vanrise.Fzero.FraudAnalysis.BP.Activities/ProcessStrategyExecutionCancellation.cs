@@ -84,7 +84,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     relatedCase = cases.Where(x => x.CaseID == item.CaseID).First();
                     if (relatedCase.StatusID == CaseStatus.Pending || relatedCase.StatusID == CaseStatus.Open)
                     {
-                        if (!itemsofCases.Exists(x => x.CaseID == relatedCase.CaseID && x.StrategyExecutionID != inputArgument.StrategyExecutionId && x.SuspicionOccuranceStatus != SuspicionOccuranceStatus.Deleted))
+                        if (!itemsofCases.Exists(x => x.CaseID == relatedCase.CaseID && x.StrategyExecutionID != inputArgument.StrategyExecutionId && x.SuspicionOccuranceStatus != SuspicionOccuranceStatus.Cancelled))
                         {
                             tobeDeletedItems.Add(item.ID);
                             tobeDeletedCases.Add(relatedCase.CaseID);

@@ -32,8 +32,20 @@
                 </vr-columns>
 
                 <vr-columns width="normal" ng-show="advancedSelected">
-                    <vr-sec-user-selector on-ready="onUserSelectorReady" customlabel="User" ismultipleselection ></vr-sec-user-selector>
+                    <vr-sec-user-selector on-ready="onUserSelectorReady" customlabel="User" ismultipleselection></vr-sec-user-selector>
                 </vr-columns>
+
+
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-select label="Status"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               datasource="suspicionOccuranceStatuses"
+                               selectedvalues="selectedSuspicionOccuranceStatuses"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
+
 
 
             </vr-row>
@@ -49,11 +61,12 @@
     <div>
         <vr-row>
             <vr-columns width="fullrow" simplecol>
+
                 <vr-datagrid datasource="strategyExecutions" dataretrievalfunction="dataRetrievalFunction" maxheight="400px" pagingtype="'PagingOnScroll'" on-ready="onMainGridReady" menuactions="gridMenuActions" idfield="Entity.ID">
                     <vr-datagridcolumn headertext="'Id'" field="'Entity.ID'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Strategy'" field="'StrategyName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Type'" field="'PeriodName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="getStatusColor" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'" widthfactor="10" getcolor="getStatusColor" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'From CDR Date'" field="'Entity.FromDate'" type="'Datetime'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'To CDR Date'" field="'Entity.ToDate'" type="'Datetime'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Exec. By'" field="'ExecutedByName'"></vr-datagridcolumn>

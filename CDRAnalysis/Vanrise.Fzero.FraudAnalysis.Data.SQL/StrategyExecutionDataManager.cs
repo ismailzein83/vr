@@ -47,17 +47,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             _columnMapper.Add("Entity.NumberofCDRs", "NumberofCDRs");
             _columnMapper.Add("Entity.NumberofSubscribers", "NumberofSubscribers");
             _columnMapper.Add("Entity.ID", "ID");
+            _columnMapper.Add("StatusDescription", "Status");
         }
 
         public BigResult<StrategyExecution> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
         {
             string strategyIDs = (input.Query.StrategyIds != null && input.Query.StrategyIds.Count > 0) ? string.Join(",", input.Query.StrategyIds) : null;
             string userIDs = (input.Query.UserIds != null && input.Query.UserIds.Count > 0) ? string.Join(",", input.Query.UserIds) : null;
+            string statusIDs = (input.Query.StatusIds != null && input.Query.StatusIds.Count > 0) ? string.Join(",", input.Query.StatusIds) : null;
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
                 ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_CreateTempByFilters", tempTableName, input.Query.FromCDRDate, input.Query.ToCDRDate, input.Query.FromExecutionDate, input.Query.ToExecutionDate,
-                    input.Query.FromCancellationDate, input.Query.ToCancellationDate, strategyIDs, input.Query.PeriodId, userIDs);
+                    input.Query.FromCancellationDate, input.Query.ToCancellationDate, strategyIDs, input.Query.PeriodId, userIDs, statusIDs);
             };
 
             return RetrieveData(input, createTempTableAction, StrategyExecutionMapper, _columnMapper);
@@ -80,6 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             item.NumberofCDRs = GetReaderValue<int?>(reader, "NumberofCDRs");
             item.NumberofCases = GetReaderValue<int?>(reader, "NumberofCases");
             item.ExecutionDuration = GetReaderValue<int?>(reader, "ExecutionDuration");
+            item.Status = GetReaderValue<SuspicionOccuranceStatus>(reader, "Status");
 
             return item;
         }
@@ -94,7 +97,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 strategyExecutionObject.ToDate,
                 strategyExecutionObject.PeriodID,
                 DateTime.Now,
-                strategyExecutionObject.ExecutedBy
+                strategyExecutionObject.ExecutedBy,
+                strategyExecutionObject.Status
             );
 
             if (recordsEffected > 0)

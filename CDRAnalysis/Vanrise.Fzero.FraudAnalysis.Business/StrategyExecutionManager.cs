@@ -42,29 +42,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             BigResult<StrategyExecution> bigResultItems = strategyExecutionDataManager.GetFilteredStrategyExecutions(input);
             List<StrategyExecution> executions = bigResultItems.Data.ToList();
 
-            BigResult<StrategyExecutionDetail> rsltResultItems = new BigResult<StrategyExecutionDetail>();
-            List<StrategyExecutionDetail> items = new List<StrategyExecutionDetail>();
-            List<long> pcocessIds = new List<long>();
-
-            foreach (var i in executions)
-                pcocessIds.Add(i.ProcessID);
-
-
-            BPClient bpClient = new BPClient();
-            Dictionary<long, BPInstanceStatus> processInstances = bpClient.GetProcessesStatuses(pcocessIds);
+            BigResult<StrategyExecutionDetail> detailedBigResultItems = new BigResult<StrategyExecutionDetail>();
+            List<StrategyExecutionDetail> details = new List<StrategyExecutionDetail>();
 
             foreach (var i in executions)
             {
                 StrategyExecutionDetail item = new StrategyExecutionDetail();
                 item.Entity = i;
-                BPInstanceStatus status;
-                if (processInstances.TryGetValue(i.ProcessID, out status))
-                    item.Status = status;
 
                 strategy = strategyManager.GetStrategy(i.StrategyID);
                 if (strategy != null)
                     item.StrategyName = strategy.Name;
-
 
                 executedByName = userManager.GetUserbyId(i.ExecutedBy);
                 if (executedByName != null)
@@ -78,14 +66,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 }
 
                 item.PeriodName = Vanrise.Common.Utilities.GetEnumDescription<PeriodEnum>((PeriodEnum)i.PeriodID);
+                item.StatusDescription = Vanrise.Common.Utilities.GetEnumDescription<SuspicionOccuranceStatus>((SuspicionOccuranceStatus)i.Status);
 
-                items.Add(item);
+                details.Add(item);
             }
 
-            rsltResultItems.Data = (IEnumerable<StrategyExecutionDetail>)items;
-            rsltResultItems.ResultKey = bigResultItems.ResultKey;
-            rsltResultItems.TotalCount = bigResultItems.TotalCount;
-            return rsltResultItems;
+            detailedBigResultItems.Data = (IEnumerable<StrategyExecutionDetail>)details;
+            detailedBigResultItems.ResultKey = bigResultItems.ResultKey;
+            detailedBigResultItems.TotalCount = bigResultItems.TotalCount;
+            return detailedBigResultItems;
         }
 
     }

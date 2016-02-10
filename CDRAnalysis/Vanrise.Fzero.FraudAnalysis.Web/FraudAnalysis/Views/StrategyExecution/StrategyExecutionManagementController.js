@@ -1,8 +1,10 @@
 ﻿"use strict";
 
-StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'BusinessProcessService', 'BusinessProcessAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'BPInstanceStatusEnum'];
+StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService',
+    'BusinessProcessAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum'];
 
-function StrategyExecutionManagementController($scope, VRUIUtilsService, StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, BusinessProcessService, BusinessProcessAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, BPInstanceStatusEnum) {
+function StrategyExecutionManagementController($scope, VRUIUtilsService, StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService,
+    UtilsService, VRValidationService, BusinessProcessAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -20,6 +22,8 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
     load();
 
     function defineScope() {
+
+        $scope.selectedSuspicionOccuranceStatuses = [];
 
         $scope.onStrategySelectorReady = function (api) {
             strategySelectorAPI = api;
@@ -52,13 +56,11 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
 
         $scope.strategyExecutions = [];
 
+        $scope.suspicionOccuranceStatuses = UtilsService.getArrayEnum(CDRAnalysis_FA_SuspicionOccuranceStatusEnum);
+
         $scope.filterDateTypes = UtilsService.getArrayEnum(CDRAnalysis_FA_StrategyExecutionFilterDateTypes);
 
         $scope.selectedFilterDateType = $scope.filterDateTypes[0];
-
-        $scope.getStatusColor = function (dataItem, colDef) {
-            return BusinessProcessService.getStatusColor(dataItem.Status);
-        };
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
@@ -72,9 +74,6 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
 
             return StrategyExecutionAPIService.GetFilteredStrategyExecutions(dataRetrievalInput)
                 .then(function (response) {
-                    angular.forEach(response.Data, function (item) {
-                        item.StatusDescription = BusinessProcessService.getStatusDescription(item.Status)
-                    });
                     onResponseReady(response);
                 });
         }
@@ -86,6 +85,12 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
             else
                 loadStrategySelector();
         };
+
+        $scope.getStatusColor = function (dataItem) {
+            if (dataItem.Entity.Status == CDRAnalysis_FA_SuspicionOccuranceStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.Entity.Status == CDRAnalysis_FA_SuspicionOccuranceStatusEnum.Closed.value) return LabelColorsEnum.Success.color;
+            else if (dataItem.Entity.Status == CDRAnalysis_FA_SuspicionOccuranceStatusEnum.Cancelled.value) return LabelColorsEnum.Error.color;
+        }
 
         defineMenuActions();
     }
@@ -159,7 +164,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
         ];
 
         $scope.gridMenuActions = function (dataItem) {
-            if (dataItem.Status == BPInstanceStatusEnum.New.value || dataItem.Status == BPInstanceStatusEnum.Completed.value) {
+            if (dataItem.Entity.Status == CDRAnalysis_FA_SuspicionOccuranceStatusEnum.Closed.value) {
                 return menuActionsWithCancel;
             } else {
                 return defaultMenuActions;
@@ -177,7 +182,8 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
             FromCancellationDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCancelDate.value ? $scope.fromDate : null),
             ToCancellationDate: ($scope.selectedFilterDateType.id == CDRAnalysis_FA_StrategyExecutionFilterDateTypes.ByCancelDate.value ? $scope.toDate : null),
             PeriodId: periodSelectorAPI.getSelectedIds(),
-            StrategyIds: strategySelectorAPI.getSelectedIds()
+            StrategyIds: strategySelectorAPI.getSelectedIds(),
+            StatusIds: UtilsService.getPropValuesFromArray($scope.selectedSuspicionOccuranceStatuses, "value")
         };
 
         return mainGridAPI.retrieveData(query);

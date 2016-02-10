@@ -36,5 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int? ExecutionDuration { get; set; }
 
+        public SuspicionOccuranceStatus Status { get; set; }
+
     }
 }

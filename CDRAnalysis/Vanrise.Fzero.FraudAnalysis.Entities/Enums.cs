@@ -50,8 +50,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         [Description("Closed")]
         Closed = 10,
 
-        [Description("Deleted")]
-        Deleted = 20
+        [Description("Cancelled")]
+        Cancelled = 20
     }
 
     public enum CaseStatus
