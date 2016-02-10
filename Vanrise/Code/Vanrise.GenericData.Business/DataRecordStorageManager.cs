@@ -31,6 +31,11 @@ namespace Vanrise.GenericData.Business
 
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataRecordStorages.ToBigResult(input, filterExpression, DataRecordStorageMapper));
         }
+        public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo()
+        {
+            var cachedDataRecordsStorage = GetCachedDataRecordStorages();
+            return cachedDataRecordsStorage.MapRecords(DataRecordStorageInfoMapper);
+        }
 
         public DataRecordStorage GetDataRecordStorage(int dataRecordStorageId)
         {
@@ -145,6 +150,14 @@ namespace Vanrise.GenericData.Business
             };
         }
 
+        DataRecordStorageInfo DataRecordStorageInfoMapper(DataRecordStorage dataRecordStorage)
+        {
+            return new DataRecordStorageInfo()
+            {
+                DataRecordStorageId = dataRecordStorage.DataRecordStorageId,
+                Name = dataRecordStorage.Name
+            };
+        }
         #endregion
     }
 }

@@ -23,6 +23,13 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetDataRecordsStorageInfo")]
+        public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo()
+        {
+            return _manager.GetDataRecordsStorageInfo();
+        }
+
+        [HttpGet]
         [Route("GetDataRecordStorage")]
         public DataRecordStorage GetDataRecordStorage(int dataRecordStorageId)
         {
