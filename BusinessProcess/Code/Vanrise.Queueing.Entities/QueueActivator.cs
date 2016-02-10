@@ -31,6 +31,8 @@ namespace Vanrise.Queueing.Entities
 
         QueueExecutionFlowStage CurrentStage { get; }
 
+        QueueExecutionFlowStage GetStage(string stageName);
+
         QueueInstance Queue { get; }
     }
 }
