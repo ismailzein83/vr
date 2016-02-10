@@ -210,6 +210,14 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\vr-genericdata-datatransformation-initializerecordstep.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\Templates\RuleStepCommonPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\vr-genericdata-datatransformation-rulestep-common-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\ExtraCharge\Templates\ExtraChargeRuleStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\ExtraCharge\Templates\ExtraChargeRuleStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\ExtraCharge\vr-genericdata-datatransformation-extrachargerulestep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\ExtraCharge\vr-genericdata-datatransformation-extrachargerulestep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\Templates\TariffRuleStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\Templates\TariffRuleStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\vr-genericdata-datatransformation-tariffrulestep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\vr-genericdata-datatransformation-tariffrulestep.js" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\Templates\NumericEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-businessentity-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-numeric-runtimeeditor.js" />

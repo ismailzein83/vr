@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Transformation.Entities;
 
-namespace Vanrise.GenericData.Pricing.ExtraCharge
+namespace Vanrise.GenericData.Pricing
 {
     public class ExtraChargeMappingStep : BaseGenericRuleMappingStep
     {

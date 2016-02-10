@@ -1,0 +1,17 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-label ng-show="ctrl.normalRate !=undefined">Rule.Value = {{ctrl.normalRate}}</vr-label>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-label ng-show="ctrl.ratesByRateType !=undefined">Rule.RatesByRateType = {{ctrl.ratesByRateType}}</vr-label>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-label ng-show="ctrl.effectiveRate !=undefined">Rule.EffectiveRate = {{ctrl.effectiveRate}}</vr-label>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-label ng-show="ctrl.rateTypeId !=undefined">Rule.RateTypeId = {{ctrl.rateTypeId}}</vr-label>
+    </vr-columns>
+</vr-row>

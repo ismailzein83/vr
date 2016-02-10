@@ -1,0 +1,15 @@
+﻿
+<vr-genericdata-datatransformation-rulestep-common on-ready="onRuleStepCommonReady"></vr-genericdata-datatransformation-rulestep-common>
+
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Settings">
+            <vr-genericdata-expressionbuilder on-ready="onInitialRateDirectiveReady" label="Initial Rate" isrequired="true"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onDurationInSecondsDirectiveReady" label="Duration In Seconds" ></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onEffectiveRateDirectiveReady" label="Effective Rate" isrequired="true"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onEffectiveDurationInSecondsDirectiveReady" label="Effective Duration In Seconds"></vr-genericdata-expressionbuilder>
+            <vr-genericdata-expressionbuilder on-ready="onTotalAmountDirectiveReady" label="Total Amount"></vr-genericdata-expressionbuilder>
+        </vr-section>
+    </vr-columns>
+
+</vr-row>
