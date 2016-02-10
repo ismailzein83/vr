@@ -46,13 +46,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRecordBatch.cs" />
+    <Compile Include="DataRecordBatchQueueItemType.cs" />
+    <Compile Include="GetRecordStorageDataManagerContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreBatchQueueActivator.cs" />
     <Compile Include="TransformBatchQueueActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
       <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
@@ -69,6 +77,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Transformation\Vanrise.GenericData.Transformation.csproj">
       <Project>{7827b1a9-ac2a-4b72-87e7-101223ec0396}</Project>
       <Name>Vanrise.GenericData.Transformation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
+      <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
+      <Name>Vanrise.Integration.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -42,7 +42,7 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages
             }
         }
 
-        public override IDataRecordDataManager GetDataRecordDataManager()
+        public override IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context)
         {
             throw new NotImplementedException();
         }

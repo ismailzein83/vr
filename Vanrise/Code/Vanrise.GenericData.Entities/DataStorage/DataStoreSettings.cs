@@ -13,6 +13,6 @@ namespace Vanrise.GenericData.Entities
         public abstract void UpdateRecordStorage(IUpdateRecordStorageContext context);
 
 
-        public abstract IDataRecordDataManager GetDataRecordDataManager();
+        public abstract IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context);
     }
 }
