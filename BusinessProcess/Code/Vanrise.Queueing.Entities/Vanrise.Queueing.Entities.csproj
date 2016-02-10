@@ -83,6 +83,7 @@
     <Compile Include="QueueStageNameInfo.cs" />
     <Compile Include="QueueSubscription.cs" />
     <Compile Include="StageQueue.cs" />
+    <Compile Include="TestActivator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
