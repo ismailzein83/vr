@@ -8,7 +8,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.SQLDataStorage
 {
-    public class StaticSQLDataStoreSettings : DataStoreSettings
+    public class SQLDataStoreSettings : DataStoreSettings
     {
         public string ConnectionString { get; set; }
 
@@ -44,7 +44,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public override IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context)
         {
-            throw new NotImplementedException();
+            return new RecordStorageDataManager(context.DataStore, context.DataRecordStorage);
         }
     }
 }
