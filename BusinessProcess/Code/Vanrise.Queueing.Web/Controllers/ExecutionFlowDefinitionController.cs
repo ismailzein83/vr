@@ -5,9 +5,11 @@ using System.Web.Http;
 using Vanrise.Queueing.Entities;
 using Vanrise.Queueing.Web.ModelMappers;
 using Vanrise.Queueing.Web.Models;
+using Vanrise.Web.Base;
 
 namespace Vanrise.Queueing.Web.Controllers
 {
+    [JSONWithType]
     [RoutePrefix(Constants.ROUTE_PREFIX + "ExecutionFlowDefinition")]
     public class ExecutionFlowDefinitionController : Vanrise.Web.Base.BaseAPIController
     {
