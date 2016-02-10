@@ -61,6 +61,7 @@
             $scope.scopeModal.applyChanges = function ()
             {
                 applyChanges();
+                $scope.scopeModal.selectedStep = undefined;
             }
 
             $scope.scopeModal.onDataRecordTypeDirectiveReady = function (api) {
