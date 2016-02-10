@@ -107,10 +107,8 @@
     <Content Include="Queueing\Directives\ExecutionFlowDefinition\Templates\ExecutionFlowDefinitionGrid.html" />
     <Content Include="Queueing\Directives\ExecutionFlowDefinition\vr-queueing-executionflowdefinition-grid.js" />
     <Content Include="Queueing\Directives\ExecutionFlowDefinition\vr-queueing-executionflowdefinition-selector.js" />
-    <Content Include="Queueing\Directives\ExecutionFlowStage\Templates\ExecutionFlowStageGrid.html" />
     <Content Include="Queueing\Directives\ExecutionFlowStage\Templates\ExecutionFlowStageManagement.html" />
     <Content Include="Queueing\Directives\ExecutionFlowStage\vr-queueing-executionflow-stage-management.js" />
-    <Content Include="Queueing\Directives\ExecutionFlowStage\vr-queueing-executionflowstage-grid.js" />
     <Content Include="Queueing\Directives\ExecutionFlow\Templates\ExecutionFlowGrid.html" />
     <Content Include="Queueing\Directives\ExecutionFlow\vr-queueing-executionflow-grid.js" />
     <Content Include="Queueing\Directives\ExecutionFlow\vr-queueing-executionflow-selector.js" />
@@ -125,10 +123,12 @@
     <Content Include="Queueing\Directives\QueueItemHeader\Templates\QueueItemHeaderGridTemplate.html" />
     <Content Include="Queueing\Directives\QueueItemHeader\vr-queueing-queueitemheader-grid.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_ExecutionFlowDefinitionAPIService.js" />
+    <Content Include="Queueing\Services\APIServices\VR_Queueing_ExecutionFlowStageAPIService.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_QueueItemHeaderAPIService.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_QueueItemTypeAPIService.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_QueueStageAPIService.js" />
     <Content Include="Queueing\Services\VR_Queueing_ExecutionFlowDefinitionService.js" />
+    <Content Include="Queueing\Services\VR_Queueing_ExecutionFlowStageService.js" />
     <Content Include="Queueing\Views\ExecutionFlowDefinition\ExecutionFlowDefinitionEditor.html" />
     <Content Include="Queueing\Views\ExecutionFlowDefinition\ExecutionFlowDefinitionEditorController.js" />
     <Content Include="Queueing\Views\ExecutionFlowDefinition\ExecutionFlowDefinitionManagement.html" />

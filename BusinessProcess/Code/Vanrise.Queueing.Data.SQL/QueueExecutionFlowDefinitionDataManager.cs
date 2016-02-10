@@ -29,7 +29,12 @@ namespace Vanrise.Queueing.Data.SQL
 
         public bool UpdateExecutionFlowDefinition(QueueExecutionFlowDefinition executionFlowDefinitionObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Update", executionFlowDefinitionObject.ID, executionFlowDefinitionObject.Name, executionFlowDefinitionObject.Title);
+            string serializedObj = null;
+            if (executionFlowDefinitionObject.Stages != null)
+            {
+                serializedObj = Vanrise.Common.Serializer.Serialize(executionFlowDefinitionObject.Stages);
+            }
+            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Update", executionFlowDefinitionObject.ID, executionFlowDefinitionObject.Name, executionFlowDefinitionObject.Title, serializedObj);
             return (recordesEffected > 0);
         }
 
@@ -37,8 +42,12 @@ namespace Vanrise.Queueing.Data.SQL
         public bool AddExecutionFlowDefinition(QueueExecutionFlowDefinition executionFlowDefinition, out int insertedId)
         {
             object executionFlowDefinitionID;
-
-            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Insert", out executionFlowDefinitionID, executionFlowDefinition.Name, executionFlowDefinition.Title);
+            string serializedObj = null;
+            if (executionFlowDefinition.Stages != null)
+            {
+                serializedObj = Vanrise.Common.Serializer.Serialize(executionFlowDefinition.Stages);
+            }
+            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlowDefinition_Insert", out executionFlowDefinitionID, executionFlowDefinition.Name, executionFlowDefinition.Title, serializedObj);
 
             insertedId = (recordesEffected > 0) ? (int)executionFlowDefinitionID : -1;
             return (recordesEffected > 0);
@@ -50,7 +59,8 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 ID = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                Title = reader["Title"] as string
+                Title = reader["Title"] as string,
+                Stages=Vanrise.Common.Serializer.Deserialize<List<QueueExecutionFlowStage>>(reader["Stages"] as string),
             };
         }
     }

@@ -5,18 +5,18 @@
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="dtitle" label="Title" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModal.title" label="Title" isrequired></vr-textbox>
                         </vr-columns>
 
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Stages'">
                     <vr-row removeline>
-                        <vr-columns width="1/2row">
-                            <!--<vr-queueing-executionflow-stage-management on-ready="scopeModal.onDataRecordFieldDirectiveReady"></vr-queueing-executionflow-stage-management>-->
+                        <vr-columns width="fullrow">
+                            <vr-queueing-executionflow-stage-management on-ready="scopeModal.onExecutionFlowStageDirectiveReady"></vr-queueing-executionflow-stage-management>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

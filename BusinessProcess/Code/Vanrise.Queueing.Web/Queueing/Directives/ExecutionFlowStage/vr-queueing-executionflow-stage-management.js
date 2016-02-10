@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingExecutionflowStageManagement", ["UtilsService", "VRNotificationService", "VR_Queueing_ExecutionFlowDefinitionService",
-function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowDefinitionService) {
+app.directive("vrQueueingExecutionflowStageManagement", ["UtilsService", "VRNotificationService", "VR_Queueing_ExecutionFlowStageService",
+function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageService) {
 
         var directiveDefinitionObject = {
 
@@ -36,11 +36,11 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowDefiniti
 
                 ctrl.addExecutionFlowStage = function () {
                     var onExecutionFlowStageAdded = function (executionFlowStage) {
-                        addNeededFields(executionFlowStage);
+                       
                         ctrl.datasource.push(executionFlowStage);
                     }
 
-                    VR_Queueing_ExecutionFlowDefinitionService.addExecutionFlowStage(onExecutionFlowStageAdded, ctrl.datasource);
+                    VR_Queueing_ExecutionFlowStageService.addExecutionFlowStage(onExecutionFlowStageAdded, ctrl.datasource);
                 };
 
                 defineMenuActions();
@@ -56,9 +56,9 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowDefiniti
                         fields = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             fields.push({
-                                StageName: ctrl.datasource[i].Name,
-                                QueueTemplateName: ctrl.datasource[i].Type,
-                                QueueTemplateTitle: ctrl.datasource[i].Type
+                                StageName: ctrl.datasource[i].StageName,
+                                QueueNameTemplate: ctrl.datasource[i].QueueNameTemplate,
+                                QueueTitleTemplate: ctrl.datasource[i].QueueTitleTemplate
                             });
                         }
 
@@ -71,30 +71,23 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowDefiniti
 
                 api.load = function (payload) {
 
-                    return VR_Queueing_ExecutionFlowDefinitionService.GetDataRecordFieldTypes().then(function (response) {
-                        angular.forEach(response, function (item) {
-                            ctrl.fieldTypeConfigs.push(item);
-                        });
+                    
                         if (payload != undefined) {
-                            if (payload.Fields && payload.Fields.length > 0) {
-                                for (var i = 0; i < payload.Fields.length; i++) {
-                                    var dataItem = payload.Fields[i];
-                                    addNeededFields(dataItem);
-                                    ctrl.datasource.push(dataItem);
+                            if (payload.Stages && payload.Stages.length > 0) {
+                                for (var i = 0; i < payload.Stages.length; i++) {
+                                    var dataItem = payload.Stages[i];
+                                     ctrl.datasource.push(dataItem);
                                 }
                             }
                         }
-                    });
+                    
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
-            function addNeededFields(dataItem) {
-                var template = UtilsService.getItemByVal(ctrl.fieldTypeConfigs, dataItem.Type.ConfigId, "DataRecordFieldTypeConfigId");
-                dataItem.TypeDescription = template != undefined ? template.Name : "";
-            }
+            
 
             function defineMenuActions() {
                 var defaultMenuActions = [
@@ -113,23 +106,24 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowDefiniti
             }
 
             function editExecutionFlowStage(executionFlowStagedObj) {
-                var onDataRecordFieldUpdated = function (executionFlowStagedObj) {
-                    addNeededFields(executionFlowStagedObj);
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, executionFlowStagedObj.Name, 'Name');
-                    ctrl.datasource[index] = executionFlowStagedObj;
+                var onExecutionFlowStageUpdated = function (executionFlowStageObj) {
+                   
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, executionFlowStagedObj.StageName, 'StageName');
+                    ctrl.datasource[index] = executionFlowStageObj;
                 }
 
-                VR_Queueing_ExecutionFlowDefinitionService.editExecutionFlowStage(dataRecordFieldObj, onExecutionFlowStageUpdated, ctrl.datasource);
+                VR_Queueing_ExecutionFlowStageService.editExecutionFlowStage(executionFlowStagedObj, onExecutionFlowStageUpdated, ctrl.datasource);
             }
 
             function deleteExecutionFlowStage(executionFlowStagedObj) {
-                var onDataRecordFieldDeleted = function (executionFlowStagedObj) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, executionFlowStagedObj.Name, 'Name');
+                var onExecutionFlowStageDeleted = function (executionFlowStaged) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, executionFlowStagedObj.StageName, 'StageName');
                     ctrl.datasource.splice(index, 1);
                 };
 
-                VR_Queueing_ExecutionFlowDefinitionService.deleteExecutionFlowStage($scope, executionFlowStagedObj, onExecutionFlowStageDeleted);
+                VR_Queueing_ExecutionFlowStageService.deleteExecutionFlowStage($scope, executionFlowStagedObj, onExecutionFlowStageDeleted);
             }
+
         }
 
         return directiveDefinitionObject;

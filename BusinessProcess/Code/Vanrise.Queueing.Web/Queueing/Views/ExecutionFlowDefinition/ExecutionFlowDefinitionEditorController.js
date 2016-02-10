@@ -8,6 +8,8 @@
         var isEditMode;
         var executionFlowDefinitionId;
         var executionFlowDefinitionEntity;
+        var executionFlowStageAPI;
+        var executionFlowStageReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -23,7 +25,12 @@
         }
 
         function defineScope() {
+            $scope.scopeModal = {}
 
+            $scope.scopeModal.onExecutionFlowStageDirectiveReady = function (api) {
+                executionFlowStageAPI = api;
+                executionFlowStageReadyPromiseDeferred.resolve();
+            }
 
             $scope.save = function () {
                 if (isEditMode) {
@@ -70,7 +77,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadExecutionFlowStage])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -93,17 +100,33 @@
             }
 
 
-            $scope.name = executionFlowDefinitionEntity.Name;
-            $scope.dtitle = executionFlowDefinitionEntity.Title;
+            $scope.scopeModal.name = executionFlowDefinitionEntity.Name;
+            $scope.scopeModal.title = executionFlowDefinitionEntity.Title;
 
         }
 
+
+        function loadExecutionFlowStage() {
+
+            var loadExecutionFlowStagePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            executionFlowStageReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = (executionFlowDefinitionEntity != undefined) ? { Stages: executionFlowDefinitionEntity.Stages } : undefined
+
+                    VRUIUtilsService.callDirectiveLoad(executionFlowStageAPI, directivePayload, loadExecutionFlowStagePromiseDeferred);
+                });
+
+            return loadExecutionFlowStagePromiseDeferred.promise;
+        }
      
         function buildExecutionFlowDefinitionObjFromScope() {
+            var stages = executionFlowStageAPI.getData();
             var executionFlowDefinitionObject = {
                 ID: (executionFlowDefinitionId != null) ? executionFlowDefinitionId : 0,
-                name: $scope.name,
-                title: $scope.dtitle
+                Name: $scope.scopeModal.name,
+                Title: $scope.scopeModal.title,
+                Stages: stages != undefined ? stages.Fields : undefined
             };
             return executionFlowDefinitionObject;
         }
@@ -115,7 +138,7 @@
 
             return VR_Queueing_ExecutionFlowDefinitionAPIService.AddExecutionFlowDefinition(executionFlowDefinitionObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Execution Flow Definition', response, 'Email')) {
+                if (VRNotificationService.notifyOnItemAdded('Execution Flow Definition', response, 'Name')) {
                     if ($scope.onExecutionFlowDefinitionAdded != undefined)
                         $scope.onExecutionFlowDefinitionAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -134,7 +157,7 @@
             var executionFlowDefinitionObject = buildExecutionFlowDefinitionObjFromScope();
 
             return VR_Queueing_ExecutionFlowDefinitionAPIService.UpdateExecutionFlowDefinition(executionFlowDefinitionObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('Execution Flow Definition', response, 'Email')) {
+                if (VRNotificationService.notifyOnItemUpdated('Execution Flow Definition', response, 'Name')) {
                     if ($scope.onExecutionFlowDefinitionUpdated != undefined)
                         $scope.onExecutionFlowDefinitionUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
