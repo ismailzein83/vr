@@ -12,8 +12,6 @@ namespace TOne.WhS.BusinessEntity.Data
         SupplierPriceList GetPriceList(int priceListId);
         List<SupplierPriceList> GetPriceLists();
         bool ArGetPriceListsUpdated(ref object updateHandle);
-        bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, string messageUid, out int insertdId);
 
-        int GetQueueStatus(int queueId);
     }
 }

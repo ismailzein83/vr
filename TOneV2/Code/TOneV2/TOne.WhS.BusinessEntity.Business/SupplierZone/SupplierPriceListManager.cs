@@ -18,17 +18,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var priceList = priceLists.FindRecord(x => x.PriceListId == priceListId);
             return priceList;
         }
-        public bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, out int insertdId)
-        {
-            ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
-            return dataManager.SavePriceList(priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, "Portal", out  insertdId);
-        }
-        public int GetQueueStatus(int queueId)
-        {
-            ISupplierPriceListDataManager dataManager =
-                BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
-            return dataManager.GetQueueStatus(queueId);
-        }
+
         public IEnumerable<SupplierPriceList> GetFilteredSupplierPriceLists(SupplierPricelistFilter filter)
         {
             List<SupplierPriceList> priceLists = GetCachedPriceLists();

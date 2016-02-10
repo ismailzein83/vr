@@ -34,13 +34,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return base.IsDataUpdated("TOneWhS_BE.SupplierPriceList", ref updateHandle);
         }
 
-        public bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, string messageUid, out int insertedId)
-        {
-            object id;
-            int recordesEffected = ExecuteNonQuerySP("[sp_SupplierPriceList_Insert]", out id, priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, messageUid);
-            insertedId = (int)id;
-            return (recordesEffected > 0);
-        }
+    
         #endregion
 
         #region Private Methods
@@ -62,11 +56,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-        public int GetQueueStatus(int queueId)
-        {
-            object result;
-            ExecuteNonQuerySP("[sp_SupplierPriceList_GetResults]", out result, queueId);
-            return (int)result;
-        }
+  
     }
 }
