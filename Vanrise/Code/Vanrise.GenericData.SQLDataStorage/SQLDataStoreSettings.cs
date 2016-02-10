@@ -16,16 +16,17 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             var sqlRecordStorageSettings = context.RecordStorage.Settings as SQLDataRecordStorageSettings;
             var sqlRecordStorageState = context.RecordStorageState as SQLDataRecordStorageState;
-            
+            var sqlDataStoreSettings = context.DataStore.Settings as SQLDataStoreSettings;
+
             if (sqlRecordStorageState == null)
-                CreateSQLTable(context.DataStore, context.RecordStorage);
+                CreateSQLTable(sqlDataStoreSettings, sqlRecordStorageSettings);
             else
                 UpdateSQLTable(sqlRecordStorageSettings, sqlRecordStorageState);
         }
 
-        private void CreateSQLTable(DataStore dataStore, DataRecordStorage dataRecordStorage)
+        private void CreateSQLTable(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings)
         {
-            RecordStorageDataManager dataManager = new RecordStorageDataManager(dataStore, dataRecordStorage);
+            SQLRecordStorageDataManager dataManager = new SQLRecordStorageDataManager(dataStoreSettings, dataRecordStorageSettings);
             dataManager.CreateSQLRecordStorageTable();
         }
 
@@ -44,7 +45,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public override IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context)
         {
-            return new RecordStorageDataManager(context.DataStore, context.DataRecordStorage);
+            return new SQLRecordStorageDataManager(context.DataStore.Settings as SQLDataStoreSettings, context.DataRecordStorage.Settings as SQLDataRecordStorageSettings);
         }
     }
 }
