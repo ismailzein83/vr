@@ -24,7 +24,7 @@
                 }
             },
             templateUrl: function (element, attrs) {
-                return "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStoreSetting/Templates/StatisSqlTemplate.html";
+                return "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStoreSetting/Templates/SqlTemplate.html";
             }
         };
         function DirectiveConstructor($scope, ctrl) {
@@ -39,7 +39,7 @@
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.MainExtensions.DataStorages.StaticSQLDataStoreSettings, Vanrise.GenericData.MainExtensions",
+                        $type: "Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage",
                         ConnectionString: $scope.connectionString
                     };
                 };

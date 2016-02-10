@@ -188,7 +188,7 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-stepsequencedesign.js" />
     <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-grid.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\StatisSqlTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\SqlTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-sql.js" />
     <Content Include="VR_GenericData\Directives\DataStore\Templates\DataStoreGrid.html" />
     <Content Include="VR_GenericData\Directives\DataStore\vr-genericdata-datastore-grid.js" />
