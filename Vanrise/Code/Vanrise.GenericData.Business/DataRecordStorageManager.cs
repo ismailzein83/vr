@@ -51,7 +51,7 @@ namespace Vanrise.GenericData.Business
             insertOperationOutput.InsertedObject = null;
             int dataRecordStorageId = -1;
 
-            UpdateDataStore(dataRecordStorage);
+            //UpdateDataStore(dataRecordStorage);
 
             IDataRecordStorageDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordStorageDataManager>();
 

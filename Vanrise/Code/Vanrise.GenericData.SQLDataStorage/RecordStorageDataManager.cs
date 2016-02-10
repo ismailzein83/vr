@@ -59,8 +59,11 @@ namespace Vanrise.GenericData.SQLDataStorage
             };
         }
 
-        public bool CreateSQLRecordStorageTable(SQLDataRecordStorageSettings settings)
+        public bool CreateSQLRecordStorageTable()
         {
+            var settings = (_dataRecordStorage != null) ? _dataRecordStorage.Settings as SQLDataRecordStorageSettings : null;
+            if (settings == null)
+                throw new ArgumentNullException("settings");
             string query = GetRecordStorageCreateTableQuery(settings);
             int affectedRows = ExecuteNonQueryText(query, null);
             return affectedRows == 1;

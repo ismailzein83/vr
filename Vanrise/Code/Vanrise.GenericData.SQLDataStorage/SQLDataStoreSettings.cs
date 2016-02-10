@@ -26,12 +26,8 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         private void CreateSQLTable(DataStore dataStore, DataRecordStorage dataRecordStorage)
         {
-            SQLDataRecordStorageSettings settings = dataRecordStorage.Settings as SQLDataRecordStorageSettings;
-            if (settings == null)
-                throw new ArgumentNullException("settings");
-
             RecordStorageDataManager dataManager = new RecordStorageDataManager(dataStore, dataRecordStorage);
-            dataManager.CreateSQLRecordStorageTable(settings);
+            dataManager.CreateSQLRecordStorageTable();
         }
 
         private static void UpdateSQLTable(SQLDataRecordStorageSettings sqlRecordStorageSettings, SQLDataRecordStorageState sqlRecordStorageState)
