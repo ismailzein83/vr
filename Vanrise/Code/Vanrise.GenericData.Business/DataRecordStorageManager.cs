@@ -12,6 +12,12 @@ namespace Vanrise.GenericData.Business
 {
     public class DataRecordStorageManager
     {
+        #region Constructors/Fields
+
+        DataStoreManager _dataStoreManager = new DataStoreManager();
+        
+        #endregion
+
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<DataRecordStorageDetail> GetFilteredDataRecordStorages(Vanrise.Entities.DataRetrievalInput<DataRecordStorageQuery> input)
@@ -40,6 +46,8 @@ namespace Vanrise.GenericData.Business
             insertOperationOutput.InsertedObject = null;
             int dataRecordStorageId = -1;
 
+            UpdateDataStore(dataRecordStorage);
+
             IDataRecordStorageDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordStorageDataManager>();
 
             if (dataManager.AddDataRecordStorage(dataRecordStorage, out dataRecordStorageId))
@@ -48,7 +56,7 @@ namespace Vanrise.GenericData.Business
                 dataRecordStorage.DataRecordStorageId = dataRecordStorageId;
                 insertOperationOutput.InsertedObject = DataRecordStorageMapper(dataRecordStorage);
 
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataRecordStorages");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -70,7 +78,7 @@ namespace Vanrise.GenericData.Business
             if (dataManager.UpdateDataRecordStorage(dataRecordStorage))
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataRecordStorages");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -93,6 +101,22 @@ namespace Vanrise.GenericData.Business
                     IEnumerable<DataRecordStorage> dataRecordStorages = dataManager.GetDataRecordStorages();
                     return dataRecordStorages.ToDictionary(dataRecordStorage => dataRecordStorage.DataRecordStorageId, dataRecordStorage => dataRecordStorage);
                 });
+        }
+
+        void UpdateDataStore(DataRecordStorage dataRecordStorage)
+        {
+            DataStore dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
+            var dataStoreSettings = (dataStore != null) ? dataStore.Settings : null;
+
+            if (dataStoreSettings != null)
+            {
+                UpdateRecordStorageContext context = new UpdateRecordStorageContext(dataRecordStorage) { RecordStorageState = null };
+                dataStoreSettings.UpdateRecordStorage(context);
+            }
+            else
+            {
+                throw new ArgumentNullException("DataStore.Settings = NULL");
+            }
         }
 
         #endregion
