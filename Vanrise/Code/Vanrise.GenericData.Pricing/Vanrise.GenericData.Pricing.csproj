@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtraCharge\ExtraChargeMappingStep.cs" />
     <Compile Include="ExtraCharge\ExtraChargeRule.cs" />
     <Compile Include="ExtraCharge\ExtraChargeRuleManager.cs" />
     <Compile Include="ExtraCharge\ExtraChargeRuleContext.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="RateValue\RateValueRule.cs" />
     <Compile Include="RateValue\RateValueRuleContext.cs" />
     <Compile Include="RateValue\RateValueRuleManager.cs" />
+    <Compile Include="Tariff\TariffMappingStep.cs" />
     <Compile Include="Tariff\TariffRuleContext.cs" />
     <Compile Include="Tariff\TariffRule.cs" />
     <Compile Include="Tariff\TariffRuleManager.cs" />
