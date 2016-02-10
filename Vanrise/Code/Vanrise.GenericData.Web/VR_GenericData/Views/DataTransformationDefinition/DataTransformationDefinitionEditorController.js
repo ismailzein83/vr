@@ -61,6 +61,7 @@
             $scope.scopeModal.applyChanges = function ()
             {
                 applyChanges();
+                $scope.scopeModal.selectedStep.isSelected = false;
                 $scope.scopeModal.selectedStep = undefined;
             }
 
@@ -200,6 +201,7 @@
                 setSelectedComposite:setSelectedComposite,
                 editStep: editStep,
                 removeStep: removeStep,
+                setSelectedStep: setSelectedStep
             };
         }
 
@@ -344,31 +346,39 @@
             }
         }
 
-        function editStep(dataItem)
+        function editStep(stepItem)
         {
             if ($scope.scopeModal.selectedStep != undefined) {
                 applyChanges();
-                if ($scope.scopeModal.selectedStep == dataItem) {
+                if ($scope.scopeModal.selectedStep == stepItem) {
                     $scope.scopeModal.selectedStep.isSelected = false;
                     $scope.scopeModal.selectedStep = undefined;
                 }
                 else {
                     $scope.scopeModal.selectedStep.isSelected = false;
-                    dataItem.isSelected = true;
+                    stepItem.isSelected = true;
                     $scope.scopeModal.selectedStep = undefined;
-                    setTimeout(function () { $scope.scopeModal.selectedStep = dataItem; UtilsService.safeApply($scope) })
+                    setTimeout(function () { $scope.scopeModal.selectedStep = stepItem; UtilsService.safeApply($scope) })
                 }
 
             }
             else {
-                $scope.scopeModal.selectedStep = dataItem;
+                $scope.scopeModal.selectedStep = stepItem;
             }
         }
 
-        function removeStep(dataItem)
+        function removeStep(stepItem)
         {
-            if ($scope.scopeModal.selectedStep == dataItem)
+            if ($scope.scopeModal.selectedStep == stepItem)
                 $scope.scopeModal.selectedStep = undefined;
+        }
+
+        function setSelectedStep(stepItem)
+        {
+            if ($scope.scopeModal.selectedStep != undefined)
+                $scope.scopeModal.selectedStep.isSelected = false;
+            stepItem.isSelected = true;
+            $scope.scopeModal.selectedStep = stepItem;
         }
 
         function buildDataTransformationDefinitionObjFromScope() {

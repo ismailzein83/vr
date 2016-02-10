@@ -22,7 +22,7 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
                 }
             }
         },
-        templateUrl: "/Client/Modules/VR_GenericData/Directives/DataTransformationDefinition/Templates/SequenceStepTemplate.html"
+        templateUrl: "/Client/Modules/VR_GenericData/Directives/DataTransformationDefinition/Templates/StepSequenceDesignTemplate.html"
 
     };
   
@@ -90,7 +90,8 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
             }
 
             api.addStep = function (stepDefinition) {
-                var stepItem = currentContext.createStepItem(stepDefinition, null, getChildrenContext())
+                var stepItem = currentContext.createStepItem(stepDefinition, null, getChildrenContext());
+                currentContext.setSelectedStep(stepItem);
                 ctrl.childSteps.push(stepItem);
             };
 
