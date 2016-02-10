@@ -36,29 +36,21 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
             ctrl.childSteps = [];
             var currentContext;
 
+            var sequenceDirectiveAPI;
+            var sequenceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
-                $scope.editStep = function (stepItem) {
-                    currentContext.editStep(stepItem);
-                };
-                ctrl.removeStep = function (stepItem) {
-                    var index = ctrl.childSteps.indexOf(stepItem);
-                    if (index != -1) {
-                        ctrl.childSteps.splice(index, 1);
-                        currentContext.removeStep(stepItem);
-                    }
-                  
-                };
+
+                $scope.onSequenceDirectiveReady = function (api) {
+                    sequenceDirectiveAPI = api;
+                    sequenceReadyPromiseDeferred.resolve();
+                }
+
                 defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
-
-                api.isCompositeStep = true;
-                api.addStep = function (stepDefinition) {
-                    var stepItem = currentContext.createStepItem(stepDefinition, null, getChildrenContext())
-                    ctrl.childSteps.push(stepItem);
-                };
 
                 api.load = function (payload) {
                     if(payload != undefined)
@@ -71,15 +63,21 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                             currentContext = payload.context;
                             ctrl.arrayVariableName = payload.stepDetails.ArrayVariableName;
                             ctrl.iterationVariableName = payload.stepDetails.IterationVariableName;
-                            if (payload.stepDetails.Steps != null) {
-                                for (var i = 0; i < payload.stepDetails.Steps.length; i++) {
-                                    var stepEntity = payload.stepDetails.Steps[i];
-                                    var stepItem = currentContext.createStepItem(null, stepEntity, getChildrenContext())
-                                    ctrl.childSteps.push(stepItem);
-                                }
-                            }
+                            
                         }
-                       checkValidation();
+                        checkValidation();
+                        var loadSequencePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        sequenceReadyPromiseDeferred.promise
+                            .then(function () {
+                                var directivePayload = { context: getChildrenContext() };
+                                if (payload.stepDetails != undefined && payload.stepDetails.Steps != null)
+                                    directivePayload.MappingSteps = payload.stepDetails.Steps;
+
+                                VRUIUtilsService.callDirectiveLoad(sequenceDirectiveAPI, directivePayload, loadSequencePromiseDeferred);
+                            });
+
+                        return loadSequencePromiseDeferred.promise;
                     }
                  
                 }
@@ -98,27 +96,12 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
                 api.getData = function () {
                     var forLoobStepDetails = stepObj.stepDetails;
                     if (forLoobStepDetails != undefined)
-                     forLoobStepDetails.Steps = buildStepsData();
+                        forLoobStepDetails.Steps = sequenceDirectiveAPI !=undefined? sequenceDirectiveAPI.getData():undefined;
                     return forLoobStepDetails;
                 }
                 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
-
-            function buildStepsData() {
-                var steps = [];
-
-                for (var i = 0; i < ctrl.childSteps.length; i++) {
-                    var stepItem = ctrl.childSteps[i];
-                    if (stepItem.previewAPI != undefined) {
-                        var stepEntity = stepItem.previewAPI.getData();
-                        if (stepEntity != undefined)
-                         stepEntity.ConfigId = stepItem.dataTransformationStepConfigId;
-                        steps.push(stepEntity);
-                    }
-                }
-                return steps;
             }
 
             function checkValidation() {                
@@ -133,38 +116,34 @@ app.directive('vrGenericdataDatatransformationForloopstepPreview', ['UtilsServic
 
             function getChildrenContext()
             {
-                var childrenContext = {
-                    getRecordNames: function () {
-                        var recordNames = [];
-                        if(ctrl.iterationVariableName != undefined)
-                            recordNames.push({ Name: ctrl.iterationVariableName });
-                        var parentRecords = currentContext.getRecordNames();
-                        if (parentRecords != null) {
-                            for (var i = 0; i < parentRecords.length; i++) {
-                                recordNames.push(parentRecords[i]);
-                            }
+                var childrenContext = UtilsService.cloneObject(currentContext, false);
+                if(childrenContext == undefined)
+                    childrenContext = {};
+                childrenContext.getRecordNames= function () {
+                    var recordNames = [];
+                    if(ctrl.iterationVariableName != undefined)
+                        recordNames.push({ Name: ctrl.iterationVariableName });
+                    var parentRecords = currentContext.getRecordNames();
+                    if (parentRecords != null) {
+                        for (var i = 0; i < parentRecords.length; i++) {
+                            recordNames.push(parentRecords[i]);
                         }
-                        return recordNames;
-                    },
-                    getRecordFields: function (recordName) {
+                    }
+                    return recordNames;
+                };
+                childrenContext.getRecordFields= function (recordName) {
 
-                        if (recordName == ctrl.iterationVariableName)
-                        {
-                            if (ctrl.iterationVariableName != undefined)
+                    if (recordName == ctrl.iterationVariableName)
+                    {
+                        if (ctrl.iterationVariableName != undefined)
                             return currentContext.getRecordFields(ctrl.arrayVariableName);
-                        }
-                        else
-                        {
-                            return currentContext.getRecordFields(recordName);
+                    }
+                    else
+                    {
+                        return currentContext.getRecordFields(recordName);
 
-                        }
+                    }
                         
-                    },
-                    getArrayRecordNames: currentContext.getArrayRecordNames,
-                    getAllRecordNames: currentContext.getAllRecordNames,
-                    createStepItem: currentContext.createStepItem,
-                    editStep: currentContext.editStep,
-                    removeStep:currentContext.removeStep
                 };
                 return childrenContext; 
             }

@@ -31,19 +31,14 @@
                                 </vr-datagrid>
                             </vr-section>
                         </vr-columns>
-                        <vr-columns colnum="4">
+                        <vr-columns colnum="6">
                             <vr-section title="Steps">
                                 <div style="max-height:500px;overflow-y:auto;">
-                                    <vr-datalist maxitemsperrow="1" datasource="scopeModal.steps" isitemdraggable onremoveitem="scopeModal.onRemoveStep">
-                                        <vr-label>{{dataItem.title}}</vr-label> <vr-check value="dataItem.isSelected" ng-click="viewScope.scopeModal.onEditStepClick(dataItem)"></vr-check><!-- <span ng-click="viewScope.scopeModal.onEditStepClick(dataItem)" class="glyphicon glyphicon-edit  hand-cursor" style="left:5px;"></span>-->
-                                        <vr-validator validate="dataItem.validationMessage">
-                                            <vr-directivewrapper directive="dataItem.stepPreviewUIControl" on-ready="dataItem.onPreviewDirectiveReady" vr-loader="dataItem.isLoadingPreviewDirective"></vr-directivewrapper>
-                                        </vr-validator>
-                                    </vr-datalist>
+                                    <vr-genericdata-datatransformationdefinition-stepsequencedesign on-ready="scopeModal.onSequenceDirectiveReady"></vr-genericdata-datatransformationdefinition-stepsequencedesign>
                                 </div>
                             </vr-section>
                         </vr-columns>
-                        <vr-columns colnum="6">
+                        <vr-columns colnum="4">
                             <vr-section title="Properties" vr-loader="scopeModal.isLoadingDirective">
                                 <vr-row removeline>
                                     <vr-columns width="fullrow">

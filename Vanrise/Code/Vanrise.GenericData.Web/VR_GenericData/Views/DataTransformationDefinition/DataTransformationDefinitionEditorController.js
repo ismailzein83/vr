@@ -14,6 +14,12 @@
 
         var editorDirectiveAPI;
         var gridDirectiveAPI;
+
+        var sequenceDirectiveAPI;
+        var sequenceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var selectedComposite;
+
         loadParameters();
         defineScope();
 
@@ -47,40 +53,9 @@
 
             $scope.scopeModal.addStep = function (dataItem)
             {
-                if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI.isCompositeStep) {                    
-                    $scope.scopeModal.selectedStep.previewAPI.addStep(dataItem);
-                }
-                else {
-                    var stepItem = createStepItem(dataItem, null, getChildrenContext());
-                    $scope.scopeModal.steps.push(stepItem);
-                }
-               
-            }
-
-            $scope.scopeModal.onEditStepClick = function (dataItem)
-            {
-                if ($scope.scopeModal.selectedStep != undefined)
-                {
-                    applyChanges();
-                    if ($scope.scopeModal.selectedStep == dataItem)
-                    {
-                        $scope.scopeModal.selectedStep.isSelected = false;
-                        $scope.scopeModal.selectedStep = undefined;
-                    }
-                    else
-                    {
-                        $scope.scopeModal.selectedStep.isSelected = false;
-                        dataItem.isSelected = true;
-                        $scope.scopeModal.selectedStep = undefined;
-                        setTimeout(function () { $scope.scopeModal.selectedStep = dataItem; UtilsService.safeApply($scope) })
-                    }
-                   
-                }
-                else
-                {
-                    $scope.scopeModal.selectedStep = dataItem;
-                }
-               
+                if (selectedComposite != undefined) {
+                    selectedComposite.addStep(dataItem);
+                }             
             }
 
             $scope.scopeModal.applyChanges = function ()
@@ -120,14 +95,12 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, editorDirectiveAPI, payload, setLoader);
             }
 
-            $scope.scopeModal.onRemoveStep= function(dataItem)
+            $scope.scopeModal.onSequenceDirectiveReady = function (api)
             {
-                var index = $scope.scopeModal.steps.indexOf(dataItem);
-                if (index != -1) {
-                    $scope.scopeModal.steps.splice(index, 1);
-                }
-                if ($scope.scopeModal.selectedStep == dataItem)
-                    $scope.scopeModal.selectedStep = undefined;
+                sequenceDirectiveAPI = api;
+                selectedComposite = api;
+                selectedComposite.setCheckedSequence(true);
+                sequenceReadyPromiseDeferred.resolve();
             }
         }
 
@@ -151,7 +124,7 @@
 
             function loadAllControls() {
                 return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadDataRecordType, loadAllStepts]).then(function () {
-                        loadPreviewStepsSection().catch(function (error) {
+                    loadSequenceStepSection().catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                         }).finally(function () {
                             $scope.scopeModal.isLoading = false;
@@ -192,22 +165,23 @@
 
                     return loadDataRecordTypePromiseDeferred.promise;
                 }
-                function loadPreviewStepsSection() {
-                    var promises = [];
-                    if (dataTransformationDefinitionEntity != undefined && dataTransformationDefinitionEntity.MappingSteps != undefined) {
+                function loadSequenceStepSection() {
+                    var loadSequencePromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        for (var i = 0; i < dataTransformationDefinitionEntity.MappingSteps.length; i++) {
-                            var stepEntity = dataTransformationDefinitionEntity.MappingSteps[i];
-                            var stepItem = createStepItem(null, stepEntity, getChildrenContext());
-                            promises.push(stepItem.loadPromiseDeferred.promise);
-                            $scope.scopeModal.steps.push(stepItem);
-                        }
-                        
-                    }
+                    sequenceReadyPromiseDeferred.promise
+                        .then(function () {
+                            var directivePayload = { context: getChildrenContext() };
+                            if (dataTransformationDefinitionEntity != undefined)
+                                directivePayload.MappingSteps = dataTransformationDefinitionEntity.MappingSteps;
 
-                    return UtilsService.waitMultiplePromises(promises);
+                            VRUIUtilsService.callDirectiveLoad(sequenceDirectiveAPI, directivePayload, loadSequencePromiseDeferred);
+                        });
+
+                    return loadSequencePromiseDeferred.promise;
                 }
+
             }
+
             function getDataTransformationDefinition() {
                 return VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationDefinition(dataTransformationDefinitionId).then(function (dataTransformationDefinition) {
                     dataTransformationDefinitionEntity = dataTransformationDefinition;
@@ -222,12 +196,9 @@
                 getArrayRecordNames: getArrayRecordNames,
                 getAllRecordNames:getAllRecordNames,
                 createStepItem: createStepItem,
-                editStep: function (stepItem) {
-                    $scope.scopeModal.onEditStepClick(stepItem);
-                },
-                removeStep: function (stepItem) {
-                    $scope.scopeModal.onRemoveStep(stepItem);
-                },
+                setSelectedComposite:setSelectedComposite,
+                editStep: editStep,
+                removeStep: removeStep,
             };
         }
 
@@ -355,6 +326,40 @@
             return recordTypeNames;
         }
 
+        function setSelectedComposite(api)
+        {
+            if (selectedComposite != undefined && selectedComposite != api)
+              selectedComposite.setCheckedSequence(false);
+            selectedComposite = api;
+        }
+
+        function editStep(dataItem)
+        {
+            if ($scope.scopeModal.selectedStep != undefined) {
+                applyChanges();
+                if ($scope.scopeModal.selectedStep == dataItem) {
+                    $scope.scopeModal.selectedStep.isSelected = false;
+                    $scope.scopeModal.selectedStep = undefined;
+                }
+                else {
+                    $scope.scopeModal.selectedStep.isSelected = false;
+                    dataItem.isSelected = true;
+                    $scope.scopeModal.selectedStep = undefined;
+                    setTimeout(function () { $scope.scopeModal.selectedStep = dataItem; UtilsService.safeApply($scope) })
+                }
+
+            }
+            else {
+                $scope.scopeModal.selectedStep = dataItem;
+            }
+        }
+
+        function removeStep(dataItem)
+        {
+            if ($scope.scopeModal.selectedStep == dataItem)
+                $scope.scopeModal.selectedStep = undefined;
+        }
+
         function buildDataTransformationDefinitionObjFromScope() {
             var obj = dataRecordTypeAPI.getData();
             var dataTransformationDefinition = {
@@ -362,23 +367,8 @@
                 Title: $scope.scopeModal.title,
                 DataTransformationDefinitionId: dataTransformationDefinitionId,
                 RecordTypes: obj != undefined ? obj.RecordTypes : undefined,
-                MappingSteps: buildStepsData()
+                MappingSteps: sequenceDirectiveAPI !=undefined? sequenceDirectiveAPI.getData():undefined
             }
-            function buildStepsData() {
-                var steps = [];
-
-                for (var i = 0; i < $scope.scopeModal.steps.length; i++) {
-                    var stepItem = $scope.scopeModal.steps[i];
-                    if (stepItem.previewAPI != undefined) {
-                        var stepEntity = stepItem.previewAPI.getData();
-                        if (stepEntity != undefined)
-                          stepEntity.ConfigId = stepItem.dataTransformationStepConfigId;
-                        steps.push(stepEntity);
-                    }
-                }
-                return steps;
-            }
-
             return dataTransformationDefinition;
         }
 

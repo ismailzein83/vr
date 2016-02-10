@@ -47,6 +47,7 @@
     <Compile Include="MappingSteps\AssignFieldStep.cs" />
     <Compile Include="MappingSteps\AssignValueRuleStep.cs" />
     <Compile Include="MappingSteps\ForLoopStep.cs" />
+    <Compile Include="MappingSteps\IfElseStep.cs" />
     <Compile Include="MappingSteps\InitializeRecordStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

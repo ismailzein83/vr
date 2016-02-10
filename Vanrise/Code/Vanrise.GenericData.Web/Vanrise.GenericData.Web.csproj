@@ -199,6 +199,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AddItemToArray\Templates\AddItemToArrayStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AddItemToArray\vr-genericdata-datatransformation-additemtoarraystep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AddItemToArray\vr-genericdata-datatransformation-additemtoarraystep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\IfElse\Templates\IfElseStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\IfElse\Templates\IfElseStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\IfElse\vr-genericdata-datatransformation-ifelsestep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\IfElse\vr-genericdata-datatransformation-ifelsestep.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\Templates\InitializeRecordStepPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\Templates\InitializeRecordStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\InitializeRecord\vr-genericdata-datatransformation-initializerecordstep-preview.js" />
