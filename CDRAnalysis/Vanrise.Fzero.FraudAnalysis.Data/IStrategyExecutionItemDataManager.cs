@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void GetStrategyExecutionItemsbyExecutionId(long ExecutionId, out List<StrategyExecutionItem> outAllStrategyExecutionItems, out List<AccountCase> outAccountCases, out List<StrategyExecutionItem> outStrategyExecutionItemRelatedtoCases);
 
-        bool UpdateStrategyExecutionItemBatch(List<int> CaseIds, int userId, SuspicionOccuranceStatus status);
+        bool UpdateStrategyExecutionItemBatch(List<long> ItemIds, int userId, SuspicionOccuranceStatus status);
 
     }
 }

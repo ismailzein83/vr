@@ -78,7 +78,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             caseDataManager.UpdateAccountCaseBatch(batch.AccountCaseIds, inputArgument.UserId, CaseStatus.Cancelled);
 
                             IStrategyExecutionItemDataManager itemDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
-                            itemDataManager.UpdateStrategyExecutionItemBatch(batch.AccountCaseIds, inputArgument.UserId, SuspicionOccuranceStatus.Deleted);
+                            itemDataManager.UpdateStrategyExecutionItemBatch(batch.StrategyExecutionItemIds, inputArgument.UserId, SuspicionOccuranceStatus.Deleted);
 
                         });
                 }

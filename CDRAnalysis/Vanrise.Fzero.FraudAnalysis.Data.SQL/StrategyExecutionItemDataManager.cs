@@ -86,17 +86,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         DataTable GetStrategyExecutionItemTable()
         {
             DataTable dt = new DataTable("FraudAnalysis.StrategyExecutionItem");
-            dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("ID", typeof(long));
             dt.Columns.Add("SuspicionOccuranceStatus", typeof(int));
             return dt;
         }
 
-        public bool UpdateStrategyExecutionItemBatch(List<int> CaseIds, int userId, SuspicionOccuranceStatus status)
+        public bool UpdateStrategyExecutionItemBatch(List<long> ItemIds, int userId, SuspicionOccuranceStatus status)
         {
             DataTable dtStrategyExecutionItemsToUpdate = GetStrategyExecutionItemTable();
             DataRow dr;
 
-            foreach (var item in CaseIds)
+            foreach (var item in ItemIds)
             {
                 dr = dtStrategyExecutionItemsToUpdate.NewRow();
                 dr["ID"] = item;
