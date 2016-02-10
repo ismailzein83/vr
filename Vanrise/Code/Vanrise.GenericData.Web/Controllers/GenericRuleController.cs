@@ -24,7 +24,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpPost]
         [Route("AddGenericRule")]
-        public Vanrise.Entities.InsertOperationOutput<GenericRule> AddGenericRule(GenericRule rule)
+        public Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
         {
             var manager = GetManager(rule.DefinitionId);
             return manager.AddGenericRule(rule);

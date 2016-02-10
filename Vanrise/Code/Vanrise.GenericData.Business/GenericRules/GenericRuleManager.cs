@@ -86,9 +86,9 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
-        public Vanrise.Entities.InsertOperationOutput<GenericRule> AddGenericRule(GenericRule rule)
+        public Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
         {
-            return this.AddRule(rule as T) as Vanrise.Entities.InsertOperationOutput<GenericRule>;
+            return this.AddRule(rule as T) as Vanrise.Entities.InsertOperationOutput<GenericRuleDetail>;
         }
 
         private GenericRuleDetail GenericRuleDetailMapper(GenericRule genericRule)

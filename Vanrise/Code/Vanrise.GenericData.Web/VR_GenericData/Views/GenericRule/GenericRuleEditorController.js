@@ -28,11 +28,11 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-
+                genericRuleId = parameters.genericRuleId;
                 genericRuleDefinitionId = parameters.genericRuleDefinitionId;
             }
-            isEditMode = false;
-            //isEditMode = (routeRuleId != undefined);
+            
+            isEditMode = (genericRuleId != undefined);
         }
 
         function defineScope() {
@@ -73,7 +73,7 @@
                             });
                     }).catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        $scope.scopeModal.isLoading = false;
+                        $scope.scopeModel.isLoading = false;
                     });
                 }
                 else {
@@ -81,7 +81,7 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.scopeModal.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
 
             
@@ -98,17 +98,16 @@
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadCriteriaSection, loadSettingsSection])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
-               .finally(function () {
-                   $scope.scopeModal.isLoading = false;
+                }).finally(function () {
+                   $scope.scopeModel.isLoading = false;
                });
         }
 
         function getGenericRule() {
-            //return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
-            //    routeRuleEntity = routeRule;
-            //    routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
-            //});
+            return VR_GenericData_GenericRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
+                routeRuleEntity = routeRule;
+                routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
+            });
         }
 
         function setTitle() {
@@ -122,13 +121,13 @@
             if (genericRuleEntity == undefined)
                 return;
 
-            //$scope.scopeModal.beginEffectiveDate = routeRuleEntity.BeginEffectiveTime;
-            //$scope.scopeModal.endEffectiveDate = routeRuleEntity.EndEffectiveTime;
+            //$scope.scopeModel.beginEffectiveDate = routeRuleEntity.BeginEffectiveTime;
+            //$scope.scopeModel.endEffectiveDate = routeRuleEntity.EndEffectiveTime;
 
             //if (routeRuleEntity.Criteria != null) {
 
             //    angular.forEach(routeRuleEntity.Criteria.ExcludedCodes, function (item) {
-            //        $scope.scopeModal.excludedCodes.push(item);
+            //        $scope.scopeModel.excludedCodes.push(item);
             //    });
             //}
         }
@@ -170,7 +169,7 @@
                     });
 
                     UtilsService.waitMultiplePromises(criteriaFieldsPromises).then(function () {
-                        loadAllFieldsPromiseDeferred.resolve;
+                        loadAllFieldsPromiseDeferred.resolve();
                     }).catch(function (error) {
                         loadAllFieldsPromiseDeferred.reject(error);
                     });
