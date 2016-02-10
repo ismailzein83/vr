@@ -52,6 +52,7 @@
     <Compile Include="PersistentQueueItem.cs" />
     <Compile Include="QueueActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueActivatorConfig.cs" />
     <Compile Include="QueueExecutionFlow.cs" />
     <Compile Include="QueueExecutionFlowDefinition.cs" />
     <Compile Include="QueueExecutionFlowDefinitionFilter.cs" />

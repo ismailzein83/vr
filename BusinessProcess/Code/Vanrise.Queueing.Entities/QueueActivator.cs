@@ -8,6 +8,8 @@ namespace Vanrise.Queueing.Entities
 {
     public abstract class QueueActivator : IDisposable
     {
+        public int ConfigId { get; set; }
+
         public abstract void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems);
 
         public virtual void ProcessItem(IQueueActivatorExecutionContext context)
