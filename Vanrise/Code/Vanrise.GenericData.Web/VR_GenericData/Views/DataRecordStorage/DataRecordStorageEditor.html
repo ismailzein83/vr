@@ -22,7 +22,7 @@
                     </vr-genericdata-datastore-selector>
                 </vr-columns>
             </vr-row>
-            <vr-row ng-show="settingsEditor != undefined">
+            <vr-row ng-show="selectedDataRecordType != undefined && selectedDataStore != undefined">
                 <vr-columns width="fullrow">
                     <vr-section title="Settings">
                         <vr-directivewrapper directive="settingsEditor" on-ready="onSettingsDirectiveReady"></vr-directivewrapper>

@@ -43,26 +43,24 @@
                 dataRecordTypeSelectorReadyDeferred.resolve();
             };
             $scope.onDataRecordTypeSelectionChanged = function (option) {
+                $scope.selectedDataRecordType = option;
                 typeSelectorChangeCount++;
                 if ((isEditMode && typeSelectorChangeCount <= 2) || (!isEditMode && typeSelectorChangeCount <= 1)) {
                     return;
                 }
-                if (dataStoreSelectorAPI.getSelectedIds() != undefined) {
-                    loadSettingsDirectiveFromScope();
-                }
+                loadSettingsDirectiveFromScope();
             };
             $scope.onDataStoreSelectorReady = function (api) {
                 dataStoreSelectorAPI = api;
                 dataStoreSelectorReadyDeferred.resolve();
             };
-            $scope.onDataStoreSelectionChanged = function () {
+            $scope.onDataStoreSelectionChanged = function (option) {
+                $scope.selectedDataStore = option;
                 storeSelectorChangeCount++;
-                if ((isEditMode && storeSelectorChangeCount <= 2) || (!isEditMode && storeSelectorChangeCount <= 1)) {
+                if ((isEditMode && storeSelectorChangeCount <= 4) || (!isEditMode && storeSelectorChangeCount <= 2)) {
                     return;
                 }
-                if (dataRecordTypeSelectorAPI.getSelectedIds() != undefined) {
-                    loadSettingsEditor();
-                }
+                loadSettingsEditor();
             };
             $scope.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
@@ -145,7 +143,8 @@
 
                     if (dataRecordStorageEntity != undefined) {
                         payload = {
-                            selectedIds: dataRecordStorageEntity.DataStoreId
+                            selectedIds: dataRecordStorageEntity.DataStoreId,
+                            showaddbutton: true
                         };
                     }
 
@@ -161,8 +160,6 @@
                 promises.push(settingsDirectiveLoadDeferred.promise);
 
                 if (dataRecordStorageEntity != undefined) {
-                    settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
                     var loadSettingsEditorPromise = loadSettingsEditor();
                     promises.push(loadSettingsEditorPromise);
 
@@ -185,6 +182,7 @@
         function loadSettingsEditor() {
             var promises = [];
             var dataStoreEntity;
+            settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             var getDataStorePromise = getDataStore();
             promises.push(getDataStorePromise);
@@ -213,8 +211,22 @@
             }
         }
         function loadSettingsDirectiveFromScope() {
+            var selectedTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+            var selectedStoreId = dataStoreSelectorAPI.getSelectedIds();
+
+            if (dataRecordStorageEntity != undefined) {
+                settingsDirectiveReadyDeferred.resolve();
+                return;
+            }
+            else {
+                settingsDirectiveReadyDeferred = undefined;
+                if (selectedTypeId == undefined || selectedStoreId == undefined) {
+                    return;
+                }
+            }
+
             var payload = {
-                DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds()
+                DataRecordTypeId: selectedTypeId
             };
             var setLoader = function (value) { $scope.isLoading = value; };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, settingsDirectiveAPI, payload, setLoader, settingsDirectiveReadyDeferred);
