@@ -24,7 +24,7 @@
 
             if (parameters != undefined) {
                 criteriaFieldName = parameters.GenericRuleDefinitionCriteriaFieldName;
-                criteriaFields = parameters.GenericRuleDefinitionCriteriaFields;
+                criteriaFields = UtilsService.cloneObject(parameters.GenericRuleDefinitionCriteriaFields, true);
                 for (var i = 0; i < criteriaFields.length; i++) {
                     criteriaFields[i].FieldName = criteriaFields[i].FieldName.toUpperCase();
                 }
