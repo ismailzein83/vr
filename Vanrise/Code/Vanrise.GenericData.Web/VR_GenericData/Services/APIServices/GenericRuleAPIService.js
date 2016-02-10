@@ -6,12 +6,20 @@
 
     function GenericRuleAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return {
-            AddGenericRule: AddGenericRule,
-            GetFilteredGenericRules: GetFilteredGenericRules
+            GetFilteredGenericRules: GetFilteredGenericRules,
+            GetGenericRule: GetGenericRule,
+            AddGenericRule: AddGenericRule
         };
 
         function GetFilteredGenericRules(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'GetFilteredGenericRules'), input);
+        }
+
+        function GetGenericRule(ruleDefinitionId, ruleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'GetGenericRule'), {
+                ruleDefinitionId: ruleDefinitionId,
+                ruleId: ruleId
+            });
         }
 
         function AddGenericRule(genericRule) {

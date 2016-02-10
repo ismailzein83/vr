@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleGridDirective.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRuleDefinitionService', 'VRNotificationService'];
+    GenericRuleGridDirective.$inject = ['VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRule', 'VRNotificationService'];
 
-    function GenericRuleGridDirective(VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRuleDefinitionService, VRNotificationService) {
+    function GenericRuleGridDirective(VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRule, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,24 +12,24 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var genericRuleDefinitionGrid = new GenericRuleDefinitionGrid($scope, ctrl, $attrs);
-                genericRuleDefinitionGrid.initializeController();
+                var obj = new GenericRuleGrid($scope, ctrl, $attrs);
+                obj.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRuleDefinition/Templates/GenericRuleDefinitionGridTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRule/Templates/GenericRuleGridTemplate.html'
         };
 
-        function GenericRuleDefinitionGrid($scope, ctrl, $attrs) {
+        function GenericRuleGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var gridAPI;
 
             function initializeController() {
-                $scope.genericRuleDefinitions = [];
+                $scope.genericRules = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -40,7 +40,7 @@
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return VR_GenericData_GenericRuleDefinitionAPIService.GetFilteredGenericRuleDefinitions(dataRetrievalInput).then(function (response) {
+                    return VR_GenericData_GenericRuleAPIService.GetFilteredGenericRules(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
@@ -51,31 +51,31 @@
             }
 
             function getDirectiveAPI() {
-                var api = {};
+                var directiveAPI = {};
 
-                api.loadGrid = function (query) {
+                directiveAPI.loadGrid = function (query) {
                     return gridAPI.retrieveData(query);
                 };
 
-                api.onGenericRuleDefinitionAdded = function (addedGenericRuleDefinition) {
-                    gridAPI.itemAdded(addedGenericRuleDefinition);
+                directiveAPI.onGenericRuleAdded = function (addedGenericRule) {
+                    gridAPI.itemAdded(addedGenericRule);
                 };
 
-                return api;
+                return directiveAPI;
             }
 
             function defineMenuActions() {
                 $scope.gridMenuActions = [{
                     name: 'Edit',
-                    clicked: editGenericRuleDefinition,
+                    clicked: editGenericRule,
                 }];
             }
 
-            function editGenericRuleDefinition(genericRuleDefinition) {
-                var onGenericRuleDefinitionUpdated = function (updatedGenericRuleDefinition) {
-                    gridAPI.itemUpdated(updatedGenericRuleDefinition);
+            function editGenericRule(genericRule) {
+                var onGenericRuleDefinitionUpdated = function (updatedGenericRule) {
+                    gridAPI.itemUpdated(updatedGenericRule);
                 };
-                VR_GenericData_GenericRuleDefinitionService.editGenericRuleDefinition(genericRuleDefinition.GenericRuleDefinitionId, onGenericRuleDefinitionUpdated);
+                VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated);
             }
         }
     }

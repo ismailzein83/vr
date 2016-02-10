@@ -104,9 +104,8 @@
         }
 
         function getGenericRule() {
-            return VR_GenericData_GenericRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
-                routeRuleEntity = routeRule;
-                routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
+            return VR_GenericData_GenericRuleAPIService.GetGenericRule(genericRuleDefinitionId, genericRuleId).then(function (genericRule) {
+                genericRuleEntity = genericRule;
             });
         }
 
@@ -121,15 +120,8 @@
             if (genericRuleEntity == undefined)
                 return;
 
-            //$scope.scopeModel.beginEffectiveDate = routeRuleEntity.BeginEffectiveTime;
-            //$scope.scopeModel.endEffectiveDate = routeRuleEntity.EndEffectiveTime;
-
-            //if (routeRuleEntity.Criteria != null) {
-
-            //    angular.forEach(routeRuleEntity.Criteria.ExcludedCodes, function (item) {
-            //        $scope.scopeModel.excludedCodes.push(item);
-            //    });
-            //}
+            $scope.scopeModel.beginEffectiveDate = genericRuleEntity.BeginEffectiveTime;
+            $scope.scopeModel.endEffectiveDate = genericRuleEntity.EndEffectiveTime;
         }
 
         function loadCriteriaSection()

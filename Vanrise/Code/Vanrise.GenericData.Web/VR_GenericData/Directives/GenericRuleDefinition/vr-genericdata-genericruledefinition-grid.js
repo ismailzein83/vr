@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleDefinitionGridDirective.$inject = ['VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRule', 'VRNotificationService'];
+    GenericRuleDefinitionGridDirective.$inject = ['VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRuleDefinitionService', 'VRNotificationService'];
 
-    function GenericRuleDefinitionGridDirective(VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRule, VRNotificationService) {
+    function GenericRuleDefinitionGridDirective(VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRuleDefinitionService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,24 +12,24 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var obj = new GenericRuleGrid($scope, ctrl, $attrs);
-                obj.initializeController();
+                var genericRuleDefinitionGrid = new GenericRuleDefinitionGrid($scope, ctrl, $attrs);
+                genericRuleDefinitionGrid.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRule/Templates/GenericRuleGridTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRuleDefinition/Templates/GenericRuleDefinitionGridTemplate.html'
         };
 
-        function GenericRuleGrid($scope, ctrl, $attrs) {
+        function GenericRuleDefinitionGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var gridAPI;
 
             function initializeController() {
-                $scope.genericRules = [];
+                $scope.genericRuleDefinitions = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -40,7 +40,7 @@
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return VR_GenericData_GenericRuleAPIService.GetFilteredGenericRules(dataRetrievalInput).then(function (response) {
+                    return VR_GenericData_GenericRuleDefinitionAPIService.GetFilteredGenericRuleDefinitions(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
@@ -67,16 +67,15 @@
             function defineMenuActions() {
                 $scope.gridMenuActions = [{
                     name: 'Edit',
-                    clicked: editGenericRule,
+                    clicked: editGenericRuleDefinition,
                 }];
             }
 
-            function editGenericRule(genericRule) {
-                var onGenericRuleUpdated = function (updatedGenericRule) {
-                    gridAPI.itemUpdated(updatedGenericRule);
+            function editGenericRuleDefinition(genericRuleDefinition) {
+                var onGenericRuleDefinitionUpdated = function (updatedGenericRuleDefinition) {
+                    gridAPI.itemUpdated(updatedGenericRuleDefinition);
                 };
-
-                VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated);
+                VR_GenericData_GenericRuleDefinitionService.editGenericRuleDefinition(genericRuleDefinition.GenericRuleDefinitionId, onGenericRuleDefinitionUpdated);
             }
         }
     }

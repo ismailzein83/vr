@@ -18,6 +18,11 @@ namespace Vanrise.GenericData.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, GenericRuleDetailMapper));
         }
 
+        public GenericRule GetGenericRule(int ruleId)
+        {
+            return GetAllRules().GetRecord(ruleId);
+        }
+
         public T GetMatchRule(int ruleDefinitionId, GenericRuleTarget target)
         {
             var ruleTree = GetRuleTree(ruleDefinitionId);
