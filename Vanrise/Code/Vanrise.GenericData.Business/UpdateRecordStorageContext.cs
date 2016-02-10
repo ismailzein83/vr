@@ -9,13 +9,19 @@ namespace Vanrise.GenericData.Business
 {
     public class UpdateRecordStorageContext : IUpdateRecordStorageContext
     {
+        DataStore _dataStore;
         DataRecordStorage _dataRecordStorage;
 
-        public UpdateRecordStorageContext(DataRecordStorage dataRecordStorage)
+        public UpdateRecordStorageContext(DataStore dataStore, DataRecordStorage dataRecordStorage)
         {
             _dataRecordStorage = dataRecordStorage;
+            _dataStore = dataStore;
         }
 
+        public DataStore DataStore
+        {
+            get { return _dataStore; }
+        }
         public DataRecordStorage RecordStorage
         {
             get { return _dataRecordStorage; }

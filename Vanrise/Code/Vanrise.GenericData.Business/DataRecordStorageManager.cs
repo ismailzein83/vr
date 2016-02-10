@@ -106,16 +106,15 @@ namespace Vanrise.GenericData.Business
         void UpdateDataStore(DataRecordStorage dataRecordStorage)
         {
             DataStore dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
-            var dataStoreSettings = (dataStore != null) ? dataStore.Settings : null;
 
-            if (dataStoreSettings != null)
+            if (dataStore != null && dataStore.Settings != null)
             {
-                UpdateRecordStorageContext context = new UpdateRecordStorageContext(dataRecordStorage) { RecordStorageState = null };
-                dataStoreSettings.UpdateRecordStorage(context);
+                UpdateRecordStorageContext context = new UpdateRecordStorageContext(dataStore, dataRecordStorage) { RecordStorageState = null };
+                dataStore.Settings.UpdateRecordStorage(context);
             }
             else
             {
-                throw new ArgumentNullException("DataStore.Settings = NULL");
+                throw new ArgumentNullException("dataStoreSettings");
             }
         }
 

@@ -19,14 +19,19 @@ namespace Vanrise.GenericData.SQLDataStorage
             //DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             //var dataRecordType = dataRecordTypeManager.GetDataRecordType(context.RecordStorage.DataRecordTypeId);
             if (sqlRecordStorageState == null)
-                CreateSQLTable(sqlRecordStorageSettings);
+                CreateSQLTable(context.DataStore, context.RecordStorage);
             else
                 UpdateSQLTable(sqlRecordStorageSettings, sqlRecordStorageState);
         }
 
-        private void CreateSQLTable(SQLDataRecordStorageSettings sqlRecordStorageSettings)
+        private void CreateSQLTable(DataStore dataStore, DataRecordStorage dataRecordStorage)
         {
-            throw new NotImplementedException();
+            SQLDataRecordStorageSettings settings = dataRecordStorage.Settings as SQLDataRecordStorageSettings;
+            if (settings == null)
+                throw new ArgumentNullException("settings");
+
+            RecordStorageDataManager dataManager = new RecordStorageDataManager(dataStore, dataRecordStorage);
+            dataManager.CreateSQLRecordStorageTable(settings);
         }
 
         private static void UpdateSQLTable(SQLDataRecordStorageSettings sqlRecordStorageSettings, SQLDataRecordStorageState sqlRecordStorageState)

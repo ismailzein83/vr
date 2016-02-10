@@ -8,6 +8,8 @@ namespace Vanrise.GenericData.Entities
 {
     public interface IUpdateRecordStorageContext
     {
+        DataStore DataStore { get; }
+
         DataRecordStorage RecordStorage { get; }
 
         Object RecordStorageState { get; set; }
