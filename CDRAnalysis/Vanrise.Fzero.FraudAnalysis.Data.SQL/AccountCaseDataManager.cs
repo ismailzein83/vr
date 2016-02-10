@@ -130,7 +130,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
                 BEGIN
                 
-                    SELECT ac.ID , ac.AccountNumber, ac.[Status], 
+                    SELECT ac.ID CaseID, ac.AccountNumber, ac.[Status], 
 	                       COUNT(sed.ID) AS NumberOfOccurances,
 	                       MAX(sed.SuspicionLevelID) AS SuspicionLevelID, 
 	                       MAX(se.ExecutionDate) AS LastOccurance
@@ -197,10 +197,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             AccountCase accountCase = new AccountCase();
 
-            accountCase.CaseID = (int)reader["ID"];
+            accountCase.CaseID = (int)reader["CaseID"];
             accountCase.AccountNumber = reader["AccountNumber"] as string;
             accountCase.UserID = GetReaderValue<int>(reader, "UserID");
-            accountCase.StatusID = (CaseStatus)reader["Status"];
+            accountCase.StatusID = (CaseStatus)reader["StatusID"];
             accountCase.StatusUpdatedTime = (DateTime)reader["StatusUpdatedTime"];
             accountCase.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");
             accountCase.CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime");
