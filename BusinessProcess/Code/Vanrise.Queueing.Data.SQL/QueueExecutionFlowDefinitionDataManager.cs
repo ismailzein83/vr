@@ -22,6 +22,7 @@ namespace Vanrise.Queueing.Data.SQL
         }
 
 
+       
         public bool AreQueueExecutionFlowDefinitionUpdated(ref object updateHandle) {
             return base.IsDataUpdated("queue.[ExecutionFlowDefinition]", ref updateHandle);
         }

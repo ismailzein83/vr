@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\QueueActivatorConfigController.cs" />
     <Compile Include="Controllers\ExecutionFlowDefinitionController.cs" />
     <Compile Include="Controllers\QueueItemTypeController.cs" />
     <Compile Include="Controllers\QueueStageController.cs" />
@@ -108,7 +109,9 @@
     <Content Include="Queueing\Directives\ExecutionFlowDefinition\vr-queueing-executionflowdefinition-grid.js" />
     <Content Include="Queueing\Directives\ExecutionFlowDefinition\vr-queueing-executionflowdefinition-selector.js" />
     <Content Include="Queueing\Directives\ExecutionFlowStage\Templates\ExecutionFlowStageManagement.html" />
+    <Content Include="Queueing\Directives\ExecutionFlowStage\Templates\QueueActivatorConfigSelectiveTemplate.html" />
     <Content Include="Queueing\Directives\ExecutionFlowStage\vr-queueing-executionflow-stage-management.js" />
+    <Content Include="Queueing\Directives\ExecutionFlowStage\vr-queueing-queueactivatorconfig-selective.js" />
     <Content Include="Queueing\Directives\ExecutionFlow\Templates\ExecutionFlowGrid.html" />
     <Content Include="Queueing\Directives\ExecutionFlow\vr-queueing-executionflow-grid.js" />
     <Content Include="Queueing\Directives\ExecutionFlow\vr-queueing-executionflow-selector.js" />
