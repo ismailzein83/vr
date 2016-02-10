@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [queue].[sp_ExecutionFlowDefinition_GetAll] 
+CREATE PROCEDURE [queue].[sp_ExecutionFlowDefinition_GetAll] 
 	
 AS
 BEGIN
@@ -12,6 +12,7 @@ BEGIN
 	SELECT [ID]
       ,[Name]
       ,[Title]
+      ,[Stages]
        from [queue].ExecutionFlowDefinition
        
      SET NOCOUNT OFF;
