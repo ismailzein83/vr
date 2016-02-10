@@ -10,7 +10,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Business
 {
-    public class GenericRuleManager<T> : Vanrise.Rules.RuleManager<T>, IGenericRuleManager where T : GenericRule
+    public class GenericRuleManager<T> : Vanrise.Rules.RuleManager<T, GenericRuleDetail>, IGenericRuleManager where T : GenericRule
     {
         public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
         {
@@ -96,6 +96,13 @@ namespace Vanrise.GenericData.Business
             GenericRuleDetail ruleDetail = new GenericRuleDetail();
             ruleDetail.Entity = genericRule;
             return ruleDetail;
+        }
+
+        protected override GenericRuleDetail MapToDetails(T rule)
+        {
+            return new GenericRuleDetail(){
+                Entity = rule
+            };
         }
     }
 }
