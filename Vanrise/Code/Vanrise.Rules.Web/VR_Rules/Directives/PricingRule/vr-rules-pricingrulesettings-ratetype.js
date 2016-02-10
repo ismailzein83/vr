@@ -99,7 +99,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 var promises = [];
 
                 var filterItems;
-                if (payload != undefined) {
+                if (payload != undefined && payload.Items !=undefined) {
                     filterItems = [];
                     for (var i = 0; i < payload.Items.length; i++) {
                         var filterItem = {
