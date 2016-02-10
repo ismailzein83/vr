@@ -36,6 +36,18 @@ namespace TOne.Analytics.Data.SQL
             return suppluerPriceLists;
         }
 
-      
+        public int GetQueueStatus(int queueId)
+        {
+            object result;
+            ExecuteNonQuerySP("[sp_SupplierPriceList_GetResults]", out result, queueId);
+            return (int)result;
+        }
+        public bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, string messageUid, out int insertedId)
+        {
+            object id;
+            int recordesEffected = ExecuteNonQuerySP("[sp_SupplierPriceList_Insert]", out id, priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, messageUid);
+            insertedId = (int)id;
+            return (recordesEffected > 0);
+        }
     }
 }

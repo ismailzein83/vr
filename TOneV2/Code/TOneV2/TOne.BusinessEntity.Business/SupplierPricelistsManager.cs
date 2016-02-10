@@ -17,5 +17,16 @@ namespace TOne.BusinessEntity.Business
             ISupplierPricelistsDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPricelistsDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetSupplierPriceLists(input));
         }
+        public bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, out int insertdId)
+        {
+            ISupplierPricelistsDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPricelistsDataManager>();
+            return dataManager.SavePriceList(priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, "Portal", out  insertdId);
+        }
+        public int GetQueueStatus(int queueId)
+        {
+            ISupplierPricelistsDataManager dataManager =
+                BEDataManagerFactory.GetDataManager<ISupplierPricelistsDataManager>();
+            return dataManager.GetQueueStatus(queueId);
+        }
     }
 }
