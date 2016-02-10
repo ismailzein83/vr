@@ -1,11 +1,7 @@
 ﻿<vr-row>
-    <vr-columns width="1/3row">
-        <vr-genericdata-datatransformationdefinition-recordname-selector on-ready="ctrl.onRecordNameSelectorReady" label="Array Variable Name" isrequired="true" selectedvalues="ctrl.selectedRecordName"></vr-genericdata-datatransformationdefinition-recordname-selector>
+    <vr-columns width="1/2row">
+        <vr-genericdata-datatransformationdefinition-recordname-selector on-ready="ctrl.onRecordNameSelectorReady" label="Array" isrequired="true" selectedvalues="ctrl.selectedRecordName"></vr-genericdata-datatransformationdefinition-recordname-selector>
     </vr-columns>
 </vr-row>
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-genericdata-expressionbuilder on-ready="ctrl.onVariableReady" label="Variable Name" isrequired="true"></vr-genericdata-expressionbuilder>
-    </vr-columns>
 
-</vr-row>
+<vr-genericdata-expressionbuilder on-ready="ctrl.onVariableReady" label="Variable Name" isrequired="true"></vr-genericdata-expressionbuilder>
