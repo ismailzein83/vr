@@ -75,7 +75,7 @@ angular.module('cgNotify', []).factory('notify',['$timeout','$http','$compile','
                 }
 
                 scope.$close = function(){
-                    templateElement.css('opacity',0).attr('data-closing','true');
+                    templateElement.css('opacity', 0).css('z-index', 0).attr('data-closing', 'true');
                     layoutMessages();
                 };
 
@@ -147,7 +147,7 @@ angular.module('cgNotify', []).factory('notify',['$timeout','$http','$compile','
         notify.closeAll = function(){
             for(var i = messageElements.length - 1; i >= 0; i --){
                 var element = messageElements[i];
-                element.css('opacity',0);
+                element.css('opacity', 0).css('z-index', 0);
             }
         };
 
