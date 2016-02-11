@@ -10,10 +10,10 @@ using Vanrise.Fzero.FraudAnalysis.Business;
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
 
-    public sealed class ConvertStrategyExecItemsToInfos : CodeActivity
+    public sealed class ConvertExecuteStrategyExecutionItemsToInfos : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<List<ExecuteStrategyExecutionItem>> StrategyExecutionItems { get; set; }
+        public InArgument<List<ExecuteStrategyExecutionItem>> ExecuteStrategyExecutionItems { get; set; }
 
         [RequiredArgument]
         public OutArgument<List<StrategyExecutionInfo>> StrategyExecutionInfos { get; set; }
@@ -25,7 +25,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             StrategyManager strategyManager = new StrategyManager();
             List<StrategyExecutionInfo> infos = new List<StrategyExecutionInfo>();
-            foreach(var item in this.StrategyExecutionItems.Get(context))
+            foreach (var item in this.ExecuteStrategyExecutionItems.Get(context))
             {
                 StrategyExecutionInfo info = new StrategyExecutionInfo
                 {

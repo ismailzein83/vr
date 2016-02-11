@@ -77,18 +77,18 @@
       <Variable x:TypeArguments="x:Int64" Name="numberOfSubscribers" />
       <Variable x:TypeArguments="x:Int64" Name="numberOfSuspicions" />
     </Sequence.Variables>
-    <vffba1:ConvertStrategyExecItemsToInfos sap2010:WorkflowViewState.IdRef="ConvertStrategyExecItemsToInfos_1">
-      <vffba1:ConvertStrategyExecItemsToInfos.StrategyExecutionInfos>
+    <vffba1:ConvertExecuteStrategyExecutionItemsToInfos sap2010:WorkflowViewState.IdRef="ConvertExecuteStrategyExecutionItemsToInfos_1">
+      <vffba1:ConvertExecuteStrategyExecutionItemsToInfos.StrategyExecutionInfos>
         <OutArgument x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">
           <mca:CSharpReference x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpReference>
         </OutArgument>
-      </vffba1:ConvertStrategyExecItemsToInfos.StrategyExecutionInfos>
-      <vffba1:ConvertStrategyExecItemsToInfos.StrategyExecutionItems>
+      </vffba1:ConvertExecuteStrategyExecutionItemsToInfos.StrategyExecutionInfos>
+      <vffba1:ConvertExecuteStrategyExecutionItemsToInfos.ExecuteStrategyExecutionItems>
         <InArgument x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">
           <mca:CSharpValue x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">Input.StrategyExecutionItems</mca:CSharpValue>
         </InArgument>
-      </vffba1:ConvertStrategyExecItemsToInfos.StrategyExecutionItems>
-    </vffba1:ConvertStrategyExecItemsToInfos>
+      </vffba1:ConvertExecuteStrategyExecutionItemsToInfos.ExecuteStrategyExecutionItems>
+    </vffba1:ConvertExecuteStrategyExecutionItemsToInfos>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
@@ -295,7 +295,7 @@
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="ConvertStrategyExecItemsToInfos_1" sap:VirtualizedContainerService.HintSize="1521,22" />
+      <sap2010:ViewStateData Id="ConvertExecuteStrategyExecutionItemsToInfos_1" sap:VirtualizedContainerService.HintSize="1521,22" />
       <sap2010:ViewStateData Id="LoadCDRs_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetStrategyExecutionItem_1" sap:VirtualizedContainerService.HintSize="200,40" />
