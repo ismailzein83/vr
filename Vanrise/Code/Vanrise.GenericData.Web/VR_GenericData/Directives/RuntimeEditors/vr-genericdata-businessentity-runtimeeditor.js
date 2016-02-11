@@ -52,20 +52,10 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
 
         function getTemplate(attrs) {
             var multipleselection = "";
-            //var label = "";
+
             if (attrs.selectionmode == "dynamic" || attrs.selectionmode == "multiple") {
-                //label = "";
                 multipleselection = "ismultipleselection";
-            }
-
-            //var required = "";
-            //if (attrs.isrequired != undefined)
-            //    required = "isrequired";
-
-            //var hideremoveicon = "";
-            //if (attrs.hideremoveicon != undefined)
-            //    hideremoveicon = "hideremoveicon";
-            
+            }            
 
             return '<vr-columns colnum="{{scopeModel.calculatedColNum}}">' +
             '<vr-directivewrapper directive="selector.directive" on-ready="selector.onDirectiveReady" '
@@ -90,10 +80,12 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
                 api.load = function (payload) {
 
                     var fieldType;
+                    var fieldValue;
 
                     if (payload != undefined) {
                         $scope.scopeModel.fieldTitle = payload.fieldTitle;
                         fieldType = payload.fieldType;
+                        fieldValue = payload.fieldValue;
                     }
 
                     if (fieldType != undefined) {
@@ -127,7 +119,12 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
                                     innerSectionPromises.push($scope.dynamic.directiveLoadPromiseDeferred.promise);
 
                                     $scope.dynamic.directiveReadyPromiseDeferred.promise.then(function () {
-                                        VRUIUtilsService.callDirectiveLoad($scope.dynamic.directiveAPI, undefined, $scope.dynamic.directiveLoadPromiseDeferred);
+                                        var payload;
+
+                                        if (fieldValue != undefined)
+                                            payload = fieldValue.BusinessEntityGroup;
+
+                                        VRUIUtilsService.callDirectiveLoad($scope.dynamic.directiveAPI, payload, $scope.dynamic.directiveLoadPromiseDeferred);
                                     });
 
                                 }
@@ -144,7 +141,15 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
                                     innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
 
                                     $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
-                                        VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, undefined, $scope.selector.directiveLoadPromiseDeferred);
+                                        var payload;
+                                        if (fieldValue != undefined)
+                                        {
+                                            payload = {
+                                                selectedIds: ($attrs.selectionmode == "dynamic" && missingGroupSelectorUIControl) ? fieldValue.Values : fieldValue
+                                            }
+                                        }
+
+                                        VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, payload, $scope.selector.directiveLoadPromiseDeferred);
                                     });
                                 }
 
