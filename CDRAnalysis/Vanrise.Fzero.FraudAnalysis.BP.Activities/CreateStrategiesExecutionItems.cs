@@ -33,7 +33,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            List<ExecuteStrategyExecutionItem> strategiesExecutionItems = new List<ExecuteStrategyExecutionItem>();
+            List<ExecuteStrategyExecutionItem> executeStrategiesExecutionItems = new List<ExecuteStrategyExecutionItem>();
 
             StrategyManager strategyManager = new StrategyManager();
             StrategyExecutionManager strategyExecutionManager = new StrategyExecutionManager();
@@ -51,12 +51,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     strategyExecutionManager.ExecuteStrategy(strategyExecution);
 
             
-                    strategiesExecutionItems.Add(new ExecuteStrategyExecutionItem { StrategyId = strategyID, StrategyExecutionId = strategyExecution.ID });
+                    executeStrategiesExecutionItems.Add(new ExecuteStrategyExecutionItem { StrategyId = strategyID, StrategyExecutionId = strategyExecution.ID });
                 }
             }
 
             
-            this.StrategyExecutionItems.Set(context, strategiesExecutionItems);
+            this.StrategyExecutionItems.Set(context, executeStrategiesExecutionItems);
         }
     }
 }
