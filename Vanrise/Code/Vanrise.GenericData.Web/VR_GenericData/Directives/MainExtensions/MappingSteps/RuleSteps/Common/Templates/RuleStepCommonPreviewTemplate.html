@@ -7,18 +7,18 @@
 </vr-row>
 <vr-row removeline>
     <vr-columns width="fullrow">
-        <vr-list maxitemsperrow="1">
-             <vr-listitem>
-                 <vr-list maxitemsperrow="2">
-                     <vr-listitem ng-show="ctrl.ruleFieldsMappings.length > 0"><vr-label>Field Name</vr-label></vr-listitem>
-                     <vr-listitem ng-show="ctrl.ruleFieldsMappings.length > 0"><vr-label>From</vr-label></vr-listitem>
-                 </vr-list>
-                 <vr-list maxitemsperrow="2" ng-repeat="field in ctrl.ruleFieldsMappings" ng-show="ctrl.ruleFieldsMappings.length > 0">
-                     <vr-listitem><vr-label>{{field.RuleCriteriaFieldName}}</vr-label></vr-listitem>
-                     <vr-listitem><vr-label>{{field.Value}}</vr-label></vr-listitem>
-                 </vr-list>
+        <vr-list maxitemsperrow="1" ng-show="ctrl.ruleFieldsMappings.length > 0">
+            <vr-listitem>
+                <vr-list maxitemsperrow="2">
+                    <vr-listitem ><vr-label>Field Name</vr-label></vr-listitem>
+                    <vr-listitem ><vr-label>From</vr-label></vr-listitem>
+                </vr-list>
+                <vr-list maxitemsperrow="2" ng-repeat="field in ctrl.ruleFieldsMappings" >
+                    <vr-listitem><vr-label>{{field.RuleCriteriaFieldName}}</vr-label></vr-listitem>
+                    <vr-listitem><vr-label>{{field.Value}}</vr-label></vr-listitem>
+                </vr-list>
 
-             </vr-listitem>
+            </vr-listitem>
         </vr-list>
     
     <!--<vr-datagrid datasource="ctrl.ruleFieldsMappings"
