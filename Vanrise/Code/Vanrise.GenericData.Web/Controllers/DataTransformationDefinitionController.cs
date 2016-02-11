@@ -43,5 +43,16 @@ namespace Vanrise.GenericData.Web.Controllers
             DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
             return dataRecordTypeManager.AddDataTransformationDefinition(dataTransformationDefinition);
         }
+
+
+        [HttpGet]
+        [Route("GetDataTransformationDefinitions")]
+        public IEnumerable<DataTransformationDefinitionInfo> GetDataTransformationDefinitions(string filter = null)
+        {
+            DataTransformationDefinitionFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<DataTransformationDefinitionFilter>(filter) : null;
+            DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
+            return dataRecordTypeManager.GetDataTransformationDefinitions(deserializedFilter);
+
+        }
     }
 }

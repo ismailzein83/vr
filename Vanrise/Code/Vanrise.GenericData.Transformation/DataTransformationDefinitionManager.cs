@@ -16,6 +16,15 @@ namespace Vanrise.GenericData.Transformation
     {
     
         #region Public Methods
+
+
+        public IEnumerable<DataTransformationDefinitionInfo> GetDataTransformationDefinitions(DataTransformationDefinitionFilter filter)
+        {
+            var cachedDataTransformationDefinitions = GetCachedDataTransformationDefinitions();
+            return cachedDataTransformationDefinitions.MapRecords(DataTransformationDefinitionInfoMapper, null);
+
+        }
+
         public IDataRetrievalResult<DataTransformationDefinitionDetail> GetFilteredDataTransformationDefinitions(DataRetrievalInput<DataTransformationDefinitionQuery> input)
         {
             var allItems = GetCachedDataTransformationDefinitions();
@@ -148,6 +157,15 @@ namespace Vanrise.GenericData.Transformation
             dataTransformationDefinitionDetail.Entity = dataTransformationDefinition;
             return dataTransformationDefinitionDetail;
         }
+
+        private DataTransformationDefinitionInfo DataTransformationDefinitionInfoMapper(DataTransformationDefinition dataTransformationDefinition)
+        {
+            DataTransformationDefinitionInfo dataTransformationDefinitionInfo = new DataTransformationDefinitionInfo();
+            dataTransformationDefinitionInfo.DataTransformationDefinitionId = dataTransformationDefinition.DataTransformationDefinitionId;
+            dataTransformationDefinitionInfo.Name = dataTransformationDefinition.Name;
+            return dataTransformationDefinitionInfo;
+        }
+
         #endregion
     }
 }
