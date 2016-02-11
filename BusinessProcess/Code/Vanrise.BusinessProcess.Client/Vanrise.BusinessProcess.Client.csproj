@@ -56,6 +56,9 @@
     <Reference Include="Vanrise.Runtime">
       <HintPath>..\..\..\CDRAnalysis\Dependencies\VanriseFramework\Vanrise.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BPClient.cs" />

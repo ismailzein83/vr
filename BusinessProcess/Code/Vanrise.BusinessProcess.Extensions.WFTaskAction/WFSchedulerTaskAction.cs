@@ -22,9 +22,12 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
                 wfTaskActionArgument.ProcessInputArguments.MapExpressionValues(evaluatedExpressions);
 
             BPClient bpClient = new BPClient();
+            BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments;
+            inputArguments.UserId = task.OwnerId;
+
             bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
             {
-                InputArguments = wfTaskActionArgument.ProcessInputArguments
+                InputArguments = inputArguments
             });
 
             Console.WriteLine("WFSchedulerTaskAction finished...");
