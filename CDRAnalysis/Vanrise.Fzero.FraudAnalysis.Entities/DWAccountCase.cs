@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     public class DWAccountCase
     {
         public int CaseID { get; set; }
-        public CaseStatusEnum CaseStatus { get; set; }
+        public CaseStatus CaseStatus { get; set; }
         public NetType NetType { get; set; }
         public int StrategyID { get; set; }
         public bool IsDefault { get; set; }

@@ -15,11 +15,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public decimal? DurationInSeconds { get; set; }
         public int? CallClassId { get; set; }
         public CallType CallType { get; set; }
-        public CaseStatusEnum? CaseStatus { get; set; }
+        public CaseStatus? CaseStatus { get; set; }
         public NetType? NetworkType { get; set; }
         public PeriodEnum? Period { get; set; }
         public int? StrategyId { get; set; }
-        public StrategyKindEnum? StrategyKind { get; set; }
+        public StrategyKind? StrategyKind { get; set; }
         public SubscriberType? SubscriberType { get; set; }
         public SuspicionLevel? SuspicionLevel { get; set; }
         public DateTime ConnectDateTime { get; set; }

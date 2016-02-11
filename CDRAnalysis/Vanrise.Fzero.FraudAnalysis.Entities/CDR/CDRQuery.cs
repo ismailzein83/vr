@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class NormalCDRQuery
+    public class CDRQuery
     {
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }

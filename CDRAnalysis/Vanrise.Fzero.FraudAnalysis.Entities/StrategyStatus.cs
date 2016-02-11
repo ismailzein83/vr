@@ -3,7 +3,7 @@
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
 
-    public enum StrategyStatusEnum
+    public enum StrategyStatus
     {
         [Description("Disabled")]
         Disabled = 0,

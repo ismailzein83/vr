@@ -26,36 +26,5 @@ namespace Vanrise.Fzero.CDRImport.Entities
         RoamingCallForward = 26
     };
 
-    public enum NetType
-    {
-        [Description("Others")]
-        Others = 0,
-
-        [Description("Local")]
-        Local = 1,
-
-        [Description("International")]
-        International = 2
-    };
-
-
-    public enum SubscriberType
-    {
-        [Description("INROAMER")]
-        INROAMER = 0,
-
-        [Description("OUTROAMER")]
-        OUTROAMER = 1,
-
-        [Description("POSTPAID")]
-        POSTPAID = 2,
-
-        [Description("PREPAID")]
-        PREPAID = 3,
-
-        [Description("PREROAMER")]
-        PREROAMER = 4
-    };
-
 
 }

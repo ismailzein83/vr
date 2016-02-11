@@ -152,7 +152,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             if (!inputArgument.IncludeWhiteList)
             {
                 AccountStatusManager accountStatusManager = new AccountStatusManager();
-                var whiteListNumbers = accountStatusManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatusEnum> { CaseStatusEnum.ClosedWhiteList }, inputArgument.NumberPrefixes);
+                var whiteListNumbers = accountStatusManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList }, inputArgument.NumberPrefixes);
                 whiteListNumbersHashSet = new HashSet<string>(whiteListNumbers);
             }
 

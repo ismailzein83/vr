@@ -11,7 +11,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IAccountCaseHistoryDataManager : IDataManager
     {
-        bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatusEnum caseStatus, string reason);
+        bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus, string reason);
 
         void SavetoDB(List<AccountCaseHistory> records);
 

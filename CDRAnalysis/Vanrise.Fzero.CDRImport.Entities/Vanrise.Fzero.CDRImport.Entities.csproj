@@ -63,11 +63,13 @@
     <Compile Include="Batches\StagingCDRBatch.cs" />
     <Compile Include="CDRDatabaseInfo.cs" />
     <Compile Include="CDRDetail.cs" />
+    <Compile Include="CallType.cs" />
+    <Compile Include="NetType.cs" />
     <Compile Include="ImportedStagingCDRBatch.cs" />
     <Compile Include="NormalCDRQuery.cs" />
     <Compile Include="StagingCDR.cs" />
     <Compile Include="CDR.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="SubscriberType.cs" />
     <Compile Include="ImportedCDRBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

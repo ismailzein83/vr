@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class AccountInfoManager
     {
-        public void LoadAccountInfo(IEnumerable<CaseStatusEnum> caseStatuses, Action<AccountInfo> onBatchReady)
+        public void LoadAccountInfo(IEnumerable<CaseStatus> caseStatuses, Action<AccountInfo> onBatchReady)
         {
             IAccountInfoDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountInfoDataManager>();
              dataManager.LoadAccountInfo(caseStatuses, onBatchReady);

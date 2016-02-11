@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IStrategyExecutionItemDataManager:IDataManager
     {
-        bool LinkDetailToCase(string accountNumber, int caseID, CaseStatusEnum caseStatus);
+        bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus);
 
         BigResult<AccountSuspicionDetail> GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input);
 

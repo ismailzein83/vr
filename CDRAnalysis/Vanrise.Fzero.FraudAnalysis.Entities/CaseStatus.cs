@@ -3,7 +3,7 @@
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
 
-    public enum CaseStatusEnum
+    public enum CaseStatus
     {
         [Description("Open")]
         Open = 1,

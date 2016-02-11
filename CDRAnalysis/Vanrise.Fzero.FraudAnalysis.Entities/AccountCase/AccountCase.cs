@@ -10,7 +10,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int UserID { get; set; }
 
-        public CaseStatusEnum StatusID { get; set; }
+        public CaseStatus StatusID { get; set; }
 
         public DateTime StatusUpdatedTime { get; set; }
 

@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             dwAccountCase.AccountNumber = reader["AccountNumber"] as string;
             dwAccountCase.CaseGenerationTime = (DateTime)reader["CaseGenerationTime"];
             dwAccountCase.CaseID = (int)reader["CaseID"];
-            dwAccountCase.CaseStatus = (CaseStatusEnum)reader["CaseStatus"];
+            dwAccountCase.CaseStatus = (CaseStatus)reader["CaseStatus"];
             dwAccountCase.CaseUser = GetReaderValue<int?>(reader, "CaseUser");
             dwAccountCase.IsDefault = (bool)reader["IsDefault"];
             dwAccountCase.NetType = (NetType)reader["NetType"];

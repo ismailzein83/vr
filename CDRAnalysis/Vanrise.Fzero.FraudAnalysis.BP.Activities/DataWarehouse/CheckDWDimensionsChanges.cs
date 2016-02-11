@@ -249,7 +249,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing call types");
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing case statuses");
-            ToBeInsertedCaseStatuses = GetToBeInserted<CaseStatusEnum>(inputArgument.CaseStatuses);
+            ToBeInsertedCaseStatuses = GetToBeInserted<CaseStatus>(inputArgument.CaseStatuses);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing case statuses");
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing periods");
@@ -257,7 +257,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing periods");
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing strategy kinds");
-            ToBeInsertedStrategyKinds = GetToBeInserted<StrategyKindEnum>(inputArgument.StrategyKinds);
+            ToBeInsertedStrategyKinds = GetToBeInserted<StrategyKind>(inputArgument.StrategyKinds);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing strategy kinds");
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing subscriber types");

@@ -224,7 +224,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                             strategy = strategies.Where(x => x.Id == accountCase.StrategyID).First();
 
                                             dwFact.StrategyId = accountCase.StrategyID;
-                                            dwFact.StrategyKind = (strategy.IsDefault ? StrategyKindEnum.SystemBuiltIn : StrategyKindEnum.UserDefined);
+                                            dwFact.StrategyKind = (strategy.IsDefault ? StrategyKind.SystemBuiltIn : StrategyKind.UserDefined);
                                             dwFact.StrategyUserId = strategy.UserId;
                                             dwFact.CaseId = accountCase.CaseID;
                                             dwFact.CaseStatus = accountCase.CaseStatus;

@@ -16,9 +16,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public IEnumerable<PeriodEnum> PeriodIds { get; set; }
 
-        public IEnumerable<StrategyKindEnum> Kinds { get; set; }
+        public IEnumerable<StrategyKind> Kinds { get; set; }
 
-        public IEnumerable<StrategyStatusEnum> Statuses { get; set; }
+        public IEnumerable<StrategyStatus> Statuses { get; set; }
 
         public DateTime? FromDate { get; set; }
 

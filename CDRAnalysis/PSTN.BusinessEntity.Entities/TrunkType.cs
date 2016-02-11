@@ -14,11 +14,5 @@ namespace PSTN.BusinessEntity.Entities
         Mobile = 3,
         Wireless = 4
     }
-
-    public enum TrunkDirection {
-        In = 0,
-        Out = 1,
-        InOut = 2,
-        Unknown = 3
-    }
+  
 }

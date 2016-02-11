@@ -67,7 +67,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 {
                     DWStrategy dwStrategy = new DWStrategy();
                     dwStrategy.Id = i.Id;
-                    dwStrategy.Kind = (i.IsDefault ? Vanrise.Common.Utilities.GetEnumDescription(StrategyKindEnum.SystemBuiltIn) : Vanrise.Common.Utilities.GetEnumDescription(StrategyKindEnum.UserDefined));
+                    dwStrategy.Kind = (i.IsDefault ? Vanrise.Common.Utilities.GetEnumDescription(StrategyKind.SystemBuiltIn) : Vanrise.Common.Utilities.GetEnumDescription(StrategyKind.UserDefined));
                     dwStrategy.Name = i.Name;
                     dwStrategy.Type = Vanrise.Common.Utilities.GetEnumDescription(((PeriodEnum)i.PeriodId));
 

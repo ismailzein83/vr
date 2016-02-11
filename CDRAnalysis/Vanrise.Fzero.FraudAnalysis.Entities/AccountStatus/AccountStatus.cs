@@ -7,7 +7,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
     {
         public string AccountNumber { get; set; }
 
-        public CaseStatusEnum Status { get; set; }
+        public CaseStatus Status { get; set; }
 
     }
 }

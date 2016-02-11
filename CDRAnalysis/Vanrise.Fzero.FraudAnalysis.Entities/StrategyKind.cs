@@ -2,7 +2,7 @@
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public enum StrategyKindEnum
+    public enum StrategyKind
     {
         [Description("User Defined")]
         UserDefined = 0,
