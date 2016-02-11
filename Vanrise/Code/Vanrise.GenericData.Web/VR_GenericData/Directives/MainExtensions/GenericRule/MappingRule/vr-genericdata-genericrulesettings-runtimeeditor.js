@@ -49,15 +49,18 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
 
                 api.load = function (payload) {
 
-                    var fieldType;
-                    var fieldTitle;
+                    var genericRuleDefinition;
+                    var settings;
 
                     if (payload != undefined) {
-                        fieldType = payload.fieldType;
-                        fieldTitle = payload.fieldTitle;
+                        genericRuleDefinition = payload.genericRuleDefinition,
+                        settings = payload.settings;
                     }
 
-                    if (fieldType != undefined) {
+                    if (genericRuleDefinition.SettingsDefinition != null)
+                    {
+                        var fieldType = genericRuleDefinition.SettingsDefinition.FieldType;
+                        var fieldTitle = genericRuleDefinition.SettingsDefinition.FieldName;
 
                         var promises = [];
 
@@ -72,7 +75,8 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
                             fieldTypeOnReadyPromiseDeferred.promise.then(function () {
                                 var payload = {
                                     fieldTitle: fieldTitle,
-                                    fieldType: fieldType
+                                    fieldType: fieldType,
+                                    fieldValue: (settings != undefined) ? settings.Value : undefined
                                 }
 
                                 VRUIUtilsService.callDirectiveLoad(fieldTypeDirectiveAPI, payload, loadFieldTypeConfigDirective);

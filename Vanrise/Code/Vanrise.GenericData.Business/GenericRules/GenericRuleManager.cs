@@ -15,7 +15,7 @@ namespace Vanrise.GenericData.Business
         public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
         {
             IEnumerable<T> allRules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == input.Query.RuleDefinitionId);
-            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, GenericRuleDetailMapper));
+            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, MapToDetails));
         }
 
         public GenericRule GetGenericRule(int ruleId)
@@ -99,13 +99,6 @@ namespace Vanrise.GenericData.Business
         public Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail> UpdateGenericRule(GenericRule rule)
         {
             return this.UpdateRule(rule as T) as Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail>;
-        }
-
-        private GenericRuleDetail GenericRuleDetailMapper(GenericRule genericRule)
-        {
-            GenericRuleDetail ruleDetail = new GenericRuleDetail();
-            ruleDetail.Entity = genericRule;
-            return ruleDetail;
         }
 
         protected override GenericRuleDetail MapToDetails(T rule)

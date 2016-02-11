@@ -196,8 +196,8 @@
                 
                 settingsDirectiveReadyPromiseDeferred.promise.then(function () {
                     var payload = {
-                        fieldTitle: genericRuleDefintion.SettingsDefinition.FieldName,
-                        fieldType: genericRuleDefintion.SettingsDefinition.FieldType
+                        genericRuleDefinition: genericRuleDefintion,
+                        settings: (genericRuleEntity != undefined && genericRuleEntity.Settings != null) ? genericRuleEntity.Settings : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, loadSettingsDirectiveReadyPromiseDeferred);
                     loadSettingsSectionPromiseDeferred.resolve();
