@@ -17,7 +17,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<List<ExecuteStrategyExecutionItem>> ExecuteStrategyExecutionItems { get; set; }
 
-
         [RequiredArgument]
         public InArgument<long> NumberofSubscribers { get; set; }
 
@@ -26,24 +25,22 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InArgument<long> NumberofCDRs { get; set; }
 
 
-        [RequiredArgument]
-        public InArgument<long> NumberofCases { get; set; }
-
-
-        [RequiredArgument]
-        public InArgument<int> ExecutionDuration { get; set; }
-
         #endregion
 
         protected override void Execute(CodeActivityContext context)
         {
             StrategyExecutionManager strategyExecutionManager = new StrategyExecutionManager();
-
+            StrategyExecution strategyExecution = new StrategyExecution();
+            int executionDuration = 0;
             foreach (ExecuteStrategyExecutionItem item in context.GetValue(ExecuteStrategyExecutionItems))
             {
-               strategyExecutionManager.CloseStrategyExecution(item.StrategyExecutionId, context.GetValue( NumberofSubscribers), context.GetValue( NumberofCDRs), context.GetValue( NumberofCases), context.GetValue( ExecutionDuration));
+                strategyExecution = strategyExecutionManager.GetStrategyExecution(item.StrategyExecutionId);
+                if (strategyExecution != null)
+                    executionDuration = Convert.ToInt32(DateTime.Now.Subtract(strategyExecution.ExecutionDate).TotalSeconds);
+
+                strategyExecutionManager.CloseStrategyExecution(item.StrategyExecutionId, context.GetValue(NumberofSubscribers), context.GetValue(NumberofCDRs), executionDuration);
             }
-            
+
         }
     }
 }

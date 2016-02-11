@@ -27,6 +27,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> ToDate { get; set; }
 
+        [RequiredArgument]
+        public InArgument<int> UserId { get; set; }
+
 
 
         #endregion
@@ -46,7 +49,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     ContextExtensions.WriteTrackingMessage(context, LogEntryType.Warning, "Strategy named: {0} was not loaded because it is disabled", strategy.Name);
                 else
                 {
-                    StrategyExecution strategyExecution = new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID, Status= SuspicionOccuranceStatus.Open };
+                    StrategyExecution strategyExecution = new StrategyExecution() { FromDate = this.FromDate.Get(context), ToDate = this.ToDate.Get(context), PeriodID = strategy.PeriodId, StrategyID = strategyID, ProcessID = ContextExtensions.GetSharedInstanceData(context).InstanceInfo.ProcessInstanceID, Status = SuspicionOccuranceStatus.Open, ExecutedBy = this.UserId.Get(context), ExecutionDate=DateTime.Now };
 
                     strategyExecutionManager.ExecuteStrategy(strategyExecution);
 

@@ -85,7 +85,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             item.CancelledBy = GetReaderValue<int?>(reader, "CancelledBy");
             item.NumberofSubscribers = GetReaderValue<int?>(reader, "NumberofSubscribers");
             item.NumberofCDRs = GetReaderValue<int?>(reader, "NumberofCDRs");
-            item.NumberofCases = GetReaderValue<int?>(reader, "NumberofCases");
             item.ExecutionDuration = GetReaderValue<int?>(reader, "ExecutionDuration");
             item.Status = GetReaderValue<SuspicionOccuranceStatus>(reader, "Status");
 
@@ -101,7 +100,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 strategyExecutionObject.FromDate,
                 strategyExecutionObject.ToDate,
                 strategyExecutionObject.PeriodID,
-                DateTime.Now,
+                strategyExecutionObject.ExecutionDate,
                 strategyExecutionObject.ExecutedBy,
                 strategyExecutionObject.Status
             );
@@ -165,9 +164,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public bool CloseStrategyExecution(long strategyExecutionId, long numberofSubscribers, long numberofCDRs, long numberofCases, long executionDuration)
+        public bool CloseStrategyExecution(long strategyExecutionId, long numberofSubscribers, long numberofCDRs, long executionDuration)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Close", strategyExecutionId, numberofSubscribers, numberofCDRs, numberofCases, executionDuration);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Close", strategyExecutionId, numberofSubscribers, numberofCDRs,  executionDuration);
 
             return (recordsAffected > 0);
         }

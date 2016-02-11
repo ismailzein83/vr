@@ -93,7 +93,7 @@
     <Compile Include="DWTime.cs" />
     <Compile Include="DWDimension.cs" />
     <Compile Include="DWFact.cs" />
-    <Compile Include="StrategyExecutionQuery.cs" />
+    <Compile Include="StrategyExecution\StrategyExecutionQuery.cs" />
     <Compile Include="RelatedNumber.cs" />
     <Compile Include="AccountCaseLogQuery.cs" />
     <Compile Include="RelatedNumberQuery.cs" />

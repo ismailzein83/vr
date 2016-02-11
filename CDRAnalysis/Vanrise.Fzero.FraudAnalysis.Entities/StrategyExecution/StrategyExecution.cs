@@ -32,9 +32,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int? NumberofCDRs { get; set; }
 
-        public int? NumberofCases { get; set; }
-
-        public int? ExecutionDuration { get; set; }
+        public float? ExecutionDuration { get; set; }
 
         public SuspicionOccuranceStatus Status { get; set; }
 

@@ -106,6 +106,11 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
         </InArgument>
       </vffba1:CreateExecuteStrategyExecutionItems.ToDate>
+      <vffba1:CreateExecuteStrategyExecutionItems.UserId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.UserId</mca:CSharpValue>
+        </InArgument>
+      </vffba1:CreateExecuteStrategyExecutionItems.UserId>
     </vffba1:CreateExecuteStrategyExecutionItems>
     <If sap2010:WorkflowViewState.IdRef="If_3">
       <If.Condition>
@@ -329,7 +334,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <vffba1:CloseStrategyExecutions ExecutionDuration="1" sap2010:WorkflowViewState.IdRef="CloseStrategyExecutions_2">
+    <vffba1:CloseStrategyExecutions sap2010:WorkflowViewState.IdRef="CloseStrategyExecutions_4">
       <vffba1:CloseStrategyExecutions.ExecuteStrategyExecutionItems>
         <InArgument x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">
           <mca:CSharpValue x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">executeStrategiesExecutionItems</mca:CSharpValue>
@@ -340,18 +345,13 @@
           <mca:CSharpValue x:TypeArguments="x:Int64">totalProcessedCDRs</mca:CSharpValue>
         </InArgument>
       </vffba1:CloseStrategyExecutions.NumberofCDRs>
-      <vffba1:CloseStrategyExecutions.NumberofCases>
-        <InArgument x:TypeArguments="x:Int64">
-          <mca:CSharpValue x:TypeArguments="x:Int64">totalNumberOfSuspicions</mca:CSharpValue>
-        </InArgument>
-      </vffba1:CloseStrategyExecutions.NumberofCases>
       <vffba1:CloseStrategyExecutions.NumberofSubscribers>
         <InArgument x:TypeArguments="x:Int64">
           <mca:CSharpValue x:TypeArguments="x:Int64">totalNumberOfSubscribers</mca:CSharpValue>
         </InArgument>
       </vffba1:CloseStrategyExecutions.NumberofSubscribers>
     </vffba1:CloseStrategyExecutions>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbD1LA+MCDgIBAVMFVxEDAcACWAVtMgMBowJuBcsCCgIBIMwCBeECJgIBAlUJVZUBAwHBAmULZWMDAbkCWwtblAEDAbICYAtgWQMBqwJqC2pXAwGkAnELcakBAgEhdQnAAhQCATHDAgnJAiQCASjZAgvZAl8CARnPAgvPAowBAgES1AIL1AJaAgELzAI3zAI6AgEK3gIL3gJgAgEDeQt/JgMBmgKAAQu/AhACATLGAg/GAoMBAgEqwwJkwwKBAQIBKXwRfG8DAZsCgwERgwGPAQIBM4cBD4sCIQIBWY4CD70CGgIBO4oBFYoBcgMBkgKRAROJAh4CAVqSAhG1Aj4CAUa2AhG8AiwCATyVARWbATADAYcCnAEVrgEmAwHxAa8BFYgCGgIBW6ECF6ECqQECAVCVAhecAiACAUe5Ahe5AtICAgE9mAEbmAGjAQMBiAKfARumASADAf0BqwEbqwGOAQMB8wGcAYYBnAGMAQMB8gGyARuyAb0BAgFctgEZvAEtAwHmAb8BGYYCJAIBZrkBH7kB3wEDAecBwwEbzgEkAwHPAc8BG9oBJAMBuAHbARvmASQDAaEB5wEb8gEkAwGKAfMBG/4BJAIBc/8BG4UCNgIBZ8sBIcsB2QEDAdsBxgEhxgGzAQMB0AHXASHXAaUBAwHEAdIBIdIBeAMBuQHjASHjAbEBAwGtAd4BId4BfgMBogHvASHvAa8BAwGWAeoBIeoBfQMBiwH7ASH7AX0CAX/2ASH2AYEBAgF0ggIhggLiBAIBaA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDxLA+MCDgIBAVMFVxEDAb8CWAVyMgMBmwJzBdACCgIBGNECBeECJgIBAlUJVZUBAwHAAmULZWMDAbgCWwtblAEDAbECYAtgWQMBqgJqC2pXAwGjAm8Lb1QDAZwCdgt2qQECARl6CcUCFAIBKcgCCc4CJAIBINQCC9QCjAECARHZAgvZAloCAQreAgveAmACAQN+C4QBJgMBkgKFAQvEAhACASrLAg/LAoMBAgEiyAJkyAKBAQIBIYEBEYEBbwMBkwKIARGIAY8BAgErjAEPkAIhAgFRkwIPwgIaAgEzjwEVjwFyAwGKApYBE44CHgIBUpcCEboCPgIBPrsCEcECLAIBNJoBFaABMAMB/wGhARWzASYDAekBtAEVjQIaAgFTpgIXpgKpAQIBSJoCF6ECIAIBP74CF74C0gICATWdARudAaMBAwGAAqQBG6sBIAMB9QGwARuwAY4BAwHrAaEBhgGhAYwBAwHqAbcBG7cBvQECAVS7ARnBAS0DAd4BxAEZiwIkAgFevgEfvgHfAQMB3wHIARvTASQDAccB1AEb3wEkAwGwAeABG+sBJAMBmQHsARv3ASQDAYIB+AEbgwIkAgFrhAIbigI2AgFf0AEh0AHZAQMB0wHLASHLAbMBAwHIAdwBIdwBpQEDAbwB1wEh1wF4AwGxAegBIegBsQEDAaUB4wEh4wF+AwGaAfQBIfQBrwEDAY4B7wEh7wF9AwGDAYACIYACfQIBd/sBIfsBgQECAWyHAiGHAuIEAgFg</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -427,7 +427,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1035,1690" />
-      <sap2010:ViewStateData Id="CloseStrategyExecutions_2" sap:VirtualizedContainerService.HintSize="1035,22" />
+      <sap2010:ViewStateData Id="CloseStrategyExecutions_4" sap:VirtualizedContainerService.HintSize="1035,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1057,2040">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

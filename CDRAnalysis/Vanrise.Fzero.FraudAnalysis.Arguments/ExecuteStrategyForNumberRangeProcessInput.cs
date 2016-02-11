@@ -35,5 +35,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
         public int StrategyId { get; set; }
 
         public long StrategyExecutionId { get; set; }
+
     }
 }
