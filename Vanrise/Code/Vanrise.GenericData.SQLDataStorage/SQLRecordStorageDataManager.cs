@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.SQLDataStorage
     {
         SQLDataStoreSettings _dataStoreSettings;
         SQLDataRecordStorageSettings _dataRecordStorageSettings;
-
+        int _dataRecordStorageId;
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings)
             : base(dataStoreSettings.ConnectionString, false)
         {
@@ -30,8 +30,15 @@ namespace Vanrise.GenericData.SQLDataStorage
             return base.InitializeStreamForBulkInsert();
         }
 
+        IBulkInsertWriter _bulkInsertWriter;
+
         public void WriteRecordToStream(object record, object dbApplyStream)
         {
+            if(_bulkInsertWriter == null)
+            {
+                DynamicTypeGenerator dynamicTypeGenerator = new DynamicTypeGenerator();
+                _bulkInsertWriter = dynamicTypeGenerator.GetBulkInsertWriter(_dataRecordStorageId, _dataRecordStorageSettings);
+            }
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             
             throw new NotImplementedException();
