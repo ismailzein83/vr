@@ -15,7 +15,18 @@ namespace Vanrise.GenericData.Business
         public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
         {
             IEnumerable<T> allRules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == input.Query.RuleDefinitionId);
-            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, MapToDetails));
+            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, (rule) => MapToDetails(rule)));
+        }
+
+        IEnumerable<GenericRuleDefinitionCriteriaField> GetRuleDefinitionCriteriaFields(int ruleDefinitionId)
+        {
+            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
+            if (ruleDefinition == null)
+                throw new ArgumentNullException("ruleDefinition");
+            else if (ruleDefinition.CriteriaDefinition == null)
+                throw new ArgumentNullException("ruleDefinition.CriteriaDefinition");
+            return ruleDefinition.CriteriaDefinition.Fields;
         }
 
         public GenericRule GetGenericRule(int ruleId)
@@ -86,11 +97,6 @@ namespace Vanrise.GenericData.Business
             return target.TargetFieldValues.TryGetValue(fieldName, out value);
         }
 
-        private IEnumerable<GenericRuleDefinitionCriteriaField> GetRuleDefinitionCriteriaFields(int ruleDefinitionId)
-        {
-            throw new NotImplementedException();
-        }
-
         public Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
         {
             return this.AddRule(rule as T) as Vanrise.Entities.InsertOperationOutput<GenericRuleDetail>;
@@ -103,8 +109,24 @@ namespace Vanrise.GenericData.Business
 
         protected override GenericRuleDetail MapToDetails(T rule)
         {
+            if (rule.Criteria == null)
+                throw new ArgumentNullException("rule.Criteria");
+            if (rule.Criteria.FieldsValues == null)
+                throw new ArgumentNullException("rule.Criteria.FieldsValues");
+
+            var criteriaFields = GetRuleDefinitionCriteriaFields(rule.DefinitionId);
+            List<string> descriptions = new List<string>();
+
+            foreach (var criteriaField in criteriaFields)
+            {
+                GenericRuleCriteriaFieldValues fieldValues;
+                rule.Criteria.FieldsValues.TryGetValue(criteriaField.FieldName, out fieldValues);
+                descriptions.Add((fieldValues != null) ? fieldValues.GetDescription() : null);
+            }
+
             return new GenericRuleDetail(){
-                Entity = rule
+                Entity = rule,
+                FieldValueDescriptions = descriptions
             };
         }
     }

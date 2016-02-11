@@ -5,4 +5,5 @@
              menuactions="gridMenuActions"
              idfield="Entity.RuleId">
     <vr-datagridcolumn headertext="'Rule Id'" type="'Text'" field="'Entity.RuleId'"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="field in ctrl.criteriaFields" headertext="field.Title" type="'Text'" field="'FieldValueDescriptions[' + $index + ']'"></vr-datagridcolumn>
 </vr-datagrid>  

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleGridDirective.$inject = ['VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRule', 'VRNotificationService'];
+    GenericRuleGridDirective.$inject = ['VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRule', 'UtilsService', 'VRNotificationService'];
 
-    function GenericRuleGridDirective(VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRule, VRNotificationService) {
+    function GenericRuleGridDirective(VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRule, UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -29,6 +29,7 @@
             var gridAPI;
 
             function initializeController() {
+                ctrl.criteriaFields = [];
                 $scope.genericRules = [];
 
                 $scope.onGridReady = function (api) {
@@ -54,7 +55,29 @@
                 var directiveAPI = {};
 
                 directiveAPI.loadGrid = function (query) {
-                    return gridAPI.retrieveData(query);
+                    var promises = [];
+
+                    var getDefinitionPromise = VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(query.RuleDefinitionId);
+                    promises.push(getDefinitionPromise);
+
+                    var retrieveDataDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(retrieveDataDeferred.promise);
+
+                    getDefinitionPromise.then(function (response) {
+                        if (response != null) {
+                            ctrl.criteriaFields.length = 0;
+                            for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
+                                ctrl.criteriaFields.push(response.CriteriaDefinition.Fields[i]);
+                            }
+
+                            gridAPI.retrieveData(query).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
+                        }
+                        else {
+                            retrieveDataDeferred.reject();
+                        }
+                    });
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 directiveAPI.onGenericRuleAdded = function (addedGenericRule) {

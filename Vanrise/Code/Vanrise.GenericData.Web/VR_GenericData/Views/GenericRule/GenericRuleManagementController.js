@@ -15,7 +15,7 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-          
+
             if (parameters != null) {
                 ruleDefinitionId = parameters.ruleDefinitionId;
             }
