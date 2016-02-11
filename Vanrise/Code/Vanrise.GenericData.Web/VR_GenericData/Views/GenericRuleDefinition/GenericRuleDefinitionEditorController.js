@@ -96,7 +96,6 @@
             function getGenericRuleDefinitionView() {
                 VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinitionView(genericRuleDefinitionId).then(function (response) {
                     viewEntity = response;
-                    console.log(viewEntity);
                 });
             }
         }

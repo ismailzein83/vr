@@ -25,9 +25,6 @@
             if (parameters != undefined) {
                 criteriaFieldName = parameters.GenericRuleDefinitionCriteriaFieldName;
                 criteriaFields = UtilsService.cloneObject(parameters.GenericRuleDefinitionCriteriaFields, true);
-                for (var i = 0; i < criteriaFields.length; i++) {
-                    criteriaFields[i].FieldName = criteriaFields[i].FieldName.toUpperCase();
-                }
             }
 
             isEditMode = (criteriaFieldName != undefined);
@@ -53,7 +50,7 @@
             $scope.validateCriteriaField = function () {
                 var fieldName = ($scope.fieldName != undefined) ? $scope.fieldName.toUpperCase() : null;
 
-                if (isEditMode && (fieldName == criteriaFieldEntity.FieldName))
+                if (isEditMode && (fieldName == criteriaFieldName))
                     return null;
                 else if (UtilsService.getItemIndexByVal(criteriaFields, fieldName, 'FieldName') > -1) {
                     return 'Another criteria field with the same name already exists';
@@ -70,9 +67,6 @@
                     loadAllControls().finally(function () {
                         genericRuleDefinitionEntity = undefined;
                     });
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
                 });
             }
             else {
@@ -107,6 +101,15 @@
                 $scope.fieldName = criteriaFieldEntity.FieldName;
                 $scope.fieldTitle = criteriaFieldEntity.Title;
                 $scope.selectedBehaviorType = UtilsService.getItemByVal($scope.behaviorTypes, criteriaFieldEntity.RuleStructureBehaviorType, 'value');
+
+                prepareGlobalVarsForValidation();
+
+                function prepareGlobalVarsForValidation() {
+                    criteriaFieldName = criteriaFieldName.toUpperCase();
+                    for (var i = 0; i < criteriaFields.length; i++) {
+                        criteriaFields[i].FieldName = criteriaFields[i].FieldName.toUpperCase();
+                    }
+                }
             }
             function loadDataRecordFieldTypeSelective() {
                 var dataRecordFieldTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
