@@ -29,8 +29,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.CancelStrategyExecutionProcessInput
                 {
-                    StrategyExecutionId = strategyExecutionId,
-                    UserId = 1
+                    StrategyExecutionId = strategyExecutionId
                 }
             };
             bpClient.CreateNewProcess(input);

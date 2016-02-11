@@ -8,8 +8,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
     {
         public long StrategyExecutionId { get; set; }
 
-        public int UserId { get; set; }
-
         public override string GetTitle()
         {
             return String.Format("Cancel Strategy Execution Id: {0}", StrategyExecutionId);
