@@ -50,6 +50,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             _columnMapper.Add("StatusDescription", "Status");
         }
 
+        public StrategyExecution GetStrategyExecution(long strategyExecutionId)
+        {
+            return GetItemSP("FraudAnalysis.sp_StrategyExecution_GetByID", StrategyExecutionMapper, strategyExecutionId);
+        }
+
         public BigResult<StrategyExecution> GetFilteredStrategyExecutions(Vanrise.Entities.DataRetrievalInput<StrategyExecutionQuery> input)
         {
             string strategyIDs = (input.Query.StrategyIds != null && input.Query.StrategyIds.Count > 0) ? string.Join(",", input.Query.StrategyIds) : null;

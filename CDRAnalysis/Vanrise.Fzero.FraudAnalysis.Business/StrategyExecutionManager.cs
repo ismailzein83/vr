@@ -77,5 +77,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return detailedBigResultItems;
         }
 
+        public StrategyExecution GetStrategyExecution(long strategyExecutionId)
+        {
+            IStrategyExecutionDataManager strategyExecutionDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
+            return strategyExecutionDataManager.GetStrategyExecution(strategyExecutionId);
+        }
+
     }
 }

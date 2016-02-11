@@ -118,6 +118,7 @@
     <Compile Include="DataWarehouse\GetDWTimes.cs" />
     <Compile Include="DataWarehouse\GetDWStrategies.cs" />
     <Compile Include="GetNumberPrefixes.cs" />
+    <Compile Include="GetStrategyExecutionStatus.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionItems.cs" />
     <Compile Include="GetAccountNumbersByIMEI.cs" />

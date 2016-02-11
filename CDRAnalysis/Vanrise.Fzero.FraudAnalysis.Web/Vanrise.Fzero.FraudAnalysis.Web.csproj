@@ -250,8 +250,6 @@
     <Content Include="FraudAnalysis\Services\APIServices\StrategyAPIService.js" />
     <Content Include="FraudAnalysis\Views\NumberPrefix\NumberPrefixManagement.html" />
     <Content Include="FraudAnalysis\Views\NumberPrefix\NumberPrefixManagementController.js" />
-    <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionEditor.html" />
-    <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionEditorController.js" />
     <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionManagement.html" />
     <Content Include="FraudAnalysis\Views\StrategyExecution\StrategyExecutionManagementController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\Includes\CaseOccuranceGrid.html" />

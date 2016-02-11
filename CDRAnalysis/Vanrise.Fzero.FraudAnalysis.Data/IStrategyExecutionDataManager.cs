@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         bool CancelStrategyExecution(long strategyExecutionId, int userId);
 
-        
+        StrategyExecution GetStrategyExecution(long strategyExecutionId);
 
     }
 }
