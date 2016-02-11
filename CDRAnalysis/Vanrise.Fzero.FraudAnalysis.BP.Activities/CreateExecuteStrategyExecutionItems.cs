@@ -10,7 +10,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
 
-    public class CreateStrategiesExecutionItems : CodeActivity
+    public class CreateExecuteStrategyExecutionItems : CodeActivity
     {
         #region Arguments
 

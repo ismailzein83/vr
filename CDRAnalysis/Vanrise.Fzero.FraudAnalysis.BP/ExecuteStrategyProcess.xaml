@@ -85,28 +85,28 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Start Executing Strategies Count: {0}",Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <vffba1:CreateStrategiesExecutionItems sap2010:WorkflowViewState.IdRef="CreateStrategiesExecutionItems_1">
-      <vffba1:CreateStrategiesExecutionItems.FromDate>
+    <vffba1:CreateExecuteStrategyExecutionItems sap2010:WorkflowViewState.IdRef="CreateExecuteStrategyExecutionItems_1">
+      <vffba1:CreateExecuteStrategyExecutionItems.FromDate>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
         </InArgument>
-      </vffba1:CreateStrategiesExecutionItems.FromDate>
-      <vffba1:CreateStrategiesExecutionItems.StrategyExecutionItems>
+      </vffba1:CreateExecuteStrategyExecutionItems.FromDate>
+      <vffba1:CreateExecuteStrategyExecutionItems.StrategyExecutionItems>
         <OutArgument x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">
           <mca:CSharpReference x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">strategiesExecutionItems</mca:CSharpReference>
         </OutArgument>
-      </vffba1:CreateStrategiesExecutionItems.StrategyExecutionItems>
-      <vffba1:CreateStrategiesExecutionItems.StrategyIds>
+      </vffba1:CreateExecuteStrategyExecutionItems.StrategyExecutionItems>
+      <vffba1:CreateExecuteStrategyExecutionItems.StrategyIds>
         <InArgument x:TypeArguments="scg:List(x:Int32)">
           <mca:CSharpValue x:TypeArguments="scg:List(x:Int32)">Input.StrategyIds</mca:CSharpValue>
         </InArgument>
-      </vffba1:CreateStrategiesExecutionItems.StrategyIds>
-      <vffba1:CreateStrategiesExecutionItems.ToDate>
+      </vffba1:CreateExecuteStrategyExecutionItems.StrategyIds>
+      <vffba1:CreateExecuteStrategyExecutionItems.ToDate>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
         </InArgument>
-      </vffba1:CreateStrategiesExecutionItems.ToDate>
-    </vffba1:CreateStrategiesExecutionItems>
+      </vffba1:CreateExecuteStrategyExecutionItems.ToDate>
+    </vffba1:CreateExecuteStrategyExecutionItems>
     <If sap2010:WorkflowViewState.IdRef="If_3">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
@@ -333,7 +333,7 @@
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1035,62" />
-      <sap2010:ViewStateData Id="CreateStrategiesExecutionItems_1" sap:VirtualizedContainerService.HintSize="1035,22" />
+      <sap2010:ViewStateData Id="CreateExecuteStrategyExecutionItems_1" sap:VirtualizedContainerService.HintSize="1035,22" />
       <sap2010:ViewStateData Id="GetNumberPrefixes_1" sap:VirtualizedContainerService.HintSize="788,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="489,22" />

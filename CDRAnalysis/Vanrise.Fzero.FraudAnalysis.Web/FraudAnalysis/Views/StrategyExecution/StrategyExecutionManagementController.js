@@ -1,10 +1,10 @@
 ﻿"use strict";
 
 StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService',
-    'BusinessProcessAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum'];
+    'BusinessProcessAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService'];
 
 function StrategyExecutionManagementController($scope, VRUIUtilsService, StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService,
-    UtilsService, VRValidationService, BusinessProcessAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum) {
+    UtilsService, VRValidationService, BusinessProcessAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum, WhS_BP_CreateProcessResultEnum, BusinessProcessService) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -145,13 +145,6 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
             });
     }
 
-    function defineMenuActions(item) {
-        $scope.gridMenuActions = [{
-            name: "Cancel",
-            clicked: cancelStrategyExecution
-        }];
-    }
-
     function defineMenuActions() {
 
         var menuActionsWithCancel = [{
@@ -203,9 +196,8 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
         var createProcessInput = buildInstanceObjFromScope(gridObject.Entity.ID);
 
         BusinessProcessAPIService.CreateNewProcess(createProcessInput).then(function (response) {
-            if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
-                if ($scope.onProcessInputCreated != undefined)
-                    $scope.onProcessInputCreated(response.ProcessInstanceId);
+            if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
             }
         }).catch(function (error) {
             VRNotificationService.notifyException(error);
