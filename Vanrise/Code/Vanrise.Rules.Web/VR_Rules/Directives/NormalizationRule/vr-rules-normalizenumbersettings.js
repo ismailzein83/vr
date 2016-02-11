@@ -76,26 +76,22 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
             var api = {};
 
             api.load = function (payload) {
-                return loadFiltersSection(payload);
-            };
 
-            api.getData = function () {
-                return {
+                var settings;
 
-                    Actions: (ctrl.datasource.length > 0) ? getActions() : null
-                };
-            }
-
-            function loadFiltersSection(payload) {
+                if (payload != undefined)
+                {
+                    settings = payload.settings;
+                }
 
                 var promises = [];
 
                 var filterItems;
-                if (payload != undefined && payload.Actions !=undefined) {
+                if (settings != undefined && settings.Actions != undefined) {
                     filterItems = [];
-                    for (var i = 0; i < payload.Actions.length; i++) {
+                    for (var i = 0; i < settings.Actions.length; i++) {
                         var filterItem = {
-                            payload: payload.Actions[i],
+                            payload: settings.Actions[i],
                             readyPromiseDeferred: UtilsService.createPromiseDeferred(),
                             loadPromiseDeferred: UtilsService.createPromiseDeferred()
                         };
@@ -108,7 +104,7 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                     angular.forEach(response, function (item) {
                         ctrl.templates.push(item);
                     });
-                   
+
                     if (filterItems != undefined) {
                         for (var i = 0; i < filterItems.length; i++) {
                             addFilterItemToGrid(filterItems[i]);
@@ -142,12 +138,17 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                         });
 
                     ctrl.datasource.push(dataItem);
-                 
+
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
+            api.getData = function () {
+                return {
+                    Actions: (ctrl.datasource.length > 0) ? getActions() : null
+                };
+            }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
