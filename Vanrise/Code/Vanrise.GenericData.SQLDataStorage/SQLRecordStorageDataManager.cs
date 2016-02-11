@@ -40,17 +40,19 @@ namespace Vanrise.GenericData.SQLDataStorage
                 _bulkInsertWriter = dynamicTypeGenerator.GetBulkInsertWriter(_dataRecordStorageId, _dataRecordStorageSettings);
             }
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            
-            throw new NotImplementedException();
+            _bulkInsertWriter.WriteRecordToStream(record, streamForBulkInsert);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
+            string tableName = this._dataRecordStorageSettings.TableName;
+            if (!String.IsNullOrEmpty(this._dataRecordStorageSettings.TableSchema))
+                tableName = String.Format("{0}.{1}", this._dataRecordStorageSettings.TableSchema, this._dataRecordStorageSettings.TableName);
             return new StreamBulkInsertInfo
             {
-                TableName = this._dataRecordStorageSettings.TableName,
+                TableName = tableName,
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,

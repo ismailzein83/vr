@@ -52,7 +52,7 @@ namespace Vanrise.GenericData.QueueActivators
             var dbApplyStream = dataManager.InitialiazeStreamForDBApply();
             foreach(var record in batchRecords)
             {
-                dataManager.WriteRecordToStream(record, dbApplyStream);
+                dataManager.WriteRecordToStream(record as Object, dbApplyStream);
             }
             var streamReadyToApply = dataManager.FinishDBApplyStream(dbApplyStream);
             dataManager.ApplyStreamToDB(streamReadyToApply);
