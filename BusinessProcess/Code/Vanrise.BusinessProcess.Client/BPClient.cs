@@ -30,8 +30,6 @@ namespace Vanrise.BusinessProcess.Client
             IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
             string processTitle = createProcessInput.InputArguments.GetTitle();
 
-            createProcessInput.InputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-
             long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, processDefinition.BPDefinitionID, createProcessInput.InputArguments, BPInstanceStatus.New);
             IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             dataManagerTracking.Insert(new BPTrackingMessage

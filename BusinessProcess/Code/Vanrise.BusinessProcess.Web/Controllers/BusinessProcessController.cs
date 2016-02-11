@@ -28,6 +28,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
             BPClient manager = new BPClient();
+            createProcessInput.InputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             return manager.CreateNewProcess(createProcessInput);
         }
 
@@ -117,7 +118,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
             foreach (SchedulerTask task in workflowTasks)
             {
-                    filteredList.Add(task);
+                filteredList.Add(task);
             }
 
             return BPMappers.MapTMapSchedulerTasks(filteredList);
@@ -144,7 +145,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public GetTrackingsFromOutput GetTrackingsFrom(TrackingQuery input)
         {
             BPClient manager = new BPClient();
-            
+
             return new GetTrackingsFromOutput()
             {
                 Tracking = manager.GetTrackingsFrom(input),
@@ -176,7 +177,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public IEnumerable<BPTrackingMessage> Tracking { get; set; }
 
         public BPInstanceStatus InstanceStatus { get; set; }
-        
+
     }
 
     #endregion
