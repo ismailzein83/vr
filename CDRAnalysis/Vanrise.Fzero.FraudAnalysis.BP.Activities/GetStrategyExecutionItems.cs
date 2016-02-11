@@ -91,7 +91,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         (item) =>
                         {
                             List<NumberProfile> numberProfiles = new List<NumberProfile>();
-                            List<StrategyExecutionItem> strategyExecutionDetails = new List<StrategyExecutionItem>();
+                            List<StrategyExecutionItem> strategyExecutionItems = new List<StrategyExecutionItem>();
 
                             foreach (NumberProfile numberProfile in item.NumberProfiles)
                             {
@@ -100,15 +100,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 if (fraudManagers[numberProfile.StrategyId].IsNumberSuspicious(numberProfile, out strategyExecutionDetail))
                                 {
                                     numberOfSuspicions++;
-                                    strategyExecutionDetails.Add(strategyExecutionDetail);
+                                    strategyExecutionItems.Add(strategyExecutionDetail);
                                 }
 
                             }
 
-                            if (strategyExecutionDetails.Count > 0)
+                            if (strategyExecutionItems.Count > 0)
                                 inputArgument.OutputQueueForStrategyExecutionItem.Enqueue(new StrategyExecutionItemBatch
                                 {
-                                    StrategyExecutionItem = strategyExecutionDetails
+                                    StrategyExecutionItem = strategyExecutionItems
                                 });
 
                             numberProfilesProcessed += item.NumberProfiles.Count;
