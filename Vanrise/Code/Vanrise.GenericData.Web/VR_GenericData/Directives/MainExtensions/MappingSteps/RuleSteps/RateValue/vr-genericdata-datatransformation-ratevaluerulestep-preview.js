@@ -93,7 +93,7 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                 }
 
                 api.getData = function () {
-                    var stepDetails = commonDirectiveAPI.getData();
+                    var stepDetails = commonDirectiveAPI !=undefined? commonDirectiveAPI.getData():undefined;
                     if (stepDetails != undefined) {
                         stepDetails.NormalRate = stepObj.normalRate;
                         stepDetails.RatesByRateType = stepObj.ratesByRateType;
