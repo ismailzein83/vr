@@ -2,9 +2,9 @@
 
     'use strict';
 
-    QueueactivatorconfigSelectiveDirective.$inject = ['VR_Queueing_ExecutionFlowDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    QueueactivatorconfigSelectiveDirective.$inject = ['VR_Queueing_QueueActivatorConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function QueueactivatorconfigSelectiveDirective(VR_Queueing_ExecutionFlowDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function QueueactivatorconfigSelectiveDirective(VR_Queueing_QueueActivatorConfigAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope:
@@ -21,7 +21,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Queueing/Directives/ExecutionFlowStage/Templates/QueueActivatorConfigSelectiveTemplate.html"
+            templateUrl: "/Client/Modules/Queueing/Directives/QueueActivatorConfig/Templates/QueueActivatorConfigSelectiveTemplate.html"
         };
 
         function QueueactivatorconfigSelective($scope, ctrl, $attrs) {
@@ -60,25 +60,25 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-                    return VR_Queueing_ExecutionFlowDefinitionAPIService.GetQueueActivatorsConfig().then(function (response) {
+                    return VR_Queueing_QueueActivatorConfigAPIService.GetQueueActivatorsConfig().then(function (response) {
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 $scope.scopeModal.queueActivatorConfig.push(response[i]);
                             }
-                            if (payload != undefined && payload.QueueActivatorConfigId != undefined) {
-                                payloadObj = payload;
-                                $scope.scopeModal.selectedqueueActivatorConfig = UtilsService.getItemByVal($scope.scopeModal.fieldTypeConfigs, payload.QueueActivatorConfigId, 'QueueActivatorConfigId');
+                            if (payload != undefined && payload.QueueActivator != undefined) {
+                                payloadObj = payload.QueueActivator;
+                                $scope.scopeModal.selectedqueueActivatorConfig = UtilsService.getItemByVal($scope.scopeModal.queueActivatorConfig, payload.QueueActivator.ConfigId, 'QueueActivatorConfigId');
                             }
                         }
                     });
                 };
 
                 api.getData = function () {
-                    var data = null;
+                    var data = {};
 
                     if ($scope.scopeModal.selectedqueueActivatorConfig != undefined) {
                         data = directiveAPI.getData();
-                        data.QueueActivatorConfigId = $scope.scopeModal.selectedqueueActivatorConfig.QueueActivatorConfigId;
+                        data.ConfigId = $scope.scopeModal.selectedqueueActivatorConfig.QueueActivatorConfigId;
                     }
 
                     return data;

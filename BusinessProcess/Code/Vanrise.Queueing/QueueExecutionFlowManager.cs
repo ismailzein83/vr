@@ -88,11 +88,6 @@ namespace Vanrise.Queueing
         public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlows(QueueExecutionFlowFilter filter)
         {
             var cachedFlows = GetCachedQueueExecutionFlows();
-            //if (cachedFlows != null)
-            //    return cachedFlows.Values.ToList();
-            //else
-            //    return null;
-
             return cachedFlows.MapRecords(QueueExecutionFlowInfoMapper, null);
 
         }

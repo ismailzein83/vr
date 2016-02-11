@@ -89,7 +89,7 @@ app.directive('vrQueueingQueueinstanceSelector', ['VR_Queueing_QueueInstanceAPIS
                 api.load = function (payload) {
                     var filter = {};
                     var selectedIds;
-                     
+                    ctrl.selectedvalues = [];
                     if (payload) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;

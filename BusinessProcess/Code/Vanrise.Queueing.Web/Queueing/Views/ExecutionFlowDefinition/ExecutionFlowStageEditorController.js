@@ -9,6 +9,9 @@
         var isEditMode;
         var ExecutionFlowStageEntity;
 
+        var queueActivatorConfigDirectiveReadyAPI;
+        var queueActivatorConfigDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -26,6 +29,11 @@
 
         function defineScope() {
             $scope.scopeModal = {};
+
+            $scope.scopeModal.onDirectiveReady = function (api) {
+                queueActivatorConfigDirectiveReadyAPI = api;
+                queueActivatorConfigDirectiveReadyPromiseDeferred.resolve();
+            }
 
             $scope.scopeModal.SaveExecutionFlowStage = function () {
                 if (isEditMode) {
@@ -54,7 +62,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeSelector, loadQueueActivatorConfigDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -90,6 +98,27 @@
             return dataRecordTypeSelectorLoadDeferred.promise;
         }
 
+
+        function loadQueueActivatorConfigDirective() {
+            var queueActivatorConfigDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            queueActivatorConfigDirectiveReadyPromiseDeferred.promise.then(function () {
+                var payload;
+
+                if (ExecutionFlowStageEntity != undefined) {
+
+                    payload = {
+                        QueueActivator: ExecutionFlowStageEntity.QueueActivator
+                      
+                    };
+                }
+
+                VRUIUtilsService.callDirectiveLoad(queueActivatorConfigDirectiveReadyAPI, payload, queueActivatorConfigDirectiveLoadPromiseDeferred);
+            });
+            return queueActivatorConfigDirectiveLoadPromiseDeferred.promise;
+        }
+
+
         function setTitle() {
             if (isEditMode && ExecutionFlowStageEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(ExecutionFlowStageEntity.Name, 'Execution Flow Stage');
@@ -101,6 +130,8 @@
 
         function buildexecutionFlowStageObjectFromScope() {
             var executionFlowStage = {};
+            var obj = queueActivatorConfigDirectiveReadyAPI.getData();
+  
             executionFlowStage.StageName = $scope.scopeModal.stageName;
             executionFlowStage.QueueNameTemplate = $scope.scopeModal.queueTemplateName;
             executionFlowStage.QueueTitleTemplate = $scope.scopeModal.queueTemplateTitle;
@@ -109,6 +140,7 @@
                 DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                 BatchDescription: $scope.scopeModal.batchDescription
             };
+            executionFlowStage.QueueActivator = obj;
             return executionFlowStage;
         }
 

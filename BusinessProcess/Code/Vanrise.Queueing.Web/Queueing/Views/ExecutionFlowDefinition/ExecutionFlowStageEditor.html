@@ -4,35 +4,32 @@
             <vr-tabs>
                 <vr-tab header="'Stages'">
                     <vr-row>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="normal">
                             <vr-textbox value="scopeModal.stageName" label="Stage Name" isrequired></vr-textbox>
                         </vr-columns>
              
-                        <vr-columns width="1/2row">
+                        <vr-columns width="normal">
                             <vr-textbox value="scopeModal.queueTemplateName" label="Queue Template Name" isrequired></vr-textbox>
                         </vr-columns>
-                    </vr-row>
-
-                    <vr-row>
-                        <vr-columns width="1/2row">
+                    
+                        <vr-columns width="normal">
                             <vr-textbox value="scopeModal.queueTemplateTitle" label="Queue Template Title" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="normal">
                             <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
                                                                     selectedvalues="selectedDataRecordType"
-                                                                     
-                                                                    isrequired="true"></vr-genericdata-datarecordtype-selector></vr-columns>
-                    </vr-row>
+                                                                    isrequired="true"></vr-genericdata-datarecordtype-selector>
+                        </vr-columns>
 
-                    <vr-row>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="normal">
                             <vr-textbox value="scopeModal.batchDescription" label="Batch Description" isrequired></vr-textbox>
 
                         </vr-columns>
+                        </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
 
-                        <vr-columns width="1/2row">
-
-                            <!--<vr-queueing-queueactivatorconfig-selective on-ready="scopeModal.onDirectiveReady"></vr-queueing-queueactivatorconfig-selective>-->
+                            <vr-queueing-queueactivatorconfig-selective on-ready="scopeModal.onDirectiveReady" isrequired="true"></vr-queueing-queueactivatorconfig-selective>
                         </vr-columns>
                     </vr-row>
 

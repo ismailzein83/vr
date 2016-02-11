@@ -26,7 +26,7 @@ namespace Vanrise.Queueing
         #region Private Methods
         private Dictionary<int, QueueActivatorConfig> GetCachedQueueActivatorConfig()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetQueueExecutionFlowDefinitions",
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedQueueActivatorConfig",
                () =>
                {
                    IQueueActivatorConfigDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueActivatorConfigDataManager>();

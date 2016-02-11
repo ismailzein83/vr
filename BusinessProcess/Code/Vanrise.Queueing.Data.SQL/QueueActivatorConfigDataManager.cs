@@ -18,9 +18,24 @@ namespace Vanrise.Queueing.Data.SQL
         }
         public List<QueueActivatorConfig> GetAllQueueActivatorConfig()
         {
-            //return GetItemsSP("[queue].[sp_QueueActivatorConfig_GetAll]", null);
-            return new List<QueueActivatorConfig>();
+            return GetItemsSP("[queue].[sp_QueueActivatorConfig_GetAll]", QueueActivatorConfigMapper);
         }
+
+
+        #region Mappers
+
+        QueueActivatorConfig QueueActivatorConfigMapper(IDataReader reader)
+        {
+            QueueActivatorConfig queueActivatorConfig = Vanrise.Common.Serializer.Deserialize<QueueActivatorConfig>(reader["Details"] as string);
+            if (queueActivatorConfig != null)
+            {
+                queueActivatorConfig.QueueActivatorConfigId = Convert.ToInt32(reader["ID"]);
+                queueActivatorConfig.Name = reader["Name"] as string;
+            }
+            return queueActivatorConfig;
+        }
+
+        #endregion
 
     }
 }
