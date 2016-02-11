@@ -165,6 +165,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
+        public bool CloseStrategyExecution(long strategyExecutionId, long numberofSubscribers, long numberofCDRs, long numberofCases, long executionDuration)
+        {
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Close", strategyExecutionId, numberofSubscribers, numberofCDRs, numberofCases, executionDuration);
+
+            return (recordsAffected > 0);
+        }
+
         public void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady)
         {
             ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionItem_GetByNULLCaseID", (reader) =>

@@ -109,7 +109,7 @@
     <Compile Include="NumberProfile\INumberProfileParameters.cs" />
     <Compile Include="NumberProfile\NumberProfileParameters.cs" />
     <Compile Include="AccountCaseUpdateQuery.cs" />
-    <Compile Include="StrategyInfo.cs" />
+    <Compile Include="Strategy\StrategyInfo.cs" />
     <Compile Include="Strategy\Strategy.cs" />
     <Compile Include="StrategyExecution\StrategyExecutionDetail.cs" />
     <Compile Include="StrategyExecutionItemSummary.cs" />
