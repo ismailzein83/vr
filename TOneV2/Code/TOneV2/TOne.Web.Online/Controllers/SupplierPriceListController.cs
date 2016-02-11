@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using TOne.BusinessEntity.Business;
+using TOne.BusinessEntity.Entities;
 
 namespace TOne.Web.Online.Controllers
 {
@@ -21,6 +22,13 @@ namespace TOne.Web.Online.Controllers
         {
             SupplierPricelistsManager manager = new SupplierPricelistsManager();
             return manager.GetQueueStatus(queueId);
+        }
+
+        [HttpGet]
+        public UploadInfo GetUploadInfo(int queueId)
+        {
+            SupplierPricelistsManager manager = new SupplierPricelistsManager();
+            return manager.GetUploadInfo(queueId);
         }
 
         [HttpGet]
