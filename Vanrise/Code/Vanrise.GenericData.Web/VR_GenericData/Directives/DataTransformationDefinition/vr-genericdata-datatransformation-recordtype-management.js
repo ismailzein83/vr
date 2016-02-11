@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataTransformationDefinitionService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataTransformationDefinitionService) {
+app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsService", "VRNotificationService", "VR_GenericData_DataTransformationDefinitionService","VR_GenericData_DataRecordTypeAPIService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataTransformationDefinitionService, VR_GenericData_DataRecordTypeAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -26,7 +26,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
         };
 
         function DataRecordTypeManagement($scope, ctrl, $attrs) {
-
+            var recordTypes;
             var gridAPI;
             this.initializeController = initializeController;
 
@@ -41,7 +41,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
 
                 ctrl.addDataRecordType = function () {
                     var onDataRecordTypeAdded = function (dataRecordType) {
-                       // addNeededTypes(dataRecordType);
+                        addNeededTypes(dataRecordType);
                         ctrl.datasource.push(dataRecordType);
                     }
 
@@ -76,21 +76,29 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                 }
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
-                        if (payload.RecordTypes) {
-                            ctrl.datasource = payload.RecordTypes
-                        }
-                    }
+                        
+                    return getDataRecordTypeInfo().then(function () {
+                            if (payload != undefined && payload.RecordTypes) {
+                                for(var i=0; i < payload.RecordTypes.length; i++)
+                                {
+                                    var dataItem = payload.RecordTypes[i];
+                                    addNeededTypes(dataItem);
+                                    ctrl.datasource.push(dataItem);
+                                }
+                            }
+                        });
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            //function addNeededTypes(dataItem)
-            //{
-            //    var template = UtilsService.getItemByVal(ctrl.dataRecordTypeTypeTemplates, dataItem.value, "TemplateConfigID");
-            //    dataItem.TypeDescription = template != undefined ? template.Name : "";
-            //}
+
+            function addNeededTypes(dataItem)
+            {
+                var template = UtilsService.getItemByVal(recordTypes, dataItem.DataRecordTypeId, "DataRecordTypeId");
+                dataItem.TypeDescription = template != undefined ? template.Name : "";
+            }
+
             function defineMenuActions() {
                 var defaultMenuActions = [
                 {
@@ -109,7 +117,7 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
 
             function editDataRecordType(dataRecordTypeObj) {
                 var onDataRecordTypeUpdated = function (dataRecordType) {
-                   // addNeededTypes(dataRecordType);
+                    addNeededTypes(dataRecordType);
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataRecordTypeObj.RecordName, 'RecordName');
                     ctrl.datasource[index] = dataRecordType;
                 }
@@ -124,6 +132,13 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
                 };
 
                 VR_GenericData_DataTransformationDefinitionService.deleteDataRecordType($scope, dataRecordTypeObj, onDataRecordTypeDeleted);
+            }
+
+            function getDataRecordTypeInfo()
+            {
+              return  VR_GenericData_DataRecordTypeAPIService.GetDataRecordTypeInfo().then(function (response) {
+                    recordTypes = response;
+                });
             }
         }
 
