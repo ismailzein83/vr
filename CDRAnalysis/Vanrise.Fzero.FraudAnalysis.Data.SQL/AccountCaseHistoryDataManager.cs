@@ -70,7 +70,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 });
         }
 
-        public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus, string reason)
+        public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatusEnum caseStatus, string reason)
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus, reason);
             return (recordsAffected > 0);
@@ -95,7 +95,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             log.LogID = (int)reader["LogID"];
             log.UserID = GetReaderValue<int?>(reader, "UserID");
-            log.AccountCaseStatusID = (CaseStatus)reader["AccountCaseStatusID"];
+            log.AccountCaseStatusID = (CaseStatusEnum)reader["AccountCaseStatusID"];
             log.StatusTime = (DateTime)reader["StatusTime"];
             log.Reason = GetReaderValue<string>(reader, "Reason");
 

@@ -64,7 +64,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
         }
 
-        public bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill, string reason)
+        public bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatusEnum caseStatus, DateTime? validTill, string reason)
         {
             object accountCaseID;
 
@@ -75,7 +75,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public bool UpdateAccountCase(int caseID, int userID, CaseStatus statusID, DateTime? validTill, string reason)
+        public bool UpdateAccountCase(int caseID, int userID, CaseStatusEnum statusID, DateTime? validTill, string reason)
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, userID, statusID, validTill, reason);
             return (recordsAffected > 0);
@@ -90,7 +90,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return dt;
         }
 
-        public bool UpdateAccountCaseBatch(List<int> CaseIds, int userId, CaseStatus status)
+        public bool UpdateAccountCaseBatch(List<int> CaseIds, int userId, CaseStatusEnum status)
         {
             DataTable dtAccountCasesToUpdate = GetAccountCaseTable();
             DataRow dr;
@@ -124,7 +124,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Private Methods
-        private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
+        private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatusEnum> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
         {
             StringBuilder query = new StringBuilder(@"
                 IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
@@ -149,7 +149,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return query.ToString();
         }
-        private string GetWhereClause(string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
+        private string GetWhereClause(string accountNumber, List<int> strategyIDs, List<CaseStatusEnum> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
         {
             StringBuilder whereClause = new StringBuilder();
 
@@ -172,11 +172,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return whereClause.ToString();
         }
-        private List<int> GetCaseStatusListAsIntList(List<CaseStatus> items)
+        private List<int> GetCaseStatusListAsIntList(List<CaseStatusEnum> items)
         {
             List<int> list = new List<int>();
 
-            foreach (CaseStatus item in items)
+            foreach (CaseStatusEnum item in items)
                 list.Add((int)item);
 
             return list;
@@ -200,7 +200,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             accountCase.CaseID = (int)reader["CaseID"];
             accountCase.AccountNumber = reader["AccountNumber"] as string;
             accountCase.UserID = GetReaderValue<int>(reader, "UserID");
-            accountCase.StatusID = (CaseStatus)reader["StatusID"];
+            accountCase.StatusID = (CaseStatusEnum)reader["StatusID"];
             accountCase.StatusUpdatedTime = (DateTime)reader["StatusUpdatedTime"];
             accountCase.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");
             accountCase.CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime");
@@ -215,7 +215,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             summary.SuspicionLevelID = GetReaderValue<SuspicionLevel>(reader, "SuspicionLevelID");
             summary.NumberOfOccurances = (int)reader["NumberOfOccurances"];
             summary.LastOccurance = GetReaderValue<DateTime?>(reader, "LastOccurance");
-            summary.Status = GetReaderValue<CaseStatus>(reader, "Status");
+            summary.Status = GetReaderValue<CaseStatusEnum>(reader, "Status");
             summary.CaseID = GetReaderValue<int>(reader, "CaseID");
             return summary;
         }

@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
         public decimal? DurationInSeconds { get; set; }
         public int? CallClassId { get; set; }
         public CallType CallType { get; set; }
-        public CaseStatus? CaseStatus { get; set; }
+        public CaseStatusEnum? CaseStatus { get; set; }
         public NetType? NetworkType { get; set; }
         public PeriodEnum? Period { get; set; }
         public int? StrategyId { get; set; }

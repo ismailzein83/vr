@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountCaseHistoryByCaseID(input));
         }
 
-        public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatus caseStatus, string reason)
+        public bool InsertAccountCaseHistory(int caseID, int? userID, CaseStatusEnum caseStatus, string reason)
         {
             IAccountCaseHistoryDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseHistoryDataManager>();
             return dataManager.InsertAccountCaseHistory(caseID,userID,caseStatus,reason);

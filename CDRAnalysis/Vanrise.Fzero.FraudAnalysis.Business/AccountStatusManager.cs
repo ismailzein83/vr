@@ -10,12 +10,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class AccountStatusManager
     {
-        public List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatus> caseStatuses, List<string> numberPrefixes)
+        public List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatusEnum> caseStatuses, List<string> numberPrefixes)
         {
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
             return dataManager.GetAccountNumbersByNumberPrefixAndStatuses(caseStatuses, numberPrefixes);
         }
-        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
+        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatusEnum caseStatus, DateTime? validTill)
         {
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
             return dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus, validTill);

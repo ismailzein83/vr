@@ -63,49 +63,54 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountCaseHistory.cs" />
+    <Compile Include="AccountCaseHistory\AccountCaseHistory.cs" />
     <Compile Include="AccountCaseLog.cs" />
-    <Compile Include="Batches\CancellingStrategyExecutionBatch.cs" />
+    <Compile Include="CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManager\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManager\IBusinessManager.cs" />
-    <Compile Include="BusinessManager\IStrategyManager.cs" />
-    <Compile Include="DataWarehouse\DWBTSDictionary.cs" />
+    <Compile Include="Strategy\IStrategyManager.cs" />
+    <Compile Include="DWBTSDictionary.cs" />
+    <Compile Include="CaseStatusEnum.cs" />
+    <Compile Include="SuspicionOccuranceStatus.cs" />
+    <Compile Include="SuspicionLevel.cs" />
+    <Compile Include="PeriodEnum.cs" />
+    <Compile Include="StrategyStatusEnum.cs" />
     <Compile Include="NumberPrefixes.cs" />
     <Compile Include="InfoDetail.cs" />
     <Compile Include="AccountInfo.cs" />
     <Compile Include="CDRDetail.cs" />
-    <Compile Include="DataWarehouse\DWAccountCase.cs" />
-    <Compile Include="DataWarehouse\DWAccountCaseDictionary .cs" />
-    <Compile Include="DataWarehouse\DWTimeDictionary.cs" />
-    <Compile Include="DataWarehouse\DWStrategyDictionary.cs" />
-    <Compile Include="DataWarehouse\DWDimensionDictionary.cs" />
+    <Compile Include="DWAccountCase.cs" />
+    <Compile Include="DWAccountCaseDictionary .cs" />
+    <Compile Include="DWTimeDictionary.cs" />
+    <Compile Include="DWStrategyDictionary.cs" />
+    <Compile Include="DWDimensionDictionary.cs" />
     <Compile Include="AccountNumbersByIMEI.cs" />
-    <Compile Include="AccountStatus.cs" />
-    <Compile Include="Batches\DWFactBatch.cs" />
-    <Compile Include="Batches\StrategyExecutionItemSummaryBatch.cs" />
+    <Compile Include="AccountStatus\AccountStatus.cs" />
+    <Compile Include="DWFactBatch.cs" />
+    <Compile Include="StrategyExecutionItemSummaryBatch.cs" />
     <Compile Include="AccountRelatedNumbers.cs" />
-    <Compile Include="DataWarehouse\DWStrategy.cs" />
-    <Compile Include="DataWarehouse\DWTime.cs" />
-    <Compile Include="DataWarehouse\DWDimension.cs" />
-    <Compile Include="DataWarehouse\DWFact.cs" />
-    <Compile Include="Query\StrategyExecutionQuery.cs" />
+    <Compile Include="DWStrategy.cs" />
+    <Compile Include="DWTime.cs" />
+    <Compile Include="DWDimension.cs" />
+    <Compile Include="DWFact.cs" />
+    <Compile Include="StrategyExecutionQuery.cs" />
     <Compile Include="RelatedNumber.cs" />
-    <Compile Include="Query\AccountCaseLogQuery.cs" />
-    <Compile Include="Query\RelatedNumberQuery.cs" />
-    <Compile Include="Query\AccountCaseQuery.cs" />
+    <Compile Include="AccountCaseLogQuery.cs" />
+    <Compile Include="RelatedNumberQuery.cs" />
+    <Compile Include="AccountCase\AccountCaseQuery.cs" />
     <Compile Include="AccountSuspicionDetail.cs" />
     <Compile Include="AccountSuspicionSummary.cs" />
-    <Compile Include="Query\AccountSuspicionSummaryQuery.cs" />
+    <Compile Include="AccountSuspicionSummaryQuery.cs" />
     <Compile Include="AccountThreshold.cs" />
-    <Compile Include="Batches\StrategyExecutionItemBatch.cs" />
-    <Compile Include="Query\CaseDetailQuery.cs" />
+    <Compile Include="StrategyExecutionItemBatch.cs" />
+    <Compile Include="CaseDetailQuery.cs" />
     <Compile Include="CasesSummary.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="StrategyKindEnum.cs" />
     <Compile Include="INumberProfileParameters.cs" />
     <Compile Include="NumberProfileParameters.cs" />
-    <Compile Include="Query\AccountCaseUpdateQuery.cs" />
+    <Compile Include="AccountCaseUpdateQuery.cs" />
     <Compile Include="StrategyInfo.cs" />
-    <Compile Include="Strategy.cs" />
+    <Compile Include="Strategy\Strategy.cs" />
     <Compile Include="StrategyExecutionDetail.cs" />
     <Compile Include="StrategyExecutionItemSummary.cs" />
     <Compile Include="StrategyExecutionInfo.cs" />
@@ -113,27 +118,27 @@
     <Compile Include="BTSHighValueCases.cs" />
     <Compile Include="BTSCases.cs" />
     <Compile Include="DailyVolumeLoose.cs" />
-    <Compile Include="AccountCaseType.cs" />
+    <Compile Include="AccountCase\AccountCaseType.cs" />
     <Compile Include="LinesDetected.cs" />
     <Compile Include="BlockedLines.cs" />
     <Compile Include="FilterDefinitionInfo.cs" />
-    <Compile Include="Query\LinesDetectedQuery.cs" />
-    <Compile Include="Query\BlockedLinesQuery.cs" />
-    <Compile Include="Query\NumberProfileQuery.cs" />
-    <Compile Include="Query\NormalCDRQuery.cs" />
-    <Compile Include="Query\CaseProductivityQuery.cs" />
-    <Compile Include="Query\StrategyQuery.cs" />
+    <Compile Include="LinesDetectedQuery.cs" />
+    <Compile Include="BlockedLinesQuery.cs" />
+    <Compile Include="NumberProfileQuery.cs" />
+    <Compile Include="NormalCDRQuery.cs" />
+    <Compile Include="CaseProductivityQuery.cs" />
+    <Compile Include="StrategyQuery.cs" />
     <Compile Include="Period.cs" />
-    <Compile Include="CallClass.cs" />
+    <Compile Include="CallClass\CallClass.cs" />
     <Compile Include="FraudResult.cs" />
     <Compile Include="FilterDefinition.cs" />
-    <Compile Include="Batches\NumberCriteriaBatch.cs" />
-    <Compile Include="Batches\NumberProfileBatch.cs" />
+    <Compile Include="NumberCriteriaBatch.cs" />
+    <Compile Include="NumberProfileBatch.cs" />
     <Compile Include="NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CaseProductivity.cs" />
     <Compile Include="StrategyDetail.cs" />
-    <Compile Include="AccountCase.cs" />
+    <Compile Include="AccountCase\AccountCase.cs" />
     <Compile Include="StrategyExecution.cs" />
     <Compile Include="StrategyExecutionItem.cs" />
     <Compile Include="Strategy\StrategyInfoFilter.cs" />
@@ -149,7 +154,11 @@
       <Name>Vanrise.Fzero.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Batches\" />
+    <Folder Include="DataWarehouse\" />
+    <Folder Include="Query\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,7 +8,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public interface IStrategyManager : IBusinessManager
     {
-        int? GetStrategyPeriodId(int strategyId);
         IEnumerable<string> GetStrategyNames(IEnumerable<int> strategyIds);
     }
 }

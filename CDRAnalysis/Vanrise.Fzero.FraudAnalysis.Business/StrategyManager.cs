@@ -55,14 +55,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return strategies.Select(kvp => kvp.Value).ToList();
         }
 
-        public int? GetStrategyPeriodId(int strategyId)
-        {
-            Strategy strategy = GetStrategy(strategyId);
-            
-            if (strategy != null)
-                return strategy.PeriodId;
-            return null;
-        }
 
         public IEnumerable<StrategyInfo> GetStrategiesInfo(StrategyInfoFilter filter)
         {

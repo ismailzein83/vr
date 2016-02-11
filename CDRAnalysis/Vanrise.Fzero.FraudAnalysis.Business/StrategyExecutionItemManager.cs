@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class StrategyExecutionItemManager
     {
-        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
+        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatusEnum caseStatus)
         {
             IStrategyExecutionItemDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
             return dataManager.LinkDetailToCase(accountNumber, caseID, caseStatus);

@@ -249,7 +249,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing call types");
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing case statuses");
-            ToBeInsertedCaseStatuses = GetToBeInserted<CaseStatus>(inputArgument.CaseStatuses);
+            ToBeInsertedCaseStatuses = GetToBeInserted<CaseStatusEnum>(inputArgument.CaseStatuses);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing case statuses");
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing periods");

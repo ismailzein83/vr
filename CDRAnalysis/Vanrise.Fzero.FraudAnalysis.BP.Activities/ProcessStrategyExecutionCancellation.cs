@@ -82,7 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 if (item.CaseID != null)
                 {
                     relatedCase = cases.Where(x => x.CaseID == item.CaseID).First();
-                    if (relatedCase.StatusID == CaseStatus.Pending || relatedCase.StatusID == CaseStatus.Open)
+                    if (relatedCase.StatusID == CaseStatusEnum.Pending || relatedCase.StatusID == CaseStatusEnum.Open)
                     {
                         if (!itemsofCases.Exists(x => x.CaseID == relatedCase.CaseID && x.StrategyExecutionID != inputArgument.StrategyExecutionId && x.SuspicionOccuranceStatus != SuspicionOccuranceStatus.Cancelled))
                         {
@@ -91,7 +91,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         }
                     }
 
-                    else if (relatedCase.StatusID == CaseStatus.Cancelled)
+                    else if (relatedCase.StatusID == CaseStatusEnum.Cancelled)
                     {
                         tobeDeletedItems.Add(item.ID);
                     }

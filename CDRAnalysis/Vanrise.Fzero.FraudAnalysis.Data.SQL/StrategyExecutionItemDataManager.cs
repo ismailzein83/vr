@@ -27,9 +27,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region  Public Methods
-        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
+        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatusEnum caseStatus)
         {
-            SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
+            SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatusEnum.Open) == 0 || caseStatus.CompareTo(CaseStatusEnum.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
 
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_UpdateStatus", accountNumber, caseID, occuranceStatus);
             return (recordsAffected > 0);

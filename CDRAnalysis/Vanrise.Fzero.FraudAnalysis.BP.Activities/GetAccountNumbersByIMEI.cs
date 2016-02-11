@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             IAccountInfoDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountInfoDataManager>();
             AccountNumbersByIMEI accountNumbersByIMEI = new AccountNumbersByIMEI();
 
-            dataManager.LoadAccountInfo(new CaseStatus[] { CaseStatus.ClosedFraud, CaseStatus.Open, CaseStatus.Pending }, ((accountInfo) =>
+            dataManager.LoadAccountInfo(new CaseStatusEnum[] { CaseStatusEnum.ClosedFraud, CaseStatusEnum.Open, CaseStatusEnum.Pending }, ((accountInfo) =>
                 {
                     if (accountInfo.InfoDetail.IMEIs != null)
                     {

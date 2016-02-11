@@ -42,7 +42,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             AccountCase accountCase = _dataManager.GetLastAccountCaseByAccountNumber(input.AccountNumber);
 
-            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
+            if (accountCase == null || (accountCase.StatusID == CaseStatusEnum.ClosedFraud) || (accountCase.StatusID == CaseStatusEnum.ClosedWhiteList))
                 _dataManager.InsertAccountCase(out caseID, input.AccountNumber, userID, input.CaseStatus, input.ValidTill, input.Reason);
             else
             {
@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 AccountCaseHistoryManager accountCaseHistoryManager = new Business.AccountCaseHistoryManager();
                 accountCaseHistoryManager.InsertAccountCaseHistory(caseID, userID, input.CaseStatus, input.Reason);
                 AccountStatusManager accountStatusManager = new AccountStatusManager();
-            if (input.CaseStatus == CaseStatus.ClosedFraud || input.CaseStatus == CaseStatus.ClosedWhiteList)
+            if (input.CaseStatus == CaseStatusEnum.ClosedFraud || input.CaseStatus == CaseStatusEnum.ClosedWhiteList)
                 accountStatusManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill);
 
             StrategyExecutionItemManager strategyExecutionItemManager = new StrategyExecutionItemManager();
@@ -73,10 +73,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AccountCase accountCase = _dataManager.GetLastAccountCaseByAccountNumber(accountNumber);
             int caseID;
 
-            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
+            if (accountCase == null || (accountCase.StatusID == CaseStatusEnum.ClosedFraud) || (accountCase.StatusID == CaseStatusEnum.ClosedWhiteList))
             {
-                _dataManager.InsertAccountCase(out caseID, accountNumber, null, CaseStatus.Open, null, null);
-                accountCaseHistoryManager.InsertAccountCaseHistory(caseID, null, CaseStatus.Open, null);
+                _dataManager.InsertAccountCase(out caseID, accountNumber, null, CaseStatusEnum.Open, null, null);
+                accountCaseHistoryManager.InsertAccountCaseHistory(caseID, null, CaseStatusEnum.Open, null);
                 accountInfoManager.InsertOrUpdateAccountInfo(accountNumber, new InfoDetail() { IMEIs = imeis });
             }
             else
@@ -84,7 +84,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 caseID = accountCase.CaseID;
             }
 
-            return strategyExecutionItemManager.LinkDetailToCase(accountNumber, caseID, CaseStatus.Open);
+            return strategyExecutionItemManager.LinkDetailToCase(accountNumber, caseID, CaseStatusEnum.Open);
         }
     }
 }

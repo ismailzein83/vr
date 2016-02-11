@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
      
         #region Public Methods
-        public void LoadAccountInfo(IEnumerable<CaseStatus> caseStatuses, Action<AccountInfo> onBatchReady)
+        public void LoadAccountInfo(IEnumerable<CaseStatusEnum> caseStatuses, Action<AccountInfo> onBatchReady)
         {
 
             ExecuteReaderSP("[FraudAnalysis].[sp_AccountInfo_GetByAccountStatuses]", (reader) =>

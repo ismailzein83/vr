@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public List<int> StrategyIDs { get; set; }
 
-        public List<CaseStatus> Statuses { get; set; }
+        public List<CaseStatusEnum> Statuses { get; set; }
 
         public List<SuspicionLevel> SuspicionLevelIDs { get; set; }
     }
