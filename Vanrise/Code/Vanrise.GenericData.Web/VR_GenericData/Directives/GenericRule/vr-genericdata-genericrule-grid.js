@@ -64,17 +64,11 @@
                     promises.push(retrieveDataDeferred.promise);
 
                     getDefinitionPromise.then(function (response) {
-                        if (response != null) {
-                            ctrl.criteriaFields.length = 0;
-                            for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
-                                ctrl.criteriaFields.push(response.CriteriaDefinition.Fields[i]);
-                            }
-
-                            gridAPI.retrieveData(query).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
+                        ctrl.criteriaFields.length = 0;
+                        for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
+                            ctrl.criteriaFields.push(response.CriteriaDefinition.Fields[i]);
                         }
-                        else {
-                            retrieveDataDeferred.reject();
-                        }
+                        gridAPI.retrieveData(query).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
                     });
 
                     return UtilsService.waitMultiplePromises(promises);

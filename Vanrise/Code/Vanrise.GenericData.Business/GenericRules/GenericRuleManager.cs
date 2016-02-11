@@ -22,10 +22,8 @@ namespace Vanrise.GenericData.Business
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
             GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
-            if (ruleDefinition == null)
-                throw new ArgumentNullException("ruleDefinition");
-            else if (ruleDefinition.CriteriaDefinition == null)
-                throw new ArgumentNullException("ruleDefinition.CriteriaDefinition");
+            // ruleDefinition, CriteriaDefinition and Fields should not be null
+            // If so, an exception must be thrown
             return ruleDefinition.CriteriaDefinition.Fields;
         }
 
@@ -109,18 +107,15 @@ namespace Vanrise.GenericData.Business
 
         protected override GenericRuleDetail MapToDetails(T rule)
         {
-            if (rule.Criteria == null)
-                throw new ArgumentNullException("rule.Criteria");
-            if (rule.Criteria.FieldsValues == null)
-                throw new ArgumentNullException("rule.Criteria.FieldsValues");
-
-            var criteriaFields = GetRuleDefinitionCriteriaFields(rule.DefinitionId);
             List<string> descriptions = new List<string>();
+            var criteriaFields = GetRuleDefinitionCriteriaFields(rule.DefinitionId);
+            bool fieldValuesExist = (rule.Criteria != null && rule.Criteria.FieldsValues != null);
 
             foreach (var criteriaField in criteriaFields)
             {
-                GenericRuleCriteriaFieldValues fieldValues;
-                rule.Criteria.FieldsValues.TryGetValue(criteriaField.FieldName, out fieldValues);
+                GenericRuleCriteriaFieldValues fieldValues = null;
+                if (fieldValuesExist)
+                    rule.Criteria.FieldsValues.TryGetValue(criteriaField.FieldName, out fieldValues);
                 descriptions.Add((fieldValues != null) ? fieldValues.GetDescription() : null);
             }
 
