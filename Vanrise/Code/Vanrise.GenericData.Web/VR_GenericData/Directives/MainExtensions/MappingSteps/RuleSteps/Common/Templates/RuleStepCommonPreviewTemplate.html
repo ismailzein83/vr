@@ -1,14 +1,30 @@
 ﻿<vr-row removeline>
     <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.effectiveTime!=undefined">Effective Time = {{ctrl.effectiveTime}}</vr-label>
+        <vr-list maxitemsperrow="1">
+            <vr-listitem ng-show="ctrl.effectiveTime!=undefined"><vr-label>Effective Time = {{ctrl.effectiveTime}}</vr-label></vr-listitem>
+        </vr-list>
     </vr-columns>
 </vr-row>
 <vr-row removeline>
     <vr-columns width="fullrow">
-        <vr-datagrid datasource="ctrl.ruleFieldsMappings"
-                     hidegridmenu norowhighlightonclick="true">
-            <vr-datagridcolumn headertext="'Rule Field Name'" type="'Text'" field="'RuleCriteriaFieldName'" widthfactor="5" disablesorting></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Mapping From'" type="'Text'" field="'Value'" widthfactor="15" disablesorting></vr-datagridcolumn>
-        </vr-datagrid>
-    </vr-columns>
+        <vr-list maxitemsperrow="1">
+             <vr-listitem>
+                 <vr-list maxitemsperrow="2">
+                     <vr-listitem ng-show="ctrl.ruleFieldsMappings.length > 0"><vr-label>Field Name</vr-label></vr-listitem>
+                     <vr-listitem ng-show="ctrl.ruleFieldsMappings.length > 0"><vr-label>From</vr-label></vr-listitem>
+                 </vr-list>
+                 <vr-list maxitemsperrow="2"  ng-repeat="field in ctrl.ruleFieldsMappings" >
+                     <vr-listitem><vr-label>{{field.RuleCriteriaFieldName}}</vr-label></vr-listitem>
+                     <vr-listitem><vr-label>{{field.Value}}</vr-label></vr-listitem>
+                 </vr-list>
+
+             </vr-listitem>
+        </vr-list>
+    
+    <!--<vr-datagrid datasource="ctrl.ruleFieldsMappings"
+                 hidegridmenu norowhighlightonclick="true">
+        <vr-datagridcolumn headertext="'Rule Field Name'" type="'Text'" field="'RuleCriteriaFieldName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Mapping From'" type="'Text'" field="'Value'" widthfactor="15" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>-->
+</vr-columns>
 </vr-row>

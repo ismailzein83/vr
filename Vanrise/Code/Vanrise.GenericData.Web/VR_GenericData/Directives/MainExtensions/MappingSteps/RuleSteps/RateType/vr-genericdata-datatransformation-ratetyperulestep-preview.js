@@ -131,10 +131,6 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                 if (ctrl.effectiveRate == undefined) {
                     return "Missing effective rate mapping.";
                 }
-                if (ctrl.rateTypeId == undefined) {
-                    return "Missing rate type id mapping.";
-                }
-
                 return null;
             }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Transformation.Entities;
 
-namespace Vanrise.GenericData.Pricing.Tariff
+namespace Vanrise.GenericData.Pricing
 {
     public class TariffMappingStep : BaseGenericRuleMappingStep
     {

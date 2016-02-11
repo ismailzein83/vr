@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
 
                 var ctrl = this;
 
-                var ctor = new rateTypeRuleStepCtor(ctrl, $scope);
+                var ctor = new TariffRuleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,12 +26,12 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Tariff/Templates/RateTypeRuleStepTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Tariff/Templates/TariffRuleStepTemplate.html';
             }
 
         };
 
-        function rateTypeRuleStepCtor(ctrl, $scope) {
+        function TariffRuleStepCtor(ctrl, $scope) {
             var ruleTypeName = "VR_TariffRule";
             var ruleTypeEntity;
 
@@ -163,7 +163,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestep', ['UtilsService', 
                             if (payload != undefined && payload.stepDetails != undefined)
                                 payloadEffectiveDurationInSeconds.selectedRecords = payload.stepDetails.EffectiveDurationInSeconds;
                         }
-                        VRUIUtilsService.callDirectiveLoad(rateTypeIdDirectiveAPI, payloadEffectiveDurationInSeconds, loadEffectiveDurationInSecondsDirectivePromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(effectiveDurationInSecondsDirectiveAPI, payloadEffectiveDurationInSeconds, loadEffectiveDurationInSecondsDirectivePromiseDeferred);
                     });
 
                     promises.push(loadEffectiveDurationInSecondsDirectivePromiseDeferred.promise);

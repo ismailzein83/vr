@@ -1,17 +1,12 @@
-﻿<vr-row>
-    <vr-columns width="fullrow">
-        <vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.normalRate !=undefined">Rule.Value = {{ctrl.normalRate}}</vr-label>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.ratesByRateType !=undefined">Rule.RatesByRateType = {{ctrl.ratesByRateType}}</vr-label>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.effectiveRate !=undefined">Rule.EffectiveRate = {{ctrl.effectiveRate}}</vr-label>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.rateTypeId !=undefined">Rule.RateTypeId = {{ctrl.rateTypeId}}</vr-label>
+﻿<vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-list maxitemsperrow="1">
+            <vr-listitem ng-show="ctrl.initialRate !=undefined"><vr-label>Rule.InitialRate = {{ctrl.initialRate}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.durationInSeconds !=undefined"><vr-label>Rule.DurationInSeconds = {{ctrl.durationInSeconds}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.effectiveRate !=undefined"><vr-label>{{ctrl.effectiveRate}} = Rule.EffectiveRate</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.effectiveDurationInSeconds !=undefined"><vr-label>{{ctrl.effectiveDurationInSeconds}} = Rule.EffectiveDurationInSeconds</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.totalAmount !=undefined"><vr-label>{{ctrl.totalAmount}} = Rule.TotalAmount</vr-label></vr-listitem>
+        </vr-list>
     </vr-columns>
 </vr-row>

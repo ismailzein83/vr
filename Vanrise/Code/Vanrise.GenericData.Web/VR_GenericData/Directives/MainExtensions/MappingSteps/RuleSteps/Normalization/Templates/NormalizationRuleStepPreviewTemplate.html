@@ -1,11 +1,10 @@
-﻿<vr-row removeline>
+﻿<vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
+<vr-row removeline>
     <vr-columns width="fullrow">
-        <vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.value !=undefined">Rule.Value = {{ctrl.value}}</vr-label>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.normalizedValue !=undefined">{{ctrl.normalizedValue}} = Rule.NomalizedValue</vr-label>
-    </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-list maxitemsperrow="1">
+                <vr-listitem ng-show="ctrl.value !=undefined"><vr-label>Rule.Value = {{ctrl.value}}</vr-label></vr-listitem>
+                <vr-listitem ng-show="ctrl.normalizedValue !=undefined"><vr-label>{{ctrl.normalizedValue}} = Rule.NomalizedValue</vr-label></vr-listitem>
+            </vr-list>
+        </vr-columns>
 </vr-row>

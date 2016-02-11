@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
 
                 var ctrl = this;
 
-                var ctor = new rateTypeRuleStepCtor(ctrl, $scope);
+                var ctor = new TariffRuleStepCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,12 +26,12 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/RateType/Templates/RateTypeRuleStepPreviewTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Tariff/Templates/TariffRuleStepPreviewTemplate.html';
             }
 
         };
 
-        function rateTypeRuleStepCtor(ctrl, $scope) {
+        function TariffRuleStepCtor(ctrl, $scope) {
             var stepObj = {};
 
             var commonDirectiveAPI;
@@ -53,15 +53,17 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                     ctrl.ruleFieldsMappings.length = 0;
                     if (payload != undefined) {
                         if (payload.stepDetails != undefined) {
-                            stepObj.normalRate = payload.stepDetails.NormalRate;
-                            stepObj.ratesByRateType = payload.stepDetails.RatesByRateType;
+                            stepObj.initialRate = payload.stepDetails.InitialRate;
+                            stepObj.durationInSeconds = payload.stepDetails.DurationInSeconds;
                             stepObj.effectiveRate = payload.stepDetails.EffectiveRate;
-                            stepObj.rateTypeId = payload.stepDetails.RateTypeId;
+                            stepObj.effectiveDurationInSeconds = payload.stepDetails.EffectiveDurationInSeconds;
+                            stepObj.totalAmount = payload.stepDetails.TotalAmount;
 
-                            ctrl.normalRate = payload.stepDetails.NormalRate;
-                            ctrl.ratesByRateType = payload.stepDetails.RatesByRateType;
+                            ctrl.initialRate = payload.stepDetails.InitialRate;
+                            ctrl.durationInSeconds = payload.stepDetails.DurationInSeconds;
                             ctrl.effectiveRate = payload.stepDetails.EffectiveRate;
-                            ctrl.rateTypeId = payload.stepDetails.RateTypeId;
+                            ctrl.effectiveDurationInSeconds = payload.stepDetails.EffectiveDurationInSeconds;
+                            ctrl.totalAmount = payload.stepDetails.TotalAmount;
                         }
 
                     }
@@ -87,15 +89,17 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                     if (commonDirectiveAPI != undefined)
                         commonDirectiveAPI.applyChanges(changes);
 
-                    stepObj.normalRate = changes.NormalRate;
-                    stepObj.ratesByRateType = changes.RatesByRateType;
+                    stepObj.initialRate = changes.InitialRate;
+                    stepObj.durationInSeconds = changes.DurationInSeconds;
                     stepObj.effectiveRate = changes.EffectiveRate;
-                    stepObj.rateTypeId = changes.RateTypeId;
+                    stepObj.effectiveDurationInSeconds = changes.EffectiveDurationInSeconds;
+                    stepObj.totalAmount = changes.TotalAmount;
 
-                    ctrl.normalRate = changes.NormalRate;
-                    ctrl.ratesByRateType = changes.RatesByRateType;
+                    ctrl.initialRate = changes.InitialRate;
+                    ctrl.durationInSeconds = changes.DurationInSeconds;
                     ctrl.effectiveRate = changes.EffectiveRate;
-                    ctrl.rateTypeId = changes.RateTypeId;
+                    ctrl.effectiveDurationInSeconds = changes.EffectiveDurationInSeconds;
+                    ctrl.totalAmount = changes.TotalAmount;
                 }
 
                 api.checkValidation = function () {
@@ -108,10 +112,11 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
                 api.getData = function () {
                     var stepDetails = commonDirectiveAPI.getData();
                     if (stepDetails != undefined) {
-                        stepDetails.NormalRate = stepObj.normalRate;
-                        stepDetails.RatesByRateType = stepObj.ratesByRateType;
+                        stepDetails.InitialRate = stepObj.initialRate;
+                        stepDetails.DurationInSeconds = stepObj.durationInSeconds;
                         stepDetails.EffectiveRate = stepObj.effectiveRate;
-                        stepDetails.RateTypeId = stepObj.rateTypeId;
+                        stepDetails.EffectiveDurationInSeconds = stepObj.effectiveDurationInSeconds;
+                        stepDetails.TotalAmount = stepObj.totalAmount;
                     }
                     return stepDetails;
                 }
@@ -122,19 +127,12 @@ app.directive('vrGenericdataDatatransformationTariffrulestepPreview', ['UtilsSer
 
             function checkValidation() {
                
-                if (ctrl.normalRate == undefined) {
-                    return "Missing normal rate mapping.";
-                }
-                if (ctrl.ratesByRateType == undefined) {
-                    return "Missing rates by rate type mapping.";
+                if (ctrl.initialRate == undefined) {
+                    return "Missing initial rate mapping.";
                 }
                 if (ctrl.effectiveRate == undefined) {
                     return "Missing effective rate mapping.";
                 }
-                if (ctrl.rateTypeId == undefined) {
-                    return "Missing rate type id mapping.";
-                }
-
                 return null;
             }
 

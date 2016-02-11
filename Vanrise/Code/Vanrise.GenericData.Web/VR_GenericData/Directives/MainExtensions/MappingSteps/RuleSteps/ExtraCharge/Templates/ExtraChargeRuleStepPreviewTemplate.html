@@ -1,11 +1,9 @@
-﻿<vr-row removeline>
-    <vr-columns width="fullrow">
-        <vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.initialRate !=undefined">Rule.InitialRate = {{ctrl.initialRate}}</vr-label>
-    </vr-columns>
-    <vr-columns width="fullrow">
-        <vr-label ng-show="ctrl.effectiveRate !=undefined">{{ctrl.effectiveRate}} = Rule.EffectiveRate </vr-label>
+﻿<vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
+<vr-row removeline>
+    <vr-columns width="1/2row">
+        <vr-list maxitemsperrow="1" >
+            <vr-listitem ng-show="ctrl.initialRate !=undefined"><vr-label>Rule.InitialRate = {{ctrl.initialRate}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.effectiveRate !=undefined"><vr-label>{{ctrl.effectiveRate}} = Rule.EffectiveRate</vr-label></vr-listitem>
+        </vr-list>
     </vr-columns>
 </vr-row>

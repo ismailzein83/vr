@@ -40,9 +40,10 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
 
             $scope.onCheckedChanged =function()
             {
+                
                 if(currentContext != undefined)
                 {
-                    if ($scope.checkedSequence)
+                    if (ctrl.checkedSequence)
                       currentContext.setSelectedComposite(api);
                     else
                       currentContext.setSelectedComposite();
@@ -97,7 +98,7 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
 
             api.setCheckedSequence = function(value)
             {
-                $scope.checkedSequence = value;
+                ctrl.checkedSequence = value;
             }
 
             api.getData = function()

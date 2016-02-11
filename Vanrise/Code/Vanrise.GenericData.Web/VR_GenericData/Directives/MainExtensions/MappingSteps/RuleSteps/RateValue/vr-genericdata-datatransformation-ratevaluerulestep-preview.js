@@ -109,9 +109,6 @@ app.directive('vrGenericdataDatatransformationRatevaluerulestepPreview', ['Utils
                 if (ctrl.normalRate == undefined) {
                     return "Missing normal rate mapping.";
                 }
-                if (ctrl.ratesByRateType == undefined) {
-                    return "Missing rates by rate type mapping.";
-                }
                 return null;
             }
 
