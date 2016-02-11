@@ -11,6 +11,8 @@ namespace Vanrise.GenericData.SQLDataStorage
     {
         public string TableName { get; set; }
 
+        public string TableSchema { get; set; }
+
         public List<SQLDataRecordStorageColumn> Columns { get; set; }
     }
 

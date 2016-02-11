@@ -65,68 +65,90 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public void AlterSQLRecordStorageTable(SQLDataRecordStorageSettings existingDataRecordSettings)
         {
-            ExecuteNonQueryText(GetRecordStorageAlterTableQuery(existingDataRecordSettings), null);
+            string query = GetRecordStorageAlterTableQuery(existingDataRecordSettings);
+            if (query != null)
+                ExecuteNonQueryText(query, null);
         }
 
         #region Private Methods
 
         string GetRecordStorageCreateTableQuery()
         {
-            if (_dataRecordStorageSettings.TableName == null)
-                throw new ArgumentNullException("_dataRecordStorageSettings.TableName");
+            StringBuilder query = new StringBuilder();
+            string schema = (_dataRecordStorageSettings.TableSchema != null) ? _dataRecordStorageSettings.TableSchema : "dbo";
+            string name = _dataRecordStorageSettings.TableName;
 
-            if (_dataRecordStorageSettings.Columns == null)
-                throw new ArgumentNullException("_dataRecordStorageSettings.Columns");
+            if (schema != null)
+                query.Append(String.Format(" IF NOT EXISTS (SELECT schema_name FROM information_schema.schemata WHERE schema_name = '{0}') BEGIN EXEC sp_executesql N'CREATE SCHEMA {0}' END;", schema));
 
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("CREATE TABLE [genericdata].[{0}] (", _dataRecordStorageSettings.TableName));
-
-            int columnCount = _dataRecordStorageSettings.Columns.Count;
-            for (int i = 0; i < columnCount; i++)
+            string tableName = (schema != null) ? String.Format("{0}.{1}", schema, name) : name;
+            query.Append(String.Format("CREATE TABLE {0}", tableName));
+            
+            List<string> columnDefinitions = new List<string>();
+            
+            foreach (var column in _dataRecordStorageSettings.Columns)
             {
-                var column = _dataRecordStorageSettings.Columns[i];
-                builder.Append(String.Format("[{0}] [{1}]{2}", column.ColumnName, column.SQLDataType, (i < columnCount - 1) ? "," : null));
+                columnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
             }
 
-            builder.Append(")");
-            return builder.ToString();
+            query.Append(String.Format(" ({0});", string.Join(",", columnDefinitions)));
+            
+            return query.ToString();
         }
 
         string GetRecordStorageAlterTableQuery(SQLDataRecordStorageSettings existingDataRecordSettings)
         {
-            if (_dataRecordStorageSettings.TableName == null)
-                throw new ArgumentNullException("_dataRecordStorageSettings.TableName");
-
-            if (_dataRecordStorageSettings.Columns == null)
-                throw new ArgumentNullException("_dataRecordStorageSettings.Columns");
-
             StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("sp_rename 'genericdata.{0}', '{1}';", existingDataRecordSettings.TableName, _dataRecordStorageSettings.TableName));
-            builder.Append(String.Format("ALTER TABLE [genericdata].[{0}] ADD", _dataRecordStorageSettings.TableName));
 
-            var columnsToAdd = GetColumnsToAdd(existingDataRecordSettings);
-            var columnCount = columnsToAdd.Count();
-            for (int i = 0; i < columnCount; i++)
+            string existingSchema = (existingDataRecordSettings.TableSchema != null) ? existingDataRecordSettings.TableSchema : "dbo";
+            string existingName = existingDataRecordSettings.TableName;
+            string newSchema = (_dataRecordStorageSettings.TableSchema != null) ? _dataRecordStorageSettings.TableSchema : "dbo";
+            string newName = _dataRecordStorageSettings.TableName;
+
+            if (existingSchema.CompareTo(newSchema) != 0)
             {
-                var column = columnsToAdd.ElementAt(i);
-                builder.Append(String.Format(" {0} {1}{2}", column.ColumnName, column.SQLDataType, (i < columnCount - 1) ? "," : ";"));
+                builder.Append(String.Format("IF NOT EXISTS (SELECT schema_name FROM information_schema.schemata WHERE schema_name = '{0}') BEGIN EXEC sp_executesql N'CREATE SCHEMA {0}' END;", newSchema));
+
+                builder.Append(string.Format("ALTER SCHEMA {0} TRANSFER {1}.{2};", newSchema, existingSchema, existingName));
+            }
+
+            if (existingName.CompareTo(newName) != 0)
+                builder.Append(String.Format("BEGIN EXEC sp_executesql N'sp_rename ''{0}.{1}'', ''{2}''' END;", newSchema, existingName, newName));
+
+            List<string> addColumnDefinitions;
+            List<string> alterColumnDefinitions;
+
+            SetAddAndAlterColumnDefinitions(existingDataRecordSettings, out addColumnDefinitions, out alterColumnDefinitions);
+
+            if (addColumnDefinitions.Count() > 0)
+                builder.Append(String.Format("ALTER TABLE {0}.{1} ADD {2};", newSchema, newName, String.Join(",", addColumnDefinitions)));
+
+            foreach (var columnDefinition in alterColumnDefinitions)
+            {
+                builder.Append(String.Format("ALTER TABLE {0}.{1} ALTER COLUMN {2};", newSchema, newName, columnDefinition));
             }
 
             return builder.ToString();
         }
 
-        IEnumerable<SQLDataRecordStorageColumn> GetColumnsToAdd(SQLDataRecordStorageSettings existingDataRecordSettings)
+        void SetAddAndAlterColumnDefinitions(SQLDataRecordStorageSettings existingDataRecordSettings, out List<string> addColumnDefinitions, out List<string> alterColumnDefinitions)
         {
-            List<SQLDataRecordStorageColumn> columnsToAdd = new List<SQLDataRecordStorageColumn>();
+            addColumnDefinitions = new List<string>();
+            alterColumnDefinitions = new List<string>();
+
             foreach (var column in _dataRecordStorageSettings.Columns)
             {
-                var matchExistingColumnState = existingDataRecordSettings.Columns.FirstOrDefault(itm => itm.ColumnName == column.ColumnName);
-                if (matchExistingColumnState == null)
-                    columnsToAdd.Add(column);
-                else if (column.SQLDataType != matchExistingColumnState.SQLDataType)
-                    throw new Exception(String.Format("Cannot change data type of column '{0}'", column.ColumnName));
+                var existingMatch = existingDataRecordSettings.Columns.FirstOrDefault(itm => itm.ColumnName == column.ColumnName);
+                if (existingMatch == null)
+                    addColumnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
+                else if (column.SQLDataType != existingMatch.SQLDataType)
+                    alterColumnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
             }
-            return columnsToAdd;
+        }
+
+        void AppendErrorCheck(StringBuilder sql)
+        {
+            sql.Append(" IF @@ERROR <> 0 BEGIN ROLLBACK TRAN END;");
         }
 
         #endregion

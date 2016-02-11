@@ -86,6 +86,7 @@
                     }
                     if (payload.Columns != undefined) {
                         ctrl.tableName = payload.TableName;
+                        ctrl.tableSchema = payload.TableSchema;
                     }
                     if (payload.DataRecordTypeId != undefined) {
                         return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(payload.DataRecordTypeId).then(function (response) {
@@ -117,6 +118,7 @@
                     return {
                         $type: 'Vanrise.GenericData.SQLDataStorage.SQLDataRecordStorageSettings, Vanrise.GenericData.SQLDataStorage',
                         TableName: ctrl.tableName,
+                        TableSchema: ctrl.tableSchema,
                         Columns: ctrl.columns.length > 0 ? getColumns() : null
                     };
 
@@ -145,7 +147,8 @@
                 if (data != undefined) {
                     gridItem.columnName = data.ColumnName,
                     gridItem.sqlDataType = data.SQLDataType,
-                    gridItem.selectedDataRecordTypeFieldName = data.ValueExpression
+                    gridItem.selectedDataRecordTypeFieldName = data.ValueExpression,
+                    gridItem.isDisabled = true
                 }
 
                 gridItem.onSelectorReady = function (api) {
