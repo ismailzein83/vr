@@ -95,12 +95,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                             foreach (NumberProfile numberProfile in item.NumberProfiles)
                             {
-                                StrategyExecutionItem strategyExecutionDetail = new StrategyExecutionItem();
+                                StrategyExecutionItem strategyExecutionItem = new StrategyExecutionItem();
 
-                                if (fraudManagers[numberProfile.StrategyId].IsNumberSuspicious(numberProfile, out strategyExecutionDetail))
+                                if (fraudManagers[numberProfile.StrategyId].IsNumberSuspicious(numberProfile, out strategyExecutionItem))
                                 {
                                     numberOfSuspicions++;
-                                    strategyExecutionItems.Add(strategyExecutionDetail);
+                                    strategyExecutionItems.Add(strategyExecutionItem);
                                 }
 
                             }
