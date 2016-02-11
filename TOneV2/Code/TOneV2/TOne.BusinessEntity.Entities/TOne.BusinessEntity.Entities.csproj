@@ -128,6 +128,7 @@
     <Compile Include="Tariff.cs" />
     <Compile Include="ToDConsideration.cs" />
     <Compile Include="UpdatedAccountManagerCarrier.cs" />
+    <Compile Include="UploadInfo.cs" />
     <Compile Include="Zone.cs" />
     <Compile Include="ZoneInfo.cs" />
     <Compile Include="ZoneRate.cs" />
