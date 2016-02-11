@@ -99,8 +99,10 @@ app.directive('vrGenericdataDatatransformationRatetyperulestepPreview', ['UtilsS
                 }
 
                 api.checkValidation = function () {
-                    var validate = commonDirectiveAPI.checkValidation();
-                    if (validate === null)
+                    var validate;
+                    if (commonDirectiveAPI != undefined)
+                        validate = commonDirectiveAPI.checkValidation();
+                    if (validate == undefined)
                         validate = checkValidation();
                     return validate;
                 }

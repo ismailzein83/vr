@@ -54,6 +54,7 @@
             $scope.scopeModal.addStep = function (dataItem)
             {
                 if (selectedComposite != undefined) {
+                    checkValidation();
                     selectedComposite.addStep(dataItem);
                 }             
             }
@@ -201,7 +202,8 @@
                 setSelectedComposite:setSelectedComposite,
                 editStep: editStep,
                 removeStep: removeStep,
-                setSelectedStep: setSelectedStep
+                setSelectedStep: setSelectedStep,
+                checkValidation: checkValidation
             };
         }
 
@@ -226,9 +228,14 @@
             }
             stepItem.onPreviewDirectiveReady = function (api) {
                 stepItem.previewAPI = api;
-                
-                var setLoader = function (value) { stepItem.isLoadingPreviewDirective = value };
+               
+                var setLoader = function (value) {
+                    stepItem.isLoadingPreviewDirective = value;
+                    if(!value)
+                      context.checkValidation(stepItem);
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stepItem.previewAPI, payload, setLoader, stepItem.readyPromiseDeferred);
+              
             }
 
             if (stepItem.readyPromiseDeferred != undefined)
@@ -284,9 +291,15 @@
             }
         }
 
-        function checkValidation()
+        function checkValidation(stepItem)
         {
-            if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI != undefined) {
+          
+            if (stepItem != undefined && stepItem.previewAPI != undefined)
+            {
+                stepItem.validationMessage = stepItem.previewAPI.checkValidation();
+            }
+               
+            else if ($scope.scopeModal.selectedStep != undefined && $scope.scopeModal.selectedStep.previewAPI != undefined) {
                 $scope.scopeModal.selectedStep.validationMessage = $scope.scopeModal.selectedStep.previewAPI.checkValidation();
             }
         }
