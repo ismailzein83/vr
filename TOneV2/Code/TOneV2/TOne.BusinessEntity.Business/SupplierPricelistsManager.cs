@@ -28,5 +28,11 @@ namespace TOne.BusinessEntity.Business
                 BEDataManagerFactory.GetDataManager<ISupplierPricelistsDataManager>();
             return dataManager.GetQueueStatus(queueId);
         }
+        public UploadInfo GetUploadInfo(int queueId)
+        {
+            ISupplierPricelistsDataManager dataManager =
+              BEDataManagerFactory.GetDataManager<ISupplierPricelistsDataManager>();
+            return dataManager.GetUploadInfo(queueId);
+        }
     }
 }

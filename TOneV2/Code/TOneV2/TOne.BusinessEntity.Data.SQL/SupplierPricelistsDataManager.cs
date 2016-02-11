@@ -42,12 +42,28 @@ namespace TOne.Analytics.Data.SQL
             ExecuteNonQuerySP("[sp_SupplierPriceList_GetResults]", out result, queueId);
             return (int)result;
         }
+
         public bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, string messageUid, out int insertedId)
         {
             object id;
             int recordesEffected = ExecuteNonQuerySP("[sp_SupplierPriceList_Insert]", out id, priceListStatus, effectiveOnDateTime, supplierId, priceListType, activeSupplierEmail, contentBytes, fileName, messageUid);
             insertedId = (int)id;
             return (recordesEffected > 0);
+        }
+
+        public UploadInfo GetUploadInfo(int queueId)
+        {
+            return GetItemSP("sp_SupplierPriceList_GetUploadInfo", UploadInfoMapper, queueId);
+        }
+        private UploadInfo UploadInfoMapper(IDataReader reader)
+        {
+            UploadInfo uploadInfo = new UploadInfo
+            {
+                Status = (int)reader["Status"]
+            };
+            if (reader["PricelistImportLog"] != null) uploadInfo.ContentBytes = (byte[])reader["PricelistImportLog"];
+            if (reader["FileName"] != null) uploadInfo.FileName = reader["FileName"] as string;
+            return uploadInfo;
         }
     }
 }

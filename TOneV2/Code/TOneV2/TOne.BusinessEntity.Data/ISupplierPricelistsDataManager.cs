@@ -12,6 +12,6 @@ namespace TOne.BusinessEntity.Data
         Vanrise.Entities.BigResult<PriceLists> GetSupplierPriceLists(Vanrise.Entities.DataRetrievalInput<string> input);
         bool SavePriceList(int priceListStatus, DateTime effectiveOnDateTime, string supplierId, string priceListType, string activeSupplierEmail, byte[] contentBytes, string fileName, string messageUid, out int insertdId);
         int GetQueueStatus(int queueId);
-
+        UploadInfo GetUploadInfo(int queueId);
     }
 }
