@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<List<int>> StrategyIds { get; set; }
 
-        public OutArgument<List<ExecuteStrategyExecutionItem>> StrategyExecutionItems { get; set; }
+        public OutArgument<List<ExecuteStrategyExecutionItem>> ExecuteStrategyExecutionItems { get; set; }
 
 
         [RequiredArgument]
@@ -56,7 +56,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             }
 
             
-            this.StrategyExecutionItems.Set(context, executeStrategiesExecutionItems);
+            this.ExecuteStrategyExecutionItems.Set(context, executeStrategiesExecutionItems);
         }
     }
 }
