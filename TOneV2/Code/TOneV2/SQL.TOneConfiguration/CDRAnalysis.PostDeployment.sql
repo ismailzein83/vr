@@ -127,14 +127,18 @@ as (select * from (values
 (13,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',5,'Root/Reporting Module:View',null,null,0,12),
 (14,'Detected Lines Summary','Detected Lines Summary','#/view/FraudAnalysis/Views/Reports/BlockedLines',5,'Root/Reporting Module:View',null,null,0,10),
 (15,'Detected Lines Details','Detected Lines Details','#/view/FraudAnalysis/Views/Reports/LinesDetected',5,'Root/Reporting Module:View',null,null,0,11),
-(16,'Cancel Cases','Cancel Cases','#/view/FraudAnalysis/Views/SuspiciousAnalysis/CancelCases',2,'Root/Suspicion Analysis Module:View',null,null,0,12),
 (17,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,10),
 (18,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',7,'Root/Administration Module/Dynamic Pages:View',null,null,0,11),
 (19,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,12),
 (20,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,10),
 (21,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,11),
 (22,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'Root/Administration Module:View',null,null,0,13),
-(23,'Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement',3,'Root/PSTN_BusinessEntity Module:View',null,null,0,13)
+(23,'Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement',3,'Root/PSTN_BusinessEntity Module:View',null,null,0,13),
+(26,'Number Prefixes','Number Prefixes','#/view/FraudAnalysis/Views/NumberPrefix/NumberPrefixManagement',1,'Root/Business Process Module/Management:View',null,null,0,	14	),
+(27,'Strategy Executions','Strategy Executions','#/view/FraudAnalysis/Views/StrategyExecution/StrategyExecutionManagement',	2,'	Root/Suspicion Analysis Module:View',null,null,0,	12	)
+
+
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
