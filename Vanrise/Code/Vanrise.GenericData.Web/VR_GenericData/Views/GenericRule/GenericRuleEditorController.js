@@ -191,18 +191,13 @@
             var loadRuleTypeConfigPromise = VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypeById(genericRuleDefintion.SettingsDefinition.ConfigId).then(function (response) {
                 genericRuleTypeConfig = response;
                 $scope.scopeModel.settingsDirective = genericRuleTypeConfig.RuntimeEditor;
-
-                var loadSettingsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 
                 settingsDirectiveReadyPromiseDeferred.promise.then(function () {
                     var payload = {
                         genericRuleDefinition: genericRuleDefintion,
                         settings: (genericRuleEntity != undefined && genericRuleEntity.Settings != null) ? genericRuleEntity.Settings : undefined
                     };
-                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, loadSettingsDirectiveReadyPromiseDeferred);
-                    loadSettingsSectionPromiseDeferred.resolve();
-                }).catch(function (error) {
-                    loadSettingsSectionPromiseDeferred.reject();
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, loadSettingsSectionPromiseDeferred);
                 });
             });
 
