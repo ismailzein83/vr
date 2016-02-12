@@ -31,6 +31,24 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             strategyExecutionProgress.CDRsProcessed += currentOutput.CDRsProcessed;
             strategyExecutionProgress.NumberOfSubscribers += currentOutput.NumberOfSubscribers;
+
+            foreach (var key in currentOutput.SuspicionsPerStrategy.Keys)
+            {
+                long currentCount = currentOutput.SuspicionsPerStrategy[key];
+                long progressCount;
+                if (strategyExecutionProgress.SuspicionsPerStrategy == null)
+                {
+                    strategyExecutionProgress.SuspicionsPerStrategy = new Dictionary<int, long>();
+                    strategyExecutionProgress.SuspicionsPerStrategy.Add(key, currentCount);
+                }
+                else if (strategyExecutionProgress.SuspicionsPerStrategy.TryGetValue(key, out progressCount))
+                {
+                    progressCount += currentCount;
+                    strategyExecutionProgress.SuspicionsPerStrategy[key] = progressCount;
+                }
+                else
+                    strategyExecutionProgress.SuspicionsPerStrategy.Add(key, currentCount);
+            }
         }
     }
 }

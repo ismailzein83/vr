@@ -12,6 +12,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public long NumberOfSubscribers { get; set; }
 
-        public long NumberOfSuspicions { get; set; }
+        public Dictionary<int, long> SuspicionsPerStrategy { get; set; }
     }
 }

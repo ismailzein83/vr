@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
     public class GetStrategyExecutionItemOuput
     {
-        public long NumberOfSuspicions { get; set; }
+        public Dictionary<int, long> SuspicionsPerStrategy { get; set; }
     }
 
     #endregion
@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<List<StrategyExecutionInfo>> StrategiesExecutionInfo { get; set; }
 
-        public OutArgument<long> NumberOfSuspicions { get; set; }
+        public OutArgument<Dictionary<int, long>> SuspicionsPerStrategy { get; set; }
 
         #endregion
 
@@ -68,7 +68,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Collecting Suspicious Numbers ");
 
             Dictionary<int, FraudManager> fraudManagers = new Dictionary<int, FraudManager>();
-          
+
             List<Strategy> strategies = new List<Strategy>();
             foreach (var strategiesExecutionInfo in inputArgument.StrategiesExecutionInfo)
             {
@@ -80,7 +80,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 fraudManagers.Add(strategy.Id, new FraudManager(strategy));
             }
             int numberProfilesProcessed = 0;
-            long numberOfSuspicions = 0;
+            Dictionary<int, long> suspicionsPerStrategy = new Dictionary<int, long>();
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -99,7 +100,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                                 if (fraudManagers[numberProfile.StrategyId].IsNumberSuspicious(numberProfile, out strategyExecutionItem))
                                 {
-                                    numberOfSuspicions++;
+                                    long suspicionsCount = suspicionsPerStrategy.GetOrCreateItem(numberProfile.StrategyId, () => { return new long(); });
+                                    suspicionsCount += 1;
+                                    suspicionsPerStrategy[numberProfile.StrategyId] = suspicionsCount;
                                     strategyExecutionItems.Add(strategyExecutionItem);
                                 }
 
@@ -122,13 +125,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finshed Collecting Suspicious Numbers ");
             return new GetStrategyExecutionItemOuput
             {
-                NumberOfSuspicions = numberOfSuspicions
+                SuspicionsPerStrategy = suspicionsPerStrategy
             };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, GetStrategyExecutionItemOuput result)
         {
-            this.NumberOfSuspicions.Set(context, result.NumberOfSuspicions);
+            this.SuspicionsPerStrategy.Set(context, result.SuspicionsPerStrategy);
         }
     }
 }

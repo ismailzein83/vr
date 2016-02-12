@@ -75,7 +75,11 @@
       <Variable x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)" Name="strategiesExecutionInfo" />
       <Variable x:TypeArguments="x:Int64" Name="processedCDRs" />
       <Variable x:TypeArguments="x:Int64" Name="numberOfSubscribers" />
-      <Variable x:TypeArguments="x:Int64" Name="numberOfSuspicions" />
+      <Variable x:TypeArguments="scg:Dictionary(x:Int32, x:Int64)" Name="suspicionsPerStrategy">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int32, x:Int64)">new Dictionary&lt;Int32,Int64&gt;()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <vffba1:ConvertExecuteStrategyExecutionItemsToInfos sap2010:WorkflowViewState.IdRef="ConvertExecuteStrategyExecutionItemsToInfos_1">
       <vffba1:ConvertExecuteStrategyExecutionItemsToInfos.ExecuteStrategyExecutionItems>
@@ -100,7 +104,7 @@
           <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
             <Parallel.Variables>
               <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileQueue" />
-              <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)" Name="strategyExecutionDetailQueue" />
+              <Variable x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)" Name="strategyExecutionItemQueue" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="createNumberProfilesStatus" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GetStrategyExecutionItemStatus" />
               <Variable x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)" Name="numberProfileToStoreQueue" />
@@ -196,20 +200,15 @@
                 </InArgument>
               </vffba1:CreateNumberProfiles.ToDate>
             </vffba1:CreateNumberProfiles>
-            <vffba1:GetStrategyExecutionItem DisplayName="GetStrategyExecutionItems" sap2010:WorkflowViewState.IdRef="GetStrategyExecutionItem_1">
+            <vffba1:GetStrategyExecutionItem sap2010:WorkflowViewState.IdRef="GetStrategyExecutionItem_4">
               <vffba1:GetStrategyExecutionItem.InputQueueForNumberProfile>
                 <InArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
                   <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpValue>
                 </InArgument>
               </vffba1:GetStrategyExecutionItem.InputQueueForNumberProfile>
-              <vffba1:GetStrategyExecutionItem.NumberOfSuspicions>
-                <OutArgument x:TypeArguments="x:Int64">
-                  <mca:CSharpReference x:TypeArguments="x:Int64">numberOfSuspicions</mca:CSharpReference>
-                </OutArgument>
-              </vffba1:GetStrategyExecutionItem.NumberOfSuspicions>
               <vffba1:GetStrategyExecutionItem.OutputQueueForStrategyExecutionItem>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">strategyExecutionDetailQueue</mca:CSharpReference>
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">strategyExecutionItemQueue</mca:CSharpReference>
                 </InOutArgument>
               </vffba1:GetStrategyExecutionItem.OutputQueueForStrategyExecutionItem>
               <vffba1:GetStrategyExecutionItem.PreviousActivityStatus>
@@ -227,11 +226,16 @@
                   <mca:CSharpValue x:TypeArguments="scg:List(vffe:StrategyExecutionInfo)">strategiesExecutionInfo</mca:CSharpValue>
                 </InArgument>
               </vffba1:GetStrategyExecutionItem.StrategiesExecutionInfo>
+              <vffba1:GetStrategyExecutionItem.SuspicionsPerStrategy>
+                <OutArgument x:TypeArguments="scg:Dictionary(x:Int32, x:Int64)">
+                  <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int32, x:Int64)">suspicionsPerStrategy</mca:CSharpReference>
+                </OutArgument>
+              </vffba1:GetStrategyExecutionItem.SuspicionsPerStrategy>
             </vffba1:GetStrategyExecutionItem>
             <vffba1:PrepareStrategyExecutionItemForDBApply sap2010:WorkflowViewState.IdRef="PrepareStrategyExecutionItemForDBApply_1">
               <vffba1:PrepareStrategyExecutionItemForDBApply.InputQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">
-                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">strategyExecutionDetailQueue</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vffe:StrategyExecutionItemBatch)">strategyExecutionItemQueue</mca:CSharpValue>
                 </InArgument>
               </vffba1:PrepareStrategyExecutionItemForDBApply.InputQueue>
               <vffba1:PrepareStrategyExecutionItemForDBApply.OutputQueue>
@@ -286,19 +290,19 @@
           <mca:CSharpValue x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput" xml:space="preserve">new ExecuteStrategyForNumberRangeProcessOutput {  
                 CDRsProcessed = processedCDRs,
                 NumberOfSubscribers = numberOfSubscribers,
-                NumberOfSuspicions = numberOfSuspicions
+                SuspicionsPerStrategy = suspicionsPerStrategy
             }</mca:CSharpValue>
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneUZvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sL0kDpwIOAgEBUAVbOgMBvQRcBZUCCgIBEZYCBaUCDgIBAlgLWIQBAwHFBFMLU5IBAwG+BF8LX5kBAgESYwmKAhQCASKNAgmTAiQCARmeAguiAiACAQqZAguZAn8CAQNkC4kCFgIBI5ACD5ACgwECARuNAmSNAoEBAgEacw2SAR4DAcoDkwENxgErAwGLAscBDeYBLwMBmAHnAQ38AT0CAUv9AQ2IAjUCASR7E3tlAwGqBIABE4ABbwMBlwR2E3ZhAwGEBIoBE4oBdQMB8QOFAROFAXQDAd4DjwETjwFfAwHLA6UBE6UBawMBtwO0ARO0AW0DAaQDoAEToAF0AwGRA74BE74BhAEDAf4CqgETqgFvAwHrApYBE5YBYQMB2AK5ARO5AYEBAwHFAq8BE68BiAEDAbICmwETmwFoAwGfAsMBE8MBXwMBjALPARPPAWoDAfgBygETygGAAQMB5QHZARPZAXkDAdIB4wET4wGEAQMBvwHeARPeAYUBAwGsAdQBE9QBmgEDAZkB9AET9AF9AwGFAeoBE+oBkgECAXL5ARP5AYkBAgFf7wET7wGJAQIBTIUCE4UCgQECATiAAhOAAoEBAgEl</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneUZvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sMEkDqwIOAgEBUAtQhAECAQJUBV86AwHEBGAFmQIKAgEYmgIFqQIOAgEJXAtchAEDAcwEVwtXkgEDAcUEYwtjmQECARlnCY4CFAIBKZECCZcCJAIBIKICC6YCIAIBEZ0CC50CfwIBCmgLjQIWAgEqlAIPlAKDAQIBIpECZJECgQECASF3DZYBHgMB0QOXAQ3KASsDAZICywEN6gEvAwGfAesBDYACPQIBUoECDYwCNQIBK38Tf2UDAbEEhAEThAFvAwGeBHoTemEDAYsEjgETjgF1AwH4A4kBE4kBdAMB5QOTAROTAV8DAdIDqQETqQFrAwG+A7gBE7gBbQMBqwOkAROkAXQDAZgDwgETwgGEAQMBhQOuAROuAW8DAfICmgETmgFhAwHfAr0BE70BgQEDAcwCswETswGIAQMBuQKfAROfAWgDAaYCxwETxwFfAwGTAucBE+cBhgEDAf8BzgETzgGAAQMB7AHYARPYAXkDAdkB4gET4gGEAQMBxgHdARPdAYUBAwGzAdMBE9MBmAEDAaAB+AET+AF9AwGMAe4BE+4BkAECAXn9ARP9AYkBAgFm8wET8wGJAQIBU4kCE4kCgQECAT+EAhOEAoEBAgEs</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="ConvertExecuteStrategyExecutionItemsToInfos_1" sap:VirtualizedContainerService.HintSize="1521,22" />
       <sap2010:ViewStateData Id="LoadCDRs_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CreateNumberProfiles_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GetStrategyExecutionItem_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetStrategyExecutionItem_4" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareStrategyExecutionItemForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyStrategyExecutionItemToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1274,86" />

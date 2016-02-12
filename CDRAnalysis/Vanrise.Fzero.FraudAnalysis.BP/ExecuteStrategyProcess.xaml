@@ -230,7 +230,7 @@
                           <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
                             <vbw:WriteTrackingMessage.Message>
                               <InArgument x:TypeArguments="x:String">
-                                <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefix '{0}' group completed. {1} groups remaining. {2} processed CDRs. {3} total processed CDRs. {4} subscribers. {5} total subscribers. {6} suspicions. {7} total suspicions", numberPrefix, (numberPrefixes.Count - subProcessByPrefixCompleted), (subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput).CDRsProcessed, strategyExecutionProgress.CDRsProcessed, (subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput).NumberOfSubscribers, strategyExecutionProgress.NumberOfSubscribers, (subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput).NumberOfSuspicions, strategyExecutionProgress.NumberOfSubscribers)</mca:CSharpValue>
+                                <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefix '{0}' group completed. {1} groups remaining. {2} processed CDRs. {3} total processed CDRs. {4} subscribers. {5} total subscribers", numberPrefix, (numberPrefixes.Count - subProcessByPrefixCompleted), (subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput).CDRsProcessed, strategyExecutionProgress.CDRsProcessed, (subProcessEventPayload.ProcessOutput as ExecuteStrategyForNumberRangeProcessOutput).NumberOfSubscribers, strategyExecutionProgress.NumberOfSubscribers)</mca:CSharpValue>
                               </InArgument>
                             </vbw:WriteTrackingMessage.Message>
                           </vbw:WriteTrackingMessage>
@@ -269,7 +269,7 @@
                       <sap2010:ViewStateData Id="ConvertExecuteStrategyExecutionItemsToInfos_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
                       <sap2010:ViewStateData Id="LoadCDRs_2" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
                       <sap2010:ViewStateData Id="CreateNumberProfiles_2" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
-                      <sap2010:ViewStateData Id="GetStrategyExecutionItem_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+                      <sap2010:ViewStateData Id="GetStrategyExecutionItem_2" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
                       <sap2010:ViewStateData Id="PrepareStrategyExecutionItemForDBApply_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
                       <sap2010:ViewStateData Id="ApplyStrategyExecutionItemToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
                       <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
@@ -297,7 +297,7 @@
                 <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3">
                   <vbw:WriteTrackingMessage.Message>
                     <InArgument x:TypeArguments="x:String">
-                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0} total processed CDRs. {1} total subscribers. {2} total suspicions", executeStrategySubProcessEventOutput.CDRsProcessed, executeStrategySubProcessEventOutput.NumberOfSubscribers, executeStrategySubProcessEventOutput.NumberOfSuspicions)</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0} total processed CDRs. {1} total subscribers", executeStrategySubProcessEventOutput.CDRsProcessed, executeStrategySubProcessEventOutput.NumberOfSubscribers)</mca:CSharpValue>
                     </InArgument>
                   </vbw:WriteTrackingMessage.Message>
                 </vbw:WriteTrackingMessage>
@@ -328,7 +328,7 @@
         </InArgument>
       </vffba1:CloseStrategyExecutions.StrategyExecutionProgress>
     </vffba1:CloseStrategyExecutions>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDhMA8wCDgIBAVMLU34CAQJXBVsRAwH0AVwFdjIDAdUBdwW+AgoCARW/AgXKAiYCAQhZCVmVAQMB9QFpC2ljAwHuAV8LX5QBAwHoAWQLZFkDAeIBbgtuVwMB3AFzC3NUAwHWAXoLeqkBAgEWfgmzAhQCASS2Agm8AiQCARzHAgvHAngCAQ/CAgvCAowBAgEJggELiAEmAwHNAYkBC40BFwMBxQGOAQuyAhACASW5Ag+5AoMBAgEetgJktgKBAQIBHYUBEYUBbwMBzgGLAQ+LAXYDAcYBkQERkQGPAQIBJpUBD/IBIQIBWfUBD7ACGgIBLZgBFZgBcgMBvgGfARPwAR4CAVr5ARGcAj4CAUidAhGoAjoCATepAhGvAiwCAS6jARWpATADAbQBqgEVvAEmAwGgAb0BFe8BGgIBW4gCF4gCqQECAVH8AReDAiACAUmlAhelAoQBAgFAoAIXoAKhAQIBOKwCF6wC0gICAS+mARumAaMBAwG1Aa0BG7QBIAMBqwG5ARu5AY4BAwGiAaoBhgGqAYwBAwGhAcABG8ABvQECAVzEARnKAS0DAZYBzQEZ7QEkAgFlxwEfxwHfAQMBlwHOARvZAUQDAYMB2gEb5QEkAgFw5gEb7AE2AgFm1gEh1gGOAQMBjQHRASHRAdkBAwGEAeIBIeIBfQIBet0BId0BgQECAXHpASHpAbIGAgFn</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDhMA8wCDgIBAVMLU34CAQJXBVsRAwH0AVwFdjIDAdUBdwW+AgoCARW/AgXKAiYCAQhZCVmVAQMB9QFpC2ljAwHuAV8LX5QBAwHoAWQLZFkDAeIBbgtuVwMB3AFzC3NUAwHWAXoLeqkBAgEWfgmzAhQCASS2Agm8AiQCARzHAgvHAngCAQ/CAgvCAowBAgEJggELiAEmAwHNAYkBC40BFwMBxQGOAQuyAhACASW5Ag+5AoMBAgEetgJktgKBAQIBHYUBEYUBbwMBzgGLAQ+LAXYDAcYBkQERkQGPAQIBJpUBD/IBIQIBWfUBD7ACGgIBLZgBFZgBcgMBvgGfARPwAR4CAVr5ARGcAj4CAUidAhGoAjoCATepAhGvAiwCAS6jARWpATADAbQBqgEVvAEmAwGgAb0BFe8BGgIBW4gCF4gCqQECAVH8AReDAiACAUmlAhelAoQBAgFAoAIXoAKhAQIBOKwCF6wCgwICAS+mARumAaMBAwG1Aa0BG7QBIAMBqwG5ARu5AY4BAwGiAaoBhgGqAYwBAwGhAcABG8ABvQECAVzEARnKAS0DAZYBzQEZ7QEkAgFlxwEfxwHfAQMBlwHOARvZAUQDAYMB2gEb5QEkAgFw5gEb7AE2AgFm1gEh1gGOAQMBjQHRASHRAdkBAwGEAeIBIeIBfQIBet0BId0BgQECAXHpASHpAfQEAgFn</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
