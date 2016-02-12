@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyStrategyExecutionCancellation.cs" />
+    <Compile Include="UpdateStrategyExecutionProgress.cs" />
     <Compile Include="ConvertExecuteStrategyExecutionItemsToInfos.cs" />
     <Compile Include="CloseStrategyExecutions.cs" />
     <Compile Include="CreateExecuteStrategyExecutionItems.cs" />

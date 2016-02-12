@@ -18,11 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         public InArgument<List<ExecuteStrategyExecutionItem>> ExecuteStrategyExecutionItems { get; set; }
 
         [RequiredArgument]
-        public InArgument<long> NumberofSubscribers { get; set; }
-
-
-        [RequiredArgument]
-        public InArgument<long> NumberofCDRs { get; set; }
+        public InArgument<StrategyExecutionProgress> StrategyExecutionProgress { get; set; }
 
 
         #endregion
@@ -38,7 +34,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 if (strategyExecution != null)
                     executionDuration = Convert.ToInt32(DateTime.Now.Subtract(strategyExecution.ExecutionDate).TotalSeconds);
 
-                strategyExecutionManager.CloseStrategyExecution(item.StrategyExecutionId, context.GetValue(NumberofSubscribers), context.GetValue(NumberofCDRs), executionDuration);
+                strategyExecutionManager.CloseStrategyExecution(item.StrategyExecutionId, context.GetValue(StrategyExecutionProgress).NumberOfSubscribers, context.GetValue(StrategyExecutionProgress).CDRsProcessed, executionDuration);
             }
 
         }

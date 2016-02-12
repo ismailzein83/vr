@@ -68,6 +68,7 @@
     <Compile Include="CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManager\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManager\IBusinessManager.cs" />
+    <Compile Include="StrategyExecutionProgress.cs" />
     <Compile Include="Strategy\IStrategyManager.cs" />
     <Compile Include="DWBTSDictionary.cs" />
     <Compile Include="CaseStatus.cs" />
