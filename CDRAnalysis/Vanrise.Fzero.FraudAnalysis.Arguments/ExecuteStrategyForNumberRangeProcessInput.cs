@@ -26,7 +26,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
         public override string GetTitle()
         {
             IStrategyManager strategyManager = FraudManagerFactory.GetManager<IStrategyManager>();
-            return String.Format("Execute Strategy Process For Number Prefixes '{0}', Time Range ({1:dd-MMM-yy HH:mm} to {2:dd-MMM-yy HH:mm}), Strategies: {3}", string.Join(",", this.NumberPrefixes), this.FromDate, this.ToDate, String.Join(",", strategyManager.GetStrategyNames(ExecuteStrategiesExecutionItems.Select(itm => itm.StrategyId).ToList())));
+            return String.Format("Execute Strategy Process For Number Prefixes '{0}', Time Range ({1:dd-MMM-yy HH:00} to {2:dd-MMM-yy HH:00}), Strategies: {3}", string.Join(",", this.NumberPrefixes), this.FromDate, this.ToDate, String.Join(",", strategyManager.GetStrategyNames(ExecuteStrategiesExecutionItems.Select(itm => itm.StrategyId).ToList())));
         }
     }
 

@@ -64,6 +64,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
 
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
+            retrieveData();
         };
 
         $scope.searchClicked = function () {

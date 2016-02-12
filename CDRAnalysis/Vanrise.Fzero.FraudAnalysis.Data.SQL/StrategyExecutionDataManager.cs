@@ -46,6 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             _columnMapper.Add("Entity.NumberofCases", "NumberofCases");
             _columnMapper.Add("Entity.NumberofCDRs", "NumberofCDRs");
             _columnMapper.Add("Entity.NumberofSubscribers", "NumberofSubscribers");
+            _columnMapper.Add("Entity.NumberofSuspicions", "NumberofSuspicions");
             _columnMapper.Add("Entity.ID", "ID");
             _columnMapper.Add("StatusDescription", "Status");
         }
