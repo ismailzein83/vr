@@ -62,14 +62,17 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var configId;
+                    var settings;
 
                     if (payload != undefined) {
-                        configId = payload.ConfigId;
+                        settings = payload.settings;
                     }
                     
                     var templatesPromise = VR_Rules_PricingRuleAPIService.GetPricingRuleRateValueTemplates();
                     promises.push(templatesPromise);
+
+                    var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(directiveLoadDeferred.promise);
 
                     templatesPromise.then(function (response) {
                         if (response != null) {
@@ -77,23 +80,21 @@
                                 $scope.rateValueTemplates.push(response[i]);
                             }
 
-                            if (configId != undefined) {
-                                $scope.selectedRateValueTemplate = UtilsService.getItemByVal($scope.rateValueTemplates, configId, 'TemplateConfigID');
+                            if (settings != undefined && settings.ConfigId != undefined) {
+                                directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                                directiveReadyDeferred.promise.then(function () {
+                                    directiveReadyDeferred = undefined;
+                                    VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
+                                });
+
+                                $scope.selectedRateValueTemplate = UtilsService.getItemByVal($scope.rateValueTemplates, settings.ConfigId, 'TemplateConfigID');
+                            }
+                            else {
+                                directiveLoadDeferred.resolve();
                             }
                         }
                     });
-                    
-                    if (payload != undefined) {
-                        directiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(directiveLoadDeferred.promise);
-
-                        directiveReadyDeferred.promise.then(function () {
-                            directiveReadyDeferred = undefined;
-                            VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
-                        });
-                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

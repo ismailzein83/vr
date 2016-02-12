@@ -74,43 +74,52 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRuleRateTypeSettings,TOne.WhS.BusinessEntity.Entities",
+                    $type: "Vanrise.Rules.Pricing.PricingRuleRateTypeSettings, Vanrise.Rules.Pricing",
                     Items: getItems(),
                 }
                 return obj;
-            }
-            function getItems() {
-                var itemList = [];
 
-                angular.forEach(ctrl.datasource, function (item) {
-                    var obj = item.directiveAPI.getData();
-                    obj.ConfigId = item.configId;
-                    obj.RateTypeId = item.rateTypeSelectorAPI.getSelectedIds();
-                    itemList.push(obj);
-                });
+                function getItems() {
+                    var itemList = [];
 
-                return itemList;
+                    angular.forEach(ctrl.datasource, function (item) {
+                        var obj = item.directiveAPI.getData();
+                        obj.ConfigId = item.configId;
+                        obj.RateTypeId = item.rateTypeSelectorAPI.getSelectedIds();
+                        itemList.push(obj);
+                    });
+
+                    return itemList;
+                }
             }
+            
             api.load = function (payload) {
                 return loadFiltersSection(payload);
             }
 
             function loadFiltersSection(payload) {
+                console.log(payload);
                 var promises = [];
 
+                var settings;
                 var filterItems;
-                if (payload != undefined && payload.Items !=undefined) {
-                    filterItems = [];
-                    for (var i = 0; i < payload.Items.length; i++) {
-                        var filterItem = {
-                            payload: payload.Items[i],
-                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            readyRateTypePromiseDeferred: UtilsService.createPromiseDeferred(),
-                            loadRateTypePromiseDeferred: UtilsService.createPromiseDeferred(),
-                        };
-                        promises.push(filterItem.loadPromiseDeferred.promise);
-                        filterItems.push(filterItem);
+
+                if (payload != undefined) {
+                    settings = payload.settings;
+
+                    if (settings != undefined && settings.Items != undefined) {
+                        filterItems = [];
+                        for (var i = 0; i < settings.Items.length; i++) {
+                            var filterItem = {
+                                payload: settings.Items[i],
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                readyRateTypePromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadRateTypePromiseDeferred: UtilsService.createPromiseDeferred(),
+                            };
+                            promises.push(filterItem.loadPromiseDeferred.promise);
+                            filterItems.push(filterItem);
+                        }
                     }
                 }
 

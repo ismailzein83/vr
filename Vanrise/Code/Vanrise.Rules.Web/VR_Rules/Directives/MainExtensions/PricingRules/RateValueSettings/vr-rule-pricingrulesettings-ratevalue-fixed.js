@@ -68,11 +68,15 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var ratesByRateType;
+
+                    var settings;
 
                     if (payload != undefined) {
-                        ctrl.normalRate = payload.NormalRate;
-                        ratesByRateType = payload.RatesByRateType;
+                        settings = payload.settings;
+
+                        if (settings != undefined) {
+                            ctrl.normalRate = settings.NormalRate;
+                        }
                     }
 
                     var getAllRateTypesPromise = VRCommon_RateTypeAPIService.GetAllRateTypes();
@@ -86,10 +90,10 @@
                                     RateTypeName: response[i].Name
                                 };
 
-                                if (ratesByRateType != undefined) {
-                                    for (var prop in ratesByRateType) {
+                                if (settings != undefined && settings.RatesByRateType != undefined) {
+                                    for (var prop in settings.RatesByRateType) {
                                         if (prop == dataItem.RateTypeId) {
-                                            dataItem.RateTypeValue = ratesByRateType[prop];
+                                            dataItem.RateTypeValue = settings.RatesByRateType[prop];
                                             break;
                                         }  
                                     }     

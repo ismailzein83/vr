@@ -332,6 +332,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Pricing.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Web.dll</HintPath>

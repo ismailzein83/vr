@@ -68,7 +68,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
 
             api.getData = function () {
                 var obj = {
-                    $type: "TOne.WhS.BusinessEntity.Entities.PricingRuleExtraChargeSettings,TOne.WhS.BusinessEntity.Entities",
+                    $type: "Vanrise.Rules.Pricing.PricingRuleExtraChargeSettings, Vanrise.Rules.Pricing",
                     Actions: getActions(),
                 }
                 return obj;
@@ -91,17 +91,23 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
             function loadFiltersSection(payload) {
                 var promises = [];
 
+                var settings;
                 var filterItems;
-                if (payload != undefined && payload.Actions != undefined) {
-                    filterItems = [];
-                    for (var i = 0; i < payload.Actions.length; i++) {
-                        var filterItem = {
-                            payload: payload.Actions[i],
-                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                        };
-                        promises.push(filterItem.loadPromiseDeferred.promise);
-                        filterItems.push(filterItem);
+
+                if (payload != undefined) {
+                    settings = payload.settings;
+
+                    if (settings != undefined && settings.Actions != undefined) {
+                        filterItems = [];
+                        for (var i = 0; i < settings.Actions.length; i++) {
+                            var filterItem = {
+                                payload: settings.Actions[i],
+                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            };
+                            promises.push(filterItem.loadPromiseDeferred.promise);
+                            filterItems.push(filterItem);
+                        }
                     }
                 }
 
