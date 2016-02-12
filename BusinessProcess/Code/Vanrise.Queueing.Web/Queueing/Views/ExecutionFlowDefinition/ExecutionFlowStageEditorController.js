@@ -44,6 +44,7 @@
                 }
             };
 
+            $scope.recordTypesWithStages = [];
 
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
@@ -53,6 +54,10 @@
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
+
+            $scope.onSelectedDataTransformationChanged = function () {
+                alert("test");
+            }
 
         }
 

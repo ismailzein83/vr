@@ -10,7 +10,8 @@
             GetFilteredDataTransformationDefinitions: GetFilteredDataTransformationDefinitions,
             AddDataTransformationDefinition: AddDataTransformationDefinition,
             UpdateDataTransformationDefinition: UpdateDataTransformationDefinition,
-            GetDataTransformationDefinitions: GetDataTransformationDefinitions
+            GetDataTransformationDefinitions: GetDataTransformationDefinitions,
+            GetDataTransformationDefinitionRecords:GetDataTransformationDefinitionRecords
         });
         function GetFilteredDataTransformationDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'GetFilteredDataTransformationDefinitions'), input);
@@ -31,6 +32,13 @@
                 filter: filter
             });
         }
+
+        function GetDataTransformationDefinitionRecords(dataTransformationDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'GetDataTransformationDefinitionRecords'), {
+                dataTransformationDefinitionId: dataTransformationDefinitionId
+            });
+        }
+        
     }
 
     appControllers.service('VR_GenericData_DataTransformationDefinitionAPIService', DataTransformationDefinitionAPIService);

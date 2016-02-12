@@ -185,6 +185,7 @@
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-selector.js" />
     <Content Include="VR_GenericData\Directives\DataStoreConfig\vr-genericdata-datastoreconfig-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\StepSequenceDesignTemplate.html" />
+    <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinitionrecord-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-recordname-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-stepsequencedesign.js" />

@@ -39,6 +39,15 @@ namespace Vanrise.GenericData.Transformation
             var dataDataTransformationDefinitions = GetCachedDataTransformationDefinitions();
             return dataDataTransformationDefinitions.GetRecord(dataTransformationDefinitionId);
         }
+
+        public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(int dataTransformationDefinitionId)
+        {
+            var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
+            if (dataTransformationDefinition != null)
+                return dataTransformationDefinition.RecordTypes;
+            else
+                return null;
+        }
         public string GetDataTransformationDefinitionName(int dataTransformationDefinitionId)
         {
             var dataTransformationDefinitions = GetCachedDataTransformationDefinitions();
