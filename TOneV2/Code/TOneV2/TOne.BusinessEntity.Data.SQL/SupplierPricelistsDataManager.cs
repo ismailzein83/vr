@@ -61,8 +61,8 @@ namespace TOne.Analytics.Data.SQL
             {
                 Status = (int)reader["Status"]
             };
-            if (reader["PricelistImportLog"] != null) uploadInfo.ContentBytes = (byte[])reader["PricelistImportLog"];
-            if (reader["FileName"] != null) uploadInfo.FileName = reader["FileName"] as string;
+            if (reader["PricelistImportLog"] != DBNull.Value) uploadInfo.ContentBytes = (byte[])reader["PricelistImportLog"];
+            uploadInfo.FileName = "ImportLog.xls";
             return uploadInfo;
         }
     }
