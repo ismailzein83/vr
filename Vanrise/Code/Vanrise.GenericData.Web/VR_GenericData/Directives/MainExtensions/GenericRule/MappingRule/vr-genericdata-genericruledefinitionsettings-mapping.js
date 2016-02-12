@@ -46,7 +46,7 @@
                     var fieldTypeSelectivePayload = {};
 
                     if (payload != undefined) {
-                        ctrl.fieldName = payload.FieldName;
+                        ctrl.fieldTitle = payload.FieldTitle;
                         fieldTypeSelectivePayload = payload.FieldType;
                     }
 
@@ -58,7 +58,7 @@
                 api.getData = function () {
                     return {
                         $type: 'Vanrise.GenericData.Transformation.Entities.MappingRuleDefinitionSettings, Vanrise.GenericData.Transformation.Entities',
-                        FieldName: ctrl.fieldName,
+                        FieldTitle: ctrl.fieldTitle,
                         FieldType: fieldTypeSelectiveAPI.getData()
                     };
                 };

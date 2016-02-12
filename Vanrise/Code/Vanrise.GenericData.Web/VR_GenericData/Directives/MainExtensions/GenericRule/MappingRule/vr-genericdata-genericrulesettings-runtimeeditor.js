@@ -60,7 +60,7 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
                     if (genericRuleDefinition.SettingsDefinition != null)
                     {
                         var fieldType = genericRuleDefinition.SettingsDefinition.FieldType;
-                        var fieldTitle = genericRuleDefinition.SettingsDefinition.FieldName;
+                        var fieldTitle = genericRuleDefinition.SettingsDefinition.FieldTitle;
 
                         var promises = [];
 

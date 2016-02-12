@@ -112,10 +112,7 @@
         }
 
         function setTitle() {
-            if (isEditMode && genericRuleEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(genericRuleEntity.Name, 'Generic Rule');
-            else
-                $scope.title = UtilsService.buildTitleForAddEditor('Generic Rule');
+            $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor(genericRuleDefintion.Name) : UtilsService.buildTitleForAddEditor(genericRuleDefintion.Name);
         }
 
         function loadStaticSection() {
@@ -234,7 +231,7 @@
             var genericRuleObj = buildGenericRuleObjFromScope();
             return VR_GenericData_GenericRuleAPIService.AddGenericRule(genericRuleObj)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Generic Rule", response)) {
+                if (VRNotificationService.notifyOnItemAdded(genericRuleDefintion.Name, response)) {
                     if ($scope.onGenericRuleAdded != undefined)
                         $scope.onGenericRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -249,7 +246,7 @@
             var genericRuleObj = buildGenericRuleObjFromScope();
             return VR_GenericData_GenericRuleAPIService.UpdateGenericRule(genericRuleObj)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Generic Rule", response)) {
+                if (VRNotificationService.notifyOnItemUpdated(genericRuleDefintion.Name, response)) {
                     if ($scope.onGenericRuleUpdated != undefined)
                         $scope.onGenericRuleUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
