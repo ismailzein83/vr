@@ -36,22 +36,28 @@ namespace CarrierPortal.DevRuntime
                         {
                             PriceListStatus.Uploaded
                         };
+
                         foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
                         {
-                            var priceListProgressContext = new PriceListProgressContext()
+                            var priceListProgressContext = new PriceListProgressContext
                             {
                                 UploadInformation = pricelist.UploadedInformation
                             };
                             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
                             try
                             {
-                                _supplierPriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
+                                priceListProgressOutput = _supplierPriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
-                                priceListProgressOutput.Result = PriceListProgressResult.Rejected;
+                                priceListProgressOutput.PriceListProgress = PriceListProgressResult.FailedWithRetry;
+                                priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                             }
-                            manager.UpdatePriceListProgress(pricelist.PriceListId, (int)priceListProgressOutput.Result);
+                            manager.UpdatePriceListProgress(pricelist.PriceListId,
+                                (int)priceListProgressOutput.PriceListProgress,
+                                (int)priceListProgressOutput.PriceListResult,
+                                (int)pricelist.ResultMaxRetryCount,
+                                pricelist.AlertMessage);
                         }
                     }
                 }

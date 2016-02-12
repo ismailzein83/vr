@@ -14,5 +14,8 @@ namespace CP.SupplierPricelist.Entities
         public object PriceListProgress { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime EffectiveOnDate { get; set; }
+        public int ResultMaxRetryCount { get; set; }
+        public int UploadMaxRetryCount { get; set; }
+        public string AlertMessage { get; set; }
     }
 }

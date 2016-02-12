@@ -18,7 +18,8 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             ImportPriceListManager manager = new ImportPriceListManager();
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
             {
-                PriceListStatus.Uploaded
+                PriceListStatus.Uploaded,
+                PriceListStatus.GetStatusFailedWithRetry
             };
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
             {
@@ -33,11 +34,69 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 }
                 catch (Exception)
                 {
-                    priceListProgressOutput.Result = PriceListProgressResult.Rejected;
+                    priceListProgressOutput.PriceListProgress = PriceListProgressResult.FailedWithRetry;
+                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                 }
-                manager.UpdatePriceListProgress(pricelist.PriceListId, (int)priceListProgressOutput.Result);
+
+                if (pricelist.Status != priceListProgressOutput.PriceListStatus &&
+                    pricelist.Result != priceListProgressOutput.PriceListResult)
+                {
+                    switch (priceListProgressOutput.PriceListResult)
+                    {
+                        case PriceListResult.Approved:
+                            break;
+                        case PriceListResult.Completed:
+                            break;
+                        case PriceListResult.NotCompleted:
+                            break;
+                        case PriceListResult.PartiallyApproved:
+                            break;
+                        case PriceListResult.Rejected:
+                            break;
+                        case PriceListResult.WaitingReview:
+                            break;
+                    }
+                }
+                else
+                {
+                    priceListProgressOutput.PriceListProgress = PriceListProgressResult.ProgressNotChanged;
+                }
+
+                PriceListResult priceListResult = PriceListResult.NotCompleted;
+                PriceListStatus priceListStatus = PriceListStatus.Uploaded;
+                switch (priceListProgressOutput.PriceListProgress)
+                {
+                    case PriceListProgressResult.Completed:
+                        break;
+                    case PriceListProgressResult.FailedWithNoRetry:
+                        priceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                        priceListResult = PriceListResult.Rejected;
+                        break;
+                    case PriceListProgressResult.ProgressChanged:
+                        break;
+                    case PriceListProgressResult.ProgressNotChanged:
+                        break;
+                    case PriceListProgressResult.FailedWithRetry:
+                        priceListStatus = PriceListStatus.Uploaded;
+                        priceListResult = PriceListResult.Completed;
+                        if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
+                            pricelist.ResultMaxRetryCount = pricelist.UploadMaxRetryCount + 1;
+                        else
+                        {
+                            priceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                            priceListResult = PriceListResult.NotCompleted;
+                        }
+                        break;
+                    default:
+                        priceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                        priceListResult = PriceListResult.NotCompleted;
+                        break;
+                }
+
+                manager.UpdatePriceListProgress(pricelist.PriceListId, (int)priceListStatus,
+                    (int)priceListResult, pricelist.ResultMaxRetryCount, pricelist.AlertMessage);
             }
-            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
+            SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
             {
                 Result = ExecuteOutputResult.Completed
             };

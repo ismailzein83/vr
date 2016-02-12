@@ -54,9 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueItemStatus.cs" />
     <Compile Include="RootObject.cs" />
-    <Compile Include="ServiceActions.cs" />
+    <Compile Include="ServiceActions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SupplierPriceListConnector.cs" />
+    <Compile Include="UploadInfo.cs" />
     <Compile Include="UploadInformation.cs" />
   </ItemGroup>
   <ItemGroup>

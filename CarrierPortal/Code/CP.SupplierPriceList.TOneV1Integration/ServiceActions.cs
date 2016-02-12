@@ -7,9 +7,9 @@ namespace CP.SupplierPriceList.TOneV1Integration
 {
     public class ServiceActions
     {
-        public string Url { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
+        private string Url { get; set; }
+        private string Username { get; set; }
+        private string Password { get; set; }
 
         public ServiceActions(string url, string password, string userName)
         {
@@ -17,28 +17,77 @@ namespace CP.SupplierPriceList.TOneV1Integration
             Username = userName;
             Password = password;
         }
-        public RootObject GetAuthenticated()
+
+        #region privateFunctions
+        private string GetApiObject(string urls)
         {
-            RootObject tokenObject = null;
-            string urls = string.Format("{0}/api/Security/authenticate?username={1}&password={2}", Url, Username, Password);
+            string result = String.Empty;
             HttpWebRequest requests = (HttpWebRequest)WebRequest.Create(urls);
             requests.Method = "GET";
-            try
+            var httpResponse = (HttpWebResponse)requests.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
+                result = streamReader.ReadToEnd();
+            }
+            httpResponse.Close();
+            return result;
+        }
+        private string GetApiObjectWithHeader(string urls)
+        {
+            RootObject tokenObject = GetAuthenticated();
+            string result = String.Empty;
+            if (tokenObject != null)
+            {
+                HttpWebRequest requests = (HttpWebRequest)WebRequest.Create(urls);
+                requests.Method = "GET";
+                requests.Headers.Add(tokenObject.TokenName, tokenObject.Token);
                 var httpResponse = (HttpWebResponse)requests.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    string result = streamReader.ReadToEnd();
-                    tokenObject = JsonConvert.DeserializeObject<RootObject>(result);
-
+                    result = streamReader.ReadToEnd();
                 }
                 httpResponse.Close();
             }
-            catch (Exception e) { }
-            return tokenObject;
+            return result;
         }
 
-        public string ping(string token, string tokenName)
+        private string PostObjectToApi(SupplierPriceListConnector.SupplierPriceListUserInput userInput)
+        {
+            RootObject tokenObject = GetAuthenticated();
+            string resultString = String.Empty;
+            if (tokenObject != null)
+            {
+                string url = string.Format("{0}/api/SupplierPriceList/UploadPriceList", Url);
+                string jSOnData = JsonConvert.SerializeObject(userInput);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "POST";
+                request.ContentType = "application/json";
+                request.ContentLength = jSOnData.Length;
+                request.Headers.Add(tokenObject.TokenName, tokenObject.Token);
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(jSOnData);
+                    streamWriter.Close();
+                }
+                var httpResponse = (HttpWebResponse)request.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    resultString = streamReader.ReadToEnd();
+                }
+                httpResponse.Close();
+            }
+            return resultString;
+        }
+        #endregion
+
+        public RootObject GetAuthenticated()
+        {
+            string urlsTemp = string.Format("{0}/api/Security/authenticate?username={1}&password={2}", Url, Username, Password);
+            string result = GetApiObject(urlsTemp);
+            return !string.IsNullOrEmpty(result) ? JsonConvert.DeserializeObject<RootObject>(result) : null;
+        }
+
+        public string Ping(string token, string tokenName)
         {
             string res = "";
             string urls = string.Format("{0}/api/SupplierPriceList/ping", Url);
@@ -58,79 +107,25 @@ namespace CP.SupplierPriceList.TOneV1Integration
             catch (Exception e) { }
             return res;
         }
-        public int UploadOnline(string token, string tokenName, SupplierPriceListConnector.SupplierPriceListUserInput userInput)
+        public int UploadOnline(SupplierPriceListConnector.SupplierPriceListUserInput userInput)
         {
-            int insertedId;
-            try
-            {
-                string URL = string.Format("{0}/api/SupplierPriceList/UploadPriceList", Url);
-                string jSOnData = JsonConvert.SerializeObject(userInput);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
-                request.Method = "POST";
-                request.ContentType = "application/json";
-                request.ContentLength = jSOnData.Length;
-                request.Headers.Add(tokenName, token);
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    streamWriter.Write(jSOnData);
-                    streamWriter.Close();
-                }
-                try
-                {
-                    var httpResponse = (HttpWebResponse)request.GetResponse();
-                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                    {
-                        string resultString = streamReader.ReadToEnd();
-                        insertedId = int.Parse(resultString);
-                        // object response = JsonConvert.DeserializeObject<object>(result);
-                    }
-                    httpResponse.Close();
-                }
-
-                catch (Exception e)
-                {
-                    insertedId = 0;
-                    // throw e;
-                }
-            }
-            catch (Exception)
-            {
-                insertedId = 0;
-            }
-            return insertedId;
+            string result = PostObjectToApi(userInput);
+            return !string.IsNullOrEmpty(result) ? int.Parse(result) : 0;
         }
 
-        public int GetResults(int queueId, string token, string tokenName)
+        public QueueItemStatus GetResults(int queueId)
         {
-            int result;
-            try
-            {
-                string URL = string.Format("{0}/api/SupplierPriceList/GetResults?QueueId={1}", Url, queueId);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
-                request.Method = "GET";
-                request.Headers.Add(tokenName, token);
-                try
-                {
-                    var httpResponse = (HttpWebResponse)request.GetResponse();
-                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                    {
-                        string resultString = streamReader.ReadToEnd();
-                        result = int.Parse(resultString);
-                    }
-                    httpResponse.Close();
-                }
-                catch (Exception e)
-                {
-                    result = 0;
-                    // throw e;
-                }
-            }
-            catch (Exception)
-            {
-                result = 0;
-                //throw;
-            }
-            return result;
+            string urlTemp = string.Format("{0}/api/SupplierPriceList/GetResults?QueueId={1}", Url, queueId);
+            string resultString = GetApiObject(urlTemp);
+            QueueItemStatus queueItemStatus = (QueueItemStatus)int.Parse(resultString);
+            return queueItemStatus;
+        }
+        public UploadInfo GetUploadInfo(int queueId)
+        {
+            string urlTemp = string.Format("{0}/api/SupplierPriceList/GetUploadInfo?QueueId={1}", Url, queueId);
+            string resultString = GetApiObjectWithHeader(urlTemp);
+            UploadInfo uploadInfo = JsonConvert.DeserializeObject<UploadInfo>(resultString);
+            return uploadInfo;
         }
     }
 }

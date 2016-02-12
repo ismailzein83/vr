@@ -10,11 +10,10 @@ namespace CP.SupplierPricelist.Entities
         public abstract PriceListProgressOutput GetPriceListProgressOutput(IPriceListProgressContext context);
     }
     public enum PriceListSupplierUploadResult { Uploaded, Failed, FailedWithRetry }
-    public enum PriceListProgressResult { NotCompleted, Approved, PartiallyApproved, Rejected }
+    public enum PriceListProgressResult { Completed, ProgressChanged, ProgressNotChanged, FailedWithRetry, FailedWithNoRetry }
 
     public class PriceListUploadOutput
     {
-        public int QueueId { get; set; }
         public PriceListSupplierUploadResult Result { get; set; }
 
         public Object UploadPriceListInformation { get; set; }
@@ -32,11 +31,12 @@ namespace CP.SupplierPricelist.Entities
     }
     public class PriceListProgressOutput
     {
-        public PriceListProgressResult Result { get; set; }
+        public PriceListProgressResult PriceListProgress { get; set; }
 
         public Object UploadProgress { get; set; }
 
         public PriceListResult PriceListResult { get; set; }
+        public PriceListStatus PriceListStatus { get; set; }
 
         public string AlertMessage { get; set; }
 

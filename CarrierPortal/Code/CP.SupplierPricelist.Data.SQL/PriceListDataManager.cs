@@ -53,9 +53,11 @@ namespace CP.SupplierPricelist.Data.SQL
                 UserId = (int)reader["UserID"],
                 Result = GetReaderValue<PriceListResult>(reader, "Result"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-                EffectiveOnDate = GetReaderValue<DateTime>(reader, "EffectiveOnDate")
+                EffectiveOnDate = GetReaderValue<DateTime>(reader, "EffectiveOnDate"),
+                ResultMaxRetryCount = GetReaderValue<int>(reader, "ResultRetryCount"),
+                UploadMaxRetryCount = GetReaderValue<int>(reader, "UploadRetryCount"),
+                AlertMessage = reader["AlertMessage"] as string
             };
-
             string uploadedInformationSerialized = reader["UploadInformation"] as string;
             if (uploadedInformationSerialized != null)
                 pricelist.UploadedInformation = Serializer.Deserialize(uploadedInformationSerialized);
@@ -76,18 +78,17 @@ namespace CP.SupplierPricelist.Data.SQL
             return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]", PriceListMapper, pricelistStatuIds);
         }
 
-
-        public bool UpdateInitiatePriceList(long id, int result, object uploadInformation)
+        public bool UpdatePriceListUpload(long id, int result, object uploadInformation, int uploadRetryCount)
         {
             int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdateInitiatePriceList]",
-                id, result, uploadInformation != null ? Serializer.Serialize(uploadInformation) : null);
+                id, result, uploadInformation != null ? Serializer.Serialize(uploadInformation) : null, uploadRetryCount);
             return (recordsEffected > 0);
         }
 
 
-        public bool UpdatePriceListProgress(long id, int status)
+        public bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage)
         {
-            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdatePriceListProgress]", id, status);
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdatePriceListProgress]", id, status, result, resultRetryCount, alertMessage);
             return (recordsEffected > 0);
         }
     }

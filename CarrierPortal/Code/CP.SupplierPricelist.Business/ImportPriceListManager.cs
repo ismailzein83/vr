@@ -53,11 +53,11 @@ namespace CP.SupplierPricelist.Business
             return dataManager.GetPriceLists(listPriceListStatuses);
         }
 
-        public bool UpdateInitiatePriceList(long id, int result, object uploadInformation)
+        public bool UpdatePriceListUpload(long id, int result, object uploadInformation, int uploadRetryCount)
         {
             IPriceListDataManager dataManager =
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            return dataManager.UpdateInitiatePriceList(id, result, uploadInformation);
+            return dataManager.UpdatePriceListUpload(id, result, uploadInformation, uploadRetryCount);
         }
         public List<Vanrise.Entities.TemplateConfig> GetUploadPriceListTemplates()
         {
@@ -70,11 +70,11 @@ namespace CP.SupplierPricelist.Business
             return manager.GetTemplateConfigurations(Constants.SupplierPriceListResult);
         }
 
-        public bool UpdatePriceListProgress(long id, int result)
+        public bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage)
         {
             IPriceListDataManager dataManager =
                    ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            return dataManager.UpdatePriceListProgress(id, result);
+            return dataManager.UpdatePriceListProgress(id, status, result, resultRetryCount, alertMessage);
 
         }
     }

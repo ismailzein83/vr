@@ -21,7 +21,8 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             ImportPriceListManager manager = new ImportPriceListManager();
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>()
                     {
-                        PriceListStatus.New
+                        PriceListStatus.New,
+                        PriceListStatus.UploadFailedWithRetry
                     };
             VRFileManager fileManager = new VRFileManager();
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
@@ -54,14 +55,19 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         priceListstatus = PriceListStatus.GetStatusFailedWithNoRetry;
                         break;
                     case PriceListSupplierUploadResult.FailedWithRetry:
-                        priceListstatus = PriceListStatus.GetStatusFailedWithRetry;
-
-                        break;
+                        {
+                            priceListstatus = PriceListStatus.UploadFailedWithRetry;
+                            if (pricelist.UploadMaxRetryCount < uploadPriceListTaskActionArgument.MaximumRetryCount)
+                                pricelist.UploadMaxRetryCount = pricelist.UploadMaxRetryCount + 1;
+                            else
+                                priceListstatus = PriceListStatus.UploadFailedWithNoRetry;
+                            break;
+                        }
                     default:
                         priceListstatus = PriceListStatus.GetStatusFailedWithRetry;
                         break;
                 }
-                manager.UpdateInitiatePriceList(pricelist.PriceListId, (int)priceListstatus, priceListUploadOutput.UploadPriceListInformation);
+                manager.UpdatePriceListUpload(pricelist.PriceListId, (int)priceListstatus, priceListUploadOutput.UploadPriceListInformation, (int)pricelist.UploadMaxRetryCount);
             }
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
             {

@@ -14,26 +14,23 @@ namespace CP.SupplierPriceList.TOneV1Integration
             PriceListUploadOutput priceListOutput = new PriceListUploadOutput();
             var cont = (PriceListUploadContext)context;
             ServiceActions serviceActions = new ServiceActions(Url, Password, UserName);
-            RootObject tokenObject = serviceActions.GetAuthenticated();
-            if (tokenObject != null)
+            SupplierPriceListUserInput userInput = new SupplierPriceListUserInput()
             {
-                SupplierPriceListUserInput userInput = new SupplierPriceListUserInput()
-                {
-                    UserId = cont.UserId,
-                    PriceListType = cont.PriceListType,
-                    FileName = cont.File.Name,
-                    EffectiveOnDateTime = cont.EffectiveOnDateTime,
-                    ContentFile = cont.File.Content
-                };
-                // Vanrise.Common.Compressor.Compress(context.File.Content)
-                int insertedId = serviceActions.UploadOnline(tokenObject.Token, tokenObject.TokenName, userInput);
-                var uploadInformation = new UploadInformation
-                {
-                    QueueId = insertedId
-                };
-                priceListOutput.UploadPriceListInformation = uploadInformation;
-                priceListOutput.Result = insertedId != 0 ? PriceListSupplierUploadResult.Uploaded : PriceListSupplierUploadResult.Failed;
-            }
+                UserId = cont.UserId,
+                PriceListType = cont.PriceListType,
+                FileName = cont.File.Name,
+                EffectiveOnDateTime = cont.EffectiveOnDateTime,
+                ContentFile = cont.File.Content
+            };
+            // Vanrise.Common.Compressor.Compress(context.File.Content)
+            int insertedId = serviceActions.UploadOnline(userInput);
+            var uploadInformation = new UploadInformation
+            {
+                QueueId = insertedId
+            };
+            priceListOutput.UploadPriceListInformation = uploadInformation;
+            priceListOutput.Result = insertedId != 0 ? PriceListSupplierUploadResult.Uploaded : PriceListSupplierUploadResult.Failed;
+
             return priceListOutput;
         }
         public class SupplierPriceListUserInput
@@ -46,49 +43,100 @@ namespace CP.SupplierPriceList.TOneV1Integration
         }
         public override PriceListProgressOutput GetPriceListProgressOutput(IPriceListProgressContext context)
         {
-            int queueResult = 0;
             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
             int queueId = ((UploadInformation)((PriceListProgressContext)context).UploadInformation).QueueId;
             ServiceActions serviceActions = new ServiceActions(Url, Password, UserName);
-            RootObject tokenObject = serviceActions.GetAuthenticated();
+            var uploadInformation = serviceActions.GetUploadInfo(queueId);
 
-            if (tokenObject != null)
-            {
-                queueResult = serviceActions.GetResults(queueId, tokenObject.Token, tokenObject.TokenName);
-            }
+            priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
+            var queueResult = (QueueItemStatus)uploadInformation.Status;
+            priceListProgressOutput.UploadProgress = uploadInformation;
+
             switch (queueResult)
             {
-                case 0: priceListProgressOutput.Result = PriceListProgressResult.Approved;
+                case QueueItemStatus.Recieved:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     break;
-                case 1: priceListProgressOutput.Result = PriceListProgressResult.Approved;
+                case QueueItemStatus.Processing:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     break;
-                case 2: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
+                case QueueItemStatus.SuspendedDueToBusinessErrors:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                    priceListProgressOutput.AlertMessage = "Suspended due to business errors";
+                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
                     break;
-                case 3: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
+                case QueueItemStatus.SuspendedToProcessingErrors:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                    priceListProgressOutput.AlertMessage = "Suspended due to processing errors";
+                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
                     break;
-                case 4: priceListProgressOutput.Result = PriceListProgressResult.PartiallyApproved;
+                case QueueItemStatus.AwaitingWarningsConfirmation:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
                     break;
-                case 5: priceListProgressOutput.Result = PriceListProgressResult.PartiallyApproved;
+                case QueueItemStatus.AwaitingSaveConfirmation:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
                     break;
-                case 6: priceListProgressOutput.Result = PriceListProgressResult.PartiallyApproved;
+                case QueueItemStatus.WarningsConfirmed:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
                     break;
-                case 7: priceListProgressOutput.Result = PriceListProgressResult.Approved;
-                    break;
-                case 8: priceListProgressOutput.Result = PriceListProgressResult.Approved;
-                    break;
-                case 9: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
-                    break;
-                case 10: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
-                    break;
-                case 11: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
-                    break;
-                case 12: priceListProgressOutput.Result = PriceListProgressResult.Approved;
-                    break;
-                case 13: priceListProgressOutput.Result = PriceListProgressResult.PartiallyApproved;
-                    break;
-                case 14: priceListProgressOutput.Result = PriceListProgressResult.Approved;
-                    break;
-                default: priceListProgressOutput.Result = PriceListProgressResult.Rejected;
+                case QueueItemStatus.SaveConfirmed:
+                    {
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Approved;
+                        break;
+                    }
+                case QueueItemStatus.ProcessedSuccessfuly:
+                    {
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Approved;
+                        break;
+                    }
+                case QueueItemStatus.FailedDuetoSheetError:
+                    {
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
+                        priceListProgressOutput.AlertMessage = "Failed due to sheet error";
+                        priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                        break;
+                    }
+                case QueueItemStatus.Rejected:
+                    {
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
+                        priceListProgressOutput.AlertMessage = "Rejected";
+                        priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                        break;
+                    }
+                case QueueItemStatus.SuspendedDueToConfigurationErrors:
+                    {
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
+                        priceListProgressOutput.AlertMessage = "Suspended due to configurtaion errors";
+                        priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                        break;
+                    }
+                case QueueItemStatus.ProcessedSuccessfulyByImport:
+                    {
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Approved;
+                        break;
+                    }
+                case QueueItemStatus.AwaitingSaveConfirmationbySystemparam:
+                    {
+
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.WaitingReview;
+                        break;
+                    }
+                case QueueItemStatus.Processedwithnochanges:
+                    {
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Approved;
+                        break;
+                    }
+                default:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.GetStatusFailedWithRetry;
+                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                     break;
             }
             return priceListProgressOutput;

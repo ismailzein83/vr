@@ -73,7 +73,9 @@ namespace CarrierPortal.DevRuntime
                                     priceListstatus = PriceListStatus.GetStatusFailedWithRetry;
                                     break;
                             }
-                            manager.UpdateInitiatePriceList(pricelist.PriceListId, (int)priceListstatus, initiatePriceListOutput.QueueId);
+                            manager.UpdatePriceListUpload(pricelist.PriceListId, (int)priceListstatus,
+                                1,
+                                pricelist.UploadMaxRetryCount);
                         }
                         _locked = false;
                         Thread.Sleep(1000);
