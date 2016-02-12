@@ -11,5 +11,7 @@ namespace Vanrise.Queueing.Entities
         public bool SingleConcurrentReader { get; set; }
 
         public string QueueActivatorFQTN { get; set; }
+
+        public QueueActivator Activator { get; set; }
     }    
 }

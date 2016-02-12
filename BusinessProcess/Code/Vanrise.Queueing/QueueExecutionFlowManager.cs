@@ -49,6 +49,111 @@ namespace Vanrise.Queueing
 
         }
 
+        public QueuesByStages GetQueuesByStages2(int executionFlowId)
+        {
+            string cacheName = String.Format("QueueExecutionFlowManager_GetQueuesByStages2_{0}", executionFlowId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();                   
+                   QueueExecutionFlow executionFlow = dataManager.GetExecutionFlow(executionFlowId);
+
+                   if (executionFlow == null)
+                       throw new ArgumentNullException(String.Format("Execution Flow of ID '{0}'", executionFlowId));
+
+                   QueueExecutionFlowDefinitionManager definitionManager = new QueueExecutionFlowDefinitionManager();
+                   var executionFlowDefinition = definitionManager.GetExecutionFlowDefinition(executionFlow.DefinitionId);
+                   if(executionFlowDefinition == null)
+                       throw new ArgumentNullException(String.Format("Execution Flow Definition of ID '{0}'", executionFlow.DefinitionId));
+
+                   if (executionFlowDefinition.Stages == null)
+                       throw new ArgumentNullException("executionFlowDefinition.Stages");
+
+                   CheckRecursiveSources(executionFlowDefinition);
+                   foreach(var stage in executionFlowDefinition.Stages)
+                   {
+                       CreateStageQueueIfNeeded(stage, executionFlow, executionFlowDefinition);
+                   }
+
+                   QueuesByStages queuesByStages = new QueuesByStages();
+                   foreach (var stage in executionFlowDefinition.Stages)
+                   {
+                       string queueName = BuildQueueName(stage, executionFlow);
+                       if (queuesByStages.ContainsKey(stage.StageName))
+                           throw new Exception(String.Format("Duplicate Stage Names: {0}", stage.StageName));
+                       queuesByStages.Add(stage.StageName, PersistentQueueFactory.Default.GetQueue(queueName));
+                   }
+                   return queuesByStages;
+               });
+
+        }
+
+        private void CheckRecursiveSources(QueueExecutionFlowDefinition executionFlowDefinition)
+        {
+            foreach (var stage in executionFlowDefinition.Stages)
+            {
+                if (stage.SourceStages != null)
+                {
+                    foreach (var sourceStageName in stage.SourceStages)
+                    {
+                        List<string> prohibitedSources = new List<string>();
+                        prohibitedSources.Add(stage.StageName);
+                        CheckRecursiveSources(executionFlowDefinition, sourceStageName, prohibitedSources);
+                    }
+                }
+            }
+        }
+
+        private void CheckRecursiveSources(QueueExecutionFlowDefinition executionFlowDefinition, string sourceStageName, List<string> prohibitedSources)
+        {
+            if (prohibitedSources.Contains(sourceStageName))
+                throw new Exception(String.Format("Execution Flow '{0}' has recursive source stages", executionFlowDefinition.Name));
+            var sourceStage = executionFlowDefinition.Stages.FindRecord(itm => itm.StageName == sourceStageName);
+            if (sourceStage == null)
+                throw new Exception(String.Format("Stage '{0}' not found in Execution Flow '{1}'", sourceStageName, executionFlowDefinition.Name));
+            prohibitedSources.Add(sourceStage.StageName);
+            if(sourceStage.SourceStages != null)
+                foreach (var sourceOfSourceStageName in sourceStage.SourceStages)
+                {
+                    CheckRecursiveSources(executionFlowDefinition, sourceOfSourceStageName, prohibitedSources);
+                }
+        }
+
+        private void CreateStageQueueIfNeeded(QueueExecutionFlowStage stage,QueueExecutionFlow executionFlow , QueueExecutionFlowDefinition executionFlowDefinition)
+        {
+            if(stage.SourceStages != null)
+            {
+                foreach(var sourceStageName in stage.SourceStages)
+                {
+                    var sourceStage = executionFlowDefinition.Stages.FindRecord(itm => itm.StageName == sourceStageName);
+                    if (sourceStage == null)
+                        throw new Exception(String.Format("Source stage '{0}' not found", sourceStageName));
+                    CreateStageQueueIfNeeded(sourceStage, executionFlow, executionFlowDefinition);
+                }
+            }
+
+            string queueName = BuildQueueName(stage, executionFlow);
+
+            StringBuilder queueTitleBuilder = new StringBuilder(stage.QueueTitleTemplate);
+            queueTitleBuilder.Replace("#FlowName#", executionFlow.Name);
+
+            var queueSettings = new QueueSettings
+            {
+                Activator = stage.QueueActivator,
+                SingleConcurrentReader = stage.SingleConcurrentReader
+            };
+
+            PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlow.ExecutionFlowId, stage.StageName, stage.QueueItemType.GetQueueItemType().AssemblyQualifiedName,
+                queueName, queueTitleBuilder.ToString(), stage.SourceStages, queueSettings);
+        }
+
+        private string BuildQueueName(QueueExecutionFlowStage stage, QueueExecutionFlow executionFlow)
+        {
+            StringBuilder queueNameBuilder = new StringBuilder(stage.QueueNameTemplate);
+            queueNameBuilder.Replace("#FlowId", executionFlow.ExecutionFlowId.ToString());
+            return  queueNameBuilder.ToString();
+        }
+
         public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlowDetail> AddExecutionFlow(QueueExecutionFlow executionFlowObj)
         {
             InsertOperationOutput<QueueExecutionFlowDetail> insertOperationOutput = new InsertOperationOutput<QueueExecutionFlowDetail>();
