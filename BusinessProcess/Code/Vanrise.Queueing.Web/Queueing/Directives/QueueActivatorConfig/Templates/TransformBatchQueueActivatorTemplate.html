@@ -1,15 +1,18 @@
-﻿<vr-row removeline>
+﻿
+<vr-columns width="1/3row">
+    <vr-genericdata-datatransformationdefinition-selector on-ready="ctrl.onSelectorReady"
+                                                          selectedvalues="selectedDataTransformation"
+                                                          onselectionchanged="onSelectedDataTransformationChanged"
+                                                          isrequired="true">
 
-    <vr-columns width="1/2row">
-        <vr-genericdata-datatransformationdefinition-selector on-ready="ctrl.onSelectorReady"
-                                                              selectedvalues="selectedDataRecordStorage"
-                                                              isrequired="true">
+    </vr-genericdata-datatransformationdefinition-selector>
+</vr-columns>
+<vr-columns width="1/3row" ng-show="showTransformationRecordTypesSelector">
+    <vr-select datasource="transformationRecordTypes"
+               datavaluefield="RecordName"
+               datatextfield="RecordName"
+               selectedvalues="selectedDataRecordStorage"
+               isrequired="true" label="Data Transformation Record">
 
-        </vr-genericdata-datatransformationdefinition-selector>
-    </vr-columns>
-    <vr-columns width="1/2row">
-        <vr-textbox value="ctrl.SourceRecordName" label="Source Record Name" isrequired></vr-textbox>
-    
-        </vr-columns>
-
-</vr-row>
+    </vr-select>
+</vr-columns>

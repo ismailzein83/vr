@@ -1,4 +1,4 @@
-﻿<vr-row>
+﻿
     <vr-columns width="1/3row">
         <vr-select on-ready="scopeModal.onSelectorReady"
                    datasource="scopeModal.queueActivatorConfig"
@@ -12,7 +12,6 @@
                    hideremoveicon>
         </vr-select>
     </vr-columns>
-    <vr-columns width="2/3row" ng-if="scopeModal.selectedqueueActivatorConfig != undefined" vr-loader="scopeModal.isLoadingDirective">
+    <div ng-if="scopeModal.selectedqueueActivatorConfig != undefined" vr-loader="scopeModal.isLoadingDirective">
         <vr-directivewrapper directive="scopeModal.selectedqueueActivatorConfig.Editor" on-ready="scopeModal.onDirectiveReady"></vr-directivewrapper>
-    </vr-columns>
-</vr-row>
+    </div>

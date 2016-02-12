@@ -2,9 +2,9 @@
 
     'use strict';
 
-    QueueingStoreBatchQueueActivator.$inject = ['UtilsService', 'VRUIUtilsService'];
+    QueueingStoreBatchQueueActivator.$inject = ['VR_GenericData_DataTransformationDefinitionAPIService','UtilsService', 'VRUIUtilsService'];
 
-    function QueueingStoreBatchQueueActivator(UtilsService, VRUIUtilsService) {
+    function QueueingStoreBatchQueueActivator(VR_GenericData_DataTransformationDefinitionAPIService,UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -33,7 +33,9 @@
             this.initializeController = initializeController;
 
             var selectorAPI;
-
+            var dataGridDataSource;
+            $scope.transformationRecordTypes = [];
+            $scope.showTransformationRecordTypesSelector = false;
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -42,7 +44,35 @@
                         ctrl.onReady(getDirectiveAPI());
                     }
                 };
+
+               
+                
+                $scope.onSelectedDataTransformationChanged = function () {
+                    if ($scope.selectedDataTransformation != undefined) {
+                        $scope.showTransformationRecordTypesSelector = true;
+                    }
+                    else {
+                        $scope.showTransformationRecordTypesSelector = false;
+                    }
+                    if ($scope.selectedDataTransformation != undefined) {
+                        $scope.transformationRecordTypes = [];
+                        VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationDefinitionRecords($scope.selectedDataTransformation.DataTransformationDefinitionId).then(function (response) {
+                            if (response) {
+                                dataGridDataSource = response;
+                                for (var i = 0; i < response.length; i++) {
+                                    $scope.transformationRecordTypes.push(response[i]);
+                                }
+                              
+                            }
+
+                        })
+                    }
+                }
+            
             }
+
+           
+       
 
             function getDirectiveAPI() {
                 var api = {};
@@ -68,8 +98,7 @@
                 api.getData = function () {
                     return {
                         $type: 'Vanrise.GenericData.QueueActivators.TransformBatchQueueActivator, Vanrise.GenericData.QueueActivators',
-                        SourceRecordName:ctrl.SourceRecordName,
-                        DataTransformationDefiniSourceRecordNametionId: selectorAPI.getSelectedIds()
+                        SourceRecordName: selectorAPI.getSelectedIds()
                     };
                 }
 
