@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         bool CancelStrategyExecution(long strategyExecutionId, int userId);
 
-        bool CloseStrategyExecution(long strategyExecutionId, long numberofSubscribers, long numberofCDRs,  long executionDuration);
+        bool CloseStrategyExecution(long strategyExecutionId, long numberofSubscribers, long numberofCDRs, long numberofSuspicions, long executionDuration);
 
         StrategyExecution GetStrategyExecution(long strategyExecutionId);
 

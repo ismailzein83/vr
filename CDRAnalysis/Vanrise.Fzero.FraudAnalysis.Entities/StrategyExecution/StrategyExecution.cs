@@ -28,11 +28,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int? CancelledBy { get; set; }
 
-        public int? NumberofSubscribers { get; set; }
+        public long? NumberofSubscribers { get; set; }
 
-        public int? NumberofCDRs { get; set; }
+        public long? NumberofCDRs { get; set; }
 
-        public float? ExecutionDuration { get; set; }
+        public long? NumberofSuspicions { get; set; }
+
+        public double? ExecutionDuration { get; set; }
 
         public SuspicionOccuranceStatus Status { get; set; }
 
