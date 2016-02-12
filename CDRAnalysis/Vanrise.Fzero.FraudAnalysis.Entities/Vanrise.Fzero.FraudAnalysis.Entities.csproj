@@ -129,7 +129,6 @@
     <Compile Include="CDR\CDRQuery.cs" />
     <Compile Include="CaseProductivityQuery.cs" />
     <Compile Include="StrategyQuery.cs" />
-    <Compile Include="Period\Period.cs" />
     <Compile Include="CallClass\CallClass.cs" />
     <Compile Include="FraudResult.cs" />
     <Compile Include="FilterDefinition.cs" />

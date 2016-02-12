@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisExecutestrategyManual", ["VRUIUtilsService", "UtilsService", "StrategyAPIService", "VRValidationService", "CDRAnalysis_FA_PeriodAPIService", "CDRAnalysis_FA_PeriodEnum",
-function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationService, CDRAnalysis_FA_PeriodAPIService, CDRAnalysis_FA_PeriodEnum) {
+app.directive("vrCdrFraudanalysisExecutestrategyManual", ["VRUIUtilsService", "UtilsService", "StrategyAPIService", "VRValidationService", "CDRAnalysis_FA_PeriodEnum",
+function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationService, CDRAnalysis_FA_PeriodEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",

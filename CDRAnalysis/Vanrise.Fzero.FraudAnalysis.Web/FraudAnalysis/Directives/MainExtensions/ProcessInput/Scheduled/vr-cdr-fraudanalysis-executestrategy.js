@@ -1,6 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsService", "StrategyAPIService", "CDRAnalysis_FA_PeriodAPIService", function (UtilsService, VRUIUtilsService, StrategyAPIService, CDRAnalysis_FA_PeriodAPIService) {
+app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsService", "StrategyAPIService",
+    function (UtilsService, VRUIUtilsService, StrategyAPIService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {

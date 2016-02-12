@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PeriodSelectorDirective.$inject = ['CDRAnalysis_FA_PeriodAPIService', 'UtilsService', 'VRUIUtilsService'];
+    PeriodSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'CDRAnalysis_FA_PeriodEnum'];
 
-    function PeriodSelectorDirective(CDRAnalysis_FA_PeriodAPIService, UtilsService, VRUIUtilsService) {
+    function PeriodSelectorDirective(UtilsService, VRUIUtilsService, CDRAnalysis_FA_PeriodEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -65,25 +65,27 @@
                 var directiveAPI = {};
 
                 directiveAPI.load = function (payload) {
+
+                    var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+
+
                     var selectedIds;
 
                     if (payload) {
                         selectedIds = payload.selectedIds;
                     }
 
-                    return CDRAnalysis_FA_PeriodAPIService.GetPeriods().then(function (response) {
-                        selectorAPI.clearDataSource();
-                        
-                        if (response) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
-                            }
-                        }
+                    var periods = UtilsService.getArrayEnum(CDRAnalysis_FA_PeriodEnum);
+                    for (var i = 0; i < periods.length; i++) {
+                        ctrl.datasource.push({ Id: periods[i].value, Name: periods[i].description });
+                    }
 
-                        if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
-                        }
-                    });
+                    if (selectedIds) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
+                    }
+                    periodSelectorLoadDeferred.resolve();
+                    periodSelectorLoadDeferred.promise;
                 };
 
                 directiveAPI.getSelectedIds = function () {

@@ -153,7 +153,6 @@
     <Compile Include="Controllers\NumberPrefixController.cs" />
     <Compile Include="Controllers\NumberProfileController.cs" />
     <Compile Include="Controllers\NormalCDRController.cs" />
-    <Compile Include="Controllers\PeriodController.cs" />
     <Compile Include="Controllers\RelatedNumberController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
     <Compile Include="Controllers\StrategyExecutionController.cs" />
@@ -235,7 +234,6 @@
     <Content Include="FraudAnalysis\Directives\Strategy\Templates\StrategyGridTemplate.html" />
     <Content Include="FraudAnalysis\Services\APIServices\AccountCaseAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\AccountCaseHistoryAPIService.js" />
-    <Content Include="FraudAnalysis\Services\APIServices\PeriodAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\RelatedNumberAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionItemAPIService.js" />
