@@ -74,17 +74,7 @@ namespace Vanrise.GenericData.Transformation
             {
                 runtimeType = null;
                 errorMessages = compilationOutput.ErrorMessages;                
-                return false;
-                StringBuilder errorsBuilder = new StringBuilder();
-                if(compilationOutput.ErrorMessages != null)
-                {
-                    foreach(var errorMessage in compilationOutput.ErrorMessages)
-                    {
-                        errorsBuilder.AppendLine(errorMessage);
-                    }
-                }
-                //throw new Exception(String.Format("Compile Error when building executor type for data transformation definition Id '{0}'. Errors: {1}", 
-                //    _dataTransformationDefinition.DataTransformationDefinitionId, errorsBuilder));
+                return false;               
             }
             var executorType = compilationOutput.OutputAssembly.GetType(fullTypeName);
             if (executorType == null)
