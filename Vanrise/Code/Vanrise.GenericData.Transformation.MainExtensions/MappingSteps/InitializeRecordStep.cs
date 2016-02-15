@@ -12,7 +12,8 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
         public string RecordName { get; set; }
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
-            throw new NotImplementedException();
+            var recordName = context.GenerateUniqueMemberName(this.RecordName.ToLower());
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}();", recordName, this.RecordName);
         }
     }
 }
