@@ -43,16 +43,21 @@ namespace Vanrise.GenericData.Transformation
             _instanceExecutionBlockBuilder.AppendLine();
         }
 
+        void IDataTransformationCodeGenerationContext.GenerateStepsCode(IEnumerable<MappingStep> steps)
+        {
+            foreach (var step in steps)
+            {
+                step.GenerateExecutionCode(this);
+            }
+        }
+
         #endregion
 
         public DataTransformationRuntimeType BuildRuntimeType()
         {
             _globalMembersBuilder = new StringBuilder();
             _instanceExecutionBlockBuilder = new StringBuilder();
-            foreach (var step in _dataTransformationDefinition.MappingSteps)
-            {
-                step.GenerateExecutionCode(this);
-            }
+            (this as IDataTransformationCodeGenerationContext).GenerateStepsCode(_dataTransformationDefinition.MappingSteps);
             string fullTypeName;
             string classDefinition = BuildClassDefinition(out fullTypeName);
 
@@ -78,6 +83,8 @@ namespace Vanrise.GenericData.Transformation
                 ExecutorType = executorType
             };
         }
+
+       
 
         private string BuildClassDefinition(out string fullTypeName)
         {           
