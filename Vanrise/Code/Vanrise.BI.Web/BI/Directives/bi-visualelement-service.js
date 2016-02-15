@@ -7,8 +7,6 @@ app.service('BIVisualElementService', function (VR_BI_BIAPIService) {
     });
 
     function retrieveWidgetData(visualElementController, visualElementSettings, filter) {
-        var fromDate = new Date(filter.fromDate.getTime() + filter.fromDate.getTimezoneOffset() * 60 * 1000);
-        var toDate = new Date(filter.toDate.getTime() + filter.toDate.getTimezoneOffset() * 60 * 1000);
         if(visualElementSettings.OperationType != undefined)
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
@@ -25,8 +23,6 @@ app.service('BIVisualElementService', function (VR_BI_BIAPIService) {
     }
 
     function exportWidgetData(visualElementController, visualElementSettings, filter) {
-        var fromDate = new Date(filter.fromDate.getTime() + filter.fromDate.getTimezoneOffset() * 60 * 1000);
-        var toDate = new Date(filter.toDate.getTime() + filter.toDate.getTimezoneOffset() * 60 * 1000);
 
         if (visualElementSettings.OperationType != undefined)
             switch (visualElementSettings.OperationType) {
@@ -45,8 +41,12 @@ app.service('BIVisualElementService', function (VR_BI_BIAPIService) {
 
     function getInputObject(operationType, visualElementSettings, filter)
     {
-        var fromDate = new Date(filter.fromDate.getTime() + filter.fromDate.getTimezoneOffset() * 60 * 1000);
-        var toDate = new Date(filter.toDate.getTime() + filter.toDate.getTimezoneOffset() * 60 * 1000);
+        var fromDate;
+        var toDate;
+        if (filter.fromDate != undefined)
+            fromDate = new Date(filter.fromDate.getTime() + filter.fromDate.getTimezoneOffset() * 60 * 1000);
+        if (filter.toDate != undefined)
+            toDate = new Date(filter.toDate.getTime() + filter.toDate.getTimezoneOffset() * 60 * 1000);
         switch (operationType) {
             case "TopEntities":
                 var input = {

@@ -61,7 +61,6 @@ app.directive('vrBiChart', ['VR_BI_BIAPIService', 'BIUtilitiesService', 'BIVisua
             api.retrieveData = retrieveData;
 
             api.load = function (payload) {
-
                 if (payload != undefined) {
                     ctrl.title = payload.title;
                     ctrl.settings = payload.settings;
