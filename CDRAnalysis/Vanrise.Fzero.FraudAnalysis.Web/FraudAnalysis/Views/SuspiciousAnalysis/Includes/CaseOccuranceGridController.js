@@ -54,8 +54,8 @@ function CaseOccuranceGridController($scope, CDRAnalysis_FA_SuspicionLevelEnum, 
                         var user = UtilsService.getItemByVal($scope.viewScope.users, item.UserID, "UserId");
                         item.UserName = (user != null) ? user.Name : "System";
 
-                        var caseStatus = UtilsService.getEnum(CDRAnalysis_FA_CaseStatusEnum, "value", item.AccountCaseStatusID);
-                        item.AccountCaseStatusDescription = caseStatus.description;
+                        var caseStatus = UtilsService.getEnum(CDRAnalysis_FA_CaseStatusEnum, "value", item.Status);
+                        item.StatusDescription = caseStatus.description;
                     });
 
                     onResponseReady(response);
@@ -82,10 +82,10 @@ function CaseOccuranceGridController($scope, CDRAnalysis_FA_SuspicionLevelEnum, 
 
         $scope.getCaseStatusColor = function (dataItem) {
 
-            if (dataItem.AccountCaseStatusID == CDRAnalysis_FA_CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
-            else if (dataItem.AccountCaseStatusID == CDRAnalysis_FA_CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
-            else if (dataItem.AccountCaseStatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
-            else if (dataItem.AccountCaseStatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
+            if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.Open.value) return LabelColorsEnum.New.color;
+            else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
+            else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
+            else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
     }
 

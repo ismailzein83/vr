@@ -1,8 +1,8 @@
 ﻿
 namespace Vanrise.Fzero.FraudAnalysis.Entities.ResultQuery
 {
-    public class AccountCaseLogQuery
+    public class AccountCaseHistoryQuery
     {
-        public int CaseID { get; set; }
+        public int CaseId { get; set; }
     }
 }

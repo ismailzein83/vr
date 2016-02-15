@@ -67,7 +67,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                             List<AccountCaseHistory> caseHistories = new List<AccountCaseHistory>();
                             foreach (var item in batch.AccountCaseIds)
-                                caseHistories.Add(new AccountCaseHistory() { CaseID = item, UserID = inputArgument.UserId, StatusTime = DateTime.Now, Status = CaseStatus.Cancelled });
+                                caseHistories.Add(new AccountCaseHistory() { CaseId = item, UserId = inputArgument.UserId, StatusTime = DateTime.Now, Status = CaseStatus.Cancelled });
 
                             IAccountCaseHistoryDataManager caseHistoryDataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseHistoryDataManager>();
                             caseHistoryDataManager.SavetoDB(caseHistories);

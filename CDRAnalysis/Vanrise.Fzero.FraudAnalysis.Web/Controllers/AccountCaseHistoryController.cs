@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
     {
         [HttpPost]
         [Route("GetFilteredAccountCaseHistoryByCaseID")]
-        public object GetFilteredAccountCaseHistoryByCaseID(DataRetrievalInput<AccountCaseLogQuery> input)
+        public object GetFilteredAccountCaseHistoryByCaseID(DataRetrievalInput<AccountCaseHistoryQuery> input)
         {
             AccountCaseHistoryManager manager = new AccountCaseHistoryManager();
             return GetWebResponse(input, manager.GetFilteredAccountCaseHistoryByCaseID(input));

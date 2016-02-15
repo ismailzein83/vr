@@ -21,8 +21,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         static AccountCaseHistoryDataManager()
         {
+            _columnMapper.Add("AccountCaseHistoryId", "ID");
             _columnMapper.Add("UserName", "UserID");
-            _columnMapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
+            _columnMapper.Add("StatusDescription", "Status");
         }
         #endregion
 
@@ -45,11 +46,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             foreach (AccountCaseHistory record in records)
             {
                 stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}",
-                                record.CaseID,
+                                record.CaseId,
                                 record.Reason,
                                 (int)record.Status,
                                 record.StatusTime,
-                                record.UserID.Value
+                                record.UserId.Value
                                 );
             }
 
@@ -72,31 +73,30 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_Insert", caseID, userID, caseStatus, reason);
             return (recordsAffected > 0);
         }
-        public BigResult<AccountCaseLog> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogQuery> input)
+        public BigResult<AccountCaseHistory> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseHistoryQuery> input)
         {
 
 
             Action<string> createTempTableAction = (tempTableName) =>
             {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_CreateTempByCaseID", tempTableName, input.Query.CaseID);
+                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCaseHistory_CreateTempByCaseID", tempTableName, input.Query.CaseId);
             };
 
-            return RetrieveData(input, createTempTableAction, AccountCaseLogMapper, _columnMapper);
+            return RetrieveData(input, createTempTableAction, AccountCaseHistoryMapper, _columnMapper);
         }
         #endregion
 
         #region Mappers
-        private AccountCaseLog AccountCaseLogMapper(IDataReader reader)
+        private AccountCaseHistory AccountCaseHistoryMapper(IDataReader reader)
         {
-            AccountCaseLog log = new AccountCaseLog();
-
-            log.LogID = (int)reader["LogID"];
-            log.UserID = GetReaderValue<int?>(reader, "UserID");
-            log.AccountCaseStatusID = (CaseStatus)reader["AccountCaseStatusID"];
-            log.StatusTime = (DateTime)reader["StatusTime"];
-            log.Reason = GetReaderValue<string>(reader, "Reason");
-
-            return log;
+            AccountCaseHistory history = new AccountCaseHistory();
+            history.AccountCaseHistoryId = (int)reader["ID"];
+            history.CaseId = GetReaderValue<int>(reader, "CaseID");
+            history.UserId = GetReaderValue<int?>(reader, "UserID");
+            history.Status = (CaseStatus)reader["Status"];
+            history.StatusTime = (DateTime)reader["StatusTime"];
+            history.Reason = GetReaderValue<string>(reader, "Reason");
+            return history;
         }
         #endregion
 

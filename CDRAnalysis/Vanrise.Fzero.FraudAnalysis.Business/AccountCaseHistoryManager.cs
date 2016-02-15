@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class AccountCaseHistoryManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<AccountCaseLog> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<AccountCaseHistory> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseHistoryQuery> input)
         {
             IAccountCaseHistoryDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseHistoryDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAccountCaseHistoryByCaseID(input));

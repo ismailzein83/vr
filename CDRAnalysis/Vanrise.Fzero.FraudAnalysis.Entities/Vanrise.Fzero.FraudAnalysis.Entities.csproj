@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCaseHistory\AccountCaseHistory.cs" />
-    <Compile Include="AccountCaseLog.cs" />
     <Compile Include="CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManager\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManager\IBusinessManager.cs" />
@@ -73,7 +72,7 @@
     <Compile Include="DWBTSDictionary.cs" />
     <Compile Include="CaseStatus.cs" />
     <Compile Include="SuspicionOccuranceStatus.cs" />
-    <Compile Include="SuspicionLevel.cs" />
+    <Compile Include="SuspicionLevel\SuspicionLevel.cs" />
     <Compile Include="Period\PeriodEnum.cs" />
     <Compile Include="Strategy\StrategyStatus.cs" />
     <Compile Include="NumberPrefix\NumberPrefixes.cs" />
@@ -96,7 +95,7 @@
     <Compile Include="DWFact.cs" />
     <Compile Include="StrategyExecution\StrategyExecutionQuery.cs" />
     <Compile Include="RelatedNumber.cs" />
-    <Compile Include="AccountCaseLogQuery.cs" />
+    <Compile Include="AccountCaseHistory\AccountCaseHistoryQuery.cs" />
     <Compile Include="RelatedNumberQuery.cs" />
     <Compile Include="AccountCase\AccountCaseQuery.cs" />
     <Compile Include="AccountSuspicionDetail.cs" />

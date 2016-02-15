@@ -11,6 +11,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void SavetoDB(List<AccountCaseHistory> records);
 
-        BigResult<AccountCaseLog> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseLogQuery> input);
+        BigResult<AccountCaseHistory> GetFilteredAccountCaseHistoryByCaseID(Vanrise.Entities.DataRetrievalInput<AccountCaseHistoryQuery> input);
     }
 }

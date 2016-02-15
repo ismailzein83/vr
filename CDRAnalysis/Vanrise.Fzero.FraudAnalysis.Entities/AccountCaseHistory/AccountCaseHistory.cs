@@ -4,11 +4,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
     public class AccountCaseHistory
     {
-        public int ID { get; set; }
+        public int AccountCaseHistoryId { get; set; }
 
-        public int CaseID { get; set; }
+        public int CaseId { get; set; }
 
-        public int? UserID { get; set; }
+        public int? UserId { get; set; }
 
         public CaseStatus Status { get; set; }
 
