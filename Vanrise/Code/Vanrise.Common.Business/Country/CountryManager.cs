@@ -44,6 +44,15 @@ namespace Vanrise.Common.Business
             return countries.GetRecord(countryId);
         }
 
+        public string GetCountryName(int countryId)
+        {
+            var country = GetCountry(countryId);
+            if (country != null)
+                return country.Name;
+            else
+                return null;
+        }
+
         public Country GetCountry(string countryName)
         {
             if (countryName == null)
