@@ -75,10 +75,10 @@
     <Compile Include="SuspicionOccuranceStatus.cs" />
     <Compile Include="SuspicionLevel.cs" />
     <Compile Include="Period\PeriodEnum.cs" />
-    <Compile Include="StrategyStatus.cs" />
+    <Compile Include="Strategy\StrategyStatus.cs" />
     <Compile Include="NumberPrefix\NumberPrefixes.cs" />
     <Compile Include="InfoDetail.cs" />
-    <Compile Include="AccountInfo.cs" />
+    <Compile Include="AccountInfo\AccountInfo.cs" />
     <Compile Include="CDR\CDRDetail.cs" />
     <Compile Include="DWAccountCase.cs" />
     <Compile Include="DWAccountCaseDictionary .cs" />
@@ -106,7 +106,7 @@
     <Compile Include="StrategyExecutionItem\StrategyExecutionItemBatch.cs" />
     <Compile Include="CaseDetailQuery.cs" />
     <Compile Include="CasesSummary.cs" />
-    <Compile Include="StrategyKind.cs" />
+    <Compile Include="StrategyKind\StrategyKind.cs" />
     <Compile Include="NumberProfile\INumberProfileParameters.cs" />
     <Compile Include="NumberProfile\NumberProfileParameters.cs" />
     <Compile Include="AccountCaseUpdateQuery.cs" />
@@ -126,7 +126,7 @@
     <Compile Include="NumberProfile\NumberProfileQuery.cs" />
     <Compile Include="CDR\CDRQuery.cs" />
     <Compile Include="CaseProductivityQuery.cs" />
-    <Compile Include="StrategyQuery.cs" />
+    <Compile Include="Strategy\StrategyQuery.cs" />
     <Compile Include="CallClass\CallClass.cs" />
     <Compile Include="FilterDefinition.cs" />
     <Compile Include="NumberCriteriaBatch.cs" />
@@ -134,7 +134,7 @@
     <Compile Include="NumberProfile\NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CaseProductivity.cs" />
-    <Compile Include="StrategyDetail.cs" />
+    <Compile Include="Strategy\StrategyDetail.cs" />
     <Compile Include="AccountCase\AccountCase.cs" />
     <Compile Include="StrategyExecution\StrategyExecution.cs" />
     <Compile Include="StrategyExecutionItem\StrategyExecutionItem.cs" />
