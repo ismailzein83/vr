@@ -71,7 +71,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PartitionedCDRDataManager.cs" />
     <Compile Include="CDRDatabaseDataManager.cs" />
     <Compile Include="PartitionedCDRDataManagerFactory.cs" />
     <Compile Include="PartitionedNormalCDRDataManager.cs" />

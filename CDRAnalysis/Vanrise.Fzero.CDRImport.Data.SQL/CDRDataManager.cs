@@ -118,7 +118,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(input.Query.FromDate, input.Query.ToDate);
                     if(dbTimeRanges != null)
                     {
-                        ExecuteNonQueryText(String.Format(PartitionedCDRDataManager.NORMALCDR_CREATETABLE_QUERYTEMPLATE, tempTableName), null);
+                        ExecuteNonQueryText(String.Format(PartitionedCDRDataManager.CDR_CREATETABLE_QUERYTEMPLATE, tempTableName), null);
                         //foreach(var dbTimeRange in dbTimeRanges)
                         Parallel.ForEach(dbTimeRanges, (dbTimeRange) =>
                         {
