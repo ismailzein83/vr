@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCdrPstnbeStagingtonormalcdr", [function () {
+app.directive("vrCdrPstnbeStagingtocdr", [function () {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -42,7 +42,7 @@ app.directive("vrCdrPstnbeStagingtonormalcdr", [function () {
             var api = {};
             api.getData = function () {
                 return {
-                    $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcess, Vanrise.Fzero.CDRImport.BP.Arguments"
+                    $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoCDRProcess, Vanrise.Fzero.CDRImport.BP.Arguments"
                 };
             };
             api.getExpressionsData = function () {

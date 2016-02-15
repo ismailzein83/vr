@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public DateTime ToTime { get; set; }
     }
 
-    public class PartitionedCDRDataManager :  IBulkApplyDataManager<CDR>
+    public class PartitionedCDRDataManager : BaseSQLDataManager, IBulkApplyDataManager<CDR>
     {
         static string[] s_cdrColumns = new string[] {
             "MSISDN"
@@ -96,7 +96,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         protected string GetCDRTableName(DateTime cdrTime)
         {
-            return string.Format("NormalCDR_{0:yyyyMMdd_HH}00", cdrTime);
+            return string.Format("CDR_{0:yyyyMMdd_HH}00", cdrTime);
         }
 
         internal string DatabaseName
@@ -131,9 +131,9 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             DateTime currentHour = fromTime;
             while (currentHour < toTime)
             {
-                string normalCDRTableName = GetCDRTableName(currentHour);
-                ExecuteNonQueryText(String.Format(CDR_CREATETABLE_QUERYTEMPLATE, normalCDRTableName), null);
-                ExecuteNonQueryText(String.Format(CDR_CREATEINDEXES_QUERYTEMPLATE, normalCDRTableName), null);
+                string cdrTableName = GetCDRTableName(currentHour);
+                ExecuteNonQueryText(String.Format(CDR_CREATETABLE_QUERYTEMPLATE, cdrTableName), null);
+                ExecuteNonQueryText(String.Format(CDR_CREATEINDEXES_QUERYTEMPLATE, cdrTableName), null);
                 currentHour = currentHour.AddHours(1);
             }
 
@@ -300,32 +300,32 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         internal CDR CDRMapper(IDataReader reader)
         {
-            var normalCDR = new CDR();
-            normalCDR.CallType = GetReaderValue<CallType>(reader, "CallTypeID");
-            normalCDR.BTS = reader["BTS"] as string;
-            normalCDR.ConnectDateTime = (DateTime)reader["ConnectDateTime"];
-            normalCDR.IMSI = reader["IMSI"] as string;
-            normalCDR.DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds");
-            normalCDR.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-            normalCDR.CallClassId = GetReaderValue<int?>(reader, "CallClassID");
-            normalCDR.IsOnNet = GetReaderValue<bool>(reader, "IsOnNet");
-            normalCDR.SubscriberType = GetReaderValue<SubscriberType?>(reader, "SubscriberTypeID");
-            normalCDR.IMEI = reader["IMEI"] as string;
-            normalCDR.Cell = reader["Cell"] as string;
-            normalCDR.UpVolume = GetReaderValue<Decimal?>(reader, "UpVolume");
-            normalCDR.DownVolume = GetReaderValue<Decimal?>(reader, "DownVolume");
-            normalCDR.CellLatitude = GetReaderValue<Decimal?>(reader, "CellLatitude");
-            normalCDR.CellLongitude = GetReaderValue<Decimal?>(reader, "CellLongitude");
-            normalCDR.InTrunkId = GetReaderValue<int?>(reader, "InTrunkID");
-            normalCDR.OutTrunkId = GetReaderValue<int?>(reader, "OutTrunkID");
-            normalCDR.ServiceTypeId = GetReaderValue<int?>(reader, "ServiceTypeID");
-            normalCDR.ServiceVASName = reader["ServiceVASName"] as string;
-            normalCDR.ReleaseCode = reader["ReleaseCode"] as string;
-            normalCDR.MSISDNAreaCode = reader["MSISDNAreaCode"] as string;
-            normalCDR.DestinationAreaCode = reader["DestinationAreaCode"] as string;
-            normalCDR.Destination = reader["Destination"] as string;
-            normalCDR.MSISDN = reader["MSISDN"] as string;
-            return normalCDR;
+            var cdr = new CDR();
+            cdr.CallType = GetReaderValue<CallType>(reader, "CallTypeID");
+            cdr.BTS = reader["BTS"] as string;
+            cdr.ConnectDateTime = (DateTime)reader["ConnectDateTime"];
+            cdr.IMSI = reader["IMSI"] as string;
+            cdr.DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds");
+            cdr.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+            cdr.CallClassId = GetReaderValue<int?>(reader, "CallClassID");
+            cdr.IsOnNet = GetReaderValue<bool>(reader, "IsOnNet");
+            cdr.SubscriberType = GetReaderValue<SubscriberType?>(reader, "SubscriberTypeID");
+            cdr.IMEI = reader["IMEI"] as string;
+            cdr.Cell = reader["Cell"] as string;
+            cdr.UpVolume = GetReaderValue<Decimal?>(reader, "UpVolume");
+            cdr.DownVolume = GetReaderValue<Decimal?>(reader, "DownVolume");
+            cdr.CellLatitude = GetReaderValue<Decimal?>(reader, "CellLatitude");
+            cdr.CellLongitude = GetReaderValue<Decimal?>(reader, "CellLongitude");
+            cdr.InTrunkId = GetReaderValue<int?>(reader, "InTrunkID");
+            cdr.OutTrunkId = GetReaderValue<int?>(reader, "OutTrunkID");
+            cdr.ServiceTypeId = GetReaderValue<int?>(reader, "ServiceTypeID");
+            cdr.ServiceVASName = reader["ServiceVASName"] as string;
+            cdr.ReleaseCode = reader["ReleaseCode"] as string;
+            cdr.MSISDNAreaCode = reader["MSISDNAreaCode"] as string;
+            cdr.DestinationAreaCode = reader["DestinationAreaCode"] as string;
+            cdr.Destination = reader["Destination"] as string;
+            cdr.MSISDN = reader["MSISDN"] as string;
+            return cdr;
         }
 
         #endregion

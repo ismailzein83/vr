@@ -21,12 +21,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
             return new AverageAggregateState();
         }
 
-        public override void Evaluate(AggregateState state, CDR normalCDR)
+        public override void Evaluate(AggregateState state, CDR cdr)
         {
-            if (this._condition == null || this._condition(normalCDR))
+            if (this._condition == null || this._condition(cdr))
             {
                 AverageAggregateState averageAggregateState = state as AverageAggregateState;
-                averageAggregateState.Sum += _cdrExpressionToSum(normalCDR);
+                averageAggregateState.Sum += _cdrExpressionToSum(cdr);
                 averageAggregateState.Count += 1;
             }
         }

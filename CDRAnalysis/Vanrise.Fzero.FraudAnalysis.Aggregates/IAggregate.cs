@@ -5,7 +5,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Aggregates
 {
     public interface IAggregate 
     {
-        void EvaluateCDR(CDR normalCDR);
+        void EvaluateCDR(CDR cdr);
 
         decimal GetResult(INumberProfileParameters strategy);
     }

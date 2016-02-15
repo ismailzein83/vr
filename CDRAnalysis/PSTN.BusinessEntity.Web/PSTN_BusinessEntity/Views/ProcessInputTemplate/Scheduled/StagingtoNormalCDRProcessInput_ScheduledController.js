@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-StagingtoNormalCDRProcessInput_Scheduled.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+StagingtoCDRProcessInput_Scheduled.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-function StagingtoNormalCDRProcessInput_Scheduled($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
+function StagingtoCDRProcessInput_Scheduled($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService) {
     defineScope();
 
     function defineScope() {
@@ -19,7 +19,7 @@ function StagingtoNormalCDRProcessInput_Scheduled($scope, $http, $routeParams, n
 
         $scope.schedulerTaskAction.processInputArguments.getData = function () {
             return {
-                $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcess, Vanrise.Fzero.CDRImport.BP.Arguments"
+                $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoCDRProcess, Vanrise.Fzero.CDRImport.BP.Arguments"
             };
         };
 
@@ -30,7 +30,7 @@ function StagingtoNormalCDRProcessInput_Scheduled($scope, $http, $routeParams, n
 }
 
 
-appControllers.controller('FraudAnalysis_StagingtoNormalCDRProcessInput_Scheduled', StagingtoNormalCDRProcessInput_Scheduled)
+appControllers.controller('FraudAnalysis_StagingtoCDRProcessInput_Scheduled', StagingtoCDRProcessInput_Scheduled)
 
 
 

@@ -254,9 +254,7 @@
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\Includes\CaseOccuranceGridController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysis.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspicionAnalysisController.js" />
-    <Content Include="FraudAnalysis\Views\Reports\LinesDetected.html" />
     <Content Include="FraudAnalysis\Views\Reports\BlockedLines.html" />
-    <Content Include="FraudAnalysis\Views\Reports\LinesDetectedController.js" />
     <Content Include="FraudAnalysis\Views\Reports\CasesProductivity.html" />
     <Content Include="FraudAnalysis\Views\Reports\BlockedLinesController.js" />
     <Content Include="FraudAnalysis\Views\Reports\CasesProductivityController.js" />

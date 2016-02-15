@@ -73,7 +73,7 @@
   <ItemGroup>
     <Compile Include="CDRDatabaseDataManager.cs" />
     <Compile Include="PartitionedCDRDataManagerFactory.cs" />
-    <Compile Include="PartitionedNormalCDRDataManager.cs" />
+    <Compile Include="PartitionedCDRDataManager.cs" />
     <Compile Include="StagingCDRDataManager.cs" />
     <Compile Include="CDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

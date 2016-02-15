@@ -2,8 +2,7 @@
 
     return ({
         GetFilteredCasesProductivity: GetFilteredCasesProductivity,
-        GetFilteredBlockedLines: GetFilteredBlockedLines,
-        GetFilteredLinesDetected: GetFilteredLinesDetected
+        GetFilteredBlockedLines: GetFilteredBlockedLines
     });
 
 
@@ -16,13 +15,5 @@
         return BaseAPIService.post("/api/Reporting/GetFilteredBlockedLines", input
            );
     }
-
-
-    function GetFilteredLinesDetected(input) {
-        return BaseAPIService.post("/api/Reporting/GetFilteredLinesDetected", input
-           );
-    }
-    
-
 
 });

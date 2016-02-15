@@ -49,19 +49,19 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void WriteRecordToStream(CDR record, object dbApplyStream)
         {
-            CDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as CDRDBApplyStream;
+            CDRDBApplyStream cdrDBApplyStream = dbApplyStream as CDRDBApplyStream;
             var dbFromTime = PartitionedCDRDataManager.GetDBFromTime(record.ConnectDateTime);
             PartitionedCDRStream matchStream;
-            if(!normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.TryGetValue(dbFromTime, out matchStream))
+            if(!cdrDBApplyStream.PartitionedStreamsByDBFromTime.TryGetValue(dbFromTime, out matchStream))
             {
                 PartitionedCDRStream newStream = new PartitionedCDRStream { DataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedCDRDataManager>(dbFromTime, false) };
                 newStream.DBApplyStream = newStream.DataManager.InitialiazeStreamForDBApply();
-                if (normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.TryAdd(dbFromTime, newStream))
+                if (cdrDBApplyStream.PartitionedStreamsByDBFromTime.TryAdd(dbFromTime, newStream))
                     matchStream = newStream;
                 else
                 {
                     newStream.DataManager.FinishDBApplyStream(newStream.DBApplyStream);
-                    matchStream = normalCDRDBApplyStream.PartitionedStreamsByDBFromTime[dbFromTime];
+                    matchStream = cdrDBApplyStream.PartitionedStreamsByDBFromTime[dbFromTime];
                 }
             }
             matchStream.DataManager.WriteRecordToStream(record, matchStream.DBApplyStream);
@@ -70,18 +70,18 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
-            CDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as CDRDBApplyStream;
-            foreach (var entry in normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values)
+            CDRDBApplyStream cdrDBApplyStream = dbApplyStream as CDRDBApplyStream;
+            foreach (var entry in cdrDBApplyStream.PartitionedStreamsByDBFromTime.Values)
             {
                 entry.DataManager.FinishDBApplyStream(entry.DBApplyStream);
             }
-            return normalCDRDBApplyStream;
+            return cdrDBApplyStream;
         }
 
         public void ApplyCDRsToDB(object preparedCDRs)
         {
-            CDRDBApplyStream normalCDRDBApplyStream = preparedCDRs as CDRDBApplyStream;
-            Parallel.ForEach(normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values, (entry) =>
+            CDRDBApplyStream cdrDBApplyStream = preparedCDRs as CDRDBApplyStream;
+            Parallel.ForEach(cdrDBApplyStream.PartitionedStreamsByDBFromTime.Values, (entry) =>
             {
                 entry.DataManager.ApplyCDRsToDB(entry.DBApplyStream);
             });

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCdrPstnbeStagingtonormalcdrManual", ["VRValidationService", function (VRValidationService) {
+app.directive("vrCdrPstnbeStagingtocdrManual", ["VRValidationService", function (VRValidationService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -21,7 +21,7 @@ app.directive("vrCdrPstnbeStagingtonormalcdrManual", ["VRValidationService", fun
                 }
             }
         },
-        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/MainExtensions/ProcessInput/Normal/Templates/StagingToNormalCDRManualTemplate.html"
+        templateUrl: "/Client/Modules/PSTN_BusinessEntity/Directives/MainExtensions/ProcessInput/Normal/Templates/StagingToCDRManualTemplate.html"
     };
 
     function DirectiveConstructor($scope, ctrl) {
@@ -55,7 +55,7 @@ app.directive("vrCdrPstnbeStagingtonormalcdrManual", ["VRValidationService", fun
                 $scope.createProcessInputObjects.length = 0;
                 $scope.createProcessInputObjects.push({
                     InputArguments: {
-                        $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoNormalCDRProcessInput, Vanrise.Fzero.CDRImport.BP.Arguments",
+                        $type: "Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoCDRProcessInput, Vanrise.Fzero.CDRImport.BP.Arguments",
                         FromDate: new Date($scope.fromDate),
                         ToDate: new Date($scope.toDate)
                     }

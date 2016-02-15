@@ -17,7 +17,7 @@
 
             <vr-choices selectedindex="selectedTabIndex" onselectionchanged="onSelectedTabChanged()">
                 <vr-choice isselected="occurancesSelected">Current Occurrences</vr-choice>
-                <vr-choice isselected="normalCDRsSelected">CDRs</vr-choice>
+                <vr-choice isselected="cdrsSelected">CDRs</vr-choice>
                 <vr-choice isselected="numberProfilesSelected">Number Profiles</vr-choice>
                 <vr-choice isselected="caseHistorySelected">Case History</vr-choice>
                 <vr-choice isselected="relatedNumbersSelected" ng-show="showRelatedNumbers">Related Numbers</vr-choice>
@@ -48,7 +48,7 @@
                 </vr-row>
             </div>
 
-            <div ng-show="normalCDRsSelected">
+            <div ng-show="cdrsSelected">
                 <vr-form validationcontext="searchCDRsContext">
                     <vr-row>
                         <vr-columns width="normal">
@@ -65,7 +65,7 @@
                 </vr-form>  
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
-                        <vr-datagrid datasource="normalCDRs"
+                        <vr-datagrid datasource="cdrs"
                                      on-ready="onGridReady_CDRs"
                                      dataretrievalfunction="dataRetrievalFunction_CDRs"
                                      pagingtype="'PagingOnScroll'"

@@ -89,7 +89,6 @@
     <Build Include="FraudAnalysis\Tables\NumberProfile.sql" />
     <Build Include="FraudAnalysis\Tables\CaseStatus.sql" />
     <Build Include="FraudAnalysis\Tables\AccountThreshold.sql" />
-    <Build Include="FraudAnalysis\Tables\NormalCDR.sql" />
     <Build Include="FraudAnalysis\Tables\AccountCase.sql" />
     <Build Include="FraudAnalysis\Tables\Period.sql" />
     <Build Include="FraudAnalysis\Tables\CallClass.sql" />
@@ -118,13 +117,11 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumbers_CreateTempTable.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NumberProfile_CreateTempByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetStatusByAccountNumber.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetBlockedLines.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
     <Build Include="PSTN_BE\Tables\SwitchTrunk.sql" />
     <Build Include="PSTN_BE\Tables\Switch.sql" />
     <Build Include="Security\PSTN_BE.sql" />
     <Build Include="FraudAnalysis\Tables\StagingCDR.sql" />
-    <Build Include="dbo\Tables\PSTNSampleData.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_SwitchTrunk_Insert.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Update.sql" />
     <Build Include="PSTN_BE\Stored Procedures\sp_Switch_Insert.sql" />

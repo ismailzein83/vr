@@ -59,7 +59,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
 
 
 
-        $scope.normalCDRs = [];
+        $scope.cdrs = [];
 
         // Number Profiles
         $scope.profileSources = [

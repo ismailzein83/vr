@@ -29,14 +29,14 @@ namespace Vanrise.Fzero.CDRImport.Business
 
           private CDRDetail CDRDetailMapper(CDR cdr)
         {
-            var normalCDR = new CDRDetail();
-            normalCDR.Entity = cdr;
+            var cdrDetail = new CDRDetail();
+            cdrDetail.Entity = cdr;
 
-            normalCDR.CallTypeName = Vanrise.Common.Utilities.GetEnumDescription(cdr.CallType);
+            cdrDetail.CallTypeName = Vanrise.Common.Utilities.GetEnumDescription(cdr.CallType);
 
             if (cdr.SubscriberType != null)
-                normalCDR.SubscriberTypeName = Vanrise.Common.Utilities.GetEnumDescription(cdr.SubscriberType.Value);
-            return normalCDR;
+                cdrDetail.SubscriberTypeName = Vanrise.Common.Utilities.GetEnumDescription(cdr.SubscriberType.Value);
+            return cdrDetail;
         }
     }
 }

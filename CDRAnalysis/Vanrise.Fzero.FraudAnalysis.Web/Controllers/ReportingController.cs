@@ -27,18 +27,7 @@ namespace  Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
             return GetWebResponse(input, manager.GetFilteredBlockedLines(input));
         }
-
-
-        [HttpPost]
-        public object GetFilteredLinesDetected(Vanrise.Entities.DataRetrievalInput<LinesDetectedQuery> input)
-        {
-
-            ReportingManager manager = new ReportingManager();
-
-            return GetWebResponse(input, manager.GetFilteredLinesDetected(input));
-        }
-
-
+        
 
     }
 }

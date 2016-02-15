@@ -120,10 +120,8 @@
     <Compile Include="BTSCases.cs" />
     <Compile Include="DailyVolumeLoose.cs" />
     <Compile Include="AccountCase\AccountCaseType.cs" />
-    <Compile Include="LinesDetected.cs" />
     <Compile Include="BlockedLines.cs" />
     <Compile Include="FilterDefinitionInfo.cs" />
-    <Compile Include="LinesDetectedQuery.cs" />
     <Compile Include="BlockedLinesQuery.cs" />
     <Compile Include="NumberProfile\NumberProfileQuery.cs" />
     <Compile Include="CDR\CDRQuery.cs" />

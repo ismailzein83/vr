@@ -204,20 +204,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #endregion
 
-        #region Get Filtered Lines Detected
-        
-        public BigResult<LinesDetected> GetFilteredLinesDetected(DataRetrievalInput<LinesDetectedQuery> input)
-        {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_GetBlockedLines", tempTableName, input.Query.FromDate, input.Query.ToDate);
-            };
-
-            return RetrieveData(input, createTempTableAction, LinesDetectedMapper);
-        }
-
-        #endregion
-
         #region Private Methods
 
         private CaseProductivity CaseProductivityMapper(IDataReader reader)
@@ -244,16 +230,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return blockedLines;
         }
 
-        private LinesDetected LinesDetectedMapper(IDataReader reader)
-        {
-            LinesDetected linesDetected = new LinesDetected();
-            linesDetected.AccountNumber = reader["AccountNumber"] as string;
-            linesDetected.ReasonofBlocking = reader["ReasonofBlocking"] as string;
-            linesDetected.ActiveDays = (int)reader["ActiveDays"];
-            linesDetected.Occurrences = (int)reader["Occurrences"];
-            linesDetected.Volume = (decimal)reader["Volume"];
-            return linesDetected;
-        }
+        
 
         #endregion
     }
