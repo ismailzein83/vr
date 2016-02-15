@@ -19,20 +19,25 @@ using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 using Vanrise.Runtime.Business;
 using Vanrise.Runtime.Entities;
+using QM.CLITester.Business.CLITestTasks;
 
 namespace QM.CLITester.Business
 {
     public class TestCallManager
     {
-        public TestCallTaskActionExecutionInfo AddNewTestCall(TestCallTaskActionArgument testCallInput, int userId, long? batchNumber, int? scheduleId)
+        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallInput)
         {
-            TestCallTaskActionExecutionInfo executionInfo = new TestCallTaskActionExecutionInfo();
+            long batchNumber;
+            IDManager.Instance.ReserveIDRange(this.GetType(), testCallInput.SuppliersIds.Count, out batchNumber);
+
+            AddTestCallOutput testCallOutput = new AddTestCallOutput();
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             
             ZoneManager zoneManager = new ZoneManager();
             SupplierManager supplierManager = new SupplierManager();
-
+            
+            
             Zone zone = new Zone();
             long zoneId = 0;
             
@@ -57,26 +62,20 @@ namespace QM.CLITester.Business
             {
                 foreach (string suppliersSourceId in testCallInput.SuppliersSourceIds)
                 {
-                    Supplier supplier = new Supplier();
-                    supplier = supplierManager.GetSupplierbySourceId(suppliersSourceId);
+                    Supplier supplier = supplierManager.GetSupplierbySourceId(suppliersSourceId);
                     listSuppliersIds.Add(supplier.SupplierId);
-                }   
+                }
             }
 
             foreach (int supplierId in listSuppliersIds)
             {
                 dataManager.Insert(supplierId, testCallInput.CountryID, zoneId, (int)CallTestStatus.New,
                     (int)CallTestResult.NotCompleted, 0, 0,
-                    userId, testCallInput.ProfileID, batchNumber, scheduleId);
+                    testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId);
             }
 
-            executionInfo.BatchNumber = batchNumber;
-            return executionInfo;
-        }
-
-        public TestCallTaskActionExecutionInfo AddNewTestCall(TestCallTaskActionArgument testCallInput)
-        {
-            return AddNewTestCall(testCallInput, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(), null, null);
+            testCallOutput.BatchNumber = batchNumber;
+            return testCallOutput;
         }
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)
@@ -211,5 +210,4 @@ namespace QM.CLITester.Business
         }
 
     }
-
 }

@@ -79,6 +79,7 @@
     <Compile Include="CLITestTasks\InitiateTestTaskActionArgument.cs" />
     <Compile Include="CLITestTasks\TestCallTaskAction.cs" />
     <Compile Include="CLITestTasks\TestCallTaskActionArgument.cs" />
+    <Compile Include="CLITestTasks\TestCallTaskActionExecutionInfo.cs" />
     <Compile Include="CLITestTasks\TestProgressTaskAction.cs" />
     <Compile Include="CLITestTasks\TestProgressTaskActionArgument.cs" />
     <Compile Include="Constants.cs" />

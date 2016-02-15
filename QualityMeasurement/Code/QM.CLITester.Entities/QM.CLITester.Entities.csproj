@@ -68,7 +68,6 @@
     <Compile Include="TestCallDetail.cs" />
     <Compile Include="TestCallQuery.cs" />
     <Compile Include="AddTestCallInput.cs" />
-    <Compile Include="TestCallTaskActionExecutionInfo.cs" />
     <Compile Include="TotalCallsChart.cs" />
   </ItemGroup>
   <ItemGroup>

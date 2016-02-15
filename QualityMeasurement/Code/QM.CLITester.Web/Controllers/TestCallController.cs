@@ -17,20 +17,13 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpPost]
         [Route("AddNewTestCall")]
-        public TestCallTaskActionExecutionInfo AddNewTestCall(TestCallTaskActionArgument testCallResult)
+        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallInput)
         {
+            testCallInput.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            testCallInput.ScheduleId = null;
             TestCallManager manager = new TestCallManager();
-            return manager.AddNewTestCall(testCallResult);
+            return manager.AddNewTestCall(testCallInput);
         }
-
-        //[HttpPost]
-        //[Route("ReTestCall")]
-        //public AddTestCallOutput ReTestCall(AddTestCallInput testCallResult)
-        //{
-        //    TestCallManager manager = new TestCallManager();
-        //    return manager.AddNewTestCall(testCallResult);
-        //}
-
 
         [HttpPost]
         [Route("GetUpdated")]

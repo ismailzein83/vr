@@ -12,12 +12,9 @@ namespace QM.CLITester.Business
         public List<int?> SuppliersIds { get; set; }
         public List<string> SuppliersSourceIds { get; set; }
         public int CountryID { get; set; }
-        public int? ZoneID { get; set; }
+        public long? ZoneID { get; set; }
         public string ZoneSourceId { get; set; }
         public int ProfileID { get; set; }
         public string ListEmails { get; set; }
-
-        //public AddTestCallInput AddTestCallInput { get; set; }
-        //public AddTestCallOutput AddTestCallOutput { get; set; }
     }
 }

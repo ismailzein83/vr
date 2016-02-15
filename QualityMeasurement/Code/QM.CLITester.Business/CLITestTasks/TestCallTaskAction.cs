@@ -1,5 +1,4 @@
-﻿using QM.CLITester.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -12,6 +11,8 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
+using QM.CLITester.Business.CLITestTasks;
+using QM.CLITester.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
@@ -34,10 +35,25 @@ namespace QM.CLITester.Business
                 throw new ArgumentNullException("testCallTaskActionArgument");
 
             TestCallManager manager = new TestCallManager();
-            long startingId;
-            IDManager.Instance.ReserveIDRange(this.GetType(), testCallTaskActionArgument.SuppliersIds.Count, out startingId);
 
-            TestCallTaskActionExecutionInfo exuctionInfo = manager.AddNewTestCall(testCallTaskActionArgument, task.OwnerId, startingId, task.TaskId);
+            AddTestCallInput testCallInput = new AddTestCallInput()
+            {
+                CountryID = testCallTaskActionArgument.CountryID,
+                ProfileID = testCallTaskActionArgument.ProfileID,
+                SuppliersIds = testCallTaskActionArgument.SuppliersIds,
+                SuppliersSourceIds = testCallTaskActionArgument.SuppliersSourceIds,
+                ZoneID = testCallTaskActionArgument.ZoneID,
+                ZoneSourceId = testCallTaskActionArgument.ZoneSourceId,
+                UserId = task.OwnerId,
+                ScheduleId = task.TaskId
+            };
+
+            AddTestCallOutput testCallOutput = manager.AddNewTestCall(testCallInput);
+            
+            TestCallTaskActionExecutionInfo exuctionInfo = new TestCallTaskActionExecutionInfo()
+            {
+                BatchNumber = testCallOutput.BatchNumber
+            };
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {

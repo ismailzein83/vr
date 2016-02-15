@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QM.CLITester.Entities
+namespace QM.CLITester.Business.CLITestTasks
 {
     public class TestCallTaskActionExecutionInfo
     {
