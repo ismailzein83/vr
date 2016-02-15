@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Vanrise.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 

@@ -1,7 +1,6 @@
 ﻿using PSTN.BusinessEntity.Entities;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace PSTN.BusinessEntity.Data.SQL
 {

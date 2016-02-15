@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace PSTN.BusinessEntity.Entities
 {
     public class SwitchDetail

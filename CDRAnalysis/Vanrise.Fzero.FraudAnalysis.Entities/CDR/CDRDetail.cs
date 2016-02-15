@@ -1,5 +1,4 @@
-﻿using System;
-using Vanrise.Fzero.CDRImport.Entities;
+﻿using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {

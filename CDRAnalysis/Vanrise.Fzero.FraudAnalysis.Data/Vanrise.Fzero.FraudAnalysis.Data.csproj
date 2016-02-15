@@ -53,18 +53,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataWarehouse\IDWAccountCaseManager.cs" />
-    <Compile Include="DataWarehouse\IDWStrategyDataManager.cs" />
+    <Compile Include="IDWAccountCaseManager.cs" />
+    <Compile Include="IDWStrategyDataManager.cs" />
     <Compile Include="FraudDataManagerFactory.cs" />
-    <Compile Include="DataWarehouse\IDWTimeDataManager.cs" />
-    <Compile Include="DataWarehouse\IDWDimensionDataManager.cs" />
+    <Compile Include="IDWTimeDataManager.cs" />
+    <Compile Include="IDWDimensionDataManager.cs" />
     <Compile Include="IAccountCaseDataManager.cs" />
     <Compile Include="IAccountCaseHistoryDataManager.cs" />
     <Compile Include="IAccountInfoDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IAccountStatusDataManager.cs" />
     <Compile Include="IAggregateDataManager.cs" />
-    <Compile Include="DataWarehouse\IDWFactDataManager.cs" />
+    <Compile Include="IDWFactDataManager.cs" />
     <Compile Include="IRelatedNumberDataManager.cs" />
     <Compile Include="INumberProfileDataManager.cs" />
     <Compile Include="IClassDataManager.cs" />
@@ -89,6 +89,9 @@
       <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataWarehouse\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

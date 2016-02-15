@@ -1,15 +1,15 @@
-﻿using System.Activities;
+﻿using System;
+using System.Activities;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Business;
+using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;
-using System.Linq;
-using Vanrise.Fzero.FraudAnalysis.Data;
-using System;
-using System.Globalization;
 
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {

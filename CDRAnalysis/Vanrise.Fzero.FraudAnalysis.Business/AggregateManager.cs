@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Common;
 using Vanrise.Fzero.Business;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.Entities;
 using Vanrise.Fzero.FraudAnalysis.Aggregates;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Common;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {

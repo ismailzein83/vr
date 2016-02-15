@@ -130,7 +130,6 @@
     <Compile Include="CaseProductivityQuery.cs" />
     <Compile Include="StrategyQuery.cs" />
     <Compile Include="CallClass\CallClass.cs" />
-    <Compile Include="FraudResult.cs" />
     <Compile Include="FilterDefinition.cs" />
     <Compile Include="NumberCriteriaBatch.cs" />
     <Compile Include="NumberProfile\NumberProfileBatch.cs" />

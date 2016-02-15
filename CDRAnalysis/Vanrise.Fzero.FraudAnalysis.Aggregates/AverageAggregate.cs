@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 

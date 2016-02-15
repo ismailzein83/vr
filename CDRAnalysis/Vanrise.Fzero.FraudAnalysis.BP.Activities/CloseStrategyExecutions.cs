@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
-using Vanrise.BusinessProcess;
-using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.BP.Arguments;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;

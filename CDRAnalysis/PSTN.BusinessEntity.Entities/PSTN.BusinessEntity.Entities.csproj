@@ -49,8 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TrunkType.cs" />
-    <Compile Include="TrunkDirection.cs" />
+    <Compile Include="TrunkType\TrunkType.cs" />
+    <Compile Include="TrunkDirection\TrunkDirection.cs" />
     <Compile Include="Normalization\NormalizationRuleDetail.cs" />
     <Compile Include="Normalization\RuleTypes\NormalizeNumber\INormalizationRuleAdjustNumberActionContext.cs" />
     <Compile Include="Normalization\RuleTypes\SetArea\INormalizationRuleSetAreaContext.cs" />

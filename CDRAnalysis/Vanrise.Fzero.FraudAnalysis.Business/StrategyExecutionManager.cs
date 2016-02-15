@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.BusinessProcess.Client;
-using Vanrise.BusinessProcess.Entities;
-using System.Linq;
-using System.Collections;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 

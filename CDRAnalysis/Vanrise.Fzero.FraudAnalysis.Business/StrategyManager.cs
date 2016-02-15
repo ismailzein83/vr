@@ -7,7 +7,6 @@ using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Security.Business;
-using Vanrise.Security.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
 {

@@ -1,7 +1,5 @@
-﻿using System;
-using Vanrise.Fzero.CDRImport.Entities;
+﻿using System.Collections.Generic;
 using Vanrise.Fzero.Entities;
-using System.Collections.Generic;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {

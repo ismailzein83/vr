@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
-using System.Linq;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {

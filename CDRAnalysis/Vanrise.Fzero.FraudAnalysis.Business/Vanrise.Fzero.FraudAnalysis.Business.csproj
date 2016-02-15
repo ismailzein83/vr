@@ -90,11 +90,11 @@
     <Compile Include="AccountInfoManager.cs" />
     <Compile Include="AccountStatusManager.cs" />
     <Compile Include="AggregateManager.cs" />
-    <Compile Include="DataWarehouse\DWAccountCaseManager.cs" />
-    <Compile Include="DataWarehouse\DWTimeManager.cs" />
-    <Compile Include="DataWarehouse\DWDimensionManager.cs" />
+    <Compile Include="DWAccountCaseManager.cs" />
+    <Compile Include="DWTimeManager.cs" />
+    <Compile Include="DWDimensionManager.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="DataWarehouse\DWStrategyManager.cs" />
+    <Compile Include="DWStrategyManager.cs" />
     <Compile Include="NumberPrefixesManager.cs" />
     <Compile Include="FilterManager.cs" />
     <Compile Include="FraudManager.cs" />
@@ -136,6 +136,9 @@
       <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataWarehouse\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

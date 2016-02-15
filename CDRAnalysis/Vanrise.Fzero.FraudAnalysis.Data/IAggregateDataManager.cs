@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Vanrise.Entities;
-using Vanrise.Fzero.FraudAnalysis.Entities;
+﻿using System.Collections.Generic;
 using Vanrise.Fzero.FraudAnalysis.Aggregates;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data

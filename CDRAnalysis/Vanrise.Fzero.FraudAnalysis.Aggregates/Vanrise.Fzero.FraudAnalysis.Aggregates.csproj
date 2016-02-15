@@ -50,7 +50,6 @@
     <Compile Include="ConsecutiveAggregate.cs" />
     <Compile Include="CountAggregate.cs" />
     <Compile Include="DistinctCountAggregate.cs" />
-    <Compile Include="FailedConsecutiveAggregate.cs" />
     <Compile Include="GroupCountAggregate.cs" />
     <Compile Include="IAggregate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

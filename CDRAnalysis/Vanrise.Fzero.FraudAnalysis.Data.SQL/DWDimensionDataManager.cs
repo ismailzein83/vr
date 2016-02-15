@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using Vanrise.Data.SQL;
-using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL

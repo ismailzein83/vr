@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Activities;
 using Vanrise.BusinessProcess;
-using Vanrise.Common;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Queueing;

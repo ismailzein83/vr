@@ -1,5 +1,4 @@
 ﻿
-using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Aggregates

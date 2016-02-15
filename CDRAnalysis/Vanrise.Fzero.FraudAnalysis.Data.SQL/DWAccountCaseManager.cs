@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Data.SQL;
-using Vanrise.Fzero.FraudAnalysis.Entities;
-using Vanrise.Fzero.CDRImport.Entities;
 using System.Data;
+using Vanrise.Data.SQL;
+using Vanrise.Fzero.CDRImport.Entities;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {

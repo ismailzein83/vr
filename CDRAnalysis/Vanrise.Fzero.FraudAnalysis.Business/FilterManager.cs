@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vanrise.Fzero.CDRImport.Entities;
-using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Fzero.Business;
 using Vanrise.Fzero.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
+using Vanrise.Fzero.FraudAnalysis.Entities;
 
 
 namespace Vanrise.Fzero.FraudAnalysis.Business
