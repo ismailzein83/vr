@@ -277,7 +277,7 @@
     <Compile Include="Tasks\FillDataWarehouse.cs" />
     <Compile Include="Tasks\Mapper.cs" />
     <Compile Include="Tasks\ExecStrategy.cs" />
-    <Compile Include="Tasks\StagingtoNormalCDR.cs" />
+    <Compile Include="Tasks\StagingtoCDR.cs" />
     <Compile Include="Tasks\RelatedNumbers.cs" />
     <Compile Include="Tasks\AssignCase.cs" />
     <Compile Include="Tasks\Profiling.cs" />
