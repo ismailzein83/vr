@@ -22,6 +22,11 @@ namespace Vanrise.Queueing.Data.SQL
         }
 
 
+        public bool AreQueueActivatorConfigUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("queue.QueueActivatorConfig", ref updateHandle);
+        }
+
         #region Mappers
 
         QueueActivatorConfig QueueActivatorConfigMapper(IDataReader reader)

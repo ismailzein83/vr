@@ -16,3 +16,23 @@
 
     </vr-select>
 </vr-columns>
+
+
+    <vr-columns width="fullrow" ng-show="showTransformationRecordTypesSelector">
+        <vr-datagrid datasource="recordTypesWithStages"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="ongridReady">
+            <vr-datagridcolumn headertext="'Record Name'" field="'RecordName'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Stages'">
+                <vr-select datasource="viewScope.stagesDataSource"
+                           datavaluefield="stageName"
+                           datatextfield="stageName"
+                           selectedvalues="dataItem.selectedStages"
+                           ismultipleselection
+                           >
+                </vr-select>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+
+

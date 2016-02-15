@@ -43,12 +43,12 @@ namespace Vanrise.Queueing
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IQueueExecutionFlowDefinitionDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDefinitionDataManager>();
+            IQueueActivatorConfigDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueActivatorConfigDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreQueueExecutionFlowDefinitionUpdated(ref _updateHandle);
+                return _dataManager.AreQueueActivatorConfigUpdated(ref _updateHandle);
             }
         }
 

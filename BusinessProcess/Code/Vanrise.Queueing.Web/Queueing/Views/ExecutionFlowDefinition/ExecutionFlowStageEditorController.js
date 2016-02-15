@@ -15,6 +15,8 @@
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var stagesDataSource = [];
+
         loadParameters();
         defineScope();
         load();
@@ -23,6 +25,11 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 ExecutionFlowStageEntity = parameters.ExecutionFlowStage;
+                for(var i=0;i<parameters.ExistingFields.length;i++)
+                {
+                   stagesDataSource.push({ stageName: parameters.ExistingFields[i].StageName });
+                }
+
             }
             isEditMode = (ExecutionFlowStageEntity != undefined);
         }
@@ -113,8 +120,14 @@
                 if (ExecutionFlowStageEntity != undefined) {
 
                     payload = {
-                        QueueActivator: ExecutionFlowStageEntity.QueueActivator
-                      
+                        QueueActivator: ExecutionFlowStageEntity.QueueActivator,
+                        stagesDataSource: stagesDataSource
+                    };
+                }
+                else {
+                    payload = {
+                        stagesDataSource: stagesDataSource
+
                     };
                 }
 

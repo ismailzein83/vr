@@ -32,7 +32,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
 
-            var payloadObj;
+            var payloadObj = {};
             function initializeController() {
                 $scope.scopeModal = {};
                 $scope.scopeModal.queueActivatorConfig = [];
@@ -65,9 +65,12 @@
                             for (var i = 0; i < response.length; i++) {
                                 $scope.scopeModal.queueActivatorConfig.push(response[i]);
                             }
+                            if (payload.stagesDataSource != undefined)
+                                 payloadObj.stagesDataSource = payload.stagesDataSource;
                             if (payload != undefined && payload.QueueActivator != undefined) {
                                 payloadObj = payload.QueueActivator;
-                                $scope.scopeModal.selectedqueueActivatorConfig = UtilsService.getItemByVal($scope.scopeModal.queueActivatorConfig, payload.QueueActivator.ConfigId, 'QueueActivatorConfigId');
+                                payloadObj.stagesDataSource = payload.stagesDataSource;
+                                 $scope.scopeModal.selectedqueueActivatorConfig = UtilsService.getItemByVal($scope.scopeModal.queueActivatorConfig, payload.QueueActivator.ConfigId, 'QueueActivatorConfigId');
                             }
                         }
                     });
@@ -80,7 +83,6 @@
                         data = directiveAPI.getData();
                         data.ConfigId = $scope.scopeModal.selectedqueueActivatorConfig.QueueActivatorConfigId;
                     }
-
                     return data;
                 };
 

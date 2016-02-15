@@ -1,6 +1,6 @@
 ﻿<div vr-modalcontent ng-controller="VR_Queueing_ExecutionFlowStageEditorController" vr-loader="scopeModal.isLoading" width="'50%'">
     <vr-modalbody maxheight="'500px'">
-        <vr-form validationcontext="dataRecordFieldEditorGroup">
+        <vr-form validationcontext="executionFlowStageEditorgroup">
             <vr-tabs>
                 <vr-tab header="'Stages'">
                     <vr-row>
@@ -26,22 +26,11 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                            <vr-queueing-queueactivatorconfig-selective on-ready="scopeModal.onDirectiveReady" isrequired="true"></vr-queueing-queueactivatorconfig-selective>
+                        <vr-queueing-queueactivatorconfig-selective on-ready="scopeModal.onDirectiveReady" isrequired="true"></vr-queueing-queueactivatorconfig-selective>
 
                     </vr-row>
 
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-datagrid datasource="recordTypesWithStages"
-                                         pagingtype="'PagingOnScroll'"
-                                         on-ready="ongridReady">
-                                <vr-datagridcolumn headertext="'Record Type'" field="'Entity.ExecutionFlowId'"></vr-datagridcolumn>
-                                <vr-templatecolumn>
 
-                                </vr-templatecolumn>
-                            </vr-datagrid>
-                        </vr-columns>
-                    </vr-row>
 
                 </vr-tab>
             </vr-tabs>
@@ -50,7 +39,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="scopeModal.SaveExecutionFlowStage"></vr-button>
+                <vr-button type="Save" data-onclick="scopeModal.SaveExecutionFlowStage" validationcontext="executionFlowStageEditorgroup"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>

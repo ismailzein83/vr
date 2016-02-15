@@ -1,6 +1,6 @@
 ﻿<div vr-modalcontent ng-controller="VR_Queueing_ExecutionFlowDefinitionEditorController" vr-loader="isLoading">
     <vr-modalbody>
-        <vr-form name="formExecutionFlowDefinitionEditor">
+        <vr-form name="formExecutionFlowDefinitionEditor" validationcontext="executionFlowDefinitionEditorGroup">
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
@@ -27,7 +27,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formExecutionFlowDefinitionEditor" data-onclick="save"></vr-button>
+                <vr-button type="Save" formname="formExecutionFlowDefinitionEditor" validationcontext="executionFlowDefinitionEditorGroup" data-onclick="save"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
