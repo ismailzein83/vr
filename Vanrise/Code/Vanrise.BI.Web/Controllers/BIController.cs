@@ -20,7 +20,7 @@ namespace Vanrise.BI.Web.Controllers
         public IEnumerable<TimeValuesRecord> GetMeasureValues(MeasureValueInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetMeasureValues(input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityName, input.MeasureTypesNames);
+            return manager.GetMeasureValues(input);
         }
       
         [HttpPost]
@@ -28,7 +28,7 @@ namespace Vanrise.BI.Web.Controllers
         public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityMeasureValueInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetEntityMeasuresValues(input.EntityType, input.EntityId, input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityName, input.MeasureTypesNames);
+            return manager.GetEntityMeasuresValues(input);
         }
        
         [HttpPost]
@@ -44,7 +44,7 @@ namespace Vanrise.BI.Web.Controllers
         public Decimal[] GetSummaryMeasureValues(BaseBIInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetSummaryMeasureValues(input.FromDate, input.ToDate, input.TimeEntityName, input.MeasureTypesNames);
+            return manager.GetSummaryMeasureValues(input);
         }
        
         [HttpPost]
@@ -52,7 +52,7 @@ namespace Vanrise.BI.Web.Controllers
         public HttpResponseMessage ExportMeasureValues(MeasureValueInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            IEnumerable<TimeValuesRecord> records = manager.GetMeasureValues(input.TimeDimensionType, input.FromDate, input.ToDate, input.TimeEntityName, input.MeasureTypesNames);
+            IEnumerable<TimeValuesRecord> records = manager.GetMeasureValues(input);
             return manager.ExportMeasureValues(records, "Time", input.MeasureTypesNames, input.TimeDimensionType, input.FromDate, input.ToDate);
         }
 

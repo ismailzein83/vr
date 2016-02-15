@@ -12,9 +12,9 @@ namespace Vanrise.BI.Data
     {
         List<BIConfiguration<BIConfigurationMeasure>> MeasureDefinitions { set; }
         List<BIConfiguration<BIConfigurationEntity>> EntityDefinitions { set; }
-        IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<object> supplierIds, List<object> customerIds, string customerColumnId, BIConfigurationTimeEntity configurationTimeEntity, params string[] measureTypeNames);
-        IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<object> supplierIds, List<object> customerIds, string customerColumnId, BIConfigurationTimeEntity configurationTimeEntity, params string[] measureTypeNames);
-        IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount,BIConfigurationTimeEntity configurationTimeEntity, List<DimensionFilter> filter, params string[] measureTypesNames);
+        IEnumerable<TimeValuesRecord> GetMeasureValues(MeasureValueInput input, List<object> supplierIds, List<object> customerIds, string customerColumnId, BIConfigurationTimeEntity configurationTimeEntity);
+        IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityMeasureValueInput input, List<object> supplierIds, List<object> customerIds, string customerColumnId, BIConfigurationTimeEntity configurationTimeEntity);
+        IEnumerable<EntityRecord> GetTopEntities(TopEntityInput input,BIConfigurationTimeEntity configurationTimeEntity);
         Decimal[] GetSummaryMeasureValues(DateTime fromDate, DateTime toDate, BIConfigurationTimeEntity configurationTimeEntity, params string[] measureTypeNames);
         
     }

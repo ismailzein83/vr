@@ -14,33 +14,33 @@ namespace Vanrise.BI.Data.SQL
 
         #region Public Methods
 
-        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<object> customerIds, List<object> supplierIds, string customerColumnId, BIConfigurationTimeEntity configurationTimeEntity, params string[] measureTypeNames)
+        public IEnumerable<TimeValuesRecord> GetMeasureValues(MeasureValueInput input, List<object> customerIds, List<object> supplierIds, string customerColumnId, BIConfigurationTimeEntity configurationTimeEntity)
         {
-            return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, null, measureTypeNames, customerIds, supplierIds, customerColumnId, configurationTimeEntity);
+            return GetTimeValuesRecord(input.TimeDimensionType, input.FromDate, input.ToDate, null, input.MeasureTypesNames, customerIds, supplierIds, customerColumnId, configurationTimeEntity);
         }
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityTypeName, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, List<object> customerIds, List<object> supplierIds, string customerColumnId, BIConfigurationTimeEntity configurationTimeEntity, params string[] measureTypesNames)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityMeasureValueInput input, List<object> customerIds, List<object> supplierIds, string customerColumnId, BIConfigurationTimeEntity configurationTimeEntity)
         {
             List<string> entityIdColumn;
             List<string> entityNameColumn;
-            GetEntityColumns(entityTypeName, out entityIdColumn, out entityNameColumn);
-            string[] additionalFilters = new string[] { BuildQueryColumnFilter(entityIdColumn, entityId) };
-            return GetTimeValuesRecord(timeDimensionType, fromDate, toDate, additionalFilters, measureTypesNames, customerIds, supplierIds, customerColumnId, configurationTimeEntity);
+            GetEntityColumns(input.EntityType, out entityIdColumn, out entityNameColumn);
+            string[] additionalFilters = new string[] { BuildQueryColumnFilter(entityIdColumn, input.EntityId) };
+            return GetTimeValuesRecord(input.TimeDimensionType, input.FromDate, input.ToDate, additionalFilters, input.MeasureTypesNames, customerIds, supplierIds, customerColumnId, configurationTimeEntity);
         }
-        public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, BIConfigurationTimeEntity configurationTimeEntity, List<DimensionFilter> filter, params string[] measureTypesNames)
+        public IEnumerable<EntityRecord> GetTopEntities(TopEntityInput input, BIConfigurationTimeEntity configurationTimeEntity)
         {
             List<EntityRecord> rslt = new List<EntityRecord>();
             string topMeasureColExp;
-            string topMeasureColumn = GetMeasureColumn(topByMeasureTypeName, out topMeasureColExp);
+            string topMeasureColumn = GetMeasureColumn(input.TopByMeasureTypeName, out topMeasureColExp);
 
             List<string> entityIdColumn;
             List<string> entityNameColumn;
-            GetEntityColumns(entityTypeName, out entityIdColumn, out entityNameColumn);
+            GetEntityColumns(input.EntityTypeName, out entityIdColumn, out entityNameColumn);
 
             string[] measureColumns;
             string expressionsPart;
-            GetMeasuresColumns(measureTypesNames, out measureColumns, out expressionsPart);
+            GetMeasuresColumns(input.MeasureTypesNames, out measureColumns, out expressionsPart);
 
-            if (!measureTypesNames.Contains(topByMeasureTypeName))
+            if (!input.MeasureTypesNames.Contains(input.TopByMeasureTypeName))
             {
                 if (expressionsPart == null)
                     expressionsPart = topMeasureColExp;
@@ -50,20 +50,20 @@ namespace Vanrise.BI.Data.SQL
             }
 
             string columnsPart = BuildQueryColumnsPart(measureColumns);
-            string rowsPart = BuildQueryTopRows(topMeasureColumn, topCount, filter, entityIdColumn, entityNameColumn);
+            string rowsPart = BuildQueryTopRows(topMeasureColumn, input.TopCount, input.Filter, entityIdColumn, entityNameColumn);
 
-            string filtersPart = GetDateFilter(fromDate, toDate, configurationTimeEntity);
+            string filtersPart = GetDateFilter(input.FromDate, input.ToDate, configurationTimeEntity);
             string query = BuildQuery(columnsPart, rowsPart, filtersPart, expressionsPart);
             List<string> entityName;
-            GetEntityName(entityTypeName, out entityName);
+            GetEntityName(input.EntityTypeName, out entityName);
             List<string> filterCulomnsIds;
-            GetFilterEntityColumns(filter, out filterCulomnsIds);
+            GetFilterEntityColumns(input.Filter, out filterCulomnsIds);
             ExecuteReaderMDX(query, (reader) =>
             {
                 while (reader.Read())
                 {
                     List<string> EntityId = new List<string>();
-                    if (filter != null && filter.Count > 0)
+                    if (input.Filter != null && input.Filter.Count > 0)
                     {
                         foreach (string id in filterCulomnsIds)
                         {
@@ -156,7 +156,10 @@ namespace Vanrise.BI.Data.SQL
 
 
             }
-            queryBuilder.AppendFormat("{0} * {1}", ids.ToString(), columns.ToString());
+            if(ids.Length > 0)
+             queryBuilder.AppendFormat("{0} * {1}", ids.ToString(), columns.ToString());
+            else
+             queryBuilder.AppendFormat("{0}", columns.ToString());
             return queryBuilder.ToString();
         }
         protected string BuildQueryTopRowsParts(string columnBy, int count, List<string> columnsNames)

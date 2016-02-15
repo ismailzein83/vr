@@ -30,7 +30,7 @@ namespace Vanrise.BI.Business
         #endregion
 
         #region Public Methods
-        public IEnumerable<TimeValuesRecord> GetMeasureValues(TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypeNames)
+        public IEnumerable<TimeValuesRecord> GetMeasureValues(MeasureValueInput input)
         {
 
 
@@ -43,7 +43,7 @@ namespace Vanrise.BI.Business
             string customerColumnId = null;
             foreach (BIConfiguration<BIConfigurationMeasure> measure in allMeasures)
             {
-                foreach (string measureName in measureTypeNames)
+                foreach (string measureName in input.MeasureTypesNames)
                 {
                     if (measureName == measure.Name && measure.Configuration.Type == MeasureConfigurationType.Financial)
                     {
@@ -62,10 +62,10 @@ namespace Vanrise.BI.Business
             }
 
             List<object> supplierIds = new List<object>();
-            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
-            return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity, measureTypeNames);
+            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(input.TimeEntityName);
+            return dataManager.GetMeasureValues(input, customerIds, supplierIds, customerColumnId, configurationTimeEntity);
         }
-        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(List<string> entityType, string entityId, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypes)
+        public IEnumerable<TimeValuesRecord> GetEntityMeasuresValues(EntityMeasureValueInput input)
         {
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = _configurations.GetMeasures();
@@ -73,8 +73,8 @@ namespace Vanrise.BI.Business
             List<object> supplierIds = new List<object>();
             List<object> customerIds = new List<object>();
             string customerColumnId = null;
-            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
-            return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity, measureTypes);
+            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(input.TimeEntityName);
+            return dataManager.GetEntityMeasuresValues(input, customerIds, supplierIds, customerColumnId, configurationTimeEntity);
         }
         public IEnumerable<EntityRecord> GetTopEntities(TopEntityInput input)
         {
@@ -116,16 +116,16 @@ namespace Vanrise.BI.Business
             dataManager.EntityDefinitions = entities;
 
             BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(input.TimeEntityName);
-            return dataManager.GetTopEntities(input.EntityTypeName, input.TopByMeasureTypeName, input.FromDate, input.ToDate, input.TopCount, configurationTimeEntity, input.Filter, input.MeasureTypesNames);
+            return dataManager.GetTopEntities(input, configurationTimeEntity);
         }
-        public Decimal[] GetSummaryMeasureValues(DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypeNames)
+        public Decimal[] GetSummaryMeasureValues(BaseBIInput input)
         {
 
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = _configurations.GetMeasures();
             dataManager.EntityDefinitions = _configurations.GetEntities();
-            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
-            return dataManager.GetSummaryMeasureValues(fromDate, toDate, configurationTimeEntity, measureTypeNames);
+            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(input.TimeEntityName);
+            return dataManager.GetSummaryMeasureValues(input.FromDate, input.ToDate, configurationTimeEntity, input.MeasureTypesNames);
         }
         public HttpResponseMessage ExportMeasureValues(IEnumerable<TimeValuesRecord> records, string entity, string[] measureTypesNames, TimeDimensionType timeDimensionType, DateTime fromDate, DateTime toDate)
         {

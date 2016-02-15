@@ -29,5 +29,5 @@
 
 </vr-row>
 <vr-row>
-     <vr-bi-dimension-filter on-ready="onFilterDimensionReady" vr-loader="isLoadingFilterDirective" ng-show="ctrl.selectedEntitiesType.length > 0"></vr-bi-dimension-filter>
+    <vr-bi-dimension-filter on-ready="onFilterDimensionReady" vr-loader="isLoadingFilterDirective" ng-show="ctrl.selectedOperationType.value == 'TopEntities' && ctrl.selectedEntitiesType.length > 0"></vr-bi-dimension-filter>
 </vr-row>
