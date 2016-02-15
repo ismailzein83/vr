@@ -2,14 +2,14 @@
 
     'use strict';
 
-    StrategyEditorController.$inject = ['$scope', 'StrategyAPIService',  'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_SuspicionLevelEnum', 'VRCommon_HourEnum', 'VRUIUtilsService', 'CDRAnalysis_FA_PeriodEnum', 'CDRAnalysis_FA_ParametersService'];
+    StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_SuspicionLevelEnum', 'VRCommon_HourEnum', 'VRUIUtilsService', 'CDRAnalysis_FA_PeriodEnum', 'CDRAnalysis_FA_ParametersService'];
 
     function StrategyEditorController($scope, StrategyAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_SuspicionLevelEnum, VRCommon_HourEnum, VRUIUtilsService, CDRAnalysis_FA_PeriodEnum, CDRAnalysis_FA_ParametersService) {
         var isEditMode;
 
         var periodSelectorAPI;
         var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        
+
         var hourSelectorAPI;
         var hourSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -30,6 +30,18 @@
             }
 
             isEditMode = strategyId != undefined;
+        }
+
+
+        function countDecimal(num) {
+            var match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+            if (!match) { return 0; }
+            return Math.max(
+                 0,
+                 // Number of digits right of decimal point.
+                 (match[1] ? match[1].length : 0)
+                 // Adjust for scientific notation.
+                 - (match[2] ? +match[2] : 0));
         }
 
         function defineScope() {
@@ -102,8 +114,21 @@
             };
             $scope.modalScope.showThresholdHint = function (filter, strategyLevel) {
                 if (filter != undefined && strategyLevel != undefined) {
-                    var newThreshold = (filter.threshold != undefined && strategyLevel.percentage != undefined) ?
-                        (parseFloat(filter.threshold) + (parseFloat(strategyLevel.percentage) * parseFloat(filter.threshold) / 100)).toFixed(2) : 'None';
+                    var newThreshold;
+
+                    if (countDecimal(filter.threshold) > 0) {
+
+                        newThreshold = (filter.threshold != undefined && strategyLevel.percentage != undefined) ?
+                       (parseFloat(filter.threshold) + (parseFloat(strategyLevel.percentage) * parseFloat(filter.threshold) / 100)).toFixed(2) : 'None';
+
+                    }
+                    else {
+
+                        newThreshold = (filter.threshold != undefined && strategyLevel.percentage != undefined) ?
+                       (parseInt(filter.threshold) + (parseInt(strategyLevel.percentage) * parseInt(filter.threshold) / 100)) : 'None';
+
+                    }
+                   
                     return filter.label + ': ' + newThreshold;
                 }
                 return null;
@@ -156,7 +181,7 @@
 
                     filterUsages.push(filterUsage);
                 }
-                
+
                 for (var i = 0; i < $scope.modalScope.suspicionRules.length; i++) {
                     var strategyLevel = $scope.modalScope.suspicionRules[i];
                     var aFilterIsUsed = false;
@@ -171,12 +196,12 @@
                             }
                         }
                     }
-                    
+
                     if (!aFilterIsUsed) {
                         return 'Some suspicion rules are not using any filters';
                     }
                 }
-                
+
                 var usedFiltersCount = 0;
                 for (var i = 0; i < filterUsages.length; i++) {
                     if (filterUsages[i].mustBeUsed && filterUsages[i].isUsed) {
@@ -194,7 +219,7 @@
 
         function load() {
             $scope.modalScope.isLoading = true;
-            
+
             if (isEditMode) {
                 getStrategy().then(function () {
                     loadAllControls().finally(function () {
@@ -296,7 +321,7 @@
                         for (var i = 0; i < response.length; i++) {
                             var filterDef = {};
 
-                            filterDef.filterId =  response[i].FilterId,
+                            filterDef.filterId = response[i].FilterId,
                             filterDef.description = response[i].Description,
                             filterDef.abbreviation = response[i].Abbreviation,
                             filterDef.label = response[i].Label,
