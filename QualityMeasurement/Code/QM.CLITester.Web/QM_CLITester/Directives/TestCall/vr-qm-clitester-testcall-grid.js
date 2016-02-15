@@ -66,7 +66,7 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                 name: "Retest",
                 clicked: function (dataItem) {
                     var testCallObject = buildTestCallObj(dataItem);
-                    Qm_CliTester_TestCallAPIService.ReTestCall(testCallObject);
+                    Qm_CliTester_TestCallAPIService.AddNewTestCall(testCallObject);
                 }
             }];
 

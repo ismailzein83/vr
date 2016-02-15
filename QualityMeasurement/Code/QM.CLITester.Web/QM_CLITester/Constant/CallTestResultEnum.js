@@ -3,5 +3,5 @@
     Succeeded: { value: 1, description: "Succeeded" },
     PartiallySucceeded: { value: 2, description: "Partially Succeeded" },
     Failed: { value: 3, description: "Failed" },
-    NotAnswered: { value: 4, description: "Not Answered" }
+    NotAnswered: { value: 4, description: "Call Failure" }
 });

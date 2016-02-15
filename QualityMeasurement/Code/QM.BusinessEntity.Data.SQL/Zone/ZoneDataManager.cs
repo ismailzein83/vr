@@ -20,7 +20,10 @@ namespace QM.BusinessEntity.Data.SQL
         }
 
 
-
+         public Zone GetZoneBySourceId(string sourceZoneId)
+         {
+             return GetItemSP("[QM_BE].sp_Zone_GetBySourceID", ZoneMapper, sourceZoneId);
+         }
        
 
 

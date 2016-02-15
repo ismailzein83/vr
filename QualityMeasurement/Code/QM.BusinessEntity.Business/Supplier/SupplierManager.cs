@@ -131,6 +131,12 @@ namespace QM.BusinessEntity.Business
             return manager.GetTemplateConfigurations(Constants.SourceSupplierReaderConfigType);
         }
 
+        public Supplier GetSupplierbySourceId(string sourceSupplierId)
+        {
+            ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+            return dataManager.GetSupplierBySourceId(sourceSupplierId);
+        }
+
         
         public string AddSuppliers(int fileId, bool AllowUpdateIfExisting)
         {

@@ -75,35 +75,13 @@ namespace QM.CLITester.Entities
         public CallTestResult CallTestResult { get; set; }
     }
 
-    public class InitiateTestInformation
-    {
-        public string Test_ID { get; set; }
-    }
-
-    public class TestProgress
-    {
-        public string Name { get; set; }
-        public int TotalCalls { get; set; }
-        public int CompletedCalls { get; set; }
-        public int CliSuccess { get; set; }
-        public int CliNoResult { get; set; }
-        public int CliFail { get; set; }
-        public string ShareUrl { get; set; }
-        public string XmlResponse { get; set; }
-        public string Source { get; set; }
-        public string Destination { get; set; }
-        public string Ring { get; set; }
-        public string Call { get; set; }
-        public string Result { get; set; }
-    }
-
     public class Measure
     {
         public decimal Pdd { get; set; }
         public decimal Mos { get; set; }
         public DateTime? Duration { get; set; }
-        public string ReleaseCode { get; set; }
-        public string ReceivedCli { get; set; }
+        //public string ReleaseCode { get; set; }
+        //public string ReceivedCli { get; set; }
         public string RingDuration { get; set; }
     }
 }

@@ -99,10 +99,16 @@ namespace QM.BusinessEntity.Business
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
-        public Zone GetZone(int zoneId)
+        public Zone GetZone(long zoneId)
         {
             var zones = GetCachedZones();
             return zones.GetRecord(zoneId);
+        }
+
+        public Zone GetZonebySourceId(string sourceZoneId)
+        {
+            IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
+            return dataManager.GetZoneBySourceId(sourceZoneId);
         }
 
         #region Private Members

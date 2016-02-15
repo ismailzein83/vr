@@ -35,7 +35,20 @@
     </vr-columns>
 </vr-row>-->
 
-<vr-row>
+<vr-datagrid datasource="testcallsdetails" on-ready="onGridReady" 
+              idfield="Id" defaultsortdirection="'DESC'">
+
+    <vr-datagridcolumn headertext="'Id'" field="'Id'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Source'" field="'Source'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Destination'" field="'Destination'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Received Cli'" field="'ReceivedCli'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Duration'" field="'Duration'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Release Code'" field="'ReleaseCode'" type="'Datetime'"></vr-datagridcolumn>
+
+</vr-datagrid>
+
+
+<!--<vr-row>
 
     <vr-columns width="normal">
         <vr-label>Source: </vr-label> <vr-label isvalue> {{ctrl.Source}} </vr-label>
@@ -56,4 +69,4 @@
     <vr-columns width="normal">
         <vr-label>Release Code: </vr-label> <vr-label isvalue> {{ctrl.ReleaseCode}} </vr-label>
     </vr-columns>
-</vr-row>
+</vr-row>-->

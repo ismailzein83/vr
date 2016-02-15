@@ -17,19 +17,19 @@ namespace QM.CLITester.Web.Controllers
 
         [HttpPost]
         [Route("AddNewTestCall")]
-        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult)
+        public TestCallTaskActionExecutionInfo AddNewTestCall(TestCallTaskActionArgument testCallResult)
         {
             TestCallManager manager = new TestCallManager();
             return manager.AddNewTestCall(testCallResult);
         }
 
-        [HttpPost]
-        [Route("ReTestCall")]
-        public AddTestCallOutput ReTestCall(AddTestCallInput testCallResult)
-        {
-            TestCallManager manager = new TestCallManager();
-            return manager.AddNewTestCall(testCallResult);
-        }
+        //[HttpPost]
+        //[Route("ReTestCall")]
+        //public AddTestCallOutput ReTestCall(AddTestCallInput testCallResult)
+        //{
+        //    TestCallManager manager = new TestCallManager();
+        //    return manager.AddNewTestCall(testCallResult);
+        //}
 
 
         [HttpPost]

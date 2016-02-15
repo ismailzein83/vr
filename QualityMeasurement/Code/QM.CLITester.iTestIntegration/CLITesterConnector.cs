@@ -85,6 +85,28 @@ namespace QM.CLITester.iTestIntegration
                 ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
         }
 
+        //public class InitiateTestInformation
+        //{
+        //    public string Test_ID { get; set; }
+        //}
+
+        //public class TestProgress
+        //{
+        //    public string Name { get; set; }
+        //    public int TotalCalls { get; set; }
+        //    public int CompletedCalls { get; set; }
+        //    public int CliSuccess { get; set; }
+        //    public int CliNoResult { get; set; }
+        //    public int CliFail { get; set; }
+        //    public string ShareUrl { get; set; }
+        //    public string XmlResponse { get; set; }
+        //    public string Source { get; set; }
+        //    public string Destination { get; set; }
+        //    public string Ring { get; set; }
+        //    public string Call { get; set; }
+        //    public string Result { get; set; }
+        //}
+
         #region Private Members
 
         private InitiateTestOutput ResponseInitiateTest(string response)
@@ -143,8 +165,8 @@ namespace QM.CLITester.iTestIntegration
                         Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
                         Mos = 0,
                         Duration = DateTime.MinValue,
-                        ReleaseCode = null,
-                        ReceivedCli = null,
+                        //ReleaseCode = null,
+                        //ReceivedCli = null,
                         RingDuration = null
                     };
 
@@ -213,22 +235,30 @@ namespace QM.CLITester.iTestIntegration
                         Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
                         Mos = node["MOS"] != null ? Decimal.Parse(node["MOS"].InnerText) : 0,
                         Duration = epoch.AddSeconds(unixTime),
-                        ReleaseCode = node["Last_Code"] != null ? node["Last_Code"].InnerText : "",
-                        ReceivedCli = node["CLI"] != null ? node["CLI"].InnerText : "",
+                        //ReleaseCode = node["Last_Code"] != null ? node["Last_Code"].InnerText : "",
+                        //ReceivedCli = node["CLI"] != null ? node["CLI"].InnerText : "",
                         RingDuration = null
                     };
 
                     TestProgress testProgress = new TestProgress
                     {
                         Name = node2["Name"] != null ? node2["Name"].InnerText : "",
-                        Source = node["Source"] != null ? node["Source"].InnerText : "",
-                        Destination = node["Destination"] != null ? node["Destination"].InnerText : "",
-                        Ring = node["Ring"] != null ? node["Ring"].InnerText : "",
-                        Call = node["Call"] != null ? node["Call"].InnerText : "",
                         Result = node["Result"] != null ? node["Result"].InnerText : "",
                         XmlResponse = xmlResponse
                     };
-
+                    foreach (XmlNode callNode in xnList)
+                    {
+                        CallResult callResult = new CallResult
+                        {
+                            Source = callNode["Source"] != null ? callNode["Source"].InnerText : "",
+                            Destination = callNode["Destination"] != null ? callNode["Destination"].InnerText : "",
+                            Ring = callNode["Ring"] != null ? callNode["Ring"].InnerText : "",
+                            Call = callNode["Call"] != null ? callNode["Call"].InnerText : "",
+                            ReleaseCode = callNode["Last_Code"] != null ? callNode["Last_Code"].InnerText : "",
+                            ReceivedCli = callNode["CLI"] != null ? callNode["CLI"].InnerText : ""
+                        };
+                        testProgress.CallResults.Add(callResult);
+                    }
                     testProgressOutput.Measure = resultTestProgress;
                     testProgressOutput.TestProgress = testProgress;
                     if (testProgress.Result != "Processing")
@@ -272,8 +302,10 @@ namespace QM.CLITester.iTestIntegration
             {
                 same = ((recentMeasure.Pdd == measure.Pdd) && (recentMeasure.Mos == measure.Mos) &&
 
-                    (recentMeasure.Duration == measure.Duration) && (recentMeasure.ReleaseCode == measure.ReleaseCode) &&
-                    (recentMeasure.ReceivedCli == measure.ReceivedCli) && (recentMeasure.RingDuration == measure.RingDuration)
+                    (recentMeasure.Duration == measure.Duration) && 
+                    //(recentMeasure.ReleaseCode == measure.ReleaseCode) &&
+                    //(recentMeasure.ReceivedCli == measure.ReceivedCli) && 
+                    (recentMeasure.RingDuration == measure.RingDuration)
                     );
             }
 
@@ -284,19 +316,16 @@ namespace QM.CLITester.iTestIntegration
             bool same = true;
             if (recentTestProgress != null)
             {
-                same = ((recentTestProgress.Source == testProgress.Source) && (recentTestProgress.Destination == testProgress.Destination) &&
-                    (recentTestProgress.Ring == testProgress.Ring) && (recentTestProgress.Call == testProgress.Call)
-                    && (recentTestProgress.Result == testProgress.Result)
-                    );
+                var firstNotSecond = recentTestProgress.CallResults.Except(testProgress.CallResults).ToList();
+                var secondNotFirst = testProgress.CallResults.Except(recentTestProgress.CallResults).ToList();
+
+                same = ((recentTestProgress.Result == testProgress.Result) && (firstNotSecond.Count == 0) && (secondNotFirst.Count == 0));
             }
 
             if (recentMeasure != null)
             {
                 same = ((recentMeasure.Pdd == measure.Pdd) && (recentMeasure.Mos == measure.Mos) &&
-
-                    (recentMeasure.Duration == measure.Duration) && (recentMeasure.ReleaseCode == measure.ReleaseCode) &&
-                    (recentMeasure.ReceivedCli == measure.ReceivedCli) && (recentMeasure.RingDuration == measure.RingDuration)
-                    );
+                        (recentMeasure.Duration == measure.Duration) && (recentMeasure.RingDuration == measure.RingDuration));
             }
 
             return same;

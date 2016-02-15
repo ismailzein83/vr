@@ -19,5 +19,6 @@ namespace QM.BusinessEntity.Data
         void UpdateSupplierFromeSource(Supplier supplier);
 
         bool AreSuppliersUpdated(ref object updateHandle);
+        Supplier GetSupplierBySourceId(string sourceSupplierId);
     }
 }

@@ -33,7 +33,7 @@ namespace QM.CLITester.Data.SQL
             _columnMapper.Add("Entity.CreationDate", "CreationDate");
         }
 
-        public bool Insert(int supplierId, int countryId, int zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount,
+        public bool Insert(int supplierId, int countryId, long zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount,
             int userId, int profileId, long? batchNumber, int? scheduleId)
         {
             object testCallId;
@@ -93,8 +93,7 @@ namespace QM.CLITester.Data.SQL
         public bool UpdateTestProgress(long testCallId, Object testProgress, Measure measure, CallTestStatus callTestStatus, CallTestResult? callTestResult, int getProgressRetryCount, string failureMessage)
         {
             int recordsEffected = ExecuteNonQuerySP("QM_CLITester.sp_TestCall_UpdateTestProgress", testCallId, testProgress != null ? Serializer.Serialize(testProgress) : null,
-                callTestStatus, callTestResult, getProgressRetryCount, failureMessage, measure.Pdd, measure.Mos, measure.Duration, measure.ReleaseCode, measure.ReceivedCli,
-                measure.RingDuration);
+                callTestStatus, callTestResult, getProgressRetryCount, failureMessage, measure.Pdd, measure.Mos, measure.Duration, measure.RingDuration);
             return (recordsEffected > 0);
         }
 
@@ -149,8 +148,8 @@ namespace QM.CLITester.Data.SQL
                 Pdd = GetReaderValue<decimal>(reader, "PDD"),
                 Mos = GetReaderValue<decimal>(reader, "MOS"),
                 Duration =  GetReaderValue<DateTime?>(reader, "Duration"),
-                ReleaseCode = reader["ReleaseCode"] as string,
-                ReceivedCli = reader["ReceivedCLI"] as string,
+                //ReleaseCode = reader["ReleaseCode"] as string,
+                //ReceivedCli = reader["ReceivedCLI"] as string,
                 RingDuration = reader["RingDuration"] as string,
             };
 
@@ -159,7 +158,7 @@ namespace QM.CLITester.Data.SQL
                 ID = (long)reader["ID"],
                 SupplierID = (int)reader["SupplierID"],
                 CountryID = (int)reader["CountryID"],
-                ZoneID = (int)reader["ZoneID"],
+                ZoneID = (long)reader["ZoneID"],
                 UserID = (int)reader["UserID"],
                 ProfileID =  GetReaderValue<int> (reader,"ProfileID"),
                 CreationDate = GetReaderValue<DateTime>(reader, "CreationDate"),

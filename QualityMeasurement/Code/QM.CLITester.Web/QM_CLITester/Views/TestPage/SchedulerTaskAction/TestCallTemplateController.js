@@ -71,7 +71,7 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         $scope.schedulerTaskAction.getData = function () {
             return {
                 $type: "QM.CLITester.Business.TestCallTaskActionArgument, QM.CLITester.Business",
-                AddTestCallInput: buildTestCallObjFromScope()
+                TestCallTaskActionArgument: buildTestCallObjFromScope()
             };
         };
     }
@@ -94,14 +94,14 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
 
     function loadProfiles() {
         var profileLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        
         profileReadyPromiseDeferred.promise
             .then(function () {
                 var directivePayload;
-                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.AddTestCallInput != undefined) {
+                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.TestCallTaskActionArgument != undefined) {
 
                      directivePayload = {
-                         selectedIds: $scope.schedulerTaskAction.data.AddTestCallInput.ProfileID
+                         selectedIds: $scope.schedulerTaskAction.data.TestCallTaskActionArgument.ProfileID
                     }
                 }
 
@@ -116,11 +116,11 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         supplierReadyPromiseDeferred.promise
             .then(function () {
                 var directivePayload;
-                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.AddTestCallInput != undefined
-                    && $scope.schedulerTaskAction.data.AddTestCallInput.SupplierID != undefined) {
+                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.TestCallTaskActionArgument != undefined
+                    && $scope.schedulerTaskAction.data.TestCallTaskActionArgument.SuppliersIds != undefined) {
 
                     directivePayload = {
-                        selectedIds:$scope.schedulerTaskAction.data.AddTestCallInput.SupplierID
+                        selectedIds:$scope.schedulerTaskAction.data.TestCallTaskActionArgument.SuppliersIds
                     }
                 }
 
@@ -136,10 +136,10 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         countryReadyPromiseDeferred.promise
             .then(function () {
                 var directivePayload;
-                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.AddTestCallInput != undefined) {
+                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.TestCallTaskActionArgument != undefined) {
 
                     directivePayload = {
-                        selectedIds: $scope.schedulerTaskAction.data.AddTestCallInput.CountryID
+                        selectedIds: $scope.schedulerTaskAction.data.TestCallTaskActionArgument.CountryID
                     }
                 }
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, directivePayload, countryLoadPromiseDeferred);
@@ -152,14 +152,14 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         zoneReadyPromiseDeferred.promise
             .then(function () {
                 var directivePayload;
-                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.AddTestCallInput != undefined) {
+                if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.TestCallTaskActionArgument != undefined) {
                     directivePayload = {
                         filter: {
-                            CountryId: $scope.schedulerTaskAction.data.AddTestCallInput.CountryID
+                            CountryId: $scope.schedulerTaskAction.data.TestCallTaskActionArgument.CountryID
                         }
                     }
-                    if ($scope.schedulerTaskAction.data.AddTestCallInput.ZoneID != undefined)
-                        directivePayload.selectedIds = $scope.schedulerTaskAction.data.AddTestCallInput.ZoneID;
+                    if ($scope.schedulerTaskAction.data.TestCallTaskActionArgument.ZoneID != undefined)
+                        directivePayload.selectedIds = $scope.schedulerTaskAction.data.TestCallTaskActionArgument.ZoneID;
                 }
 
                 VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, zoneLoadPromiseDeferred);

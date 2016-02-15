@@ -24,27 +24,59 @@ namespace QM.CLITester.Business
 {
     public class TestCallManager
     {
-        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult, int userId, long? batchNumber, int? scheduleId)
+        public TestCallTaskActionExecutionInfo AddNewTestCall(TestCallTaskActionArgument testCallInput, int userId, long? batchNumber, int? scheduleId)
         {
-            AddTestCallOutput output = new AddTestCallOutput();
+            TestCallTaskActionExecutionInfo executionInfo = new TestCallTaskActionExecutionInfo();
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+            
+            ZoneManager zoneManager = new ZoneManager();
+            SupplierManager supplierManager = new SupplierManager();
 
-            foreach (int supplierId in testCallResult.SupplierID)
+            Zone zone = new Zone();
+            long zoneId = 0;
+            
+            if (testCallInput.ZoneID == null)
             {
-                dataManager.Insert(supplierId, testCallResult.CountryID, testCallResult.ZoneID, (int) CallTestStatus.New,
-                    (int) CallTestResult.NotCompleted, 0, 0,
-                    userId, testCallResult.ProfileID, batchNumber, scheduleId);
+                zone = zoneManager.GetZonebySourceId(testCallInput.ZoneSourceId);
+                if (zone != null)
+                    zoneId = zone.ZoneId;
+            }   
+            else
+            {
+                zoneId = testCallInput.ZoneID.Value;
             }
 
-            output.BatchNumber = batchNumber;
-            output.ListEmails = testCallResult.ListEmails;
-            return output;
+            List<int?> listSuppliersIds = new List<int?>();
+
+            if (testCallInput.SuppliersIds != null)
+            {
+                listSuppliersIds = testCallInput.SuppliersIds;
+            }
+            else
+            {
+                foreach (string suppliersSourceId in testCallInput.SuppliersSourceIds)
+                {
+                    Supplier supplier = new Supplier();
+                    supplier = supplierManager.GetSupplierbySourceId(suppliersSourceId);
+                    listSuppliersIds.Add(supplier.SupplierId);
+                }   
+            }
+
+            foreach (int supplierId in listSuppliersIds)
+            {
+                dataManager.Insert(supplierId, testCallInput.CountryID, zoneId, (int)CallTestStatus.New,
+                    (int)CallTestResult.NotCompleted, 0, 0,
+                    userId, testCallInput.ProfileID, batchNumber, scheduleId);
+            }
+
+            executionInfo.BatchNumber = batchNumber;
+            return executionInfo;
         }
 
-        public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallResult)
+        public TestCallTaskActionExecutionInfo AddNewTestCall(TestCallTaskActionArgument testCallInput)
         {
-            return AddNewTestCall(testCallResult, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(), null, null);
+            return AddNewTestCall(testCallInput, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(), null, null);
         }
 
         public bool UpdateInitiateTest(long testCallId, Object initiateTestInformation, CallTestStatus callTestStatus, int initiationRetryCount, string failureMessage)

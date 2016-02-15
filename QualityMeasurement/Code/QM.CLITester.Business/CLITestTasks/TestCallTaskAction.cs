@@ -30,14 +30,14 @@ namespace QM.CLITester.Business
                 throw new Exception(
                     String.Format("taskActionArgument '{0}' is not of type TestCallTaskActionArgument",
                         testCallTaskActionArgument));
-            if (testCallTaskActionArgument.AddTestCallInput == null)
-                throw new ArgumentNullException("testCallTaskActionArgument.AddTestCallInput");
+            if (testCallTaskActionArgument == null)
+                throw new ArgumentNullException("testCallTaskActionArgument");
 
             TestCallManager manager = new TestCallManager();
             long startingId;
-            IDManager.Instance.ReserveIDRange(this.GetType(), testCallTaskActionArgument.AddTestCallInput.SupplierID.Count, out startingId);
+            IDManager.Instance.ReserveIDRange(this.GetType(), testCallTaskActionArgument.SuppliersIds.Count, out startingId);
 
-            AddTestCallOutput exuctionInfo = manager.AddNewTestCall(testCallTaskActionArgument.AddTestCallInput, task.OwnerId, startingId, task.TaskId);
+            TestCallTaskActionExecutionInfo exuctionInfo = manager.AddNewTestCall(testCallTaskActionArgument, task.OwnerId, startingId, task.TaskId);
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {
@@ -63,9 +63,11 @@ namespace QM.CLITester.Business
             };
 
             TestCallManager manager = new TestCallManager();
-            if (((AddTestCallOutput) context.ExecutionInfo).BatchNumber.HasValue)
+            var testCallExecInfo = context.ExecutionInfo as TestCallTaskActionExecutionInfo;
+
+            if (testCallExecInfo.BatchNumber != null)
             {
-                List<TestCallDetail> listTestCalls = manager.GetAllbyBatchNumber(((AddTestCallOutput)context.ExecutionInfo).BatchNumber.Value);
+                List<TestCallDetail> listTestCalls = manager.GetAllbyBatchNumber(testCallExecInfo.BatchNumber.Value);
                 foreach (TestCallDetail testCall in listTestCalls)
                 {
                     if (testCall.Entity.CallTestStatus == CallTestStatus.GetProgressFailedWithNoRetry || testCall.Entity.CallTestStatus == CallTestStatus.InitiationFailedWithNoRetry)
@@ -85,10 +87,14 @@ namespace QM.CLITester.Business
                         wbk.Worksheets.RemoveAt("Sheet1");
                         License license = new License();
                         license.SetLicense("Aspose.Cells.lic");
-                        
-                        CreateWorkSheet(wbk, ((AddTestCallOutput)context.ExecutionInfo).BatchNumber.ToString(), listTestCalls, listTestCallsCount);
+
+                        CreateWorkSheet(wbk, testCallExecInfo.BatchNumber.ToString(), listTestCalls, listTestCallsCount);
                         MemoryStream memoryStream = wbk.SaveToStream();
-                        SendMail(memoryStream, user.Email, ((AddTestCallOutput)context.ExecutionInfo).ListEmails);
+
+                        var testCallTaskArg = context.Task.TaskSettings.TaskActionArgument as TestCallTaskActionArgument;
+
+
+                        SendMail(memoryStream, user.Email, testCallTaskArg.ListEmails);
 
                         string filename = "D:\\" + DateTime.Now.Minute + DateTime.Now.Second + "book1.xls";
                         wbk.Save(filename);

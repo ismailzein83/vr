@@ -13,5 +13,6 @@ namespace QM.BusinessEntity.Data
         void UpdateZoneFromSource(Zone zone);
         List<Zone> GetZones();
         bool AreZonesUpdated(ref object updateHandle);
+        Zone GetZoneBySourceId(string sourceZoneId);
     }
 }

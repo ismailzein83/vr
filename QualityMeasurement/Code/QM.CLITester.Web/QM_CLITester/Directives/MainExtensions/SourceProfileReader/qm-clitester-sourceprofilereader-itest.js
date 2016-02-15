@@ -46,7 +46,6 @@ app.directive("qmClitesterSourceprofilereaderItest", [function () {
 
 
             api.load = function (payload) {
-                console.log(payload);
                 if (payload != undefined) {
                     $scope.dummy = payload.Dummy;
                 }

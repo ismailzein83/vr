@@ -40,7 +40,6 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
               VRNotificationService.notifyExceptionWithClose(error, $scope);
           })
          .finally(function () {
-             console.log($scope.selectedSourceTypeTemplate.Name);
              $scope.isLoading = false;
          });
     }

@@ -43,6 +43,10 @@ namespace QM.BusinessEntity.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("[QM_BE].[sp_Supplier_Insert]", supplier.SupplierId, supplier.Name, settings);
             return (recordsEffected > 0);
         }
+        public Supplier GetSupplierBySourceId(string sourceSupplierId)
+        {
+            return GetItemSP("[QM_BE].[sp_Supplier_GetBySourceID]", SupplierMapper, sourceSupplierId);
+        }
 
         public bool Update(Supplier supplier)
         {
