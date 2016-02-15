@@ -11,11 +11,11 @@ namespace TOne.BusinessEntity.Business
 {
     public class CustomerBehavior:IDimensionBehavior
     {
-        public List<string> GetFilteredValues()
+        public List<object> GetFilteredValues()
         {
             AccountManagerManager accountManagerManager = new AccountManagerManager();
             List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Customer);
-            List<string> cutomers = new List<string>();
+            List<object> cutomers = new List<object>();
             foreach (AssignedCarrier assignedCarrier in assignedCarriers)
             {
                 cutomers.Add(assignedCarrier.CarrierAccountId);

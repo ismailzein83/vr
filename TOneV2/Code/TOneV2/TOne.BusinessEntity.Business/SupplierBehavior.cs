@@ -11,11 +11,11 @@ namespace TOne.BusinessEntity.Business
 {
     public class SupplierBehavior : IDimensionBehavior
     {
-        public List<string> GetFilteredValues()
+        public List<object> GetFilteredValues()
         {
             AccountManagerManager accountManagerManager = new AccountManagerManager();
             List<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers(SecurityContext.Current.GetLoggedInUserId(), true, CarrierType.Supplier);
-            List<string> suppliers = new List<string>();
+            List<object> suppliers = new List<object>();
             foreach (AssignedCarrier assignedCarrier in assignedCarriers)
             {
                 suppliers.Add(assignedCarrier.CarrierAccountId);
