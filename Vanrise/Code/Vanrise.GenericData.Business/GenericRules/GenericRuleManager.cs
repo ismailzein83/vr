@@ -112,10 +112,11 @@ namespace Vanrise.GenericData.Business
                 descriptions.Add((fieldValues != null) ? fieldValues.GetDescription() : null);
             }
 
-            return new GenericRuleDetail(){
+            return new GenericRuleDetail()
+            {
                 Entity = rule,
                 FieldValueDescriptions = descriptions,
-                SettingsDescription = rule.GetSettingsDescription(ruleDefinition.SettingsDefinition)
+                SettingsDescription = rule.GetSettingsDescription(new GenericRuleSettingsDescriptionContext() { RuleDefinitionSettings = ruleDefinition.SettingsDefinition })
             };
         }
     }

@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Pricing
     {
         public Vanrise.Rules.Pricing.PricingRuleTariffSettings Settings { get; set; }
 
-        public override string GetSettingsDescription(GenericRuleDefinitionSettings settingsDefinition)
+        public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)
         {
             return Settings.GetDescription();
         }

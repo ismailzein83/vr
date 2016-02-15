@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Normalization
     {
         public Vanrise.Rules.Normalization.NormalizeNumberSettings Settings { get; set; }
 
-        public override string GetSettingsDescription(GenericRuleDefinitionSettings settingsDefinition)
+        public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)
         {
             if (Settings != null && Settings.Actions != null)
             {

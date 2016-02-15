@@ -11,11 +11,11 @@ namespace Vanrise.GenericData.Transformation.Entities
     {
         public MappingRuleSettings Settings { get; set; }
 
-        public override string GetSettingsDescription(GenericRuleDefinitionSettings settingsDefinition)
+        public override string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context)
         {
             if (Settings != null && Settings.Value != null)
             {
-                var mappingRuleDefinitionSettings = settingsDefinition as MappingRuleDefinitionSettings;
+                var mappingRuleDefinitionSettings = context.RuleDefinitionSettings as MappingRuleDefinitionSettings;
                 if (mappingRuleDefinitionSettings != null && mappingRuleDefinitionSettings.FieldType != null)
                     return mappingRuleDefinitionSettings.FieldType.GetDescription(Settings.Value);
             }

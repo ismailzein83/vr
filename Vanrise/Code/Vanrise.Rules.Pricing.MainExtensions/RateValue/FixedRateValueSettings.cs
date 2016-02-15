@@ -21,7 +21,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.RateValue
             context.RatesByRateType = this.RatesByRateType;
         }
 
-        public override string GetDescription(GenericRuleDefinitionSettings settingsDefinition)
+        public override string GetDescription(IGenericRuleSettingsDescriptionContext context)
         {
             StringBuilder description = new StringBuilder();
             description.Append(String.Format("Normal Rate: {0}", NormalRate));

@@ -94,10 +94,12 @@ app.directive('vrGenericdataChoicesRuntimeeditor', ['UtilsService', 'VRUIUtilsSe
                         if (fieldValue != undefined)
                         {
                             if (ctrl.selectionmode == "dynamic") {
-                                for (var i = 0; i < fieldValue.Values.length; i++) {
-                                    var selectedValue = UtilsService.getItemByVal(ctrl.datasource, fieldValue.Values[i], "Value");
-                                    if (selectedValue != null)
-                                        ctrl.selectedvalues.push(selectedValue);
+                                if (fieldValue.Values != undefined) {
+                                    for (var i = 0; i < fieldValue.Values.length; i++) {
+                                        var selectedValue = UtilsService.getItemByVal(ctrl.datasource, fieldValue.Values[i], "Value");
+                                        if (selectedValue != null)
+                                            ctrl.selectedvalues.push(selectedValue);
+                                    }
                                 }
                             }
                             else if (ctrl.selectionmode == "multiple") {
