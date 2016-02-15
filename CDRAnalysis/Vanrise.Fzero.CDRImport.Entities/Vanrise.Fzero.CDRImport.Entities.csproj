@@ -59,8 +59,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Batches\CDRBatch.cs" />
-    <Compile Include="Batches\StagingCDRBatch.cs" />
+    <Compile Include="CDRBatch.cs" />
+    <Compile Include="StagingCDRBatch.cs" />
     <Compile Include="CDRDatabaseInfo.cs" />
     <Compile Include="CDRDetail.cs" />
     <Compile Include="CallType.cs" />
@@ -72,6 +72,9 @@
     <Compile Include="SubscriberType.cs" />
     <Compile Include="ImportedCDRBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Batches\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

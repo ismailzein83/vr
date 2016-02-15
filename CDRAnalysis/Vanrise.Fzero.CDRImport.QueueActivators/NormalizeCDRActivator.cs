@@ -1,5 +1,4 @@
 ﻿using System;
-using Vanrise.Fzero.CDRImport.Data;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing.Entities;
 

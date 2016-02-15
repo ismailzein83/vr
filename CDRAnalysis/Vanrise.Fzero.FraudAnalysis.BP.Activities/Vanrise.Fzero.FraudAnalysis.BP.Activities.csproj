@@ -105,30 +105,30 @@
     <Compile Include="ConvertExecuteStrategyExecutionItemsToInfos.cs" />
     <Compile Include="CloseStrategyExecutions.cs" />
     <Compile Include="CreateExecuteStrategyExecutionItems.cs" />
-    <Compile Include="DataWarehouse\ApplyDWDimensionsToDB.cs" />
-    <Compile Include="DataWarehouse\ApplyDWStrategiesToDB.cs" />
-    <Compile Include="DataWarehouse\ApplyDWFactsToDB.cs" />
+    <Compile Include="ApplyDWDimensionsToDB.cs" />
+    <Compile Include="ApplyDWStrategiesToDB.cs" />
+    <Compile Include="ApplyDWFactsToDB.cs" />
     <Compile Include="ApplyNumberProfilesToDB.cs" />
     <Compile Include="ApplyStrategyExecutionItemsToDB.cs" />
     <Compile Include="AssignCases.cs" />
-    <Compile Include="DataWarehouse\CheckDWDimensionsChanges.cs" />
-    <Compile Include="DataWarehouse\FillFactValues.cs" />
-    <Compile Include="DataWarehouse\CheckDWStrategiesChanges.cs" />
-    <Compile Include="DataWarehouse\GetDWBTSs.cs" />
-    <Compile Include="DataWarehouse\GetDWAccountCases.cs" />
+    <Compile Include="CheckDWDimensionsChanges.cs" />
+    <Compile Include="FillFactValues.cs" />
+    <Compile Include="CheckDWStrategiesChanges.cs" />
+    <Compile Include="GetDWBTSs.cs" />
+    <Compile Include="GetDWAccountCases.cs" />
     <Compile Include="FindRelatedNumbersthroughIMEIs.cs" />
-    <Compile Include="DataWarehouse\GetDWTimes.cs" />
-    <Compile Include="DataWarehouse\GetDWStrategies.cs" />
+    <Compile Include="GetDWTimes.cs" />
+    <Compile Include="GetDWStrategies.cs" />
     <Compile Include="GetNumberPrefixes.cs" />
     <Compile Include="GetStrategyExecutionStatus.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionItems.cs" />
     <Compile Include="GetAccountNumbersByIMEI.cs" />
-    <Compile Include="DataWarehouse\GetDWDimensions.cs" />
+    <Compile Include="GetDWDimensions.cs" />
     <Compile Include="ProcessStrategyExecutionCancellation.cs" />
     <Compile Include="LoadStrategyExecutionItemSummaries.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
-    <Compile Include="DataWarehouse\PrepareDWFactsForDBApply.cs" />
+    <Compile Include="PrepareDWFactsForDBApply.cs" />
     <Compile Include="PrepareNumberProfilesForDBApply.cs" />
     <Compile Include="PrepareStrategyExecutionItemsForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -158,6 +158,9 @@
       <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataWarehouse\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
