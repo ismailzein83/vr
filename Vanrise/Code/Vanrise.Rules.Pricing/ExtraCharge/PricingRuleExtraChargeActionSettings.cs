@@ -11,5 +11,7 @@ namespace Vanrise.Rules.Pricing
         public int ConfigId { get; set; }
 
         internal protected abstract void Execute(IPricingRuleExtraChargeActionContext context);
+
+        public abstract string GetDescription();
     }
 }

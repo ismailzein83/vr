@@ -19,5 +19,14 @@ namespace Vanrise.Rules.Pricing.MainExtensions.ExtraCharge
             if (context.Rate >= this.FromRate && context.Rate < this.ToRate)
                 context.Rate += this.ExtraAmount;
         }
+
+        public override string GetDescription()
+        {
+            StringBuilder description = new StringBuilder();
+            description.Append(String.Format("From Rate: {0}; ", FromRate));
+            description.Append(String.Format("To Rate: {0}; ", ToRate));
+            description.Append(String.Format("Extra Amount: {0}", ExtraAmount));
+            return description.ToString();
+        }
     }
 }

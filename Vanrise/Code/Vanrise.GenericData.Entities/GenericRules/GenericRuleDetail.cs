@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Entities
         public GenericRule Entity { get; set; }
 
         public List<string> FieldValueDescriptions { get; set; }
+
+        public string SettingsDescription { get; set; }
     }
 }

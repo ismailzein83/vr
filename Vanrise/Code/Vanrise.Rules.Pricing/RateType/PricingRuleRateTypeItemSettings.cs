@@ -13,5 +13,7 @@ namespace Vanrise.Rules.Pricing
         public int RateTypeId { get; set; }
 
         internal protected abstract bool Evaluate(IPricingRuleRateTypeItemContext context);
+
+        public abstract string GetDescription();
     }
 }

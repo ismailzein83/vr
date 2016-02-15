@@ -8,11 +8,11 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class CarrierProfileManager
+    public class CarrierProfileManager : IBusinessEntityManager
     {
-      
         #region ctor/Local Variables
         #endregion
 
@@ -93,6 +93,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+        public string GetEntityDescription(object entityId)
+        {
+            return GetCarrierProfileName(Convert.ToInt32(entityId));
+        }
         #endregion
 
         #region Private Members
@@ -131,18 +135,14 @@ namespace TOne.WhS.BusinessEntity.Business
         private CarrierProfileDetail CarrierProfileDetailMapper(CarrierProfile carrierProfile)
         {
             CarrierProfileDetail carrierProfileDetail = new CarrierProfileDetail();
-
             carrierProfileDetail.Entity = carrierProfile;
 
-            CountryManager manager = new CountryManager();
+            CountryManager countryManager = new CountryManager();
             if (carrierProfile.Settings != null)
-            {
-                carrierProfileDetail.CountryName = manager.GetCountry(carrierProfile.Settings.CountryId).Name;
-            }
+                carrierProfileDetail.CountryName = countryManager.GetCountryName(carrierProfile.Settings.CountryId);
 
             return carrierProfileDetail;
         }
         #endregion
     }
-
 }

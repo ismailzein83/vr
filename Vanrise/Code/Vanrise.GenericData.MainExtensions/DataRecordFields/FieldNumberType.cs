@@ -19,6 +19,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 throw new NullReferenceException("FieldNumberDataTypeInfoAttribute");
             return attributeInfo.RuntimeType;
         }
+
+        public override string GetDescription(Object value)
+        {
+            return value.ToString();
+        }
     }
 
     public enum FieldNumberDataType

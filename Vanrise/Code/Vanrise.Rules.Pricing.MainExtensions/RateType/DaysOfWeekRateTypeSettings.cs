@@ -26,5 +26,26 @@ namespace Vanrise.Rules.Pricing.MainExtensions.RateType
             }
             return false;
         }
+
+        public override string GetDescription()
+        {
+            StringBuilder description = new StringBuilder();
+
+            if (Days != null && Days.Count > 0)
+            {
+                description.Append("Days: ");
+                IEnumerable<string> dayDescriptions = Days.Select(day => day.ToString());
+                description.Append(String.Join(", ", dayDescriptions));
+            }
+
+            if (TimeRanges != null && TimeRanges.Count > 0)
+            {
+                description.Append("; Time Ranges: ");
+                IEnumerable<string> timeRangeDescriptions = TimeRanges.Select(timeRange => String.Format("{0} - {1}", timeRange.FromTime.ToShortTimeString(), timeRange.ToTime.ToShortTimeString()));
+                description.Append(String.Join(", ", timeRangeDescriptions));
+            }
+
+            return description.ToString();
+        }
     }
 }

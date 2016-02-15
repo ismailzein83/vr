@@ -59,5 +59,15 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
             context.TotalAmount = totalAmount;
         }
+
+        public override string GetDescription()
+        {
+            StringBuilder description = new StringBuilder();
+            description.Append(String.Format("Call Fee: {0}; ", CallFee));
+            description.Append(String.Format("First Period: {0}; ", FirstPeriod));
+            description.Append(String.Format("First Period Rate: {0}; ", FirstPeriodRate));
+            description.Append(String.Format("Fraction Unit: {0}", FractionUnit));
+            return description.ToString();
+        }
     }
 }

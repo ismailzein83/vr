@@ -18,15 +18,6 @@ namespace Vanrise.GenericData.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, (rule) => MapToDetails(rule)));
         }
 
-        IEnumerable<GenericRuleDefinitionCriteriaField> GetRuleDefinitionCriteriaFields(int ruleDefinitionId)
-        {
-            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
-            // ruleDefinition, CriteriaDefinition and Fields should not be null
-            // If so, an exception must be thrown
-            return ruleDefinition.CriteriaDefinition.Fields;
-        }
-
         public GenericRule GetGenericRule(int ruleId)
         {
             return GetAllRules().GetRecord(ruleId);
@@ -107,11 +98,13 @@ namespace Vanrise.GenericData.Business
 
         protected override GenericRuleDetail MapToDetails(T rule)
         {
+            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(rule.DefinitionId);
+
             List<string> descriptions = new List<string>();
-            var criteriaFields = GetRuleDefinitionCriteriaFields(rule.DefinitionId);
             bool fieldValuesExist = (rule.Criteria != null && rule.Criteria.FieldsValues != null);
 
-            foreach (var criteriaField in criteriaFields)
+            foreach (var criteriaField in ruleDefinition.CriteriaDefinition.Fields)
             {
                 GenericRuleCriteriaFieldValues fieldValues = null;
                 if (fieldValuesExist)
@@ -121,7 +114,8 @@ namespace Vanrise.GenericData.Business
 
             return new GenericRuleDetail(){
                 Entity = rule,
-                FieldValueDescriptions = descriptions
+                FieldValueDescriptions = descriptions,
+                SettingsDescription = rule.GetSettingsDescription(ruleDefinition.SettingsDefinition)
             };
         }
     }

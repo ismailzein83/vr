@@ -16,5 +16,7 @@ namespace Vanrise.Rules.Pricing
         {
             this.Execute(context);
         }
+
+        public abstract string GetDescription();
     }
 }

@@ -13,5 +13,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return typeof(bool);
         }
+        public override string GetDescription(Object value)
+        {
+            return value.ToString();
+        }
     }
 }

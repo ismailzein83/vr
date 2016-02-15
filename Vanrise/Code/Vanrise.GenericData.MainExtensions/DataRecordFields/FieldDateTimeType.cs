@@ -13,5 +13,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return typeof(DateTime);
         }
+
+        public override string GetDescription(Object value)
+        {
+            return value.ToString();
+        }
     }
 }

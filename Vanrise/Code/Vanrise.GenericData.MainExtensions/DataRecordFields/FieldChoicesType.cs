@@ -15,6 +15,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return typeof(int);
         }
+
+        public override string GetDescription(Object value)
+        {
+            if (Choices != null && Choices.Count > 0)
+            {
+                int selectedChoiceValue = (int)value;
+                Choice selectedChoice = Choices.Find(choice => choice.Value == selectedChoiceValue);
+                return (selectedChoice != null) ? selectedChoice.Text : null;
+            }
+            return null;
+        }
     }
 
     public class Choice

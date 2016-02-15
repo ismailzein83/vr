@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Entities
         public int ConfigId { get; set; }
 
         public abstract Type GetRuntimeType();
+
+        public abstract string GetDescription(Object value);
     }   
 }

@@ -7,10 +7,11 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class CarrierAccountManager
+    public class CarrierAccountManager : IBusinessEntityManager
     {
      
         #region ctor/Local Variables
@@ -210,7 +211,10 @@ namespace TOne.WhS.BusinessEntity.Business
             string profileName = _carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId);
             return GetCarrierAccountName(profileName, carrierAccount.NameSuffix);
         }
-     
+        public string GetEntityDescription(object entityId)
+        {
+            return GetCarrierAccountName(Convert.ToInt32(entityId));
+        }
         #endregion
 
         #region Private Methods
@@ -355,7 +359,5 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccountDetail;
         }
         #endregion
-
-
     }
 }

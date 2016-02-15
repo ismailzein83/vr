@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Entities
         public string SelectorUIControl { get; set; }
 
         public string GroupSelectorUIControl { get; set; }
+
+        public string ManagerFQTN { get; set; }
     }
 }
