@@ -62,5 +62,32 @@ namespace Vanrise.GenericData.Web.Controllers
             return dataRecordTypeManager.GetDataTransformationDefinitions(deserializedFilter);
 
         }
+
+        [HttpPost]
+        [Route("TryCompileSteps")]
+        public DataTransformationCompilationOutput TryCompileSteps(DataTransformationDefinition dataTransformationDefinition)
+        {
+            DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
+            DataTransformationRuntimeType dataTransformationRuntimeType;
+            List<string> errorMessages;
+            bool compilationResult = dataRecordTypeManager.TryCompileDataTransformation(dataTransformationDefinition, out dataTransformationRuntimeType, out errorMessages);
+
+            if (compilationResult)
+            {
+                return new DataTransformationCompilationOutput
+                {
+                    ErrorMessages = null,
+                    Result = true
+                };
+            }
+            else
+            {
+                return new DataTransformationCompilationOutput
+                {
+                    ErrorMessages = errorMessages,
+                    Result = false
+                };
+            }
+        }
     }
 }

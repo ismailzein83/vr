@@ -209,9 +209,13 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Merge',
                     class: "glyphicon glyphicon-resize-small"
                 }
+            case 'Compile':
+                return {
+                    text: 'Compile',
+                    class: "glyphicon glyphicon-tasks"
+                }
 
-
-
+              
             case 'SelectAll':
                 return {
                     text: 'Select All',

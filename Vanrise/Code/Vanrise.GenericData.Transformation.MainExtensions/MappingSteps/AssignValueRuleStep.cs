@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             var ruleVariableName = context.GenerateUniqueMemberName("rule");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = {1}.GetMatchRule({2}, {3});",
                 ruleVariableName, ruleManagerVariableName, this.RuleDefinitionId, ruleTargetVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null", ruleVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = ({1}){2}.Settings.Value;",
                 this.Target, ruleValueRuntimeType.FullName, ruleVariableName);

@@ -318,6 +318,8 @@
     <Content Include="VR_GenericData\Views\DataStore\DataStoreEditorController.js" />
     <Content Include="VR_GenericData\Views\DataStore\DataStoreManagement.html" />
     <Content Include="VR_GenericData\Views\DataStore\DataStoreManagementController.js" />
+    <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationCompilationResult.html" />
+    <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationCompilationResultController.js" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditor.html" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\DataTransformationDefinitionManagement.html" />

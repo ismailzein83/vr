@@ -2,9 +2,9 @@
 
     "use strict";
 
-    DataTransformationDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_DataTransformationDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataTransformationStepConfigAPIService','VR_GenericData_DataRecordTypeAPIService'];
+    DataTransformationDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_DataTransformationDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataTransformationStepConfigAPIService','VR_GenericData_DataRecordTypeAPIService','VR_GenericData_DataTransformationDefinitionService'];
 
-    function DataTransformationDefinitionEditorController($scope, VR_GenericData_DataTransformationDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataTransformationStepConfigAPIService, VR_GenericData_DataRecordTypeAPIService) {
+    function DataTransformationDefinitionEditorController($scope, VR_GenericData_DataTransformationDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataTransformationStepConfigAPIService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataTransformationDefinitionService) {
 
         var isEditMode;
         var dataTransformationDefinitionEntity;
@@ -104,6 +104,12 @@
                 selectedComposite = api;
                 selectedComposite.setCheckedSequence(true);
                 sequenceReadyPromiseDeferred.resolve();
+            }
+
+            $scope.scopeModal.onCompileClick = function()
+            {
+               return tryCompile();
+
             }
         }
 
@@ -392,6 +398,12 @@
                 $scope.scopeModal.selectedStep.isSelected = false;
             stepItem.isSelected = true;
             $scope.scopeModal.selectedStep = stepItem;
+        }
+        
+        function tryCompile()
+        {
+            var dataTransformationDefinitionObject = buildDataTransformationDefinitionObjFromScope();
+            VR_GenericData_DataTransformationDefinitionService.tryCompilationResult(dataTransformationDefinitionObject);
         }
 
         function buildDataTransformationDefinitionObjFromScope() {

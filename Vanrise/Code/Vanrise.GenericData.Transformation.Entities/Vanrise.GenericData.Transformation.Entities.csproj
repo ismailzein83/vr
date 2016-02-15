@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseGenericRuleMappingStep.cs" />
+    <Compile Include="DataTransformationCompilationOutput.cs" />
     <Compile Include="DataTransformationDefinition.cs" />
     <Compile Include="DataTransformationDefinitionDetail.cs" />
     <Compile Include="DataTransformationDefinitionFilter.cs" />

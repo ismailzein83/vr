@@ -10,7 +10,8 @@
             editDataTransformationDefinition: editDataTransformationDefinition,
             addDataRecordType: addDataRecordType,
             editDataRecordType: editDataRecordType,
-            deleteDataRecordType: deleteDataRecordType
+            deleteDataRecordType: deleteDataRecordType,
+            tryCompilationResult: tryCompilationResult
 
         });
 
@@ -24,9 +25,9 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionEditor.html', null, modalSettings);
         }
 
-        function editDataTransformationDefinition(dataRecordTypeId, onDataTransformationDefinitionUpdated) {
+        function editDataTransformationDefinition(dataTransformationDefinitionId, onDataTransformationDefinitionUpdated) {
             var modalParameters = {
-                DataTransformationDefinitionId: dataRecordTypeId
+                DataTransformationDefinitionId: dataTransformationDefinitionId
             };
 
             var modalSettings = {};
@@ -64,6 +65,7 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataTransformationDefinition/TransformationRecordTypeEditor.html', modalParameters, modalSettings);
         }
+
         function deleteDataRecordType($scope, dataRecordTypeObj, onDataRecordTypeDeleted) {
             VRNotificationService.showConfirmation()
                 .then(function (response) {
@@ -71,6 +73,17 @@
                         onDataRecordTypeDeleted(dataRecordTypeObj);
                     }
                 });
+        }
+
+        function tryCompilationResult(dataTransformationDefinition) {
+            var modalSettings = {};
+            var modalParameters = {
+                dataTransformationDefinition: dataTransformationDefinition,
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataTransformationDefinition/DataTransformationCompilationResult.html', modalParameters, modalSettings);
         }
     };
 

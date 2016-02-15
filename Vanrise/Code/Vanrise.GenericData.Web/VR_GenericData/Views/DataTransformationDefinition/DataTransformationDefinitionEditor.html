@@ -34,6 +34,7 @@
                         <vr-columns colnum="7">
                             <vr-section title="Steps">
                                 <div style="max-height:500px;overflow-y:auto;">
+
                                     <vr-columns width="fullrow">
                                         <vr-genericdata-datatransformationdefinition-stepsequencedesign on-ready="scopeModal.onSequenceDirectiveReady"></vr-genericdata-datatransformationdefinition-stepsequencedesign>
                                     </vr-columns>
@@ -68,6 +69,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
+                <vr-button type="Compile" data-onclick="scopeModal.onCompileClick"></vr-button>
                 <vr-button type="Save" validationcontext="dataTransformationDefinitionEditorGroup" data-onclick="scopeModal.SaveDataTransformationDefinition"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
