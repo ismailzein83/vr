@@ -66,7 +66,7 @@
     <Compile Include="CallType.cs" />
     <Compile Include="NetType.cs" />
     <Compile Include="ImportedStagingCDRBatch.cs" />
-    <Compile Include="NormalCDRQuery.cs" />
+    <Compile Include="CDRQuery.cs" />
     <Compile Include="StagingCDR.cs" />
     <Compile Include="CDR.cs" />
     <Compile Include="SubscriberType.cs" />

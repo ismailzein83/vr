@@ -60,7 +60,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             return dbTimeRanges;
         }
 
-        protected string GetNormalCDRTableName(DateTime cdrTime)
+        protected string GetCDRTableName(DateTime cdrTime)
         {
             return string.Format("NormalCDR_{0:yyyyMMdd_HH}00", cdrTime);
         }
@@ -97,7 +97,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             DateTime currentHour = fromTime;
             while(currentHour < toTime)
             {
-                string normalCDRTableName = GetNormalCDRTableName(currentHour);
+                string normalCDRTableName = GetCDRTableName(currentHour);
                 ExecuteNonQueryText(String.Format(NORMALCDR_CREATETABLE_QUERYTEMPLATE, normalCDRTableName), null);
                 ExecuteNonQueryText(String.Format(NORMALCDR_CREATEINDEXES_QUERYTEMPLATE, normalCDRTableName), null);
                 currentHour = currentHour.AddHours(1);

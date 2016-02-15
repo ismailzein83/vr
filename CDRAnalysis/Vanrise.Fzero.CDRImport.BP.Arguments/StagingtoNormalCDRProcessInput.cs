@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vanrise.Fzero.CDRImport.BP.Arguments
 {
-    public class StagingtoNormalCDRProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
+    public class StagingtoCDRProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
 
         public DateTime FromDate { get; set; }
@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Arguments
 
         public override string GetTitle()
         {
-           return String.Format("Staging to Normal CDR Process ({0:dd-MMM-yy HH:mm}    to     {1:dd-MMM-yy HH:mm})", this.FromDate, this.ToDate);
+           return String.Format("Staging to CDR Process ({0:dd-MMM-yy HH:mm}    to     {1:dd-MMM-yy HH:mm})", this.FromDate, this.ToDate);
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)

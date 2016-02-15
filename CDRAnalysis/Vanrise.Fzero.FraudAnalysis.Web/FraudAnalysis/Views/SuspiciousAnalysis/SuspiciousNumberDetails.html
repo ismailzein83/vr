@@ -52,11 +52,11 @@
                 <vr-form validationcontext="searchCDRsContext">
                     <vr-row>
                         <vr-columns width="normal">
-                            <vr-datetimepicker label="From" value="fromDate_NormalCDRs" type="dateTime" isrequired customvalidate="validateTimeRangeNormalCDRs()"></vr-datetimepicker>
+                            <vr-datetimepicker label="From" value="fromDate_CDRs" type="dateTime" isrequired customvalidate="validateTimeRangeCDRs()"></vr-datetimepicker>
                         </vr-columns>
 
                         <vr-columns width="normal">
-                            <vr-datetimepicker label="To" value="toDate_NormalCDRs" type="dateTime" customvalidate="validateTimeRangeNormalCDRs()"></vr-datetimepicker>
+                            <vr-datetimepicker label="To" value="toDate_CDRs" type="dateTime" customvalidate="validateTimeRangeCDRs()"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns withemptyline width="1/4row">
                             <vr-button type="Search" data-onclick="searchCDRs" standalone validationcontext="searchCDRsContext"></vr-button>
@@ -66,8 +66,8 @@
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="normalCDRs"
-                                     on-ready="onGridReady_NormalCDRs"
-                                     dataretrievalfunction="dataRetrievalFunction_NormalCDRs"
+                                     on-ready="onGridReady_CDRs"
+                                     dataretrievalfunction="dataRetrievalFunction_CDRs"
                                      pagingtype="'PagingOnScroll'"
                                      maxheight="150px"
                                      >

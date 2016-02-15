@@ -2,7 +2,7 @@
 
 namespace Vanrise.Fzero.CDRImport.Entities
 {
-    public class NormalCDRQuery
+    public class CDRQuery
     {
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }

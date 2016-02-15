@@ -5,20 +5,20 @@ using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.CDRImport.Business
 {
-    public class NormalCDRManager
+    public class CDRManager
     {
-        public IDataRetrievalResult<CDRDetail> GetNormalCDRs(DataRetrievalInput<NormalCDRQuery> input)
+        public IDataRetrievalResult<CDRDetail> GetCDRs(DataRetrievalInput<CDRQuery> input)
         {
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
 
-            Vanrise.Entities.BigResult<CDR> cdrs = dataManager.GetNormalCDRs(input);
+            Vanrise.Entities.BigResult<CDR> cdrs = dataManager.GetCDRs(input);
             Vanrise.Entities.BigResult<CDRDetail> cdrsBigResult = new BigResult<CDRDetail>();
 
             List<CDRDetail> listCDRDetails = new List<CDRDetail>();
 
             foreach (CDR cdr in cdrs.Data)
             {
-                listCDRDetails.Add(NormalCDRDetailMapper(cdr));
+                listCDRDetails.Add(CDRDetailMapper(cdr));
             }
             cdrsBigResult.Data = listCDRDetails;
             cdrsBigResult.ResultKey = cdrs.ResultKey;
@@ -27,17 +27,10 @@ namespace Vanrise.Fzero.CDRImport.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cdrsBigResult);
         }
 
-          private CDRDetail NormalCDRDetailMapper(CDR cdr)
+          private CDRDetail CDRDetailMapper(CDR cdr)
         {
             var normalCDR = new CDRDetail();
             normalCDR.Entity = cdr;
-
-            //if (cdr.CallClassId != null)
-            //{
-            //    CallClass callClass = CallClassManager.GetCallClassById(cdr.CallClassId.Value);
-            //    if (callClass != null)
-            //        normalCDR.CallClassName = callClass.Description;
-            //}
 
             normalCDR.CallTypeName = Vanrise.Common.Utilities.GetEnumDescription(cdr.CallType);
 

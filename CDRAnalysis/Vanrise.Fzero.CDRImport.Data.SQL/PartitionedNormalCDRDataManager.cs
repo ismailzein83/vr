@@ -12,7 +12,7 @@ using Vanrise.Fzero.CDRImport.Entities;
 
 namespace Vanrise.Fzero.CDRImport.Data.SQL
 {
-    internal class PartitionedNormalCDRDataManager : PartitionedCDRDataManager, IBulkApplyDataManager<CDR>
+    internal class PartitionedCDRDataManager : PartitionedCDRDataManager, IBulkApplyDataManager<CDR>
     {
         static string[] s_cdrColumns = new string[] {
             "MSISDN"
@@ -44,13 +44,13 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public object InitialiazeStreamForDBApply()
         {
-            return new PartitionedNormalCDRDBApplyStream { StreamsByTableNames = new ConcurrentDictionary<string, StreamForBulkInsert>() };
+            return new PartitionedCDRDBApplyStream { StreamsByTableNames = new ConcurrentDictionary<string, StreamForBulkInsert>() };
         }
 
         public void WriteRecordToStream(CDR record, object dbApplyStream)
         {
-            PartitionedNormalCDRDBApplyStream allStreams = dbApplyStream as PartitionedNormalCDRDBApplyStream;
-            string tableName = GetNormalCDRTableName(record.ConnectDateTime);
+            PartitionedCDRDBApplyStream allStreams = dbApplyStream as PartitionedCDRDBApplyStream;
+            string tableName = GetCDRTableName(record.ConnectDateTime);
             StreamForBulkInsert matchStream;
             if(!allStreams.StreamsByTableNames.TryGetValue(tableName, out matchStream))
             {
@@ -94,7 +94,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
-            PartitionedNormalCDRDBApplyStream allStreams = dbApplyStream as PartitionedNormalCDRDBApplyStream;
+            PartitionedCDRDBApplyStream allStreams = dbApplyStream as PartitionedCDRDBApplyStream;
             foreach(var entry in allStreams.StreamsByTableNames)
             {
                 entry.Value.Close();
@@ -104,7 +104,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void ApplyCDRsToDB(object preparedCDRs)
         {
-            PartitionedNormalCDRDBApplyStream allStreams = preparedCDRs as PartitionedNormalCDRDBApplyStream;
+            PartitionedCDRDBApplyStream allStreams = preparedCDRs as PartitionedCDRDBApplyStream;
             //foreach (var entry in allStreams.StreamsByTableNames)
             Parallel.ForEach(allStreams.StreamsByTableNames, (entry) =>
             {
@@ -137,12 +137,12 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 filter = filterBuilder.ToString();
             } 
 
-            string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) {2}", CDR_COLUMNS, GetNormalCDRTableName(fromTime), filter);
+            string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) {2}", CDR_COLUMNS, GetCDRTableName(fromTime), filter);
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
                 {
-                    onCDRReady(NormalCDRMapper(reader));
+                    onCDRReady(CDRMapper(reader));
                 }
             }, null);
         }
@@ -153,7 +153,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             string query = String.Format(@"INSERT INTO {0}
                                         SELECT {1} 
                                         FROM {2} WITH(NOLOCK)
-                                        WHERE [MSISDN] = @MSISDN", tempTableName, CDR_COLUMNS, GetNormalCDRTableName(fromTime));
+                                        WHERE [MSISDN] = @MSISDN", tempTableName, CDR_COLUMNS, GetCDRTableName(fromTime));
 
             ExecuteNonQueryText(query, (cmd) =>
                 {
@@ -163,7 +163,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         #region Private Methods
 
-        internal CDR NormalCDRMapper(IDataReader reader)
+        internal CDR CDRMapper(IDataReader reader)
         {
             var normalCDR = new CDR();
             normalCDR.CallType = GetReaderValue<CallType>(reader, "CallTypeID");
@@ -208,7 +208,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         #region Private Classes
 
-        private class PartitionedNormalCDRDBApplyStream
+        private class PartitionedCDRDBApplyStream
         {
             public ConcurrentDictionary<string, StreamForBulkInsert> StreamsByTableNames { get; set; }
         }

@@ -77,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExecutionFlows\AllFlows.cs" />
-    <Compile Include="NormalCDRManager.cs" />
+    <Compile Include="CDRManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

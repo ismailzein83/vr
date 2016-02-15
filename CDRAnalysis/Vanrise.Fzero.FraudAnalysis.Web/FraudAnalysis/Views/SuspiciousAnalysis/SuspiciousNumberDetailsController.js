@@ -1,13 +1,13 @@
 ﻿"use strict";
 
-SuspiciousNumberDetailsController.$inject = ["$scope", "NormalCDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "VR_Sec_UserAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService','CDRAnalysis_FA_RelatedNumberAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
+SuspiciousNumberDetailsController.$inject = ["$scope", "CDRAPIService", "NumberProfileAPIService", "StrategyAPIService", "VR_Sec_UserAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRModalService", "VRValidationService",'CDRAnalysis_FA_AccountCaseAPIService','CDRAnalysis_FA_RelatedNumberAPIService','CDRAnalysis_FA_StrategyExecutionItemAPIService'];
 
-function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberProfileAPIService, StrategyAPIService, VR_Sec_UserAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, CDRAnalysis_FA_RelatedNumberAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
+function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileAPIService, StrategyAPIService, VR_Sec_UserAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNavigationService, VRNotificationService, VRModalService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, CDRAnalysis_FA_RelatedNumberAPIService, CDRAnalysis_FA_StrategyExecutionItemAPIService) {
     var gridOccurances_ReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     var gridAPI_Occurances = undefined;
     var occurancesLoaded = false;
 
-    var gridAPI_NormalCDRs = undefined;
+    var gridAPI_CDRs = undefined;
 
 
     var gridAPI_NumberProfiles = undefined;
@@ -50,11 +50,11 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
         $scope.message = undefined;
 
         // Normal CDRs
-        $scope.fromDate_NormalCDRs = $scope.fromDate;
-        $scope.toDate_NormalCDRs = $scope.toDate;
+        $scope.fromDate_CDRs = $scope.fromDate;
+        $scope.toDate_CDRs = $scope.toDate;
 
-        $scope.validateTimeRangeNormalCDRs = function () {
-            return VRValidationService.validateTimeRange($scope.fromDate_NormalCDRs, $scope.toDate_NormalCDRs);
+        $scope.validateTimeRangeCDRs = function () {
+            return VRValidationService.validateTimeRange($scope.fromDate_CDRs, $scope.toDate_CDRs);
         }
 
 
@@ -105,8 +105,8 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
             gridOccurances_ReadyPromiseDeferred.resolve();
         }
 
-        $scope.onGridReady_NormalCDRs = function (api) {
-            gridAPI_NormalCDRs = api;
+        $scope.onGridReady_CDRs = function (api) {
+            gridAPI_CDRs = api;
         }
 
         $scope.onGridReady_NumberProfiles = function (api) {
@@ -164,9 +164,9 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
             });
         }
 
-        $scope.dataRetrievalFunction_NormalCDRs = function (dataRetrievalInput, onResponseReady) {
+        $scope.dataRetrievalFunction_CDRs = function (dataRetrievalInput, onResponseReady) {
 
-            return NormalCDRAPIService.GetNormalCDRs(dataRetrievalInput)
+            return CDRAPIService.GetCDRs(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             })
@@ -308,7 +308,7 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
             else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
         }
 
-        $scope.searchCDRs = retrieveData_NormalCDRs;
+        $scope.searchCDRs = retrieveData_CDRs;
 
         $scope.searchNumberProfiles = retrieveData_NumberProfiles;
     }
@@ -355,14 +355,14 @@ function SuspiciousNumberDetailsController($scope, NormalCDRAPIService, NumberPr
         $scope.showDate = true;
     }
 
-    function retrieveData_NormalCDRs() {
+    function retrieveData_CDRs() {
         var query = {
             MSISDN: $scope.accountNumber,
-            FromDate: $scope.fromDate_NormalCDRs,
-            ToDate: $scope.toDate_NormalCDRs,
+            FromDate: $scope.fromDate_CDRs,
+            ToDate: $scope.toDate_CDRs,
         };
 
-        return gridAPI_NormalCDRs.retrieveData(query)
+        return gridAPI_CDRs.retrieveData(query)
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });

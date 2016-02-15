@@ -17,6 +17,6 @@ namespace Vanrise.Fzero.CDRImport.Data
 
         void LoadCDR(List<string> numberPrefix, DateTime from, DateTime to, int? batchSize, Action<CDR> onCDRReady);
 
-        BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input);
+        BigResult<CDR> GetCDRs(Vanrise.Entities.DataRetrievalInput<CDRQuery> input);
     }
 }

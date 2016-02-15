@@ -44,17 +44,17 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public object InitialiazeStreamForDBApply()
         {
-            return new NormalCDRDBApplyStream { PartitionedStreamsByDBFromTime = new ConcurrentDictionary<DateTime, PartitionedNormalCDRStream>() };
+            return new CDRDBApplyStream { PartitionedStreamsByDBFromTime = new ConcurrentDictionary<DateTime, PartitionedCDRStream>() };
         }
 
         public void WriteRecordToStream(CDR record, object dbApplyStream)
         {
-            NormalCDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as NormalCDRDBApplyStream;
+            CDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as CDRDBApplyStream;
             var dbFromTime = PartitionedCDRDataManager.GetDBFromTime(record.ConnectDateTime);
-            PartitionedNormalCDRStream matchStream;
+            PartitionedCDRStream matchStream;
             if(!normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.TryGetValue(dbFromTime, out matchStream))
             {
-                PartitionedNormalCDRStream newStream = new PartitionedNormalCDRStream { DataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(dbFromTime, false) };
+                PartitionedCDRStream newStream = new PartitionedCDRStream { DataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedCDRDataManager>(dbFromTime, false) };
                 newStream.DBApplyStream = newStream.DataManager.InitialiazeStreamForDBApply();
                 if (normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.TryAdd(dbFromTime, newStream))
                     matchStream = newStream;
@@ -70,7 +70,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
-            NormalCDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as NormalCDRDBApplyStream;
+            CDRDBApplyStream normalCDRDBApplyStream = dbApplyStream as CDRDBApplyStream;
             foreach (var entry in normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values)
             {
                 entry.DataManager.FinishDBApplyStream(entry.DBApplyStream);
@@ -80,8 +80,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void ApplyCDRsToDB(object preparedCDRs)
         {
-            NormalCDRDBApplyStream normalCDRDBApplyStream = preparedCDRs as NormalCDRDBApplyStream;
-            //foreach (var entry in normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values)
+            CDRDBApplyStream normalCDRDBApplyStream = preparedCDRs as CDRDBApplyStream;
             Parallel.ForEach(normalCDRDBApplyStream.PartitionedStreamsByDBFromTime.Values, (entry) =>
             {
                 entry.DataManager.ApplyCDRsToDB(entry.DBApplyStream);
@@ -93,7 +92,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(from, to);
             foreach (var dbTimeRange in dbTimeRanges)
             {
-                var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(dbTimeRange.FromTime, true);
+                var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedCDRDataManager>(dbTimeRange.FromTime, true);
                 if (dataManager != null)
                 {
                     dataManager.LoadCDR(dbTimeRange.FromTime, numberPrefix, onCDRReady);
@@ -102,7 +101,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         }
 
 
-        public BigResult<CDR> GetNormalCDRs(Vanrise.Entities.DataRetrievalInput<NormalCDRQuery> input)
+        public BigResult<CDR> GetCDRs(Vanrise.Entities.DataRetrievalInput<CDRQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -123,7 +122,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                         //foreach(var dbTimeRange in dbTimeRanges)
                         Parallel.ForEach(dbTimeRanges, (dbTimeRange) =>
                         {
-                            var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedNormalCDRDataManager>(dbTimeRange.FromTime, true);
+                            var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedCDRDataManager>(dbTimeRange.FromTime, true);
                             if (dataManager != null)
                             {
                                 dataManager.InsertCDRsByMSISDNToTempTable(tempTableName, input.Query.MSISDN, dbTimeRange.FromTime, dbTimeRange.ToTime);
@@ -136,21 +135,21 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             if (input.SortByColumnName != null)
                 input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
 
-            return RetrieveData(input, createTempTableAction, (new PartitionedNormalCDRDataManager()).NormalCDRMapper, _columnMapper);
+            return RetrieveData(input, createTempTableAction, (new PartitionedCDRDataManager()).CDRMapper, _columnMapper);
         }
 
         #region Private Classes
 
-        private class PartitionedNormalCDRStream
+        private class PartitionedCDRStream
         {
-            public PartitionedNormalCDRDataManager DataManager { get; set; }
+            public PartitionedCDRDataManager DataManager { get; set; }
 
             public Object DBApplyStream { get; set; }
         }
 
-        private class NormalCDRDBApplyStream
+        private class CDRDBApplyStream
         {
-            public ConcurrentDictionary<DateTime, PartitionedNormalCDRStream> PartitionedStreamsByDBFromTime { get; set; }
+            public ConcurrentDictionary<DateTime, PartitionedCDRStream> PartitionedStreamsByDBFromTime { get; set; }
         }
 
         #endregion
