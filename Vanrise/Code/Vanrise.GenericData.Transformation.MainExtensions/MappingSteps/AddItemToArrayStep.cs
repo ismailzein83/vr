@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             context.AddCodeToCurrentInstanceExecutionBlock("{");
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = new List<{1}>();",arrayVariableName, this.ArrayVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("}");
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.Add({1}",arrayVariableName,this.VariableName);      
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.Add({1});",arrayVariableName,this.VariableName);      
         }
     }
 }
