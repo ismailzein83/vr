@@ -29,5 +29,10 @@ namespace PSTN.BusinessEntity.Business.Rules.StructureRulesBehaviors
                 return false;
             }
         }
+
+        public override Vanrise.Rules.BaseRuleStructureBehavior CreateNewBehaviorObject()
+        {
+            return new RuleBehaviorByNumberType();
+        }
     }
 }
