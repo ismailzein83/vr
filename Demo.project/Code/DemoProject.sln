@@ -1,0 +1,147 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{055CFD09-F0E6-49C1-BDDB-0BBAE2888E9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{150D0608-384E-480D-A86D-7A2732457104}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{BE3991B1-597B-4490-B662-5E54D23B835B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{B13FE066-3A0F-404A-8BA1-EC40714E9F7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web.Base", "..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj", "{C527C7B2-A481-4D1D-B25A-4A540E812153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web", "..\..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj", "{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Web", "Demo.Web\Demo.Web.csproj", "{C94F4630-1F25-4FFF-AC76-46544F5E9511}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{42B7DADE-E19B-4B6E-A55E-B7F41646AF60}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Demo", "Demo\Demo.sqlproj", "{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo.Module", "Demo.Module", "{CD9D68D1-97A9-4FE6-A314-3272DF3757DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.Entities", "Demo.Module.Entities\Demo.Module.Entities.csproj", "{7F3A2FAB-E969-475D-9EAA-EA742E5222DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.Data", "Demo.Module.Data\Demo.Module.Data.csproj", "{415C2A9E-E7D1-4C21-8862-57450E277758}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.Data.SQL", "Demo.Module.Data.SQL\Demo.Module.Data.SQL.csproj", "{6E72DC74-F79D-4F63-A6C1-444EF4EBB4B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.Business", "Demo.Module.Business\Demo.Module.Business.csproj", "{A0190A8F-95BD-4CE5-B60E-87529661E6E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.Web", "Demo.Module.Web\Demo.Module.Web.csproj", "{99CB64F1-5314-41FD-9F8F-EB435EE7449A}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 11
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
+		SccProjectTopLevelParentUniqueName1 = DemoProject.sln
+		SccProjectName1 = ../../Vanrise/Code/Vanrise.Web.Base
+		SccLocalPath1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base
+		SccProjectUniqueName2 = ..\\..\\Vanrise\\Code\\Vanrise.Web\\Vanrise.Web.csproj
+		SccProjectTopLevelParentUniqueName2 = DemoProject.sln
+		SccProjectName2 = ../../Vanrise/Code/Vanrise.Web
+		SccLocalPath2 = ..\\..\\Vanrise\\Code\\Vanrise.Web
+		SccProjectUniqueName3 = Demo.Web\\Demo.Web.csproj
+		SccProjectTopLevelParentUniqueName3 = DemoProject.sln
+		SccProjectName3 = Demo.Web
+		SccLocalPath3 = Demo.Web
+		SccProjectUniqueName4 = Resources\\Resources.csproj
+		SccProjectTopLevelParentUniqueName4 = DemoProject.sln
+		SccProjectName4 = Resources
+		SccLocalPath4 = Resources
+		SccProjectUniqueName5 = Demo\\Demo.sqlproj
+		SccProjectTopLevelParentUniqueName5 = DemoProject.sln
+		SccProjectName5 = Demo
+		SccLocalPath5 = Demo
+		SccProjectUniqueName6 = Demo.Module.Entities\\Demo.Module.Entities.csproj
+		SccProjectTopLevelParentUniqueName6 = DemoProject.sln
+		SccProjectName6 = Demo.Module.Entities
+		SccLocalPath6 = Demo.Module.Entities
+		SccProjectUniqueName7 = Demo.Module.Data\\Demo.Module.Data.csproj
+		SccProjectTopLevelParentUniqueName7 = DemoProject.sln
+		SccProjectName7 = Demo.Module.Data
+		SccLocalPath7 = Demo.Module.Data
+		SccProjectUniqueName8 = Demo.Module.Data.SQL\\Demo.Module.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName8 = DemoProject.sln
+		SccProjectName8 = Demo.Module.Data.SQL
+		SccLocalPath8 = Demo.Module.Data.SQL
+		SccProjectUniqueName9 = Demo.Module.Business\\Demo.Module.Business.csproj
+		SccProjectTopLevelParentUniqueName9 = DemoProject.sln
+		SccProjectName9 = Demo.Module.Business
+		SccLocalPath9 = Demo.Module.Business
+		SccProjectUniqueName10 = Demo.Module.Web\\Demo.Module.Web.csproj
+		SccProjectTopLevelParentUniqueName10 = DemoProject.sln
+		SccProjectName10 = Demo.Module.Web
+		SccLocalPath10 = Demo.Module.Web
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C94F4630-1F25-4FFF-AC76-46544F5E9511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C94F4630-1F25-4FFF-AC76-46544F5E9511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C94F4630-1F25-4FFF-AC76-46544F5E9511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C94F4630-1F25-4FFF-AC76-46544F5E9511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42B7DADE-E19B-4B6E-A55E-B7F41646AF60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42B7DADE-E19B-4B6E-A55E-B7F41646AF60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42B7DADE-E19B-4B6E-A55E-B7F41646AF60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42B7DADE-E19B-4B6E-A55E-B7F41646AF60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{7F3A2FAB-E969-475D-9EAA-EA742E5222DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F3A2FAB-E969-475D-9EAA-EA742E5222DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F3A2FAB-E969-475D-9EAA-EA742E5222DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F3A2FAB-E969-475D-9EAA-EA742E5222DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{415C2A9E-E7D1-4C21-8862-57450E277758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{415C2A9E-E7D1-4C21-8862-57450E277758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{415C2A9E-E7D1-4C21-8862-57450E277758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{415C2A9E-E7D1-4C21-8862-57450E277758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E72DC74-F79D-4F63-A6C1-444EF4EBB4B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E72DC74-F79D-4F63-A6C1-444EF4EBB4B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E72DC74-F79D-4F63-A6C1-444EF4EBB4B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E72DC74-F79D-4F63-A6C1-444EF4EBB4B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0190A8F-95BD-4CE5-B60E-87529661E6E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0190A8F-95BD-4CE5-B60E-87529661E6E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0190A8F-95BD-4CE5-B60E-87529661E6E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0190A8F-95BD-4CE5-B60E-87529661E6E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99CB64F1-5314-41FD-9F8F-EB435EE7449A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99CB64F1-5314-41FD-9F8F-EB435EE7449A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99CB64F1-5314-41FD-9F8F-EB435EE7449A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99CB64F1-5314-41FD-9F8F-EB435EE7449A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{42B7DADE-E19B-4B6E-A55E-B7F41646AF60} = {055CFD09-F0E6-49C1-BDDB-0BBAE2888E9E}
+		{CD9D68D1-97A9-4FE6-A314-3272DF3757DA} = {150D0608-384E-480D-A86D-7A2732457104}
+		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62} = {BE3991B1-597B-4490-B662-5E54D23B835B}
+		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {B13FE066-3A0F-404A-8BA1-EC40714E9F7F}
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {B13FE066-3A0F-404A-8BA1-EC40714E9F7F}
+		{C94F4630-1F25-4FFF-AC76-46544F5E9511} = {B13FE066-3A0F-404A-8BA1-EC40714E9F7F}
+		{7F3A2FAB-E969-475D-9EAA-EA742E5222DE} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
+		{415C2A9E-E7D1-4C21-8862-57450E277758} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
+		{6E72DC74-F79D-4F63-A6C1-444EF4EBB4B7} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
+		{A0190A8F-95BD-4CE5-B60E-87529661E6E8} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
+		{99CB64F1-5314-41FD-9F8F-EB435EE7449A} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
+	EndGlobalSection
+EndGlobal
