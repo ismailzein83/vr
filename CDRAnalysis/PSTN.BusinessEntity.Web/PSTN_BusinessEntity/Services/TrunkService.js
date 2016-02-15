@@ -13,7 +13,6 @@
             registerDrillDownToSwitch: registerDrillDownToSwitch
         });
         function editTrunk(trunkId, onTrunkUpdated) {
-            console.log("edit trunk")
             var settings = {
             };
 
@@ -27,7 +26,6 @@
             VRModalService.showModal("/Client/Modules/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkEditor.html", parameters, settings);
         }
         function addTrunk(onTrunkAdded, switchId) {
-            console.log("add trunk")
 
             var settings = {
             };
