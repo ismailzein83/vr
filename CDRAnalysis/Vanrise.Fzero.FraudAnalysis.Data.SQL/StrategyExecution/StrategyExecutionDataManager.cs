@@ -7,23 +7,9 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
-    public class StrategyExecutionDataManager : BaseSQLDataManager, IStrategyExecutionDataManager
+    public class StrategyExecutionDataManager : BaseSQLDataManager, IStrategyExecutionDataManager 
     {
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-
-        static string[] s_Columns = new string[] {
-            "ID"
-            ,"StrategyExecutionID"  
-            ,"AccountNumber"
-            ,"SuspicionLevelID"
-            ,"FilterValues"
-            ,"AggregateValues" 
-            ,"CaseID" 
-            ,"SuspicionOccuranceStatus"  
-            ,"IMEIs"  
-        };
-
-
 
         public StrategyExecutionDataManager()
             : base("CDRDBConnectionString")
@@ -71,29 +57,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, StrategyExecutionMapper, _columnMapper);
         }
 
-        private StrategyExecution StrategyExecutionMapper(IDataReader reader)
-        {
-            var item = new StrategyExecution();
-            item.ID = (long)reader["ID"];
-            item.ProcessID = (long)reader["ProcessID"];
-            item.StrategyID = (int)reader["StrategyID"];
-            item.FromDate = (DateTime)reader["FromDate"];
-            item.ToDate = (DateTime)reader["ToDate"];
-            item.PeriodID = (int)reader["PeriodID"];
-            item.ExecutionDate = (DateTime)reader["ExecutionDate"];
-            item.CancellationDate = GetReaderValue<DateTime?>(reader, "CancellationDate");
-            item.ExecutedBy = GetReaderValue<int>(reader, "ExecutedBy");
-            item.CancelledBy = GetReaderValue<int?>(reader, "CancelledBy");
-            item.NumberofSubscribers = GetReaderValue<long?>(reader, "NumberofSubscribers");
-            item.NumberofCDRs = GetReaderValue<long?>(reader, "NumberofCDRs");
-            item.NumberofSuspicions = GetReaderValue<long?>(reader, "NumberofSuspicions");
-            item.ExecutionDuration = GetReaderValue<double?>(reader, "ExecutionDuration");
-            item.Status = GetReaderValue<SuspicionOccuranceStatus>(reader, "Status");
-
-            return item;
-        }
-
-        public bool ExecuteStrategy(StrategyExecution strategyExecutionObject, out int insertedId)
+        public bool AddStrategyExecution(StrategyExecution strategyExecutionObject, out int insertedId)
         {
             object id;
             int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Insert", out id,
@@ -120,46 +84,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public object FinishDBApplyStream(object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.Close();
-            return new StreamBulkInsertInfo
-            {
-                TableName = "[FraudAnalysis].[StrategyExecutionItem]",
-                ColumnNames = s_Columns,
-                Stream = streamForBulkInsert,
-                TabLock = false,
-                KeepIdentity = false,
-                FieldSeparator = '^'
-            };
-        }
-
-        public object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        public void WriteRecordToStream(StrategyExecutionItem record, object dbApplyStream)
-        {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
-                                 record.StrategyExecutionID,
-                                 record.AccountNumber,
-                                 record.SuspicionLevelID,
-                                 Vanrise.Common.Serializer.Serialize(record.FilterValues, true),
-                                 Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
-                                 null,
-                                 (int)record.SuspicionOccuranceStatus,
-                                 string.Join<string>(",", record.IMEIs)
-                                 );
-        }
-
-        public void ApplyStrategyExecutionItemsToDB(object preparedStrategyExecutionItem)
-        {
-            InsertBulkToTable(preparedStrategyExecutionItem as BaseBulkInsertInfo);
-        }
-
         public bool CancelStrategyExecution(long strategyExecutionId, int userId)
         {
             int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecution_Cancel", strategyExecutionId, userId);
@@ -173,42 +97,31 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady)
-        {
-            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionItem_GetByNULLCaseID", (reader) =>
-            {
-                while (reader.Read())
-                {
-
-                    HashSet<string> iMEIs = new HashSet<string>();
-
-                    string IMEIs = GetReaderValue<string>(reader, "IMEIs");
-                    if (IMEIs != null)
-                        foreach (var i in IMEIs.Split(','))
-                        {
-                            iMEIs.Add(i);
-
-                        }
-
-                    onBatchReady(new StrategyExecutionItemSummary() { AccountNumber = (reader["AccountNumber"] as string), IMEIs = iMEIs });
-                }
-
-
-
-            }
-               );
-        }
-
-
         #region Private Members
 
-        private int CaseMapper(IDataReader reader)
+        private StrategyExecution StrategyExecutionMapper(IDataReader reader)
         {
-            return (int)reader["CaseID"];
+            var item = new StrategyExecution();
+            item.ID = (long)reader["ID"];
+            item.ProcessID = (long)reader["ProcessID"];
+            item.StrategyID = (int)reader["StrategyID"];
+            item.FromDate = (DateTime)reader["FromDate"];
+            item.ToDate = (DateTime)reader["ToDate"];
+            item.PeriodID = (int)reader["PeriodID"];
+            item.ExecutionDate = (DateTime)reader["ExecutionDate"];
+            item.CancellationDate = GetReaderValue<DateTime?>(reader, "CancellationDate");
+            item.ExecutedBy = GetReaderValue<int>(reader, "ExecutedBy");
+            item.CancelledBy = GetReaderValue<int?>(reader, "CancelledBy");
+            item.NumberofSubscribers = GetReaderValue<long?>(reader, "NumberofSubscribers");
+            item.NumberofCDRs = GetReaderValue<long?>(reader, "NumberofCDRs");
+            item.NumberofSuspicions = GetReaderValue<long?>(reader, "NumberofSuspicions");
+            item.ExecutionDuration = GetReaderValue<double?>(reader, "ExecutionDuration");
+            item.Status = GetReaderValue<SuspicionOccuranceStatus>(reader, "Status");
+
+            return item;
         }
 
         #endregion
-
 
     }
 }

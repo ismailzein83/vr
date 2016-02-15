@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
         public object GetFilteredDetailsByCaseID(DataRetrievalInput<CaseDetailQuery> input)
         {
             StrategyExecutionItemManager manager = new StrategyExecutionItemManager();
-            return GetWebResponse(input, manager.GetFilteredDetailsByCaseID(input));
+            return GetWebResponse(input, manager.GetFilteredItemsByCaseId(input));
         }
     }
 }

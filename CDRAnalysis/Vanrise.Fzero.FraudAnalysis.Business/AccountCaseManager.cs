@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 accountStatusManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill);
 
             StrategyExecutionItemManager strategyExecutionItemManager = new StrategyExecutionItemManager();
-            strategyExecutionItemManager.LinkDetailToCase(input.AccountNumber, caseID, input.CaseStatus);
+            strategyExecutionItemManager.LinkItemToCase(input.AccountNumber, caseID, input.CaseStatus);
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 
@@ -80,7 +80,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 caseID = accountCase.CaseID;
             }
 
-            return strategyExecutionItemManager.LinkDetailToCase(accountNumber, caseID, CaseStatus.Open);
+            return strategyExecutionItemManager.LinkItemToCase(accountNumber, caseID, CaseStatus.Open);
         }
     }
 }

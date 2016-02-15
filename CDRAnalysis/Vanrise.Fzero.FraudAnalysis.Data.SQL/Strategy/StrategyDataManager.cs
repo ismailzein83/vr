@@ -79,12 +79,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             strategy.UserId = (int)reader["UserId"];
             return strategy;
         }
-
-        private String StrategyNameMapper(IDataReader reader)
-        {
-            return reader["Name"] as string;
-        }
-
+       
         #endregion
     }
 }

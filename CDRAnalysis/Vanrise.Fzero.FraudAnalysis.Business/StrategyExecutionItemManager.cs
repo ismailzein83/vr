@@ -6,12 +6,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 {
     public class StrategyExecutionItemManager
     {
-        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
+        public bool LinkItemToCase(string accountNumber, int accountCaseID, CaseStatus caseStatus)
         {
             IStrategyExecutionItemDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
-            return dataManager.LinkDetailToCase(accountNumber, caseID, caseStatus);
+            return dataManager.LinkItemToCase(accountNumber, accountCaseID, caseStatus);
         }
-        public BigResult<AccountSuspicionDetail> GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input)
+        public BigResult<AccountSuspicionDetail> GetFilteredItemsByCaseId(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input)
         {
             IStrategyExecutionItemDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
             return dataManager.GetFilteredDetailsByCaseID(input);

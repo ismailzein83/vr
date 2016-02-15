@@ -63,8 +63,8 @@
   <ItemGroup>
     <Compile Include="AccountCaseDataManager.cs" />
     <Compile Include="AccountCaseHistoryDataManager.cs" />
-    <Compile Include="AccountInfoDataManager.cs" />
-    <Compile Include="AccountStatusDataManager.cs" />
+    <Compile Include="AccountInfo\AccountInfoDataManager.cs" />
+    <Compile Include="AccountStatus\AccountStatusDataManager.cs" />
     <Compile Include="AggregateDataManager.cs" />
     <Compile Include="DWAccountCaseManager.cs" />
     <Compile Include="DWStrategyDataManager.cs" />
@@ -72,13 +72,13 @@
     <Compile Include="DWDimensionDataManager.cs" />
     <Compile Include="DWFactDataManager.cs" />
     <Compile Include="RelatedNumberDataManager.cs" />
-    <Compile Include="NumberProfileDataManager.cs" />
-    <Compile Include="CallClassDataManager.cs" />
+    <Compile Include="NumberProfile\NumberProfileDataManager.cs" />
+    <Compile Include="CallClass\CallClassDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportingDataManager.cs" />
     <Compile Include="FilterDataManager.cs" />
-    <Compile Include="StrategyExecutionDataManager.cs" />
-    <Compile Include="StrategyDataManager.cs" />
+    <Compile Include="StrategyExecution\StrategyExecutionDataManager.cs" />
+    <Compile Include="Strategy\StrategyDataManager.cs" />
     <Compile Include="StrategyExecutionItemDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

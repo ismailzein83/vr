@@ -37,10 +37,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(LoadStrategyExecutionItemSummariesInput inputArgument, AsyncActivityHandle handle)
         {
-            IStrategyExecutionDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
+            IStrategyExecutionItemDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
             int index = 0;
             int totalIndex = 0;
-            List<StrategyExecutionItemSummary> strategyExecutionDetailSummaries = new List<StrategyExecutionItemSummary>();
+            List<StrategyExecutionItemSummary> strategyExecutionItemSummaries = new List<StrategyExecutionItemSummary>();
 
             dataManager.LoadStrategyExecutionItemSummaries((strategyExecutionDetailSummary) =>
                 {
@@ -48,15 +48,15 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     index++;
                     totalIndex++;
 
-                    strategyExecutionDetailSummaries.Add(strategyExecutionDetailSummary);
+                    strategyExecutionItemSummaries.Add(strategyExecutionDetailSummary);
 
                    
                     if (index == 1000)
                     {
-                        inputArgument.OutputQueue.Enqueue(new StrategyExecutionItemSummaryBatch() { StrategyExecutionItemSummaries = strategyExecutionDetailSummaries });
+                        inputArgument.OutputQueue.Enqueue(new StrategyExecutionItemSummaryBatch() { StrategyExecutionItemSummaries = strategyExecutionItemSummaries });
                         Console.WriteLine("{0} Accounts Loaded", totalIndex);
                         index = 0;
-                        strategyExecutionDetailSummaries = new List<StrategyExecutionItemSummary>();
+                        strategyExecutionItemSummaries = new List<StrategyExecutionItemSummary>();
                     }
                      
                     
@@ -64,10 +64,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 });
 
 
-            if (strategyExecutionDetailSummaries.Count > 0)
+            if (strategyExecutionItemSummaries.Count > 0)
             {
-                inputArgument.OutputQueue.Enqueue(new StrategyExecutionItemSummaryBatch() { StrategyExecutionItemSummaries = strategyExecutionDetailSummaries });
-                strategyExecutionDetailSummaries = new List<StrategyExecutionItemSummary>();
+                inputArgument.OutputQueue.Enqueue(new StrategyExecutionItemSummaryBatch() { StrategyExecutionItemSummaries = strategyExecutionItemSummaries });
+                strategyExecutionItemSummaries = new List<StrategyExecutionItemSummary>();
             }
 
         }

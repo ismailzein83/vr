@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             int strategyExecutionId = -1;
 
             IStrategyExecutionDataManager manager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionDataManager>();
-            manager.ExecuteStrategy(strategyExecutionObject, out strategyExecutionId);
+            manager.AddStrategyExecution(strategyExecutionObject, out strategyExecutionId);
 
             strategyExecutionObject.ID = strategyExecutionId;
             insertOperationOutput.InsertedObject = strategyExecutionObject;

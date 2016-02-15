@@ -24,14 +24,26 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             _columnMapper.Add("SuspicionOccuranceStatusDescription", "SuspicionOccuranceStatus");
             _columnMapper.Add("AccountCaseStatusDescription", "AccountCaseStatusID");
         }
+
+        static string[] s_Columns = new string[] {
+            "ID"
+            ,"StrategyExecutionID"  
+            ,"AccountNumber"
+            ,"SuspicionLevelID"
+            ,"FilterValues"
+            ,"AggregateValues" 
+            ,"CaseID" 
+            ,"SuspicionOccuranceStatus"  
+            ,"IMEIs"  
+        };
         #endregion
 
         #region  Public Methods
-        public bool LinkDetailToCase(string accountNumber, int caseID, CaseStatus caseStatus)
+        public bool LinkItemToCase(string accountNumber, int accountCaseId, CaseStatus caseStatus)
         {
             SuspicionOccuranceStatus occuranceStatus = (caseStatus.CompareTo(CaseStatus.Open) == 0 || caseStatus.CompareTo(CaseStatus.Pending) == 0) ? SuspicionOccuranceStatus.Open : SuspicionOccuranceStatus.Closed;
 
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_UpdateStatus", accountNumber, caseID, occuranceStatus);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_StrategyExecutionItem_UpdateStatus", accountNumber, accountCaseId, occuranceStatus);
             return (recordsAffected > 0);
         }
         public BigResult<AccountSuspicionDetail> GetFilteredDetailsByCaseID(Vanrise.Entities.DataRetrievalInput<CaseDetailQuery> input)
@@ -120,6 +132,73 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
 
         }
+
+        public void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady)
+        {
+            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionItem_GetByNULLCaseID", (reader) =>
+            {
+                while (reader.Read())
+                {
+
+                    HashSet<string> iMEIs = new HashSet<string>();
+
+                    string IMEIs = GetReaderValue<string>(reader, "IMEIs");
+                    if (IMEIs != null)
+                        foreach (var i in IMEIs.Split(','))
+                        {
+                            iMEIs.Add(i);
+
+                        }
+
+                    onBatchReady(new StrategyExecutionItemSummary() { AccountNumber = (reader["AccountNumber"] as string), IMEIs = iMEIs });
+                }
+
+
+
+            }
+               );
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                TableName = "[FraudAnalysis].[StrategyExecutionItem]",
+                ColumnNames = s_Columns,
+                Stream = streamForBulkInsert,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = '^'
+            };
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(StrategyExecutionItem record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
+                                 record.StrategyExecutionID,
+                                 record.AccountNumber,
+                                 record.SuspicionLevelID,
+                                 Vanrise.Common.Serializer.Serialize(record.FilterValues, true),
+                                 Vanrise.Common.Serializer.Serialize(record.AggregateValues, true),
+                                 null,
+                                 (int)record.SuspicionOccuranceStatus,
+                                 string.Join<string>(",", record.IMEIs)
+                                 );
+        }
+
+        public void ApplyStrategyExecutionItemsToDB(object preparedStrategyExecutionItem)
+        {
+            InsertBulkToTable(preparedStrategyExecutionItem as BaseBulkInsertInfo);
+        }
+
 
         #endregion
 
