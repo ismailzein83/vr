@@ -8,7 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierProfileManager : IBusinessEntityManager

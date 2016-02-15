@@ -7,7 +7,7 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
