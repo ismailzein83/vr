@@ -215,12 +215,17 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Classes
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDataRecordTypeDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
             object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(object parameter)
+            protected override bool ShouldSetCacheExpired()
+            {
+                return this.IsCacheExpired();
+            }
+
+            public bool IsCacheExpired()
             {
                 return _dataManager.AreDataRecordTypeUpdated(ref _updateHandle);
             }

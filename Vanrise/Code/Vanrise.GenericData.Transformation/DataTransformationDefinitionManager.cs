@@ -116,7 +116,7 @@ namespace Vanrise.GenericData.Transformation
         internal DataTransformationRuntimeType GetTransformationRuntimeType(int dataTransformationDefinitionId)
         {
             string cacheName = String.Format("GetTransformationRuntimeType_{0}", dataTransformationDefinitionId);
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+            return CacheManagerFactory.GetCacheManager<RuntimeCacheManager>().GetOrCreateObject(cacheName,
               () =>
               {
                   var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
@@ -144,12 +144,17 @@ namespace Vanrise.GenericData.Transformation
         #endregion
 
         #region Private Classes
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDataTransformationDefinitionDataManager _dataManager = DataTransformationDefinitionDataManagerFactory.GetDataManager<IDataTransformationDefinitionDataManager>();
             object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(object parameter)
+            protected override bool ShouldSetCacheExpired()
+            {
+                return this.IsCacheExpired();
+            }
+            
+            public bool IsCacheExpired()
             {
                 return _dataManager.AreDataTransformationDefinitionUpdated(ref _updateHandle);
             }
