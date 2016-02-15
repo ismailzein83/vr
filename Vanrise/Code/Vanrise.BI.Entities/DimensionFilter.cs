@@ -8,7 +8,7 @@ namespace Vanrise.BI.Entities
 {
     public class DimensionFilter
     {
-        public string Name { get; set; }
-        public List<string> Data { get; set; }
+        public string EntityName { get; set; }
+        public List<Object> Values { get; set; }
     }
 }

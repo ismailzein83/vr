@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BI.Entities
 {
-    public class MeasureValueInput : BaseBIInput
+    public class DimensionValueFilter
     {
-        public TimeDimensionType TimeDimensionType { get; set; }
-
+        public string EntityName { get; set; }
+        public List<Object> Values { get; set; }
     }
 }

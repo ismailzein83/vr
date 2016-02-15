@@ -8,6 +8,6 @@ namespace Vanrise.BI.Entities
 {
     public interface IDimensionBehavior
     {
-         List<string> GetFilteredValues();
+         List<Object> GetFilteredValues();
     }
 }

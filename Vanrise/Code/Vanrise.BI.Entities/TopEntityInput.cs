@@ -11,5 +11,6 @@ namespace Vanrise.BI.Entities
         public List<string> EntityTypeName { get; set; }
         public string TopByMeasureTypeName { get; set; }
         public int TopCount { get; set; }
+        public List<DimensionFilter> Filter { get; set; }
     }
 }

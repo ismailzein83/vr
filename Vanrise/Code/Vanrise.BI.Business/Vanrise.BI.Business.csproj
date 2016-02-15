@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BIConfigurationManager.cs" />
+    <Compile Include="DimensionManager.cs" />
     <Compile Include="GenericEntityManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

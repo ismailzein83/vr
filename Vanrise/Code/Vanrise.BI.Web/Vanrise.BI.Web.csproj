@@ -133,6 +133,9 @@
     <Content Include="BI\Directives\Chart\Templates\BIChartTemplate.html" />
     <Content Include="BI\Directives\Chart\vr-bi-chart-template.js" />
     <Content Include="BI\Directives\Chart\vr-bi-chart.js" />
+    <Content Include="BI\Directives\Dimention\Templates\DimensionFilterTemplate.html" />
+    <Content Include="BI\Directives\Dimention\vr-bi-dimension-filter.js" />
+    <Content Include="BI\Directives\Dimention\vr-bi-dimention-selector.js" />
     <Content Include="BI\Directives\Grid\Templates\BIDataGridTemplate.html" />
     <Content Include="BI\Directives\Grid\vr-bi-datagrid-template.js" />
     <Content Include="BI\Directives\Grid\vr-bi-datagrid.js" />
@@ -144,6 +147,7 @@
     <Content Include="BI\Directives\Summary\vr-bi-summary.js" />
     <Content Include="BI\Services\APIServices\BIAPIService.js" />
     <Content Include="BI\Services\APIServices\BIConfigurationAPIService.js" />
+    <Content Include="BI\Services\APIServices\DimensionAPIService.js" />
     <Content Include="BI\Services\bi-utilities-service.js" />
     <Content Include="BI\Views\DynamicPageValidator.html" />
     <Content Include="BI\Views\DynamicPageValidatorController.js" />
@@ -156,6 +160,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BIConfigurationController.cs" />
     <Compile Include="Controllers\BIController.cs" />
+    <Compile Include="Controllers\DimensionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

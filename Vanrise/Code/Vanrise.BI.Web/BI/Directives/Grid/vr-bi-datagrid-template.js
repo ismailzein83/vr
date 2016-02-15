@@ -31,7 +31,29 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
 
         var entityDirectiveAPI;
         var entityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var filterDimensionAPI;
+        var filterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         function initializeController() {
+
+            $scope.onFilterDimensionReady = function(api)
+            {
+                filterDimensionAPI = api;
+                var setLoader = function (value) { $scope.isLoadingFilterDirective = value };
+                var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") }
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionAPI, payload, setLoader, filterReadyPromiseDeferred);
+            }
+
+            ctrl.onEntitySelectionChanged = function()
+            {
+                if (filterDimensionAPI != undefined)
+                {
+                  
+                    var setLoader = function (value) { $scope.isLoadingFilterDirective = value };
+                    var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") }
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionAPI, payload, setLoader, filterReadyPromiseDeferred);
+                }
+               
+            }
             ctrl.selectedEntitiesType = [];
            
             ctrl.selectedMeasureTypes = [];
@@ -108,7 +130,8 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
                     MeasureTypes: measureTypes,
                     TopMeasure: topMeasure,
                     TopRecords: ctrl.topRecords,
-                    TimeEntity: ctrl.selectedTimeEntity !=undefined? ctrl.selectedTimeEntity.Name :undefined
+                    TimeEntity: ctrl.selectedTimeEntity != undefined ? ctrl.selectedTimeEntity.Name : undefined,
+                    Filter: filterDimensionAPI !=undefined?filterDimensionAPI.getData():undefined
                 };
 
             }
@@ -153,6 +176,19 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
 
                 });
                 promises.push(loadEntityPromiseDeferred.promise);
+
+
+
+                var loadFilterDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
+                filterReadyPromiseDeferred.promise.then(function () {
+                    var entityPayload = payload != undefined ? { entityNames: payload.EntityType ,filter:payload.Filter}: undefined;
+                    filterReadyPromiseDeferred = undefined;
+                    VRUIUtilsService.callDirectiveLoad(filterDimensionAPI, entityPayload, loadFilterDimentionPromiseDeferred);
+
+                });
+                promises.push(loadFilterDimentionPromiseDeferred.promise);
+
+
                 return UtilsService.waitMultiplePromises(promises).then(function()
                 {
                     if (payload != undefined)

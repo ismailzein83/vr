@@ -14,7 +14,16 @@ namespace Vanrise.BI.Data.SQL
     {
         string _biConnectionString;
         string _cubeName;
-
+        protected List<BIConfiguration<BIConfigurationMeasure>> _measureDefinitions;
+        protected List<BIConfiguration<BIConfigurationEntity>> _entityDefinitions;
+        public List<BIConfiguration<BIConfigurationMeasure>> MeasureDefinitions
+        {
+            set { _measureDefinitions = value; }
+        }
+        public List<BIConfiguration<BIConfigurationEntity>> EntityDefinitions
+        {
+            set { _entityDefinitions = value; }
+        }
         protected string CubeName
         {
             get
@@ -146,7 +155,7 @@ namespace Vanrise.BI.Data.SQL
 
         #region ExecuteReader
 
-        protected void ExecuteReaderMDX(string mdxQuery, Action<IDataReader> onReaderReady)
+        protected void ExecuteReaderMDX(string mdxQuery, Action<IDataReader> onReaderReady,params MDXParameter[] parameters)
         {
             using (var connection = new AdomdConnection(_biConnectionString))
             {
@@ -155,7 +164,8 @@ namespace Vanrise.BI.Data.SQL
                 using (AdomdCommand cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = mdxQuery;
-
+                    foreach (MDXParameter param in parameters)
+                        cmd.Parameters.Add(param.Name,param.Value);
                     using (var reader = cmd.ExecuteReader())
                     {
                         onReaderReady(reader);
@@ -322,5 +332,8 @@ namespace Vanrise.BI.Data.SQL
         }
 
         #endregion
+
+        
     }
+   
 }

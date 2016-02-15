@@ -14,6 +14,7 @@ namespace Vanrise.BI.Entities
         public string TopMeasure { get; set; }
         public int TopRecords { get; set; }
         public string TimeEntity { get; set; }
+        public List<DimensionValueFilter> Filter { get; set; }
         public override List<string> GetMeasures()
         {
             return this.MeasureTypes;

@@ -36,7 +36,7 @@ namespace Vanrise.BI.Web.Controllers
         public IEnumerable<EntityRecord> GetTopEntities(TopEntityInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            return manager.GetTopEntities(input.EntityTypeName, input.TopByMeasureTypeName, input.FromDate, input.ToDate, input.TopCount, input.TimeEntityName, input.MeasureTypesNames);
+            return manager.GetTopEntities(input);
         }
       
         [HttpPost]
@@ -61,7 +61,7 @@ namespace Vanrise.BI.Web.Controllers
         public HttpResponseMessage ExportTopEntities(TopEntityInput input)
         {
             GenericEntityManager manager = new GenericEntityManager();
-            IEnumerable<EntityRecord> records = manager.GetTopEntities(input.EntityTypeName, input.TopByMeasureTypeName, input.FromDate, input.ToDate, input.TopCount, input.TimeEntityName, input.MeasureTypesNames);
+            IEnumerable<EntityRecord> records = manager.GetTopEntities(input);
             return manager.ExportTopEntities(records, input.EntityTypeName, input.MeasureTypesNames);
         }
 

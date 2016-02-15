@@ -39,7 +39,7 @@ namespace Vanrise.BI.Business
             List<BIConfiguration<BIConfigurationEntity>> entities = _configurations.GetEntities();
             dataManager.MeasureDefinitions = allMeasures;
             dataManager.EntityDefinitions = entities;
-            List<String> customerIds = new List<String>();
+            List<object> customerIds = new List<object>();
             string customerColumnId = null;
             foreach (BIConfiguration<BIConfigurationMeasure> measure in allMeasures)
             {
@@ -61,7 +61,7 @@ namespace Vanrise.BI.Business
                 }
             }
 
-            List<String> supplierIds = new List<String>();
+            List<object> supplierIds = new List<object>();
             BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
             return dataManager.GetMeasureValues(timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity, measureTypeNames);
         }
@@ -70,45 +70,53 @@ namespace Vanrise.BI.Business
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             dataManager.MeasureDefinitions = _configurations.GetMeasures();
             dataManager.EntityDefinitions = _configurations.GetEntities();
-            List<String> supplierIds = new List<String>();
-            List<String> customerIds = new List<String>();
+            List<object> supplierIds = new List<object>();
+            List<object> customerIds = new List<object>();
             string customerColumnId = null;
             BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
             return dataManager.GetEntityMeasuresValues(entityType, entityId, timeDimensionType, fromDate, toDate, customerIds, supplierIds, customerColumnId, configurationTimeEntity, measureTypes);
         }
-        public IEnumerable<EntityRecord> GetTopEntities(List<string> entityTypeName, string topByMeasureTypeName, DateTime fromDate, DateTime toDate, int topCount, string timeEntityName, params string[] measureTypesNames)
+        public IEnumerable<EntityRecord> GetTopEntities(TopEntityInput input)
         {
-            List<DimensionFilter> queryFilter = new List<DimensionFilter>();
             IGenericEntityDataManager dataManager = BIDataManagerFactory.GetDataManager<IGenericEntityDataManager>();
             List<BIConfiguration<BIConfigurationEntity>> entities = _configurations.GetEntities();
 
             foreach (BIConfiguration<BIConfigurationEntity> entity in entities)
             {
-                foreach (string entityType in entityTypeName)
+                foreach (string entityType in input.EntityTypeName)
                     if (entityType == entity.Name && entity.Configuration.BehaviorFQTN != null)
                     {
                         var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));
-                        List<string> data = myObject.GetFilteredValues();
+                        List<object> data = myObject.GetFilteredValues();
                         if (data.Count > 0)
                         {
-                            queryFilter.Add(new DimensionFilter
+                            if (input.Filter == null)
+                                input.Filter = new List<DimensionFilter>();
+
+                            if (!input.Filter.Any(x => x.EntityName == entityType))
                             {
-                                Name = entity.Name,
-                                Data = data
-                            });
+                                input.Filter.Add(new DimensionFilter
+                                {
+                                    EntityName = entity.Name,
+                                    Values = data
+                                });
+                            }
+                            else
+                            {
+                                input.Filter.Find(x => x.EntityName == entityType).Values.AddRange(data);
+                            }
+                           
                         }
 
 
                     }
 
             }
-            if (queryFilter.Count == 0)
-                queryFilter = null;
             dataManager.MeasureDefinitions = _configurations.GetMeasures();
             dataManager.EntityDefinitions = entities;
 
-            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(timeEntityName);
-            return dataManager.GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, queryFilter, configurationTimeEntity, measureTypesNames);
+            BIConfigurationTimeEntity configurationTimeEntity = GetUsedTimeEntityOrDefault(input.TimeEntityName);
+            return dataManager.GetTopEntities(input.EntityTypeName, input.TopByMeasureTypeName, input.FromDate, input.ToDate, input.TopCount, configurationTimeEntity, input.Filter, input.MeasureTypesNames);
         }
         public Decimal[] GetSummaryMeasureValues(DateTime fromDate, DateTime toDate, string timeEntityName, params string[] measureTypeNames)
         {

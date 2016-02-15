@@ -56,7 +56,10 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="DataGridDirectiveSetting.cs" />
     <Compile Include="DimensionFilter.cs" />
+    <Compile Include="DimensionInfo.cs" />
+    <Compile Include="DimensionValueFilter.cs" />
     <Compile Include="EntityMeasureValueInput.cs" />
+    <Compile Include="MDXParameter.cs" />
     <Compile Include="MeasureValueInput.cs" />
     <Compile Include="EntityRecord.cs" />
     <Compile Include="Enums.cs" />

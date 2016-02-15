@@ -9,31 +9,15 @@
              return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetUserMeasuresValidator"), userMeasuresValidatorInput);
          }
 
-         function ExportTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount, measureTypesNames) {
-             return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "ExportTopEntities"),
-                 {
-                     EntityTypeName: entityTypeName,
-                     TopByMeasureTypeName: topByMeasureTypeName,
-                     FromDate: fromDate,
-                     ToDate: toDate,
-                     TopCount: topCount,
-                     MeasureTypesNames: measureTypesNames,
-                     TimeEntityName: timeEntityName
-                 }, {
+         function ExportTopEntities(input) {
+             return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "ExportTopEntities"), input, {
                      returnAllResponseParameters: true,
                      responseTypeAsBufferArray: true
                  });
          }
 
-         function ExportMeasureValues(timeDimensionType, fromDate, toDate, timeEntityName, measureTypesNames) {
-             return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "ExportMeasureValues"),
-                 {
-                     TimeDimensionType: timeDimensionType,
-                     FromDate: fromDate,
-                     ToDate: toDate,
-                     MeasureTypesNames: measureTypesNames,
-                     TimeEntityName: timeEntityName
-                 }, {
+         function ExportMeasureValues(input) {
+             return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "ExportMeasureValues"), input, {
                      returnAllResponseParameters: true,
                      responseTypeAsBufferArray: true
                  });
@@ -49,28 +33,12 @@
                  });
          }
 
-         function GetTopEntities(entityTypeName, topByMeasureTypeName, fromDate, toDate, topCount,timeEntityName, measureTypesNames) {
-             return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetTopEntities"),
-                 {
-                     EntityTypeName: entityTypeName,
-                     TopByMeasureTypeName: topByMeasureTypeName,
-                     FromDate: fromDate,
-                     ToDate: toDate,
-                     TopCount: topCount,
-                     TimeEntityName: timeEntityName,
-                     MeasureTypesNames: measureTypesNames
-                 });
+         function GetTopEntities(input) {
+             return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetTopEntities"), input);
          }
 
-         function GetMeasureValues(timeDimensionType, fromDate, toDate,timeEntityName, measureTypesNames) {
-             return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetMeasureValues"),
-                 {
-                     TimeDimensionType: timeDimensionType,
-                     FromDate: fromDate,
-                     ToDate: toDate,
-                     TimeEntityName: timeEntityName,
-                     MeasureTypesNames: measureTypesNames
-                 });
+         function GetMeasureValues(input) {
+             return BaseAPIService.post(UtilsService.getServiceURL(VR_BI_ModuleConfig.moduleName, "BI", "GetMeasureValues"), input);
          }
 
          function GetEntityMeasuresValues(entityTypeName, entityId, timeDimensionType, fromDate, toDate,timeEntityName, measureTypesNames) {

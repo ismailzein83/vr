@@ -13,16 +13,17 @@ app.service('BIVisualElementService', function (VR_BI_BIAPIService) {
         switch (visualElementSettings.OperationType) {
             case "TopEntities":
                 visualElementController.isTopEntities = true;
-                return VR_BI_BIAPIService.GetTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, fromDate, toDate, visualElementSettings.TopRecords,visualElementSettings.TimeEntity, visualElementSettings.MeasureTypes);
+                return VR_BI_BIAPIService.GetTopEntities(getInputObject(visualElementSettings.OperationType, visualElementSettings, filter));
             case "MeasuresGroupedByTime":
                 visualElementController.isDateTimeGroupedData = true;
-                return VR_BI_BIAPIService.GetMeasureValues(filter.timeDimensionType.value, fromDate, toDate,visualElementSettings.TimeEntity, visualElementSettings.MeasureTypes);
+                return VR_BI_BIAPIService.GetMeasureValues(getInputObject(visualElementSettings.OperationType, visualElementSettings, filter));
                 break;
 
         }
 
 
     }
+
     function exportWidgetData(visualElementController, visualElementSettings, filter) {
         var fromDate = new Date(filter.fromDate.getTime() + filter.fromDate.getTimezoneOffset() * 60 * 1000);
         var toDate = new Date(filter.toDate.getTime() + filter.toDate.getTimezoneOffset() * 60 * 1000);
@@ -31,15 +32,45 @@ app.service('BIVisualElementService', function (VR_BI_BIAPIService) {
             switch (visualElementSettings.OperationType) {
                 case "TopEntities":
                     visualElementController.isTopEntities = true;
-                    return VR_BI_BIAPIService.ExportTopEntities(visualElementSettings.EntityType, visualElementSettings.TopMeasure, fromDate, toDate, visualElementSettings.TopRecords, visualElementSettings.TimeEntity,visualElementSettings.MeasureTypes);
+                    return VR_BI_BIAPIService.ExportTopEntities(getInputObject(visualElementSettings.OperationType, visualElementSettings, filter));
                 case "MeasuresGroupedByTime":
                     visualElementController.isDateTimeGroupedData = true;
-                    return VR_BI_BIAPIService.ExportMeasureValues(filter.timeDimensionType.value, fromDate, toDate,visualElementSettings.TimeEntity, visualElementSettings.MeasureTypes);
+                    return VR_BI_BIAPIService.ExportMeasureValues(getInputObject(visualElementSettings.OperationType, visualElementSettings, filter));
                     break;
 
             }
 
 
+    }
+
+    function getInputObject(operationType, visualElementSettings, filter)
+    {
+        var fromDate = new Date(filter.fromDate.getTime() + filter.fromDate.getTimezoneOffset() * 60 * 1000);
+        var toDate = new Date(filter.toDate.getTime() + filter.toDate.getTimezoneOffset() * 60 * 1000);
+        switch (operationType) {
+            case "TopEntities":
+                var input = {
+                    EntityTypeName: visualElementSettings.EntityType,
+                    TopByMeasureTypeName: visualElementSettings.TopMeasure,
+                    FromDate: fromDate,
+                    ToDate: toDate,
+                    TopCount: visualElementSettings.TopRecords,
+                    TimeEntityName: visualElementSettings.TimeEntity,
+                    MeasureTypesNames: visualElementSettings.MeasureTypes,
+                    Filter: visualElementSettings.Filter
+                };
+                return input;
+            case "MeasuresGroupedByTime":
+                var input = {
+                    TimeDimensionType: filter.timeDimensionType.value,
+                    FromDate: fromDate,
+                    ToDate: toDate,
+                    TimeEntityName: visualElementSettings.TimeEntity,
+                    MeasureTypesNames: visualElementSettings.MeasureTypes
+                };
+                return input;
+        }
+        
     }
 
 });

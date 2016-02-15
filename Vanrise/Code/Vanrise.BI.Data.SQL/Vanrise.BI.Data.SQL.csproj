@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="BaseDataManager.cs" />
     <Compile Include="BIConfigurationDataManager.cs" />
+    <Compile Include="DimensionDataManager.cs" />
     <Compile Include="GenericEntityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

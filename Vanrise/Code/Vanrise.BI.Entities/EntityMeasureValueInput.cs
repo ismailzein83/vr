@@ -11,5 +11,6 @@ namespace Vanrise.BI.Entities
         public List<string> EntityType { get; set; }
         public  string EntityId { get; set; }
         public TimeDimensionType TimeDimensionType { get; set; }
+        public List<DimensionValueFilter> Filter { get; set; }
     }
 }
