@@ -29,5 +29,10 @@ namespace TOne.WhS.CDRProcessing.Business.CustomerRule.Rules.StructureRulesBehav
                 return false;
             }
         }
+
+        public override Vanrise.Rules.BaseRuleStructureBehavior CreateNewBehaviorObject()
+        {
+            return new RuleBehaviorByInCarrier();
+        }
     }
 }

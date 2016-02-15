@@ -41,6 +41,11 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
                 matchedRule = _ruleBehaviorByCodeAsPrefix.GetMatchedNode(target);
             return matchedRule;
         }
+        
+        public override Vanrise.Rules.BaseRuleStructureBehavior CreateNewBehaviorObject()
+        {
+            return new RuleBehaviorByCode();
+        }
 
         #region Private Classes
 
@@ -69,6 +74,11 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
                     return false;
                 }
             }
+
+            public override Vanrise.Rules.BaseRuleStructureBehavior CreateNewBehaviorObject()
+            {
+                return new RuleBehaviorByCodeAsKey();
+            }
         }
 
         private class RuleBehaviorByCodeAsPrefix : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByPrefix
@@ -95,6 +105,11 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
                     value = null;
                     return false;
                 }
+            }
+
+            public override Vanrise.Rules.BaseRuleStructureBehavior CreateNewBehaviorObject()
+            {
+                return new RuleBehaviorByCodeAsPrefix();
             }
         }
 

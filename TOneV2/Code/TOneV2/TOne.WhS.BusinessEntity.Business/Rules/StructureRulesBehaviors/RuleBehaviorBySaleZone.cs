@@ -29,5 +29,10 @@ namespace TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors
                 return false;
             }
         }
+
+        public override Vanrise.Rules.BaseRuleStructureBehavior CreateNewBehaviorObject()
+        {
+            return new RuleBehaviorBySaleZone();
+        }
     }
 }
