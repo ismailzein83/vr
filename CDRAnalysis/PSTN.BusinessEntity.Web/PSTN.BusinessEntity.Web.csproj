@@ -189,7 +189,7 @@
     <Content Include="PSTN_BusinessEntity\Directives\cdranalysis-pstn-trunklink-selector.js" />
     <Content Include="PSTN_BusinessEntity\Directives\cdranalysis-pstn-numbertype-selector.js" />
     <Content Include="PSTN_BusinessEntity\Directives\cdranalysis-pstn-trunktype-selector.js" />
-    <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Normal\Templates\StagingToNormalCDRManualTemplate.html" />
+    <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Normal\Templates\StagingToCDRManualTemplate.html" />
     <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Normal\vr-cdr-pstnbe-stagingtonormalcdr-manual.js" />
     <Content Include="PSTN_BusinessEntity\Directives\MainExtensions\ProcessInput\Scheduled\vr-cdr-pstnbe-stagingtonormalcdr.js" />
     <Content Include="PSTN_BusinessEntity\Directives\SwitchBrand\cdranalysis-pstn-switchbrand-grid.js" />
