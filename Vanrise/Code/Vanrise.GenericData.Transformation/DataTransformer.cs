@@ -27,15 +27,32 @@ namespace Vanrise.GenericData.Transformation
         public DataTransformationExecutionOutput ExecuteDataTransformation(DataTransformationDefinition transformationDefinition, Action<IDataTransformationExecutionContext> onContextReady)
         {
             DataTransformationCodeGenerationContext codeGenerationContext = new DataTransformationCodeGenerationContext(transformationDefinition);
-            var dataTransformationRuntimeType = codeGenerationContext.BuildRuntimeType();
-            var executionContext = new DataTransformationExecutionContext(dataTransformationRuntimeType.ExecutorType);
-            if (onContextReady != null)
-                onContextReady(executionContext);
-            executionContext.Executor.Execute();
-            return new DataTransformationExecutionOutput
+            DataTransformationRuntimeType runtimeType;
+            List<string> errorMessages;
+            if (codeGenerationContext.TryBuildRuntimeType(out runtimeType, out errorMessages))
             {
-                DataRecords = executionContext.Executor
-            };
+                var executionContext = new DataTransformationExecutionContext(runtimeType.ExecutorType);
+                if (onContextReady != null)
+                    onContextReady(executionContext);
+                executionContext.Executor.Execute();
+                return new DataTransformationExecutionOutput
+                {
+                    DataRecords = executionContext.Executor
+                };
+            }
+            else
+            {
+                StringBuilder errorsBuilder = new StringBuilder();
+                if (errorMessages != null)
+                {
+                    foreach (var errorMessage in errorMessages)
+                    {
+                        errorsBuilder.AppendLine(errorMessage);
+                    }
+                }
+                throw new Exception(String.Format("Compile Error when building executor type for data transformation definition. Errors: {0}",
+                    errorsBuilder));
+            }
         }
     }
 

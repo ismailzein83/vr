@@ -61,7 +61,7 @@ namespace Vanrise.GenericData.Transformation
 
         #endregion
 
-        public DataTransformationRuntimeType BuildRuntimeType()
+        public bool TryBuildRuntimeType(out DataTransformationRuntimeType runtimeType, out List<string> errorMessages)
         {
             _globalMembersBuilder = new StringBuilder();
             _instanceExecutionBlockBuilder = new StringBuilder();
@@ -72,6 +72,9 @@ namespace Vanrise.GenericData.Transformation
             CSharpCompilationOutput compilationOutput;
             if(!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
             {
+                runtimeType = null;
+                errorMessages = compilationOutput.ErrorMessages;                
+                return false;
                 StringBuilder errorsBuilder = new StringBuilder();
                 if(compilationOutput.ErrorMessages != null)
                 {
@@ -80,16 +83,18 @@ namespace Vanrise.GenericData.Transformation
                         errorsBuilder.AppendLine(errorMessage);
                     }
                 }
-                throw new Exception(String.Format("Compile Error when building executor type for data transformation definition Id '{0}'. Errors: {1}", 
-                    _dataTransformationDefinition.DataTransformationDefinitionId, errorsBuilder));
+                //throw new Exception(String.Format("Compile Error when building executor type for data transformation definition Id '{0}'. Errors: {1}", 
+                //    _dataTransformationDefinition.DataTransformationDefinitionId, errorsBuilder));
             }
             var executorType = compilationOutput.OutputAssembly.GetType(fullTypeName);
             if (executorType == null)
                 throw new NullReferenceException("executorType");
-            return new DataTransformationRuntimeType
+            runtimeType = new DataTransformationRuntimeType
             {
                 ExecutorType = executorType
             };
+            errorMessages = null;
+            return true;
         }
 
        

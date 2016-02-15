@@ -120,11 +120,33 @@ namespace Vanrise.GenericData.Transformation
               () =>
               {
                   var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
-                  
-                  DataTransformationCodeGenerationContext codeGenerationContext = new DataTransformationCodeGenerationContext(dataTransformationDefinition);
+                  if (dataTransformationDefinition == null)
+                      throw new NullReferenceException(String.Format("dataTransformationDefinition '{0}'", dataTransformationDefinitionId));
+                  DataTransformationRuntimeType runtimeType;
+                  List<string> errorMessages;
 
-                  return codeGenerationContext.BuildRuntimeType();
+                  if (TryCompileDataTransformation(dataTransformationDefinition, out runtimeType, out errorMessages))
+                      return runtimeType;
+                  else
+                  {
+                      StringBuilder errorsBuilder = new StringBuilder();
+                      if (errorMessages != null)
+                      {
+                          foreach (var errorMessage in errorMessages)
+                          {
+                              errorsBuilder.AppendLine(errorMessage);
+                          }
+                      }
+                      throw new Exception(String.Format("Compile Error when building executor type for data transformation definition Id '{0}'. Errors: {1}",
+                          dataTransformationDefinitionId, errorsBuilder));
+                  }
               });
+        }
+
+        public bool TryCompileDataTransformation(DataTransformationDefinition dataTransformationDefinition, out DataTransformationRuntimeType runtimeType, out List<string> errorMessages)
+        {
+            DataTransformationCodeGenerationContext codeGenerationContext = new DataTransformationCodeGenerationContext(dataTransformationDefinition);
+            return codeGenerationContext.TryBuildRuntimeType(out runtimeType, out errorMessages);
         }
 
         #endregion
