@@ -35,5 +35,13 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
                 return false;
             }
         }
+
+        public override BaseRuleStructureBehavior CreateNewBehaviorObject()
+        {
+            return new GenericRuleStructureBehaviorByPrefix
+            {
+                FieldName = this.FieldName
+            };
+        }
     }
 }

@@ -21,5 +21,13 @@ namespace Vanrise.GenericData.Business.GenericRules.RuleStructureBehaviors
         {
             return GenericRuleManager<GenericRule>.TryGetTargetFieldValue(target as GenericRuleTarget, this.FieldName, out key);
         }
+
+        public override BaseRuleStructureBehavior CreateNewBehaviorObject()
+        {
+            return new GenericRuleStructureBehaviorByKey
+            {
+                FieldName = this.FieldName
+            };
+        }
     }
 }

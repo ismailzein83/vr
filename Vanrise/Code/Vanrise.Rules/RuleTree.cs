@@ -21,8 +21,7 @@ namespace Vanrise.Rules
         {
             if (behaviorIndex >= _structureBehaviors.Count)
                 return;
-            Type behaviorType = _structureBehaviors[behaviorIndex].GetType();
-            node.Behavior = Activator.CreateInstance(behaviorType) as BaseRuleStructureBehavior;
+            node.Behavior = _structureBehaviors[behaviorIndex].CreateNewBehaviorObject();
 
             List<BaseRule> notMatchedRules;
             IEnumerable<RuleNode> childNodes = node.Behavior.StructureRules(node.Rules, out notMatchedRules);

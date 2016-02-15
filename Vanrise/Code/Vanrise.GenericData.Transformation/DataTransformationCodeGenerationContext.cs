@@ -51,6 +51,14 @@ namespace Vanrise.GenericData.Transformation
             }
         }
 
+        List<DataTransformationRecordType> IDataTransformationCodeGenerationContext.Records
+        {
+            get
+            {
+                return this._dataTransformationDefinition.RecordTypes;
+            }
+        }
+
         #endregion
 
         public DataTransformationRuntimeType BuildRuntimeType()

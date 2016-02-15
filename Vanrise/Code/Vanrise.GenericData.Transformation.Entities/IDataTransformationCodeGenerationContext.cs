@@ -18,5 +18,7 @@ namespace Vanrise.GenericData.Transformation.Entities
         void AddCodeToCurrentInstanceExecutionBlock(string codeLineTemplate, params object[] placeholders);
 
         void GenerateStepsCode(IEnumerable<MappingStep> steps);
+
+        List<DataTransformationRecordType> Records { get; }
     }
 }
