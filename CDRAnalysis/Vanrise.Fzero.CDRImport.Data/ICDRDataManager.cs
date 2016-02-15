@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Vanrise.Fzero.CDRImport.Entities;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.Data;
 using Vanrise.Entities;
-using System;
+using Vanrise.Fzero.CDRImport.Entities;
 
 
 

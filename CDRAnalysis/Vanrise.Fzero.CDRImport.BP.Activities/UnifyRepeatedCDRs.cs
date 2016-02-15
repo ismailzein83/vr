@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
+using System.Configuration;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Fzero.CDRImport.Entities;
-using Vanrise.Fzero.CDRImport.Business;
-using Vanrise.Fzero.CDRImport.Data;
-using System.Linq;
 using Vanrise.Queueing;
-using System.Configuration;
 
 namespace Vanrise.Fzero.CDRImport.BP.Activities
 {

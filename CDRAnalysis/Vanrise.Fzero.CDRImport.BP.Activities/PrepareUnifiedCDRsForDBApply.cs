@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Activities;
-using System.Collections.Generic;
 using Vanrise.BusinessProcess;
 using Vanrise.Fzero.CDRImport.Data;
 using Vanrise.Fzero.CDRImport.Entities;
@@ -31,9 +30,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, cdrBatch =>
                 {
                     return cdrBatch.CDRs;
-                    //var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                    //System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
-                    //return Vanrise.Common.ProtoBufSerializer.Deserialize<List<CDR>>(serializedCDRs);
                 });
         }
 

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
-using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Fzero.CDRImport.Data;
+using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
 
 namespace Vanrise.Fzero.CDRImport.BP.Activities
@@ -25,8 +25,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
 
     #endregion
 
-
-    
 
     public sealed class LoadStagingCDRs : BaseAsyncActivity<LoadStagingCDRsInput>
     {
