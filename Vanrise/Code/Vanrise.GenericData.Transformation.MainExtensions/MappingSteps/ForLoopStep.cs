@@ -17,7 +17,10 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
-            throw new NotImplementedException();
+            context.AddCodeToCurrentInstanceExecutionBlock("foreach(var {0} in {1})", this.IterationVariableName, this.ArrayVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{");
+            context.GenerateStepsCode(this.Steps);
+            context.AddCodeToCurrentInstanceExecutionBlock("}");     
         }
     }
 }
