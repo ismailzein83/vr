@@ -1,4 +1,4 @@
-﻿TrunkEditorController.$inject = ["$scope", "CDRAnalysis_PSTN_TrunkAPIService",  "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRUIUtilsService"];
+﻿TrunkEditorController.$inject = ["$scope", "CDRAnalysis_PSTN_TrunkAPIService", "TrunkTypeEnum", "TrunkDirectionEnum", "UtilsService", "VRNavigationService", "VRNotificationService", "VRUIUtilsService"];
 
 function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTypeEnum, TrunkDirectionEnum, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService) {
 
@@ -28,6 +28,7 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
+
         if (parameters != undefined && parameters != null) {
             trunkId = parameters.TrunkId;
             switchId = parameters.SwitchId;
@@ -37,11 +38,9 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
     }
 
     function defineScope() {
-
-       
-        $scope.selectedSwitch = undefined;
-        $scope.selectedSwitchToLinkTo = undefined;
-        $scope.selectedTrunkToLinkTo = undefined;
+        $scope.selectedSwitch;
+        $scope.selectedSwitchToLinkTo;
+        $scope.selectedTrunkToLinkTo;
         $scope.disableSwitchMenu = switchId != undefined;
         $scope.onReadySwicth = function (api) {
             switchDirectiveApi = api;
@@ -76,12 +75,12 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
                 directivePayload.filter = { ExcludedIds: [$scope.selectedSwitch.SwitchId] };
                 linkSwitchDirectiveApi.load(directivePayload)
             }
-           
+
         }
 
         $scope.onSwitchToLinkToChanged = function () {
             $scope.selectedTrunkToLinkTo = undefined;
-            if ($scope.selectedSwitchToLinkTo != undefined && $scope.selectedSwitchToLinkTo != null  ) {
+            if ($scope.selectedSwitchToLinkTo != undefined && $scope.selectedSwitchToLinkTo != null) {
                 var directivePayload = {};
                 directivePayload.filter = {
                     SwitchIds: [$scope.selectedSwitchToLinkTo.SwitchId],
@@ -110,7 +109,7 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
         if (editMode) {
             getTrunk().then(function () {
                 loadAllControls().then(function () {
-                   trunkEntity = undefined;
+                    trunkEntity = undefined;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isGettingData = false;
@@ -139,7 +138,7 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
           });
     }
 
-    
+
 
     function setTitle() {
         if (editMode && trunkEntity != undefined)
@@ -157,13 +156,13 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
         $scope.symbol = trunkEntity.Symbol;
     }
 
-    
+
     function loadSwitchSelector() {
         var switchLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         switchReadyPromiseDeferred.promise
             .then(function () {
                 var directivePayload = {
-                    selectedIds: trunkEntity != undefined ? trunkEntity.SwitchId :(switchId!=undefined)? switchId : undefined
+                    selectedIds: trunkEntity != undefined ? trunkEntity.SwitchId : (switchId != undefined) ? switchId : undefined
                 };
                 VRUIUtilsService.callDirectiveLoad(switchDirectiveApi, directivePayload, switchLoadPromiseDeferred);
             });
@@ -203,43 +202,46 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
                 var directivePayload = {};
                 if (trunkEntity && trunkEntity.SwitchId)
                     directivePayload.filter = { ExcludedIds: [trunkEntity.SwitchId] };
-                
+
                 VRUIUtilsService.callDirectiveLoad(linkSwitchDirectiveApi, directivePayload, linkSwitchLoadPromiseDeferred);
             });
         return linkSwitchLoadPromiseDeferred.promise;
     }
-    
+
     function loadLinkTrunkSelector() {
         var linkTrunkLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         linkTrunkReadyPromiseDeferred.promise
-        .then(function () {             
+        .then(function () {
             if (trunkEntity && trunkEntity.LinkedToTrunkId != null) {
                 currentlyLinkedToTrunkId = trunkEntity.LinkedToTrunkId;
                 return CDRAnalysis_PSTN_TrunkAPIService.GetTrunkById(trunkEntity.LinkedToTrunkId)
                    .then(function (response) {
                        var payload = {
-                           selectedIds: response.SwitchId
+                           selectedIds: response != null && response != undefined ? response.SwitchId : undefined
                        };
-                       payload.filter = { ExcludedIds: [trunkEntity.SwitchId] };
+                       payload.filter = {
+                           ExcludedIds: trunkEntity != null && trunkEntity != undefined ? [trunkEntity.SwitchId] : undefined
+                       };
+
                        linkSwitchDirectiveApi.load(payload).then(function () {
                            var directivePayload = {
                                selectedIds: trunkEntity != undefined ? trunkEntity.LinkedToTrunkId : undefined
                            };
                            directivePayload.filter = {
-                               SwitchIds: [response.SwitchId],
+                               SwitchIds: response != null && response != undefined ? [response.SwitchId] : undefined,
                                TrunkNameFilter: null
                            };
                            directivePayload.excludedId = trunkId;
                            VRUIUtilsService.callDirectiveLoad(linkTrunkDirectiveApi, directivePayload, linkTrunkLoadPromiseDeferred);
                        });
-                       
+
                    })
-                   .catch(function (error) {
-                       VRNotificationService.notifyExceptionWithClose(error, $scope);
-                   })
-                   .finally(function () {
-                       $scope.isGettingData = false;
-                   });
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isGettingData = false;
+            });
             }
             else {
                 VRUIUtilsService.callDirectiveLoad(linkTrunkDirectiveApi, undefined, linkTrunkLoadPromiseDeferred);
