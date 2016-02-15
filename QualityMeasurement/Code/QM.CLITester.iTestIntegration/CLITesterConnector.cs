@@ -85,28 +85,6 @@ namespace QM.CLITester.iTestIntegration
                 ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
         }
 
-        //public class InitiateTestInformation
-        //{
-        //    public string Test_ID { get; set; }
-        //}
-
-        //public class TestProgress
-        //{
-        //    public string Name { get; set; }
-        //    public int TotalCalls { get; set; }
-        //    public int CompletedCalls { get; set; }
-        //    public int CliSuccess { get; set; }
-        //    public int CliNoResult { get; set; }
-        //    public int CliFail { get; set; }
-        //    public string ShareUrl { get; set; }
-        //    public string XmlResponse { get; set; }
-        //    public string Source { get; set; }
-        //    public string Destination { get; set; }
-        //    public string Ring { get; set; }
-        //    public string Call { get; set; }
-        //    public string Result { get; set; }
-        //}
-
         #region Private Members
 
         private InitiateTestOutput ResponseInitiateTest(string response)
