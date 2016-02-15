@@ -25,11 +25,11 @@ namespace Vanrise.Queueing
 
         protected override void Execute()
         {
-            QueueingManager queueingManager = new QueueingManager();
-            IEnumerable<QueueInstance> allQueues = queueingManager.GetReadyQueueInstances();
+            QueueInstanceManager queuegManager = new QueueInstanceManager();
+            IEnumerable<QueueInstance> allQueues = queuegManager.GetReadyQueueInstances();
             foreach (var queueInstance in allQueues)
             {
-                if (queueInstance.Settings != null && !String.IsNullOrEmpty(queueInstance.Settings.QueueActivatorFQTN))
+                if (queueInstance.Settings != null && queueInstance.Settings.Activator != null)
                 {
                     while (s_runningThreads >= s_maxNumberOfConcurrentThreads)
                     {
@@ -41,35 +41,26 @@ namespace Vanrise.Queueing
                     {
                         try
                         {
-                            Type queueActivatorType = Type.GetType(queueInstance.Settings.QueueActivatorFQTN);
-                            if (queueActivatorType == null)
-                                throw new Exception(String.Format("Could not load QueueActivator type '{0}'", queueInstance.Settings.QueueActivatorFQTN));
-                            QueueActivator queueActivator = Activator.CreateInstance(queueActivatorType) as QueueActivator;
-                            if (queueActivator == null)
-                                throw new Exception(String.Format("'{0}' is not of type Vanrise.Queueing.Entities.QueueActivator", queueInstance.Settings.QueueActivatorFQTN));
-                            using (queueActivator)
+                            var queue = PersistentQueueFactory.Default.GetQueue(queueInstance.Name);
+                            if (queueInstance.ExecutionFlowId != null)
                             {
-                                var queue = PersistentQueueFactory.Default.GetQueue(queueInstance.Name);
-                                if (queueInstance.ExecutionFlowId != null)
+                                QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
+                                var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
+                                while (queue.TryDequeueObject((itemToProcess) =>
                                 {
-                                    QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
-                                    var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
-                                    while (queue.TryDequeueObject((itemToProcess) =>
+                                    QueueActivatorExecutionContext context = new QueueActivatorExecutionContext(itemToProcess, queueInstance);
+                                    queueInstance.Settings.Activator.ProcessItem(context);
+                                    if (context.OutputItems != null && context.OutputItems.Count > 0)
                                     {
-                                        ItemsToEnqueue outputItems = new ItemsToEnqueue();
-                                        queueActivator.ProcessItem(itemToProcess, outputItems);
-                                        if (outputItems.Count > 0)
+                                        foreach (var outputItem in context.OutputItems)
                                         {
-                                            foreach (var outputItem in outputItems)
-                                            {
-                                                outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
-                                                queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
-                                            }
+                                            outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
+                                            queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
                                         }
-                                    }))
-                                    {
-
                                     }
+                                }))
+                                {
+
                                 }
                             }
                         }

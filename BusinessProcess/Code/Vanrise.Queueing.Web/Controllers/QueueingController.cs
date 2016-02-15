@@ -45,7 +45,8 @@ namespace Vanrise.Queueing.Web.Controllers
         [Route("GetQueueInstances")]
         public IEnumerable<QueueInstanceModel> GetQueueInstances(IEnumerable<int> queueItemTypes)
         {
-            return QueueingMappers.MapQueueInstances(_queueingManager.GetQueueInstances(queueItemTypes));
+            QueueInstanceManager queueManager = new QueueInstanceManager();
+            return QueueingMappers.MapQueueInstances(queueManager.GetQueueInstances(queueItemTypes));
         }
 
         [HttpPost]

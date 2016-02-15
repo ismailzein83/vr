@@ -17,11 +17,6 @@ namespace Vanrise.Queueing.Data.SQL
         {
         }
 
-        public QueueExecutionFlow GetExecutionFlow(int executionFlowId)
-        {
-            return GetItemSP("queue.sp_ExecutionFlow_GetByID", ExecutionFlowMapper, executionFlowId);
-        }
-
         public List<QueueExecutionFlow> GetExecutionFlows()
         {
             return GetItemsSP("queue.sp_ExecutionFlow_GetAll", ExecutionFlowMapper);

@@ -25,27 +25,14 @@ namespace Vanrise.Queueing
 
         #region Public Methods
 
-        public QueueInstance GetQueueInstance(string queueName)
-        {
-            return GetCachedQueueInstancesByName().GetRecord(queueName);
-        }
-        public QueueInstance GetQueueInstanceById(int instanceId)
-        {
-            return GetCachedQueueInstances().GetRecord(instanceId);
-        }
+        
        
         public List<QueueItemType> GetQueueItemTypes()
         {
             return _dataManager.GetQueueItemTypes();
         }
        
-        public IEnumerable<QueueInstance> GetQueueInstances(IEnumerable<int> queueItemTypes)
-        {
-            var readyQueueInstances = GetReadyQueueInstances();
-            if (readyQueueInstances == null)
-                return null;
-            return readyQueueInstances.Where(itm => queueItemTypes == null || queueItemTypes.Contains(itm.ItemTypeId));
-        }
+        
         public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo)
         {
             return _itemDataManager.GetHeaders(queueIds, statuses, dateFrom, dateTo);
@@ -124,41 +111,11 @@ namespace Vanrise.Queueing
             returnedResult.Data = data.Data.MapRecords(QueueItemHeaderDetailsMapper);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, returnedResult);
         }
-        public IEnumerable<QueueInstance> GetReadyQueueInstances()
-        {
-            var cachedQueues = GetCachedQueueInstances();
-            if (cachedQueues != null)
-                return cachedQueues.Values.FindAllRecords(itm => itm.Status == QueueInstanceStatus.ReadyToUse);
-            else
-                return null;
-        }
-
-      
+       
+              
         #endregion
 
         #region Private Classes
-
-        Dictionary<string, QueueInstance> GetCachedQueueInstancesByName()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("GetCachedQueueInstancesByName",
-              () =>
-              {
-                  IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-                  IEnumerable<QueueInstance> queueInstances = dataManager.GetAllQueueInstances();
-                  return queueInstances.ToDictionary(kvp => kvp.Name, kvp => kvp);
-              });
-        }
-
-        Dictionary<int, QueueInstance> GetCachedQueueInstances()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("GetCachedQueueInstances",
-               () =>
-               {
-                   IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-                   IEnumerable<QueueInstance> queueInstances = dataManager.GetAllQueueInstances();
-                   return queueInstances.ToDictionary(kvp => kvp.QueueInstanceId, kvp => kvp);
-               });
-        }
         private QueueItemStatus GetSubStatus(List<ItemExecutionFlowInfo> subList)
         {
             return QueueItemStatus.Processed;
@@ -169,7 +126,8 @@ namespace Vanrise.Queueing
         #region Mappers
         QueueItemHeaderDetails QueueItemHeaderDetailsMapper(QueueItemHeader queueItemHeader)
         {
-            var instance = GetQueueInstanceById(queueItemHeader.QueueId);
+            QueueInstanceManager queueManager = new QueueInstanceManager();
+            var instance = queueManager.GetQueueInstanceById(queueItemHeader.QueueId);
             return new QueueItemHeaderDetails
             {
                 Entity = queueItemHeader,
@@ -179,25 +137,5 @@ namespace Vanrise.Queueing
         }
 
         #endregion
-    }
-
-    internal class QueueInstanceCacheManager : Vanrise.Caching.BaseCacheManager
-    {
-        IQueueDataManager _queueDataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-        IQueueExecutionFlowDataManager _queueExecutionFlowDataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
-        object _queueUpdateHandle;
-        object _queueExecutionFlowUpdateHandle;
-
-        public override Caching.CacheObjectSize ApproximateObjectSize
-        {
-            get
-            {
-                return Caching.CacheObjectSize.ExtraSmall;
-            }
-        }
-        protected override bool ShouldSetCacheExpired(object parameter)
-        {
-            return _queueDataManager.AreQueuesUpdated(ref _queueUpdateHandle) || _queueExecutionFlowDataManager.AreExecutionFlowsUpdated(ref _queueExecutionFlowUpdateHandle);
-        }
     }
 }

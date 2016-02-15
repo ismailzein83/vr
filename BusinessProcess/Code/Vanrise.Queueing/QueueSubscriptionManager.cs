@@ -56,7 +56,7 @@ namespace Vanrise.Queueing
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IQueueSubscriptionDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueSubscriptionDataManager>();
             object _updateHandle;

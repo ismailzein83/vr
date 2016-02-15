@@ -13,16 +13,14 @@ namespace Vanrise.Queueing
     {
         public IEnumerable<QueueItemTypeInfo> GetItemTypes(QueueItemTypeFilter filter)
         {
-            IQueueItemTypeDataManager manager = QDataManagerFactory.GetDataManager<IQueueItemTypeDataManager>();
-            IEnumerable<QueueItemType> itemTypes = manager.GetQueueItemTypes();
-
+            IEnumerable<QueueItemType> itemTypes = GetCachedQueueItemTypes().Values;
             return itemTypes.MapRecords(ItemTypesInfoMapper, null);
 
         }
 
         Dictionary<int, QueueItemType> GetCachedQueueItemTypes()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("QueueItemTypeManager_GetCachedQueueItemTypes",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("QueueItemTypeManager_GetCachedQueueItemTypes",
                () =>
                {
                    IQueueItemTypeDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueItemTypeDataManager>();
@@ -47,7 +45,7 @@ namespace Vanrise.Queueing
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IQueueItemTypeDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueItemTypeDataManager>();
             object _updateHandle;

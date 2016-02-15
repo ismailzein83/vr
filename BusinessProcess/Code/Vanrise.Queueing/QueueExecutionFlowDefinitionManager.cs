@@ -29,16 +29,36 @@ namespace Vanrise.Queueing
             QueueExecutionFlowDefinition executionFlowDefinition = GetExecutionFlowDefinition(definitionID);
             return executionFlowDefinition != null ? executionFlowDefinition.Title : null;
         }
-
-
+        
         public List<QueueExecutionFlowDefinition> GetAll()
         {
-            IQueueExecutionFlowDefinitionDataManager manager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDefinitionDataManager>();
-            return manager.GetAll();
-
+            var cachedFlowDefinitions = GetCachedExecutionFlowDefinitions();
+            if (cachedFlowDefinitions != null)
+                return cachedFlowDefinitions.Values.ToList();
+            else
+                return null;
         }
 
-
+        public QueueExecutionFlowStagesByStageName GetFlowStages(int definitionId)
+        {
+            String cacheName = String.Format("GetFlowStages_{0}", definitionId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    var execFlowDefinition = GetExecutionFlowDefinition(definitionId);
+                    if (execFlowDefinition == null)
+                        return null;
+                    QueueExecutionFlowStagesByStageName stagesByName = new QueueExecutionFlowStagesByStageName();
+                    if (execFlowDefinition.Stages != null)
+                    {
+                        foreach(var stage in execFlowDefinition.Stages)
+                        {
+                            stagesByName.Add(stage.StageName, stage);
+                        }
+                    }
+                    return stagesByName;
+                });
+        }
 
         public Vanrise.Entities.IDataRetrievalResult<QueueExecutionFlowDefinitionDetail> GetFilteredExecutionFlowDefinitions(Vanrise.Entities.DataRetrievalInput<QueueExecutionFlowDefinitionQuery> input)
         {
@@ -117,7 +137,7 @@ namespace Vanrise.Queueing
 
         private Dictionary<int, QueueExecutionFlowDefinition> GetCachedExecutionFlowDefinitions()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetQueueExecutionFlowDefinitions",
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedExecutionFlowDefinitions",
                () =>
                {
                    IQueueExecutionFlowDefinitionDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDefinitionDataManager>();
@@ -133,12 +153,17 @@ namespace Vanrise.Queueing
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IQueueExecutionFlowDefinitionDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDefinitionDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return this.IsCacheExpired();
+            }
+
+            public bool IsCacheExpired()
             {
                 return _dataManager.AreQueueExecutionFlowDefinitionUpdated(ref _updateHandle);
             }

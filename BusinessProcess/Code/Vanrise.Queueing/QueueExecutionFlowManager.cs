@@ -11,60 +11,23 @@ using Vanrise.Queueing.Entities;
 namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowManager
-    {
-   
+    {  
         public QueuesByStages GetQueuesByStages(int executionFlowId)
         {
-            string cacheName = String.Format("QueueExecutionFlowManager_GetQueuesByStages_{0}", executionFlowId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject(cacheName,
-               () =>
-               {
-                   IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
-                   QueueExecutionFlow executionFlow = dataManager.GetExecutionFlow(executionFlowId);
-                   List<QueueStageInfo> queueStages = executionFlow.Tree.GetQueueStageInfos();
-                   if (queueStages == null || queueStages.Count == 0)
-                       throw new Exception("QueueExecutionFlow doesnt return any QueueStageInfo");
-
-                   QueuesByStages queuesByStages = new QueuesByStages();
-                   foreach (var stage in queueStages)
-                   {
-                       var queueName = GetQueueName(executionFlow, stage);
-                       var queueTitle = GetQueueTitle(executionFlow, stage);
-                       List<string> sourceQueueNames = null;
-                       if (stage.SourceQueueStages != null && stage.SourceQueueStages.Count > 0)
-                       {
-                           sourceQueueNames = new List<string>();
-                           foreach (var sourceStage in stage.SourceQueueStages)
-                           {
-                               sourceQueueNames.Add(GetQueueName(executionFlow, sourceStage));
-                           }
-                       }
-                       PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlowId, stage.StageName, stage.QueueTypeFQTN, queueName, queueTitle, sourceQueueNames, stage.QueueSettings);
-                       if (queuesByStages.ContainsKey(stage.StageName))
-                           throw new Exception(String.Format("Duplicate Stage Names: {0}", stage.StageName));
-                       queuesByStages.Add(stage.StageName, PersistentQueueFactory.Default.GetQueue(queueName));
-                   }
-                   return queuesByStages;
-               });
-
-        }
-
-        public QueuesByStages GetQueuesByStages2(int executionFlowId)
-        {
             string cacheName = String.Format("QueueExecutionFlowManager_GetQueuesByStages2_{0}", executionFlowId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject(cacheName,
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<ExecutionFlowRuntimeCacheManager>().GetOrCreateObject(cacheName,
                () =>
                {
-                   IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();                   
-                   QueueExecutionFlow executionFlow = dataManager.GetExecutionFlow(executionFlowId);
+                   QueueExecutionFlowManager execFlowManager = new QueueExecutionFlowManager();
+                   QueueExecutionFlow executionFlow = execFlowManager.GetExecutionFlow(executionFlowId);
 
                    if (executionFlow == null)
-                       throw new ArgumentNullException(String.Format("Execution Flow of ID '{0}'", executionFlowId));
+                       throw new ArgumentNullException(String.Format("Execution Flow '{0}'", executionFlowId));
 
                    QueueExecutionFlowDefinitionManager definitionManager = new QueueExecutionFlowDefinitionManager();
                    var executionFlowDefinition = definitionManager.GetExecutionFlowDefinition(executionFlow.DefinitionId);
                    if(executionFlowDefinition == null)
-                       throw new ArgumentNullException(String.Format("Execution Flow Definition of ID '{0}'", executionFlow.DefinitionId));
+                       throw new ArgumentNullException(String.Format("Execution Flow Definition '{0}'", executionFlow.DefinitionId));
 
                    if (executionFlowDefinition.Stages == null)
                        throw new ArgumentNullException("executionFlowDefinition.Stages");
@@ -85,7 +48,6 @@ namespace Vanrise.Queueing
                    }
                    return queuesByStages;
                });
-
         }
 
         private void CheckRecursiveSources(QueueExecutionFlowDefinition executionFlowDefinition)
@@ -107,10 +69,10 @@ namespace Vanrise.Queueing
         private void CheckRecursiveSources(QueueExecutionFlowDefinition executionFlowDefinition, string sourceStageName, List<string> prohibitedSources)
         {
             if (prohibitedSources.Contains(sourceStageName))
-                throw new Exception(String.Format("Execution Flow '{0}' has recursive source stages", executionFlowDefinition.Name));
+                throw new Exception(String.Format("Execution Flow Definition '{0}' has recursive source stages", executionFlowDefinition.Name));
             var sourceStage = executionFlowDefinition.Stages.FindRecord(itm => itm.StageName == sourceStageName);
             if (sourceStage == null)
-                throw new Exception(String.Format("Stage '{0}' not found in Execution Flow '{1}'", sourceStageName, executionFlowDefinition.Name));
+                throw new Exception(String.Format("Stage '{0}' not found in Execution Flow Definition '{1}'", sourceStageName, executionFlowDefinition.Name));
             prohibitedSources.Add(sourceStage.StageName);
             if(sourceStage.SourceStages != null)
                 foreach (var sourceOfSourceStageName in sourceStage.SourceStages)
@@ -136,6 +98,7 @@ namespace Vanrise.Queueing
 
             StringBuilder queueTitleBuilder = new StringBuilder(stage.QueueTitleTemplate);
             queueTitleBuilder.Replace("#FlowName#", executionFlow.Name);
+            queueTitleBuilder.Replace("#StageName#", stage.StageName);
 
             var queueSettings = new QueueSettings
             {
@@ -150,7 +113,8 @@ namespace Vanrise.Queueing
         private string BuildQueueName(QueueExecutionFlowStage stage, QueueExecutionFlow executionFlow)
         {
             StringBuilder queueNameBuilder = new StringBuilder(stage.QueueNameTemplate);
-            queueNameBuilder.Replace("#FlowId", executionFlow.ExecutionFlowId.ToString());
+            queueNameBuilder.Replace("#FlowId#", executionFlow.ExecutionFlowId.ToString());
+            queueNameBuilder.Replace("#StageName#", stage.StageName);
             return  queueNameBuilder.ToString();
         }
 
@@ -167,7 +131,7 @@ namespace Vanrise.Queueing
 
             if (insertActionSucc)
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 executionFlowObj.ExecutionFlowId = executionFlowId;
                 insertOperationOutput.InsertedObject = QueueExecutionFlowMapper(executionFlowObj);
@@ -179,25 +143,14 @@ namespace Vanrise.Queueing
 
             return insertOperationOutput;
         }
-
-        private string GetQueueName(QueueExecutionFlow executionFlow, QueueStageInfo queueStage)
-        {
-            return String.Format("ExecutionFlow_{0}_Queue_{1}", executionFlow.ExecutionFlowId, queueStage.QueueName);
-        }
-
-        private string GetQueueTitle(QueueExecutionFlow executionFlow, QueueStageInfo queueStage)
-        {
-            return String.Format("{1} ({0})", executionFlow.Name, queueStage.QueueTitle);
-        }
-
+        
         public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlows(QueueExecutionFlowFilter filter)
         {
             var cachedFlows = GetCachedQueueExecutionFlows();
             return cachedFlows.MapRecords(QueueExecutionFlowInfoMapper, null);
 
         }
-
-
+        
         public string GetExecutionFlowName(int executionFlowId)
         {
             QueueExecutionFlow executionFlow = GetExecutionFlow(executionFlowId);
@@ -215,15 +168,14 @@ namespace Vanrise.Queueing
 
         Dictionary<int, QueueExecutionFlow> GetCachedQueueExecutionFlows()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlows",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlows",
                () =>
                {
                    IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
                    return dataManager.GetExecutionFlows().ToDictionary(kvp => kvp.ExecutionFlowId, kvp => kvp);
                });
         }
-
-
+        
         public Vanrise.Entities.IDataRetrievalResult<QueueExecutionFlowDetail> GetFilteredExecutionFlows(Vanrise.Entities.DataRetrievalInput<QueueExecutionFlowQuery> input)
         {
             var queueExecutionFlows = GetCachedQueueExecutionFlows();
@@ -238,14 +190,11 @@ namespace Vanrise.Queueing
 
         }
 
-
-
         public QueueExecutionFlow GetExecutionFlow(int executionFlowId)
         {
             var executionFlows = GetCachedQueueExecutionFlows();
             return executionFlows.GetRecord(executionFlowId);
         }
-
 
         public Vanrise.Entities.UpdateOperationOutput<QueueExecutionFlowDetail> UpdateExecutionFlow(QueueExecutionFlow executionFlowObject)
         {
@@ -258,14 +207,34 @@ namespace Vanrise.Queueing
 
             if (updateActionSucc)
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = QueueExecutionFlowMapper(executionFlowObject);
             }
             return updateOperationOutput;
 
         }
+        
+        #region Private Classes
 
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IQueueExecutionFlowDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return this.IsCacheExpired();
+            }
+
+            public bool IsCacheExpired()
+            {
+                return _dataManager.AreExecutionFlowsUpdated(ref _updateHandle);
+            }
+        }
+
+
+        #endregion
 
         #region Mappers
 

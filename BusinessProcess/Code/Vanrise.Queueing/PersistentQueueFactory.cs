@@ -35,12 +35,12 @@ namespace Vanrise.Queueing
 
         }
 
-        QueueingManager _queueingManager = new QueueingManager();
+        QueueInstanceManager _queueManager = new QueueInstanceManager();
 
         #endregion
         public PersistentQueue<T> GetQueue<T>(string queueName) where T : PersistentQueueItem
         {
-            QueueInstance queueInstance = _queueingManager.GetQueueInstance(queueName);
+            QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
             if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
                 return null;
 
@@ -53,7 +53,7 @@ namespace Vanrise.Queueing
 
         public IPersistentQueue GetQueue(string queueName)
         {
-            QueueInstance queueInstance = _queueingManager.GetQueueInstance(queueName);
+            QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
             if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
                 return null;
 
@@ -65,7 +65,7 @@ namespace Vanrise.Queueing
 
         public bool QueueExists(string queueName)
         {
-            QueueInstance queueInstance = _queueingManager.GetQueueInstance(queueName);
+            QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
             return queueInstance != null && queueInstance.Status == QueueInstanceStatus.ReadyToUse;
         }
 
@@ -75,9 +75,9 @@ namespace Vanrise.Queueing
             IQueueItemDataManager dataManagerQueueItem = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
             QueueSubscriptionManager queueSubscriptionManager = new QueueSubscriptionManager();
             Type queueItemType = Type.GetType(queueItemFQTN);
-            if(queueItemType == null)
+            if (queueItemType == null)
                 throw new Exception(String.Format("type '{0}' is not available", queueItemFQTN));
-            
+
             PersistentQueueItem emptyInstance = Activator.CreateInstance(queueItemType) as PersistentQueueItem;
             if (emptyInstance == null)
                 throw new Exception(String.Format("{0} is not of type PersistentQueueItem", queueItemFQTN));
@@ -86,7 +86,7 @@ namespace Vanrise.Queueing
             {
                 foreach (var sourceQueueName in sourceQueueNames)
                 {
-                    QueueInstance sourceQueue = _queueingManager.GetQueueInstance(sourceQueueName);
+                    QueueInstance sourceQueue = _queueManager.GetQueueInstance(sourceQueueName);
                     if (sourceQueue == null)
                         throw new Exception(String.Format("Source Queue '{0}' not found", sourceQueueName));
 
@@ -102,13 +102,14 @@ namespace Vanrise.Queueing
                 }
             }
             int itemTypeId = dataManagerQueue.InsertOrUpdateQueueItemType(queueItemFQTN, emptyInstance.ItemTypeTitle, emptyInstance.DefaultQueueSettings);
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueItemTypeManager.CacheManager>().SetCacheExpired();
             Action createQueueAction = () =>
             {
                 int queueId = dataManagerQueue.InsertQueueInstance(executionFlowId, stageName, queueName, queueTitle, QueueInstanceStatus.New, itemTypeId, queueSettings);
                 queueSubscriptionManager.AddSubscriptions(sourceQueueIds, queueId);
                 dataManagerQueueItem.CreateQueue(queueId);
                 dataManagerQueue.UpdateQueueInstanceStatus(queueName, QueueInstanceStatus.ReadyToUse);
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Queueing.QueueInstanceCacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>().SetCacheExpired();               
             };
             //this logic is implemented to rename any previous failed Create Queue action to allow recreation. this is done instead of using Transaction against two databases
             try
@@ -125,21 +126,6 @@ namespace Vanrise.Queueing
                     throw;
             }
         }
-
-        //public void CreateQueue<T>(int executionFlowId, string queueName, string queueTitle, IEnumerable<string> sourceQueueNames, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        //{
-        //    CreateQueue(executionFlowId, typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
-        //}
-
-        //public void CreateQueue<T>(int executionFlowId, string queueName, string queueTitle, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        //{
-        //    CreateQueue<T>(executionFlowId, queueName, queueTitle, null, queueSettings);
-        //}
-
-        //public void CreateQueue<T>(int executionFlowId, string queueName, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        //{
-        //    CreateQueue<T>(executionFlowId, queueName, queueName, null, queueSettings);
-        //}
 
         public void CreateQueueIfNotExists(int executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null)
         {
@@ -160,13 +146,8 @@ namespace Vanrise.Queueing
             {
                 IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
                 dataManagerQueue.UpdateQueueInstance(queueName, stageName, queueTitle, queueSettings);
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Queueing.QueueInstanceCacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>().SetCacheExpired();
             }
         }
-
-        //public void CreateQueueIfNotExists<T>(int executionFlowId, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null) where T : PersistentQueueItem
-        //{      
-        //    CreateQueueIfNotExists(executionFlowId, typeof(T).AssemblyQualifiedName, queueName, queueTitle, sourceQueueNames, queueSettings);
-        //}
     }
 }

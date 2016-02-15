@@ -27,4 +27,9 @@ namespace Vanrise.Queueing.Entities
     {
         public abstract Type GetQueueItemType();
     }
+
+    public class QueueExecutionFlowStagesByStageName : Dictionary<string, QueueExecutionFlowStage>
+    {
+
+    }
 }

@@ -31,18 +31,7 @@ namespace Vanrise.Queueing
         {
             return GetCachedQueueInstances().Values;
         }
-
-        Dictionary<int, QueueInstance> GetCachedQueueInstances()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceCacheManager>().GetOrCreateObject("GetCachedQueueInstances",
-               () =>
-               {
-                   IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-                   IEnumerable<QueueInstance> queueInstances = dataManager.GetAllQueueInstances();
-                   return queueInstances.ToDictionary(kvp => kvp.QueueInstanceId, kvp => kvp);
-               });
-        }
-
+        
         public IEnumerable<QueueInstanceInfo> GetQueueInstances(QueueInstanceFilter filter)
         {
             List<QueueInstance> queueInstances = new List<QueueInstance>();
@@ -59,6 +48,31 @@ namespace Vanrise.Queueing
 
         }
 
+        public QueueInstance GetQueueInstance(string queueName)
+        {
+            return GetCachedQueueInstancesByName().GetRecord(queueName);
+        }
+        public QueueInstance GetQueueInstanceById(int instanceId)
+        {
+            return GetCachedQueueInstances().GetRecord(instanceId);
+        }
+
+        public IEnumerable<QueueInstance> GetQueueInstances(IEnumerable<int> queueItemTypes)
+        {
+            var readyQueueInstances = GetReadyQueueInstances();
+            if (readyQueueInstances == null)
+                return null;
+            return readyQueueInstances.Where(itm => queueItemTypes == null || queueItemTypes.Contains(itm.ItemTypeId));
+        }
+
+        public IEnumerable<QueueInstance> GetReadyQueueInstances()
+        {
+            var cachedQueues = GetCachedQueueInstances();
+            if (cachedQueues != null)
+                return cachedQueues.Values.FindAllRecords(itm => itm.Status == QueueInstanceStatus.ReadyToUse);
+            else
+                return null;
+        }
 
         public IEnumerable<QueueInstance> GetQueueExecutionFlows(List<int> executionFlowIds)
         {
@@ -66,6 +80,55 @@ namespace Vanrise.Queueing
             return queueInstances.Where(x => x.ExecutionFlowId.HasValue && executionFlowIds.Contains(x.ExecutionFlowId.Value));
 
         }
+
+        #region Private Classes
+
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IQueueDataManager _queueDataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+            object _updateHandle;
+
+            public override Caching.CacheObjectSize ApproximateObjectSize
+            {
+                get
+                {
+                    return Caching.CacheObjectSize.ExtraSmall;
+                }
+            }
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return this.IsCacheExpired();
+            }
+
+            public bool IsCacheExpired()
+            {
+                return _queueDataManager.AreQueuesUpdated(ref _updateHandle);
+            }
+        }
+
+        Dictionary<string, QueueInstance> GetCachedQueueInstancesByName()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedQueueInstancesByName",
+              () =>
+              {
+                  IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+                  IEnumerable<QueueInstance> queueInstances = dataManager.GetAllQueueInstances();
+                  return queueInstances.ToDictionary(kvp => kvp.Name, kvp => kvp);
+              });
+        }
+
+        Dictionary<int, QueueInstance> GetCachedQueueInstances()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedQueueInstances",
+               () =>
+               {
+                   IQueueDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+                   IEnumerable<QueueInstance> queueInstances = dataManager.GetAllQueueInstances();
+                   return queueInstances.ToDictionary(kvp => kvp.QueueInstanceId, kvp => kvp);
+               });
+        }
+
+        #endregion
 
         #region Mappers
         private QueueInstanceDetail QueueInstanceDetailMapper(QueueInstance queueInstance)

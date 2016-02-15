@@ -41,9 +41,9 @@ namespace Vanrise.Queueing
         private QueueItemHeaderDetails QueueItemHeaderDetailMapper(QueueItemHeader queueItemHeader)
         {
             QueueItemHeaderDetails queueItemHeaderDetail = new QueueItemHeaderDetails();
-            QueueingManager manager = new QueueingManager();
+            QueueInstanceManager queueManager = new QueueInstanceManager();
             QueueExecutionFlowManager executionFlowManager=new QueueExecutionFlowManager();
-            var instance = manager.GetQueueInstanceById(queueItemHeader.QueueId);
+            var instance = queueManager.GetQueueInstanceById(queueItemHeader.QueueId);
             queueItemHeaderDetail.Entity = queueItemHeader;
             queueItemHeaderDetail.StageName = instance != null ? instance.StageName : "";
             queueItemHeaderDetail.StatusName = Vanrise.Common.Utilities.GetEnumDescription(queueItemHeader.Status);
