@@ -49,6 +49,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccount.cs" />
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccountCustomerSettings.cs" />
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccountDetail.cs" />
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccountInfo.cs" />
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccountInfoFilter.cs" />
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccountQuery.cs" />
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccountSettings.cs" />
+    <Compile Include="Carriers\CarrierAccounts\CarrierAccountSupplierSettings.cs" />
+    <Compile Include="Carriers\CarrierProfile\CarrierContact.cs" />
+    <Compile Include="Carriers\CarrierProfile\CarrierProfile.cs" />
+    <Compile Include="Carriers\CarrierProfile\CarrierProfileDetail.cs" />
+    <Compile Include="Carriers\CarrierProfile\CarrierProfileInfo.cs" />
+    <Compile Include="Carriers\CarrierProfile\CarrierProfileQuery.cs" />
+    <Compile Include="Carriers\Customer\CustomerFilterSettings.cs" />
+    <Compile Include="Carriers\Customer\CustomerZones.cs" />
+    <Compile Include="Carriers\Supplier\ISupplierGroupContext.cs" />
+    <Compile Include="Carriers\Supplier\SupplierFilterSettings.cs" />
+    <Compile Include="Carriers\Supplier\SupplierGroupSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
