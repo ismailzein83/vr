@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrDemoCarrierprofileGrid", ["UtilsService", "VRNotificationService", "Demo_CarrierProfileAPIService", "Demo_CarrierAccountService", "Demo_CarrierProfileService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, Demo_CarrierAccountService, Demo_CarrierProfileService, VRUIUtilsService) {
+app.directive("vrDemoOperatorprofileGrid", ["UtilsService", "VRNotificationService", "Demo_OperatorProfileAPIService", "Demo_OperatorAccountService", "Demo_OperatorProfileService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, Demo_OperatorProfileAPIService, Demo_OperatorAccountService, Demo_OperatorProfileService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -12,19 +12,19 @@ function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, De
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var carrierProfileGrid = new CarrierProfileGrid($scope, ctrl, $attrs);
-            carrierProfileGrid.initializeController();
+            var operatorProfileGrid = new OperatorProfileGrid($scope, ctrl, $attrs);
+            operatorProfileGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Demo_Module/Directives/CarrierAccount/Templates/CarrierProfileGridTemplate.html"
+        templateUrl: "/Client/Modules/Demo_Module/Directives/OperatorAccount/Templates/OperatorProfileGridTemplate.html"
 
     };
 
-    function CarrierProfileGrid($scope, ctrl, $attrs) {
+    function OperatorProfileGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         var gridDrillDownTabsObj;
@@ -32,7 +32,7 @@ function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, De
 
         function initializeController() {
 
-            $scope.carrierProfiles = [];
+            $scope.operatorProfiles = [];
             defineMenuActions();
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -40,18 +40,18 @@ function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, De
                 var drillDownDefinitions = [];
                 var drillDownDefinition = {};
 
-                drillDownDefinition.title = "Carrier Account";
-                drillDownDefinition.directive = "vr-demo-carrieraccount-grid";
+                drillDownDefinition.title = "Operator Account";
+                drillDownDefinition.directive = "vr-demo-operatoraccount-grid";
 
-                drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
-                    carrierProfileItem.carrierAccountGridAPI = directiveAPI;
+                drillDownDefinition.loadDirective = function (directiveAPI, operatorProfileItem) {
+                    operatorProfileItem.operatorAccountGridAPI = directiveAPI;
                     var payload = {
                         query: {
-                            CarrierProfilesIds: [carrierProfileItem.Entity.CarrierProfileId]
+                            OperatorProfilesIds: [operatorProfileItem.Entity.OperatorProfileId]
                         },
                         hideProfileColumn: true
                     };
-                    return carrierProfileItem.carrierAccountGridAPI.loadGrid(payload);
+                    return operatorProfileItem.operatorAccountGridAPI.loadGrid(payload);
                 };
                 drillDownDefinitions.push(drillDownDefinition);
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
@@ -64,15 +64,15 @@ function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, De
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
                     }
-                    directiveAPI.onCarrierProfileAdded = function (carrierProfileObject) {
-                        gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfileObject);
-                        gridAPI.itemAdded(carrierProfileObject);
+                    directiveAPI.onOperatorProfileAdded = function (operatorProfileObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(operatorProfileObject);
+                        gridAPI.itemAdded(operatorProfileObject);
                     }
                     return directiveAPI;
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return Demo_CarrierProfileAPIService.GetFilteredCarrierProfiles(dataRetrievalInput)
+                return Demo_OperatorProfileAPIService.GetFilteredOperatorProfiles(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
@@ -91,45 +91,45 @@ function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, De
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editCarrierProfile,
+                clicked: editOperatorProfile,
             },
                 {
-                    name: "New Carrier Account",
-                    clicked: addCarrierAccount
+                    name: "New Operator Account",
+                    clicked: addOperatorAccount
                 }
             ];
         }
 
-        function editCarrierProfile(carrierProfileObj) {
-            var onCarrierProfileUpdated = function (carrierProfile) {
-                gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfile);
-                gridAPI.itemUpdated(carrierProfile);
+        function editOperatorProfile(operatorProfileObj) {
+            var onOperatorProfileUpdated = function (operatorProfile) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(operatorProfile);
+                gridAPI.itemUpdated(operatorProfile);
 
             }
-            Demo_CarrierProfileService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);
+            Demo_OperatorProfileService.editOperatorProfile(operatorProfileObj, onOperatorProfileUpdated);
         }
 
-        function addCarrierAccount(dataItem) {
+        function addOperatorAccount(dataItem) {
             gridAPI.expandRow(dataItem);
             var query = {
-                CarrierProfilesIds: [dataItem.CarrierProfileId],
+                OperatorProfilesIds: [dataItem.OperatorProfileId],
             }
 
-            var onCarrierAccountAdded = function (carrierAccountObj) {
-                gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccountObj);
-                if (dataItem.carrierAccountGridAPI != undefined)
-                    dataItem.carrierAccountGridAPI.onCarrierAccountAdded(carrierAccountObj);
+            var onOperatorAccountAdded = function (operatorAccountObj) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(operatorAccountObj);
+                if (dataItem.operatorAccountGridAPI != undefined)
+                    dataItem.operatorAccountGridAPI.onOperatorAccountAdded(operatorAccountObj);
             };
-            Demo_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded, dataItem.Entity);
+            Demo_OperatorAccountService.addOperatorAccount(onOperatorAccountAdded, dataItem.Entity);
         }
 
-        function deleteCarrierProfile(carrierProfileObj) {
-            var onCarrierProfileDeleted = function () {
+        function deleteOperatorProfile(operatorProfileObj) {
+            var onOperatorProfileDeleted = function () {
                 //TODO: This is to refresh the Grid after delete, should be removed when centralized
                 retrieveData();
             };
 
-            // Demo_MainService.deleteCarrierAccount(carrierProfileObj, onCarrierProfileDeleted); to be added in CarrierAccountService
+            // Demo_MainService.deleteOperatorAccount(operatorProfileObj, onOperatorProfileDeleted); to be added in OperatorAccountService
         }
     }
 

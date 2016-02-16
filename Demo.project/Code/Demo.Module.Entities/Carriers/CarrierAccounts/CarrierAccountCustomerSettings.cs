@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Demo.Module.Entities
 {
 
-    public class CarrierAccountCustomerSettings
+    public class OperatorAccountCustomerSettings
     {
         public int? DefaultRoutingProductId { get; set; }
         public  RoutingStatus RoutingStatus { get; set; }

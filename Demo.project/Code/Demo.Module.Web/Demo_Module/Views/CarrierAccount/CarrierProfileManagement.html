@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Demo_CarrierProfileManagementController" >
+﻿<vr-panel ng-controller="Demo_OperatorProfileManagementController" >
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
@@ -24,13 +24,13 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewCarrierProfile"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewOperatorProfile"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-demo-carrierprofile-grid on-ready="onGridReady"></vr-demo-carrierprofile-grid>
+                <vr-demo-operatorprofile-grid on-ready="onGridReady"></vr-demo-operatorprofile-grid>
             </vr-columns>
         </vr-row>
         

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
-   public class CarrierAccountDetail
+   public class OperatorAccountDetail
     {
-       public string CarrierProfileName { get; set; }
-       public string CarrierAccountName { get; set; }
-       public CarrierAccount Entity { get; set; }
+       public string OperatorProfileName { get; set; }
+       public string OperatorAccountName { get; set; }
+       public OperatorAccount Entity { get; set; }
     }
 }

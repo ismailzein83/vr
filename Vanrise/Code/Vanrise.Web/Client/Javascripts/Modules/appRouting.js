@@ -163,8 +163,8 @@ appRouting.config(['$routeProvider',
           when('/Analytics/CDRLog', {
               templateUrl: '/Client/Modules/Analytics/Views/CDR/CDRLog.html'
           }).
-          when('/BusinessEntity/CarrierAccount Managments', {
-              templateUrl: '/Client/Modules/BusinessEntity/Views/CarrierAccountManagement.html'
+          when('/BusinessEntity/OperatorAccount Managments', {
+              templateUrl: '/Client/Modules/BusinessEntity/Views/OperatorAccountManagement.html'
           }).
           when('/NOC/VolumeReports', {
               templateUrl: '/Client/Modules/Analytics/Views/Volume Reports/VolumeReports.html'

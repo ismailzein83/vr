@@ -8,11 +8,11 @@ using Demo.Module.Entities;
 
 namespace Demo.Module.Data
 {
-    public interface ICarrierAccountDataManager:IDataManager
+    public interface IOperatorAccountDataManager:IDataManager
     {
-        List<CarrierAccount> GetCarrierAccounts();
-        bool Insert(CarrierAccount carrierAccount,out int carrierAccountId);
-        bool Update(CarrierAccount carrierAccount);
-        bool AreCarrierAccountsUpdated(ref object updateHandle);
+        List<OperatorAccount> GetOperatorAccounts();
+        bool Insert(OperatorAccount operatorAccount,out int operatorAccountId);
+        bool Update(OperatorAccount operatorAccount);
+        bool AreOperatorAccountsUpdated(ref object updateHandle);
     }
 }

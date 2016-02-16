@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrDemoCarrieraccountGrid", ["UtilsService", "VRNotificationService", "Demo_CarrierAccountAPIService", "Demo_CarrierAccountTypeEnum", "Demo_CarrierAccountService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, Demo_CarrierAccountTypeEnum, Demo_CarrierAccountService, VRUIUtilsService) {
+app.directive("vrDemoOperatoraccountGrid", ["UtilsService", "VRNotificationService", "Demo_OperatorAccountAPIService", "Demo_OperatorAccountTypeEnum", "Demo_OperatorAccountService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, Demo_OperatorAccountAPIService, Demo_OperatorAccountTypeEnum, Demo_OperatorAccountService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -12,19 +12,19 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var carrierAccountGrid = new CarrierAccountGrid($scope, ctrl, $attrs);
-            carrierAccountGrid.initializeController();
+            var operatorAccountGrid = new OperatorAccountGrid($scope, ctrl, $attrs);
+            operatorAccountGrid.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Demo_Module/Directives/CarrierAccount/Templates/CarrierAccountGridTemplate.html"
+        templateUrl: "/Client/Modules/Demo_Module/Directives/OperatorAccount/Templates/OperatorAccountGridTemplate.html"
 
     };
 
-    function CarrierAccountGrid($scope, ctrl, $attrs) {
+    function OperatorAccountGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
         this.initializeController = initializeController;
@@ -34,12 +34,12 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
             $scope.hideProfileColumn = false;
 
             $scope.isExpandable = function (dataItem) {
-                if (dataItem.Entity.AccountType == Demo_CarrierAccountTypeEnum.Supplier.value)
+                if (dataItem.Entity.AccountType == Demo_OperatorAccountTypeEnum.Supplier.value)
                     return false;
                 return true
             }
 
-            $scope.carrierAccounts = [];
+            $scope.operatorAccounts = [];
             defineMenuActions();
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -50,15 +50,15 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
                 drillDownDefinition.title = "Customer Selling Product";
                 drillDownDefinition.directive = "vr-demo-customersellingproduct-grid";
 
-                drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
-                    carrierAccountItem.customersellingproductGridAPI = directiveAPI;
+                drillDownDefinition.loadDirective = function (directiveAPI, operatorAccountItem) {
+                    operatorAccountItem.customersellingproductGridAPI = directiveAPI;
                     var payload = {
                         query: {
-                            CustomersIds: [carrierAccountItem.Entity.CarrierAccountId]
+                            CustomersIds: [operatorAccountItem.Entity.OperatorAccountId]
                         },
                         hideCustomerColumn: true
                     };
-                    return carrierAccountItem.customersellingproductGridAPI.loadGrid(payload);
+                    return operatorAccountItem.customersellingproductGridAPI.loadGrid(payload);
                 };
                 drillDownDefinitions.push(drillDownDefinition);
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
@@ -76,20 +76,20 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
                         }
                         return gridAPI.retrieveData(query);
                     }
-                    directiveAPI.onCarrierAccountAdded = function (carrierAccountObject) {
-                        gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccountObject);
-                        gridAPI.itemAdded(carrierAccountObject);
+                    directiveAPI.onOperatorAccountAdded = function (operatorAccountObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(operatorAccountObject);
+                        gridAPI.itemAdded(operatorAccountObject);
                     }
                     return directiveAPI;
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return Demo_CarrierAccountAPIService.GetFilteredCarrierAccounts(dataRetrievalInput)
+                return Demo_OperatorAccountAPIService.GetFilteredOperatorAccounts(dataRetrievalInput)
                     .then(function (response) {
 
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                if (response.Data[i].Entity.AccountType != Demo_CarrierAccountTypeEnum.Supplier.value) {
+                                if (response.Data[i].Entity.AccountType != Demo_OperatorAccountTypeEnum.Supplier.value) {
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                                 }
                             }
@@ -107,7 +107,7 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
             var menuActionsWithSellingProduct = [
                 {
                     name: "Edit",
-                    clicked: editCarrierAccount,
+                    clicked: editOperatorAccount,
                 },
                 {
                     name: "Assign Selling Product",
@@ -117,12 +117,12 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
             var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editCarrierAccount,
+                    clicked: editOperatorAccount,
                 }
             ];
 
             $scope.gridMenuActions = function (dataItem) {
-                if (dataItem.Entity.AccountType == Demo_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == Demo_CarrierAccountTypeEnum.Exchange.value) {
+                if (dataItem.Entity.AccountType == Demo_OperatorAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == Demo_OperatorAccountTypeEnum.Exchange.value) {
                     return menuActionsWithSellingProduct;
                 } else {
                     return defaultMenuActions;
@@ -130,22 +130,22 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
             }
         }
 
-        function editCarrierAccount(carrierAccountObj) {
-            var onCarrierAccountUpdated = function (carrierAccount) {
-                gridDrillDownTabsObj.setDrillDownExtensionObject(carrierAccount);
-                gridAPI.itemUpdated(carrierAccount);
+        function editOperatorAccount(operatorAccountObj) {
+            var onOperatorAccountUpdated = function (operatorAccount) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(operatorAccount);
+                gridAPI.itemUpdated(operatorAccount);
             }
-            var carrierAccountItem;
+            var operatorAccountItem;
 
             if ($scope.hideProfileColumn)
-                carrierAccountItem = carrierAccountObj.Entity;
+                operatorAccountItem = operatorAccountObj.Entity;
             else
-                carrierAccountItem = carrierAccountObj.Entity.CarrierAccountId;
-            Demo_CarrierAccountService.editCarrierAccount(carrierAccountItem, onCarrierAccountUpdated);
+                operatorAccountItem = operatorAccountObj.Entity.OperatorAccountId;
+            Demo_OperatorAccountService.editOperatorAccount(operatorAccountItem, onOperatorAccountUpdated);
         }
 
         function assignNew(dataItem) {
-            if (dataItem.Entity.AccountType == Demo_CarrierAccountTypeEnum.Supplier.value)
+            if (dataItem.Entity.AccountType == Demo_OperatorAccountTypeEnum.Supplier.value)
                 return;
 
             gridAPI.expandRow(dataItem);
@@ -159,12 +159,12 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
            // Demo_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
         }
 
-        function deleteCarrierAccount(carrierAccountObj) {
-            var onCarrierAccountDeleted = function () {
+        function deleteOperatorAccount(operatorAccountObj) {
+            var onOperatorAccountDeleted = function () {
                 retrieveData();
             };
 
-            // Demo_MainService.deleteCarrierAccount(carrierAccountObj, onCarrierAccountDeleted); to be added in CarrierAccountService
+            // Demo_MainService.deleteOperatorAccount(operatorAccountObj, onOperatorAccountDeleted); to be added in OperatorAccountService
         }
     }
 

@@ -9,56 +9,56 @@ using Vanrise.Data.SQL;
 
 namespace Demo.Module.Data.SQL
 {
-    public class CarrierAccountDataManager : BaseSQLDataManager, ICarrierAccountDataManager
+    public class OperatorAccountDataManager : BaseSQLDataManager, IOperatorAccountDataManager
     {
 
         #region ctor/Local Variables
-        public CarrierAccountDataManager(): base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
+        public OperatorAccountDataManager(): base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
         {
         }
         #endregion
 
         #region Public Methods
-        public bool Insert(CarrierAccount carrierAccount, out int insertedId)
+        public bool Insert(OperatorAccount operatorAccount, out int insertedId)
         {
 
-            object carrierAccountId;
+            object operatorAccountId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
-                Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
-            insertedId = (int)carrierAccountId;
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorAccount_Insert", out operatorAccountId, operatorAccount.NameSuffix, operatorAccount.OperatorProfileId, Vanrise.Common.Serializer.Serialize(operatorAccount.CustomerSettings),
+                Vanrise.Common.Serializer.Serialize(operatorAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(operatorAccount.OperatorAccountSettings));
+            insertedId = (int)operatorAccountId;
             return (recordsEffected > 0);
         }
-        public bool Update(CarrierAccount carrierAccount)
+        public bool Update(OperatorAccount operatorAccount)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
-                 Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorAccount_Update", operatorAccount.OperatorAccountId, operatorAccount.NameSuffix, operatorAccount.OperatorProfileId, Vanrise.Common.Serializer.Serialize(operatorAccount.CustomerSettings),
+                 Vanrise.Common.Serializer.Serialize(operatorAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(operatorAccount.OperatorAccountSettings));
             return (recordsEffected > 0);
         }
-        public List<CarrierAccount> GetCarrierAccounts()
+        public List<OperatorAccount> GetOperatorAccounts()
         {
-            return GetItemsSP("dbo.sp_CarrierAccount_GetAll", CarrierAccountMapper);
+            return GetItemsSP("dbo.sp_OperatorAccount_GetAll", OperatorAccountMapper);
         }
-        public bool AreCarrierAccountsUpdated(ref object updateHandle)
+        public bool AreOperatorAccountsUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("dbo.CarrierAccount", ref updateHandle);
+            return base.IsDataUpdated("dbo.OperatorAccount", ref updateHandle);
         }
         #endregion
 
 
         #region  Mappers
-        private CarrierAccount CarrierAccountMapper(IDataReader reader)
+        private OperatorAccount OperatorAccountMapper(IDataReader reader)
         {
-            CarrierAccount carrierAccount = new CarrierAccount
+            OperatorAccount operatorAccount = new OperatorAccount
             {
-                CarrierAccountId = (int)reader["ID"],
+                OperatorAccountId = (int)reader["ID"],
                 NameSuffix = reader["NameSuffix"] as string,
-                SupplierSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSupplierSettings>(reader["SupplierSettings"] as string),
-                CustomerSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountCustomerSettings>(reader["CustomerSettings"] as string),
-                CarrierProfileId = (int)reader["CarrierProfileId"],
-                CarrierAccountSettings = Vanrise.Common.Serializer.Deserialize<Entities.CarrierAccountSettings>(reader["CarrierAccountSettings"] as string),
+                SupplierSettings = Vanrise.Common.Serializer.Deserialize<Entities.OperatorAccountSupplierSettings>(reader["SupplierSettings"] as string),
+                CustomerSettings = Vanrise.Common.Serializer.Deserialize<Entities.OperatorAccountCustomerSettings>(reader["CustomerSettings"] as string),
+                OperatorProfileId = (int)reader["OperatorProfileId"],
+                OperatorAccountSettings = Vanrise.Common.Serializer.Deserialize<Entities.OperatorAccountSettings>(reader["OperatorAccountSettings"] as string),
             };
-            return carrierAccount;
+            return operatorAccount;
         }
         #endregion
 

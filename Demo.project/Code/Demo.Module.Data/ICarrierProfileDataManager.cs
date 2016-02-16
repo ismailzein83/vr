@@ -7,11 +7,11 @@ using Demo.Module.Entities;
 
 namespace Demo.Module.Data
 {
-    public interface ICarrierProfileDataManager:IDataManager
+    public interface IOperatorProfileDataManager:IDataManager
     {
-        List<CarrierProfile> GetCarrierProfiles();
-        bool Insert(CarrierProfile carrierProfile, out int carrierProfileId);
-        bool Update(CarrierProfile carrierProfile);
-        bool AreCarrierProfilesUpdated(ref object updateHandle);
+        List<OperatorProfile> GetOperatorProfiles();
+        bool Insert(OperatorProfile operatorProfile, out int operatorProfileId);
+        bool Update(OperatorProfile operatorProfile);
+        bool AreOperatorProfilesUpdated(ref object updateHandle);
     }
 }

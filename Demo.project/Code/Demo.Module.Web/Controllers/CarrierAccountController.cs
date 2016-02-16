@@ -10,40 +10,40 @@ using Vanrise.Web.Base;
 
 namespace Demo.Module.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierAccount")]
-    public class Demo_CarrierAccountController : BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "OperatorAccount")]
+    public class Demo_OperatorAccountController : BaseAPIController
     {
 
         [HttpPost]
-        [Route("GetFilteredCarrierAccounts")]
-        public object GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        [Route("GetFilteredOperatorAccounts")]
+        public object GetFilteredOperatorAccounts(Vanrise.Entities.DataRetrievalInput<OperatorAccountQuery> input)
         {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            return GetWebResponse(input, manager.GetFilteredCarrierAccounts(input));
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return GetWebResponse(input, manager.GetFilteredOperatorAccounts(input));
         }
 
         [HttpGet]
-        [Route("GetCarrierAccount")]
-        public CarrierAccount GetCarrierAccount(int carrierAccountId)
+        [Route("GetOperatorAccount")]
+        public OperatorAccount GetOperatorAccount(int operatorAccountId)
         {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.GetCarrierAccount(carrierAccountId);
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return manager.GetOperatorAccount(operatorAccountId);
         }
         
         [HttpPost]
-        [Route("AddCarrierAccount")]
-        public Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
+        [Route("AddOperatorAccount")]
+        public Vanrise.Entities.InsertOperationOutput<OperatorAccountDetail> AddOperatorAccount(OperatorAccount operatorAccount)
         {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.AddCarrierAccount(carrierAccount);
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return manager.AddOperatorAccount(operatorAccount);
         }
 
         [HttpPost]
-        [Route("UpdateCarrierAccount")]
-        public Vanrise.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
+        [Route("UpdateOperatorAccount")]
+        public Vanrise.Entities.UpdateOperationOutput<OperatorAccountDetail> UpdateOperatorAccount(OperatorAccount operatorAccount)
         {
-            CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.UpdateCarrierAccount(carrierAccount);
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return manager.UpdateOperatorAccount(operatorAccount);
         }
        
     }

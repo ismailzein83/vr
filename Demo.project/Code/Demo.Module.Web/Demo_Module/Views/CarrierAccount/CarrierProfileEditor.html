@@ -1,6 +1,6 @@
-﻿<div vr-modalcontent ng-controller="Demo_CarrierProfileEditorController" vr-loader="isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="Demo_OperatorProfileEditorController" vr-loader="isLoading" width="'50%'">
     <vr-modalbody>
-        <vr-form name="formCarrierProfileEditor">
+        <vr-form name="formOperatorProfileEditor">
             <vr-tabs>
                 <vr-tab header="'General Info'">
                     <vr-row>
@@ -97,7 +97,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formCarrierProfileEditor" data-onclick="SaveCarrierProfile"></vr-button>
+                <vr-button type="Save" formname="formOperatorProfileEditor" data-onclick="SaveOperatorProfile"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

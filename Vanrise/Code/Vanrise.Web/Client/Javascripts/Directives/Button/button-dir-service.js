@@ -152,9 +152,9 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Choose an Organization Chart',
                     class: 'glyphicon glyphicon-list-alt'
                 };
-            case 'AssignCarriers':
+            case 'AssignOperators':
                 return {
-                    text: 'Assign Carriers',
+                    text: 'Assign Operators',
                     class: 'glyphicon glyphicon-link'
                 };
             case 'Validate':

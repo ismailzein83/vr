@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
-    public class CarrierProfile
+    public class OperatorProfile
     {
-        public int CarrierProfileId { get; set; }
+        public int OperatorProfileId { get; set; }
 
         public string Name { get; set; }
 
-        public CarrierProfileSettings Settings { get; set;  }
+        public OperatorProfileSettings Settings { get; set;  }
     }
-    public class CarrierProfileSettings
+    public class OperatorProfileSettings
     {
         public string Company { get; set; }
 
@@ -38,7 +38,7 @@ namespace Demo.Module.Entities
 
         public long CompanyLogo { get; set; }
 
-        public List<CarrierContact> Contacts { get; set; }
+        public List<OperatorContact> Contacts { get; set; }
 
     }
 }

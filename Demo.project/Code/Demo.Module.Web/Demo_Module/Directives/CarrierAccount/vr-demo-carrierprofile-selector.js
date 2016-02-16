@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrDemoCarrierprofileSelector', ['Demo_CarrierProfileAPIService', 'UtilsService', '$compile','VRUIUtilsService',
-function (Demo_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrDemoOperatorprofileSelector', ['Demo_OperatorProfileAPIService', 'UtilsService', '$compile','VRUIUtilsService',
+function (Demo_OperatorProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -22,7 +22,7 @@ function (Demo_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServic
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
-            var ctor = new carrierProfileCtor(ctrl, $scope, $attrs);
+            var ctor = new operatorProfileCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -51,12 +51,12 @@ function (Demo_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServic
             required = "isrequired";
         var disabled = "";
         return '<div  vr-loader="isLoadingDirective">'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
-        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="OperatorProfileId" '
+        + required + ' label="Operator Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</div>'
     }
 
-    function carrierProfileCtor(ctrl, $scope, $attrs) {
+    function operatorProfileCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
 
@@ -66,7 +66,7 @@ function (Demo_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServic
         function defineAPI() {
             var api = {};
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('CarrierProfileId', $attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('OperatorProfileId', $attrs, ctrl);
             }
             api.load = function (payload) {
 
@@ -75,13 +75,13 @@ function (Demo_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServic
                     selectedIds = payload.selectedIds;
                 }
 
-                    return Demo_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
+                    return Demo_OperatorProfileAPIService.GetOperatorProfilesInfo().then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);
 
                         });
                         if (selectedIds!=undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierProfileId', $attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'OperatorProfileId', $attrs, ctrl);
 
                     });
 

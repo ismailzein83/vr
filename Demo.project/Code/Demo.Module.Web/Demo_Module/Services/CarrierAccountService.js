@@ -2,44 +2,44 @@
 
     'use strict';
 
-    CarrierAccountService.$inject = ['VRModalService'];
+    OperatorAccountService.$inject = ['VRModalService'];
 
-    function CarrierAccountService(VRModalService) {
+    function OperatorAccountService(VRModalService) {
         return ({
-            addCarrierAccount: addCarrierAccount,
-            editCarrierAccount: editCarrierAccount
+            addOperatorAccount: addOperatorAccount,
+            editOperatorAccount: editOperatorAccount
         });
 
-        function addCarrierAccount(onCarrierAccountAdded, dataItem) {
+        function addOperatorAccount(onOperatorAccountAdded, dataItem) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onCarrierAccountAdded = onCarrierAccountAdded;
+                modalScope.onOperatorAccountAdded = onOperatorAccountAdded;
             };
             var parameters;
             if (dataItem != undefined) {
                 parameters = {
-                    CarrierProfileId: dataItem.CarrierProfileId,
+                    OperatorProfileId: dataItem.OperatorProfileId,
                 };
             }
-            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CarrierAccount/CarrierAccountEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/OperatorAccount/OperatorAccountEditor.html', parameters, settings);
         }
 
-        function editCarrierAccount(carrierAccountObj, onCarrierAccountUpdated) {
+        function editOperatorAccount(operatorAccountObj, onOperatorAccountUpdated) {
             var modalSettings = {
             };
             var parameters = {
-                CarrierAccountId: carrierAccountObj.CarrierAccountId != undefined?carrierAccountObj.CarrierAccountId:carrierAccountObj,
-                CarrierProfileId: carrierAccountObj.CarrierProfileId != undefined? carrierAccountObj.CarrierProfileId:undefined,
+                OperatorAccountId: operatorAccountObj.OperatorAccountId != undefined?operatorAccountObj.OperatorAccountId:operatorAccountObj,
+                OperatorProfileId: operatorAccountObj.OperatorProfileId != undefined? operatorAccountObj.OperatorProfileId:undefined,
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onCarrierAccountUpdated = onCarrierAccountUpdated;
+                modalScope.onOperatorAccountUpdated = onOperatorAccountUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/OperatorAccount/OperatorAccountEditor.html', parameters, modalSettings);
         }
     }
 
-    appControllers.service('Demo_CarrierAccountService', CarrierAccountService);
+    appControllers.service('Demo_OperatorAccountService', OperatorAccountService);
 
 })(appControllers);

@@ -1,25 +1,25 @@
 ﻿'use strict'
 
-app.service('CarriersService', function (HttpService, MainService) {
+app.service('OperatorsService', function (HttpService, MainService) {
 
     return ({
         getCustomers: getCustomers,
         getSuppliers: getSuppliers
     });
-    function insertCarrierTest() {
-        var CarrierAccountID = $scope.CarrierAccountID;
+    function insertOperatorTest() {
+        var OperatorAccountID = $scope.OperatorAccountID;
         var Name = $scope.Name;
-        var getCarriersURL = MainService.getBaseURL() + "/api/BusinessEntity/insertCarrierTest";
-        return HttpService.post(getCarriersURL, CarrierAccountID, Name);
+        var getOperatorsURL = MainService.getBaseURL() + "/api/BusinessEntity/insertOperatorTest";
+        return HttpService.post(getOperatorsURL, OperatorAccountID, Name);
     }
     function getCustomers() {
 
-        var getCarriersURL = MainService.getBaseURL() + "/api/BusinessEntity/GetCarriers";
-        return HttpService.get(getCarriersURL, { carrierType: 1 });
+        var getOperatorsURL = MainService.getBaseURL() + "/api/BusinessEntity/GetOperators";
+        return HttpService.get(getOperatorsURL, { operatorType: 1 });
     }
     function getSuppliers() {
 
-        var getCarriersURL = MainService.getBaseURL() + "/api/BusinessEntity/GetCarriers";
-        return HttpService.get(getCarriersURL, { carrierType: 2 });
+        var getOperatorsURL = MainService.getBaseURL() + "/api/BusinessEntity/GetOperators";
+        return HttpService.get(getOperatorsURL, { operatorType: 2 });
     }
 });

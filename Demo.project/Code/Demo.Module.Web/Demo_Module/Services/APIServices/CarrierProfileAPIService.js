@@ -1,39 +1,39 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    carrierProfileAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_ModuleConfig'];
+    operatorProfileAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_ModuleConfig'];
 
-    function carrierProfileAPIService(BaseAPIService, UtilsService, Demo_ModuleConfig) {
+    function operatorProfileAPIService(BaseAPIService, UtilsService, Demo_ModuleConfig) {
 
-        function GetFilteredCarrierProfiles(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierProfile", "GetFilteredCarrierProfiles"), input);
+        function GetFilteredOperatorProfiles(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "GetFilteredOperatorProfiles"), input);
         }
 
-        function GetCarrierProfile(carrierProfileId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierProfile", "GetCarrierProfile"), {
-                carrierProfileId: carrierProfileId
+        function GetOperatorProfile(operatorProfileId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "GetOperatorProfile"), {
+                operatorProfileId: operatorProfileId
             });
 
         }
-        function GetCarrierProfilesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierProfile", "GetCarrierProfilesInfo"));
+        function GetOperatorProfilesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "GetOperatorProfilesInfo"));
 
         }
-        function UpdateCarrierProfile(carrierProfileObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierProfile", "UpdateCarrierProfile"), carrierProfileObject);
+        function UpdateOperatorProfile(operatorProfileObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "UpdateOperatorProfile"), operatorProfileObject);
         }
-        function AddCarrierProfile(carrierProfileObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierProfile", "AddCarrierProfile"), carrierProfileObject);
+        function AddOperatorProfile(operatorProfileObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "AddOperatorProfile"), operatorProfileObject);
         }
         return ({
-            GetCarrierProfilesInfo: GetCarrierProfilesInfo,
-            GetFilteredCarrierProfiles: GetFilteredCarrierProfiles,
-            GetCarrierProfile: GetCarrierProfile,
-            AddCarrierProfile:AddCarrierProfile,
-            UpdateCarrierProfile: UpdateCarrierProfile
+            GetOperatorProfilesInfo: GetOperatorProfilesInfo,
+            GetFilteredOperatorProfiles: GetFilteredOperatorProfiles,
+            GetOperatorProfile: GetOperatorProfile,
+            AddOperatorProfile:AddOperatorProfile,
+            UpdateOperatorProfile: UpdateOperatorProfile
         });
     }
 
-    appControllers.service('Demo_CarrierProfileAPIService', carrierProfileAPIService);
+    appControllers.service('Demo_OperatorProfileAPIService', operatorProfileAPIService);
 
 })(appControllers);

@@ -2,12 +2,12 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'Demo_CarrierAccountTypeEnum', 'VRUIUtilsService', 'Demo_CarrierAccountService'];
+    operatorAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'Demo_OperatorAccountTypeEnum', 'VRUIUtilsService', 'Demo_OperatorAccountService'];
 
-    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, Demo_CarrierAccountTypeEnum, VRUIUtilsService, Demo_CarrierAccountService) {
+    function operatorAccountManagementController($scope, UtilsService, VRNotificationService, Demo_OperatorAccountTypeEnum, VRUIUtilsService, Demo_OperatorAccountService) {
         var gridAPI;
-        var carrierProfileDirectiveAPI;
-        var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var operatorProfileDirectiveAPI;
+        var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -23,18 +23,18 @@
                 api.loadGrid(filter);
             }
 
-            $scope.onCarrierProfileDirectiveReady = function (api) {
-                carrierProfileDirectiveAPI = api;
-                carrierProfileReadyPromiseDeferred.resolve();
+            $scope.onOperatorProfileDirectiveReady = function (api) {
+                operatorProfileDirectiveAPI = api;
+                operatorProfileReadyPromiseDeferred.resolve();
             }
 
-            $scope.selectedCarrierAccountTypes = [];
-            $scope.AddNewCarrierAccount = AddNewCarrierAccount;
+            $scope.selectedOperatorAccountTypes = [];
+            $scope.AddNewOperatorAccount = AddNewOperatorAccount;
 
             function getFilterObject() {
                 var data = {
-                    AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountTypes, "value"),
-                    CarrierProfilesIds: carrierProfileDirectiveAPI.getSelectedIds(),
+                    AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedOperatorAccountTypes, "value"),
+                    OperatorProfilesIds: operatorProfileDirectiveAPI.getSelectedIds(),
                     Name: $scope.name
                 };
                 return data;
@@ -46,7 +46,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorAccountType, loadOperatorProfiles])
                 .catch(function (error) {
                     $scope.isLoading = false;
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -56,31 +56,31 @@
                });
         }
 
-        function loadCarrierAccountType() {
-            $scope.carrierAccountTypes = UtilsService.getArrayEnum(Demo_CarrierAccountTypeEnum);
+        function loadOperatorAccountType() {
+            $scope.operatorAccountTypes = UtilsService.getArrayEnum(Demo_OperatorAccountTypeEnum);
         }
 
-        function loadCarrierProfiles() {
-            var loadCarrierProfilePromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadOperatorProfiles() {
+            var loadOperatorProfilePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            carrierProfileReadyPromiseDeferred.promise
+            operatorProfileReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = undefined;
 
-                    VRUIUtilsService.callDirectiveLoad(carrierProfileDirectiveAPI, directivePayload, loadCarrierProfilePromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(operatorProfileDirectiveAPI, directivePayload, loadOperatorProfilePromiseDeferred);
                 });
 
-            return loadCarrierProfilePromiseDeferred.promise;
+            return loadOperatorProfilePromiseDeferred.promise;
         }
 
-        function AddNewCarrierAccount() {
-            var onCarrierAccountAdded = function (carrierAccountObj) {
-                gridAPI.onCarrierAccountAdded(carrierAccountObj);
+        function AddNewOperatorAccount() {
+            var onOperatorAccountAdded = function (operatorAccountObj) {
+                gridAPI.onOperatorAccountAdded(operatorAccountObj);
             };
 
-            Demo_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded);
+            Demo_OperatorAccountService.addOperatorAccount(onOperatorAccountAdded);
         }
     }
 
-    appControllers.controller('Demo_CarrierAccountManagementController', carrierAccountManagementController);
+    appControllers.controller('Demo_OperatorAccountManagementController', operatorAccountManagementController);
 })(appControllers);

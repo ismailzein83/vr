@@ -1,4 +1,4 @@
-﻿Expand the IIS web site of CarrierPortal.Web project:
+﻿Expand the IIS web site of OperatorPortal.Web project:
  - Add the following virtual directory under the root site:
 Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 

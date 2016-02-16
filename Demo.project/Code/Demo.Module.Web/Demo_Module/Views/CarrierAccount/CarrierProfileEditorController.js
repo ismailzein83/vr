@@ -2,12 +2,12 @@
 
     "use strict";
 
-    carrierProfileEditorController.$inject = ['$scope', 'Demo_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_ContactTypeEnum', 'VRUIUtilsService'];
+    operatorProfileEditorController.$inject = ['$scope', 'Demo_OperatorProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_ContactTypeEnum', 'VRUIUtilsService'];
 
-    function carrierProfileEditorController($scope, Demo_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_ContactTypeEnum, VRUIUtilsService) {
+    function operatorProfileEditorController($scope, Demo_OperatorProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_ContactTypeEnum, VRUIUtilsService) {
         var isEditMode;
-        var carrierProfileId;
-        var carrierProfileEntity;
+        var operatorProfileId;
+        var operatorProfileEntity;
         var countryId;
         var cityId;
 
@@ -25,9 +25,9 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                carrierProfileId = parameters.CarrierProfileId;
+                operatorProfileId = parameters.OperatorProfileId;
             }
-            isEditMode = (carrierProfileId != undefined);
+            isEditMode = (operatorProfileId != undefined);
 
         }
 
@@ -57,12 +57,12 @@
                 cityReadyPromiseDeferred.resolve();
             }
 
-            $scope.SaveCarrierProfile = function () {
+            $scope.SaveOperatorProfile = function () {
                 if (isEditMode) {
-                    return updateCarrierProfile();
+                    return updateOperatorProfile();
                 }
                 else {
-                    return insertCarrierProfile();
+                    return insertOperatorProfile();
                 }
             };
             $scope.close = function () {
@@ -107,10 +107,10 @@
             $scope.isLoading = true;
 
             if (isEditMode) {
-                getCarrierProfile().then(function () {
+                getOperatorProfile().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            carrierProfileEntity = undefined;
+                            operatorProfileEntity = undefined;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -122,9 +122,9 @@
             }
         }
 
-        function getCarrierProfile() {
-            return Demo_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
-                carrierProfileEntity = carrierProfile;
+        function getOperatorProfile() {
+            return Demo_OperatorProfileAPIService.GetOperatorProfile(operatorProfileId).then(function (operatorProfile) {
+                operatorProfileEntity = operatorProfile;
             });
         }
 
@@ -139,14 +139,14 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierProfileEntity ? carrierProfileEntity.Name : null, 'Carrier Profile') : UtilsService.buildTitleForAddEditor('Carrier Profile');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorProfileEntity ? operatorProfileEntity.Name : null, 'Operator Profile') : UtilsService.buildTitleForAddEditor('Operator Profile');
         }
 
         function loadCountries() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
             countryReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    selectedIds: (carrierProfileEntity != undefined) ? carrierProfileEntity.Settings.CountryId : undefined
+                    selectedIds: (operatorProfileEntity != undefined) ? operatorProfileEntity.Settings.CountryId : undefined
                 };
 
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
@@ -159,10 +159,10 @@
             var loadCityPromiseDeferred = UtilsService.createPromiseDeferred();
             cityReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    selectedIds: (carrierProfileEntity != undefined) ? carrierProfileEntity.Settings.CityId : undefined
+                    selectedIds: (operatorProfileEntity != undefined) ? operatorProfileEntity.Settings.CityId : undefined
                 };
-                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined)
-                    payload.filter = { CountryId: carrierProfileEntity.Settings.CountryId }
+                if (operatorProfileEntity != undefined && operatorProfileEntity.Settings.CountryId != undefined)
+                    payload.filter = { CountryId: operatorProfileEntity.Settings.CountryId }
                 VRUIUtilsService.callDirectiveLoad(cityDirectiveApi, payload, loadCityPromiseDeferred);
             });
 
@@ -174,9 +174,9 @@
                 $scope.scopeModal.contacts.push(addcontactObj(x));
             }
            
-            if (carrierProfileEntity!=undefined &&  carrierProfileEntity.Settings.Contacts != null)
-                for (var y = 0; y < carrierProfileEntity.Settings.Contacts.length; y++) {
-                        var item = carrierProfileEntity.Settings.Contacts[y];
+            if (operatorProfileEntity!=undefined &&  operatorProfileEntity.Settings.Contacts != null)
+                for (var y = 0; y < operatorProfileEntity.Settings.Contacts.length; y++) {
+                        var item = operatorProfileEntity.Settings.Contacts[y];
                         var matchedItem = UtilsService.getItemByVal($scope.scopeModal.contacts, item.Type, 'value');
                         if (matchedItem != null)
                             matchedItem.description = item.Description;
@@ -192,37 +192,37 @@
         }
 
         function loadStaticSection() {
-            if (carrierProfileEntity != undefined) {
-                $scope.scopeModal.name = carrierProfileEntity.Name;
+            if (operatorProfileEntity != undefined) {
+                $scope.scopeModal.name = operatorProfileEntity.Name;
 
-                if (carrierProfileEntity.Settings != null) {
-                    $scope.scopeModal.company = carrierProfileEntity.Settings.Company;
-                    $scope.scopeModal.website = carrierProfileEntity.Settings.Website;
-                    $scope.scopeModal.registrationNumber = carrierProfileEntity.Settings.RegistrationNumber;
-                    $scope.scopeModal.address = carrierProfileEntity.Settings.Address;
-                    $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
-                    $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
+                if (operatorProfileEntity.Settings != null) {
+                    $scope.scopeModal.company = operatorProfileEntity.Settings.Company;
+                    $scope.scopeModal.website = operatorProfileEntity.Settings.Website;
+                    $scope.scopeModal.registrationNumber = operatorProfileEntity.Settings.RegistrationNumber;
+                    $scope.scopeModal.address = operatorProfileEntity.Settings.Address;
+                    $scope.scopeModal.postalCode = operatorProfileEntity.Settings.PostalCode;
+                    $scope.scopeModal.town = operatorProfileEntity.Settings.Town;
 
-                    if (carrierProfileEntity.Settings.CompanyLogo > 0)
+                    if (operatorProfileEntity.Settings.CompanyLogo > 0)
                         $scope.scopeModal.companyLogo = {
-                            fileId: carrierProfileEntity.Settings.CompanyLogo
+                            fileId: operatorProfileEntity.Settings.CompanyLogo
                         };
                     else
                         $scope.scopeModal.companyLogo = null;
-                    if (carrierProfileEntity.Settings.PhoneNumbers == undefined)
-                        carrierProfileEntity.Settings.PhoneNumbers = [];
+                    if (operatorProfileEntity.Settings.PhoneNumbers == undefined)
+                        operatorProfileEntity.Settings.PhoneNumbers = [];
                     $scope.scopeModal.phoneNumbers = [];
-                    for (var i = 0; i < carrierProfileEntity.Settings.PhoneNumbers.length; i++) {
+                    for (var i = 0; i < operatorProfileEntity.Settings.PhoneNumbers.length; i++) {
                         $scope.scopeModal.phoneNumbers.push({
-                            phoneNumber: carrierProfileEntity.Settings.PhoneNumbers[i]
+                            phoneNumber: operatorProfileEntity.Settings.PhoneNumbers[i]
                         });
                     }
                     $scope.scopeModal.faxes = [];
-                    if (carrierProfileEntity.Settings.Faxes == undefined)
-                        carrierProfileEntity.Settings.Faxes = [];
-                    for (var j = 0; j < carrierProfileEntity.Settings.Faxes.length; j++) {
+                    if (operatorProfileEntity.Settings.Faxes == undefined)
+                        operatorProfileEntity.Settings.Faxes = [];
+                    for (var j = 0; j < operatorProfileEntity.Settings.Faxes.length; j++) {
                         $scope.scopeModal.faxes.push({
-                            fax: carrierProfileEntity.Settings.Faxes[j]
+                            fax: operatorProfileEntity.Settings.Faxes[j]
                         });
                     }
                     
@@ -234,10 +234,10 @@
 
         }
 
-        function buildCarrierProfileObjFromScope() {
+        function buildOperatorProfileObjFromScope() {
 
             var obj = {
-                CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
+                OperatorProfileId: (operatorProfileId != null) ? operatorProfileId : 0,
                 Name:  $scope.scopeModal.name,
                 Settings: {
                     CountryId: countryDirectiveApi.getSelectedIds(),
@@ -263,16 +263,16 @@
            return obj;
         }
 
-        function insertCarrierProfile() {
+        function insertOperatorProfile() {
             $scope.isLoading = true;
 
-            var carrierProfileObject = buildCarrierProfileObjFromScope();
+            var operatorProfileObject = buildOperatorProfileObjFromScope();
             
-            return Demo_CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
+            return Demo_OperatorProfileAPIService.AddOperatorProfile(operatorProfileObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response, "Name")) {
-                    if ($scope.onCarrierProfileAdded != undefined)
-                        $scope.onCarrierProfileAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded("Operator Profile", response, "Name")) {
+                    if ($scope.onOperatorProfileAdded != undefined)
+                        $scope.onOperatorProfileAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -283,16 +283,16 @@
 
         }
 
-        function updateCarrierProfile() {
+        function updateOperatorProfile() {
             $scope.isLoading = true;
 
-            var carrierProfileObject = buildCarrierProfileObjFromScope();
+            var operatorProfileObject = buildOperatorProfileObjFromScope();
             
-            Demo_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
+            Demo_OperatorProfileAPIService.UpdateOperatorProfile(operatorProfileObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response ,"Name")) {
-                    if ($scope.onCarrierProfileUpdated != undefined)
-                        $scope.onCarrierProfileUpdated(response.UpdatedObject);
+                if (VRNotificationService.notifyOnItemUpdated("Operator Profile", response ,"Name")) {
+                    if ($scope.onOperatorProfileUpdated != undefined)
+                        $scope.onOperatorProfileUpdated(response.UpdatedObject);
 
                     $scope.modalContext.closeModal();
                 }
@@ -304,5 +304,5 @@
         }
     }
 
-    appControllers.controller('Demo_CarrierProfileEditorController', carrierProfileEditorController);
+    appControllers.controller('Demo_OperatorProfileEditorController', operatorProfileEditorController);
 })(appControllers);

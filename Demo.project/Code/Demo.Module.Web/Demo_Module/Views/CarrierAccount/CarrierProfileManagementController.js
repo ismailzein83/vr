@@ -2,11 +2,11 @@
 
     "use strict";
 
-    carrierProfileManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'Demo_CarrierProfileService'];
+    operatorProfileManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'Demo_OperatorProfileService'];
 
-    function carrierProfileManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, Demo_CarrierProfileService) {
+    function operatorProfileManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, Demo_OperatorProfileService) {
         var gridAPI;
-        var carrierProfileDirectiveAPI;
+        var operatorProfileDirectiveAPI;
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
@@ -28,7 +28,7 @@
                 return gridAPI.loadGrid(getFilterObject());
             };
 
-            $scope.AddNewCarrierProfile = AddNewCarrierProfile;
+            $scope.AddNewOperatorProfile = AddNewOperatorProfile;
 
             function getFilterObject() {
                 var data = {
@@ -65,15 +65,15 @@
             return loadCountryPromiseDeferred.promise;
         }
 
-        function AddNewCarrierProfile() {
-            var onCarrierProfileAdded = function (carrierProfileObj) {
-                gridAPI.onCarrierProfileAdded(carrierProfileObj);
+        function AddNewOperatorProfile() {
+            var onOperatorProfileAdded = function (operatorProfileObj) {
+                gridAPI.onOperatorProfileAdded(operatorProfileObj);
             };
 
-            Demo_CarrierProfileService.addCarrierProfile(onCarrierProfileAdded);
+            Demo_OperatorProfileService.addOperatorProfile(onOperatorProfileAdded);
         }
 
     }
 
-    appControllers.controller('Demo_CarrierProfileManagementController', carrierProfileManagementController);
+    appControllers.controller('Demo_OperatorProfileManagementController', operatorProfileManagementController);
 })(appControllers);

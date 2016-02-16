@@ -9,46 +9,46 @@ using Vanrise.Web.Base;
 
 namespace Demo.Module.Web.Controllers
 {
-     [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierProfile")]
-    public class Demo_CarrierProfileController : BaseAPIController
+     [RoutePrefix(Constants.ROUTE_PREFIX + "OperatorProfile")]
+    public class Demo_OperatorProfileController : BaseAPIController
     {
         [HttpPost]
-        [Route("GetFilteredCarrierProfiles")]
-         public object GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
+        [Route("GetFilteredOperatorProfiles")]
+         public object GetFilteredOperatorProfiles(Vanrise.Entities.DataRetrievalInput<OperatorProfileQuery> input)
         {
-            CarrierProfileManager manager = new CarrierProfileManager();
-            return GetWebResponse(input, manager.GetFilteredCarrierProfiles(input));
+            OperatorProfileManager manager = new OperatorProfileManager();
+            return GetWebResponse(input, manager.GetFilteredOperatorProfiles(input));
         }
 
         [HttpGet]
-        [Route("GetCarrierProfile")]
-        public CarrierProfile GetCarrierProfile(int carrierProfileId)
+        [Route("GetOperatorProfile")]
+        public OperatorProfile GetOperatorProfile(int operatorProfileId)
         {
-            CarrierProfileManager manager = new CarrierProfileManager();
-            return manager.GetCarrierProfile(carrierProfileId);
+            OperatorProfileManager manager = new OperatorProfileManager();
+            return manager.GetOperatorProfile(operatorProfileId);
         }
 
         [HttpGet]
-        [Route("GetCarrierProfilesInfo")]
-        public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
+        [Route("GetOperatorProfilesInfo")]
+        public IEnumerable<OperatorProfileInfo> GetOperatorProfilesInfo()
         {
-            CarrierProfileManager manager = new CarrierProfileManager();
-            return manager.GetCarrierProfilesInfo();
+            OperatorProfileManager manager = new OperatorProfileManager();
+            return manager.GetOperatorProfilesInfo();
         }
 
         [HttpPost]
-        [Route("AddCarrierProfile")]
-        public Vanrise.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
+        [Route("AddOperatorProfile")]
+        public Vanrise.Entities.InsertOperationOutput<OperatorProfileDetail> AddOperatorProfile(OperatorProfile operatorProfile)
         {
-            CarrierProfileManager manager = new CarrierProfileManager();
-            return manager.AddCarrierProfile(carrierProfile);
+            OperatorProfileManager manager = new OperatorProfileManager();
+            return manager.AddOperatorProfile(operatorProfile);
         }
         [HttpPost]
-        [Route("UpdateCarrierProfile")]
-        public Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        [Route("UpdateOperatorProfile")]
+        public Vanrise.Entities.UpdateOperationOutput<OperatorProfileDetail> UpdateOperatorProfile(OperatorProfile operatorProfile)
         {
-            CarrierProfileManager manager = new CarrierProfileManager();
-            return manager.UpdateCarrierProfile(carrierProfile);
+            OperatorProfileManager manager = new OperatorProfileManager();
+            return manager.UpdateOperatorProfile(operatorProfile);
         }
     }
 }

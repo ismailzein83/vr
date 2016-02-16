@@ -11,18 +11,18 @@ using Vanrise.Entities;
 
 namespace Demo.Module.Business
 {
-    public class CarrierProfileManager
+    public class OperatorProfileManager
     {
       
         #region ctor/Local Variables
         #endregion
 
         #region Public Methods
-        public Vanrise.Entities.IDataRetrievalResult<CarrierProfileDetail> GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<OperatorProfileDetail> GetFilteredOperatorProfiles(Vanrise.Entities.DataRetrievalInput<OperatorProfileQuery> input)
         {
-            var allCarrierProfiles = GetCachedCarrierProfiles();
+            var allOperatorProfiles = GetCachedOperatorProfiles();
 
-            Func<CarrierProfile, bool> filterExpression = (prod) =>
+            Func<OperatorProfile, bool> filterExpression = (prod) =>
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
 
@@ -31,50 +31,50 @@ namespace Demo.Module.Business
 
                  (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || input.Query.CountriesIds.Contains(prod.Settings.CountryId))
                  &&
-                 (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId));
+                 (input.Query.OperatorProfileIds == null || input.Query.OperatorProfileIds.Contains(prod.OperatorProfileId));
 
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierProfiles.ToBigResult(input, filterExpression, CarrierProfileDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allOperatorProfiles.ToBigResult(input, filterExpression, OperatorProfileDetailMapper));
         }
-        public CarrierProfile GetCarrierProfile(int carrierProfileId)
+        public OperatorProfile GetOperatorProfile(int operatorProfileId)
         {
-            var carrierProfiles = GetCachedCarrierProfiles();
-            return carrierProfiles.GetRecord(carrierProfileId);
+            var operatorProfiles = GetCachedOperatorProfiles();
+            return operatorProfiles.GetRecord(operatorProfileId);
         }
-        public IEnumerable<CarrierProfileInfo> GetCarrierProfilesInfo()
+        public IEnumerable<OperatorProfileInfo> GetOperatorProfilesInfo()
         {
-            var carrierProfiles = GetCachedCarrierProfiles();
-            return carrierProfiles.MapRecords(CarrierProfileInfoMapper);
+            var operatorProfiles = GetCachedOperatorProfiles();
+            return operatorProfiles.MapRecords(OperatorProfileInfoMapper);
         }
-        public Vanrise.Entities.InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
+        public Vanrise.Entities.InsertOperationOutput<OperatorProfileDetail> AddOperatorProfile(OperatorProfile operatorProfile)
         {
-            Vanrise.Entities.InsertOperationOutput<CarrierProfileDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CarrierProfileDetail>();
+            Vanrise.Entities.InsertOperationOutput<OperatorProfileDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<OperatorProfileDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            int carrierProfileId = -1;
+            int operatorProfileId = -1;
 
-            ICarrierProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-            bool insertActionSucc = dataManager.Insert(carrierProfile, out carrierProfileId);
+            IOperatorProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorProfileDataManager>();
+            bool insertActionSucc = dataManager.Insert(operatorProfile, out operatorProfileId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                carrierProfile.CarrierProfileId = carrierProfileId;
-                insertOperationOutput.InsertedObject = CarrierProfileDetailMapper(carrierProfile);
+                operatorProfile.OperatorProfileId = operatorProfileId;
+                insertOperationOutput.InsertedObject = OperatorProfileDetailMapper(operatorProfile);
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        public Vanrise.Entities.UpdateOperationOutput<OperatorProfileDetail> UpdateOperatorProfile(OperatorProfile operatorProfile)
         {
-            ICarrierProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+            IOperatorProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorProfileDataManager>();
 
-            bool updateActionSucc = dataManager.Update(carrierProfile);
-            Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail>();
+            bool updateActionSucc = dataManager.Update(operatorProfile);
+            Vanrise.Entities.UpdateOperationOutput<OperatorProfileDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<OperatorProfileDetail>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -83,7 +83,7 @@ namespace Demo.Module.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(carrierProfile);
+                updateOperationOutput.UpdatedObject = OperatorProfileDetailMapper(operatorProfile);
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
@@ -92,51 +92,51 @@ namespace Demo.Module.Business
         #endregion
 
         #region Private Members
-        private Dictionary<int, CarrierProfile> GetCachedCarrierProfiles()
+        private Dictionary<int, OperatorProfile> GetCachedOperatorProfiles()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierProfiles",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetOperatorProfiles",
                () =>
                {
-                   ICarrierProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-                   IEnumerable<CarrierProfile> carrierProfiles = dataManager.GetCarrierProfiles();
-                   return carrierProfiles.ToDictionary(cn => cn.CarrierProfileId, cn => cn);
+                   IOperatorProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorProfileDataManager>();
+                   IEnumerable<OperatorProfile> operatorProfiles = dataManager.GetOperatorProfiles();
+                   return operatorProfiles.ToDictionary(cn => cn.OperatorProfileId, cn => cn);
                });
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICarrierProfileDataManager _dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+            IOperatorProfileDataManager _dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorProfileDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCarrierProfilesUpdated(ref _updateHandle);
+                return _dataManager.AreOperatorProfilesUpdated(ref _updateHandle);
             }
         }
 
         #endregion
      
         #region  Mappers
-        private CarrierProfileInfo CarrierProfileInfoMapper(CarrierProfile carrierProfile)
+        private OperatorProfileInfo OperatorProfileInfoMapper(OperatorProfile operatorProfile)
         {
-            return new CarrierProfileInfo()
+            return new OperatorProfileInfo()
             {
-                CarrierProfileId = carrierProfile.CarrierProfileId,
-                Name = carrierProfile.Name,
+                OperatorProfileId = operatorProfile.OperatorProfileId,
+                Name = operatorProfile.Name,
             };
         }
-        private CarrierProfileDetail CarrierProfileDetailMapper(CarrierProfile carrierProfile)
+        private OperatorProfileDetail OperatorProfileDetailMapper(OperatorProfile operatorProfile)
         {
-            CarrierProfileDetail carrierProfileDetail = new CarrierProfileDetail();
+            OperatorProfileDetail operatorProfileDetail = new OperatorProfileDetail();
 
-            carrierProfileDetail.Entity = carrierProfile;
+            operatorProfileDetail.Entity = operatorProfile;
 
             CountryManager manager = new CountryManager();
-            if (carrierProfile.Settings != null)
+            if (operatorProfile.Settings != null)
             {
-                carrierProfileDetail.CountryName = manager.GetCountry(carrierProfile.Settings.CountryId).Name;
+                operatorProfileDetail.CountryName = manager.GetCountry(operatorProfile.Settings.CountryId).Name;
             }
 
-            return carrierProfileDetail;
+            return operatorProfileDetail;
         }
         #endregion
     }

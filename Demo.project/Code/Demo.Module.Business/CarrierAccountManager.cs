@@ -10,57 +10,57 @@ using Vanrise.Common.Business;
 
 namespace Demo.Module.Business
 {
-    public class CarrierAccountManager
+    public class OperatorAccountManager
     {
 
         #region ctor/Local Variables
-        CarrierProfileManager _carrierProfileManager;
-        public CarrierAccountManager()
+        OperatorProfileManager _operatorProfileManager;
+        public OperatorAccountManager()
         {
-            _carrierProfileManager = new CarrierProfileManager();
+            _operatorProfileManager = new OperatorProfileManager();
         }
 
         #endregion
 
         #region Public Methods
-        public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<OperatorAccountDetail> GetFilteredOperatorAccounts(Vanrise.Entities.DataRetrievalInput<OperatorAccountQuery> input)
         {
-            var allCarrierAccounts = GetCachedCarrierAccounts();
+            var allOperatorAccounts = GetCachedOperatorAccounts();
 
-            Func<CarrierAccount, bool> filterExpression = (item) =>
+            Func<OperatorAccount, bool> filterExpression = (item) =>
                  (input.Query.Name == null || item.NameSuffix.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
-                 (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
+                 (input.Query.OperatorProfilesIds == null || input.Query.OperatorProfilesIds.Contains(item.OperatorProfileId))
                   &&
-                 (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId));
+                 (input.Query.OperatorAccountsIds == null || input.Query.OperatorAccountsIds.Contains(item.OperatorAccountId));
                
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allOperatorAccounts.ToBigResult(input, filterExpression, OperatorAccountDetailMapper));
         }
-        public CarrierAccount GetCarrierAccount(int carrierAccountId)
+        public OperatorAccount GetOperatorAccount(int operatorAccountId)
         {
-            var CarrierAccounts = GetCachedCarrierAccounts();
-            return CarrierAccounts.GetRecord(carrierAccountId);
+            var OperatorAccounts = GetCachedOperatorAccounts();
+            return OperatorAccounts.GetRecord(operatorAccountId);
         }
 
-        public Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
+        public Vanrise.Entities.InsertOperationOutput<OperatorAccountDetail> AddOperatorAccount(OperatorAccount operatorAccount)
         {
-            Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail>();
+            Vanrise.Entities.InsertOperationOutput<OperatorAccountDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<OperatorAccountDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            int carrierAccountId = -1;
+            int operatorAccountId = -1;
 
-            ICarrierAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-            bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
+            IOperatorAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorAccountDataManager>();
+            bool insertActionSucc = dataManager.Insert(operatorAccount, out operatorAccountId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                carrierAccount.CarrierAccountId = carrierAccountId;
-                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
+                operatorAccount.OperatorAccountId = operatorAccountId;
+                OperatorAccountDetail operatorAccountDetail = OperatorAccountDetailMapper(operatorAccount);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = carrierAccountDetail;
+                insertOperationOutput.InsertedObject = operatorAccountDetail;
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
@@ -68,12 +68,12 @@ namespace Demo.Module.Business
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
+        public Vanrise.Entities.UpdateOperationOutput<OperatorAccountDetail> UpdateOperatorAccount(OperatorAccount operatorAccount)
         {
-            ICarrierAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            IOperatorAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorAccountDataManager>();
 
-            bool updateActionSucc = dataManager.Update(carrierAccount);
-            Vanrise.Entities.UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CarrierAccountDetail>();
+            bool updateActionSucc = dataManager.Update(operatorAccount);
+            Vanrise.Entities.UpdateOperationOutput<OperatorAccountDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<OperatorAccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -81,9 +81,9 @@ namespace Demo.Module.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
+                OperatorAccountDetail operatorAccountDetail = OperatorAccountDetailMapper(operatorAccount);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = carrierAccountDetail;
+                updateOperationOutput.UpdatedObject = operatorAccountDetail;
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
@@ -93,27 +93,27 @@ namespace Demo.Module.Business
         #endregion
 
         #region Private Methods
-        Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
+        Dictionary<int, OperatorAccount> GetCachedOperatorAccounts()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetOperatorAccounts",
                () =>
                {
-                   ICarrierAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-                   IEnumerable<CarrierAccount> carrierAccounts = dataManager.GetCarrierAccounts();
-                   return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp);
+                   IOperatorAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorAccountDataManager>();
+                   IEnumerable<OperatorAccount> operatorAccounts = dataManager.GetOperatorAccounts();
+                   return operatorAccounts.ToDictionary(kvp => kvp.OperatorAccountId, kvp => kvp);
                });
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICarrierAccountDataManager _dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            IOperatorAccountDataManager _dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorAccountDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
+                return _dataManager.AreOperatorAccountsUpdated(ref _updateHandle);
             }
         }
-        private static string GetCarrierAccountName(string profileName, string nameSuffix)
+        private static string GetOperatorAccountName(string profileName, string nameSuffix)
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
@@ -122,20 +122,20 @@ namespace Demo.Module.Business
 
         #region  Mappers
 
-        private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
+        private OperatorAccountDetail OperatorAccountDetailMapper(OperatorAccount operatorAccount)
         {
-            CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
-            carrierAccountDetail.Entity = carrierAccount;
+            OperatorAccountDetail operatorAccountDetail = new OperatorAccountDetail();
+            operatorAccountDetail.Entity = operatorAccount;
 
-            var carrierProfile = _carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
+            var operatorProfile = _operatorProfileManager.GetOperatorProfile(operatorAccount.OperatorProfileId);
 
-            if (carrierProfile != null)
+            if (operatorProfile != null)
             {
-                carrierAccountDetail.CarrierProfileName = carrierProfile.Name;
-                carrierAccountDetail.CarrierAccountName = GetCarrierAccountName(carrierProfile.Name, carrierAccountDetail.Entity.NameSuffix);
+                operatorAccountDetail.OperatorProfileName = operatorProfile.Name;
+                operatorAccountDetail.OperatorAccountName = GetOperatorAccountName(operatorProfile.Name, operatorAccountDetail.Entity.NameSuffix);
             }
 
-            return carrierAccountDetail;
+            return operatorAccountDetail;
         }
         #endregion
 

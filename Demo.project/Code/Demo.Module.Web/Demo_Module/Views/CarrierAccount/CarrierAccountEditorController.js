@@ -2,20 +2,20 @@
 
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'Demo_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_CarrierAccountTypeEnum', 'VRUIUtilsService', 'Demo_CarrierAccountActivationStatusEnum'];
+    operatorAccountEditorController.$inject = ['$scope', 'Demo_OperatorAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_OperatorAccountTypeEnum', 'VRUIUtilsService', 'Demo_OperatorAccountActivationStatusEnum'];
 
-    function carrierAccountEditorController($scope, Demo_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_CarrierAccountTypeEnum, VRUIUtilsService, Demo_CarrierAccountActivationStatusEnum) {
-        var carrierProfileDirectiveAPI;
-        var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    function operatorAccountEditorController($scope, Demo_OperatorAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_OperatorAccountTypeEnum, VRUIUtilsService, Demo_OperatorAccountActivationStatusEnum) {
+        var operatorProfileDirectiveAPI;
+        var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var sellingNumberPlanDirectiveAPI;
 
         var isEditMode;
         $scope.scopeModal = {};
 
-        var carrierAccountId;
-        var carrierProfileId;
-        var carrierAccountEntity;
+        var operatorAccountId;
+        var operatorProfileId;
+        var operatorAccountEntity;
 
         loadParameters();
         defineScope();
@@ -24,19 +24,19 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                carrierAccountId = parameters.CarrierAccountId;
-                carrierProfileId = parameters.CarrierProfileId
+                operatorAccountId = parameters.OperatorAccountId;
+                operatorProfileId = parameters.OperatorProfileId
             }
-            isEditMode = (carrierAccountId != undefined);
-            $scope.scopeModal.disableCarrierProfile = ((carrierProfileId != undefined));
+            isEditMode = (operatorAccountId != undefined);
+            $scope.scopeModal.disableOperatorProfile = ((operatorProfileId != undefined));
         }
 
         function defineScope() {
-            $scope.scopeModal.SaveCarrierAccount = function () {
+            $scope.scopeModal.SaveOperatorAccount = function () {
                 if (isEditMode) {
-                    return updateCarrierAccount();
+                    return updateOperatorAccount();
                 } else {
-                    return insertCarrierAccount();
+                    return insertOperatorAccount();
                 }
             };
 
@@ -44,9 +44,9 @@
                 sellingNumberPlanDirectiveAPI = api;
             }
 
-            $scope.scopeModal.onCarrierProfileDirectiveReady = function (api) {
-                carrierProfileDirectiveAPI = api;
-                carrierProfileReadyPromiseDeferred.resolve();
+            $scope.scopeModal.onOperatorProfileDirectiveReady = function (api) {
+                operatorProfileDirectiveAPI = api;
+                operatorProfileReadyPromiseDeferred.resolve();
 
             }
 
@@ -60,11 +60,11 @@
             $scope.scopeModal.isLoading = true;
 
             if (isEditMode) {
-                getCarrierAccount()
+                getOperatorAccount()
                     .then(function () {
                         loadAllControls()
                             .finally(function () {
-                                carrierAccountEntity = undefined;
+                                operatorAccountEntity = undefined;
                             });
                     })
                     .catch(function () {
@@ -78,7 +78,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadCarrierProfileDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadOperatorProfileDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -88,36 +88,36 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierAccountEntity ? carrierAccountEntity.NameSuffix : null, 'Carrier Account') : UtilsService.buildTitleForAddEditor('Carrier Account');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorAccountEntity ? operatorAccountEntity.NameSuffix : null, 'Operator Account') : UtilsService.buildTitleForAddEditor('Operator Account');
         }
 
-        function loadCarrierProfileDirective() {
+        function loadOperatorProfileDirective() {
 
-            var loadCarrierProfilePromiseDeferred = UtilsService.createPromiseDeferred();
+            var loadOperatorProfilePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            carrierProfileReadyPromiseDeferred.promise
+            operatorProfileReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds: (carrierAccountEntity != undefined ? carrierAccountEntity.CarrierProfileId : (carrierProfileId != undefined ? carrierProfileId : undefined))
+                        selectedIds: (operatorAccountEntity != undefined ? operatorAccountEntity.OperatorProfileId : (operatorProfileId != undefined ? operatorProfileId : undefined))
                     }
-                    VRUIUtilsService.callDirectiveLoad(carrierProfileDirectiveAPI, directivePayload, loadCarrierProfilePromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(operatorProfileDirectiveAPI, directivePayload, loadOperatorProfilePromiseDeferred);
                 });
 
-            return loadCarrierProfilePromiseDeferred.promise;
+            return loadOperatorProfilePromiseDeferred.promise;
         }
 
-        function getCarrierAccount() {
-            return Demo_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId)
-                .then(function (carrierAccount) {
-                    carrierAccountEntity = carrierAccount;
+        function getOperatorAccount() {
+            return Demo_OperatorAccountAPIService.GetOperatorAccount(operatorAccountId)
+                .then(function (operatorAccount) {
+                    operatorAccountEntity = operatorAccount;
                 });
         }
 
-        function buildCarrierAccountObjFromScope() {
+        function buildOperatorAccountObjFromScope() {
             var obj = {
-                CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
+                OperatorAccountId: (operatorAccountId != null) ? operatorAccountId : 0,
                 NameSuffix: $scope.scopeModal.name,
-                CarrierProfileId: carrierProfileDirectiveAPI.getSelectedIds(),
+                OperatorProfileId: operatorProfileDirectiveAPI.getSelectedIds(),
                 SupplierSettings: {},
                 CustomerSettings: {},
             };
@@ -125,21 +125,21 @@
         }
 
         function loadFilterBySection() {
-            if (carrierAccountEntity != undefined) {
-                $scope.scopeModal.name = carrierAccountEntity.NameSuffix;
+            if (operatorAccountEntity != undefined) {
+                $scope.scopeModal.name = operatorAccountEntity.NameSuffix;
             }
         }
 
 
-        function insertCarrierAccount() {
+        function insertOperatorAccount() {
             $scope.scopeModal.isLoading = true;
 
-            var carrierAccountObject = buildCarrierAccountObjFromScope();
-            return Demo_CarrierAccountAPIService.AddCarrierAccount(carrierAccountObject)
+            var operatorAccountObject = buildOperatorAccountObjFromScope();
+            return Demo_OperatorAccountAPIService.AddOperatorAccount(operatorAccountObject)
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded("Carrier Account", response, "Name")) {
-                        if ($scope.onCarrierAccountAdded != undefined)
-                            $scope.onCarrierAccountAdded(response.InsertedObject);
+                    if (VRNotificationService.notifyOnItemAdded("Operator Account", response, "Name")) {
+                        if ($scope.onOperatorAccountAdded != undefined)
+                            $scope.onOperatorAccountAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();
                     }
                 })
@@ -151,15 +151,15 @@
 
         }
 
-        function updateCarrierAccount() {
+        function updateOperatorAccount() {
             $scope.scopeModal.isLoading = true;
 
-            var carrierAccountObject = buildCarrierAccountObjFromScope();
-            Demo_CarrierAccountAPIService.UpdateCarrierAccount(carrierAccountObject)
+            var operatorAccountObject = buildOperatorAccountObjFromScope();
+            Demo_OperatorAccountAPIService.UpdateOperatorAccount(operatorAccountObject)
                 .then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("Carrier Account", response, "Name")) {
-                        if ($scope.onCarrierAccountUpdated != undefined)
-                            $scope.onCarrierAccountUpdated(response.UpdatedObject);
+                    if (VRNotificationService.notifyOnItemUpdated("Operator Account", response, "Name")) {
+                        if ($scope.onOperatorAccountUpdated != undefined)
+                            $scope.onOperatorAccountUpdated(response.UpdatedObject);
                         $scope.modalContext.closeModal();
                     }
                 })
@@ -171,5 +171,5 @@
         }
     }
 
-    appControllers.controller('Demo_CarrierAccountEditorController', carrierAccountEditorController);
+    appControllers.controller('Demo_OperatorAccountEditorController', operatorAccountEditorController);
 })(appControllers);

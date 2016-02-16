@@ -64,7 +64,7 @@ var TestViewController = function ($scope, $http, ValuesAPIService, $timeout, Ut
               Code: "5345",
               ExcludedCodes: ["534", "5346"]
           },
-          CarrierAccountSet: {
+          OperatorAccountSet: {
               $type: "TOne.LCR.Entities.CustomerSelectionSet, TOne.LCR.Entities",
               Customers: {
                   SelectionOption: "AllExceptItems",

@@ -1,12 +1,12 @@
-﻿<vr-datagrid datasource="carrierAccounts"
+﻿<vr-datagrid datasource="operatorAccounts"
                 on-ready="onGridReady"
                 dataretrievalfunction="dataRetrievalFunction"
                 pagingtype="'PagingOnScroll'"
                 menuactions="gridMenuActions"
-                idfield="Entity.CarrierAccountId"
+                idfield="Entity.OperatorAccountId"
                 showexpand="isExpandable">
 
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.CarrierAccountId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name Suffix'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Profile Name'" field="'CarrierProfileName'" type="'Text'" ng-show="!hideProfileColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.OperatorAccountId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name Suffix'" field="'OperatorAccountName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Profile Name'" field="'OperatorProfileName'" type="'Text'" ng-show="!hideProfileColumn"></vr-datagridcolumn>
 </vr-datagrid>

@@ -1,36 +1,36 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    carrierAccountAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_ModuleConfig'];
+    operatorAccountAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_ModuleConfig'];
 
-    function carrierAccountAPIService(BaseAPIService, UtilsService, Demo_ModuleConfig) {
+    function operatorAccountAPIService(BaseAPIService, UtilsService, Demo_ModuleConfig) {
 
-        function GetFilteredCarrierAccounts(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierAccount", "GetFilteredCarrierAccounts"), input);
+        function GetFilteredOperatorAccounts(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorAccount", "GetFilteredOperatorAccounts"), input);
         }
         
-        function GetCarrierAccount(carrierAccountId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierAccount", "GetCarrierAccount"), {
-                carrierAccountId: carrierAccountId
+        function GetOperatorAccount(operatorAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorAccount", "GetOperatorAccount"), {
+                operatorAccountId: operatorAccountId
             });
 
         }
        
-        function AddCarrierAccount(carrierAccountObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierAccount", "AddCarrierAccount"), carrierAccountObject);
+        function AddOperatorAccount(operatorAccountObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorAccount", "AddOperatorAccount"), operatorAccountObject);
         }
-        function UpdateCarrierAccount(carrierAccountObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "CarrierAccount", "UpdateCarrierAccount"), carrierAccountObject);
+        function UpdateOperatorAccount(operatorAccountObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorAccount", "UpdateOperatorAccount"), operatorAccountObject);
         }
 
         return ({
-            GetFilteredCarrierAccounts: GetFilteredCarrierAccounts,
-            GetCarrierAccount: GetCarrierAccount,
-            AddCarrierAccount: AddCarrierAccount,
-            UpdateCarrierAccount: UpdateCarrierAccount,
+            GetFilteredOperatorAccounts: GetFilteredOperatorAccounts,
+            GetOperatorAccount: GetOperatorAccount,
+            AddOperatorAccount: AddOperatorAccount,
+            UpdateOperatorAccount: UpdateOperatorAccount,
         });
     }
 
-    appControllers.service('Demo_CarrierAccountAPIService', carrierAccountAPIService);
+    appControllers.service('Demo_OperatorAccountAPIService', operatorAccountAPIService);
 
 })(appControllers);

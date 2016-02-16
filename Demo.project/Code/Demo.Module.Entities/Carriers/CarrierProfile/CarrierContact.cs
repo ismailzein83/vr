@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
-    public enum CarrierContactType
+    public enum OperatorContactType
     {
         BillingContactPerson = 1,
         BillingEmail = 2,
@@ -23,9 +23,9 @@ namespace Demo.Module.Entities
         CommercialEmail = 13, 
         AlertingSMSPhoneNumbers = 14
     }
-    public class CarrierContact
+    public class OperatorContact
     {
-        public CarrierContactType Type { get; set; }
+        public OperatorContactType Type { get; set; }
 
         public string Description { get; set; }
     }

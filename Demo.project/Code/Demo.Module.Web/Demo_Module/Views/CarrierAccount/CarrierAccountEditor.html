@@ -1,6 +1,6 @@
-﻿<div vr-modalcontent ng-controller="Demo_CarrierAccountEditorController" vr-loader="scopeModal.isLoading">
+﻿<div vr-modalcontent ng-controller="Demo_OperatorAccountEditorController" vr-loader="scopeModal.isLoading">
     <vr-modalbody>
-        <vr-form name="formCarrierAccountEditor">
+        <vr-form name="formOperatorAccountEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
@@ -8,7 +8,7 @@
                             <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-demo-carrierprofile-selector isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady" isdisabled="scopeModal.disableCarrierProfile"></vr-demo-carrierprofile-selector>
+                            <vr-demo-operatorprofile-selector isrequired on-ready="scopeModal.onOperatorProfileDirectiveReady" isdisabled="scopeModal.disableOperatorProfile"></vr-demo-operatorprofile-selector>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -18,7 +18,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formCarrierAccountEditor" data-onclick="scopeModal.SaveCarrierAccount"></vr-button>
+                <vr-button type="Save" formname="formOperatorAccountEditor" data-onclick="scopeModal.SaveOperatorAccount"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>

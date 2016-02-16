@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrDemoCarrieraccountSelector', ['Demo_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile',
-    function (Demo_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile) {
+app.directive('vrDemoOperatoraccountSelector', ['Demo_OperatorAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile',
+    function (Demo_OperatorAccountAPIService, UtilsService, VRUIUtilsService, $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -26,7 +26,7 @@ app.directive('vrDemoCarrieraccountSelector', ['Demo_CarrierAccountAPIService', 
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
-            var ctor = new carriersCtor(ctrl, $scope, Demo_CarrierAccountAPIService, $attrs);
+            var ctor = new operatorsCtor(ctrl, $scope, Demo_OperatorAccountAPIService, $attrs);
             ctor.initializeController();
 
         },
@@ -49,11 +49,11 @@ app.directive('vrDemoCarrieraccountSelector', ['Demo_CarrierAccountAPIService', 
         if (attrs.ismultipleselection != undefined) {
 
             label = (attrs.getcustomers != undefined) ? "Customers" : "Suppliers";
-            label = (attrs.getcustomers != undefined && attrs.getsuppliers != undefined) ? "Carriers" : label;
+            label = (attrs.getcustomers != undefined && attrs.getsuppliers != undefined) ? "Operators" : label;
         }
         else {
             label = (attrs.getcustomers != undefined) ? "Customer" : "Supplier";
-            label = (attrs.getcustomers != undefined && attrs.getsuppliers != undefined) ? "Carrier" : label;
+            label = (attrs.getcustomers != undefined && attrs.getsuppliers != undefined) ? "Operator" : label;
         }
 
         //var required = "";
@@ -77,11 +77,11 @@ app.directive('vrDemoCarrieraccountSelector', ['Demo_CarrierAccountAPIService', 
         if (attrs.ismultipleselection != undefined)
             ismultipleselection = "ismultipleselection";
 
-        return '<vr-select isrequired="ctrl.isrequired" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+        return '<vr-select isrequired="ctrl.isrequired" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="OperatorAccountId" label="'
             + label + '" ' + hideselectedvaluessection + ' entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select>'
     }
 
-    function carriersCtor(ctrl, $scope, Demo_CarrierAccountAPIService, attrs) {
+    function operatorsCtor(ctrl, $scope, Demo_OperatorAccountAPIService, attrs) {
 
         function initializeController() {
 
@@ -109,20 +109,20 @@ app.directive('vrDemoCarrieraccountSelector', ['Demo_CarrierAccountAPIService', 
                 if (filter != undefined)
                     serializedFilter = UtilsService.serializetoJson(filter);
 
-                return Demo_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
+                return Demo_OperatorAccountAPIService.GetOperatorAccountInfo(serializedFilter).then(function (response) {
                     ctrl.datasource.length = 0;
                     angular.forEach(response, function (itm) {
                         ctrl.datasource.push(itm);
                     });
 
                     if (selectedIds != undefined) {
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierAccountId', attrs, ctrl);
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'OperatorAccountId', attrs, ctrl);
                     }
                 });
             }
 
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('CarrierAccountId', attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('OperatorAccountId', attrs, ctrl);
             }
 
             api.getSelectedValues = function () {

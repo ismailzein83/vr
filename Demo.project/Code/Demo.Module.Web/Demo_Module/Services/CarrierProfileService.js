@@ -2,40 +2,40 @@
 
     'use stict';
 
-    CarrierProfileService.$inject = ['VRModalService'];
+    OperatorProfileService.$inject = ['VRModalService'];
 
-    function CarrierProfileService(VRModalService) {
+    function OperatorProfileService(VRModalService) {
         return ({
-            addCarrierProfile: addCarrierProfile,
-            editCarrierProfile: editCarrierProfile
+            addOperatorProfile: addOperatorProfile,
+            editOperatorProfile: editOperatorProfile
         });
 
-        function addCarrierProfile(onCarrierProfileAdded) {
+        function addOperatorProfile(onOperatorProfileAdded) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
 
-                modalScope.onCarrierProfileAdded = onCarrierProfileAdded;
+                modalScope.onOperatorProfileAdded = onOperatorProfileAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CarrierAccount/CarrierProfileEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/OperatorAccount/OperatorProfileEditor.html', null, settings);
         }
 
-        function editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated) {
+        function editOperatorProfile(operatorProfileObj, onOperatorProfileUpdated) {
             var modalSettings = {
             };
 
             var parameters = {
-                CarrierProfileId: carrierProfileObj.Entity.CarrierProfileId,
+                OperatorProfileId: operatorProfileObj.Entity.OperatorProfileId,
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onCarrierProfileUpdated = onCarrierProfileUpdated;
+                modalScope.onOperatorProfileUpdated = onOperatorProfileUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/OperatorAccount/OperatorProfileEditor.html', parameters, modalSettings);
         }
     }
 
-    appControllers.service('Demo_CarrierProfileService', CarrierProfileService);
+    appControllers.service('Demo_OperatorProfileService', OperatorProfileService);
 
 })(appControllers);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Demo.Module.Entities
 {
     public enum ActivationStatus { Active = 0, Inactive = 1, Testing = 2 }
-    public class CarrierAccountSettings
+    public class OperatorAccountSettings
     {
         public ActivationStatus ActivationStatus { get; set; } 
     }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
-    public class CarrierProfileInfo
+    public class OperatorProfileInfo
     {
-        public int CarrierProfileId { get; set; }
+        public int OperatorProfileId { get; set; }
         public string Name { get; set; }
     }
 }

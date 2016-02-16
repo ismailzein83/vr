@@ -9,11 +9,11 @@ using Vanrise.Data.SQL;
 
 namespace Demo.Module.Data.SQL
 {
-    public class CarrierProfileDataManager : BaseSQLDataManager, ICarrierProfileDataManager
+    public class OperatorProfileDataManager : BaseSQLDataManager, IOperatorProfileDataManager
     {
    
         #region ctor/Local Variables
-        public CarrierProfileDataManager()
+        public OperatorProfileDataManager()
             : base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
         {
 
@@ -21,30 +21,30 @@ namespace Demo.Module.Data.SQL
         #endregion
 
         #region Public Methods
-        public bool Insert(CarrierProfile carrierProfile, out int insertedId)
+        public bool Insert(OperatorProfile operatorProfile, out int insertedId)
         {
-            object carrierProfileId;
+            object operatorProfileId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_CarrierProfile_Insert", out carrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorProfile_Insert", out operatorProfileId, operatorProfile.Name, Vanrise.Common.Serializer.Serialize(operatorProfile.Settings));
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
-                insertedId = (int)carrierProfileId;
+                insertedId = (int)operatorProfileId;
             else
                 insertedId = 0;
             return insertedSuccesfully;
         }
-        public bool Update(CarrierProfile carrierProfile)
+        public bool Update(OperatorProfile operatorProfile)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorProfile_Update", operatorProfile.OperatorProfileId, operatorProfile.Name, Vanrise.Common.Serializer.Serialize(operatorProfile.Settings));
             return (recordsEffected > 0);
         }
-        public bool AreCarrierProfilesUpdated(ref object updateHandle)
+        public bool AreOperatorProfilesUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("dbo.CarrierProfile", ref updateHandle);
+            return base.IsDataUpdated("dbo.OperatorProfile", ref updateHandle);
         }
-        public List<CarrierProfile> GetCarrierProfiles()
+        public List<OperatorProfile> GetOperatorProfiles()
         {
-            return GetItemsSP("dbo.sp_CarrierProfile_GetAll", CarrierProfileMapper);
+            return GetItemsSP("dbo.sp_OperatorProfile_GetAll", OperatorProfileMapper);
         }
         #endregion
 
@@ -53,15 +53,15 @@ namespace Demo.Module.Data.SQL
         #endregion
 
         #region  Mappers
-        private CarrierProfile CarrierProfileMapper(IDataReader reader)
+        private OperatorProfile OperatorProfileMapper(IDataReader reader)
         {
-            CarrierProfile carrierProfile = new CarrierProfile
+            OperatorProfile operatorProfile = new OperatorProfile
             {
-                CarrierProfileId = (int)reader["ID"],
+                OperatorProfileId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<CarrierProfileSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<OperatorProfileSettings>(reader["Settings"] as string)
             };
-            return carrierProfile;
+            return operatorProfile;
         }
 
         #endregion
