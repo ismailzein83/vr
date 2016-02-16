@@ -8,7 +8,7 @@
                             <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-whs-be-carrierprofile-selector isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady" isdisabled="scopeModal.disableCarrierProfile"></vr-whs-be-carrierprofile-selector>
+                            <vr-demo-carrierprofile-selector isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady" isdisabled="scopeModal.disableCarrierProfile"></vr-demo-carrierprofile-selector>
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Activation Status" datasource="scopeModal.activationStatus"
@@ -20,7 +20,7 @@
                         </vr-columns>
 
                         <vr-columns width="1/2row" vr-loader="scopeModal.isLoadingSellingNumberPlan" ng-show="scopeModal.showSellingNumberPlan">
-                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModal.onSellingNumberPlanDirectiveReady" isrequired="scopeModal.showSellingNumberPlan" isdisabled="scopeModal.isEditMode"></vr-whs-be-sellingnumberplan-selector>
+                            <vr-demo-sellingnumberplan-selector on-ready="scopeModal.onSellingNumberPlanDirectiveReady" isrequired="scopeModal.showSellingNumberPlan" isdisabled="scopeModal.isEditMode"></vr-demo-sellingnumberplan-selector>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

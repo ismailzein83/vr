@@ -22,7 +22,7 @@
                     CarrierProfileId: dataItem.CarrierProfileId,
                 };
             }
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CarrierAccount/CarrierAccountEditor.html', parameters, settings);
         }
 
         function editCarrierAccount(carrierAccountObj, onCarrierAccountUpdated) {
@@ -36,7 +36,7 @@
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onCarrierAccountUpdated = onCarrierAccountUpdated;
             };
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CarrierAccount/CarrierAccountEditor.html', parameters, modalSettings);
         }
     }
 

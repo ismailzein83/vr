@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "Demo_CarrierProfileAPIService", "Demo_CarrierAccountService", "Demo_CarrierProfileService", "VRUIUtilsService",
+app.directive("vrDemoCarrierprofileGrid", ["UtilsService", "VRNotificationService", "Demo_CarrierProfileAPIService", "Demo_CarrierAccountService", "Demo_CarrierProfileService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, Demo_CarrierAccountService, Demo_CarrierProfileService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -20,7 +20,7 @@ function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, De
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/CarrierAccount/Templates/CarrierProfileGridTemplate.html"
+        templateUrl: "/Client/Modules/Demo_Module/Directives/CarrierAccount/Templates/CarrierProfileGridTemplate.html"
 
     };
 
@@ -41,7 +41,7 @@ function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, De
                 var drillDownDefinition = {};
 
                 drillDownDefinition.title = "Carrier Account";
-                drillDownDefinition.directive = "vr-whs-be-carrieraccount-grid";
+                drillDownDefinition.directive = "vr-demo-carrieraccount-grid";
 
                 drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
                     carrierProfileItem.carrierAccountGridAPI = directiveAPI;

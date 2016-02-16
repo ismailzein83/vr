@@ -18,7 +18,7 @@
                 modalScope.onCarrierProfileAdded = onCarrierProfileAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CarrierAccount/CarrierProfileEditor.html', null, settings);
         }
 
         function editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated) {
@@ -32,7 +32,7 @@
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onCarrierProfileUpdated = onCarrierProfileUpdated;
             };
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CarrierAccount/CarrierProfileEditor.html', parameters, modalSettings);
         }
     }
 

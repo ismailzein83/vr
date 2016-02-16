@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrieraccountSelector', ['Demo_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile',
+app.directive('vrDemoCarrieraccountSelector', ['Demo_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile',
     function (Demo_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile) {
 
     var directiveDefinitionObject = {

@@ -13,7 +13,7 @@ namespace Demo.Module.Data
          static ObjectFactory s_objectFactory;
          static BEDataManagerFactory()
         {
-            s_objectFactory = new ObjectFactory(Assembly.Load("TOne.WhS.BusinessEntity.Data.SQL"));
+            s_objectFactory = new ObjectFactory(Assembly.Load("Demo.Module.Data.SQL"));
         }
 
         public static T GetDataManager<T>() where T : class, IDataManager
