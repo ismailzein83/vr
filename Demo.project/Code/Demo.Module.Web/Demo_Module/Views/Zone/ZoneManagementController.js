@@ -19,10 +19,7 @@
                 setFilterObject();
                 return gridAPI.loadGrid(filter);
             };
-            $scope.onSellingNumberReady = function (api) {
-                sellingDirectiveApi = api;
-                sellingReadyPromiseDeferred.resolve();
-            }
+           
             $scope.onCountryReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
@@ -39,7 +36,7 @@
 
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadSellingSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadCountrySelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -57,21 +54,11 @@
                 });
             return countryLoadPromiseDeferred.promise;
         }
-        function loadSellingSelector() {
-            var sellingLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            sellingReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = {};
-                    VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, directivePayload, sellingLoadPromiseDeferred);
-                });
-            return sellingLoadPromiseDeferred.promise;
-        }
+       
 
         function setFilterObject() {
             filter = {
                 Name: $scope.name,
-                SellingNumberId: sellingDirectiveApi.getSelectedIds(),
                 EffectiveOn: $scope.effectiveOn,
                 Countries: countryDirectiveApi.getSelectedIds()
             };

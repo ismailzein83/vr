@@ -14,7 +14,7 @@ namespace Demo.Module.Data.SQL
 
         #region ctor/Local Variables
         public SaleZoneDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+            : base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
         {
 
         }

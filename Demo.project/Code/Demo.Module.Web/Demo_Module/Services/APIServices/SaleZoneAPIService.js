@@ -1,15 +1,15 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    saleZonesAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
+    saleZonesAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_Module_ModuleConfig'];
 
-    function saleZonesAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
+    function saleZonesAPIService(BaseAPIService, UtilsService, Demo_Module_ModuleConfig) {
         function GetFilteredSaleZones(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetFilteredSaleZones"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetFilteredSaleZones"), input);
         }
 
         function GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfo"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfo"), {
                 nameFilter: nameFilter,
                 sellingNumberPlanId: sellingNumberPlanId,
                 serializedFilter: serializedFilter
@@ -17,24 +17,24 @@
         }
 
         function GetSaleZonesInfoByIds(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByIds"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByIds"), input);
         }
 
         function GetSaleZone(saleZoneId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZone"), { saleZoneId: saleZoneId });
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZone"), { saleZoneId: saleZoneId });
         }       
         function GetSaleZoneGroupTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZoneGroupTemplates"));
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZoneGroupTemplates"));
         }
 
         function GetSaleZonesByName(customerId, saleZoneNameFilter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesByName"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesByName"), {
                 customerId: customerId,
                 saleZoneNameFilter: saleZoneNameFilter
             });
         }
         function GetSaleZoneInfoByCountryId(sellingNumberPlanId, countryId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByCountryId"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByCountryId"), {
                 sellingNumberPlanId: sellingNumberPlanId,
                 countryId: countryId
             });
@@ -51,5 +51,72 @@
     }
 
     appControllers.service('WhS_BE_SaleZoneAPIService', saleZonesAPIService);
+
+})(appControllers);
+
+
+(function (appControllers) {
+
+    'use stict';
+
+    SaleZoneService.$inject = [ 'VRModalService'];
+
+    function SaleZoneService( VRModalService) {
+        return ({
+            addSaleZone: addSaleZone,
+            editSaleZone: editSaleZone//,
+            //registerDrillDownToSellingNumberPlan: registerDrillDownToSellingNumberPlan
+        });
+
+        function addSaleZone(onSaleZoneAdded, sellingNumberPlanId) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSaleZoneAdded = onSaleZoneAdded;
+            };
+            var parameters = {};
+            if (sellingNumberPlanId != undefined) {
+                parameters.sellingNumberPlanId = sellingNumberPlanId;
+            }
+
+            VRModalService.showModal('/Client/Modules/Common/Views/SaleZone/SaleZoneEditor.html', parameters, settings);
+        }
+
+        function editSaleZone(saleZoneId, onSaleZoneUpdated) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onSaleZoneUpdated = onSaleZoneUpdated;
+            };
+            var parameters = {
+                SaleZoneId: saleZoneId
+            };
+
+            VRModalService.showModal('/Client/Modules/Common/Views/SaleZone/SaleZoneEditor.html', parameters, settings);
+        }
+
+        //function registerDrillDownToSellingNumberPlan() {
+        //    var drillDownDefinition = {};
+
+        //    drillDownDefinition.title = "Sale Zones";
+        //    drillDownDefinition.directive = "vr-whs-be-saleZone-grid";
+
+        //    drillDownDefinition.loadDirective = function (directiveAPI, sellingNumberPlanItem) {
+
+        //        sellingNumberPlanItem.saleZoneGridAPI = directiveAPI;
+        //        var query = {
+        //            SellingNumber: sellingNumberPlanItem.Entity.SellingNumberPlanId
+        //        };
+
+        //        return sellingNumberPlanItem.saleZoneGridAPI.loadGrid(query);
+        //    };
+
+        //    WhS_BE_SellingNumberPlanService.addDrillDownDefinition(drillDownDefinition);
+        //}
+    }
+
+    appControllers.service('WhS_BE_SaleZoneService', SaleZoneService);
 
 })(appControllers);
