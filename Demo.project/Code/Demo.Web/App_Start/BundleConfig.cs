@@ -13,6 +13,7 @@ namespace Demo.Web
             bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Demo_Module", "*.js", true));
         }
     }
