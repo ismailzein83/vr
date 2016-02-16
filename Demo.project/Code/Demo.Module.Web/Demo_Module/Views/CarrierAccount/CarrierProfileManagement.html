@@ -1,0 +1,39 @@
+﻿<vr-panel ng-controller="WhS_BE_CarrierProfileManagementController" >
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-textbox value="company" label="Company"></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-textbox value="billingEmail" label="Billing Email"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewCarrierProfile"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-be-carrierprofile-grid on-ready="onGridReady"></vr-whs-be-carrierprofile-grid>
+            </vr-columns>
+        </vr-row>
+        
+    </vr-form>
+
+</vr-panel>

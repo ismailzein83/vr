@@ -121,18 +121,35 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Demo_Module\Directives\" />
-    <Folder Include="Demo_Module\Services\APIServices\" />
-    <Folder Include="Demo_Module\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CarrierAccountController.cs" />
+    <Compile Include="Controllers\CarrierProfileController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Demo_Module\Constant\CarrierAccountActivationStatusEnum.js" />
+    <Content Include="Demo_Module\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrieraccount-grid.js" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrieraccount-selector.js" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrierprofile-grid.js" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrierprofile-selector.js" />
+    <Content Include="Demo_Module\Services\APIServices\CarrierAccountAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\CarrierProfileAPIService.js" />
+    <Content Include="Demo_Module\Services\CarrierAccountService.js" />
+    <Content Include="Demo_Module\Services\CarrierProfileService.js" />
+    <Content Include="Demo_Module\Views\CarrierAccount\CarrierAccountEditor.html" />
+    <Content Include="Demo_Module\Views\CarrierAccount\CarrierAccountEditorController.js" />
+    <Content Include="Demo_Module\Views\CarrierAccount\CarrierAccountManagement.html" />
+    <Content Include="Demo_Module\Views\CarrierAccount\CarrierAccountManagementController.js" />
+    <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileEditor.html" />
+    <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileEditorController.js" />
+    <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileManagement.html" />
+    <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Business\Demo.Module.Business.csproj">
