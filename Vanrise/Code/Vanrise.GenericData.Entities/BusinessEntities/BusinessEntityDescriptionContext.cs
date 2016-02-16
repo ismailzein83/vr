@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public interface IBusinessEntityManager
+    public class BusinessEntityDescriptionContext : IBusinessEntityDescriptionContext
     {
-        string GetEntityDescription(IBusinessEntityDescriptionContext context);
+        public object EntityId { get; set; }
     }
 }

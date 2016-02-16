@@ -211,9 +211,9 @@ namespace TOne.WhS.BusinessEntity.Business
             string profileName = _carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId);
             return GetCarrierAccountName(profileName, carrierAccount.NameSuffix);
         }
-        public string GetEntityDescription(object entityId)
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetCarrierAccountName(Convert.ToInt32(entityId));
+            return GetCarrierAccountName(Convert.ToInt32(context.EntityId));
         }
         #endregion
 

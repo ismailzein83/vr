@@ -93,9 +93,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-        public string GetEntityDescription(object entityId)
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetCarrierProfileName(Convert.ToInt32(entityId));
+            return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
         }
         #endregion
 

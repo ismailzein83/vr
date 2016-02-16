@@ -25,7 +25,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             {
                 Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
                 IBusinessEntityManager beManager = Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
-                return beManager.GetEntityDescription(value);
+                return beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityId = value });
             }
             return null;
         }
