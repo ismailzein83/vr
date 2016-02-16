@@ -64,8 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CarrierAccountManager.cs" />
-    <Compile Include="CarrierProfileManager.cs" />
+    <Compile Include="OperatorAccountManager.cs" />
+    <Compile Include="OperatorProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaleZone\SaleCodeManager.cs" />
     <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
