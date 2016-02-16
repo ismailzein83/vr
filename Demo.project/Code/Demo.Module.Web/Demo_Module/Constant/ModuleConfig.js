@@ -1,3 +1,3 @@
-﻿app.constant('Demo_Module_ModuleConfig', {
+﻿app.constant('Demo_ModuleConfig', {
     moduleName: "Demo_Module"
 });

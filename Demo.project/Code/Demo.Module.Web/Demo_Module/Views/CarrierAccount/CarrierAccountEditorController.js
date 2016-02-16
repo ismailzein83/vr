@@ -2,14 +2,14 @@
 
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'Demo_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_CarrierAccountTypeEnum', 'VRUIUtilsService','Demo_CarrierAccountActivationStatusEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'Demo_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_CarrierAccountTypeEnum', 'VRUIUtilsService', 'Demo_CarrierAccountActivationStatusEnum'];
 
     function carrierAccountEditorController($scope, Demo_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_CarrierAccountTypeEnum, VRUIUtilsService, Demo_CarrierAccountActivationStatusEnum) {
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var sellingNumberPlanDirectiveAPI;
-            
+
         var isEditMode;
         $scope.scopeModal = {};
 
@@ -50,25 +50,6 @@
 
             }
 
-            $scope.scopeModal.onCarrierTypeSelectionChanged = function () {
-                if ($scope.scopeModal.selectedCarrierAccountType != undefined)
-                {
-                    if ($scope.scopeModal.selectedCarrierAccountType.value == Demo_CarrierAccountTypeEnum.Customer.value || $scope.scopeModal.selectedCarrierAccountType.value == Demo_CarrierAccountTypeEnum.Exchange.value) {
-                        if (sellingNumberPlanDirectiveAPI != undefined) {
-                            $scope.scopeModal.showSellingNumberPlan = true;
-                            var setLoader = function (value) { $scope.scopeModal.isLoadingSellingNumberPlan = value };
-                            var payload = {
-                                selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined
-                            }
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, payload, setLoader);
-                        }
-                    }
-                    else
-                        $scope.scopeModal.showSellingNumberPlan = false;
-                }
-          
-            }
-
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -97,7 +78,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadFilterBySection, loadCarrierProfileDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadCarrierProfileDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -117,7 +98,7 @@
             carrierProfileReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds:( carrierAccountEntity != undefined ? carrierAccountEntity.CarrierProfileId : (carrierProfileId != undefined?carrierProfileId:undefined))
+                        selectedIds: (carrierAccountEntity != undefined ? carrierAccountEntity.CarrierProfileId : (carrierProfileId != undefined ? carrierProfileId : undefined))
                     }
                     VRUIUtilsService.callDirectiveLoad(carrierProfileDirectiveAPI, directivePayload, loadCarrierProfilePromiseDeferred);
                 });
@@ -136,12 +117,9 @@
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
                 NameSuffix: $scope.scopeModal.name,
-                AccountType: $scope.scopeModal.selectedCarrierAccountType.value,
                 CarrierProfileId: carrierProfileDirectiveAPI.getSelectedIds(),
-                SellingNumberPlanId:sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 SupplierSettings: {},
                 CustomerSettings: {},
-                CarrierAccountSettings: { ActivationStatus: $scope.scopeModal.selectedActivationStatus.value}
             };
             return obj;
         }
@@ -149,23 +127,9 @@
         function loadFilterBySection() {
             if (carrierAccountEntity != undefined) {
                 $scope.scopeModal.name = carrierAccountEntity.NameSuffix;
-                for (var i = 0; i < $scope.scopeModal.carrierAccountTypes.length; i++)
-                    if (carrierAccountEntity.AccountType == $scope.scopeModal.carrierAccountTypes[i].value)
-                        $scope.scopeModal.selectedCarrierAccountType = $scope.scopeModal.carrierAccountTypes[i];
-              
-                for (var i = 0; i < $scope.scopeModal.activationStatus.length; i++)
-                    if (carrierAccountEntity.CarrierAccountSettings != null && carrierAccountEntity.CarrierAccountSettings.ActivationStatus == $scope.scopeModal.activationStatus[i].value)
-                        $scope.scopeModal.selectedActivationStatus = $scope.scopeModal.activationStatus[i];
             }
         }
 
-        function loadCarrierAccountType() {
-            $scope.scopeModal.carrierAccountTypes = UtilsService.getArrayEnum(Demo_CarrierAccountTypeEnum);
-        }
-
-        function loadCarrierActivationStatusType() {
-            $scope.scopeModal.activationStatus = UtilsService.getArrayEnum(Demo_CarrierAccountActivationStatusEnum);
-        }
 
         function insertCarrierAccount() {
             $scope.scopeModal.isLoading = true;
@@ -202,8 +166,8 @@
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
-                $scope.scopeModal.isLoading = false;
-            });
+                    $scope.scopeModal.isLoading = false;
+                });
         }
     }
 

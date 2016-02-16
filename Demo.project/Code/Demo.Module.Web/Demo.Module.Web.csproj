@@ -137,6 +137,7 @@
   <ItemGroup>
     <Content Include="Demo_Module\Constant\CarrierAccountActivationStatusEnum.js" />
     <Content Include="Demo_Module\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="Demo_Module\Constant\ContactTypeEnum.js" />
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
     <Content Include="Demo_Module\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="Demo_Module\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />

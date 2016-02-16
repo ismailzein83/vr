@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrDemoCarrieraccountGrid", ["UtilsService", "VRNotificationService", "Demo_CarrierAccountAPIService", "Demo_CarrierAccountTypeEnum", "Demo_CustomerSellingProductService", "Demo_CarrierAccountService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, Demo_CarrierAccountTypeEnum, Demo_CustomerSellingProductService, Demo_CarrierAccountService, VRUIUtilsService) {
+app.directive("vrDemoCarrieraccountGrid", ["UtilsService", "VRNotificationService", "Demo_CarrierAccountAPIService", "Demo_CarrierAccountTypeEnum", "Demo_CarrierAccountService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, Demo_CarrierAccountTypeEnum, Demo_CarrierAccountService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -30,7 +30,7 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
         this.initializeController = initializeController;
         var gridDrillDownTabsObj;
         function initializeController() {
-           
+
             $scope.hideProfileColumn = false;
 
             $scope.isExpandable = function (dataItem) {
@@ -156,7 +156,7 @@ function (UtilsService, VRNotificationService, Demo_CarrierAccountAPIService, De
                     }
                 }
             };
-            Demo_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
+           // Demo_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
         }
 
         function deleteCarrierAccount(carrierAccountObj) {

@@ -10,18 +10,6 @@
                         <vr-columns width="1/2row">
                             <vr-demo-carrierprofile-selector isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady" isdisabled="scopeModal.disableCarrierProfile"></vr-demo-carrierprofile-selector>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Activation Status" datasource="scopeModal.activationStatus"
-                                       selectedvalues="scopeModal.selectedActivationStatus" />
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Carrier Type" datasource="scopeModal.carrierAccountTypes"
-                                       selectedvalues="scopeModal.selectedCarrierAccountType" onselectionchanged="scopeModal.onCarrierTypeSelectionChanged" vr-disabled="scopeModal.isEditMode" />
-                        </vr-columns>
-
-                        <vr-columns width="1/2row" vr-loader="scopeModal.isLoadingSellingNumberPlan" ng-show="scopeModal.showSellingNumberPlan">
-                            <vr-demo-sellingnumberplan-selector on-ready="scopeModal.onSellingNumberPlanDirectiveReady" isrequired="scopeModal.showSellingNumberPlan" isdisabled="scopeModal.isEditMode"></vr-demo-sellingnumberplan-selector>
-                        </vr-columns>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
