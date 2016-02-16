@@ -27,7 +27,9 @@ font-size:12px !important;
     color: #635F5F;
     margin-top:5px;
 }
-
+.responsive-container{
+    white-space: normal;
+}
 @media (max-width: 768px ) {   
     .modal-dialog{
         width:auto !important;

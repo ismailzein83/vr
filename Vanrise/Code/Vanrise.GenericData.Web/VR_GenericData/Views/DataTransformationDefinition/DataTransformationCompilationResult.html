@@ -2,9 +2,13 @@
     <vr-modalbody vr-loader="isLoading" maxheight="'700px'">
         <vr-form name="formValidateEditor">
 
-            <vr-datagrid datasource="dataSrouce"  on-ready="onMainGridReady">
-                <vr-datagridcolumn headertext="'Error Messages'" field="'Error'" isfielddynamic></vr-datagridcolumn>
-                        </vr-datagrid>
+            <vr-datagrid datasource="dataSrouce" on-ready="onMainGridReady">
+                <vr-datagridcolumn headertext="'Error Messages'" isfielddynamic>
+                    <div class="responsive-container">
+                       {{dataItem.Error}}
+                    </div>
+                </vr-datagridcolumn>
+            </vr-datagrid>
             <vr-label ng-if="showMessage!=undefined">{{showMessage}}</vr-label>
         </vr-form>
     </vr-modalbody>
