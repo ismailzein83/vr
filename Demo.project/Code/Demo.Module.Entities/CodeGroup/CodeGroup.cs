@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Demo.Module.Entities
+{
+    public class CodeGroup : ICode
+    {
+       public int CodeGroupId { get; set; }
+
+       public string Code { get; set; }
+
+       public int CountryId { get; set; }
+    }
+}
