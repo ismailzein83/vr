@@ -46,7 +46,11 @@
             var selectorAPI;
             
             function initializeController() {
+                var isReadyTrigged = false;
                 ctrl.onSelectorReady = function (api) {
+                    if (isReadyTrigged)
+                        return;
+                    isReadyTrigged = true;
                     selectorAPI = api;
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
