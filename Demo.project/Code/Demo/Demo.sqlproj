@@ -61,5 +61,33 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Zone.sql" />
+    <Build Include="dbo\Tables\OperatorProfile.sql" />
+    <Build Include="dbo\Tables\OperatorAccount.sql" />
+    <Build Include="dbo\Tables\Code.sql" />
+    <Build Include="dbo\Functions\ParseStringList.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ZoneInfo_GetFiltered.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Zone_GetIds.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Zone_GetByDate.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Zone_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_OperatorProfile_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_OperatorProfile_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\sp_OperatorProfile_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_OperatorAccount_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_OperatorAccount_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\sp_OperatorAccount_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Code_GetDistinctCodePrefixes.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Code_GetByZoneName.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Code_GetByZoneId.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Code_GetByDate.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Code_GetByCodePrefix.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Code_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Code_CreateTempByFiltered.sql" />
   </ItemGroup>
 </Project>
