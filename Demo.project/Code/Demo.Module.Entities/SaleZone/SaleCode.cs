@@ -13,7 +13,6 @@ namespace Demo.Module.Entities
         public string Code { get; set; }
 
         public long ZoneId { get; set; }
-        public int CodeGroupId { get; set; }
 
         public DateTime BED { get; set; }
 

@@ -131,6 +131,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
+    <Compile Include="Controllers\SaleCodeController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -145,14 +146,18 @@
     <Content Include="Demo_Module\Directives\CarrierAccount\vr-demo-carrieraccount-selector.js" />
     <Content Include="Demo_Module\Directives\CarrierAccount\vr-demo-carrierprofile-grid.js" />
     <Content Include="Demo_Module\Directives\CarrierAccount\vr-demo-carrierprofile-selector.js" />
+    <Content Include="Demo_Module\Directives\Code\Templates\SaleCodeGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Code\vr-whs-be-salecode-grid.js" />
     <Content Include="Demo_Module\Directives\Zone\Templates\SaleZoneGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Zone\vr-whs-be-salezone-grid.js" />
     <Content Include="Demo_Module\Directives\Zone\vr-whs-be-salezone-selector.js" />
     <Content Include="Demo_Module\Services\APIServices\CarrierAccountAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CarrierProfileAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\SaleCodeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SaleZoneAPIService.js" />
     <Content Include="Demo_Module\Services\CarrierAccountService.js" />
     <Content Include="Demo_Module\Services\CarrierProfileService.js" />
+    <Content Include="Demo_Module\Services\SaleZoneService.js" />
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierAccountEditor.html" />
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierAccountEditorController.js" />
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierAccountManagement.html" />
@@ -161,6 +166,8 @@
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileEditorController.js" />
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileManagement.html" />
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileManagementController.js" />
+    <Content Include="Demo_Module\Views\Code\CodeManagement.html" />
+    <Content Include="Demo_Module\Views\Code\CodeManagementController.js" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagement.html" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagementController.js" />
   </ItemGroup>

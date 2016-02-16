@@ -26,7 +26,7 @@ namespace Demo.Module.Data.SQL
             _mapper.Add("Entity.EED", "EED");
         }
         public SaleCodeDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+            : base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
         {
 
         }
@@ -43,26 +43,26 @@ namespace Demo.Module.Data.SQL
 
 
 
-                ExecuteNonQuerySP("TOneWhS_BE.sp_SaleCode_CreateTempByFiltered", tempTableName, input.Query.EffectiveOn, input.Query.SellingNumberPlanId, zonesids);
+                ExecuteNonQuerySP("[dbo].[sp_Code_CreateTempByFiltered]", tempTableName, input.Query.EffectiveOn, zonesids);
             };
 
             return RetrieveData(input, createTempTableAction, SaleCodeMapper, _mapper);
         }
         public IEnumerable<SaleCode> GetAllSaleCodes()
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetAll", SaleCodeMapper);
+            return GetItemsSP("[dbo].[sp_Code_GetAll]", SaleCodeMapper);
         }
         public List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZoneId", SaleCodeMapper, zoneID, effectiveDate);
+            return GetItemsSP("[dbo].[sp_Code_GetByZoneId]", SaleCodeMapper, zoneID, effectiveDate);
         }
-        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
-        {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetBySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn);
-        }
+        //public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
+        //{
+        //    return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetBySellingNumberPlan", SaleCodeMapper, sellingNumberPlanId, effectiveOn);
+        //}
         public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCodePrefix", SaleCodeMapper, codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes);
+            return GetItemsSP("[dbo].[sp_Code_GetByCodePrefix]", SaleCodeMapper, codePrefix, effectiveOn, isFuture, getChildCodes, getParentCodes);
         }
         public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {

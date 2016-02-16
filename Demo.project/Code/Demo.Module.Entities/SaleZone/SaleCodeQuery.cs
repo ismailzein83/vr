@@ -8,7 +8,6 @@ namespace Demo.Module.Entities
 {
     public class SaleCodeQuery
     {
-        public int? SellingNumberPlanId { get; set; }
         public List<int> ZonesIds { get; set; }
 
         public DateTime? EffectiveOn { get; set; }

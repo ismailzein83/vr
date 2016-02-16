@@ -39,11 +39,11 @@ namespace Demo.Module.Business
             IDManager.Instance.ReserveIDRange(this.GetType(), numberOfIDs, out startingId);
             return startingId;
         }
-        public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
-        {
-            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
-        }
+        //public List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn)
+        //{
+        //    ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+        //    return dataManager.GetSellingNumberPlanSaleCodes(sellingNumberPlanId, effectiveOn);
+        //}
         public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
