@@ -131,6 +131,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
     <Compile Include="Controllers\OperatorAccountController.cs" />
+    <Compile Include="Controllers\NationalNumberingPlanController.cs" />
     <Compile Include="Controllers\OperatorProfileController.cs" />
     <Compile Include="Controllers\SaleCodeController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />

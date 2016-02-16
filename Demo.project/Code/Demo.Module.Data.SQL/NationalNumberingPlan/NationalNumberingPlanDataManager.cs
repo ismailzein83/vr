@@ -58,7 +58,7 @@ namespace Demo.Module.Data.SQL
             NationalNumberingPlan operatorProfile = new NationalNumberingPlan
             {
                 NationalNumberingPlanId = (int)reader["ID"],
-                Name = reader["Name"] as string,
+                //Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<NationalNumberingPlanSettings>(reader["Settings"] as string)
             };
             return operatorProfile;
