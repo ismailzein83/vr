@@ -98,7 +98,10 @@ namespace Vanrise.GenericData.Transformation
             foreach (var recordType in _dataTransformationDefinition.RecordTypes)
             {
                 var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId);
-                (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1} = new {0}();", dataRecordRuntimeType.FullName, recordType.RecordName));
+                if (recordType.IsArray)
+                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<{0}> {1} = new List<{0}>();", dataRecordRuntimeType.FullName, recordType.RecordName));
+                else
+                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1} = new {0}();", dataRecordRuntimeType.FullName, recordType.RecordName));
             }
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;

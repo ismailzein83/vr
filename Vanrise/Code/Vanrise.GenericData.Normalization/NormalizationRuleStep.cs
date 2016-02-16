@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Normalization
             base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
             var ruleContextVariableName = context.GenerateUniqueMemberName("ruleContext");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Normalization.NormalizeRuleContext();", ruleContextVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.Value = {1}", ruleContextVariableName, this.Value);
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.Value = {1};", ruleContextVariableName, this.Value);
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Normalization.NormalizationRuleManager();", ruleManagerVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyNormalizationRule({1}, {2}, {3});",

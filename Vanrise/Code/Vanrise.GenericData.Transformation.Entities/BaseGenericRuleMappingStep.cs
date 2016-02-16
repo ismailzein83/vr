@@ -25,8 +25,8 @@ namespace Vanrise.GenericData.Transformation.Entities
 
             foreach (var ruleFieldMapping in this.RuleFieldsMappings)
             {
-                context.AddCodeToCurrentInstanceExecutionBlock(@"if({0} != null) {1}.TargetFieldValues.Add({2}, {0});",
-                    ruleFieldMapping.Value, ruleTargetVariableName, ruleFieldMapping.RuleCriteriaFieldName);
+                context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null) {1}.TargetFieldValues.Add({3}{2}{3}, {0});",
+                    ruleFieldMapping.Value, ruleTargetVariableName, ruleFieldMapping.RuleCriteriaFieldName,"\"");
             }            
         }
     }
