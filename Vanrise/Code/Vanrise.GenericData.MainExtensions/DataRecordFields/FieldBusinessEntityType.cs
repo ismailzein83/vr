@@ -14,7 +14,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetRuntimeType()
         {
-            throw new NotImplementedException();
+            BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
+            BusinessEntityDefinition beDefinition = beDefinitionManager.GetBusinessEntityDefinition(BusinessEntityDefinitionId);
+            if (beDefinition == null)
+                throw new NullReferenceException(string.Format("beDefinition '{0}'", this.BusinessEntityDefinitionId));
+            return Type.GetType(beDefinition.Settings.IdType);
         }
 
         public override string GetDescription(Object value)
