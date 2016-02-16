@@ -9,10 +9,10 @@ namespace Demo.Module.Data
 {
     public interface ISaleZoneDataManager : IDataManager
     {
-        List<SaleZone> GetSaleZones(int sellingNumberPlanId);
+        List<SaleZone> GetSaleZones();
 
 
-        List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter);
+        List<SaleZoneInfo> GetSaleZonesInfo(string filter);
 
         bool AreZonesUpdated(ref object updateHandle);
 
@@ -20,6 +20,6 @@ namespace Demo.Module.Data
 
         IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture);
 
-        List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId,int countryId, DateTime minimumDate);
+        List<SaleZone> GetSaleZonesEffectiveAfter(int countryId, DateTime minimumDate);
     }
 }

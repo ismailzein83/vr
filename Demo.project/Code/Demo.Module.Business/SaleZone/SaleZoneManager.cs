@@ -133,10 +133,10 @@ namespace Demo.Module.Business
             return null;
         }
 
-        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        public List<SaleZone> GetSaleZonesEffectiveAfter(int countryId, DateTime minimumDate)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
+            return dataManager.GetSaleZonesEffectiveAfter(countryId, minimumDate);
         }
 
 

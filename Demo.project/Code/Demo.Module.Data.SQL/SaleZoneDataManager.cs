@@ -23,24 +23,24 @@ namespace Demo.Module.Data.SQL
         #region Public Methods
         public IEnumerable<SaleZone> GetAllSaleZones()
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetAll", SaleZoneMapper);
+            return GetItemsSP("[dbo].[sp_Zone_GetAll]", SaleZoneMapper);
         }
-        public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
+        public List<SaleZone> GetSaleZones()
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlan", SaleZoneMapper, sellingNumberPlanId);
+            return GetItemsSP("[dbo].[sp_Zone_GetAll]", SaleZoneMapper);
         }
-        public List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter)
+        public List<SaleZoneInfo> GetSaleZonesInfo(string filter)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZoneInfo_GetFiltered", SaleZoneInfoMapper, sellingNumberPlanId, filter);
+            return GetItemsSP("[dbo].[sp_ZoneInfo_GetFiltered]", SaleZoneInfoMapper, filter);
         }
         public bool AreZonesUpdated(ref object lastReceivedDataInfo)
         {
-            return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedDataInfo);
+            return IsDataUpdated("[dbo].Zone", ref lastReceivedDataInfo);
         }
         public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             List<long> saleZoneIds = new List<long>();
-            ExecuteReaderSP("[TOneWhS_BE].[sp_SaleZone_GetIds]", (reader) =>
+            ExecuteReaderSP("[dbo].[sp_Zone_GetIds]", (reader) =>
             {
                 while (reader.Read())
                 {
@@ -50,9 +50,9 @@ namespace Demo.Module.Data.SQL
             }, effectiveOn, isEffectiveInFuture);
             return saleZoneIds;
         }
-        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        public List<SaleZone> GetSaleZonesEffectiveAfter(int countryId, DateTime minimumDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByDate", SaleZoneMapper, sellingNumberPlanId, countryId, minimumDate);
+            return GetItemsSP("[dbo].[sp_Zone_GetByDate]", SaleZoneMapper, countryId, minimumDate);
         }
         #endregion
 
@@ -79,8 +79,7 @@ namespace Demo.Module.Data.SQL
             SaleZoneInfo saleZoneInfo = new SaleZoneInfo
             {
                 SaleZoneId = (long)reader["ID"],
-                Name = reader["Name"] as string,
-                SellingNumberPlanId =  (int)reader["SellingNumberPlanID"]
+                Name = reader["Name"] as string
                 
             };
             return saleZoneInfo;

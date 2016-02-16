@@ -12,6 +12,5 @@ namespace Demo.Module.Entities
 
         public string Name { get; set; }
 
-        public int SellingNumberPlanId { get; set; }
     }
 }

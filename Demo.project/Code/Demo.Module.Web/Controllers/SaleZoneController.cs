@@ -31,14 +31,14 @@ namespace Demo.Module.Web.Controllers
         }
 
 
-        
+
         //[HttpGet]
         //[Route("GetSaleZonesInfo")]
-        //public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, string serializedFilter)
+        //public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, string serializedFilter)
         //{
         //    SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
         //    SaleZoneManager manager = new SaleZoneManager();
-        //    return manager.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, filter);
+        //    return manager.GetSaleZonesInfo(nameFilter, filter);
         //}
 
 
