@@ -221,6 +221,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Select All',
                     class: "glyphicon glyphicon-check"
                 }
+            case 'Export':
+                return {
+                    text: 'Export',
+                    class: "glyphicon glyphicon-download"
+                }
         } 
     }
 }]);

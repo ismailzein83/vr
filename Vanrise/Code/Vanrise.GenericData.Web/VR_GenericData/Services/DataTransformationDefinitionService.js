@@ -75,10 +75,11 @@
                 });
         }
 
-        function tryCompilationResult(dataTransformationDefinition) {
+        function tryCompilationResult(errorMessages, dataTransformationObj) {
             var modalSettings = {};
             var modalParameters = {
-                dataTransformationDefinition: dataTransformationDefinition,
+                errorMessages: errorMessages,
+                dataTransformationObj: dataTransformationObj
             };
             modalSettings.onScopeReady = function (modalScope) {
             };

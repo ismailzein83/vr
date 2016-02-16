@@ -18,6 +18,7 @@
         var sequenceDirectiveAPI;
         var sequenceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var savePromiseDeferred = UtilsService.createPromiseDeferred();
         var selectedComposite;
 
         loadParameters();
@@ -72,13 +73,22 @@
             }
 
             $scope.scopeModal.SaveDataTransformationDefinition = function () {
-                applyChanges();
-                if (isEditMode) {
-                    return updateDataTransformationDefinition();
-                }
-                else {
-                    return insertDataTransformationDefinition();
-                }
+
+            
+                
+                tryCompile().then(function (response) {
+                    if (response) {
+                        if (isEditMode) {
+                            updateDataTransformationDefinition();
+                        }
+                        else {
+                            insertDataTransformationDefinition();
+                        }
+                    } else {
+                        savePromiseDeferred.resolve();
+                    }
+                });
+                return savePromiseDeferred.promise;
             };
 
             $scope.scopeModal.close = function () {
@@ -108,7 +118,12 @@
 
             $scope.scopeModal.onCompileClick = function()
             {
-               return tryCompile();
+                
+                return tryCompile().then(function(response)
+                {
+                    if (response)
+                      VRNotificationService.showSuccess("All steps compiled successfully.");
+                });
 
             }
         }
@@ -402,8 +417,20 @@
         
         function tryCompile()
         {
-            var dataTransformationDefinitionObject = buildDataTransformationDefinitionObjFromScope();
-            VR_GenericData_DataTransformationDefinitionService.tryCompilationResult(dataTransformationDefinitionObject);
+              applyChanges();
+              var dataTransformationDefinitionObject = buildDataTransformationDefinitionObjFromScope();
+              return VR_GenericData_DataTransformationDefinitionAPIService.TryCompileSteps(dataTransformationDefinitionObject).then(function (response) {
+                if (response) {
+                    if (response.Result) {
+                        return true;
+                      } else {
+                        VR_GenericData_DataTransformationDefinitionService.tryCompilationResult(response.ErrorMessages, dataTransformationDefinitionObject);
+                        return false;
+                    }
+                }
+            });
+         
+           
         }
 
         function buildDataTransformationDefinitionObjFromScope() {
@@ -423,12 +450,14 @@
             var dataTransformationDefinitionObject = buildDataTransformationDefinitionObjFromScope();
             return VR_GenericData_DataTransformationDefinitionAPIService.AddDataTransformationDefinition(dataTransformationDefinitionObject)
             .then(function (response) {
+                 savePromiseDeferred.resolve();
                 if (VRNotificationService.notifyOnItemAdded("Data Transformation", response)) {
                     if ($scope.onDataTransformationDefinitionAdded != undefined)
                         $scope.onDataTransformationDefinitionAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
+                 savePromiseDeferred.reject(error);
                 VRNotificationService.notifyException(error, $scope);
             });
 
@@ -438,12 +467,14 @@
             var dataTransformationDefinitionObject = buildDataTransformationDefinitionObjFromScope();
             VR_GenericData_DataTransformationDefinitionAPIService.UpdateDataTransformationDefinition(dataTransformationDefinitionObject)
             .then(function (response) {
+                savePromiseDeferred.resolve();
                 if (VRNotificationService.notifyOnItemUpdated("Data Transformation", response)) {
                     if ($scope.onDataTransformationDefinitionUpdated != undefined)
                         $scope.onDataTransformationDefinitionUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
+                savePromiseDeferred.reject(error);
                 VRNotificationService.notifyException(error, $scope);
             });
         }

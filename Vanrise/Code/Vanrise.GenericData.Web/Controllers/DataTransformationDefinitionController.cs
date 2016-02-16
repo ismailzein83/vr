@@ -89,5 +89,13 @@ namespace Vanrise.GenericData.Web.Controllers
                 };
             }
         }
+
+        [HttpPost]
+        [Route("ExportCompilationResult")]
+        public object ExportCompilationResult(DataTransformationDefinition dataTransformationDefinition)
+        {
+            DataTransformationCompilationOutput result = TryCompileSteps(dataTransformationDefinition);
+            return base.GetExcelResponse(result.ErrorMessages.SelectMany(s => System.Text.Encoding.ASCII.GetBytes(s)).ToArray(), "CompilationResult.xls");
+        }
     }
 }

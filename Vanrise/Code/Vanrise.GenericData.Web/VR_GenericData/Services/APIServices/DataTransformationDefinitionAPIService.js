@@ -12,7 +12,8 @@
             UpdateDataTransformationDefinition: UpdateDataTransformationDefinition,
             GetDataTransformationDefinitions: GetDataTransformationDefinitions,
             GetDataTransformationDefinitionRecords: GetDataTransformationDefinitionRecords,
-            TryCompileSteps: TryCompileSteps
+            TryCompileSteps: TryCompileSteps,
+            ExportCompilationResult: ExportCompilationResult
         });
         function GetFilteredDataTransformationDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'GetFilteredDataTransformationDefinitions'), input);
@@ -41,6 +42,13 @@
         }
         function TryCompileSteps(dataTransformationDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'TryCompileSteps'), dataTransformationDefinition);
+        }
+
+        function ExportCompilationResult(dataTransformationDefinition) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'ExportCompilationResult'),dataTransformationDefinition, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
         }
     }
 

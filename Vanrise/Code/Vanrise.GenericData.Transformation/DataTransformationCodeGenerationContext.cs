@@ -39,7 +39,10 @@ namespace Vanrise.GenericData.Transformation
 
         void IDataTransformationCodeGenerationContext.AddCodeToCurrentInstanceExecutionBlock(string codeLineTemplate, params object[] placeholders)
         {
-            _instanceExecutionBlockBuilder.AppendFormat(codeLineTemplate, placeholders);
+            if (placeholders != null && placeholders.Length>0)
+             _instanceExecutionBlockBuilder.AppendFormat(codeLineTemplate, placeholders);
+            else
+             _instanceExecutionBlockBuilder.Append(codeLineTemplate);
             _instanceExecutionBlockBuilder.AppendLine();
         }
 
