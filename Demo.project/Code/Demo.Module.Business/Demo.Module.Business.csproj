@@ -53,6 +53,9 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
@@ -64,6 +67,9 @@
     <Compile Include="CarrierAccountManager.cs" />
     <Compile Include="CarrierProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaleZone\SaleCodeManager.cs" />
+    <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
+    <Compile Include="SaleZone\SaleZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Data\Demo.Module.Data.csproj">

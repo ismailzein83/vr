@@ -1,0 +1,91 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Demo.Module.Entities;
+using Vanrise.Data.SQL;
+
+namespace Demo.Module.Data.SQL
+{
+    public class SaleZoneDataManager : BaseSQLDataManager, ISaleZoneDataManager
+    {
+
+        #region ctor/Local Variables
+        public SaleZoneDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
+
+        }
+        #endregion
+
+        #region Public Methods
+        public IEnumerable<SaleZone> GetAllSaleZones()
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetAll", SaleZoneMapper);
+        }
+        public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByNumberPlan", SaleZoneMapper, sellingNumberPlanId);
+        }
+        public List<SaleZoneInfo> GetSaleZonesInfo(int sellingNumberPlanId, string filter)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleZoneInfo_GetFiltered", SaleZoneInfoMapper, sellingNumberPlanId, filter);
+        }
+        public bool AreZonesUpdated(ref object lastReceivedDataInfo)
+        {
+            return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedDataInfo);
+        }
+        public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            List<long> saleZoneIds = new List<long>();
+            ExecuteReaderSP("[TOneWhS_BE].[sp_SaleZone_GetIds]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    long saleZoneId = GetReaderValue<Int64>(reader, "Id");
+                    saleZoneIds.Add(saleZoneId);
+                }
+            }, effectiveOn, isEffectiveInFuture);
+            return saleZoneIds;
+        }
+        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetByDate", SaleZoneMapper, sellingNumberPlanId, countryId, minimumDate);
+        }
+        #endregion
+
+        #region Private Methods
+        #endregion
+
+        #region Mappers
+
+        SaleZone SaleZoneMapper(IDataReader reader)
+        {
+            SaleZone sellingNumberPlan = new SaleZone();
+
+            sellingNumberPlan.SaleZoneId = (long)reader["ID"];
+            sellingNumberPlan.CountryId = GetReaderValue<int>(reader, "CountryID");
+            sellingNumberPlan.Name = reader["Name"] as string;
+            sellingNumberPlan.BED = GetReaderValue<DateTime>(reader, "BED");
+            sellingNumberPlan.EED = GetReaderValue<DateTime?>(reader, "EED");
+
+            return sellingNumberPlan;
+        }
+
+        SaleZoneInfo SaleZoneInfoMapper(IDataReader reader)
+        {
+            SaleZoneInfo saleZoneInfo = new SaleZoneInfo
+            {
+                SaleZoneId = (long)reader["ID"],
+                Name = reader["Name"] as string,
+                SellingNumberPlanId =  (int)reader["SellingNumberPlanID"]
+                
+            };
+            return saleZoneInfo;
+        }
+        #endregion
+  
+    }
+}

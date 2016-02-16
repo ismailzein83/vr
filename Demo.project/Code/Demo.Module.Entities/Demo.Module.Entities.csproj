@@ -47,6 +47,9 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\CarrierAccounts\CarrierAccount.cs" />
@@ -68,6 +71,18 @@
     <Compile Include="Carriers\Supplier\SupplierFilterSettings.cs" />
     <Compile Include="Carriers\Supplier\SupplierGroupSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaleZone\IContext.cs" />
+    <Compile Include="SaleZone\ISaleZoneGroupContext.cs" />
+    <Compile Include="SaleZone\SaleCode.cs" />
+    <Compile Include="SaleZone\SaleCodeDetail.cs" />
+    <Compile Include="SaleZone\SaleCodeQuery.cs" />
+    <Compile Include="SaleZone\SaleZone.cs" />
+    <Compile Include="SaleZone\SaleZoneDetail.cs" />
+    <Compile Include="SaleZone\SaleZoneFilterSettings.cs" />
+    <Compile Include="SaleZone\SaleZoneGroupSettings.cs" />
+    <Compile Include="SaleZone\SaleZoneInfo.cs" />
+    <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
+    <Compile Include="SaleZone\SaleZoneQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
