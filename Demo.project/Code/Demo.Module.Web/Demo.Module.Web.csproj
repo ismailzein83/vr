@@ -137,17 +137,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Demo_Module\Constant\OperatorAccountActivationStatusEnum.js" />
-    <Content Include="Demo_Module\Constant\OperatorAccountTypeEnum.js" />
     <Content Include="Demo_Module\Constant\ContactTypeEnum.js" />
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
     <Content Include="Demo_Module\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
     <Content Include="Demo_Module\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
     <Content Include="Demo_Module\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />
+    <Content Include="Demo_Module\Directives\NationalNumberingPlan\Templates\NationalNumberingPlanGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\NationalNumberingPlan\vr-demo-nationalnumberingplan-grid.js" />
     <Content Include="Demo_Module\Directives\OperatorAccount\Templates\OperatorAccountGridTemplate.html" />
     <Content Include="Demo_Module\Directives\OperatorAccount\Templates\OperatorProfileGridTemplate.html" />
     <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-carrieraccount-grid.js" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-carrieraccount-selector.js" />
     <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-carrierprofile-grid.js" />
     <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-carrierprofile-selector.js" />
     <Content Include="Demo_Module\Directives\Code\Templates\SaleCodeGridTemplate.html" />
@@ -158,11 +157,13 @@
     <Content Include="Demo_Module\ModuleInitialization.js" />
     <Content Include="Demo_Module\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorAccountAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\NationalNumberingPlanAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorProfileAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SaleCodeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SaleZoneAPIService.js" />
     <Content Include="Demo_Module\Services\CodeGroupService.js" />
     <Content Include="Demo_Module\Services\OperatorAccountService.js" />
+    <Content Include="Demo_Module\Services\NationalNumberingPlanService.js" />
     <Content Include="Demo_Module\Services\OperatorProfileService.js" />
     <Content Include="Demo_Module\Services\SaleZoneService.js" />
     <Content Include="Demo_Module\Views\CodeGroup\CodeGroupEditor.html" />
@@ -171,6 +172,10 @@
     <Content Include="Demo_Module\Views\CodeGroup\CodeGroupManagementController.js" />
     <Content Include="Demo_Module\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="Demo_Module\Views\CodeGroup\CodeGroupUploadEditorController.js" />
+    <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanEditor.html" />
+    <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanEditorController.js" />
+    <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanManagement.html" />
+    <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanManagementController.js" />
     <Content Include="Demo_Module\Views\OperatorAccount\OperatorAccountEditor.html" />
     <Content Include="Demo_Module\Views\OperatorAccount\OperatorAccountEditorController.js" />
     <Content Include="Demo_Module\Views\OperatorAccount\OperatorAccountManagement.html" />

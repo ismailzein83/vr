@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NationalNumberingPlan\NationalNumberingPlanDataManager.cs" />
     <Compile Include="Operator\OperatorAccountDataManager.cs" />
     <Compile Include="Operator\OperatorProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,6 +72,7 @@
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

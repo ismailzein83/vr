@@ -56,6 +56,11 @@
     <Compile Include="CodeGroup\CodeGroupDetail.cs" />
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
+    <Compile Include="NationalNumberingPlan\NationalNumberingPlanContact.cs" />
+    <Compile Include="NationalNumberingPlan\NationalNumberingPlan.cs" />
+    <Compile Include="NationalNumberingPlan\NationalNumberingPlanDetail.cs" />
+    <Compile Include="NationalNumberingPlan\NationalNumberingPlanInfo.cs" />
+    <Compile Include="NationalNumberingPlan\NationalNumberingPlanQuery.cs" />
     <Compile Include="Operator\OperatorAccounts\OperatorAccount.cs" />
     <Compile Include="Operator\OperatorAccounts\OperatorAccountCustomerSettings.cs" />
     <Compile Include="Operator\OperatorAccounts\OperatorAccountDetail.cs" />
