@@ -40,56 +40,10 @@ namespace Demo.Module.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
         }
-        public IEnumerable<CarrierAccount> GetAllCarriers()
-        {
-            return GetCachedCarrierAccounts().Values;
-        }
         public CarrierAccount GetCarrierAccount(int carrierAccountId)
         {
             var CarrierAccounts = GetCachedCarrierAccounts();
             return CarrierAccounts.GetRecord(carrierAccountId);
-        }
-        public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
-        {
-            if(carrierAccountsIds.Count() > 0 )
-            {
-                StringBuilder stringBuilder = new StringBuilder();
-                foreach (int carrierAccount in carrierAccountsIds)
-                {
-                    if (stringBuilder != null && stringBuilder.Length > 0)
-                        stringBuilder.Append(",");
-                    stringBuilder.AppendFormat("{0}", GetCarrierAccountName(carrierAccount));
-                }
-                return stringBuilder.ToString();
-            }
-
-            return string.Empty;
-        }
-        public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoFilter filter)
-        {
-            IEnumerable<CarrierAccount> carrierAccounts = null;
-
-            if (filter != null)
-            {
-                if (filter.AssignableToSellingProductId != null)
-                    carrierAccounts = this.GetNotAssignableCustomersToSellingProduct((int)filter.AssignableToSellingProductId);
-                else if (filter.AssignableToUserId != null)
-                {
-                    carrierAccounts = this.GetCarriersAssignableToUserId(filter.GetCustomers, filter.GetSuppliers).ToList();
-                    //return carrierAccounts.MapRecords(AccountManagerCarrierMapper);
-                }
-
-                else
-                    carrierAccounts = this.GetCarrierAccountsByType(filter.GetCustomers, filter.GetSuppliers, filter.SupplierFilterSettings, filter.CustomerFilterSettings);
-            }
-            else
-            {
-                var cachedCarrierAccounts = GetCachedCarrierAccounts();
-                if (cachedCarrierAccounts != null)
-                    carrierAccounts = cachedCarrierAccounts.Values;
-            }
-
-            return carrierAccounts.MapRecords(CarrierAccountInfoMapper);
         }
        
         public Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
@@ -141,57 +95,10 @@ namespace Demo.Module.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-        public int GetSellingNumberPlanId(int carrierAccountId, CarrierAccountType carrierAccountType)
-        {
-            if (carrierAccountType == CarrierAccountType.Supplier)
-                return -1;
-
-            return (int)this.GetCarrierAccount(carrierAccountId).SellingNumberPlanId;
-        }
-        public IEnumerable<CarrierAccount> GetNotAssignableCustomersToSellingProduct(int sellingProductId)
-        {
-            //SellingProductManager sellingProductManager = new SellingProductManager();
-            //SellingProduct sellingProduct = sellingProductManager.GetSellingProduct(sellingProductId);
-            //var cachedCarrierAccounts = GetCarrierAccountsByType(true, false, null, null);
-            //CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
-            //IEnumerable<CustomerSellingProduct> customerSellingProducts = customerSellingProductManager.GetEffectiveInFutureCustomerSellingProduct();
-            //return cachedCarrierAccounts.Where(x => x.SellingNumberPlanId == sellingProduct.SellingNumberPlanId
-            //    && (!customerSellingProducts.Any(y => y.CustomerId == x.CarrierAccountId)));
-            return null;
-
-        }
-       
-        public string GetCarrierAccountName(int carrierAccountId)
-        {
-            CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);
-            if (carrierAccount == null)
-                return null;
-            string profileName = _carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId);
-            return GetCarrierAccountName(profileName, carrierAccount.NameSuffix);
-        }
      
         #endregion
 
         #region Private Methods
-        private IEnumerable<CarrierAccount> GetCarriersAssignableToUserId(bool getCustomers, bool getSuppliers)
-        {
-            //AccountManagerManager AccountManagerManager = new AccountManagerManager();
-            //IEnumerable<CarrierAccount> carriers = GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
-            //IEnumerable<AssignedCarrier> assignedCarriers = AccountManagerManager.GetAssignedCarriers();
-
-            //Func<CarrierAccount, bool> filterExpression = (carrierAccount) =>
-            //{
-            //    if (carrierAccount.AccountType == CarrierAccountType.Exchange && assignedCarriers.Where(z => z.CarrierAccountId == carrierAccount.CarrierAccountId).Count() > 1)
-            //        return false;
-            //    if (carrierAccount.AccountType != CarrierAccountType.Exchange && assignedCarriers.Any(y => y.CarrierAccountId == carrierAccount.CarrierAccountId))
-            //        return false;
-            //    return true;
-
-            //};
-
-            //return carriers.FindAllRecords(filterExpression);
-            return null;
-        }
         Dictionary<int, CarrierAccount> GetCachedCarrierAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
@@ -212,32 +119,6 @@ namespace Demo.Module.Business
                 return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
             }
         }  
-       
-        private IEnumerable<CarrierAccount> GetCarrierAccountsByType(bool getCustomers, bool getSuppliers, SupplierFilterSettings supplierFilterSettings, CustomerFilterSettings customerFilterSettings)
-        {
-            return null;
-            //Dictionary<int, CarrierAccount> carrierAccounts = GetCachedCarrierAccounts();
-
-            //HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
-            //HashSet<int> filteredCustomerIds = CustomerGroupContext.GetFilteredCustomerIds(customerFilterSettings);
-            //Func<CarrierAccount, bool> filterExpression = (carrierAccount) =>
-            //{
-            //    bool isSupplier = carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
-            //    bool isCustomer = carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;
-            //    if (getCustomers && getSuppliers)
-            //        return true;
-            //    if (getCustomers && !isCustomer)
-            //        return false;
-            //    if (getSuppliers && !isSupplier)
-            //        return false;
-            //    if (isSupplier && filteredSupplierIds != null && !filteredSupplierIds.Contains(carrierAccount.CarrierAccountId))
-            //        return false;
-            //    if (isCustomer && filteredCustomerIds != null && !filteredCustomerIds.Contains(carrierAccount.CarrierAccountId))
-            //        return false;
-            //    return true;
-            //};
-           // return carrierAccounts.FindAllRecords(filterExpression);
-        }   
         private static string GetCarrierAccountName(string profileName, string nameSuffix)
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
@@ -246,14 +127,6 @@ namespace Demo.Module.Business
         #endregion
   
         #region  Mappers
-        private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)
-        {
-            return new CarrierAccountInfo()
-            {
-                CarrierAccountId = carrierAccount.CarrierAccountId,
-                Name = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.NameSuffix),
-            };
-        }
        
         private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
         {

@@ -49,7 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BEDataManagerFactory.cs" />
+    <Compile Include="DemoModuleDataManagerFactory.cs" />
     <Compile Include="ICarrierAccountDataManager.cs" />
     <Compile Include="ICarrierProfileDataManager.cs" />
     <Compile Include="IDataManager.cs" />

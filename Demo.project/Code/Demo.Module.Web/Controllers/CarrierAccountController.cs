@@ -30,35 +30,6 @@ namespace Demo.Module.Web.Controllers
             return manager.GetCarrierAccount(carrierAccountId);
         }
         
-        [HttpGet]
-        [Route("GetCarrierAccountInfo")]
-        public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(string serializedFilter)
-        {
-            return null;
-            //CarrierAccountInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<CarrierAccountInfoFilter>(serializedFilter) : null;
-            //CarrierAccountManager manager = new CarrierAccountManager();
-            //return manager.GetCarrierAccountInfo(filter);
-        }
-
-        [HttpGet]
-        [Route("GetSupplierGroupTemplates")]
-        public List<TemplateConfig> GetSupplierGroupTemplates()
-        {
-            return null;
-            //CarrierAccountManager manager = new CarrierAccountManager();
-            //return manager.GetSupplierGroupTemplates();
-        }
-
-        [HttpGet]
-        [Route("GetCustomerGroupTemplates")]
-        public List<TemplateConfig> GetCustomerGroupTemplates()
-        {
-            return null;
-            //CarrierAccountManager manager = new CarrierAccountManager();
-            //return manager.GetCustomerGroupTemplates();
-        }
-
-
         [HttpPost]
         [Route("AddCarrierAccount")]
         public Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
@@ -67,22 +38,13 @@ namespace Demo.Module.Web.Controllers
             return manager.AddCarrierAccount(carrierAccount);
         }
 
-
         [HttpPost]
         [Route("UpdateCarrierAccount")]
-        public Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
+        public Vanrise.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
         {
-            return null;
-            //CarrierAccountManager manager = new CarrierAccountManager();
-            //return manager.UpdateCarrierAccount(carrierAccount);
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.UpdateCarrierAccount(carrierAccount);
         }
-        [HttpGet]
-        [Route("GetSuppliersWithZonesGroupsTemplates")]
-        public List<TemplateConfig> GetSuppliersWithZonesGroupsTemplates()
-        {
-            return null;
-            //CarrierAccountManager manager = new CarrierAccountManager();
-            //return manager.GetSuppliersWithZonesGroupsTemplates();
-        }
+       
     }
 }
