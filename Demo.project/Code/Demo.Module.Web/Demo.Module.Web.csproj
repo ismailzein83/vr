@@ -126,6 +126,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
+    <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -138,8 +139,12 @@
     <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrieraccount-selector.js" />
     <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrierprofile-grid.js" />
     <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrierprofile-selector.js" />
+    <Content Include="Demo_Module\Directives\Zone\Templates\SaleZoneGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Zone\vr-whs-be-salezone-grid.js" />
+    <Content Include="Demo_Module\Directives\Zone\vr-whs-be-salezone-selector.js" />
     <Content Include="Demo_Module\Services\APIServices\CarrierAccountAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CarrierProfileAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\SaleZoneAPIService.js" />
     <Content Include="Demo_Module\Services\CarrierAccountService.js" />
     <Content Include="Demo_Module\Services\CarrierProfileService.js" />
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierAccountEditor.html" />
@@ -150,6 +155,8 @@
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileEditorController.js" />
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileManagement.html" />
     <Content Include="Demo_Module\Views\CarrierAccount\CarrierProfileManagementController.js" />
+    <Content Include="Demo_Module\Views\Zone\ZoneManagement.html" />
+    <Content Include="Demo_Module\Views\Zone\ZoneManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Business\Demo.Module.Business.csproj">
