@@ -2,11 +2,11 @@
 
     "use strict";
 
-    operatorProfileManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'Demo_OperatorProfileService'];
+    nationalNumberingPlanManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'Demo_NationalNumberingPlanService'];
 
-    function operatorProfileManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, Demo_OperatorProfileService) {
+    function nationalNumberingPlanManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, Demo_NationalNumberingPlanService) {
         var gridAPI;
-        var operatorProfileDirectiveAPI;
+        var nationalNumberingPlanDirectiveAPI;
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
@@ -28,7 +28,7 @@
                 return gridAPI.loadGrid(getFilterObject());
             };
 
-            $scope.AddNewOperatorProfile = AddNewOperatorProfile;
+            $scope.AddNewNationalNumberingPlan = AddNewNationalNumberingPlan;
 
             function getFilterObject() {
                 var data = {
@@ -65,15 +65,15 @@
             return loadCountryPromiseDeferred.promise;
         }
 
-        function AddNewOperatorProfile() {
-            var onOperatorProfileAdded = function (operatorProfileObj) {
-                gridAPI.onOperatorProfileAdded(operatorProfileObj);
+        function AddNewNationalNumberingPlan() {
+            var onNationalNumberingPlanAdded = function (nationalNumberingPlanObj) {
+                gridAPI.onNationalNumberingPlanAdded(nationalNumberingPlanObj);
             };
 
-            Demo_OperatorProfileService.addOperatorProfile(onOperatorProfileAdded);
+            Demo_NationalNumberingPlanService.addNationalNumberingPlan(onNationalNumberingPlanAdded);
         }
 
     }
 
-    appControllers.controller('Demo_OperatorProfileManagementController', operatorProfileManagementController);
+    appControllers.controller('Demo_NationalNumberingPlanManagementController', nationalNumberingPlanManagementController);
 })(appControllers);

@@ -1,39 +1,39 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    operatorProfileAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_ModuleConfig'];
+    nationalNumberingPlanAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_ModuleConfig'];
 
-    function operatorProfileAPIService(BaseAPIService, UtilsService, Demo_ModuleConfig) {
+    function nationalNumberingPlanAPIService(BaseAPIService, UtilsService, Demo_ModuleConfig) {
 
-        function GetFilteredOperatorProfiles(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "GetFilteredOperatorProfiles"), input);
+        function GetFilteredNationalNumberingPlans(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "NationalNumberingPlan", "GetFilteredNationalNumberingPlans"), input);
         }
 
-        function GetOperatorProfile(operatorProfileId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "GetOperatorProfile"), {
-                operatorProfileId: operatorProfileId
+        function GetNationalNumberingPlan(nationalNumberingPlanId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "NationalNumberingPlan", "GetNationalNumberingPlan"), {
+                nationalNumberingPlanId: nationalNumberingPlanId
             });
 
         }
-        function GetOperatorProfilesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "GetOperatorProfilesInfo"));
+        function GetNationalNumberingPlansInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "NationalNumberingPlan", "GetNationalNumberingPlansInfo"));
 
         }
-        function UpdateOperatorProfile(operatorProfileObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "UpdateOperatorProfile"), operatorProfileObject);
+        function UpdateNationalNumberingPlan(nationalNumberingPlanObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "NationalNumberingPlan", "UpdateNationalNumberingPlan"), nationalNumberingPlanObject);
         }
-        function AddOperatorProfile(operatorProfileObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorProfile", "AddOperatorProfile"), operatorProfileObject);
+        function AddNationalNumberingPlan(nationalNumberingPlanObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "NationalNumberingPlan", "AddNationalNumberingPlan"), nationalNumberingPlanObject);
         }
         return ({
-            GetOperatorProfilesInfo: GetOperatorProfilesInfo,
-            GetFilteredOperatorProfiles: GetFilteredOperatorProfiles,
-            GetOperatorProfile: GetOperatorProfile,
-            AddOperatorProfile:AddOperatorProfile,
-            UpdateOperatorProfile: UpdateOperatorProfile
+            GetNationalNumberingPlansInfo: GetNationalNumberingPlansInfo,
+            GetFilteredNationalNumberingPlans: GetFilteredNationalNumberingPlans,
+            GetNationalNumberingPlan: GetNationalNumberingPlan,
+            AddNationalNumberingPlan:AddNationalNumberingPlan,
+            UpdateNationalNumberingPlan: UpdateNationalNumberingPlan
         });
     }
 
-    appControllers.service('Demo_OperatorProfileAPIService', operatorProfileAPIService);
+    appControllers.service('Demo_NationalNumberingPlanAPIService', nationalNumberingPlanAPIService);
 
 })(appControllers);

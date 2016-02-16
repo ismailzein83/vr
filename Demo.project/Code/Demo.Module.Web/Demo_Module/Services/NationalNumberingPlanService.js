@@ -2,40 +2,40 @@
 
     'use stict';
 
-    OperatorProfileService.$inject = ['VRModalService'];
+    NationalNumberingPlanService.$inject = ['VRModalService'];
 
-    function OperatorProfileService(VRModalService) {
+    function NationalNumberingPlanService(VRModalService) {
         return ({
-            addOperatorProfile: addOperatorProfile,
-            editOperatorProfile: editOperatorProfile
+            addNationalNumberingPlan: addNationalNumberingPlan,
+            editNationalNumberingPlan: editNationalNumberingPlan
         });
 
-        function addOperatorProfile(onOperatorProfileAdded) {
+        function addNationalNumberingPlan(onNationalNumberingPlanAdded) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
 
-                modalScope.onOperatorProfileAdded = onOperatorProfileAdded;
+                modalScope.onNationalNumberingPlanAdded = onNationalNumberingPlanAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Demo_Module/Views/OperatorAccount/OperatorProfileEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/NationalNumberingPlan/NationalNumberingPlanEditor.html', null, settings);
         }
 
-        function editOperatorProfile(operatorProfileObj, onOperatorProfileUpdated) {
+        function editNationalNumberingPlan(nationalNumberingPlanObj, onNationalNumberingPlanUpdated) {
             var modalSettings = {
             };
 
             var parameters = {
-                OperatorProfileId: operatorProfileObj.Entity.OperatorProfileId,
+                NationalNumberingPlanId: nationalNumberingPlanObj.Entity.NationalNumberingPlanId,
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onOperatorProfileUpdated = onOperatorProfileUpdated;
+                modalScope.onNationalNumberingPlanUpdated = onNationalNumberingPlanUpdated;
             };
-            VRModalService.showModal('/Client/Modules/Demo_Module/Views/OperatorAccount/OperatorProfileEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/NationalNumberingPlan/NationalNumberingPlanEditor.html', parameters, modalSettings);
         }
     }
 
-    appControllers.service('Demo_OperatorProfileService', OperatorProfileService);
+    appControllers.service('Demo_NationalNumberingPlanService', NationalNumberingPlanService);
 
 })(appControllers);

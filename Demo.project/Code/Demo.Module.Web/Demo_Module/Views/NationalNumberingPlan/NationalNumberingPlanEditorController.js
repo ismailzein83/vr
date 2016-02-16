@@ -2,12 +2,12 @@
 
     "use strict";
 
-    operatorProfileEditorController.$inject = ['$scope', 'Demo_OperatorProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_ContactTypeEnum', 'VRUIUtilsService'];
+    nationalNumberingPlanEditorController.$inject = ['$scope', 'Demo_NationalNumberingPlanAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_ContactTypeEnum', 'VRUIUtilsService'];
 
-    function operatorProfileEditorController($scope, Demo_OperatorProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_ContactTypeEnum, VRUIUtilsService) {
+    function nationalNumberingPlanEditorController($scope, Demo_NationalNumberingPlanAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_ContactTypeEnum, VRUIUtilsService) {
         var isEditMode;
-        var operatorProfileId;
-        var operatorProfileEntity;
+        var nationalNumberingPlanId;
+        var nationalNumberingPlanEntity;
         var countryId;
         var cityId;
 
@@ -25,9 +25,9 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                operatorProfileId = parameters.OperatorProfileId;
+                nationalNumberingPlanId = parameters.NationalNumberingPlanId;
             }
-            isEditMode = (operatorProfileId != undefined);
+            isEditMode = (nationalNumberingPlanId != undefined);
 
         }
 
@@ -57,12 +57,12 @@
                 cityReadyPromiseDeferred.resolve();
             }
 
-            $scope.SaveOperatorProfile = function () {
+            $scope.SaveNationalNumberingPlan = function () {
                 if (isEditMode) {
-                    return updateOperatorProfile();
+                    return updateNationalNumberingPlan();
                 }
                 else {
-                    return insertOperatorProfile();
+                    return insertNationalNumberingPlan();
                 }
             };
             $scope.close = function () {
@@ -107,10 +107,10 @@
             $scope.isLoading = true;
 
             if (isEditMode) {
-                getOperatorProfile().then(function () {
+                getNationalNumberingPlan().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            operatorProfileEntity = undefined;
+                            nationalNumberingPlanEntity = undefined;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -122,9 +122,9 @@
             }
         }
 
-        function getOperatorProfile() {
-            return Demo_OperatorProfileAPIService.GetOperatorProfile(operatorProfileId).then(function (operatorProfile) {
-                operatorProfileEntity = operatorProfile;
+        function getNationalNumberingPlan() {
+            return Demo_NationalNumberingPlanAPIService.GetNationalNumberingPlan(nationalNumberingPlanId).then(function (nationalNumberingPlan) {
+                nationalNumberingPlanEntity = nationalNumberingPlan;
             });
         }
 
@@ -139,14 +139,14 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorProfileEntity ? operatorProfileEntity.Name : null, 'Operator Profile') : UtilsService.buildTitleForAddEditor('Operator Profile');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(nationalNumberingPlanEntity ? nationalNumberingPlanEntity.Name : null, 'National Numbering Plan') : UtilsService.buildTitleForAddEditor('National Numbering Plan');
         }
 
         function loadCountries() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
             countryReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    selectedIds: (operatorProfileEntity != undefined) ? operatorProfileEntity.Settings.CountryId : undefined
+                    selectedIds: (nationalNumberingPlanEntity != undefined) ? nationalNumberingPlanEntity.Settings.CountryId : undefined
                 };
 
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
@@ -159,10 +159,10 @@
             var loadCityPromiseDeferred = UtilsService.createPromiseDeferred();
             cityReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    selectedIds: (operatorProfileEntity != undefined) ? operatorProfileEntity.Settings.CityId : undefined
+                    selectedIds: (nationalNumberingPlanEntity != undefined) ? nationalNumberingPlanEntity.Settings.CityId : undefined
                 };
-                if (operatorProfileEntity != undefined && operatorProfileEntity.Settings.CountryId != undefined)
-                    payload.filter = { CountryId: operatorProfileEntity.Settings.CountryId }
+                if (nationalNumberingPlanEntity != undefined && nationalNumberingPlanEntity.Settings.CountryId != undefined)
+                    payload.filter = { CountryId: nationalNumberingPlanEntity.Settings.CountryId }
                 VRUIUtilsService.callDirectiveLoad(cityDirectiveApi, payload, loadCityPromiseDeferred);
             });
 
@@ -174,9 +174,9 @@
                 $scope.scopeModal.contacts.push(addcontactObj(x));
             }
            
-            if (operatorProfileEntity!=undefined &&  operatorProfileEntity.Settings.Contacts != null)
-                for (var y = 0; y < operatorProfileEntity.Settings.Contacts.length; y++) {
-                        var item = operatorProfileEntity.Settings.Contacts[y];
+            if (nationalNumberingPlanEntity!=undefined &&  nationalNumberingPlanEntity.Settings.Contacts != null)
+                for (var y = 0; y < nationalNumberingPlanEntity.Settings.Contacts.length; y++) {
+                        var item = nationalNumberingPlanEntity.Settings.Contacts[y];
                         var matchedItem = UtilsService.getItemByVal($scope.scopeModal.contacts, item.Type, 'value');
                         if (matchedItem != null)
                             matchedItem.description = item.Description;
@@ -192,37 +192,37 @@
         }
 
         function loadStaticSection() {
-            if (operatorProfileEntity != undefined) {
-                $scope.scopeModal.name = operatorProfileEntity.Name;
+            if (nationalNumberingPlanEntity != undefined) {
+                $scope.scopeModal.name = nationalNumberingPlanEntity.Name;
 
-                if (operatorProfileEntity.Settings != null) {
-                    $scope.scopeModal.company = operatorProfileEntity.Settings.Company;
-                    $scope.scopeModal.website = operatorProfileEntity.Settings.Website;
-                    $scope.scopeModal.registrationNumber = operatorProfileEntity.Settings.RegistrationNumber;
-                    $scope.scopeModal.address = operatorProfileEntity.Settings.Address;
-                    $scope.scopeModal.postalCode = operatorProfileEntity.Settings.PostalCode;
-                    $scope.scopeModal.town = operatorProfileEntity.Settings.Town;
+                if (nationalNumberingPlanEntity.Settings != null) {
+                    $scope.scopeModal.company = nationalNumberingPlanEntity.Settings.Company;
+                    $scope.scopeModal.website = nationalNumberingPlanEntity.Settings.Website;
+                    $scope.scopeModal.registrationNumber = nationalNumberingPlanEntity.Settings.RegistrationNumber;
+                    $scope.scopeModal.address = nationalNumberingPlanEntity.Settings.Address;
+                    $scope.scopeModal.postalCode = nationalNumberingPlanEntity.Settings.PostalCode;
+                    $scope.scopeModal.town = nationalNumberingPlanEntity.Settings.Town;
 
-                    if (operatorProfileEntity.Settings.CompanyLogo > 0)
+                    if (nationalNumberingPlanEntity.Settings.CompanyLogo > 0)
                         $scope.scopeModal.companyLogo = {
-                            fileId: operatorProfileEntity.Settings.CompanyLogo
+                            fileId: nationalNumberingPlanEntity.Settings.CompanyLogo
                         };
                     else
                         $scope.scopeModal.companyLogo = null;
-                    if (operatorProfileEntity.Settings.PhoneNumbers == undefined)
-                        operatorProfileEntity.Settings.PhoneNumbers = [];
+                    if (nationalNumberingPlanEntity.Settings.PhoneNumbers == undefined)
+                        nationalNumberingPlanEntity.Settings.PhoneNumbers = [];
                     $scope.scopeModal.phoneNumbers = [];
-                    for (var i = 0; i < operatorProfileEntity.Settings.PhoneNumbers.length; i++) {
+                    for (var i = 0; i < nationalNumberingPlanEntity.Settings.PhoneNumbers.length; i++) {
                         $scope.scopeModal.phoneNumbers.push({
-                            phoneNumber: operatorProfileEntity.Settings.PhoneNumbers[i]
+                            phoneNumber: nationalNumberingPlanEntity.Settings.PhoneNumbers[i]
                         });
                     }
                     $scope.scopeModal.faxes = [];
-                    if (operatorProfileEntity.Settings.Faxes == undefined)
-                        operatorProfileEntity.Settings.Faxes = [];
-                    for (var j = 0; j < operatorProfileEntity.Settings.Faxes.length; j++) {
+                    if (nationalNumberingPlanEntity.Settings.Faxes == undefined)
+                        nationalNumberingPlanEntity.Settings.Faxes = [];
+                    for (var j = 0; j < nationalNumberingPlanEntity.Settings.Faxes.length; j++) {
                         $scope.scopeModal.faxes.push({
-                            fax: operatorProfileEntity.Settings.Faxes[j]
+                            fax: nationalNumberingPlanEntity.Settings.Faxes[j]
                         });
                     }
                     
@@ -234,10 +234,10 @@
 
         }
 
-        function buildOperatorProfileObjFromScope() {
+        function buildNationalNumberingPlanObjFromScope() {
 
             var obj = {
-                OperatorProfileId: (operatorProfileId != null) ? operatorProfileId : 0,
+                NationalNumberingPlanId: (nationalNumberingPlanId != null) ? nationalNumberingPlanId : 0,
                 Name:  $scope.scopeModal.name,
                 Settings: {
                     CountryId: countryDirectiveApi.getSelectedIds(),
@@ -263,16 +263,16 @@
            return obj;
         }
 
-        function insertOperatorProfile() {
+        function insertNationalNumberingPlan() {
             $scope.isLoading = true;
 
-            var operatorProfileObject = buildOperatorProfileObjFromScope();
+            var nationalNumberingPlanObject = buildNationalNumberingPlanObjFromScope();
             
-            return Demo_OperatorProfileAPIService.AddOperatorProfile(operatorProfileObject)
+            return Demo_NationalNumberingPlanAPIService.AddNationalNumberingPlan(nationalNumberingPlanObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Operator Profile", response, "Name")) {
-                    if ($scope.onOperatorProfileAdded != undefined)
-                        $scope.onOperatorProfileAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded("National Numbering Plan", response, "Name")) {
+                    if ($scope.onNationalNumberingPlanAdded != undefined)
+                        $scope.onNationalNumberingPlanAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -283,16 +283,16 @@
 
         }
 
-        function updateOperatorProfile() {
+        function updateNationalNumberingPlan() {
             $scope.isLoading = true;
 
-            var operatorProfileObject = buildOperatorProfileObjFromScope();
+            var nationalNumberingPlanObject = buildNationalNumberingPlanObjFromScope();
             
-            Demo_OperatorProfileAPIService.UpdateOperatorProfile(operatorProfileObject)
+            Demo_NationalNumberingPlanAPIService.UpdateNationalNumberingPlan(nationalNumberingPlanObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Operator Profile", response ,"Name")) {
-                    if ($scope.onOperatorProfileUpdated != undefined)
-                        $scope.onOperatorProfileUpdated(response.UpdatedObject);
+                if (VRNotificationService.notifyOnItemUpdated("National Numbering Plan", response, "Name")) {
+                    if ($scope.onNationalNumberingPlanUpdated != undefined)
+                        $scope.onNationalNumberingPlanUpdated(response.UpdatedObject);
 
                     $scope.modalContext.closeModal();
                 }
@@ -304,5 +304,5 @@
         }
     }
 
-    appControllers.controller('Demo_OperatorProfileEditorController', operatorProfileEditorController);
+    appControllers.controller('Demo_NationalNumberingPlanEditorController', nationalNumberingPlanEditorController);
 })(appControllers);

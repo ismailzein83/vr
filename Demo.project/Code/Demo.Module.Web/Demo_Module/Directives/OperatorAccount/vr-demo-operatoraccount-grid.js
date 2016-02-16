@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrDemoOperatoraccountGrid", ["UtilsService", "VRNotificationService", "Demo_OperatorAccountAPIService", "Demo_OperatorAccountTypeEnum", "Demo_OperatorAccountService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, Demo_OperatorAccountAPIService, Demo_OperatorAccountTypeEnum, Demo_OperatorAccountService, VRUIUtilsService) {
+app.directive("vrDemoOperatoraccountGrid", ["UtilsService", "VRNotificationService", "Demo_OperatorAccountAPIService", "Demo_OperatorAccountService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, Demo_OperatorAccountAPIService, Demo_OperatorAccountService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -34,8 +34,6 @@ function (UtilsService, VRNotificationService, Demo_OperatorAccountAPIService, D
             $scope.hideProfileColumn = false;
 
             $scope.isExpandable = function (dataItem) {
-                if (dataItem.Entity.AccountType == Demo_OperatorAccountTypeEnum.Supplier.value)
-                    return false;
                 return true
             }
 
@@ -89,9 +87,7 @@ function (UtilsService, VRNotificationService, Demo_OperatorAccountAPIService, D
 
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                if (response.Data[i].Entity.AccountType != Demo_OperatorAccountTypeEnum.Supplier.value) {
-                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
-                                }
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
                         }
                         onResponseReady(response);
@@ -122,11 +118,7 @@ function (UtilsService, VRNotificationService, Demo_OperatorAccountAPIService, D
             ];
 
             $scope.gridMenuActions = function (dataItem) {
-                if (dataItem.Entity.AccountType == Demo_OperatorAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == Demo_OperatorAccountTypeEnum.Exchange.value) {
-                    return menuActionsWithSellingProduct;
-                } else {
-                    return defaultMenuActions;
-                }
+                return defaultMenuActions;
             }
         }
 
@@ -145,8 +137,6 @@ function (UtilsService, VRNotificationService, Demo_OperatorAccountAPIService, D
         }
 
         function assignNew(dataItem) {
-            if (dataItem.Entity.AccountType == Demo_OperatorAccountTypeEnum.Supplier.value)
-                return;
 
             gridAPI.expandRow(dataItem);
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
@@ -156,7 +146,7 @@ function (UtilsService, VRNotificationService, Demo_OperatorAccountAPIService, D
                     }
                 }
             };
-           // Demo_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
+            // Demo_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
         }
 
         function deleteOperatorAccount(operatorAccountObj) {

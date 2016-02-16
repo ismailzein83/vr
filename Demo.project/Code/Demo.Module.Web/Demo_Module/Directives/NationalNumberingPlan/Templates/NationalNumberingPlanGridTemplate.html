@@ -1,11 +1,11 @@
-﻿<vr-datagrid datasource="operatorProfiles"
+﻿<vr-datagrid datasource="nationalNumberingPlans"
                 on-ready="onGridReady"
                 dataretrievalfunction="dataRetrievalFunction"
                 pagingtype="'PagingOnScroll'"
                 menuactions="gridMenuActions"
-                idfield="Entity.OperatorProfileId">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.OperatorProfileId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Operator Profile Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+                idfield="Entity.NationalNumberingPlanId">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.NationalNumberingPlanId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'National Numbering Plan Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Company'" field="'Entity.Settings.Company'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>

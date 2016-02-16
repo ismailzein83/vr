@@ -2,9 +2,9 @@
 
     "use strict";
 
-    operatorAccountEditorController.$inject = ['$scope', 'Demo_OperatorAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_OperatorAccountTypeEnum', 'VRUIUtilsService', 'Demo_OperatorAccountActivationStatusEnum'];
+    operatorAccountEditorController.$inject = ['$scope', 'Demo_OperatorAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function operatorAccountEditorController($scope, Demo_OperatorAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_OperatorAccountTypeEnum, VRUIUtilsService, Demo_OperatorAccountActivationStatusEnum) {
+    function operatorAccountEditorController($scope, Demo_OperatorAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 

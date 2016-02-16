@@ -2,9 +2,9 @@
 
     "use strict";
 
-    operatorAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'Demo_OperatorAccountTypeEnum', 'VRUIUtilsService', 'Demo_OperatorAccountService'];
+    operatorAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'Demo_OperatorAccountService'];
 
-    function operatorAccountManagementController($scope, UtilsService, VRNotificationService, Demo_OperatorAccountTypeEnum, VRUIUtilsService, Demo_OperatorAccountService) {
+    function operatorAccountManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, Demo_OperatorAccountService) {
         var gridAPI;
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -28,12 +28,10 @@
                 operatorProfileReadyPromiseDeferred.resolve();
             }
 
-            $scope.selectedOperatorAccountTypes = [];
             $scope.AddNewOperatorAccount = AddNewOperatorAccount;
 
             function getFilterObject() {
                 var data = {
-                    AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedOperatorAccountTypes, "value"),
                     OperatorProfilesIds: operatorProfileDirectiveAPI.getSelectedIds(),
                     Name: $scope.name
                 };
@@ -46,7 +44,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorAccountType, loadOperatorProfiles])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles])
                 .catch(function (error) {
                     $scope.isLoading = false;
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -56,9 +54,6 @@
                });
         }
 
-        function loadOperatorAccountType() {
-            $scope.operatorAccountTypes = UtilsService.getArrayEnum(Demo_OperatorAccountTypeEnum);
-        }
 
         function loadOperatorProfiles() {
             var loadOperatorProfilePromiseDeferred = UtilsService.createPromiseDeferred();

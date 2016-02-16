@@ -146,9 +146,9 @@
     <Content Include="Demo_Module\Directives\NationalNumberingPlan\vr-demo-nationalnumberingplan-grid.js" />
     <Content Include="Demo_Module\Directives\OperatorAccount\Templates\OperatorAccountGridTemplate.html" />
     <Content Include="Demo_Module\Directives\OperatorAccount\Templates\OperatorProfileGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-carrieraccount-grid.js" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-carrierprofile-grid.js" />
-    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-carrierprofile-selector.js" />
+    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatoraccount-grid.js" />
+    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatorprofile-grid.js" />
+    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatorprofile-selector.js" />
     <Content Include="Demo_Module\Directives\Code\Templates\SaleCodeGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Code\vr-whs-be-salecode-grid.js" />
     <Content Include="Demo_Module\Directives\Zone\Templates\SaleZoneGridTemplate.html" />

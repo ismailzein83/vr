@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Demo_OperatorProfileManagementController" >
+﻿<vr-panel ng-controller="Demo_NationalNumberingPlanManagementController" >
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
@@ -24,7 +24,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewOperatorProfile"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewNationalNumberingPlan"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
