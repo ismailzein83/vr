@@ -135,10 +135,10 @@
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
     <Content Include="Demo_Module\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="Demo_Module\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrieraccount-grid.js" />
-    <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrieraccount-selector.js" />
-    <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrierprofile-grid.js" />
-    <Content Include="Demo_Module\Directives\CarrierAccount\vr-whs-be-carrierprofile-selector.js" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\vr-demo-carrieraccount-grid.js" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\vr-demo-carrieraccount-selector.js" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\vr-demo-carrierprofile-grid.js" />
+    <Content Include="Demo_Module\Directives\CarrierAccount\vr-demo-carrierprofile-selector.js" />
     <Content Include="Demo_Module\Directives\Zone\Templates\SaleZoneGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Zone\vr-whs-be-salezone-grid.js" />
     <Content Include="Demo_Module\Directives\Zone\vr-whs-be-salezone-selector.js" />
