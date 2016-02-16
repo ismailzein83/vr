@@ -104,6 +104,7 @@ namespace Demo.Module.Data.SQL
                 SaleCodeId = (long)reader["ID"],
                 Code = reader["Code"] as string,
                 ZoneId = GetReaderValue<long>(reader, "ZoneID"),
+                CodeGroupId = GetReaderValue<int>(reader, "CodeGroupId"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED")
             };

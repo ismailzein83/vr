@@ -55,12 +55,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeGroup\CodeGroupDataManager.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanDataManager.cs" />
     <Compile Include="Operator\OperatorAccountDataManager.cs" />
     <Compile Include="Operator\OperatorProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaleCodeDataManager.cs" />
-    <Compile Include="SaleZoneDataManager.cs" />
+    <Compile Include="Code\SaleCodeDataManager.cs" />
+    <Compile Include="Zone\SaleZoneDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Data\Demo.Module.Data.csproj">

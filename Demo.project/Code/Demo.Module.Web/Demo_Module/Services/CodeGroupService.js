@@ -26,7 +26,7 @@
                 };
             }
 
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CodeGroup/CodeGroupEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CodeGroup/CodeGroupEditor.html', parameters, settings);
         }
 
         function editCodeGroup(codeGroupId, onCodeGroupUpdated, disableCountry) {
@@ -41,7 +41,7 @@
                 disableCountry: disableCountry != undefined
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CodeGroup/CodeGroupEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CodeGroup/CodeGroupEditor.html', parameters, settings);
         }
 
         function registerDrillDownToCountry() {
@@ -86,7 +86,7 @@
                 modalScope.onCodeGroupUploaded = onCodeGroupUploaded;
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/CodeGroup/CodeGroupUploadEditor.html', null, settings);
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CodeGroup/CodeGroupUploadEditor.html', null, settings);
         }
     }
 

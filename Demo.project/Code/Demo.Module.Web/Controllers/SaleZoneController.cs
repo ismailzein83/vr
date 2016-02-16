@@ -11,7 +11,7 @@ using Vanrise.Web.Base;
 namespace Demo.Module.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "SaleZone")]
-    public class WhSBE_SaleZoneController : BaseAPIController
+    public class Demo_SaleZoneController : BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredSaleZones")]

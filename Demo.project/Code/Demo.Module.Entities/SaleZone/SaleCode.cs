@@ -14,6 +14,8 @@ namespace Demo.Module.Entities
 
         public long ZoneId { get; set; }
 
+        public int CodeGroupId { get; set; }
+
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
