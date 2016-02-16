@@ -58,6 +58,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
                             StageName: ctrl.datasource[i].StageName,
                             QueueNameTemplate: ctrl.datasource[i].QueueNameTemplate,
                             QueueTitleTemplate: ctrl.datasource[i].QueueTitleTemplate,
+                            singleConcurrentReader: ctrl.datasource[i].SingleConcurrentReader,
                             QueueItemType: ctrl.datasource[i].QueueItemType,
                             QueueActivator: ctrl.datasource[i].QueueActivator
                         });

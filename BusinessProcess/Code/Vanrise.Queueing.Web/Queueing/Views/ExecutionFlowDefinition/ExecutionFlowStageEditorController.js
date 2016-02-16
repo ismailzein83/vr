@@ -89,6 +89,7 @@
                 $scope.scopeModal.queueTemplateName = ExecutionFlowStageEntity.QueueNameTemplate;
                 $scope.scopeModal.queueTemplateTitle = ExecutionFlowStageEntity.QueueTitleTemplate;
                 $scope.scopeModal.batchDescription = ExecutionFlowStageEntity.QueueItemType.BatchDescription;
+                $scope.scopeModal.singleConcurrentReader = ExecutionFlowStageEntity.SingleConcurrentReader;
             }
         }
 
@@ -139,7 +140,7 @@
 
         function setTitle() {
             if (isEditMode && ExecutionFlowStageEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(ExecutionFlowStageEntity.Name, 'Execution Flow Stage');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(ExecutionFlowStageEntity.StageName, 'Execution Flow Stage');
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Execution Flow Stage');
         }
@@ -153,6 +154,7 @@
             executionFlowStage.StageName = $scope.scopeModal.stageName;
             executionFlowStage.QueueNameTemplate = $scope.scopeModal.queueTemplateName;
             executionFlowStage.QueueTitleTemplate = $scope.scopeModal.queueTemplateTitle;
+            executionFlowStage.SingleConcurrentReader = $scope.scopeModal.singleConcurrentReader;
             executionFlowStage.QueueItemType = {
                 $type: "Vanrise.GenericData.QueueActivators.DataRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators",
                 DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),

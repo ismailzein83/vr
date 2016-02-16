@@ -51,7 +51,11 @@
                     var setLoader = function (value) {
                         $scope.scopeModal.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, directiveAPI, payloadObj, setLoader, directiveReadyDeferred);
+
+                    var activatorPayload = {};                    
+                    activatorPayload.stagesDataSource = payloadObj.stagesDataSource;
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, directiveAPI, activatorPayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -59,21 +63,39 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    payloadObj = payload;
                     selectorAPI.clearDataSource();
-                    return VR_Queueing_QueueActivatorConfigAPIService.GetQueueActivatorsConfig().then(function (response) {
-                        if (response) {
-                            for (var i = 0; i < response.length; i++) {
-                                $scope.scopeModal.queueActivatorConfig.push(response[i]);
-                            }
-                            if (payload.stagesDataSource != undefined)
-                                 payloadObj.stagesDataSource = payload.stagesDataSource;
-                            if (payload != undefined && payload.QueueActivator != undefined) {
-                                payloadObj = payload.QueueActivator;
-                                payloadObj.stagesDataSource = payload.stagesDataSource;
-                                 $scope.scopeModal.selectedqueueActivatorConfig = UtilsService.getItemByVal($scope.scopeModal.queueActivatorConfig, payload.QueueActivator.ConfigId, 'QueueActivatorConfigId');
-                            }
+                    var promises = [];
+                    var getActivatorTemplatesPromise = VR_Queueing_QueueActivatorConfigAPIService.GetQueueActivatorsConfig();
+                    promises.push(getActivatorTemplatesPromise);
+
+                    var loadActivatorPromiseDeferred;
+
+                    if (payload != undefined && payload.QueueActivator != undefined) {
+                        loadActivatorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadActivatorPromiseDeferred.promise);
+                    }
+
+                    getActivatorTemplatesPromise.then(function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            $scope.scopeModal.queueActivatorConfig.push(response[i]);
+                        }
+
+                        if (payload != undefined && payload.QueueActivator != undefined) {
+                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                            $scope.scopeModal.selectedqueueActivatorConfig = UtilsService.getItemByVal($scope.scopeModal.queueActivatorConfig, payload.QueueActivator.ConfigId, 'QueueActivatorConfigId');
+
+                            directiveReadyDeferred.promise.then(function () {
+                                directiveReadyDeferred = undefined;
+                                var activatorPayload = {};
+                                activatorPayload.QueueActivator = payload.QueueActivator;
+                                activatorPayload.stagesDataSource = payload.stagesDataSource;
+                                VRUIUtilsService.callDirectiveLoad(directiveAPI, activatorPayload, loadActivatorPromiseDeferred);
+                            });
                         }
                     });
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {

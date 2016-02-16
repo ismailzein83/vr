@@ -33,10 +33,15 @@ app.directive('vrQueueingQueueactivatorconfigTestingDirective', ['UtilsService',
         function choicesTypeCtor(ctrl, $scope) {
 
             function initializeController() {
+                ctrl.selectSource = [{ value: "ffff" }];
+
+                ctrl.selectorReady = function () {
+
+                }
 
                 defineAPI();
             }
-
+            
              
             function defineAPI() {
                 var api = {};

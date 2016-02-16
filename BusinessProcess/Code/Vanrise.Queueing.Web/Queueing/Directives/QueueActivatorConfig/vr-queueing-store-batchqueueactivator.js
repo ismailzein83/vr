@@ -50,15 +50,17 @@
                 api.load = function (payload) {
                     var selectedId;
 
-                    if (payload != undefined) {
-                        selectedId = payload.DataRecordStorageId;
+                    if (payload != undefined && payload.QueueActivator != undefined) {
+                        selectedId = payload.QueueActivator.DataRecordStorageId;
                     }
 
                     return loadSelector();
 
                     function loadSelector() {
                         var selectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        var selectorPayload = { selectedIds: selectedId };
+                        var selectorPayload = {};
+                        if (selectedId != undefined)
+                            selectorPayload.selectedIds = selectedId;
                         VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
                         return selectorLoadDeferred.promise;
                     }
