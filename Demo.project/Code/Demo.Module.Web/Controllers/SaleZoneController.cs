@@ -32,14 +32,14 @@ namespace Demo.Module.Web.Controllers
 
 
 
-        //[HttpGet]
-        //[Route("GetSaleZonesInfo")]
-        //public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, string serializedFilter)
-        //{
-        //    SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
-        //    SaleZoneManager manager = new SaleZoneManager();
-        //    return manager.GetSaleZonesInfo(nameFilter, filter);
-        //}
+        [HttpGet]
+        [Route("GetSaleZonesInfo")]
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, string serializedFilter)
+        {
+            SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZonesInfo(nameFilter, filter);
+        }
 
 
         [HttpPost]
