@@ -96,7 +96,7 @@
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionSettings.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleTypeConfig.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleViewSettings.cs" />
-    <Compile Include="IBusinessEntityManager.cs" />
+    <Compile Include="BusinessEntities\IBusinessEntityManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
