@@ -50,8 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoModuleDataManagerFactory.cs" />
-    <Compile Include="IOperatorAccountDataManager.cs" />
-    <Compile Include="IOperatorProfileDataManager.cs" />
+    <Compile Include="Operator\IOperatorAccountDataManager.cs" />
+    <Compile Include="Operator\IOperatorProfileDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="ISaleCodeDataManager.cs" />
     <Compile Include="ISaleZoneDataManager.cs" />

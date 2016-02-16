@@ -64,8 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OperatorAccountManager.cs" />
-    <Compile Include="OperatorProfileManager.cs" />
+    <Compile Include="Operator\OperatorAccountManager.cs" />
+    <Compile Include="Operator\OperatorProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaleZone\SaleCodeManager.cs" />
     <Compile Include="SaleZone\SaleZoneGroupContext.cs" />
