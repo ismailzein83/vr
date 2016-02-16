@@ -13,5 +13,7 @@ namespace TOne.Sales.Entities
         public decimal OldRate { get; set; }
         public decimal NewRate { get; set; }
         public short ServiceFlag { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
     }
 }
