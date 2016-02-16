@@ -44,7 +44,7 @@ namespace Demo.Module.Business
 
         public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            ISaleZoneDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
             return dataManager.GetSaleZoneIds(effectiveOn, isEffectiveInFuture);
         }
 
@@ -135,7 +135,7 @@ namespace Demo.Module.Business
 
         public List<SaleZone> GetSaleZonesEffectiveAfter(int countryId, DateTime minimumDate)
         {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            ISaleZoneDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
             return dataManager.GetSaleZonesEffectiveAfter(countryId, minimumDate);
         }
 
@@ -144,7 +144,7 @@ namespace Demo.Module.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ISaleZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            ISaleZoneDataManager _dataManager = DemoModuleDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired()
@@ -157,7 +157,7 @@ namespace Demo.Module.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSaleZones", () =>
             {
-                ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+                ISaleZoneDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
                 IEnumerable<SaleZone> allSaleZones = dataManager.GetAllSaleZones();
                 Dictionary<long, SaleZone> allSaleZonesDic = new Dictionary<long, SaleZone>();
                 if (allSaleZones != null)

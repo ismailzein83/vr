@@ -58,7 +58,7 @@ namespace Demo.Module.Business
             if ((carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange) && carrierAccount.SellingNumberPlanId == null)
                 throw new ArgumentNullException("Missing SellingNumberPlanId");
 
-            ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            ICarrierAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
             if (insertActionSucc)
             {
@@ -76,7 +76,7 @@ namespace Demo.Module.Business
         }
         public Vanrise.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
         {
-            ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            ICarrierAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
 
             bool updateActionSucc = dataManager.Update(carrierAccount);
             Vanrise.Entities.UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CarrierAccountDetail>();
@@ -104,14 +104,14 @@ namespace Demo.Module.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierAccounts",
                () =>
                {
-                   ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+                   ICarrierAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
                    IEnumerable<CarrierAccount> carrierAccounts = dataManager.GetCarrierAccounts();
                    return carrierAccounts.ToDictionary(kvp => kvp.CarrierAccountId, kvp => kvp);
                });
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICarrierAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            ICarrierAccountDataManager _dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)

@@ -8,10 +8,10 @@ using Vanrise.Common;
 
 namespace Demo.Module.Data
 {
-    public class BEDataManagerFactory
+    public class DemoModuleDataManagerFactory
     {
          static ObjectFactory s_objectFactory;
-         static BEDataManagerFactory()
+         static DemoModuleDataManagerFactory()
         {
             s_objectFactory = new ObjectFactory(Assembly.Load("Demo.Module.Data.SQL"));
         }

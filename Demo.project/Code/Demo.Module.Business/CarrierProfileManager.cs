@@ -55,7 +55,7 @@ namespace Demo.Module.Business
 
             int carrierProfileId = -1;
 
-            ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+            ICarrierProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
             bool insertActionSucc = dataManager.Insert(carrierProfile, out carrierProfileId);
             if (insertActionSucc)
             {
@@ -71,7 +71,7 @@ namespace Demo.Module.Business
         }
         public Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
         {
-            ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+            ICarrierProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
 
             bool updateActionSucc = dataManager.Update(carrierProfile);
             Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail>();
@@ -97,14 +97,14 @@ namespace Demo.Module.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierProfiles",
                () =>
                {
-                   ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+                   ICarrierProfileDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
                    IEnumerable<CarrierProfile> carrierProfiles = dataManager.GetCarrierProfiles();
                    return carrierProfiles.ToDictionary(cn => cn.CarrierProfileId, cn => cn);
                });
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICarrierProfileDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+            ICarrierProfileDataManager _dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
