@@ -40,6 +40,6 @@
         }
     }
 
-    appControllers.service('WhS_BE_CarrierAccountService', CarrierAccountService);
+    appControllers.service('Demo_CarrierAccountService', CarrierAccountService);
 
 })(appControllers);

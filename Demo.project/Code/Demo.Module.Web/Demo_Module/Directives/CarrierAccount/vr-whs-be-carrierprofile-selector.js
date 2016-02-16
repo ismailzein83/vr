@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrierprofileSelector', ['WhS_BE_CarrierProfileAPIService', 'UtilsService', '$compile','VRUIUtilsService',
-function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrWhsBeCarrierprofileSelector', ['Demo_CarrierProfileAPIService', 'UtilsService', '$compile','VRUIUtilsService',
+function (Demo_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -75,7 +75,7 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
                     selectedIds = payload.selectedIds;
                 }
 
-                    return WhS_BE_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
+                    return Demo_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);
 

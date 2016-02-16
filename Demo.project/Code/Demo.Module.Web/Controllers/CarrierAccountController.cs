@@ -11,7 +11,7 @@ using Vanrise.Web.Base;
 namespace Demo.Module.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierAccount")]
-    public class WhSBE_CarrierAccountController : BaseAPIController
+    public class Demo_CarrierAccountController : BaseAPIController
     {
 
         [HttpPost]

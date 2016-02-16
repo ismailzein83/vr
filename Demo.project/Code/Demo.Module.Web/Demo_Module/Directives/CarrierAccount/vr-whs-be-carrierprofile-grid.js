@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_CarrierAccountService", "WhS_BE_CarrierProfileService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService) {
+app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "Demo_CarrierProfileAPIService", "Demo_CarrierAccountService", "Demo_CarrierProfileService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, Demo_CarrierProfileAPIService, Demo_CarrierAccountService, Demo_CarrierProfileService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -72,7 +72,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_CarrierProfileAPIService.GetFilteredCarrierProfiles(dataRetrievalInput)
+                return Demo_CarrierProfileAPIService.GetFilteredCarrierProfiles(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
@@ -106,7 +106,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 gridAPI.itemUpdated(carrierProfile);
 
             }
-            WhS_BE_CarrierProfileService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);
+            Demo_CarrierProfileService.editCarrierProfile(carrierProfileObj, onCarrierProfileUpdated);
         }
 
         function addCarrierAccount(dataItem) {
@@ -120,7 +120,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 if (dataItem.carrierAccountGridAPI != undefined)
                     dataItem.carrierAccountGridAPI.onCarrierAccountAdded(carrierAccountObj);
             };
-            WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded, dataItem.Entity);
+            Demo_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded, dataItem.Entity);
         }
 
         function deleteCarrierProfile(carrierProfileObj) {
@@ -129,7 +129,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 retrieveData();
             };
 
-            // WhS_BE_MainService.deleteCarrierAccount(carrierProfileObj, onCarrierProfileDeleted); to be added in CarrierAccountService
+            // Demo_MainService.deleteCarrierAccount(carrierProfileObj, onCarrierProfileDeleted); to be added in CarrierAccountService
         }
     }
 

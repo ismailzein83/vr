@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile',
-    function (WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile) {
+app.directive('vrWhsBeCarrieraccountSelector', ['Demo_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile',
+    function (Demo_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -26,7 +26,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
-            var ctor = new carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
+            var ctor = new carriersCtor(ctrl, $scope, Demo_CarrierAccountAPIService, $attrs);
             ctor.initializeController();
 
         },
@@ -81,7 +81,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             + label + '" ' + hideselectedvaluessection + ' entityname="' + label + '" ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select>'
     }
 
-    function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {
+    function carriersCtor(ctrl, $scope, Demo_CarrierAccountAPIService, attrs) {
 
         function initializeController() {
 
@@ -109,7 +109,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 if (filter != undefined)
                     serializedFilter = UtilsService.serializetoJson(filter);
 
-                return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
+                return Demo_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
                     ctrl.datasource.length = 0;
                     angular.forEach(response, function (itm) {
                         ctrl.datasource.push(itm);

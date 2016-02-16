@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService','WhS_BE_CarrierAccountActivationStatusEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'Demo_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_CarrierAccountTypeEnum', 'VRUIUtilsService','Demo_CarrierAccountActivationStatusEnum'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
+    function carrierAccountEditorController($scope, Demo_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_CarrierAccountTypeEnum, VRUIUtilsService, Demo_CarrierAccountActivationStatusEnum) {
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -53,7 +53,7 @@
             $scope.scopeModal.onCarrierTypeSelectionChanged = function () {
                 if ($scope.scopeModal.selectedCarrierAccountType != undefined)
                 {
-                    if ($scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Customer.value || $scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
+                    if ($scope.scopeModal.selectedCarrierAccountType.value == Demo_CarrierAccountTypeEnum.Customer.value || $scope.scopeModal.selectedCarrierAccountType.value == Demo_CarrierAccountTypeEnum.Exchange.value) {
                         if (sellingNumberPlanDirectiveAPI != undefined) {
                             $scope.scopeModal.showSellingNumberPlan = true;
                             var setLoader = function (value) { $scope.scopeModal.isLoadingSellingNumberPlan = value };
@@ -126,7 +126,7 @@
         }
 
         function getCarrierAccount() {
-            return WhS_BE_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId)
+            return Demo_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId)
                 .then(function (carrierAccount) {
                     carrierAccountEntity = carrierAccount;
                 });
@@ -160,18 +160,18 @@
         }
 
         function loadCarrierAccountType() {
-            $scope.scopeModal.carrierAccountTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountTypeEnum);
+            $scope.scopeModal.carrierAccountTypes = UtilsService.getArrayEnum(Demo_CarrierAccountTypeEnum);
         }
 
         function loadCarrierActivationStatusType() {
-            $scope.scopeModal.activationStatus = UtilsService.getArrayEnum(WhS_BE_CarrierAccountActivationStatusEnum);
+            $scope.scopeModal.activationStatus = UtilsService.getArrayEnum(Demo_CarrierAccountActivationStatusEnum);
         }
 
         function insertCarrierAccount() {
             $scope.scopeModal.isLoading = true;
 
             var carrierAccountObject = buildCarrierAccountObjFromScope();
-            return WhS_BE_CarrierAccountAPIService.AddCarrierAccount(carrierAccountObject)
+            return Demo_CarrierAccountAPIService.AddCarrierAccount(carrierAccountObject)
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("Carrier Account", response, "Name")) {
                         if ($scope.onCarrierAccountAdded != undefined)
@@ -191,7 +191,7 @@
             $scope.scopeModal.isLoading = true;
 
             var carrierAccountObject = buildCarrierAccountObjFromScope();
-            WhS_BE_CarrierAccountAPIService.UpdateCarrierAccount(carrierAccountObject)
+            Demo_CarrierAccountAPIService.UpdateCarrierAccount(carrierAccountObject)
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Carrier Account", response, "Name")) {
                         if ($scope.onCarrierAccountUpdated != undefined)
@@ -207,5 +207,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_CarrierAccountEditorController', carrierAccountEditorController);
+    appControllers.controller('Demo_CarrierAccountEditorController', carrierAccountEditorController);
 })(appControllers);

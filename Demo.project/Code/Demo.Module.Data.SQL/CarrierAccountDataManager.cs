@@ -13,7 +13,7 @@ namespace Demo.Module.Data.SQL
     {
 
         #region ctor/Local Variables
-        public CarrierAccountDataManager(): base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        public CarrierAccountDataManager(): base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
         {
         }
         #endregion
@@ -24,24 +24,24 @@ namespace Demo.Module.Data.SQL
 
             object carrierAccountId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, carrierAccount.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_CarrierAccount_Insert", out carrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, carrierAccount.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
                 Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }
         public bool Update(CarrierAccount carrierAccount)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
                  Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
             return (recordsEffected > 0);
         }
         public List<CarrierAccount> GetCarrierAccounts()
         {
-            return GetItemsSP("TOneWhS_BE.sp_CarrierAccount_GetAll", CarrierAccountMapper);
+            return GetItemsSP("dbo.sp_CarrierAccount_GetAll", CarrierAccountMapper);
         }
         public bool AreCarrierAccountsUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("TOneWhS_BE.CarrierAccount", ref updateHandle);
+            return base.IsDataUpdated("dbo.CarrierAccount", ref updateHandle);
         }
         #endregion
 

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_ContactTypeEnum', 'VRUIUtilsService'];
+    carrierProfileEditorController.$inject = ['$scope', 'Demo_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'Demo_ContactTypeEnum', 'VRUIUtilsService'];
 
-    function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_ContactTypeEnum, VRUIUtilsService) {
+    function carrierProfileEditorController($scope, Demo_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, Demo_ContactTypeEnum, VRUIUtilsService) {
         var isEditMode;
         var carrierProfileId;
         var carrierProfileEntity;
@@ -123,7 +123,7 @@
         }
 
         function getCarrierProfile() {
-            return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
+            return Demo_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
                 carrierProfileEntity = carrierProfile;
             });
         }
@@ -170,7 +170,7 @@
         }
 
         function loadContacts() {
-            for (var x in WhS_BE_ContactTypeEnum) {
+            for (var x in Demo_ContactTypeEnum) {
                 $scope.scopeModal.contacts.push(addcontactObj(x));
             }
            
@@ -185,9 +185,9 @@
 
         function addcontactObj(x) {
             return {
-                label: WhS_BE_ContactTypeEnum[x].label,
-                value: WhS_BE_ContactTypeEnum[x].value,
-                inputetype: WhS_BE_ContactTypeEnum[x].type
+                label: Demo_ContactTypeEnum[x].label,
+                value: Demo_ContactTypeEnum[x].value,
+                inputetype: Demo_ContactTypeEnum[x].type
             };
         }
 
@@ -268,7 +268,7 @@
 
             var carrierProfileObject = buildCarrierProfileObjFromScope();
             
-            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
+            return Demo_CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response, "Name")) {
                     if ($scope.onCarrierProfileAdded != undefined)
@@ -288,7 +288,7 @@
 
             var carrierProfileObject = buildCarrierProfileObjFromScope();
             
-            WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
+            Demo_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response ,"Name")) {
                     if ($scope.onCarrierProfileUpdated != undefined)
@@ -304,5 +304,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_CarrierProfileEditorController', carrierProfileEditorController);
+    appControllers.controller('Demo_CarrierProfileEditorController', carrierProfileEditorController);
 })(appControllers);

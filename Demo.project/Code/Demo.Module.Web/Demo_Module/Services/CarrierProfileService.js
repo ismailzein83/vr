@@ -36,6 +36,6 @@
         }
     }
 
-    appControllers.service('WhS_BE_CarrierProfileService', CarrierProfileService);
+    appControllers.service('Demo_CarrierProfileService', CarrierProfileService);
 
 })(appControllers);

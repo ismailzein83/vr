@@ -14,7 +14,7 @@ namespace Demo.Module.Data.SQL
    
         #region ctor/Local Variables
         public CarrierProfileDataManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+            : base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
         {
 
         }
@@ -25,7 +25,7 @@ namespace Demo.Module.Data.SQL
         {
             object carrierProfileId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Insert", out carrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_CarrierProfile_Insert", out carrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)carrierProfileId;
@@ -35,16 +35,16 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(CarrierProfile carrierProfile)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
             return (recordsEffected > 0);
         }
         public bool AreCarrierProfilesUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("TOneWhS_BE.CarrierProfile", ref updateHandle);
+            return base.IsDataUpdated("dbo.CarrierProfile", ref updateHandle);
         }
         public List<CarrierProfile> GetCarrierProfiles()
         {
-            return GetItemsSP("TOneWhS_BE.sp_CarrierProfile_GetAll", CarrierProfileMapper);
+            return GetItemsSP("dbo.sp_CarrierProfile_GetAll", CarrierProfileMapper);
         }
         #endregion
 

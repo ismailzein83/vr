@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService'];
+    carrierAccountManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'Demo_CarrierAccountTypeEnum', 'VRUIUtilsService', 'Demo_CarrierAccountService'];
 
-    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService) {
+    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, Demo_CarrierAccountTypeEnum, VRUIUtilsService, Demo_CarrierAccountService) {
         var gridAPI;
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -36,7 +36,7 @@
             }
 
             $scope.onCarrierTypeSelectionChanged = function () {
-                if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Customer) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)) {
+                if (UtilsService.contains($scope.selectedCarrierAccountTypes, Demo_CarrierAccountTypeEnum.Customer) || UtilsService.contains($scope.selectedCarrierAccountTypes, Demo_CarrierAccountTypeEnum.Exchange)) {
                        if (sellingNumberPlanDirectiveAPI != undefined) {
                             $scope.showSellingNumberPlan = true;
                             var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
@@ -83,7 +83,7 @@
         }
 
         function loadCarrierAccountType() {
-            $scope.carrierAccountTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountTypeEnum);
+            $scope.carrierAccountTypes = UtilsService.getArrayEnum(Demo_CarrierAccountTypeEnum);
         }
 
         function loadCarrierProfiles() {
@@ -104,9 +104,9 @@
                 gridAPI.onCarrierAccountAdded(carrierAccountObj);
             };
 
-            WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded);
+            Demo_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded);
         }
     }
 
-    appControllers.controller('WhS_BE_CarrierAccountManagementController', carrierAccountManagementController);
+    appControllers.controller('Demo_CarrierAccountManagementController', carrierAccountManagementController);
 })(appControllers);

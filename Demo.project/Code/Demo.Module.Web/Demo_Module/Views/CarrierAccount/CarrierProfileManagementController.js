@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierProfileManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CarrierProfileService'];
+    carrierProfileManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'Demo_CarrierProfileService'];
 
-    function carrierProfileManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_CarrierProfileService) {
+    function carrierProfileManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, Demo_CarrierProfileService) {
         var gridAPI;
         var carrierProfileDirectiveAPI;
         var countryDirectiveApi;
@@ -70,10 +70,10 @@
                 gridAPI.onCarrierProfileAdded(carrierProfileObj);
             };
 
-            WhS_BE_CarrierProfileService.addCarrierProfile(onCarrierProfileAdded);
+            Demo_CarrierProfileService.addCarrierProfile(onCarrierProfileAdded);
         }
 
     }
 
-    appControllers.controller('WhS_BE_CarrierProfileManagementController', carrierProfileManagementController);
+    appControllers.controller('Demo_CarrierProfileManagementController', carrierProfileManagementController);
 })(appControllers);

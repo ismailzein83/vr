@@ -10,7 +10,7 @@ using Vanrise.Web.Base;
 namespace Demo.Module.Web.Controllers
 {
      [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierProfile")]
-    public class WhSBE_CarrierProfileController : BaseAPIController
+    public class Demo_CarrierProfileController : BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredCarrierProfiles")]
