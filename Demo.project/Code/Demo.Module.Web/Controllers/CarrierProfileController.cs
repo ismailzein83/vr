@@ -45,7 +45,7 @@ namespace Demo.Module.Web.Controllers
         }
         [HttpPost]
         [Route("UpdateCarrierProfile")]
-        public Vanrise.Entities.InsertOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        public Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
         {
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.UpdateCarrierProfile(carrierProfile);

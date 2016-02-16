@@ -74,26 +74,25 @@ namespace Demo.Module.Business
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.InsertOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
+        public Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfile carrierProfile)
         {
-            //ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+            ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
 
-            //bool updateActionSucc = dataManager.Update(carrierProfile);
-            //Vanrise.Entities.InsertOperationOutput<CarrierProfileDetail> updateOperationOutput = new Vanrise.Entities.InsertOperationOutput<CarrierProfileDetail>();
+            bool updateActionSucc = dataManager.Update(carrierProfile);
+            Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CarrierProfileDetail>();
 
-            //updateOperationOutput.Result = UpdateOperationResult.Failed;
-            //updateOperationOutput.UpdatedObject = null;
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
 
-            //if (updateActionSucc)
-            //{
-            //    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-            //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-            //    updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(carrierProfile);
-            //}
-            //else
-            //    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-            //return updateOperationOutput;
-            return null;
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = CarrierProfileDetailMapper(carrierProfile);
+            }
+            else
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            return updateOperationOutput;
         }
         #endregion
 

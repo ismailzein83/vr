@@ -75,7 +75,7 @@ namespace Demo.Module.Business
                     carrierAccounts = this.GetNotAssignableCustomersToSellingProduct((int)filter.AssignableToSellingProductId);
                 else if (filter.AssignableToUserId != null)
                 {
-                    //carrierAccounts = this.GetCarriersAssignableToUserId(filter.GetCustomers, filter.GetSuppliers).ToList();
+                    carrierAccounts = this.GetCarriersAssignableToUserId(filter.GetCustomers, filter.GetSuppliers).ToList();
                     //return carrierAccounts.MapRecords(AccountManagerCarrierMapper);
                 }
 
