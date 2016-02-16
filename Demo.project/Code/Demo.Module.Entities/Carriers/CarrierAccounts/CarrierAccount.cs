@@ -11,16 +11,10 @@ namespace Demo.Module.Entities
     public class CarrierAccount
     {
         public int CarrierAccountId { get; set; }
-
         public string NameSuffix { get; set; }
         public int CarrierProfileId { get; set; }
-
-        public int? SellingNumberPlanId { get; set; }
-        public CarrierAccountType AccountType { get; set; }
         public CarrierAccountSettings CarrierAccountSettings { get; set; } 
-
         public CarrierAccountSupplierSettings SupplierSettings { get; set; }
-
         public CarrierAccountCustomerSettings CustomerSettings { get; set; }
     }
 }

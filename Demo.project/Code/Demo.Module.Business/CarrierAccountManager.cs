@@ -12,16 +12,16 @@ namespace Demo.Module.Business
 {
     public class CarrierAccountManager
     {
-     
+
         #region ctor/Local Variables
         CarrierProfileManager _carrierProfileManager;
         public CarrierAccountManager()
         {
             _carrierProfileManager = new CarrierProfileManager();
         }
-        
+
         #endregion
-        
+
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
@@ -32,11 +32,8 @@ namespace Demo.Module.Business
                  &&
                  (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
                   &&
-                 (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId))
-                   &&
-                 (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType))
-                  &&
-                 (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId));
+                 (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId));
+               
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
         }
@@ -45,7 +42,7 @@ namespace Demo.Module.Business
             var CarrierAccounts = GetCachedCarrierAccounts();
             return CarrierAccounts.GetRecord(carrierAccountId);
         }
-       
+
         public Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail> AddCarrierAccount(CarrierAccount carrierAccount)
         {
             Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CarrierAccountDetail>();
@@ -54,9 +51,6 @@ namespace Demo.Module.Business
             insertOperationOutput.InsertedObject = null;
 
             int carrierAccountId = -1;
-
-            if ((carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange) && carrierAccount.SellingNumberPlanId == null)
-                throw new ArgumentNullException("Missing SellingNumberPlanId");
 
             ICarrierAccountDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
@@ -95,7 +89,7 @@ namespace Demo.Module.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
-     
+
         #endregion
 
         #region Private Methods
@@ -118,16 +112,16 @@ namespace Demo.Module.Business
             {
                 return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
             }
-        }  
+        }
         private static string GetCarrierAccountName(string profileName, string nameSuffix)
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
 
         #endregion
-  
+
         #region  Mappers
-       
+
         private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
         {
             CarrierAccountDetail carrierAccountDetail = new CarrierAccountDetail();
@@ -139,15 +133,6 @@ namespace Demo.Module.Business
             {
                 carrierAccountDetail.CarrierProfileName = carrierProfile.Name;
                 carrierAccountDetail.CarrierAccountName = GetCarrierAccountName(carrierProfile.Name, carrierAccountDetail.Entity.NameSuffix);
-            }
-
-            carrierAccountDetail.AccountTypeDescription = carrierAccount.AccountType.ToString();
-
-            if (carrierAccount.SellingNumberPlanId != null)
-            {
-                //var sellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlan((int)carrierAccount.SellingNumberPlanId);
-                //if (sellingNumberPlan != null)
-                //    carrierAccountDetail.SellingNumberPlanName = sellingNumberPlan.Name;
             }
 
             return carrierAccountDetail;

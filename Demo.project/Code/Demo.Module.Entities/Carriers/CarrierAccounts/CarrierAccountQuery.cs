@@ -11,7 +11,5 @@ namespace Demo.Module.Entities
         public List<int> CarrierAccountsIds { get; set; }
         public List<int> CarrierProfilesIds { get; set; }
         public string Name { get; set; }
-        public List<CarrierAccountType> AccountsTypes { get; set; }
-        public List<int?> SellingNumberPlanIds { get; set; }
     }
 }
