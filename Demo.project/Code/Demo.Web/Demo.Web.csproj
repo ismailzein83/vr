@@ -168,6 +168,9 @@
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Components.Security">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Vanrise.Components.Security.dll</HintPath>
     </Reference>
