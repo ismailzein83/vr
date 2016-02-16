@@ -32,8 +32,13 @@ app.directive('vrGenericdataDatatransformationInitializerecordstep', ['UtilsServ
         };
 
         function InitializeRecordStepCtor(ctrl, $scope) {
+            var recordNameSelectorDirectiveReadyAPI;
+            var recordNameSelectorDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
-
+                ctrl.onRecordNameSelectorReady = function (api) {
+                    recordNameSelectorDirectiveReadyAPI = api;
+                    recordNameSelectorDirectiveReadyPromiseDeferred.resolve();
+                }
                 defineAPI();
             }
 
@@ -43,10 +48,18 @@ app.directive('vrGenericdataDatatransformationInitializerecordstep', ['UtilsServ
                 api.load = function (payload) {
                     if (payload != undefined)
                     {
-                        if(payload.context != undefined)
-                            ctrl.records = payload.context.getAllRecordNames();
-                        if (payload.stepDetails != undefined)
-                            ctrl.selectedRecordName = UtilsService.getItemByVal(ctrl.records, payload.stepDetails.RecordName, "Name");
+                        var promises = [];
+
+                        var loadRecordNameSelectorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        recordNameSelectorDirectiveReadyPromiseDeferred.promise.then(function () {
+                            var payloadRecordName = { context: payload.context, getArray: true ,getNonArray:true};
+                            if (payload != undefined && payload.stepDetails != undefined)
+                                payloadRecordName.selectedIds = payload.stepDetails.RecordName;
+                            VRUIUtilsService.callDirectiveLoad(recordNameSelectorDirectiveReadyAPI, payloadRecordName, loadRecordNameSelectorDirectivePromiseDeferred);
+                        });
+                        promises.push(loadRecordNameSelectorDirectivePromiseDeferred.promise);
+                        return UtilsService.waitMultiplePromises(promises);
                     }
                    
 
@@ -55,7 +68,7 @@ app.directive('vrGenericdataDatatransformationInitializerecordstep', ['UtilsServ
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.Transformation.MainExtensions.MappingSteps.InitializeRecordStep, Vanrise.GenericData.Transformation.MainExtensions",
-                        RecordName: ctrl.selectedRecordName !=undefined? ctrl.selectedRecordName.Name:undefined,
+                        RecordName: recordNameSelectorDirectiveReadyAPI != undefined ? recordNameSelectorDirectiveReadyAPI.getSelectedIds() : undefined,
                         
                     };
                 }

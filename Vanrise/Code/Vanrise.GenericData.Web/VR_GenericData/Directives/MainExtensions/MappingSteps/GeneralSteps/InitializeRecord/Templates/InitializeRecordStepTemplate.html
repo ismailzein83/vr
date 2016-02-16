@@ -1,6 +1,6 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-select datasource="ctrl.records" datatextfield="Name" datavaluefield="Name" hideremoveicon selectedvalues="ctrl.selectedRecordName" isrequired="true" label="Record Name" entityname="Record Name" hideselectedvaluessection></vr-select>
+        <vr-genericdata-datatransformationdefinition-recordname-selector on-ready="ctrl.onRecordNameSelectorReady" label="Record Name" isrequired="true" selectedvalues="ctrl.selectedRecordName"></vr-genericdata-datatransformationdefinition-recordname-selector>
     </vr-columns>
 
 </vr-row>
