@@ -19,7 +19,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleCodeAPIService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/SaleCode/Templates/SaleCodeGridTemplate.html"
+        templateUrl: "/Client/Modules/Demo_Module/Directives/Code/Templates/SaleCodeGridTemplate.html"
 
     };
 

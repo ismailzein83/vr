@@ -75,14 +75,12 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                 ctrl.search = function (nameFilter) {
 
-                    if (sellingNumberPlanId == undefined)
-                        return;
-
+                   
                     var serializedFilter = {};
                     if (filter != undefined)
                         serializedFilter = UtilsService.serializetoJson(filter);
 
-                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter);
+                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, serializedFilter);
                 }
 
 
@@ -106,7 +104,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                         ctrl.datasource = [];
 
                         var input = {
-                            SellingNumberPlanId: sellingNumberPlanId,
+                           // SellingNumberPlanId: sellingNumberPlanId,
                             SaleZoneIds: selectedIds,
                             SaleZoneFilterSettings: { RoutingProductId: (filter != undefined && filter.SaleZoneFilterSettings != undefined) ? filter.SaleZoneFilterSettings.RoutingProductId : undefined }
                         };

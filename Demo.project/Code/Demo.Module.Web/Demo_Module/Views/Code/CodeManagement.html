@@ -1,8 +1,8 @@
 ﻿<vr-panel ng-controller="CodeManagementController" vr-loader="isGettingData">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
-            <vr-row removeline>                
-                <vr-columns width="normal >
+            <vr-row removeline>
+                <vr-columns width="normal">
                     <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady">
                     </vr-whs-be-salezone-selector>
                 </vr-columns>
@@ -20,7 +20,6 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-
                 <vr-whs-be-salecode-grid on-ready="onGridReady"></vr-whs-be-salecode-grid>
             </vr-columns>
         </vr-row>

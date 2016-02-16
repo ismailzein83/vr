@@ -28,27 +28,10 @@
                 gridAPI = api;            
                
             }
-            $scope.onSellingNumberPlanDirectiveReady = function (api) {
-                sellingNumberPlanDirectiveAPI = api;
-                sellingNumberPlanReadyPromiseDeferred.resolve();
-            }
-
+           
             $scope.onSaleZoneDirectiveReady = function (api) {
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-            }
-
-            $scope.onSellingNumberPlanSelectItem = function (selectedItem) {
-                if (selectedItem != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
-
-                    var payload = {
-                        sellingNumberPlanId: selectedItem.SellingNumberPlanId
-                    }
-
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-                }
-
             }
         }
         function load() {           
@@ -76,7 +59,6 @@
        
         function setFilterObject() {
             filter = {
-                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
                 EffectiveOn: $scope.effectiveOn
             };

@@ -21,10 +21,9 @@ namespace  Demo.Module.Data
         List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes);
 
         IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture);
-        List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate);
+        List<SaleCode> GetSaleCodesByZoneName(string zoneName, DateTime effectiveDate);
         bool AreZonesUpdated(ref object updateHandle);
-        List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate);
-
+        List<SaleCode> GetSaleCodesEffectiveAfter(int countryId, DateTime minimumDate);
         bool AreSaleCodesUpdated(ref object updateHandle);
     }
 }

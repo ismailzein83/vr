@@ -1,40 +1,40 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    saleZonesAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_Module_ModuleConfig'];
+    saleZonesAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Demo_ModuleConfig'];
 
-    function saleZonesAPIService(BaseAPIService, UtilsService, Demo_Module_ModuleConfig) {
+    function saleZonesAPIService(BaseAPIService, UtilsService, Demo_ModuleConfig) {
         function GetFilteredSaleZones(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetFilteredSaleZones"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "SaleZone", "GetFilteredSaleZones"), input);
         }
 
-        function GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfo"), {
+        function GetSaleZonesInfo(nameFilter, serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfo"), {
                 nameFilter: nameFilter,
-                sellingNumberPlanId: sellingNumberPlanId,
+                //sellingNumberPlanId: sellingNumberPlanId,
                 serializedFilter: serializedFilter
             });
         }
 
         function GetSaleZonesInfoByIds(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByIds"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByIds"), input);
         }
 
         function GetSaleZone(saleZoneId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZone"), { saleZoneId: saleZoneId });
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "SaleZone", "GetSaleZone"), { saleZoneId: saleZoneId });
         }       
         function GetSaleZoneGroupTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZoneGroupTemplates"));
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "SaleZone", "GetSaleZoneGroupTemplates"));
         }
 
         function GetSaleZonesByName(customerId, saleZoneNameFilter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesByName"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesByName"), {
                 customerId: customerId,
                 saleZoneNameFilter: saleZoneNameFilter
             });
         }
         function GetSaleZoneInfoByCountryId(sellingNumberPlanId, countryId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByCountryId"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "SaleZone", "GetSaleZonesInfoByCountryId"), {
                 sellingNumberPlanId: sellingNumberPlanId,
                 countryId: countryId
             });

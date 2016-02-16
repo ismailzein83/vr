@@ -66,28 +66,28 @@ namespace Demo.Module.Data.SQL
         }
         public IEnumerable<string> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
+            return GetItemsSP("[dbo].[sp_Code_GetDistinctCodePrefixes]", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
         public bool AreZonesUpdated(ref object lastReceivedDataInfo)
         {
-            return IsDataUpdated("TOneWhS_BE.SaleCode", ref lastReceivedDataInfo);
+            return IsDataUpdated("dbo.Zone", ref lastReceivedDataInfo);
         }
-        public List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate)
+        public List<SaleCode> GetSaleCodesByZoneName( string zoneName, DateTime effectiveDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZoneName", SaleCodeMapper, sellingNumberPlanId, zoneName, effectiveDate);
+            return GetItemsSP("[dbo].[sp_Code_GetByZoneName]", SaleCodeMapper, zoneName, effectiveDate);
         }
-        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        public List<SaleCode> GetSaleCodesEffectiveAfter( int countryId, DateTime minimumDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByDate", SaleCodeMapper, sellingNumberPlanId, countryId, minimumDate);
+            return GetItemsSP("[dbo].[sp_Code_GetByDate]", SaleCodeMapper, countryId, minimumDate);
         }
         public List<SaleCode> GetSaleCodesByCountry(int countryId, DateTime effectiveDate)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCountry", SaleCodeMapper, countryId, effectiveDate);
+            return GetItemsSP("[dbo].[sp_Code_GetByCountry]", SaleCodeMapper, countryId, effectiveDate);
         }
 
         public bool AreSaleCodesUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("TOneWhS_BE.SaleCode", ref updateHandle);
+            return base.IsDataUpdated("dbo.Code", ref updateHandle);
         }
 
         #endregion

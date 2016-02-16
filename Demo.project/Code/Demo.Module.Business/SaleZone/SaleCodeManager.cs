@@ -54,15 +54,15 @@ namespace Demo.Module.Business
             ISaleCodeDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
             return dataManager.GetDistinctCodeByPrefixes(prefixLength, effectiveOn, isFuture);
         }
-        public List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlanId, string zoneName, DateTime effectiveDate)
+        public List<SaleCode> GetSaleCodesByZoneName( string zoneName, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSaleCodesByZoneName(sellingNumberPlanId, zoneName, effectiveDate);
+            return dataManager.GetSaleCodesByZoneName(zoneName, effectiveDate);
         }
-        public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        public List<SaleCode> GetSaleCodesEffectiveAfter( int countryId, DateTime minimumDate)
         {
             ISaleCodeDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
+            return dataManager.GetSaleCodesEffectiveAfter(countryId, minimumDate);
         }
 
         #endregion
