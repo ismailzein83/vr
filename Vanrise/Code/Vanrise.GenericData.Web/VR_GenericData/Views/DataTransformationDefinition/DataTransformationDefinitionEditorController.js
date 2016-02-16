@@ -126,6 +126,11 @@
                 });
 
             }
+
+            $scope.scopeModal.refreshEditor = function ()
+            {
+                refreshEditor();
+            }
         }
 
         function load() {
@@ -431,6 +436,18 @@
             });
          
            
+        }
+
+        function refreshEditor()
+        {
+            var setLoader = function (value) {
+                $scope.scopeModal.isLoadingDirective = value;
+            };
+            var payload = {
+                context: $scope.scopeModal.selectedStep.context,
+                stepDetails: $scope.scopeModal.selectedStep.previewAPI != undefined ? $scope.scopeModal.selectedStep.previewAPI.getData() : undefined
+            }
+            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, editorDirectiveAPI, payload, setLoader);
         }
 
         function buildDataTransformationDefinitionObjFromScope() {
