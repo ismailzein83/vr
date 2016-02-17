@@ -74,6 +74,7 @@
     <Compile Include="CodeGroup\CodeGroupManager.cs" />
     <Compile Include="CodeGroup\CodeIterator.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanManager.cs" />
+    <Compile Include="OperatorDeclaredInformation\OperatorDeclaredInformationManager.cs" />
     <Compile Include="Operator\OperatorAccountManager.cs" />
     <Compile Include="Operator\OperatorProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
