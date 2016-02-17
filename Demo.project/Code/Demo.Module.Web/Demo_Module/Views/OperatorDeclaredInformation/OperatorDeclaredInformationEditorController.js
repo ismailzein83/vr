@@ -116,7 +116,7 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatordeclaredinformationEntity ? '' : null, 'National Numbering Plan') : UtilsService.buildTitleForAddEditor('National Numbering Plan');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatordeclaredinformationEntity ? '' : null, 'Operator Declared Information') : UtilsService.buildTitleForAddEditor('Operator Declared Information');
         }
 
         function loadOperatorProfileDirective() {
@@ -174,7 +174,7 @@
 
             return Demo_OperatorDeclaredInformationAPIService.AddOperatorDeclaredInformation(operatordeclaredinformationObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("National Numbering Plan", response, undefined)) {
+                if (VRNotificationService.notifyOnItemAdded("Operator Declared Information", response, undefined)) {
                     if ($scope.onOperatorDeclaredInformationAdded != undefined)
                         $scope.onOperatorDeclaredInformationAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -194,7 +194,7 @@
 
             Demo_OperatorDeclaredInformationAPIService.UpdateOperatorDeclaredInformation(operatordeclaredinformationObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("National Numbering Plan", response, undefined)) {
+                if (VRNotificationService.notifyOnItemUpdated("Operator Declared Information", response, undefined)) {
                     if ($scope.onOperatorDeclaredInformationUpdated != undefined)
                         $scope.onOperatorDeclaredInformationUpdated(response.UpdatedObject);
 

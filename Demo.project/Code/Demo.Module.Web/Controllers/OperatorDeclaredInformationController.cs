@@ -5,12 +5,12 @@ using Vanrise.Web.Base;
 
 namespace Demo.Module.Web.Controllers
 {
-     [RoutePrefix(Constants.ROUTE_PREFIX + "OperatorDeclaredInformation")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "OperatorDeclaredInformation")]
     public class Demo_OperatorDeclaredInformationController : BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredOperatorDeclaredInformations")]
-         public object GetFilteredOperatorDeclaredInformations(Vanrise.Entities.DataRetrievalInput<OperatorDeclaredInformationQuery> input)
+        public object GetFilteredOperatorDeclaredInformations(Vanrise.Entities.DataRetrievalInput<OperatorDeclaredInformationQuery> input)
         {
             OperatorDeclaredInformationManager manager = new OperatorDeclaredInformationManager();
             return GetWebResponse(input, manager.GetFilteredOperatorDeclaredInformations(input));

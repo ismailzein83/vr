@@ -1,4 +1,4 @@
-﻿<vr-panel ng-controller="Demo_NationalNumberingPlanManagementController">
+﻿<vr-panel ng-controller="Demo_OperatorDeclaredInformationManagementController">
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
@@ -14,14 +14,14 @@
                 <vr-columns width="normal">
                     <vr-datetimepicker label="To" value="toDate" type="dateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
-              
+
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewNationalNumberingPlan"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewOperatorDeclaredInformation"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
