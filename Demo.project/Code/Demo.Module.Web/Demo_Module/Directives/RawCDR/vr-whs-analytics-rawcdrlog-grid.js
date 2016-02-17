@@ -19,7 +19,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RawCDRLogAPIService
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/WhS_Analytics/Directives/RawCDR/Templates/RawCDRLogGridTemplate.html"
+        templateUrl: "/Client/Modules/Demo_Module/Directives/RawCDR/Templates/RawCDRLogGridTemplate.html"
 
     };
 

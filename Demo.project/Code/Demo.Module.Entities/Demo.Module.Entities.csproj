@@ -74,6 +74,10 @@
     <Compile Include="Operator\OperatorProfile\OperatorProfileInfo.cs" />
     <Compile Include="Operator\OperatorProfile\OperatorProfileQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawCDR\ServiceType.cs" />
+    <Compile Include="RawCDR\RawCDRQuery.cs" />
+    <Compile Include="RawCDR\RawCDRLog.cs" />
+    <Compile Include="RawCDR\RawCDRLogDetail.cs" />
     <Compile Include="SaleZone\IContext.cs" />
     <Compile Include="SaleZone\ISaleZoneGroupContext.cs" />
     <Compile Include="SaleZone\SaleCode.cs" />

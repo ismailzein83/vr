@@ -8,12 +8,18 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
     var dataSourceDirectiveAPI;
     var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var directionDirectiveAPI;
+    var directionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var serviceTypeDirectiveAPI;
+    var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     defineScope();
     load();
 
     function defineScope() {
         $scope.fromDate = '2015/06/02';
-        $scope.toDate = '2015/06/06';
+        $scope.toDate = '2016/06/06';
         $scope.inCarrier;
         $scope.outCarrier;
         $scope.cdpn;
@@ -30,7 +36,15 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
             dataSourceDirectiveAPI = api;
             dataSourceReadyPromiseDeferred.resolve();
         }
-
+        $scope.onCDRDirectionReady = function (api) {
+            directionDirectiveAPI = api;
+            directionReadyPromiseDeferred.resolve();
+        }
+        $scope.onServiceTypeReady = function (api) {
+            serviceTypeDirectiveAPI = api;
+            serviceTypeReadyPromiseDeferred.resolve();
+        }
+        
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
         };
@@ -40,19 +54,17 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
     function getQuery() {
         var filter = buildFilter();
         var query = {
-            Switches: filter.SwitchIds,
             FromDate: $scope.fromDate,
             ToDate:  $scope.toDate,
-            NRecords: $scope.nRecords,
-            InCarrier: $scope.inCarrier,
-            OutCarrier: $scope.outCarrier,
-            InCDPN: $scope.inCDPN,
-            OutCDPN: $scope.OutCDPN,
+            NumberRecords: $scope.nRecords,           
+            CDPN: $scope.cdpn,
             CGPN: $scope.cgpn,
             MinDuration: $scope.minDuration,
             MaxDuration: $scope.maxDuration,
-            DurationType: $scope.selectedDurationType.value,
-            WhereCondition: $scope.whereCondtion
+            DataSourceIds: dataSourceDirectiveAPI.getSelectedIds(),
+            Directions: directionDirectiveAPI.getSelectedIds(),
+            ServiceTypes: serviceTypeDirectiveAPI.getSelectedIds()
+
         }
         return query;
        
@@ -64,7 +76,7 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadDataSources])
+        return UtilsService.waitMultipleAsyncOperations([loadDataSources, loadDirection, loadServiceTypes])
           .catch(function (error) {
               VRNotificationService.notifyExceptionWithClose(error, $scope);
               $scope.isLoading = false;
@@ -81,9 +93,25 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
         });
         return loadDataSourcePromiseDeferred.promise;
     }
+    function loadDirection() {
+        var loadDirectionPromiseDeferred = UtilsService.createPromiseDeferred();
+        directionReadyPromiseDeferred.promise.then(function () {
+
+            VRUIUtilsService.callDirectiveLoad(directionDirectiveAPI, undefined, loadDirectionPromiseDeferred);
+        });
+        return loadDirectionPromiseDeferred.promise;
+    }
+
+    function loadServiceTypes() {
+        var loadServiceTypesPromiseDeferred = UtilsService.createPromiseDeferred();
+        serviceTypeReadyPromiseDeferred.promise.then(function () {
+
+            VRUIUtilsService.callDirectiveLoad(serviceTypeDirectiveAPI, undefined, loadServiceTypesPromiseDeferred);
+        });
+        return loadServiceTypesPromiseDeferred.promise;
+    }
     function buildFilter() {
         var filter = {};
-        filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
         return filter;
     }
 

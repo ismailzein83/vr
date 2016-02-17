@@ -127,12 +127,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Demo_Module\Constant\CDRDirectionEnum.js" />
     <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\Templates\OperatorDeclaredInformationGridTemplate.html" />
     <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\vr-demo-operatordeclaredinformation-grid.js" />
+    <Content Include="Demo_Module\Directives\RawCDR\servicetype-selector.js" />
+    <Content Include="Demo_Module\Directives\RawCDR\cdrdirection-selector.js" />
     <Content Include="Demo_Module\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
     <Content Include="Demo_Module\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\ServiceTypeAPIService.js" />
     <Content Include="Demo_Module\Services\OperatorDeclaredInformationService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
   </ItemGroup>
@@ -144,6 +148,7 @@
     <Compile Include="Controllers\NationalNumberingPlanController.cs" />
     <Compile Include="Controllers\OperatorProfileController.cs" />
     <Compile Include="Controllers\RawCDRController.cs" />
+    <Compile Include="Controllers\ServiceTypeController.cs" />
     <Compile Include="Controllers\SaleCodeController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

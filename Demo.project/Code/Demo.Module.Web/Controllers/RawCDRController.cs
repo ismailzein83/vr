@@ -11,13 +11,13 @@ namespace Demo.Module.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "RawCDR")]
     public class RawCDRController : Vanrise.Web.Base.BaseAPIController
     {
-        //[HttpPost]
-        //[Route("GetRawCDRData")]
-        //public object GetRawCDRData(Vanrise.Entities.DataRetrievalInput<RawCDRInput> input)
-        //{
-        //    //RawCDRManager manager = new RawCDRManager();
-        //    return null;//GetWebResponse(input, manager.GetRawCDRData(input));
-        //}
+        [HttpPost]
+        [Route("GetRawCDRData")]
+        public object GetRawCDRData(Vanrise.Entities.DataRetrievalInput<RawCDRQuery> input)
+        {
+            RawCDRManager manager = new RawCDRManager();
+            return GetWebResponse(input, manager.GetRawCDRData(input));
+        }
         
     }
 }

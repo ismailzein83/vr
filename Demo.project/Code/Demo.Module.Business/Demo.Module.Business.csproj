@@ -63,6 +63,12 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Integration.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
@@ -79,6 +85,8 @@
     <Compile Include="Operator\OperatorProfileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\SaleCodeManager.cs" />
+    <Compile Include="RawCDRLog\ServiceTypeManager.cs" />
+    <Compile Include="RawCDRLog\RawCDRManager.cs" />
     <Compile Include="Zone\SaleZoneGroupContext.cs" />
     <Compile Include="Zone\SaleZoneManager.cs" />
   </ItemGroup>
