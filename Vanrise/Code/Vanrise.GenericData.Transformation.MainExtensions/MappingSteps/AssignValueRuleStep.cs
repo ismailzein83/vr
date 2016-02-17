@@ -34,7 +34,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
                 ruleVariableName, ruleManagerVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = ({1}){2}.Settings.Value;",
+            context.AddCodeToCurrentInstanceExecutionBlock("{0} = ({1})Convert.ChangeType({2}.Settings.Value, typeof({1}));",
                 this.Target, ruleValueRuntimeType.FullName, ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("}");
         }
