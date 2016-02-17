@@ -38,6 +38,7 @@
             var dataTransformationSelectorReadyPromiseDeferred;
             var dataTransformationRecordSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var dataTransformationDefinitionId;
+            var dataRecordTypeId;
             var secondtimeChanged = false;
 
             $scope.recordTypesWithStages = [];
@@ -83,6 +84,7 @@
 
             }
 
+
             $scope.ongridReady = function (api) {
                 gridAPI = api;
             };
@@ -90,14 +92,19 @@
             function loadDataTransformationRecordSelector() {
                 if (dataTransformationDefinitionId != undefined) {
                     VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationDefinitionRecords(dataTransformationDefinitionId).then(function (response) {
+                        var filteredResponse = [];
+
                         $scope.recordTypesWithStages.length=0;
                         $scope.transformationRecordTypes.length = 0;
                         $scope.selectedDataRecordStorage = [];
-                        dataGridDataSource = response;
-                        loadDataGrid(dataGridDataSource);
+                       
                         for (var i = 0; i < response.length; i++) {
-                            $scope.transformationRecordTypes.push(response[i]);
+                            if (response[i].IsArray && response[i].DataRecordTypeId == dataRecordTypeId) {
+                                $scope.transformationRecordTypes.push(response[i]);
+                                filteredResponse.push(response[i]);
+                            }
                         }
+                        loadDataGrid(filteredResponse);
                         dataTransformationRecordSelectorReadyPromiseDeferred.resolve();
                     })
 
@@ -125,11 +132,13 @@
                 api.load = function (payload) {
                     var selectedId;
 
-                    if (payload != undefined && payload.stagesDataSource != undefined) {
+                    if (payload != undefined && payload.StagesDataSource != undefined) {
                         $scope.stagesDataSource = [];
-                        $scope.stagesDataSource = payload.stagesDataSource;
+                        $scope.stagesDataSource = payload.StagesDataSource;
                     }
 
+                    if(payload != undefined && payload.DataRecordTypeId != undefined)
+                        dataRecordTypeId=payload.DataRecordTypeId
 
                     if (payload != undefined && payload.QueueActivator != undefined) {
                         selectedId = payload.QueueActivator.DataTransformationDefinitionId;
@@ -141,11 +150,9 @@
                     if (payload != undefined && payload.QueueActivator != undefined) {
                         dataTransformationSelectorReadyPromiseDeferred.promise.then(function () {
                             dataTransformationRecordSelectorReadyPromiseDeferred.promise.then(function () {
-                                if (payload != undefined && payload.QueueActivator != undefined) {
                                     var selectedValue = UtilsService.getItemByVal($scope.transformationRecordTypes, payload.QueueActivator.SourceRecordName, "RecordName");
                                     $scope.selectedDataRecordStorage = selectedValue;
                                     loadDataGridInEditMode();
-                                }
                             })
                         });
                     }

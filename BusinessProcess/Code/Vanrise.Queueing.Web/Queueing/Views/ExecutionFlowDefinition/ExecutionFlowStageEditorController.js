@@ -7,7 +7,8 @@
     function ExecutionFlowStageEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
-        var ExecutionFlowStageEntity;
+        var executionFlowStageEntity;
+        var dataRecordTypeId;
 
         var queueActivatorConfigDirectiveReadyAPI;
         var queueActivatorConfigDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -24,18 +25,19 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                ExecutionFlowStageEntity = parameters.ExecutionFlowStage;
-                for(var i=0;i<parameters.ExistingFields.length;i++)
-                {
-                   stagesDataSource.push({ stageName: parameters.ExistingFields[i].StageName });
+                executionFlowStageEntity = parameters.ExecutionFlowStage;
+                for (var i = 0; i < parameters.ExistingFields.length; i++) {
+                    stagesDataSource.push({ stageName: parameters.ExistingFields[i].StageName });
                 }
 
             }
-            isEditMode = (ExecutionFlowStageEntity != undefined);
+            isEditMode = (executionFlowStageEntity != undefined);
         }
 
         function defineScope() {
             $scope.scopeModal = {};
+
+            $scope.isDataRecordTypeSelected = false;
 
             $scope.scopeModal.onDirectiveReady = function (api) {
                 queueActivatorConfigDirectiveReadyAPI = api;
@@ -53,6 +55,7 @@
 
             $scope.recordTypesWithStages = [];
 
+
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
@@ -62,8 +65,16 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.onSelectedDataTransformationChanged = function () {
-                alert("test");
+
+            $scope.onDataRecordTypeSelectionChange = function () {
+
+                var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+                if (selectedDataRecordTypeId != undefined) {
+                    loadQueueActivatorConfigDirective(selectedDataRecordTypeId);
+                    $scope.isDataRecordTypeSelected = true;
+                }
+                else
+                    $scope.isDataRecordTypeSelected = false;
             }
 
         }
@@ -74,7 +85,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeSelector, loadQueueActivatorConfigDirective])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -84,24 +95,25 @@
         }
 
         function loadFilterBySection() {
-            if (ExecutionFlowStageEntity != undefined) {
-                $scope.scopeModal.stageName = ExecutionFlowStageEntity.StageName;
-                $scope.scopeModal.queueTemplateName = ExecutionFlowStageEntity.QueueNameTemplate;
-                $scope.scopeModal.queueTemplateTitle = ExecutionFlowStageEntity.QueueTitleTemplate;
-                $scope.scopeModal.batchDescription = ExecutionFlowStageEntity.QueueItemType.BatchDescription;
-                $scope.scopeModal.singleConcurrentReader = ExecutionFlowStageEntity.SingleConcurrentReader;
+            if (executionFlowStageEntity != undefined) {
+                $scope.scopeModal.stageName = executionFlowStageEntity.StageName;
+                $scope.scopeModal.queueTemplateName = executionFlowStageEntity.QueueNameTemplate;
+                $scope.scopeModal.queueTemplateTitle = executionFlowStageEntity.QueueTitleTemplate;
+                $scope.scopeModal.batchDescription = executionFlowStageEntity.QueueItemType.BatchDescription;
+                $scope.scopeModal.singleConcurrentReader = executionFlowStageEntity.SingleConcurrentReader;
             }
         }
 
         function loadDataRecordTypeSelector() {
+
             var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             dataRecordTypeSelectorReadyDeferred.promise.then(function () {
                 var payload;
 
-                if (ExecutionFlowStageEntity != undefined) {
+                if (executionFlowStageEntity != undefined) {
                     payload = {
-                        selectedIds: ExecutionFlowStageEntity.QueueItemType.DataRecordTypeId
+                        selectedIds: executionFlowStageEntity.QueueItemType.DataRecordTypeId
                     };
                 }
 
@@ -112,22 +124,25 @@
         }
 
 
-        function loadQueueActivatorConfigDirective() {
+        function loadQueueActivatorConfigDirective(dataRecordTypeId) {
             var queueActivatorConfigDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             queueActivatorConfigDirectiveReadyPromiseDeferred.promise.then(function () {
                 var payload;
 
-                if (ExecutionFlowStageEntity != undefined) {
+                if (executionFlowStageEntity != undefined && executionFlowStageEntity.QueueItemType.DataRecordTypeId == dataRecordTypeId) {
 
                     payload = {
-                        QueueActivator: ExecutionFlowStageEntity.QueueActivator,
-                        stagesDataSource: stagesDataSource
+                        QueueActivator: executionFlowStageEntity.QueueActivator,
+                        StagesDataSource: stagesDataSource,
+                        DataRecordTypeId: dataRecordTypeId
                     };
                 }
+
                 else {
                     payload = {
-                        stagesDataSource: stagesDataSource
+                        StagesDataSource: stagesDataSource,
+                        DataRecordTypeId: dataRecordTypeId
 
                     };
                 }
@@ -139,8 +154,8 @@
 
 
         function setTitle() {
-            if (isEditMode && ExecutionFlowStageEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(ExecutionFlowStageEntity.StageName, 'Execution Flow Stage');
+            if (isEditMode && executionFlowStageEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(executionFlowStageEntity.StageName, 'Execution Flow Stage');
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Execution Flow Stage');
         }
@@ -150,7 +165,7 @@
         function buildexecutionFlowStageObjectFromScope() {
             var executionFlowStage = {};
             var obj = queueActivatorConfigDirectiveReadyAPI.getData();
-  
+
             executionFlowStage.StageName = $scope.scopeModal.stageName;
             executionFlowStage.QueueNameTemplate = $scope.scopeModal.queueTemplateName;
             executionFlowStage.QueueTitleTemplate = $scope.scopeModal.queueTemplateTitle;

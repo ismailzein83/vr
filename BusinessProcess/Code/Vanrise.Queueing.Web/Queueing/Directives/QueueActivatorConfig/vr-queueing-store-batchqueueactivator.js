@@ -59,6 +59,7 @@
                     function loadSelector() {
                         var selectorLoadDeferred = UtilsService.createPromiseDeferred();
                         var selectorPayload = {};
+                        selectorPayload.DataRecordTypeId = payload.DataRecordTypeId;
                         if (selectedId != undefined)
                             selectorPayload.selectedIds = selectedId;
                         VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);

@@ -53,11 +53,12 @@
                     };
 
                     var activatorPayload = {};                    
-                    activatorPayload.stagesDataSource = payloadObj.stagesDataSource;
+                    activatorPayload.StagesDataSource = payloadObj.StagesDataSource;
+                    activatorPayload.DataRecordTypeId = payloadObj.DataRecordTypeId;
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, directiveAPI, activatorPayload, setLoader, directiveReadyDeferred);
                 };
-            }
+            } 
 
             function getDirectiveAPI() {
                 var api = {};
@@ -89,7 +90,8 @@
                                 directiveReadyDeferred = undefined;
                                 var activatorPayload = {};
                                 activatorPayload.QueueActivator = payload.QueueActivator;
-                                activatorPayload.stagesDataSource = payload.stagesDataSource;
+                                activatorPayload.StagesDataSource = payload.StagesDataSource;
+                                activatorPayload.DataRecordTypeId = payload.DataRecordTypeId;
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, activatorPayload, loadActivatorPromiseDeferred);
                             });
                         }

@@ -18,7 +18,7 @@
 
                         <vr-columns width="1/3row">
                             <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
-                                                                    selectedvalues="selectedDataRecordType"
+                                                                    onselectionchanged="onDataRecordTypeSelectionChange"
                                                                     isrequired="true"></vr-genericdata-datarecordtype-selector>
                         </vr-columns>
                         <vr-columns width="1/3row">
@@ -30,7 +30,7 @@
                         </vr-columns>
 
                     </vr-row>
-                    <vr-row>
+                    <vr-row ng-show="isDataRecordTypeSelected">
                         <vr-queueing-queueactivatorconfig-selective on-ready="scopeModal.onDirectiveReady" isrequired="true"></vr-queueing-queueactivatorconfig-selective>
 
                     </vr-row>
