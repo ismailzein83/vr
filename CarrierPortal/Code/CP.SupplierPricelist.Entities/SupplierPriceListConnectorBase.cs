@@ -41,6 +41,7 @@ namespace CP.SupplierPricelist.Entities
         public string AlertMessage { get; set; }
 
         public byte[] AlertFile { get; set; }
+        public string AlerFileName { get; set; }
     }
     public interface IPriceListProgressContext
     {

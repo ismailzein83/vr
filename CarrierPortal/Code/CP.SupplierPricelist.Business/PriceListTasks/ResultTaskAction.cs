@@ -1,6 +1,8 @@
 ﻿using CP.SupplierPricelist.Entities;
 using System;
 using System.Collections.Generic;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Runtime.Entities;
 
 namespace CP.SupplierPricelist.Business.PriceListTasks
@@ -56,6 +58,10 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         case PriceListResult.WaitingReview:
                             break;
                     }
+                    if (priceListProgressOutput.AlertFile != null)
+                        pricelist.FileId = SaveLog(priceListProgressOutput.AlertFile, priceListProgressOutput.AlerFileName);
+                    manager.UpdatePriceListProgress(pricelist.PriceListId, (int)priceListProgressOutput.PriceListStatus,
+                  (int)priceListProgressOutput.PriceListResult, pricelist.ResultMaxRetryCount, pricelist.AlertMessage);
                 }
                 else
                 {
@@ -93,14 +99,28 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         break;
                 }
 
-                manager.UpdatePriceListProgress(pricelist.PriceListId, (int)priceListStatus,
-                    (int)priceListResult, pricelist.ResultMaxRetryCount, pricelist.AlertMessage);
+              
             }
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
             {
                 Result = ExecuteOutputResult.Completed
             };
             return output;
+        }
+
+        private long SaveLog(byte[] contentBytes, string fileName)
+        {
+            string[] nameastab = fileName.Split('.');
+            VRFile file = new VRFile
+            {
+                Content = contentBytes,
+                Name = fileName,
+                Extension = nameastab[nameastab.Length - 1],
+                CreatedTime = DateTime.Now
+
+            };
+            VRFileManager manager = new VRFileManager();
+            return manager.AddFile(file);
         }
     }
 }

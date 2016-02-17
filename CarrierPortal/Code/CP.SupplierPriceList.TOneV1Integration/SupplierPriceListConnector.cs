@@ -1,6 +1,7 @@
 ﻿using System;
 using CP.SupplierPricelist.Entities;
 using CP.SupplierPricelist.Business;
+using Vanrise.Entities;
 
 namespace CP.SupplierPriceList.TOneV1Integration
 {
@@ -62,13 +63,17 @@ namespace CP.SupplierPriceList.TOneV1Integration
                     break;
                 case QueueItemStatus.SuspendedDueToBusinessErrors:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                     priceListProgressOutput.AlertMessage = "Suspended due to business errors";
                     priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
                     break;
                 case QueueItemStatus.SuspendedToProcessingErrors:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                     priceListProgressOutput.AlertMessage = "Suspended due to processing errors";
                     priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
                     break;
                 case QueueItemStatus.AwaitingWarningsConfirmation:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
@@ -97,6 +102,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
                         priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                         priceListProgressOutput.AlertMessage = "Failed due to sheet error";
                         priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                        priceListProgressOutput.AlerFileName = uploadInformation.FileName;
                         break;
                     }
                 case QueueItemStatus.Rejected:
@@ -105,6 +111,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
                         priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                         priceListProgressOutput.AlertMessage = "Rejected";
                         priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                        priceListProgressOutput.AlerFileName = uploadInformation.FileName;
                         break;
                     }
                 case QueueItemStatus.SuspendedDueToConfigurationErrors:
@@ -113,6 +120,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
                         priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                         priceListProgressOutput.AlertMessage = "Suspended due to configurtaion errors";
                         priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                        priceListProgressOutput.AlerFileName = uploadInformation.FileName;
                         break;
                     }
                 case QueueItemStatus.ProcessedSuccessfulyByImport:
