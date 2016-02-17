@@ -108,7 +108,7 @@ namespace Demo.Module.Business
         #endregion
 
         #region  Mappers
-      
+
         private NationalNumberingPlanDetail NationalNumberingPlanDetailMapper(NationalNumberingPlan plan)
         {
             NationalNumberingPlanDetail planDetail = new NationalNumberingPlanDetail();
@@ -116,10 +116,7 @@ namespace Demo.Module.Business
             planDetail.Entity = plan;
 
             OperatorProfileManager manager = new OperatorProfileManager();
-            if (plan.Settings != null)
-            {
-                planDetail.OperatorName = manager.GetOperatorProfile(plan.OperatorId).Name;
-            }
+            planDetail.OperatorName = manager.GetOperatorProfile(plan.OperatorId).Name;
 
             return planDetail;
         }
