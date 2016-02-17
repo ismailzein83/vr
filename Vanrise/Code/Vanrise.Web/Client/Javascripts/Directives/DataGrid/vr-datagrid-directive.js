@@ -523,7 +523,7 @@
             setTimeout(function () {
                 isRowHtmlBuildScheduled = false;
                 buildRowHtml();
-                
+                scope.$apply();
             }, 100);
         }
 
