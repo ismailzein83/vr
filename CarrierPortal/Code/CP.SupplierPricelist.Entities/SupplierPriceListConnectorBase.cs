@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Entities;
 
 namespace CP.SupplierPricelist.Entities
@@ -7,8 +8,22 @@ namespace CP.SupplierPricelist.Entities
     {
         public int ConfigId { get; set; }
         public abstract PriceListUploadOutput PriceListUploadOutput(IPriceListUploadContext context);
+
         public abstract PriceListProgressOutput GetPriceListProgressOutput(IPriceListProgressContext context);
+
+        public virtual List<SupplierInfo> GetSuppliers(GetSuppliersContext context)
+        {
+            return null;
+        }
     }
+
+    
+
+    public interface GetSuppliersContext
+    {
+
+    }
+
     public enum PriceListSupplierUploadResult { Uploaded, Failed, FailedWithRetry }
     public enum PriceListProgressResult { Completed, ProgressChanged, ProgressNotChanged, FailedWithRetry, FailedWithNoRetry }
 
