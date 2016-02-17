@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="CodeGroup\CodeGroupDataManager.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanDataManager.cs" />
+    <Compile Include="OperatorDeclaredInformation\OperatorDeclaredInformationDataManager.cs" />
     <Compile Include="Operator\OperatorAccountDataManager.cs" />
     <Compile Include="Operator\OperatorProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
