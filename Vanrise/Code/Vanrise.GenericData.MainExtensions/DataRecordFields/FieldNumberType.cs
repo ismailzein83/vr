@@ -24,11 +24,25 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return value.ToString();
         }
+
+        public override bool IsMatched(object fieldValue, object filterValue)
+        {
+            if (filterValue != null)
+            {
+                var fieldValueList = fieldValue as List<object>;
+                foreach (var fieldValueListItem in fieldValueList)
+                {
+                    if (fieldValueListItem.Equals(filterValue))
+                        return true;
+                }
+            }
+            return false;
+        }
     }
 
     public enum FieldNumberDataType
     {
-        [FieldNumberDataTypeInfo(RuntimeType=typeof(Decimal))]
+        [FieldNumberDataTypeInfo(RuntimeType = typeof(Decimal))]
         Decimal = 0,
         [FieldNumberDataTypeInfo(RuntimeType = typeof(int))]
         Int = 1,

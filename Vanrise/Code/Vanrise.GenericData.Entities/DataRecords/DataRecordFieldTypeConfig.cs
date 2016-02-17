@@ -18,6 +18,8 @@ namespace Vanrise.GenericData.Entities
 
         public string RuntimeEditor { get; set; }
 
+        public string FilterEditor { get; set; }
+
         public bool IsSupportedInGenericRule { get; set; }
     }
 }

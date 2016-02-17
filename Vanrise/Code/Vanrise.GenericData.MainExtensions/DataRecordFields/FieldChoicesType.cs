@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
@@ -25,6 +26,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return (selectedChoice != null) ? selectedChoice.Text : null;
             }
             return null;
+        }
+
+        public override bool IsMatched(object fieldValue, object filterValue)
+        {
+            var fieldValueList = fieldValue as List<Choice>;
+            int filterValueInt = Convert.ToInt32(filterValue);
+            return (fieldValueList.FindRecord(itm => itm.Value == filterValueInt) != null);
         }
     }
 

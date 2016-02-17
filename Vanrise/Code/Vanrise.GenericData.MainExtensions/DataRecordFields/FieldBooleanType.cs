@@ -17,5 +17,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return value.ToString();
         }
+
+        public override bool IsMatched(object fieldValue, object filterValue)
+        {
+            return true;
+        }
     }
 }

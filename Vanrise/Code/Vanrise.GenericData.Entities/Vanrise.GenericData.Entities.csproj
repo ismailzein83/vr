@@ -48,8 +48,10 @@
     <Compile Include="BusinessEntities\BusinessEntityDefinitionInfoFilter.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDescriptionContext.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityDescriptionContext.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityGroupContext.cs" />
+    <Compile Include="BusinessEntities\IBusinessEntityMatchContext.cs" />
     <Compile Include="DataRecords\DataRecord.cs" />
     <Compile Include="DataRecords\DataRecordField.cs" />
     <Compile Include="DataRecords\DataRecordFieldDetail.cs" />

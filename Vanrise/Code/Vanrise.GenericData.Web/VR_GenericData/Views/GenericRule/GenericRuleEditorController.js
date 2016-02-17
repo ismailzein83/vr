@@ -159,12 +159,12 @@
 
                         VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
                     });
+                });
 
-                    UtilsService.waitMultiplePromises(criteriaFieldsPromises).then(function () {
-                        loadAllFieldsPromiseDeferred.resolve();
-                    }).catch(function (error) {
-                        loadAllFieldsPromiseDeferred.reject(error);
-                    });
+                UtilsService.waitMultiplePromises(criteriaFieldsPromises).then(function () {
+                    loadAllFieldsPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadAllFieldsPromiseDeferred.reject(error);
                 });
 
                 $scope.scopeModel.criteriaFields = genericRuleDefintion.CriteriaDefinition.Fields;

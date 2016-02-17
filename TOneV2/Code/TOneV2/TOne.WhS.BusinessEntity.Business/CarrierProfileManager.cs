@@ -97,6 +97,17 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
         }
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            var fieldValueList = context.FieldValue as List<int>;
+            var filterValueList = context.FilterValue as List<int>;
+            foreach (var filterValueListItem in filterValueList)
+            {
+                if (fieldValueList.Contains(filterValueListItem))
+                    return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Private Members

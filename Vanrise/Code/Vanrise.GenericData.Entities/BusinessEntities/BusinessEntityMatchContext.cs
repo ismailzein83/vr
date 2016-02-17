@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericRuleQuery
+    public class BusinessEntityMatchContext : IBusinessEntityMatchContext
     {
-        public int RuleDefinitionId { get; set; }
+        public object FieldValue { get; set; }
 
-        public Dictionary<string, object> CriteriaFieldValues { get; set; }
+        public object FilterValue { get; set; }
     }
 }

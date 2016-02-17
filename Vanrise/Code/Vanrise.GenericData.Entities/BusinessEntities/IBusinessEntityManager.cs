@@ -9,5 +9,7 @@ namespace Vanrise.GenericData.Entities
     public interface IBusinessEntityManager
     {
         string GetEntityDescription(IBusinessEntityDescriptionContext context);
+
+        bool IsMatched(IBusinessEntityMatchContext context);
     }
 }

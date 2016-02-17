@@ -189,6 +189,10 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-recordname-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-stepsequencedesign.js" />
+    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-fieldtype-businessentity-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-fieldtype-choices-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-fieldtype-numeric-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-fieldtype-text-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-grid.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\SqlTemplate.html" />

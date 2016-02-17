@@ -1,15 +1,17 @@
 ﻿<vr-panel ng-controller="VR_GenericData_GenericRuleManagementController">
 
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                
+                <vr-columns width="normal" ng-repeat="filter in filters">
+                    <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady"></vr-directivewrapper>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
                     <vr-button type="Add" data-onclick="addGenericRule"></vr-button>
                 </div>
             </vr-actionbar>

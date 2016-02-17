@@ -13,5 +13,7 @@ namespace Vanrise.GenericData.Entities
         public abstract Type GetRuntimeType();
 
         public abstract string GetDescription(Object value);
+
+        public abstract bool IsMatched(Object fieldValue, Object filterValue);
     }   
 }

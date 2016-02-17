@@ -23,13 +23,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(Object value)
         {
+            IBusinessEntityManager beManager = GetBusinessEntityManager();
+            return (beManager != null) ? beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityId = value }) : null;
+        }
+
+        public override bool IsMatched(object fieldValue, object filterValue)
+        {
+            IBusinessEntityManager beManager = GetBusinessEntityManager();
+            return (beManager != null) ? beManager.IsMatched(new BusinessEntityMatchContext() { FieldValue = fieldValue, FilterValue = filterValue }) : false;
+        }
+
+        IBusinessEntityManager GetBusinessEntityManager()
+        {
             BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
             BusinessEntityDefinition beDefinition = beDefinitionManager.GetBusinessEntityDefinition(BusinessEntityDefinitionId);
             if (beDefinition != null && beDefinition.Settings != null && beDefinition.Settings.ManagerFQTN != null)
             {
                 Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
-                IBusinessEntityManager beManager = Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
-                return beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityId = value });
+                return Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
             }
             return null;
         }
