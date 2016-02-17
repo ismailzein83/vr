@@ -135,6 +135,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
+    <Compile Include="Controllers\OperatorDeclaredInformationController.cs" />
     <Compile Include="Controllers\OperatorAccountController.cs" />
     <Compile Include="Controllers\NationalNumberingPlanController.cs" />
     <Compile Include="Controllers\OperatorProfileController.cs" />
