@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Entities.DataStorage.DataRecordStorage;
 using Vanrise.Web.Base;
 
 namespace Vanrise.GenericData.Web.Controllers
@@ -24,9 +25,10 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetDataRecordsStorageInfo")]
-        public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo()
+        public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo(string filter)
         {
-            return _manager.GetDataRecordsStorageInfo();
+            DataRecordStorageFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<DataRecordStorageFilter>(filter) : null;
+            return _manager.GetDataRecordsStorageInfo(deserializedFilter);
         }
 
         [HttpGet]

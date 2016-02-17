@@ -7,6 +7,7 @@ using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Entities.DataStorage.DataRecordStorage;
 
 namespace Vanrise.GenericData.Business
 {
@@ -31,9 +32,13 @@ namespace Vanrise.GenericData.Business
 
             return DataRetrievalManager.Instance.ProcessResult(input, cachedDataRecordStorages.ToBigResult(input, filterExpression, DataRecordStorageMapper));
         }
-        public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo()
+        public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo(DataRecordStorageFilter filter)
         {
-            var cachedDataRecordsStorage = GetCachedDataRecordStorages();
+            IEnumerable<DataRecordStorage> cachedDataRecordsStorage = GetCachedDataRecordStorages().Values;
+            if (filter != null)
+            {
+                cachedDataRecordsStorage=cachedDataRecordsStorage.Where(x => x.DataRecordTypeId == filter.DataRecordTypeId);
+            }
             return cachedDataRecordsStorage.MapRecords(DataRecordStorageInfoMapper);
         }
 

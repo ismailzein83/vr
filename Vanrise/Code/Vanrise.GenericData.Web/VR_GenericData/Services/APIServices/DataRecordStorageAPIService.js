@@ -7,7 +7,7 @@
     function DataRecordStorageAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return {
             GetFilteredDataRecordStorages: GetFilteredDataRecordStorages,
-            GetDataRecordsStorageInfo:GetDataRecordsStorageInfo,
+            GetDataRecordsStorageInfo: GetDataRecordsStorageInfo,
             GetDataRecordStorage: GetDataRecordStorage,
             AddDataRecordStorage: AddDataRecordStorage,
             UpdateDataRecordStorage: UpdateDataRecordStorage
@@ -17,8 +17,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetFilteredDataRecordStorages'), input);
         }
 
-        function GetDataRecordsStorageInfo(dataRecordStorageId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetDataRecordsStorageInfo'));
+        function GetDataRecordsStorageInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetDataRecordsStorageInfo'), {
+                filter: filter
+            });
         }
         function GetDataRecordStorage(dataRecordStorageId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetDataRecordStorage'), {

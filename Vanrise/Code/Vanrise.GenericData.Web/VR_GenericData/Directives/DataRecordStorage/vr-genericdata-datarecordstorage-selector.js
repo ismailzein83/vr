@@ -64,14 +64,15 @@
 
                 api.load = function (payload) {
                     var selectedIds;
-
+                    var filter = {};
                     if (payload != undefined) {
+                        filter.DataRecordTypeId = payload.DataRecordTypeId;
                         if (payload.showaddbutton)
                             ctrl.onAddDataStorageRecord = onAddDataStorageRecord;
                         selectedIds = payload.selectedIds;
                     }
 
-                    return VR_GenericData_DataRecordStorageAPIService.GetDataRecordsStorageInfo().then(function (response) {
+                    return VR_GenericData_DataRecordStorageAPIService.GetDataRecordsStorageInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {

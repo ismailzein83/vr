@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.Web.Controllers
         public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(int dataTransformationDefinitionId)
         {
             DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
-            return dataRecordTypeManager.GetDataTransformationDefinitionRecords(dataTransformationDefinitionId).Where(x=>x.IsArray);
+            return dataRecordTypeManager.GetDataTransformationDefinitionRecords(dataTransformationDefinitionId);
         }
 
         [HttpPost]
