@@ -25,7 +25,7 @@ namespace Demo.Module.Data.SQL
         {
             object infoId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Insert", out infoId, info.OperatorId, info.FromDate, info.ToDate, Vanrise.Common.Serializer.Serialize(info.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Insert", out infoId, info.OperatorId, info.FromDate, info.ToDate, info.ZoneId, info.Volume, info.AmountType);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)infoId;
@@ -35,7 +35,7 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(OperatorDeclaredInformation info)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Update", info.OperatorDeclaredInformationId, info.OperatorId, info.FromDate, info.ToDate, Vanrise.Common.Serializer.Serialize(info.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Update", info.OperatorDeclaredInformationId, info.OperatorId, info.FromDate, info.ToDate, info.ZoneId, info.Volume, info.AmountType);
             return (recordsEffected > 0);
         }
         public bool AreOperatorDeclaredInformationsUpdated(ref object updateHandle)
@@ -61,7 +61,9 @@ namespace Demo.Module.Data.SQL
                 OperatorId = (int)reader["OperatorID"],
                 FromDate = GetReaderValue<DateTime?>(reader,"FromDate"),
                 ToDate = GetReaderValue<DateTime?>(reader,"ToDate"),
-                Settings = Vanrise.Common.Serializer.Deserialize<OperatorDeclaredInformationSettings>(reader["Settings"] as string)
+                ZoneId = GetReaderValue<long?>(reader, "ZoneId"),
+                Volume = GetReaderValue<int>(reader, "Volume"),
+                AmountType = GetReaderValue<int>(reader, "AmountType"),
             };
             return info;
         }

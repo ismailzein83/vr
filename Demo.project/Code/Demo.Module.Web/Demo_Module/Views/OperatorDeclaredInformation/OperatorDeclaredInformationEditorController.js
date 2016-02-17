@@ -12,6 +12,9 @@
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var zoneDirectiveAPI;
+        var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -28,7 +31,6 @@
         function defineScope() {
 
             $scope.scopeModal = {
-                range: []
             };
 
             $scope.validateDateRange = function () {
@@ -40,11 +42,12 @@
                 operatorProfileReadyPromiseDeferred.resolve();
 
             }
-            $scope.scopeModal.disabledrange = true;
-            $scope.scopeModal.onRangeValueChange = function (value) {
-                $scope.scopeModal.disabledrange = (contains($scope.scopeModal.range, value) || value == undefined);
-            }
 
+            $scope.scopeModal.onZoneDirectiveReady = function (api) {
+                zoneDirectiveAPI = api;
+                zoneReadyPromiseDeferred.resolve();
+
+            }
 
             $scope.SaveOperatorDeclaredInformation = function () {
                 if (isEditMode) {
@@ -57,28 +60,7 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
-
-            $scope.addRangeOption = function () {
-                var range = $scope.scopeModal.rangevalue;
-                $scope.scopeModal.range.push({
-                    range: range
-                });
-                $scope.scopeModal.rangevalue = undefined;
-                $scope.scopeModal.disabledrange = true;
-            };
-
         }
-
-
-        function contains(a, obj) {
-            for (var i = 0; i < a.length; i++) {
-                if (a[i].range === obj) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
 
         function load() {
             $scope.isLoading = true;
@@ -106,7 +88,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadZoneDirective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -134,21 +116,24 @@
             return loadOperatorProfilePromiseDeferred.promise;
         }
 
+        function loadZoneDirective() {
+            var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
+            zoneReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {
+                        selectedIds: (operatordeclaredinformationEntity != undefined ? (operatordeclaredinformationEntity.ZoneId != undefined ? [operatordeclaredinformationEntity.ZoneId] : undefined) : (operatordeclaredinformationId != undefined ? operatordeclaredinformationId : undefined))
+                    }
+                    VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, loadZonePromiseDeferred);
+                });
+            return loadZonePromiseDeferred.promise;
+        }
+
         function loadStaticSection() {
             if (operatordeclaredinformationEntity != undefined) {
                 $scope.scopeModal.fromDate = operatordeclaredinformationEntity.FromDate;
                 $scope.scopeModal.toDate = operatordeclaredinformationEntity.ToDate;
-
-                if (operatordeclaredinformationEntity.Settings != null) {
-                    $scope.scopeModal.range = [];
-                    if (operatordeclaredinformationEntity.Settings.Range == undefined)
-                        operatordeclaredinformationEntity.Settings.Range = [];
-                    for (var j = 0; j < operatordeclaredinformationEntity.Settings.Range.length; j++) {
-                        $scope.scopeModal.range.push({
-                            range: operatordeclaredinformationEntity.Settings.Range[j]
-                        });
-                    }
-                }
+                $scope.scopeModal.volume = operatordeclaredinformationEntity.Volume;
+                $scope.scopeModal.amountType = operatordeclaredinformationEntity.AmountType;
             }
         }
 
@@ -159,9 +144,9 @@
                 FromDate: $scope.scopeModal.fromDate,
                 ToDate: $scope.scopeModal.toDate,
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
-                Settings: {
-                    Range: UtilsService.getPropValuesFromArray($scope.scopeModal.range, "range")
-                }
+                ZoneId: zoneDirectiveAPI.getSelectedIds(),
+                Volume: $scope.scopeModal.volume,
+                AmountType: $scope.scopeModal.amountType,
             };
 
             return obj;

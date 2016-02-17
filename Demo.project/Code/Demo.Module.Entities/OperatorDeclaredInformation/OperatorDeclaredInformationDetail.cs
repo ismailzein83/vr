@@ -11,5 +11,7 @@ namespace Demo.Module.Entities
         public OperatorDeclaredInformation Entity { get; set; }
 
         public String OperatorName { get; set; }
+
+        public String ZoneName { get; set; }
     }
 }

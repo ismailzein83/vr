@@ -9,6 +9,10 @@
         var operatorDeclaredInformationDirectiveAPI;
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var zoneDirectiveAPI;
+        var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -22,6 +26,11 @@
             $scope.onOperatorProfileDirectiveReady = function (api) {
                 operatorProfileDirectiveAPI = api;
                 operatorProfileReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onZoneDirectiveReady = function (api) {
+                zoneDirectiveAPI = api;
+                zoneReadyPromiseDeferred.resolve();
             }
 
             $scope.onGridReady = function (api) {
@@ -39,7 +48,8 @@
                 var data = {
                     FromDate: $scope.fromDate,
                     ToDate: $scope.toDate,
-                    OperatorIds: operatorProfileDirectiveAPI.getSelectedIds()
+                    OperatorIds: operatorProfileDirectiveAPI.getSelectedIds(),
+                    ZoneIds: zoneDirectiveAPI.getSelectedIds()
                 };
 
                 return data;
@@ -52,7 +62,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadZones])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -72,6 +82,17 @@
                 });
 
             return loadOperatorProfilePromiseDeferred.promise;
+        }
+
+        function loadZones() {
+            var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
+            zoneReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = undefined;
+                    VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, loadZonePromiseDeferred);
+                });
+
+            return loadZonePromiseDeferred.promise;
         }
 
         function AddNewOperatorDeclaredInformation() {

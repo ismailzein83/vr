@@ -23,10 +23,13 @@ namespace Demo.Module.Business
                  (input.Query.FromDate == null || input.Query.FromDate < prod.FromDate)
                  &&
 
-                  (input.Query.ToDate == null || input.Query.ToDate >= prod.ToDate)
+                 (input.Query.ToDate == null || input.Query.ToDate >= prod.ToDate)
                  &&
 
                  (input.Query.OperatorIds == null || input.Query.OperatorIds.Count == 0 || input.Query.OperatorIds.Contains(prod.OperatorId))
+                 &&
+
+                 (input.Query.ZoneIds == null || input.Query.ZoneIds.Count == 0 || (prod.ZoneId.HasValue && input.Query.ZoneIds.Contains(prod.ZoneId.Value)))
                  &&
                  (input.Query.OperatorDeclaredInformationIds == null || input.Query.OperatorDeclaredInformationIds.Contains(prod.OperatorDeclaredInformationId));
 
@@ -108,19 +111,16 @@ namespace Demo.Module.Business
         #endregion
 
         #region  Mappers
-      
+
         private OperatorDeclaredInformationDetail OperatorDeclaredInformationDetailMapper(OperatorDeclaredInformation info)
         {
             OperatorDeclaredInformationDetail infoDetail = new OperatorDeclaredInformationDetail();
-
             infoDetail.Entity = info;
-
             OperatorProfileManager manager = new OperatorProfileManager();
-            if (info.Settings != null)
-            {
-                infoDetail.OperatorName = manager.GetOperatorProfile(info.OperatorId).Name;
-            }
-
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            infoDetail.OperatorName = manager.GetOperatorProfile(info.OperatorId).Name;
+            if (info.ZoneId.HasValue)
+                infoDetail.ZoneName = saleZoneManager.GetSaleZoneName(info.ZoneId.Value);
             return infoDetail;
         }
         #endregion

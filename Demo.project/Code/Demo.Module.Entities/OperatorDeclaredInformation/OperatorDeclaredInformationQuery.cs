@@ -13,5 +13,7 @@ namespace Demo.Module.Entities
 
        public List<int> OperatorIds { get; set; }
 
+       public List<long> ZoneIds { get; set; }
+
     }
 }

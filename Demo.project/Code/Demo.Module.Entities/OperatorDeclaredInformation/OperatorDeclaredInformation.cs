@@ -13,11 +13,11 @@ namespace Demo.Module.Entities
 
         public DateTime? ToDate { get; set; }
 
-        public OperatorDeclaredInformationSettings Settings { get; set;  }
-    }
-    public class OperatorDeclaredInformationSettings
-    {
-        public List<string> Range { get; set; }
+        public long? ZoneId { get; set; }
 
+        public int Volume { get; set; }
+
+        public int AmountType { get; set; }
     }
+   
 }
