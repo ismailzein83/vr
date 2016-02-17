@@ -26,7 +26,10 @@ namespace Demo.Module.Business
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
 
-                  (input.Query.Company == null || prod.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
+                 (input.Query.Company == null || prod.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
+                 &&
+
+                 (input.Query.BillingEmail == null || prod.Settings.Contacts.Where(x => x.Type == OperatorContactType.BillingEmail).Select(x => x.Description.ToLower()).Contains(input.Query.BillingEmail.ToLower()))
                  &&
 
                  (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || input.Query.CountriesIds.Contains(prod.Settings.CountryId))
