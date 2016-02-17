@@ -13,7 +13,6 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CarrierAccountManager : IBusinessEntityManager
     {
-     
         #region ctor/Local Variables
         CarrierProfileManager _carrierProfileManager;
         SellingNumberPlanManager _sellingNumberPlanManager;
@@ -217,14 +216,18 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
-            var fieldValueList = context.FieldValue as List<int>;
-            var filterValueList = context.FilterValue as List<int>;
-            foreach (var filterValueListItem in filterValueList)
+            if (context.FieldValueIds != null && context.FilterIds != null)
             {
-                if (fieldValueList.Contains(filterValueListItem))
-                    return true;
+                IEnumerable<int> fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+                IEnumerable<int> filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+                foreach (var filterId in filterIds)
+                {
+                    if (fieldValueIds.Contains(filterId))
+                        return true;
+                }
+                return false;
             }
-            return false;
+            return true;
         }
         #endregion
 
@@ -305,7 +308,6 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
-
         #endregion
   
         #region  Mappers

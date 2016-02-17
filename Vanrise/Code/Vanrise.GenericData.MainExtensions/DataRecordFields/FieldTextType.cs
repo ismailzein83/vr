@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
@@ -21,18 +22,19 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            if (filterValue != null)
+            if (fieldValue != null && filterValue != null)
             {
-                var fieldValueList = ConvertObjectToStringList(fieldValue);
+                var fieldValueObjList = fieldValue as List<object>;
+                var fieldValueStringList = fieldValueObjList.MapRecords(itm => Convert.ToString(itm).ToUpper());
                 var filterValueString = filterValue.ToString().ToUpper();
-                
-                foreach (var fieldValueListItem in fieldValueList)
+                foreach (var fieldValueStringItem in fieldValueStringList)
                 {
-                    if (fieldValueListItem.ToUpper().Contains(filterValueString))
+                    if (fieldValueStringItem.Contains(filterValueString))
                         return true;
                 }
+                return false;
             }
-            return false;
+            return true;
         }
 
         IEnumerable<string> ConvertObjectToStringList(object target)

@@ -30,9 +30,19 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            var fieldValueList = fieldValue as List<Choice>;
-            int filterValueInt = Convert.ToInt32(filterValue);
-            return (fieldValueList.FindRecord(itm => itm.Value == filterValueInt) != null);
+            var choicesFilter = filterValue as ChoicesFieldTypeFilter;
+            if (fieldValue != null && choicesFilter.ChoiceIds != null)
+            {
+                var fieldValueObjList = fieldValue as List<object>;
+                var fieldValueIds = fieldValueObjList.MapRecords(itm => Convert.ToInt32(itm));
+                foreach (var filterId in choicesFilter.ChoiceIds)
+                {
+                    if (fieldValueIds.Contains(filterId))
+                        return true;
+                }
+                return false;
+            }
+            return true;
         }
     }
 

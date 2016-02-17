@@ -24,13 +24,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override string GetDescription(Object value)
         {
             IBusinessEntityManager beManager = GetBusinessEntityManager();
-            return (beManager != null) ? beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityId = value }) : null;
+            return beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityId = value });
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
+            var fieldValueObjList = fieldValue as List<object>;
+            var beFilter = filterValue as BusinessEntityFieldTypeFilter;
+
             IBusinessEntityManager beManager = GetBusinessEntityManager();
-            return (beManager != null) ? beManager.IsMatched(new BusinessEntityMatchContext() { FieldValue = fieldValue, FilterValue = filterValue }) : false;
+            return beManager.IsMatched(new BusinessEntityMatchContext() { FieldValueIds = fieldValueObjList, FilterIds = beFilter.BusinessEntityIds });
         }
 
         IBusinessEntityManager GetBusinessEntityManager()

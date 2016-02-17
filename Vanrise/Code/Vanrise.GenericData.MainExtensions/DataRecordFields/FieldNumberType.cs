@@ -27,16 +27,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            if (filterValue != null)
+            if (fieldValue != null && filterValue != null)
             {
-                var fieldValueList = fieldValue as List<object>;
-                foreach (var fieldValueListItem in fieldValueList)
+                var fieldValueIds = fieldValue as List<object>;
+                foreach (var fieldValueId in fieldValueIds)
                 {
-                    if (fieldValueListItem.Equals(filterValue))
+                    if (fieldValueId.Equals(filterValue))
                         return true;
                 }
+                return false;
             }
-            return false;
+            return true;
         }
     }
 

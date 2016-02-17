@@ -8,8 +8,8 @@ namespace Vanrise.GenericData.Entities
 {
     public interface IBusinessEntityMatchContext
     {
-        Object FieldValue { get; set; }
+        IEnumerable<object> FieldValueIds { get; set; }
 
-        Object FilterValue { get; set; }
+        IEnumerable<object> FilterIds { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Entities.BusinessEntities;
 
 namespace TOne.WhS.BusinessEntity.Entities
@@ -19,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         IEnumerable<object> Vanrise.GenericData.Entities.IBusinessEntityGroup.GetIds(IBusinessEntityGroupContext context)
         {
-            return this.GetZoneIds(null) as IEnumerable<Object>;
+            return GetZoneIds(null).MapRecords(itm => (object)itm);
         }
 
         string Vanrise.GenericData.Entities.IBusinessEntityGroup.GetDescription(IBusinessEntityGroupContext context)

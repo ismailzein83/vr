@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -21,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         IEnumerable<object> Vanrise.GenericData.Entities.IBusinessEntityGroup.GetIds(Vanrise.GenericData.Entities.BusinessEntities.IBusinessEntityGroupContext context)
         {
-            return this.GetCustomerIds(null) as IEnumerable<object>;
+            return GetCustomerIds(null).MapRecords(itm => (object)itm);
         }
     }
 
