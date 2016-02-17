@@ -6,6 +6,9 @@
                 <vr-columns width="normal" ng-repeat="filter in filters">
                     <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady"></vr-directivewrapper>
                 </vr-columns>
+                <vr-columns width="normal">
+                    <vr-directivewrapper directive="settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady"></vr-directivewrapper>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>

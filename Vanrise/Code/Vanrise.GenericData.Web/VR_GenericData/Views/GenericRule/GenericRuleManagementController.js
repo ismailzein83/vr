@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var gridAPI;
 
@@ -12,6 +12,9 @@
         load();
 
         var ruleDefinitionId
+
+        var settingsFilterDirectiveAPI;
+        var settingsFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -23,6 +26,11 @@
 
         function defineScope() {
             $scope.filters = [];
+
+            $scope.onSettingsFilterDirectiveReady = function (api) {
+                settingsFilterDirectiveAPI = api;
+                settingsFilterDirectiveReadyDeferred.resolve();
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -88,6 +96,9 @@
                         }
                     }
 
+                    var loadSettingsFilterPromise = loadSettingsFilter();
+                    promises.push(loadSettingsFilterPromise);
+
                     getRuleDefinitionAndFieldTypesDeferred.resolve();
                 }).catch(function (error) {
                     getRuleDefinitionAndFieldTypesDeferred.reject(error);
@@ -129,6 +140,40 @@
                     };
 
                     return filter;
+                }
+                function loadSettingsFilter() {
+                    var settingsPromises = [];
+                    var ruleTypes;
+
+                    var getRuleTypesPromise = getRuleTypes();
+                    settingsPromises.push(getRuleTypesPromise);
+
+                    var settingsFilterEditorLoadDeferred = UtilsService.createPromiseDeferred();
+                    settingsPromises.push(settingsFilterEditorLoadDeferred.promise);
+
+                    getRuleTypesPromise.then(function () {
+                        $scope.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'GenericRuleTypeConfigId').FilterEditor;
+                        console.log(UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'GenericRuleTypeConfigId'));
+
+                        settingsFilterDirectiveReadyDeferred.promise.then(function () {
+                            var settingsFilterDirectivePayload = {
+                                genericRuleDefinition: ruleDefinition,
+                                settings: ruleDefinition.SettingsDefinition
+                            };
+                            VRUIUtilsService.callDirectiveLoad(settingsFilterDirectiveAPI, settingsFilterDirectivePayload, settingsFilterEditorLoadDeferred);
+                        });
+                    });
+
+                    return UtilsService.waitMultiplePromises(settingsPromises);
+
+                    function getRuleTypes() {
+                        return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypes().then(function (response) {
+                            ruleTypes = [];
+                            for (var i = 0; i < response.length; i++) {
+                                ruleTypes.push(response[i]);
+                            }
+                        });
+                    }
                 }
             }
         }
