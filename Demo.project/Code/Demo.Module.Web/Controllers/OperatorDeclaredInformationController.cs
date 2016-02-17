@@ -26,17 +26,17 @@ namespace Demo.Module.Web.Controllers
 
         [HttpPost]
         [Route("AddOperatorDeclaredInformation")]
-        public Vanrise.Entities.InsertOperationOutput<OperatorDeclaredInformationDetail> AddOperatorDeclaredInformation(OperatorDeclaredInformation nationalNumberPlan)
+        public Vanrise.Entities.InsertOperationOutput<OperatorDeclaredInformationDetail> AddOperatorDeclaredInformation(OperatorDeclaredInformation operatorDeclaredInformation)
         {
             OperatorDeclaredInformationManager manager = new OperatorDeclaredInformationManager();
-            return manager.AddOperatorDeclaredInformation(nationalNumberPlan);
+            return manager.AddOperatorDeclaredInformation(operatorDeclaredInformation);
         }
         [HttpPost]
         [Route("UpdateOperatorDeclaredInformation")]
-        public Vanrise.Entities.UpdateOperationOutput<OperatorDeclaredInformationDetail> UpdateOperatorDeclaredInformation(OperatorDeclaredInformation nationalNumberPlan)
+        public Vanrise.Entities.UpdateOperationOutput<OperatorDeclaredInformationDetail> UpdateOperatorDeclaredInformation(OperatorDeclaredInformation operatorDeclaredInformation)
         {
             OperatorDeclaredInformationManager manager = new OperatorDeclaredInformationManager();
-            return manager.UpdateOperatorDeclaredInformation(nationalNumberPlan);
+            return manager.UpdateOperatorDeclaredInformation(operatorDeclaredInformation);
         }
     }
 }

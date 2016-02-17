@@ -10,8 +10,8 @@ namespace Demo.Module.Data
     public interface IOperatorDeclaredInformationDataManager:IDataManager
     {
         List<OperatorDeclaredInformation> GetOperatorDeclaredInformations();
-        bool Insert(OperatorDeclaredInformation plan, out int planId);
-        bool Update(OperatorDeclaredInformation plan);
+        bool Insert(OperatorDeclaredInformation info, out int infoId);
+        bool Update(OperatorDeclaredInformation info);
         bool AreOperatorDeclaredInformationsUpdated(ref object updateHandle);
     }
 }

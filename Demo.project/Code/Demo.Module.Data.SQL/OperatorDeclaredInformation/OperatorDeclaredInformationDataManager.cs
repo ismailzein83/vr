@@ -21,21 +21,21 @@ namespace Demo.Module.Data.SQL
         #endregion
 
         #region Public Methods
-        public bool Insert(OperatorDeclaredInformation plan, out int insertedId)
+        public bool Insert(OperatorDeclaredInformation info, out int insertedId)
         {
-            object planId;
+            object infoId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Insert", out planId, plan.OperatorId, plan.FromDate, plan.ToDate, Vanrise.Common.Serializer.Serialize(plan.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Insert", out infoId, info.OperatorId, info.FromDate, info.ToDate, Vanrise.Common.Serializer.Serialize(info.Settings));
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
-                insertedId = (int)planId;
+                insertedId = (int)infoId;
             else
                 insertedId = 0;
             return insertedSuccesfully;
         }
-        public bool Update(OperatorDeclaredInformation plan)
+        public bool Update(OperatorDeclaredInformation info)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Update", plan.OperatorDeclaredInformationId, plan.OperatorId, plan.FromDate, plan.ToDate, Vanrise.Common.Serializer.Serialize(plan.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Update", info.OperatorDeclaredInformationId, info.OperatorId, info.FromDate, info.ToDate, Vanrise.Common.Serializer.Serialize(info.Settings));
             return (recordsEffected > 0);
         }
         public bool AreOperatorDeclaredInformationsUpdated(ref object updateHandle)
@@ -55,7 +55,7 @@ namespace Demo.Module.Data.SQL
         #region  Mappers
         private OperatorDeclaredInformation OperatorDeclaredInformationMapper(IDataReader reader)
         {
-            OperatorDeclaredInformation plan = new OperatorDeclaredInformation
+            OperatorDeclaredInformation info = new OperatorDeclaredInformation
             {
                 OperatorDeclaredInformationId = (int)reader["ID"],
                 OperatorId = (int)reader["OperatorID"],
@@ -63,7 +63,7 @@ namespace Demo.Module.Data.SQL
                 ToDate = GetReaderValue<DateTime?>(reader,"ToDate"),
                 Settings = Vanrise.Common.Serializer.Deserialize<OperatorDeclaredInformationSettings>(reader["Settings"] as string)
             };
-            return plan;
+            return info;
         }
 
         #endregion

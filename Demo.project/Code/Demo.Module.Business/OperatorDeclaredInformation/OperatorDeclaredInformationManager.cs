@@ -35,8 +35,8 @@ namespace Demo.Module.Business
         }
         public OperatorDeclaredInformation GetOperatorDeclaredInformation(int OperatorDeclaredInformationId)
         {
-            var plans = GetCachedOperatorDeclaredInformations();
-            return plans.GetRecord(OperatorDeclaredInformationId);
+            var info = GetCachedOperatorDeclaredInformations();
+            return info.GetRecord(OperatorDeclaredInformationId);
         }
         public Vanrise.Entities.InsertOperationOutput<OperatorDeclaredInformationDetail> AddOperatorDeclaredInformation(OperatorDeclaredInformation OperatorDeclaredInformation)
         {
@@ -45,15 +45,15 @@ namespace Demo.Module.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            int planId = -1;
+            int infoId = -1;
 
             IOperatorDeclaredInformationDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorDeclaredInformationDataManager>();
-            bool insertActionSucc = dataManager.Insert(OperatorDeclaredInformation, out planId);
+            bool insertActionSucc = dataManager.Insert(OperatorDeclaredInformation, out infoId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                OperatorDeclaredInformation.OperatorDeclaredInformationId = planId;
+                OperatorDeclaredInformation.OperatorDeclaredInformationId = infoId;
                 insertOperationOutput.InsertedObject = OperatorDeclaredInformationDetailMapper(OperatorDeclaredInformation);
             }
             else
@@ -90,8 +90,8 @@ namespace Demo.Module.Business
                () =>
                {
                    IOperatorDeclaredInformationDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorDeclaredInformationDataManager>();
-                   IEnumerable<OperatorDeclaredInformation> plans = dataManager.GetOperatorDeclaredInformations();
-                   return plans.ToDictionary(cn => cn.OperatorDeclaredInformationId, cn => cn);
+                   IEnumerable<OperatorDeclaredInformation> info = dataManager.GetOperatorDeclaredInformations();
+                   return info.ToDictionary(cn => cn.OperatorDeclaredInformationId, cn => cn);
                });
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
@@ -109,19 +109,19 @@ namespace Demo.Module.Business
 
         #region  Mappers
       
-        private OperatorDeclaredInformationDetail OperatorDeclaredInformationDetailMapper(OperatorDeclaredInformation plan)
+        private OperatorDeclaredInformationDetail OperatorDeclaredInformationDetailMapper(OperatorDeclaredInformation info)
         {
-            OperatorDeclaredInformationDetail planDetail = new OperatorDeclaredInformationDetail();
+            OperatorDeclaredInformationDetail infoDetail = new OperatorDeclaredInformationDetail();
 
-            planDetail.Entity = plan;
+            infoDetail.Entity = info;
 
             OperatorProfileManager manager = new OperatorProfileManager();
-            if (plan.Settings != null)
+            if (info.Settings != null)
             {
-                planDetail.OperatorName = manager.GetOperatorProfile(plan.OperatorId).Name;
+                infoDetail.OperatorName = manager.GetOperatorProfile(info.OperatorId).Name;
             }
 
-            return planDetail;
+            return infoDetail;
         }
         #endregion
     }

@@ -127,9 +127,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\Templates\OperatorDeclaredInformationGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\vr-demo-operatordeclaredinformation-grid.js" />
     <Content Include="Demo_Module\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
     <Content Include="Demo_Module\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
+    <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
+    <Content Include="Demo_Module\Services\OperatorDeclaredInformationService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +198,10 @@
     <Content Include="Demo_Module\Views\OperatorAccount\OperatorProfileManagementController.js" />
     <Content Include="Demo_Module\Views\Code\CodeManagement.html" />
     <Content Include="Demo_Module\Views\Code\CodeManagementController.js" />
+    <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationEditor.html" />
+    <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationEditorController.js" />
+    <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationManagement.html" />
+    <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationManagementController.js" />
     <Content Include="Demo_Module\Views\RawCDR\RawCDRLog.html" />
     <Content Include="Demo_Module\Views\RawCDR\RawCDRLogController.js" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagement.html" />
