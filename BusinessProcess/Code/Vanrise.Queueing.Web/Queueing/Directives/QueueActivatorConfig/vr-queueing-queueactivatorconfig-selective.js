@@ -49,7 +49,7 @@
                 $scope.scopeModal.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) {
-                        $scope.scopeModal.isLoadingDirective = value;
+                        $scope.scopeModal.isLoading = value;
                     };
 
                     var activatorPayload = {};                    
@@ -78,6 +78,7 @@
                     }
 
                     getActivatorTemplatesPromise.then(function (response) {
+                        $scope.scopeModal.queueActivatorConfig = [];
                         for (var i = 0; i < response.length; i++) {
                             $scope.scopeModal.queueActivatorConfig.push(response[i]);
                         }
@@ -109,6 +110,7 @@
                     }
                     return data;
                 };
+
 
                 return api;
             }

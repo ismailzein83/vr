@@ -12,11 +12,13 @@
 
         var queueActivatorConfigDirectiveReadyAPI;
         var queueActivatorConfigDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var directiveReadyDeferred;
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var stagesDataSource = [];
+        var filteredStages = [];
 
         loadParameters();
         defineScope();
@@ -27,7 +29,13 @@
             if (parameters != undefined && parameters != null) {
                 executionFlowStageEntity = parameters.ExecutionFlowStage;
                 for (var i = 0; i < parameters.ExistingFields.length; i++) {
-                    stagesDataSource.push({ stageName: parameters.ExistingFields[i].StageName });
+                    var existingFieldsInstance=parameters.ExistingFields[i];
+                    stagesDataSource.push({ stageName: existingFieldsInstance.StageName });
+                    
+                    if (executionFlowStageEntity != undefined && existingFieldsInstance.StageName != executionFlowStageEntity.StageName && existingFieldsInstance.QueueItemType.DataRecordTypeId == executionFlowStageEntity.QueueItemType.DataRecordTypeId)
+                        filteredStages.push({ stageName: parameters.ExistingFields[i].StageName });
+                    else if(executionFlowStageEntity == undefined)
+                        filteredStages.push({ stageName: parameters.ExistingFields[i].StageName });
                 }
 
             }
@@ -38,6 +46,8 @@
             $scope.scopeModal = {};
 
             $scope.isDataRecordTypeSelected = false;
+
+            $scope.scopeModal.sourceStages = [];
 
             $scope.scopeModal.onDirectiveReady = function (api) {
                 queueActivatorConfigDirectiveReadyAPI = api;
@@ -70,8 +80,10 @@
 
                 var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
                 if (selectedDataRecordTypeId != undefined) {
-                    loadQueueActivatorConfigDirective(selectedDataRecordTypeId);
                     $scope.isDataRecordTypeSelected = true;
+                    loadSourceStages();
+                    loadQueueActivatorConfigDirective(selectedDataRecordTypeId, false);
+
                 }
                 else
                     $scope.isDataRecordTypeSelected = false;
@@ -85,7 +97,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeSelectorWithActivatorTemplate])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -93,6 +105,10 @@
                     $scope.scopeModal.isLoading = false;
                 });
         }
+
+        function loadSourceStages() {
+            $scope.scopeModal.sourceStages = filteredStages;
+              }
 
         function loadFilterBySection() {
             if (executionFlowStageEntity != undefined) {
@@ -103,6 +119,17 @@
                 $scope.scopeModal.singleConcurrentReader = executionFlowStageEntity.SingleConcurrentReader;
             }
         }
+
+        function loadDataRecordTypeSelectorWithActivatorTemplate() {
+            var laodDataRecordTypeSelectorPromise = loadDataRecordTypeSelector();
+
+            laodDataRecordTypeSelectorPromise.then(function () {
+                if (executionFlowStageEntity != undefined) {
+                    loadQueueActivatorConfigDirective(executionFlowStageEntity.QueueItemType.dataRecordTypeId, true);
+                }
+            });
+        }
+
 
         function loadDataRecordTypeSelector() {
 
@@ -124,29 +151,26 @@
         }
 
 
-        function loadQueueActivatorConfigDirective(dataRecordTypeId) {
+        function loadQueueActivatorConfigDirective(dataRecordTypeId, isEditMode) {
             var queueActivatorConfigDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             queueActivatorConfigDirectiveReadyPromiseDeferred.promise.then(function () {
                 var payload;
-
-                if (executionFlowStageEntity != undefined && executionFlowStageEntity.QueueItemType.DataRecordTypeId == dataRecordTypeId) {
-
+                if (isEditMode) {
                     payload = {
                         QueueActivator: executionFlowStageEntity.QueueActivator,
                         StagesDataSource: stagesDataSource,
-                        DataRecordTypeId: dataRecordTypeId
+                        DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds()
                     };
                 }
 
                 else {
                     payload = {
                         StagesDataSource: stagesDataSource,
-                        DataRecordTypeId: dataRecordTypeId
+                        DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds()
 
                     };
                 }
-
                 VRUIUtilsService.callDirectiveLoad(queueActivatorConfigDirectiveReadyAPI, payload, queueActivatorConfigDirectiveLoadPromiseDeferred);
             });
             return queueActivatorConfigDirectiveLoadPromiseDeferred.promise;
@@ -170,6 +194,8 @@
             executionFlowStage.QueueNameTemplate = $scope.scopeModal.queueTemplateName;
             executionFlowStage.QueueTitleTemplate = $scope.scopeModal.queueTemplateTitle;
             executionFlowStage.SingleConcurrentReader = $scope.scopeModal.singleConcurrentReader;
+            executionFlowStage.SourceStages = [];
+            executionFlowStage.SourceStages.push($scope.scopeModal.selectedSourceStages.stageName);
             executionFlowStage.QueueItemType = {
                 $type: "Vanrise.GenericData.QueueActivators.DataRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators",
                 DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),

@@ -99,9 +99,11 @@
                         $scope.selectedDataRecordStorage = [];
                        
                         for (var i = 0; i < response.length; i++) {
-                            if (response[i].IsArray && response[i].DataRecordTypeId == dataRecordTypeId) {
+                            if (response[i].DataRecordTypeId == dataRecordTypeId) {
                                 $scope.transformationRecordTypes.push(response[i]);
-                                filteredResponse.push(response[i]);
+                            }
+                            if (response[i].IsArray) {
+                             filteredResponse.push(response[i]);
                             }
                         }
                         loadDataGrid(filteredResponse);
@@ -131,7 +133,7 @@
 
                 api.load = function (payload) {
                     var selectedId;
-
+                    var promises=[];
                     if (payload != undefined && payload.StagesDataSource != undefined) {
                         $scope.stagesDataSource = [];
                         $scope.stagesDataSource = payload.StagesDataSource;
@@ -145,7 +147,8 @@
                         dataTransformationSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     }
 
-                    loadSelector();
+                   var loadSelectorPromise=loadSelector();
+                   promises.push(loadSelectorPromise);
 
                     if (payload != undefined && payload.QueueActivator != undefined) {
                         dataTransformationSelectorReadyPromiseDeferred.promise.then(function () {
@@ -157,13 +160,18 @@
                         });
                     }
 
+                    return UtilsService.waitMultiplePromises(promises);
+
+
                     function loadDataGridInEditMode() {
                         for (var i = 0; i < $scope.recordTypesWithStages.length; i++) {
-                            for (var j = 0; j < payload.QueueActivator.NextStagesRecords[i].NextStages.length; j++) {
-                                var selectedValue = UtilsService.getItemByVal($scope.stagesDataSource, payload.QueueActivator.NextStagesRecords[i].NextStages[j], "stageName");
-                                if (selectedValue != null)
-                                    $scope.recordTypesWithStages[i].selectedStages.push(selectedValue);
-                            }
+                            if (payload.QueueActivator.NextStagesRecords[i] != undefined) {
+                                for (var j = 0; j < payload.QueueActivator.NextStagesRecords[i].NextStages.length; j++) {
+                                    var selectedValue = UtilsService.getItemByVal($scope.stagesDataSource, payload.QueueActivator.NextStagesRecords[i].NextStages[j], "stageName");
+                                    if (selectedValue != null)
+                                        $scope.recordTypesWithStages[i].selectedStages.push(selectedValue);
+                                }
+                        }
                         }
                     }
 
