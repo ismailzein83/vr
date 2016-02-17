@@ -13,7 +13,7 @@ namespace Demo.Module.Business
 {
     public class OperatorProfileManager
     {
-      
+
         #region ctor/Local Variables
         #endregion
 
@@ -114,7 +114,7 @@ namespace Demo.Module.Business
         }
 
         #endregion
-     
+
         #region  Mappers
         private OperatorProfileInfo OperatorProfileInfoMapper(OperatorProfile operatorProfile)
         {
@@ -131,9 +131,12 @@ namespace Demo.Module.Business
             operatorProfileDetail.Entity = operatorProfile;
 
             CountryManager manager = new CountryManager();
+            Country country;
             if (operatorProfile.Settings != null)
             {
-                operatorProfileDetail.CountryName = manager.GetCountry(operatorProfile.Settings.CountryId).Name;
+                country = manager.GetCountry(operatorProfile.Settings.CountryId);
+                if (country != null)
+                    operatorProfileDetail.CountryName = country.Name;
             }
 
             return operatorProfileDetail;

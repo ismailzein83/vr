@@ -21,21 +21,21 @@ namespace Demo.Module.Data.SQL
         #endregion
 
         #region Public Methods
-        public bool Insert(NationalNumberingPlan operatorProfile, out int insertedId)
+        public bool Insert(NationalNumberingPlan plan, out int insertedId)
         {
-            object operatorProfileId;
+            object planId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_NationalNumberingPlan_Insert", out operatorProfileId, operatorProfile.Name, Vanrise.Common.Serializer.Serialize(operatorProfile.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_NationalNumberingPlan_Insert", out planId, plan.OperatorId, plan.FromDate, plan.ToDate, Vanrise.Common.Serializer.Serialize(plan.Settings));
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
-                insertedId = (int)operatorProfileId;
+                insertedId = (int)planId;
             else
                 insertedId = 0;
             return insertedSuccesfully;
         }
-        public bool Update(NationalNumberingPlan operatorProfile)
+        public bool Update(NationalNumberingPlan plan)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_NationalNumberingPlan_Update", operatorProfile.NationalNumberingPlanId, operatorProfile.Name, Vanrise.Common.Serializer.Serialize(operatorProfile.Settings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_NationalNumberingPlan_Update", plan.NationalNumberingPlanId, plan.OperatorId, plan.FromDate, plan.ToDate, Vanrise.Common.Serializer.Serialize(plan.Settings));
             return (recordsEffected > 0);
         }
         public bool AreNationalNumberingPlansUpdated(ref object updateHandle)
@@ -55,13 +55,15 @@ namespace Demo.Module.Data.SQL
         #region  Mappers
         private NationalNumberingPlan NationalNumberingPlanMapper(IDataReader reader)
         {
-            NationalNumberingPlan operatorProfile = new NationalNumberingPlan
+            NationalNumberingPlan plan = new NationalNumberingPlan
             {
                 NationalNumberingPlanId = (int)reader["ID"],
-                //Name = reader["Name"] as string,
+                OperatorId = (int)reader["OperatorID"],
+                FromDate = GetReaderValue<DateTime?>(reader,"FromDate"),
+                ToDate = GetReaderValue<DateTime?>(reader,"ToDate"),
                 Settings = Vanrise.Common.Serializer.Deserialize<NationalNumberingPlanSettings>(reader["Settings"] as string)
             };
-            return operatorProfile;
+            return plan;
         }
 
         #endregion

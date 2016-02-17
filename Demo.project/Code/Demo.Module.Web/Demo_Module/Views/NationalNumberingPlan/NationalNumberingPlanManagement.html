@@ -1,23 +1,20 @@
-﻿<vr-panel ng-controller="Demo_NationalNumberingPlanManagementController" >
+﻿<vr-panel ng-controller="Demo_NationalNumberingPlanManagementController">
 
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-textbox value="name" label="Name"></vr-textbox>
+                    <vr-demo-operatorprofile-selector on-ready="onOperatorProfileDirectiveReady" ismultipleselection></vr-demo-operatorprofile-selector>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-textbox value="company" label="Company"></vr-textbox>
+                    <vr-datetimepicker label="From" value="fromDate" type="dateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
+                    <vr-datetimepicker label="To" value="toDate" type="dateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
-
-                <vr-columns width="normal">
-                    <vr-textbox value="billingEmail" label="Billing Email"></vr-textbox>
-                </vr-columns>
+              
             </vr-row>
         </div>
         <vr-row removeline>
@@ -33,7 +30,7 @@
                 <vr-demo-nationalnumberingplan-grid on-ready="onGridReady"></vr-demo-nationalnumberingplan-grid>
             </vr-columns>
         </vr-row>
-        
+
     </vr-form>
 
 </vr-panel>

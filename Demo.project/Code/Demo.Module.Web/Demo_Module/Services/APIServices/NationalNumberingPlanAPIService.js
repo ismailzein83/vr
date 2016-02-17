@@ -15,10 +15,7 @@
             });
 
         }
-        function GetNationalNumberingPlansInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "NationalNumberingPlan", "GetNationalNumberingPlansInfo"));
-
-        }
+       
         function UpdateNationalNumberingPlan(nationalNumberingPlanObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "NationalNumberingPlan", "UpdateNationalNumberingPlan"), nationalNumberingPlanObject);
         }
@@ -26,10 +23,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "NationalNumberingPlan", "AddNationalNumberingPlan"), nationalNumberingPlanObject);
         }
         return ({
-            GetNationalNumberingPlansInfo: GetNationalNumberingPlansInfo,
             GetFilteredNationalNumberingPlans: GetFilteredNationalNumberingPlans,
             GetNationalNumberingPlan: GetNationalNumberingPlan,
-            AddNationalNumberingPlan:AddNationalNumberingPlan,
+            AddNationalNumberingPlan: AddNationalNumberingPlan,
             UpdateNationalNumberingPlan: UpdateNationalNumberingPlan
         });
     }

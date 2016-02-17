@@ -75,10 +75,9 @@ function (Demo_OperatorProfileAPIService, UtilsService, $compile, VRUIUtilsServi
                     selectedIds = payload.selectedIds;
                 }
 
-                    return Demo_OperatorProfileAPIService.GetOperatorProfilesInfo().then(function (response) {
+                return Demo_OperatorProfileAPIService.GetOperatorProfilesInfo().then(function (response) {
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);
-
                         });
                         if (selectedIds!=undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'OperatorProfileId', $attrs, ctrl);

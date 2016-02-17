@@ -10,8 +10,8 @@ namespace Demo.Module.Data
     public interface INationalNumberingPlanDataManager:IDataManager
     {
         List<NationalNumberingPlan> GetNationalNumberingPlans();
-        bool Insert(NationalNumberingPlan operatorProfile, out int operatorProfileId);
-        bool Update(NationalNumberingPlan operatorProfile);
+        bool Insert(NationalNumberingPlan plan, out int planId);
+        bool Update(NationalNumberingPlan plan);
         bool AreNationalNumberingPlansUpdated(ref object updateHandle);
     }
 }

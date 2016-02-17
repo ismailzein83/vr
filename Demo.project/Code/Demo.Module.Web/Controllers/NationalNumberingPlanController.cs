@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using Demo.Module.Business;
+﻿using Demo.Module.Business;
 using Demo.Module.Entities;
+using System.Web.Http;
 using Vanrise.Web.Base;
 
 namespace Demo.Module.Web.Controllers
@@ -22,33 +18,25 @@ namespace Demo.Module.Web.Controllers
 
         [HttpGet]
         [Route("GetNationalNumberingPlan")]
-        public NationalNumberingPlan GetNationalNumberingPlan(int operatorProfileId)
+        public NationalNumberingPlan GetNationalNumberingPlan(int nationalNumberingPlanId)
         {
             NationalNumberingPlanManager manager = new NationalNumberingPlanManager();
-            return manager.GetNationalNumberingPlan(operatorProfileId);
-        }
-
-        [HttpGet]
-        [Route("GetNationalNumberingPlansInfo")]
-        public IEnumerable<NationalNumberingPlanInfo> GetNationalNumberingPlansInfo()
-        {
-            NationalNumberingPlanManager manager = new NationalNumberingPlanManager();
-            return manager.GetNationalNumberingPlansInfo();
+            return manager.GetNationalNumberingPlan(nationalNumberingPlanId);
         }
 
         [HttpPost]
         [Route("AddNationalNumberingPlan")]
-        public Vanrise.Entities.InsertOperationOutput<NationalNumberingPlanDetail> AddNationalNumberingPlan(NationalNumberingPlan operatorProfile)
+        public Vanrise.Entities.InsertOperationOutput<NationalNumberingPlanDetail> AddNationalNumberingPlan(NationalNumberingPlan nationalNumberPlan)
         {
             NationalNumberingPlanManager manager = new NationalNumberingPlanManager();
-            return manager.AddNationalNumberingPlan(operatorProfile);
+            return manager.AddNationalNumberingPlan(nationalNumberPlan);
         }
         [HttpPost]
         [Route("UpdateNationalNumberingPlan")]
-        public Vanrise.Entities.UpdateOperationOutput<NationalNumberingPlanDetail> UpdateNationalNumberingPlan(NationalNumberingPlan operatorProfile)
+        public Vanrise.Entities.UpdateOperationOutput<NationalNumberingPlanDetail> UpdateNationalNumberingPlan(NationalNumberingPlan nationalNumberPlan)
         {
             NationalNumberingPlanManager manager = new NationalNumberingPlanManager();
-            return manager.UpdateNationalNumberingPlan(operatorProfile);
+            return manager.UpdateNationalNumberingPlan(nationalNumberPlan);
         }
     }
 }

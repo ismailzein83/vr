@@ -10,6 +10,6 @@ namespace Demo.Module.Entities
     {
         public NationalNumberingPlan Entity { get; set; }
 
-        public String CountryName { get; set; }
+        public String OperatorName { get; set; }
     }
 }

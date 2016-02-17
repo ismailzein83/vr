@@ -2,21 +2,26 @@
 
     "use strict";
 
-    nationalNumberingPlanManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'Demo_NationalNumberingPlanService'];
+    nationalNumberingPlanManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'Demo_NationalNumberingPlanService', 'VRValidationService'];
 
-    function nationalNumberingPlanManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, Demo_NationalNumberingPlanService) {
+    function nationalNumberingPlanManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, Demo_NationalNumberingPlanService, VRValidationService) {
         var gridAPI;
         var nationalNumberingPlanDirectiveAPI;
-        var countryDirectiveApi;
-        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var operatorProfileDirectiveAPI;
+        var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
 
         function defineScope() {
 
-            $scope.onCountryDirectiveReady = function (api) {
-                countryDirectiveApi = api;
-                countryReadyPromiseDeferred.resolve();
+            $scope.validateTimeRange = function () {
+                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            }
+
+
+            $scope.onOperatorProfileDirectiveReady = function (api) {
+                operatorProfileDirectiveAPI = api;
+                operatorProfileReadyPromiseDeferred.resolve();
             }
 
             $scope.onGridReady = function (api) {
@@ -32,9 +37,9 @@
 
             function getFilterObject() {
                 var data = {
-                    Name: $scope.name,
-                    CountriesIds: countryDirectiveApi.getSelectedIds(),
-                    Company: $scope.company
+                    FromDate: $scope.fromDate,
+                    ToDate: $scope.toDate,
+                    OperatorIds: operatorProfileDirectiveAPI.getSelectedIds()
                 };
 
                 return data;
@@ -43,11 +48,11 @@
 
         function load() {
             $scope.isLoadingFilters = true;
-             loadAllControls();
+            loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCountries])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -56,13 +61,17 @@
               });
         }
 
-        function loadCountries() {
-            var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
-            countryReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, undefined, loadCountryPromiseDeferred);
-            });
+        function loadOperatorProfiles() {
+            var loadOperatorProfilePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            return loadCountryPromiseDeferred.promise;
+            operatorProfileReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = undefined;
+
+                    VRUIUtilsService.callDirectiveLoad(operatorProfileDirectiveAPI, directivePayload, loadOperatorProfilePromiseDeferred);
+                });
+
+            return loadOperatorProfilePromiseDeferred.promise;
         }
 
         function AddNewNationalNumberingPlan() {

@@ -1,97 +1,34 @@
 ﻿<div vr-modalcontent ng-controller="Demo_NationalNumberingPlanEditorController" vr-loader="isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formNationalNumberingPlanEditor">
-            <vr-tabs>
-                <vr-tab header="'General Info'">
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.name" label="Profile Name" isrequired></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-common-country-selector selectedvalues="country" onselectionchanged="onCountrySelctionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
-                        </vr-columns>
-                    </vr-row>
+            <vr-row>
+                <vr-columns width="1/4row">
+                    <vr-demo-operatorprofile-selector isrequired on-ready="scopeModal.onOperatorProfileDirectiveReady"></vr-demo-operatorprofile-selector>
+                </vr-columns>
+                <vr-columns width="1/4row">
+                    <vr-datetimepicker value="scopeModal.fromDate" label="From Date" customvalidate="validateDateRange()" isrequired type="dateTime"></vr-datetimepicker>
+                </vr-columns>
 
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.company" label="Company" isrequired></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-common-city-selector vr-disabled="country== undefined || country ==  null" selectedvalues="scopeModal.city" on-ready="onCityDirectiveReady" isrequired showaddbutton></vr-common-city-selector>
-                        </vr-columns>
-                    </vr-row>
+                <vr-columns width="1/4row">
+                    <vr-datetimepicker value="scopeModal.toDate" label="To Date" customvalidate="validateDateRange()" isrequired type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
 
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.registrationNumber" label="Registration Number"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.address" label="Address"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.website" label="Website"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.postalCode" label="Postal Code"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.town" label="Town"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="1/4row">
-                            <vr-textbox value="scopeModal.faxvalue" type="number" onvaluechanged="scopeModal.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns withemptyline width="1/4row">
-                            <vr-button type="Add" data-onclick="addFaxOption" vr-disabled="scopeModal.disabledfax" standalone></vr-button>
-                        </vr-columns>
-
-                        <vr-columns width="1/4row">
-                            <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModal.onPhoneValueChange" value="scopeModal.phoneNumberValue"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns withemptyline width="1/4row">
-                            <vr-button type="Add" data-onclick="addPhoneNumberOption" vr-disabled="scopeModal.disabledphone" standalone></vr-button>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="1/2row">
-                            <vr-datalist maxitemsperrow="2" datasource="scopeModal.faxes" autoremoveitem="true">
-                                {{dataItem.fax}}
-                            </vr-datalist>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-datalist maxitemsperrow="2" datasource="scopeModal.phoneNumbers" autoremoveitem="true">
-                                {{dataItem.phoneNumber}}
-                            </vr-datalist>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-fileupload extension="images" value="scopeModal.companyLogo" label="Company Logo"> </vr-fileupload>
-                        </vr-columns>
-
-                        <vr-columns width="1/2row">
-                            <vr-preview-image height="80px" width="80px" value="scopeModal.companyLogo.fileId"> </vr-preview-image>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Financial Info'">Financial Info</vr-tab>
-                <vr-tab header="'Contacts'">
-                    <vr-row>
-                        <vr-columns width="1/2row" ng-repeat="c in scopeModal.contacts">
-                            <vr-label>{{c.label}}</vr-label>
-                            <vr-textbox  value="c.description" type="c.inputetype"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Documents'">Documents</vr-tab>
-            </vr-tabs>
+            <vr-row removeline>
+                <vr-columns width="1/4row">
+                    <vr-textbox value="scopeModal.rangevalue" type="number" onvaluechanged="scopeModal.onRangeValueChange" decimalprecision="0" label="Range"></vr-textbox>
+                </vr-columns>
+                <vr-columns withemptyline width="1/4row">
+                    <vr-button type="Add" data-onclick="addRangeOption" vr-disabled="scopeModal.disabledrange" standalone></vr-button>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-datalist maxitemsperrow="2" datasource="scopeModal.range" autoremoveitem="true">
+                        {{dataItem.range}}
+                    </vr-datalist>
+                </vr-columns>
+            </vr-row>
         </vr-form>
     </vr-modalbody>
     <div>

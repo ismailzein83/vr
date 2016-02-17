@@ -12,12 +12,9 @@
 
         function addNationalNumberingPlan(onNationalNumberingPlanAdded) {
             var settings = {};
-
             settings.onScopeReady = function (modalScope) {
-
                 modalScope.onNationalNumberingPlanAdded = onNationalNumberingPlanAdded;
             };
-
             VRModalService.showModal('/Client/Modules/Demo_Module/Views/NationalNumberingPlan/NationalNumberingPlanEditor.html', null, settings);
         }
 
