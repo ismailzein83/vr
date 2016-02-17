@@ -40,7 +40,7 @@ namespace Vanrise.GenericData.QueueActivators
             if (dataRecordStorage.Settings == null)
                 throw new NullReferenceException("dataRecordStorage.Settings");
 
-            var dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.Settings.ConfigId);
+            var dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
             if (dataStore == null)
                 throw new NullReferenceException(String.Format("dataStore. dataStore Id '{0}' dataRecordStorage Id '{1}'", dataRecordStorage.Settings.ConfigId, this.DataRecordStorageId));
             var getRecordStorageDataManagerContext = new GetRecordStorageDataManagerContext

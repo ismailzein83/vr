@@ -19,7 +19,18 @@ namespace Vanrise.GenericData.SQLDataStorage
                 namespace #NAMESPACE#
                 {
                     public class #CLASSNAME# : Vanrise.GenericData.SQLDataStorage.IBulkInsertWriter
-                    {                        
+                    {      
+
+                        string[] _columnNames = {#COLUMNNAMES#};
+
+                        public string[] ColumnNames 
+                        {
+                            get
+                            {
+                                return _columnNames;
+                            }
+                        }
+                  
                         public void WriteRecordToStream(dynamic record, Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert)
                         {
                             streamForBulkInsert.WriteRecord(""#RECORDFORMAT#"" #COLUMNSVALUES#);
@@ -29,6 +40,7 @@ namespace Vanrise.GenericData.SQLDataStorage
            
             StringBuilder recordFormatBuilder = new StringBuilder();
             StringBuilder columnsValuesBuider = new StringBuilder();
+            StringBuilder columnNamesBuilder = new StringBuilder();
             int columnIndex = 0;
             foreach(var columnSettings in dataRecordStorageSettings.Columns)
             {
@@ -37,9 +49,13 @@ namespace Vanrise.GenericData.SQLDataStorage
                 recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");                
                 columnsValuesBuider.Append(String.Format(", record.{0}", columnSettings.ValueExpression));
                 columnIndex++;
+                if (columnNamesBuilder.Length > 0)
+                    columnNamesBuilder.Append(", ");
+                columnNamesBuilder.AppendFormat("\"{0}\"", columnSettings.ColumnName);
             }
             classDefinitionBuilder.Replace("#RECORDFORMAT#", recordFormatBuilder.ToString());
             classDefinitionBuilder.Replace("#COLUMNSVALUES#", columnsValuesBuider.ToString());
+            classDefinitionBuilder.Replace("#COLUMNNAMES#", columnNamesBuilder.ToString());
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.SQLDataStorage");
             string className = "BulkInsertWriter";
@@ -68,6 +84,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
     public interface IBulkInsertWriter
     {
+        string[] ColumnNames { get; }
         void WriteRecordToStream(dynamic record, StreamForBulkInsert streamForBulkInsert);
     }
 }

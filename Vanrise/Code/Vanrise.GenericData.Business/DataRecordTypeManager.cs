@@ -189,19 +189,26 @@ namespace Vanrise.GenericData.Business
                 namespace #NAMESPACE#
                 {
                     public class #CLASSNAME#
-                    {                        
+                    {                   
+                        static #CLASSNAME#()
+                        {
+                             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(#CLASSNAME#) #PROPERTIESTOSETSERIALIZED#);
+                        }     
                         #GLOBALMEMBERS#
                     }
                 }
                 ");
 
+            StringBuilder propertiesToSetSerializedBuilder = new StringBuilder();
             StringBuilder globalMembersBuilder = new StringBuilder();
             foreach(var field in dataRecordType.Fields)
             {
                 globalMembersBuilder.AppendFormat("public {0} {1};", field.Type.GetRuntimeType().FullName, field.Name);
+                propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
             }
   
             classDefinitionBuilder.Replace("#GLOBALMEMBERS#", globalMembersBuilder.ToString());
+            classDefinitionBuilder.Replace("#PROPERTIESTOSETSERIALIZED#", propertiesToSetSerializedBuilder.ToString());
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
             string className = "DataRecord";

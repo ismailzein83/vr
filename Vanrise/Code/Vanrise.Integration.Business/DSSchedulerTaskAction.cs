@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime.Entities;
@@ -184,6 +185,26 @@ namespace Vanrise.Integration.Business
         private bool BuildGeneratedType(string assemblyName, string customCode, string className, out Assembly compiledAssembly)
         {
             string classDefinition = this.BuildCustomClass(customCode, className);
+
+            CSharpCompilationOutput compilationOutput;
+            if(CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
+            {
+                compiledAssembly = compilationOutput.OutputAssembly;
+                return true;
+            }
+            else
+            {
+                compiledAssembly = null;
+                _logger.WriteError("Errors while building the code for the custom class. Please make sure to build the custom code bound with this data source.");
+                if (compilationOutput.ErrorMessages != null)
+                {
+                    foreach (var error in compilationOutput.ErrorMessages)
+                    {
+                        _logger.WriteError(error);
+                    }
+                }
+                return false;
+            }
 
             Dictionary<string, string> providerOptions = new Dictionary<string, string>();
             providerOptions["CompilerVersion"] = "v4.0";

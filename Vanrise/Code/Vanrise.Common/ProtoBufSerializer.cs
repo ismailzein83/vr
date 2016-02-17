@@ -12,7 +12,7 @@ namespace Vanrise.Common
         static ProtoBufSerializer()
         {
             s_SerializeMethod = typeof(ProtoBuf.Serializer).GetMethod("Serialize", BindingFlags.Static);
-            s_SerializeMethod = typeof(ProtoBuf.Serializer).GetMethod("Deserialize", BindingFlags.Static);
+            s_DeserializeMethod = typeof(ProtoBuf.Serializer).GetMethod("Deserialize", BindingFlags.Public | BindingFlags.Static);
         }
 
         static MethodInfo s_SerializeMethod;
@@ -62,7 +62,7 @@ namespace Vanrise.Common
 
         public static dynamic Deserialize(byte[] serializedBytes, Type type)
         {
-            return s_DeserializeMethod.MakeGenericMethod(type).Invoke(null, new Object[] { serializedBytes });
+            return s_DeserializeMethod.MakeGenericMethod(type).Invoke(null, new Object[] { new MemoryStream(serializedBytes) });
         }
 
         public static void AddSerializableType(Type type, params string[] memberNames)

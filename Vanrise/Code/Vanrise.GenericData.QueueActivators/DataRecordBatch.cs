@@ -16,11 +16,17 @@ namespace Vanrise.GenericData.QueueActivators
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             Type recordTypeRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(recordTypeId);
-
+            var dummy = Activator.CreateInstance(recordTypeRuntimeType);//this is only to try declaring the ProtoBuf Serialization in the static constructor of the Record Runtime Type
             Type genericListType = typeof(List<>);
             Type recordListType = genericListType.MakeGenericType(recordTypeRuntimeType);
-
-            return ProtoBufSerializer.Deserialize(this.SerializedRecordsList, recordListType);
+            
+            var rslt = ProtoBufSerializer.Deserialize(this.SerializedRecordsList, recordListType);
+            List<dynamic> rsltAsDynamic = new List<dynamic>();
+            foreach(var itm in rslt)
+            {
+                rsltAsDynamic.Add(itm);
+            }
+            return rsltAsDynamic;
         }
 
         public static DataRecordBatch CreateBatchFromRecords(List<dynamic> records, string batchDescription)

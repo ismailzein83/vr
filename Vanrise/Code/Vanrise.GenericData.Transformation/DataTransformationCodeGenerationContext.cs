@@ -99,7 +99,7 @@ namespace Vanrise.GenericData.Transformation
             {
                 var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId);
                 if (recordType.IsArray)
-                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<{0}> {1} = new List<{0}>();", dataRecordRuntimeType.FullName, recordType.RecordName));
+                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<dynamic> {1} = new List<dynamic>();", dataRecordRuntimeType.FullName, recordType.RecordName));
                 else
                     (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1} = new {0}();", dataRecordRuntimeType.FullName, recordType.RecordName));
             }

@@ -12,7 +12,8 @@ namespace Vanrise.GenericData.Transformation.Entities
 
         public dynamic GetRecordValue(string recordName)
         {
-            return this.DataRecords.GetType().GetProperty(recordName).GetValue(this.DataRecords, null);
+            Type dataRecordsType = this.DataRecords.GetType();
+            return dataRecordsType.GetField(recordName).GetValue(this.DataRecords);
         }
     }
 }

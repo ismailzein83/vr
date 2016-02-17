@@ -34,13 +34,18 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public void WriteRecordToStream(object record, object dbApplyStream)
         {
-            if(_bulkInsertWriter == null)
+            BuildBulkInsertWriter();
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            _bulkInsertWriter.WriteRecordToStream(record, streamForBulkInsert);
+        }
+
+        private void BuildBulkInsertWriter()
+        {
+            if (_bulkInsertWriter == null)
             {
                 DynamicTypeGenerator dynamicTypeGenerator = new DynamicTypeGenerator();
                 _bulkInsertWriter = dynamicTypeGenerator.GetBulkInsertWriter(_dataRecordStorageId, _dataRecordStorageSettings);
             }
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            _bulkInsertWriter.WriteRecordToStream(record, streamForBulkInsert);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -50,10 +55,12 @@ namespace Vanrise.GenericData.SQLDataStorage
             string tableName = this._dataRecordStorageSettings.TableName;
             if (!String.IsNullOrEmpty(this._dataRecordStorageSettings.TableSchema))
                 tableName = String.Format("{0}.{1}", this._dataRecordStorageSettings.TableSchema, this._dataRecordStorageSettings.TableName);
+            BuildBulkInsertWriter();
             return new StreamBulkInsertInfo
             {
                 TableName = tableName,
                 Stream = streamForBulkInsert,
+                ColumnNames = _bulkInsertWriter.ColumnNames,
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^',
