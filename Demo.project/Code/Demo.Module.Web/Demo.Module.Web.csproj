@@ -127,6 +127,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Demo_Module\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
+    <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +138,7 @@
     <Compile Include="Controllers\OperatorAccountController.cs" />
     <Compile Include="Controllers\NationalNumberingPlanController.cs" />
     <Compile Include="Controllers\OperatorProfileController.cs" />
+    <Compile Include="Controllers\RawCDRController.cs" />
     <Compile Include="Controllers\SaleCodeController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -189,6 +193,8 @@
     <Content Include="Demo_Module\Views\OperatorAccount\OperatorProfileManagementController.js" />
     <Content Include="Demo_Module\Views\Code\CodeManagement.html" />
     <Content Include="Demo_Module\Views\Code\CodeManagementController.js" />
+    <Content Include="Demo_Module\Views\RawCDR\RawCDRLog.html" />
+    <Content Include="Demo_Module\Views\RawCDR\RawCDRLogController.js" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagement.html" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagementController.js" />
   </ItemGroup>
@@ -206,6 +212,7 @@
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
