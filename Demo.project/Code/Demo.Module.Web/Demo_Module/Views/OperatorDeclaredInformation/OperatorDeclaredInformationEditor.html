@@ -2,26 +2,26 @@
     <vr-modalbody>
         <vr-form name="formOperatorDeclaredInformationEditor">
             <vr-row>
-                <vr-columns width="normal">
+                <vr-columns width="1/3row">
                     <vr-demo-operatorprofile-selector isrequired on-ready="scopeModal.onOperatorProfileDirectiveReady"></vr-demo-operatorprofile-selector>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="1/3row">
                     <vr-datetimepicker value="scopeModal.fromDate" label="From Date" customvalidate="validateDateRange()" isrequired type="dateTime"></vr-datetimepicker>
                 </vr-columns>
 
-                <vr-columns width="normal">
+                <vr-columns width="1/3row">
                     <vr-datetimepicker value="scopeModal.toDate" label="To Date" customvalidate="validateDateRange()" isrequired type="dateTime"></vr-datetimepicker>
                 </vr-columns>
 
-                <vr-columns width="normal">
+                <vr-columns width="1/3row">
                     <vr-whs-be-salezone-selector on-ready="scopeModal.onZoneDirectiveReady" />
                 </vr-columns>
 
-                <vr-columns width="normal">
+                <vr-columns width="1/3row">
                     <vr-textbox value="scopeModal.volume" isrequired label="Volume"></vr-textbox>
                 </vr-columns>
 
-                <vr-columns width="normal">
+                <vr-columns width="1/3row">
                     <servicetype-selector on-ready="onServiceTypeReady" isrequired></servicetype-selector>
                 </vr-columns>
             </vr-row>
