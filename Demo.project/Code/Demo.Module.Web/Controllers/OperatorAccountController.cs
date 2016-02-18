@@ -21,7 +21,13 @@ namespace Demo.Module.Web.Controllers
             OperatorAccountManager manager = new OperatorAccountManager();
             return GetWebResponse(input, manager.GetFilteredOperatorAccounts(input));
         }
-
+        [HttpGet]
+        [Route("GetOperatorAccountsInfo")]
+        public IEnumerable<OperatorAccountInfo> GetOperatorAccountsInfo()
+        {
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return manager.GetOperatorAccountsInfo();
+        }
         [HttpGet]
         [Route("GetOperatorAccount")]
         public OperatorAccount GetOperatorAccount(int operatorAccountId)

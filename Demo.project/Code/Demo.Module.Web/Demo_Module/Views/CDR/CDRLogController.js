@@ -16,6 +16,13 @@ function cdrLogController($scope, UtilsService, VRNotificationService, VRUIUtils
 
     var cdrTypeDirectiveAPI;
     var cdrTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var operatorDirectiveAPI;
+    var operatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    
+    var saleZoneDirectiveAPI;
+    var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     defineScope();
     load();
 
@@ -50,7 +57,14 @@ function cdrLogController($scope, UtilsService, VRNotificationService, VRUIUtils
             cdrTypeDirectiveAPI = api;
             cdrTypeReadyPromiseDeferred.resolve();
         }
-        
+        $scope.onOperatorAccountReady = function (api) {
+            operatorDirectiveAPI = api;
+            operatorReadyPromiseDeferred.resolve();
+        }
+        $scope.onSaleZoneDirectiveReady = function (api) {
+            saleZoneDirectiveAPI = api;
+            saleZoneReadyPromiseDeferred.resolve();
+        }
         
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
@@ -71,7 +85,9 @@ function cdrLogController($scope, UtilsService, VRNotificationService, VRUIUtils
             DataSourceIds: dataSourceDirectiveAPI.getSelectedIds(),
             Directions: directionDirectiveAPI.getSelectedIds(),
             ServiceTypes: serviceTypeDirectiveAPI.getSelectedIds(),
-            CDRTypes: cdrTypeDirectiveAPI.getSelectedIds()
+            CDRTypes: cdrTypeDirectiveAPI.getSelectedIds(),
+            OperatorIds: operatorDirectiveAPI.getSelectedIds(),
+            ZoneIds: saleZoneDirectiveAPI.getSelectedIds()
 
         }
         return query;
@@ -84,7 +100,7 @@ function cdrLogController($scope, UtilsService, VRNotificationService, VRUIUtils
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadDataSources, loadDirection, loadServiceTypes, loadCdrTypes])
+        return UtilsService.waitMultipleAsyncOperations([loadDataSources, loadDirection, loadServiceTypes, loadCdrTypes, loadOperator])
           .catch(function (error) {
               VRNotificationService.notifyExceptionWithClose(error, $scope);
               $scope.isLoading = false;
@@ -126,6 +142,17 @@ function cdrLogController($scope, UtilsService, VRNotificationService, VRUIUtils
         });
         return loadCdrTypesPromiseDeferred.promise;
     }
+
+    function loadOperator() {
+        var loadOperatorPromiseDeferred = UtilsService.createPromiseDeferred();
+        operatorReadyPromiseDeferred.promise.then(function () {
+
+            VRUIUtilsService.callDirectiveLoad(operatorDirectiveAPI, undefined, loadOperatorPromiseDeferred);
+        });
+        return loadOperatorPromiseDeferred.promise;
+    }
+
+    
     function buildFilter() {
         var filter = {};
         return filter;

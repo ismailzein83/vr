@@ -37,13 +37,24 @@ namespace Demo.Module.Business
             string serviceTypeDescription = "";
             if (serviceType != null)
                 serviceTypeDescription = serviceType.Description;
+            string operatorName = "";
+            OperatorAccount operatorObj = new OperatorAccountManager().GetOperatorAccount(cDRLog.OperatorId);
+            if (operatorObj != null)
+                operatorName = operatorObj.NameSuffix;
+
+            string zone = "";
+            SaleZone zoneObj = new SaleZoneManager().GetSaleZone(cDRLog.ZoneId);
+            if (zoneObj != null)
+                zone = zoneObj.Name;
+
 
             CDRLogDetail cDRLogDetail = new CDRLogDetail
             {
                 Entity = cDRLog,
                 DataSourceName = dataSourceName,
-                ServiceTypeDescription = serviceTypeDescription
-
+                ServiceTypeDescription = serviceTypeDescription,
+                Operator = operatorName,
+                Zone = zone
             };
 
             var directionAttribute = Utilities.GetEnumAttribute<Direction, DescriptionAttribute>(cDRLog.DirectionType);

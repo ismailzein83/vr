@@ -37,6 +37,13 @@ namespace Demo.Module.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allOperatorAccounts.ToBigResult(input, filterExpression, OperatorAccountDetailMapper));
         }
+
+        public IEnumerable<OperatorAccountInfo> GetOperatorAccountsInfo()
+        {
+            var OperatorAccounts = GetCachedOperatorAccounts();
+            return OperatorAccounts.MapRecords(OperatorAccountInfoMapper);
+        }
+
         public OperatorAccount GetOperatorAccount(int operatorAccountId)
         {
             var OperatorAccounts = GetCachedOperatorAccounts();
@@ -136,6 +143,17 @@ namespace Demo.Module.Business
             }
 
             return operatorAccountDetail;
+        }
+
+        private OperatorAccountInfo OperatorAccountInfoMapper(OperatorAccount operatorAccount)
+        {
+            var operatorProfile = _operatorProfileManager.GetOperatorProfile(operatorAccount.OperatorProfileId);
+
+            return new OperatorAccountInfo()
+            {
+                OperatorAccountId = operatorAccount.OperatorAccountId,
+                Name = GetOperatorAccountName(operatorProfile.Name, operatorAccount.NameSuffix)
+            };
         }
         #endregion
 

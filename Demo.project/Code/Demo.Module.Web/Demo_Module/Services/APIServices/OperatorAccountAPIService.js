@@ -15,6 +15,13 @@
             });
 
         }
+
+        function GetOperatorAccountsInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorAccount", "GetOperatorAccountsInfo"));
+
+        }
+
+        
        
         function AddOperatorAccount(operatorAccountObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorAccount", "AddOperatorAccount"), operatorAccountObject);
@@ -25,6 +32,7 @@
 
         return ({
             GetFilteredOperatorAccounts: GetFilteredOperatorAccounts,
+            GetOperatorAccountsInfo: GetOperatorAccountsInfo,
             GetOperatorAccount: GetOperatorAccount,
             AddOperatorAccount: AddOperatorAccount,
             UpdateOperatorAccount: UpdateOperatorAccount,

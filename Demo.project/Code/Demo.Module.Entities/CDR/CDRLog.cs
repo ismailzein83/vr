@@ -23,6 +23,9 @@ namespace Demo.Module.Entities
         public int DataSourceId { get; set; }
         public int ServiceTypeId { get; set; }
         public Type CDRType { get; set; }
+        public string Code { get; set; }
+        public int ZoneId { get; set; }
+        public int OperatorId { get; set; }
 
     }
 }

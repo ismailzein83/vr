@@ -9,8 +9,7 @@
 
         var gridAPI;
 
-        var sellingNumberPlanDirectiveAPI;
-        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+       
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -39,21 +38,13 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlan])
+            return UtilsService.waitMultipleAsyncOperations([])
               .catch(function (error) {
                   VRNotificationService.notifyExceptionWithClose(error, $scope);
               })
              .finally(function () {
                  $scope.isLoading = false;
              });
-        }
-        function loadSellingNumberPlan() {
-            var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
-            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
-            });
-
-            return loadSellingNumberPlanPromiseDeferred.promise;
         }
         
        

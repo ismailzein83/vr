@@ -17,5 +17,10 @@ namespace Demo.Module.Entities
        public string ServiceTypeDescription { get; set; }
 
        public string CDRTypeDescription { get; set; }
+
+       public string Operator { get; set; }
+
+       public string Zone { get; set; }
+
     }
 }

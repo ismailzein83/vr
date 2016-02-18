@@ -129,6 +129,7 @@
   <ItemGroup>
     <Content Include="Demo_Module\Constant\CDRTypeEnum.js" />
     <Content Include="Demo_Module\Constant\CDRDirectionEnum.js" />
+    <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatoraccount-selector.js" />
     <Content Include="Demo_Module\Directives\OperatorConfiguration\Templates\OperatorConfigurationGridTemplate.html" />
     <Content Include="Demo_Module\Directives\OperatorConfiguration\vr-demo-operatorconfiguration-grid.js" />
     <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\Templates\OperatorDeclaredInformationGridTemplate.html" />

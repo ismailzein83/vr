@@ -29,10 +29,13 @@ namespace Demo.Module.Data.SQL
             _columnMapper.Add("Entity.PortOut", "PortOut");
             _columnMapper.Add("Entity.CGPN", "CGPN");
             _columnMapper.Add("Entity.CDPN", "CDPN");
+            _columnMapper.Add("Entity.Code", "Code");
             _columnMapper.Add("DataSourceName", "DataSourceID");
             _columnMapper.Add("DirectionDescription", "Direction");
             _columnMapper.Add("ServiceTypeDescription", "ServiceTypeID");
             _columnMapper.Add("CDRTypeDescription", "CDRType");
+            _columnMapper.Add("Zone", "ZoneID");
+            _columnMapper.Add("Operator", "OperatorID");
 
             
         }
@@ -80,6 +83,9 @@ namespace Demo.Module.Data.SQL
                                             Direction,
                                             ServiceTypeID,
                                             CDRType,
+                                            Code,
+                                            ZoneID,
+                                            OperatorID,
                                             DataSourceID
                                             INTO  #TEMPTABLE#
                                             FROM   dbo.CDRMain C WITH(
@@ -101,6 +107,10 @@ namespace Demo.Module.Data.SQL
             AddFilter<int>(whereBuilder, query.ServiceTypes, "C.ServiceTypeID");
 
             AddFilter<int>(whereBuilder, query.CDRTypes, "C.CDRType");
+
+            AddFilter<int>(whereBuilder, query.ZoneIds, "C.ZoneID");
+
+            AddFilter<int>(whereBuilder, query.OperatorIds, "C.OperatorID");
 
 
             if (!string.IsNullOrEmpty(query.CDPN))
@@ -156,6 +166,9 @@ namespace Demo.Module.Data.SQL
             cDRLog.CDRType = GetReaderValue<Demo.Module.Entities.Type>(reader, "CDRType");
             cDRLog.DataSourceId = GetReaderValue<int>(reader, "DataSourceID");
             cDRLog.ServiceTypeId = GetReaderValue<int>(reader, "ServiceTypeID");
+            cDRLog.Code = reader["Code"] as string;
+            cDRLog.ZoneId = GetReaderValue<int>(reader, "ZoneID");
+            cDRLog.OperatorId = GetReaderValue<int>(reader, "OperatorID");
 
         }
         #endregion
