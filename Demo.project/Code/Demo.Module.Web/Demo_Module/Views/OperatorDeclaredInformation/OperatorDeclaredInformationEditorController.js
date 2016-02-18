@@ -15,6 +15,9 @@
         var zoneDirectiveAPI;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var serviceTypeDirectiveAPI;
+        var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -41,6 +44,11 @@
                 operatorProfileDirectiveAPI = api;
                 operatorProfileReadyPromiseDeferred.resolve();
 
+            }
+
+            $scope.onServiceTypeReady = function (api) {
+                serviceTypeDirectiveAPI = api;
+                serviceTypeReadyPromiseDeferred.resolve();
             }
 
             $scope.scopeModal.onZoneDirectiveReady = function (api) {
@@ -88,13 +96,24 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadZoneDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadZoneDirective, loadServiceTypes])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.isLoading = false;
               });
+        }
+
+        function loadServiceTypes() {
+            var loadServiceTypesPromiseDeferred = UtilsService.createPromiseDeferred();
+            serviceTypeReadyPromiseDeferred.promise.then(function () {
+                var directivePayload = {
+                    selectedIds: (operatordeclaredinformationEntity != undefined ? (operatordeclaredinformationEntity.AmountType != undefined ? [operatordeclaredinformationEntity.AmountType] : undefined) : (operatordeclaredinformationId != undefined ? operatordeclaredinformationId : undefined))
+                }
+                VRUIUtilsService.callDirectiveLoad(serviceTypeDirectiveAPI, directivePayload, loadServiceTypesPromiseDeferred);
+            });
+            return loadServiceTypesPromiseDeferred.promise;
         }
 
         function setTitle() {
@@ -133,7 +152,6 @@
                 $scope.scopeModal.fromDate = operatordeclaredinformationEntity.FromDate;
                 $scope.scopeModal.toDate = operatordeclaredinformationEntity.ToDate;
                 $scope.scopeModal.volume = operatordeclaredinformationEntity.Volume;
-                $scope.scopeModal.amountType = operatordeclaredinformationEntity.AmountType;
             }
         }
 
@@ -146,7 +164,7 @@
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
                 ZoneId: zoneDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModal.volume,
-                AmountType: $scope.scopeModal.amountType,
+                AmountType: serviceTypeDirectiveAPI.getSelectedIds()
             };
 
             return obj;

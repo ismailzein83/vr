@@ -116,11 +116,16 @@ namespace Demo.Module.Business
         {
             OperatorDeclaredInformationDetail infoDetail = new OperatorDeclaredInformationDetail();
             infoDetail.Entity = info;
-            OperatorProfileManager manager = new OperatorProfileManager();
+
+            OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
             SaleZoneManager saleZoneManager = new SaleZoneManager();
-            infoDetail.OperatorName = manager.GetOperatorProfile(info.OperatorId).Name;
+            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
+
+            infoDetail.OperatorName = operatorProfileManager.GetOperatorProfile(info.OperatorId).Name;
             if (info.ZoneId.HasValue)
                 infoDetail.ZoneName = saleZoneManager.GetSaleZoneName(info.ZoneId.Value);
+
+            infoDetail.AmountTypeName = serviceTypeManager.GetServiceType(info.AmountType).Description;
             return infoDetail;
         }
         #endregion
