@@ -99,18 +99,17 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
-            if (context.FieldValueIds != null && context.FilterIds != null)
+            if (context.FieldValueIds == null) return false;
+            if (context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
             {
-                var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
-                var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
-                foreach (var filterId in filterIds)
-                {
-                    if (fieldValueIds.Contains(filterId))
-                        return true;
-                }
-                return false;
+                if (fieldValueIds.Contains(filterId))
+                    return true;
             }
-            return true;
+            return false;
         }
         #endregion
 
