@@ -2,12 +2,12 @@
 
     "use strict";
 
-    operatordeclaredinformationEditorController.$inject = ['$scope', 'Demo_OperatorDeclaredInformationAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService'];
+    operatorDeclaredInformationEditorController.$inject = ['$scope', 'Demo_OperatorDeclaredInformationAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService'];
 
-    function operatordeclaredinformationEditorController($scope, Demo_OperatorDeclaredInformationAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService) {
+    function operatorDeclaredInformationEditorController($scope, Demo_OperatorDeclaredInformationAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService) {
         var isEditMode;
-        var operatordeclaredinformationId;
-        var operatordeclaredinformationEntity;
+        var operatorDeclaredInformationId;
+        var operatorDeclaredInformationEntity;
 
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -25,9 +25,9 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                operatordeclaredinformationId = parameters.OperatorDeclaredInformationId;
+                operatorDeclaredInformationId = parameters.OperatorDeclaredInformationId;
             }
-            isEditMode = (operatordeclaredinformationId != undefined);
+            isEditMode = (operatorDeclaredInformationId != undefined);
 
         }
 
@@ -77,7 +77,7 @@
                 getOperatorDeclaredInformation().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            operatordeclaredinformationEntity = undefined;
+                            operatorDeclaredInformationEntity = undefined;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -90,8 +90,8 @@
         }
 
         function getOperatorDeclaredInformation() {
-            return Demo_OperatorDeclaredInformationAPIService.GetOperatorDeclaredInformation(operatordeclaredinformationId).then(function (operatordeclaredinformation) {
-                operatordeclaredinformationEntity = operatordeclaredinformation;
+            return Demo_OperatorDeclaredInformationAPIService.GetOperatorDeclaredInformation(operatorDeclaredInformationId).then(function (operatordeclaredinformation) {
+                operatorDeclaredInformationEntity = operatordeclaredinformation;
             });
         }
 
@@ -109,7 +109,7 @@
             var loadServiceTypesPromiseDeferred = UtilsService.createPromiseDeferred();
             serviceTypeReadyPromiseDeferred.promise.then(function () {
                 var directivePayload = {
-                    selectedIds: (operatordeclaredinformationEntity != undefined ? (operatordeclaredinformationEntity.AmountType != undefined ? [operatordeclaredinformationEntity.AmountType] : undefined) : (operatordeclaredinformationId != undefined ? operatordeclaredinformationId : undefined))
+                    selectedIds: (operatorDeclaredInformationEntity != undefined ? (operatorDeclaredInformationEntity.AmountType != undefined ? [operatorDeclaredInformationEntity.AmountType] : undefined) : (operatorDeclaredInformationId != undefined ? operatorDeclaredInformationId : undefined))
                 }
                 VRUIUtilsService.callDirectiveLoad(serviceTypeDirectiveAPI, directivePayload, loadServiceTypesPromiseDeferred);
             });
@@ -117,7 +117,7 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatordeclaredinformationEntity ? '' : null, 'Operator Declared Information') : UtilsService.buildTitleForAddEditor('Operator Declared Information');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorDeclaredInformationEntity ? '' : null, 'Operator Declared Information') : UtilsService.buildTitleForAddEditor('Operator Declared Information');
         }
 
         function loadOperatorProfileDirective() {
@@ -127,7 +127,7 @@
             operatorProfileReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds: (operatordeclaredinformationEntity != undefined ? operatordeclaredinformationEntity.OperatorId : (operatordeclaredinformationId != undefined ? operatordeclaredinformationId : undefined))
+                        selectedIds: (operatorDeclaredInformationEntity != undefined ? operatorDeclaredInformationEntity.OperatorId : (operatorDeclaredInformationId != undefined ? operatorDeclaredInformationId : undefined))
                     }
                     VRUIUtilsService.callDirectiveLoad(operatorProfileDirectiveAPI, directivePayload, loadOperatorProfilePromiseDeferred);
                 });
@@ -140,7 +140,7 @@
             zoneReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds: (operatordeclaredinformationEntity != undefined ? (operatordeclaredinformationEntity.ZoneId != undefined ? [operatordeclaredinformationEntity.ZoneId] : undefined) : (operatordeclaredinformationId != undefined ? operatordeclaredinformationId : undefined))
+                        selectedIds: (operatorDeclaredInformationEntity != undefined ? (operatorDeclaredInformationEntity.ZoneId != undefined ? [operatorDeclaredInformationEntity.ZoneId] : undefined) : (operatorDeclaredInformationId != undefined ? operatorDeclaredInformationId : undefined))
                     }
                     VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, loadZonePromiseDeferred);
                 });
@@ -148,17 +148,17 @@
         }
 
         function loadStaticSection() {
-            if (operatordeclaredinformationEntity != undefined) {
-                $scope.scopeModal.fromDate = operatordeclaredinformationEntity.FromDate;
-                $scope.scopeModal.toDate = operatordeclaredinformationEntity.ToDate;
-                $scope.scopeModal.volume = operatordeclaredinformationEntity.Volume;
+            if (operatorDeclaredInformationEntity != undefined) {
+                $scope.scopeModal.fromDate = operatorDeclaredInformationEntity.FromDate;
+                $scope.scopeModal.toDate = operatorDeclaredInformationEntity.ToDate;
+                $scope.scopeModal.volume = operatorDeclaredInformationEntity.Volume;
             }
         }
 
         function buildOperatorDeclaredInformationObjFromScope() {
 
             var obj = {
-                OperatorDeclaredInformationId: (operatordeclaredinformationId != null) ? operatordeclaredinformationId : 0,
+                operatorDeclaredInformationId: (operatorDeclaredInformationId != null) ? operatorDeclaredInformationId : 0,
                 FromDate: $scope.scopeModal.fromDate,
                 ToDate: $scope.scopeModal.toDate,
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
@@ -211,5 +211,5 @@
         }
     }
 
-    appControllers.controller('Demo_OperatorDeclaredInformationEditorController', operatordeclaredinformationEditorController);
+    appControllers.controller('Demo_OperatorDeclaredInformationEditorController', operatorDeclaredInformationEditorController);
 })(appControllers);
