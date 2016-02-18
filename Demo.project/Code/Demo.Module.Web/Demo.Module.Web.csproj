@@ -129,6 +129,8 @@
   <ItemGroup>
     <Content Include="Demo_Module\Constant\CDRTypeEnum.js" />
     <Content Include="Demo_Module\Constant\CDRDirectionEnum.js" />
+    <Content Include="Demo_Module\Directives\OperatorConfiguration\Templates\OperatorConfigurationGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\OperatorConfiguration\vr-demo-operatorconfiguration-grid.js" />
     <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\Templates\OperatorDeclaredInformationGridTemplate.html" />
     <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\vr-demo-operatordeclaredinformation-grid.js" />
     <Content Include="Demo_Module\Directives\CDR\Templates\CDRLogGridTemplate.html" />
@@ -139,15 +141,18 @@
     <Content Include="Demo_Module\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
     <Content Include="Demo_Module\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
     <Content Include="Demo_Module\Services\APIServices\CDRLogAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\OperatorConfigurationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ServiceTypeAPIService.js" />
+    <Content Include="Demo_Module\Services\OperatorConfigurationService.js" />
     <Content Include="Demo_Module\Services\OperatorDeclaredInformationService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
+    <Compile Include="Controllers\OperatorConfigurationController.cs" />
     <Compile Include="Controllers\OperatorDeclaredInformationController.cs" />
     <Compile Include="Controllers\OperatorAccountController.cs" />
     <Compile Include="Controllers\NationalNumberingPlanController.cs" />
@@ -209,6 +214,10 @@
     <Content Include="Demo_Module\Views\OperatorAccount\OperatorProfileManagementController.js" />
     <Content Include="Demo_Module\Views\Code\CodeManagement.html" />
     <Content Include="Demo_Module\Views\Code\CodeManagementController.js" />
+    <Content Include="Demo_Module\Views\OperatorConfiguration\OperatorConfigurationEditor.html" />
+    <Content Include="Demo_Module\Views\OperatorConfiguration\OperatorConfigurationEditorController.js" />
+    <Content Include="Demo_Module\Views\OperatorConfiguration\OperatorConfigurationManagement.html" />
+    <Content Include="Demo_Module\Views\OperatorConfiguration\OperatorConfigurationManagementController.js" />
     <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationEditor.html" />
     <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationEditorController.js" />
     <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationManagement.html" />

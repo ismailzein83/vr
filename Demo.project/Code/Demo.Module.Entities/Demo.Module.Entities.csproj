@@ -60,6 +60,9 @@
     <Compile Include="NationalNumberingPlan\NationalNumberingPlan.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanDetail.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanQuery.cs" />
+    <Compile Include="OperatorConfiguration\OperatorConfiguration.cs" />
+    <Compile Include="OperatorConfiguration\OperatorConfigurationDetail.cs" />
+    <Compile Include="OperatorConfiguration\OperatorConfigurationQuery.cs" />
     <Compile Include="OperatorDeclaredInformation\OperatorDeclaredInformation.cs" />
     <Compile Include="OperatorDeclaredInformation\OperatorDeclaredInformationDetail.cs" />
     <Compile Include="OperatorDeclaredInformation\OperatorDeclaredInformationQuery.cs" />

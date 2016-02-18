@@ -52,6 +52,7 @@
     <Compile Include="CodeGroup\ICodeGroupDataManager.cs" />
     <Compile Include="DemoModuleDataManagerFactory.cs" />
     <Compile Include="NationalNumberingPlan\INationalNumberingPlanDataManager.cs" />
+    <Compile Include="OperatorConfiguration\IOperatorConfigurationDataManager.cs" />
     <Compile Include="OperatorDeclaredInformation\IOperatorDeclaredInformationDataManager.cs" />
     <Compile Include="Operator\IOperatorAccountDataManager.cs" />
     <Compile Include="Operator\IOperatorProfileDataManager.cs" />
