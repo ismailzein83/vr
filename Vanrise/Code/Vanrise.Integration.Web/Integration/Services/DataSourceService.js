@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'VR_Integration_MappingResultEnum', 'LabelColorsEnum'];
+    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'VR_Integration_MappingResultEnum', 'LabelColorsEnum','VRNotificationService','VR_Integration_DataSourceAPIService'];
 
-    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, VR_Integration_MappingResultEnum, LabelColorsEnum) {
+    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, VR_Integration_MappingResultEnum, LabelColorsEnum, VRNotificationService, VR_Integration_DataSourceAPIService) {
         return {
             getExecutionStatusDescription: getExecutionStatusDescription,
             getMappingResultDescription: getMappingResultDescription,
@@ -43,11 +43,11 @@
             return color;
         }
 
-        function editDataSource(dataSourceObj, onDataSourceUpdated) {
+        function editDataSource(dataSourceId, onDataSourceUpdated) {
             var modalSettings = {
             };
             var parameters = {
-                dataSourceId: dataSourceObj.DataSourceId
+                dataSourceId: dataSourceId
             };
 
             modalSettings.onScopeReady = function (modalScope) {

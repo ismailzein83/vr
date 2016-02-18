@@ -47,6 +47,11 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
 
                         return gridAPI.retrieveData(query);
                     }
+                    directiveAPI.onDataSourceAdded = function (dataSource) {
+
+                        gridAPI.itemAdded(dataSource);
+
+                    }
                     return directiveAPI;
                 }
             };
@@ -77,15 +82,15 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
         function editDataSource(dataSourceObj) {
 
             var onDataSourceUpdated = function (dataSource) {
-                gridApi.itemUpdated(dataSource);
+                gridAPI.itemUpdated(dataSource);
             }
 
-            VR_Integration_DataSourceService.editDataSource(dataSourceObj, onDataSourceUpdated);
+            VR_Integration_DataSourceService.editDataSource(dataSourceObj.DataSourceId, onDataSourceUpdated);
         }
 
         function deleteDataSource(dataSourceObj) {
             var onDataSourceDeleted = function (dataSource) {
-                gridApi.itemDeleted(dataSource);
+                gridAPI.itemDeleted(dataSource);
             }
 
             VR_Integration_DataSourceService.deleteDataSource($scope, dataSourceObj, onDataSourceDeleted);

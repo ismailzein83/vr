@@ -59,7 +59,7 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
 
     function addNewDataSource() {
         var onDataSourceAdded = function (dataSource) {
-            gridApi.itemAdded(dataSource);
+            gridApi.onDataSourceAdded(dataSource);
         };
         VR_Integration_DataSourceService.addDataSource(onDataSourceAdded);
     }
