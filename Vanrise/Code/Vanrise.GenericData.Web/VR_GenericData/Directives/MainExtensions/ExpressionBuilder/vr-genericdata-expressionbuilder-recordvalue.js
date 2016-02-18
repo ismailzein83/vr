@@ -75,7 +75,7 @@ app.directive('vrGenericdataExpressionbuilderRecordvalue', ['VR_GenericData_Data
                         if (mainPayload.selectedRecords != undefined) {
                             ctrl.selectedFieldName = UtilsService.getItemByVal(ctrl.fieldNames, mainPayload.selectedRecords.split('.')[1], "Name");
                         }
-
+                        ctrl.selectedFieldName = undefined;
                         ctrl.loadingFields = false;
                     });
                 }
@@ -91,11 +91,16 @@ app.directive('vrGenericdataExpressionbuilderRecordvalue', ['VR_GenericData_Data
             var api = {};
 
             api.getData = function () {
-                var value;
+                var value="";
                 if (ctrl.selectedRecordName != undefined)
-                    value = ctrl.selectedRecordName.Name + ".";
-                if (ctrl.selectedFieldName != undefined)
-                    value += ctrl.selectedFieldName.Name;
+                {
+                    value = ctrl.selectedRecordName.Name;
+                    if (ctrl.selectedFieldName != undefined)
+                        value += "." + ctrl.selectedFieldName.Name;
+                } else if (ctrl.selectedFieldName != undefined)
+                {
+                    value = ctrl.selectedFieldName.Name;
+                }       
                 return value;
             }
 

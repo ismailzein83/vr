@@ -22,10 +22,11 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateValueRuleContext();", ruleContextVariableName);
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateValueRuleManager();", ruleManagerVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateValueRule({1}, {2}, {3});", 
+            context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateValueRule({1}, {2}, {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.NormalRate;", this.NormalRate, ruleContextVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RatesByRateType;", this.RatesByRateType, ruleContextVariableName);
+            if (this.RatesByRateType != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RatesByRateType;", this.RatesByRateType, ruleContextVariableName);
         }
     }
 }

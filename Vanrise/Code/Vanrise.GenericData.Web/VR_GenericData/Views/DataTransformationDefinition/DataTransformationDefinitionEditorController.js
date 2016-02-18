@@ -229,7 +229,8 @@
                 editStep: editStep,
                 removeStep: removeStep,
                 setSelectedStep: setSelectedStep,
-                checkValidation: checkValidation
+                checkValidation: checkValidation,
+        getAllRecordNamesExceptDynamic: getAllRecordNamesExceptDynamic
             };
         }
 
@@ -289,7 +290,7 @@
             if (dataRecordTypes != undefined)
             {
                 var recordType = UtilsService.getItemByVal(dataRecordTypes.RecordTypes, typeName, 'RecordName');
-                if (recordType != undefined)
+                if (recordType != undefined && recordType.DataRecordTypeId !=undefined)
                 {
                     VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(recordType.DataRecordTypeId).then(function (response) {
                         if (response)
@@ -299,6 +300,10 @@
                         VRNotificationService.notifyException(error, $scope);
                     });
                 }
+            else
+            {
+                    loadPromiseDeferred.resolve();
+            }
             } else
             {
                 loadPromiseDeferred.resolve();
@@ -364,6 +369,17 @@
                 if (recordType.IsArray) {
                   recordTypeNames.push({ Name: recordType.RecordName });
                 }
+            }
+            return recordTypeNames;
+        }
+
+        function getAllRecordNamesExceptDynamic() {
+            var obj = dataRecordTypeAPI.getData();
+            var recordTypeNames = [];
+            for (var i = 0; i < obj.RecordTypes.length; i++) {
+                var recordType = obj.RecordTypes[i];
+                if (recordType.DataRecordTypeId != undefined)
+                  recordTypeNames.push({ Name: recordType.RecordName });
             }
             return recordTypeNames;
         }
@@ -449,6 +465,7 @@
             }
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, editorDirectiveAPI, payload, setLoader);
         }
+
 
         function buildDataTransformationDefinitionObjFromScope() {
             var obj = dataRecordTypeAPI.getData();

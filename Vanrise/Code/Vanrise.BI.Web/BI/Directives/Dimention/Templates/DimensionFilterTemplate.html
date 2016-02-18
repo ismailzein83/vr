@@ -1,15 +1,18 @@
 ﻿
     <vr-columns width="1/2row">
-        <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
-                     on-ready="onGridReady" ondeleterow="ctrl.removeFilter" hidegridmenu>
-            <vr-datagridcolumn headertext="'Entity'" field="'Entity'" widthfactor="10" disablesorting>
-                <vr-select datatextfield="Name" datavaluefield="Name"
-                           entityname="Entity" selectedvalues="dataItem.selectedEntityName" datasource="dataItem.entityNames" onselectitem="dataItem.onSelectItem"></vr-select>
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Filter'" field="'Filter'" widthfactor="10" disablesorting>
-                <vr-bi-dimension-selector on-ready="dataItem.onDimensionSelectorReady" ng-if="dataItem.selectedEntityName !=undefined" vr-loader="dataItem.isLoadingDimentionDirective" hidelabel ismultipleselection></vr-bi-dimension-selector>
-            </vr-datagridcolumn>
-        </vr-datagrid>
+        <vr-validator validate="ctrl.validate()">
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
+                         on-ready="onGridReady" ondeleterow="ctrl.removeFilter" hidegridmenu>
+                <vr-datagridcolumn headertext="'Entity'" field="'Entity'" widthfactor="10" disablesorting>
+                    <vr-select datatextfield="Name" datavaluefield="Name"
+                               entityname="Entity" selectedvalues="dataItem.selectedEntityName" datasource="dataItem.entityNames" onselectitem="dataItem.onSelectItem" isrequired="true"></vr-select>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Filter'" field="'Filter'" widthfactor="10" disablesorting>
+                    <vr-bi-dimension-selector on-ready="dataItem.onDimensionSelectorReady" ng-if="dataItem.selectedEntityName !=undefined" isrequired="true" vr-loader="dataItem.isLoadingDimentionDirective" hidelabel ismultipleselection></vr-bi-dimension-selector>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+       
     </vr-columns>
     <vr-columns width="1/4row">
         <vr-button type="Add" data-onclick="ctrl.addFilter" standalone></vr-button>

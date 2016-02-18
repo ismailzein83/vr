@@ -23,14 +23,17 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.TariffRuleContext();", ruleContextVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetTime = {1};", ruleContextVariableName, this.EffectiveTime);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.Rate = {1};", ruleContextVariableName, this.InitialRate);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0}.DurationInSeconds = {1};", ruleContextVariableName, this.DurationInSeconds);
+            if (this.DurationInSeconds != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.DurationInSeconds = {1};", ruleContextVariableName, this.DurationInSeconds);
             var ruleManagerVariableName = context.GenerateUniqueMemberName("ruleManager");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.TariffRuleManager();", ruleManagerVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyTariffRule({1}, {2}, {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveRate;", this.EffectiveRate, ruleContextVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveDurationInSeconds;", this.EffectiveDurationInSeconds, ruleContextVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.TotalAmount;", this.TotalAmount, ruleContextVariableName);
+            if (this.EffectiveDurationInSeconds != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveDurationInSeconds;", this.EffectiveDurationInSeconds, ruleContextVariableName);
+            if (this.TotalAmount != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.TotalAmount;", this.TotalAmount, ruleContextVariableName);
         }
     }
 }

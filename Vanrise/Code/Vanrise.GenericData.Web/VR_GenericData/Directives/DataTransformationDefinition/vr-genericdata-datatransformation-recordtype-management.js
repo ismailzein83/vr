@@ -96,7 +96,8 @@ app.directive("vrGenericdataDatatransformationRecordtypeManagement", ["UtilsServ
             function addNeededTypes(dataItem)
             {
                 var template = UtilsService.getItemByVal(recordTypes, dataItem.DataRecordTypeId, "DataRecordTypeId");
-                dataItem.TypeDescription = template != undefined ? template.Name : "";
+
+                dataItem.TypeDescription = template != undefined ? template.Name : "Dynamic";
             }
 
             function defineMenuActions() {

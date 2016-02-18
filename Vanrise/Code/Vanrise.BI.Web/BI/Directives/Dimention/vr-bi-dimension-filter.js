@@ -32,6 +32,18 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
 
             function initializeController() {
                 ctrl.datasource = [];
+                ctrl.validate = function () {
+                    for(var i = 0;i<ctrl.datasource.length; i++)
+                    {
+                        for(var j = 0;j<ctrl.datasource.length; j++)
+                        {
+                            if ( i !=j && ctrl.datasource[i].selectedEntityName != undefined && ctrl.datasource[j].selectedEntityName !=undefined)
+                                 if (ctrl.datasource[i].selectedEntityName.Name == ctrl.datasource[j].selectedEntityName.Name)
+                                    return "Same entity selected more than once.";
+                        }
+                    }
+                    return null;
+                }
                 ctrl.removeFilter = function(dataItem)
                 {
                     var index = ctrl.datasource.indexOf(dataItem);

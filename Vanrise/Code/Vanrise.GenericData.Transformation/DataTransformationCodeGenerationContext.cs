@@ -97,11 +97,24 @@ namespace Vanrise.GenericData.Transformation
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             foreach (var recordType in _dataTransformationDefinition.RecordTypes)
             {
-                var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId);
-                if (recordType.IsArray)
-                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<dynamic> {1} = new List<dynamic>();", dataRecordRuntimeType.FullName, recordType.RecordName));
+                string dataRecordRuntimeType;
+
+                if (recordType.DataRecordTypeId.HasValue)
+                {
+                    dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId.Value).FullName;
+                    if (recordType.IsArray)
+                        (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<dynamic> {0} = new List<dynamic>();", recordType.RecordName));
+                    else
+                        (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1} = new {0}();", dataRecordRuntimeType, recordType.RecordName));
+                }
+
                 else
-                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1} = new {0}();", dataRecordRuntimeType.FullName, recordType.RecordName));
+                {
+                    dataRecordRuntimeType = "dynamic";
+                    (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public {0} {1};", dataRecordRuntimeType, recordType.RecordName));
+                }
+                    
+               
             }
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;

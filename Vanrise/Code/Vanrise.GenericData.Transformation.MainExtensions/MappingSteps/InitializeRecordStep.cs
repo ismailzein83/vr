@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             if (record == null)
                 throw new Exception(String.Format("Record '{0}' not found", this.RecordName));
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var runtimeType = dataRecordTypeManager.GetDataRecordRuntimeType(record.DataRecordTypeId);
+            var runtimeType = dataRecordTypeManager.GetDataRecordRuntimeType(record.DataRecordTypeId.Value);
             if (runtimeType == null)
                 throw new NullReferenceException("runtimeType");
             if (!record.IsArray)

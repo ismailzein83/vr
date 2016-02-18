@@ -64,15 +64,18 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
         if (attrs.ismultipleselection != undefined)
             multipleselection = "ismultipleselection"
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="Name"'
+        return ' <vr-select ' + multipleselection + ' on-ready="onSelectorReady" datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="Name"'
                + 'entityname="Record Name" ' + label + '></vr-select>';
 
     }
 
     function recordTypeCtor(ctrl, $scope, $attrs) {
-
+        var selectorAPI;
         function initializeController() {
-
+            $scope.onSelectorReady = function(api)
+            {
+                selectorAPI = api;
+            }
             defineAPI();
         }
 
@@ -84,14 +87,18 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
             }
 
             api.load = function (payload) {
+                if (selectorAPI != undefined)
+                    selectorAPI.clearDataSource();
                 console.log(payload)
                 var selectedIds;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                     if (payload.context != undefined)
                     {
-                        if (payload.getArray && payload.getNonArray)
+                        if (payload.getArray && payload.getNonArray && payload.getDynamic)
                             ctrl.datasource = payload.context.getAllRecordNames();
+                        else if(payload.getArray && payload.getNonArray)
+                            ctrl.datasource = payload.context.getAllRecordNamesExceptDynamic();
                         else if(payload.getArray)
                             ctrl.datasource = payload.context.getArrayRecordNames();
                         else if (payload.getNonArray)

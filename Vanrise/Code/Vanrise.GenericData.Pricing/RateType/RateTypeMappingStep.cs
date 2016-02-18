@@ -32,7 +32,8 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateTypeRule({1}, {2}, {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveRate;", this.EffectiveRate, ruleContextVariableName);
-            context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RateTypeId;", this.RateTypeId, ruleContextVariableName);
+            if (this.RateTypeId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RateTypeId;", this.RateTypeId, ruleContextVariableName);
         }
     }
 }
