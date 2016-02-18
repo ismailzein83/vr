@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService","VR_Queueing_QueueInstanceService" , "VR_Queueing_QueueItemTypeAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum',
-    function (VR_Queueing_QueueInstanceAPIService,VR_Queueing_QueueInstanceService, VR_Queueing_QueueItemTypeAPIService,VR_Queueing_ExecutionFlowService, VRNotificationService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
+app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIService", "VR_Queueing_QueueInstanceService", "VR_Queueing_QueueItemHeaderAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum',
+    function (VR_Queueing_QueueInstanceAPIService, VR_Queueing_QueueInstanceService, VR_Queueing_QueueItemHeaderAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
 
         var directiveDefinitionObject = {
 
@@ -114,7 +114,7 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
             function RefreshDataGrid() {
 
                 if ($scope.queueInstances != undefined) {
-                    VR_Queueing_QueueItemTypeAPIService.GetItemStatusSummary().then(function (itemStatusSummaryResponse) {
+                    VR_Queueing_QueueItemHeaderAPIService.GetItemStatusSummary().then(function (itemStatusSummaryResponse) {
                         var notProcessedCount = 0;
                         var suspendedCount = 0;
                         if ($scope.queueInstances != undefined) {

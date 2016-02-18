@@ -10,7 +10,7 @@ namespace Vanrise.Queueing.Data
     public interface IQueueItemDataManager : IDataManager
     {
 
-        List<QueueItemStatusSummary> GetItemStatusSummary();
+        
 
         void CreateQueue(int queueId);
 

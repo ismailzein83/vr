@@ -43,10 +43,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         #region Public Methods
 
-        public List<QueueItemStatusSummary> GetItemStatusSummary()
-        {
-            return GetItemsSP("queue.sp_QueueItemHeader_GetItemStatusSummary", QueueItemStatusSummaryMapper);
-        }
+     
 
 
         public void CreateQueue(int queueId)
@@ -253,16 +250,7 @@ namespace Vanrise.Queueing.Data.SQL
             };
         }
 
-        private QueueItemStatusSummary QueueItemStatusSummaryMapper(IDataReader reader)
-        {
-            return new QueueItemStatusSummary
-            {
-                QueueId = (int)reader["QueueId"],
-                Status = (QueueItemStatus)reader["Status"],
-                Count = (int)reader["Count"]
-            };
-        }
-
+       
         #endregion
 
         #region Queries

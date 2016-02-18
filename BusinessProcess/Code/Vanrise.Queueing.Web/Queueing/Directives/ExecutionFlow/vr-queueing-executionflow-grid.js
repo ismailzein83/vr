@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum',
-    function (VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
+app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_QueueItemHeaderAPIService","VR_Queueing_ExecutionFlowAPIService", "VR_Queueing_ExecutionFlowService", 'VRNotificationService', 'VRUIUtilsService', 'VR_Queueing_QueueItemStatusEnum', 'LabelColorsEnum',
+function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIService, VR_Queueing_ExecutionFlowService, VRNotificationService, VRUIUtilsService, VR_Queueing_QueueItemStatusEnum, LabelColorsEnum) {
 
         var directiveDefinitionObject = {
 
@@ -120,7 +120,7 @@ app.directive("vrQueueingExecutionflowGrid", ["VR_Queueing_ExecutionFlowAPIServi
             }
 
             function refreshExecutionFlowGrid() {
-                VR_Queueing_ExecutionFlowAPIService.GetExecutionFlowStatusSummary().then(function (response) {
+                VR_Queueing_QueueItemHeaderAPIService.GetExecutionFlowStatusSummary().then(function (response) {
                     if ($scope.executionFlows != undefined) {
                         var notProcessedCount;
                         var suspendedCount;

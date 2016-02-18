@@ -21,10 +21,10 @@ namespace Vanrise.Queueing.Web.Controllers
         
         [HttpGet]
         [Route("GetExecutionFlows")]
-        public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlows(string filter = null)
+        public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlowsInfo(string filter = null)
         {
             QueueExecutionFlowFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueExecutionFlowFilter>(filter) : null;
-            return _manager.GetExecutionFlows(deserializedFilter);
+            return _manager.GetExecutionFlowsInfo(deserializedFilter);
 
         }
 
@@ -66,15 +66,6 @@ namespace Vanrise.Queueing.Web.Controllers
 
             return GetWebResponse(input, _manager.GetFilteredExecutionFlows(input));
 
-        }
-
-
-        [HttpGet]
-        [Route("GetExecutionFlowStatusSummary")]
-        public IEnumerable<ExecutionFlowStatusSummary> GetExecutionFlowStatusSummary()
-        {
-            QueueItemManager manager = new QueueItemManager();
-            return manager.GetExecutionFlowStatusSummary();
         }
 
     }

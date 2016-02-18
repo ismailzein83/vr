@@ -19,10 +19,10 @@ namespace Vanrise.Queueing.Web.Controllers
 
         [HttpGet]
         [Route("GetStageNames")]
-        public IEnumerable<QueueStageNameInfo> GetStageNames(string filter = null)
+        public IEnumerable<QueueStageNameInfo> GetStageNamesInfo(string filter = null)
         {
             QueueStageFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueStageFilter>(filter) : null;
-            return _manager.GetStageNames(deserializedFilter);
+            return _manager.GetStageNamesInfo(deserializedFilter);
         }
 
 

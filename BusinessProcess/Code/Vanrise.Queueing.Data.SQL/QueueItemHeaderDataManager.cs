@@ -13,15 +13,16 @@ namespace Vanrise.Queueing.Data.SQL
 {
     public class QueueItemHeaderDataManager : BaseSQLDataManager, IQueueItemHeaderDataManager
     {
+
+
+        #region ctor/Local Variables
+      
         private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
 
         public QueueItemHeaderDataManager()
             : base(GetConnectionStringName("QueueItemDBConnStringKey", "QueueItemDBConnString"))
         {
         }
-
-        #region ctor/Local Variables
-
 
 
         static QueueItemHeaderDataManager()
@@ -39,7 +40,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         #endregion
 
-
+        #region Public Methods
         public Vanrise.Entities.BigResult<Entities.QueueItemHeader> GetFilteredQueueItemHeader(Vanrise.Entities.DataRetrievalInput<Entities.QueueItemHeaderQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
@@ -51,12 +52,17 @@ namespace Vanrise.Queueing.Data.SQL
 
                 if (input.Query.QueueStatusIds != null && input.Query.QueueStatusIds.Count() > 0)
                     queueStatusIds = string.Join<int>(",", input.Query.QueueStatusIds.Select(itm => (int)itm));
-                ExecuteNonQuerySP("[queue].[sp_QueueItemHeader_CreateTempByFiltered2]", tempTableName,queueIds, queueStatusIds, input.Query.CreatedTimeFrom, input.Query.CreatedTimeTo);
+                ExecuteNonQuerySP("[queue].[sp_QueueItemHeader_CreateTempByFiltered2]", tempTableName, queueIds, queueStatusIds, input.Query.CreatedTimeFrom, input.Query.CreatedTimeTo);
             };
 
             return RetrieveData(input, createTempTableAction, QueueItemHeaderMapper, _mapper);
         }
 
+        public List<QueueItemStatusSummary> GetItemStatusSummary()
+        {
+            return GetItemsSP("queue.sp_QueueItemHeader_GetItemStatusSummary", QueueItemStatusSummaryMapper);
+        }
+        #endregion
 
         #region Mappers
 
@@ -77,7 +83,17 @@ namespace Vanrise.Queueing.Data.SQL
             };
         }
 
-        
+
+        private QueueItemStatusSummary QueueItemStatusSummaryMapper(IDataReader reader)
+        {
+            return new QueueItemStatusSummary
+            {
+                QueueId = (int)reader["QueueId"],
+                Status = (QueueItemStatus)reader["Status"],
+                Count = (int)reader["Count"]
+            };
+        }
+
 
         #endregion
 

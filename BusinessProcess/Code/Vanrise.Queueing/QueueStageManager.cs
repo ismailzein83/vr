@@ -12,7 +12,9 @@ namespace Vanrise.Queueing
 {
     public class QueueStageManager
     {
-        public IEnumerable<QueueStageNameInfo> GetStageNames(QueueStageFilter filter)
+      
+        #region Public Methods
+        public IEnumerable<QueueStageNameInfo> GetStageNamesInfo(QueueStageFilter filter)
         {
             QueueInstanceManager manager = new QueueInstanceManager();
             IEnumerable<string> filteredStageNames = manager.GetAllQueueInstances().Select(x => x.StageName).Distinct().ToList();
@@ -20,6 +22,7 @@ namespace Vanrise.Queueing
 
         }
 
+        #endregion
 
         #region Mappers
 

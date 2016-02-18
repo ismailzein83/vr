@@ -11,12 +11,28 @@ namespace Vanrise.Queueing
 {
     public class QueueItemTypeManager
     {
+       
+     
+        #region Public Methods
+
         public IEnumerable<QueueItemTypeInfo> GetItemTypes(QueueItemTypeFilter filter)
         {
             IEnumerable<QueueItemType> itemTypes = GetCachedQueueItemTypes().Values;
             return itemTypes.MapRecords(ItemTypesInfoMapper, null);
 
         }
+
+
+        public string GetItemTypeName(int itemTypeId)
+        {
+            QueueItemType queueItemType = GetQueueItemType(itemTypeId);
+            return queueItemType != null ? queueItemType.Title : null;
+        }
+
+        #endregion
+
+
+        #region Private Methods
 
         Dictionary<int, QueueItemType> GetCachedQueueItemTypes()
         {
@@ -29,19 +45,13 @@ namespace Vanrise.Queueing
                });
         }
 
-        public string GetItemTypeName(int itemTypeId)
-        {
-            QueueItemType queueItemType = GetQueueItemType(itemTypeId);
-            return queueItemType != null ? queueItemType.Title : null;
-        }
-
-
         private QueueItemType GetQueueItemType(int queueItemTypeId)
         {
             var queueItemTypes = GetCachedQueueItemTypes();
             return queueItemTypes.GetRecord(queueItemTypeId);
         }
 
+        #endregion
 
         #region Private Classes
 
@@ -58,7 +68,6 @@ namespace Vanrise.Queueing
 
 
         #endregion
-
 
 
         #region Mappers

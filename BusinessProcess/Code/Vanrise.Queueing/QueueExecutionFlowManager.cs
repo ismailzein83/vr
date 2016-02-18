@@ -11,7 +11,10 @@ using Vanrise.Queueing.Entities;
 namespace Vanrise.Queueing
 {
     public class QueueExecutionFlowManager
-    {  
+    {
+
+        #region Public Methods
+
         public QueuesByStages GetQueuesByStages(int executionFlowId)
         {
             string cacheName = String.Format("QueueExecutionFlowManager_GetQueuesByStages2_{0}", executionFlowId);
@@ -26,14 +29,14 @@ namespace Vanrise.Queueing
 
                    QueueExecutionFlowDefinitionManager definitionManager = new QueueExecutionFlowDefinitionManager();
                    var executionFlowDefinition = definitionManager.GetExecutionFlowDefinition(executionFlow.DefinitionId);
-                   if(executionFlowDefinition == null)
+                   if (executionFlowDefinition == null)
                        throw new ArgumentNullException(String.Format("Execution Flow Definition '{0}'", executionFlow.DefinitionId));
 
                    if (executionFlowDefinition.Stages == null)
                        throw new ArgumentNullException("executionFlowDefinition.Stages");
 
                    CheckRecursiveSources(executionFlowDefinition);
-                   foreach(var stage in executionFlowDefinition.Stages)
+                   foreach (var stage in executionFlowDefinition.Stages)
                    {
                        CreateStageQueueIfNeeded(stage, executionFlow, executionFlowDefinition);
                    }
@@ -48,74 +51,6 @@ namespace Vanrise.Queueing
                    }
                    return queuesByStages;
                });
-        }
-
-        private void CheckRecursiveSources(QueueExecutionFlowDefinition executionFlowDefinition)
-        {
-            foreach (var stage in executionFlowDefinition.Stages)
-            {
-                if (stage.SourceStages != null)
-                {
-                    foreach (var sourceStageName in stage.SourceStages)
-                    {
-                        List<string> prohibitedSources = new List<string>();
-                        prohibitedSources.Add(stage.StageName);
-                        CheckRecursiveSources(executionFlowDefinition, sourceStageName, prohibitedSources);
-                    }
-                }
-            }
-        }
-
-        private void CheckRecursiveSources(QueueExecutionFlowDefinition executionFlowDefinition, string sourceStageName, List<string> prohibitedSources)
-        {
-            if (prohibitedSources.Contains(sourceStageName))
-                throw new Exception(String.Format("Execution Flow Definition '{0}' has recursive source stages", executionFlowDefinition.Name));
-            var sourceStage = executionFlowDefinition.Stages.FindRecord(itm => itm.StageName == sourceStageName);
-            if (sourceStage == null)
-                throw new Exception(String.Format("Stage '{0}' not found in Execution Flow Definition '{1}'", sourceStageName, executionFlowDefinition.Name));
-            prohibitedSources.Add(sourceStage.StageName);
-            if(sourceStage.SourceStages != null)
-                foreach (var sourceOfSourceStageName in sourceStage.SourceStages)
-                {
-                    CheckRecursiveSources(executionFlowDefinition, sourceOfSourceStageName, prohibitedSources);
-                }
-        }
-
-        private void CreateStageQueueIfNeeded(QueueExecutionFlowStage stage,QueueExecutionFlow executionFlow , QueueExecutionFlowDefinition executionFlowDefinition)
-        {
-            if(stage.SourceStages != null)
-            {
-                foreach(var sourceStageName in stage.SourceStages)
-                {
-                    var sourceStage = executionFlowDefinition.Stages.FindRecord(itm => itm.StageName == sourceStageName);
-                    if (sourceStage == null)
-                        throw new Exception(String.Format("Source stage '{0}' not found", sourceStageName));
-                    CreateStageQueueIfNeeded(sourceStage, executionFlow, executionFlowDefinition);
-                }
-            }
-
-            string queueName = BuildQueueName(stage, executionFlow);
-
-            StringBuilder queueTitleBuilder = new StringBuilder(stage.QueueTitleTemplate);
-            queueTitleBuilder.Replace("#FlowName#", executionFlow.Name);
-            queueTitleBuilder.Replace("#StageName#", stage.StageName);
-
-            var queueSettings = new QueueSettings
-            {
-                Activator = stage.QueueActivator,
-                SingleConcurrentReader = stage.SingleConcurrentReader
-            };
-
-            PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlow.ExecutionFlowId, stage.StageName, stage.QueueItemType.GetQueueItemType().AssemblyQualifiedName,
-                queueName, queueTitleBuilder.ToString(), stage.SourceStages, queueSettings);
-        }
-
-        private string BuildQueueName(QueueExecutionFlowStage stage, QueueExecutionFlow executionFlow)
-        {
-            StringBuilder queueNameBuilder = new StringBuilder(stage.QueueNameTemplate);
-            queueNameBuilder.Replace("#FlowId#", executionFlow.ExecutionFlowId.ToString());
-            queueNameBuilder.Replace("#StageName#", stage.StageName);
-            return  queueNameBuilder.ToString();
         }
 
         public Vanrise.Entities.InsertOperationOutput<QueueExecutionFlowDetail> AddExecutionFlow(QueueExecutionFlow executionFlowObj)
@@ -143,14 +78,15 @@ namespace Vanrise.Queueing
 
             return insertOperationOutput;
         }
-        
-        public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlows(QueueExecutionFlowFilter filter)
+
+        public IEnumerable<QueueExecutionFlowInfo> GetExecutionFlowsInfo(QueueExecutionFlowFilter filter)
         {
             var cachedFlows = GetCachedQueueExecutionFlows();
             return cachedFlows.MapRecords(QueueExecutionFlowInfoMapper, null);
 
         }
-        
+
+
         public string GetExecutionFlowName(int executionFlowId)
         {
             QueueExecutionFlow executionFlow = GetExecutionFlow(executionFlowId);
@@ -166,16 +102,6 @@ namespace Vanrise.Queueing
                 return null;
         }
 
-        Dictionary<int, QueueExecutionFlow> GetCachedQueueExecutionFlows()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlows",
-               () =>
-               {
-                   IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
-                   return dataManager.GetExecutionFlows().ToDictionary(kvp => kvp.ExecutionFlowId, kvp => kvp);
-               });
-        }
-        
         public Vanrise.Entities.IDataRetrievalResult<QueueExecutionFlowDetail> GetFilteredExecutionFlows(Vanrise.Entities.DataRetrievalInput<QueueExecutionFlowQuery> input)
         {
             var queueExecutionFlows = GetCachedQueueExecutionFlows();
@@ -214,7 +140,93 @@ namespace Vanrise.Queueing
             return updateOperationOutput;
 
         }
-        
+
+        #endregion
+
+
+        #region Private Methods
+
+        private void CheckRecursiveSources(QueueExecutionFlowDefinition executionFlowDefinition)
+        {
+            foreach (var stage in executionFlowDefinition.Stages)
+            {
+                if (stage.SourceStages != null)
+                {
+                    foreach (var sourceStageName in stage.SourceStages)
+                    {
+                        List<string> prohibitedSources = new List<string>();
+                        prohibitedSources.Add(stage.StageName);
+                        CheckRecursiveSources(executionFlowDefinition, sourceStageName, prohibitedSources);
+                    }
+                }
+            }
+        }
+
+        private void CheckRecursiveSources(QueueExecutionFlowDefinition executionFlowDefinition, string sourceStageName, List<string> prohibitedSources)
+        {
+            if (prohibitedSources.Contains(sourceStageName))
+                throw new Exception(String.Format("Execution Flow Definition '{0}' has recursive source stages", executionFlowDefinition.Name));
+            var sourceStage = executionFlowDefinition.Stages.FindRecord(itm => itm.StageName == sourceStageName);
+            if (sourceStage == null)
+                throw new Exception(String.Format("Stage '{0}' not found in Execution Flow Definition '{1}'", sourceStageName, executionFlowDefinition.Name));
+            prohibitedSources.Add(sourceStage.StageName);
+            if (sourceStage.SourceStages != null)
+                foreach (var sourceOfSourceStageName in sourceStage.SourceStages)
+                {
+                    CheckRecursiveSources(executionFlowDefinition, sourceOfSourceStageName, prohibitedSources);
+                }
+        }
+
+        private void CreateStageQueueIfNeeded(QueueExecutionFlowStage stage, QueueExecutionFlow executionFlow, QueueExecutionFlowDefinition executionFlowDefinition)
+        {
+            if (stage.SourceStages != null)
+            {
+                foreach (var sourceStageName in stage.SourceStages)
+                {
+                    var sourceStage = executionFlowDefinition.Stages.FindRecord(itm => itm.StageName == sourceStageName);
+                    if (sourceStage == null)
+                        throw new Exception(String.Format("Source stage '{0}' not found", sourceStageName));
+                    CreateStageQueueIfNeeded(sourceStage, executionFlow, executionFlowDefinition);
+                }
+            }
+
+            string queueName = BuildQueueName(stage, executionFlow);
+
+            StringBuilder queueTitleBuilder = new StringBuilder(stage.QueueTitleTemplate);
+            queueTitleBuilder.Replace("#FlowName#", executionFlow.Name);
+            queueTitleBuilder.Replace("#StageName#", stage.StageName);
+
+            var queueSettings = new QueueSettings
+            {
+                Activator = stage.QueueActivator,
+                SingleConcurrentReader = stage.SingleConcurrentReader
+            };
+
+            PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlow.ExecutionFlowId, stage.StageName, stage.QueueItemType.GetQueueItemType().AssemblyQualifiedName,
+                queueName, queueTitleBuilder.ToString(), stage.SourceStages, queueSettings);
+        }
+
+        private string BuildQueueName(QueueExecutionFlowStage stage, QueueExecutionFlow executionFlow)
+        {
+            StringBuilder queueNameBuilder = new StringBuilder(stage.QueueNameTemplate);
+            queueNameBuilder.Replace("#FlowId#", executionFlow.ExecutionFlowId.ToString());
+            queueNameBuilder.Replace("#StageName#", stage.StageName);
+            return queueNameBuilder.ToString();
+        }
+
+        Dictionary<int, QueueExecutionFlow> GetCachedQueueExecutionFlows()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("QueueExecutionFlowManager_GetCachedQueueExecutionFlows",
+               () =>
+               {
+                   IQueueExecutionFlowDataManager dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
+                   return dataManager.GetExecutionFlows().ToDictionary(kvp => kvp.ExecutionFlowId, kvp => kvp);
+               });
+        }
+
+        #endregion
+
+
         #region Private Classes
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager

@@ -14,9 +14,9 @@ namespace Vanrise.Queueing
     public class QueueExecutionFlowDefinitionManager
     {
 
-       
+        #region Public Methods
 
-        public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitions(QueueExecutionFlowDefinitionFilter filter)
+        public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitionsInfo(QueueExecutionFlowDefinitionFilter filter)
         {
             var executionFlowDefinitions = GetCachedExecutionFlowDefinitions();
             return executionFlowDefinitions.MapRecords(QueueExecutionFlowDefinitionInfoMapper, null);
@@ -29,7 +29,7 @@ namespace Vanrise.Queueing
             QueueExecutionFlowDefinition executionFlowDefinition = GetExecutionFlowDefinition(definitionID);
             return executionFlowDefinition != null ? executionFlowDefinition.Title : null;
         }
-        
+
         public List<QueueExecutionFlowDefinition> GetAll()
         {
             var cachedFlowDefinitions = GetCachedExecutionFlowDefinitions();
@@ -51,7 +51,7 @@ namespace Vanrise.Queueing
                     QueueExecutionFlowStagesByStageName stagesByName = new QueueExecutionFlowStagesByStageName();
                     if (execFlowDefinition.Stages != null)
                     {
-                        foreach(var stage in execFlowDefinition.Stages)
+                        foreach (var stage in execFlowDefinition.Stages)
                         {
                             stagesByName.Add(stage.StageName, stage);
                         }
@@ -133,6 +133,10 @@ namespace Vanrise.Queueing
         }
 
 
+
+        #endregion
+
+       
         #region Private Methods
 
         private Dictionary<int, QueueExecutionFlowDefinition> GetCachedExecutionFlowDefinitions()

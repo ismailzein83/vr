@@ -21,8 +21,6 @@ namespace Vanrise.Queueing.Web.Controllers
         }
 
 
-
-
         [HttpPost]
         [Route("GetFilteredQueueItemHeader")]
         public object GetFilteredQueueItemHeader(Vanrise.Entities.DataRetrievalInput<QueueItemHeaderQuery> input)
@@ -30,7 +28,23 @@ namespace Vanrise.Queueing.Web.Controllers
 
             return GetWebResponse(input, _manager.GetFilteredQueueItemHeader(input));
         }
-         
+
+
+        [HttpGet]
+        [Route("GetItemStatusSummary")]
+        public List<QueueItemStatusSummary> GetItemStatusSummary()
+        {
+            return _manager.GetItemStatusSummary();
+        }
+
+
+        [HttpGet]
+        [Route("GetExecutionFlowStatusSummary")]
+        public IEnumerable<ExecutionFlowStatusSummary> GetExecutionFlowStatusSummary()
+        {
+            return _manager.GetExecutionFlowStatusSummary();
+        }
+
 
     }
 }

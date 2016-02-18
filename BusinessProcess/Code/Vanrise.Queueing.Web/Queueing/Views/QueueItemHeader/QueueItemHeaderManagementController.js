@@ -41,6 +41,8 @@
             $scope.selectedQueueInstance = [];
             $scope.selectedQueueStatus = [];
 
+            $scope.createdTimeFrom = new Date();
+
             $scope.ShowGrid = false;
             $scope.isDisabledQueueInstanceSelect = false;
 
@@ -92,6 +94,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (isModalMode && !$scope.isLoading) {
+                    $scope.createdTimeFrom = "";
                     filter = getFilterObject();
                     gridAPI.loadGrid(filter);
                     $scope.ShowGrid = true;

@@ -22,11 +22,11 @@ namespace Vanrise.Queueing.Web.Controllers
 
         [HttpGet]
         [Route("GetExecutionFlowDefinitions")]
-        public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitions(string filter = null)
+        public IEnumerable<QueueExecutionFlowDefinitionInfo> GetExecutionFlowDefinitionsInfo(string filter = null)
         {
 
             QueueExecutionFlowDefinitionFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QueueExecutionFlowDefinitionFilter>(filter) : null;
-            return _manager.GetExecutionFlowDefinitions(deserializedFilter);
+            return _manager.GetExecutionFlowDefinitionsInfo(deserializedFilter);
 
         }
 

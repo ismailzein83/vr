@@ -11,36 +11,46 @@ using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing.Data.SQL
 {
- 
-  public  class QueueItemTypeDataManager:BaseSQLDataManager, IQueueItemTypeDataManager
+
+    public class QueueItemTypeDataManager : BaseSQLDataManager, IQueueItemTypeDataManager
     {
-      public QueueItemTypeDataManager()
+
+
+        #region ctor
+
+        public QueueItemTypeDataManager()
             : base(GetConnectionStringName("QueueDBConnStringKey", "QueueDBConnString"))
         {
         }
 
-        public IEnumerable<QueueItemType> GetQueueItemTypes() 
+        #endregion
+
+
+        #region Public Methods
+        public IEnumerable<QueueItemType> GetQueueItemTypes()
         {
             return GetItemsSP("queue.sp_QueueItemTypes_GetAll", QueueItemTypeMapper);
         }
 
 
-        public bool AreItemTypeUpdated(ref object updateHandle) {
+        public bool AreItemTypeUpdated(ref object updateHandle)
+        {
             return base.IsDataUpdated("[queue].[QueueItemType]", ref updateHandle);
-        
+
         }
 
+        #endregion
 
         #region Mappers
         private QueueItemType QueueItemTypeMapper(IDataReader reader)
         {
             return new QueueItemType
             {
-                 Id = (int)reader["ID"],
-                 ItemFQTN = reader["ItemFQTN"] as string,
-                 Title = reader["Title"] as string,
-                 CreatedTime =(DateTime)reader["CreatedTime"],
-                 DefaultQueueSettings = reader["DefaultQueueSettings"] as string
+                Id = (int)reader["ID"],
+                ItemFQTN = reader["ItemFQTN"] as string,
+                Title = reader["Title"] as string,
+                CreatedTime = (DateTime)reader["CreatedTime"],
+                DefaultQueueSettings = reader["DefaultQueueSettings"] as string
             };
         }
 

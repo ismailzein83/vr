@@ -38,7 +38,6 @@ namespace Vanrise.Queueing
         #endregion
 
 
-
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager

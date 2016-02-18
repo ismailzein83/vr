@@ -16,14 +16,18 @@ namespace Vanrise.Queueing.Data.SQL
         {
         }
 
+
+        #region Public Methods
+
         public List<Entities.QueueExecutionFlowDefinition> GetAll()
         {
             return GetItemsSP("queue.sp_ExecutionFlowDefinition_GetAll", ExecutionFlowDefinitionMapper);
         }
 
 
-       
-        public bool AreQueueExecutionFlowDefinitionUpdated(ref object updateHandle) {
+
+        public bool AreQueueExecutionFlowDefinitionUpdated(ref object updateHandle)
+        {
             return base.IsDataUpdated("queue.[ExecutionFlowDefinition]", ref updateHandle);
         }
 
@@ -54,6 +58,10 @@ namespace Vanrise.Queueing.Data.SQL
             return (recordesEffected > 0);
         }
 
+        #endregion
+
+        #region Private Methods
+
         private Entities.QueueExecutionFlowDefinition ExecutionFlowDefinitionMapper(IDataReader reader)
         {
             return new Entities.QueueExecutionFlowDefinition
@@ -61,8 +69,11 @@ namespace Vanrise.Queueing.Data.SQL
                 ID = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
-                Stages=Vanrise.Common.Serializer.Deserialize<List<QueueExecutionFlowStage>>(reader["Stages"] as string),
+                Stages = Vanrise.Common.Serializer.Deserialize<List<QueueExecutionFlowStage>>(reader["Stages"] as string),
             };
         }
+
+        #endregion
+
     }
 }

@@ -17,6 +17,10 @@ namespace Vanrise.Queueing.Data.SQL
         {
         }
 
+
+
+        #region Public Methods
+
         public List<QueueExecutionFlow> GetExecutionFlows()
         {
             return GetItemsSP("queue.sp_ExecutionFlow_GetAll", ExecutionFlowMapper);
@@ -38,11 +42,13 @@ namespace Vanrise.Queueing.Data.SQL
         }
 
 
-        public bool UpdateExecutionFlow(QueueExecutionFlow executionFlowObject) 
+        public bool UpdateExecutionFlow(QueueExecutionFlow executionFlowObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlow_Update", executionFlowObject.ExecutionFlowId,executionFlowObject.Name);
+            int recordesEffected = ExecuteNonQuerySP("queue.sp_ExecutionFlow_Update", executionFlowObject.ExecutionFlowId, executionFlowObject.Name);
             return (recordesEffected > 0);
         }
+        #endregion
+
 
         #region Private Methods
 

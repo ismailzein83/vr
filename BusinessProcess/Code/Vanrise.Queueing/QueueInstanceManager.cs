@@ -11,6 +11,8 @@ namespace Vanrise.Queueing
 {
     public class QueueInstanceManager
     {
+
+        #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<QueueInstanceDetail> GetFilteredQueueInstances(Vanrise.Entities.DataRetrievalInput<QueueInstanceQuery> input)
         {
             var queueInstances = GetCachedQueueInstances();
@@ -31,8 +33,8 @@ namespace Vanrise.Queueing
         {
             return GetCachedQueueInstances().Values;
         }
-        
-        public IEnumerable<QueueInstanceInfo> GetQueueInstances(QueueInstanceFilter filter)
+
+        public IEnumerable<QueueInstanceInfo> GetQueueInstancesInfo(QueueInstanceFilter filter)
         {
             List<QueueInstance> queueInstances = new List<QueueInstance>();
             if (filter != null)
@@ -40,8 +42,8 @@ namespace Vanrise.Queueing
                 List<int> filterToList = new List<int>();
                 filterToList.Add(filter.ExecutionFlowId);
                 queueInstances = GetQueueExecutionFlows(filterToList).ToList();
-                return queueInstances.MapRecords(QueueInstanceInfoMapper,null);
-            
+                return queueInstances.MapRecords(QueueInstanceInfoMapper, null);
+
             }
             queueInstances = GetAllQueueInstances().ToList();
             return queueInstances.MapRecords(QueueInstanceInfoMapper, null);
@@ -52,6 +54,7 @@ namespace Vanrise.Queueing
         {
             return GetCachedQueueInstancesByName().GetRecord(queueName);
         }
+
         public QueueInstance GetQueueInstanceById(int instanceId)
         {
             return GetCachedQueueInstances().GetRecord(instanceId);
@@ -80,6 +83,10 @@ namespace Vanrise.Queueing
             return queueInstances.Where(x => x.ExecutionFlowId.HasValue && executionFlowIds.Contains(x.ExecutionFlowId.Value));
 
         }
+
+
+        #endregion
+
 
         #region Private Classes
 
@@ -129,6 +136,7 @@ namespace Vanrise.Queueing
         }
 
         #endregion
+
 
         #region Mappers
         private QueueInstanceDetail QueueInstanceDetailMapper(QueueInstance queueInstance)
