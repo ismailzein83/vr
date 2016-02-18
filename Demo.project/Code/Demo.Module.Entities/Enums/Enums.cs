@@ -19,8 +19,8 @@ namespace Demo.Module.Entities
     public enum Type
     {
 
-        [Description("National")]
-        National = 1,
+        [Description("Interconnect")]
+        Interconnect = 1,
 
         [Description("International")]
         International = 2
