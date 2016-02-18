@@ -5,11 +5,11 @@
                 <vr-tab header="'Stages'">
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-textbox value="scopeModal.stageName" label="Stage Name" customvalidate="scopeModal.validateName()" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModal.stageName" label="Stage Name" customvalidate="scopeModal.validateStageName()" isrequired></vr-textbox>
                         </vr-columns>
 
                         <vr-columns width="1/3row">
-                            <vr-textbox value="scopeModal.queueTemplateName" label="Queue Template Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModal.queueTemplateName" label="Queue Template Name" customvalidate="scopeModal.validateQueueTemplateName()" isrequired></vr-textbox>
                         </vr-columns>
 
                         <vr-columns width="1/3row">
@@ -22,11 +22,11 @@
                                                                     isrequired="true"></vr-genericdata-datarecordtype-selector>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-textbox value="scopeModal.batchDescription" label="Batch Description" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModal.batchDescription" label="Batch Description" customvalidate="scopeModal.validateBatchDescription()" isrequired></vr-textbox>
                         </vr-columns>
 
                         <vr-columns width="1/3row">
-                            <vr-switch value="scopeModal.singleConcurrentReader" label="Single Concurrent Reader" isrequired></vr-switch>
+                            <vr-switch value="scopeModal.singleConcurrentReader" label="Single Concurrent Reader"  isrequired></vr-switch>
                         </vr-columns>
 
                         <vr-columns width="1/3row" ng-show="isDataRecordTypeSelected">

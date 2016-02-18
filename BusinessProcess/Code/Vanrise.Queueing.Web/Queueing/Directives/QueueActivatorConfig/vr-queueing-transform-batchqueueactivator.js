@@ -40,6 +40,7 @@
             var dataTransformationDefinitionId;
             var dataRecordTypeId;
             var secondtimeChanged = false;
+            var stagesDataSource;
 
             $scope.recordTypesWithStages = [];
             $scope.selectedDataRecordStorage = [];
@@ -122,6 +123,11 @@
                 for (var i = 0; i < response.length; i++) {
                     dataItem = {};
                     dataItem.RecordName = response[i].RecordName;
+                    dataItem.stagesDataSource = [];
+                    for (var j = 0; j < stagesDataSource.length; j++) {
+                        if (stagesDataSource[j].DataRecordTypeId == response[i].DataRecordTypeId)
+                            dataItem.stagesDataSource.push({ stageName: stagesDataSource[j].stageName });
+                    }
                     dataItem.selectedStages =response[i].NextStages!=undefined? response[i].NextStages: [];
                     $scope.recordTypesWithStages.push(dataItem);
                 }
@@ -136,7 +142,7 @@
                     var promises=[];
                     if (payload != undefined && payload.StagesDataSource != undefined) {
                         $scope.stagesDataSource = [];
-                        $scope.stagesDataSource = payload.StagesDataSource;
+                        stagesDataSource = payload.StagesDataSource;
                     }
 
                     if(payload != undefined && payload.DataRecordTypeId != undefined)
@@ -167,7 +173,7 @@
                         for (var i = 0; i < $scope.recordTypesWithStages.length; i++) {
                             if (payload.QueueActivator.NextStagesRecords[i] != undefined) {
                                 for (var j = 0; j < payload.QueueActivator.NextStagesRecords[i].NextStages.length; j++) {
-                                    var selectedValue = UtilsService.getItemByVal($scope.stagesDataSource, payload.QueueActivator.NextStagesRecords[i].NextStages[j], "stageName");
+                                    var selectedValue = UtilsService.getItemByVal($scope.recordTypesWithStages[i].stagesDataSource, payload.QueueActivator.NextStagesRecords[i].NextStages[j], "stageName");
                                     if (selectedValue != null)
                                         $scope.recordTypesWithStages[i].selectedStages.push(selectedValue);
                                 }

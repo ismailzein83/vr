@@ -34,7 +34,7 @@
                 executionFlowStageEntity = parameters.ExecutionFlowStage;
                 for (var i = 0; i < parameters.ExistingFields.length; i++) {
                     var existingFieldsInstance = parameters.ExistingFields[i];
-                    stagesDataSource.push({ stageName: existingFieldsInstance.StageName });
+                    stagesDataSource.push({ stageName: existingFieldsInstance.StageName, DataRecordTypeId: existingFieldsInstance.QueueItemType.DataRecordTypeId });
 
                     if (executionFlowStageEntity != undefined && existingFieldsInstance.StageName != executionFlowStageEntity.StageName && existingFieldsInstance.QueueItemType.DataRecordTypeId == executionFlowStageEntity.QueueItemType.DataRecordTypeId)
                         filteredStages.push({ stageName: parameters.ExistingFields[i].StageName });
@@ -50,6 +50,10 @@
             $scope.scopeModal = {};
 
             $scope.isDataRecordTypeSelected = false;
+
+            $scope.scopeModal.queueTemplateName = "Queue_#FlowId#_#StageName#";
+            $scope.scopeModal.queueTemplateTitle = "#StageName# Queue (#FlowName#)";
+            $scope.scopeModal.batchDescription = "#RECORDSCOUNT# of CDRs";
 
 
             $scope.scopeModal.sourceStages = [];
@@ -72,10 +76,17 @@
 
             $scope.recordTypesWithStages = [];
 
-            $scope.scopeModal.validateName = function () {
-                return validateName();
+            $scope.scopeModal.validateStageName = function () {
+                return validateStageName();
             }
 
+            $scope.scopeModal.validateQueueTemplateName = function () {
+                return validateQueueTemplateName();
+            }
+
+            $scope.scopeModal.validateBatchDescription = function () {
+                return validateBatchDescription();
+            }
 
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
@@ -108,11 +119,29 @@
 
         }
 
-        function validateName() {
+        function validateStageName() {
             if (isEditMode && $scope.scopeModal.stageName == executionFlowStageEntity.StageName)
                 return null;
             else if (UtilsService.getItemIndexByVal(existingFields, $scope.scopeModal.stageName, 'StageName') != -1)
                 return 'Same Name Exist.';
+            return null;
+        }
+
+
+        function validateQueueTemplateName() {
+            if ($scope.scopeModal.queueTemplateName.indexOf('#FlowId#') >= 0)
+                return null;
+            else
+                return 'Queue Template Name Must Contain #FlowId#.';
+            return null;
+        }
+
+
+        function validateBatchDescription() {
+            if ($scope.scopeModal.batchDescription.indexOf('#RECORDSCOUNT#') >= 0)
+                return null;
+            else 
+                return 'Batch Description Must Contain #RECORDSCOUNT#.';
             return null;
         }
 
