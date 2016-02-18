@@ -7,14 +7,6 @@ using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
-    public enum Direction {
-
-        [Description("Outgoing")]
-        Outgoing = 1,
-
-        [Description("Incoming")]
-        Incoming = 2
-    }
     public class RawCDRQuery
     {
        
@@ -29,5 +21,6 @@ namespace Demo.Module.Entities
         public List<int> DataSourceIds { get; set; }
         public List<int> Directions { get; set; }
         public List<int> ServiceTypes { get; set; }
+        public List<int> CDRTypes { get; set; }
     }
 }

@@ -47,9 +47,12 @@ namespace Demo.Module.Business
             };
 
             var directionAttribute = Utilities.GetEnumAttribute<Direction, DescriptionAttribute>(rawCDRLog.DirectionType);
-
             if (directionAttribute != null)
                 rawCDRLogDetail.DirectionDescription = directionAttribute.Description;
+
+            var cdrType = Utilities.GetEnumAttribute<Demo.Module.Entities.Type, DescriptionAttribute>(rawCDRLog.CDRType);
+            if (cdrType != null)
+                rawCDRLogDetail.CDRTypeDescription = cdrType.Description;
 
             return rawCDRLogDetail;
         }

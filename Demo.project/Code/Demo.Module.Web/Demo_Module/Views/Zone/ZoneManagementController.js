@@ -26,7 +26,7 @@
             }
             $scope.onGridReady = function (api) {
                 gridAPI = api;            
-               
+                return gridAPI.loadGrid({});
             }
           
         }

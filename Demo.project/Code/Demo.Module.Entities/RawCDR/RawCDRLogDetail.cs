@@ -15,5 +15,7 @@ namespace Demo.Module.Entities
        public string DirectionDescription { get; set; }
 
        public string ServiceTypeDescription { get; set; }
+
+       public string CDRTypeDescription { get; set; }
     }
 }

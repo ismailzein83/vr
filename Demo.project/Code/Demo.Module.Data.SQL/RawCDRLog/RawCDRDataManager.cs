@@ -32,6 +32,8 @@ namespace Demo.Module.Data.SQL
             _columnMapper.Add("DataSourceName", "DataSourceID");
             _columnMapper.Add("DirectionDescription", "Direction");
             _columnMapper.Add("ServiceTypeDescription", "ServiceTypeID");
+            _columnMapper.Add("CDRTypeDescription", "CDRType");
+
             
         }
         public RawCDRDataManager() :  base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
@@ -77,6 +79,7 @@ namespace Demo.Module.Data.SQL
 	                                        CDPN,
                                             Direction,
                                             ServiceTypeID,
+                                            CDRType,
                                             DataSourceID
                                             INTO  #TEMPTABLE#
                                             FROM   dbo.CDR C WITH(
@@ -96,6 +99,9 @@ namespace Demo.Module.Data.SQL
             AddFilter<int>(whereBuilder, query.Directions, "C.Direction");
 
             AddFilter<int>(whereBuilder, query.ServiceTypes, "C.ServiceTypeID");
+
+            AddFilter<int>(whereBuilder, query.CDRTypes, "C.CDRType");
+
 
             if (!string.IsNullOrEmpty(query.CDPN))
                 whereBuilder.AppendFormat(@" AND CDPN LIKE '{0}'", query.CDPN);
@@ -146,7 +152,8 @@ namespace Demo.Module.Data.SQL
             rawCDRLog.InTrunk = reader["InTrunk"] as string;
             rawCDRLog.PortOut = reader["PortOut"] as string;
             rawCDRLog.OutTrunk = reader["OutTrunk"] as string;
-            rawCDRLog.DirectionType = GetReaderValue<Direction>(reader, "Direction"); 
+            rawCDRLog.DirectionType = GetReaderValue<Direction>(reader, "Direction");
+            rawCDRLog.CDRType = GetReaderValue<Demo.Module.Entities.Type>(reader, "CDRType"); 
             rawCDRLog.DataSourceId = GetReaderValue<int>(reader, "DataSourceID");
             rawCDRLog.ServiceTypeId = GetReaderValue<int>(reader, "ServiceTypeID");
 

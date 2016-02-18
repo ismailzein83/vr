@@ -29,7 +29,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
         this.initializeController = initializeController;
 
         function initializeController() {
-            $scope.showGrid = false;
             var gridDrillDownTabsObj;
             $scope.salezones = [];
             $scope.onGridReady = function (api) {
@@ -39,7 +38,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
                 var drillDownDefinitions = [];
                 var drillDownDefinition = {};
 
-                drillDownDefinition.title = "Sale Codes";
+                drillDownDefinition.title = "Codes";
                 drillDownDefinition.directive = "vr-whs-be-salecode-grid";
 
                 drillDownDefinition.loadDirective = function (directiveAPI, saleZoneItem) {
@@ -77,7 +76,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SaleZoneAPIService, WhS_BE
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                             }
                         }
-                        $scope.showGrid = true;
                          onResponseReady(response);
                     })
                     .catch(function (error) {

@@ -8,25 +8,21 @@ namespace Demo.Module.Entities
 {
     public class RawCDRLog
     {
-      //  public Int64 IDonSwitch { get; set; }
-      //  public string Tag { get; set; }
         public DateTime Attempt { get; set; }
         public DateTime Alert { get; set; }
         public DateTime Connect { get; set; }
         public DateTime Disconnect { get; set; }
         public Decimal DurationInSeconds { get; set; }
         public string InTrunk { get; set; }
-    //    public Int64 IN_CIRCUIT { get; set; }
         public string PortIn { get; set; }
         public string OutTrunk { get; set; }
-      //  public Int16 OUT_CIRCUIT { get; set; }
         public string PortOut { get; set; }
         public string CGPN { get; set; }
         public string CDPN { get; set; }
         public Direction DirectionType { get; set; } 
         public int DataSourceId { get; set; }
-
         public int ServiceTypeId { get; set; }
+        public Type CDRType { get; set; }
 
     }
 }

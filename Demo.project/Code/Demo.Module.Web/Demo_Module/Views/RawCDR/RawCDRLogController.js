@@ -14,6 +14,8 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
     var serviceTypeDirectiveAPI;
     var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var cdrTypeDirectiveAPI;
+    var cdrTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
     defineScope();
     load();
 
@@ -44,6 +46,11 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
             serviceTypeDirectiveAPI = api;
             serviceTypeReadyPromiseDeferred.resolve();
         }
+        $scope.onCDRTypeReady = function (api) {
+            cdrTypeDirectiveAPI = api;
+            cdrTypeReadyPromiseDeferred.resolve();
+        }
+        
         
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
@@ -63,7 +70,8 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
             MaxDuration: $scope.maxDuration,
             DataSourceIds: dataSourceDirectiveAPI.getSelectedIds(),
             Directions: directionDirectiveAPI.getSelectedIds(),
-            ServiceTypes: serviceTypeDirectiveAPI.getSelectedIds()
+            ServiceTypes: serviceTypeDirectiveAPI.getSelectedIds(),
+            CDRTypes: cdrTypeDirectiveAPI.getSelectedIds()
 
         }
         return query;
@@ -76,7 +84,7 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadDataSources, loadDirection, loadServiceTypes])
+        return UtilsService.waitMultipleAsyncOperations([loadDataSources, loadDirection, loadServiceTypes, loadCdrTypes])
           .catch(function (error) {
               VRNotificationService.notifyExceptionWithClose(error, $scope);
               $scope.isLoading = false;
@@ -109,6 +117,14 @@ function rawCDRLogController($scope, UtilsService,  VRNotificationService, VRUIU
             VRUIUtilsService.callDirectiveLoad(serviceTypeDirectiveAPI, undefined, loadServiceTypesPromiseDeferred);
         });
         return loadServiceTypesPromiseDeferred.promise;
+    }
+    function loadCdrTypes() {
+        var loadCdrTypesPromiseDeferred = UtilsService.createPromiseDeferred();
+        cdrTypeReadyPromiseDeferred.promise.then(function () {
+
+            VRUIUtilsService.callDirectiveLoad(cdrTypeDirectiveAPI, undefined, loadCdrTypesPromiseDeferred);
+        });
+        return loadCdrTypesPromiseDeferred.promise;
     }
     function buildFilter() {
         var filter = {};
