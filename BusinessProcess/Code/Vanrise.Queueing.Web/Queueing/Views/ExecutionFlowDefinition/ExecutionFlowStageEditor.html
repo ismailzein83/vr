@@ -5,7 +5,7 @@
                 <vr-tab header="'Stages'">
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-textbox value="scopeModal.stageName" label="Stage Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModal.stageName" label="Stage Name" customvalidate="scopeModal.validateName()" isrequired></vr-textbox>
                         </vr-columns>
 
                         <vr-columns width="1/3row">
@@ -35,8 +35,7 @@
                                        datatextfield="stageName"
                                        datavaluefield="stageName"
                                        label="Source Stages"
-                                       ismultipleselect
-                                       >
+                                       ismultipleselection>
 
                             </vr-select>
                         </vr-columns>

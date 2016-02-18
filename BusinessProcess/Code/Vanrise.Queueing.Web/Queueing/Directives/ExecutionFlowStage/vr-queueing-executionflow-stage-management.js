@@ -61,7 +61,7 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
                             singleConcurrentReader: ctrl.datasource[i].SingleConcurrentReader,
                             QueueItemType: ctrl.datasource[i].QueueItemType,
                             QueueActivator: ctrl.datasource[i].QueueActivator,
-                            SourcesStages: ctrl.datasource[i].SourceStages
+                            SourceStages: ctrl.datasource[i].SourceStages
                         });
                     }
 
