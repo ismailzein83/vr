@@ -36,12 +36,12 @@ namespace Demo.Module.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allOperatorDeclaredInformations.ToBigResult(input, filterExpression, OperatorDeclaredInformationDetailMapper));
         }
-        public OperatorDeclaredInformation GetOperatorDeclaredInformation(int OperatorDeclaredInformationId)
+        public OperatorDeclaredInformation GetOperatorDeclaredInformation(int operatorDeclaredInformationId)
         {
             var info = GetCachedOperatorDeclaredInformations();
-            return info.GetRecord(OperatorDeclaredInformationId);
+            return info.GetRecord(operatorDeclaredInformationId);
         }
-        public Vanrise.Entities.InsertOperationOutput<OperatorDeclaredInformationDetail> AddOperatorDeclaredInformation(OperatorDeclaredInformation OperatorDeclaredInformation)
+        public Vanrise.Entities.InsertOperationOutput<OperatorDeclaredInformationDetail> AddOperatorDeclaredInformation(OperatorDeclaredInformation operatorDeclaredInformation)
         {
             Vanrise.Entities.InsertOperationOutput<OperatorDeclaredInformationDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<OperatorDeclaredInformationDetail>();
 
@@ -51,24 +51,24 @@ namespace Demo.Module.Business
             int infoId = -1;
 
             IOperatorDeclaredInformationDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorDeclaredInformationDataManager>();
-            bool insertActionSucc = dataManager.Insert(OperatorDeclaredInformation, out infoId);
+            bool insertActionSucc = dataManager.Insert(operatorDeclaredInformation, out infoId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                OperatorDeclaredInformation.OperatorDeclaredInformationId = infoId;
-                insertOperationOutput.InsertedObject = OperatorDeclaredInformationDetailMapper(OperatorDeclaredInformation);
+                operatorDeclaredInformation.OperatorDeclaredInformationId = infoId;
+                insertOperationOutput.InsertedObject = OperatorDeclaredInformationDetailMapper(operatorDeclaredInformation);
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<OperatorDeclaredInformationDetail> UpdateOperatorDeclaredInformation(OperatorDeclaredInformation OperatorDeclaredInformation)
+        public Vanrise.Entities.UpdateOperationOutput<OperatorDeclaredInformationDetail> UpdateOperatorDeclaredInformation(OperatorDeclaredInformation operatorDeclaredInformation)
         {
             IOperatorDeclaredInformationDataManager dataManager = DemoModuleDataManagerFactory.GetDataManager<IOperatorDeclaredInformationDataManager>();
 
-            bool updateActionSucc = dataManager.Update(OperatorDeclaredInformation);
+            bool updateActionSucc = dataManager.Update(operatorDeclaredInformation);
             Vanrise.Entities.UpdateOperationOutput<OperatorDeclaredInformationDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<OperatorDeclaredInformationDetail>();
 
             updateOperationOutput.Result = UpdateOperationResult.Failed;
@@ -78,7 +78,7 @@ namespace Demo.Module.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = OperatorDeclaredInformationDetailMapper(OperatorDeclaredInformation);
+                updateOperationOutput.UpdatedObject = OperatorDeclaredInformationDetailMapper(operatorDeclaredInformation);
             }
             else
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
