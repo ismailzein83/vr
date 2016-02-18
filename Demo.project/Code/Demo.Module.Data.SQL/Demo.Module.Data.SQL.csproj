@@ -62,6 +62,7 @@
     <Compile Include="Operator\OperatorProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\SaleCodeDataManager.cs" />
+    <Compile Include="CDRLog\CDRLogDataManager.cs" />
     <Compile Include="RawCDRLog\RawCDRDataManager.cs" />
     <Compile Include="RawCDRLog\ServiceTypeDataManager.cs" />
     <Compile Include="Zone\SaleZoneDataManager.cs" />

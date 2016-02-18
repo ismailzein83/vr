@@ -75,6 +75,9 @@
     <Compile Include="Operator\OperatorProfile\OperatorProfileInfo.cs" />
     <Compile Include="Operator\OperatorProfile\OperatorProfileQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CDR\CDRLog.cs" />
+    <Compile Include="CDR\CDRLogDetail.cs" />
+    <Compile Include="CDR\CDRQuery.cs" />
     <Compile Include="RawCDR\ServiceType.cs" />
     <Compile Include="RawCDR\RawCDRQuery.cs" />
     <Compile Include="RawCDR\RawCDRLog.cs" />

@@ -131,11 +131,14 @@
     <Content Include="Demo_Module\Constant\CDRDirectionEnum.js" />
     <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\Templates\OperatorDeclaredInformationGridTemplate.html" />
     <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\vr-demo-operatordeclaredinformation-grid.js" />
+    <Content Include="Demo_Module\Directives\CDR\Templates\CDRLogGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\CDR\vr-whs-analytics-cdrlog-grid.js" />
     <Content Include="Demo_Module\Directives\RawCDR\cdrtype-selector.js" />
     <Content Include="Demo_Module\Directives\RawCDR\servicetype-selector.js" />
     <Content Include="Demo_Module\Directives\RawCDR\cdrdirection-selector.js" />
     <Content Include="Demo_Module\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
     <Content Include="Demo_Module\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
+    <Content Include="Demo_Module\Services\APIServices\CDRLogAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ServiceTypeAPIService.js" />
@@ -149,6 +152,7 @@
     <Compile Include="Controllers\OperatorAccountController.cs" />
     <Compile Include="Controllers\NationalNumberingPlanController.cs" />
     <Compile Include="Controllers\OperatorProfileController.cs" />
+    <Compile Include="Controllers\CDRLogController.cs" />
     <Compile Include="Controllers\RawCDRController.cs" />
     <Compile Include="Controllers\ServiceTypeController.cs" />
     <Compile Include="Controllers\SaleCodeController.cs" />
@@ -209,6 +213,8 @@
     <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationEditorController.js" />
     <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationManagement.html" />
     <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationManagementController.js" />
+    <Content Include="Demo_Module\Views\CDR\CDRLog.html" />
+    <Content Include="Demo_Module\Views\CDR\CDRLogController.js" />
     <Content Include="Demo_Module\Views\RawCDR\RawCDRLog.html" />
     <Content Include="Demo_Module\Views\RawCDR\RawCDRLogController.js" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagement.html" />
