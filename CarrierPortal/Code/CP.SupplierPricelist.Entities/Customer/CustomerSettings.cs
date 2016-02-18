@@ -8,8 +8,6 @@ namespace CP.SupplierPricelist.Entities
 {
     public class CustomerSettings
     {
-        public int ConfigId { get; set; }
-
         public SupplierPriceListConnectorBase PriceListConnector { get; set; }
     }
 }

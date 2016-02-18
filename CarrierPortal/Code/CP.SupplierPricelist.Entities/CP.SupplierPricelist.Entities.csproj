@@ -52,7 +52,6 @@
     <Compile Include="Customer\Customer.cs" />
     <Compile Include="Customer\CustomerSettings.cs" />
     <Compile Include="Customer\CustomerSupplierMapping.cs" />
-    <Compile Include="Customer\CustomerTypeConfig.cs" />
     <Compile Include="Customer\CustomerUser.cs" />
     <Compile Include="GetUpdatedInput.cs" />
     <Compile Include="PriceListlUpdateOutput.cs" />
