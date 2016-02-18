@@ -179,13 +179,16 @@ namespace Vanrise.Queueing
 
         private void CreateStageQueueIfNeeded(QueueExecutionFlowStage stage, QueueExecutionFlow executionFlow, QueueExecutionFlowDefinition executionFlowDefinition)
         {
-            if (stage.SourceStages != null)
+            List<string> sourceQueueNames = null;
+            if (stage.SourceStages != null && stage.SourceStages.Count > 0)
             {
+                sourceQueueNames = new List<string>();
                 foreach (var sourceStageName in stage.SourceStages)
                 {
                     var sourceStage = executionFlowDefinition.Stages.FindRecord(itm => itm.StageName == sourceStageName);
                     if (sourceStage == null)
                         throw new Exception(String.Format("Source stage '{0}' not found", sourceStageName));
+                    sourceQueueNames.Add(BuildQueueName(sourceStage, executionFlow));
                     CreateStageQueueIfNeeded(sourceStage, executionFlow, executionFlowDefinition);
                 }
             }
@@ -203,7 +206,7 @@ namespace Vanrise.Queueing
             };
 
             PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlow.ExecutionFlowId, stage.StageName, stage.QueueItemType.GetQueueItemType().AssemblyQualifiedName,
-                queueName, queueTitleBuilder.ToString(), stage.SourceStages, queueSettings);
+                queueName, queueTitleBuilder.ToString(), sourceQueueNames, queueSettings);
         }
 
         private string BuildQueueName(QueueExecutionFlowStage stage, QueueExecutionFlow executionFlow)
