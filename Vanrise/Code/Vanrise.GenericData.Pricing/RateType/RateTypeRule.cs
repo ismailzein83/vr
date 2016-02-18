@@ -22,5 +22,10 @@ namespace Vanrise.GenericData.Pricing
             }
             return null;
         }
+
+        public override bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue)
+        {
+            return true;
+        }
     }
 }

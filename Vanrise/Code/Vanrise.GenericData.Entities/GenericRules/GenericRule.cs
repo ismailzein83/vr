@@ -13,5 +13,7 @@ namespace Vanrise.GenericData.Entities
         public GenericRuleCriteria Criteria { get; set; }
 
         public abstract string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context);
+
+        public abstract bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue);
     }
 }

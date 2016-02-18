@@ -12,12 +12,65 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericRuleManager<T> : Vanrise.Rules.RuleManager<T, GenericRuleDetail>, IGenericRuleManager where T : GenericRule
     {
+        #region Public Methods
+
         public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
         {
             var ruleDefinition = GetRuleDefinition(input.Query.RuleDefinitionId);
-            IEnumerable<T> allRules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == input.Query.RuleDefinitionId && RuleCriteriaFilter(itm, ruleDefinition, input.Query));
+            IEnumerable<T> allRules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == input.Query.RuleDefinitionId && RuleCriteriaFilter(itm, ruleDefinition, input.Query) && RuleSettingsFilter(itm, ruleDefinition, input.Query));
             return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, (rule) => MapToDetails(rule)));
         }
+
+        public GenericRule GetGenericRule(int ruleId)
+        {
+            return GetAllRules().GetRecord(ruleId);
+        }
+
+        public T GetMatchRule(int ruleDefinitionId, GenericRuleTarget target)
+        {
+            var ruleTree = GetRuleTree(ruleDefinitionId);
+            return ruleTree.GetMatchRule(target) as T;
+        }
+
+        public static IEnumerable<Object> GetCriteriaFieldValues(GenericRule rule, string fieldName)
+        {
+            if (rule == null)
+                throw new ArgumentNullException("rule");
+            if (rule.Criteria == null)
+                throw new ArgumentNullException("rule.Criteria");
+            if (rule.Criteria.FieldsValues == null)
+                throw new ArgumentNullException("rule.Criteria.FieldsValues");
+            GenericRuleCriteriaFieldValues genericRuleCriteriaFieldValues;
+            if (rule.Criteria.FieldsValues.TryGetValue(fieldName, out genericRuleCriteriaFieldValues))
+            {
+                return genericRuleCriteriaFieldValues.GetValues();
+            }
+            else
+                return null;
+        }
+
+        public static bool TryGetTargetFieldValue(GenericRuleTarget target, string fieldName, out Object value)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            if (target.TargetFieldValues == null)
+                throw new ArgumentNullException("target.TargetFieldValues");
+            return target.TargetFieldValues.TryGetValue(fieldName, out value);
+        }
+
+        public Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
+        {
+            return this.AddRule(rule as T) as Vanrise.Entities.InsertOperationOutput<GenericRuleDetail>;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail> UpdateGenericRule(GenericRule rule)
+        {
+            return this.UpdateRule(rule as T) as Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail>;
+        }
+
+        #endregion
+
+        #region Private Methods
 
         GenericRuleDefinition GetRuleDefinition(int ruleDefintionId)
         {
@@ -40,15 +93,9 @@ namespace Vanrise.GenericData.Business
             return true;
         }
 
-        public GenericRule GetGenericRule(int ruleId)
+        bool RuleSettingsFilter(GenericRule rule, GenericRuleDefinition ruleDefinition, GenericRuleQuery query)
         {
-            return GetAllRules().GetRecord(ruleId);
-        }
-
-        public T GetMatchRule(int ruleDefinitionId, GenericRuleTarget target)
-        {
-            var ruleTree = GetRuleTree(ruleDefinitionId);
-            return ruleTree.GetMatchRule(target) as T;
+            return rule.AreSettingsMatched(ruleDefinition.SettingsDefinition, query.SettingsFilterValue);
         }
 
         private RuleTree GetRuleTree(int ruleDefinitionId)
@@ -82,41 +129,9 @@ namespace Vanrise.GenericData.Business
             return behavior as BaseRuleStructureBehavior;
         }
 
-        public static IEnumerable<Object> GetCriteriaFieldValues(GenericRule rule, string fieldName)
-        {
-            if (rule == null)
-                throw new ArgumentNullException("rule");
-            if (rule.Criteria == null)
-                throw new ArgumentNullException("rule.Criteria");
-            if (rule.Criteria.FieldsValues == null)
-                throw new ArgumentNullException("rule.Criteria.FieldsValues");
-            GenericRuleCriteriaFieldValues genericRuleCriteriaFieldValues;
-            if (rule.Criteria.FieldsValues.TryGetValue(fieldName, out genericRuleCriteriaFieldValues))
-            {
-                return genericRuleCriteriaFieldValues.GetValues();
-            }
-            else
-                return null;
-        }
+        #endregion
 
-        public static bool TryGetTargetFieldValue(GenericRuleTarget target, string fieldName, out Object value)
-        {
-            if (target == null)
-                throw new ArgumentNullException("target");
-            if(target.TargetFieldValues == null)
-                throw new ArgumentNullException("target.TargetFieldValues");
-            return target.TargetFieldValues.TryGetValue(fieldName, out value);
-        }
-
-        public Vanrise.Entities.InsertOperationOutput<GenericRuleDetail> AddGenericRule(GenericRule rule)
-        {
-            return this.AddRule(rule as T) as Vanrise.Entities.InsertOperationOutput<GenericRuleDetail>;
-        }
-
-        public Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail> UpdateGenericRule(GenericRule rule)
-        {
-            return this.UpdateRule(rule as T) as Vanrise.Entities.UpdateOperationOutput<GenericRuleDetail>;
-        }
+        #region Protected Methods
 
         protected override GenericRuleDetail MapToDetails(T rule)
         {
@@ -140,5 +155,7 @@ namespace Vanrise.GenericData.Business
                 SettingsDescription = rule.GetSettingsDescription(new GenericRuleSettingsDescriptionContext() { RuleDefinitionSettings = ruleDefinition.SettingsDefinition })
             };
         }
+        
+        #endregion
     }
 }

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
+app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService',
     function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService) {
 
         var directiveDefinitionObject = {
@@ -64,30 +64,30 @@ app.directive('vrGenericdataGenericrulesettingsRuntimeeditor', ['UtilsService', 
 
                         var promises = [];
 
-                        var loadWholeSectionPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadWholeSectionPromiseDeferred.promise);
+                        var getFieldTypeConfigPromise = getFieldTypeConfig();
+                        promises.push(getFieldTypeConfigPromise);
 
-                        var loadFieldTypeConfigPromise = VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypeConfig(fieldType.ConfigId).then(function (fieldTypeConfig) {
-                            $scope.scopeModel.runtimeEditorDirective = fieldTypeConfig.RuntimeEditor;
+                        var loadFieldTypeDirectiveDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadFieldTypeDirectiveDeferred.promise);
 
-                            var loadFieldTypeConfigDirective = UtilsService.createPromiseDeferred();
-
+                        getFieldTypeConfigPromise.then(function () {
                             fieldTypeOnReadyPromiseDeferred.promise.then(function () {
                                 var payload = {
                                     fieldTitle: fieldTitle,
                                     fieldType: fieldType,
                                     fieldValue: (settings != undefined) ? settings.Value : undefined
-                                }
-
-                                VRUIUtilsService.callDirectiveLoad(fieldTypeDirectiveAPI, payload, loadFieldTypeConfigDirective);
-                                loadWholeSectionPromiseDeferred.resolve();
-                            }).catch(function (error) {
-                                loadWholeSectionPromiseDeferred.reject();
+                                };
+                                VRUIUtilsService.callDirectiveLoad(fieldTypeDirectiveAPI, payload, loadFieldTypeDirectiveDeferred);
                             });
                         });
 
-                        promises.push(loadFieldTypeConfigPromise);
                         return UtilsService.waitMultiplePromises(promises);
+
+                        function getFieldTypeConfig() {
+                            return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypeConfig(fieldType.ConfigId).then(function (fieldTypeConfig) {
+                                $scope.scopeModel.runtimeEditorDirective = fieldTypeConfig.RuntimeEditor;
+                            });
+                        }
                     }
                 }
 

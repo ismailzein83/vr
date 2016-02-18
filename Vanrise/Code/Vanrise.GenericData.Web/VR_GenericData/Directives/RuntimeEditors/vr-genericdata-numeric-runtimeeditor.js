@@ -25,7 +25,9 @@ app.directive('vrGenericdataNumericRuntimeeditor', ['UtilsService', function (Ut
                 }
             }
         },
-        templateUrl: "/Client/Modules/VR_GenericData/Directives/RuntimeEditors/Templates/NumericEditorTemplate.html"
+        template: function (element, attrs) {
+            return getDirectiveTemplate(attrs);
+        }
     };
 
     function textCtor(ctrl, $scope, $attrs) {
@@ -105,6 +107,36 @@ app.directive('vrGenericdataNumericRuntimeeditor', ['UtilsService', function (Ut
         this.initializeController = initializeController;
 
     }
+
+    function getDirectiveTemplate(attrs) {
+        if (attrs.selectionmode == 'single') {
+            return getSingleSelectionModeTemplate();
+        }
+        else {
+            return '<vr-columns colnum="{{ctrl.normalColNum * 4}}">'
+                    + '<vr-row>'
+                        + getSingleSelectionModeTemplate()
+                        + '<vr-columns withemptyline>'
+                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.disableAddButton"></vr-button>'
+                        + '</vr-columns>'
+                    + '</vr-row>'
+                    + '<vr-row>'
+                        + '<vr-columns colnum="{{ctrl.normalColNum * 2}}">'
+                            + '<vr-validator validate="scopeModel.isValid()">'
+                                + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
+                            + '</vr-validator>'
+                        + '</vr-columns>'
+                    + '</vr-row>'
+                + '</vr-columns>';
+        }
+
+        function getSingleSelectionModeTemplate() {
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                    + '<vr-textbox type="number" label="{{scopeModel.label}}" value="scopeModel.value" onvaluechanged="scopeModel.onValueChange"></vr-textbox>'
+                + '</vr-columns>';
+        }
+    }
+
     return directiveDefinitionObject;
 }]);
 

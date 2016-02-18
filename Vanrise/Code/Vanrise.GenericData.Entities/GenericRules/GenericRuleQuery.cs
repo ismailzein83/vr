@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Entities
         public int RuleDefinitionId { get; set; }
 
         public Dictionary<string, object> CriteriaFieldValues { get; set; }
+
+        public object SettingsFilterValue { get; set; }
     }
 }

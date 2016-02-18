@@ -2,45 +2,86 @@
 
     'use strict';
 
-    MappingRuleSettingsFilterEditorDirective.$inject = [];
+    MappingRuleSettingsFilterEditorDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function MappingRuleSettingsFilterEditorDirective() {
+    function MappingRuleSettingsFilterEditorDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
-                onReady: '='
+                onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var mappingRuleSettingsFilterEditor = new MappingRuleSettingsFilterEditor(ctrl, $scope, $attrs);
+                var isolatedCtrl = this;
+                var mappingRuleSettingsFilterEditor = new MappingRuleSettingsFilterEditor(isolatedCtrl, $scope, $attrs);
                 mappingRuleSettingsFilterEditor.initializeController();
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'isolatedCtrl',
             bindToController: true,
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
             }
         };
 
-        function MappingRuleSettingsFilterEditor(ctrl, $scope, $attrs) {
+        function MappingRuleSettingsFilterEditor(isolatedCtrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             var directiveAPI;
+            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                ctrl.onDirectiveReady = function (api) {
+                isolatedCtrl.onDirectiveReady = function (api) {
                     directiveAPI = api;
+                    directiveReadyDeferred.resolve();
+                };
 
-                    if (ctrl.onReady != undefined) {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                if (isolatedCtrl.onReady != undefined) {
+                    isolatedCtrl.onReady(getDirectiveAPI());
                 }
             }
 
             function getDirectiveAPI() {
                 var api = {};
                 api.load = function (payload) {
-                    return directiveAPI.load(payload);
+                    var fieldTitle;
+                    var fieldType;
+
+                    if (payload != undefined) {
+                        fieldTitle = payload.settings.FieldTitle;
+                        fieldType = payload.settings.FieldType;
+                    }
+
+                    var promises = [];
+                    var fieldTypeConfigs;
+
+                    var getFieldTypeConfigsPromise = getFieldTypeConfigs();
+                    promises.push(getFieldTypeConfigsPromise);
+
+                    var loadWrapperDirectiveDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadWrapperDirectiveDeferred.promise);
+
+                    getFieldTypeConfigsPromise.then(function () {
+                        isolatedCtrl.directiveEditor = UtilsService.getItemByVal(fieldTypeConfigs, fieldType.ConfigId, 'DataRecordFieldTypeConfigId').FilterEditor;
+
+                        directiveReadyDeferred.promise.then(function () {
+                            var directivePayload = {
+                                fieldTitle: fieldTitle,
+                                fieldType: fieldType
+                            };
+                            VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, loadWrapperDirectiveDeferred);
+                        });
+                    });
+
+                    return UtilsService.waitMultiplePromises(promises);
+
+                    function getFieldTypeConfigs() {
+                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                            fieldTypeConfigs = [];
+                            for (var i = 0; i < response.length; i++) {
+                                fieldTypeConfigs.push(response[i]);
+                            }
+                        });
+                    }
                 };
                 api.getData = function () {
                     return directiveAPI.getData();
@@ -50,7 +91,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-genericrulesettings-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" />';
+            return '<vr-directivewrapper directive="isolatedCtrl.directiveEditor" on-ready="isolatedCtrl.onDirectiveReady" normal-col-num="ctrl.normalColNum" />';
         }
     }
 

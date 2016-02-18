@@ -42,7 +42,6 @@
 
             $scope.search = function () {
                 var filter = getFilterObject();
-                console.log(filter);
                 return gridAPI.loadGrid(filter);
             };
 
@@ -62,6 +61,8 @@
                     gridQuery.CriteriaFieldValues[$scope.filters[i].criteriaFieldName] = $scope.filters[i].directiveAPI.getData();
                 }
 
+                gridQuery.SettingsFilterValue = (settingsFilterDirectiveAPI != undefined) ? settingsFilterDirectiveAPI.getData() : null;
+
                 return gridQuery;
             }
         }
@@ -69,110 +70,123 @@
         function load() {
             $scope.isLoading = true;
             loadAllControls();
-        }
 
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilters]).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
-
-            function loadFilters() {
-                var promises = [];
-                var ruleDefinition;
-                var fieldTypes;
-
-                var getRuleDefinitionAndFieldTypesDeferred = UtilsService.createPromiseDeferred();
-                promises.push(getRuleDefinitionAndFieldTypesDeferred.promise);
-
-                UtilsService.waitMultipleAsyncOperations([getRuleDefinition, getFieldTypes]).then(function () {
-                    for (var i = 0; i < ruleDefinition.CriteriaDefinition.Fields.length; i++) {
-                        var fieldTypeConfigId = ruleDefinition.CriteriaDefinition.Fields[i];
-                        var filter = getFilter(fieldTypeConfigId);
-                        if (filter != undefined) {
-                            promises.push(filter.directiveLoadDeferred.promise);
-                            $scope.filters.push(filter);
-                        }
-                    }
-
-                    var loadSettingsFilterPromise = loadSettingsFilter();
-                    promises.push(loadSettingsFilterPromise);
-
-                    getRuleDefinitionAndFieldTypesDeferred.resolve();
-                }).catch(function (error) {
-                    getRuleDefinitionAndFieldTypesDeferred.reject(error);
+            function loadAllControls() {
+                return UtilsService.waitMultipleAsyncOperations([loadFilters]).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
                 });
 
-                return UtilsService.waitMultiplePromises(promises);
+                function loadFilters() {
+                    var promises = [];
+                    var ruleDefinition;
+                    var fieldTypes;
 
-                function getRuleDefinition() {
-                    return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(ruleDefinitionId).then(function (response) {
-                        ruleDefinition = response;
-                    });
-                }
-                function getFieldTypes() {
-                    return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
-                        fieldTypes = [];
-                        for (var i = 0; i < response.length; i++) {
-                            fieldTypes.push(response[i]);
-                        }
-                    });
-                }
-                function getFilter(criteriaField) {
-                    var filter;
-                    var filterEditor = UtilsService.getItemByVal(fieldTypes, criteriaField.FieldType.ConfigId, 'DataRecordFieldTypeConfigId').FilterEditor;
+                    var getRuleDefinitionPromise = getRuleDefinition();
+                    var getFieldTypeConfigsPromise = getFieldTypeConfigs();
+                    var getRuleDefinitionAndFieldTypeConfigsDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(getRuleDefinitionAndFieldTypeConfigsDeferred.promise);
 
-                    if (filterEditor == null) return filter;
+                    var loadSettingsFilterDirectiveDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadSettingsFilterDirectiveDeferred.promise);
 
-                    filter = {};
-                    filter.criteriaFieldName = criteriaField.FieldName;
-                    filter.directiveEditor = filterEditor;
-                    filter.directiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                    filter.onDirectiveReady = function (api) {
-                        filter.directiveAPI = api;
-                        var directivePayload = {
-                            fieldTitle: criteriaField.Title,
-                            fieldType: criteriaField.FieldType
-                        };
-                        VRUIUtilsService.callDirectiveLoad(api, directivePayload, filter.directiveLoadDeferred);
-                    };
-
-                    return filter;
-                }
-                function loadSettingsFilter() {
-                    var settingsPromises = [];
-                    var ruleTypes;
-
-                    var getRuleTypesPromise = getRuleTypes();
-                    settingsPromises.push(getRuleTypesPromise);
-
-                    var settingsFilterEditorLoadDeferred = UtilsService.createPromiseDeferred();
-                    settingsPromises.push(settingsFilterEditorLoadDeferred.promise);
-
-                    getRuleTypesPromise.then(function () {
-                        $scope.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'GenericRuleTypeConfigId').FilterEditor;
-                        console.log(UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'GenericRuleTypeConfigId'));
-
-                        settingsFilterDirectiveReadyDeferred.promise.then(function () {
-                            var settingsFilterDirectivePayload = {
-                                genericRuleDefinition: ruleDefinition,
-                                settings: ruleDefinition.SettingsDefinition
-                            };
-                            VRUIUtilsService.callDirectiveLoad(settingsFilterDirectiveAPI, settingsFilterDirectivePayload, settingsFilterEditorLoadDeferred);
+                    getRuleDefinitionPromise.then(function () {
+                        loadSettingsFilter().then(function () {
+                            loadSettingsFilterDirectiveDeferred.resolve();
+                        }).catch(function (error) {
+                            loadSettingsFilterDirectiveDeferred.reject(error);
                         });
                     });
 
-                    return UtilsService.waitMultiplePromises(settingsPromises);
+                    UtilsService.waitMultiplePromises([getRuleDefinitionPromise, getFieldTypeConfigsPromise]).then(function () {
+                        for (var i = 0; i < ruleDefinition.CriteriaDefinition.Fields.length; i++) {
+                            var criteriaField = ruleDefinition.CriteriaDefinition.Fields[i];
+                            var filter = getFilter(criteriaField);
+                            if (filter != undefined) {
+                                promises.push(filter.directiveLoadDeferred.promise);
+                                $scope.filters.push(filter);
+                            }
+                        }
+                        getRuleDefinitionAndFieldTypeConfigsDeferred.resolve();
+                    }).catch(function (error) {
+                        getRuleDefinitionAndFieldTypeConfigsDeferred.reject(error);
+                    });
 
-                    function getRuleTypes() {
-                        return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypes().then(function (response) {
-                            ruleTypes = [];
+                    return UtilsService.waitMultiplePromises(promises);
+
+                    function getRuleDefinition() {
+                        return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(ruleDefinitionId).then(function (response) {
+                            ruleDefinition = response;
+                        });
+                    }
+                    function getFieldTypeConfigs() {
+                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                            fieldTypes = [];
                             for (var i = 0; i < response.length; i++) {
-                                ruleTypes.push(response[i]);
+                                fieldTypes.push(response[i]);
                             }
                         });
+                    }
+                    function getFilter(criteriaField) {
+                        var filter;
+                        var filterEditor = UtilsService.getItemByVal(fieldTypes, criteriaField.FieldType.ConfigId, 'DataRecordFieldTypeConfigId').FilterEditor;
+
+                        if (filterEditor == null) return filter;
+
+                        filter = {};
+                        filter.criteriaFieldName = criteriaField.FieldName;
+                        filter.directiveEditor = filterEditor;
+                        filter.directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        filter.onDirectiveReady = function (api) {
+                            filter.directiveAPI = api;
+                            var directivePayload = {
+                                fieldTitle: criteriaField.Title,
+                                fieldType: criteriaField.FieldType
+                            };
+                            VRUIUtilsService.callDirectiveLoad(api, directivePayload, filter.directiveLoadDeferred);
+                        };
+
+                        return filter;
+                    }
+                    function loadSettingsFilter() {
+                        var settingsPromises = [];
+                        var ruleTypes;
+
+                        var getRuleTypesPromise = getRuleTypes();
+                        settingsPromises.push(getRuleTypesPromise);
+
+                        var settingsFilterEditorLoadDeferred = UtilsService.createPromiseDeferred();
+                        settingsPromises.push(settingsFilterEditorLoadDeferred.promise);
+
+                        getRuleTypesPromise.then(function () {
+                            $scope.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'GenericRuleTypeConfigId').FilterEditor;
+
+                            if ($scope.settingsFilterEditor != null) {
+                                settingsFilterDirectiveReadyDeferred.promise.then(function () {
+                                    var settingsFilterDirectivePayload = {
+                                        genericRuleDefinition: ruleDefinition,
+                                        settings: ruleDefinition.SettingsDefinition
+                                    };
+                                    VRUIUtilsService.callDirectiveLoad(settingsFilterDirectiveAPI, settingsFilterDirectivePayload, settingsFilterEditorLoadDeferred);
+                                });
+                            }
+                            else {
+                                settingsFilterEditorLoadDeferred.resolve();
+                            }
+                        });
+
+                        return UtilsService.waitMultiplePromises(settingsPromises);
+
+                        function getRuleTypes() {
+                            return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypes().then(function (response) {
+                                ruleTypes = [];
+                                for (var i = 0; i < response.length; i++) {
+                                    ruleTypes.push(response[i]);
+                                }
+                            });
+                        }
                     }
                 }
             }

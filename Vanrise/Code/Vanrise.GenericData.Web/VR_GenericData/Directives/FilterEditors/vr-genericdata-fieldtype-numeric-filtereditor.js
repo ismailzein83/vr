@@ -8,7 +8,8 @@
         return {
             restrict: 'E',
             scope: {
-                onReady: '='
+                onReady: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -50,7 +51,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-numeric-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" />';
+            return '<vr-genericdata-numeric-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" normal-col-num="ctrl.normalColNum" />';
         }
     }
 

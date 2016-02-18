@@ -253,7 +253,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\Templates\MappingRuleSettingsRuntimeEditor.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericruledefinitionsettings-mapping.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericrulesettings-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericrulesettings-mapping-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Templates\GenericRuleDefinitionSettingsSelectiveTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\vr-genericdata-genericrulesettings-selective.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\AssignField\Templates\AssignFieldStepPreviewTemplate.html" />

@@ -4,10 +4,10 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
                 <vr-columns width="normal" ng-repeat="filter in filters">
-                    <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady"></vr-directivewrapper>
+                    <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="12"></vr-directivewrapper>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-directivewrapper directive="settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady"></vr-directivewrapper>
+                    <vr-directivewrapper directive="settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="12"></vr-directivewrapper>
                 </vr-columns>
             </vr-row>
         </div>
