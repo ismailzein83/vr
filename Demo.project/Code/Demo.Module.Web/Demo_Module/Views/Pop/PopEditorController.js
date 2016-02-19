@@ -75,7 +75,7 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(popEntity ? popEntity.Name : null, 'Pop') : UtilsService.buildTitleForAddEditor('Pop');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(popEntity ? popEntity.Name : null, 'Probing Pop') : UtilsService.buildTitleForAddEditor('Probing Pop');
         }
 
        
