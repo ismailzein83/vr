@@ -94,7 +94,6 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (isModalMode && !$scope.isLoading) {
-                    $scope.createdTimeFrom = "";
                     filter = getFilterObject();
                     gridAPI.loadGrid(filter);
                     $scope.ShowGrid = true;

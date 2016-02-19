@@ -100,7 +100,7 @@
                         $scope.selectedDataRecordStorage = [];
                        
                         for (var i = 0; i < response.length; i++) {
-                            if (response[i].DataRecordTypeId == dataRecordTypeId) {
+                            if (response[i].DataRecordTypeId == dataRecordTypeId && response[i].IsArray) {
                                 $scope.transformationRecordTypes.push(response[i]);
                             }
                             if (response[i].IsArray) {
@@ -171,13 +171,15 @@
 
                     function loadDataGridInEditMode() {
                         for (var i = 0; i < $scope.recordTypesWithStages.length; i++) {
-                            if (payload.QueueActivator.NextStagesRecords[i] != undefined) {
-                                for (var j = 0; j < payload.QueueActivator.NextStagesRecords[i].NextStages.length; j++) {
-                                    var selectedValue = UtilsService.getItemByVal($scope.recordTypesWithStages[i].stagesDataSource, payload.QueueActivator.NextStagesRecords[i].NextStages[j], "stageName");
-                                    if (selectedValue != null)
-                                        $scope.recordTypesWithStages[i].selectedStages.push(selectedValue);
+                       
+                                for (var j = 0; j < payload.QueueActivator.NextStagesRecords.length; j++) {
+                                    if ($scope.recordTypesWithStages[i].RecordName == payload.QueueActivator.NextStagesRecords[j].RecordName) {
+                                        for (var k = 0; k < payload.QueueActivator.NextStagesRecords[j].NextStages.length;k++)
+                                        var selectedValue = UtilsService.getItemByVal($scope.recordTypesWithStages[i].stagesDataSource, payload.QueueActivator.NextStagesRecords[j].NextStages[k], "stageName");
+                                        if (selectedValue != null)
+                                            $scope.recordTypesWithStages[i].selectedStages.push(selectedValue);
+                                    }
                                 }
-                        }
                         }
                     }
 
