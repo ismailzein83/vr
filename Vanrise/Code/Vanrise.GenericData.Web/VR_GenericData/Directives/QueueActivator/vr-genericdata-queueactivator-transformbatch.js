@@ -140,9 +140,9 @@
                 api.load = function (payload) {
                     var selectedId;
                     var promises=[];
-                    if (payload != undefined && payload.StagesDataSource != undefined) {
+                    if (payload != undefined && payload.ExistingStages != undefined) {
                         $scope.stagesDataSource = [];
-                        stagesDataSource = payload.StagesDataSource;
+                        stagesDataSource = payload.ExistingStages;
                     }
 
                     if(payload != undefined && payload.DataRecordTypeId != undefined)
