@@ -16,9 +16,14 @@ namespace Vanrise.GenericData.Business
 
         public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
         {
-            var ruleDefinition = GetRuleDefinition(input.Query.RuleDefinitionId);
-            IEnumerable<T> allRules = GetAllRules().FindAllRecords(itm => itm.DefinitionId == input.Query.RuleDefinitionId && RuleCriteriaFilter(itm, ruleDefinition, input.Query) && RuleSettingsFilter(itm, ruleDefinition, input.Query));
-            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, null, (rule) => MapToDetails(rule)));
+            var ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(input.Query.RuleDefinitionId);
+
+            Func<T, bool> filterExpression = (rule) => rule.DefinitionId == input.Query.RuleDefinitionId
+                && (input.Query.CriteriaFieldValues == null || RuleCriteriaFilter(rule, ruleDefinition, input.Query.CriteriaFieldValues))
+                && (input.Query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, input.Query.SettingsFilterValue));
+
+            var allRules = GetAllRules();
+            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, filterExpression, (rule) => MapToDetails(rule)));
         }
 
         public GenericRule GetGenericRule(int ruleId)
@@ -72,30 +77,25 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        GenericRuleDefinition GetRuleDefinition(int ruleDefintionId)
+        bool RuleCriteriaFilter(GenericRule rule, GenericRuleDefinition ruleDefinition, Dictionary<string, object> filterValues)
         {
-            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            return ruleDefinitionManager.GetGenericRuleDefinition(ruleDefintionId);
-        }
+            if (rule.Criteria == null) return false;
 
-        bool RuleCriteriaFilter(GenericRule rule, GenericRuleDefinition ruleDefinition, GenericRuleQuery query)
-        {
-            if (query.CriteriaFieldValues != null)
+            foreach (KeyValuePair<string, object> kvp in filterValues)
             {
-                foreach (KeyValuePair<string, object> kvp in query.CriteriaFieldValues)
-                {
-                    DataRecordFieldType criteriaFieldType = ruleDefinition.CriteriaDefinition.Fields.MapRecord(itm => itm.FieldType, itm => itm.FieldName == kvp.Key);
-                    GenericRuleCriteriaFieldValues criteriaFieldValue;
-                    rule.Criteria.FieldsValues.TryGetValue(kvp.Key, out criteriaFieldValue);
-                    if (!criteriaFieldType.IsMatched(criteriaFieldValue.GetValues(), kvp.Value)) return false;
-                }
+                DataRecordFieldType criteriaFieldType = ruleDefinition.CriteriaDefinition.Fields.MapRecord(itm => itm.FieldType, itm => itm.FieldName == kvp.Key);
+                GenericRuleCriteriaFieldValues criteriaFieldValue;
+                rule.Criteria.FieldsValues.TryGetValue(kvp.Key, out criteriaFieldValue);
+
+                if (criteriaFieldValue != null && !criteriaFieldType.IsMatched(criteriaFieldValue.GetValues(), kvp.Value))
+                    return false;
             }
             return true;
         }
 
-        bool RuleSettingsFilter(GenericRule rule, GenericRuleDefinition ruleDefinition, GenericRuleQuery query)
+        bool RuleSettingsFilter(GenericRule rule, GenericRuleDefinition ruleDefinition, object settingsFilterValue)
         {
-            return rule.AreSettingsMatched(ruleDefinition.SettingsDefinition, query.SettingsFilterValue);
+            return rule.AreSettingsMatched(ruleDefinition.SettingsDefinition, settingsFilterValue);
         }
 
         private RuleTree GetRuleTree(int ruleDefinitionId)
@@ -135,7 +135,7 @@ namespace Vanrise.GenericData.Business
 
         protected override GenericRuleDetail MapToDetails(T rule)
         {
-            GenericRuleDefinition ruleDefinition = GetRuleDefinition(rule.DefinitionId);
+            GenericRuleDefinition ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(rule.DefinitionId);
 
             List<string> descriptions = new List<string>();
             bool fieldValuesExist = (rule.Criteria != null && rule.Criteria.FieldsValues != null);

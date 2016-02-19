@@ -171,19 +171,24 @@ app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUI
                     var retVal;
 
                     if (ctrl.selectionmode == "dynamic") {
-
                         if (missingGroupSelectorUIControl)
                         {
-                            retVal = {
-                                $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                                Values: $scope.selector.directiveAPI.getSelectedIds()
+                            var selectedIds = $scope.selector.directiveAPI.getSelectedIds();
+                            if (selectedIds != undefined) {
+                                retVal = {
+                                    $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                                    Values: selectedIds
+                                };
                             }
                         }
                         else
                         {
-                            retVal = {
-                                $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.BusinessEntityValues, Vanrise.GenericData.MainExtensions",
-                                BusinessEntityGroup: $scope.dynamic.directiveAPI.getData()
+                            var directiveData = $scope.dynamic.directiveAPI.getData();
+                            if (directiveData != undefined) {
+                                retVal = {
+                                    $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.BusinessEntityValues, Vanrise.GenericData.MainExtensions",
+                                    BusinessEntityGroup: directiveData
+                                };
                             }
                         }
                     }

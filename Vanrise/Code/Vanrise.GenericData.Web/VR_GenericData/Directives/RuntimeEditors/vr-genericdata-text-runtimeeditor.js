@@ -38,12 +38,6 @@ app.directive('vrGenericdataTextRuntimeeditor', ['UtilsService', function (Utils
             
             $scope.scopeModel.showInMultipleMode = (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple");
 
-            $scope.scopeModel.isValid = function () {
-                if ($scope.scopeModel.values != undefined && $scope.scopeModel.values.length > 0)
-                    return null;
-                return "You should add at least one choice."
-            }
-
             $scope.scopeModel.disableAddButton = true;
             $scope.scopeModel.addValue = function () {
                 $scope.scopeModel.values.push($scope.scopeModel.value);
@@ -54,6 +48,17 @@ app.directive('vrGenericdataTextRuntimeeditor', ['UtilsService', function (Utils
             $scope.scopeModel.onValueChange = function (value) {
                 $scope.scopeModel.disableAddButton = (value == undefined);
             }
+
+            $scope.scopeModel.validateValue = function () {
+                for (var i = 0; i < $scope.scopeModel.values.length; i++) {
+                    if ($scope.scopeModel.value == $scope.scopeModel.values[i]) {
+                        $scope.scopeModel.disableAddButton = true;
+                        return 'Value already exists';
+                    }
+                }
+                $scope.scopeModel.disableAddButton = false;
+                return null;
+            };
 
             defineAPI();
         }
@@ -92,9 +97,11 @@ app.directive('vrGenericdataTextRuntimeeditor', ['UtilsService', function (Utils
 
                 if(ctrl.selectionmode == "dynamic")
                 {
-                    retVal = {
-                        $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                        Values: $scope.scopeModel.values
+                    if ($scope.scopeModel.values.length > 0) {
+                        retVal = {
+                            $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                            Values: $scope.scopeModel.values
+                        };
                     }
                 }
                 else
@@ -127,9 +134,7 @@ app.directive('vrGenericdataTextRuntimeeditor', ['UtilsService', function (Utils
                     + '</vr-row>'
                     + '<vr-row>'
                         + '<vr-columns colnum="{{ctrl.normalColNum * 2}}">'
-                            + '<vr-validator validate="scopeModel.isValid()">'
-                                + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
-                            + '</vr-validator>'
+                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
                         + '</vr-columns>'
                     + '</vr-row>'
                 + '</vr-columns>';
@@ -137,7 +142,7 @@ app.directive('vrGenericdataTextRuntimeeditor', ['UtilsService', function (Utils
 
         function getSingleSelectionModeTemplate() {
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                    + '<vr-textbox type="text" label="{{scopeModel.label}}" value="scopeModel.value" onvaluechanged="scopeModel.onValueChange"></vr-textbox>'
+                    + '<vr-textbox type="text" label="{{scopeModel.label}}" value="scopeModel.value" onvaluechanged="scopeModel.onValueChange" customvalidate="scopeModel.validateValue()"></vr-textbox>'
                 + '</vr-columns>';
         }
     }

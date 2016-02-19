@@ -208,10 +208,18 @@
             
             if (criteriaDefinitionFields != undefined) {
                 genericRuleCriteria.FieldsValues = {};
+                var criteriaValuesExist = false;
 
                 angular.forEach(criteriaDefinitionFields, function (field) {
-                    genericRuleCriteria.FieldsValues[field.FieldName] = field.runtimeEditor.directiveAPI.getData();
+                    var fieldData = field.runtimeEditor.directiveAPI.getData();
+                    if (fieldData != undefined) {
+                        genericRuleCriteria.FieldsValues[field.FieldName] = fieldData;
+                        criteriaValuesExist = true;
+                    }
                 });
+
+                if (!criteriaValuesExist)
+                    genericRuleCriteria = undefined;
             }
 
             var genericRule = {
@@ -224,6 +232,7 @@
                 EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };
 
+            console.log(genericRule);
             return genericRule;
         }
 

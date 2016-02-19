@@ -119,21 +119,27 @@ app.directive('vrGenericdataChoicesRuntimeeditor', ['UtilsService', 'VRUIUtilsSe
                 }
 
                 api.getData = function () {
-
                     var retVal;
+                    var selectedIds = UtilsService.getPropValuesFromArray(ctrl.selectedvalues, 'Value');
 
                     if (ctrl.selectionmode == "dynamic") {
-                        retVal = {
-                            $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                            Values: UtilsService.getPropValuesFromArray(ctrl.selectedvalues, 'Value')
+                        if (ctrl.selectedvalues.length > 0) {
+                            retVal = {
+                                $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                                Values: selectedIds
+                            };
                         }
                     }
                     else if (ctrl.selectionmode == "multiple") {
-                        retVal = UtilsService.getPropValuesFromArray(ctrl.selectedvalues, 'Value');
+                        if (ctrl.selectedvalues.length > 0) {
+                            retVal = selectedIds;
+                        }
                     }
                     else if (ctrl.selectionmode == "single")
                     {
-                        retVal = ctrl.selectedvalues['Value'];
+                        if (ctrl.selectedvalues != undefined) {
+                            retVal = ctrl.selectedvalues['Value'];
+                        }
                     }
 
                     return retVal;

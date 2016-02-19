@@ -44,10 +44,17 @@
                     return directiveAPI.load(payload);
                 };
                 api.getData = function () {
-                    return {
-                        $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter, Vanrise.GenericData.MainExtensions',
-                        BusinessEntityIds: directiveAPI.getData()
-                    };
+                    var returnValue;
+                    var directiveData = directiveAPI.getData();
+
+                    if (directiveData != undefined) {
+                        returnValue = {
+                            $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter, Vanrise.GenericData.MainExtensions',
+                            BusinessEntityIds: directiveData
+                        };
+                    }
+
+                    return returnValue;
                 };
                 return api;
             }

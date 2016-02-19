@@ -36,20 +36,5 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return true;
         }
-
-        IEnumerable<string> ConvertObjectToStringList(object target)
-        {
-            if (target == null) return null;
-
-            var objectList = target as List<object>;
-            var stringList = new List<string>();
-
-            foreach (var objectListItem in objectList)
-            {
-                stringList.Add(objectListItem.ToString());
-            }
-
-            return stringList;
-        }
     }
 }

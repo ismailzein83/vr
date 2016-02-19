@@ -57,11 +57,26 @@
                 var gridQuery = { RuleDefinitionId: ruleDefinitionId };
 
                 gridQuery.CriteriaFieldValues = {};
+                var criteriaFilterValuesExist = false;
+
                 for (var i = 0; i < $scope.filters.length; i++) {
-                    gridQuery.CriteriaFieldValues[$scope.filters[i].criteriaFieldName] = $scope.filters[i].directiveAPI.getData();
+                    var criteriaFilterData = $scope.filters[i].directiveAPI.getData();
+                    if (criteriaFilterData != undefined) {
+                        gridQuery.CriteriaFieldValues[$scope.filters[i].criteriaFieldName] = criteriaFilterData;
+                        criteriaFilterValuesExist = true;
+                    }
                 }
 
-                gridQuery.SettingsFilterValue = (settingsFilterDirectiveAPI != undefined) ? settingsFilterDirectiveAPI.getData() : null;
+                if (!criteriaFilterValuesExist) {
+                    gridQuery.CriteriaFieldValues = undefined;
+                }
+
+                if (settingsFilterDirectiveAPI != undefined) {
+                    var settingsFilterData = settingsFilterDirectiveAPI.getData();
+                    if (settingsFilterData != undefined) {
+                        gridQuery.SettingsFilterValue = settingsFilterData;
+                    }
+                }
 
                 return gridQuery;
             }

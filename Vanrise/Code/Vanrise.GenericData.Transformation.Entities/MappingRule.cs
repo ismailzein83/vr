@@ -24,13 +24,12 @@ namespace Vanrise.GenericData.Transformation.Entities
 
         public override bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue)
         {
-            if (settingsFilterValue != null)
-            {
-                var mappingRuleDefinitionSettings = ruleDefinitionSettings as MappingRuleDefinitionSettings;
-                object settingsValue = (Settings.Value != null) ? new List<object> { Settings.Value } : null;
-                return mappingRuleDefinitionSettings.FieldType.IsMatched(settingsValue, settingsFilterValue);
-            }
-            return true;
+            if (Settings.Value == null) return false;
+
+            var mappingRuleDefinitionSettings = ruleDefinitionSettings as MappingRuleDefinitionSettings;
+            object settingsValue = new List<object> { Settings.Value };
+            
+            return mappingRuleDefinitionSettings.FieldType.IsMatched(settingsValue, settingsFilterValue);
         }
     }
 }
