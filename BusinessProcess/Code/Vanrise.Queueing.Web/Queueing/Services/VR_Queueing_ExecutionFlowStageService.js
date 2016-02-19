@@ -11,22 +11,22 @@
             deleteExecutionFlowStage: deleteExecutionFlowStage
         });
 
-        function addExecutionFlowStage(onExecutionFlowStageAdded, existingFields) {
+        function addExecutionFlowStage(onExecutionFlowStageAdded, existingExecutionFlowStages) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onExecutionFlowStageAdded = onExecutionFlowStageAdded;
             };
             var modalParameters = {
-                ExistingFields: existingFields
+                ExistingExecutionFlowStages: existingExecutionFlowStages
             };
             VRModalService.showModal('/Client/Modules/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowStageEditor.html', modalParameters, modalSettings);
         }
 
-        function editExecutionFlowStage(executionFlowStage, onExecutionFlowStageUpdated, existingFields) {
+        function editExecutionFlowStage(executionFlowStage, onExecutionFlowStageUpdated, existingExecutionFlowStages) {
             var modalParameters = {
                 ExecutionFlowStage: executionFlowStage,
-                ExistingFields: existingFields
+                ExistingExecutionFlowStages: existingExecutionFlowStages
             };
 
             var modalSettings = {};

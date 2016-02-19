@@ -53,7 +53,7 @@
                     };
 
                     var activatorPayload = {};                    
-                    activatorPayload.StagesDataSource = payloadObj.StagesDataSource;
+                    activatorPayload.ExistingStages = payloadObj.ExistingStages;
                     activatorPayload.DataRecordTypeId = payloadObj.DataRecordTypeId;
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, directiveAPI, activatorPayload, setLoader, directiveReadyDeferred);
@@ -91,7 +91,7 @@
                                 directiveReadyDeferred = undefined;
                                 var activatorPayload = {};
                                 activatorPayload.QueueActivator = payload.QueueActivator;
-                                activatorPayload.StagesDataSource = payload.StagesDataSource;
+                                activatorPayload.ExistingStages = payload.ExistingStages;
                                 activatorPayload.DataRecordTypeId = payload.DataRecordTypeId;
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, activatorPayload, loadActivatorPromiseDeferred);
                             });
