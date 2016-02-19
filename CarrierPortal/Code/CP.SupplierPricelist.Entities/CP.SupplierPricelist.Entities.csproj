@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomerOutput.cs" />
     <Compile Include="Customer\Customer.cs" />
     <Compile Include="Customer\CustomerSettings.cs" />
     <Compile Include="Customer\CustomerSupplierMapping.cs" />
