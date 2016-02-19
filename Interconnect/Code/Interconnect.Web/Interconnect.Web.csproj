@@ -404,6 +404,26 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InterConnect.BusinessEntity.Business\InterConnect.BusinessEntity.Business.csproj">
+      <Project>{087c8145-88c7-44f9-b918-82069edd373a}</Project>
+      <Name>InterConnect.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InterConnect.BusinessEntity.Data.SQL\InterConnect.BusinessEntity.Data.SQL.csproj">
+      <Project>{3517370d-f07f-44c9-951e-7e62244c18b6}</Project>
+      <Name>InterConnect.BusinessEntity.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InterConnect.BusinessEntity.Data\InterConnect.BusinessEntity.Data.csproj">
+      <Project>{4672ebdd-d420-4a2d-bd39-d106980da330}</Project>
+      <Name>InterConnect.BusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InterConnect.BusinessEntity.Entities\InterConnect.BusinessEntity.Entities.csproj">
+      <Project>{96a6a321-ce09-4b26-9eb4-9700cb85c9fa}</Project>
+      <Name>InterConnect.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InterConnect.BusinessEntity.Web\InterConnect.BusinessEntity.Web.csproj">
+      <Project>{554e2602-2311-4dd2-92d4-d6c61c0d4841}</Project>
+      <Name>InterConnect.BusinessEntity.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

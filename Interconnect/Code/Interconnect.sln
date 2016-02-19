@@ -21,9 +21,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interconnect.Web", "Interco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{19DC10B2-A983-4300-A4B5-519C7613FB4E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InterConnect.BusinessEntity", "InterConnect.BusinessEntity", "{CA51B366-5E15-42BB-9E5C-95B33AEF9E41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterConnect.BusinessEntity.Entities", "InterConnect.BusinessEntity.Entities\InterConnect.BusinessEntity.Entities.csproj", "{96A6A321-CE09-4B26-9EB4-9700CB85C9FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterConnect.BusinessEntity.Business", "InterConnect.BusinessEntity.Business\InterConnect.BusinessEntity.Business.csproj", "{087C8145-88C7-44F9-B918-82069EDD373A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterConnect.BusinessEntity.Web", "InterConnect.BusinessEntity.Web\InterConnect.BusinessEntity.Web.csproj", "{554E2602-2311-4DD2-92D4-D6C61C0D4841}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterConnect.BusinessEntity.Data", "InterConnect.BusinessEntity.Data\InterConnect.BusinessEntity.Data.csproj", "{4672EBDD-D420-4A2D-BD39-D106980DA330}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterConnect.BusinessEntity.Data.SQL", "InterConnect.BusinessEntity.Data.SQL\InterConnect.BusinessEntity.Data.SQL.csproj", "{3517370D-F07F-44C9-951E-7E62244C18B6}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -47,6 +59,26 @@ Global
 		SccProjectTopLevelParentUniqueName5 = Interconnect.sln
 		SccProjectName5 = Resources
 		SccLocalPath5 = Resources
+		SccProjectUniqueName6 = InterConnect.BusinessEntity.Entities\\InterConnect.BusinessEntity.Entities.csproj
+		SccProjectTopLevelParentUniqueName6 = Interconnect.sln
+		SccProjectName6 = InterConnect.BusinessEntity.Entities
+		SccLocalPath6 = InterConnect.BusinessEntity.Entities
+		SccProjectUniqueName7 = InterConnect.BusinessEntity.Business\\InterConnect.BusinessEntity.Business.csproj
+		SccProjectTopLevelParentUniqueName7 = Interconnect.sln
+		SccProjectName7 = InterConnect.BusinessEntity.Business
+		SccLocalPath7 = InterConnect.BusinessEntity.Business
+		SccProjectUniqueName8 = InterConnect.BusinessEntity.Web\\InterConnect.BusinessEntity.Web.csproj
+		SccProjectTopLevelParentUniqueName8 = Interconnect.sln
+		SccProjectName8 = InterConnect.BusinessEntity.Web
+		SccLocalPath8 = InterConnect.BusinessEntity.Web
+		SccProjectUniqueName9 = InterConnect.BusinessEntity.Data\\InterConnect.BusinessEntity.Data.csproj
+		SccProjectTopLevelParentUniqueName9 = Interconnect.sln
+		SccProjectName9 = InterConnect.BusinessEntity.Data
+		SccLocalPath9 = InterConnect.BusinessEntity.Data
+		SccProjectUniqueName10 = InterConnect.BusinessEntity.Data.SQL\\InterConnect.BusinessEntity.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName10 = Interconnect.sln
+		SccProjectName10 = InterConnect.BusinessEntity.Data.SQL
+		SccLocalPath10 = InterConnect.BusinessEntity.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,15 +107,41 @@ Global
 		{19DC10B2-A983-4300-A4B5-519C7613FB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19DC10B2-A983-4300-A4B5-519C7613FB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19DC10B2-A983-4300-A4B5-519C7613FB4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A6A321-CE09-4B26-9EB4-9700CB85C9FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A6A321-CE09-4B26-9EB4-9700CB85C9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A6A321-CE09-4B26-9EB4-9700CB85C9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A6A321-CE09-4B26-9EB4-9700CB85C9FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{087C8145-88C7-44F9-B918-82069EDD373A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{087C8145-88C7-44F9-B918-82069EDD373A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{087C8145-88C7-44F9-B918-82069EDD373A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{087C8145-88C7-44F9-B918-82069EDD373A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{554E2602-2311-4DD2-92D4-D6C61C0D4841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{554E2602-2311-4DD2-92D4-D6C61C0D4841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{554E2602-2311-4DD2-92D4-D6C61C0D4841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{554E2602-2311-4DD2-92D4-D6C61C0D4841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4672EBDD-D420-4A2D-BD39-D106980DA330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4672EBDD-D420-4A2D-BD39-D106980DA330}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4672EBDD-D420-4A2D-BD39-D106980DA330}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4672EBDD-D420-4A2D-BD39-D106980DA330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3517370D-F07F-44C9-951E-7E62244C18B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3517370D-F07F-44C9-951E-7E62244C18B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3517370D-F07F-44C9-951E-7E62244C18B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3517370D-F07F-44C9-951E-7E62244C18B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{19DC10B2-A983-4300-A4B5-519C7613FB4E} = {4283A792-F477-48F1-9264-7161D2030731}
+		{CA51B366-5E15-42BB-9E5C-95B33AEF9E41} = {1F08E7BF-BB8F-470E-91C7-4D9D82B333F3}
 		{80C3BD4F-47BA-4A62-8CCF-296334A40376} = {088EF0CE-33D4-468D-84F6-902AF97804CA}
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {97629DBC-4D8F-4B28-8078-6A7009590999}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {97629DBC-4D8F-4B28-8078-6A7009590999}
 		{744824C1-A1D2-4BF9-BCF7-4FEAC6A30ACE} = {97629DBC-4D8F-4B28-8078-6A7009590999}
+		{96A6A321-CE09-4B26-9EB4-9700CB85C9FA} = {CA51B366-5E15-42BB-9E5C-95B33AEF9E41}
+		{087C8145-88C7-44F9-B918-82069EDD373A} = {CA51B366-5E15-42BB-9E5C-95B33AEF9E41}
+		{554E2602-2311-4DD2-92D4-D6C61C0D4841} = {CA51B366-5E15-42BB-9E5C-95B33AEF9E41}
+		{4672EBDD-D420-4A2D-BD39-D106980DA330} = {CA51B366-5E15-42BB-9E5C-95B33AEF9E41}
+		{3517370D-F07F-44C9-951E-7E62244C18B6} = {CA51B366-5E15-42BB-9E5C-95B33AEF9E41}
 	EndGlobalSection
 EndGlobal
