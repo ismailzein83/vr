@@ -225,6 +225,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\Templates\TariffRuleStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\vr-genericdata-datatransformation-tariffrulestep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\vr-genericdata-datatransformation-tariffrulestep.js" />
+    <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
+    <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorTransformBatchTemplate.html" />
+    <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-storebatch.js" />
+    <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-transformbatch.js" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\Templates\NumericEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-businessentity-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-numeric-runtimeeditor.js" />
