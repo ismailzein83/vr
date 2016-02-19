@@ -21,7 +21,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Queueing/Directives/QueueActivatorConfig/Templates/QueueActivatorConfigSelectiveTemplate.html"
+            templateUrl: "/Client/Modules/Queueing/Directives/QueueActivator/Templates/QueueActivatorTypeSelectorTemplate.html"
         };
 
         function QueueactivatorconfigSelective($scope, ctrl, $attrs) {
@@ -117,6 +117,6 @@
         }
     }
 
-    app.directive('vrQueueingQueueactivatorconfigSelective', QueueactivatorconfigSelectiveDirective);
+    app.directive('vrQueueingQueueactivatortypeSelector', QueueactivatorconfigSelectiveDirective);
 
 })(app);
