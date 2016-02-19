@@ -15,5 +15,7 @@ namespace Vanrise.GenericData.Entities
         public int? ParentId { get; set; }
 
         public List<DataRecordField> Fields { get; set; }
+
+        public DataRecordTypeSettings Settings { get; set; }
     }
 }

@@ -55,6 +55,7 @@
     <Compile Include="DataStoreConfigManager.cs" />
     <Compile Include="DataStoreManager.cs" />
     <Compile Include="ExpressionBuilderConfigManager.cs" />
+    <Compile Include="GenericEditorManager.cs" />
     <Compile Include="GenericRuleDefinitionManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />
     <Compile Include="GenericRules\GenericRuleTypeConfigManager.cs" />

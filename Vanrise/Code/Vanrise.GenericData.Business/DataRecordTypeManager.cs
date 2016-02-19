@@ -31,6 +31,15 @@ namespace Vanrise.GenericData.Business
             var dataRecordTypes = GetCachedDataRecordTypes();
             return dataRecordTypes.GetRecord(dataRecordTypeId);
         }
+
+        public List<DataRecordField> GetDataRecordTypeFields(int dataRecordTypeId)
+        {
+            var dataRecordType = GetDataRecordType(dataRecordTypeId);
+            if (dataRecordType == null)
+                return null;
+            return dataRecordType.Fields;
+        }
+
         public string GetDataRecordTypeName(int dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();

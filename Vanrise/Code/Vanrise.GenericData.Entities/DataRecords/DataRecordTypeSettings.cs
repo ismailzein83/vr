@@ -8,12 +8,13 @@ namespace Vanrise.GenericData.Entities
 {
     public class DataRecordTypeSettings
     {
-        public int AssemblyId { get; set; }
+        public RecordTypeRuntimeEditor RuntimeEditor { get; set; }
+    }
 
-        public string RuntimeFQTN { get; set; }
+    public abstract class RecordTypeRuntimeEditor
+    {
+        public int ConfigId { get; set; }
 
-        public int BatchAssemblyId { get; set; }
-
-        public string BatchRuntimeFQTN { get; set; }
+        public abstract string GetDirective();
     }
 }

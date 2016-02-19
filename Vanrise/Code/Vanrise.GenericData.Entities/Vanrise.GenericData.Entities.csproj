@@ -83,6 +83,14 @@
     <Compile Include="DataStorage\IGetRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\IUpdateRecordStorageSettingsContext.cs" />
     <Compile Include="ExpressionBuilder\ExpressionBuilderConfig.cs" />
+    <Compile Include="GenericEditor\GenericEditor.cs" />
+    <Compile Include="GenericEditor\GenericEditorField.cs" />
+    <Compile Include="GenericEditor\GenericEditorRow.cs" />
+    <Compile Include="GenericEditor\GenericEditorSection.cs" />
+    <Compile Include="GenericEditor\Runtime\GenericEditorRuntime.cs" />
+    <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeField.cs" />
+    <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeRow.cs" />
+    <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeSection.cs" />
     <Compile Include="GenericRules\GenericRule.cs" />
     <Compile Include="GenericRules\GenericRuleCriteria.cs" />
     <Compile Include="GenericRules\GenericRuleCriteriaFieldValues.cs" />
