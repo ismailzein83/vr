@@ -10,6 +10,13 @@
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var cdrDirectionDirectiveAPI;
+        var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var cdrTypeDirectiveAPI;
+        var cdrTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         defineScope();
         load();
 
@@ -21,6 +28,15 @@
                 operatorProfileReadyPromiseDeferred.resolve();
             }
 
+            $scope.onCDRDirectionReady = function (api) {
+                cdrDirectionDirectiveAPI = api;
+                cdrDirectionReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onCDRTypeReady = function (api) {
+                cdrTypeDirectiveAPI = api;
+                cdrTypeReadyPromiseDeferred.resolve();
+            }
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -36,6 +52,8 @@
             function getFilterObject() {
                 var data = {
                     OperatorIds: operatorProfileDirectiveAPI.getSelectedIds(),
+                    CDRTypes: cdrTypeDirectiveAPI.getSelectedIds(),
+                    CDRDirections: cdrDirectionDirectiveAPI.getSelectedIds(),
                 };
 
                 return data;
@@ -48,7 +66,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadCDRTypes, loadCDRDirections])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -62,13 +80,28 @@
 
             operatorProfileReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = undefined;
-
-                    VRUIUtilsService.callDirectiveLoad(operatorProfileDirectiveAPI, directivePayload, loadOperatorProfilePromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(operatorProfileDirectiveAPI, undefined, loadOperatorProfilePromiseDeferred);
                 });
 
             return loadOperatorProfilePromiseDeferred.promise;
         }
+
+        function loadCDRTypes() {
+            var loadCDRTypesPromiseDeferred = UtilsService.createPromiseDeferred();
+            cdrTypeReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(cdrTypeDirectiveAPI, undefined, loadCDRTypesPromiseDeferred);
+            });
+            return loadCDRTypesPromiseDeferred.promise;
+        }
+
+        function loadCDRDirections() {
+            var loadCDRDirectionsPromiseDeferred = UtilsService.createPromiseDeferred();
+            cdrDirectionReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(cdrDirectionDirectiveAPI, undefined, loadCDRDirectionsPromiseDeferred);
+            });
+            return loadCDRDirectionsPromiseDeferred.promise;
+        }
+
 
         function AddNewOperatorConfiguration() {
             var onOperatorConfigurationAdded = function (operatorConfigurationObj) {

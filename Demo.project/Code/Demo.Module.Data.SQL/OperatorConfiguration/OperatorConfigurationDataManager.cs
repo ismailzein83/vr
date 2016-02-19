@@ -11,7 +11,7 @@ namespace Demo.Module.Data.SQL
 {
     public class OperatorConfigurationDataManager : BaseSQLDataManager, IOperatorConfigurationDataManager
     {
-   
+
         #region ctor/Local Variables
         public OperatorConfigurationDataManager()
             : base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
@@ -25,7 +25,7 @@ namespace Demo.Module.Data.SQL
         {
             object infoId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Insert", out infoId, config.OperatorId,  config.Volume, config.AmountType);
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Insert", out infoId, config.OperatorId, config.Volume, config.AmountType, config.CDRType, config.CDRDirection, config.UnitType, config.Percentage, config.Amount, config.Currency);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)infoId;
@@ -35,7 +35,7 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(OperatorConfiguration config)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Update", config.OperatorConfigurationId, config.OperatorId,  config.Volume, config.AmountType);
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Update", config.OperatorConfigurationId, config.OperatorId, config.Volume, config.AmountType, config.CDRType, config.CDRDirection, config.UnitType, config.Percentage, config.Amount, config.Currency);
             return (recordsEffected > 0);
         }
         public bool AreOperatorConfigurationsUpdated(ref object updateHandle)
@@ -61,11 +61,17 @@ namespace Demo.Module.Data.SQL
                 OperatorId = (int)reader["OperatorID"],
                 Volume = GetReaderValue<int>(reader, "Volume"),
                 AmountType = GetReaderValue<int>(reader, "AmountType"),
+                CDRType = GetReaderValue<Demo.Module.Entities.Type>(reader, "CDRType"),
+                CDRDirection = GetReaderValue<Direction>(reader, "CDRDirection"),
+                UnitType = (int)reader["UnitType"],
+                Percentage = GetReaderValue<double?>(reader, "Percentage"),
+                Amount = GetReaderValue<double?>(reader, "Amount"),
+                Currency = GetReaderValue<int?>(reader, "Currency"),
             };
             return config;
         }
 
         #endregion
-      
+
     }
 }

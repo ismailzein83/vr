@@ -2,8 +2,10 @@
 using Demo.Module.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Demo.Module.Business
@@ -21,6 +23,12 @@ namespace Demo.Module.Business
 
             Func<OperatorConfiguration, bool> filterExpression = (prod) =>
                  (input.Query.OperatorIds == null || input.Query.OperatorIds.Count == 0 || input.Query.OperatorIds.Contains(prod.OperatorId))
+                 &&
+
+                  (input.Query.CDRTypeIds == null || input.Query.CDRTypeIds.Count == 0 || input.Query.CDRTypeIds.Contains((int)prod.CDRType))
+                 &&
+
+                 (input.Query.CDRDirectionIds == null || input.Query.CDRDirectionIds.Count == 0 || input.Query.CDRDirectionIds.Contains((int)prod.CDRDirection))
                  &&
 
                  (input.Query.OperatorConfigurationIds == null || input.Query.OperatorConfigurationIds.Contains(prod.OperatorConfigurationId));
@@ -106,16 +114,30 @@ namespace Demo.Module.Business
 
         private OperatorConfigurationDetail OperatorConfigurationDetailMapper(OperatorConfiguration config)
         {
-            OperatorConfigurationDetail infoDetail = new OperatorConfigurationDetail();
-            infoDetail.Entity = config;
-            
+            OperatorConfigurationDetail configDetail = new OperatorConfigurationDetail();
+            configDetail.Entity = config;
+
             OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
-            
-            infoDetail.OperatorName = operatorProfileManager.GetOperatorProfile(config.OperatorId).Name;
-            infoDetail.AmountTypeName = serviceTypeManager.GetServiceType(config.AmountType).Description;
-            return infoDetail;
+            UnitTypeManager unitTypeManager = new UnitTypeManager();
+            CurrencyManager currencyTypeManager = new CurrencyManager();
+
+            var directionAttribute = Utilities.GetEnumAttribute<Direction, DescriptionAttribute>(config.CDRDirection);
+            if (directionAttribute != null)
+                configDetail.CDRDirectionName = directionAttribute.Description;
+
+            var cdrType = Utilities.GetEnumAttribute<Demo.Module.Entities.Type, DescriptionAttribute>(config.CDRType);
+            if (cdrType != null)
+                configDetail.CDRTypeName = cdrType.Description;
+
+
+            configDetail.UnitTypeName = unitTypeManager.GetUnitType(config.UnitType).Description;
+            if (config.Currency.HasValue)
+                configDetail.CurrencyName = currencyTypeManager.GetCurrency(config.Currency.Value).Name;
+            configDetail.OperatorName = operatorProfileManager.GetOperatorProfile(config.OperatorId).Name;
+            configDetail.AmountTypeName = serviceTypeManager.GetServiceType(config.AmountType).Description;
+            return configDetail;
         }
         #endregion
     }

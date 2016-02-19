@@ -12,6 +12,19 @@ namespace Demo.Module.Entities
         public int Volume { get; set; }
 
         public int AmountType { get; set; }
+
+        public Type CDRType { get; set; }
+
+        public Direction CDRDirection { get; set; } 
+
+        public int UnitType { get; set; }
+
+        public double? Percentage { get; set; }
+
+        public double? Amount { get; set; }
+
+        public int? Currency { get; set; }
+
     }
    
 }

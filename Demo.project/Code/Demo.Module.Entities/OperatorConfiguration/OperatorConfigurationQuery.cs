@@ -7,6 +7,8 @@ namespace Demo.Module.Entities
     {
        public List<int> OperatorConfigurationIds { get; set; }
        public List<int> OperatorIds { get; set; }
+       public List<int> CDRTypeIds { get; set; }
+       public List<int> CDRDirectionIds { get; set; }
 
     }
 }

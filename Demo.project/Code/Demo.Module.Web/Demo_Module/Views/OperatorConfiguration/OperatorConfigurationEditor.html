@@ -26,6 +26,28 @@
                 </vr-columns>
 
 
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModal.amount" label="Amount" type="number" decimalprecision="0"></vr-textbox>
+                </vr-columns>
+
+
+                <vr-columns width="normal">
+                    <vr-common-currency-selector on-ready="onCurrencyDirectiveReady" selectedvalues="selectedCurrency"></vr-common-currency-selector>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-numeric label="Percentage" value="scopeModal.percentage"
+                                minvalue="0"
+                                maxvalue="100"
+                                stepvalue="1"
+                                unit="%">
+                    </vr-numeric>
+                </vr-columns>
+
+
+
+
+
             </vr-row>
         </vr-form>
     </vr-modalbody>
