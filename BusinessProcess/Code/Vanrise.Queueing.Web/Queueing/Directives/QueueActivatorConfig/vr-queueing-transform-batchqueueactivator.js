@@ -213,7 +213,7 @@
                         $type: 'Vanrise.GenericData.QueueActivators.TransformBatchQueueActivator, Vanrise.GenericData.QueueActivators',
                         DataTransformationDefinitionId: selectorAPI.getSelectedIds(),
                         SourceRecordName: $scope.selectedDataRecordStorage.RecordName,
-                        NextStagesRecords: NextStagesRecords
+                        NextStagesRecords: NextStagesRecords.length>0 ? NextStagesRecords:undefined
                     };
                 }
 
