@@ -15,6 +15,15 @@
         var serviceTypeDirectiveAPI;
         var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var unitTypeDirectiveAPI;
+        var unitTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var cdrDirectionDirectiveAPI;
+        var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var cdrTypeDirectiveAPI;
+        var cdrTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -24,7 +33,7 @@
             if (parameters != undefined && parameters != null) {
                 operatorConfigurationId = parameters.OperatorConfigurationId;
             }
-           
+
             isEditMode = (operatorConfigurationId != undefined);
 
         }
@@ -46,6 +55,20 @@
                 serviceTypeReadyPromiseDeferred.resolve();
             }
 
+            $scope.onUnitTypeReady = function (api) {
+                unitTypeDirectiveAPI = api;
+                unitTypeReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onCDRDirectionReady = function (api) {
+                cdrDirectionDirectiveAPI = api;
+                cdrDirectionReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onCDRTypeReady = function (api) {
+                cdrTypeDirectiveAPI = api;
+                cdrTypeReadyPromiseDeferred.resolve();
+            }
 
             $scope.SaveOperatorConfiguration = function () {
                 if (isEditMode) {
@@ -86,7 +109,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadServiceTypes])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadServiceTypes, loadUnitTypes, loadCDRTypes, loadCDRDirections])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -105,6 +128,42 @@
             });
             return loadServiceTypesPromiseDeferred.promise;
         }
+
+
+        function loadUnitTypes() {
+            var loadUnitTypesPromiseDeferred = UtilsService.createPromiseDeferred();
+            unitTypeReadyPromiseDeferred.promise.then(function () {
+                var directivePayload = {
+                    selectedIds: (operatorConfigurationEntity != undefined ? (operatorConfigurationEntity.AmountType != undefined ? [operatorConfigurationEntity.AmountType] : undefined) : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
+                }
+                VRUIUtilsService.callDirectiveLoad(unitTypeDirectiveAPI, directivePayload, loadUnitTypesPromiseDeferred);
+            });
+            return loadUnitTypesPromiseDeferred.promise;
+        }
+
+
+        function loadCDRTypes() {
+            var loadCDRTypesPromiseDeferred = UtilsService.createPromiseDeferred();
+            cdrTypeReadyPromiseDeferred.promise.then(function () {
+                var directivePayload = {
+                    selectedIds: (operatorConfigurationEntity != undefined ? (operatorConfigurationEntity.AmountType != undefined ? [operatorConfigurationEntity.AmountType] : undefined) : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
+                }
+                VRUIUtilsService.callDirectiveLoad(cdrTypeDirectiveAPI, directivePayload, loadCDRTypesPromiseDeferred);
+            });
+            return loadCDRTypesPromiseDeferred.promise;
+        }
+
+        function loadCDRDirections() {
+            var loadCDRDirectionsPromiseDeferred = UtilsService.createPromiseDeferred();
+            cdrDirectionReadyPromiseDeferred.promise.then(function () {
+                var directivePayload = {
+                    selectedIds: (operatorConfigurationEntity != undefined ? (operatorConfigurationEntity.AmountType != undefined ? [operatorConfigurationEntity.AmountType] : undefined) : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
+                }
+                VRUIUtilsService.callDirectiveLoad(cdrDirectionDirectiveAPI, directivePayload, loadCDRDirectionsPromiseDeferred);
+            });
+            return loadCDRDirectionsPromiseDeferred.promise;
+        }
+
 
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorConfigurationEntity ? '' : null, 'Operator Declared Information') : UtilsService.buildTitleForAddEditor('Operator Declared Information');
@@ -138,7 +197,10 @@
                 OperatorConfigurationId: (operatorConfigurationId != null) ? operatorConfigurationId : 0,
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModal.volume,
-                AmountType: serviceTypeDirectiveAPI.getSelectedIds()
+                AmountType: serviceTypeDirectiveAPI.getSelectedIds(),
+                UnitType: unitTypeDirectiveAPI.getSelectedIds(),
+                CDRDirection: cdrDirectionDirectiveAPI.getSelectedIds(),
+                CDRType: cdrTypeDirectiveAPI.getSelectedIds()
             };
 
             return obj;

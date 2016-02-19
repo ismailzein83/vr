@@ -155,12 +155,14 @@
     <Content Include="Demo_Module\Directives\RawCDR\cdrdirection-selector.js" />
     <Content Include="Demo_Module\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
     <Content Include="Demo_Module\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
+    <Content Include="Demo_Module\Directives\UnitType\unittype-selector.js" />
     <Content Include="Demo_Module\Services\APIServices\CDRLogAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\GenericAnalyticAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorConfigurationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\PopAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\UnitTypeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ServiceTypeAPIService.js" />
     <Content Include="Demo_Module\Services\GenericAnalyticService.js" />
     <Content Include="Demo_Module\Services\PopService.js" />
@@ -184,6 +186,7 @@
     <Compile Include="Controllers\SaleCodeController.cs" />
     <Compile Include="Controllers\SaleZoneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controllers\UnitTypeController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_Module\Constant\ContactTypeEnum.js" />

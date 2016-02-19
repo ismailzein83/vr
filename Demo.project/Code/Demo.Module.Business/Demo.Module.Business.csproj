@@ -91,6 +91,7 @@
     <Compile Include="CDRLog\CDRLogManager.cs" />
     <Compile Include="RawCDRLog\ServiceTypeManager.cs" />
     <Compile Include="RawCDRLog\RawCDRManager.cs" />
+    <Compile Include="UnitTypeManager.cs" />
     <Compile Include="Zone\SaleZoneGroupContext.cs" />
     <Compile Include="Zone\SaleZoneManager.cs" />
   </ItemGroup>
