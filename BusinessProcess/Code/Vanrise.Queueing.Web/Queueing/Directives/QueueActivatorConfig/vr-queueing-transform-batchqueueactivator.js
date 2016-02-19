@@ -200,12 +200,14 @@
                     var nextStages;
                     for (var i = 0; i < $scope.recordTypesWithStages.length; i++) {
                         nextStages = [];
-                        for (var j = 0; j < $scope.recordTypesWithStages[i].selectedStages.length; j++) {
+                        if ($scope.recordTypesWithStages[i].selectedStages.length > 0) {
+                            for (var j = 0; j < $scope.recordTypesWithStages[i].selectedStages.length; j++) {
 
-                            nextStages.push($scope.recordTypesWithStages[i].selectedStages[j].stageName);
+                                nextStages.push($scope.recordTypesWithStages[i].selectedStages[j].stageName);
+                            }
+
+                            NextStagesRecords.push({ RecordName: $scope.recordTypesWithStages[i].RecordName, NextStages: nextStages });
                         }
-
-                        NextStagesRecords.push({ RecordName: $scope.recordTypesWithStages[i].RecordName, NextStages: nextStages });
                     }
                     return {
                         $type: 'Vanrise.GenericData.QueueActivators.TransformBatchQueueActivator, Vanrise.GenericData.QueueActivators',
