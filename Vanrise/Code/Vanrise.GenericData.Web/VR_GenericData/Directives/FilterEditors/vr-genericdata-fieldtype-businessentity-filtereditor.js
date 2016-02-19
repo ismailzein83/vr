@@ -45,7 +45,7 @@
                 };
                 api.getData = function () {
                     return {
-                        $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.BusinessEntityFieldTypeFilter, Vanrise.GenericData.MainExtensions',
+                        $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.Filters.BusinessEntityFieldTypeFilter, Vanrise.GenericData.MainExtensions',
                         BusinessEntityIds: directiveAPI.getData()
                     };
                 };

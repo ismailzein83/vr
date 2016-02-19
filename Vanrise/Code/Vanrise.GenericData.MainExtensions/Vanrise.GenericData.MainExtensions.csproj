@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataRecordFields\BusinessEntityFieldTypeFilter.cs" />
-    <Compile Include="DataRecordFields\ChoicesFieldTypeFilter.cs" />
+    <Compile Include="DataRecordFields\Filters\BusinessEntityFieldTypeFilter.cs" />
+    <Compile Include="DataRecordFields\Filters\ChoicesFieldTypeFilter.cs" />
     <Compile Include="DataRecordFields\FieldBusinessEntityType.cs" />
     <Compile Include="DataRecordFields\FieldNumberType.cs" />
     <Compile Include="DataRecordTypeReferences\LocalDataRecordType.cs" />

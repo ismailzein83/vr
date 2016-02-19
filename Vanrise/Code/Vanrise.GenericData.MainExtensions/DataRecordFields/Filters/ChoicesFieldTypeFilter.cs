@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.GenericData.MainExtensions.DataRecordFields
+namespace Vanrise.GenericData.MainExtensions.DataRecordFields.Filters
 {
     public class ChoicesFieldTypeFilter
     {

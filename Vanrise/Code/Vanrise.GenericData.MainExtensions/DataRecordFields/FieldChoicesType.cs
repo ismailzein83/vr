@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
