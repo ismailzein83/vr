@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4283A792-F477-48F1-9264-7161D2030731}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{1F08E7BF-BB8F-470E-91C7-4D9D82B333F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{088EF0CE-33D4-468D-84F6-902AF97804CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{97629DBC-4D8F-4B28-8078-6A7009590999}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Interconnect", "Interconnect\Interconnect.sqlproj", "{80C3BD4F-47BA-4A62-8CCF-296334A40376}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web.Base", "..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj", "{C527C7B2-A481-4D1D-B25A-4A540E812153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web", "..\..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj", "{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interconnect.Web", "Interconnect.Web\Interconnect.Web.csproj", "{744824C1-A1D2-4BF9-BCF7-4FEAC6A30ACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{19DC10B2-A983-4300-A4B5-519C7613FB4E}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Interconnect\\Interconnect.sqlproj
+		SccProjectTopLevelParentUniqueName1 = Interconnect.sln
+		SccProjectName1 = Interconnect
+		SccLocalPath1 = Interconnect
+		SccProjectUniqueName2 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
+		SccProjectTopLevelParentUniqueName2 = Interconnect.sln
+		SccProjectName2 = ../../Vanrise/Code/Vanrise.Web.Base
+		SccLocalPath2 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base
+		SccProjectUniqueName3 = ..\\..\\Vanrise\\Code\\Vanrise.Web\\Vanrise.Web.csproj
+		SccProjectTopLevelParentUniqueName3 = Interconnect.sln
+		SccProjectName3 = ../../Vanrise/Code/Vanrise.Web
+		SccLocalPath3 = ..\\..\\Vanrise\\Code\\Vanrise.Web
+		SccProjectUniqueName4 = Interconnect.Web\\Interconnect.Web.csproj
+		SccProjectTopLevelParentUniqueName4 = Interconnect.sln
+		SccProjectName4 = Interconnect.Web
+		SccLocalPath4 = Interconnect.Web
+		SccProjectUniqueName5 = Resources\\Resources.csproj
+		SccProjectTopLevelParentUniqueName5 = Interconnect.sln
+		SccProjectName5 = Resources
+		SccLocalPath5 = Resources
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80C3BD4F-47BA-4A62-8CCF-296334A40376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C3BD4F-47BA-4A62-8CCF-296334A40376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C3BD4F-47BA-4A62-8CCF-296334A40376}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{80C3BD4F-47BA-4A62-8CCF-296334A40376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C3BD4F-47BA-4A62-8CCF-296334A40376}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80C3BD4F-47BA-4A62-8CCF-296334A40376}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{744824C1-A1D2-4BF9-BCF7-4FEAC6A30ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{744824C1-A1D2-4BF9-BCF7-4FEAC6A30ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{744824C1-A1D2-4BF9-BCF7-4FEAC6A30ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{744824C1-A1D2-4BF9-BCF7-4FEAC6A30ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19DC10B2-A983-4300-A4B5-519C7613FB4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19DC10B2-A983-4300-A4B5-519C7613FB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19DC10B2-A983-4300-A4B5-519C7613FB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19DC10B2-A983-4300-A4B5-519C7613FB4E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{19DC10B2-A983-4300-A4B5-519C7613FB4E} = {4283A792-F477-48F1-9264-7161D2030731}
+		{80C3BD4F-47BA-4A62-8CCF-296334A40376} = {088EF0CE-33D4-468D-84F6-902AF97804CA}
+		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {97629DBC-4D8F-4B28-8078-6A7009590999}
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {97629DBC-4D8F-4B28-8078-6A7009590999}
+		{744824C1-A1D2-4BF9-BCF7-4FEAC6A30ACE} = {97629DBC-4D8F-4B28-8078-6A7009590999}
+	EndGlobalSection
+EndGlobal
