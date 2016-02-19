@@ -22,7 +22,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (Choices != null && Choices.Count > 0)
             {
-                int selectedChoiceValue = (int)value;
+                int selectedChoiceValue = Convert.ToInt32(value);
                 Choice selectedChoice = Choices.Find(choice => choice.Value == selectedChoiceValue);
                 return (selectedChoice != null) ? selectedChoice.Text : null;
             }

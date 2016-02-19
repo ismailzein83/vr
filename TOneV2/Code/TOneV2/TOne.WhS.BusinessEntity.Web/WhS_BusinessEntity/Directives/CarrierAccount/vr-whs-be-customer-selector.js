@@ -6,7 +6,8 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: '@'
+                ismultipleselection: '@',
+                isrequired: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -47,7 +48,7 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
 
 
             return '<vr-whs-be-carrieraccount-selector getcustomers on-ready="onCarrierAccountDirectiveReady" ' + 
-                multipleselection + ' ></vr-whs-be-carrieraccount-selector>'
+                multipleselection + ' isrequired="ctrl.isrequired"></vr-whs-be-carrieraccount-selector>'
         }
 
         function customerSelector(ctrl, $scope) {
