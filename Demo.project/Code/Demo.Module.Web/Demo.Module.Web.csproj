@@ -129,6 +129,18 @@
   <ItemGroup>
     <Content Include="Demo_Module\Constant\CDRTypeEnum.js" />
     <Content Include="Demo_Module\Constant\CDRDirectionEnum.js" />
+    <Content Include="Demo_Module\Constant\GenericAnalyticDimensionEnum.js" />
+    <Content Include="Demo_Module\Constant\GenericAnalyticMeasureEnum.js" />
+    <Content Include="Demo_Module\Directives\Generic\GenericAnalyticGridSettingsController.js" />
+    <Content Include="Demo_Module\Directives\Generic\Templates\GenericAnalyticGridSettings.html" />
+    <Content Include="Demo_Module\Directives\Generic\Templates\GenericChartTemplate.html" />
+    <Content Include="Demo_Module\Directives\Generic\Templates\GenericFilterTemplate.html" />
+    <Content Include="Demo_Module\Directives\Generic\Templates\GenericGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Generic\Templates\GenericSettingsTemplate.html" />
+    <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericchart.js" />
+    <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericfilter.js" />
+    <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericgrid.js" />
+    <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericsettings.js" />
     <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatoraccount-selector.js" />
     <Content Include="Demo_Module\Directives\OperatorConfiguration\Templates\OperatorConfigurationGridTemplate.html" />
     <Content Include="Demo_Module\Directives\OperatorConfiguration\vr-demo-operatorconfiguration-grid.js" />
@@ -144,11 +156,13 @@
     <Content Include="Demo_Module\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
     <Content Include="Demo_Module\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
     <Content Include="Demo_Module\Services\APIServices\CDRLogAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\GenericAnalyticAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorConfigurationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\PopAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ServiceTypeAPIService.js" />
+    <Content Include="Demo_Module\Services\GenericAnalyticService.js" />
     <Content Include="Demo_Module\Services\PopService.js" />
     <Content Include="Demo_Module\Services\OperatorConfigurationService.js" />
     <Content Include="Demo_Module\Services\OperatorDeclaredInformationService.js" />
@@ -157,6 +171,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
+    <Compile Include="Controllers\GenericAnalyticController.cs" />
     <Compile Include="Controllers\PopController.cs" />
     <Compile Include="Controllers\OperatorConfigurationController.cs" />
     <Compile Include="Controllers\OperatorDeclaredInformationController.cs" />
@@ -236,6 +251,8 @@
     <Content Include="Demo_Module\Views\Pop\PopManagementController.js" />
     <Content Include="Demo_Module\Views\RawCDR\RawCDRLog.html" />
     <Content Include="Demo_Module\Views\RawCDR\RawCDRLogController.js" />
+    <Content Include="Demo_Module\Views\TrafficMonitor\TrafficMonitor.html" />
+    <Content Include="Demo_Module\Views\TrafficMonitor\TrafficMonitorController.js" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagement.html" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagementController.js" />
   </ItemGroup>

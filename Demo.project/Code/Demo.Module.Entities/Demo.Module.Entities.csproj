@@ -57,6 +57,12 @@
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="Enums\Enums.cs" />
+    <Compile Include="GenericAnalytic\AnalyticDimension.cs" />
+    <Compile Include="GenericAnalytic\AnalyticDimensionValue.cs" />
+    <Compile Include="GenericAnalytic\AnalyticMeasureField.cs" />
+    <Compile Include="GenericAnalytic\AnalyticRecord.cs" />
+    <Compile Include="GenericAnalytic\AnalyticSummaryBigResult.cs" />
+    <Compile Include="GenericAnalytic\GenericAnalyticQuery.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlan.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanDetail.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanQuery.cs" />
