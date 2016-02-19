@@ -99,8 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
-            if (context.FieldValueIds == null) return false;
-            if (context.FilterIds == null) return true;
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
 
             var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
             var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
