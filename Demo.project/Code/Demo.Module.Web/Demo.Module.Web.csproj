@@ -136,6 +136,8 @@
     <Content Include="Demo_Module\Directives\OperatorDeclaredInformation\vr-demo-operatordeclaredinformation-grid.js" />
     <Content Include="Demo_Module\Directives\CDR\Templates\CDRLogGridTemplate.html" />
     <Content Include="Demo_Module\Directives\CDR\vr-whs-analytics-cdrlog-grid.js" />
+    <Content Include="Demo_Module\Directives\Pop\Templates\PopGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Pop\vr-demo-pop-grid.js" />
     <Content Include="Demo_Module\Directives\RawCDR\cdrtype-selector.js" />
     <Content Include="Demo_Module\Directives\RawCDR\servicetype-selector.js" />
     <Content Include="Demo_Module\Directives\RawCDR\cdrdirection-selector.js" />
@@ -144,8 +146,10 @@
     <Content Include="Demo_Module\Services\APIServices\CDRLogAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorConfigurationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\PopAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ServiceTypeAPIService.js" />
+    <Content Include="Demo_Module\Services\PopService.js" />
     <Content Include="Demo_Module\Services\OperatorConfigurationService.js" />
     <Content Include="Demo_Module\Services\OperatorDeclaredInformationService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
@@ -153,6 +157,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
+    <Compile Include="Controllers\PopController.cs" />
     <Compile Include="Controllers\OperatorConfigurationController.cs" />
     <Compile Include="Controllers\OperatorDeclaredInformationController.cs" />
     <Compile Include="Controllers\OperatorAccountController.cs" />
@@ -225,6 +230,10 @@
     <Content Include="Demo_Module\Views\OperatorDeclaredInformation\OperatorDeclaredInformationManagementController.js" />
     <Content Include="Demo_Module\Views\CDR\CDRLog.html" />
     <Content Include="Demo_Module\Views\CDR\CDRLogController.js" />
+    <Content Include="Demo_Module\Views\Pop\PopEditor.html" />
+    <Content Include="Demo_Module\Views\Pop\PopEditorController.js" />
+    <Content Include="Demo_Module\Views\Pop\PopManagement.html" />
+    <Content Include="Demo_Module\Views\Pop\PopManagementController.js" />
     <Content Include="Demo_Module\Views\RawCDR\RawCDRLog.html" />
     <Content Include="Demo_Module\Views\RawCDR\RawCDRLogController.js" />
     <Content Include="Demo_Module\Views\Zone\ZoneManagement.html" />

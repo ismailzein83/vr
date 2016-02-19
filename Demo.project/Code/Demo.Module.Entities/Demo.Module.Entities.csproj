@@ -78,6 +78,8 @@
     <Compile Include="Operator\OperatorProfile\OperatorProfileDetail.cs" />
     <Compile Include="Operator\OperatorProfile\OperatorProfileInfo.cs" />
     <Compile Include="Operator\OperatorProfile\OperatorProfileQuery.cs" />
+    <Compile Include="Pop\Pop.cs" />
+    <Compile Include="Pop\PopQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CDR\CDRLog.cs" />
     <Compile Include="CDR\CDRLogDetail.cs" />

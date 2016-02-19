@@ -84,6 +84,7 @@
     <Compile Include="OperatorDeclaredInformation\OperatorDeclaredInformationManager.cs" />
     <Compile Include="Operator\OperatorAccountManager.cs" />
     <Compile Include="Operator\OperatorProfileManager.cs" />
+    <Compile Include="Pop\PopManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\SaleCodeManager.cs" />
     <Compile Include="CDRLog\CDRLogManager.cs" />

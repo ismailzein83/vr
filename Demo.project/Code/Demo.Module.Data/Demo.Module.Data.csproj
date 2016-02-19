@@ -59,6 +59,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="Code\ISaleCodeDataManager.cs" />
     <Compile Include="CDRLog\ICDRLogDataManager.cs" />
+    <Compile Include="Pop\IPopDataManager.cs" />
     <Compile Include="RawCDRLog\IRawCDRDataManager.cs" />
     <Compile Include="RawCDRLog\IServiceTypeDataManager.cs" />
     <Compile Include="Zone\ISaleZoneDataManager.cs" />
