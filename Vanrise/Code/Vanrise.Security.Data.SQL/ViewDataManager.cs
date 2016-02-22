@@ -95,6 +95,7 @@ namespace Vanrise.Security.Data.SQL
                 Url = reader["Url"] as string,
                 ModuleId = (int)reader["Module"],
                 RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
+                ActionNames = GetReaderValue<string>(reader, "ActionNames"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
                 Settings = reader["Settings"] != DBNull.Value ? Common.Serializer.Deserialize(reader["Settings"] as string) as ViewSettings : null,

@@ -19,11 +19,17 @@ namespace Vanrise.Security.Entities
         public string Url { get; set; }
 
         public int ModuleId { get; set; }
+
         public string RequiredPermissions { get; set; }
 
+        public string ActionNames { get; set; }
+
         public AudienceWrapper Audience { get; set; }
+
         public ViewType Type { get; set; }
+
         public ViewContent ViewContent { get; set; }
+
         public int Rank { get; set; }
 
         public ViewSettings Settings { get; set; }
