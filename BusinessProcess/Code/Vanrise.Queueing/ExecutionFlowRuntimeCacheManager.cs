@@ -8,9 +8,12 @@ namespace Vanrise.Queueing
 {
     internal class ExecutionFlowRuntimeCacheManager : Vanrise.Caching.BaseCacheManager
     {
-        QueueExecutionFlowDefinitionManager.CacheManager _execFlowDefinitionCacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueExecutionFlowDefinitionManager.CacheManager>();
-        QueueExecutionFlowManager.CacheManager _execFlowCacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueExecutionFlowManager.CacheManager>();
-        QueueInstanceManager.CacheManager _queueCacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>();
+        QueueExecutionFlowDefinitionManager.CacheManager _execFlowDefinitionCacheManager = 
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueExecutionFlowDefinitionManager.CacheManager>(Guid.NewGuid());
+        QueueExecutionFlowManager.CacheManager _execFlowCacheManager = 
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueExecutionFlowManager.CacheManager>(Guid.NewGuid());
+        QueueInstanceManager.CacheManager _queueCacheManager = 
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>(Guid.NewGuid());
 
         protected override bool ShouldSetCacheExpired()
         {
