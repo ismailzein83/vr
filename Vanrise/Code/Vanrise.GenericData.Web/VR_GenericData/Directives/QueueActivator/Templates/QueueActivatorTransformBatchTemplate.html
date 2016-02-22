@@ -11,7 +11,7 @@
     <vr-select datasource="transformationRecordTypes"
                datavaluefield="RecordName"
                datatextfield="RecordName"
-               selectedvalues="selectedDataRecordStorage"
+               selectedvalues="selectedTransformationRecordType"
                isrequired="true" label="Data Transformation Record">
 
     </vr-select>
@@ -20,12 +20,12 @@
     <vr-columns width="fullrow" >
         <vr-row>
             <vr-columns width="fullrow" ng-show="showTransformationRecordTypesSelector">
-                <vr-datagrid datasource="recordTypesWithStages"
+                <vr-datagrid datasource="nextStages"
                              pagingtype="'PagingOnScroll'"
                              on-ready="ongridReady">
                     <vr-datagridcolumn headertext="'Record Name'" field="'RecordName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Stages'">
-                        <vr-select datasource="dataItem.stagesDataSource"
+                        <vr-select datasource="dataItem.existingStages"
                                    datavaluefield="stageName"
                                    datatextfield="stageName"
                                    selectedvalues="dataItem.selectedStages"
