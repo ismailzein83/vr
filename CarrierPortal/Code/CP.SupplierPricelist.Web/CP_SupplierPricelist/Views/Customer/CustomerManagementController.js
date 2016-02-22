@@ -2,7 +2,7 @@
     function (appControllers) {
         "use strict";
 
-        function customerManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, customerManagmentApiService) {
+        function customerManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, customerManagmentApiService, customerService) {
             var gridAPI;
 
             function defineScope() {
@@ -11,13 +11,17 @@
                     gridAPI = api;
                     api.loadGrid();
                 }
+
+                $scope.AddCustomer = function () {
+                    customerService.addCustomer();
+                }
             }
 
             defineScope();
 
         }
 
-        customerManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'CP_SupplierPricelist_CustomerManagmentAPIService'];
+        customerManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'CP_SupplierPricelist_CustomerManagmentAPIService', 'CP_SupplierPricelist_CustomerService'];
         appControllers.controller('CP_SupplierPriceList_CustomerManagementController', customerManagementController);
     }
 )(appControllers);

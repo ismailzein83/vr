@@ -1,0 +1,16 @@
+﻿<div vr-modalcontent ng-controller="CP_SupplierPricelist_CustomerEditorController" vr-loader="scopeModel.isLoading" width="'55%'">
+    <vr-modalbody>
+        <vr-form name="formCustomerEditor">
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCustomerEditor" data-onclick="scopeModel.SaveSellingRule"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

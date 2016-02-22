@@ -1,9 +1,8 @@
-﻿<vr-datagrid datasource="Customers"
+﻿<vr-datagrid datasource="customers"
              on-ready="onGridReady"
              pagingtype="'PagingOnScroll'"
-             menuactions="[]"
+             dataretrievalfunction="dataRetrievalFunction"
+             menuactions="gridMenuActions"
              idfield="Id" loadmoredata="loadMoreData">
-
-    <vr-datagridcolumn headertext="'Customer'" field="'CustomerId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customer Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
 </vr-datagrid>

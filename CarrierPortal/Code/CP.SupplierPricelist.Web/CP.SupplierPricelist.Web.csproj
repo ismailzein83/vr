@@ -150,8 +150,8 @@
     <Content Include="CP_SupplierPricelist\Constant\PriceListResultEnum.js" />
     <Content Include="CP_SupplierPricelist\Constant\PriceListStatusEnum.js" />
     <Content Include="CP_SupplierPricelist\Constant\PriceListTypeEnum.js" />
-    <Content Include="CP_SupplierPricelist\Directives\Customer\Templates\CustomerManagmentGridTemplate.html" />
-    <Content Include="CP_SupplierPricelist\Directives\Customer\vr-cp-customermanagment-grid.js" />
+    <Content Include="CP_SupplierPricelist\Directives\Customer\Templates\CustomerGridTemplate.html" />
+    <Content Include="CP_SupplierPricelist\Directives\Customer\vr-cp-customer-grid.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\cp-supplierpricelist-resultsupplierpricelist.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\cp-supplierpricelist-uploadsupplierpricelist.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Templates\SupplierpricelistConnectorTemplate.html" />
@@ -165,8 +165,11 @@
     <Content Include="CP_SupplierPricelist\Services\APIServices\SupplierManagmentAPIService.js" />
     <Content Include="CP_SupplierPricelist\Services\APIServices\CustomerManagmentAPIService.js" />
     <Content Include="CP_SupplierPricelist\Services\APIServices\SupplierPriceListAPIService.js" />
+    <Content Include="CP_SupplierPricelist\Services\CustomerService.js" />
     <Content Include="CP_SupplierPricelist\Services\SupplierPriceListService.js" />
+    <Content Include="CP_SupplierPricelist\Views\Customer\CustomerEditor.html" />
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerManagement.html" />
+    <Content Include="CP_SupplierPricelist\Views\Customer\CustomerEditorController.js" />
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerManagementController.js" />
     <Content Include="CP_SupplierPricelist\Views\SupplierPriceList\SupplierPriceListManagement.html" />
     <Content Include="CP_SupplierPricelist\Views\SupplierPriceList\SupplierPriceListManagementController.js" />
