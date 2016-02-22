@@ -11,19 +11,19 @@ namespace Demo.Module.Entities
         Operator = 0,
         Zone = 1,
         Country = 2,
-        GateWayIn = 3,
-        GateWayOut = 4,
-        PortIn = 7,
-        PortOut = 5,
-        Date = 6,
-        Hour = 7,
-        Currency = 8,
-        Day =9,
-        Week = 10,
-        Month = 11,
-        ServiceType = 12 ,
-        Direction = 13 ,
-        CDRType = 14
+        //GateWayIn = 3,
+        //GateWayOut = 4,
+        PortIn = 3,
+        PortOut = 4,
+        Date = 5,
+        Hour = 6,
+        Currency = 7,
+        Day =8,
+        Week = 9,
+        Month = 10,
+        ServiceType = 11 ,
+        Direction = 12 ,
+        CDRType = 13
     }
 
     public enum AnalyticSummary

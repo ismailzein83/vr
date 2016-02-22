@@ -78,19 +78,6 @@ namespace Demo.Module.Data.SQL
              });
             #endregion
 
-//            #region SupplierPart
-//            s_AllDimensionsConfig.Add(AnalyticDimension.Supplier,
-//               new AnalyticDimensionConfig
-//               {
-//                   IdColumn = "ISNULL(ts.SupplierID,0)",
-//                   NameColumn = "ISNULL(case when supp.NameSuffix != '' THEN  suppProf.Name + ' (' + supp.NameSuffix + ')' else suppProf.Name end,'N/A')",
-//                   JoinStatements = new List<string>() { @"LEFT JOIN TOneWhS_BE.CarrierAccount supp WITH (NOLOCK) ON supp.ID = ts.SupplierID 
-//                                                           LEFT JOIN TOneWhS_BE.CarrierProfile suppProf on supp.CarrierProfileID = suppProf.ID " },
-//                   GroupByStatements = new List<string>() { " ts.SupplierID, supp.NameSuffix, suppProf.Name " },
-//                   ExpressionSummary = AnalyticSummary.Sum.ToString("G")
-//               });
-//            #endregion
-
             #region CountryPart
 
             s_AllDimensionsConfig.Add(AnalyticDimension.Country,
@@ -103,18 +90,6 @@ namespace Demo.Module.Data.SQL
                     ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                 });
             #endregion
-
-            //#region SwitchPart
-            //s_AllDimensionsConfig.Add(AnalyticDimension.Switch,
-            //    new AnalyticDimensionConfig
-            //    {
-            //        IdColumn = "ts.SwitchID",
-            //        NameColumn = "sw.Name",
-            //        JoinStatements = new List<string>() { @"JOIN [TOneWhS_BE].[Switch] sw WITH (NOLOCK) ON sw.ID = ts.SwitchID" },
-            //        GroupByStatements = new List<string>() { "ts.SwitchID, sw.Name" },
-            //        ExpressionSummary = AnalyticSummary.Sum.ToString("G")
-            //    });
-            //#endregion
 
             #region PortInPart
             s_AllDimensionsConfig.Add(AnalyticDimension.PortIn,
@@ -140,29 +115,6 @@ namespace Demo.Module.Data.SQL
             });
             #endregion
 
-            //#region CodeSalesPart
-            ////s_AllDimensionsConfig.Add(AnalyticDimension.CodeSales,
-            ////    new AnalyticDimensionConfig
-            ////    {
-            ////        IdColumn = "ts.SaleCode",
-            ////        NameColumn = "ts.SaleCode",
-            ////        JoinStatements = null,
-            ////        GroupByStatements = new List<string>() { "ts.SaleCode" },
-            ////        ExpressionSummary = AnalyticSummary.Sum.ToString("G")
-            ////    });
-            //#endregion
-
-            //#region CodeBuyPart
-            ////s_AllDimensionsConfig.Add(AnalyticDimension.CodeBuy,
-            ////  new AnalyticDimensionConfig
-            ////  {
-            ////      IdColumn = "ISNULL(ts.SupplierCode,'N/A')",
-            ////      NameColumn = "ISNULL(ts.SupplierCode,'N/A')",
-            ////      JoinStatements = null,
-            ////      GroupByStatements = new List<string>() { "ts.SupplierCode" },
-            ////      ExpressionSummary = AnalyticSummary.Sum.ToString("G")
-            ////  });
-            //#endregion
 
             #region DatePart
             s_AllDimensionsConfig.Add(AnalyticDimension.Date,
@@ -315,7 +267,7 @@ namespace Demo.Module.Data.SQL
                            }
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
-                               if (dimension == AnalyticDimension.Operator || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut || filterOperator)
+                               if (dimension == AnalyticDimension.Operator || dimension == AnalyticDimension.PortOut ||  filterOperator)
                                    s = "Attempts";
                                else
                                    s = "NumberOfCalls";
@@ -355,14 +307,14 @@ namespace Demo.Module.Data.SQL
                            
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
-                               if (dimension == AnalyticDimension.Operator || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut || filterOperator)
+                               if (dimension == AnalyticDimension.Operator || dimension == AnalyticDimension.PortOut ||  filterOperator)
                                    s = "Attempts";
                                else
                                    s = "NumberOfCalls";
                            }
                            return new MeasureValueExpression
                            {
-                               Expression = String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.SupplierID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.{0})-Sum(case when ts.OperatorID is null then ts.Attempts else 0 end))) ELSE 0 END ", s),
+                               Expression = String.Format("Case WHEN (Sum(ts.{0})-Sum(case when ts.OperatorID is null then ts.Attempts else 0 end))>0 THEN CONVERT(DECIMAL(10,2),SUM(ts.SuccessfulAttempts)*100.0/(Sum(ts.{0})-Sum(case when ts.OperatorID is null then ts.Attempts else 0 end))) ELSE 0 END ", s),
                                ColumnAlias = "Measure_ASR",
                                ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                            };
@@ -394,7 +346,7 @@ namespace Demo.Module.Data.SQL
                            
                            foreach (AnalyticDimension dimension in query.DimensionFields)
                            {
-                               if (dimension == AnalyticDimension.Operator || dimension == AnalyticDimension.PortOut || dimension == AnalyticDimension.GateWayOut || filterOperator)
+                               if (dimension == AnalyticDimension.Operator || dimension == AnalyticDimension.PortOut ||  filterOperator)
                                    s = "Attempts";
                                else
                                    s = "NumberOfCalls";
