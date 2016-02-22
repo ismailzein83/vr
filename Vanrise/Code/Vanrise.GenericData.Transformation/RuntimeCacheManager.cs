@@ -9,8 +9,10 @@ namespace Vanrise.GenericData.Transformation
 {
     public class RuntimeCacheManager : Vanrise.Caching.BaseCacheManager
     {
-        DataTransformationDefinitionManager.CacheManager _dataTransformationDefinitionCacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataTransformationDefinitionManager.CacheManager>();
-        DataRecordTypeManager.CacheManager _dataRecordTypeCacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordTypeManager.CacheManager>();
+        DataTransformationDefinitionManager.CacheManager _dataTransformationDefinitionCacheManager = 
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataTransformationDefinitionManager.CacheManager>(Guid.NewGuid());
+        DataRecordTypeManager.CacheManager _dataRecordTypeCacheManager = 
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordTypeManager.CacheManager>(Guid.NewGuid());
         protected override bool ShouldSetCacheExpired()
         {
             return _dataRecordTypeCacheManager.IsCacheExpired() || _dataTransformationDefinitionCacheManager.IsCacheExpired();
