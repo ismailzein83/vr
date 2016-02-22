@@ -2,9 +2,9 @@
 
     'use strict';
 
-    QueueingStoreBatchQueueActivator.$inject = ['VR_GenericData_DataTransformationDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    QueueActivatorTransformBatch.$inject = ['VR_GenericData_DataTransformationDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function QueueingStoreBatchQueueActivator(VR_GenericData_DataTransformationDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function QueueActivatorTransformBatch(VR_GenericData_DataTransformationDefinitionAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -41,17 +41,16 @@
             var dataRecordTypeId;
             var secondtimeChanged = false;
             var existingStages;
-            var nextStages = {};
+            var transformationRecords = {};
 
-            $scope.nextStages = [];
-            $scope.selectedTransformationRecordType = [];
-            $scope.transformationRecordTypes = [];
-            $scope.showTransformationRecordTypesSelector = false;
-            $scope.stages = [];
+            $scope.nextRecords = [];
+            $scope.selectedTransformationRecord = [];
+            $scope.transformationRecords = [];
+            $scope.showTransformationRecordSelector = false;
 
             function initializeController() {
                 var isTriggered = false;
-                ctrl.onSelectorReady = function (api) {
+                ctrl.onDataTransformationSelectorReady = function (api) {
                     if (isTriggered)
                         return;
                     isTriggered = true;
@@ -68,19 +67,20 @@
 
                     if ($scope.selectedDataTransformation != undefined) {
                         dataTransformationDefinitionId = $scope.selectedDataTransformation.DataTransformationDefinitionId;
-                        if (isEditMode) {
+                        if (dataTransformationRecordSelectorPromise != undefined) {
                             dataTransformationRecordSelectorPromise.resolve();
 
                         }
                         else {
-                            var dataTransformationRecordSelectorPromisee = loadDataTransformationRecordSelector();
-                            dataTransformationRecordSelectorPromisee.then(function () {
-                                loadDataGrid();
+                            $scope.scopeModal.isLoadingTransformActivatorSection = true;
+                            loadDataTransformationRecordSelector().then(function () {
+                                loadNextRecordsSection();
+                                $scope.scopeModal.isLoadingTransformActivatorSection = false;
                             })
                         }
                     }
                     else
-                        $scope.showTransformationRecordTypesSelector = false;
+                        $scope.showTransformationRecordSelector = false;
                 }
 
             }
@@ -92,51 +92,52 @@
 
             function loadDataTransformationRecordSelector() {
                 if (dataTransformationDefinitionId != undefined) {
-                    $scope.showTransformationRecordTypesSelector = true;
-                    return VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationDefinitionRecords(dataTransformationDefinitionId).then(function (response) {
-                        var filteredResponse = [];
-                        $scope.nextStages.length = 0;
-                        $scope.transformationRecordTypes.length = 0;
-                        for (var i = 0; i < response.length; i++) {
-                            if (response[i].DataRecordTypeId == dataRecordTypeId && response[i].IsArray) {
-                                $scope.transformationRecordTypes.push(response[i]);
+                    $scope.showTransformationRecordSelector = true;
+                    return VR_GenericData_DataTransformationDefinitionAPIService.GetDataTransformationDefinitionRecords(dataTransformationDefinitionId).then(function (transformationRecordsResponse) {
+                        var arrayTransformationRecords = [];
+                        var transformationRecord;
+                        $scope.nextRecords.length = 0;
+                        $scope.transformationRecords.length = 0;
+                        for (var i = 0; i < transformationRecordsResponse.length; i++) {
+                            transformationRecord = transformationRecordsResponse[i];
+                            if (transformationRecord.DataRecordTypeId == dataRecordTypeId && transformationRecord.IsArray) {
+                                $scope.transformationRecords.push(transformationRecord);
                             }
-                            if (response[i].IsArray) {
-                                filteredResponse.push(response[i]);
+                            if (transformationRecord.IsArray) {
+                                arrayTransformationRecords.push(transformationRecord);
                             }
                         }
-                        nextStages = filteredResponse;
+                        transformationRecords = arrayTransformationRecords;
                     })
                 }
             }
 
 
-            function loadDataGrid() {
+            function loadNextRecordsSection() {
                 var dataItem;
-                $scope.nextStages.length = 0;
-                for (var i = 0; i < nextStages.length; i++) {
+                var transformationRecord;
+                $scope.nextRecords.length = 0;
+                for (var i = 0; i < transformationRecords.length; i++) {
+                    transformationRecord = transformationRecords[i];
                     dataItem = {};
-                    dataItem.RecordName = nextStages[i].RecordName;
-                    dataItem.existingStages = [];
+                    dataItem.RecordName = transformationRecord.RecordName;
+                    dataItem.nextStages = [];
                     for (var j = 0; j < existingStages.length; j++) {
-                        if (existingStages[j].DataRecordTypeId == nextStages[i].DataRecordTypeId )
-                            dataItem.existingStages.push({ stageName: existingStages[j].stageName });
+                        if (existingStages[j].DataRecordTypeId == transformationRecord.DataRecordTypeId)
+                            dataItem.nextStages.push({ stageName: existingStages[j].stageName });
                     }
-                    dataItem.selectedStages = nextStages[i].NextStages != undefined ? nextStages[i].NextStages : [];
-                    $scope.nextStages.push(dataItem);
+                    dataItem.selectedStages = transformationRecord.NextStages != undefined ? transformationRecord.NextStages : [];
+                    $scope.nextRecords.push(dataItem);
                 }
 
                 if (isEditMode) {
-                    for (var i = 0; i < $scope.nextStages.length; i++) {
-
-                        for (var j = 0; j < receivedQueueActivator.NextStagesRecords.length; j++) {
-                            if ($scope.nextStages[i].RecordName == receivedQueueActivator.NextStagesRecords[j].RecordName) {
-                                for (var k = 0; k < receivedQueueActivator.NextStagesRecords[j].NextStages.length; k++) {
-                                    var selectedValue = UtilsService.getItemByVal($scope.nextStages[i].existingStages, receivedQueueActivator.NextStagesRecords[j].NextStages[k], "stageName");
-                                    if (selectedValue != null)
-                                        $scope.nextStages[i].selectedStages.push(selectedValue);
-                                }
-                            }
+                    var selectedRecord;
+                    for (var i = 0; i < $scope.nextRecords.length; i++) {
+                        selectedRecord = UtilsService.getItemByVal(receivedQueueActivator.NextStagesRecords, $scope.nextRecords[i].RecordName, "RecordName");
+                        for (var j = 0; j < selectedRecord.NextStages.length; j++) {
+                            var selectedStage = UtilsService.getItemByVal($scope.nextRecords[i].nextStages, selectedRecord.NextStages[j], "stageName");
+                            if (selectedStage != null)
+                                $scope.nextRecords[i].selectedStages.push(selectedStage);
                         }
                     }
                 }
@@ -147,10 +148,9 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var selectedId;
+                    var existingDataTransformationId;
                     var promises = [];
                     if (payload != undefined && payload.ExistingStages != undefined) {
-                        $scope.stages.length = 0;
                         existingStages = payload.ExistingStages;
                     }
 
@@ -161,7 +161,7 @@
                     if (payload != undefined && payload.QueueActivator != undefined) {
                         isEditMode = true;
                         receivedQueueActivator = payload.QueueActivator;
-                        selectedId = payload.QueueActivator.DataTransformationDefinitionId;
+                        existingDataTransformationId = payload.QueueActivator.DataTransformationDefinitionId;
                         dataTransformationRecordSelectorPromise = UtilsService.createPromiseDeferred();
                         promises.push(dataTransformationRecordSelectorPromise.promise);
                     }
@@ -172,15 +172,14 @@
 
                     loadDataTransformationSelectorPromise.then(function () {
                         if (payload != undefined && payload.QueueActivator != undefined) {
-
                             dataTransformationRecordSelectorPromise.promise.then(function () {
                                 dataTransformationRecordSelectorPromise = undefined;
                                 var dataTransformationRecordSelectorPromise = loadDataTransformationRecordSelector();
                                 promises.push(dataTransformationRecordSelectorPromise);
                                 dataTransformationRecordSelectorPromise.then(function () {
-                                    var selectedValue = UtilsService.getItemByVal($scope.transformationRecordTypes, payload.QueueActivator.SourceRecordName, "RecordName");
-                                    $scope.selectedTransformationRecordType = selectedValue;
-                                    loadDataGrid();
+                                    var selectedValue = UtilsService.getItemByVal($scope.transformationRecords, payload.QueueActivator.SourceRecordName, "RecordName");
+                                    $scope.selectedTransformationRecord = selectedValue;
+                                    loadNextRecordsSection();
                                 })
                             });
                         }
@@ -192,7 +191,7 @@
 
                     function loadDataTransformationSelector() {
                         var selectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        var selectorPayload = { selectedIds: selectedId };
+                        var selectorPayload = { selectedIds: existingDataTransformationId };
                         VRUIUtilsService.callDirectiveLoad(dataTransformationSelectorAPI, selectorPayload, selectorLoadDeferred);
                         return selectorLoadDeferred.promise;
                     }
@@ -202,21 +201,21 @@
                 api.getData = function () {
                     var NextStagesRecords = [];
                     var selectedNextStages;
-                    for (var i = 0; i < $scope.nextStages.length; i++) {
-                        nextStages = [];
-                        if ($scope.nextStages[i].selectedStages.length > 0) {
-                            for (var j = 0; j < $scope.nextStages[i].selectedStages.length; j++) {
-
-                                selectedNextStages.push($scope.nextStages[i].selectedStages[j].stageName);
+                    for (var i = 0; i < $scope.nextRecords.length; i++) {
+                        selectedNextStages = [];
+                        var nextStage = $scope.nextRecords[i];
+                        if (nextStage.selectedStages.length > 0) {
+                            for (var j = 0; j < nextStage.selectedStages.length; j++) {
+                                selectedNextStages.push(nextStage.selectedStages[j].stageName);
                             }
 
-                            NextStagesRecords.push({ RecordName: $scope.nextStages[i].RecordName, NextStages: selectedNextStages });
+                            NextStagesRecords.push({ RecordName: nextStage.RecordName, NextStages: selectedNextStages });
                         }
                     }
                     return {
                         $type: 'Vanrise.GenericData.QueueActivators.TransformBatchQueueActivator, Vanrise.GenericData.QueueActivators',
                         DataTransformationDefinitionId: dataTransformationSelectorAPI.getSelectedIds(),
-                        SourceRecordName: $scope.selectedTransformationRecordType.RecordName,
+                        SourceRecordName: $scope.selectedTransformationRecord.RecordName,
                         NextStagesRecords: NextStagesRecords.length > 0 ? NextStagesRecords : undefined
                     };
                 }
@@ -226,6 +225,6 @@
         }
     }
 
-    app.directive('vrGenericdataQueueactivatorTransformbatch', QueueingStoreBatchQueueActivator);
+    app.directive('vrGenericdataQueueactivatorTransformbatch', QueueActivatorTransformBatch);
 
 })(app);

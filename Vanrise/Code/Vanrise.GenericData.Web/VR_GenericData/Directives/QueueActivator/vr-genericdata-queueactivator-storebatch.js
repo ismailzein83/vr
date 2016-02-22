@@ -2,9 +2,9 @@
 
     'use strict';
 
-    QueueingStoreBatchQueueActivator.$inject = ['UtilsService', 'VRUIUtilsService'];
+    QueueActivatorStoreBatch.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function QueueingStoreBatchQueueActivator(UtilsService, VRUIUtilsService) {
+    function QueueActivatorStoreBatch(UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -32,11 +32,11 @@
         function QueueingStoreBatchQueueActivatorCtor(ctrl, $scope) {
             this.initializeController = initializeController;
 
-            var selectorAPI;
+            var dataRecordStorageSelectorAPI;
 
             function initializeController() {
-                ctrl.onSelectorReady = function (api) {
-                    selectorAPI = api;
+                ctrl.onDataRecordStorageSelectorReady = function (api) {
+                    dataRecordStorageSelectorAPI = api;
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
@@ -57,20 +57,20 @@
                     return loadSelector();
 
                     function loadSelector() {
-                        var selectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         var selectorPayload = {};
                         selectorPayload.DataRecordTypeId = payload.DataRecordTypeId;
                         if (selectedId != undefined)
                             selectorPayload.selectedIds = selectedId;
-                        VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, selectorLoadDeferred);
-                        return selectorLoadDeferred.promise;
+                        VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, selectorPayload, dataRecordStorageSelectorLoadDeferred);
+                        return dataRecordStorageSelectorLoadDeferred.promise;
                     }
                 }
 
                 api.getData = function () {
                     return {
                         $type: 'Vanrise.GenericData.QueueActivators.StoreBatchQueueActivator, Vanrise.GenericData.QueueActivators',
-                        DataRecordStorageId: selectorAPI.getSelectedIds()
+                        DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds()
                     };
                 }
 
@@ -79,6 +79,6 @@
         }
     }
 
-    app.directive('vrGenericdataQueueactivatorStorebatch', QueueingStoreBatchQueueActivator);
+    app.directive('vrGenericdataQueueactivatorStorebatch', QueueActivatorStoreBatch);
 
 })(app);

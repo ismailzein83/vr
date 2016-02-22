@@ -1,42 +1,43 @@
-﻿<vr-columns width="1/3row">
-    <vr-genericdata-datatransformationdefinition-selector on-ready="ctrl.onSelectorReady"
-                                                          selectedvalues="selectedDataTransformation"
-                                                          onselectionchanged="onSelectedDataTransformationChanged"
-                                                          isrequired="true">
+﻿<div vr-loader="scopeModal.isLoadingTransformActivatorSection">
+    <vr-columns width="1/3row">
+        <vr-genericdata-datatransformationdefinition-selector on-ready="ctrl.onDataTransformationSelectorReady"
+                                                              selectedvalues="selectedDataTransformation"
+                                                              onselectionchanged="onSelectedDataTransformationChanged"
+                                                              isrequired="true">
 
-    </vr-genericdata-datatransformationdefinition-selector>
-</vr-columns>
-
-<vr-columns width="1/3row" ng-show="showTransformationRecordTypesSelector">
-    <vr-select datasource="transformationRecordTypes"
-               datavaluefield="RecordName"
-               datatextfield="RecordName"
-               selectedvalues="selectedTransformationRecordType"
-               isrequired="true" label="Data Transformation Record">
-
-    </vr-select>
-</vr-columns>
-<vr-row>
-    <vr-columns width="fullrow" >
-        <vr-row>
-            <vr-columns width="fullrow" ng-show="showTransformationRecordTypesSelector">
-                <vr-datagrid datasource="nextStages"
-                             pagingtype="'PagingOnScroll'"
-                             on-ready="ongridReady">
-                    <vr-datagridcolumn headertext="'Record Name'" field="'RecordName'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Stages'">
-                        <vr-select datasource="dataItem.existingStages"
-                                   datavaluefield="stageName"
-                                   datatextfield="stageName"
-                                   selectedvalues="dataItem.selectedStages"
-                                   ismultipleselection>
-                        </vr-select>
-                    </vr-datagridcolumn>
-                </vr-datagrid>
-            </vr-columns>
-        </vr-row>
+        </vr-genericdata-datatransformationdefinition-selector>
     </vr-columns>
-</vr-row>
 
+    <vr-columns width="1/3row" ng-show="showTransformationRecordSelector">
+        <vr-select datasource="transformationRecords"
+                   datavaluefield="RecordName"
+                   datatextfield="RecordName"
+                   selectedvalues="selectedTransformationRecord"
+                   isrequired="true" label="Data Transformation Record">
 
+        </vr-select>
+    </vr-columns>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-row>
+                <vr-columns width="fullrow" ng-show="showTransformationRecordSelector">
+                    <vr-datagrid datasource="nextRecords"
+                                 pagingtype="'PagingOnScroll'"
+                                 on-ready="ongridReady">
+                        <vr-datagridcolumn headertext="'Record Name'" field="'RecordName'"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Stages'">
+                            <vr-select datasource="dataItem.nextStages"
+                                       datavaluefield="stageName"
+                                       datatextfield="stageName"
+                                       selectedvalues="dataItem.selectedStages"
+                                       ismultipleselection>
+                            </vr-select>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </vr-columns>
+    </vr-row>
+
+</div>
 
