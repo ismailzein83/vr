@@ -241,7 +241,7 @@
 
             return Demo_OperatorConfigurationAPIService.AddOperatorConfiguration(operatorconfigurationObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Operator Declared Information", response, undefined)) {
+                if (VRNotificationService.notifyOnItemAdded("Operator Configuration", response, undefined)) {
                     if ($scope.onOperatorConfigurationAdded != undefined)
                         $scope.onOperatorConfigurationAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -261,7 +261,7 @@
 
             Demo_OperatorConfigurationAPIService.UpdateOperatorConfiguration(operatorconfigurationObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Operator Declared Information", response, undefined)) {
+                if (VRNotificationService.notifyOnItemUpdated("Operator Configuration", response, undefined)) {
                     if ($scope.onOperatorConfigurationUpdated != undefined)
                         $scope.onOperatorConfigurationUpdated(response.UpdatedObject);
 
