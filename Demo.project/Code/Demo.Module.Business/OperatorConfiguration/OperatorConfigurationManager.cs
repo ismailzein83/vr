@@ -25,9 +25,6 @@ namespace Demo.Module.Business
                  (input.Query.OperatorIds == null || input.Query.OperatorIds.Count == 0 || input.Query.OperatorIds.Contains(prod.OperatorId))
                  &&
 
-                  (input.Query.CDRTypeIds == null || input.Query.CDRTypeIds.Count == 0 || input.Query.CDRTypeIds.Contains((int)prod.CDRType))
-                 &&
-
                  (input.Query.CDRDirectionIds == null || input.Query.CDRDirectionIds.Count == 0 || input.Query.CDRDirectionIds.Contains((int)prod.CDRDirection))
                  &&
 
@@ -120,15 +117,6 @@ namespace Demo.Module.Business
             var directionAttribute = Utilities.GetEnumAttribute<CDRDirection, DescriptionAttribute>(config.CDRDirection);
             if (directionAttribute != null)
                 configDetail.CDRDirectionName = directionAttribute.Description;
-
-            var cdrType = Utilities.GetEnumAttribute<Demo.Module.Entities.CDRType, DescriptionAttribute>(config.CDRType);
-            if (cdrType != null)
-                configDetail.CDRTypeName = cdrType.Description;
-
-            UnitTypeManager unitTypeManager = new UnitTypeManager();
-            UnitType unitType = unitTypeManager.GetUnitType(config.UnitType);
-            if (unitType != null)
-                configDetail.UnitTypeName = unitType.Description;
 
             CurrencyManager currencyTypeManager = new CurrencyManager();
             if (config.Currency.HasValue)
