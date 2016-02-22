@@ -59,15 +59,11 @@ namespace CP.SupplierPricelist.Business
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
             return dataManager.UpdatePriceListUpload(id, result, uploadInformation, uploadRetryCount);
         }
-        public List<Vanrise.Entities.TemplateConfig> GetUploadPriceListTemplates()
+
+        public List<Vanrise.Entities.TemplateConfig> GetConnectorTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SupplierPriceListConnectorInitiateTest);
-        }
-        public List<Vanrise.Entities.TemplateConfig> GetResultPriceListTemplates()
-        {
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SupplierPriceListResult);
+            return manager.GetTemplateConfigurations(Constants.CustomerConnector);
         }
 
         public bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage)

@@ -156,6 +156,8 @@
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\cp-supplierpricelist-uploadsupplierpricelist.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Templates\SupplierpricelistConnectorTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Templates\ResultPriceListTemplate.html" />
+    <Content Include="CP_SupplierPricelist\Directives\MainExtensions\ToneV1Integration\Templates\CustomerConnectorTemplate.html" />
+    <Content Include="CP_SupplierPricelist\Directives\MainExtensions\ToneV1Integration\vr-cp-supplierpricelist-tonev1integration-customerconnector.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\vr-cp-supplierpricelist-connector.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Templates\UploadPriceListTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\Templates\SupplierPriceListGridTemplate.html" />

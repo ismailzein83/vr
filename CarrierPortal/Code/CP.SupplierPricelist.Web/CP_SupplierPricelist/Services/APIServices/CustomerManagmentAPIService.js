@@ -3,11 +3,11 @@
     "use strict";
     function customerManagmentApiService(baseApiService, utilsService, moduleConfig) {
 
-        function GetCustomers(input) {
-            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "GetCustomers"), input);
+        function GetCustomerTemplates() {
+            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "GetCustomerTemplates"));
         }
         return ({
-            GetCustomers: GetCustomers
+            GetCustomerTemplates: GetCustomerTemplates
         });
     }
     customerManagmentApiService.$inject = ['BaseAPIService', 'UtilsService', 'CP_SupPriceList_ModuleConfig'];

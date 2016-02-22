@@ -27,20 +27,14 @@ namespace CP.SupplierPricelist.Web.Controllers
             byte[] maxTimeStamp = input.LastUpdateHandle;
             return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows);
         }
-        [HttpGet]
-        [Route("GetUploadPriceListTemplates")]
-        public List<TemplateConfig> GetUploadPriceListTemplates()
-        {
-            ImportPriceListManager manager = new ImportPriceListManager();
-            return manager.GetUploadPriceListTemplates();
-        }
-          [HttpGet]
-          [Route("GetResultPriceListTemplates")]
-        public List<TemplateConfig> GetResultPriceListTemplates()
-        {
-            ImportPriceListManager manager = new ImportPriceListManager();
-            return manager.GetResultPriceListTemplates();
-        }
+        //[HttpGet]
+        //[Route("GetUploadPriceListTemplates")]
+        //public List<TemplateConfig> GetUploadPriceListTemplates()
+        //{
+        //    ImportPriceListManager manager = new ImportPriceListManager();
+        //    return manager.GetUploadPriceListTemplates();
+        //}
+      
         
 
 
