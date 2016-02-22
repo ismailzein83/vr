@@ -117,12 +117,6 @@ namespace Demo.Module.Business
             OperatorConfigurationDetail configDetail = new OperatorConfigurationDetail();
             configDetail.Entity = config;
 
-            OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
-            UnitTypeManager unitTypeManager = new UnitTypeManager();
-            CurrencyManager currencyTypeManager = new CurrencyManager();
-
             var directionAttribute = Utilities.GetEnumAttribute<Direction, DescriptionAttribute>(config.CDRDirection);
             if (directionAttribute != null)
                 configDetail.CDRDirectionName = directionAttribute.Description;
@@ -131,12 +125,26 @@ namespace Demo.Module.Business
             if (cdrType != null)
                 configDetail.CDRTypeName = cdrType.Description;
 
+            UnitTypeManager unitTypeManager = new UnitTypeManager();
+            UnitType unitType = unitTypeManager.GetUnitType(config.UnitType);
+            if (unitType != null)
+                configDetail.UnitTypeName = unitType.Description;
 
-            configDetail.UnitTypeName = unitTypeManager.GetUnitType(config.UnitType).Description;
+            CurrencyManager currencyTypeManager = new CurrencyManager();
             if (config.Currency.HasValue)
-                configDetail.CurrencyName = currencyTypeManager.GetCurrency(config.Currency.Value).Name;
-            configDetail.OperatorName = operatorProfileManager.GetOperatorProfile(config.OperatorId).Name;
-            configDetail.AmountTypeName = serviceTypeManager.GetServiceType(config.AmountType).Description;
+            {
+                Currency currency = currencyTypeManager.GetCurrency(config.Currency.Value);
+                if (currency != null)
+                    configDetail.CurrencyName = currency.Name;
+            }
+
+            OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
+            configDetail.OperatorName = operatorProfileManager.GetOperatorProfileName(config.OperatorId);
+
+
+            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
+            configDetail.AmountTypeName = serviceTypeManager.GetServiceTypeName(config.OperatorId);
+
             return configDetail;
         }
         #endregion

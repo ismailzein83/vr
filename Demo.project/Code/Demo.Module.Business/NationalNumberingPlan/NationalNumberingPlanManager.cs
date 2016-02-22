@@ -115,8 +115,8 @@ namespace Demo.Module.Business
 
             planDetail.Entity = plan;
 
-            OperatorProfileManager manager = new OperatorProfileManager();
-            planDetail.OperatorName = manager.GetOperatorProfile(plan.OperatorId).Name;
+            OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
+            planDetail.OperatorName = operatorProfileManager.GetOperatorProfileName(plan.OperatorId);
 
             return planDetail;
         }

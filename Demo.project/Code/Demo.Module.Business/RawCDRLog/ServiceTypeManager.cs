@@ -24,6 +24,16 @@ namespace Demo.Module.Business
         {
             return GetCachedServiceTypes().GetRecord(serviceTypeId);
         }
+
+        public string GetServiceTypeName(int serviceTypeId)
+        {
+            ServiceType serviceType = GetServiceType(serviceTypeId);
+
+            if (serviceType != null)
+                return serviceType.Description ;
+
+            return null;
+        }
         
         private Dictionary<int, ServiceType> GetCachedServiceTypes()
         {

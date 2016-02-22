@@ -118,14 +118,15 @@ namespace Demo.Module.Business
             infoDetail.Entity = info;
 
             OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
+            infoDetail.OperatorName = operatorProfileManager.GetOperatorProfileName(info.OperatorId);
 
-            infoDetail.OperatorName = operatorProfileManager.GetOperatorProfile(info.OperatorId).Name;
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
             if (info.ZoneId.HasValue)
                 infoDetail.ZoneName = saleZoneManager.GetSaleZoneName(info.ZoneId.Value);
 
-            infoDetail.AmountTypeName = serviceTypeManager.GetServiceType(info.AmountType).Description;
+            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
+            infoDetail.AmountTypeName = serviceTypeManager.GetServiceTypeName(info.OperatorId);
+
             return infoDetail;
         }
         #endregion

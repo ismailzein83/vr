@@ -92,6 +92,17 @@ namespace Demo.Module.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+
+        public string GetOperatorProfileName(int operatorProfileId)
+        {
+            OperatorProfile operatorProfile = GetOperatorProfile(operatorProfileId);
+
+            if (operatorProfile != null)
+                return operatorProfile.Name;
+
+            return null;
+        }
+
         #endregion
 
         #region Private Members
