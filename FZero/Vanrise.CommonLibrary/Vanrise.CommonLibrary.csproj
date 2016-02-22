@@ -87,6 +87,7 @@
     <None Include="App.config" />
     <None Include="Documents\Application Workflow and Services.docx" />
     <None Include="Documents\Database Schema Documentation.docx" />
+    <None Include="Documents\FMS_Import.rar" />
     <None Include="Documents\Fzero Clients Installation Guide.docx" />
     <None Include="Documents\Fzero Installation Guide.docx" />
   </ItemGroup>
