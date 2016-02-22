@@ -18,6 +18,11 @@ namespace Demo.Module.Entities
         public int Volume { get; set; }
 
         public int AmountType { get; set; }
+
+        public string Notes { get; set; }
+
+        public long? Attachment { get; set; }
+
     }
    
 }

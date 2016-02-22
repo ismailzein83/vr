@@ -152,6 +152,14 @@
                 $scope.scopeModal.fromDate = operatorDeclaredInformationEntity.FromDate;
                 $scope.scopeModal.toDate = operatorDeclaredInformationEntity.ToDate;
                 $scope.scopeModal.volume = operatorDeclaredInformationEntity.Volume;
+                $scope.scopeModal.notes = operatorDeclaredInformationEntity.Notes;
+                if (operatorDeclaredInformationEntity.Attachment > 0)
+                    $scope.scopeModal.attachment = {
+                        fileId: operatorDeclaredInformationEntity.Attachment
+                    };
+                else
+                    $scope.scopeModal.attachment = null;
+
             }
         }
 
@@ -164,6 +172,8 @@
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
                 ZoneId: zoneDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModal.volume,
+                Notes: $scope.scopeModal.notes,
+                Attachment: ($scope.scopeModal.attachment != null) ? $scope.scopeModal.attachment.fileId : 0,
                 AmountType: serviceTypeDirectiveAPI.getSelectedIds()
             };
 

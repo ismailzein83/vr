@@ -11,7 +11,7 @@ namespace Demo.Module.Data.SQL
 {
     public class OperatorDeclaredInformationDataManager : BaseSQLDataManager, IOperatorDeclaredInformationDataManager
     {
-   
+
         #region ctor/Local Variables
         public OperatorDeclaredInformationDataManager()
             : base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoDBConnectionString"))
@@ -25,7 +25,7 @@ namespace Demo.Module.Data.SQL
         {
             object infoId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Insert", out infoId, info.OperatorId, info.FromDate, info.ToDate, info.ZoneId, info.Volume, info.AmountType);
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Insert", out infoId, info.OperatorId, info.FromDate, info.ToDate, info.ZoneId, info.Volume, info.AmountType, info.Attachment, info.Notes);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)infoId;
@@ -35,7 +35,7 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(OperatorDeclaredInformation info)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Update", info.OperatorDeclaredInformationId, info.OperatorId, info.FromDate, info.ToDate, info.ZoneId, info.Volume, info.AmountType);
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Update", info.OperatorDeclaredInformationId, info.OperatorId, info.FromDate, info.ToDate, info.ZoneId, info.Volume, info.AmountType, info.Attachment, info.Notes);
             return (recordsEffected > 0);
         }
         public bool AreOperatorDeclaredInformationsUpdated(ref object updateHandle)
@@ -59,9 +59,11 @@ namespace Demo.Module.Data.SQL
             {
                 OperatorDeclaredInformationId = (int)reader["ID"],
                 OperatorId = (int)reader["OperatorID"],
-                FromDate = GetReaderValue<DateTime?>(reader,"FromDate"),
-                ToDate = GetReaderValue<DateTime?>(reader,"ToDate"),
+                FromDate = GetReaderValue<DateTime?>(reader, "FromDate"),
+                ToDate = GetReaderValue<DateTime?>(reader, "ToDate"),
                 ZoneId = GetReaderValue<long?>(reader, "ZoneId"),
+                Attachment = GetReaderValue<long?>(reader, "Attachment"),
+                Notes = reader["Notes"] as string,
                 Volume = GetReaderValue<int>(reader, "Volume"),
                 AmountType = GetReaderValue<int>(reader, "AmountType"),
             };
@@ -69,6 +71,6 @@ namespace Demo.Module.Data.SQL
         }
 
         #endregion
-      
+
     }
 }
