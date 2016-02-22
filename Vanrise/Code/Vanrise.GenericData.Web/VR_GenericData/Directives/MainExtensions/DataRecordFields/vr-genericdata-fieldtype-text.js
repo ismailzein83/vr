@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatetime', ['UtilsService',
+app.directive('vrGenericdataFieldtypeText', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -12,7 +12,7 @@ app.directive('vrGenericdataDatetime', ['UtilsService',
 
                 var ctrl = this;
 
-                var ctor = new datetimeTypeCtor(ctrl, $scope);
+                var ctor = new textTypeCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,12 +26,12 @@ app.directive('vrGenericdataDatetime', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/DatetimeDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/TextDirectiveTemplate.html';
             }
 
         };
 
-        function datetimeTypeCtor(ctrl, $scope) {
+        function textTypeCtor(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -40,13 +40,11 @@ app.directive('vrGenericdataDatetime', ['UtilsService',
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
-
-                }
+                api.load = function (payload) { }
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldDateTimeType,Vanrise.GenericData.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions",
                     };
                 }
 

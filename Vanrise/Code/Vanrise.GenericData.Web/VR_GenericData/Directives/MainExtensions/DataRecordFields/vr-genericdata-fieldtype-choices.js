@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataChoices', ['UtilsService',
+app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {

@@ -51,7 +51,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-numeric-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" normal-col-num="ctrl.normalColNum" />';
+            return '<vr-genericdata-fieldtype-numeric-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" normal-col-num="ctrl.normalColNum" />';
         }
     }
 

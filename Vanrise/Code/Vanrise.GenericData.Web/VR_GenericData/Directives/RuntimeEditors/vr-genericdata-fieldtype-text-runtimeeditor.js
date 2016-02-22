@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataTextRuntimeeditor', ['UtilsService', function (UtilsService) {
+app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',

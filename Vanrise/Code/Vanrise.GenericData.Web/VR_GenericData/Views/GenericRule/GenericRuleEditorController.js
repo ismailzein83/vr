@@ -232,7 +232,6 @@
                 EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };
 
-            console.log(genericRule);
             return genericRule;
         }
 

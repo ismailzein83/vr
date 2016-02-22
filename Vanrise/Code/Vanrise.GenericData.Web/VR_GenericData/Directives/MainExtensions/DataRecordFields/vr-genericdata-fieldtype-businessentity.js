@@ -76,6 +76,6 @@
         }
     }
 
-    app.directive('vrGenericdataDatarecordfieldtypeBusinessentity', BusinessEntityDirective);
+    app.directive('vrGenericdataFieldtypeBusinessentity', BusinessEntityDirective);
 
 })(app);

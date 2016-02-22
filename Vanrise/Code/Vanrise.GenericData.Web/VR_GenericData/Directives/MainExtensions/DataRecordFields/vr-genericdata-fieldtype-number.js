@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataNumber', ['VR_GenericData_FieldNumberDataTypeEnum', 'UtilsService', function (VR_GenericData_FieldNumberDataTypeEnum, UtilsService) {
+app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTypeEnum', 'UtilsService', function (VR_GenericData_FieldNumberDataTypeEnum, UtilsService) {
     return {
         restrict: 'E',
         scope: {

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService',
+app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_BusinessEntityDefinitionAPIService',
     function (UtilsService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionAPIService) {
 
         var directiveDefinitionObject = {
