@@ -125,7 +125,7 @@ namespace Demo.Module.Business
                 infoDetail.ZoneName = saleZoneManager.GetSaleZoneName(info.ZoneId.Value);
 
             ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
-            infoDetail.AmountTypeName = serviceTypeManager.GetServiceTypeName(info.OperatorId);
+            infoDetail.AmountTypeName = serviceTypeManager.GetServiceTypeName(info.AmountType);
 
             return infoDetail;
         }

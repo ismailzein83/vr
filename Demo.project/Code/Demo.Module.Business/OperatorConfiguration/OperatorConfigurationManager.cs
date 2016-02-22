@@ -143,7 +143,7 @@ namespace Demo.Module.Business
 
 
             ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
-            configDetail.AmountTypeName = serviceTypeManager.GetServiceTypeName(config.OperatorId);
+            configDetail.AmountTypeName = serviceTypeManager.GetServiceTypeName(config.AmountType);
 
             return configDetail;
         }
