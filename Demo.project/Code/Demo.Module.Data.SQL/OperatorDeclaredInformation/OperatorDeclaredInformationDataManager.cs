@@ -59,7 +59,7 @@ namespace Demo.Module.Data.SQL
             {
                 OperatorDeclaredInformationId = (int)reader["ID"],
                 OperatorId = (int)reader["OperatorID"],
-                FromDate = GetReaderValue<DateTime?>(reader, "FromDate"),
+                FromDate = (DateTime)reader["FromDate"],
                 ToDate = GetReaderValue<DateTime?>(reader, "ToDate"),
                 ZoneId = GetReaderValue<long?>(reader, "ZoneId"),
                 Attachment = GetReaderValue<long?>(reader, "Attachment"),

@@ -59,7 +59,7 @@ namespace Demo.Module.Data.SQL
             {
                 NationalNumberingPlanId = (int)reader["ID"],
                 OperatorId = (int)reader["OperatorID"],
-                FromDate = GetReaderValue<DateTime?>(reader,"FromDate"),
+                FromDate = (DateTime)reader["FromDate"],
                 ToDate = GetReaderValue<DateTime?>(reader,"ToDate"),
                 Settings = Vanrise.Common.Serializer.Deserialize<NationalNumberingPlanSettings>(reader["Settings"] as string)
             };

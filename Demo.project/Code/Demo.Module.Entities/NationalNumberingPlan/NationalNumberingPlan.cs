@@ -9,7 +9,7 @@ namespace Demo.Module.Entities
 
         public int OperatorId { get; set; }
 
-        public DateTime? FromDate { get; set; }
+        public DateTime FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
 
