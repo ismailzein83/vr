@@ -14,13 +14,49 @@
         load();
 
         function loadParameters() {
-            
+
         }
         function defineScope() {
             $scope.sourceTypeTemplates = [];
-            $scope.close = function() {
+            $scope.close = function () {
                 $scope.modalContext.closeModal();
             }
+            $scope.SaveCustomer = function () {
+                if (isEditMode) {
+                    return updateCustomer();
+                }
+                else {
+                    return insertCustomer();
+                }
+            };
+        }
+        function insertCustomer() {
+            var customerObject = buildCustomerFromScope();
+            return customerManagmentAPIService.AddCustomer(customerObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Customer", response)) {
+                    if ($scope.onCustomerAdded != undefined)
+                        $scope.onCustomerAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+
+        }
+
+        function updateCustomer() {
+            var customerObject = buildCustomerFromScope();
+            customerManagmentAPIService.UpdateCustomer(customerObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("Customer", response)) {
+                    if ($scope.onCustomerUpdated != undefined)
+                        $scope.onCustomerUpdated(response.UpdatedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
         }
         function load() {
             loadAllControls();
@@ -43,7 +79,7 @@
         }
 
         function LoadCustomerTemplates() {
-            
+
             customerManagmentAPIService.GetCustomerTemplates().then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.sourceTypeTemplates.push(item);
