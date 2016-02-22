@@ -51,6 +51,7 @@
     <Compile Include="IOrgChartLinkedEntityDataManager.cs" />
     <Compile Include="IPermissionDataManager.cs" />
     <Compile Include="IGroupDataManager.cs" />
+    <Compile Include="ISystemActionDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />
     <Compile Include="IUserGroupDataManager.cs" />
     <Compile Include="IViewDataManager.cs" />

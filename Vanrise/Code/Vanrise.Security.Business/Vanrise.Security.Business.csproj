@@ -54,6 +54,7 @@
     <Compile Include="ModuleManager.cs" />
     <Compile Include="OrgChartManager.cs" />
     <Compile Include="SecurityContext.cs" />
+    <Compile Include="SystemActionManager.cs" />
     <Compile Include="UserGroupManager.cs" />
     <Compile Include="ViewManager.cs" />
     <Compile Include="MenuManager.cs" />
