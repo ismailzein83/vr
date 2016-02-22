@@ -145,7 +145,7 @@ namespace Vanrise.GenericData.Business
                 GenericRuleCriteriaFieldValues fieldValues = null;
                 if (fieldValuesExist)
                     rule.Criteria.FieldsValues.TryGetValue(criteriaField.FieldName, out fieldValues);
-                descriptions.Add((fieldValues != null) ? fieldValues.GetDescription() : null);
+                descriptions.Add((fieldValues != null) ? criteriaField.FieldType.GetDescription(fieldValues) : null);
             }
 
             return new GenericRuleDetail()

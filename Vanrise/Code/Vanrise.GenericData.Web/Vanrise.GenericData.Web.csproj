@@ -229,7 +229,6 @@
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorTransformBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-storebatch.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-transformbatch.js" />
-    <Content Include="VR_GenericData\Directives\RuntimeEditors\Templates\NumericEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-fieldtype-businessentity-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-fieldtype-numeric-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-fieldtype-choices-runtimeeditor.js" />
@@ -296,7 +295,6 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
-    <Content Include="VR_GenericData\Directives\RuntimeEditors\Templates\TextEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-fieldtype-text-runtimeeditor.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />

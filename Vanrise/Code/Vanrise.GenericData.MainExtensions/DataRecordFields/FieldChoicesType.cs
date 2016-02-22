@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
+using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -20,13 +21,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(Object value)
         {
+            var descriptions = new List<string>();
             if (Choices != null && Choices.Count > 0)
             {
-                int selectedChoiceValue = Convert.ToInt32(value);
-                Choice selectedChoice = Choices.Find(choice => choice.Value == selectedChoiceValue);
-                return (selectedChoice != null) ? selectedChoice.Text : null;
+                var staticValues = value as StaticValues;
+                var selectedValues = staticValues.Values.MapRecords(itm => Convert.ToInt32(itm));
+                foreach (int selectedValue in selectedValues)
+                    descriptions.Add(Choices.FindRecord(itm => itm.Value == selectedValue).Text);
             }
-            return null;
+            return String.Join(",", descriptions);
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)

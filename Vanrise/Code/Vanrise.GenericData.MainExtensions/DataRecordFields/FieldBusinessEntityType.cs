@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
+using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -24,8 +25,20 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(Object value)
         {
+            var beValues = value as BusinessEntityValues;
+            var entityIds = new List<object>();
+
+            if (beValues == null)
+                entityIds.Add(value);
+            else
+            {
+                var selectedValues = beValues.GetValues();
+                foreach (var beValue in selectedValues)
+                    entityIds.Add(beValue);
+            }
+
             IBusinessEntityManager beManager = GetBusinessEntityManager();
-            return beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityId = value });
+            return beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityIds = entityIds });
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)

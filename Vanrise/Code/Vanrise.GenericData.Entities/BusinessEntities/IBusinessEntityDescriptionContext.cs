@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public interface IBusinessEntityDescriptionContext
     {
-        object EntityId { get; set; }
+        List<object> EntityIds { get; set; }
     }
 }

@@ -212,7 +212,10 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetCarrierAccountName(Convert.ToInt32(context.EntityId));
+            var carrierAccountNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+                carrierAccountNames.Add(GetCarrierAccountName(Convert.ToInt32(entityId)));
+            return String.Join(",", carrierAccountNames);
         }
         public bool IsMatched(IBusinessEntityMatchContext context)
         {

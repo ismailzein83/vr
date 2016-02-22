@@ -95,7 +95,10 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
+            var carrierProfileNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+                carrierProfileNames.Add(GetCarrierProfileName(Convert.ToInt32(entityId)));
+            return String.Join(",", carrierProfileNames);
         }
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
