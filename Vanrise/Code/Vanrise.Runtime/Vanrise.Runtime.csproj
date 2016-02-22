@@ -44,6 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationParameter.cs" />
+    <Compile Include="Configuration\RuntimeConfig.cs" />
+    <Compile Include="Configuration\RuntimeServiceGroup.cs" />
+    <Compile Include="Configuration\RuntimeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunningProcessManager.cs" />
     <Compile Include="RuntimeHost.cs" />
