@@ -13,6 +13,9 @@
         var zoneDirectiveAPI;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var serviceTypeDirectiveAPI;
+        var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -26,6 +29,11 @@
             $scope.onOperatorProfileDirectiveReady = function (api) {
                 operatorProfileDirectiveAPI = api;
                 operatorProfileReadyPromiseDeferred.resolve();
+            }
+
+            $scope.onServiceTypeReady = function (api) {
+                serviceTypeDirectiveAPI = api;
+                serviceTypeReadyPromiseDeferred.resolve();
             }
 
             $scope.onZoneDirectiveReady = function (api) {
@@ -49,7 +57,8 @@
                     FromDate: $scope.fromDate,
                     ToDate: $scope.toDate,
                     OperatorIds: operatorProfileDirectiveAPI.getSelectedIds(),
-                    ZoneIds: zoneDirectiveAPI.getSelectedIds()
+                    ZoneIds: zoneDirectiveAPI.getSelectedIds(),
+                    ServiceTypeIds: serviceTypeDirectiveAPI.getSelectedIds(),
                 };
 
                 return data;
@@ -62,7 +71,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadZones])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadZones, loadServiceTypes])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -93,6 +102,14 @@
                 });
 
             return loadZonePromiseDeferred.promise;
+        }
+
+        function loadServiceTypes() {
+            var loadServiceTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            serviceTypeReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(serviceTypeDirectiveAPI, undefined, loadServiceTypePromiseDeferred)
+            })
+            return loadServiceTypePromiseDeferred.promise;
         }
 
         function AddNewOperatorDeclaredInformation() {

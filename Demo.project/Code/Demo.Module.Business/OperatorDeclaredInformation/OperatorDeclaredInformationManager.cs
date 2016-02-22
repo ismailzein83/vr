@@ -31,6 +31,10 @@ namespace Demo.Module.Business
 
                  (input.Query.ZoneIds == null || input.Query.ZoneIds.Count == 0 || (prod.ZoneId.HasValue && input.Query.ZoneIds.Contains(prod.ZoneId.Value)))
                  &&
+
+                  (input.Query.ServiceTypeIds == null || input.Query.ServiceTypeIds.Count == 0 || (input.Query.ServiceTypeIds.Contains(prod.AmountType)))
+                 &&
+
                  (input.Query.OperatorDeclaredInformationIds == null || input.Query.OperatorDeclaredInformationIds.Contains(prod.OperatorDeclaredInformationId));
 
 

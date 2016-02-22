@@ -15,5 +15,7 @@ namespace Demo.Module.Entities
 
        public List<long> ZoneIds { get; set; }
 
+       public List<int> ServiceTypeIds { get; set; }
+
     }
 }
