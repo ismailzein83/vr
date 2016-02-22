@@ -8,6 +8,9 @@ namespace Demo.Module.Entities
        public List<int> OperatorConfigurationIds { get; set; }
        public List<int> OperatorIds { get; set; }
        public List<int> CDRDirectionIds { get; set; }
+       public List<int> ServiceTypeIds { get; set; }
+       public DateTime? FromDate { get; set; }
+       public DateTime? ToDate { get; set; }
 
     }
 }

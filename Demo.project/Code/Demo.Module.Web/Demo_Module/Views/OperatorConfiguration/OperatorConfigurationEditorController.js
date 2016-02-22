@@ -49,6 +49,9 @@
 
             }
 
+            $scope.validateDateRange = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModal.fromDate, $scope.scopeModal.toDate);
+            }
 
             $scope.onCurrencyDirectiveReady = function (api) {
                 currencyDirectiveAPI = api;
@@ -174,6 +177,9 @@
                 $scope.scopeModal.volume = operatorConfigurationEntity.Volume;
                 $scope.scopeModal.amount = operatorConfigurationEntity.Amount;
                 $scope.scopeModal.percentage = operatorConfigurationEntity.Percentage;
+                $scope.scopeModal.notes = operatorConfigurationEntity.Notes;
+                $scope.scopeModal.fromDate = operatorConfigurationEntity.FromDate;
+                $scope.scopeModal.toDate = operatorConfigurationEntity.ToDate;
             }
         }
 
@@ -183,9 +189,12 @@
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModal.volume,
                 Percentage: $scope.scopeModal.percentage,
+                FromDate: $scope.scopeModal.fromDate,
+                ToDate: $scope.scopeModal.toDate,
                 Amount: $scope.scopeModal.amount,
                 AmountType: serviceTypeDirectiveAPI.getSelectedIds(),
                 CDRDirection: cdrDirectionDirectiveAPI.getSelectedIds(),
+                Notes: $scope.scopeModal.notes,
                 Currency: currencyDirectiveAPI.getSelectedIds()
             };
 

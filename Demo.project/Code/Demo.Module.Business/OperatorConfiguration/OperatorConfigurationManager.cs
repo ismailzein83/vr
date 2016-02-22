@@ -22,13 +22,22 @@ namespace Demo.Module.Business
             var allOperatorConfigurations = GetCachedOperatorConfigurations();
 
             Func<OperatorConfiguration, bool> filterExpression = (prod) =>
-                 (input.Query.OperatorIds == null || input.Query.OperatorIds.Count == 0 || input.Query.OperatorIds.Contains(prod.OperatorId))
-                 &&
+                (input.Query.OperatorIds == null || input.Query.OperatorIds.Count == 0 || input.Query.OperatorIds.Contains(prod.OperatorId))
+                &&
 
-                 (input.Query.CDRDirectionIds == null || input.Query.CDRDirectionIds.Count == 0 || input.Query.CDRDirectionIds.Contains((int)prod.CDRDirection))
-                 &&
+                (input.Query.CDRDirectionIds == null || input.Query.CDRDirectionIds.Count == 0 || input.Query.CDRDirectionIds.Contains((int)prod.CDRDirection))
+                &&
 
-                 (input.Query.OperatorConfigurationIds == null || input.Query.OperatorConfigurationIds.Contains(prod.OperatorConfigurationId));
+                (input.Query.ServiceTypeIds == null || input.Query.ServiceTypeIds.Count == 0 || input.Query.ServiceTypeIds.Contains((int)prod.AmountType))
+                &&
+
+                (input.Query.OperatorConfigurationIds == null || input.Query.OperatorConfigurationIds.Contains(prod.OperatorConfigurationId))
+                &&
+                
+                (!input.Query.FromDate.HasValue || input.Query.FromDate < prod.FromDate)
+                &&
+                
+                (!input.Query.ToDate.HasValue || input.Query.ToDate >= prod.ToDate);
 
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allOperatorConfigurations.ToBigResult(input, filterExpression, OperatorConfigurationDetailMapper));

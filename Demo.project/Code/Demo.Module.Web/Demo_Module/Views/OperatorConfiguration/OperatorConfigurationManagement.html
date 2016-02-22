@@ -4,7 +4,19 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
                 <vr-columns width="normal">
+                    <vr-datetimepicker value="fromDate" label="From Date" customvalidate="validateDateRange()" type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-datetimepicker value="toDate" label="To Date" customvalidate="validateDateRange()" type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="normal">
                     <vr-demo-operatorprofile-selector on-ready="onOperatorProfileDirectiveReady" ismultipleselection></vr-demo-operatorprofile-selector>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <servicetype-selector on-ready="onServiceTypeReady" ismultipleselection></servicetype-selector>
                 </vr-columns>
 
                 <vr-columns width="normal">

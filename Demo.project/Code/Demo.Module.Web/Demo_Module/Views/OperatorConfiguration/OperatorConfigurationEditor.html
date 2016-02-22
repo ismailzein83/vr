@@ -6,25 +6,20 @@
                     <vr-demo-operatorprofile-selector isrequired on-ready="scopeModal.onOperatorProfileDirectiveReady"></vr-demo-operatorprofile-selector>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-textbox value="scopeModal.volume" isrequired label="Volume" type="number" decimalprecision="0"></vr-textbox>
-                </vr-columns>
-
-                <vr-columns width="normal">
                     <servicetype-selector on-ready="onServiceTypeReady" isrequired="true"></servicetype-selector>
                 </vr-columns>
-
                 <vr-columns width="normal">
                     <cdrdirection-selector on-ready="onCDRDirectionReady" isrequired="true"></cdrdirection-selector>
                 </vr-columns>
-
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModal.volume" isrequired label="Volume" type="number" decimalprecision="0"></vr-textbox>
+                </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModal.amount" label="Amount" type="number" decimalprecision="0"></vr-textbox>
                 </vr-columns>
-
                 <vr-columns width="normal">
                     <vr-common-currency-selector on-ready="onCurrencyDirectiveReady" selectedvalues="selectedCurrency"></vr-common-currency-selector>
                 </vr-columns>
-
                 <vr-columns width="normal">
                     <vr-numeric label="Percentage" value="scopeModal.percentage"
                                 minvalue="0"
@@ -33,8 +28,20 @@
                                 unit="%">
                     </vr-numeric>
                 </vr-columns>
-
+                <vr-columns width="normal">
+                    <vr-datetimepicker value="scopeModal.fromDate" label="From Date" customvalidate="validateDateRange()" isrequired type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker value="scopeModal.toDate" label="To Date" customvalidate="validateDateRange()" type="dateTime"></vr-datetimepicker>
+                </vr-columns>
             </vr-row>
+
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-textbox value="scopeModal.notes" label="Notes"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+
         </vr-form>
     </vr-modalbody>
     <div>
