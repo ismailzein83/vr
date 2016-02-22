@@ -37,7 +37,7 @@
             };
 
             $scope.validateDateRange = function () {
-                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+                return VRValidationService.validateTimeRange($scope.scopeModal.fromDate, $scope.scopeModal.toDate);
             }
 
             $scope.scopeModal.onOperatorProfileDirectiveReady = function (api) {
