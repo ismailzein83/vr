@@ -152,8 +152,8 @@ namespace Demo.Module.Data.SQL
             rawCDRLog.InTrunk = reader["InTrunk"] as string;
             rawCDRLog.PortOut = reader["PortOut"] as string;
             rawCDRLog.OutTrunk = reader["OutTrunk"] as string;
-            rawCDRLog.DirectionType = GetReaderValue<Direction>(reader, "Direction");
-            rawCDRLog.CDRType = GetReaderValue<Demo.Module.Entities.Type>(reader, "CDRType"); 
+            rawCDRLog.DirectionType = GetReaderValue<CDRDirection>(reader, "Direction");
+            rawCDRLog.CDRType = GetReaderValue<Demo.Module.Entities.CDRType>(reader, "CDRType"); 
             rawCDRLog.DataSourceId = GetReaderValue<int>(reader, "DataSourceID");
             rawCDRLog.ServiceTypeId = GetReaderValue<int>(reader, "ServiceTypeID");
 

@@ -12,7 +12,7 @@ namespace Demo.Module.Entities
        
         public string CDPN { get; set; }
         public string CGPN { get; set; }
-        public Direction DirectionType { get; set; }
+        public CDRDirection DirectionType { get; set; }
         public decimal? MinDuration { get; set; }
         public decimal? MaxDuration { get; set; }
         public int NumberRecords { get; set; }

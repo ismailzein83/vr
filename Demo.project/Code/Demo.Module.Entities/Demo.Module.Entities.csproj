@@ -56,7 +56,8 @@
     <Compile Include="CodeGroup\CodeGroupDetail.cs" />
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
-    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Enums\CDRDirection.cs" />
+    <Compile Include="Enums\CDRType.cs" />
     <Compile Include="GenericAnalytic\AnalyticDimension.cs" />
     <Compile Include="GenericAnalytic\AnalyticDimensionValue.cs" />
     <Compile Include="GenericAnalytic\AnalyticMeasureField.cs" />

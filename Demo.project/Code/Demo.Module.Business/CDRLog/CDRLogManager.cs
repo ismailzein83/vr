@@ -57,11 +57,11 @@ namespace Demo.Module.Business
                 Zone = zone
             };
 
-            var directionAttribute = Utilities.GetEnumAttribute<Direction, DescriptionAttribute>(cDRLog.DirectionType);
+            var directionAttribute = Utilities.GetEnumAttribute<CDRDirection, DescriptionAttribute>(cDRLog.DirectionType);
             if (directionAttribute != null)
                 cDRLogDetail.DirectionDescription = directionAttribute.Description;
 
-            var cdrType = Utilities.GetEnumAttribute<Demo.Module.Entities.Type, DescriptionAttribute>(cDRLog.CDRType);
+            var cdrType = Utilities.GetEnumAttribute<Demo.Module.Entities.CDRType, DescriptionAttribute>(cDRLog.CDRType);
             if (cdrType != null)
                 cDRLogDetail.CDRTypeDescription = cdrType.Description;
 

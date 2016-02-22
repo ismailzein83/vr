@@ -7,23 +7,17 @@ using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
-    public enum Direction {
+    public enum CDRDirection
+    {
 
         [Description("Outgoing")]
         Outgoing = 1,
 
         [Description("Incoming")]
-        Incoming = 2
-    }
-
-    public enum Type
-    {
+        Incoming = 2,
 
         [Description("Interconnect")]
-        Interconnect = 1,
-
-        [Description("International")]
-        International = 2
+        Interconnect = 3
     }
    
 }

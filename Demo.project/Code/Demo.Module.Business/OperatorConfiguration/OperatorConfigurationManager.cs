@@ -117,11 +117,11 @@ namespace Demo.Module.Business
             OperatorConfigurationDetail configDetail = new OperatorConfigurationDetail();
             configDetail.Entity = config;
 
-            var directionAttribute = Utilities.GetEnumAttribute<Direction, DescriptionAttribute>(config.CDRDirection);
+            var directionAttribute = Utilities.GetEnumAttribute<CDRDirection, DescriptionAttribute>(config.CDRDirection);
             if (directionAttribute != null)
                 configDetail.CDRDirectionName = directionAttribute.Description;
 
-            var cdrType = Utilities.GetEnumAttribute<Demo.Module.Entities.Type, DescriptionAttribute>(config.CDRType);
+            var cdrType = Utilities.GetEnumAttribute<Demo.Module.Entities.CDRType, DescriptionAttribute>(config.CDRType);
             if (cdrType != null)
                 configDetail.CDRTypeName = cdrType.Description;
 

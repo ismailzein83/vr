@@ -19,10 +19,10 @@ namespace Demo.Module.Entities
         public string PortOut { get; set; }
         public string CGPN { get; set; }
         public string CDPN { get; set; }
-        public Direction DirectionType { get; set; } 
+        public CDRDirection DirectionType { get; set; } 
         public int DataSourceId { get; set; }
         public int ServiceTypeId { get; set; }
-        public Type CDRType { get; set; }
+        public CDRType CDRType { get; set; }
         public string Code { get; set; }
         public int ZoneId { get; set; }
         public int OperatorId { get; set; }
