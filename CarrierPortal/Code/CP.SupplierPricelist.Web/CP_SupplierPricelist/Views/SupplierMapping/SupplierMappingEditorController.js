@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'CP_SupplierPricelist_SupplierManagmentAPIService'];
+    supplierMappingEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'CP_SupplierPricelist_SupplierMappingAPIService'];
 
-    function supplierEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, supplierManagmentAPIService) {
+    function supplierMappingEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, supplierMappingAPIService) {
 
         var isEditMode;
         var supplierEntity;
@@ -19,7 +19,8 @@
             
         }
         function defineScope() {
-
+            $scope.carriers = [];
+            $scope.selectedCarriers = [];
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             }
@@ -32,7 +33,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, LoadUser])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, LoadUser, LoadCarriers])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -58,7 +59,16 @@
             return userLoadPromiseDeferred.promise;
         }
 
+        function LoadCarriers() {
+            return supplierMappingAPIService.GetCustomerSuppliers().then(function (response) {              
+                angular.forEach(response, function (item) {
+                    $scope.carriers.push(item);
+                });
+            });
+        }
+
+
        
     }
-    appControllers.controller('CP_SupplierPricelist_SupplierEditorController', supplierEditorController);
+    appControllers.controller('CP_SupplierPricelist_SupplierMappingEditorController', supplierMappingEditorController);
 })(appControllers);

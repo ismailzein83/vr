@@ -2,7 +2,7 @@
     function (appControllers) {
         "use strict";
 
-        function supplierManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, supplierService) {
+        function supplierManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, supplierMappingService) {
             var gridAPI;
 
             function defineScope() {
@@ -12,8 +12,8 @@
                     api.loadGrid();
                 }
 
-                $scope.AddSupplier = function () {
-                    supplierService.addSupplier();
+                $scope.AddSupplierMapping = function () {
+                    supplierMappingService.addSupplierMapping();
                 }
             }
 
@@ -21,7 +21,7 @@
 
         }
 
-        supplierManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'CP_SupplierPricelist_SupplierService'];
+        supplierManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'CP_SupplierPricelist_SupplierMappingService'];
         appControllers.controller('CP_SupplierPriceList_SupplierManagementController', supplierManagementController);
     }
 )(appControllers);

@@ -8,6 +8,11 @@ namespace CP.SupplierPricelist.Data.SQL
 {
     public class CustomerDataManager : BaseSQLDataManager, ICustomerDataManager
     {
+        public CustomerDataManager() :
+            base(GetConnectionStringName("CP_DBConnStringKey", "CP_DBConnString"))
+        {
+
+        }
         public List<Customer> GetCustomers(ref byte[] maxTimeStamp, int nbOfRows)
         {
             List<Customer> customers = new List<Customer>();

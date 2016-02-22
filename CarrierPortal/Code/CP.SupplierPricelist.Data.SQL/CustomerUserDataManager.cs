@@ -8,7 +8,11 @@ namespace CP.SupplierPricelist.Data.SQL
 {
     public class CustomerUserDataManager : BaseSQLDataManager, ICustomerUserDataManager
     {
-       
+        public CustomerUserDataManager() :
+            base(GetConnectionStringName("CP_DBConnStringKey", "CP_DBConnString"))
+        {
+
+        }
         public List<CustomerUser> GetAllCustomersUsers()
         {
             return GetItemsSP("[CP_SupPriceList].[sp_CustomerUser_GetAll]", CustomerUserMapper);
@@ -22,7 +26,7 @@ namespace CP.SupplierPricelist.Data.SQL
             CustomerUser customerUser = new CustomerUser
             {
                 CustomerId = (int)reader["CustomerID"],
-                UserId = (int)reader["UserID"],
+                UserId = (int)reader["UserID"]
                 
             };
 

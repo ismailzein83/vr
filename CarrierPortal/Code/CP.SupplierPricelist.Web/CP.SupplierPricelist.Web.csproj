@@ -123,7 +123,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
-    <Compile Include="Controllers\SupplierController.cs" />
+    <Compile Include="Controllers\SupplierMappingController.cs" />
     <Compile Include="Controllers\PriceListController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -162,12 +162,12 @@
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Templates\UploadPriceListTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\Templates\SupplierPriceListGridTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-supplierpricelist-grid.js" />
-    <Content Include="CP_SupplierPricelist\Directives\Supplier\Templates\SupplierManagmentGridTemplate.html" />
-    <Content Include="CP_SupplierPricelist\Directives\Supplier\vr-cp-suppliermanagment-grid.js" />
-    <Content Include="CP_SupplierPricelist\Services\APIServices\SupplierManagmentAPIService.js" />
+    <Content Include="CP_SupplierPricelist\Directives\SupplierMapping\Templates\SupplierMappingGridTemplate.html" />
+    <Content Include="CP_SupplierPricelist\Directives\SupplierMapping\vr-cp-suppliermapping-grid.js" />
+    <Content Include="CP_SupplierPricelist\Services\APIServices\SupplierMappingAPIService.js" />
     <Content Include="CP_SupplierPricelist\Services\APIServices\CustomerManagmentAPIService.js" />
     <Content Include="CP_SupplierPricelist\Services\APIServices\SupplierPriceListAPIService.js" />
-    <Content Include="CP_SupplierPricelist\Services\SupplierService.js" />
+    <Content Include="CP_SupplierPricelist\Services\SupplierMappingService.js" />
     <Content Include="CP_SupplierPricelist\Services\CustomerService.js" />
     <Content Include="CP_SupplierPricelist\Services\SupplierPriceListService.js" />
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerEditor.html" />
@@ -176,10 +176,10 @@
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerManagementController.js" />
     <Content Include="CP_SupplierPricelist\Views\SupplierPriceList\SupplierPriceListManagement.html" />
     <Content Include="CP_SupplierPricelist\Views\SupplierPriceList\SupplierPriceListManagementController.js" />
-    <Content Include="CP_SupplierPricelist\Views\Supplier\SupplierEditor.html" />
-    <Content Include="CP_SupplierPricelist\Views\Supplier\SupplierEditorController.js" />
-    <Content Include="CP_SupplierPricelist\Views\Supplier\SupplierManagement.html" />
-    <Content Include="CP_SupplierPricelist\Views\Supplier\SupplierManagementController.js" />
+    <Content Include="CP_SupplierPricelist\Views\SupplierMapping\SupplierMappingEditor.html" />
+    <Content Include="CP_SupplierPricelist\Views\SupplierMapping\SupplierMappingEditorController.js" />
+    <Content Include="CP_SupplierPricelist\Views\SupplierMapping\SupplierMappingManagement.html" />
+    <Content Include="CP_SupplierPricelist\Views\SupplierMapping\SupplierMappingManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="CP_SupplierPricelist_SupplierEditorController" vr-loader="scopeModel.isLoading" >
+﻿<div vr-modalcontent ng-controller="CP_SupplierPricelist_SupplierMappingEditorController" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formEditor">
             <vr-row>
@@ -6,8 +6,8 @@
                     <vr-sec-user-selector on-ready="onUserDirectiveReady" isrequired="true" showaddbutton></vr-sec-user-selector>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Carrier Accounts" datasource="[]" text="None"
-                               selectedvalues="selectedCarriers" isrequired="true">
+                    <vr-select datatextfield="SupplierName" datavaluefield="SupplierId" label="Carrier Accounts" datasource="carriers" text="None"
+                               selectedvalues="selectedCarriers" ismultipleselection entityname="arrier Account" isrequired="true">
                     </vr-select>
                 </vr-columns>
 

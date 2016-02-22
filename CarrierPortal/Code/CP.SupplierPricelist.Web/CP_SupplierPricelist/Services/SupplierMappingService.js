@@ -1,8 +1,8 @@
 ﻿
-app.service('CP_SupplierPricelist_SupplierService', ['VRModalService',
+app.service('CP_SupplierPricelist_SupplierMappingService', ['VRModalService',
     function ( VRModalService) {
 
-        function addSupplier(onSupplierAdded) {
+        function addSupplierMapping(onSupplierAdded) {
             var settings = {
             
             };
@@ -12,10 +12,10 @@ app.service('CP_SupplierPricelist_SupplierService', ['VRModalService',
             settings.onScopeReady = function(modalScope) {
                 //modalScope.onCustomerAdded = onCustomerAdded;
             };
-            VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/Supplier/SupplierEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingEditor.html', parameters, settings);
         }
 
-        function editSupplier(customerId, onCustomerUpdated) {
+        function editSupplierMapping(customerId, onCustomerUpdated) {
                 var modalSettings = {
                 };
                 var parameters = {
@@ -25,10 +25,10 @@ app.service('CP_SupplierPricelist_SupplierService', ['VRModalService',
                 modalSettings.onScopeReady = function (modalScope) {
                   //  modalScope.onCustomerUpdated = onCustomerUpdated;
                 };
-                VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/Supplier/SupplierEditor.html', parameters, modalSettings);
+                VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingEditor.html', parameters, modalSettings);
             }
         return ({
-            addSupplier: addSupplier,
-            editSupplier: editSupplier
+            addSupplierMapping: addSupplierMapping,
+            editSupplierMapping: editSupplierMapping
         });
     }]);
