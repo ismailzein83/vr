@@ -15,15 +15,8 @@
         var serviceTypeDirectiveAPI;
         var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var unitTypeDirectiveAPI;
-        var unitTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var cdrDirectionDirectiveAPI;
         var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var cdrTypeDirectiveAPI;
-        var cdrTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
 
         var currencyDirectiveAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -68,19 +61,10 @@
                 serviceTypeReadyPromiseDeferred.resolve();
             }
 
-            $scope.onUnitTypeReady = function (api) {
-                unitTypeDirectiveAPI = api;
-                unitTypeReadyPromiseDeferred.resolve();
-            }
 
             $scope.onCDRDirectionReady = function (api) {
                 cdrDirectionDirectiveAPI = api;
                 cdrDirectionReadyPromiseDeferred.resolve();
-            }
-
-            $scope.onCDRTypeReady = function (api) {
-                cdrTypeDirectiveAPI = api;
-                cdrTypeReadyPromiseDeferred.resolve();
             }
 
             $scope.SaveOperatorConfiguration = function () {
@@ -122,7 +106,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadServiceTypes, loadUnitTypes, loadCDRTypes, loadCDRDirections, loadCurrencies])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadServiceTypes, loadCDRDirections, loadCurrencies])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -142,29 +126,6 @@
             return loadServiceTypesPromiseDeferred.promise;
         }
 
-
-        function loadUnitTypes() {
-            var loadUnitTypesPromiseDeferred = UtilsService.createPromiseDeferred();
-            unitTypeReadyPromiseDeferred.promise.then(function () {
-                var directivePayload = {
-                    selectedIds: (operatorConfigurationEntity != undefined ? (operatorConfigurationEntity.UnitType != undefined ? [operatorConfigurationEntity.UnitType] : undefined) : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
-                }
-                VRUIUtilsService.callDirectiveLoad(unitTypeDirectiveAPI, directivePayload, loadUnitTypesPromiseDeferred);
-            });
-            return loadUnitTypesPromiseDeferred.promise;
-        }
-
-
-        function loadCDRTypes() {
-            var loadCDRTypesPromiseDeferred = UtilsService.createPromiseDeferred();
-            cdrTypeReadyPromiseDeferred.promise.then(function () {
-                var directivePayload = {
-                    selectedIds: (operatorConfigurationEntity != undefined ? (operatorConfigurationEntity.CDRType != undefined ? [operatorConfigurationEntity.CDRType] : undefined) : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
-                }
-                VRUIUtilsService.callDirectiveLoad(cdrTypeDirectiveAPI, directivePayload, loadCDRTypesPromiseDeferred);
-            });
-            return loadCDRTypesPromiseDeferred.promise;
-        }
 
         function loadCDRDirections() {
             var loadCDRDirectionsPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -217,7 +178,6 @@
         }
 
         function buildOperatorConfigurationObjFromScope() {
-            console.log($scope.scopeModal.percentage)
             var obj = {
                 OperatorConfigurationId: (operatorConfigurationId != null) ? operatorConfigurationId : 0,
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
@@ -225,9 +185,7 @@
                 Percentage: $scope.scopeModal.percentage,
                 Amount: $scope.scopeModal.amount,
                 AmountType: serviceTypeDirectiveAPI.getSelectedIds(),
-                UnitType: unitTypeDirectiveAPI.getSelectedIds(),
                 CDRDirection: cdrDirectionDirectiveAPI.getSelectedIds(),
-                CDRType: cdrTypeDirectiveAPI.getSelectedIds(),
                 Currency: currencyDirectiveAPI.getSelectedIds()
             };
 

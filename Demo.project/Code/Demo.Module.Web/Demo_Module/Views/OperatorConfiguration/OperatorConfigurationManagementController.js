@@ -13,10 +13,6 @@
         var cdrDirectionDirectiveAPI;
         var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var cdrTypeDirectiveAPI;
-        var cdrTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-
         defineScope();
         load();
 
@@ -33,11 +29,6 @@
                 cdrDirectionReadyPromiseDeferred.resolve();
             }
 
-            $scope.onCDRTypeReady = function (api) {
-                cdrTypeDirectiveAPI = api;
-                cdrTypeReadyPromiseDeferred.resolve();
-            }
-
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
@@ -52,8 +43,7 @@
             function getFilterObject() {
                 var data = {
                     OperatorIds: operatorProfileDirectiveAPI.getSelectedIds(),
-                    CDRTypes: cdrTypeDirectiveAPI.getSelectedIds(),
-                    CDRDirections: cdrDirectionDirectiveAPI.getSelectedIds(),
+                    CDRDirectionIds: cdrDirectionDirectiveAPI.getSelectedIds(),
                 };
 
                 return data;
@@ -66,7 +56,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadCDRTypes, loadCDRDirections])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadCDRDirections])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -84,14 +74,6 @@
                 });
 
             return loadOperatorProfilePromiseDeferred.promise;
-        }
-
-        function loadCDRTypes() {
-            var loadCDRTypesPromiseDeferred = UtilsService.createPromiseDeferred();
-            cdrTypeReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(cdrTypeDirectiveAPI, undefined, loadCDRTypesPromiseDeferred);
-            });
-            return loadCDRTypesPromiseDeferred.promise;
         }
 
         function loadCDRDirections() {
