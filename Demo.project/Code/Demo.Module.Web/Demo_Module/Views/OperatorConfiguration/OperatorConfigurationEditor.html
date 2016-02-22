@@ -6,6 +6,12 @@
                     <vr-demo-operatorprofile-selector isrequired on-ready="scopeModal.onOperatorProfileDirectiveReady"></vr-demo-operatorprofile-selector>
                 </vr-columns>
                 <vr-columns width="normal">
+                    <vr-datetimepicker value="scopeModal.fromDate" label="From Date" customvalidate="validateDateRange()" isrequired type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker value="scopeModal.toDate" label="To Date" customvalidate="validateDateRange()" type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="normal">
                     <servicetype-selector on-ready="onServiceTypeReady" isrequired="true"></servicetype-selector>
                 </vr-columns>
                 <vr-columns width="normal">
@@ -28,12 +34,7 @@
                                 unit="%">
                     </vr-numeric>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-datetimepicker value="scopeModal.fromDate" label="From Date" customvalidate="validateDateRange()" isrequired type="dateTime"></vr-datetimepicker>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-datetimepicker value="scopeModal.toDate" label="To Date" customvalidate="validateDateRange()" type="dateTime"></vr-datetimepicker>
-                </vr-columns>
+               
             </vr-row>
 
             <vr-row>
