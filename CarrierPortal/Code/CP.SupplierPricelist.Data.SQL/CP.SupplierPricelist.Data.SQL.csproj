@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomerUserDataManager.cs" />
     <Compile Include="CustomerDataManager.cs" />
     <Compile Include="PriceListDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

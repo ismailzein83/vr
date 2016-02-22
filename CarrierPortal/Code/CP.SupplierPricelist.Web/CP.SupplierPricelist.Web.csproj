@@ -167,6 +167,7 @@
     <Content Include="CP_SupplierPricelist\Services\APIServices\SupplierManagmentAPIService.js" />
     <Content Include="CP_SupplierPricelist\Services\APIServices\CustomerManagmentAPIService.js" />
     <Content Include="CP_SupplierPricelist\Services\APIServices\SupplierPriceListAPIService.js" />
+    <Content Include="CP_SupplierPricelist\Services\SupplierService.js" />
     <Content Include="CP_SupplierPricelist\Services\CustomerService.js" />
     <Content Include="CP_SupplierPricelist\Services\SupplierPriceListService.js" />
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerEditor.html" />
@@ -175,6 +176,8 @@
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerManagementController.js" />
     <Content Include="CP_SupplierPricelist\Views\SupplierPriceList\SupplierPriceListManagement.html" />
     <Content Include="CP_SupplierPricelist\Views\SupplierPriceList\SupplierPriceListManagementController.js" />
+    <Content Include="CP_SupplierPricelist\Views\Supplier\SupplierEditor.html" />
+    <Content Include="CP_SupplierPricelist\Views\Supplier\SupplierEditorController.js" />
     <Content Include="CP_SupplierPricelist\Views\Supplier\SupplierManagement.html" />
     <Content Include="CP_SupplierPricelist\Views\Supplier\SupplierManagementController.js" />
   </ItemGroup>

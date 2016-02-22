@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomerDataManagerFactory.cs" />
+    <Compile Include="ICustomerUserDataManager.cs" />
     <Compile Include="ICustomerDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="ImportPriceListDataManagerFactory.cs" />

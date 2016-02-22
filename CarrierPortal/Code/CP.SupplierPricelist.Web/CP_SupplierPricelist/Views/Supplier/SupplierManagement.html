@@ -1,1 +1,17 @@
-﻿
+﻿<vr-panel ng-controller="CP_SupplierPriceList_SupplierManagementController">
+    <vr-form name="formFilter" vr-loader="isLoading">
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Add" formname="formFilter" data-onclick="AddSupplier"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <!--<vr-cp-customer-grid on-ready="onGridReady"></vr-cp-customer-grid>-->
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+
+</vr-panel>

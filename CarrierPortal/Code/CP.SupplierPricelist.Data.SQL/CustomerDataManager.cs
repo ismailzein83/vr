@@ -25,12 +25,22 @@ namespace CP.SupplierPricelist.Data.SQL
             maxTimeStamp = timestamp;
             return customers;
         }
+
+        public List<Customer> GetAllCustomers()
+        {
+            return GetItemsSP("[CP_SupPriceList].[sp_Customer_GetAll]", CustomerMapper);
+        }
+        public bool AreCustomersUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[CP_SupPriceList].[Customer]", ref updateHandle);
+        }
         Customer CustomerMapper(IDataReader reader)
         {
             Customer customer = new Customer
             {
                 CustomerId = (int)reader["ID"],
                 Name = reader["Name"] as string,
+                
             };
             string settings = reader["Settings"] as string;
             if (settings != null)

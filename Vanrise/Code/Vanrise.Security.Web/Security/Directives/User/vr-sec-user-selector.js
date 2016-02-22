@@ -32,7 +32,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                         else
                             ctrl.selectedvalues = userObj.Entity;
                     };
-                    VR_Sec_UserService.adduser(onUserAdded);
+                    VR_Sec_UserService.addUser(onUserAdded);
                 }
 
 

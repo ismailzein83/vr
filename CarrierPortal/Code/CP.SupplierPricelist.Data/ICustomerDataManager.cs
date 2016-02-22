@@ -6,5 +6,9 @@ namespace CP.SupplierPricelist.Data
     public interface ICustomerDataManager : IDataManager
     {
         List<Customer> GetCustomers(ref byte[] maxTimeStamp, int nbOfRows);
+
+        List<Customer> GetAllCustomers();
+
+        bool AreCustomersUpdated(ref object updateHandle);
     }
 }
