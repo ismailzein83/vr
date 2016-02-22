@@ -50,25 +50,27 @@ function (UtilsService, VRNotificationService, VR_Queueing_ExecutionFlowStageSer
             var api = {};
 
             api.getData = function () {
-                var fields;
+                var stages;
+                var stage;
                 if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                    fields = [];
+                    stages = [];
                     for (var i = 0; i < ctrl.datasource.length; i++) {
-                        fields.push({
-                            StageName: ctrl.datasource[i].StageName,
-                            QueueNameTemplate: ctrl.datasource[i].QueueNameTemplate,
-                            QueueTitleTemplate: ctrl.datasource[i].QueueTitleTemplate,
-                            singleConcurrentReader: ctrl.datasource[i].SingleConcurrentReader,
-                            QueueItemType: ctrl.datasource[i].QueueItemType,
-                            QueueActivator: ctrl.datasource[i].QueueActivator,
-                            SourceStages: ctrl.datasource[i].SourceStages
+                        stage = ctrl.datasource[i];
+                        stages.push({
+                            StageName: stage.StageName,
+                            QueueNameTemplate: stage.QueueNameTemplate,
+                            QueueTitleTemplate: stage.QueueTitleTemplate,
+                            singleConcurrentReader: stage.SingleConcurrentReader,
+                            QueueItemType: stage.QueueItemType,
+                            QueueActivator: stage.QueueActivator,
+                            SourceStages: stage.SourceStages
                         });
                     }
 
                 }
 
                 var obj = {
-                    Fields: fields,
+                    Stages: stages,
                 }
                 return obj;
             }

@@ -1,6 +1,6 @@
 ﻿
     <vr-columns width="1/3row">
-        <vr-select on-ready="scopeModal.onSelectorReady"
+        <vr-select on-ready="scopeModal.onQueueActivatorSelectorReady"
                    datasource="scopeModal.queueActivatorConfig"
                    selectedvalues="scopeModal.selectedqueueActivatorConfig"
                    onselectionchanged="scopeModal.onSelectionChanged"
@@ -13,5 +13,5 @@
         </vr-select>
     </vr-columns>
     <div ng-if="scopeModal.selectedqueueActivatorConfig != undefined" vr-loader="scopeModal.isLoadingDirective">
-        <vr-directivewrapper directive="scopeModal.selectedqueueActivatorConfig.Editor" on-ready="scopeModal.onDirectiveReady"></vr-directivewrapper>
+        <vr-directivewrapper directive="scopeModal.selectedqueueActivatorConfig.Editor" on-ready="scopeModal.onWrapperDirectiveReady"></vr-directivewrapper>
     </div>

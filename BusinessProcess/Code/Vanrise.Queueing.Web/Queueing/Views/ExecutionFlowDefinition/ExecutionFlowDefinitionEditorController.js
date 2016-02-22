@@ -126,7 +126,7 @@
                 ID: (executionFlowDefinitionId != null) ? executionFlowDefinitionId : 0,
                 Name: $scope.scopeModal.name,
                 Title: $scope.scopeModal.title,
-                Stages: stages != undefined ? stages.Fields : undefined
+                Stages: stages != undefined ? stages.Stages : undefined
             };
             return executionFlowDefinitionObject;
         }

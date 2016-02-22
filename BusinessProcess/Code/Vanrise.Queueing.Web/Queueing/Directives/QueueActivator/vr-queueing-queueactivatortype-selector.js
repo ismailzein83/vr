@@ -27,10 +27,10 @@
         function QueueactivatorconfigSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var selectorAPI;
+            var queueActivatorSelectorAPI;
 
-            var directiveAPI;
-            var directiveReadyDeferred;
+            var wrapperDirectiveAPI;
+            var wrapperDirectiveReadyDeferred;
 
             var payloadObj = {};
             function initializeController() {
@@ -38,16 +38,16 @@
                 $scope.scopeModal.queueActivatorConfig = [];
                 $scope.scopeModal.selectedqueueActivatorConfig;
 
-                $scope.scopeModal.onSelectorReady = function (api) {
-                    selectorAPI = api;
+                $scope.scopeModal.onQueueActivatorSelectorReady = function (api) {
+                    queueActivatorSelectorAPI = api;
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
                 };
 
-                $scope.scopeModal.onDirectiveReady = function (api) {
-                    directiveAPI = api;
+                $scope.scopeModal.onWrapperDirectiveReady = function (api) {
+                    wrapperDirectiveAPI = api;
                     var setLoader = function (value) {
                         $scope.scopeModal.isLoading = value;
                     };
@@ -56,7 +56,7 @@
                     activatorPayload.ExistingStages = payloadObj.ExistingStages;
                     activatorPayload.DataRecordTypeId = payloadObj.DataRecordTypeId;
 
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, directiveAPI, activatorPayload, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, wrapperDirectiveAPI, activatorPayload, setLoader, wrapperDirectiveReadyDeferred);
                 };
             } 
 
@@ -65,7 +65,7 @@
 
                 api.load = function (payload) {
                     payloadObj = payload;
-                    selectorAPI.clearDataSource();
+                    queueActivatorSelectorAPI.clearDataSource();
                     var promises = [];
                     var getActivatorTemplatesPromise = VR_Queueing_QueueActivatorConfigAPIService.GetQueueActivatorsConfig();
                     promises.push(getActivatorTemplatesPromise);
@@ -84,16 +84,16 @@
                         }
 
                         if (payload != undefined && payload.QueueActivator != undefined) {
-                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                            wrapperDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
                             $scope.scopeModal.selectedqueueActivatorConfig = UtilsService.getItemByVal($scope.scopeModal.queueActivatorConfig, payload.QueueActivator.ConfigId, 'QueueActivatorConfigId');
 
-                            directiveReadyDeferred.promise.then(function () {
-                                directiveReadyDeferred = undefined;
+                            wrapperDirectiveReadyDeferred.promise.then(function () {
+                                wrapperDirectiveReadyDeferred = undefined;
                                 var activatorPayload = {};
                                 activatorPayload.QueueActivator = payload.QueueActivator;
                                 activatorPayload.ExistingStages = payload.ExistingStages;
                                 activatorPayload.DataRecordTypeId = payload.DataRecordTypeId;
-                                VRUIUtilsService.callDirectiveLoad(directiveAPI, activatorPayload, loadActivatorPromiseDeferred);
+                                VRUIUtilsService.callDirectiveLoad(wrapperDirectiveAPI, activatorPayload, loadActivatorPromiseDeferred);
                             });
                         }
                     });
@@ -105,7 +105,7 @@
                     var data = {};
 
                     if ($scope.scopeModal.selectedqueueActivatorConfig != undefined) {
-                        data = directiveAPI.getData();
+                        data = wrapperDirectiveAPI.getData();
                         data.ConfigId = $scope.scopeModal.selectedqueueActivatorConfig.QueueActivatorConfigId;
                     }
                     return data;
