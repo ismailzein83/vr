@@ -55,7 +55,7 @@ namespace CP.SupplierPricelist.Data.SQL
         public bool AddCustomer(Customer inputCustomer, out int customerId)
         {
             object id;
-            int recordesEffected = ExecuteNonQuerySP("[CP_SupPriceList].[InsertCustomer]", out id, inputCustomer.Name, inputCustomer.Settings);
+            int recordesEffected = ExecuteNonQuerySP("[CP_SupPriceList].[InsertCustomer]", out id, inputCustomer.Name, inputCustomer.Settings != null ? Serializer.Serialize(inputCustomer.Settings) : null);
             customerId = (int)id;
             return recordesEffected > 0;
         }

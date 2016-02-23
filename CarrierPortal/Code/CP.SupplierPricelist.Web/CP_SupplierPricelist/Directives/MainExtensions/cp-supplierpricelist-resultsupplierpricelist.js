@@ -83,9 +83,6 @@ app.directive("cpSupplierpricelistResultsupplierpricelist", ['UtilsService', 'VR
                     sourceDirectiveReadyPromiseDeferred.promise.then(function () {
                         sourceDirectiveReadyPromiseDeferred = undefined;
                         var obj;
-                        console.log(payload);
-                        console.log(payload.data);
-                        console.log(payload.data.SupplierPriceListConnector);
                         if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined) {
                             console.log(payload.data.SupplierPriceListConnector);
                             obj = {

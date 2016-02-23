@@ -3,11 +3,11 @@
     "use strict";
     function customerManagmentApiService(baseApiService, utilsService, moduleConfig) {
 
-        function UpdateCustomer() {
-            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "UpdateCustomer"));
+        function UpdateCustomer(object) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "UpdateCustomer"), object);
         }
-        function AddCustomer() {
-            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "AddCustomer"));
+        function AddCustomer(object) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "AddCustomer"), object);
         }
         function GetCustomerTemplates() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "GetCustomerTemplates"));
