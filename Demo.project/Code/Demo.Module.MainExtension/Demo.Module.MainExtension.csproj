@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ServiceSubTypeData.cs" />
     <Compile Include="ServiceSubTypeVoice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

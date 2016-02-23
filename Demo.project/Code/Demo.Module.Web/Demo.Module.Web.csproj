@@ -127,6 +127,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Demo_Module\Constant\DataServiceSubTypeEnum.js" />
     <Content Include="Demo_Module\Constant\VoiceServiceSubTypeEnum.js" />
     <Content Include="Demo_Module\Constant\CDRTypeEnum.js" />
     <Content Include="Demo_Module\Constant\CDRDirectionEnum.js" />
@@ -142,6 +143,7 @@
     <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericfilter.js" />
     <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericgrid.js" />
     <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericsettings.js" />
+    <Content Include="Demo_Module\Directives\MainExtensions\ServiceSubTypes\demo-servicesubtype-data.js" />
     <Content Include="Demo_Module\Directives\MainExtensions\ServiceSubTypes\demo-servicesubtype-voice.js" />
     <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatoraccount-selector.js" />
     <Content Include="Demo_Module\Directives\OperatorConfiguration\Templates\OperatorConfigurationGridTemplate.html" />
