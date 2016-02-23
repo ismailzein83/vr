@@ -11,11 +11,11 @@ namespace CP.SupplierPricelist.Web.Controllers
     public class CP_SupPriceList_CustomerController : BaseAPIController
     {
         [HttpGet]
-        [Route("GetCustomers")]
-        public CustomerOutput GetCustomers(ref byte[] maxTimeStamp, int nbOfRows)
+        [Route("GetCustomer")]
+        public Customer GetCustomer(int customerId)
         {
             CustomerManager manager = new CustomerManager();
-            return manager.GetCustomers(ref maxTimeStamp, nbOfRows);
+            return manager.GetCustomer(customerId);
         }
 
         [HttpGet]

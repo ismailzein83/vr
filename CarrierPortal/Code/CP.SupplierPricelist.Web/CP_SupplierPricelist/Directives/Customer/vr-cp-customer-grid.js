@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService",
-function (UtilsService, customeApiService) {
+app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService",
+function (UtilsService, customeApiService, customerService) {
 
     function CustomerGrid($scope, ctrl) {
 
@@ -51,18 +51,23 @@ function (UtilsService, customeApiService) {
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
-                name: "Edit"//,
-                // clicked: editSellingRule,
+                name: "Edit",
+                clicked: editCustomer
             },
             {
                 name: "Assign User"//,
-                //clicked: deleteSellingRule,
+                //clicked: Assign,
             }
             ];
         }
     }
+    function editCustomer(customer) {
+        var onCustomerUpdated = function (updatedItem) {
+            gridAPI.itemUpdated(updatedItem);
+        };
+        customerService.editcustomer(customer.Entity.CustomerId, onCustomerUpdated);
+    }
 
-   
 
     var directiveDefinitionObject = {
 
