@@ -12,10 +12,14 @@
         function GetCustomerTemplates() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "GetCustomerTemplates"));
         }
+        function GetFilteredCustomers(input) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "GetFilteredCustomers"), input);
+        }
         return ({
             GetCustomerTemplates: GetCustomerTemplates,
             UpdateCustomer: UpdateCustomer,
-            AddCustomer: AddCustomer
+            AddCustomer: AddCustomer,
+            GetFilteredCustomers: GetFilteredCustomers
 
         });
     }

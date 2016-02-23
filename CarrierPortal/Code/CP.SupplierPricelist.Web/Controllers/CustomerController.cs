@@ -1,5 +1,4 @@
 ﻿using CP.SupplierPricelist.Business;
-using CP.SupplierPricelist.Data;
 using CP.SupplierPricelist.Entities;
 using System.Collections.Generic;
 using System.Web.Http;
@@ -28,19 +27,18 @@ namespace CP.SupplierPricelist.Web.Controllers
         }
         [HttpPost]
         [Route("AddCustomer")]
-        public  InsertOperationOutput<Customer> AddCustomer(Customer input)
+        public InsertOperationOutput<Customer> AddCustomer(Customer input)
         {
             CustomerManager manager = new CustomerManager();
             return manager.AddCustomer(input);
         }
 
-        //[HttpPost]
-        //[Route("UpdateCustomer")]
-        //public new UpdateOperationOutput<Customer> UpdateCustomer(Customer input)
-        //{
-        //    CustomerManager manager = new CustomerManager();
-        //    return manager.UpdateCustomer(input);
-        //}
-
+        [HttpPost]
+        [Route("GetFilteredCustomers")]
+        public object GetFilteredSellingRules(DataRetrievalInput<Customer> input)
+        {
+            CustomerManager manager = new CustomerManager();
+            return GetWebResponse(input, manager.GetFilteredCustomers(input));
+        }
     }
 }

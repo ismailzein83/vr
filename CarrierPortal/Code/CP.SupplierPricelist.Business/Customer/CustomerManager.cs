@@ -5,6 +5,7 @@ using CP.SupplierPricelist.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
+using System;
 
 namespace CP.SupplierPricelist.Business
 {
@@ -20,29 +21,37 @@ namespace CP.SupplierPricelist.Business
             output.MaxTimeStamp = maxTimeStamp;
             return output;
         }
-
+        protected CustomerDetail MapToDetails(Customer customer)
+        {
+            return new CustomerDetail()
+            {
+                Entity = customer
+            };
+        }
+        public Vanrise.Entities.IDataRetrievalResult<CustomerDetail> GetFilteredCustomers(DataRetrievalInput<Customer> input)
+        {
+            ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
+            List<Customer> customers = dataManager.GetAllCustomers();
+            return DataRetrievalManager.Instance.ProcessResult(input, customers.ToBigResult(input, null, MapToDetails));
+        }
         public InsertOperationOutput<Customer> AddCustomer(Customer inputCustomer)
         {
-
-
-            Vanrise.Entities.InsertOperationOutput<Customer> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<Customer>();
+            InsertOperationOutput<Customer> insertOperationOutput = new InsertOperationOutput<Customer>();
             int customerId = -1;
             ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
             bool insertActionSucc = dataManager.AddCustomer(inputCustomer, out customerId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 inputCustomer.CustomerId = customerId;
                 insertOperationOutput.InsertedObject = inputCustomer;
             }
             else
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
             }
-
             return insertOperationOutput;
-
         }
         public Customer GetCustomer(int customerId)
         {

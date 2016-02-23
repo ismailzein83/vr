@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="CustomerOutput.cs" />
     <Compile Include="Customer\Customer.cs" />
+    <Compile Include="Customer\CustomerDetail.cs" />
     <Compile Include="Customer\CustomerSettings.cs" />
     <Compile Include="Customer\CustomerSupplierMappingQuery.cs" />
     <Compile Include="Customer\CustomerSupplierMapping.cs" />

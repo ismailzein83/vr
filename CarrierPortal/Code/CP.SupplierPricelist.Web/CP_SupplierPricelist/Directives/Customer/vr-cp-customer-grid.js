@@ -18,7 +18,7 @@ function (UtilsService, customeApiService) {
 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (payload) {
+                    directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
                     }
 
@@ -37,7 +37,7 @@ function (UtilsService, customeApiService) {
         };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return customeApiService.GetCustomers(dataRetrievalInput)
+            return customeApiService.GetFilteredCustomers(dataRetrievalInput)
                .then(function (response) {
                    onResponseReady(response);
                })

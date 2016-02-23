@@ -13,6 +13,16 @@ namespace CP.SupplierPricelist.Data.SQL
         {
 
         }
+
+        //static Dictionary<string, string> _columnMapper; 
+        //static CustomerDataManager()
+        //{
+           
+        //    _columnMapper.Add("Entity.Attempt", "Attempt");
+
+            
+        //}
+
         public List<Customer> GetCustomers(ref byte[] maxTimeStamp, int nbOfRows)
         {
             List<Customer> customers = new List<Customer>();
