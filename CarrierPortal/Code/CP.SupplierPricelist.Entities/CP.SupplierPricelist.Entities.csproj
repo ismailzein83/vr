@@ -53,6 +53,7 @@
     <Compile Include="Customer\Customer.cs" />
     <Compile Include="Customer\CustomerDetail.cs" />
     <Compile Include="Customer\CustomerSettings.cs" />
+    <Compile Include="Customer\CustomerSupplierMappingDetail.cs" />
     <Compile Include="Customer\CustomerSupplierMappingQuery.cs" />
     <Compile Include="Customer\CustomerSupplierMapping.cs" />
     <Compile Include="Customer\CustomerUser.cs" />

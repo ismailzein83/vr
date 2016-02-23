@@ -3,12 +3,15 @@
         <vr-form name="formEditor">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-sec-user-selector on-ready="onUserDirectiveReady" isrequired="true" showaddbutton></vr-sec-user-selector>
+                    <vr-sec-user-selector on-ready="onUserDirectiveReady" isrequired="true" showaddbutton selectedvalues="selecteduser"></vr-sec-user-selector>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-select datatextfield="SupplierName" datavaluefield="SupplierId" label="Carrier Accounts" datasource="carriers" text="None"
-                               selectedvalues="selectedCarriers" ismultipleselection entityname="Carrier Account" isrequired="true">
-                    </vr-select>
+                    <!--<vr-select datatextfield="SupplierName" datavaluefield="SupplierId" label="Carrier Accounts" datasource="carriers" text="None"
+                               selectedvalues="selectedCarriers" ismultipleselection entityname="Carrier Account" isrequired="true" >
+                    </vr-select>-->
+
+                    <vr-cp-carrieraccount-selector selectedvalues="selectedCarriers" on-ready="onCarrierAccountDirectiveReady" isrequired="true" ismultipleselection isdisabled="!selecteduser"></vr-cp-carrieraccount-selector>
+
                 </vr-columns>
 
             </vr-row>

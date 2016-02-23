@@ -8,6 +8,7 @@ namespace CP.SupplierPricelist.Entities
 {
     public class CustomerSupplierMapping
     {
+        public int SupplierMappingId { get; set; }
         public int CustomerId { get; set; }
 
         public int UserId { get; set; }

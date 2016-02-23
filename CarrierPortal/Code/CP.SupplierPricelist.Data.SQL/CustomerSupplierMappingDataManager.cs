@@ -14,14 +14,18 @@ namespace CP.SupplierPricelist.Data.SQL
 
         }
 
-        public bool Insert(CustomerSupplierMapping customerSupplierMapping)
+        public bool Insert(CustomerSupplierMapping customerSupplierMapping ,  out int insertedId)
         {
-
+            object supplierMappingId;
             int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_CustomerSupplierMapping_Insert]",
+                out supplierMappingId,
                 customerSupplierMapping.UserId,
                 customerSupplierMapping.CustomerId,
                 customerSupplierMapping.Settings !=null ? Serializer.Serialize( customerSupplierMapping.Settings ) :null  
+                
                 );
+            insertedId = (int)supplierMappingId;
+
             return (recordsEffected > 0);
         }
         public List<CustomerSupplierMapping> GetAllCustomerSupplierMappings()
@@ -36,6 +40,7 @@ namespace CP.SupplierPricelist.Data.SQL
         {
             CustomerSupplierMapping customerSupplier = new CustomerSupplierMapping
             {
+                SupplierMappingId = (int)reader["ID"],
                 UserId = (int)reader["UserID"],
                 CustomerId = (int)reader["CustomerID"]
                 

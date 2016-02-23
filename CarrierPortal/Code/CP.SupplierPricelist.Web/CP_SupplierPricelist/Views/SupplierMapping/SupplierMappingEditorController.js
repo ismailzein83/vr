@@ -11,6 +11,9 @@
         var userDirectiveApi;
         var userReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var carrierAccountDirectiveApi;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -29,6 +32,10 @@
                 userDirectiveApi = api;
                 userReadyPromiseDeferred.resolve();
             }
+            $scope.onCarrierAccountDirectiveReady = function (api) {
+                carrierAccountDirectiveApi = api;
+                carrierAccountReadyPromiseDeferred.resolve();
+            }
             $scope.saveCustomerSupplierMapping = function () {
                 if (isEditMode) {
                     return updateCustomerSupplierMapping();
@@ -42,7 +49,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, LoadUser, LoadCarriers])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, LoadUser, LoadCarrierAccount])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -68,12 +75,13 @@
             return userLoadPromiseDeferred.promise;
         }
 
-        function LoadCarriers() {
-            return supplierMappingAPIService.GetCustomerSuppliers().then(function (response) {              
-                angular.forEach(response, function (item) {
-                    $scope.carriers.push(item);
-                });
+        function LoadCarrierAccount() {
+            var carrierAccountLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            carrierAccountReadyPromiseDeferred.promise.then(function () {
+
+                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveApi, undefined, carrierAccountLoadPromiseDeferred);
             });
+            return carrierAccountLoadPromiseDeferred.promise;
         }
 
         function buildCustomerSupplierMappingFromScope() {

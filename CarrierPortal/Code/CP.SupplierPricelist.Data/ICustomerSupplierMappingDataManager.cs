@@ -6,7 +6,7 @@ namespace CP.SupplierPricelist.Data
     public interface ICustomerSupplierMappingDataManager : IDataManager
     {
         List<CustomerSupplierMapping> GetAllCustomerSupplierMappings();
-        bool Insert(CustomerSupplierMapping customerSupplierMapping);
+        bool Insert(CustomerSupplierMapping customerSupplierMapping, out int insertedId);
         bool AreCustomerSupplierMappingsUpdated(ref object updateHandle);
     }
 }

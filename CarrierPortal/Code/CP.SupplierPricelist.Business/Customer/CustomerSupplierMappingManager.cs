@@ -10,6 +10,7 @@ using Vanrise.Entities;
 using Vanrise.Common.Business;
 using CP.SupplierPricelist.Data;
 using CP.SupplierPricelist.Entities;
+using Vanrise.Security.Entities;
 
 
 namespace CP.SupplierPricelist.Business
@@ -31,10 +32,15 @@ namespace CP.SupplierPricelist.Business
             
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<CustomerSupplierMapping> GetFilteredCustomerSupplierMappings(Vanrise.Entities.DataRetrievalInput<CustomerSupplierMappingQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<CustomerSupplierMappingDetail> GetFilteredCustomerSupplierMappings(Vanrise.Entities.DataRetrievalInput<CustomerSupplierMappingQuery> input)
         {
             var allCustomerSupplierMappings = GetCachedCustomerSupplierMappingsUsers();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, null));
+            Func<CustomerSupplierMapping, bool> filterExpression = (item) =>
+                 (input.Query.Users == null || input.Query.Users.Count() == 0 || input.Query.Users.Contains(item.UserId))
+                  &&
+                 (input.Query.CarrierAccouts == null || input.Query.CarrierAccouts.Count() == 0 || input.Query.CarrierAccouts.Contains((item.Settings.MappedSuppliers.Select(x=>x.SupplierId)).ToString()));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, SupplierMappingDetailMapper));
         }
 
         public IEnumerable<CustomerSupplierMapping> GetCustomerSupplierMappings()
@@ -49,13 +55,16 @@ namespace CP.SupplierPricelist.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             customerSupplierMapping.CustomerId = GetLoggedInCustomerId();
+            int supplierMappingId = -1;
+
             ICustomerSupplierMappingDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerSupplierMappingDataManager>();
-            bool insertActionSucc = dataManager.Insert(customerSupplierMapping);
+            bool insertActionSucc = dataManager.Insert(customerSupplierMapping, out supplierMappingId);
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                customerSupplierMapping.SupplierMappingId = supplierMappingId;
                 insertOperationOutput.InsertedObject = customerSupplierMapping;
             }
             else
@@ -78,7 +87,7 @@ namespace CP.SupplierPricelist.Business
                {
                    ICustomerSupplierMappingDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerSupplierMappingDataManager>();
                    IEnumerable<CustomerSupplierMapping> customerSupplierMappings = dataManager.GetAllCustomerSupplierMappings();
-                   return customerSupplierMappings.ToDictionary(cu => cu.UserId, cu => cu);
+                   return customerSupplierMappings.ToDictionary(cu => cu.SupplierMappingId, cu => cu);
                });
         }
 
@@ -93,5 +102,24 @@ namespace CP.SupplierPricelist.Business
             }
         }
         #endregion
+
+        protected CustomerSupplierMappingDetail SupplierMappingDetailMapper(CustomerSupplierMapping customerSupplierMapping)
+        {
+            CustomerSupplierMappingDetail customerSupplierMappingDetail =  new CustomerSupplierMappingDetail()
+            {
+                Entity = customerSupplierMapping
+            };
+
+            if (customerSupplierMapping.Settings.MappedSuppliers.Count() > 0)
+            {
+                customerSupplierMappingDetail.SupplierNames = string.Join(",", customerSupplierMapping.Settings.MappedSuppliers.Select(x => x.SupplierName));;
+            }
+
+            User user = new UserManager().GetUserbyId(customerSupplierMapping.UserId);
+            if (user != null)
+                customerSupplierMappingDetail.UserName = user.Name;
+
+            return customerSupplierMappingDetail;
+        }
     }
 }

@@ -1,1 +1,9 @@
-﻿
+﻿<vr-datagrid datasource="supplierMappings"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             dataretrievalfunction="dataRetrievalFunction"
+             menuactions="gridMenuActions"
+             idfield="SupplierMappingId" >
+    <vr-datagridcolumn headertext="'User Name'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Suppliers Names'" field="'SupplierNames'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

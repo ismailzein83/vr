@@ -5,11 +5,16 @@
         function GetCustomerSuppliers() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "GetCustomerSuppliers"));
         }
+        function GetFilteredCustomerSupplierMappings(input) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "GetFilteredCustomerSupplierMappings"), input);
+        }
         function AddCustomerSupplierMapping(supplierMapping) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "AddCustomerSupplierMapping"), supplierMapping);
         }
+
         return ({
             GetCustomerSuppliers: GetCustomerSuppliers,
+            GetFilteredCustomerSupplierMappings:GetFilteredCustomerSupplierMappings,
             AddCustomerSupplierMapping: AddCustomerSupplierMapping
         });
        
