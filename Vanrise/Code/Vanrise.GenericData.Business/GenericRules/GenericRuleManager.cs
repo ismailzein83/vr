@@ -138,14 +138,14 @@ namespace Vanrise.GenericData.Business
             GenericRuleDefinition ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(rule.DefinitionId);
 
             List<string> descriptions = new List<string>();
-            bool fieldValuesExist = (rule.Criteria != null && rule.Criteria.FieldsValues != null);
-
-            foreach (var criteriaField in ruleDefinition.CriteriaDefinition.Fields)
+            if (rule.Criteria != null && rule.Criteria.FieldsValues != null)
             {
-                GenericRuleCriteriaFieldValues fieldValues = null;
-                if (fieldValuesExist)
+                foreach (var criteriaField in ruleDefinition.CriteriaDefinition.Fields)
+                {
+                    GenericRuleCriteriaFieldValues fieldValues = null;
                     rule.Criteria.FieldsValues.TryGetValue(criteriaField.FieldName, out fieldValues);
-                descriptions.Add((fieldValues != null) ? criteriaField.FieldType.GetDescription(fieldValues) : null);
+                    descriptions.Add((fieldValues != null) ? criteriaField.FieldType.GetDescription(fieldValues) : null);
+                }
             }
 
             return new GenericRuleDetail()
