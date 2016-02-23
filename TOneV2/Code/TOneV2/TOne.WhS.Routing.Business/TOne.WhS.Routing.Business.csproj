@@ -63,6 +63,9 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
@@ -84,6 +87,8 @@
     <Compile Include="OptionPolicies\SupplierZoneToRPOptionHighestRatePolicy.cs" />
     <Compile Include="OptionPolicies\SupplierZoneToRPOptionLowestRatePolicy.cs" />
     <Compile Include="SupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="TransformationSteps\SaleCodeMatchStep.cs" />
+    <Compile Include="TransformationSteps\SupplierCodeMatchStep.cs" />
     <Compile Include="ZoneDetailBuilder.cs" />
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="RouteOptionRules\BlockRouteOptionRule.cs" />

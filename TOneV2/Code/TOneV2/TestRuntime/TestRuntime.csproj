@@ -395,6 +395,17 @@
     <Reference Include="Vanrise.Rules.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Normalization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Pricing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Pricing.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
     </Reference>

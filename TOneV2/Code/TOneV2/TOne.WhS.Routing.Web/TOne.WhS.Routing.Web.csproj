@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -24,6 +25,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -199,6 +201,14 @@
     <Content Include="WhS_Routing\Directives\RoutingDatabase\vr-whs-routing-routingdatabase-selector.js" />
     <Content Include="WhS_Routing\Directives\RPRoute\vr-whs-routing-rproutepolicy-selector.js" />
     <Content Include="WhS_Routing\Directives\RPRoute\vr-whs-routing-zonerouteoptions.js" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStep\Templates\SaleCodeMatchStepTemplate.html" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStep\Templates\SaleCodeMatchStepPreviewTemplate.html" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStep\vr-whs-routing-datatransformation-salecodematch-preview.js" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStep\vr-whs-routing-datatransformation-salecodematch.js" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\Templates\SupplierCodeMatchStepTemplate.html" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\Templates\SupplierCodeMatchStepPreviewTemplate.html" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch-preview.js" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch.js" />
     <Content Include="WhS_Routing\Services\APIServices\CustomerRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RPRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleAPIService.js" />
@@ -223,12 +233,12 @@
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplier.html" />
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplierController.js" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
