@@ -1,5 +1,6 @@
 ﻿using CP.SupplierPricelist.Entities;
 using System.Collections.Generic;
+using Vanrise.Entities;
 
 namespace CP.SupplierPricelist.Data
 {
@@ -10,5 +11,6 @@ namespace CP.SupplierPricelist.Data
         List<Customer> GetAllCustomers();
 
         bool AreCustomersUpdated(ref object updateHandle);
+        bool AddCustomer(Customer inputCustomer, out int customerId);
     }
 }

@@ -4,10 +4,10 @@
     function customerManagmentApiService(baseApiService, utilsService, moduleConfig) {
 
         function UpdateCustomer() {
-            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "UpdateCustomer"));
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "UpdateCustomer"));
         }
         function AddCustomer() {
-            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "AddCustomer"));
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "AddCustomer"));
         }
         function GetCustomerTemplates() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "GetCustomerTemplates"));

@@ -19,20 +19,20 @@ namespace CP.SupplierPricelist.Web.Controllers
             return manager.GetCustomers(ref maxTimeStamp, nbOfRows);
         }
 
-        //[HttpGet]
-        //[Route("GetCustomerTemplates")]
-        //public List<TemplateConfig> GetCustomerTemplates()
-        //{
-        //    CustomerManager manager = new CustomerManager();
-        //    return manager.GetConnectorTemplates();
-        //}
-        //[HttpPost]
-        //[Route("AddCustomer")]
-        //public new InsertOperationOutput<Customer> AddCustomer(Customer input)
-        //{
-        //    CustomerManager manager = new CustomerManager();
-        //    return manager.AddCustomer(input);
-        //}
+        [HttpGet]
+        [Route("GetCustomerTemplates")]
+        public List<TemplateConfig> GetCustomerTemplates()
+        {
+            CustomerManager manager = new CustomerManager();
+            return manager.GetConnectorTemplates();
+        }
+        [HttpPost]
+        [Route("AddCustomer")]
+        public  InsertOperationOutput<Customer> AddCustomer(Customer input)
+        {
+            CustomerManager manager = new CustomerManager();
+            return manager.AddCustomer(input);
+        }
 
         //[HttpPost]
         //[Route("UpdateCustomer")]

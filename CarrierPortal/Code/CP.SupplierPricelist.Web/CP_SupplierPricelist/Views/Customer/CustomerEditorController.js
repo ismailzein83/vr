@@ -16,6 +16,15 @@
         function loadParameters() {
 
         }
+        function buildCustomerFromScope() {
+
+            var customerObject = {
+                name: $scope.name//,
+                //CustomerSettings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, sellingRuleSettingsAPI, 'selectedSellingRuleSettingsTemplate')
+            };
+
+            return customerObject;
+        }
         function defineScope() {
             $scope.sourceTypeTemplates = [];
             $scope.close = function () {

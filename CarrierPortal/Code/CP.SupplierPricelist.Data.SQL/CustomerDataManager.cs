@@ -45,12 +45,19 @@ namespace CP.SupplierPricelist.Data.SQL
             {
                 CustomerId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                
+
             };
             string settings = reader["Settings"] as string;
             if (settings != null)
                 customer.Settings = Serializer.Deserialize<CustomerSettings>(settings);
             return customer;
+        }
+        public bool AddCustomer(Customer inputCustomer, out int customerId)
+        {
+            object id;
+            int recordesEffected = ExecuteNonQuerySP("[CP_SupPriceList].[InsertCustomer]", out id, inputCustomer.Name, inputCustomer.Settings);
+            customerId = (int)id;
+            return recordesEffected > 0;
         }
     }
 }
