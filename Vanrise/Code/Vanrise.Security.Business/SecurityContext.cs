@@ -70,5 +70,14 @@ namespace Vanrise.Security.Business
 
         #endregion
 
+        #region Pending Methods
+
+        public bool IsAllowedV2(string actionNames)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.IsAllowedV2(actionNames, this.GetSecurityToken().UserId);
+        }
+        
+        #endregion
     }
 }

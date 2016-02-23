@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
@@ -125,6 +126,7 @@ namespace Vanrise.Security.Business
         #endregion
 
         #region Private Methods
+
         private bool CheckPermissions(string requiredPath, List<string> requiredFlags, Dictionary<string, Dictionary<string, Flag>> effectivePermissions,
             HashSet<string> breakInheritanceEntities, HashSet<string> allowedFlags)
         {
@@ -185,7 +187,6 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-
         private Dictionary<string, List<string>> ParseRequiredPermissionsString(string value)
         {
             Dictionary<string, List<string>> requiredPermissions = null;
@@ -210,6 +211,96 @@ namespace Vanrise.Security.Business
             }
 
             return requiredPermissions;
+        }
+        
+        #endregion
+
+        #region Pending Methods
+
+        public bool IsAllowedV2(string actionNames, int userId)
+        {
+            //Assume that the view is allowed, and start looping until you find an exception that prevents the user from seeing this view
+            bool result = true;
+
+            PermissionManager manager = new PermissionManager();
+            EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(userId);
+
+            Dictionary<string, List<string>> requiredPermissions = GetPermissionOptionsByNodePaths(actionNames);
+
+            foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
+            {
+                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissionsWrapper.EffectivePermissions, effectivePermissionsWrapper.BreakInheritanceEntities, new HashSet<string>());
+                if (!result)
+                    break;
+            }
+
+            return result;
+        }
+
+        // Example: Root/Administration Module/Users, [View, Add, Edit, Delete]
+        Dictionary<string, List<string>> GetPermissionOptionsByNodePaths(string actionNames)
+        {
+            Dictionary<string, List<string>> requiredPermissions = null;
+
+            if (actionNames != null)
+            {
+                requiredPermissions = new Dictionary<string, List<string>>();
+                string[] actionNameArray = actionNames.Split('|');
+                IEnumerable<SystemAction> systemActions = new SystemActionManager().GetSystemActions();
+                IEnumerable<BusinessEntityNode> beNodes = new BusinessEntityManager().GetEntityNodes();
+
+                foreach (var actionName in actionNameArray)
+                {
+                    var permissionOptionsByNodeNames = GetPermissionOptionsByNodeNames(systemActions, actionName.Trim());
+                    foreach (KeyValuePair<string, List<string>> kvp in permissionOptionsByNodeNames)
+                    {
+                        string nodePath = GetNodePathByNodeName(beNodes, kvp.Key);
+                        
+                        List<string> existingPermissionOptions;
+                        requiredPermissions.TryGetValue(nodePath, out existingPermissionOptions);
+                        
+                        if (existingPermissionOptions != null)
+                            existingPermissionOptions.AddRange(kvp.Value);
+                        else
+                            requiredPermissions.Add(nodePath, kvp.Value);
+                    }
+                }
+            }
+
+            return requiredPermissions;
+        }
+
+        string GetNodePathByNodeName(IEnumerable<BusinessEntityNode> beNodes, string nodeName)
+        {
+            foreach (var beNode in beNodes)
+            {
+                if (beNode.Name == nodeName)
+                    return beNode.GetRelativePath();
+                else if (beNode.Children != null)
+                {
+                    string path = GetNodePathByNodeName(beNode.Children, nodeName);
+                    if (path != null) return path;
+                }
+            }
+            return null;
+        }
+
+        // Example: Users, [View, Add, Edit, Delete]
+        Dictionary<string, List<string>> GetPermissionOptionsByNodeNames(IEnumerable<SystemAction> systemActions, string actionName)
+        {
+            var permissionOptionsByNodeNames = new Dictionary<string,List<string>>();
+
+            SystemAction systemAction = systemActions.FindRecord(itm => itm.Name == actionName);
+            string[] permissions = systemAction.RequiredPermissions.Split('|');
+
+            foreach (string permission in permissions)
+            {
+                string[] kvp = permission.Split(':');
+                List<string> permissionOptions = kvp[1].Split(',').MapRecords(itm => itm.Trim()).ToList();
+                permissionOptionsByNodeNames.Add(kvp[0].Trim(), permissionOptions);
+            }
+
+            return permissionOptionsByNodeNames;
         }
 
         #endregion

@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Data
 {
-    interface ISystemActionDataManager
+    public interface ISystemActionDataManager : IDataManager
     {
+        IEnumerable<SystemAction> GetSystemActions();
+
+        bool AreSystemActionsUpdated(ref object updateHandle);
     }
 }
