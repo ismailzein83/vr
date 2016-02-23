@@ -15,7 +15,8 @@ namespace Interconnect.Web
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Integration", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/InterConnect_BusinessEntity", "*.js", true));
+                "~/Client/Modules/InterConnect_BusinessEntity", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/VR_GenericData", "*.js", true));
         }
     }
 }
