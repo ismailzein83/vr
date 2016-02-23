@@ -7,7 +7,9 @@ using Vanrise.Web.Base;
 
 namespace CP.SupplierPricelist.Web.Controllers
 {
+    
     [RoutePrefix(Constants.ROUTE_PREFIX + "Customer")]
+    [JSONWithTypeAttribute]
     public class CP_SupPriceList_CustomerController : BaseAPIController
     {
         [HttpGet]
