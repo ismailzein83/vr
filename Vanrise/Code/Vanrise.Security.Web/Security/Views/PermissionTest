@@ -1,0 +1,3 @@
+﻿<vr-panel ng-controller="PermissionTestController">
+    <h1>Permission Test</h1>
+</vr-panel>
