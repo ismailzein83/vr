@@ -23,7 +23,7 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
             }
         },
         templateUrl: function (element, attrs) {
-            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Number/Templates/NumberFieldTypeTemplate.html';
+            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Number/Templates/NumberFieldTypeTemplate.html';
         }
     };
 

@@ -26,7 +26,7 @@ app.directive('vrGenericdataFieldtypeText', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Text/Templates/TextFieldTypeTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Text/Templates/TextFieldTypeTemplate.html';
             }
 
         };

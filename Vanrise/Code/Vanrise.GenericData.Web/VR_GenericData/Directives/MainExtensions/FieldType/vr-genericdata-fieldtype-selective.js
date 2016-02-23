@@ -21,7 +21,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/DataRecordFieldTypeSelectiveTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Templates/FieldTypeSelectiveTemplate.html"
         };
 
         function DataRecordFieldTypeSelective($scope, ctrl, $attrs) {
@@ -89,6 +89,6 @@
         }
     }
 
-    app.directive('vrGenericdataDatarecordfieldtypeSelective', DataRecordFieldTypeSelectiveDirective);
+    app.directive('vrGenericdataFieldtypeSelective', DataRecordFieldTypeSelectiveDirective);
 
 })(app);

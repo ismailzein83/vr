@@ -26,7 +26,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Choices/Templates/ChoicesFieldTypeTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Choices/Templates/ChoicesFieldTypeTemplate.html';
             }
 
         };
