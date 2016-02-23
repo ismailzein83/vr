@@ -51,10 +51,10 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-fieldtype-numeric-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" normal-col-num="ctrl.normalColNum" />';
+            return '<vr-genericdata-fieldtype-number-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" normal-col-num="ctrl.normalColNum" />';
         }
     }
 
-    app.directive('vrGenericdataFieldtypeNumericFiltereditor', NumericFieldTypeFilterEditorDirective);
+    app.directive('vrGenericdataFieldtypeNumberFiltereditor', NumericFieldTypeFilterEditorDirective);
 
 })(app);

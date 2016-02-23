@@ -189,11 +189,11 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-recordname-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-stepsequencedesign.js" />
-    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-fieldtype-businessentity-filtereditor.js" />
-    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-fieldtype-choices-filtereditor.js" />
-    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-fieldtype-numeric-filtereditor.js" />
-    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-fieldtype-text-filtereditor.js" />
-    <Content Include="VR_GenericData\Directives\FilterEditors\vr-genericdata-genericrulesettings-mapping-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\BusinessEntity\vr-genericdata-fieldtype-businessentity-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Choices\vr-genericdata-fieldtype-choices-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Number\vr-genericdata-fieldtype-number-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Text\vr-genericdata-fieldtype-text-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericrulesettings-mapping-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-grid.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\SqlTemplate.html" />
@@ -229,26 +229,26 @@
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorTransformBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-storebatch.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-transformbatch.js" />
-    <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-fieldtype-businessentity-runtimeeditor.js" />
-    <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-fieldtype-numeric-runtimeeditor.js" />
-    <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-fieldtype-choices-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\BusinessEntity\vr-genericdata-fieldtype-businessentity-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Number\vr-genericdata-fieldtype-number-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Choices\vr-genericdata-fieldtype-choices-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\CriteriaField\Templates\GenericRuleDefinitionCriteriaFieldManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\CriteriaField\vr-genericdata-genericruledefinitioncriteriafield-management.js" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\Templates\GenericRuleDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\vr-genericdata-genericruledefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericRuleDefinition\vr-genericdata-genericruledefinition-selector.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\BooleanDirectiveTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\BusinessEntityDirectiveTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\ChoicesDirectiveTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\DateTimeDirectiveTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\NumberDirectiveTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Templates\TextDirectiveTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-fieldtype-boolean.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-fieldtype-choices.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-fieldtype-businessentity.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-fieldtype-datetime.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-fieldtype-number.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\vr-genericdata-fieldtype-text.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Boolean\Templates\BooleanFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\BusinessEntity\Templates\BusinessEntityFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Choices\Templates\ChoicesFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\DateTime\Templates\DateTimeFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Number\Templates\NumberFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Text\Templates\TextFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Boolean\vr-genericdata-fieldtype-boolean.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Choices\vr-genericdata-fieldtype-choices.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\BusinessEntity\vr-genericdata-fieldtype-businessentity.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\DateTime\vr-genericdata-fieldtype-datetime.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Number\vr-genericdata-fieldtype-number.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Text\vr-genericdata-fieldtype-text.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSQLSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-sql.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\ExpressionBuilder\vr-genericdata-expressionbuilder-recordvalue.js" />
@@ -295,7 +295,7 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
-    <Content Include="VR_GenericData\Directives\RuntimeEditors\vr-genericdata-fieldtype-text-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFields\Text\vr-genericdata-fieldtype-text-runtimeeditor.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageAPIService.js" />
@@ -352,7 +352,10 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_GenericData\Directives\FilterEditors\" />
+    <Folder Include="VR_GenericData\Directives\RuntimeEditors\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="web.config" />

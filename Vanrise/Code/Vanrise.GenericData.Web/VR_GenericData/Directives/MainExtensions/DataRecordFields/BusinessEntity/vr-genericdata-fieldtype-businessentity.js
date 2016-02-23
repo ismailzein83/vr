@@ -25,7 +25,7 @@
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/BusinessEntityDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/BusinessEntity/Templates/BusinessEntityFieldTypeTemplate.html';
             }
         };
 

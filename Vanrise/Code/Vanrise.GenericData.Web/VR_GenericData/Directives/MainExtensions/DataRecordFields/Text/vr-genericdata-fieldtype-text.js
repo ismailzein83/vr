@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeBoolean', ['UtilsService',
+app.directive('vrGenericdataFieldtypeText', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -12,7 +12,7 @@ app.directive('vrGenericdataFieldtypeBoolean', ['UtilsService',
 
                 var ctrl = this;
 
-                var ctor = new booleanTypeCtor(ctrl, $scope);
+                var ctor = new textTypeCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -26,12 +26,12 @@ app.directive('vrGenericdataFieldtypeBoolean', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/BooleanDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Text/Templates/TextFieldTypeTemplate.html';
             }
 
         };
 
-        function booleanTypeCtor(ctrl, $scope) {
+        function textTypeCtor(ctrl, $scope) {
 
             function initializeController() {
                 defineAPI();
@@ -44,7 +44,7 @@ app.directive('vrGenericdataFieldtypeBoolean', ['UtilsService',
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBooleanType,Vanrise.GenericData.MainExtensions",
+                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType, Vanrise.GenericData.MainExtensions",
                     };
                 }
 

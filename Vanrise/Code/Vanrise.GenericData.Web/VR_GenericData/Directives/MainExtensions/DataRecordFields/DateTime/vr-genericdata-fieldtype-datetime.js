@@ -26,7 +26,7 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService',
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/Templates/DatetimeDirectiveTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFields/DateTime/Templates/DateTimeFieldTypeTemplate.html';
             }
 
         };
