@@ -103,6 +103,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -112,11 +116,10 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="InterConnect_BusinessEntity\Views\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\OperatorProfileController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +135,17 @@
       <Project>{96a6a321-ce09-4b26-9eb4-9700cb85c9fa}</Project>
       <Name>InterConnect.BusinessEntity.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="InterConnect_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="InterConnect_BusinessEntity\Directives\OperatorProfile\Templates\OperatorProfileGridTemplate.html" />
+    <Content Include="InterConnect_BusinessEntity\Directives\OperatorProfile\vr-interconnect-be-operatorprofile-grid.js" />
+    <Content Include="InterConnect_BusinessEntity\Services\APIServices\OperatorProfileAPIService.js" />
+    <Content Include="InterConnect_BusinessEntity\Services\OperatorProfileService.js" />
+    <Content Include="InterConnect_BusinessEntity\Views\OperatorProfile\OperatorProfileEditor.html" />
+    <Content Include="InterConnect_BusinessEntity\Views\OperatorProfile\OperatorProfileEditorController.js" />
+    <Content Include="InterConnect_BusinessEntity\Views\OperatorProfile\OperatorProfileManagement.html" />
+    <Content Include="InterConnect_BusinessEntity\Views\OperatorProfile\OperatorProfileManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

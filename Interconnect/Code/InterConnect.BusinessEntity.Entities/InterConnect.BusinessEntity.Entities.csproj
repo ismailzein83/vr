@@ -44,7 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OperatorProfile.cs" />
+    <Compile Include="OperatorProfileDetail.cs" />
     <Compile Include="OperatorProfileExtendedSettingType.cs" />
+    <Compile Include="OperatorProfileInfo.cs" />
+    <Compile Include="OperatorProfileQuery.cs" />
     <Compile Include="OperatorProfileSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
