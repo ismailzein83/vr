@@ -27,9 +27,9 @@ namespace CP.SupplierPricelist.Business
 
                 return supplierPriceListConnectorBase.GetSuppliers(null);
             }
-            else 
-                throw new NotSupportedException();          
-            
+            else
+                throw new NotSupportedException();
+
         }
 
         public Vanrise.Entities.IDataRetrievalResult<CustomerSupplierMappingDetail> GetFilteredCustomerSupplierMappings(Vanrise.Entities.DataRetrievalInput<CustomerSupplierMappingQuery> input)
@@ -38,7 +38,7 @@ namespace CP.SupplierPricelist.Business
             Func<CustomerSupplierMapping, bool> filterExpression = (item) =>
                  (input.Query.Users == null || input.Query.Users.Count() == 0 || input.Query.Users.Contains(item.UserId))
                   &&
-                 (input.Query.CarrierAccouts == null || input.Query.CarrierAccouts.Count() == 0 || input.Query.CarrierAccouts.Contains((item.Settings.MappedSuppliers.Select(x=>x.SupplierId)).ToString()));
+                 (input.Query.CarrierAccouts == null || input.Query.CarrierAccouts.Count() == 0 || input.Query.CarrierAccouts.Any(y => (item.Settings.MappedSuppliers.Any(x => x.SupplierId == y))));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, SupplierMappingDetailMapper));
         }
@@ -62,7 +62,7 @@ namespace CP.SupplierPricelist.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-               
+
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 customerSupplierMapping.SupplierMappingId = supplierMappingId;
                 insertOperationOutput.InsertedObject = customerSupplierMapping;
@@ -105,14 +105,14 @@ namespace CP.SupplierPricelist.Business
 
         protected CustomerSupplierMappingDetail SupplierMappingDetailMapper(CustomerSupplierMapping customerSupplierMapping)
         {
-            CustomerSupplierMappingDetail customerSupplierMappingDetail =  new CustomerSupplierMappingDetail()
+            CustomerSupplierMappingDetail customerSupplierMappingDetail = new CustomerSupplierMappingDetail()
             {
                 Entity = customerSupplierMapping
             };
 
             if (customerSupplierMapping.Settings.MappedSuppliers.Count() > 0)
             {
-                customerSupplierMappingDetail.SupplierNames = string.Join(",", customerSupplierMapping.Settings.MappedSuppliers.Select(x => x.SupplierName));;
+                customerSupplierMappingDetail.SupplierNames = string.Join(",", customerSupplierMapping.Settings.MappedSuppliers.Select(x => x.SupplierName)); ;
             }
 
             User user = new UserManager().GetUserbyId(customerSupplierMapping.UserId);
