@@ -23,6 +23,7 @@ namespace Vanrise.Security.Business
         #endregion
 
         #region Public Methods
+
         public List<MenuItem> GetMenuItems(bool getOnlyAllowDynamic)
         {
             List<Module> modules = _moduleManager.GetModules();
@@ -40,6 +41,7 @@ namespace Vanrise.Security.Business
 
             return retVal;
         }
+
         public List<MenuItem> GetMenuItems(int userId)
         {
             List<Module> modules = _moduleManager.GetModules();
@@ -56,7 +58,7 @@ namespace Vanrise.Security.Business
             {
                 if (item.ParentId == 0)
                 {
-                    MenuItem rootItem = GetModuleMenuV2(item, modules, views);
+                    MenuItem rootItem = GetModuleMenu(item, modules, views);
                     if (rootItem.Childs != null && rootItem.Childs.Count > 0)
                         retVal.Add(rootItem);
                 }
@@ -64,6 +66,7 @@ namespace Vanrise.Security.Business
 
             return SortedMenuItems(retVal); ;
         }
+
         public List<MenuItem> SortedMenuItems(List<MenuItem> menuItems)
         {
 
@@ -77,9 +80,11 @@ namespace Vanrise.Security.Business
 
 
         }
+
         #endregion
 
         #region Private Methods
+
         private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views)
         {
             MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon, Rank = module.Rank };
@@ -93,7 +98,7 @@ namespace Vanrise.Security.Business
                 menu.Childs = new List<MenuItem>();
                 foreach (View viewItem in childViews)
                 {
-                    if (viewItem.RequiredPermissions == null || SecurityContext.Current.IsAllowed(viewItem.RequiredPermissions))
+                    if ((viewItem.RequiredPermissions == null || SecurityContext.Current.IsAllowed(viewItem.RequiredPermissions)) && (viewItem.ActionNames == null || SecurityContext.Current.IsAllowedV2(viewItem.ActionNames)))
                     {
                         MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem.Rank };
                         menu.Childs.Add(viewMenu);
@@ -113,6 +118,7 @@ namespace Vanrise.Security.Business
 
             return menu;
         }
+
         private List<View> FilterViewsPerAudience(List<View> views, int userId, List<int> subscribedGroups)
         {
             List<View> filteredResults = new List<View>();
@@ -134,6 +140,7 @@ namespace Vanrise.Security.Business
 
             return filteredResults;
         }
+
         private bool isAudienceInSubscribedGroups(View view, List<int> subscribedGroups)
         {
             if (view.Audience.Groups != null)
@@ -149,6 +156,7 @@ namespace Vanrise.Security.Business
 
             return false;
         }
+
         private MenuItem GetModuleMenu(Module module, List<Module> modules, bool getOnlyAllowDynamic )
         {
 
@@ -164,40 +172,6 @@ namespace Vanrise.Security.Business
                 {
                     menu.Childs.Add(GetModuleMenu(item, modules, getOnlyAllowDynamic));
                 }
-            }
-
-            return menu;
-        }
-        #endregion
-
-        #region Pending Methods
-
-        MenuItem GetModuleMenuV2(Module module, List<Module> modules, List<View> views)
-        {
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon, Rank = module.Rank };
-
-            List<View> childViews = views.FindAll(x => x.ModuleId == module.ModuleId);
-            List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
-
-            if (childViews.Count > 0)
-            {
-                menu.Childs = new List<MenuItem>();
-                foreach (View viewItem in childViews)
-                {
-                    if (viewItem.ActionNames == null || SecurityContext.Current.IsAllowedV2(viewItem.ActionNames))
-                    {
-                        MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem.Rank };
-                        menu.Childs.Add(viewMenu);
-                    }
-                }
-            }
-
-            if (subModules.Count > 0)
-            {
-                if (menu.Childs == null)
-                    menu.Childs = new List<MenuItem>();
-                foreach (Module item in subModules)
-                    menu.Childs.Add(GetModuleMenuV2(item, modules, views));
             }
 
             return menu;
