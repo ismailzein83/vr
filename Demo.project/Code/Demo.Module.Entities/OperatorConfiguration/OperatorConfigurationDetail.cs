@@ -12,7 +12,9 @@ namespace Demo.Module.Entities
 
         public String OperatorName { get; set; }
 
-        public String AmountTypeName { get; set; }
+        public String ServiceTypeName { get; set; }
+
+        public String ServiceSubTypeName { get; set; }
 
         public string CDRDirectionName { get; set; }
 

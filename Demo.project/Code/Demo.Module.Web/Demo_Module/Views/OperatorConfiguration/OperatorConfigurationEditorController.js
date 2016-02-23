@@ -12,9 +12,6 @@
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var serviceTypeDirectiveAPI;
-        var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var cdrDirectionDirectiveAPI;
         var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -66,13 +63,6 @@
                 currencyDirectiveAPI = api;
                 currencyReadyPromiseDeferred.resolve();
             }
-
-
-            $scope.onServiceTypeReady = function (api) {
-                serviceTypeDirectiveAPI = api;
-                serviceTypeReadyPromiseDeferred.resolve();
-            }
-
 
             $scope.onCDRDirectionReady = function (api) {
                 cdrDirectionDirectiveAPI = api;
@@ -168,16 +158,6 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        function loadServiceTypes() {
-            var loadServiceTypesPromiseDeferred = UtilsService.createPromiseDeferred();
-            serviceTypeReadyPromiseDeferred.promise.then(function () {
-                var directivePayload = {
-                    selectedIds: (operatorConfigurationEntity != undefined ? (operatorConfigurationEntity.AmountType != undefined ? [operatorConfigurationEntity.AmountType] : undefined) : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
-                }
-                VRUIUtilsService.callDirectiveLoad(serviceTypeDirectiveAPI, directivePayload, loadServiceTypesPromiseDeferred);
-            });
-            return loadServiceTypesPromiseDeferred.promise;
-        }
 
         function loadCDRDirections() {
             var loadCDRDirectionsPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -239,7 +219,6 @@
                 FromDate: $scope.scopeModal.fromDate,
                 ToDate: $scope.scopeModal.toDate,
                 Amount: $scope.scopeModal.amount,
-                //AmountType: serviceTypeDirectiveAPI.getSelectedIds(),
                 CDRDirection: cdrDirectionDirectiveAPI.getSelectedIds(),
                 Notes: $scope.scopeModal.notes,
                 Currency: currencyDirectiveAPI.getSelectedIds(),

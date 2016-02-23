@@ -25,7 +25,7 @@ namespace Demo.Module.Data.SQL
         {
             object infoId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Insert", out infoId, config.OperatorId, config.Volume, config.AmountType, config.CDRDirection, config.Percentage, config.Amount, config.Currency, config.FromDate, config.ToDate, config.Notes, Vanrise.Common.Serializer.Serialize(config.ServiceSubTypeSettings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Insert", out infoId, config.OperatorId, config.Volume, config.CDRDirection, config.Percentage, config.Amount, config.Currency, config.FromDate, config.ToDate, config.Notes, Vanrise.Common.Serializer.Serialize(config.ServiceSubTypeSettings));
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)infoId;
@@ -35,7 +35,7 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(OperatorConfiguration config)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Update", config.OperatorConfigurationId, config.OperatorId, config.Volume, config.AmountType, config.CDRDirection, config.Percentage, config.Amount, config.Currency, config.FromDate, config.ToDate, config.Notes, Vanrise.Common.Serializer.Serialize(config.ServiceSubTypeSettings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Update", config.OperatorConfigurationId, config.OperatorId, config.Volume, config.CDRDirection, config.Percentage, config.Amount, config.Currency, config.FromDate, config.ToDate, config.Notes, Vanrise.Common.Serializer.Serialize(config.ServiceSubTypeSettings));
             return (recordsEffected > 0);
         }
         public bool AreOperatorConfigurationsUpdated(ref object updateHandle)
@@ -62,7 +62,6 @@ namespace Demo.Module.Data.SQL
                 OperatorConfigurationId = (int)reader["ID"],
                 OperatorId = (int)reader["OperatorID"],
                 Volume = GetReaderValue<int>(reader, "Volume"),
-                AmountType = GetReaderValue<int>(reader, "AmountType"),
                 CDRDirection = GetReaderValue<CDRDirection>(reader, "CDRDirection"),
                 Percentage = GetReaderValue<double?>(reader, "Percentage"),
                 Amount = GetReaderValue<double?>(reader, "Amount"),
@@ -70,7 +69,7 @@ namespace Demo.Module.Data.SQL
                 FromDate = (DateTime)reader["FromDate"],
                 ToDate = GetReaderValue<DateTime?>(reader, "ToDate"),
                 Notes = reader["Notes"] as string,
-                ServiceSubTypeSettings =   (ServiceSubTypeSettings!=null?Vanrise.Common.Serializer.Deserialize<ServiceSubType>(ServiceSubTypeSettings):null)   
+                ServiceSubTypeSettings = (ServiceSubTypeSettings != null ? Vanrise.Common.Serializer.Deserialize<ServiceSubType>(ServiceSubTypeSettings) : null)
             };
             return config;
         }

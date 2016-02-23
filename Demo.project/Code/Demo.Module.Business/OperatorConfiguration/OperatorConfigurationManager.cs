@@ -28,9 +28,6 @@ namespace Demo.Module.Business
                 (input.Query.CDRDirectionIds == null || input.Query.CDRDirectionIds.Count == 0 || input.Query.CDRDirectionIds.Contains((int)prod.CDRDirection))
                 &&
 
-                (input.Query.ServiceTypeIds == null || input.Query.ServiceTypeIds.Count == 0 || input.Query.ServiceTypeIds.Contains((int)prod.AmountType))
-                &&
-
                 (input.Query.OperatorConfigurationIds == null || input.Query.OperatorConfigurationIds.Contains(prod.OperatorConfigurationId))
                 &&
                 
@@ -144,10 +141,6 @@ namespace Demo.Module.Business
 
             OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
             configDetail.OperatorName = operatorProfileManager.GetOperatorProfileName(config.OperatorId);
-
-
-            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
-            configDetail.AmountTypeName = serviceTypeManager.GetServiceTypeName(config.AmountType);
 
             return configDetail;
         }

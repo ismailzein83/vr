@@ -13,9 +13,6 @@
         var cdrDirectionDirectiveAPI;
         var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var serviceTypeDirectiveAPI;
-        var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         defineScope();
         load();
 
@@ -34,11 +31,6 @@
                 cdrDirectionReadyPromiseDeferred.resolve();
             }
 
-            $scope.onServiceTypeReady = function (api) {
-                serviceTypeDirectiveAPI = api;
-                serviceTypeReadyPromiseDeferred.resolve();
-            }
-
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
@@ -54,7 +46,6 @@
                 var data = {
                     OperatorIds: operatorProfileDirectiveAPI.getSelectedIds(),
                     CDRDirectionIds: cdrDirectionDirectiveAPI.getSelectedIds(),
-                    ServiceTypeIds: serviceTypeDirectiveAPI.getSelectedIds(),
                     FromDate: $scope.fromDate,
                     ToDate:$scope.toDate
                 };
@@ -69,7 +60,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadCDRDirections, loadServiceTypes])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadCDRDirections])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -95,14 +86,6 @@
                 VRUIUtilsService.callDirectiveLoad(cdrDirectionDirectiveAPI, undefined, loadCDRDirectionsPromiseDeferred);
             });
             return loadCDRDirectionsPromiseDeferred.promise;
-        }
-
-        function loadServiceTypes() {
-            var loadServiceTypePromiseDeferred = UtilsService.createPromiseDeferred();
-            serviceTypeReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(serviceTypeDirectiveAPI, undefined,loadServiceTypePromiseDeferred)
-            })
-            return loadServiceTypePromiseDeferred.promise;
         }
 
 
