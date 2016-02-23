@@ -24,10 +24,19 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             }
+
             $scope.onUserDirectiveReady = function (api) {
                 userDirectiveApi = api;
                 userReadyPromiseDeferred.resolve();
             }
+            $scope.saveCustomerSupplierMapping = function () {
+                if (isEditMode) {
+                    return updateCustomerSupplierMapping();
+                }
+                else {
+                    return insertCustomerSupplierMapping();
+                }
+            };
         }
         function load() {
             loadAllControls();
@@ -67,6 +76,46 @@
             });
         }
 
+        function buildCustomerSupplierMappingFromScope() {
+            var object = {                
+                UserId: userDirectiveApi.getSelectedIds(),
+                Settings: {
+                    MappedSuppliers: $scope.selectedCarriers
+                }
+            };
+
+            return object;
+        }
+
+        function insertCustomerSupplierMapping() {
+            var object = buildCustomerSupplierMappingFromScope();
+            return supplierMappingAPIService.AddCustomerSupplierMapping(object)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("Customer Supplier Mapping", response)) {
+                    if ($scope.onCustomerAdded != undefined)
+                        $scope.onCustomerAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+
+        }
+
+        function updateCustomerSupplierMapping() {
+            //var object = buildCustomerSupplierMappingFromScope();
+            //return supplierMappingAPIService.AddCustomerSupplierMapping(object)
+            //.then(function (response) {
+            //    if (VRNotificationService.notifyOnItemAdded("Customer Supplier Mapping", response)) {
+            //        if ($scope.onCustomerAdded != undefined)
+            //            $scope.onCustomerAdded(response.InsertedObject);
+            //        $scope.modalContext.closeModal();
+            //    }
+            //}).catch(function (error) {
+            //    VRNotificationService.notifyException(error, $scope);
+            //});
+
+        }
 
        
     }

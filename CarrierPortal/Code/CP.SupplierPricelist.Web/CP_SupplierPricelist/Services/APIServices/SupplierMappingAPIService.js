@@ -5,8 +5,12 @@
         function GetCustomerSuppliers() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "GetCustomerSuppliers"));
         }
+        function AddCustomerSupplierMapping(supplierMapping) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "AddCustomerSupplierMapping"), supplierMapping);
+        }
         return ({
-            GetCustomerSuppliers: GetCustomerSuppliers
+            GetCustomerSuppliers: GetCustomerSuppliers,
+            AddCustomerSupplierMapping: AddCustomerSupplierMapping
         });
        
     }

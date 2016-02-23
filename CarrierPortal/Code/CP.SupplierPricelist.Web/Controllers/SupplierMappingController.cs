@@ -18,5 +18,21 @@ namespace CP.SupplierPricelist.Web.Controllers
             CustomerSupplierMappingManager manager = new CustomerSupplierMappingManager();
             return manager.GetCustomerSuppliers();
         }
+
+        [HttpPost]
+        [Route("GetFilteredCustomerSupplierMappings")]
+        public object GetFilteredCustomerSupplierMappings(Vanrise.Entities.DataRetrievalInput<CustomerSupplierMappingQuery> input)
+        {
+            CustomerSupplierMappingManager manager = new CustomerSupplierMappingManager();
+            return GetWebResponse(input, manager.GetFilteredCustomerSupplierMappings(input));
+        }
+
+        [HttpPost]
+        [Route("AddCustomerSupplierMapping")]
+        public object AddCustomerSupplierMapping(CustomerSupplierMapping customerSupplierMapping)
+        {
+            CustomerSupplierMappingManager manager = new CustomerSupplierMappingManager();
+            return manager.AddCustomerSupplierMapping(customerSupplierMapping);
+        }
     }
 }
