@@ -46,7 +46,7 @@ namespace Vanrise.GenericData.Business
                 genericRuleDefinition.GenericRuleDefinitionId = genericRuleDefinitionId;
                 insertOperationOutput.InsertedObject = genericRuleDefinition;
 
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetGenericRuleDefinitions");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -69,7 +69,7 @@ namespace Vanrise.GenericData.Business
             if (added)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetGenericRuleDefinitions");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {

@@ -31,9 +31,9 @@ namespace Vanrise.GenericData.Pricing
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveRate;", this.EffectiveRate, ruleContextVariableName);
             if (this.EffectiveDurationInSeconds != null)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveDurationInSeconds;", this.EffectiveDurationInSeconds, ruleContextVariableName);
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.EffectiveDurationInSeconds.Value;", this.EffectiveDurationInSeconds, ruleContextVariableName);
             if (this.TotalAmount != null)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.TotalAmount;", this.TotalAmount, ruleContextVariableName);
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.TotalAmount.Value;", this.TotalAmount, ruleContextVariableName);
         }
     }
 }
