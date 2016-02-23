@@ -11,28 +11,16 @@ namespace CP.SupplierPricelist.Business
 {
     public class CustomerManager
     {
-        public CustomerOutput GetCustomers(ref byte[] maxTimeStamp, int nbOfRows)
-        {
-            CustomerOutput output = new CustomerOutput();
-            ICustomerDataManager dataManager =
-             CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
-            List<Customer> customers = dataManager.GetCustomers(ref maxTimeStamp, nbOfRows);
-            output.Customers = customers;
-            output.MaxTimeStamp = maxTimeStamp;
-            return output;
-        }
         protected CustomerDetail MapToDetails(Customer customer)
         {
-            return new CustomerDetail()
+            return new CustomerDetail
             {
                 Entity = customer
             };
         }
-        public Vanrise.Entities.IDataRetrievalResult<CustomerDetail> GetFilteredCustomers(DataRetrievalInput<Customer> input)
+        public IDataRetrievalResult<CustomerDetail> GetFilteredCustomers(DataRetrievalInput<Customer> input)
         {
-            ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
-            List<Customer> customers = dataManager.GetAllCustomers();
-            return DataRetrievalManager.Instance.ProcessResult(input, customers.ToBigResult(input, null, MapToDetails));
+            return DataRetrievalManager.Instance.ProcessResult(input, GetCachedCustomers().ToBigResult(input, null, MapToDetails));
         }
         public InsertOperationOutput<Customer> AddCustomer(Customer inputCustomer)
         {
@@ -85,8 +73,6 @@ namespace CP.SupplierPricelist.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.CustomerConnector);
         }
-
-
         #endregion
 
 

@@ -86,7 +86,6 @@
         function load() {
             $scope.isLoading = true;
             if (isEditMode) {
-                $scope.title = "Edit Customer";
                 getCustomer().then(function () {
                     loadAllControls()
                         .finally(function () {
@@ -98,10 +97,8 @@
                 });
             }
             else {
-                $scope.title = "New Customer";
                 loadAllControls();
             }
-            loadAllControls();
         }
         function getCustomer() {
             return customerManagmentAPIService.GetCustomer(customerId).then(function (customer) {
@@ -109,7 +106,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData , LoadCustomerTemplates, loadSourceType])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, LoadCustomerTemplates, loadSourceType])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -131,15 +128,14 @@
             $scope.name = customerEntity.Name;
         }
         function LoadCustomerTemplates() {
+             return customerManagmentAPIService.GetCustomerTemplates().then(function (response) {
+                angular.forEach(response, function (item) {
+                    $scope.sourceTypeTemplates.push(item);
+                });
+                var sourceConfigId;
+                if (customerEntity != undefined && customerEntity.Settings != undefined && customerEntity.Settings.PriceListConnector != undefined)
+                    sourceConfigId = customerEntity.Settings.PriceListConnector.ConfigId;
 
-            customerManagmentAPIService.GetCustomerTemplates().then(function (response) {
-                angular.forEach(response, function (item) {
-                    $scope.sourceTypeTemplates.push(item);
-                });
-                var sourceConfigId = customerEntity.Settings.PriceListConnector.ConfigId;
-                angular.forEach(response, function (item) {
-                    $scope.sourceTypeTemplates.push(item);
-                });
                 if (sourceConfigId != undefined)
                     $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
             });
@@ -153,15 +149,15 @@
                 sourceDirectiveReadyPromiseDeferred = undefined;
                 var obj;
                 if (customerEntity != undefined && customerEntity.Settings != undefined && customerEntity.Settings.PriceListConnector != undefined) {
-                    
-                    //    obj = {
-                    //        Url: payload.data.SupplierPriceListConnector.Url,
-                    //        Username: payload.data.SupplierPriceListConnector.UserName,
-                    //        Password: payload.data.SupplierPriceListConnector.Password
-                    //    };
-                    //}
+
+                    obj = {
+                        Url: customerEntity.Settings.PriceListConnector.Url,
+                        Username: customerEntity.Settings.PriceListConnector.UserName,
+                        Password: customerEntity.Settings.PriceListConnector.Password
+                    };
+
                 }
-               
+
                 VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, obj, loadSourceTemplatePromiseDeferred);
             });
             return loadSourceTemplatePromiseDeferred.promise;
