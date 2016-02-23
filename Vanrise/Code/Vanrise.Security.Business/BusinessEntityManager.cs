@@ -15,34 +15,20 @@ namespace Vanrise.Security.Business
     {
         #region Fields / Constructors
 
-        BusinessEntityModuleManager _businessEntityModuleManager;
+        BusinessEntityModuleManager _beModuleManager;
 
         public BusinessEntityManager()
         {
-            _businessEntityModuleManager = new BusinessEntityModuleManager();
+            _beModuleManager = new BusinessEntityModuleManager();
         }
 
         #endregion
 
         #region Public Methods
 
-        public List<BusinessEntityNode> GetEntityNodes()
+        public IEnumerable<BusinessEntity> GetBusinessEntites()
         {
-            //TODO: pass the holder id to load the saved permissions
-            IEnumerable<BusinessEntityModule> modules = _businessEntityModuleManager.GetBusinessEntityModules();
-            IEnumerable<BusinessEntity> entities = GetCachedBusinessEntities().Values;
-
-            List<BusinessEntityNode> retVal = new List<BusinessEntityNode>();
-
-            foreach (BusinessEntityModule item in modules)
-            {
-                if (item.ParentId == 0)
-                {
-                    retVal.Add(GetModuleNode(item, modules, entities, null));
-                }
-            }
-
-            return retVal;
+            return GetCachedBusinessEntities().Values;
         }
 
         public BusinessEntity GetBusinessEntityById(int entityId)
@@ -56,42 +42,17 @@ namespace Vanrise.Security.Business
             int convertedEntityId = Convert.ToInt32(entityId);
 
             if (entityType == EntityType.MODULE)
-                return _businessEntityModuleManager.GetBusinessEntityModuleName(convertedEntityId);
+                return _beModuleManager.GetBusinessEntityModuleName(convertedEntityId);
 
             BusinessEntity entity = GetBusinessEntityById(convertedEntityId);
             return entity != null ? entity.Name : null;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(EntityType entityType, string entityId)
+        public void SetCacheExpired()
         {
-            UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
-            updateOperationOutput.UpdatedObject = null;
-            updateOperationOutput.Result = UpdateOperationResult.Failed;
-
-            if (entityType == EntityType.MODULE)
-            {
-                IBusinessEntityModuleDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
-                
-                if (manager.ToggleBreakInheritance(entityId))
-                {
-                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                    _businessEntityModuleManager.SetCacheExpired();
-                }
-            }
-            else
-            {
-                IBusinessEntityDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
-
-                if (manager.ToggleBreakInheritance(entityId))
-                {
-                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetEntities");
-                }
-            }
-
-            return updateOperationOutput;
+            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
-        
+
         #endregion
 
         #region Private Methods
@@ -107,55 +68,6 @@ namespace Vanrise.Security.Business
             });
         }
 
-        private BusinessEntityNode GetModuleNode(BusinessEntityModule module, IEnumerable<BusinessEntityModule> modules, IEnumerable<BusinessEntity> entities, BusinessEntityNode parent)
-        {
-            BusinessEntityNode node = new BusinessEntityNode()
-            {
-                EntityId = module.ModuleId,
-                Name = module.Name,
-                EntType = EntityType.MODULE,
-                BreakInheritance = module.BreakInheritance,
-                PermissionOptions = module.PermissionOptions,
-                Parent = parent
-            };
-
-            IEnumerable<BusinessEntityModule> subModules = modules.FindAllRecords(x => x.ParentId == module.ModuleId);
-
-            IEnumerable<BusinessEntity> childEntities = entities.FindAllRecords(x => x.ModuleId == module.ModuleId);
-
-            if (childEntities.Count() > 0)
-            {
-                node.Children = new List<BusinessEntityNode>();
-                foreach (BusinessEntity entityItem in childEntities)
-                {
-                    BusinessEntityNode entityNode = new BusinessEntityNode()
-                    {
-                        EntityId = entityItem.EntityId,
-                        Name = entityItem.Name,
-                        EntType = EntityType.ENTITY,
-                        BreakInheritance = entityItem.BreakInheritance,
-                        PermissionOptions = entityItem.PermissionOptions,
-                        Parent = node
-                    };
-
-                    node.Children.Add(entityNode);
-                }
-            }
-
-            if (subModules.Count() > 0)
-            {
-                if (node.Children == null)
-                    node.Children = new List<BusinessEntityNode>();
-
-                foreach (BusinessEntityModule item in subModules)
-                {
-                    node.Children.Add(GetModuleNode(item, modules, entities, node));
-                }
-            }
-
-            return node;
-        }
-        
         #endregion
 
         #region Private Classes

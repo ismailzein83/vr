@@ -33,7 +33,7 @@ namespace Vanrise.Security.Business
 
         public void SetCacheExpired()
         {
-            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetModules");
+            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
         
         #endregion

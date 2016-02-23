@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PermissionEditorController.$inject = ['$scope', 'VR_Sec_BusinessEntityAPIService', 'VR_Sec_PermissionAPIService', 'VR_Sec_PermissionFlagEnum', 'UtilsService', 'VRNavigationService', 'VRNotificationService'];
+    PermissionEditorController.$inject = ['$scope', 'VR_Sec_BusinessEntityNodeAPIService', 'VR_Sec_PermissionAPIService', 'VR_Sec_PermissionFlagEnum', 'UtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function PermissionEditorController($scope, VR_Sec_BusinessEntityAPIService, VR_Sec_PermissionAPIService, VR_Sec_PermissionFlagEnum, UtilsService, VRNavigationService, VRNotificationService) {
+    function PermissionEditorController($scope, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_PermissionAPIService, VR_Sec_PermissionFlagEnum, UtilsService, VRNavigationService, VRNotificationService) {
         var holderType;
         var holderId;
         var notificationResponseText;
@@ -68,7 +68,7 @@
                 });
 
                 function getEntityNodes() {
-                    return VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
+                    return VR_Sec_BusinessEntityNodeAPIService.GetEntityNodes().then(function (response) {
                         if (response) {
                             $scope.beList = response;
 

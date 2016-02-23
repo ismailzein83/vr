@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BusinessEntityManagementController.$inject = ['$scope', 'VR_Sec_BusinessEntityAPIService', 'VR_Sec_PermissionService', 'UtilsService', 'VRNotificationService'];
+    BusinessEntityManagementController.$inject = ['$scope', 'VR_Sec_BusinessEntityNodeAPIService', 'VR_Sec_PermissionService', 'UtilsService', 'VRNotificationService'];
 
-    function BusinessEntityManagementController($scope, VR_Sec_BusinessEntityAPIService, VR_Sec_PermissionService, UtilsService, VRNotificationService) {
+    function BusinessEntityManagementController($scope, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_PermissionService, UtilsService, VRNotificationService) {
         var treeAPI;
 
         var gridAPI;
@@ -32,7 +32,7 @@
             };
 
             $scope.toggleInheritance = function () {
-                return VR_Sec_BusinessEntityAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId).then(function (response) {
+                return VR_Sec_BusinessEntityNodeAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId).then(function (response) {
                        $scope.currentNode.BreakInheritance = !$scope.currentNode.BreakInheritance;
                        $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
                        gridAPI.loadGrid(getGridQuery());
@@ -60,7 +60,7 @@
             });
 
             function loadTree() {
-                return VR_Sec_BusinessEntityAPIService.GetEntityNodes().then(function (response) {
+                return VR_Sec_BusinessEntityNodeAPIService.GetEntityNodes().then(function (response) {
                     $scope.beList = response;
                     treeAPI.refreshTree($scope.beList);
                 });

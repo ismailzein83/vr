@@ -10,15 +10,10 @@ using Vanrise.Web.Base;
 namespace Vanrise.Security.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "BusinessEntity")]
-    // VR_Sec_BusinessEntityController is used because the BusinessEntity module already has a controller named BusinessEntityController which causes a name conflict
-    public class VR_Sec_BusinessEntityController : Vanrise.Web.Base.BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "BusinessEntityNode")]
+    public class BusinessEntityNodeController : BaseAPIController
     {
-        BusinessEntityManager _manager;
-        public VR_Sec_BusinessEntityController()
-        {
-            _manager = new BusinessEntityManager();
-        }
+        BusinessEntityNodeManager _manager = new BusinessEntityNodeManager();
 
         [HttpGet]
         [Route("GetEntityNodes")]

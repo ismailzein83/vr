@@ -225,7 +225,7 @@ namespace Vanrise.Security.Business
             PermissionManager manager = new PermissionManager();
             EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(userId);
 
-            Dictionary<string, List<string>> requiredPermissions = GetPermissionOptionsByNodePaths(actionNames);
+            Dictionary<string, List<string>> requiredPermissions = GetRequiredPermissionsByNodePath(actionNames);
 
             foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
             {
@@ -237,70 +237,35 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        // Example: Root/Administration Module/Users, [View, Add, Edit, Delete]
-        Dictionary<string, List<string>> GetPermissionOptionsByNodePaths(string actionNames)
+        Dictionary<string, List<string>> GetRequiredPermissionsByNodePath(string systemActionNames)
         {
-            Dictionary<string, List<string>> requiredPermissions = null;
+            var permissionsByNodePath = new Dictionary<string, List<string>>();
+            string[] actionNames = systemActionNames.Split('|');
+            BusinessEntityNodeManager beNodeManager = new BusinessEntityNodeManager();
 
-            if (actionNames != null)
+            foreach (var actionName in actionNames)
             {
-                requiredPermissions = new Dictionary<string, List<string>>();
-                string[] actionNameArray = actionNames.Split('|');
-                IEnumerable<SystemAction> systemActions = new SystemActionManager().GetSystemActions();
-                IEnumerable<BusinessEntityNode> beNodes = new BusinessEntityManager().GetEntityNodes();
+                SystemAction systemAction = new SystemActionManager().GetSystemAction(actionName);
+                string[] permissionsByNodeNameStrings = systemAction.RequiredPermissions.Split('|');
 
-                foreach (var actionName in actionNameArray)
+                foreach (string permissionsByNodeNameString in permissionsByNodeNameStrings)
                 {
-                    var permissionOptionsByNodeNames = GetPermissionOptionsByNodeNames(systemActions, actionName.Trim());
-                    foreach (KeyValuePair<string, List<string>> kvp in permissionOptionsByNodeNames)
-                    {
-                        string nodePath = GetNodePathByNodeName(beNodes, kvp.Key);
-                        
-                        List<string> existingPermissionOptions;
-                        requiredPermissions.TryGetValue(nodePath, out existingPermissionOptions);
-                        
-                        if (existingPermissionOptions != null)
-                            existingPermissionOptions.AddRange(kvp.Value);
-                        else
-                            requiredPermissions.Add(nodePath, kvp.Value);
-                    }
+                    string[] permissionsByNodeNameArray = permissionsByNodeNameString.Split(':');
+
+                    string nodePath = beNodeManager.GetBusinessEntityNodePath(permissionsByNodeNameArray[0].Trim());
+                    List<string> permissions = permissionsByNodeNameArray[1].Split(',').MapRecords(itm => itm.Trim()).ToList();
+
+                    List<string> existingPermissionsByNodePath;
+                    permissionsByNodePath.TryGetValue(nodePath, out existingPermissionsByNodePath);
+
+                    if (existingPermissionsByNodePath != null)
+                        existingPermissionsByNodePath.AddRange(permissions);
+                    else
+                        permissionsByNodePath.Add(nodePath, permissions);
                 }
             }
 
-            return requiredPermissions;
-        }
-
-        string GetNodePathByNodeName(IEnumerable<BusinessEntityNode> beNodes, string nodeName)
-        {
-            foreach (var beNode in beNodes)
-            {
-                if (beNode.Name == nodeName)
-                    return beNode.GetRelativePath();
-                else if (beNode.Children != null)
-                {
-                    string path = GetNodePathByNodeName(beNode.Children, nodeName);
-                    if (path != null) return path;
-                }
-            }
-            return null;
-        }
-
-        // Example: Users, [View, Add, Edit, Delete]
-        Dictionary<string, List<string>> GetPermissionOptionsByNodeNames(IEnumerable<SystemAction> systemActions, string actionName)
-        {
-            var permissionOptionsByNodeNames = new Dictionary<string,List<string>>();
-
-            SystemAction systemAction = systemActions.FindRecord(itm => itm.Name == actionName);
-            string[] permissions = systemAction.RequiredPermissions.Split('|');
-
-            foreach (string permission in permissions)
-            {
-                string[] kvp = permission.Split(':');
-                List<string> permissionOptions = kvp[1].Split(',').MapRecords(itm => itm.Trim()).ToList();
-                permissionOptionsByNodeNames.Add(kvp[0].Trim(), permissionOptions);
-            }
-
-            return permissionOptionsByNodeNames;
+            return permissionsByNodePath;
         }
 
         #endregion

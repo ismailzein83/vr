@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
+using Vanrise.Common;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
@@ -18,17 +19,22 @@ namespace Vanrise.Security.Business
             return GetCachedSystemActions().Values;
         }
 
+        public SystemAction GetSystemAction(string systemActionName)
+        {
+            return GetCachedSystemActions().GetRecord(systemActionName);
+        }
+
         #endregion
 
         #region Private Methods
 
-        Dictionary<int, SystemAction> GetCachedSystemActions()
+        Dictionary<string, SystemAction> GetCachedSystemActions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("", () =>
                {
                    ISystemActionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ISystemActionDataManager>();
                    IEnumerable<SystemAction> systemActions = dataManager.GetSystemActions();
-                   return systemActions.ToDictionary(kvp => kvp.SystemActionId, kvp => kvp);
+                   return systemActions.ToDictionary(kvp => kvp.Name, kvp => kvp);
                });
         }
         

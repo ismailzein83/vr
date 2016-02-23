@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="BusinessEntityModuleManager.cs" />
+    <Compile Include="BusinessEntityNodeManager.cs" />
     <Compile Include="HashingUtility.cs" />
     <Compile Include="ModuleManager.cs" />
     <Compile Include="OrgChartManager.cs" />
