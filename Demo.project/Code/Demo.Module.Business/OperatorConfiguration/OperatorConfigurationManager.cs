@@ -90,6 +90,13 @@ namespace Demo.Module.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+
+        public List<Vanrise.Entities.TemplateConfig> GetServiceSubTypeTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.ServiceSubTypesConfigType);
+        }
+
         #endregion
 
         #region Private Members

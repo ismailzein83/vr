@@ -13,7 +13,7 @@ namespace Demo.Module.Entities
 
         public int AmountType { get; set; }
 
-        public CDRDirection CDRDirection { get; set; } 
+        public CDRDirection CDRDirection { get; set; }
 
         public double? Percentage { get; set; }
 
@@ -27,6 +27,8 @@ namespace Demo.Module.Entities
 
         public string Notes { get; set; }
 
+        public ServiceSubType ServiceSubTypeSettings { get; set; }
+
     }
-   
+
 }

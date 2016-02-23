@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("qmBeSourcesupplierreaderTonev2", [function () {
+app.directive("demoServicesubtypeSms", [function () {
     
     var directiveDefinitionObject = {
         restrict: "E",

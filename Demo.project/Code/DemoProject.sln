@@ -33,9 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.Business", "Dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.Web", "Demo.Module.Web\Demo.Module.Web.csproj", "{99CB64F1-5314-41FD-9F8F-EB435EE7449A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.MainExtension", "Demo.Module.MainExtension\Demo.Module.MainExtension.csproj", "{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -79,6 +81,10 @@ Global
 		SccProjectTopLevelParentUniqueName10 = DemoProject.sln
 		SccProjectName10 = Demo.Module.Web
 		SccLocalPath10 = Demo.Module.Web
+		SccProjectUniqueName11 = Demo.Module.MainExtension\\Demo.Module.MainExtension.csproj
+		SccProjectTopLevelParentUniqueName11 = DemoProject.sln
+		SccProjectName11 = Demo.Module.MainExtension
+		SccLocalPath11 = Demo.Module.MainExtension
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +133,10 @@ Global
 		{99CB64F1-5314-41FD-9F8F-EB435EE7449A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99CB64F1-5314-41FD-9F8F-EB435EE7449A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99CB64F1-5314-41FD-9F8F-EB435EE7449A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,5 +153,6 @@ Global
 		{6E72DC74-F79D-4F63-A6C1-444EF4EBB4B7} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
 		{A0190A8F-95BD-4CE5-B60E-87529661E6E8} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
 		{99CB64F1-5314-41FD-9F8F-EB435EE7449A} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
+		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
 	EndGlobalSection
 EndGlobal

@@ -425,6 +425,10 @@
       <Project>{7f3a2fab-e969-475d-9eaa-ea742e5222de}</Project>
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Demo.Module.MainExtension\Demo.Module.MainExtension.csproj">
+      <Project>{7d0273be-2a89-4cf4-a485-b8475dd5f2d5}</Project>
+      <Name>Demo.Module.MainExtension</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Demo.Module.Web\Demo.Module.Web.csproj">
       <Project>{99cb64f1-5314-41fd-9f8f-eb435ee7449a}</Project>
       <Name>Demo.Module.Web</Name>

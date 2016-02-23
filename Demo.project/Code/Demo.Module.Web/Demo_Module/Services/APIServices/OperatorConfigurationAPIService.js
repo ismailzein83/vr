@@ -15,14 +15,20 @@
             });
 
         }
-       
+
         function UpdateOperatorConfiguration(operatorConfigurationObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorConfiguration", "UpdateOperatorConfiguration"), operatorConfigurationObject);
         }
         function AddOperatorConfiguration(operatorConfigurationObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorConfiguration", "AddOperatorConfiguration"), operatorConfigurationObject);
         }
+
+        function GetServiceSubTypeTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "OperatorConfiguration", "GetServiceSubTypeTemplates"));
+        }
+
         return ({
+            GetServiceSubTypeTemplates: GetServiceSubTypeTemplates,
             GetFilteredOperatorConfigurations: GetFilteredOperatorConfigurations,
             GetOperatorConfiguration: GetOperatorConfiguration,
             AddOperatorConfiguration: AddOperatorConfiguration,

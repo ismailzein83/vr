@@ -25,7 +25,7 @@ namespace Demo.Module.Data.SQL
         {
             object infoId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Insert", out infoId, config.OperatorId, config.Volume, config.AmountType, config.CDRDirection,  config.Percentage, config.Amount, config.Currency, config.FromDate, config.ToDate, config.Notes);
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Insert", out infoId, config.OperatorId, config.Volume, config.AmountType, config.CDRDirection, config.Percentage, config.Amount, config.Currency, config.FromDate, config.ToDate, config.Notes, Vanrise.Common.Serializer.Serialize(config.ServiceSubTypeSettings));
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)infoId;
@@ -35,7 +35,7 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(OperatorConfiguration config)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Update", config.OperatorConfigurationId, config.OperatorId, config.Volume, config.AmountType, config.CDRDirection, config.Percentage, config.Amount, config.Currency, config.FromDate, config.ToDate, config.Notes);
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorConfiguration_Update", config.OperatorConfigurationId, config.OperatorId, config.Volume, config.AmountType, config.CDRDirection, config.Percentage, config.Amount, config.Currency, config.FromDate, config.ToDate, config.Notes, Vanrise.Common.Serializer.Serialize(config.ServiceSubTypeSettings));
             return (recordsEffected > 0);
         }
         public bool AreOperatorConfigurationsUpdated(ref object updateHandle)
@@ -55,6 +55,8 @@ namespace Demo.Module.Data.SQL
         #region  Mappers
         private OperatorConfiguration OperatorConfigurationMapper(IDataReader reader)
         {
+            string ServiceSubTypeSettings = reader["ServiceSubTypeSettings"] as string;
+
             OperatorConfiguration config = new OperatorConfiguration
             {
                 OperatorConfigurationId = (int)reader["ID"],
@@ -65,10 +67,10 @@ namespace Demo.Module.Data.SQL
                 Percentage = GetReaderValue<double?>(reader, "Percentage"),
                 Amount = GetReaderValue<double?>(reader, "Amount"),
                 Currency = GetReaderValue<int?>(reader, "Currency"),
-                FromDate = (DateTime) reader["FromDate"],
+                FromDate = (DateTime)reader["FromDate"],
                 ToDate = GetReaderValue<DateTime?>(reader, "ToDate"),
-                Notes = reader[ "Notes"] as string
-
+                Notes = reader["Notes"] as string,
+                ServiceSubTypeSettings =   (ServiceSubTypeSettings!=null?Vanrise.Common.Serializer.Deserialize<ServiceSubType>(ServiceSubTypeSettings):null)   
             };
             return config;
         }

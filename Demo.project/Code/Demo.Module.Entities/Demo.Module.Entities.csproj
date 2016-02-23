@@ -107,7 +107,8 @@
     <Compile Include="SaleZone\SaleZoneInfo.cs" />
     <Compile Include="SaleZone\SaleZoneInfoFilter.cs" />
     <Compile Include="SaleZone\SaleZoneQuery.cs" />
-    <Compile Include="UnitType.cs" />
+    <Compile Include="ServiceSubType\ServiceSubType.cs" />
+    <Compile Include="UnitType\UnitType.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

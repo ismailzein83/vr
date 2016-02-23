@@ -21,6 +21,9 @@
         var currencyDirectiveAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var sourceTemplateDirectiveAPI;
+        var sourceDirectiveReadyPromiseDeferred;
+
         loadParameters();
         defineScope();
         load();
@@ -40,6 +43,12 @@
             $scope.scopeModal = {
             };
 
+            $scope.sourceTypeTemplates = [];
+            $scope.onSourceTypeDirectiveReady = function (api) {
+                sourceTemplateDirectiveAPI = api;
+                var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTemplateDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
+            }
 
             $scope.selectedCurrency;
 
@@ -109,13 +118,54 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadServiceTypes, loadCDRDirections, loadCurrencies])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadCDRDirections, loadCurrencies, loadServiceSubTypes])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.isLoading = false;
               });
+        }
+
+        function loadServiceSubTypes() {
+            var promises = [];
+            var sourceConfigId;
+            if (operatorConfigurationEntity != undefined && operatorConfigurationEntity.ServiceSubTypeSettings ) {
+                sourceConfigId = operatorConfigurationEntity.ServiceSubTypeSettings.ConfigId;
+            }
+
+            var loadServiceSubTypePromise = Demo_OperatorConfigurationAPIService.GetServiceSubTypeTemplates().then(function (response) {
+
+                angular.forEach(response, function (item) {
+                    $scope.sourceTypeTemplates.push(item);
+                });
+
+                if (sourceConfigId != undefined)
+                    $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
+
+            });
+            promises.push(loadServiceSubTypePromise);
+
+            if (sourceConfigId != undefined) {
+                sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
+                sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+                    var serviceSubTypePayload;
+
+                    if (operatorConfigurationEntity != undefined && operatorConfigurationEntity.ServiceSubTypeSettings) {
+                        serviceSubTypePayload = {
+                            selectedIds: [operatorConfigurationEntity.ServiceSubTypeSettings.SelectedId]
+                        };
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(sourceTemplateDirectiveAPI, serviceSubTypePayload, loadSourceTemplatePromiseDeferred);
+                });
+
+                promises.push(loadSourceTemplatePromiseDeferred.promise);
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function loadServiceTypes() {
@@ -129,7 +179,6 @@
             return loadServiceTypesPromiseDeferred.promise;
         }
 
-
         function loadCDRDirections() {
             var loadCDRDirectionsPromiseDeferred = UtilsService.createPromiseDeferred();
             cdrDirectionReadyPromiseDeferred.promise.then(function () {
@@ -140,7 +189,6 @@
             });
             return loadCDRDirectionsPromiseDeferred.promise;
         }
-
 
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorConfigurationEntity ? '' : null, 'Operator Declared Information') : UtilsService.buildTitleForAddEditor('Operator Declared Information');
@@ -171,7 +219,6 @@
             return loadOperatorProfilePromiseDeferred.promise;
         }
 
-
         function loadStaticSection() {
             if (operatorConfigurationEntity != undefined) {
                 $scope.scopeModal.volume = operatorConfigurationEntity.Volume;
@@ -192,12 +239,13 @@
                 FromDate: $scope.scopeModal.fromDate,
                 ToDate: $scope.scopeModal.toDate,
                 Amount: $scope.scopeModal.amount,
-                AmountType: serviceTypeDirectiveAPI.getSelectedIds(),
+                //AmountType: serviceTypeDirectiveAPI.getSelectedIds(),
                 CDRDirection: cdrDirectionDirectiveAPI.getSelectedIds(),
                 Notes: $scope.scopeModal.notes,
-                Currency: currencyDirectiveAPI.getSelectedIds()
+                Currency: currencyDirectiveAPI.getSelectedIds(),
+                ServiceSubTypeSettings: { $type: "Demo.Module.MainExtension.ServiceSubTypeVoice, Demo.Module.MainExtension", SelectedId: sourceTemplateDirectiveAPI.getSelectedIds(), ConfigId: $scope.selectedSourceTypeTemplate.TemplateConfigID }
             };
-
+            console.log(obj)
             return obj;
         }
 

@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="CodeGroup\CodeGroupManager.cs" />
     <Compile Include="CodeGroup\CodeIterator.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Generic\GenericAnalyticManager.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanManager.cs" />
     <Compile Include="OperatorConfiguration\OperatorConfigurationManager.cs" />

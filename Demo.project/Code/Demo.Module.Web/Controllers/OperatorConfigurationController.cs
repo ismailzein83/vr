@@ -1,10 +1,13 @@
 ﻿using Demo.Module.Business;
 using Demo.Module.Entities;
+using System.Collections.Generic;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace Demo.Module.Web.Controllers
 {
+    [JSONWithType]
     [RoutePrefix(Constants.ROUTE_PREFIX + "OperatorConfiguration")]
     public class Demo_OperatorConfigurationController : BaseAPIController
     {
@@ -38,5 +41,16 @@ namespace Demo.Module.Web.Controllers
             OperatorConfigurationManager manager = new OperatorConfigurationManager();
             return manager.UpdateOperatorConfiguration(operatorConfiguration);
         }
+
+
+        [HttpGet]
+        [Route("GetServiceSubTypeTemplates")]
+        public List<TemplateConfig> GetServiceSubTypeTemplates()
+        {
+            OperatorConfigurationManager manager = new OperatorConfigurationManager();
+            return manager.GetServiceSubTypeTemplates();
+        }
+
+
     }
 }
