@@ -12,10 +12,16 @@ namespace CP.SupplierPricelist.Business
     {
         protected CustomerDetail MapToDetails(Customer customer)
         {
+            string configName = "";
+            TemplateConfig config = new TemplateConfigManager().GetTemplateConfiguration(customer.Settings.PriceListConnector.ConfigId);
+            if (config != null)
+                configName = config.Name;
             return new CustomerDetail
             {
-                Entity = customer
+                Entity = customer,
+                ConfigName = configName
             };
+             
         }
         public IDataRetrievalResult<CustomerDetail> GetFilteredCustomers(DataRetrievalInput<Customer> input)
         {

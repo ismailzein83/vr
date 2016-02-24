@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService",
-function (UtilsService, customeApiService, customerService) {
+app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService","VRNotificationService",
+function (UtilsService, customeApiService, customerService, vRNotificationService) {
     var gridAPI;
 
     function CustomerGrid($scope, ctrl) {
@@ -42,7 +42,7 @@ function (UtilsService, customeApiService, customerService) {
                    onResponseReady(response);
                })
                .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+                   vRNotificationService.notifyExceptionWithClose(error, $scope);
                });
         };
 

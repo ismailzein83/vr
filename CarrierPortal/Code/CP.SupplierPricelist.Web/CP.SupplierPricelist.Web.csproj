@@ -171,7 +171,9 @@
     <Content Include="CP_SupplierPricelist\Services\SupplierMappingService.js" />
     <Content Include="CP_SupplierPricelist\Services\CustomerService.js" />
     <Content Include="CP_SupplierPricelist\Services\SupplierPriceListService.js" />
+    <Content Include="CP_SupplierPricelist\Views\Customer\CustomerUserEditor.html" />
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerEditor.html" />
+    <Content Include="CP_SupplierPricelist\Views\Customer\CustomeUserEditorController.js" />
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerManagement.html" />
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerEditorController.js" />
     <Content Include="CP_SupplierPricelist\Views\Customer\CustomerManagementController.js" />

@@ -9,5 +9,6 @@ namespace CP.SupplierPricelist.Entities
     public class CustomerDetail
     {
         public Customer Entity { get; set; }
+        public string ConfigName { get; set; }
     }
 }
