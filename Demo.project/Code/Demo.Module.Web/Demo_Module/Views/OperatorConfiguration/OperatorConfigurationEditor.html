@@ -2,36 +2,33 @@
     <vr-modalbody>
         <vr-form name="formOperatorConfigurationEditor">
             <vr-row>
-                <vr-columns width="normal">
+                <vr-columns width="1/4row">
                     <vr-demo-operatorprofile-selector isrequired on-ready="scopeModal.onOperatorProfileDirectiveReady"></vr-demo-operatorprofile-selector>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="1/4row">
                     <vr-datetimepicker value="scopeModal.fromDate" label="From Date" customvalidate="validateDateRange()" isrequired type="dateTime"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="1/4row">
                     <vr-datetimepicker value="scopeModal.toDate" label="To Date" customvalidate="validateDateRange()" type="dateTime"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Service Type" datasource="sourceTypeTemplates" text="None" hideremoveicon
-                               selectedvalues="selectedSourceTypeTemplate" isrequired="true">
-                    </vr-select>
-                </vr-columns>
-                <vr-columns width="normal" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedSourceTypeTemplate.Editor">
-                    <vr-directivewrapper directive="selectedSourceTypeTemplate.Editor" on-ready="onSourceTypeDirectiveReady" isrequired="true"></vr-directivewrapper>
-                </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="1/4row">
                     <cdrdirection-selector on-ready="onCDRDirectionReady" isrequired="true"></cdrdirection-selector>
                 </vr-columns>
-                <vr-columns width="normal">
+            </vr-row>
+
+
+            <vr-row>
+
+                <vr-columns width="1/4row">
                     <vr-textbox value="scopeModal.volume" isrequired label="Volume" type="number" decimalprecision="0"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="1/4row">
                     <vr-textbox value="scopeModal.amount" label="Amount" type="number" decimalprecision="0"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="1/4row">
                     <vr-common-currency-selector on-ready="onCurrencyDirectiveReady" selectedvalues="selectedCurrency"></vr-common-currency-selector>
                 </vr-columns>
-                <vr-columns width="normal">
+                <vr-columns width="1/4row">
                     <vr-numeric label="Percentage" value="scopeModal.percentage"
                                 minvalue="0"
                                 maxvalue="100"
@@ -41,6 +38,20 @@
                 </vr-columns>
 
             </vr-row>
+
+            <vr-row>
+                <vr-columns width="1/4row">
+                    <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Service Type" datasource="sourceTypeTemplates" text="None" hideremoveicon
+                               selectedvalues="selectedSourceTypeTemplate" isrequired="true">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="1/4row" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedSourceTypeTemplate.Editor">
+                    <vr-directivewrapper directive="selectedSourceTypeTemplate.Editor" on-ready="onSourceTypeDirectiveReady" isrequired="true"></vr-directivewrapper>
+                </vr-columns>
+
+
+            </vr-row>
+
 
 
             <vr-row>
