@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IOperatorAccountDataManager.cs" />
     <Compile Include="IOperatorProfileDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
