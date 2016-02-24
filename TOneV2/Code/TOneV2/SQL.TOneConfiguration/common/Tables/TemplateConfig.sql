@@ -5,8 +5,11 @@
     [Editor]       NVARCHAR (1000) NULL,
     [BehaviorFQTN] NVARCHAR (1000) NULL,
     [Settings]     NVARCHAR (MAX)  NULL,
+    [timestamp]    ROWVERSION      NULL,
     CONSTRAINT [PK_TemplateConfig] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

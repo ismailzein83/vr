@@ -85,6 +85,9 @@
     <Folder Include="genericdata\" />
     <Folder Include="genericdata\Tables\" />
     <Folder Include="genericdata\Stored Procedures\" />
+    <Folder Include="queue\" />
+    <Folder Include="queue\Tables\" />
+    <Folder Include="queue\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -223,7 +226,6 @@
     <Build Include="genericdata\Stored Procedures\sp_GenericRuleTypeConfig_GetAll.sql" />
     <Build Include="genericdata\Stored Procedures\sp_DataRecordFieldTypeConfig_GetAll.sql" />
     <Build Include="genericdata\Stored Procedures\sp_DataTransformationStepConfig_GetAll.sql" />
-    <Build Include="genericdata\Stored Procedures\sp_GenericRuleDefinition_Delete.sql" />
     <Build Include="genericdata\Stored Procedures\sp_GenericRuleDefinition_Update.sql" />
     <Build Include="genericdata\Stored Procedures\sp_GenericRuleDefinition_Insert.sql" />
     <Build Include="genericdata\Stored Procedures\sp_DataTransformationDefinition_Insert.sql" />
@@ -234,6 +236,27 @@
     <Build Include="genericdata\Stored Procedures\sp_DataRecordType_Insert.sql" />
     <Build Include="genericdata\Stored Procedures\sp_DataRecordType_GetAll.sql" />
     <Build Include="Security\genericdata.sql" />
+    <Build Include="sec\Tables\SystemAction.sql" />
+    <Build Include="genericdata\Tables\ExpressionBuilderConfig.sql" />
+    <Build Include="genericdata\Tables\DataStoreConfig.sql" />
+    <Build Include="genericdata\Tables\DataStore.sql" />
+    <Build Include="genericdata\Tables\DataRecordStorage.sql" />
+    <Build Include="common\Tables\RateType.sql" />
+    <Build Include="queue\Tables\QueueActivatorConfig.sql" />
+    <Build Include="sec\Stored Procedures\sp_SystemAction_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_ExpressionBuilderConfig_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataStoreConfig_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataStore_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataStore_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataStore_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordStorage_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordStorage_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_DataRecordStorage_GetALL.sql" />
+    <Build Include="common\Stored Procedures\sp_RateType_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_RateType_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_RateType_GetAll.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueActivatorConfig_GetAll.sql" />
+    <Build Include="Security\queue.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

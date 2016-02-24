@@ -60,7 +60,7 @@ namespace TOne.WhS.CDRProcessing.Business
             List<string> dataSourcesNames=new List<string>();
             for(int i =0;i<rule.Criteria.DataSources.Count;i++)
             {
-                 DataSourceDetail  dataSourceDetail=_dataSourceManager.GetDataSource(rule.Criteria.DataSources[i]);
+                 DataSourceDetail  dataSourceDetail=_dataSourceManager.GetDataSourceDetail(rule.Criteria.DataSources[i]);
                  if(dataSourceDetail!=null)
                      dataSourcesNames.Add(dataSourceDetail.Name);
 

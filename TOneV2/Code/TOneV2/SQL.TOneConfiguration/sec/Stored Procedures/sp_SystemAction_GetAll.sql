@@ -3,10 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE genericdata.[sp_GenericRuleDefinition_Delete]
-	@Id INT
+CREATE PROCEDURE sec.sp_SystemAction_GetAll
 AS
 BEGIN
-	DELETE FROM genericdata.GenericRuleDefinition
-	WHERE ID = @Id
+	SELECT ID, Name, RequiredPermissions
+	FROM sec.SystemAction
 END

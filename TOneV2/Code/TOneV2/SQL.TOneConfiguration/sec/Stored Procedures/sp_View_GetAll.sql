@@ -19,6 +19,7 @@ BEGIN
       ,v.[Url]
       ,v.[Module]
       ,v.[RequiredPermissions]
+      ,v.[ActionNames]
       ,v.[Audience]
       ,v.[Type]
       ,v.[Content]
