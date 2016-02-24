@@ -72,6 +72,8 @@ app.directive('demoServicesubtypeVoice', ['Demo_VoiceSubTypeEnum', 'UtilsService
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 }
+                api.getType = "Demo.Module.MainExtension.ServiceSubTypeVoice, Demo.Module.MainExtension"
+
                 api.load = function (payload) {
                     var selectedIds;
                     if (payload != undefined) {

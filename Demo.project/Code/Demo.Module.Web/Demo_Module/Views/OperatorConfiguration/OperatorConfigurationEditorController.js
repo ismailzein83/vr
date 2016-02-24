@@ -222,7 +222,7 @@
                 CDRDirection: cdrDirectionDirectiveAPI.getSelectedIds(),
                 Notes: $scope.scopeModal.notes,
                 Currency: currencyDirectiveAPI.getSelectedIds(),
-                ServiceSubTypeSettings: { $type: "Demo.Module.MainExtension.ServiceSubTypeVoice, Demo.Module.MainExtension", SelectedId: sourceTemplateDirectiveAPI.getSelectedIds(), ConfigId: $scope.selectedSourceTypeTemplate.TemplateConfigID }
+                ServiceSubTypeSettings: { $type: sourceTemplateDirectiveAPI.getType, SelectedId: sourceTemplateDirectiveAPI.getSelectedIds(), ConfigId: $scope.selectedSourceTypeTemplate.TemplateConfigID }
             };
             console.log(obj)
             return obj;
