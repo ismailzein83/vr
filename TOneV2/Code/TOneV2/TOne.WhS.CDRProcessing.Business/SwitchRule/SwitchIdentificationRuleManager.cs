@@ -58,13 +58,13 @@ namespace TOne.WhS.CDRProcessing.Business
            
             Switch switchEntity = _switchManager.GetSwitch(rule.Settings.SwitchId);
             List<string> dataSourcesNames=new List<string>();
-            for(int i =0;i<rule.Criteria.DataSources.Count;i++)
-            {
-                 DataSourceDetail  dataSourceDetail=_dataSourceManager.GetDataSourceDetail(rule.Criteria.DataSources[i]);
-                 if(dataSourceDetail!=null)
-                     dataSourcesNames.Add(dataSourceDetail.Name);
+            //for(int i =0;i<rule.Criteria.DataSources.Count;i++)
+            //{
+            //     DataSourceDetail  dataSourceDetail=_dataSourceManager.GetDataSourceDetail(rule.Criteria.DataSources[i]);
+            //     if(dataSourceDetail!=null)
+            //         dataSourcesNames.Add(dataSourceDetail.Name);
 
-            }
+            //}
             return new SwitchIdentificationRuleDetail
             {
                 Entity = rule,
