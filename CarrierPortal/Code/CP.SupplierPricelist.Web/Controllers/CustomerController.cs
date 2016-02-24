@@ -29,11 +29,19 @@ namespace CP.SupplierPricelist.Web.Controllers
         }
         [HttpPost]
         [Route("AddCustomer")]
-        public InsertOperationOutput<Customer> AddCustomer(Customer input)
+        public InsertOperationOutput<CustomerDetail> AddCustomer(Customer input)
         {
             CustomerManager manager = new CustomerManager();
             return manager.AddCustomer(input);
         }
+        [HttpPost]
+        [Route("UpdateCustomer")]
+        public new UpdateOperationOutput<CustomerDetail> UpdateRule(Customer input)
+        {
+            CustomerManager manager = new CustomerManager();
+            return manager.UpdateCustomer(input);
+        }
+
 
         [HttpPost]
         [Route("GetFilteredCustomers")]

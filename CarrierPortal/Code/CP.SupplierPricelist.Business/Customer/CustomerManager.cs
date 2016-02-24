@@ -5,7 +5,6 @@ using CP.SupplierPricelist.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
-using System;
 
 namespace CP.SupplierPricelist.Business
 {
@@ -22,10 +21,10 @@ namespace CP.SupplierPricelist.Business
         {
             return DataRetrievalManager.Instance.ProcessResult(input, GetCachedCustomers().ToBigResult(input, null, MapToDetails));
         }
-        public InsertOperationOutput<Customer> AddCustomer(Customer inputCustomer)
+        public InsertOperationOutput<CustomerDetail> AddCustomer(Customer inputCustomer)
         {
-            InsertOperationOutput<Customer> insertOperationOutput = new InsertOperationOutput<Customer>();
-            int customerId = -1;
+            InsertOperationOutput<CustomerDetail> insertOperationOutput = new InsertOperationOutput<CustomerDetail>();
+            int customerId;
             ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
             bool insertActionSucc = dataManager.AddCustomer(inputCustomer, out customerId);
             if (insertActionSucc)
@@ -33,7 +32,7 @@ namespace CP.SupplierPricelist.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 inputCustomer.CustomerId = customerId;
-                insertOperationOutput.InsertedObject = inputCustomer;
+                insertOperationOutput.InsertedObject = MapToDetails(inputCustomer);
             }
             else
             {
@@ -41,6 +40,24 @@ namespace CP.SupplierPricelist.Business
             }
             return insertOperationOutput;
         }
+
+        public UpdateOperationOutput<CustomerDetail> UpdateCustomer(Customer input)
+        {
+            UpdateOperationOutput<CustomerDetail> updateOperationOutput = new UpdateOperationOutput<CustomerDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+            ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
+            bool updateActionSucc = dataManager.UpdateCustomer(input);
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = MapToDetails(input);
+            }
+            return updateOperationOutput;
+        }
+
         public Customer GetCustomer(int customerId)
         {
             var customers = GetCachedCustomers();
@@ -68,7 +85,7 @@ namespace CP.SupplierPricelist.Business
                 return _dataManager.AreCustomersUpdated(ref _updateHandle);
             }
         }
-        public List<Vanrise.Entities.TemplateConfig> GetConnectorTemplates()
+        public List<TemplateConfig> GetConnectorTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.CustomerConnector);

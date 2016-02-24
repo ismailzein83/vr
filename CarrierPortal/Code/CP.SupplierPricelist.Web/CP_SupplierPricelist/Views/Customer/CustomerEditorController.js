@@ -27,6 +27,7 @@
         }
         function buildCustomerFromScope() {
             var customerObject = {
+                CustomerId: (customerId != undefined) ? customerId : 0,
                 Name: $scope.name,
                 Settings: {
                     PriceListConnector: VRUIUtilsService.getSettingsFromDirective($scope, sourceTypeDirectiveAPI, 'selectedSourceTypeTemplate')
@@ -72,7 +73,7 @@
 
         function updateCustomer() {
             var customerObject = buildCustomerFromScope();
-            customerManagmentAPIService.UpdateCustomer(customerObject)
+            return customerManagmentAPIService.UpdateCustomer(customerObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Customer", response)) {
                     if ($scope.onCustomerUpdated != undefined)

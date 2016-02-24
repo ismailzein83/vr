@@ -1,10 +1,10 @@
 ﻿"use strict";
 app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService",
 function (UtilsService, customeApiService, customerService) {
+    var gridAPI;
 
     function CustomerGrid($scope, ctrl) {
 
-        var gridAPI;
 
         this.initializeController = initializeController;
 

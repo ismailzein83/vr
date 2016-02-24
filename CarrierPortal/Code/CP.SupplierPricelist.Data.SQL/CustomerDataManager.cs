@@ -14,33 +14,6 @@ namespace CP.SupplierPricelist.Data.SQL
 
         }
 
-        //static Dictionary<string, string> _columnMapper; 
-        //static CustomerDataManager()
-        //{
-           
-        //    _columnMapper.Add("Entity.Attempt", "Attempt");
-
-            
-        //}
-
-        public List<Customer> GetCustomers(ref byte[] maxTimeStamp, int nbOfRows)
-        {
-            List<Customer> customers = new List<Customer>();
-            byte[] timestamp = null;
-
-            ExecuteReaderSP("CP_SupPriceList.sp_PriceList_GetUpdated", (reader) =>
-            {
-                while (reader.Read())
-                    customers.Add(CustomerMapper(reader));
-                if (reader.NextResult())
-                    while (reader.Read())
-                        timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
-            },
-               maxTimeStamp, nbOfRows);
-            maxTimeStamp = timestamp;
-            return customers;
-        }
-
         public List<Customer> GetAllCustomers()
         {
             return GetItemsSP("[CP_SupPriceList].[sp_Customer_GetAll]", CustomerMapper);
@@ -68,6 +41,12 @@ namespace CP.SupplierPricelist.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("[CP_SupPriceList].[InsertCustomer]", out id, inputCustomer.Name, inputCustomer.Settings != null ? Serializer.Serialize(inputCustomer.Settings) : null);
             customerId = (int)id;
             return recordesEffected > 0;
+        }
+        public bool UpdateCustomer(Customer input)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[UpdateCustomer]",
+                input.CustomerId, input.Name, input.Settings != null ? Serializer.Serialize(input.Settings) : null);
+            return (recordsEffected > 0);
         }
     }
 }

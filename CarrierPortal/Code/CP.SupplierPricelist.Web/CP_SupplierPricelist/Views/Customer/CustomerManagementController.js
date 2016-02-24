@@ -13,7 +13,10 @@
                 }
 
                 $scope.AddCustomer = function () {
-                    customerService.addCustomer();
+                    var onCustomerAdded=  function(customerObject) {
+                        gridAPI.onCustomerAdded(customerObject);
+                    }
+                    customerService.addCustomer(onCustomerAdded);
                 }
             }
 

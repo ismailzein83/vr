@@ -10,7 +10,7 @@ app.service('CP_SupplierPricelist_CustomerService', ['VRModalService',
             };
 
             settings.onScopeReady = function (modalScope) {
-                //modalScope.onCustomerAdded = onCustomerAdded;
+                modalScope.onCustomerAdded = onCustomerAdded;
             };
             VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/Customer/CustomerEditor.html', parameters, settings);
         }
