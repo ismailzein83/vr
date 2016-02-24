@@ -19,6 +19,9 @@ BEGIN
       ,[CreatedTime]
       ,[EffectiveOnDate]
       ,[timestamp]
+      ,[ResultRetryCount]
+      ,[UploadRetryCount]
+      ,AlertMessage
   FROM [CP_SupPriceList].[PriceList]
   WHERE (@PriceListStatusIDs  is null or [CP_SupPriceList].[PriceList].[Status] in (select PriceListStatusID from @PriceListStatusIDsTable))	
 END
