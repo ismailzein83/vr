@@ -116,7 +116,7 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(nationalNumberingPlanEntity ? '' : null, 'National Numbering Plan') : UtilsService.buildTitleForAddEditor('National Numbering Plan');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(nationalNumberingPlanEntity ? nationalNumberingPlanEntity.NationalNumberingPlanId : null, 'National Numbering Plan') : UtilsService.buildTitleForAddEditor('National Numbering Plan');
         }
 
         function loadOperatorProfileDirective() {

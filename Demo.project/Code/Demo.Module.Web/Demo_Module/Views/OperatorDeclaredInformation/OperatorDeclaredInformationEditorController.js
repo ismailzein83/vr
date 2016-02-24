@@ -117,7 +117,7 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorDeclaredInformationEntity ? '' : null, 'Operator Declared Information') : UtilsService.buildTitleForAddEditor('Operator Declared Information');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorDeclaredInformationEntity ? operatorDeclaredInformationEntity.OperatorDeclaredInformationId : null, 'Operator Declared Information') : UtilsService.buildTitleForAddEditor('Operator Declared Information');
         }
 
         function loadOperatorProfileDirective() {
