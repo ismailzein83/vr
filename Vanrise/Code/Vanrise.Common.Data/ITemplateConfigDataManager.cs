@@ -11,5 +11,6 @@ namespace Vanrise.Common.Data
     {
         List<TemplateConfig> GetTemplateConfigurations(string configType);
         List<Entities.TemplateConfig> GetTemplateConfigurations();
+        bool AreTemplateConfigurationsUpdated (ref object _updateHandle);
     }
 }

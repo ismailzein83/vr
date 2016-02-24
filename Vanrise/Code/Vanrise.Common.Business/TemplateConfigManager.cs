@@ -20,7 +20,11 @@ namespace Vanrise.Common.Business
             ITemplateConfigDataManager manager = CommonDataManagerFactory.GetDataManager<ITemplateConfigDataManager>();
             return manager.GetTemplateConfigurations();
         }
-
+        public Entities.TemplateConfig GetTemplateConfiguration(int templateConfigID)
+        {
+            var allTemplateConfigs = GetCachedTemplateConfigurations();
+            return allTemplateConfigs.GetRecord(templateConfigID);
+        }
         public T GetBehavior<T>(int configId) where T : class
         {
             var allTemplates = GetAllTemplateConfigurations();
@@ -35,5 +39,29 @@ namespace Vanrise.Common.Business
             }
             return null;
         }
+
+        #region Private Methods
+
+        Dictionary<int, Entities.TemplateConfig> GetCachedTemplateConfigurations()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetTemplateConfigurations",
+               () =>
+               {
+                   IEnumerable<Entities.TemplateConfig> templateConfigurations = GetAllTemplateConfigurations();
+                   return templateConfigurations.ToDictionary(t => t.TemplateConfigID, t => t);
+               });
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ITemplateConfigDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ITemplateConfigDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreTemplateConfigurationsUpdated(ref _updateHandle);
+            }
+        }
+        #endregion
     }
 }

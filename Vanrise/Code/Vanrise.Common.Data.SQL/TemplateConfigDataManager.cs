@@ -21,9 +21,15 @@ namespace Vanrise.Common.Data.SQL
             return GetItemsSP("common.sp_TemplateConfig_GetByConfigType", TemplateConfigMapper, configType);
         }
 
+
         public List<Entities.TemplateConfig> GetTemplateConfigurations()
         {
             return GetItemsSP("common.sp_TemplateConfig_GetAll", TemplateConfigMapper);
+        }
+
+        public bool AreTemplateConfigurationsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("common.TemplateConfig", ref updateHandle);
         }
 
         TemplateConfig TemplateConfigMapper(IDataReader reader)
