@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OperatorAccount.cs" />
+    <Compile Include="OperatorAccountSettings.cs" />
     <Compile Include="OperatorProfile.cs" />
     <Compile Include="OperatorProfileDetail.cs" />
     <Compile Include="OperatorProfileExtendedSettingType.cs" />
