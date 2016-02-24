@@ -48,5 +48,11 @@ namespace CP.SupplierPricelist.Data.SQL
                 input.CustomerId, input.Name, input.Settings != null ? Serializer.Serialize(input.Settings) : null);
             return (recordsEffected > 0);
         }
+
+
+        public bool AddUser(Customer input)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

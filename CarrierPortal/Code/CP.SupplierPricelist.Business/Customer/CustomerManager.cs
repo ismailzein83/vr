@@ -21,7 +21,7 @@ namespace CP.SupplierPricelist.Business
                 Entity = customer,
                 ConfigName = configName
             };
-             
+
         }
         public IDataRetrievalResult<CustomerDetail> GetFilteredCustomers(DataRetrievalInput<Customer> input)
         {
@@ -56,6 +56,22 @@ namespace CP.SupplierPricelist.Business
             };
             ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
             bool updateActionSucc = dataManager.UpdateCustomer(input);
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = MapToDetails(input);
+            }
+            return updateOperationOutput;
+        }
+        public UpdateOperationOutput<CustomerDetail> AddUser(Customer input)
+        {
+            UpdateOperationOutput<CustomerDetail> updateOperationOutput = new UpdateOperationOutput<CustomerDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+            ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
+            bool updateActionSucc = dataManager.AddUser(input);
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;

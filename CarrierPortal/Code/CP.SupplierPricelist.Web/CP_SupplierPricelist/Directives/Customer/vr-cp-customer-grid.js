@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService","VRNotificationService",
+app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService", "VRNotificationService",
 function (UtilsService, customeApiService, customerService, vRNotificationService) {
     var gridAPI;
 
@@ -29,7 +29,9 @@ function (UtilsService, customeApiService, customerService, vRNotificationServic
                     directiveAPI.onCustomerUpdated = function (customerObject) {
                         gridAPI.itemUpdated(customerObject);
                     }
-
+                    directiveAPI.onUserAdded = function (UserObject) {
+                        gridAPI.itemAdded(UserObject);
+                    }
                     return directiveAPI;
                 }
 
@@ -55,8 +57,8 @@ function (UtilsService, customeApiService, customerService, vRNotificationServic
                 clicked: editCustomer
             },
             {
-                name: "Assign User"//,
-                //clicked: Assign,
+                name: "Assign User",
+                clicked: assignUser,
             }
             ];
         }
@@ -67,7 +69,12 @@ function (UtilsService, customeApiService, customerService, vRNotificationServic
         };
         customerService.editcustomer(customer.Entity.CustomerId, onCustomerUpdated);
     }
-
+    function assignUser(customer) {
+        var onAssigningUser = function (updatedItem) {
+            gridAPI.itemUpdated(updatedItem);
+        };
+        customerService.assignUser(customer.Entity.CustomerId, onAssigningUser);
+    }
 
     var directiveDefinitionObject = {
 

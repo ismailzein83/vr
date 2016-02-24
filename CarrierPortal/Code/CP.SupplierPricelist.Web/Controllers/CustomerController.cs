@@ -7,7 +7,7 @@ using Vanrise.Web.Base;
 
 namespace CP.SupplierPricelist.Web.Controllers
 {
-    
+
     [RoutePrefix(Constants.ROUTE_PREFIX + "Customer")]
     [JSONWithTypeAttribute]
     public class CP_SupPriceList_CustomerController : BaseAPIController
@@ -36,12 +36,18 @@ namespace CP.SupplierPricelist.Web.Controllers
         }
         [HttpPost]
         [Route("UpdateCustomer")]
-        public new UpdateOperationOutput<CustomerDetail> UpdateRule(Customer input)
+        public UpdateOperationOutput<CustomerDetail> UpdateCustomer(Customer input)
         {
             CustomerManager manager = new CustomerManager();
             return manager.UpdateCustomer(input);
         }
-
+        [HttpPost]
+        [Route("AddUser")]
+        public UpdateOperationOutput<CustomerDetail> AddUser(Customer input)
+        {
+            CustomerManager manager = new CustomerManager();
+            return manager.AddUser(input);
+        }
 
         [HttpPost]
         [Route("GetFilteredCustomers")]
