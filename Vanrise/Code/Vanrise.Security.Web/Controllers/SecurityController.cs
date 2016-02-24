@@ -37,6 +37,13 @@ namespace Vanrise.Security.Web.Controllers
             return manager.ChangePassword(changedPasswordObject.OldPassword,changedPasswordObject.NewPassword);
         }
 
+        [HttpGet]
+        [Route("IsAllowed")]
+        public bool IsAllowed(string actionNames)
+        {
+            return SecurityContext.Current.IsAllowedV2(actionNames);
+        }
+
         public class CredentialsInput
         {
             public string Email { get; set; }

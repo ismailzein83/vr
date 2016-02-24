@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    UserManagementController.$inject = ['$scope', 'VR_Sec_UserService'];
+    UserManagementController.$inject = ['$scope', 'VR_Sec_UserService', 'VR_Sec_UserAPIService'];
 
-    function UserManagementController($scope, VR_Sec_UserService) {
+    function UserManagementController($scope, VR_Sec_UserService, VR_Sec_UserAPIService) {
 
         var gridAPI;
         var filter = {};
@@ -28,6 +28,10 @@
                 };
 
                 VR_Sec_UserService.addUser(onUserAdded);
+            };
+
+            $scope.hasAddUserPermission = function () {
+                return VR_Sec_UserAPIService.HasAddUserPermission();
             };
         }
 

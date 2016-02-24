@@ -1,7 +1,7 @@
 ﻿'use strict'
-widgetManagementController.$inject = ['$scope', 'UtilsService', 'VR_Sec_WidgetDefinitionAPIService', 'VRNotificationService', 'VR_Sec_WidgetService'];
+widgetManagementController.$inject = ['$scope', 'UtilsService', 'VR_Sec_WidgetDefinitionAPIService', 'VRNotificationService', 'VR_Sec_WidgetService', 'VR_Sec_ViewAPIService'];
 
-function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitionAPIService, VRNotificationService, VR_Sec_WidgetService) {
+function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitionAPIService, VRNotificationService, VR_Sec_WidgetService, VR_Sec_ViewAPIService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -21,6 +21,9 @@ function widgetManagementController($scope, UtilsService, VR_Sec_WidgetDefinitio
 
         $scope.Add = addNewWidget;
 
+        $scope.hasAddViewPermission = function () {
+            return VR_Sec_ViewAPIService.HasAddViewPermission();
+        };
     }
 
     function getFilterObject() {

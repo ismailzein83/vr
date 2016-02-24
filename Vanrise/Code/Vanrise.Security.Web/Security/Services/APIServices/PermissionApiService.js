@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PermissionAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService'];
+    PermissionAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService', 'VR_Sec_SecurityAPIService'];
 
-    function PermissionAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService) {
+    function PermissionAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService, VR_Sec_SecurityAPIService) {
 
         return ({
             GetFilteredEntityPermissions: GetFilteredEntityPermissions,
@@ -12,6 +12,7 @@
             GetEffectivePermissions: GetEffectivePermissions,
             UpdatePermissions: UpdatePermissions,
             DeletePermissions: DeletePermissions,
+            HasAddPermissionPermission: HasAddPermissionPermission
         });
 
         function GetFilteredEntityPermissions(input) {
@@ -40,6 +41,10 @@
                 entityType: entityType,
                 entityId: entityId
             });
+        }
+
+        function HasAddPermissionPermission() {
+            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Permission/UpdatePermissions');
         }
     }
 

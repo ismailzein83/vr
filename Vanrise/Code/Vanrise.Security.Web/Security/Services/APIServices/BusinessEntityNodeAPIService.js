@@ -2,12 +2,13 @@
 
     'use strict';
 
-    BusinessEntityNodeAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService'];
+    BusinessEntityNodeAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService', 'VR_Sec_SecurityAPIService'];
 
-    function BusinessEntityNodeAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService) {
+    function BusinessEntityNodeAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService, VR_Sec_SecurityAPIService) {
         return {
             GetEntityNodes: GetEntityNodes,
-            ToggleBreakInheritance: ToggleBreakInheritance
+            ToggleBreakInheritance: ToggleBreakInheritance,
+            HasBreakInheritancePermission: HasBreakInheritancePermission
         };
 
         function GetEntityNodes() {
@@ -19,6 +20,10 @@
                 entityType: entityType,
                 entityId: entityId
             });
+        }
+
+        function HasBreakInheritancePermission() {
+            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/BusinessEntityNode/ToggleBreakInheritance');
         }
     }
 

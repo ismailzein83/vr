@@ -1,15 +1,16 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    GroupAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+    GroupAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig', 'VR_Sec_SecurityAPIService'];
 
-    function GroupAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+    function GroupAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig, VR_Sec_SecurityAPIService) {
         return ({
             GetFilteredGroups: GetFilteredGroups,
             GetGroupInfo: GetGroupInfo,
             GetGroup: GetGroup,
             AddGroup: AddGroup,
-            UpdateGroup: UpdateGroup
+            UpdateGroup: UpdateGroup,
+            HasAddGroupPermission: HasAddGroupPermission
         });
 
         function GetFilteredGroups(input) {
@@ -34,6 +35,10 @@
 
         function UpdateGroup(group) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, "Group", "UpdateGroup"), group);
+        }
+
+        function HasAddGroupPermission() {
+            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Group/AddGroup');
         }
     }
 

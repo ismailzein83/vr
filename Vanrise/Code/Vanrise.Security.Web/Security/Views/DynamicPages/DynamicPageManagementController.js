@@ -1,7 +1,7 @@
 ﻿'use strict'
-dynamicPageManagementController.$inject = ['$scope', 'VR_Sec_ViewService'];
+dynamicPageManagementController.$inject = ['$scope', 'VR_Sec_ViewService', 'VR_Sec_ViewAPIService'];
 
-function dynamicPageManagementController($scope, VR_Sec_ViewService) {
+function dynamicPageManagementController($scope, VR_Sec_ViewService, VR_Sec_ViewAPIService) {
     var mainGridAPI;
     defineScope();
     load();
@@ -20,6 +20,10 @@ function dynamicPageManagementController($scope, VR_Sec_ViewService) {
 
         $scope.searchClicked = function () {
             return mainGridAPI.loadGrid(getFilterObject());
+        };
+
+        $scope.hasAddViewPermission = function () {
+            return VR_Sec_ViewAPIService.HasAddViewPermission();
         };
     }
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (ButtonDirService, SecurityService) {
+app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -9,14 +9,13 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
             onclick: '=',
             isasynchronous: '=',
             formname: '=',
-            permissions: '@',
+            haspermission: '=',
             validationcontext: '='
         },
         controller: function ($scope, $element, $attrs) {
-            
             var isSubmitting = false;
             var ctrl = this;
-           
+            
             ctrl.onInternalClick = function (evnt) {
                 if (ctrl.menuActions != undefined)
                     ctrl.showMenuActions = true;
@@ -70,6 +69,13 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
 
             ctrl.menuActions = $attrs.menuactions != undefined ? $scope.$parent.$eval($attrs.menuactions) : undefined;
             
+            ctrl.hideTemplate = false;
+            if (ctrl.haspermission != undefined && typeof (ctrl.haspermission) == 'function') {
+                ctrl.hideTemplate = true;
+                ctrl.haspermission().then(function (isAllowed) {
+                    ctrl.hideTemplate = !isAllowed;
+                });
+            }
         },
         controllerAs: 'ctrl',
         bindToController: true,
@@ -99,10 +105,7 @@ app.directive('vrButton', ['ButtonDirService', 'SecurityService', function (Butt
             }
         },
         template: function (element, attrs) {
-            if (attrs.permissions === undefined || SecurityService.isAllowed(attrs.permissions))
-                return ButtonDirService.getTemplate(attrs);
-            else
-                return "";
+            return ButtonDirService.getTemplate(attrs);
         }
 
     };

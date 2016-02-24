@@ -2,16 +2,17 @@
 
     'use strict';
 
-    ViewAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+    ViewAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig', 'VR_Sec_SecurityAPIService'];
 
-    function ViewAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+    function ViewAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig, VR_Sec_SecurityAPIService) {
         return ({
             GetView: GetView,
             GetFilteredDynamicPages: GetFilteredDynamicPages,
             AddView: AddView,
             UpdateView: UpdateView,
             UpdateViewsRank: UpdateViewsRank,
-            DeleteView: DeleteView
+            DeleteView: DeleteView,
+            HasAddViewPermission: HasAddViewPermission
         });
 
         function GetView(ViewId) {
@@ -40,6 +41,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'View', 'DeleteView'), {
                 viewId: viewId
             });
+        }
+
+        function HasAddViewPermission() {
+            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/View/AddView');
         }
     }
 

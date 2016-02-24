@@ -11,7 +11,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="Add" permissions="Root/Administration Module/Groups:Add" data-onclick="addGroup"></vr-button>
+                    <vr-button type="Add" haspermission="hasAddGroupPermission" data-onclick="addGroup"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

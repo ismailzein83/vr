@@ -2,9 +2,9 @@
 
     'use strict';
 
-    UserAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig'];
+    UserAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig', 'VR_Sec_SecurityAPIService'];
 
-    function UserAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig) {
+    function UserAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig, VR_Sec_SecurityAPIService) {
         return ({
             GetFilteredUsers: GetFilteredUsers,
             GetUsersInfo: GetUsersInfo,
@@ -16,7 +16,8 @@
             CheckUserName: CheckUserName,
             ResetPassword: ResetPassword,
             EditUserProfile: EditUserProfile,
-            LoadLoggedInUserProfile: LoadLoggedInUserProfile
+            LoadLoggedInUserProfile: LoadLoggedInUserProfile,
+            HasAddUserPermission: HasAddUserPermission
         });
 
         function GetFilteredUsers(input) {
@@ -69,6 +70,10 @@
 
         function LoadLoggedInUserProfile() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'LoadLoggedInUserProfile'));
+        }
+
+        function HasAddUserPermission() {
+            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Users/AddUser');
         }
     }
 

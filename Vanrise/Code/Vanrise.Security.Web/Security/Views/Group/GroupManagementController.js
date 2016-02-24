@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    GroupManagementController.$inject = ['$scope', 'VR_Sec_GroupService'];
+    GroupManagementController.$inject = ['$scope', 'VR_Sec_GroupService', 'VR_Sec_GroupAPIService'];
 
-    function GroupManagementController($scope, VR_Sec_GroupService) {
+    function GroupManagementController($scope, VR_Sec_GroupService, VR_Sec_GroupAPIService) {
 
         var gridAPI;
         var filter = {};
@@ -23,6 +23,10 @@
             };
 
             $scope.addGroup = addGroup;
+
+            $scope.hasAddGroupPermission = function () {
+                return VR_Sec_GroupAPIService.HasAddGroupPermission();
+            };
         }
 
         function load() {

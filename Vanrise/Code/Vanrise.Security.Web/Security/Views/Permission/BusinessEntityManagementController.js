@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BusinessEntityManagementController.$inject = ['$scope', 'VR_Sec_BusinessEntityNodeAPIService', 'VR_Sec_PermissionService', 'UtilsService', 'VRNotificationService'];
+    BusinessEntityManagementController.$inject = ['$scope', 'VR_Sec_BusinessEntityNodeAPIService', 'VR_Sec_PermissionService', 'VR_Sec_PermissionAPIService', 'UtilsService', 'VRNotificationService'];
 
-    function BusinessEntityManagementController($scope, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_PermissionService, UtilsService, VRNotificationService) {
+    function BusinessEntityManagementController($scope, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_PermissionService, VR_Sec_PermissionAPIService, UtilsService, VRNotificationService) {
         var treeAPI;
 
         var gridAPI;
@@ -44,6 +44,14 @@
                     gridAPI.onPermissionAdded(addedPermission);
                 };
                 VR_Sec_PermissionService.addPermission($scope.currentNode.EntType, $scope.currentNode.EntityId, $scope.currentNode.PermissionOptions, $scope.permissions, onPermissionAdded);
+            };
+
+            $scope.hasBreakInheritancePermission = function () {
+                return VR_Sec_BusinessEntityNodeAPIService.HasBreakInheritancePermission();
+            };
+
+            $scope.hasAddPermissionPermission = function () {
+                return VR_Sec_PermissionAPIService.HasAddPermissionPermission();
             };
         }
 

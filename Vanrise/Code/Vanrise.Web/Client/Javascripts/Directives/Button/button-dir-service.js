@@ -22,7 +22,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
 
         var buttonAttributes = getButtonAttributes(type);
         if (type == "Login") {            
-            return '<div style="position:relative;display:inline-block;width:100%" ng-mouseleave="ctrl.showMenuActions = false"  >'
+            return '<div style="position:relative;display:inline-block;width:100%" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
             + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + '<span style="padding-left:4px"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
@@ -33,13 +33,13 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         }
         else if (attrs.standalone != undefined) {
             return '<div style="position:relative;display:inline-block" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonAttributes.text + '" '               
-           + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">'
+           + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-hide="ctrl.hideTemplate">'
                + '<span style="padding-left:4px;font-size:24px" class="' + buttonAttributes.class + ' hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
                 + actionsMenuTemplate + '</div>';
         }
         else {
-            return '<div style="position:relative;display:inline-block" ng-mouseleave="ctrl.showMenuActions = false"  >'
+            return '<div style="position:relative;display:inline-block" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 +'<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
             + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + '<span style="padding-left:4px" class="' + buttonAttributes.class + ' aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
