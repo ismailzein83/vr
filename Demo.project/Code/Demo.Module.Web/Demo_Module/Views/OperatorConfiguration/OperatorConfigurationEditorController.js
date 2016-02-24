@@ -171,7 +171,7 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorConfigurationEntity ? '' : null, 'Operator Declared Information') : UtilsService.buildTitleForAddEditor('Operator Declared Information');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(operatorConfigurationEntity ? '' : null, 'Operator Configuration') : UtilsService.buildTitleForAddEditor('Operator Configuration');
         }
 
         function loadCurrencies() {
