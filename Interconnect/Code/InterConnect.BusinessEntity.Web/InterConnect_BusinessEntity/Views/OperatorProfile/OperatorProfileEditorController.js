@@ -17,6 +17,8 @@
         var cityDirectiveApi;
         var cityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var extendedSettingsAPI;
+        var extendedSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -33,8 +35,30 @@
 
         function defineScope() {
 
-            $scope.scopeModal = { sections:[]};
+            $scope.scopeModal = {};
+            $scope.scopeModal.optionSettings =[{
+                value: 1,
+                Name:"Option1"
 
+            }, {
+                value: 2,
+                Name: "Option2"
+
+            }, ];
+
+            $scope.scopeModal.onSettingSelectionChanged = function () {
+                if ($scope.scopeModal.selectedOptionSettings != undefined)
+                loadExtendedSettings($scope.scopeModal.selectedOptionSettings.value).then(function() {
+                                    loadExtendedSettingsDirective();
+
+                });
+            }
+
+            $scope.scopeModal.onExtendedSettingsDirectiveReady = function (api)
+                {
+                extendedSettingsAPI = api;
+                extendedSettingsReadyPromiseDeferred.resolve();
+            }
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
@@ -98,7 +122,9 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection, loadExtendedSettings,loadFieldTypeTemplates])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection]).then(function () {
+
+            })
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -148,30 +174,26 @@
             }
         }
 
-        function loadRunTimeFieldTypeTemplates()
+        function loadExtendedSettings(id)
         {
-            VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
-                if (response) {
-                    $scope.scopeModal.fieldTypeConfigs = response;
-                 
-                }
-            });
-        }
-
-        function loadExtendedSettings()
-        {
-            return VR_GenericData_GenericEditorAPIService.GetEditorRuntimeMock().then(function (response) {
-                console.log(response);
+            return VR_GenericData_GenericEditorAPIService.GetEditorRuntimeMock(id).then(function (response) {
                 $scope.scopeModal.sections = response.Sections;
-                if( $scope.scopeModal.fieldTypeConfigs !=undefined)
-                {
-                    var editor = UtilsService.getItemByVal($scope.scopeModal.fieldTypeConfigs, 1, 'DataRecordFieldTypeConfigId').Editor
-                }
             });
 
         }
 
+        function loadExtendedSettingsDirective() {
+            var loadExtendedSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+            extendedSettingsReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    sections: $scope.scopeModal.sections
+                };
 
+                VRUIUtilsService.callDirectiveLoad(extendedSettingsAPI, payload, loadExtendedSettingsPromiseDeferred);
+            });
+
+            return loadExtendedSettingsPromiseDeferred.promise;
+        }
 
 
         function buildOperatorProfileObjFromScope() {

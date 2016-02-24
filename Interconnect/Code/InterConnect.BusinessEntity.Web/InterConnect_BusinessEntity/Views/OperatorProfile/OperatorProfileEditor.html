@@ -20,17 +20,16 @@
                             <vr-common-city-selector vr-disabled="country== undefined || country ==  null" selectedvalues="scopeModal.city" on-ready="onCityDirectiveReady" isrequired showaddbutton></vr-common-city-selector>
                         </vr-columns>
                     </vr-row>
-                </vr-tab>
-
-                <vr-tab ng-repeat="section in scopeModal.sections" header="section.SectionTitle">
-                    <vr-row ng-repeat="row in section.Rows">
-                        <vr-columns width="1/2row" ng-repeat="field in row.Fields">
-                            <vr-label>{{field.FieldTitle}}</vr-label>
-                            <vr-directivewrapper directive="field.editor" on-ready="field.onEditorDirectiveReady"></vr-directivewrapper>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-select datatextfield="value" datavaluefield="Name"
+                                       entityname="Option" selectedvalues="scopeModal.selectedOptionSettings" datasource="scopeModal.optionSettings" label="Option Setting" onselectionchanged="scopeModal.onSettingSelectionChanged"></vr-select>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
 
+                <vr-genericdata-genericeditor-runtime-editor on-ready="scopeModal.onExtendedSettingsDirectiveReady"></vr-genericdata-genericeditor-runtime-editor>
+                 
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
