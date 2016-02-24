@@ -11,7 +11,7 @@ namespace Demo.Module.Entities
     {
         public int ConfigId { get; set; }
 
-        public int SelectedId { get; set; }
+        public List<int> SelectedIds { get; set; }
 
     }
 }

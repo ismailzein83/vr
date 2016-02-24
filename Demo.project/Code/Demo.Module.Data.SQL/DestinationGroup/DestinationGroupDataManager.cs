@@ -25,7 +25,7 @@ namespace Demo.Module.Data.SQL
         {
             object infoId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_DestinationGroup_Insert", out infoId, group.DestinationType, Vanrise.Common.Serializer.Serialize(group.GroupSettings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_DestinationGroup_Insert", out infoId, group.DestinationType, Vanrise.Common.Serializer.Serialize(group.GroupSettings), group.Name);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)infoId;
@@ -35,7 +35,7 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(DestinationGroup group)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_DestinationGroup_Update", group.DestinationGroupId, group.DestinationType, Vanrise.Common.Serializer.Serialize(group.GroupSettings));
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_DestinationGroup_Update", group.DestinationGroupId, group.DestinationType, Vanrise.Common.Serializer.Serialize(group.GroupSettings), group.Name);
             return (recordsEffected > 0);
         }
         public bool AreDestinationGroupsUpdated(ref object updateHandle)
@@ -61,6 +61,7 @@ namespace Demo.Module.Data.SQL
             {
                 DestinationGroupId = (int)reader["ID"],
                 DestinationType = (int)reader["DestinationType"],
+                Name = reader["Name"] as string,
                 GroupSettings = (GroupSettingsString != null ? Vanrise.Common.Serializer.Deserialize<GroupType>(GroupSettingsString) : null)
             };
             return group;

@@ -40,7 +40,8 @@
                 });
 
                 var data = {
-                    DestinationTypes: selectedGroupTypeTemplateIds
+                    DestinationTypes: selectedGroupTypeTemplateIds,
+                    Name:$scope.name
                 };
 
                 return data;

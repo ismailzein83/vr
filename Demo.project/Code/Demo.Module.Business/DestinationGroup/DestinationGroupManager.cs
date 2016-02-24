@@ -21,8 +21,10 @@ namespace Demo.Module.Business
         {
             var allDestinationGroups = GetCachedDestinationGroups();
 
-            Func<DestinationGroup, bool> filterExpression = (prod) =>
-                (input.Query.DestinationTypes == null || input.Query.DestinationTypes.Count == 0 || input.Query.DestinationTypes.Contains(prod.DestinationType));
+            Func<DestinationGroup, bool> filterExpression = (x) =>
+                (input.Query.DestinationTypes == null || input.Query.DestinationTypes.Count == 0 || input.Query.DestinationTypes.Contains(x.DestinationType))
+                &&
+                (input.Query.Name == null || x.Name.Contains(input.Query.Name));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDestinationGroups.ToBigResult(input, filterExpression, DestinationGroupDetailMapper));
         }

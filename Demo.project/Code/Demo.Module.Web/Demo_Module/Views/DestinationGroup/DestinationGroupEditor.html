@@ -2,12 +2,17 @@
     <vr-modalbody>
         <vr-form name="formDestinationGroupEditor">
             <vr-row>
-                <vr-columns width="1/3row">
+                <vr-columns width="1/4row">
+                    <vr-textbox value="scopeModal.name" isrequired="true" label="Name">
+
+                    </vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/4row">
                     <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Group Type" datasource="groupTypeTemplates" text="None" hideremoveicon
                                selectedvalues="selectedGroupTypeTemplate" isrequired="true">
                     </vr-select>
                 </vr-columns>
-                <vr-columns width="1/3row" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedGroupTypeTemplate.Editor">
+                <vr-columns width="1/4row" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedGroupTypeTemplate.Editor">
                     <vr-directivewrapper directive="selectedGroupTypeTemplate.Editor" on-ready="onSourceTypeDirectiveReady" isrequired="true"></vr-directivewrapper>
                 </vr-columns>
             </vr-row>

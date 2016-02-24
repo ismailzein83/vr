@@ -145,6 +145,8 @@
     <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericfilter.js" />
     <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericgrid.js" />
     <Content Include="Demo_Module\Directives\Generic\vr-whs-analytics-genericsettings.js" />
+    <Content Include="Demo_Module\Directives\MainExtensions\GroupTypes\Templates\GroupTypeCountry.html" />
+    <Content Include="Demo_Module\Directives\MainExtensions\GroupTypes\demo-grouptype-country.js" />
     <Content Include="Demo_Module\Directives\MainExtensions\ServiceSubTypes\demo-servicesubtype-data.js" />
     <Content Include="Demo_Module\Directives\MainExtensions\ServiceSubTypes\demo-servicesubtype-voice.js" />
     <Content Include="Demo_Module\Directives\OperatorAccount\vr-demo-operatoraccount-selector.js" />
@@ -287,7 +289,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Demo_Module\Directives\MainExtensions\GroupTypes\" />
     <Folder Include="Demo_Module\Directives\NewFolder1\" />
   </ItemGroup>
   <PropertyGroup>

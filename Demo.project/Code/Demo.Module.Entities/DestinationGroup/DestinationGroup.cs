@@ -6,6 +6,7 @@ namespace Demo.Module.Entities
     public class DestinationGroup
     {
         public int DestinationGroupId { get; set; }
+        public string Name { get; set; }
 
         public int DestinationType { get; set; }
 

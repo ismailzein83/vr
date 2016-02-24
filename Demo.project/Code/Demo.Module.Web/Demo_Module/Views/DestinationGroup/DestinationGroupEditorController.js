@@ -90,8 +90,8 @@
         function loadGroupSubTypes() {
             var promises = [];
             var sourceConfigId;
-            if (destinationGroupEntity != undefined && destinationGroupEntity.GroupSubTypeSettings) {
-                sourceConfigId = destinationGroupEntity.GroupSubTypeSettings.ConfigId;
+            if (destinationGroupEntity != undefined && destinationGroupEntity.GroupSettings) {
+                sourceConfigId = destinationGroupEntity.GroupSettings.ConfigId;
             }
 
             var loadGroupSubTypePromise = Demo_DestinationGroupAPIService.GetGroupTypeTemplates().then(function (response) {
@@ -113,9 +113,9 @@
                 sourceDirectiveReadyPromiseDeferred.promise.then(function () {
                     var serviceSubTypePayload;
 
-                    if (destinationGroupEntity != undefined && destinationGroupEntity.GroupSubTypeSettings) {
+                    if (destinationGroupEntity != undefined && destinationGroupEntity.GroupSettings) {
                         serviceSubTypePayload = {
-                            selectedIds: [destinationGroupEntity.GroupSubTypeSettings.SelectedId]
+                            selectedIds: destinationGroupEntity.GroupSettings.SelectedIds
                         };
                     }
 
@@ -129,22 +129,22 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(destinationGroupEntity ? '' : null, 'Destination Group') : UtilsService.buildTitleForAddEditor('Destination Group');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(destinationGroupEntity ? destinationGroupEntity.Name : null, 'Destination Group') : UtilsService.buildTitleForAddEditor('Destination Group');
         }
 
         function loadStaticSection() {
             if (destinationGroupEntity != undefined) {
-                //$scope.scopeModal.toDate = destinationGroupEntity.ToDate;
+                $scope.scopeModal.name = destinationGroupEntity.Name;
             }
         }
 
         function buildDestinationGroupObjFromScope() {
             var obj = {
                 DestinationGroupId: (destinationGroupId != null) ? destinationGroupId : 0,
-               // ToDate: $scope.scopeModal.toDate,
-                GroupSubTypeSettings: { $type: "Demo.Module.MainExtension.GroupSubTypeVoice, Demo.Module.MainExtension", SelectedId: sourceTemplateDirectiveAPI.getSelectedIds(), ConfigId: $scope.selectedGroupTypeTemplate.TemplateConfigID }
+                Name: $scope.scopeModal.name,
+                DestinationType: $scope.selectedGroupTypeTemplate.TemplateConfigID,
+                GroupSettings: VRUIUtilsService.getSettingsFromDirective($scope, sourceTemplateDirectiveAPI, 'selectedGroupTypeTemplate')
             };
-            console.log(obj)
             return obj;
         }
 
