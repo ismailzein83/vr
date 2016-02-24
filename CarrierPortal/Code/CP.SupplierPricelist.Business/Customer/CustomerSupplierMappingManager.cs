@@ -73,11 +73,30 @@ namespace CP.SupplierPricelist.Business
                 customerSupplierMapping.SupplierMappingId = supplierMappingId;
                 insertOperationOutput.InsertedObject = SupplierMappingDetailMapper(customerSupplierMapping);
             }
-            else
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-
+           
 
             return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<CustomerSupplierMappingDetail> UpdateCustomerSupplierMapping(CustomerSupplierMapping customerSupplierMapping)
+        {
+            Vanrise.Entities.UpdateOperationOutput<CustomerSupplierMappingDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CustomerSupplierMappingDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            ICustomerSupplierMappingDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerSupplierMappingDataManager>();
+            bool updateActionSucc = dataManager.Update(customerSupplierMapping);
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = SupplierMappingDetailMapper(customerSupplierMapping);
+            }
+
+
+            return updateOperationOutput;
         }
         #region Private Methods
         int GetLoggedInCustomerId()

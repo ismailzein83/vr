@@ -7,8 +7,10 @@
     function supplierMappingEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, supplierMappingAPIService) {
 
         var isEditMode;
+        var supplierMappingId;
         var supplierEntity;
         var userDirectiveApi;
+
         var userReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountDirectiveApi;
@@ -19,7 +21,11 @@
         load();
 
         function loadParameters() {
-            
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined) {
+                supplierMappingId = parameters.SupplierMappingId;
+            }
+            isEditMode = (supplierMappingId != undefined);
         }
         function defineScope() {
             $scope.carriers = [];
@@ -46,7 +52,26 @@
             };
         }
         function load() {
-            loadAllControls();
+            $scope.isLoading = true;
+            if (isEditMode) {
+                getCustomerSupplierMapping().then(function () {
+                    loadAllControls()
+                        .finally(function () {
+                            supplierEntity = undefined;
+                        });
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+            }
+            else {
+                loadAllControls();
+            }
+        }
+        function getCustomerSupplierMapping() {
+            return supplierMappingAPIService.GetCustomerSupplierMapping(supplierMappingId).then(function (supplier) {
+                supplierEntity = supplier;
+            });
         }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, LoadUser, LoadCarrierAccount])
@@ -59,18 +84,25 @@
         }
 
         function setTitle() {
-            //if (isEditMode && customerEntity != undefined)
-            //    $scope.title = UtilsService.buildTitleForUpdateEditor(customerEntity.Name, "Supplier");
-            //else
-                $scope.title = UtilsService.buildTitleForAddEditor("Supplier");
+            if (isEditMode && supplierEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(supplierEntity.SupplierMappingId, "Supplier Mapping");
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor("Supplier Mapping");
         }
 
 
         function LoadUser() {        
             var userLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             userReadyPromiseDeferred.promise.then(function () {
-             
-                VRUIUtilsService.callDirectiveLoad(userDirectiveApi, undefined, userLoadPromiseDeferred);
+                var obj;
+                if (supplierEntity != undefined && supplierEntity.UserId != undefined) {
+                    obj = {
+                        selectedIds: supplierEntity.UserId
+                    }
+                    $scope.disableUser = true;
+                }
+                   
+                VRUIUtilsService.callDirectiveLoad(userDirectiveApi, obj, userLoadPromiseDeferred);
             });
             return userLoadPromiseDeferred.promise;
         }
@@ -78,14 +110,19 @@
         function LoadCarrierAccount() {
             var carrierAccountLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             carrierAccountReadyPromiseDeferred.promise.then(function () {
-
-                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveApi, undefined, carrierAccountLoadPromiseDeferred);
+                var obj;
+                if (supplierEntity != undefined && supplierEntity.Settings != undefined && supplierEntity.Settings.MappedSuppliers!=undefined)
+                    obj = {
+                        selectedIds: supplierEntity.Settings.MappedSuppliers
+                    }
+                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveApi, obj, carrierAccountLoadPromiseDeferred);
             });
             return carrierAccountLoadPromiseDeferred.promise;
         }
 
         function buildCustomerSupplierMappingFromScope() {
-            var object = {                
+            var object = {
+                SupplierMappingId: (supplierMappingId != undefined) ? supplierMappingId : 0,
                 UserId: userDirectiveApi.getSelectedIds(),
                 Settings: {
                     MappedSuppliers: $scope.selectedCarriers
@@ -112,11 +149,11 @@
 
         function updateCustomerSupplierMapping() {
             var object = buildCustomerSupplierMappingFromScope();
-            return supplierMappingAPIService.AddCustomerSupplierMapping(object)
+            return supplierMappingAPIService.UpdateCustomerSupplierMapping(object)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Customer Supplier Mapping", response)) {
-                    if ($scope.onCustomerAdded != undefined)
-                        $scope.onCustomerAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemUpdated("Customer Supplier Mapping", response ,  "User")) {
+                    if ($scope.onSupplierMappingUpdated != undefined)
+                        $scope.onSupplierMappingUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

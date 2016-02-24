@@ -28,6 +28,18 @@ namespace CP.SupplierPricelist.Data.SQL
 
             return (recordsEffected > 0);
         }
+
+        public bool Update(CustomerSupplierMapping customerSupplierMapping)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_CustomerSupplierMapping_Update]",
+                customerSupplierMapping.SupplierMappingId,
+                customerSupplierMapping.UserId,
+                customerSupplierMapping.CustomerId,
+                customerSupplierMapping.Settings != null ? Serializer.Serialize(customerSupplierMapping.Settings) : null
+                );
+
+            return (recordsEffected > 0);
+        }
         public List<CustomerSupplierMapping> GetAllCustomerSupplierMappings()
         {
             return GetItemsSP("[CP_SupPriceList].[sp_CustomerSupplierMapping_GetAll]", CustomerSupplierMapper);

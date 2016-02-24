@@ -42,5 +42,12 @@ namespace CP.SupplierPricelist.Web.Controllers
             CustomerSupplierMappingManager manager = new CustomerSupplierMappingManager();
             return manager.AddCustomerSupplierMapping(customerSupplierMapping);
         }
+        [HttpPost]
+        [Route("UpdateCustomerSupplierMapping")]
+        public object UpdateCustomerSupplierMapping(CustomerSupplierMapping customerSupplierMapping)
+        {
+            CustomerSupplierMappingManager manager = new CustomerSupplierMappingManager();
+            return manager.UpdateCustomerSupplierMapping(customerSupplierMapping);
+        }
     }
 }

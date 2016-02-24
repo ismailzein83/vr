@@ -19,7 +19,7 @@ app.service('CP_SupplierPricelist_SupplierMappingService', ['VRModalService',
                 var modalSettings = {
                 };
                 var parameters = {
-                    SupplierMappingId: supplierMappingId
+                    SupplierMappingId: supplierMappingId 
                 };
 
                 modalSettings.onScopeReady = function (modalScope) {

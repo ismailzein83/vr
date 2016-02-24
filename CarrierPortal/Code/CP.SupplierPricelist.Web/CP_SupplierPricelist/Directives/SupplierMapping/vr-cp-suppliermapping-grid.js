@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCpSuppliermappingGrid", ["UtilsService", "CP_SupplierPricelist_SupplierMappingAPIService","VRNotificationService",
-function (UtilsService, supplierMappingAPIService , VRNotificationService ) {
+app.directive("vrCpSuppliermappingGrid", ["UtilsService", "CP_SupplierPricelist_SupplierMappingService", "CP_SupplierPricelist_SupplierMappingAPIService", "VRNotificationService",
+function (UtilsService, supplierMappingService , supplierMappingAPIService, VRNotificationService) {
 
     function SupplierMappingGrid($scope, ctrl) {
 
@@ -52,9 +52,16 @@ function (UtilsService, supplierMappingAPIService , VRNotificationService ) {
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
-                name: "Edit"
+                name: "Edit",
+                clicked: editSupplierMapping
             }
             ];
+        }
+        function editSupplierMapping(supplierMapping) {
+            var ontSupplierMappingUpdated = function (updatedItem) {
+                gridAPI.itemUpdated(updatedItem);
+            };
+            supplierMappingService.editSupplierMapping(supplierMapping.Entity.SupplierMappingId, ontSupplierMappingUpdated);
         }
     }
 

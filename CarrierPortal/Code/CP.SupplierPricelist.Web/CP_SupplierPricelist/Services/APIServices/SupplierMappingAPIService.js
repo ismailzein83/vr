@@ -16,11 +16,15 @@
         function AddCustomerSupplierMapping(supplierMapping) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "AddCustomerSupplierMapping"), supplierMapping);
         }
-
+        function UpdateCustomerSupplierMapping(supplierMapping) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "UpdateCustomerSupplierMapping"), supplierMapping);
+        }
         return ({
             GetCustomerSuppliers: GetCustomerSuppliers,
-            GetFilteredCustomerSupplierMappings:GetFilteredCustomerSupplierMappings,
-            AddCustomerSupplierMapping: AddCustomerSupplierMapping
+            GetFilteredCustomerSupplierMappings: GetFilteredCustomerSupplierMappings,
+            GetCustomerSupplierMapping:GetCustomerSupplierMapping,
+            AddCustomerSupplierMapping: AddCustomerSupplierMapping,
+            UpdateCustomerSupplierMapping: UpdateCustomerSupplierMapping
         });
        
     }
