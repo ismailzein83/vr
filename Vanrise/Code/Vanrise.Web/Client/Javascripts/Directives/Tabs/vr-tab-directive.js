@@ -16,6 +16,7 @@ app.directive('vrTab', ['MultiTranscludeService', function (MultiTranscludeServi
         controllerAs: 'ctrl',
         bindToController: true,
         link: function ($scope, elem, iAttrs, tabsCtrl, transcludeFn) {
+
             var ctrl = $scope.ctrl;
             if (ctrl.tabobject == undefined)
                 ctrl.tabobject = {};
@@ -25,6 +26,13 @@ app.directive('vrTab', ['MultiTranscludeService', function (MultiTranscludeServi
             if (!dontLoad)
                 tab.isLoaded = true;
             tabsCtrl.addTab(tab);
+
+            elem.bind("$destroy", function () {
+                if (ctrl.tabobject != undefined) {
+                    tabsCtrl.removeTab(ctrl.tabobject);
+                    ctrl.tabobject = undefined;
+                }
+            });
         },
         templateUrl: '/Client/Javascripts/Directives/Tabs/Templates/TabTemplate.html'
     };

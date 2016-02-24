@@ -8,6 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericEditorRuntimeSection
     {
+        public string SectionTitle { get; set; }
         public List<GenericEditorRuntimeRow> Rows { get; set; }
     }
 }

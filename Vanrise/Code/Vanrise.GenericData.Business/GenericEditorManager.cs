@@ -25,6 +25,85 @@ namespace Vanrise.GenericData.Business
             BuildEditorRuntime(genericEditor, editorRuntime);
             return editorRuntime;
         }
+        public GenericEditorRuntime GetEditorRuntimeMock(int editorId)
+        {
+            var genericEditor = new GenericEditor();
+            if (editorId == 1)
+            {
+                genericEditor.DataRecordTypeId = 1;
+                int i = 0;
+                genericEditor.Sections = new List<GenericEditorSection>();
+
+                genericEditor.Sections.Add(new GenericEditorSection
+                {
+                    Rows = new List<GenericEditorRow>()
+                });
+                genericEditor.Sections.Add(new GenericEditorSection
+                {
+                    Rows = new List<GenericEditorRow>()
+                });
+                foreach (GenericEditorSection section in genericEditor.Sections)
+                {
+                    section.SectionTitle = "Contacts" + i++;
+                    section.Rows.Add(new GenericEditorRow
+                    {
+                        Fields = new List<GenericEditorField>()
+                    });
+                    section.Rows.Add(new GenericEditorRow
+                    {
+                        Fields = new List<GenericEditorField>()
+                    });
+                    foreach (GenericEditorRow field in section.Rows)
+                    {
+                        field.Fields.Add(new GenericEditorField
+                        {
+                            FieldTitle = "Email" + i++,
+                            FieldPath = "Email"
+                        });
+                        field.Fields.Add(new GenericEditorField
+                        {
+                            FieldTitle = "Address" + i++,
+                            FieldPath = "Address"
+                        });
+                    }
+                }
+            }
+            else
+            {
+                genericEditor.DataRecordTypeId = 1;
+                int i = 0;
+                genericEditor.Sections = new List<GenericEditorSection>();
+
+                genericEditor.Sections.Add(new GenericEditorSection
+                {
+                    Rows = new List<GenericEditorRow>()
+                });
+              
+                foreach (GenericEditorSection section in genericEditor.Sections)
+                {
+                    section.SectionTitle = "Contacts" + i++;
+                    section.Rows.Add(new GenericEditorRow
+                    {
+                        Fields = new List<GenericEditorField>()
+                    });
+                    
+                    foreach (GenericEditorRow field in section.Rows)
+                    {
+                        field.Fields.Add(new GenericEditorField
+                        {
+                            FieldTitle = "Email" + i++,
+                            FieldPath = "Email"
+                        });
+                    }
+                }
+            }
+            
+
+            GenericEditorRuntime editorRuntime = new GenericEditorRuntime();
+            BuildEditorRuntime(genericEditor, editorRuntime);
+            return editorRuntime;
+        }
+
 
         #region Private Methods
 
@@ -41,6 +120,7 @@ namespace Vanrise.GenericData.Business
                 foreach (var section in genericEditor.Sections)
                 {
                     var runtimeSection = new GenericEditorRuntimeSection();
+                    runtimeSection.SectionTitle = section.SectionTitle;
                     editorRuntime.Sections.Add(runtimeSection);
                     BuildEditorRuntimeRows(genericEditor, section, runtimeSection);
                 }

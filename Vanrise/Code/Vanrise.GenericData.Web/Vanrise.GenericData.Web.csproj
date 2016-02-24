@@ -132,6 +132,7 @@
     <Compile Include="Controllers\DataRecordStorageController.cs" />
     <Compile Include="Controllers\DataTransformationStepConfigController.cs" />
     <Compile Include="Controllers\ExpressionBuilderConfigController.cs" />
+    <Compile Include="Controllers\GenericEditorController.cs" />
     <Compile Include="Controllers\GenericRuleController.cs" />
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordTypeController.cs" />
@@ -189,6 +190,12 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-recordname-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-stepsequencedesign.js" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\EditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\RowTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\SectionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-editor.js" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-row.js" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-section.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-fieldtype-businessentity-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Choices\vr-genericdata-fieldtype-choices-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\vr-genericdata-fieldtype-number-filtereditor.js" />
@@ -303,6 +310,7 @@
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\GenericEditorAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreConfigAPIService.js" />

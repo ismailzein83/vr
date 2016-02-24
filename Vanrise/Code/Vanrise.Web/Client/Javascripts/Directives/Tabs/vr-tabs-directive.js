@@ -19,6 +19,12 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
             ctrl.tabSelectionChanged = function () {
                 ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
             }
+
+            ctrl.removeTab = function(tab)
+            {
+                var index = ctrl.tabs.indexOf(tab);
+                ctrl.tabs.splice(index, 1);
+            }
         },
         controllerAs: 'ctrl',
         bindToController: true,
