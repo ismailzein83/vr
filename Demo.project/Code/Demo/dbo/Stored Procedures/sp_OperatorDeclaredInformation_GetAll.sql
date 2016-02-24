@@ -1,22 +1,25 @@
 ﻿
+
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[sp_Code_GetAll]
+CREATE PROCEDURE [dbo].[sp_OperatorDeclaredInformation_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
+	SELECT	nnp.ID,
+			nnp.OperatorID,
+			nnp.FromDate,
+			nnp.ToDate,
+			nnp.ZoneID,
+			nnp.Volume,
+			nnp.AmountType,
+			nnp.Attachment,
+			nnp.Notes
 
-    SELECT  
-	   sc.[ID]
-      ,sc.[Code]
-      ,sc.[ZoneID]
-      ,sc.[CodeGroupID]
-      ,sc.[BED]
-      ,sc.[EED]
-      from dbo.Code sc
+	FROM	[dbo].OperatorDeclaredInformation  as nnp WITH(NOLOCK) 
 END

@@ -20,6 +20,7 @@ BEGIN
 	SELECT  sc.[ID],
 			sc.[Code],
 			sc.[ZoneID],
+			sc.[CodeGroupID],
 			sc.[BED],
 			sc.[EED]
 	FROM	[dbo].[Code] sc

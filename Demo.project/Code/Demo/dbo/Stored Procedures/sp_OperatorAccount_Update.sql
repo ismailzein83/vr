@@ -12,7 +12,7 @@ CREATE PROCEDURE [dbo].[sp_OperatorAccount_Update]
 	@OperatorAccountSettings nvarchar(MAX)
 AS
 BEGIN
-IF NOT EXISTS(select 1 from dbo.OperatorProfile where Name = @Name and Id!=@ID) 
+IF NOT EXISTS(select 1 from dbo.OperatorAccount where NameSuffix = @Name and Id!=@ID) 
 BEGIN
 	Update dbo.OperatorAccount
 	Set NameSuffix = @Name,

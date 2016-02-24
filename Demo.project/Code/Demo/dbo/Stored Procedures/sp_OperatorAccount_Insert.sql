@@ -14,7 +14,7 @@ CREATE PROCEDURE [dbo].[sp_OperatorAccount_Insert]
 AS
 BEGIN
 SET @id =0;
-IF NOT EXISTS(SELECT 1 FROM dbo.OperatorAccount WHERE [NameSuffix] = @Name and [OperatorProfileID]=@OperatorProfileId)
+IF NOT EXISTS(SELECT 1 FROM dbo.OperatorAccount WHERE [NameSuffix] = @Name )
 	BEGIN
 		Insert into dbo.OperatorAccount([NameSuffix],[OperatorProfileID],[SupplierSettings] ,[CustomerSettings],[OperatorAccountSettings] )
 		Values(@Name,@OperatorProfileId,  @SupplierSettings,@CustomerSettings,@OperatorAccountSettings)

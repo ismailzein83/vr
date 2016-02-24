@@ -18,6 +18,7 @@ BEGIN
 			   sc.[ID]
 			  ,sc.[Code]
 			  ,sc.[ZoneID]
+			  ,sc.[CodeGroupID]
 			  ,sc.[BED]
 			  ,sc.[EED]
 			INTO #RESULT

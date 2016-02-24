@@ -7,6 +7,8 @@
     [OperatorAccountSettings] NVARCHAR (MAX) NULL,
     [timestamp]               ROWVERSION     NULL,
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [FK_CarrierAccount_CarrierProfile] FOREIGN KEY ([OperatorProfileID]) REFERENCES [dbo].[OperatorProfile] ([ID])
+    CONSTRAINT [FK_OperatorAccount_OperatorProfile] FOREIGN KEY ([OperatorProfileID]) REFERENCES [dbo].[OperatorProfile] ([ID])
 );
+
+
 

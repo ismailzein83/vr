@@ -17,6 +17,7 @@ BEGIN
 
 	SELECT sc.[ID]
 		  ,sc.Code
+		  ,sc.[CodeGroupID]
 		  ,sc.ZoneID
 		  ,sc.BED
 		  ,sc.EED

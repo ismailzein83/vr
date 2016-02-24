@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[BillingStats] (
+    [ID]               BIGINT          NOT NULL,
+    [CallDate]         DATETIME        NOT NULL,
+    [OperatorID]       INT             NOT NULL,
+    [ZoneID]           BIGINT          NOT NULL,
+    [CostCurrency]     INT             NULL,
+    [SaleCurrency]     INT             NULL,
+    [NumberOfCalls]    INT             NULL,
+    [FirstCallTime]    VARCHAR (8)     NULL,
+    [LastCallTime]     VARCHAR (8)     NULL,
+    [MinDuration]      INT             NULL,
+    [MaxDuration]      INT             NULL,
+    [AvgDuration]      NUMERIC (20, 6) NULL,
+    [CostNets]         NUMERIC (20, 6) NULL,
+    [CostExtraCharges] NUMERIC (20, 6) NULL,
+    [SaleNets]         NUMERIC (20, 6) NULL,
+    [SaleExtraCharges] NUMERIC (20, 6) NULL,
+    [SaleRate]         NUMERIC (20, 6) NULL,
+    [CostRate]         NUMERIC (20, 6) NULL,
+    [SaleDuration]     NUMERIC (20, 6) NULL,
+    [CostDuration]     NUMERIC (20, 6) NULL,
+    [SaleRateType]     INT             NULL,
+    [CostRateType]     INT             NULL,
+    CONSTRAINT [IX_BillingStats_ID] UNIQUE NONCLUSTERED ([ID] ASC)
+);
+

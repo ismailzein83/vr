@@ -4,7 +4,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [dbo].[sp_Code_GetByZoneName]
+CREATE PROCEDURE [dbo].[sp_Code_GetByZoneName]
 	-- Add the parameters for the stored procedure here
 	@ZoneName nvarchar(255),
 	@When DateTime
@@ -17,6 +17,7 @@ BEGIN
 	SELECT  sc.[ID],
 			sc.[Code],
 			sc.[ZoneID],
+			sc.[CodeGroupID],
 			sc.[BED],
 			sc.[EED]
 	FROM	[dbo].[Code] sc
