@@ -56,6 +56,9 @@
     <Compile Include="CodeGroup\CodeGroupDetail.cs" />
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
+    <Compile Include="DestinationGroup\DestinationGroup.cs" />
+    <Compile Include="DestinationGroup\DestinationGroupDetail.cs" />
+    <Compile Include="DestinationGroup\DestinationGroupQuery.cs" />
     <Compile Include="Enums\CDRDirection.cs" />
     <Compile Include="Enums\CDRType.cs" />
     <Compile Include="GenericAnalytic\AnalyticDimension.cs" />
@@ -64,6 +67,7 @@
     <Compile Include="GenericAnalytic\AnalyticRecord.cs" />
     <Compile Include="GenericAnalytic\AnalyticSummaryBigResult.cs" />
     <Compile Include="GenericAnalytic\GenericAnalyticQuery.cs" />
+    <Compile Include="GroupType\GroupType.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlan.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanDetail.cs" />
     <Compile Include="NationalNumberingPlan\NationalNumberingPlanQuery.cs" />

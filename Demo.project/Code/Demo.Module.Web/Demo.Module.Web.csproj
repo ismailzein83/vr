@@ -133,6 +133,8 @@
     <Content Include="Demo_Module\Constant\CDRDirectionEnum.js" />
     <Content Include="Demo_Module\Constant\GenericAnalyticDimensionEnum.js" />
     <Content Include="Demo_Module\Constant\GenericAnalyticMeasureEnum.js" />
+    <Content Include="Demo_Module\Directives\DestinationGroup\Templates\DestinationGroupGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\DestinationGroup\vr-demo-destinationgroup-grid.js" />
     <Content Include="Demo_Module\Directives\Generic\GenericAnalyticGridSettingsController.js" />
     <Content Include="Demo_Module\Directives\Generic\Templates\GenericAnalyticGridSettings.html" />
     <Content Include="Demo_Module\Directives\Generic\Templates\GenericChartTemplate.html" />
@@ -162,6 +164,7 @@
     <Content Include="Demo_Module\Directives\UnitType\unittype-selector.js" />
     <Content Include="Demo_Module\Services\APIServices\CDRLogAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\GenericAnalyticAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\DestinationGroupAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorConfigurationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OperatorDeclaredInformationAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\PopAPIService.js" />
@@ -169,6 +172,7 @@
     <Content Include="Demo_Module\Services\APIServices\UnitTypeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ServiceTypeAPIService.js" />
     <Content Include="Demo_Module\Services\GenericAnalyticService.js" />
+    <Content Include="Demo_Module\Services\DestinationGroupService.js" />
     <Content Include="Demo_Module\Services\PopService.js" />
     <Content Include="Demo_Module\Services\OperatorConfigurationService.js" />
     <Content Include="Demo_Module\Services\OperatorDeclaredInformationService.js" />
@@ -178,6 +182,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
     <Compile Include="Controllers\GenericAnalyticController.cs" />
+    <Compile Include="Controllers\DestinationGroupController.cs" />
     <Compile Include="Controllers\PopController.cs" />
     <Compile Include="Controllers\OperatorConfigurationController.cs" />
     <Compile Include="Controllers\OperatorDeclaredInformationController.cs" />
@@ -228,6 +233,10 @@
     <Content Include="Demo_Module\Views\CodeGroup\CodeGroupManagementController.js" />
     <Content Include="Demo_Module\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="Demo_Module\Views\CodeGroup\CodeGroupUploadEditorController.js" />
+    <Content Include="Demo_Module\Views\DestinationGroup\DestinationGroupEditor.html" />
+    <Content Include="Demo_Module\Views\DestinationGroup\DestinationGroupEditorController.js" />
+    <Content Include="Demo_Module\Views\DestinationGroup\DestinationGroupManagement.html" />
+    <Content Include="Demo_Module\Views\DestinationGroup\DestinationGroupManagementController.js" />
     <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanEditor.html" />
     <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanEditorController.js" />
     <Content Include="Demo_Module\Views\NationalNumberingPlan\NationalNumberingPlanManagement.html" />
@@ -277,7 +286,10 @@
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Demo_Module\Directives\MainExtensions\GroupTypes\" />
+    <Folder Include="Demo_Module\Directives\NewFolder1\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeGroup\CodeGroupDataManager.cs" />
+    <Compile Include="DestinationGroup\DestinationGroupDataManager.cs" />
     <Compile Include="GenericAnalytic\GenericAnalyticDataManager.cs" />
     <Compile Include="Generic\AnalyticDimensionConfig.cs" />
     <Compile Include="Generic\AnalyticMeasureFieldConfig.cs" />
