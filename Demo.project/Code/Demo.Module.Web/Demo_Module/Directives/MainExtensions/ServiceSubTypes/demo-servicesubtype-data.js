@@ -69,12 +69,10 @@ app.directive('demoServicesubtypeData', ['Demo_DataSubTypeEnum', 'UtilsService',
 
             function defineAPI() {
                 var api = {};
-                api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
-                }
 
-                api.getType = "Demo.Module.MainExtension.ServiceSubTypeData, Demo.Module.MainExtension";
-
+                api.getData = function () {
+                    return { $type: "Demo.Module.MainExtension.ServiceSubTypeData, Demo.Module.MainExtension", SelectedId: VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl) }
+                    }
 
                 api.load = function (payload) {
                     var selectedIds;

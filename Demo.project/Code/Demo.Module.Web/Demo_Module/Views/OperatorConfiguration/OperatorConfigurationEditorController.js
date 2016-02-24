@@ -222,7 +222,7 @@
                 CDRDirection: cdrDirectionDirectiveAPI.getSelectedIds(),
                 Notes: $scope.scopeModal.notes,
                 Currency: currencyDirectiveAPI.getSelectedIds(),
-                ServiceSubTypeSettings: { $type: sourceTemplateDirectiveAPI.getType, SelectedId: sourceTemplateDirectiveAPI.getSelectedIds(), ConfigId: $scope.selectedSourceTypeTemplate.TemplateConfigID }
+                ServiceSubTypeSettings: VRUIUtilsService.getSettingsFromDirective($scope, sourceTemplateDirectiveAPI, 'selectedSourceTypeTemplate')
             };
             console.log(obj)
             return obj;
