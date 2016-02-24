@@ -158,7 +158,6 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
-
         function loadCDRDirections() {
             var loadCDRDirectionsPromiseDeferred = UtilsService.createPromiseDeferred();
             cdrDirectionReadyPromiseDeferred.promise.then(function () {
