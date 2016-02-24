@@ -16,7 +16,7 @@ namespace CP.SupplierPricelist.Web.Controllers
         public IEnumerable<SupplierInfo> GetCustomerSuppliers()
         {
             CustomerSupplierMappingManager manager = new CustomerSupplierMappingManager();
-            return manager.GetCustomerSuppliers();
+            return manager.GetCustomerSuppliers(null);
         }
 
 

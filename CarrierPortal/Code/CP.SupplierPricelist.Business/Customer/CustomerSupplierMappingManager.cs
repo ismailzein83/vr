@@ -17,7 +17,7 @@ namespace CP.SupplierPricelist.Business
 {
     public class CustomerSupplierMappingManager
     {
-        public List<SupplierInfo> GetCustomerSuppliers()
+        public IEnumerable<SupplierInfo> GetCustomerSuppliers(SupplierInfoFilter filter)
         {
             int customerId = GetLoggedInCustomerId();
             Customer customer = new CustomerManager().GetCustomer(customerId);
@@ -25,7 +25,26 @@ namespace CP.SupplierPricelist.Business
             {
                 SupplierPriceListConnectorBase supplierPriceListConnectorBase = customer.Settings.PriceListConnector as SupplierPriceListConnectorBase;
 
-                return supplierPriceListConnectorBase.GetSuppliers(null);
+                var allCustomerSuppliers = supplierPriceListConnectorBase.GetSuppliers(null);
+                if (allCustomerSuppliers == null)
+                    return null;
+                else
+                {
+                    var allSupplierMappings = GetCachedCustomerSupplierMappings();
+                    var currentCustomerSupplierMappings = allSupplierMappings.FindAllRecords(itm => itm.Value.CustomerId == customerId);
+                    Func<SupplierInfo, bool> filterExpression = (supplierInfo) =>
+                        {
+                            if(filter.AssignableToSupplierUserId.HasValue)
+                            {
+                                if (currentCustomerSupplierMappings.Any(itm => 
+                                    itm.Value.UserId != filter.AssignableToSupplierUserId.Value 
+                                    && itm.Value.Settings.MappedSuppliers.Any(sup => sup.SupplierId == supplierInfo.SupplierId)))
+                                    return false;
+                            }
+                            return true;
+                        };
+                    return allCustomerSuppliers.FindAllRecords(filterExpression);
+                }
             }
             else
                 throw new NotSupportedException();
