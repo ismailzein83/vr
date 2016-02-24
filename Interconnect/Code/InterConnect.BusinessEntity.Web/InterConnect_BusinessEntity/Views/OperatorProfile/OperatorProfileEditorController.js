@@ -2,9 +2,9 @@
 
     "use strict";
 
-    operatorProfileEditorController.$inject = ['$scope', 'InterConnect_BE_OperatorProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    operatorProfileEditorController.$inject = ['$scope', 'InterConnect_BE_OperatorProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_GenericData_GenericEditorAPIService'];
 
-    function operatorProfileEditorController($scope, InterConnect_BE_OperatorProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function operatorProfileEditorController($scope, InterConnect_BE_OperatorProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_GenericEditorAPIService) {
         var isEditMode;
         var operatorProfileId;
         var operatorProfileEntity;
@@ -33,7 +33,7 @@
 
         function defineScope() {
 
-            $scope.scopeModal = {};
+            $scope.scopeModal = { sections:[]};
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
@@ -98,7 +98,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection, loadExtendedSettings,loadFieldTypeTemplates])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -147,6 +147,32 @@
 
             }
         }
+
+        function loadRunTimeFieldTypeTemplates()
+        {
+            VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                if (response) {
+                    $scope.scopeModal.fieldTypeConfigs = response;
+                 
+                }
+            });
+        }
+
+        function loadExtendedSettings()
+        {
+            return VR_GenericData_GenericEditorAPIService.GetEditorRuntimeMock().then(function (response) {
+                console.log(response);
+                $scope.scopeModal.sections = response.Sections;
+                if( $scope.scopeModal.fieldTypeConfigs !=undefined)
+                {
+                    var editor = UtilsService.getItemByVal($scope.scopeModal.fieldTypeConfigs, 1, 'DataRecordFieldTypeConfigId').Editor
+                }
+            });
+
+        }
+
+
+
 
         function buildOperatorProfileObjFromScope() {
 

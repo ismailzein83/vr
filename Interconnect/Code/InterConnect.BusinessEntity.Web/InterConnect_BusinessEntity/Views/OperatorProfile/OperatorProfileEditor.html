@@ -21,6 +21,16 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+
+                <vr-tab ng-repeat="section in scopeModal.sections" header="section.SectionTitle">
+                    <vr-row ng-repeat="row in section.Rows">
+                        <vr-columns width="1/2row" ng-repeat="field in row.Fields">
+                            <vr-label>{{field.FieldTitle}}</vr-label>
+                            <vr-directivewrapper directive="field.editor" on-ready="field.onEditorDirectiveReady"></vr-directivewrapper>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
