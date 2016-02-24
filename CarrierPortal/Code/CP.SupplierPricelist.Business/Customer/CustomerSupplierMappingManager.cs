@@ -34,7 +34,7 @@ namespace CP.SupplierPricelist.Business
 
         public Vanrise.Entities.IDataRetrievalResult<CustomerSupplierMappingDetail> GetFilteredCustomerSupplierMappings(Vanrise.Entities.DataRetrievalInput<CustomerSupplierMappingQuery> input)
         {
-            var allCustomerSupplierMappings = GetCachedCustomerSupplierMappingsUsers();
+            var allCustomerSupplierMappings = GetCachedCustomerSupplierMappings();
             Func<CustomerSupplierMapping, bool> filterExpression = (item) =>
                  (input.Query.Users == null || input.Query.Users.Count() == 0 || input.Query.Users.Contains(item.UserId))
                   &&
@@ -43,14 +43,20 @@ namespace CP.SupplierPricelist.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, SupplierMappingDetailMapper));
         }
 
+        public CustomerSupplierMapping GetCustomerSupplierMapping(int supplierMappingId)
+        {
+            var customerSupplierMappings = GetCachedCustomerSupplierMappings();
+            return customerSupplierMappings.GetRecord(supplierMappingId);
+        }
+
         public IEnumerable<CustomerSupplierMapping> GetCustomerSupplierMappings()
         {
-            var customerSupplierMappings = GetCachedCustomerSupplierMappingsUsers();
+            var customerSupplierMappings = GetCachedCustomerSupplierMappings();
             return customerSupplierMappings.Values;
         }
-        public Vanrise.Entities.InsertOperationOutput<CustomerSupplierMapping> AddCustomerSupplierMapping(CustomerSupplierMapping customerSupplierMapping)
+        public Vanrise.Entities.InsertOperationOutput<CustomerSupplierMappingDetail> AddCustomerSupplierMapping(CustomerSupplierMapping customerSupplierMapping)
         {
-            Vanrise.Entities.InsertOperationOutput<CustomerSupplierMapping> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CustomerSupplierMapping>();
+            Vanrise.Entities.InsertOperationOutput<CustomerSupplierMappingDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CustomerSupplierMappingDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -65,7 +71,7 @@ namespace CP.SupplierPricelist.Business
 
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 customerSupplierMapping.SupplierMappingId = supplierMappingId;
-                insertOperationOutput.InsertedObject = customerSupplierMapping;
+                insertOperationOutput.InsertedObject = SupplierMappingDetailMapper(customerSupplierMapping);
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
@@ -80,7 +86,7 @@ namespace CP.SupplierPricelist.Business
             return new CustomerUserManager().GetCustomerIdByUserId(userId);
         }
 
-        Dictionary<int, CustomerSupplierMapping> GetCachedCustomerSupplierMappingsUsers()
+        Dictionary<int, CustomerSupplierMapping> GetCachedCustomerSupplierMappings()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomersSupplierMappings",
                () =>

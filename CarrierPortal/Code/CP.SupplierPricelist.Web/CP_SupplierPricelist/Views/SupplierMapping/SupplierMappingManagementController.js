@@ -32,7 +32,10 @@
                 }
 
                 $scope.AddSupplierMapping = function () {
-                    supplierMappingService.addSupplierMapping();
+                    var onSupplierMappingAdded = function (supplierMapping) {
+                        gridAPI.onSupplierMappingAdded(supplierMapping);
+                    };
+                    supplierMappingService.addSupplierMapping(onSupplierMappingAdded);
                 }
             }
 

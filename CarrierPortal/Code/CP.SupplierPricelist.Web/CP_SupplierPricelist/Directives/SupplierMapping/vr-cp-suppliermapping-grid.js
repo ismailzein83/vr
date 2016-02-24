@@ -23,11 +23,12 @@ function (UtilsService, supplierMappingAPIService , VRNotificationService ) {
                     }
 
                     directiveAPI.onSupplierMappingAdded = function (supplierObject) {
-                        gridAPI.itemAdded(customerObject);
+                        gridAPI.itemAdded(supplierObject);
                     }
 
                     directiveAPI.onSupplierMappingUpdated = function (supplierObject) {
-                        gridAPI.itemUpdated(customerObject);
+                        console.log(supplierObject)
+                        gridAPI.itemUpdated(supplierObject);
                     }
 
                     return directiveAPI;

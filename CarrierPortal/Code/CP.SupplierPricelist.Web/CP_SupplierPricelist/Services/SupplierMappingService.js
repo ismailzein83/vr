@@ -2,7 +2,7 @@
 app.service('CP_SupplierPricelist_SupplierMappingService', ['VRModalService',
     function ( VRModalService) {
 
-        function addSupplierMapping(onSupplierAdded) {
+        function addSupplierMapping(onSupplierMappingAdded) {
             var settings = {
             
             };
@@ -10,20 +10,20 @@ app.service('CP_SupplierPricelist_SupplierMappingService', ['VRModalService',
             };
 
             settings.onScopeReady = function(modalScope) {
-                //modalScope.onCustomerAdded = onCustomerAdded;
+                modalScope.onSupplierMappingAdded = onSupplierMappingAdded;
             };
             VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingEditor.html', parameters, settings);
         }
 
-        function editSupplierMapping(customerId, onCustomerUpdated) {
+        function editSupplierMapping(supplierMappingId, onSupplierMappingUpdated) {
                 var modalSettings = {
                 };
                 var parameters = {
-                   // customerId: customerId
+                    SupplierMappingId: supplierMappingId
                 };
 
                 modalSettings.onScopeReady = function (modalScope) {
-                  //  modalScope.onCustomerUpdated = onCustomerUpdated;
+                    modalScope.onSupplierMappingUpdated = onSupplierMappingUpdated
                 };
                 VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingEditor.html', parameters, modalSettings);
             }
