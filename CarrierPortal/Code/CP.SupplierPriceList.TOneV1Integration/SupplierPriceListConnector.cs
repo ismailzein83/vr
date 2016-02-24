@@ -2,6 +2,7 @@
 using CP.SupplierPricelist.Entities;
 using CP.SupplierPricelist.Business;
 using Vanrise.Entities;
+using System.Collections.Generic;
 
 namespace CP.SupplierPriceList.TOneV1Integration
 {
@@ -149,5 +150,25 @@ namespace CP.SupplierPriceList.TOneV1Integration
             }
             return priceListProgressOutput;
         }
+
+        public override List<SupplierInfo> GetSuppliers(GetSuppliersContext context)
+        {
+            ServiceActions serviceActions = new ServiceActions(Url, Password, UserName);
+            var list = serviceActions.GetCarriersInfos();
+            List<SupplierInfo> supplierInfosList = new List<SupplierInfo>();
+            foreach (var a in list)
+            {
+                supplierInfosList.Add(
+                    new SupplierInfo()
+                    {
+                        SupplierId = a.CarrierAccountID,
+                        SupplierName = a.Name
+                    }
+                );
+            }
+
+            return supplierInfosList;
+        }
+
     }
 }

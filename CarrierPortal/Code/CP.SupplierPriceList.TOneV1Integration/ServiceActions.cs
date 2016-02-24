@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Collections.Generic;
+using CP.SupplierPricelist.Entities;
 
 namespace CP.SupplierPriceList.TOneV1Integration
 {
@@ -126,6 +128,14 @@ namespace CP.SupplierPriceList.TOneV1Integration
             string resultString = GetApiObjectWithHeader(urlTemp);
             UploadInfo uploadInfo = JsonConvert.DeserializeObject<UploadInfo>(resultString);
             return uploadInfo;
+        }
+
+        public List<CarrierInfo> GetCarriersInfos()
+        {
+            string urlTemp = string.Format("{0}/api/BusinessEntity/GetCarriers?carrierType=2", Url);
+            string resultString = GetApiObjectWithHeader(urlTemp);
+            List<CarrierInfo> carrierInfos = JsonConvert.DeserializeObject<List<CarrierInfo>>(resultString);
+            return carrierInfos;
         }
     }
 }

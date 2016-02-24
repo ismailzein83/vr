@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SupplierPriceListConnector.cs" />
+    <Compile Include="CarrierInfo.cs" />
     <Compile Include="UploadInfo.cs" />
     <Compile Include="UploadInformation.cs" />
   </ItemGroup>

@@ -113,7 +113,7 @@
                 var obj;
                 if (supplierEntity != undefined && supplierEntity.Settings != undefined && supplierEntity.Settings.MappedSuppliers!=undefined)
                     obj = {
-                        selectedIds: supplierEntity.Settings.MappedSuppliers
+                        selectedIds: UtilsService.getPropValuesFromArray(supplierEntity.Settings.MappedSuppliers, "SupplierId")
                     }
                 VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveApi, obj, carrierAccountLoadPromiseDeferred);
             });
