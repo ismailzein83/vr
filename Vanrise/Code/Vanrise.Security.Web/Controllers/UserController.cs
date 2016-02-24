@@ -22,7 +22,6 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]      
         [Route("GetFilteredUsers")]
-        [Authorization(Permissions = "Root/Administration Module/Users:View")]
         public object GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredUsers(input));
@@ -37,7 +36,6 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        [Authorization(Permissions = "Root/Administration Module/Users:View")]
         [Route("GetMembers")]
         public IEnumerable<int> GetMembers(int groupId)
         {
@@ -46,7 +44,6 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        [Authorization(Permissions = "Root/Administration Module/Users:View")]
         [Route("GetUserbyId")]
         public User GetUserbyId(int userId)
         {
@@ -54,7 +51,6 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        [Authorization(Permissions = "Root/Administration Module/Users:Edit")]
         [Route("UpdateUser")]
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
         {
@@ -62,7 +58,6 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        [Authorization(Permissions = "Root/Administration Module/Users:Add")]
         [Route("AddUser")]
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(User userObject)
         {
@@ -77,7 +72,6 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
-        [Authorization(Permissions = "Root/Administration Module/Users:Reset Password")]
         [Route("ResetPassword")]
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(ResetPasswordInput user)
         {

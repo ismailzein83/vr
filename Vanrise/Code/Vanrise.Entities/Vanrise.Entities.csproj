@@ -65,7 +65,6 @@
     <Compile Include="Currency\CurrencyExchangeRate.cs" />
     <Compile Include="Currency\CurrencyQuery.cs" />
     <Compile Include="Currency\Currency.cs" />
-    <Compile Include="CustomAttributes\AuthorizationAttribute.cs" />
     <Compile Include="BigResult.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
     <Compile Include="EntitySynchronization\IItem.cs" />
