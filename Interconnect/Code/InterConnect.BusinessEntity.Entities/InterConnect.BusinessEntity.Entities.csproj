@@ -44,11 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OperatorAccount.cs" />
+    <Compile Include="OperatorAccountDetail.cs" />
     <Compile Include="OperatorAccountSettings.cs" />
     <Compile Include="OperatorProfile.cs" />
     <Compile Include="OperatorProfileDetail.cs" />
     <Compile Include="OperatorProfileExtendedSettingType.cs" />
     <Compile Include="OperatorProfileInfo.cs" />
+    <Compile Include="OperatorAccountQuery.cs" />
     <Compile Include="OperatorProfileQuery.cs" />
     <Compile Include="OperatorProfileSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

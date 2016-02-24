@@ -139,13 +139,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="InterConnect_BusinessEntity\Constant\ModuleConfig.js" />
+    <Content Include="InterConnect_BusinessEntity\Directives\OperatorAccount\Templates\OperatorAccountGridTemplate.html" />
+    <Content Include="InterConnect_BusinessEntity\Directives\OperatorAccount\vr-interconnect-be-operatoraccount-grid.js" />
     <Content Include="InterConnect_BusinessEntity\Directives\OperatorProfile\Templates\OperatorProfileGridTemplate.html" />
     <Content Include="InterConnect_BusinessEntity\Directives\OperatorProfile\vr-interconnect-be-operatorprofile-grid.js" />
     <Content Include="InterConnect_BusinessEntity\Services\APIServices\OperatorAccountAPIService.js" />
     <Content Include="InterConnect_BusinessEntity\Services\APIServices\OperatorProfileAPIService.js" />
     <Content Include="InterConnect_BusinessEntity\Services\OperatorAccountService.js" />
     <Content Include="InterConnect_BusinessEntity\Services\OperatorProfileService.js" />
+    <Content Include="InterConnect_BusinessEntity\Views\OperatorAccount\OperatorAccountEditor.html" />
     <Content Include="InterConnect_BusinessEntity\Views\OperatorAccount\OperatorAccountManagement.html" />
+    <Content Include="InterConnect_BusinessEntity\Views\OperatorAccount\OperatorAccountEditorController.js" />
     <Content Include="InterConnect_BusinessEntity\Views\OperatorAccount\OperatorAccountManagementController.js" />
     <Content Include="InterConnect_BusinessEntity\Views\OperatorProfile\OperatorProfileEditor.html" />
     <Content Include="InterConnect_BusinessEntity\Views\OperatorProfile\OperatorProfileEditorController.js" />

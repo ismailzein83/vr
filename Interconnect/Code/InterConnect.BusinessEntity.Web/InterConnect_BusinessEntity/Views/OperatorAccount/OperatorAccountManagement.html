@@ -1,1 +1,28 @@
-﻿
+﻿<vr-panel ng-controller="InterConnect_BE_OperatorAccountManagementController">
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="suffix" label="Suffix"></vr-textbox>
+                </vr-columns>
+
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewOperatorAccount"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-interconnect-be-operatoraccount-grid on-ready="onGridReady"></vr-interconnect-be-operatoraccount-grid>
+            </vr-columns>
+        </vr-row>
+
+    </vr-form>
+
+</vr-panel>

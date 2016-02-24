@@ -1,4 +1,5 @@
 ﻿using InterConnect.BusinessEntity.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using Vanrise.Data.SQL;
@@ -22,6 +23,28 @@ namespace InterConnect.BusinessEntity.Data.SQL
         {
             return GetItemsSP("InterConnect_BE.sp_OperatorAccount_GetAll", OperatorProfileMapper);
         }
+
+        public bool AreOperatorAccountsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[InterConnect_BE].[OperatorAccount]", ref updateHandle);
+        }
+
+
+        public bool Insert(OperatorAccount operatorAccount, out int operatorProfileId)
+        {
+            object objectId;
+
+            int recordesEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorAccount_Insert", out objectId, operatorAccount.Suffix);
+            operatorProfileId = (recordesEffected > 0) ? (int)objectId : -1;
+
+            return (recordesEffected > 0);
+        }
+
+        public bool Update(OperatorAccount operatorAccount)
+        {
+            int recordesEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorAccount_Update", operatorAccount.OperatorAccountId, operatorAccount.Suffix);
+            return (recordesEffected > 0);
+        }
         #endregion
 
         #region  Mappers
@@ -29,7 +52,8 @@ namespace InterConnect.BusinessEntity.Data.SQL
         {
             OperatorAccount operationAccount = new OperatorAccount
             {
-                ProfileId = (int)reader["ID"],
+                OperatorAccountId = (int)reader["ID"],
+                //ProfileId = (int)reader["ProfileID"],
                 Suffix = reader["Suffix"] as string
             };
             return operationAccount;

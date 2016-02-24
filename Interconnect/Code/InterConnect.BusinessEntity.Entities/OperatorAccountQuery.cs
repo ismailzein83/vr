@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace InterConnect.BusinessEntity.Entities
 {
-    public class OperatorAccount
+    public class OperatorAccountQuery
     {
-        public int OperatorAccountId { get; set; }
-
         public string Suffix { get; set; }
-
-        public int ProfileId { get; set; }
-
-        public OperatorAccountSettings Settings { get; set; }
     }
 }

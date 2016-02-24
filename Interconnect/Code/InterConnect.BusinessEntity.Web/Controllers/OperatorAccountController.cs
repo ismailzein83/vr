@@ -13,6 +13,36 @@ namespace InterConnect.BusinessEntity.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "OperatorAccount")]
     public class OperatorAccountController : BaseAPIController
     {
-        
+        [HttpPost]
+        [Route("GetFilteredOperatorAccounts")]
+        public object GetFilteredOperatorAccounts(Vanrise.Entities.DataRetrievalInput<OperatorAccountQuery> input)
+        {
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return GetWebResponse(input, manager.GetFilteredOperatorAccounts(input));
+        }
+
+        [HttpGet]
+        [Route("GetOperatorAccount")]
+        public OperatorAccount GetOperatorAccount(int operatorAccountId)
+        {
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return manager.GetOperatorAccount(operatorAccountId);
+        }
+
+        [HttpPost]
+        [Route("AddOperatorAccount")]
+        public InsertOperationOutput<OperatorAccountDetail> AddOperatorAccount(OperatorAccount operatorAccount)
+        {
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return manager.AddOperatorAccount(operatorAccount);
+        }
+
+        [HttpPost]
+        [Route("UpdateOperatorAccount")]
+        public UpdateOperationOutput<OperatorAccountDetail> UpdateOperatorAccount(OperatorAccount operatorAccount)
+        {
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return manager.UpdateOperatorAccount(operatorAccount);
+        }
     }
 }
