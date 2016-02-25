@@ -31,39 +31,14 @@ namespace Demo.Module.Web.Controllers
         }
 
 
-
         [HttpGet]
         [Route("GetSaleZonesInfo")]
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, string serializedFilter)
-        {
-            SaleZoneInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter) : null;
-            SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfo(nameFilter, filter);
-        }
-
-
-        [HttpPost]
-        [Route("GetSaleZonesInfoByIds")]
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo()
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfoByIds(input.SaleZoneIds, input.SaleZoneFilterSettings);
+            return manager.GetSaleZonesInfo();
         }
-        //[HttpGet]
-        //[Route("GetSaleZoneGroupTemplates")]
-        //public List<TemplateConfig> GetSaleZoneGroupTemplates()
-        //{
-        //    SaleZoneManager manager = new SaleZoneManager();
-        //    return manager.GetSaleZoneGroupTemplates();
-        //}
+      
     }
-
-    public class SaleZoneInput
-    {
-       // public int SellingNumberPlanId { get; set; }
-
-        public HashSet<long> SaleZoneIds { get; set; }
-
-        public SaleZoneFilterSettings SaleZoneFilterSettings { get; set; }
-    }
+   
 }

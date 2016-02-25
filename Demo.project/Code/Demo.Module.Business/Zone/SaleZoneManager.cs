@@ -92,21 +92,13 @@ namespace Demo.Module.Business
             return saleZonesBySellingNumberPlan;
         }
 
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, SaleZoneInfoFilter filter)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfo()
         {
-            string nameFilterLower = nameFilter != null ? nameFilter.ToLower() : null;
-            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZones();
-            HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
-            Func<SaleZone, bool> zoneFilter = (zone) =>
-            {
-                if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
-                    return false;
-                if (nameFilterLower != null && !zone.Name.ToLower().Contains(nameFilterLower))
-                    return false;
-                return true;
-            };
-            return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter);
+            IEnumerable<SaleZone> saleZones = GetSaleZones();
+            return saleZones.MapRecords(SaleZoneInfoMapper);
         }
+
+
 
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(HashSet<long> saleZoneIds, SaleZoneFilterSettings saleZoneFilterSettings)
         {

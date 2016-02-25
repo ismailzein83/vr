@@ -15,7 +15,10 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
-
+                ctrl.datasource = [];
+                ctrl.selectedvalues;
+                if ($attrs.ismultipleselection != undefined)
+                    ctrl.selectedvalues = [];
                 var ctor = new saleZoneCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
@@ -51,72 +54,42 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
             return '<div>'
                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SaleZoneId" '
-            + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.search" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '"></vr-select>'
+            + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '"></vr-select>'
             + '</div>'
         }
 
         function saleZoneCtor(ctrl, $scope, attrs) {
 
-            var filter;
             var selectorApi;
-            var sellingNumberPlanId;
             var isDirectiveLoaded = false;
 
             function initializeController() {
-
-                ctrl.selectedvalues;
-                if (attrs.ismultipleselection != undefined)
-                    ctrl.selectedvalues = [];
-
                 ctrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     defineAPI();
                 }
-
-                ctrl.search = function (nameFilter) {
-
-                   
-                    var serializedFilter = {};
-                    if (filter != undefined)
-                        serializedFilter = UtilsService.serializetoJson(filter);
-
-                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, serializedFilter);
-                }
-
-
             }
 
             function defineAPI() {
                 var api = {};
-
                 api.load = function (payload) {
 
                     selectorApi.clearDataSource();
 
                     var selectedIds;
                     if (payload != undefined) {
-                        sellingNumberPlanId = payload.sellingNumberPlanId;
-                        filter = payload.filter;
                         selectedIds = payload.selectedIds;
                     }
 
-                    if (selectedIds != undefined) {
-                        ctrl.datasource = [];
-
-                        var input = {
-                           // SellingNumberPlanId: sellingNumberPlanId,
-                            SaleZoneIds: selectedIds,
-                            SaleZoneFilterSettings: { RoutingProductId: (filter != undefined && filter.SaleZoneFilterSettings != undefined) ? filter.SaleZoneFilterSettings.RoutingProductId : undefined }
-                        };
-
-                        return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
+                    ctrl.datasource = [];
+                    return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo().then(function (response) {
+                        if (ctrl.datasource.length == 0)
                             angular.forEach(response, function (item) {
                                 ctrl.datasource.push(item);
                             });
-
+                        if (selectedIds != undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'SaleZoneId', attrs, ctrl);
-                        });
-                    }
+                    });
                 }
 
                 api.getSelectedIds = function () {
