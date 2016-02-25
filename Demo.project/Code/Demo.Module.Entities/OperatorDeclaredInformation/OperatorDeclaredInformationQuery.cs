@@ -13,7 +13,7 @@ namespace Demo.Module.Entities
 
        public List<int> OperatorIds { get; set; }
 
-       public List<long> ZoneIds { get; set; }
+       public List<int> DestinationGroups { get; set; }
 
        public List<int> ServiceTypeIds { get; set; }
 

@@ -12,7 +12,7 @@ namespace Demo.Module.Entities
 
         public String OperatorName { get; set; }
 
-        public String ZoneName { get; set; }
+        public String DestinationGroupName { get; set; }
 
         public String AmountTypeName { get; set; }
     }

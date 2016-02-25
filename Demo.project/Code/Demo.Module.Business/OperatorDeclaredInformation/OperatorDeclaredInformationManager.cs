@@ -29,7 +29,7 @@ namespace Demo.Module.Business
                  (input.Query.OperatorIds == null || input.Query.OperatorIds.Count == 0 || input.Query.OperatorIds.Contains(prod.OperatorId))
                  &&
 
-                 (input.Query.ZoneIds == null || input.Query.ZoneIds.Count == 0 || (prod.ZoneId.HasValue && input.Query.ZoneIds.Contains(prod.ZoneId.Value)))
+                 (input.Query.DestinationGroups == null || input.Query.DestinationGroups.Count == 0 || (prod.DestinationGroup.HasValue && input.Query.DestinationGroups.Contains(prod.DestinationGroup.Value)))
                  &&
 
                   (input.Query.ServiceTypeIds == null || input.Query.ServiceTypeIds.Count == 0 || (input.Query.ServiceTypeIds.Contains(prod.AmountType)))
@@ -124,9 +124,9 @@ namespace Demo.Module.Business
             OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
             infoDetail.OperatorName = operatorProfileManager.GetOperatorProfileName(info.OperatorId);
 
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            if (info.ZoneId.HasValue)
-                infoDetail.ZoneName = saleZoneManager.GetSaleZoneName(info.ZoneId.Value);
+            DestinationGroupManager destinationGroupManager = new DestinationGroupManager();
+            if (info.DestinationGroup.HasValue)
+                infoDetail.DestinationGroupName = destinationGroupManager.GetDestinationGroupName(info.DestinationGroup.Value);
 
             ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
             infoDetail.AmountTypeName = serviceTypeManager.GetServiceTypeName(info.AmountType);

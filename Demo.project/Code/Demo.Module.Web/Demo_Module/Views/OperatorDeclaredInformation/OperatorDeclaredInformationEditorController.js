@@ -12,8 +12,8 @@
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var zoneDirectiveAPI;
-        var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var destinationGroupDirectiveAPI;
+        var destinationGroupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var serviceTypeDirectiveAPI;
         var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -51,9 +51,9 @@
                 serviceTypeReadyPromiseDeferred.resolve();
             }
 
-            $scope.scopeModal.onZoneDirectiveReady = function (api) {
-                zoneDirectiveAPI = api;
-                zoneReadyPromiseDeferred.resolve();
+            $scope.scopeModal.onDestinationGroupReady = function (api) {
+                destinationGroupDirectiveAPI = api;
+                destinationGroupReadyPromiseDeferred.resolve();
 
             }
 
@@ -96,7 +96,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadZoneDirective, loadServiceTypes])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadDestinationGroups, loadServiceTypes])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -135,16 +135,15 @@
             return loadOperatorProfilePromiseDeferred.promise;
         }
 
-        function loadZoneDirective() {
-            var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
-            zoneReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = {
-                        selectedIds: (operatorDeclaredInformationEntity != undefined ? (operatorDeclaredInformationEntity.ZoneId != undefined ? [operatorDeclaredInformationEntity.ZoneId] : undefined) : (operatorDeclaredInformationId != undefined ? operatorDeclaredInformationId : undefined))
-                    }
-                    VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, loadZonePromiseDeferred);
-                });
-            return loadZonePromiseDeferred.promise;
+        function loadDestinationGroups() {
+            var loadDestinationGroupsPromiseDeferred = UtilsService.createPromiseDeferred();
+            destinationGroupReadyPromiseDeferred.promise.then(function () {
+                var directivePayload = {
+                    selectedIds: (operatorDeclaredInformationEntity != undefined ? (operatorDeclaredInformationEntity.DestinationGroup != undefined ? [operatorDeclaredInformationEntity.DestinationGroup] : undefined) : (operatorDeclaredInformationId != undefined ? operatorDeclaredInformationId : undefined))
+                }
+                VRUIUtilsService.callDirectiveLoad(destinationGroupDirectiveAPI, directivePayload, loadDestinationGroupsPromiseDeferred);
+            })
+            return loadDestinationGroupsPromiseDeferred.promise;
         }
 
         function loadStaticSection() {
@@ -170,7 +169,7 @@
                 FromDate: $scope.scopeModal.fromDate,
                 ToDate: $scope.scopeModal.toDate,
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
-                ZoneId: zoneDirectiveAPI.getSelectedIds(),
+                DestinationGroup: destinationGroupDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModal.volume,
                 Notes: $scope.scopeModal.notes,
                 Attachment: ($scope.scopeModal.attachment != null) ? $scope.scopeModal.attachment.fileId : 0,

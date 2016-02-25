@@ -13,7 +13,7 @@ namespace Demo.Module.Entities
 
         public DateTime? ToDate { get; set; }
 
-        public long? ZoneId { get; set; }
+        public int? DestinationGroup { get; set; }
 
         public int Volume { get; set; }
 

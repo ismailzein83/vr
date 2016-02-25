@@ -25,7 +25,7 @@ namespace Demo.Module.Data.SQL
         {
             object infoId;
 
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Insert", out infoId, info.OperatorId, info.FromDate, info.ToDate, info.ZoneId, info.Volume, info.AmountType, info.Attachment, info.Notes);
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Insert", out infoId, info.OperatorId, info.FromDate, info.ToDate, info.DestinationGroup, info.Volume, info.AmountType, info.Attachment, info.Notes);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)infoId;
@@ -35,7 +35,7 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(OperatorDeclaredInformation info)
         {
-            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Update", info.OperatorDeclaredInformationId, info.OperatorId, info.FromDate, info.ToDate, info.ZoneId, info.Volume, info.AmountType, info.Attachment, info.Notes);
+            int recordsEffected = ExecuteNonQuerySP("dbo.sp_OperatorDeclaredInformation_Update", info.OperatorDeclaredInformationId, info.OperatorId, info.FromDate, info.ToDate, info.DestinationGroup, info.Volume, info.AmountType, info.Attachment, info.Notes);
             return (recordsEffected > 0);
         }
         public bool AreOperatorDeclaredInformationsUpdated(ref object updateHandle)
@@ -61,7 +61,7 @@ namespace Demo.Module.Data.SQL
                 OperatorId = (int)reader["OperatorID"],
                 FromDate = (DateTime)reader["FromDate"],
                 ToDate = GetReaderValue<DateTime?>(reader, "ToDate"),
-                ZoneId = GetReaderValue<long?>(reader, "ZoneId"),
+                DestinationGroup = GetReaderValue<int?>(reader, "DestinationGroup"),
                 Attachment = GetReaderValue<long?>(reader, "Attachment"),
                 Notes = reader["Notes"] as string,
                 Volume = GetReaderValue<int>(reader, "Volume"),
