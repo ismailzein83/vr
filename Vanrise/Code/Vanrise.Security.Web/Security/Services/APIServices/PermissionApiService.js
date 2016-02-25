@@ -12,7 +12,8 @@
             GetEffectivePermissions: GetEffectivePermissions,
             UpdatePermissions: UpdatePermissions,
             DeletePermissions: DeletePermissions,
-            HasAddPermissionPermission: HasAddPermissionPermission
+            HasAddPermissionPermission: HasAddPermissionPermission,
+            HasUpdatePermissionsPermission: HasUpdatePermissionsPermission
         });
 
         function GetFilteredEntityPermissions(input) {
@@ -44,6 +45,10 @@
         }
 
         function HasAddPermissionPermission() {
+            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Permission/UpdatePermissions');
+        }
+
+        function HasUpdatePermissionsPermission() {
             return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Permission/UpdatePermissions');
         }
     }

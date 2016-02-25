@@ -17,7 +17,9 @@
             ResetPassword: ResetPassword,
             EditUserProfile: EditUserProfile,
             LoadLoggedInUserProfile: LoadLoggedInUserProfile,
-            HasAddUserPermission: HasAddUserPermission
+            HasAddUserPermission: HasAddUserPermission,
+            HasUpdateUserPermission: HasUpdateUserPermission,
+            HasResetUserPasswordPermission: HasResetUserPasswordPermission
         });
 
         function GetFilteredUsers(input) {
@@ -74,6 +76,14 @@
 
         function HasAddUserPermission() {
             return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Users/AddUser');
+        }
+
+        function HasUpdateUserPermission() {
+            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Users/UpdateUser');
+        }
+
+        function HasResetUserPasswordPermission() {
+            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Users/ResetPassword');
         }
     }
 

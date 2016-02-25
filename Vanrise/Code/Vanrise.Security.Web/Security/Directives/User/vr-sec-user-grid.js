@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', function (VR_Sec_UserAPIService, VR_Sec_UserService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService) {
+app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", 'VR_Sec_PermissionAPIService', "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', function (VR_Sec_UserAPIService, VR_Sec_UserService, VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService) {
 
     var directiveDefinitionObject = {
 
@@ -67,21 +67,28 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", "
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
-                    name: "Edit",
-                    clicked: editUser,
-                    permissions: "Root/Administration Module/Users:Edit"
-                },
-                {
-                    name: "Reset Password",
-                    clicked: resetPassword,
-                    permissions: "Root/Administration Module/Users:Reset Password"
-                },
-                {
-                    name: "Assign Permissions",
-                    clicked: assignPermissions,
-                    permissions: "Root/Administration Module/System Entities:Assign Permissions"
-                }
-            ];
+                name: "Edit",
+                clicked: editUser,
+                haspermission: hasUpdateUserPermission
+            }, {
+                name: "Reset Password",
+                clicked: resetPassword,
+                haspermission: hasResetUserPasswordPermission
+            }, {
+                name: "Assign Permissions",
+                clicked: assignPermissions,
+                haspermission: hasUpdateSystemEntityPermissionsPermission // System Entities:Assign Permissions
+            }];
+
+            function hasUpdateUserPermission() {
+                return VR_Sec_UserAPIService.HasUpdateUserPermission();
+            }
+            function hasResetUserPasswordPermission() {
+                return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
+            }
+            function hasUpdateSystemEntityPermissionsPermission() {
+                return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
+            }
         }
 
         function editUser(userObj) {
