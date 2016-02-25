@@ -1,7 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="Demo_OperatorConfigurationEditorController" vr-loader="isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formOperatorConfigurationEditor">
-            <vr-row>
+            <vr-row removeline>
                 <vr-columns width="1/4row">
                     <vr-demo-operatorprofile-selector isrequired on-ready="scopeModal.onOperatorProfileDirectiveReady"></vr-demo-operatorprofile-selector>
                 </vr-columns>
@@ -17,7 +17,7 @@
             </vr-row>
 
 
-            <vr-row>
+            <vr-row removeline>
 
                 <vr-columns width="1/4row">
                     <vr-textbox value="scopeModal.volume" isrequired label="Volume" type="number" decimalprecision="0"></vr-textbox>
@@ -39,7 +39,7 @@
 
             </vr-row>
 
-            <vr-row>
+            <vr-row removeline>
                 <vr-columns width="1/4row">
                     <vr-demo-destinationgroup-selector on-ready="onDestinationGroupReady" isrequired="true"></vr-demo-destinationgroup-selector>
                 </vr-columns>
@@ -58,7 +58,7 @@
 
 
 
-            <vr-row>
+            <vr-row removeline>
                 <vr-columns width="fullrow">
                     <vr-textbox value="scopeModal.notes" label="Notes"></vr-textbox>
                 </vr-columns>
