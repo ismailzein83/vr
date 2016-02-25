@@ -38,7 +38,7 @@ namespace CP.SupplierPricelist.Business
                             {
                                 if (currentCustomerSupplierMappings.Any(itm => 
                                     itm.Value.UserId != filter.AssignableToSupplierUserId.Value 
-                                    && itm.Value.Settings.MappedSuppliers.Any(sup => sup.SupplierId == supplierInfo.SupplierId)))
+                                    && itm.Value.Settings.MappedSuppliers.Any(sup => sup == supplierInfo.SupplierId)))
                                     return false;
                             }
                             return true;
@@ -51,21 +51,23 @@ namespace CP.SupplierPricelist.Business
 
         }
 
+        
+
         public Vanrise.Entities.IDataRetrievalResult<CustomerSupplierMappingDetail> GetFilteredCustomerSupplierMappings(Vanrise.Entities.DataRetrievalInput<CustomerSupplierMappingQuery> input)
         {
             var allCustomerSupplierMappings = GetCachedCustomerSupplierMappings();
             Func<CustomerSupplierMapping, bool> filterExpression = (item) =>
                  (input.Query.Users == null || input.Query.Users.Count() == 0 || input.Query.Users.Contains(item.UserId))
                   &&
-                 (input.Query.CarrierAccouts == null || input.Query.CarrierAccouts.Count() == 0 || input.Query.CarrierAccouts.Any(y => (item.Settings.MappedSuppliers.Any(x => x.SupplierId == y))));
+                 (input.Query.CarrierAccouts == null || input.Query.CarrierAccouts.Count() == 0 || input.Query.CarrierAccouts.Any(y => (item.Settings.MappedSuppliers.Any(x => x == y))));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, SupplierMappingDetailMapper));
         }
 
-        public CustomerSupplierMapping GetCustomerSupplierMapping(int supplierMappingId)
+        public CustomerSupplierMapping GetCustomerSupplierMapping(int userId)
         {
             var customerSupplierMappings = GetCachedCustomerSupplierMappings();
-            return customerSupplierMappings.GetRecord(supplierMappingId);
+            return customerSupplierMappings.GetRecord(userId);
         }
 
         public IEnumerable<CustomerSupplierMapping> GetCustomerSupplierMappings()
@@ -103,7 +105,7 @@ namespace CP.SupplierPricelist.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
+            customerSupplierMapping.CustomerId = GetLoggedInCustomerId();
             ICustomerSupplierMappingDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerSupplierMappingDataManager>();
             bool updateActionSucc = dataManager.Update(customerSupplierMapping);
             if (updateActionSucc)
@@ -118,7 +120,23 @@ namespace CP.SupplierPricelist.Business
             return updateOperationOutput;
         }
         #region Private Methods
-        int GetLoggedInCustomerId()
+
+        private List<SupplierInfo> GetAllCustomerSuppliersByLoggedInUser() 
+        {
+        
+            int customerId = GetLoggedInCustomerId();
+            Customer customer = new CustomerManager().GetCustomer(customerId);
+            if (customer != null)
+            {
+                SupplierPriceListConnectorBase supplierPriceListConnectorBase = customer.Settings.PriceListConnector as SupplierPriceListConnectorBase;
+
+                return supplierPriceListConnectorBase.GetSuppliers(null);
+            }
+            else
+               return null;
+        
+        }
+        private int GetLoggedInCustomerId()
         {
             int userId = new SecurityContext().GetLoggedInUserId();
             return new CustomerUserManager().GetCustomerIdByUserId(userId);
@@ -131,7 +149,7 @@ namespace CP.SupplierPricelist.Business
                {
                    ICustomerSupplierMappingDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerSupplierMappingDataManager>();
                    IEnumerable<CustomerSupplierMapping> customerSupplierMappings = dataManager.GetAllCustomerSupplierMappings();
-                   return customerSupplierMappings.ToDictionary(cu => cu.SupplierMappingId, cu => cu);
+                   return customerSupplierMappings.ToDictionary(cu => cu.UserId, cu => cu);
                });
         }
 
@@ -156,7 +174,7 @@ namespace CP.SupplierPricelist.Business
 
             if (customerSupplierMapping.Settings.MappedSuppliers.Count() > 0)
             {
-                customerSupplierMappingDetail.SupplierNames = string.Join(",", customerSupplierMapping.Settings.MappedSuppliers.Select(x => x.SupplierName)); ;
+                customerSupplierMappingDetail.SupplierNames = string.Join(",", GetAllCustomerSuppliersByLoggedInUser().Where(u=> customerSupplierMapping.Settings.MappedSuppliers.Contains(u.SupplierId)).Select(x => x.SupplierName));
             }
 
             User user = new UserManager().GetUserbyId(customerSupplierMapping.UserId);

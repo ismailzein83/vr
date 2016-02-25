@@ -15,11 +15,11 @@ app.service('CP_SupplierPricelist_SupplierMappingService', ['VRModalService',
             VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingEditor.html', parameters, settings);
         }
 
-        function editSupplierMapping(supplierMappingId, onSupplierMappingUpdated) {
+        function editSupplierMapping(userId, onSupplierMappingUpdated) {
                 var modalSettings = {
                 };
                 var parameters = {
-                    SupplierMappingId: supplierMappingId 
+                    UserId: userId
                 };
 
                 modalSettings.onScopeReady = function (modalScope) {

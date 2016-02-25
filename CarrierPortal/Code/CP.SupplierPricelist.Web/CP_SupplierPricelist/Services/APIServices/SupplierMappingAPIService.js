@@ -2,15 +2,17 @@
 
     "use strict";
     function supplierMappingAPIService(baseApiService, utilsService, moduleConfig) {
-        function GetCustomerSuppliers() {
-            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "GetCustomerSuppliers"));
+        function GetCustomerSuppliers(serializedFilter) {
+            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "GetCustomerSuppliers"), {
+                   serializedFilter: serializedFilter
+            });
         }
         function GetFilteredCustomerSupplierMappings(input) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "GetFilteredCustomerSupplierMappings"), input);
         }
-        function GetCustomerSupplierMapping(supplierMappingId) {
+        function GetCustomerSupplierMapping(userId) {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "GetCustomerSupplierMapping"), {
-                supplierMappingId: supplierMappingId
+                userId: userId
             });
         }
         function AddCustomerSupplierMapping(supplierMapping) {

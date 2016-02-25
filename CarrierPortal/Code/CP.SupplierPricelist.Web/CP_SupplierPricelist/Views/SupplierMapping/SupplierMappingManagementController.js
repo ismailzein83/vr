@@ -73,8 +73,9 @@
             function LoadCarrierAccount() {
                 var carrierAccountLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 carrierAccountReadyPromiseDeferred.promise.then(function () {
+                    
 
-                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveApi, undefined, carrierAccountLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveApi, undefined , carrierAccountLoadPromiseDeferred);
                 });
                 return carrierAccountLoadPromiseDeferred.promise;
             }

@@ -61,7 +61,7 @@ function (UtilsService, supplierMappingService , supplierMappingAPIService, VRNo
             var ontSupplierMappingUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            supplierMappingService.editSupplierMapping(supplierMapping.Entity.SupplierMappingId, ontSupplierMappingUpdated);
+            supplierMappingService.editSupplierMapping(supplierMapping.Entity.UserId, ontSupplierMappingUpdated);
         }
     }
 

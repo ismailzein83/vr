@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Common;
 
 namespace CP.SupplierPricelist.Web.Controllers
 {
@@ -13,10 +14,11 @@ namespace CP.SupplierPricelist.Web.Controllers
     {
         [HttpGet]
         [Route("GetCustomerSuppliers")]
-        public IEnumerable<SupplierInfo> GetCustomerSuppliers()
+        public IEnumerable<SupplierInfo> GetCustomerSuppliers(string serializedFilter)
         {
+            SupplierInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SupplierInfoFilter>(serializedFilter) : null;
             CustomerSupplierMappingManager manager = new CustomerSupplierMappingManager();
-            return manager.GetCustomerSuppliers(null);
+            return manager.GetCustomerSuppliers(filter);
         }
 
 
@@ -29,10 +31,10 @@ namespace CP.SupplierPricelist.Web.Controllers
         }
         [HttpGet]
         [Route("GetCustomerSupplierMapping")]
-        public CustomerSupplierMapping GetCustomerSupplierMapping(int supplierMappingId)
+        public CustomerSupplierMapping GetCustomerSupplierMapping(int UserId)
         {
             CustomerSupplierMappingManager manager = new CustomerSupplierMappingManager();
-            return manager.GetCustomerSupplierMapping(supplierMappingId);
+            return manager.GetCustomerSupplierMapping(UserId);
         }
 
         [HttpPost]

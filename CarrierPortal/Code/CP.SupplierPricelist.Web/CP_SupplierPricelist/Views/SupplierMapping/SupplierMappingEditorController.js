@@ -7,6 +7,7 @@
     function supplierMappingEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, supplierMappingAPIService) {
 
         var isEditMode;
+        var userId;
         var supplierMappingId;
         var supplierEntity;
         var userDirectiveApi;
@@ -23,9 +24,9 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                supplierMappingId = parameters.SupplierMappingId;
+                userId = parameters.UserId;
             }
-            isEditMode = (supplierMappingId != undefined);
+            isEditMode = (userId != undefined);
         }
         function defineScope() {
             $scope.carriers = [];
@@ -42,6 +43,44 @@
                 carrierAccountDirectiveApi = api;
                 carrierAccountReadyPromiseDeferred.resolve();
             }
+            $scope.onUserSelectionChanged = function () {
+                if ($scope.selecteduser != undefined) {
+                    $scope.isLoading = true;
+                    supplierMappingAPIService.GetCustomerSupplierMapping($scope.selecteduser.UserId).then(function (supplier) {                  
+
+                        var obj = {
+                            filter: {
+                                AssignableToSupplierUserId: $scope.selecteduser.UserId
+                            }
+                        }
+                        if (supplier != null) {                            
+                            obj.selectedIds = supplier.Settings.MappedSuppliers;
+                            supplierMappingId = supplier.SupplierMappingId;
+                            isEditMode = true;
+                            $scope.title = UtilsService.buildTitleForUpdateEditor(supplier.SupplierMappingId, "Supplier Mapping");
+
+                        }
+                        else {
+                            supplierMappingId = undefined;
+                            $scope.title = UtilsService.buildTitleForAddEditor("Supplier Mapping");
+                            isEditMode = undefined;
+
+                        }
+                        carrierAccountDirectiveApi.load(obj)
+
+                    }).finally(function () {
+                        $scope.isLoading = false;
+                    })
+                }
+                else {
+                        supplierMappingId = undefined;
+                        $scope.title = UtilsService.buildTitleForAddEditor("Supplier Mapping");
+                        isEditMode = undefined;
+                        carrierAccountDirectiveApi.load(undefined);
+                }
+               
+            }
+            
             $scope.saveCustomerSupplierMapping = function () {
                 if (isEditMode) {
                     return updateCustomerSupplierMapping();
@@ -69,8 +108,9 @@
             }
         }
         function getCustomerSupplierMapping() {
-            return supplierMappingAPIService.GetCustomerSupplierMapping(supplierMappingId).then(function (supplier) {
+            return supplierMappingAPIService.GetCustomerSupplierMapping(userId).then(function (supplier) {
                 supplierEntity = supplier;
+                supplierMappingId = supplier.SupplierMappingId;
             });
         }
         function loadAllControls() {
@@ -113,7 +153,10 @@
                 var obj;
                 if (supplierEntity != undefined && supplierEntity.Settings != undefined && supplierEntity.Settings.MappedSuppliers!=undefined)
                     obj = {
-                        selectedIds: UtilsService.getPropValuesFromArray(supplierEntity.Settings.MappedSuppliers, "SupplierId")
+                        selectedIds: supplierEntity.Settings.MappedSuppliers,
+                        filter:{
+                            AssignableToSupplierUserId: supplierEntity.UserId
+                        }
                     }
                 VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveApi, obj, carrierAccountLoadPromiseDeferred);
             });
@@ -125,7 +168,7 @@
                 SupplierMappingId: (supplierMappingId != undefined) ? supplierMappingId : 0,
                 UserId: userDirectiveApi.getSelectedIds(),
                 Settings: {
-                    MappedSuppliers: $scope.selectedCarriers
+                    MappedSuppliers: carrierAccountDirectiveApi.getSelectedIds()
                 }
             };
 

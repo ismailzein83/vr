@@ -8,6 +8,6 @@ namespace CP.SupplierPricelist.Entities
 {
     public class CustomerSupplierMappingSettings
     {
-        public List<SupplierInfo> MappedSuppliers { get; set; }
+        public List<string> MappedSuppliers { get; set; }
     }
 }
