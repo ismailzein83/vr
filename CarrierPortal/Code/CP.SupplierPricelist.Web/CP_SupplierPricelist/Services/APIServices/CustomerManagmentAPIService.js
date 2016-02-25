@@ -3,7 +3,7 @@
     "use strict";
     function customerManagmentApiService(baseApiService, utilsService, moduleConfig) {
         function AddUser(object) {
-            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "AddUser"), object);
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "CustomerUser", "AddUser"), object);
         }
         function UpdateCustomer(object) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "UpdateCustomer"), object);

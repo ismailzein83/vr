@@ -41,13 +41,6 @@ namespace CP.SupplierPricelist.Web.Controllers
             CustomerManager manager = new CustomerManager();
             return manager.UpdateCustomer(input);
         }
-        [HttpPost]
-        [Route("AddUser")]
-        public UpdateOperationOutput<CustomerUser> AddUser(CustomerUser input)
-        {
-            CustomerUserManager manager = new CustomerUserManager();
-            return manager.AddUser(input);
-        }
 
         [HttpPost]
         [Route("GetFilteredCustomers")]
