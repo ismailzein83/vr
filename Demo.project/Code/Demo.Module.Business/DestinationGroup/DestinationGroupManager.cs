@@ -33,6 +33,17 @@ namespace Demo.Module.Business
             var info = GetCachedDestinationGroups();
             return info.GetRecord(destinationGroupId);
         }
+
+        public string GetDestinationGroupName(int destinationGroupId)
+        {
+            DestinationGroup destinationGroup = GetDestinationGroup(destinationGroupId);
+
+            if (destinationGroup != null)
+                return destinationGroup.Name;
+
+            return null;
+        }
+
         public Vanrise.Entities.InsertOperationOutput<DestinationGroupDetail> AddDestinationGroup(DestinationGroup destinationGroup)
         {
             Vanrise.Entities.InsertOperationOutput<DestinationGroupDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DestinationGroupDetail>();

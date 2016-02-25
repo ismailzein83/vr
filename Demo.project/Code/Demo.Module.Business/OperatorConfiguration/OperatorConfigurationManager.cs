@@ -145,6 +145,12 @@ namespace Demo.Module.Business
             OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
             configDetail.OperatorName = operatorProfileManager.GetOperatorProfileName(config.OperatorId);
 
+            if (config.DestinationGroup.HasValue)
+            {
+                DestinationGroupManager destinationGroupManager = new DestinationGroupManager();
+                configDetail.DestinationGroupName = destinationGroupManager.GetDestinationGroupName(config.DestinationGroup.Value);
+            }
+
             return configDetail;
         }
         #endregion

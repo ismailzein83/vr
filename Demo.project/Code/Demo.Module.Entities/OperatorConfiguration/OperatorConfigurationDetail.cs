@@ -20,5 +20,7 @@ namespace Demo.Module.Entities
 
         public string CurrencyName { get; set; }
 
+        public string DestinationGroupName { get; set; }
+
     }
 }
