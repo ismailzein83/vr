@@ -108,8 +108,7 @@ namespace InterConnect.BusinessEntity.Business
 
             return new OperatorAccountDetail()
             {
-                OperatorAccountId = operatorAccount.OperatorAccountId,
-                Suffix = operatorAccount.Suffix,
+                Entity = operatorAccount,
                 OperatorProfileName = operatorProfileName
             };
         }

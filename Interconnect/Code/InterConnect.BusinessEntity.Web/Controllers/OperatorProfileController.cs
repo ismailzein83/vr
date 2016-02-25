@@ -31,11 +31,13 @@ namespace InterConnect.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetOperatorProfilsInfo")]
-        public IEnumerable<OperatorProfileInfo> GetOperatorProfilsInfo()
+        public IEnumerable<OperatorProfileInfo> GetOperatorProfilsInfo(string serializedFilter)
         {
+            OperatorProfileInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<OperatorProfileInfoFilter>(serializedFilter) : null;
             OperatorProfileManager manager = new OperatorProfileManager();
-            return manager.GetOperatorProfilsInfo();
+            return manager.GetOperatorProfilsInfo(filter);
         }
+
 
         [HttpPost]
         [Route("AddOperatorProfile")]

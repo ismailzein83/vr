@@ -49,10 +49,19 @@ namespace InterConnect.BusinessEntity.Business
             OperatorProfile operatorProfile = GetOperatorProfile(operatorProfileId);
             return operatorProfile != null ? operatorProfile.Name : null;
         }
-        public IEnumerable<OperatorProfileInfo> GetOperatorProfilsInfo()
+        public IEnumerable<OperatorProfileInfo> GetOperatorProfilsInfo(OperatorProfileInfoFilter filter)
         {
             var operatorProfiles = GetCachedOperatorProfiles();
-            return operatorProfiles.MapRecords(OperatorProfileInfoMapper);
+            
+            if (filter != null)
+            {
+                Func<OperatorProfile, bool> filterExpression = (x) => (true);
+                return operatorProfiles.FindAllRecords(filterExpression).MapRecords(OperatorProfileInfoMapper);
+            }
+            else
+            {
+                return operatorProfiles.MapRecords(OperatorProfileInfoMapper);
+            }
         }
         public InsertOperationOutput<OperatorProfileDetail> AddOperatorProfile(OperatorProfile operatorProfile)
         {

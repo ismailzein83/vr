@@ -63,7 +63,6 @@
         }
 
         function getFilterObject() {
-            console.log($scope.operatorProfiles);
             filter = {
                 Suffix: $scope.suffix,
                 OperatorProfileIds: operatorProfileDirectiveApi.getSelectedIds(),

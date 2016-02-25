@@ -6,9 +6,11 @@
 
     function operatorAccountEditorController($scope, InterConnect_BE_OperatorAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
+        var operatorAccountObj;
         var operatorAccountId;
         var operatorProfileDirectiveApi;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        $scope.scopeModel = {};
 
         loadParameters();
         defineScope();
@@ -52,7 +54,9 @@
 
             if (isEditMode) {
                 getOperatorAccount().then(function () {
-                    loadAllControls();
+                    loadAllControls().finally(function () {
+                        operatorAccountObj = undefined;
+                    });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
@@ -65,12 +69,12 @@
 
         function getOperatorAccount() {
             return InterConnect_BE_OperatorAccountAPIService.GetOperatorAccount(operatorAccountId).then(function (operatorAccount) {
-                $scope.scopeModal = operatorAccount;
+                operatorAccountObj = operatorAccount;
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadOperatorProfiles])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadOperatorProfiles, loadStaticSection])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -85,7 +89,7 @@
 
         function loadOperatorProfiles() {
             var payload = {
-                selectedIds: isEditMode ? $scope.scopeModal.ProfileId : undefined
+                selectedIds: operatorAccountObj != undefined ? operatorAccountObj.ProfileId : undefined
             };
             var loadOperatorProfilePromiseDeferred = UtilsService.createPromiseDeferred();
             operatorProfileReadyPromiseDeferred.promise.then(function () {
@@ -95,12 +99,18 @@
             return loadOperatorProfilePromiseDeferred.promise;
         }
 
+        function loadStaticSection() {
+            if (operatorAccountObj != undefined) {
+                $scope.scopeModel.suffix = operatorAccountObj.Suffix;
+            }
+        }
+
         function buildOperatorAccountObjFromScope() {
 
             var obj = {
                 OperatorAccountId: (operatorAccountId != null) ? operatorAccountId : 0,
-                Suffix: $scope.scopeModal.Suffix,
-                ProfileId: $scope.scopeModal.operatorProfile.OperatorProfileId
+                Suffix: $scope.scopeModel.suffix,
+                ProfileId: $scope.operatorProfile.OperatorProfileId
             };
             return obj;
         }

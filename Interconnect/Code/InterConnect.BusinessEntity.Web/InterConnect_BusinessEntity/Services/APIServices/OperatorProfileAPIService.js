@@ -15,8 +15,10 @@
             });
 
         }
-        function GetOperatorProfilsInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorProfile", "GetOperatorProfilsInfo"));
+        function GetOperatorProfilsInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorProfile", "GetOperatorProfilsInfo"), {
+                serializedFilter: serializedFilter
+            });
 
         }
         function UpdateOperatorProfile(operatorProfile) {

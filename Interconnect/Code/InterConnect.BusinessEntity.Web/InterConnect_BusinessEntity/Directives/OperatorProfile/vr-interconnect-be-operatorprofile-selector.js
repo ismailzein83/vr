@@ -88,11 +88,15 @@ app.directive('vrInterconnectBeOperatorprofileSelector', ['InterConnect_BE_Opera
                 api.load = function (payload) {
 
                     var selectedIds;
+                    var serializedFilter = {};
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        if (payload.filter != undefined) {
+                            serializedFilter = UtilsService.serializetoJson(payload.filter);
+                        }
                     }
 
-                    return getOperatorProfilesInfo(attrs, ctrl, selectedIds);
+                    return getOperatorProfilesInfo(attrs, ctrl, selectedIds, serializedFilter);
                 }
 
                 api.getSelectedIds = function () {
@@ -105,8 +109,8 @@ app.directive('vrInterconnectBeOperatorprofileSelector', ['InterConnect_BE_Opera
             this.initializeController = initializeController;
         }
 
-        function getOperatorProfilesInfo(attrs, ctrl, selectedIds) {
-            return InterConnect_BE_OperatorProfileAPIService.GetOperatorProfilsInfo().then(function (response) {
+        function getOperatorProfilesInfo(attrs, ctrl, selectedIds, serializedFilter) {
+            return InterConnect_BE_OperatorProfileAPIService.GetOperatorProfilsInfo(serializedFilter).then(function (response) {
                 ctrl.datasource.length = 0;
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);

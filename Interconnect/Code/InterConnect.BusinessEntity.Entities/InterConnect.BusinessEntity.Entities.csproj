@@ -51,6 +51,7 @@
     <Compile Include="OperatorProfileExtendedSettingType.cs" />
     <Compile Include="OperatorProfileInfo.cs" />
     <Compile Include="OperatorAccountQuery.cs" />
+    <Compile Include="OperatorProfileInfoFilter.cs" />
     <Compile Include="OperatorProfileQuery.cs" />
     <Compile Include="OperatorProfileSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
