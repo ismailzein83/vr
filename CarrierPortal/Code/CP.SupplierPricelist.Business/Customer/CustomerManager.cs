@@ -33,7 +33,11 @@ namespace CP.SupplierPricelist.Business
         }
         public InsertOperationOutput<CustomerDetail> AddCustomer(Customer inputCustomer)
         {
-            InsertOperationOutput<CustomerDetail> insertOperationOutput = new InsertOperationOutput<CustomerDetail>();
+            InsertOperationOutput<CustomerDetail> insertOperationOutput = new InsertOperationOutput<CustomerDetail>
+            {
+                Result = InsertOperationResult.Failed,
+                InsertedObject = null
+            };
             int customerId;
             ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
             bool insertActionSucc = dataManager.AddCustomer(inputCustomer, out customerId);
@@ -64,6 +68,10 @@ namespace CP.SupplierPricelist.Business
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = MapToDetails(input);
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
             return updateOperationOutput;
         }

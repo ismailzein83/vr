@@ -38,13 +38,13 @@ namespace CP.SupplierPricelist.Data.SQL
         public bool AddCustomer(Customer inputCustomer, out int customerId)
         {
             object id;
-            int recordesEffected = ExecuteNonQuerySP("[CP_SupPriceList].[InsertCustomer]", out id, inputCustomer.Name, inputCustomer.Settings != null ? Serializer.Serialize(inputCustomer.Settings) : null);
+            int recordesEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_Customer_Insert]", out id, inputCustomer.Name, inputCustomer.Settings != null ? Serializer.Serialize(inputCustomer.Settings) : null);
             customerId = (int)id;
             return recordesEffected > 0;
         }
         public bool UpdateCustomer(Customer input)
         {
-            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[UpdateCustomer]",
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_Customer_Update]",
                 input.CustomerId, input.Name, input.Settings != null ? Serializer.Serialize(input.Settings) : null);
             return (recordsEffected > 0);
         }
