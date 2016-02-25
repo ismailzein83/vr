@@ -1,7 +1,8 @@
 ﻿"use strict";
-app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService", "VRNotificationService",
-function (UtilsService, customeApiService, customerService, vRNotificationService) {
+app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService","VRUIUtilsService", "VRNotificationService",
+function (UtilsService, customeApiService, customerService, vRUIUtilsService, vRNotificationService) {
     var gridAPI;
+    var gridDrillDownTabsObj;
 
     function CustomerGrid($scope, ctrl) {
 
@@ -13,6 +14,9 @@ function (UtilsService, customeApiService, customerService, vRNotificationServic
             $scope.customers = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = customerService.getDrillDownDefinition();
+                gridDrillDownTabsObj = vRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -23,14 +27,8 @@ function (UtilsService, customeApiService, customerService, vRNotificationServic
                     }
 
                     directiveAPI.onCustomerAdded = function (customerObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(countryObject);
                         gridAPI.itemAdded(customerObject);
-                    }
-
-                    directiveAPI.onCustomerUpdated = function (customerObject) {
-                        gridAPI.itemUpdated(customerObject);
-                    }
-                    directiveAPI.onUserAdded = function (UserObject) {
-                        gridAPI.itemAdded(UserObject);
                     }
                     return directiveAPI;
                 }
@@ -41,6 +39,11 @@ function (UtilsService, customeApiService, customerService, vRNotificationServic
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return customeApiService.GetFilteredCustomers(dataRetrievalInput)
                .then(function (response) {
+                   if (response.Data != undefined) {
+                       for (var i = 0; i < response.Data.length; i++) {
+                           gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                       }
+                   }
                    onResponseReady(response);
                })
                .catch(function (error) {
@@ -55,27 +58,17 @@ function (UtilsService, customeApiService, customerService, vRNotificationServic
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editCustomer
-            },
-            {
-                name: "Assign User",
-                clicked: assignUser,
-            }
-            ];
+            }];
         }
     }
     function editCustomer(customer) {
         var onCustomerUpdated = function (updatedItem) {
+            gridDrillDownTabsObj.setDrillDownExtensionObject(countryObj);
             gridAPI.itemUpdated(updatedItem);
         };
         customerService.editcustomer(customer.Entity.CustomerId, onCustomerUpdated);
     }
-    function assignUser(customer) {
-        var onAssigningUser = function (updatedItem) {
-            gridAPI.itemUpdated(updatedItem);
-        };
-        customerService.assignUser(customer.Entity.CustomerId, onAssigningUser);
-    }
-
+    
     var directiveDefinitionObject = {
 
         restrict: "E",

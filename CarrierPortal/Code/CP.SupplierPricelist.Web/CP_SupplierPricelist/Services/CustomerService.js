@@ -1,6 +1,7 @@
 ﻿
 app.service('CP_SupplierPricelist_CustomerService', ['VRModalService',
     function (VRModalService) {
+        var drillDownDefinitions = [];
 
         function addCustomer(onCustomerAdded) {
             var settings = {
@@ -14,20 +15,6 @@ app.service('CP_SupplierPricelist_CustomerService', ['VRModalService',
             };
             VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/Customer/CustomerEditor.html', parameters, settings);
         }
-
-        function assignUser(customerId, onUserAdded) {
-            var modalSettings = {
-            };
-            var parameters = {
-                customerId: customerId
-            };
-
-            modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onCustomerUserAdded = onUserAdded;
-            };
-            VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/Customer/CustomerUserEditor.html', parameters, modalSettings);
-        }
-
         function editcustomer(customerId, onCustomerUpdated) {
             var modalSettings = {
             };
@@ -40,9 +27,19 @@ app.service('CP_SupplierPricelist_CustomerService', ['VRModalService',
             };
             VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/Customer/CustomerEditor.html', parameters, modalSettings);
         }
+
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
         return ({
             addCustomer: addCustomer,
             editcustomer: editcustomer,
-            assignUser: assignUser
+            addDrillDownDefinition: addDrillDownDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
         });
     }]);

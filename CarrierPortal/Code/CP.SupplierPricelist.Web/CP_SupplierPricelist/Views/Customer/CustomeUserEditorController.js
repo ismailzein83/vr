@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function customeUserEditorController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, customerManagmentApiService) {
+    function customeUserEditorController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, customerUserAPIService) {
 
         var customerId;
         var userDirectiveApi;
@@ -26,13 +26,13 @@
             return customerObject;
         }
 
-        function insertCustomerUSer() {
+        function insertCustomerUser() {
             var object = buildCustomerFromScope();
-            return customerManagmentApiService.AddUser(object)
+            return customerUserAPIService.AddCustomerUser(object)
                 .then(function (response) {
-                    if (vrNotificationService.notifyOnItemAdded("User", response)) {
+                    if (vrNotificationService.notifyOnItemAdded("Customer User", response)) {
                         if ($scope.onCustomerUserAdded != undefined)
-                            $scope.onCustomerUserAdded(response.UpdatedObject);
+                            $scope.onCustomerUserAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();
                     }
                 }).catch(function (error) {
@@ -56,7 +56,7 @@
                 $scope.modalContext.closeModal();
             }
             $scope.Save = function () {
-                insertCustomerUSer();
+                insertCustomerUser();
 
             };
         }
@@ -64,7 +64,7 @@
         defineScope();
 
         function setTitle() {
-            $scope.title = utilsService.buildTitleForAddEditor("User");
+            $scope.title = utilsService.buildTitleForAddEditor("Customer User");
         }
 
         function loadUser() {
@@ -89,10 +89,9 @@
         function load() {
             loadAllControls();
         }
-
         load();
     }
 
-    customeUserEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'CP_SupplierPricelist_CustomerManagmentAPIService'];
+    customeUserEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'CP_SupplierPricelist_CustomerUserAPIService'];
     appControllers.controller('CP_SupplierPricelist_CustomeUserEditorController', customeUserEditorController);
 })(appControllers);

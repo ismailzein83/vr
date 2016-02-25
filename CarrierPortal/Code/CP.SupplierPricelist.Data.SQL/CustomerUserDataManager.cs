@@ -33,9 +33,15 @@ namespace CP.SupplierPricelist.Data.SQL
             return customerUser;
         }
 
-        public bool AddUser(CustomerUser input)
+        public bool Insert(CustomerUser input)
         {
-            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_Insert_CustomerUser]", input.CustomerId, input.UserId);
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_CustomerUser_Insert]", input.CustomerId, input.UserId);
+            return (recordsEffected > 0);
+        }
+
+        public bool Delete(int userId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_Customeruser_Delete]", userId);
             return (recordsEffected > 0);
         }
     }

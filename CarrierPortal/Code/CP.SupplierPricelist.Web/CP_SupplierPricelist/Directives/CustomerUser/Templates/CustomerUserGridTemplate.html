@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="customerUsers"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             dataretrievalfunction="dataRetrievalFunction"
+             menuactions="gridMenuActions"
+             idfield="Entity.UserId" loadmoredata="loadMoreData">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.UserId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'User Name'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
+
+</vr-datagrid>

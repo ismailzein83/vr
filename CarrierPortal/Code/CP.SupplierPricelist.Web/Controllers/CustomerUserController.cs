@@ -10,12 +10,30 @@ namespace CP.SupplierPricelist.Web.Controllers
     [JSONWithTypeAttribute]
     public class CustomerUserController : BaseAPIController
     {
+
         [HttpPost]
-        [Route("AddUser")]
-        public UpdateOperationOutput<CustomerUserDetail> AddUser(CustomerUser input)
+        [Route("GetFilteredCustomerUsers")]
+        public object GetFilteredCustomerUsers(DataRetrievalInput<CustomerUserQuery> input)
         {
             CustomerUserManager manager = new CustomerUserManager();
-            return manager.AddUser(input);
+            return GetWebResponse(input, manager.GetFilteredCustomerUsers(input));
+        } 
+
+        [HttpPost]
+        [Route("AddCustomerUser")]
+        public InsertOperationOutput<CustomerUserDetail> AddCustomerUser(CustomerUser input)
+        {
+            CustomerUserManager manager = new CustomerUserManager();
+            return manager.AddCustomerUser(input);
+        }
+
+        [HttpGet]
+        [Route("DeleteCustomerUser")]
+        public DeleteOperationOutput<CustomerUserDetail> DeleteCustomerUser(int userId)
+        {
+
+            CustomerUserManager manager = new CustomerUserManager();
+            return manager.DeleteCustomerUser(userId);
         }
     }
 }

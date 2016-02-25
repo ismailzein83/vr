@@ -1,10 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    function customerManagmentApiService(baseApiService, utilsService, moduleConfig) {
-        function AddUser(object) {
-            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "CustomerUser", "AddUser"), object);
-        }
+    function customerManagmentApiService(baseApiService, utilsService, moduleConfig) {     
         function UpdateCustomer(object) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "UpdateCustomer"), object);
         }
@@ -27,8 +24,7 @@
             UpdateCustomer: UpdateCustomer,
             AddCustomer: AddCustomer,
             GetFilteredCustomers: GetFilteredCustomers,
-            GetCustomer: GetCustomer,
-            AddUser: AddUser
+            GetCustomer: GetCustomer
         });
     }
     customerManagmentApiService.$inject = ['BaseAPIService', 'UtilsService', 'CP_SupPriceList_ModuleConfig'];

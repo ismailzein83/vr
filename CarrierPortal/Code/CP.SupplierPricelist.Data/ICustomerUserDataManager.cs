@@ -10,6 +10,7 @@ namespace CP.SupplierPricelist.Data
 
         bool AreCustomersUsersUpdated(ref object updateHandle);
 
-        bool AddUser(CustomerUser input);
+        bool Insert(CustomerUser input);
+        bool Delete(int userId);
     }
 }

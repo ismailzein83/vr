@@ -4,6 +4,9 @@ using CP.SupplierPricelist.Data;
 using CP.SupplierPricelist.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
+using System;
 
 namespace CP.SupplierPricelist.Business
 {
@@ -11,33 +14,57 @@ namespace CP.SupplierPricelist.Business
     {
         protected CustomerUserDetail MapToDetails(CustomerUser customerUser)
         {
+            string username = "";
+            User user = new UserManager().GetUserbyId(customerUser.UserId);
+            if (user != null)
+                username = user.Name;
             return new CustomerUserDetail
             {
                 Entity = customerUser,
-                UserName = ""
+                UserName = username
             };
 
         }
+        public Vanrise.Entities.IDataRetrievalResult<CustomerUserDetail> GetFilteredCustomerUsers(Vanrise.Entities.DataRetrievalInput<CustomerUserQuery> input)
+        {
+            var allCustomerSupplierMappings = GetCachedCustomersUsers();
+            Func<CustomerUser, bool> filterExpression = (item) => (input.Query.CustomerId == null || input.Query.CustomerId == item.CustomerId ) ;
+             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, MapToDetails));
+        }
+
         public int GetCustomerIdByUserId(int customerId)
         {
             var customers = GetCachedCustomersUsers();
             return customers.GetRecord(customerId).CustomerId;
         }
-        public UpdateOperationOutput<CustomerUserDetail> AddUser(CustomerUser input)
+        public InsertOperationOutput<CustomerUserDetail> AddCustomerUser(CustomerUser input)
         {
-            UpdateOperationOutput<CustomerUserDetail> updateOperationOutput = new UpdateOperationOutput<CustomerUserDetail>
-            {
-                Result = UpdateOperationResult.Failed,
-                UpdatedObject = null
-            };
+            InsertOperationOutput<CustomerUserDetail> insertOperationOutput = new InsertOperationOutput<CustomerUserDetail>();
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
             ICustomerUserDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerUserDataManager>();
-            bool updateActionSucc = dataManager.AddUser(input);
+            bool updateActionSucc = dataManager.Insert(input);
             if (updateActionSucc)
             {
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = MapToDetails(input);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = MapToDetails(input);
             }
-            return updateOperationOutput;
+            return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.DeleteOperationOutput<CustomerUserDetail> DeleteCustomerUser(int userId)
+        {
+            ICustomerUserDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerUserDataManager>();
+            Vanrise.Entities.DeleteOperationOutput<CustomerUserDetail> deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<CustomerUserDetail>();
+            bool updateActionSucc = dataManager.Delete(userId);
+            if (updateActionSucc)
+            {
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+            }
+            else
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
+            return deleteOperationOutput;
         }
         #region Private Methods
         Dictionary<int, CustomerUser> GetCachedCustomersUsers()
