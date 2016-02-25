@@ -52,10 +52,7 @@
 
             if (isEditMode) {
                 getOperatorAccount().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            //operatorAccountEntity = undefined;
-                        });
+                    loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
@@ -69,8 +66,6 @@
         function getOperatorAccount() {
             return InterConnect_BE_OperatorAccountAPIService.GetOperatorAccount(operatorAccountId).then(function (operatorAccount) {
                 $scope.scopeModal = operatorAccount;
-                //var obj = { Name: 'Test Profile', OperatorProfileId: 2 };
-                //$scope.scopeModal.operatorProfile = obj;
             });
         }
 
