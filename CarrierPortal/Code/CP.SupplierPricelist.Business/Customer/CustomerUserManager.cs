@@ -28,8 +28,8 @@ namespace CP.SupplierPricelist.Business
         public Vanrise.Entities.IDataRetrievalResult<CustomerUserDetail> GetFilteredCustomerUsers(Vanrise.Entities.DataRetrievalInput<CustomerUserQuery> input)
         {
             var allCustomerSupplierMappings = GetCachedCustomersUsers();
-            Func<CustomerUser, bool> filterExpression = (item) => (input.Query.CustomerId == null || input.Query.CustomerId == item.CustomerId ) ;
-             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, MapToDetails));
+            Func<CustomerUser, bool> filterExpression = (item) => (input.Query.CustomerId == null || input.Query.CustomerId == item.CustomerId);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, MapToDetails));
         }
 
         public int GetCustomerIdByUserId(int customerId)
@@ -40,15 +40,20 @@ namespace CP.SupplierPricelist.Business
         public InsertOperationOutput<CustomerUserDetail> AddCustomerUser(CustomerUser input)
         {
             InsertOperationOutput<CustomerUserDetail> insertOperationOutput = new InsertOperationOutput<CustomerUserDetail>();
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
             ICustomerUserDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerUserDataManager>();
             bool updateActionSucc = dataManager.Insert(input);
             if (updateActionSucc)
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = MapToDetails(input);
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+
             }
             return insertOperationOutput;
         }
