@@ -111,6 +111,7 @@
 
                 var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
                 sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+                    sourceDirectiveReadyPromiseDeferred = undefined;
                     var serviceSubTypePayload;
 
                     if (destinationGroupEntity != undefined && destinationGroupEntity.GroupSettings) {

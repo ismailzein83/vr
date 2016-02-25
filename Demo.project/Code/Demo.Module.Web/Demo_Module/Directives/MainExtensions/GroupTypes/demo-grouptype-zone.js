@@ -19,12 +19,9 @@ app.directive("demoGrouptypeZone", ['UtilsService', 'VRUIUtilsService', function
 
     function GroupTypeZone(ctrl, $scope) {
         this.initCtrl = initCtrl;
-
         var zoneDirectiveApi;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         function initCtrl() {
-
             ctrl.onZoneDirectiveReady = function (zoneAPI) {
                 zoneDirectiveApi = zoneAPI;
                 zoneReadyPromiseDeferred.resolve();
@@ -35,7 +32,6 @@ app.directive("demoGrouptypeZone", ['UtilsService', 'VRUIUtilsService', function
                 var api = {};
 
                 api.load = function (payload) {
-
                     var zoneLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     zoneReadyPromiseDeferred.promise
                         .then(function () {
