@@ -10,12 +10,15 @@
         var carrierProfileEntity;
         var countryId;
         var cityId;
-
+        var receivedCityId;
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var cityDirectiveApi;
         var cityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var city1DirectiveAPI;
+        var city1ReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -26,6 +29,7 @@
 
             if (parameters != undefined && parameters != null) {
                 carrierProfileId = parameters.CarrierProfileId;
+               
             }
             isEditMode = (carrierProfileId != undefined);
 
@@ -44,6 +48,12 @@
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             }
+
+            $scope.onCityyDirectiveReady = function (api) {
+                city1DirectiveAPI = api;
+                city1ReadyPromiseDeferred.resolve();
+            }
+
             $scope.scopeModal.disabledfax = true;
             $scope.scopeModal.onFaxValueChange = function (value) {
                 $scope.scopeModal.disabledfax = (value== undefined);
@@ -81,9 +91,11 @@
             $scope.onCountrySelctionChanged = function (item, datasource) {
                
                 if (item != undefined) {
-                    var payload = {};                   
-                     payload.filter = { CountryId: item.CountryId }
-                     cityDirectiveApi.load(payload)
+                    var payload = {};
+                    payload.countryId = item.CountryId;
+                    if(isEditMode)
+                        payload.selectedIds = receivedCityId;                    
+                    city1DirectiveAPI.load(payload);
                 }
                 else {                  
                     $scope.scopeModal.city = undefined;
@@ -125,11 +137,12 @@
         function getCarrierProfile() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
                 carrierProfileEntity = carrierProfile;
+                receivedCityId = carrierProfileEntity.Settings.CityId;
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection, loadContacts])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadStaticSection, loadContacts])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -140,6 +153,21 @@
 
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierProfileEntity ? carrierProfileEntity.Name : null, 'Carrier Profile') : UtilsService.buildTitleForAddEditor('Carrier Profile');
+        }
+
+
+        function loadCity1() {
+            var loadCity1SelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            city1ReadyPromiseDeferred.promise.then(function () {
+                var payload = {};
+                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CityId != undefined) {
+                    payload.countryId = carrierProfileEntity.Settings.CountryId;
+                    payload.selectedIds= (carrierProfileEntity != undefined) ? carrierProfileEntity.Settings.CityId : undefined
+                }
+                
+                VRUIUtilsService.callDirectiveLoad(city1DirectiveAPI, payload, loadCity1SelectorPromiseDeferred);
+            })
+            return loadCity1SelectorPromiseDeferred.promise;
         }
 
         function loadCountries() {
@@ -241,7 +269,7 @@
                 Name:  $scope.scopeModal.name,
                 Settings: {
                     CountryId: countryDirectiveApi.getSelectedIds(),
-                    CityId: cityDirectiveApi.getSelectedIds(),
+                    CityId: city1DirectiveAPI.getSelectedIds(),
                     Company: $scope.scopeModal.company,
                     Website: $scope.scopeModal.website,
                     RegistrationNumber: $scope.scopeModal.registrationNumber,
