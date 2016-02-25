@@ -12,6 +12,8 @@ namespace Demo.Module.Entities
 
         public String OperatorName { get; set; }
 
+        public String InterconnectOperatorName { get; set; }
+
         public String ServiceTypeName { get; set; }
 
         public String ServiceSubTypeName { get; set; }

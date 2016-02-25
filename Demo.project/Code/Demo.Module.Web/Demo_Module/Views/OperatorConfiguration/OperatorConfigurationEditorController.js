@@ -2,15 +2,18 @@
 
     "use strict";
 
-    operatorConfigurationEditorController.$inject = ['$scope', 'Demo_OperatorConfigurationAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService'];
+    operatorConfigurationEditorController.$inject = ['$scope', 'Demo_OperatorConfigurationAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService', 'Demo_CDRDirectionEnum'];
 
-    function operatorConfigurationEditorController($scope, Demo_OperatorConfigurationAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService) {
+    function operatorConfigurationEditorController($scope, Demo_OperatorConfigurationAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService, Demo_CDRDirectionEnum) {
         var isEditMode;
         var operatorConfigurationId;
         var operatorConfigurationEntity;
 
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var interconnectOperatorProfileDirectiveAPI;
+        var interconnectOperatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var cdrDirectionDirectiveAPI;
         var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -51,6 +54,23 @@
             }
 
             $scope.selectedCurrency;
+
+            $scope.isInterconnect = function () {
+                if (cdrDirectionDirectiveAPI != undefined)
+                    return (cdrDirectionDirectiveAPI.getSelectedIds() == Demo_CDRDirectionEnum.Interconnect.value);
+                else
+                    return false;
+            }
+
+            $scope.scopeModal.onInterconnectOperatorProfileDirectiveReady = function (api) {
+                interconnectOperatorProfileDirectiveAPI = api;
+                var setLoader = function (value) { $scope.isLoadingInterconnectOperatorProfile = value };
+                var directivePayload = {
+                    selectedIds: (operatorConfigurationEntity != undefined ? [operatorConfigurationEntity.InterconnectOperator] : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
+                }
+                console.log(operatorConfigurationEntity)
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, interconnectOperatorProfileDirectiveAPI, directivePayload, setLoader, interconnectOperatorProfileReadyPromiseDeferred);
+            }
 
             $scope.scopeModal.onOperatorProfileDirectiveReady = function (api) {
                 operatorProfileDirectiveAPI = api;
@@ -116,7 +136,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadCDRDirections, loadCurrencies, loadServiceSubTypes, loadDestinationGroups])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfiles, loadCDRDirections, loadCurrencies, loadServiceSubTypes, loadDestinationGroups, loadInterconnectOperatorProfiles])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -202,7 +222,7 @@
             });
         }
 
-        function loadOperatorProfileDirective() {
+        function loadOperatorProfiles() {
 
             var loadOperatorProfilePromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -215,6 +235,27 @@
                 });
 
             return loadOperatorProfilePromiseDeferred.promise;
+        }
+
+        function loadInterconnectOperatorProfiles() {
+
+            var loadInterconnectOperatorProfilePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            if ($scope.isInterconnect()) {
+                interconnectOperatorProfileReadyPromiseDeferred.promise
+               .then(function () {
+                   var directivePayload = {
+                       selectedIds: (operatorConfigurationEntity != undefined ? operatorConfigurationEntity.InterconnectOperatorId : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
+                   }
+                   VRUIUtilsService.callDirectiveLoad(interconnectOperatorProfileDirectiveAPI, directivePayload, loadInterconnectOperatorProfilePromiseDeferred);
+               });
+            }
+            else {
+                interconnectOperatorProfileReadyPromiseDeferred = undefined;
+                loadInterconnectOperatorProfilePromiseDeferred.resolve();
+            }
+
+            return loadInterconnectOperatorProfilePromiseDeferred.promise;
         }
 
         function loadStaticSection() {
@@ -232,6 +273,7 @@
             var obj = {
                 OperatorConfigurationId: (operatorConfigurationId != null) ? operatorConfigurationId : 0,
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
+                InterconnectOperator: interconnectOperatorProfileDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModal.volume,
                 Percentage: $scope.scopeModal.percentage,
                 FromDate: $scope.scopeModal.fromDate,

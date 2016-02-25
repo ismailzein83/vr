@@ -29,6 +29,8 @@ namespace Demo.Module.Entities
 
         public int? DestinationGroup { get; set; }
 
+        public int? InterconnectOperator { get; set; }
+
     }
 
 }

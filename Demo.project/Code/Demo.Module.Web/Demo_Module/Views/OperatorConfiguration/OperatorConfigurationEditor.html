@@ -12,16 +12,20 @@
                     <vr-datetimepicker value="scopeModal.toDate" label="To Date" customvalidate="validateDateRange()" type="dateTime"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="1/4row">
-                    <cdrdirection-selector on-ready="onCDRDirectionReady" isrequired="true"></cdrdirection-selector>
+                    <vr-textbox value="scopeModal.volume" isrequired label="Volume" type="number" decimalprecision="0"></vr-textbox>
                 </vr-columns>
             </vr-row>
 
 
             <vr-row removeline>
-
                 <vr-columns width="1/4row">
-                    <vr-textbox value="scopeModal.volume" isrequired label="Volume" type="number" decimalprecision="0"></vr-textbox>
+                    <cdrdirection-selector on-ready="onCDRDirectionReady" isrequired="true"></cdrdirection-selector>
                 </vr-columns>
+
+                <vr-columns width="1/4row" ng-if="isInterconnect()">
+                    <vr-demo-operatorprofile-selector on-ready="scopeModal.onInterconnectOperatorProfileDirectiveReady" isrequired label="Interconnect Operator"></vr-demo-operatorprofile-selector>
+                </vr-columns>
+
                 <vr-columns width="1/4row">
                     <vr-textbox value="scopeModal.amount" label="Amount" type="number" decimalprecision="0"></vr-textbox>
                 </vr-columns>

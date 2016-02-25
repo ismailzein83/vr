@@ -144,6 +144,11 @@ namespace Demo.Module.Business
 
             OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
             configDetail.OperatorName = operatorProfileManager.GetOperatorProfileName(config.OperatorId);
+            if (config.InterconnectOperator.HasValue)
+                configDetail.InterconnectOperatorName = operatorProfileManager.GetOperatorProfileName(config.InterconnectOperator.Value);
+
+
+            
 
             if (config.DestinationGroup.HasValue)
             {
