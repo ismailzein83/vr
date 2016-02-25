@@ -27,6 +27,7 @@ function (UtilsService, VRNotificationService, InterConnect_BE_OperatorAccountAP
     function OperatorAccountGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var isDrillDownOperatorProfile = false;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -42,6 +43,8 @@ function (UtilsService, VRNotificationService, InterConnect_BE_OperatorAccountAP
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                        isDrillDownOperatorProfile = query.isDrillDownOperatorProfile != undefined ? query.isDrillDownOperatorProfile : false;
+                        $scope.showOperatorProfileColumn = !isDrillDownOperatorProfile;
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onOperatorAccountAdded = function (operatorAccountObject) {
@@ -74,7 +77,7 @@ function (UtilsService, VRNotificationService, InterConnect_BE_OperatorAccountAP
             var onOperatorAccountUpdated = function (operatorAccount) {
                 gridAPI.itemUpdated(operatorAccount);
             }
-            InterConnect_BE_OperatorAccountService.editOperatorAccount(operatorAccountObj, onOperatorAccountUpdated);
+            InterConnect_BE_OperatorAccountService.editOperatorAccount(operatorAccountObj, onOperatorAccountUpdated, isDrillDownOperatorProfile);
         }
     }
 

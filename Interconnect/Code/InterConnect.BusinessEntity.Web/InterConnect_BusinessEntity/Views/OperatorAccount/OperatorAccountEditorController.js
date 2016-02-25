@@ -16,14 +16,18 @@
         defineScope();
         load();
 
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
+            $scope.disableOperatorProfileColumn = false;
             if (parameters != undefined && parameters != null) {
                 operatorAccountId = parameters.OperatorAccountId;
+
+                if (parameters.IsDrillDownOperatorProfile != undefined) {
+                    $scope.disableOperatorProfileColumn = parameters.IsDrillDownOperatorProfile;
+                }
             }
             isEditMode = (operatorAccountId != undefined);
-
         }
 
         function defineScope() {

@@ -27,6 +27,8 @@ function (UtilsService, VRNotificationService, InterConnect_BE_OperatorProfileAP
     function OperatorProfileGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var gridDrillDownTabsObj;
+
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -36,6 +38,26 @@ function (UtilsService, VRNotificationService, InterConnect_BE_OperatorProfileAP
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+
+                var drillDownDefinitions = [];
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = "Operator Accounts";
+                drillDownDefinition.directive = "vr-interconnect-be-operatoraccount-grid";
+
+                drillDownDefinition.loadDirective = function (directiveAPI, operatorProfileItem) {
+                    operatorProfileItem.operatorAccountGridAPI = directiveAPI;
+                    var operatorProfileIds = [];
+                    operatorProfileIds.push(operatorProfileItem.Entity.OperatorProfileId);
+                    var payload = {
+                        OperatorProfileIds: operatorProfileIds,
+                        isDrillDownOperatorProfile: true
+                    };
+                    return operatorProfileItem.operatorAccountGridAPI.loadGrid(payload);
+                };
+                drillDownDefinitions.push(drillDownDefinition);
+
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -45,6 +67,7 @@ function (UtilsService, VRNotificationService, InterConnect_BE_OperatorProfileAP
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onOperatorProfileAdded = function (operatorProfileObject) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(operatorProfileObject);
                         gridAPI.itemAdded(operatorProfileObject);
                     }
                     return directiveAPI;
@@ -54,6 +77,11 @@ function (UtilsService, VRNotificationService, InterConnect_BE_OperatorProfileAP
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return InterConnect_BE_OperatorProfileAPIService.GetFilteredOperatorProfiles(dataRetrievalInput)
                     .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -72,6 +100,7 @@ function (UtilsService, VRNotificationService, InterConnect_BE_OperatorProfileAP
 
         function editOperatorProfile(operatorProfileObj) {
             var onOperatorProfileUpdated = function (operatorProfile) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(operatorProfile);
                 gridAPI.itemUpdated(operatorProfile);
             }
             InterConnect_BE_OperatorProfileService.editOperatorProfile(operatorProfileObj, onOperatorProfileUpdated);

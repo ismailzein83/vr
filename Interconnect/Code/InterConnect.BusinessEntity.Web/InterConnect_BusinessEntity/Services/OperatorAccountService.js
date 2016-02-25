@@ -21,12 +21,13 @@
             VRModalService.showModal('/Client/Modules/InterConnect_BusinessEntity/Views/OperatorAccount/OperatorAccountEditor.html', null, settings);
         }
 
-        function editOperatorAccount(OperatorAccountObj, onOperatorAccountUpdated) {
+        function editOperatorAccount(OperatorAccountObj, onOperatorAccountUpdated, isDrillDownOperatorProfile) {
             var modalSettings = {
             };
 
             var parameters = {
                 OperatorAccountId: OperatorAccountObj.Entity.OperatorAccountId,
+                IsDrillDownOperatorProfile: isDrillDownOperatorProfile
             };
 
             modalSettings.onScopeReady = function (modalScope) {

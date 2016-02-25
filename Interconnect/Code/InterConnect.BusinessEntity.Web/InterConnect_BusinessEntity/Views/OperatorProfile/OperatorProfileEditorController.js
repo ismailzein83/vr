@@ -218,7 +218,7 @@
                     Company: $scope.scopeModal.company,
                 },
                 ExtendedSettings: extendedSettingsAPI != undefined ? extendedSettingsAPI.getData() : undefined,
-                ExtendedSettingsRecordTypeId: $scope.scopeModal.selectedOptionSettings.value
+                ExtendedSettingsRecordTypeId: $scope.scopeModal.selectedOptionSettings != undefined ? $scope.scopeModal.selectedOptionSettings.value : undefined
             };
             return obj;
         }

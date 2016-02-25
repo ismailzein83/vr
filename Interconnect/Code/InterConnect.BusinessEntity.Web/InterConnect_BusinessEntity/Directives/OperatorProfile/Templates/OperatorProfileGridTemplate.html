@@ -8,4 +8,7 @@
     <vr-datagridcolumn headertext="'Operator Profile Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Company'" field="'Entity.Settings.Company'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>
