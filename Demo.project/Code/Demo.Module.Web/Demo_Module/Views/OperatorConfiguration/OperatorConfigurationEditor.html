@@ -41,6 +41,10 @@
 
             <vr-row>
                 <vr-columns width="1/4row">
+                    <vr-demo-destinationgroup-selector on-ready="onDestinationGroupReady" isrequired="true"></vr-demo-destinationgroup-selector>
+                </vr-columns>
+
+                <vr-columns width="1/4row">
                     <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Service Type" datasource="sourceTypeTemplates" text="None" hideremoveicon
                                selectedvalues="selectedSourceTypeTemplate" isrequired="true">
                     </vr-select>

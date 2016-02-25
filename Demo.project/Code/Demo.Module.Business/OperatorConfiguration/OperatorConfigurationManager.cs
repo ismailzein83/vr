@@ -25,15 +25,18 @@ namespace Demo.Module.Business
                 (input.Query.OperatorIds == null || input.Query.OperatorIds.Count == 0 || input.Query.OperatorIds.Contains(prod.OperatorId))
                 &&
 
+                (input.Query.DestinationGroups == null || input.Query.DestinationGroups.Count == 0 || (prod.DestinationGroup.HasValue && input.Query.DestinationGroups.Contains(prod.DestinationGroup.Value)))
+                &&
+
                 (input.Query.CDRDirectionIds == null || input.Query.CDRDirectionIds.Count == 0 || input.Query.CDRDirectionIds.Contains((int)prod.CDRDirection))
                 &&
 
                 (input.Query.OperatorConfigurationIds == null || input.Query.OperatorConfigurationIds.Contains(prod.OperatorConfigurationId))
                 &&
-                
+
                 (!input.Query.FromDate.HasValue || input.Query.FromDate < prod.FromDate)
                 &&
-                
+
                 (!input.Query.ToDate.HasValue || input.Query.ToDate >= prod.ToDate);
 
 

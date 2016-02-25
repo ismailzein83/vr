@@ -51,6 +51,15 @@ namespace Demo.Module.Web.Controllers
             return manager.GetGroupTypeTemplates();
         }
 
+        [HttpGet]
+        [Route("GetDestinationGroupsInfo")]
+        public IEnumerable<DestinationGroupInfo> GetDestinationGroupsInfo()
+        {
+            DestinationGroupManager manager = new DestinationGroupManager();
+            return manager.GetDestinationGroupsInfo();
+        }
+
+
 
     }
 }

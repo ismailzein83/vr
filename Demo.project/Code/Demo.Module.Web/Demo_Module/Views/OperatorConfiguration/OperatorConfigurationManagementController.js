@@ -13,6 +13,9 @@
         var cdrDirectionDirectiveAPI;
         var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var destinationGroupDirectiveAPI;
+        var destinationGroupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -31,6 +34,11 @@
                 cdrDirectionReadyPromiseDeferred.resolve();
             }
 
+            $scope.onDestinationGroupReady = function (api) {
+                destinationGroupDirectiveAPI = api;
+                destinationGroupReadyPromiseDeferred.resolve();
+            }
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid({});
@@ -46,6 +54,7 @@
                 var data = {
                     OperatorIds: operatorProfileDirectiveAPI.getSelectedIds(),
                     CDRDirectionIds: cdrDirectionDirectiveAPI.getSelectedIds(),
+                    DestinationGroups:destinationGroupDirectiveAPI.getSelectedIds(),
                     FromDate: $scope.fromDate,
                     ToDate:$scope.toDate
                 };
@@ -60,7 +69,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadCDRDirections])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadCDRDirections, loadDestinationGroups])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -86,6 +95,14 @@
                 VRUIUtilsService.callDirectiveLoad(cdrDirectionDirectiveAPI, undefined, loadCDRDirectionsPromiseDeferred);
             });
             return loadCDRDirectionsPromiseDeferred.promise;
+        }
+
+        function loadDestinationGroups() {
+            var loadDestinationGroupsPromiseDeferred = UtilsService.createPromiseDeferred();
+            destinationGroupReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(destinationGroupDirectiveAPI, undefined, loadDestinationGroupsPromiseDeferred);
+            })
+            return loadDestinationGroupsPromiseDeferred.promise;
         }
 
 

@@ -11,5 +11,7 @@ namespace Demo.Module.Entities
        public DateTime? FromDate { get; set; }
        public DateTime? ToDate { get; set; }
 
+       public List<int> DestinationGroups { get; set; }
+
     }
 }

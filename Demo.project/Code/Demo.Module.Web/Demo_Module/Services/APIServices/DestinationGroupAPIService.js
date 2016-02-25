@@ -27,7 +27,13 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "DestinationGroup", "GetGroupTypeTemplates"));
         }
 
+        function GetDestinationGroupsInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_ModuleConfig.moduleName, "DestinationGroup", "GetDestinationGroupsInfo"));
+        }
+
+
         return ({
+            GetDestinationGroupsInfo: GetDestinationGroupsInfo,
             GetGroupTypeTemplates: GetGroupTypeTemplates,
             GetFilteredDestinationGroups: GetFilteredDestinationGroups,
             GetDestinationGroup: GetDestinationGroup,

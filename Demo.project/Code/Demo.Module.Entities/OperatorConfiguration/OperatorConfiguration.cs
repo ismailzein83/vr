@@ -27,6 +27,8 @@ namespace Demo.Module.Entities
 
         public ServiceSubType ServiceSubTypeSettings { get; set; }
 
+        public int? DestinationGroup { get; set; }
+
     }
 
 }

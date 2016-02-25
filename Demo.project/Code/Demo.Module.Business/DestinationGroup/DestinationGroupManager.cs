@@ -77,6 +77,15 @@ namespace Demo.Module.Business
             return updateOperationOutput;
         }
 
+        public IEnumerable<DestinationGroupInfo> GetDestinationGroupsInfo()
+        {
+            var allDestinationGroups = GetCachedDestinationGroups();
+            if (allDestinationGroups == null)
+                return null;
+
+            return allDestinationGroups.MapRecords(DestinationGroupInfoMapper);
+        }
+
         public List<TemplateConfig> GetGroupTypeTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();
@@ -123,6 +132,14 @@ namespace Demo.Module.Business
                 groupDetail.DestinationTypeName = destinationType.Name;
 
             return groupDetail;
+        }
+
+        private DestinationGroupInfo DestinationGroupInfoMapper(DestinationGroup group)
+        {
+            DestinationGroupInfo groupInfo = new DestinationGroupInfo();
+            groupInfo.DestinationGroupId = group.DestinationGroupId;
+            groupInfo.Name = group.Name;
+            return groupInfo;
         }
         #endregion
     }

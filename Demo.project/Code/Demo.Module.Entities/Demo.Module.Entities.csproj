@@ -56,6 +56,7 @@
     <Compile Include="CodeGroup\CodeGroupDetail.cs" />
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
+    <Compile Include="DestinationGroup\DestinationGroupInfo.cs" />
     <Compile Include="DestinationGroup\DestinationGroup.cs" />
     <Compile Include="DestinationGroup\DestinationGroupDetail.cs" />
     <Compile Include="DestinationGroup\DestinationGroupQuery.cs" />

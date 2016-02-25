@@ -134,6 +134,7 @@
     <Content Include="Demo_Module\Constant\GenericAnalyticDimensionEnum.js" />
     <Content Include="Demo_Module\Constant\GenericAnalyticMeasureEnum.js" />
     <Content Include="Demo_Module\Directives\DestinationGroup\Templates\DestinationGroupGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\DestinationGroup\vr-demo-destinationgroup-selector.js" />
     <Content Include="Demo_Module\Directives\DestinationGroup\vr-demo-destinationgroup-grid.js" />
     <Content Include="Demo_Module\Directives\Generic\GenericAnalyticGridSettingsController.js" />
     <Content Include="Demo_Module\Directives\Generic\Templates\GenericAnalyticGridSettings.html" />

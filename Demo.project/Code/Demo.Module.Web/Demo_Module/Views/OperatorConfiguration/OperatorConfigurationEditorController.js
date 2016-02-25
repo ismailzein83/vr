@@ -15,6 +15,9 @@
         var cdrDirectionDirectiveAPI;
         var cdrDirectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var destinationGroupDirectiveAPI;
+        var destinationGroupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var currencyDirectiveAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -69,6 +72,11 @@
                 cdrDirectionReadyPromiseDeferred.resolve();
             }
 
+            $scope.onDestinationGroupReady = function (api) {
+                destinationGroupDirectiveAPI = api;
+                destinationGroupReadyPromiseDeferred.resolve();
+            }
+
             $scope.SaveOperatorConfiguration = function () {
                 if (isEditMode) {
                     return updateOperatorConfiguration();
@@ -108,7 +116,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadCDRDirections, loadCurrencies, loadServiceSubTypes])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticSection, loadOperatorProfileDirective, loadCDRDirections, loadCurrencies, loadServiceSubTypes, loadDestinationGroups])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -120,7 +128,7 @@
         function loadServiceSubTypes() {
             var promises = [];
             var sourceConfigId;
-            if (operatorConfigurationEntity != undefined && operatorConfigurationEntity.ServiceSubTypeSettings ) {
+            if (operatorConfigurationEntity != undefined && operatorConfigurationEntity.ServiceSubTypeSettings) {
                 sourceConfigId = operatorConfigurationEntity.ServiceSubTypeSettings.ConfigId;
             }
 
@@ -167,6 +175,17 @@
                 VRUIUtilsService.callDirectiveLoad(cdrDirectionDirectiveAPI, directivePayload, loadCDRDirectionsPromiseDeferred);
             });
             return loadCDRDirectionsPromiseDeferred.promise;
+        }
+
+        function loadDestinationGroups() {
+            var loadDestinationGroupsPromiseDeferred = UtilsService.createPromiseDeferred();
+            destinationGroupReadyPromiseDeferred.promise.then(function () {
+                var directivePayload = {
+                    selectedIds: (operatorConfigurationEntity != undefined ? (operatorConfigurationEntity.DestinationGroup != undefined ? [operatorConfigurationEntity.DestinationGroup] : undefined) : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
+                }
+                VRUIUtilsService.callDirectiveLoad(destinationGroupDirectiveAPI, directivePayload, loadDestinationGroupsPromiseDeferred);
+            })
+            return loadDestinationGroupsPromiseDeferred.promise;
         }
 
         function setTitle() {
@@ -219,11 +238,11 @@
                 ToDate: $scope.scopeModal.toDate,
                 Amount: $scope.scopeModal.amount,
                 CDRDirection: cdrDirectionDirectiveAPI.getSelectedIds(),
+                DestinationGroup: destinationGroupDirectiveAPI.getSelectedIds(),
                 Notes: $scope.scopeModal.notes,
                 Currency: currencyDirectiveAPI.getSelectedIds(),
                 ServiceSubTypeSettings: VRUIUtilsService.getSettingsFromDirective($scope, sourceTemplateDirectiveAPI, 'selectedSourceTypeTemplate')
             };
-            console.log(obj)
             return obj;
         }
 
