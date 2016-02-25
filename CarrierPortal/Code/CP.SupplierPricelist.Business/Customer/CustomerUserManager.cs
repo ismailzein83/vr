@@ -9,15 +9,23 @@ namespace CP.SupplierPricelist.Business
 {
     public class CustomerUserManager
     {
+        protected CustomerUserDetail MapToDetails(CustomerUser customerUser)
+        {
+            return new CustomerUserDetail
+            {
+                Entity = customerUser,
+                UserName = ""
+            };
 
+        }
         public int GetCustomerIdByUserId(int customerId)
         {
             var customers = GetCachedCustomersUsers();
             return customers.GetRecord(customerId).CustomerId;
         }
-        public UpdateOperationOutput<CustomerUser> AddUser(CustomerUser input)
+        public UpdateOperationOutput<CustomerUserDetail> AddUser(CustomerUser input)
         {
-            UpdateOperationOutput<CustomerUser> updateOperationOutput = new UpdateOperationOutput<CustomerUser>
+            UpdateOperationOutput<CustomerUserDetail> updateOperationOutput = new UpdateOperationOutput<CustomerUserDetail>
             {
                 Result = UpdateOperationResult.Failed,
                 UpdatedObject = null
@@ -27,7 +35,7 @@ namespace CP.SupplierPricelist.Business
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = input;
+                updateOperationOutput.UpdatedObject = MapToDetails(input);
             }
             return updateOperationOutput;
         }

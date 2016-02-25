@@ -12,7 +12,7 @@ namespace CP.SupplierPricelist.Web.Controllers
     {
         [HttpPost]
         [Route("AddUser")]
-        public UpdateOperationOutput<CustomerUser> AddUser(CustomerUser input)
+        public UpdateOperationOutput<CustomerUserDetail> AddUser(CustomerUser input)
         {
             CustomerUserManager manager = new CustomerUserManager();
             return manager.AddUser(input);

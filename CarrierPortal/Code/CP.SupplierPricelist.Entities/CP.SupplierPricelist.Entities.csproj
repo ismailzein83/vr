@@ -57,6 +57,7 @@
     <Compile Include="Customer\CustomerSupplierMappingQuery.cs" />
     <Compile Include="Customer\CustomerSupplierMapping.cs" />
     <Compile Include="Customer\CustomerUser.cs" />
+    <Compile Include="Customer\CustomerUserDetail.cs" />
     <Compile Include="GetUpdatedInput.cs" />
     <Compile Include="PriceListlUpdateOutput.cs" />
     <Compile Include="PriceListResult.cs" />
