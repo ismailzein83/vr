@@ -10,8 +10,8 @@
         var operatorProfileDirectiveAPI;
         var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var zoneDirectiveAPI;
-        var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var destinationGroupDirectiveAPI;
+        var destinationGroupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var serviceTypeDirectiveAPI;
         var serviceTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -36,9 +36,9 @@
                 serviceTypeReadyPromiseDeferred.resolve();
             }
 
-            $scope.onZoneDirectiveReady = function (api) {
-                zoneDirectiveAPI = api;
-                zoneReadyPromiseDeferred.resolve();
+            $scope.onDestinationGroupReady = function (api) {
+                destinationGroupDirectiveAPI = api;
+                destinationGroupReadyPromiseDeferred.resolve();
             }
 
             $scope.onGridReady = function (api) {
@@ -57,7 +57,7 @@
                     FromDate: $scope.fromDate,
                     ToDate: $scope.toDate,
                     OperatorIds: operatorProfileDirectiveAPI.getSelectedIds(),
-                    ZoneIds: zoneDirectiveAPI.getSelectedIds(),
+                    DestinationGroups: destinationGroupDirectiveAPI.getSelectedIds(),
                     ServiceTypeIds: serviceTypeDirectiveAPI.getSelectedIds(),
                 };
 
@@ -71,7 +71,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadZones, loadServiceTypes])
+            return UtilsService.waitMultipleAsyncOperations([loadOperatorProfiles, loadServiceTypes, loadDestinationGroups])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -93,15 +93,12 @@
             return loadOperatorProfilePromiseDeferred.promise;
         }
 
-        function loadZones() {
-            var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
-            zoneReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = undefined;
-                    VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, loadZonePromiseDeferred);
-                });
-
-            return loadZonePromiseDeferred.promise;
+        function loadDestinationGroups() {
+            var loadDestinationGroupsPromiseDeferred = UtilsService.createPromiseDeferred();
+            destinationGroupReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(destinationGroupDirectiveAPI, undefined, loadDestinationGroupsPromiseDeferred);
+            })
+            return loadDestinationGroupsPromiseDeferred.promise;
         }
 
         function loadServiceTypes() {
