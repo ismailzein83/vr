@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 namespace InterConnect.BusinessEntity.Business
 {
     public class OperatorProfileManager
@@ -135,7 +136,9 @@ namespace InterConnect.BusinessEntity.Business
         {
             OperatorProfileDetail operatorProfileDetail = new OperatorProfileDetail();
             operatorProfileDetail.Entity = operatorProfile;
-
+            CountryManager countryManager = new CountryManager();
+            if (operatorProfile.Settings != null)
+                operatorProfileDetail.CountryName = countryManager.GetCountryName(operatorProfile.Settings.CountryId);
             return operatorProfileDetail;
         }
         #endregion

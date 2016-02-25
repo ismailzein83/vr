@@ -36,6 +36,7 @@
         function defineScope() {
 
             $scope.scopeModal = {};
+
             $scope.scopeModal.optionSettings =[{
                 value: 1,
                 Name:"Option1"
@@ -44,11 +45,16 @@
                 value: 2,
                 Name: "Option2"
 
-            }, ];
+            }];
+            if ($scope.scopeModal.optionSettings.length == 1) {
+                loadExtendedSettings($scope.scopeModal.optionSettings[0].value).then(function () {
+                    loadExtendedSettingsDirective();
 
+                });
+            }
             $scope.scopeModal.onSettingSelectionChanged = function () {
-                if ($scope.scopeModal.selectedOptionSettings != undefined)
-                loadExtendedSettings($scope.scopeModal.selectedOptionSettings.value).then(function() {
+                if ($scope.scopeModal.selectedOptionSettings != undefined && $scope.scopeModal.optionSettings.length > 1)
+                        loadExtendedSettings($scope.scopeModal.selectedOptionSettings.value).then(function() {
                                     loadExtendedSettingsDirective();
 
                 });
@@ -59,6 +65,7 @@
                 extendedSettingsAPI = api;
                 extendedSettingsReadyPromiseDeferred.resolve();
             }
+
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
@@ -103,7 +110,7 @@
                 getOperatorProfile().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            operatorProfileEntity = undefined;
+                          //  operatorProfileEntity = undefined;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -170,7 +177,8 @@
                 if (operatorProfileEntity.Settings != null) {
                     $scope.scopeModal.company = operatorProfileEntity.Settings.Company;
                 }
-
+                if (operatorProfileEntity.ExtendedSettingsRecordTypeId != null)
+                $scope.scopeModal.selectedOptionSettings = UtilsService.getItemByVal($scope.scopeModal.optionSettings, operatorProfileEntity.ExtendedSettingsRecordTypeId, 'value')
             }
         }
 
@@ -178,6 +186,7 @@
         {
             return VR_GenericData_GenericEditorAPIService.GetEditorRuntimeMock(id).then(function (response) {
                 $scope.scopeModal.sections = response.Sections;
+
             });
 
         }
@@ -186,9 +195,11 @@
             var loadExtendedSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
             extendedSettingsReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    sections: $scope.scopeModal.sections
-                };
+                    sections: $scope.scopeModal.sections,
+                    selectedValues: operatorProfileEntity != undefined ? operatorProfileEntity.ExtendedSettings : undefined
 
+                };
+                operatorProfileEntity = undefined;
                 VRUIUtilsService.callDirectiveLoad(extendedSettingsAPI, payload, loadExtendedSettingsPromiseDeferred);
             });
 
@@ -205,7 +216,9 @@
                     CountryId: countryDirectiveApi.getSelectedIds(),
                     CityId: cityDirectiveApi.getSelectedIds(),
                     Company: $scope.scopeModal.company,
-                }
+                },
+                ExtendedSettings: extendedSettingsAPI != undefined ? extendedSettingsAPI.getData() : undefined,
+                ExtendedSettingsRecordTypeId: $scope.scopeModal.selectedOptionSettings.value
             };
             return obj;
         }

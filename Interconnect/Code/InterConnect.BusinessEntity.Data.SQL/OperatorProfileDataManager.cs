@@ -57,7 +57,7 @@ namespace InterConnect.BusinessEntity.Data.SQL
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<OperatorProfileSettings>(reader["Settings"] as string),
                 ExtendedSettingsRecordTypeId = GetReaderValue<int?>(reader, "ExtendedSettingsRecordTypeID"),
-                ExtendedSettings = reader["ExtendedSettings"] as string != null ? Vanrise.Common.Serializer.Deserialize<OperatorProfileSettings>(reader["ExtendedSettings"] as string) : null,
+                ExtendedSettings = reader["ExtendedSettings"] as string != null ? Vanrise.Common.Serializer.Deserialize<dynamic>(reader["ExtendedSettings"] as string) : null,
             };
             return operatorProfile;
         }

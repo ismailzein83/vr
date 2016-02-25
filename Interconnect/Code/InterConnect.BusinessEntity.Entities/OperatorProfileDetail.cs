@@ -9,5 +9,6 @@ namespace InterConnect.BusinessEntity.Entities
    public class OperatorProfileDetail
     {
         public OperatorProfile Entity { get; set; }
+        public string CountryName { get; set; }
     }
 }

@@ -567,6 +567,16 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         else
             return false;
     }
+
+    function mergeObject(mainObj, input, replaceExisting) {
+        for (var attrname in input) {
+            if (mainObj[attrname] == undefined)
+                mainObj[attrname] = input[attrname];
+            else if (replaceExisting)
+                mainObj[attrname] = input[attrname];
+        }
+        return mainObj;
+    }
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -603,7 +613,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         generateJSVariableName: generateJSVariableName,
         buildTitleForUploadEditor: buildTitleForUploadEditor,
         safeApply: safeApply,
-        compareEqualsTimes: compareEqualsTimes
+        compareEqualsTimes: compareEqualsTimes,
+        mergeObject: mergeObject
     });
 
 }]);
