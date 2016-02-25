@@ -26,11 +26,14 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
 
                 $scope.addNewUser = function () {
                     var onUserAdded = function (userObj) {
-                        ctrl.datasource.push(userObj.Entity);
-                        if ($attrs.ismultipleselection != undefined)
-                            ctrl.selectedvalues.push(userObj.Entity);
-                        else
-                            ctrl.selectedvalues = userObj.Entity;
+                        if (userObj.Entity.Status == 1) {
+                            ctrl.datasource.push(userObj.Entity);
+                            if ($attrs.ismultipleselection != undefined)
+                                ctrl.selectedvalues.push(userObj.Entity);
+                            else
+                                ctrl.selectedvalues = userObj.Entity;
+                        }
+                        
                     };
                     VR_Sec_UserService.addUser(onUserAdded);
                 }
