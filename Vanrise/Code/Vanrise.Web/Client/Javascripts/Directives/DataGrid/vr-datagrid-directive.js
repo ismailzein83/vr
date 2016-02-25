@@ -955,20 +955,19 @@
                     var indexOfActionsInArray = menuActionsArrays.indexOf(arrayOfActions);
                     if (indexOfActionsInArray < 0) {
                         for (var i = 0; i < arrayOfActions.length; i++) {
-                            var menuAction = arrayOfActions[i];
-                            if (menuAction.haspermission != undefined) {
-                                menuAction.disable = true;
-                                UtilsService.convertToPromiseIfUndefined(menuAction.haspermission())
-                                .then(function (isAllowed) {
-                                    if (isAllowed)
-                                        menuAction.disable = false;
-                                });
-                            }
+                            invokeHasPermission(arrayOfActions[i]);
                         }
                         menuActionsArrays.push(arrayOfActions);
                     }
-                }
 
+                    function invokeHasPermission(menuAction) {
+                        if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
+                        menuAction.disable = true;
+                        UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {
+                            if (isAllowed) { menuAction.disable = false; }
+                        });
+                    }
+                }
             };
 
            
