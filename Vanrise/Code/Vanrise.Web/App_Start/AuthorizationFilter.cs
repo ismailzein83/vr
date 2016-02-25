@@ -15,7 +15,7 @@ namespace Vanrise.Web.App_Start
         {
             var systemAction = new SystemActionManager().GetSystemAction(GetSystemActionName(actionContext));
 
-            if (systemAction != null && !SecurityContext.Current.IsAllowedV2(systemAction.Name))
+            if (systemAction != null && systemAction.RequiredPermissions != null && !SecurityContext.Current.IsAllowedV2(systemAction.Name))
             {
                 actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Forbidden, "you are not authorized to perform this request");
             }

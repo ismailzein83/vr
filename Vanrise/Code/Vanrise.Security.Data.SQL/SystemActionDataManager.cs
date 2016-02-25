@@ -43,7 +43,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 SystemActionId = (int)reader["ID"],
                 Name = (string)reader["Name"],
-                RequiredPermissions = (string)reader["RequiredPermissions"]
+                RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions")
             };
         }
         

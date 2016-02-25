@@ -246,6 +246,10 @@ namespace Vanrise.Security.Business
             foreach (var actionName in actionNames)
             {
                 SystemAction systemAction = new SystemActionManager().GetSystemAction(actionName);
+                
+                if (systemAction.RequiredPermissions == null)
+                    continue;
+
                 string[] permissionsByNodeNameStrings = systemAction.RequiredPermissions.Split('|');
 
                 foreach (string permissionsByNodeNameString in permissionsByNodeNameStrings)
