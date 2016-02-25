@@ -6,7 +6,9 @@
                 <vr-columns width="normal">
                     <vr-textbox value="suffix" label="Suffix"></vr-textbox>
                 </vr-columns>
-
+                <vr-columns width="normal">
+                    <vr-interconnect-be-operatorprofile-selector on-ready="onOperatorProfileDirectiveReady" ismultipleselection selectedvalues="operatorProfiles"></vr-interconnect-be-operatorprofile-selector>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>

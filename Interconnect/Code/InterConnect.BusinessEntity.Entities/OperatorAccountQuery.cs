@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace InterConnect.BusinessEntity.Entities
 {
     public class OperatorAccountQuery
     {
         public string Suffix { get; set; }
+        public List<int> OperatorProfileIds { get; set; }
     }
 }

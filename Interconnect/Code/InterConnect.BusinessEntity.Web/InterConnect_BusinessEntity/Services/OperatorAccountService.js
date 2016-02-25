@@ -26,7 +26,7 @@
             };
 
             var parameters = {
-                OperatorAccountId: OperatorAccountObj.Entity.OperatorAccountId,
+                OperatorAccountId: OperatorAccountObj.OperatorAccountId,
             };
 
             modalSettings.onScopeReady = function (modalScope) {

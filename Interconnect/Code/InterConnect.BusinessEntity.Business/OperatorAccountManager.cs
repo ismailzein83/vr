@@ -16,7 +16,8 @@ namespace InterConnect.BusinessEntity.Business
             var allOperatorAccounts = GetCachedOperatorAccounts();
 
             Func<OperatorAccount, bool> filterExpression = (prod) =>
-                 (input.Query.Suffix == null || prod.Suffix.ToLower().Contains(input.Query.Suffix.ToLower()));
+                 (input.Query.Suffix == null || prod.Suffix.ToLower().Contains(input.Query.Suffix.ToLower()))
+              && (input.Query.OperatorProfileIds == null || input.Query.OperatorProfileIds.Count == 0 || input.Query.OperatorProfileIds.Contains(prod.ProfileId)); 
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allOperatorAccounts.ToBigResult(input, filterExpression, OperatorAccountDetailMapper));
         }
@@ -99,7 +100,18 @@ namespace InterConnect.BusinessEntity.Business
 
         private OperatorAccountDetail OperatorAccountDetailMapper(OperatorAccount operatorAccount)
         {
-            return new OperatorAccountDetail() { Entity = operatorAccount };
+            if (operatorAccount == null)
+                return null;
+
+            OperatorProfileManager operatorProfileManager = new OperatorProfileManager();
+            string operatorProfileName = operatorProfileManager.GetOperatorProfileName(operatorAccount.ProfileId);
+
+            return new OperatorAccountDetail()
+            {
+                OperatorAccountId = operatorAccount.OperatorAccountId,
+                Suffix = operatorAccount.Suffix,
+                OperatorProfileName = operatorProfileName
+            };
         }
         #endregion
     }

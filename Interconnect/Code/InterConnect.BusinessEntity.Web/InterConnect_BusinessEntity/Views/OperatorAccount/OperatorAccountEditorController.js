@@ -2,12 +2,13 @@
 
     "use strict";
 
-    operatorAccountEditorController.$inject = ['$scope', 'InterConnect_BE_OperatorAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
+    operatorAccountEditorController.$inject = ['$scope', 'InterConnect_BE_OperatorAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function operatorAccountEditorController($scope, InterConnect_BE_OperatorAccountAPIService, UtilsService, VRNotificationService, VRNavigationService) {
+    function operatorAccountEditorController($scope, InterConnect_BE_OperatorAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
         var operatorAccountId;
-        //var operatorAccountEntity;
+        var operatorProfileDirectiveApi;
+        var operatorProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -24,6 +25,12 @@
         }
 
         function defineScope() {
+
+            $scope.onOperatorProfileDirectiveReady = function (api) {
+                operatorProfileDirectiveApi = api;
+                operatorProfileReadyPromiseDeferred.resolve();
+            }
+
             $scope.saveOperatorAccount = function () {
                 if (isEditMode) {
                     return updateOperatorAccount();
@@ -37,7 +44,7 @@
                 $scope.modalContext.closeModal()
             };
 
-            
+
         }
 
         function load() {
@@ -61,13 +68,14 @@
 
         function getOperatorAccount() {
             return InterConnect_BE_OperatorAccountAPIService.GetOperatorAccount(operatorAccountId).then(function (operatorAccount) {
-                console.log(operatorAccount);
                 $scope.scopeModal = operatorAccount;
+                //var obj = { Name: 'Test Profile', OperatorProfileId: 2 };
+                //$scope.scopeModal.operatorProfile = obj;
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadOperatorProfiles])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -80,11 +88,24 @@
             $scope.title = 'Operator Account';
         }
 
+        function loadOperatorProfiles() {
+            var payload = {
+                selectedIds: isEditMode ? $scope.scopeModal.ProfileId : undefined
+            };
+            var loadOperatorProfilePromiseDeferred = UtilsService.createPromiseDeferred();
+            operatorProfileReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(operatorProfileDirectiveApi, payload, loadOperatorProfilePromiseDeferred);
+            });
+
+            return loadOperatorProfilePromiseDeferred.promise;
+        }
+
         function buildOperatorAccountObjFromScope() {
 
             var obj = {
                 OperatorAccountId: (operatorAccountId != null) ? operatorAccountId : 0,
-                Suffix: $scope.scopeModal.Suffix
+                Suffix: $scope.scopeModal.Suffix,
+                ProfileId: $scope.scopeModal.operatorProfile.OperatorProfileId
             };
             return obj;
         }

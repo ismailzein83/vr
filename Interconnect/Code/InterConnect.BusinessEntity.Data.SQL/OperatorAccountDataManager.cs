@@ -34,7 +34,7 @@ namespace InterConnect.BusinessEntity.Data.SQL
         {
             object objectId;
 
-            int recordesEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorAccount_Insert", out objectId, operatorAccount.Suffix);
+            int recordesEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorAccount_Insert", out objectId, operatorAccount.Suffix, operatorAccount.ProfileId);
             operatorProfileId = (recordesEffected > 0) ? (int)objectId : -1;
 
             return (recordesEffected > 0);
@@ -42,7 +42,7 @@ namespace InterConnect.BusinessEntity.Data.SQL
 
         public bool Update(OperatorAccount operatorAccount)
         {
-            int recordesEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorAccount_Update", operatorAccount.OperatorAccountId, operatorAccount.Suffix);
+            int recordesEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorAccount_Update", operatorAccount.OperatorAccountId, operatorAccount.Suffix, operatorAccount.ProfileId);
             return (recordesEffected > 0);
         }
         #endregion
@@ -53,7 +53,7 @@ namespace InterConnect.BusinessEntity.Data.SQL
             OperatorAccount operationAccount = new OperatorAccount
             {
                 OperatorAccountId = (int)reader["ID"],
-                //ProfileId = (int)reader["ProfileID"],
+                ProfileId = (int)reader["ProfileID"],
                 Suffix = reader["Suffix"] as string
             };
             return operationAccount;
