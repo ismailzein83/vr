@@ -14,4 +14,10 @@ namespace CP.SupplierPricelist.Entities
 
         public CustomerSettings Settings { get; set; }
     }
+
+    public class CustomerQuery
+    {
+
+        public string Name { get; set; }
+    }
 }

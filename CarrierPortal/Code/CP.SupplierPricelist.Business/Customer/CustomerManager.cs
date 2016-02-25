@@ -5,6 +5,7 @@ using CP.SupplierPricelist.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
+using System;
 
 namespace CP.SupplierPricelist.Business
 {
@@ -23,9 +24,12 @@ namespace CP.SupplierPricelist.Business
             };
 
         }
-        public IDataRetrievalResult<CustomerDetail> GetFilteredCustomers(DataRetrievalInput<Customer> input)
+        public IDataRetrievalResult<CustomerDetail> GetFilteredCustomers(DataRetrievalInput<CustomerQuery> input)
         {
-            return DataRetrievalManager.Instance.ProcessResult(input, GetCachedCustomers().ToBigResult(input, null, MapToDetails));
+            var cachedCustomers = GetCachedCustomers();
+            Func<Customer, bool> filterExpression = item =>
+                   (string.IsNullOrEmpty(input.Query.Name) || input.Query.Name.ToLower().Contains(item.Name.ToLower()));
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedCustomers.ToBigResult(input, filterExpression, MapToDetails));
         }
         public InsertOperationOutput<CustomerDetail> AddCustomer(Customer inputCustomer)
         {

@@ -44,7 +44,7 @@ namespace CP.SupplierPricelist.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredCustomers")]
-        public object GetFilteredSellingRules(DataRetrievalInput<Customer> input)
+        public object GetFilteredSCustomers(DataRetrievalInput<CustomerQuery> input)
         {
             CustomerManager manager = new CustomerManager();
             return GetWebResponse(input, manager.GetFilteredCustomers(input));

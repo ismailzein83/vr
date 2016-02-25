@@ -1,5 +1,12 @@
 ﻿<vr-panel ng-controller="CP_SupplierPriceList_CustomerManagementController">
     <vr-form name="formFilter" vr-loader="isLoading">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns colnum="2">
+                    <vr-textbox label="Customer Name" value="CustomerName" ></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
