@@ -156,7 +156,7 @@
     <Content Include="Common\Directives\City\Templates\citySelectorTemplate.html" />
     <Content Include="Common\Directives\City\vr-common-city-grid.js" />
     <Content Include="Common\Directives\City\vr-common-city-selector.js" />
-    <Content Include="Common\Directives\City\vr-common-city1-selector.js" />
+    <Content Include="Common\Directives\City\vr-common-cityy-selector.js" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\CountrySourceReaderSelector.html" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\Templates\SourceCountryReaderTOneV1.html" />
     <Content Include="Common\Directives\Country\MainExtensions\SourceCountryReader\vr-common-country-sourcereader-selector.js" />
