@@ -5,6 +5,8 @@
     UserAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig', 'VR_Sec_SecurityAPIService'];
 
     function UserAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig, VR_Sec_SecurityAPIService) {
+        var controllerName = 'Users';
+
         return ({
             GetFilteredUsers: GetFilteredUsers,
             GetUsersInfo: GetUsersInfo,
@@ -23,67 +25,67 @@
         });
 
         function GetFilteredUsers(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'GetFilteredUsers'), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetFilteredUsers'), input);
         }
 
         function GetUsersInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'GetUsersInfo'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUsersInfo'), {
                 filter: filter
             });
         }
 
         function GetUsers() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'GetUsersInfo'));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUsersInfo'));
         }
 
         function GetUserbyId(userId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'GetUserbyId'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUserbyId'), {
                 UserId: userId
             });
         }
 
         function GetMembers(groupId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'GetMembers'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetMembers'), {
                 groupId: groupId
             });
         }
 
         function AddUser(user) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'AddUser'), user);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'AddUser'), user);
         }
 
         function UpdateUser(user) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'UpdateUser'), user);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateUser'), user);
         }
 
         function CheckUserName(name) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'CheckUserName'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'CheckUserName'), {
                 Name: name
             });
         }
 
         function ResetPassword(resetPasswordInput) {   
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'ResetPassword'), resetPasswordInput);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ResetPassword'), resetPasswordInput);
         }
 
         function EditUserProfile(userProfileObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'EditUserProfile'), userProfileObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'EditUserProfile'), userProfileObject);
         }
 
         function LoadLoggedInUserProfile() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Users', 'LoadLoggedInUserProfile'));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'LoadLoggedInUserProfile'));
         }
 
         function HasAddUserPermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Users/AddUser');
+            return VR_Sec_SecurityAPIService.IsAllowed(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['AddUser']));
         }
 
         function HasUpdateUserPermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Users/UpdateUser');
+            return VR_Sec_SecurityAPIService.IsAllowed(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateUser']));
         }
 
         function HasResetUserPasswordPermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Users/ResetPassword');
+            return VR_Sec_SecurityAPIService.IsAllowed(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['ResetPassword']));
         }
     }
 

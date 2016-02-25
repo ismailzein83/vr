@@ -577,6 +577,18 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         }
         return mainObj;
     }
+
+    function getSystemActionNames(moduleName, controllerName, methodNames) {
+        var actionNames = '';
+        if (methodNames != undefined && methodNames != null) {
+            for (var i = 0; i < methodNames.length; i++) {
+                if (i > 0) { actionNames += '|'; }
+                actionNames += (moduleName + '/' + controllerName + '/' + methodNames[i]);
+            }
+        }
+        return actionNames;
+    }
+
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -614,7 +626,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         buildTitleForUploadEditor: buildTitleForUploadEditor,
         safeApply: safeApply,
         compareEqualsTimes: compareEqualsTimes,
-        mergeObject: mergeObject
+        mergeObject: mergeObject,
+        getSystemActionNames: getSystemActionNames
     });
 
 }]);
