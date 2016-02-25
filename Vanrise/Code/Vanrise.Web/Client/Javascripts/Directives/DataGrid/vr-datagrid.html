@@ -91,7 +91,7 @@
                 ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
                 <li role="presentation" ng-if="showMenu==true">
                     <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
-                        <div class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
+                        <div ng-hide="action.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
                     </div>
                 </li>
             </ul>

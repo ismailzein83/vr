@@ -935,21 +935,40 @@
                 $(dropDown).css({ position: 'fixed', top: (selfOffset.top - w.scrollTop()) + selfHeight, left: 'auto' });
             };
 
-            ctrl.getMenuActions = function (dataItem) {
-                var arrayofActions = (typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute);
+            var menuActionsArrays = [];
 
-                if (arrayofActions != undefined && arrayofActions != null) {
-                    for (var i = arrayofActions.length - 1; i >= 0; i--) {
-                        if (arrayofActions[i].permissions != undefined && arrayofActions[i].permissions != null) {
-                            var isAllowed = SecurityService.isAllowed(arrayofActions[i].permissions);
-                            if (!isAllowed) {
-                                arrayofActions.splice(i, 1);
+            ctrl.getMenuActions = function (dataItem) {
+
+                if (dataItem.menuActionObj == undefined) {
+                    dataItem.menuActionObj = {};
+
+                    var arrayOfActions = (typeof (actionsAttribute) == 'function' ? actionsAttribute(dataItem) : actionsAttribute);
+                    if (arrayOfActions != undefined) {
+                        checkMenuActionPermission(arrayOfActions);
+                    }
+                    dataItem.menuActionObj.menuActions = arrayOfActions;
+                }
+
+                return dataItem.menuActionObj.menuActions;
+
+                function checkMenuActionPermission(arrayOfActions) {
+                    var indexOfActionsInArray = menuActionsArrays.indexOf(arrayOfActions);
+                    if (indexOfActionsInArray < 0) {
+                        for (var i = 0; i < arrayOfActions.length; i++) {
+                            var menuAction = arrayOfActions[i];
+                            if (menuAction.haspermission != undefined) {
+                                menuAction.disable = true;
+                                UtilsService.convertToPromiseIfUndefined(menuAction.haspermission())
+                                .then(function (isAllowed) {
+                                    if (isAllowed)
+                                        menuAction.disable = false;
+                                });
                             }
                         }
+                        menuActionsArrays.push(arrayOfActions);
                     }
                 }
 
-                return arrayofActions;
             };
 
            
