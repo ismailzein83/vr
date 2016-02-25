@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CP.SupplierPricelist.Data;
 using CP.SupplierPricelist.Entities;
-using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace CP.SupplierPricelist.Business
 {
@@ -16,7 +15,22 @@ namespace CP.SupplierPricelist.Business
             var customers = GetCachedCustomersUsers();
             return customers.GetRecord(customerId).CustomerId;
         }
-
+        public UpdateOperationOutput<CustomerUser> AddUser(CustomerUser input)
+        {
+            UpdateOperationOutput<CustomerUser> updateOperationOutput = new UpdateOperationOutput<CustomerUser>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+            ICustomerUserDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerUserDataManager>();
+            bool updateActionSucc = dataManager.AddUser(input);
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = input;
+            }
+            return updateOperationOutput;
+        }
         #region Private Methods
         Dictionary<int, CustomerUser> GetCachedCustomersUsers()
         {
@@ -40,5 +54,5 @@ namespace CP.SupplierPricelist.Business
         }
 
     }
-    #endregion
+        #endregion
 }

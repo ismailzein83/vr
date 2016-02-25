@@ -49,10 +49,5 @@ namespace CP.SupplierPricelist.Data.SQL
             return (recordsEffected > 0);
         }
 
-
-        public bool AddUser(Customer input)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

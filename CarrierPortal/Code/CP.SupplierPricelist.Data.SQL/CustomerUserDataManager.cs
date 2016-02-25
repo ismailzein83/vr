@@ -27,10 +27,16 @@ namespace CP.SupplierPricelist.Data.SQL
             {
                 CustomerId = (int)reader["CustomerID"],
                 UserId = (int)reader["UserID"]
-                
+
             };
 
             return customerUser;
+        }
+
+        public bool AddUser(CustomerUser input)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_Insert_CustomerUser]", input.CustomerId, input.UserId);
+            return (recordsEffected > 0);
         }
     }
 }

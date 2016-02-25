@@ -4,7 +4,6 @@
 
     function customeUserEditorController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, customerManagmentApiService) {
 
-        console.log('----------------');
         var customerId;
         var userDirectiveApi;
         var userReadyPromiseDeferred = utilsService.createPromiseDeferred();
@@ -21,7 +20,8 @@
 
         function buildCustomerFromScope() {
             var customerObject = {
-                CustomerId: (customerId != undefined) ? customerId : 0
+                CustomerId: (customerId != undefined) ? customerId : 0,
+                UserId: userDirectiveApi.getSelectedIds()
             }
             return customerObject;
         }
@@ -32,7 +32,7 @@
                 .then(function (response) {
                     if (vrNotificationService.notifyOnItemAdded("User", response)) {
                         if ($scope.onCustomerUserAdded != undefined)
-                            $scope.onCustomerUserAdded(response.InsertedObject);
+                            $scope.onCustomerUserAdded(response.UpdatedObject);
                         $scope.modalContext.closeModal();
                     }
                 }).catch(function (error) {
@@ -52,8 +52,11 @@
                 userDirectiveApi = api;
                 userReadyPromiseDeferred.resolve();
             }
-            $scope.onCustomerUserAdded = function () {
-                return insertCustomerUSer();
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
+            }
+            $scope.Save = function () {
+                insertCustomerUSer();
 
             };
         }

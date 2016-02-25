@@ -63,22 +63,6 @@ namespace CP.SupplierPricelist.Business
             }
             return updateOperationOutput;
         }
-        public UpdateOperationOutput<CustomerDetail> AddUser(Customer input)
-        {
-            UpdateOperationOutput<CustomerDetail> updateOperationOutput = new UpdateOperationOutput<CustomerDetail>
-            {
-                Result = UpdateOperationResult.Failed,
-                UpdatedObject = null
-            };
-            ICustomerDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerDataManager>();
-            bool updateActionSucc = dataManager.AddUser(input);
-            if (updateActionSucc)
-            {
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = MapToDetails(input);
-            }
-            return updateOperationOutput;
-        }
 
         public Customer GetCustomer(int customerId)
         {

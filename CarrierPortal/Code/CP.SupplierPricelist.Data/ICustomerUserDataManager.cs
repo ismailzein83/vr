@@ -9,5 +9,7 @@ namespace CP.SupplierPricelist.Data
         List<CustomerUser> GetAllCustomersUsers();
 
         bool AreCustomersUsersUpdated(ref object updateHandle);
+
+        bool AddUser(CustomerUser input);
     }
 }
