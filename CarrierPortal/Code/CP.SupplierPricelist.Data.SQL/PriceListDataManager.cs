@@ -18,7 +18,14 @@ namespace CP.SupplierPricelist.Data.SQL
 
         public bool Insert(PriceList priceList)
         {
-            int recordEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_Insert]", priceList.UserId, priceList.FileId, priceList.PriceListType, 0, priceList.EffectiveOnDate);
+            int recordEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_Insert]"
+                , priceList.UserId
+                , priceList.FileId
+                , priceList.PriceListType
+                , 0
+                , priceList.EffectiveOnDate
+                , priceList.CustomerId
+                , priceList.CarrierAccountId);
             return (recordEffected > 0);
         }
 
