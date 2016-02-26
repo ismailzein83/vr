@@ -75,6 +75,9 @@ namespace Vanrise.Security.Business
 
         public bool IsAllowed(string requiredPermissions, int userId)
         {
+            if (requiredPermissions == null)
+                return true;
+
             //Assume that the view is allowed, and start looping until you find an exception that prevents the user from seeing this view
             bool result = true;
 
