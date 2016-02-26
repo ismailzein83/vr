@@ -40,14 +40,18 @@ namespace QM.CLITester.Business
             
             Zone zone = new Zone();
             long zoneId = 0;
-            int countryId = testCallInput.CountryID;
+            int countryId = 0;
+            if(testCallInput.CountryID != null)
+                countryId = testCallInput.CountryID.Value;
 
             if (testCallInput.ZoneID == null)
             {
                 zone = zoneManager.GetZonebySourceId(testCallInput.ZoneSourceId);
                 if (zone != null)
+                {
                     zoneId = zone.ZoneId;
-                countryId = zone.CountryId;
+                    countryId = zone.CountryId;   
+                }
             }
             else
             {

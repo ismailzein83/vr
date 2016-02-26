@@ -81,8 +81,12 @@ namespace QM.CLITester.iTestIntegration
         {
             ServiceActions serviceActions = new ServiceActions();
             return ResponseTestProgress(
-                serviceActions.PostRequest("https://api-now.i-test.net", "3024", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
+                serviceActions.PostRequest("3011", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
                 ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
+
+            //return ResponseTestProgress(
+            //    serviceActions.PostRequest("https://api-now.i-test.net", "3024", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
+            //    ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
         }
 
         #region Private Members
@@ -120,7 +124,7 @@ namespace QM.CLITester.iTestIntegration
             return testOutput;
         }
 
-        private GetTestProgressOutput ResponseTestProgressOld(string response, string testId, Object recentTestProgress, Measure recentMeasure)
+        private GetTestProgressOutput ResponseTestProgress(string response, string testId, Object recentTestProgress, Measure recentMeasure)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
 
@@ -142,7 +146,7 @@ namespace QM.CLITester.iTestIntegration
                     {
                         Pdd = node["PDD"] != null ? Decimal.Parse(node["PDD"].InnerText) : 0,
                         Mos = 0,
-                        Duration = DateTime.MinValue,
+                        Duration = null,
                         //ReleaseCode = null,
                         //ReceivedCli = null,
                         RingDuration = null
@@ -187,7 +191,7 @@ namespace QM.CLITester.iTestIntegration
             testProgressOutput.Result = GetTestProgressResult.FailedWithRetry;
             return testProgressOutput;
         }
-        private GetTestProgressOutput ResponseTestProgress(string response, string testId, Object recentTestProgress, Measure recentMeasure)
+        private GetTestProgressOutput ResponseTestProgressNew(string response, string testId, Object recentTestProgress, Measure recentMeasure)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
 
@@ -265,7 +269,7 @@ namespace QM.CLITester.iTestIntegration
             return testProgressOutput;
         }
 
-        private bool CompareTestProgressOld(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
+        private bool CompareTestProgress(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
         {
             bool same = true;
             if (recentTestProgress != null)
@@ -289,7 +293,7 @@ namespace QM.CLITester.iTestIntegration
 
             return same;
         }
-        private bool CompareTestProgress(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
+        private bool CompareTestProgressNew(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
         {
             bool same = true;
             if (recentTestProgress != null)
