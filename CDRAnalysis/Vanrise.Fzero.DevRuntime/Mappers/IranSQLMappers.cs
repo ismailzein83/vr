@@ -63,7 +63,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = ImportedData.Reader;
             long lastImportedId = 0;
-            long.TryParse(ImportedData.LastImportedId, out lastImportedId);
+            if (ImportedData.LastImportedId != null)
+                lastImportedId = Convert.ToInt64(ImportedData.LastImportedId);
 
             while (reader.Read())
             {

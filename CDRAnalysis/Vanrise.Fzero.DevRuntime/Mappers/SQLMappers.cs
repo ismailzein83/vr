@@ -63,7 +63,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             PSTN.BusinessEntity.Business.TrunkManager trunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
             IDataReader reader = ImportedData.Reader;
-            string index = ImportedData.LastImportedId;
+            Object index = ImportedData.LastImportedId;
             while (reader.Read())
             {
                 Vanrise.Fzero.CDRImport.Entities.StagingCDR cdr = new Vanrise.Fzero.CDRImport.Entities.StagingCDR();
@@ -74,7 +74,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
                 cdr.InTrunkId = trunkManager.GetTrunkIdBySymbol(reader["InTrunkSymbol"] as string);
                 cdr.OutTrunkId = trunkManager.GetTrunkIdBySymbol(reader["OutTrunkSymbol"] as string);
-                index = Utils.GetReaderValue<int?>(reader, "ID").ToString();
+                index = reader["ID"];
                 batch.StagingCDRs.Add(cdr);
             }
 
@@ -96,7 +96,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             PSTN.BusinessEntity.Business.TrunkManager trunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
             IDataReader reader = ImportedData.Reader;
-            string index = ImportedData.LastImportedId;
+            Object index = ImportedData.LastImportedId;
 
             while (reader.Read())
             {
@@ -155,7 +155,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 cdr.InTrunkId = trunkManager.GetTrunkIdBySymbol(reader["In_Trunk"] as string);
                 cdr.OutTrunkId = trunkManager.GetTrunkIdBySymbol(reader["Out_Trunk"] as string);
 
-                index = ((int)reader["ID"]).ToString();
+                index = reader["ID"];
 
                 batch.CDRs.Add(cdr);
             }

@@ -62,14 +62,13 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             batch.CDRs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
             Vanrise.Integration.Entities.DBReaderImportedData ImportedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
             IDataReader reader = ImportedData.Reader;
-            long lastImportedId = 0;
-              long.TryParse(  ImportedData.LastImportedId,out lastImportedId);
+            Object lastImportedId =  ImportedData.LastImportedId;
 
             while (reader.Read())
             {
                 Vanrise.Fzero.CDRImport.Entities.CDR cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
 
-                lastImportedId = (long)reader["ID"];
+                lastImportedId = reader["ID"];
                 cdr.MSISDN = reader["SubscriberMSISDN"] as string;
                 cdr.Destination = reader["CallPartner"] as string;
 
@@ -140,7 +139,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
                 batch.CDRs.Add(cdr);
             }
 
-            ImportedData.LastImportedId = lastImportedId.ToString();
+            ImportedData.LastImportedId = lastImportedId;
             batch.Datasource = dataSourceId;
             mappedBatches.Add("Normalize CDRs", batch);
 

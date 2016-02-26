@@ -10,6 +10,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 using Vanrise.Fzero.CDRImport.Business.ExecutionFlows;
+using Vanrise.Integration.Business;
 
 namespace Vanrise.Fzero.DevRuntime
 {
@@ -26,6 +27,7 @@ namespace Vanrise.Fzero.DevRuntime
                 BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
                 QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
                 SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5) };
+                DataSourceRuntimeService dsRuntimeService = new DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
 
                 var runtimeServices = new List<RuntimeService>();
 
@@ -34,6 +36,7 @@ namespace Vanrise.Fzero.DevRuntime
                 runtimeServices.Add(bpService);
 
                 runtimeServices.Add(schedulerService);
+                runtimeServices.Add(dsRuntimeService);
 
                 RuntimeHost host = new RuntimeHost(runtimeServices);
                 host.Start();
