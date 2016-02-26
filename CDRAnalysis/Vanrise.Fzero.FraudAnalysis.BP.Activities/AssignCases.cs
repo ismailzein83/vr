@@ -45,7 +45,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 {
 
                     hasItem = inputArgument.InputQueue.TryDequeue(
-                        (strategyExecutionDetailSummaryBatch) =>
+                        (strategyExecutionItemSummaryBatch) =>
                         {
 
                             index++;
@@ -56,8 +56,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 index = 0;
                             }
 
-                            foreach (var strategyExecutionDetailSummary in strategyExecutionDetailSummaryBatch.StrategyExecutionItemSummaries)
-                                manager.AssignAccountCase(strategyExecutionDetailSummary.AccountNumber, strategyExecutionDetailSummary.IMEIs);
+                            foreach (var strategyExecutionItemSummary in strategyExecutionItemSummaryBatch.StrategyExecutionItemSummaries)
+                                manager.AssignAccountCase(strategyExecutionItemSummary.AccountNumber, strategyExecutionItemSummary.IMEIs);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);

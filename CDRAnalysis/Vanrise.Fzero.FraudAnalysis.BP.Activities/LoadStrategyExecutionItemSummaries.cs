@@ -42,13 +42,13 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             int totalIndex = 0;
             List<StrategyExecutionItemSummary> strategyExecutionItemSummaries = new List<StrategyExecutionItemSummary>();
 
-            dataManager.LoadStrategyExecutionItemSummaries((strategyExecutionDetailSummary) =>
+            dataManager.LoadStrategyExecutionItemSummaries((strategyExecutionItemSummary) =>
                 {
 
                     index++;
                     totalIndex++;
 
-                    strategyExecutionItemSummaries.Add(strategyExecutionDetailSummary);
+                    strategyExecutionItemSummaries.Add(strategyExecutionItemSummary);
 
                    
                     if (index == 1000)
