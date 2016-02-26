@@ -31,6 +31,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.GetSaleZone(saleZoneId);
         }
 
+
+        [HttpGet]
+        [Route("GetSellingNumberPlanIdBySaleZoneId")]
+        public int GetSellingNumberPlanIdBySaleZoneId(int saleZoneId)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetSaleZone(saleZoneId).SellingNumberPlanId;
+        }
+
         [HttpGet]
         [Route("GetSaleZonesInfo")]
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfo(string nameFilter, int sellingNumberPlanId, string serializedFilter)
@@ -53,7 +62,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(SaleZoneInput input)
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesInfoByIds(input.SellingNumberPlanId, input.SaleZoneIds, input.SaleZoneFilterSettings);
+            return manager.GetSaleZonesInfoByIds(input.SaleZoneIds, input.SaleZoneFilterSettings);
         }
         [HttpGet]
         [Route("GetSaleZoneGroupTemplates")]
@@ -66,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
     public class SaleZoneInput
     {
-        public int SellingNumberPlanId { get; set; }
+       // public int SellingNumberPlanId { get; set; }
 
         public HashSet<long> SaleZoneIds { get; set; }
 

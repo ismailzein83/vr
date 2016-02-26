@@ -107,9 +107,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter);
         }
 
-        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(int sellingNumberPlanId, HashSet<long> saleZoneIds, SaleZoneFilterSettings saleZoneFilterSettings)
+        public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(HashSet<long> saleZoneIds, SaleZoneFilterSettings saleZoneFilterSettings)
         {
-            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+            IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetCachedSaleZones().Values;
             HashSet<long> filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(saleZoneFilterSettings);
             Func<SaleZone, bool> zoneFilter = (zone) =>
             {
@@ -198,7 +198,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         private SaleZoneInfo SaleZoneInfoMapper(SaleZone saleZone)
         {
-            return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name };
+            return new SaleZoneInfo { SaleZoneId = saleZone.SaleZoneId, Name = saleZone.Name , SellingNumberPlanId =  saleZone.SellingNumberPlanId};
         }
 
         #endregion

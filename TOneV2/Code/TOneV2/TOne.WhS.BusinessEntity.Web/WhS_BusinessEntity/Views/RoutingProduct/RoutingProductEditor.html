@@ -8,25 +8,30 @@
                             <vr-textbox value="scopeModal.routingProductName" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModal.onSellingNumberPlansSelectorReady" onselectionchanged="    scopeModal.onSellingNumberPlanSelectionChanged"
+                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModal.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModal.onSellingNumberPlanSelectionChanged"
                                                                   selectedvalues="scopeModal.selectedSellingNumberPlan" isrequired="true" />
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Sale Zones'">
-                    <vr-row vr-loader="scopeModal.isLoadingSaleZonesSelector">
-                        <vr-columns width="1/2row">
-                            <vr-select datatextfield="description" datavaluefield="value" label="Sale Zones" datasource="scopeModal.saleZoneRelationType"
-                                       selectedvalues="scopeModal.selectedSaleZoneRelationType" onselectionchanged="scopeModal.onSaleZoneRelationTypeSelectionChanged" hideremoveicon />
-                        </vr-columns>
-                        <vr-columns width="1/2row" ng-if="scopeModal.showSaleZoneSelector">
-                            <vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady"
-                                                         isdisabled="!scopeModal.selectedSellingNumberPlan"
-                                                         selectedvalues="scopeModal.selectedSaleZones"
-                                                         isrequired="scopeModal.showSaleZoneSelector"
-                                                         ismultipleselection>
-                            </vr-whs-be-salezone-selector>
-                        </vr-columns>
+                    <vr-row vr-loader="scopeModal.isLoadingSaleZonesSelector">                            
+                        <vr-validator validate="scopeModal.validateSellingNumberPlan()">
+                            <div ng-show="scopeModal.selectedSellingNumberPlan">
+                                <vr-columns width="1/2row">
+                                    <vr-select datatextfield="description" datavaluefield="value" label="Sale Zones" datasource="scopeModal.saleZoneRelationType"
+                                               selectedvalues="scopeModal.selectedSaleZoneRelationType" onselectionchanged="scopeModal.onSaleZoneRelationTypeSelectionChanged" hideremoveicon />
+                                </vr-columns>
+                                <vr-columns width="1/2row" ng-show="scopeModal.showSaleZoneSelector">
+                                    <vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady"
+                                                                 isdisabled="!scopeModal.selectedSellingNumberPlan"
+                                                                 selectedvalues="scopeModal.selectedSaleZones"
+                                                                 isrequired="scopeModal.showSaleZoneSelector"
+                                                                 ismultipleselection>
+                                    </vr-whs-be-salezone-selector>
+                                </vr-columns>
+                            </div>
+                        </vr-validator>
+                       
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Suppliers'">

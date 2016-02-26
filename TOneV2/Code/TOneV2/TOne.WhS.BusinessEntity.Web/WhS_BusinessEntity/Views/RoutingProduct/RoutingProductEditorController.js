@@ -44,12 +44,12 @@
 
             $scope.scopeModal.onSaleZoneSelectorReady = function (api) {
                 saleZoneDirectiveAPI = api;
-                var setLoader = function (value) { $scope.scopeModal.isLoadingSaleZonesSelector = value; };
+                var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value; };
                 var payload = {
                     sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, saleZoneReadyPromiseDeferred);
-                UtilsService.safeApply($scope);
+               // UtilsService.safeApply($scope);
             };
 
             $scope.scopeModal.onCarrierAccountSelectorReady = function (api) {
@@ -61,15 +61,15 @@
                 var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
 
                 if (selectedSellingNumberPlanId && saleZoneDirectiveAPI) {
-                    var setLoader = function (value) {
-                        $scope.scopeModal.isLoadingSaleZonesSelector = value;
-                        UtilsService.safeApply($scope);
-                    };
+                   // var setLoader = function (value) {
+                        //$scope.scopeModal.isLoadingSaleZonesSelector = value;
+                    //};
 
                     var payload = {
                         sellingNumberPlanId: selectedSellingNumberPlanId,
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
+                    
+                    saleZoneDirectiveAPI.load(payload);
                 }
             }
 
@@ -78,7 +78,7 @@
                     $scope.scopeModal.selectedSaleZones.length = 0;
                 }
 
-                $scope.scopeModal.showSaleZoneSelector = ($scope.scopeModal.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
+                $scope.scopeModal.showSaleZoneSelector = ($scope.scopeModal.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones );
             }
 
             $scope.scopeModal.onSupplierRelationTypeSelectionChanged = function () {
@@ -87,6 +87,11 @@
                 }
 
                 $scope.scopeModal.showSupplierSelector = ($scope.scopeModal.selectedSupplierRelationType == WhS_BE_RoutingProductSupplierRelationTypeEnum.SpecificSuppliers);
+            }
+
+            $scope.scopeModal.validateSellingNumberPlan = function () {
+                return ($scope.scopeModal.selectedSellingNumberPlan != undefined) ? null : 'No selling number plan selected';
+
             }
 
             $scope.scopeModal.SaveRoutingProduct = function () {
@@ -191,7 +196,7 @@
                 }
 
                 return {
-                    sellingNumberPlanId: routingProductEntity.SellingNumberPlanId,
+                    //sellingNumberPlanId: routingProductEntity.SellingNumberPlanId,
                     selectedIds: zoneIds
                 };
             }

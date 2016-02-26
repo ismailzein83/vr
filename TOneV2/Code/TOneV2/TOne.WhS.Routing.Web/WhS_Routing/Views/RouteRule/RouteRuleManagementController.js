@@ -14,6 +14,7 @@
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneDirectiveAPI;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -31,7 +32,10 @@
             }
 
             $scope.onSaleZoneDirectiveReady = function (api) {
-                saleZoneDirectiveAPI = api;
+                saleZoneDirectiveAPI = api;           
+                saleZoneReadyPromiseDeferred.resolve();
+              //  var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+               // VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, undefined, setLoader);
             }
 
             $scope.onSelectSellingNumberPlan = function (selectedItem) {
@@ -91,8 +95,14 @@
         function loadSellingNumberPlanSection() {
             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
+            saleZoneReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI,
+                     //{
+                     //   //sellingNumberPlanId: 16,
+                     //  // selectedIds: [10748, 10754]
+                     //}  
+                     undefined
+                    , loadSellingNumberPlanPromiseDeferred);
             });
 
             return loadSellingNumberPlanPromiseDeferred.promise;

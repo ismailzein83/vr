@@ -82,6 +82,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SaleZoneId = (long)reader["ID"],
                 Name = reader["Name"] as string,
+                SellingNumberPlanId =  (int)reader["SellingNumberPlanID"]
+                
             };
             return saleZoneInfo;
         }
