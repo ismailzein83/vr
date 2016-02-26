@@ -7,21 +7,22 @@ using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Business;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
-    public sealed class ApplyRatePreviewDataToDB : CodeActivity
+    public sealed class GenerateRatesPreview : CodeActivity
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
 
-        [RequiredArgument]
-        public InArgument<int> PriceListId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<BaseQueue<IEnumerable<RatePreview>>> PreviewRateQueue { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedRate> importedRatesList = this.ImportedRates.Get(context);
-            int priceListId = this.PriceListId.Get(context);
+            BaseQueue<IEnumerable<RatePreview>> previewRateQueue = this.PreviewRateQueue.Get(context);
 
             List<RatePreview> ratePreviewList = new List<RatePreview>();
 
@@ -44,8 +45,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
             }
 
-            SupplierRatePreviewManager manager = new SupplierRatePreviewManager();
-            manager.Insert(priceListId, ratePreviewList);
+            previewRateQueue.Enqueue(ratePreviewList);
         }
     }
 }

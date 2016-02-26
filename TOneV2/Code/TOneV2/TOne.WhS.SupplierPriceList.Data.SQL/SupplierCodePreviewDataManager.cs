@@ -4,15 +4,16 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.Data.SQL;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
-    public class SupplierCodePreviewDataManager : BaseSQLDataManager, ISupplierCodePreviewDataManager
+    public class SupplierCodePreviewDataManager : BaseTOneDataManager, ISupplierCodePreviewDataManager
     {
-        readonly string[] _columns = { "PriceListId", "Code", "ChangeType", "RecentZoneName", "ZoneName", "BED", "EED" };
+        readonly string[] _columns = { "ProcessInstanceID", "Code", "ChangeType", "RecentZoneName", "ZoneName", "BED", "EED" };
 
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static SupplierCodePreviewDataManager()
@@ -20,24 +21,29 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             _columnMapper.Add("ChangeTypeDecription", "ChangeType");
         }
 
+
+        public long ProcessInstanceId
+        {
+            set
+            {
+                _processInstanceID = value;
+            }
+        }
+
+        long _processInstanceID;
+
         public SupplierCodePreviewDataManager()
             : base(GetConnectionStringName("TOneWhS_SPL_DBConnStringKey", "TOneWhS_SPL_DBConnString"))
         {
 
         }
 
-        public void Insert(int priceListId, IEnumerable<Entities.CodePreview> codePreviewList)
+        public void ApplyPreviewCodesToDB(object preparedZones)
         {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (CodePreview code in codePreviewList)
-            {
-                WriteRecordToStream(priceListId, code, dbApplyStream);
-            }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
+            InsertBulkToTable(preparedZones as BaseBulkInsertInfo);
         }
+
+        
 
         public Vanrise.Entities.BigResult<Entities.CodePreview> GetCodePreviewFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SPLPreviewQuery> input)
         {
@@ -53,16 +59,16 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             return RetrieveData(input, createTempTableAction, CodePreviewMapper, _columnMapper);
         }
 
-        private object InitialiazeStreamForDBApply()
+        object Vanrise.Data.IBulkApplyDataManager<CodePreview>.InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
         }
 
-        private void WriteRecordToStream(int priceListId, CodePreview record, object dbApplyStream)
+        public void WriteRecordToStream(CodePreview record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
-                priceListId,
+                _processInstanceID,
                 record.Code,
                 (int)record.ChangeType,
                 record.RecentZoneName,
@@ -71,7 +77,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 record.EED);
         }
 
-        private object FinishDBApplyStream(object dbApplyStream)
+        public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -86,10 +92,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             };
         }
 
-        private void ApplyForDB(object preparedObject)
-        {
-            InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
-        }
+ 
         private CodePreview CodePreviewMapper(IDataReader reader)
         {
             CodePreview codePreview = new CodePreview
@@ -103,5 +106,11 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             };
             return codePreview;
         }
+
+
+
+
+
+        
     }
 }

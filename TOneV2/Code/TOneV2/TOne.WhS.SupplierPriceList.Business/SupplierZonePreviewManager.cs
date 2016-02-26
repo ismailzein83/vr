@@ -13,24 +13,21 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SupplierZonePreviewManager
     {
-        public void Insert(int priceListId, IEnumerable<ZonePreview> zonePreviewList)
-        {
-            ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
-            dataManager.Insert(priceListId, zonePreviewList);
-        }
+        
         public Vanrise.Entities.IDataRetrievalResult<ZonePreviewDetail> GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
-            ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
+            //ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
 
-            BigResult<ZonePreview> zonesPreview = dataManager.GetZonePreviewFilteredFromTemp(input);
-            BigResult<ZonePreviewDetail> zonePreviewDetailResult = new BigResult<ZonePreviewDetail>()
-            {
-                ResultKey = zonesPreview.ResultKey,
-                TotalCount = zonesPreview.TotalCount,
-                Data = zonesPreview.Data.MapRecords(ZonePreviewDetailMapper)
-            };
+            //BigResult<ZonePreview> zonesPreview = dataManager.GetZonePreviewFilteredFromTemp(input);
+            //BigResult<ZonePreviewDetail> zonePreviewDetailResult = new BigResult<ZonePreviewDetail>()
+            //{
+            //    ResultKey = zonesPreview.ResultKey,
+            //    TotalCount = zonesPreview.TotalCount,
+            //    Data = zonesPreview.Data.MapRecords(ZonePreviewDetailMapper)
+            //};
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, zonePreviewDetailResult);
+            //return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, zonePreviewDetailResult);
+            return null;
         }
 
         private ZonePreviewDetail ZonePreviewDetailMapper(ZonePreview zonePreview)

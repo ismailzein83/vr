@@ -6,11 +6,12 @@ using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Business;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
 
-    public sealed class ApplyZonePreviewDataToDB : CodeActivity
+    public sealed class GenerateZonesPreview : CodeActivity
     {
         [RequiredArgument]
         public InArgument<IEnumerable<NewZone>> NewZones { get; set; }
@@ -18,15 +19,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
-        [RequiredArgument]
-        public InArgument<int> PriceListId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<BaseQueue<IEnumerable<ZonePreview>>> PreviewZoneQueue { get; set; }
+
+        
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<NewZone> newZonesList = this.NewZones.Get(context);
             Dictionary<long, ExistingZone> existingZonesList = this.ExistingZonesByZoneId.Get(context);
-            int priceListId = this.PriceListId.Get(context);
-            
+            BaseQueue<IEnumerable<ZonePreview>> previewCodeQueue = this.PreviewZoneQueue.Get(context);
             List<ZonePreview> zonePreviewList = new List<ZonePreview>();
 
             if(newZonesList != null)
@@ -60,8 +62,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
             }
 
-            SupplierZonePreviewManager manager = new SupplierZonePreviewManager();
-            manager.Insert(priceListId, zonePreviewList);
+            previewCodeQueue.Enqueue(zonePreviewList);
         }
     }
 }
