@@ -60,7 +60,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadUser, loadCarrierAccount ] //, loadCustomer
+                return UtilsService.waitMultipleAsyncOperations([loadUser, loadCarrierAccount ]) //, loadCustomer
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
