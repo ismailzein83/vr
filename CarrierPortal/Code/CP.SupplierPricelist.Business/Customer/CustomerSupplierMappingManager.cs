@@ -19,36 +19,42 @@ namespace CP.SupplierPricelist.Business
     {
         public IEnumerable<SupplierInfo> GetCustomerSuppliers(SupplierInfoFilter filter)
         {
-            int customerId = GetLoggedInCustomerId();
-            Customer customer = new CustomerManager().GetCustomer(customerId);
-            if (customer != null)
-            {
-                SupplierPriceListConnectorBase supplierPriceListConnectorBase = customer.Settings.PriceListConnector as SupplierPriceListConnectorBase;
+            int customerId = filter.CustomerIdForCurrentSupplier.HasValue ? filter.CustomerIdForCurrentSupplier.Value : GetLoggedInCustomerId();
+            var customerSuppliers = new CustomerManager().GetCustomerSuppliers(customerId);
+            if(customerSuppliers == null)
+                    throw new NullReferenceException("customerSuppliers");
 
-                var allCustomerSuppliers = supplierPriceListConnectorBase.GetSuppliers(null);
-                if (allCustomerSuppliers == null)
-                    return null;
+            if (filter.CustomerIdForCurrentSupplier.HasValue)
+            {
+                CustomerSupplierMapping customerSupplierMapping = GetCurrentSupplierMapping();
+                if (customerSupplierMapping != null)
+                    return customerSuppliers.FindAllRecords((sup) => customerSupplierMapping.Settings.MappedSuppliers.Contains(sup.SupplierId));
                 else
-                {
-                    var allSupplierMappings = GetCachedCustomerSupplierMappings();
-                    var currentCustomerSupplierMappings = allSupplierMappings.FindAllRecords(itm => itm.Value.CustomerId == customerId);
-                    Func<SupplierInfo, bool> filterExpression = (supplierInfo) =>
-                        {
-                            if(filter.AssignableToSupplierUserId.HasValue)
-                            {
-                                if (currentCustomerSupplierMappings.Any(itm => 
-                                    itm.Value.UserId != filter.AssignableToSupplierUserId.Value 
-                                    && itm.Value.Settings.MappedSuppliers.Any(sup => sup == supplierInfo.SupplierId)))
-                                    return false;
-                            }
-                            return true;
-                        };
-                    return allCustomerSuppliers.FindAllRecords(filterExpression);
-                }
+                    return null;
             }
             else
-                throw new NotSupportedException();
+            {
+                var allSupplierMappings = GetCachedCustomerSupplierMappings();
+                var currentCustomerSupplierMappings = allSupplierMappings.FindAllRecords(itm => itm.Value.CustomerId == customerId);
+                Func<SupplierInfo, bool> filterExpression = (supplierInfo) =>
+                    {
+                        if (filter.AssignableToSupplierUserId.HasValue)
+                        {
+                            if (currentCustomerSupplierMappings.Any(itm =>
+                                itm.Value.UserId != filter.AssignableToSupplierUserId.Value
+                                && itm.Value.Settings.MappedSuppliers.Any(sup => sup == supplierInfo.SupplierId)))
+                                return false;
+                        }
+                        return true;
+                    };
+                return customerSuppliers.FindAllRecords(filterExpression);
+            }
+        }
 
+        private Entities.CustomerSupplierMapping GetCurrentSupplierMapping()
+        {            
+            var allSupplierMappings = GetCachedCustomerSupplierMappings();
+            return allSupplierMappings.GetRecord(SecurityContext.Current.GetLoggedInUserId());
         }
 
         
@@ -140,7 +146,7 @@ namespace CP.SupplierPricelist.Business
         }
         public int GetLoggedInCustomerId()
         {
-            int userId = new SecurityContext().GetLoggedInUserId();
+            int userId = SecurityContext.Current.GetLoggedInUserId();
             return new CustomerUserManager().GetCustomerIdByUserId(userId);
         }
 

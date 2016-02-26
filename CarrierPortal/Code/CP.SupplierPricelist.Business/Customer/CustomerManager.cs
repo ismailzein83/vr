@@ -35,6 +35,19 @@ namespace CP.SupplierPricelist.Business
 
         }
 
+        public List<SupplierInfo> GetCustomerSuppliers(int customerId)
+        {
+            Customer customer = GetCustomer(customerId);
+            if (customer == null)
+                throw new NullReferenceException("customer");
+            if (customer.Settings == null)
+                throw new NullReferenceException("customer.Settings");
+            if (customer.Settings.PriceListConnector == null)
+                throw new NullReferenceException("customer.Settings.PriceListConnector");
+
+           return customer.Settings.PriceListConnector.GetSuppliers(null);
+        }
+
         public IEnumerable<CustomerInfo> GetCustomerInfos(CustomerFilter filter )
         {
             var cachedCustomers = GetCachedCustomers();
