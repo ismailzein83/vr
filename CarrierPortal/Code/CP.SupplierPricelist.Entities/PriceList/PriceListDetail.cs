@@ -14,5 +14,7 @@ namespace CP.SupplierPricelist.Entities
         public string PriceListResultDescription { get; set; }
         public string ScheduleName { get; set; }
         public string PriceListTypeValue { get; set; }
+        public string CustomerName { get; set; }
+        public string CarrierAccountName { get; set; }
     }
 }
