@@ -71,7 +71,7 @@
             var userLoadPromiseDeferred = utilsService.createPromiseDeferred();
             userReadyPromiseDeferred.promise.then(function () {
 
-                vruiUtilsService.callDirectiveLoad(userDirectiveApi, undefined, userLoadPromiseDeferred);
+                vruiUtilsService.callDirectiveLoad(userDirectiveApi, { filter: { ExcludeInactive: true } }, userLoadPromiseDeferred);
             });
             return userLoadPromiseDeferred.promise;
         }
