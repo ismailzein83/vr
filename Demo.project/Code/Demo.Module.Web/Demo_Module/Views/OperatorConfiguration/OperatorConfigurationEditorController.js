@@ -68,7 +68,6 @@
                 var directivePayload = {
                     selectedIds: (operatorConfigurationEntity != undefined ? [operatorConfigurationEntity.InterconnectOperator] : (operatorConfigurationId != undefined ? operatorConfigurationId : undefined))
                 }
-                console.log(operatorConfigurationEntity)
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, interconnectOperatorProfileDirectiveAPI, directivePayload, setLoader, interconnectOperatorProfileReadyPromiseDeferred);
             }
 
@@ -273,7 +272,7 @@
             var obj = {
                 OperatorConfigurationId: (operatorConfigurationId != null) ? operatorConfigurationId : 0,
                 OperatorId: operatorProfileDirectiveAPI.getSelectedIds(),
-                InterconnectOperator: interconnectOperatorProfileDirectiveAPI.getSelectedIds(),
+                InterconnectOperator: (interconnectOperatorProfileDirectiveAPI != undefined ? interconnectOperatorProfileDirectiveAPI.getSelectedIds() : undefined),
                 Volume: $scope.scopeModal.volume,
                 Percentage: $scope.scopeModal.percentage,
                 FromDate: $scope.scopeModal.fromDate,
