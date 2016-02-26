@@ -21,7 +21,7 @@ SELECT [ItemID]
       ,[ErrorMessage]
       ,[CreatedTime]
       ,[LastUpdatedTime]
-  FROM [queue].[QueueItemHeader]
+  FROM [queue].[QueueItemHeader] WITH(NOLOCK)
   WHERE (@QueueIDs is NULL or QueueID in (SELECT ParsedString FROM [queue].ParseStringList(@QueueIDs) ) ) and 
 		(@Statuses is NULL or Status in (SELECT ParsedString FROM ParseStringList(@Statuses) ) ) and CreatedTime BETWEEN  @DateFrom and @DateTo
            

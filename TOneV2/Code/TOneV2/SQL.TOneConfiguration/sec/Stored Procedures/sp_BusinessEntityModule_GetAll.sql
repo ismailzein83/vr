@@ -13,6 +13,7 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT [Id]
       ,[Name]
+      ,[Title]
       ,[ParentId]
       ,[BreakInheritance]
       ,[PermissionOptions] from sec.BusinessEntityModule

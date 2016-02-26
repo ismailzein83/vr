@@ -127,7 +127,10 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetFiltered.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetFiltered.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
     <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetItemsExecutionStatus.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>

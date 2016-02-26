@@ -9,7 +9,7 @@ CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_Insert]
 	@BatchSize decimal(18, 5),
 	@RecordsCount int,
 	@MappingResult int,
-	@MapperMessage nvarchar(1000),
+	@MapperMessage nvarchar(max),
 	@QueueItemIds nvarchar(50),
 	@LogEntryTime dateTime
 AS

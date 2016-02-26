@@ -6,7 +6,7 @@
 CREATE PROCEDURE [integration].[sp_DataSourceLog_Insert] 
 	@DataSourceId int,
 	@Severity int,
-	@Message varchar(1000),
+	@Message nvarchar(max),
 	@ImportedBatchId bigint,
 	@LogEntryTime dateTime
 AS

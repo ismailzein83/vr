@@ -257,6 +257,9 @@
     <Build Include="common\Stored Procedures\sp_RateType_GetAll.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueActivatorConfig_GetAll.sql" />
     <Build Include="Security\queue.sql" />
+    <Build Include="genericdata\Tables\GenericEditorDefinition.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericEditorDefinition_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericEditorDefinition_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

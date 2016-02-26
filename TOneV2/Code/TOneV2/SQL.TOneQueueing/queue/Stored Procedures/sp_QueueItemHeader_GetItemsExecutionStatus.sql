@@ -9,10 +9,11 @@ BEGIN
 	SET NOCOUNT ON;
 
     With ExecutionFlowItemIds as (SELECT  itemHeader.[ItemID], itemHeader.[ExecutionFlowTriggerItemID]
-                  FROM  [queue].[QueueItemHeader] itemHeader JOIN  @ItemIds ids ON itemHeader.ItemID = ids.ItemID)
+                  FROM  [queue].[QueueItemHeader] itemHeader WITH(NOLOCK)
+                  JOIN  @ItemIds ids ON itemHeader.ItemID = ids.ItemID)
 
 	SELECT execFlowIds.[ItemID], execFlowIds.ExecutionFlowTriggerItemID,  itemHeader.Status
-  FROM [queue].[QueueItemHeader] itemHeader
+  FROM [queue].[QueueItemHeader] itemHeader WITH(NOLOCK)
   JOIN ExecutionFlowItemIds execFlowIds ON itemHeader.ExecutionFlowTriggerItemID = execFlowIds.ExecutionFlowTriggerItemID
   GROUP BY execFlowIds.ItemID, execFlowIds.ExecutionFlowTriggerItemID,  itemHeader.Status
 END
