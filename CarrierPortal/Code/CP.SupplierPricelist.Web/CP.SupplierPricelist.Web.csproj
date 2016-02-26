@@ -159,6 +159,7 @@
     <Content Include="CP_SupplierPricelist\Directives\CustomerUser\Templates\CustomerUserGridTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\CustomerUser\vr-cp-customeruser-grid.js" />
     <Content Include="CP_SupplierPricelist\Directives\Customer\Templates\CustomerGridTemplate.html" />
+    <Content Include="CP_SupplierPricelist\Directives\Customer\vr-cp-customer-selector.js" />
     <Content Include="CP_SupplierPricelist\Directives\Customer\vr-cp-customer-grid.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\cp-supplierpricelist-resultsupplierpricelist.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\cp-supplierpricelist-uploadsupplierpricelist.js" />

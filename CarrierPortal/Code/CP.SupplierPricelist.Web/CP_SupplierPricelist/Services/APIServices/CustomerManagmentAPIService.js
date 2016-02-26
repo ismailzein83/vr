@@ -19,12 +19,18 @@
                 customerId: customerId
             });
         }
+        function GetCustomerInfos(serializedFilter) {
+            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "GetCustomerInfos"), {
+                serializedFilter: serializedFilter
+            });
+        }
         return ({
             GetCustomerTemplates: GetCustomerTemplates,
             UpdateCustomer: UpdateCustomer,
             AddCustomer: AddCustomer,
             GetFilteredCustomers: GetFilteredCustomers,
-            GetCustomer: GetCustomer
+            GetCustomer: GetCustomer,
+            GetCustomerInfos: GetCustomerInfos
         });
     }
     customerManagmentApiService.$inject = ['BaseAPIService', 'UtilsService', 'CP_SupPriceList_ModuleConfig'];

@@ -27,6 +27,14 @@ namespace CP.SupplierPricelist.Web.Controllers
             CustomerManager manager = new CustomerManager();
             return manager.GetConnectorTemplates();
         }
+        [HttpGet]
+        [Route("GetCustomerInfos")]
+        public IEnumerable<CustomerInfo> GetCustomerInfos(string serializedFilter = null)
+        {
+            CustomerFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<CustomerFilter>(serializedFilter) : null;
+            CustomerManager manager = new CustomerManager();
+            return manager.GetCustomerInfos(filter);
+        }
         [HttpPost]
         [Route("AddCustomer")]
         public InsertOperationOutput<CustomerDetail> AddCustomer(Customer input)
