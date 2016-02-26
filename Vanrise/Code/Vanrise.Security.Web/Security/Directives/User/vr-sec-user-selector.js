@@ -1,7 +1,8 @@
 ﻿'use strict';
 app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService', 'UtilsService', 'VRUIUtilsService',
+   
     function (VR_Sec_UserAPIService, VR_Sec_UserService, UtilsService, VRUIUtilsService) {
-
+       
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -26,7 +27,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
 
                 $scope.addNewUser = function () {
                     var onUserAdded = function (userObj) {
-                        if (userObj.Entity.Status == 1) {
+                        if (userObj.Entity.Status == 1 || (ctrl.filter != undefined && ctrl.filter.ExcludeInactive == false)) {
                             ctrl.datasource.push(userObj.Entity);
                             if ($attrs.ismultipleselection != undefined)
                                 ctrl.selectedvalues.push(userObj.Entity);
@@ -97,15 +98,14 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 var api = {};
 
                 api.load = function (payload) {
-                    var filter = {};
+                   
                     var selectedIds;
-
+                    ctrl.filter = {};
                     if (payload != undefined) {
-                        filter = payload.filter;
+                        ctrl.filter = payload.filter;
                         selectedIds = payload.selectedIds;
-                    }
-
-                    return VR_Sec_UserAPIService.GetUsersInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    }                   
+                    return VR_Sec_UserAPIService.GetUsersInfo(UtilsService.serializetoJson(ctrl.filter)).then(function (response) {
                         ctrl.datasource.length = 0;
 
                         if (response) {

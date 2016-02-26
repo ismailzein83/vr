@@ -45,11 +45,11 @@ namespace Vanrise.Security.Business
                     IEnumerable<Permission> entityPermissions = permissionManager.GetEntityPermissions((EntityType)filter.EntityType, filter.EntityId);
                     
                     IEnumerable<int> excludedUserIds = entityPermissions.MapRecords(permission => Convert.ToInt32(permission.HolderId), permission => permission.HolderType == HolderType.USER);
-                    return users.MapRecords(UserInfoMapper, user => !excludedUserIds.Contains(user.UserId) && user.Status== UserStatus.Active);
+                    return users.MapRecords(UserInfoMapper, user => !excludedUserIds.Contains(user.UserId) || (filter.ExcludeInactive == true && user.Status == UserStatus.Active));
                 }
-            }
 
-            return users.MapRecords(UserInfoMapper);
+            }
+            return users.MapRecords(UserInfoMapper, user =>  ( filter.ExcludeInactive == false || (filter.ExcludeInactive == true && user.Status == UserStatus.Active)));
         }
 
         public User GetUserbyId(int userId)
