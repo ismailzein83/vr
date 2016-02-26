@@ -13,6 +13,8 @@ namespace Vanrise.Security.Entities
 
         public string Name { get; set; }
 
+        public string Title { get; set; }
+
         public EntityType EntType { get; set; }
 
         public List<string> PermissionOptions { get; set; }

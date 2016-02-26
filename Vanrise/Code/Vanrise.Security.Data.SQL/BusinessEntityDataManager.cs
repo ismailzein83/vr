@@ -40,6 +40,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 EntityId = (int)reader["Id"],
                 Name = reader["Name"] as string,
+                Title = reader["Title"] as string,
                 ModuleId = (int)reader["ModuleId"],
                 BreakInheritance = (bool)reader["BreakInheritance"],
                 PermissionOptions = Common.Serializer.Deserialize<List<string>>(reader["PermissionOptions"] as string)

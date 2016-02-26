@@ -49,9 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationToken.cs" />
-    <Compile Include="BusinessEntity.cs" />
-    <Compile Include="BusinessEntityNode.cs" />
-    <Compile Include="BusinessEntityModule.cs" />
+    <Compile Include="BusinessEntity\BusinessEntity.cs" />
+    <Compile Include="BusinessEntity\BusinessEntityNode.cs" />
+    <Compile Include="BusinessEntity\BusinessEntityModule.cs" />
     <Compile Include="Group\GroupFilter.cs" />
     <Compile Include="Group\GroupInfo.cs" />
     <Compile Include="Group\GroupQuery.cs" />
