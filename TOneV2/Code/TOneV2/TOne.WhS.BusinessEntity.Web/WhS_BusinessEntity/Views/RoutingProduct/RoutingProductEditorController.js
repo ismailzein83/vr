@@ -44,12 +44,8 @@
 
             $scope.scopeModal.onSaleZoneSelectorReady = function (api) {
                 saleZoneDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value; };
-                var payload = {
-                    sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
-                };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, saleZoneReadyPromiseDeferred);
-               // UtilsService.safeApply($scope);
+                saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                saleZoneReadyPromiseDeferred.resolve(); 
             };
 
             $scope.scopeModal.onCarrierAccountSelectorReady = function (api) {
@@ -175,8 +171,6 @@
             var saleZoneLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             if (routingProductEntity && routingProductEntity.Settings && routingProductEntity.Settings.Zones) {
-                saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
                 saleZoneReadyPromiseDeferred.promise.then(function () {
                     saleZoneReadyPromiseDeferred = undefined;
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, getSaleZoneSelectorPayload(), saleZoneLoadPromiseDeferred);

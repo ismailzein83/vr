@@ -114,7 +114,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 else {
                     sellingNumberPlanId = newsellingNumberPlanId;
                 }
-                console.log(sellingNumberPlanId)
             }
             function initializeController() {
 
