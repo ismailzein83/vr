@@ -26,7 +26,7 @@ namespace CP.SupplierPricelist.Business
 
             if (filter.CustomerIdForCurrentSupplier.HasValue)
             {
-                CustomerSupplierMapping customerSupplierMapping = GetCurrentSupplierMapping();
+                CustomerSupplierMapping customerSupplierMapping = GetCurrentSupplierMapping(customerId);
                 if (customerSupplierMapping != null)
                     return customerSuppliers.FindAllRecords((sup) => customerSupplierMapping.Settings.MappedSuppliers.Contains(sup.SupplierId));
                 else
@@ -51,10 +51,10 @@ namespace CP.SupplierPricelist.Business
             }
         }
 
-        private Entities.CustomerSupplierMapping GetCurrentSupplierMapping()
+        private Entities.CustomerSupplierMapping GetCurrentSupplierMapping(int customerId)
         {            
             var allSupplierMappings = GetCachedCustomerSupplierMappings();
-            return allSupplierMappings.GetRecord(SecurityContext.Current.GetLoggedInUserId());
+            return allSupplierMappings.Values.FindRecord(x => x.UserId == SecurityContext.Current.GetLoggedInUserId() && x.CustomerId == customerId);
         }
 
         

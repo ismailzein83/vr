@@ -11,9 +11,7 @@
             var carrierAccountDirectiveApi;
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            //var customerDirectiveApi;
-            //var customerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+           
             defineScope();
             load()
             function defineScope() {
@@ -34,11 +32,7 @@
                     carrierAccountDirectiveApi = api;
                     carrierAccountReadyPromiseDeferred.resolve();
                 }
-                //$scope.onCustomerDirectiveReady = function (api) {
-                //    customerDirectiveApi = api;
-                //    customerReadyPromiseDeferred.resolve();
-                //}
-                $scope.AddSupplierMapping = function () {
+                        $scope.AddSupplierMapping = function () {
                     var onSupplierMappingAdded = function (supplierMapping) {
                         gridAPI.onSupplierMappingAdded(supplierMapping);
                     };
@@ -60,7 +54,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadUser, loadCarrierAccount ]) //, loadCustomer
+                return UtilsService.waitMultipleAsyncOperations([loadUser, loadCarrierAccount ])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -86,14 +80,7 @@
                 });
                 return carrierAccountLoadPromiseDeferred.promise;
             }
-            //function loadCustomer() {
-            //    var customerLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            //    customerReadyPromiseDeferred.promise.then(function () {
-            //        // 
-            //        VRUIUtilsService.callDirectiveLoad(customerDirectiveApi, { filter: { AssignedToCurrentSupplier: true } }, customerLoadPromiseDeferred);
-            //    });
-            //    return customerLoadPromiseDeferred.promise;
-            //}
+            
 
         }
 
