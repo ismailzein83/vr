@@ -921,7 +921,7 @@
                 if (dataItem.isDeleted)
                     return false;
                 var actions = ctrl.getMenuActions(dataItem);
-                return (actions == undefined && actions == null && actions.length > 0 && UtilsService.getItemIndexByVal(actions, 'disable', false) > -1);
+                return (actions != undefined && actions != null && actions.length > 0);
             };
 
             ctrl.adjustPosition = function (e) {
