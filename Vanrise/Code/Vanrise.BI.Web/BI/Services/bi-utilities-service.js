@@ -1,10 +1,7 @@
-﻿
-
-
-app.service('BIUtilitiesService', function (TimeDimensionTypeEnum, VRModalService, SecurityService) {
+﻿app.service('BIUtilitiesService', function (TimeDimensionTypeEnum, VRModalService, SecurityService, UtilsService) {
 
     return ({
-        openEntityReport:openEntityReport,
+        openEntityReport: openEntityReport,
         fillDateTimeProperties: fillDateTimeProperties,
         getNextDate: getNextDate,
         checkPermissions: checkPermissions
@@ -24,16 +21,35 @@ app.service('BIUtilitiesService', function (TimeDimensionTypeEnum, VRModalServic
         };
         VRModalService.showModal('/Client/Modules/BI/Views/Reports/EntityReport.html', parameters, modalSettings);
     }
+
     function checkPermissions(measures) {
+        var deferred = UtilsService.createPromiseDeferred();
+        var promises = [];
+        var returnValue = true;
 
-        for (var i = 0; i < measures.length; i++) 
-            if (measures[i].RequiredPermissions != "" && measures[i].RequiredPermissions != null && measures[i].RequiredPermissions != undefined)
-                if (!SecurityService.isAllowed(measures[i].RequiredPermissions))
-                        return false;
-            return true;
+        var i = 0;
+        while (returnValue && i < measures.length) {
+            var requiredPermissions = measures[i].RequiredPermissions;
+
+            if (requiredPermissions != undefined && requiredPermissions != null && requiredPermissions != '') {
+                var isAllowedPromise = SecurityService.IsAllowed(requiredPermissions);
+                isAllowedPromise.then(function (isAllowed) {
+                    if (!isAllowed) { returnValue = false; }
+                });
+                promises.push(isAllowedPromise);
+            }
+
+            i++;
         }
-        
 
+        UtilsService.waitMultiplePromises(promises).then(function () {
+            deferred.resolve(returnValue);
+        }).catch(function (error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    }
     
     function fillDateTimeProperties(data, timeDimensionType, fromDateString, toDateString, dontFillGroup) {
         var fromDate = new Date(fromDateString);
@@ -160,9 +176,6 @@ app.service('BIUtilitiesService', function (TimeDimensionTypeEnum, VRModalServic
     //    }
     //};
 
-
-  
-
     //Date.prototype.getMonthName = function (lang) {
     //    lang = lang && (lang in locale) ? lang : 'en';
     //    return Date.locale[lang].month_names[this.getMonth()];
@@ -173,6 +186,4 @@ app.service('BIUtilitiesService', function (TimeDimensionTypeEnum, VRModalServic
          var monthIndex = date.getMonth();
          return shortMonthNames[monthIndex];
     }
-
-
 });

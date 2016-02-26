@@ -47,11 +47,22 @@ app.directive('vrBiChart', ['VR_BI_BIAPIService', 'BIUtilitiesService', 'BIVisua
 
     function BIChart(ctrl, $scope) {
         var chartAPI;
+        var chartReadyDeferred = UtilsService.createPromiseDeferred();
         var measures = [];
         var entity = [];
         var directiveSettings = {};
 
         function initializeController() {
+            ctrl.onChartReady = function (api) {
+                chartAPI = api;
+                chartReadyDeferred.resolve();
+
+                //chartAPI.onDataItemClicked = function (item) {
+                //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
+                //};
+                //if (retrieveDataOnLoad)
+                //    retrieveData();
+            };
 
             defineAPI();
         }
@@ -61,51 +72,85 @@ app.directive('vrBiChart', ['VR_BI_BIAPIService', 'BIUtilitiesService', 'BIVisua
             api.retrieveData = retrieveData;
 
             api.load = function (payload) {
+                var promises = [];
+
                 if (payload != undefined) {
                     ctrl.title = payload.title;
                     ctrl.settings = payload.settings;
                     ctrl.filter = payload.filter;
                 }
-                return UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
-                    .then(function () {
-                        directiveSettings = {
-                            EntityType: entity,
-                            MeasureTypes: measures
-                        }
 
-                        if (payload != undefined && !payload.previewMode) {
+                var loadMeasuresAndEntitiesPromise = UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities]);
+                promises.push(loadMeasuresAndEntitiesPromise);
 
-                            if (!BIUtilitiesService.checkPermissions(measures)) {
+                var checkPermissionsDeferred = UtilsService.createPromiseDeferred();
+                promises.push(checkPermissionsDeferred.promise);
+
+                loadMeasuresAndEntitiesPromise.then(function () {
+                    directiveSettings = {
+                        EntityType: entity,
+                        MeasureTypes: measures
+                    };
+
+                    if (payload != undefined && !payload.previewMode) {
+                        var retrieveDataDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(retrieveDataDeferred.promise);
+
+                        BIUtilitiesService.checkPermissions(measures).then(function (isAuthorized) {
+                            checkPermissionsDeferred.resolve();
+
+                            if (!isAuthorized) {
                                 ctrl.isAllowed = false;
-                                return;
+                                retrieveDataDeferred.resolve();
                             }
-                            ctrl.isAllowed = true;
-                            ctrl.onChartReady = function (api) {
-                                chartAPI = api;
+                            else {
+                                ctrl.isAllowed = true;
+                                chartReadyDeferred.promise.then(function () {
+                                    retrieveData(ctrl.filter).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
+                                });
+                            }
+                        }).catch(function (error) {
+                            checkPermissionsDeferred.reject(error);
+                        });
+                    }
+                    else { checkPermissionsDeferred.resolve(); }
 
-                                //chartAPI.onDataItemClicked = function (item) {
-                                //    BIUtilitiesService.openEntityReport(item.EntityType, item.EntityId, item.EntityName);
-                                //};
-                                //if (retrieveDataOnLoad)
-                                //    retrieveData();
-                                return retrieveData(ctrl.filter);
-                            };
-                            if (chartAPI != undefined)
-                                return retrieveData(ctrl.filter);
-                        }
-                        getClassType();
-                    });
-            }
+                    setClassType();
+                });
+
+                return UtilsService.waitMultiplePromises(promises);
+
+                function loadMeasures() {
+                    measures.length = 0;
+                    return VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
+                        .then(function (response) {
+                            for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {
+                                var value = UtilsService.getItemByVal(response, ctrl.settings.MeasureTypes[i], 'Name');
+                                if (value != null)
+                                    measures.push(value);
+                            }
+                        });
+                }
+                function loadEntities() {
+                    entity.length = 0;
+                    return VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
+                        .then(function (response) {
+                            if (ctrl.settings.EntityType != undefined) {
+                                for (var i = 0; i < ctrl.settings.EntityType.length; i++)
+                                    entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));
+                            }
+                        });
+                }
+                function setClassType() {
+                    if (ctrl.settings.OperationType == "TopEntities" && ctrl.settings.IsPieChart)
+                        ctrl.class = "piechartpermission";
+                    else
+                        ctrl.class = "chartpermission";
+                }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
-        }
-
-        function getClassType() {
-            if (ctrl.settings.OperationType == "TopEntities" && ctrl.settings.IsPieChart)
-                ctrl.class = "piechartpermission";
-            else
-                ctrl.class = "chartpermission";
         }
 
         function retrieveData(filter) {
@@ -175,29 +220,6 @@ app.directive('vrBiChart', ['VR_BI_BIAPIService', 'BIUtilitiesService', 'BIVisua
             }
 
             chartAPI.renderChart(response, chartDefinition, seriesDefinitions, xAxisDefinition);
-        }
-
-        function loadMeasures() {
-            measures.length = 0;
-            return VR_BI_BIConfigurationAPIService.GetMeasuresInfo()
-                .then(function (response) {
-                    for (var i = 0; i < ctrl.settings.MeasureTypes.length; i++) {
-                        var value = UtilsService.getItemByVal(response, ctrl.settings.MeasureTypes[i], 'Name');
-                        if (value != null)
-                            measures.push(value);
-                    }
-                });
-        }
-
-        function loadEntities() {
-            entity.length = 0;
-            return VR_BI_BIConfigurationAPIService.GetEntitiesInfo()
-                .then(function (response) {
-                    if (ctrl.settings.EntityType != undefined) {
-                        for (var i = 0; i < ctrl.settings.EntityType.length; i++)
-                            entity.push(UtilsService.getItemByVal(response, ctrl.settings.EntityType[i], 'Name'));
-                    }
-                });
         }
 
         this.initializeController = initializeController;

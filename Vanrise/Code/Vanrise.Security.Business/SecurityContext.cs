@@ -50,6 +50,12 @@ namespace Vanrise.Security.Business
             return manager.IsAllowed(requiredPermissions, this.GetSecurityToken().UserId);
         }
 
+        public bool IsAllowedBySystemActionNames(string systemActionNames)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.IsAllowedBySystemActionNames(systemActionNames, this.GetSecurityToken().UserId);
+        }
+
         #endregion
 
         #region Private Methods
@@ -68,16 +74,6 @@ namespace Vanrise.Security.Business
             return Common.Serializer.Deserialize<SecurityToken>(decryptedKey);
         }
 
-        #endregion
-
-        #region Pending Methods
-
-        public bool IsAllowedV2(string actionNames)
-        {
-            SecurityManager manager = new SecurityManager();
-            return manager.IsAllowedV2(actionNames, this.GetSecurityToken().UserId);
-        }
-        
         #endregion
     }
 }

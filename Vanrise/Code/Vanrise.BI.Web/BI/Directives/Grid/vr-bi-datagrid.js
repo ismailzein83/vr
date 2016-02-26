@@ -45,15 +45,38 @@ app.directive('vrBiDatagrid', ['UtilsService', 'VR_BI_BIAPIService', 'BIUtilitie
     }
 
     function BIDataGrid(ctrl, $scope) {
-
         var gridAPI;
+        var gridAPIReadyDeferred = UtilsService.createPromiseDeferred();
         var measures = [];
         var entity = [];
 
         function initializeController() {
+            ctrl.onGridReady = function (api) {
+                gridAPI = api;
+                gridAPIReadyDeferred.resolve();
+            };
+
+            ctrl.onexport = function () {
+                var promises = [];
+
+                var exportWidgetDataPromise = BIVisualElementService.exportWidgetData(ctrl, ctrl.settings, ctrl.filter);
+                promises.push(exportWidgetDataPromise);
+
+                var downloadFileDeferred = UtilsService.createPromiseDeferred();
+                promises.push(downloadFileDeferred.promise);
+
+                exportWidgetDataPromise.then(function (response) {
+                    UtilsService.downloadFile(response.data, response.headers).then(function () {
+                        downloadFileDeferred.resolve();
+                    }).catch(function (error) {
+                        downloadFileDeferred.reject(error);
+                    });
+                });
+
+                return UtilsService.waitMultiplePromises(promises);
+            };
 
             defineAPI();
-
         }
 
         function defineAPI() {
@@ -61,41 +84,49 @@ app.directive('vrBiDatagrid', ['UtilsService', 'VR_BI_BIAPIService', 'BIUtilitie
             api.retrieveData = retrieveData;
 
             api.load = function (payload) {
+                var promises = [];
+
                 if (payload != undefined) {
                     ctrl.title = payload.title;
                     ctrl.settings = payload.settings;
                     ctrl.filter = payload.filter;
                 }
-                return UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities])
-                    .then(function () {
-                        ctrl.data = [];
 
-                        ctrl.entityType = entity;
-                        ctrl.measureTypes = measures;
-                        if (payload != undefined && !payload.previewMode) {
-                            ctrl.onGridReady = function (api) {
-                                gridAPI = api;
+                var loadMeasuresAndEntitiesPromise = UtilsService.waitMultipleAsyncOperations([loadMeasures, loadEntities]);
+                promises.push(loadMeasuresAndEntitiesPromise);
 
-                            }
-                            if (!BIUtilitiesService.checkPermissions(measures)) {
+                var checkPermissionsDeferred = UtilsService.createPromiseDeferred();
+                promises.push(checkPermissionsDeferred.promise);
+
+                loadMeasuresAndEntitiesPromise.then(function () {
+                    ctrl.data = [];
+                    ctrl.entityType = entity;
+                    ctrl.measureTypes = measures;
+
+                    if (payload != undefined && !payload.previewMode) {
+                        var retrieveDataDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(retrieveDataDeferred.promise);
+
+                        BIUtilitiesService.checkPermissions(measures).then(function (isAuthorized) {
+                            checkPermissionsDeferred.resolve();
+
+                            if (!isAuthorized) {
                                 ctrl.isAllowed = false;
-                                return;
+                                retrieveDataDeferred.resolve();
                             }
-
-                            ctrl.isAllowed = true;
-                            ctrl.onexport = function () {
-
-                                return BIVisualElementService.exportWidgetData(ctrl, ctrl.settings, ctrl.filter)
-                                    .then(function (response) {
-
-                                        return UtilsService.downloadFile(response.data, response.headers);
-                                    });
+                            else {
+                                ctrl.isAllowed = true;
+                                retrieveData(ctrl.filter).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
                             }
-                            return retrieveData(ctrl.filter);
-                        }
+                        }).catch(function (error) {
+                            checkPermissionsDeferred.reject(error);
+                        });
+                    }
+                    else { checkPermissionsDeferred.resolve(); }
+                });
 
-                    });
-            }
+                return UtilsService.waitMultiplePromises(promises);
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

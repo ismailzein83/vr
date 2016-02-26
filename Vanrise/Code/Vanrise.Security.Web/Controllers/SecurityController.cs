@@ -39,9 +39,16 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("IsAllowed")]
-        public bool IsAllowed(string actionNames)
+        public bool IsAllowed(string requiredPermissions)
         {
-            return SecurityContext.Current.IsAllowedV2(actionNames);
+            return SecurityContext.Current.IsAllowed(requiredPermissions);
+        }
+
+        [HttpGet]
+        [Route("IsAllowedBySystemActionNames")]
+        public bool IsAllowedBySystemActionNames(string systemActionNames)
+        {
+            return SecurityContext.Current.IsAllowedBySystemActionNames(systemActionNames);
         }
 
         public class CredentialsInput

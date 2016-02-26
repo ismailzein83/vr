@@ -2,9 +2,9 @@
 
     'use strict';
 
-    UserAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig', 'VR_Sec_SecurityAPIService'];
+    UserAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig', 'SecurityService'];
 
-    function UserAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig, VR_Sec_SecurityAPIService) {
+    function UserAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig, SecurityService) {
         var controllerName = 'Users';
 
         return ({
@@ -77,15 +77,15 @@
         }
 
         function HasAddUserPermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['AddUser']));
+            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['AddUser']));
         }
 
         function HasUpdateUserPermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateUser']));
+            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateUser']));
         }
 
         function HasResetUserPasswordPermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['ResetPassword']));
+            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['ResetPassword']));
         }
     }
 

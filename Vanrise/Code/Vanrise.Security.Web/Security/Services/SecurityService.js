@@ -1,14 +1,24 @@
 ﻿'use strict';
 
-app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_PermissionFlagEnum', '$cookies', function ($rootScope, UtilsService, VR_Sec_PermissionFlagEnum, $cookies) {
+app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_PermissionFlagEnum', '$cookies', 'VR_Sec_SecurityAPIService', function ($rootScope, UtilsService, VR_Sec_PermissionFlagEnum, $cookies, VR_Sec_SecurityAPIService) {
 
     return ({
         isAllowed: isAllowed,
         createAccessCookie: createAccessCookie,
         deleteAccessCookie: deleteAccessCookie,
         getLoggedInUserInfo: getLoggedInUserInfo,
-        getUserToken: getUserToken
+        getUserToken: getUserToken,
+        IsAllowed: IsAllowed,
+        IsAllowedBySystemActionNames: IsAllowedBySystemActionNames
     });
+
+    function IsAllowed(requiredPermissions) {
+        return VR_Sec_SecurityAPIService.IsAllowed(requiredPermissions);
+    }
+
+    function IsAllowedBySystemActionNames(systemActionNames) {
+        return VR_Sec_SecurityAPIService.IsAllowedBySystemActionNames(systemActionNames);
+    }
 
     function isAllowed(attrValue) {
 

@@ -60,28 +60,47 @@ app.directive('vrBiSummary', ['UtilsService', 'VR_BI_BIConfigurationAPIService',
             var api = {};
 
             api.load = function (payload) {
+                var promises = [];
+
                 if (payload != undefined) {
                     ctrl.title = payload.title;
                     ctrl.settings = payload.settings;
                     ctrl.filter = payload.filter;
                 }
-                return loadMeasures()
-                    .then(function () {
-                        ctrl.measureTypes = measures;
 
-                        if (payload != undefined && !payload.previewMode) {
-                            if (!BIUtilitiesService.checkPermissions(measures)) {
+                var loadMeasuresPromise = loadMeasures();
+                promises.push(loadMeasuresPromise);
+
+                var checkPermissionsDeferred = UtilsService.createPromiseDeferred();
+                promises.push(checkPermissionsDeferred.promise);
+
+                loadMeasuresPromise.then(function () {
+                    ctrl.measureTypes = measures;
+
+                    if (payload != undefined && !payload.previewMode) {
+                        var retrieveDataDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(retrieveDataDeferred.promise);
+
+                        BIUtilitiesService.checkPermissions(measures).then(function (isAuthorized) {
+                            checkPermissionsDeferred.resolve();
+
+                            if (!isAuthorized) {
                                 ctrl.isAllowed = false;
-                                return;
+                                retrieveDataDeferred.resolve();
                             }
-                            ctrl.isAllowed = true;
-                            return retrieveData(ctrl.filter);
+                            else {
+                                ctrl.isAllowed = true;
+                                retrieveData(ctrl.filter).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
+                            }
+                        }).catch(function (error) {
+                            checkPermissionsDeferred.reject(error);
+                        });
+                    }
+                    else { checkPermissionsDeferred.resolve(); }
+                });
 
-                        }
-
-                    });
-
-            }
+                return UtilsService.waitMultiplePromises(promises);
+            };
             api.retrieveData = retrieveData;
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

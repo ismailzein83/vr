@@ -2,9 +2,10 @@
 
     'use strict';
 
-    BusinessEntityNodeAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService', 'VR_Sec_SecurityAPIService'];
+    BusinessEntityNodeAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService', 'SecurityService'];
 
-    function BusinessEntityNodeAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService, VR_Sec_SecurityAPIService) {
+    function BusinessEntityNodeAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService, SecurityService) {
+        var controllerName = 'BusinessEntityNode';
         return {
             GetEntityNodes: GetEntityNodes,
             ToggleBreakInheritance: ToggleBreakInheritance,
@@ -12,18 +13,18 @@
         };
 
         function GetEntityNodes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'BusinessEntityNode', 'GetEntityNodes'));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetEntityNodes'));
         }
 
         function ToggleBreakInheritance(entityType, entityId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'BusinessEntityNode', 'ToggleBreakInheritance'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ToggleBreakInheritance'), {
                 entityType: entityType,
                 entityId: entityId
             });
         }
 
         function HasBreakInheritancePermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/BusinessEntityNode/ToggleBreakInheritance');
+            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['ToggleBreakInheritance']));
         }
     }
 

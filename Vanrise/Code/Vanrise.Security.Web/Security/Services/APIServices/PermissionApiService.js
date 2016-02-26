@@ -2,9 +2,10 @@
 
     'use strict';
 
-    PermissionAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService', 'VR_Sec_SecurityAPIService'];
+    PermissionAPIService.$inject = ['BaseAPIService', 'VR_Sec_ModuleConfig', 'UtilsService', 'SecurityService'];
 
-    function PermissionAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService, VR_Sec_SecurityAPIService) {
+    function PermissionAPIService(BaseAPIService, VR_Sec_ModuleConfig, UtilsService, SecurityService) {
+        var controllerName = 'Permission';
 
         return ({
             GetFilteredEntityPermissions: GetFilteredEntityPermissions,
@@ -17,26 +18,26 @@
         });
 
         function GetFilteredEntityPermissions(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'GetFilteredEntityPermissions'), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetFilteredEntityPermissions'), input);
         }
 
         function GetHolderPermissions(holderType, holderId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'GetHolderPermissions'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetHolderPermissions'), {
                 holderType: holderType,
                 holderId: holderId
             });
         }
 
         function GetEffectivePermissions() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'GetEffectivePermissions'));
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetEffectivePermissions'));
         }
 
         function UpdatePermissions(permissionsArray) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'UpdatePermissions'), permissionsArray);
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdatePermissions'), permissionsArray);
         }
 
         function DeletePermissions(holderType, holderId, entityType, entityId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Permission', 'DeletePermissions'), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'DeletePermissions'), {
                 holderType: holderType,
                 holderId: holderId,
                 entityType: entityType,
@@ -45,11 +46,11 @@
         }
 
         function HasAddPermissionPermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Permission/UpdatePermissions');
+            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdatePermissions']));
         }
 
         function HasUpdatePermissionsPermission() {
-            return VR_Sec_SecurityAPIService.IsAllowed(VR_Sec_ModuleConfig.moduleName + '/Permission/UpdatePermissions');
+            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdatePermissions']));
         }
     }
 

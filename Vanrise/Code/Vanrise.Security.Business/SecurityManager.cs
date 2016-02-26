@@ -81,7 +81,7 @@ namespace Vanrise.Security.Business
             PermissionManager manager = new PermissionManager();
             EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(userId);
 
-            Dictionary<string, List<string>> reqPermissionsDic = this.ParseRequiredPermissionsString(requiredPermissions);
+            Dictionary<string, List<string>> reqPermissionsDic = GetRequiredPermissionsByNodePath(requiredPermissions);
 
             foreach (KeyValuePair<string, List<string>> kvp in reqPermissionsDic)
             {
@@ -217,61 +217,94 @@ namespace Vanrise.Security.Business
 
         #region Pending Methods
 
-        public bool IsAllowedV2(string actionNames, int userId)
+        public bool IsAllowedBySystemActionNames(string systemActionNames, int userId)
         {
-            //Assume that the view is allowed, and start looping until you find an exception that prevents the user from seeing this view
-            bool result = true;
-
-            PermissionManager manager = new PermissionManager();
-            EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(userId);
-
-            Dictionary<string, List<string>> requiredPermissions = GetRequiredPermissionsByNodePath(actionNames);
-
-            foreach (KeyValuePair<string, List<string>> kvp in requiredPermissions)
-            {
-                result = CheckPermissions(kvp.Key, kvp.Value, effectivePermissionsWrapper.EffectivePermissions, effectivePermissionsWrapper.BreakInheritanceEntities, new HashSet<string>());
-                if (!result)
-                    break;
-            }
-
-            return result;
+            return IsAllowed(GetRequiredPermissionsFromSystemActionNames(systemActionNames), userId);
         }
 
-        Dictionary<string, List<string>> GetRequiredPermissionsByNodePath(string systemActionNames)
+        string GetRequiredPermissionsFromSystemActionNames(string systemActionNames)
         {
-            var permissionsByNodePath = new Dictionary<string, List<string>>();
-            string[] actionNames = systemActionNames.Split('|');
-            BusinessEntityNodeManager beNodeManager = new BusinessEntityNodeManager();
+            string[] systemActionNamesArray = systemActionNames.Split('|');
+            var requiredPermissions = new List<string>();
 
-            foreach (var actionName in actionNames)
+            SystemActionManager systemActionManager = new SystemActionManager();
+
+            foreach (string systemActionName in systemActionNamesArray)
             {
-                SystemAction systemAction = new SystemActionManager().GetSystemAction(actionName);
-                
-                if (systemAction.RequiredPermissions == null)
-                    continue;
-
-                string[] permissionsByNodeNameStrings = systemAction.RequiredPermissions.Split('|');
-
-                foreach (string permissionsByNodeNameString in permissionsByNodeNameStrings)
+                SystemAction systemAction = systemActionManager.GetSystemAction(systemActionName.Trim());
+                if (systemAction != null && systemAction.RequiredPermissions != null)
                 {
-                    string[] permissionsByNodeNameArray = permissionsByNodeNameString.Split(':');
-
-                    string nodePath = beNodeManager.GetBusinessEntityNodePath(permissionsByNodeNameArray[0].Trim());
-                    List<string> permissions = permissionsByNodeNameArray[1].Split(',').MapRecords(itm => itm.Trim()).ToList();
-
-                    List<string> existingPermissionsByNodePath;
-                    permissionsByNodePath.TryGetValue(nodePath, out existingPermissionsByNodePath);
-
-                    if (existingPermissionsByNodePath != null)
-                        existingPermissionsByNodePath.AddRange(permissions);
-                    else
-                        permissionsByNodePath.Add(nodePath, permissions);
+                    requiredPermissions.Add(systemAction.RequiredPermissions);
                 }
             }
 
-            return permissionsByNodePath;
+            return (requiredPermissions.Count > 0) ? String.Join("|", requiredPermissions) : null;
         }
 
+        Dictionary<string, List<string>> GetRequiredPermissionsByNodePath(string input)
+        {
+            var dictionary = new Dictionary<string, List<string>>();
+            BusinessEntityNodeManager beNodeManager = new BusinessEntityNodeManager();
+            
+            string[] permissionsByNodeNameArray = input.Split('|');
+
+            foreach (string permissionsByNodeNameString in permissionsByNodeNameArray)
+            {
+                string[] kvp = permissionsByNodeNameString.Split(':');
+                string nodePath = beNodeManager.GetBusinessEntityNodePath(kvp[0].Trim());
+                List<string> permissions = kvp[1].Split(',').MapRecords(itm => itm.Trim()).ToList();
+
+                List<string> existingPermissions;
+                dictionary.TryGetValue(nodePath, out existingPermissions);
+
+                if (existingPermissions != null)
+                    existingPermissions.AddRange(permissions);
+                else
+                    dictionary.Add(nodePath, permissions);
+            }
+
+            return dictionary;
+        }
+
+        #endregion
+
+        #region Junk Methods
+
+        //Dictionary<string, List<string>> GetRequiredPermissionsByNodePath(string systemActionNames)
+        //{
+        //    var permissionsByNodePath = new Dictionary<string, List<string>>();
+        //    string[] actionNames = systemActionNames.Split('|');
+        //    BusinessEntityNodeManager beNodeManager = new BusinessEntityNodeManager();
+
+        //    foreach (var actionName in actionNames)
+        //    {
+        //        SystemAction systemAction = new SystemActionManager().GetSystemAction(actionName);
+
+        //        if (systemAction.RequiredPermissions == null)
+        //            continue;
+
+        //        string[] permissionsByNodeNameStrings = systemAction.RequiredPermissions.Split('|');
+
+        //        foreach (string permissionsByNodeNameString in permissionsByNodeNameStrings)
+        //        {
+        //            string[] permissionsByNodeNameArray = permissionsByNodeNameString.Split(':');
+
+        //            string nodePath = beNodeManager.GetBusinessEntityNodePath(permissionsByNodeNameArray[0].Trim());
+        //            List<string> permissions = permissionsByNodeNameArray[1].Split(',').MapRecords(itm => itm.Trim()).ToList();
+
+        //            List<string> existingPermissionsByNodePath;
+        //            permissionsByNodePath.TryGetValue(nodePath, out existingPermissionsByNodePath);
+
+        //            if (existingPermissionsByNodePath != null)
+        //                existingPermissionsByNodePath.AddRange(permissions);
+        //            else
+        //                permissionsByNodePath.Add(nodePath, permissions);
+        //        }
+        //    }
+
+        //    return permissionsByNodePath;
+        //}
+        
         #endregion
     }
 }
