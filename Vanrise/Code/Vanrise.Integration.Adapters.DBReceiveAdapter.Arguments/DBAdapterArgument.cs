@@ -12,5 +12,21 @@ namespace Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments
         public string ConnectionString { get; set; }
 
         public string Query { get; set; }
+
+        public string IdentifierColumnName { get; set; }
+
+        public int NumberOfParallelReader { get; set; }
+
+        public int? NumberOffSet { get; set; }
+
+        public TimeSpan? TimeOffset { get; set; }
+
+        public override int MaxParallelRuntimeInstances
+        {
+            get
+            {
+                return this.NumberOfParallelReader;
+            }
+        }
     }
 }

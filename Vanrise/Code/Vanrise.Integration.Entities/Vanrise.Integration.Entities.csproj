@@ -60,6 +60,8 @@
     <Compile Include="DataSourceLog.cs" />
     <Compile Include="DataSourceLogQuery.cs" />
     <Compile Include="DataSourceQuery.cs" />
+    <Compile Include="DataSourceRuntimeInstance.cs" />
+    <Compile Include="IAdapterImportDataContext.cs" />
     <Compile Include="IDataSourceLogger.cs" />
     <Compile Include="IDataSourceManager.cs" />
     <Compile Include="ImportedBatchEntry.cs" />

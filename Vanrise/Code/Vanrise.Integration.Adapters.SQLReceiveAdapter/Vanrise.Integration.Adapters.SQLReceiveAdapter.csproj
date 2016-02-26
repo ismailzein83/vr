@@ -59,6 +59,14 @@
       <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
       <Name>Vanrise.Integration.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj">
+      <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>
+      <Name>Vanrise.Runtime.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime\Vanrise.Runtime.csproj">
+      <Project>{2cdddf60-45b6-4ce6-ac2b-4470bb9bfe96}</Project>
+      <Name>Vanrise.Runtime</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -29,5 +29,16 @@ namespace Vanrise.Integration.Entities
         {
             
         }
+
+        public bool IsMultipleReadings
+        {
+            get { return false; }
+        }
+
+        public bool IsEmpty
+        {
+            get;
+            set;
+        }
     }
 }

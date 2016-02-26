@@ -28,7 +28,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public override IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context)
         {
-            return new SQLRecordStorageDataManager(context.DataStore.Settings as SQLDataStoreSettings, context.DataRecordStorage.Settings as SQLDataRecordStorageSettings);
+            return new SQLRecordStorageDataManager(context.DataStore.Settings as SQLDataStoreSettings, context.DataRecordStorage.Settings as SQLDataRecordStorageSettings, context.DataRecordStorage);
         }
     }
 }

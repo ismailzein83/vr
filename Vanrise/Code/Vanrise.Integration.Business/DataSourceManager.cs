@@ -4,16 +4,26 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Caching;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Integration.Business
 {
     public class DataSourceManager : IDataSourceManager
     {
+        public IEnumerable<DataSource> GetAllDataSources()
+        {
+            var cachedDataSources = GetCachedDataSources();
+            if (cachedDataSources != null)
+                return cachedDataSources.Values;
+            else
+                return null;
+        }
         public IEnumerable<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources(DataSourceFilter filter)
         {
             IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
@@ -30,10 +40,15 @@ namespace Vanrise.Integration.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDataSources(input));
         }
 
-        public Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId)
+        public Vanrise.Integration.Entities.DataSourceDetail GetDataSourceDetail(int dataSourceId)
         {
             IDataSourceDataManager datamanager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return datamanager.GetDataSource(dataSourceId);
+        }
+
+        public DataSource GetDataSource(int dataSourceId)
+        {
+            return GetCachedDataSources().GetRecord(dataSourceId);
         }
 
         public Vanrise.Integration.Entities.DataSource GetDataSourcebyTaskId(int taskId)
@@ -174,5 +189,39 @@ namespace Vanrise.Integration.Business
             IDataSourceDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             return manager.UpdateAdapterState(dataSourceId, adapterState);
         }
+
+        #region Private Methods
+
+        private Dictionary<int, DataSource> GetCachedDataSources()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDataSources",
+               () =>
+               {
+                   IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
+                   var dataSources = dataManager.GetAllDataSources();
+                   if (dataSources != null)
+                       return dataSources.ToDictionary(kvp => kvp.DataSourceId, kvp => kvp);
+                   else
+                       return null;
+               });
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IDataSourceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreDataSourcesUpdated(ref _updateHandle);
+            }
+        }
+
+
+        #endregion
     }
 }

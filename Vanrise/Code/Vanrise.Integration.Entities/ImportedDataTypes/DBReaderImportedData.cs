@@ -12,13 +12,14 @@ namespace Vanrise.Integration.Entities
     {
         public DbDataReader Reader { get; set; }
 
-        public string LastImportedId { get; set; }
+        public Object LastImportedId { get; set; }
 
         public string Description
         {
             get { return null; }
         }
 
+        public Object MapperStateObj { get; set; }
 
         public long? BatchSize
         {
@@ -33,6 +34,18 @@ namespace Vanrise.Integration.Entities
                 Reader.Close();
                 Reader.Dispose();
             }
+        }
+
+
+        public bool IsMultipleReadings
+        {
+            get { return true; }
+        }
+
+        public bool IsEmpty
+        {
+            get;
+            set;
         }
     }
 }

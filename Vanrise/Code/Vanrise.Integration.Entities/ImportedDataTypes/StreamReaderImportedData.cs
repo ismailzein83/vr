@@ -45,5 +45,17 @@ namespace Vanrise.Integration.Entities
                 this.StreamReader.Dispose();
             }
         }
+
+
+        public bool IsMultipleReadings
+        {
+            get { return false; }
+        }
+
+        public bool IsEmpty
+        {
+            get;
+            set;
+        }
     }
 }

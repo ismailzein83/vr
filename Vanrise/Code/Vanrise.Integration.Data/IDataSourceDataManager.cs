@@ -11,6 +11,8 @@ namespace Vanrise.Integration.Data
     {
         List<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources();
 
+        List<Vanrise.Integration.Entities.DataSource> GetAllDataSources();
+
         Vanrise.Entities.BigResult<Vanrise.Integration.Entities.DataSourceDetail> GetFilteredDataSources(Vanrise.Entities.DataRetrievalInput<DataSourceQuery> input);
 
         Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId);
@@ -26,5 +28,7 @@ namespace Vanrise.Integration.Data
         bool UpdateTaskId(int dataSourceId, int taskId);
 
         bool UpdateAdapterState(int dataSourceId, Entities.BaseAdapterState adapterState);
+
+        bool AreDataSourcesUpdated(ref object updateHandle);
     }
 }

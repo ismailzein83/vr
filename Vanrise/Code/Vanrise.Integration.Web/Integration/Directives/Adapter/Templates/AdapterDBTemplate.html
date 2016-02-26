@@ -2,12 +2,25 @@
     <vr-columns width="fullrow">
         <vr-textbox value="connectionString" label="Connection String" isrequired />
     </vr-columns>
-
     <vr-columns width="fullrow">
-        <vr-textarea value="query" label="Query" hint="Ex: Select top 1000 from Table where ID > {LastImportedId}" isrequired />
+        <vr-textarea value="query" label="Query" hint="Ex: select  #TopRows# *  from [SourceTime]
+Where (ID > @RangeStart OR @RangeStart IS NULL)
+AND (ID <= @RangeEnd OR @RangeEnd IS NULL)
+ORDER BY Time" isrequired />
     </vr-columns>
-
-    <vr-columns width="fullrow">
-        <vr-textbox readonly value="lastImportedId" label="Last Imported Id" />
+    <vr-columns width="1/2row">
+        <vr-textbox value="identifierColumnName" label="Identifier Column Name" isrequired />
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="numberOfParallelReader" label="Number Of Parallel Readers" type="number" decimalprecision="0" minvalue="1" maxvalue="10" isrequired />
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-switch value="isTimeRange" label="DateTime Identifier" />
+    </vr-columns>
+    <vr-columns width="1/2row" ng-show="!isTimeRange">
+        <vr-textbox value="numberOffSet" label="Number Range Offset" type="number" decimalprecision="0" minvalue="1000" isrequired="!isTimeRange" />
+    </vr-columns>
+    <vr-columns width="1/2row" ng-show="isTimeRange">
+        <vr-textbox value="timeOffSet" label="Time Offset" isrequired="isTimeRange" customvalidate="validateTimeOffset(timeRangeOffSet)" />
     </vr-columns>
 </vr-row>

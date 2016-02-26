@@ -22,6 +22,11 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
+        public List<Vanrise.Integration.Entities.DataSource> GetAllDataSources()
+        {
+            return GetItemsSP("integration.sp_DataSource_GetAll", DataSourceMapper);
+        }
+
         public List<Entities.DataSourceInfo> GetDataSources()
         {
             return GetItemsSP("integration.sp_DataSource_GetAll", DataSourceInfoMapper);
@@ -45,7 +50,10 @@ namespace Vanrise.Integration.Data.SQL
         }
 
 
-
+        public bool AreDataSourcesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[integration].[DataSource]", ref updateHandle);
+        }
 
         //public List<Entities.DataSource> GetDataSources()
         //{
@@ -56,19 +64,7 @@ namespace Vanrise.Integration.Data.SQL
         //{
         //    return GetItemSP("integration.sp_DataSource_Get", DataSourceMapper, dataSourceId);
         //}
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
         public Entities.DataSource GetDataSourcebyTaskId(int taskId)
         {
             return GetItemSP("integration.sp_DataSource_GetByTaskId", DataSourceMapper, taskId);

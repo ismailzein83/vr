@@ -119,6 +119,11 @@ namespace Vanrise.Runtime
         static List<RunningProcessInfo> s_runningProcesses;
         static DateTime s_RunningProcessesRetrievedTime;
 
+        public List<RunningProcessInfo> GetCachedRunningProcesses()
+        {
+            return GetCachedRunningProcesses(new TimeSpan(0, 0, 2));
+        }
+
         public List<RunningProcessInfo> GetCachedRunningProcesses(TimeSpan maxCacheTime)
         {
             maxCacheTime = new TimeSpan(0, 0, 2);

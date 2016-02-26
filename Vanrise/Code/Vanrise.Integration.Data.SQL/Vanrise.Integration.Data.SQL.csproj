@@ -41,16 +41,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vanrise.Entities\bin\Debug\Vanrise.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSourceAdapterTypeDataManager.cs" />
     <Compile Include="DataSourceDataManager.cs" />
     <Compile Include="DataSourceImportedBatchDataManager.cs" />
     <Compile Include="DataSourceLogDataManager.cs" />
+    <Compile Include="DataSourceRuntimeInstanceDataManager.cs" />
+    <Compile Include="DataSourceStateDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +63,10 @@
     <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
       <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
       <Name>Vanrise.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Data\Vanrise.Integration.Data.csproj">
       <Project>{88cd0723-c237-4632-8bbe-346a645b4c09}</Project>

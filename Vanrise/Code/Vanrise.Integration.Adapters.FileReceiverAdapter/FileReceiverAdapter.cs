@@ -59,10 +59,10 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         }
 
         #endregion
-
-        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData)
+        
+        public override void ImportData(IAdapterImportDataContext context)
         {
-            FileAdapterArgument fileAdapterArgument = argument as FileAdapterArgument;
+            FileAdapterArgument fileAdapterArgument = context.AdapterArgument as FileAdapterArgument;
 
 
             base.LogVerbose("Checking the following directory {0}", fileAdapterArgument.Directory);
@@ -77,7 +77,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                     base.LogInformation("{0} files are ready to be imported", Files.Length);
                     foreach (FileInfo file in Files)
                     {
-                        CreateStreamReader(fileAdapterArgument, receiveData, file);
+                        CreateStreamReader(fileAdapterArgument, context.OnDataReceived, file);
                         AfterImport(fileAdapterArgument, file);
                     }
                 }

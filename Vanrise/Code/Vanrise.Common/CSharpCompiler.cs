@@ -30,6 +30,7 @@ namespace Vanrise.Common
 
             parameters.ReferencedAssemblies.Add(Assembly.GetCallingAssembly().Location);
             parameters.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
+            parameters.ReferencedAssemblies.Add(typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).Assembly.Location);//this is needed for dynamic variables
 
             string path = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
             foreach (string fileName in Directory.GetFiles(path, "*.dll"))
@@ -46,7 +47,8 @@ namespace Vanrise.Common
                         parameters.ReferencedAssemblies.Add(assembly.Location);
                 }
                 catch (NotSupportedException ex)
-                { }
+                { 
+                }
             }
 
             CompilerResults results = provider.CompileAssemblyFromSource(parameters, classDefinition);

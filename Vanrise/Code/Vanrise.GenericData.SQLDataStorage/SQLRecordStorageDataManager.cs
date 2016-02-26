@@ -12,12 +12,19 @@ namespace Vanrise.GenericData.SQLDataStorage
     {
         SQLDataStoreSettings _dataStoreSettings;
         SQLDataRecordStorageSettings _dataRecordStorageSettings;
-        int _dataRecordStorageId;
+        DataRecordStorage _dataRecordStorage;
+
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings)
             : base(dataStoreSettings.ConnectionString, false)
         {
             this._dataStoreSettings = dataStoreSettings;
             this._dataRecordStorageSettings = dataRecordStorageSettings;
+        }
+
+        internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage)
+            : this(dataStoreSettings, dataRecordStorageSettings)
+        {
+            this._dataRecordStorage = dataRecordStorage;
         }
 
         public void ApplyStreamToDB(object stream)
@@ -43,8 +50,10 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             if (_bulkInsertWriter == null)
             {
+                if (_dataRecordStorage == null)
+                    throw new NullReferenceException("_dataRecordStorage");
                 DynamicTypeGenerator dynamicTypeGenerator = new DynamicTypeGenerator();
-                _bulkInsertWriter = dynamicTypeGenerator.GetBulkInsertWriter(_dataRecordStorageId, _dataRecordStorageSettings);
+                _bulkInsertWriter = dynamicTypeGenerator.GetBulkInsertWriter(_dataRecordStorage.DataRecordStorageId, _dataRecordStorageSettings);
             }
         }
 

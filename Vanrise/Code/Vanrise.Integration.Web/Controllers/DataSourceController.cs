@@ -36,7 +36,7 @@ namespace Vanrise.Integration.Web.Controllers
         public Vanrise.Integration.Entities.DataSourceDetail GetDataSource(int dataSourceId)
         {
             DataSourceManager manager = new DataSourceManager();
-            return manager.GetDataSource(dataSourceId);
+            return manager.GetDataSourceDetail(dataSourceId);
         }
 
         [HttpGet]

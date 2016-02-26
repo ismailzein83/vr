@@ -9,6 +9,6 @@ namespace Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments
 {
     public class DBAdapterState : BaseAdapterState
     {
-        public string LastImportedId { get; set; }
+        public Object LastImportedId { get; set; }
     }
 }

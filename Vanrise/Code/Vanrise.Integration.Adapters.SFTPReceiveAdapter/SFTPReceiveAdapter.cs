@@ -70,10 +70,9 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
         #endregion
 
-        public override void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData)
+        public override void ImportData(IAdapterImportDataContext context)
         {
-
-            FTPAdapterArgument ftpAdapterArgument = argument as FTPAdapterArgument;
+            FTPAdapterArgument ftpAdapterArgument = context.AdapterArgument as FTPAdapterArgument;
 
             var sftp = new Rebex.Net.Sftp();
 
@@ -105,7 +104,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                         if (!fileObj.IsDirectory && fileObj.Name.ToUpper().Contains(ftpAdapterArgument.Extension))
                         {
                             String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
-                            CreateStreamReader(receiveData, sftp, fileObj, filePath);
+                            CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath);
                             AfterImport(sftp, fileObj, filePath, ftpAdapterArgument);
                         }
                     }
@@ -117,8 +116,8 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                 base.LogError("Could not ftp connect to server {0}", ftpAdapterArgument.ServerIP);
                 throw new Exception("FTP adapter could not connect to FTP Server");
             }
-
         }
+
 
     }
 }

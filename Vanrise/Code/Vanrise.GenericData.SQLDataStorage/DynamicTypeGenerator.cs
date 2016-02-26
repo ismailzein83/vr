@@ -5,15 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.GenericData.SQLDataStorage
 {
      
     internal class DynamicTypeGenerator
     {
-        public IBulkInsertWriter GetBulkInsertWriter(int dataRecordTypeId, SQLDataRecordStorageSettings dataRecordStorageSettings)
+        public IBulkInsertWriter GetBulkInsertWriter(int dataRecordStorageId, SQLDataRecordStorageSettings dataRecordStorageSettings)
         {
-            StringBuilder classDefinitionBuilder = new StringBuilder(@"
+            String cacheName = String.Format("SQLDataStorage_DynamicTypeGenerator_GetBulkInsertWriter_{0}", dataRecordStorageId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordStorageManager.CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    StringBuilder classDefinitionBuilder = new StringBuilder(@"
                 using System;                
 
                 namespace #NAMESPACE#
@@ -37,48 +42,50 @@ namespace Vanrise.GenericData.SQLDataStorage
                         }
                     }
                 }");
-           
-            StringBuilder recordFormatBuilder = new StringBuilder();
-            StringBuilder columnsValuesBuider = new StringBuilder();
-            StringBuilder columnNamesBuilder = new StringBuilder();
-            int columnIndex = 0;
-            foreach(var columnSettings in dataRecordStorageSettings.Columns)
-            {
-                if (columnIndex > 0)
-                    recordFormatBuilder.Append("^");
-                recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");                
-                columnsValuesBuider.Append(String.Format(", record.{0}", columnSettings.ValueExpression));
-                columnIndex++;
-                if (columnNamesBuilder.Length > 0)
-                    columnNamesBuilder.Append(", ");
-                columnNamesBuilder.AppendFormat("\"{0}\"", columnSettings.ColumnName);
-            }
-            classDefinitionBuilder.Replace("#RECORDFORMAT#", recordFormatBuilder.ToString());
-            classDefinitionBuilder.Replace("#COLUMNSVALUES#", columnsValuesBuider.ToString());
-            classDefinitionBuilder.Replace("#COLUMNNAMES#", columnNamesBuilder.ToString());
 
-            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.SQLDataStorage");
-            string className = "BulkInsertWriter";
-            classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
-            classDefinitionBuilder.Replace("#CLASSNAME#", className);
-            string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
-
-            CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(classDefinitionBuilder.ToString(), out compilationOutput))
-            {
-                StringBuilder errorsBuilder = new StringBuilder();
-                if (compilationOutput.ErrorMessages != null)
-                {
-                    foreach (var errorMessage in compilationOutput.ErrorMessages)
+                    StringBuilder recordFormatBuilder = new StringBuilder();
+                    StringBuilder columnsValuesBuider = new StringBuilder();
+                    StringBuilder columnNamesBuilder = new StringBuilder();
+                    int columnIndex = 0;
+                    foreach (var columnSettings in dataRecordStorageSettings.Columns)
                     {
-                        errorsBuilder.AppendLine(errorMessage);
+                        if (columnIndex > 0)
+                            recordFormatBuilder.Append("^");
+                        recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");
+                        columnsValuesBuider.Append(String.Format(", record.{0}", columnSettings.ValueExpression));
+                        columnIndex++;
+                        if (columnNamesBuilder.Length > 0)
+                            columnNamesBuilder.Append(", ");
+                        columnNamesBuilder.AppendFormat("\"{0}\"", columnSettings.ColumnName);
                     }
-                }
-                throw new Exception(String.Format("Compile Error when building BulkInsertWriter for record type Id'{0}'. Errors: {1}",
-                    dataRecordTypeId, errorsBuilder));
-            }
-            else
-                return Activator.CreateInstance(compilationOutput.OutputAssembly.GetType(fullTypeName)) as IBulkInsertWriter;
+                    classDefinitionBuilder.Replace("#RECORDFORMAT#", recordFormatBuilder.ToString());
+                    classDefinitionBuilder.Replace("#COLUMNSVALUES#", columnsValuesBuider.ToString());
+                    classDefinitionBuilder.Replace("#COLUMNNAMES#", columnNamesBuilder.ToString());
+
+                    string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.SQLDataStorage");
+                    string className = "BulkInsertWriter";
+                    classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
+                    classDefinitionBuilder.Replace("#CLASSNAME#", className);
+                    string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+
+                    CSharpCompilationOutput compilationOutput;
+                    if (!CSharpCompiler.TryCompileClass(classDefinitionBuilder.ToString(), out compilationOutput))
+                    {
+                        StringBuilder errorsBuilder = new StringBuilder();
+                        if (compilationOutput.ErrorMessages != null)
+                        {
+                            foreach (var errorMessage in compilationOutput.ErrorMessages)
+                            {
+                                errorsBuilder.AppendLine(errorMessage);
+                            }
+                        }
+                        throw new Exception(String.Format("Compile Error when building BulkInsertWriter for record Storage Id'{0}'. Errors: {1}",
+                            dataRecordStorageId, errorsBuilder));
+                    }
+                    else
+                        return Activator.CreateInstance(compilationOutput.OutputAssembly.GetType(fullTypeName)) as IBulkInsertWriter;
+                });
+            
         }
     }
 

@@ -8,10 +8,9 @@ using Vanrise.Common;
 namespace Vanrise.Integration.Entities
 {
     public abstract class BaseReceiveAdapter
-    {
-        public abstract void ImportData(int dataSourceId, BaseAdapterState adapterState, BaseAdapterArgument argument, Action<IImportedData> receiveData);
-
+    {        
         //public abstract bool IsCredentialsAvailable(string connectionString);
+        public abstract void ImportData(IAdapterImportDataContext context);
 
         private IDataSourceLogger _logger;
         private IDataSourceManager _dataSourceManager;
