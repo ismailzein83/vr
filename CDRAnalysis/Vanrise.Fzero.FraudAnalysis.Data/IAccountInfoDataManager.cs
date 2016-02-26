@@ -8,5 +8,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
     {
         void LoadAccountInfo(IEnumerable<CaseStatus> caseStatuses, Action<AccountInfo> onBatchReady);
         bool InsertOrUpdateAccountInfo(string accountNumber, InfoDetail infoDetail);
+        void SavetoDB(List<AccountInfo> records);
+        bool UpdateAccountInfoBatch(List<AccountInfo> accountInfos);
+
     }
 }

@@ -100,19 +100,53 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             DataTable dt = new DataTable("FraudAnalysis.StrategyExecutionItem");
             dt.Columns.Add("ID", typeof(long));
             dt.Columns.Add("SuspicionOccuranceStatus", typeof(int));
+            dt.Columns.Add("AccountNumber", typeof(string));
+            dt.Columns.Add("CaseId", typeof(int));
             return dt;
         }
 
-        public bool UpdateStrategyExecutionItemBatch(List<long> ItemIds, int userId, SuspicionOccuranceStatus status)
+        public bool CancelStrategyExecutionItemBatch(List<long> itemIds, int userId, SuspicionOccuranceStatus status)
         {
             DataTable dtStrategyExecutionItemsToUpdate = GetStrategyExecutionItemTable();
             DataRow dr;
 
-            foreach (var item in ItemIds)
+            foreach (var item in itemIds)
             {
                 dr = dtStrategyExecutionItemsToUpdate.NewRow();
                 dr["ID"] = item;
                 dr["SuspicionOccuranceStatus"] = (int)status;
+                dr["AccountNumber"] = string.Empty;
+                dr["CaseId"] = 0;
+                dtStrategyExecutionItemsToUpdate.Rows.Add(dr);
+            }
+
+            int recordsAffected = 0;
+            if (dtStrategyExecutionItemsToUpdate.Rows.Count > 0)
+            {
+                recordsAffected = ExecuteNonQuerySPCmd("[FraudAnalysis].[sp_StrategyExecutionItem_BulkCancel]",
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@StrategyExecutionItem", SqlDbType.Structured);
+                           dtPrm.Value = dtStrategyExecutionItemsToUpdate;
+                           cmd.Parameters.Add(dtPrm);
+                       });
+            }
+
+            return (recordsAffected > 0);
+
+
+        }
+
+        public bool UpdateStrategyExecutionItemBatch(Dictionary<string, int> accountNumberCaseIds)
+        {
+            DataTable dtStrategyExecutionItemsToUpdate = GetStrategyExecutionItemTable();
+            DataRow dr;
+
+            foreach (var item in accountNumberCaseIds)
+            {
+                dr = dtStrategyExecutionItemsToUpdate.NewRow();
+                dr["AccountNumber"] = item.Key;
+                dr["CaseId"] = item.Value;
                 dtStrategyExecutionItemsToUpdate.Rows.Add(dr);
             }
 
@@ -199,6 +233,43 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedStrategyExecutionItem as BaseBulkInsertInfo);
         }
 
+        public void GetStrategyExecutionItemsbyNULLCaseId(out List<AccountInfo> outItems, out List<AccountCase> outCases, out List<AccountInfo> outInfos)
+        {
+            AccountCaseDataManager accountCaseDataManager = new AccountCaseDataManager();
+            AccountInfoDataManager accountInfoDataManager = new AccountInfoDataManager();
+            List<AccountInfo> itemsInfo = new List<AccountInfo>();
+            List<AccountCase> cases = new List<AccountCase>();
+            List<AccountInfo> infos = new List<AccountInfo>();
+
+            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionItem_GetItemsAndCasesAndInfoByNULLCaseID", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    itemsInfo.Add(accountInfoDataManager.AccountInfoMapper(reader));
+                }
+                reader.NextResult();
+
+
+
+                while (reader.Read())
+                {
+                    cases.Add(accountCaseDataManager.AccountCaseMapper(reader));
+                }
+                reader.NextResult();
+
+
+
+                while (reader.Read())
+                {
+                    infos.Add(accountInfoDataManager.AccountInfoMapper(reader));
+                }
+
+            });
+
+            outItems = itemsInfo;
+            outCases = cases;
+            outInfos = infos;
+        }
 
         #endregion
 

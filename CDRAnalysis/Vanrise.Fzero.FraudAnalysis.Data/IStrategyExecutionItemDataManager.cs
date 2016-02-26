@@ -14,11 +14,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void GetStrategyExecutionItemsbyExecutionId(long ExecutionId, out List<StrategyExecutionItem> outAllStrategyExecutionItems, out List<AccountCase> outAccountCases, out List<StrategyExecutionItem> outStrategyExecutionItemRelatedtoCases);
 
-        bool UpdateStrategyExecutionItemBatch(List<long> ItemIds, int userId, SuspicionOccuranceStatus status);
+        bool CancelStrategyExecutionItemBatch(List<long> ItemIds, int userId, SuspicionOccuranceStatus status);
+
+        bool UpdateStrategyExecutionItemBatch(Dictionary<string, int> accountNumberCaseIds);
 
         void ApplyStrategyExecutionItemsToDB(object preparedStrategyExecutionItems);
 
         void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady);
 
+        void GetStrategyExecutionItemsbyNULLCaseId(out List<AccountInfo> outItems, out List<AccountCase> outCases, out List<AccountInfo> outInfos);
     }
 }

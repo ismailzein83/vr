@@ -81,15 +81,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return (recordsAffected > 0);
         }
 
-        DataTable GetAccountCaseTable()
-        {
-            DataTable dt = new DataTable("FraudAnalysis.AccountCase");
-            dt.Columns.Add("ID", typeof(int));
-            dt.Columns.Add("UserID", typeof(int));
-            dt.Columns.Add("Status", typeof(int));
-            return dt;
-        }
-
         public bool UpdateAccountCaseBatch(List<int> CaseIds, int userId, CaseStatus status)
         {
             DataTable dtAccountCasesToUpdate = GetAccountCaseTable();
@@ -121,9 +112,59 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
+        public void SavetoDB(List<AccountCase> records)
+        {
+            string[] s_Columns = new string[] {
+                "AccountNumber"	,
+                "UserID"	,
+                "Status"	,
+                "StatusUpdatedTime"	,
+                "ValidTill"	,
+                "CreatedTime"	,
+                "Reason"
+        };
+
+
+            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
+
+            foreach (AccountCase record in records)
+            {
+                stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
+                                record.AccountNumber,
+                                record.UserID,
+                                (int)record.StatusID,
+                                record.StatusUpdatedTime,
+                                record.ValidTill,
+                                record.CreatedTime,
+                                record.Reason
+                                );
+            }
+
+            stream.Close();
+
+            InsertBulkToTable(
+                new StreamBulkInsertInfo
+                {
+                    TableName = "[FraudAnalysis].[AccountCase]",
+                    Stream = stream,
+                    TabLock = true,
+                    ColumnNames = s_Columns,
+                    KeepIdentity = false,
+                    FieldSeparator = '^'
+                });
+        }
+
         #endregion
 
         #region Private Methods
+        private DataTable GetAccountCaseTable()
+        {
+            DataTable dt = new DataTable("FraudAnalysis.AccountCase");
+            dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("UserID", typeof(int));
+            dt.Columns.Add("Status", typeof(int));
+            return dt;
+        }
         private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
         {
             StringBuilder query = new StringBuilder(@"
