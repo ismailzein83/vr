@@ -24,6 +24,28 @@ namespace CP.SupplierPricelist.Business
             };
 
         }
+        protected CustomerInfo CustomerInfoMapper(Customer customer)
+        {
+
+            return new CustomerInfo
+            {
+                CustomerId = customer.CustomerId,
+                Name = customer.Name
+            };
+
+        }
+
+        public IEnumerable<CustomerInfo> GetCustomerInfos(CustomerFilter filter )
+        {
+            var cachedCustomers = GetCachedCustomers();
+            if (filter != null && filter.AssignedToCurrentSupplier == true)
+            {
+                CustomerSupplierMappingManager csmanger = new CustomerSupplierMappingManager();
+                return cachedCustomers.MapRecords(CustomerInfoMapper, cus => (csmanger.GetCustomersIdsByLoggedInUserId().Contains(cus.CustomerId)));
+            }
+            return cachedCustomers.MapRecords(CustomerInfoMapper);
+
+        }
         public IDataRetrievalResult<CustomerDetail> GetFilteredCustomers(DataRetrievalInput<CustomerQuery> input)
         {
             var cachedCustomers = GetCachedCustomers();

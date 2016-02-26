@@ -69,7 +69,7 @@ namespace CP.SupplierPricelist.Business
         public CustomerSupplierMapping GetCustomerSupplierMapping(int userId)
         {
             var customerSupplierMappings = GetCachedCustomerSupplierMappings();
-            return customerSupplierMappings.GetRecord(userId);
+            return customerSupplierMappings.Values.FindRecord(x => x.UserId == userId && x.CustomerId == GetLoggedInCustomerId());
         }
 
         public IEnumerable<CustomerSupplierMapping> GetCustomerSupplierMappings()
@@ -138,11 +138,18 @@ namespace CP.SupplierPricelist.Business
                return null;
         
         }
-        private int GetLoggedInCustomerId()
+        public int GetLoggedInCustomerId()
         {
             int userId = new SecurityContext().GetLoggedInUserId();
             return new CustomerUserManager().GetCustomerIdByUserId(userId);
         }
+
+        public List<int> GetCustomersIdsByLoggedInUserId()
+        {
+            int userId = new SecurityContext().GetLoggedInUserId();
+            return GetCachedCustomerSupplierMappings().Values.FindAllRecords(x => x.UserId == userId).Select(c => c.CustomerId).ToList();
+        }
+
 
         Dictionary<int, CustomerSupplierMapping> GetCachedCustomerSupplierMappings()
         {
@@ -151,7 +158,7 @@ namespace CP.SupplierPricelist.Business
                {
                    ICustomerSupplierMappingDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerSupplierMappingDataManager>();
                    IEnumerable<CustomerSupplierMapping> customerSupplierMappings = dataManager.GetAllCustomerSupplierMappings();
-                   return customerSupplierMappings.ToDictionary(cu => cu.UserId, cu => cu);
+                   return customerSupplierMappings.ToDictionary(cu => cu.SupplierMappingId, cu => cu);
                });
         }
 

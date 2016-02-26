@@ -52,6 +52,8 @@
     <Compile Include="CustomerOutput.cs" />
     <Compile Include="Customer\Customer.cs" />
     <Compile Include="Customer\CustomerDetail.cs" />
+    <Compile Include="Customer\CustomerFilter.cs" />
+    <Compile Include="Customer\CustomerInfo.cs" />
     <Compile Include="Customer\CustomerSettings.cs" />
     <Compile Include="Customer\CustomerSupplierMappingDetail.cs" />
     <Compile Include="Customer\CustomerUserQuery.cs" />
