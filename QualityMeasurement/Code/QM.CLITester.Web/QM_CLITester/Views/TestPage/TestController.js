@@ -124,11 +124,15 @@
 
         function buildTestCallObjFromScope() {
             var obj = {
-                TestCallId: 0,
-                SupplierID: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
+                //TestCallId: 0,
+                SuppliersIds: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
+                SuppliersSourceIds:"",
                 CountryID: $scope.selectedCountry.CountryId,
                 ZoneID: $scope.selectedZone.ZoneId,
-                ProfileID: $scope.selectedProfile.ProfileId
+                ZoneSourceId:"",
+                ProfileID: $scope.selectedProfile.ProfileId,
+                UserId: 0,
+                ScheduleId:0
             };
             return obj;
         }

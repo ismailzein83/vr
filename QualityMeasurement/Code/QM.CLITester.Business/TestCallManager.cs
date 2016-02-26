@@ -40,13 +40,15 @@ namespace QM.CLITester.Business
             
             Zone zone = new Zone();
             long zoneId = 0;
-            
+            int countryId = testCallInput.CountryID;
+
             if (testCallInput.ZoneID == null)
             {
                 zone = zoneManager.GetZonebySourceId(testCallInput.ZoneSourceId);
                 if (zone != null)
                     zoneId = zone.ZoneId;
-            }   
+                countryId = zone.CountryId;
+            }
             else
             {
                 zoneId = testCallInput.ZoneID.Value;
@@ -54,7 +56,7 @@ namespace QM.CLITester.Business
 
             List<int?> listSuppliersIds = new List<int?>();
 
-            if (testCallInput.SuppliersIds != null)
+            if (testCallInput.SuppliersIds != null && testCallInput.SuppliersIds.Count > 0)
             {
                 listSuppliersIds = testCallInput.SuppliersIds;
             }
@@ -69,7 +71,7 @@ namespace QM.CLITester.Business
 
             foreach (int supplierId in listSuppliersIds)
             {
-                dataManager.Insert(supplierId, testCallInput.CountryID, zoneId, (int)CallTestStatus.New,
+                dataManager.Insert(supplierId, countryId, zoneId, (int)CallTestStatus.New,
                     (int)CallTestResult.NotCompleted, 0, 0,
                     testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId);
             }
