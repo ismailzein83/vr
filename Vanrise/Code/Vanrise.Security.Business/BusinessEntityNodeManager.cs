@@ -97,6 +97,7 @@ namespace Vanrise.Security.Business
             {
                 EntityId = module.ModuleId,
                 Name = module.Name,
+                Title = module.Title,
                 EntType = EntityType.MODULE,
                 BreakInheritance = module.BreakInheritance,
                 PermissionOptions = module.PermissionOptions,
@@ -116,6 +117,7 @@ namespace Vanrise.Security.Business
                     {
                         EntityId = entityItem.EntityId,
                         Name = entityItem.Name,
+                        Title = entityItem.Title,
                         EntType = EntityType.ENTITY,
                         BreakInheritance = entityItem.BreakInheritance,
                         PermissionOptions = entityItem.PermissionOptions,
