@@ -4,6 +4,9 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row>
                 <vr-columns colnum="2">
+                    <vr-cp-customer-selector on-ready="onCustomerDirectiveReady" isrequired="true"></vr-cp-customer-selector>
+                </vr-columns>
+                <vr-columns colnum="2">
                     <vr-fileupload extension="xls,xlsx,csv" value="file" label="File to upload" isrequired="true"> </vr-fileupload>
                 </vr-columns>
                 <vr-columns colnum="2">
