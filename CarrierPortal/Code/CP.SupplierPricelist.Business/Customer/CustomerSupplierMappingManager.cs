@@ -59,6 +59,8 @@ namespace CP.SupplierPricelist.Business
             Func<CustomerSupplierMapping, bool> filterExpression = (item) =>
                  (input.Query.Users == null || input.Query.Users.Count() == 0 || input.Query.Users.Contains(item.UserId))
                   &&
+                  (item.CustomerId == GetLoggedInCustomerId())
+                  &&
                  (input.Query.CarrierAccouts == null || input.Query.CarrierAccouts.Count() == 0 || input.Query.CarrierAccouts.Any(y => (item.Settings.MappedSuppliers.Any(x => x == y))));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, SupplierMappingDetailMapper));
