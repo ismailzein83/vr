@@ -134,11 +134,13 @@
         function LoadUser() {        
             var userLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             userReadyPromiseDeferred.promise.then(function () {
-                var obj;
-                if (supplierEntity != undefined && supplierEntity.UserId != undefined) {
-                    obj = {
-                        selectedIds: supplierEntity.UserId
+                var obj = {
+                    filter: {
+                        ExcludeInactive: true
                     }
+                }
+                if (supplierEntity != undefined && supplierEntity.UserId != undefined) {
+                    obj.selectedIds = supplierEntity.UserId;                        
                     $scope.disableUser = true;
                 }
                    
