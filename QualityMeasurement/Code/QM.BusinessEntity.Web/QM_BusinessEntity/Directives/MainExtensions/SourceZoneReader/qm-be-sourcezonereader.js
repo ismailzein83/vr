@@ -56,7 +56,7 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
                 sourceTypeDirectiveAPI = api;
                 sourceDirectiveReadyPromiseDeferred.resolve();
             }
-            $scope.onSourceCountryDirectiveReady = function (api) {
+            $scope.onSourceCountryDirectiveReady = function (api) {                
                 countrySourceTypeDirectiveAPI = api;
                 countrySourceDirectiveReadyPromiseDeferred.resolve();
             }
@@ -96,21 +96,22 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
                     if (sourceConfigId != undefined)
                         $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
 
-                })
+                });
                 promises.push(zoneSourceTemplatesLoad);
 
-                var loadZoneSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
-                sourceDirectiveReadyPromiseDeferred.promise.then(function () {
-                    var obj;
-                    if (payload != undefined && payload.data != undefined && payload.data.SourceZoneReader != undefined)
-                        obj = {
-                            connectionString: payload.data.SourceZoneReader.ConnectionString
-                        };
-                    VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, obj, loadZoneSourceTemplatePromiseDeferred);
-                });
-                promises.push(loadZoneSourceTemplatePromiseDeferred.promise);
-
-
+                if (payload != undefined && payload.data != undefined && payload.data.SourceZoneReader != undefined) {
+                    var loadZoneSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
+                    sourceDirectiveReadyPromiseDeferred.promise.then(function () {
+                        var obj;
+                        if (payload != undefined && payload.data != undefined && payload.data.SourceZoneReader != undefined)
+                            obj = {
+                                connectionString: payload.data.SourceZoneReader.ConnectionString
+                            };
+                        VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, obj, loadZoneSourceTemplatePromiseDeferred);
+                    });
+                    promises.push(loadZoneSourceTemplatePromiseDeferred.promise);
+                }
+                
                 var loadCountrySourcePromiseDeferred = UtilsService.createPromiseDeferred();
                 countrySourceDirectiveReadyPromiseDeferred.promise.then(function () {
                     var obj ;
