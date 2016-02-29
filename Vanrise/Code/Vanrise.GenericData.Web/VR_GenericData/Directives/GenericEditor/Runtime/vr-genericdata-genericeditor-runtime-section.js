@@ -58,8 +58,13 @@ app.directive('vrGenericdataGenericeditorRuntimeSection', ['UtilsService','VRUIU
                 }
 
                 api.getData = function () {
-                    return {
-                    };
+                    var rows = {};
+                    for(var i = 0; i < ctrl.rows.length; i++ )
+                    {
+                        var row = ctrl.rows[i];
+                        rows = UtilsService.mergeObject(rows, row.fieldsAPI.getData(),false);
+                    }
+                    return rows;
                 }
 
                 if (ctrl.onReady != null)

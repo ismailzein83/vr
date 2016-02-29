@@ -29,5 +29,12 @@ namespace Vanrise.GenericData.Web.Controllers
             BusinessEntityDefinitionInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<BusinessEntityDefinitionInfoFilter>(filter) : null;
             return _manager.GetBusinessEntityDefinitionsInfo(deserializedFilter);
         }
+
+        [HttpPost]
+        [Route("GetFilteredBusinessEntityDefinitions")]
+        public object GetFilteredDataRecordStorages(Vanrise.Entities.DataRetrievalInput<BusinessEntityDefinitionQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredBusinessEntityDefinitions(input));
+        }
     }
 }

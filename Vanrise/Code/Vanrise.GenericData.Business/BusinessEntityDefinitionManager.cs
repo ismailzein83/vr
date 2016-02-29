@@ -14,6 +14,21 @@ namespace Vanrise.GenericData.Business
     {
         #region Public Methods
 
+        public Vanrise.Entities.IDataRetrievalResult<BusinessEntityDefinitionDetail> GetFilteredBusinessEntityDefinitions(Vanrise.Entities.DataRetrievalInput<BusinessEntityDefinitionQuery> input)
+        {
+            var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
+
+            Func<BusinessEntityDefinition, bool> filterExpression = (dataRecordStorage) =>
+                (input.Query.Name == null || dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedBEDefinitions.ToBigResult(input, filterExpression, BusinessEntityDefinitionDetailMapper));
+        }
+        public int GetBusinessEntityDefinitionId(string businessEntityDefinitionName)
+        {
+            var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
+            var businessEntityDefinition = cachedBEDefinitions.FindRecord(x=>x.Name == businessEntityDefinitionName);
+            return businessEntityDefinition.BusinessEntityDefinitionId;
+        }
+
         public BusinessEntityDefinition GetBusinessEntityDefinition(int businessEntityDefinitionId)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
@@ -73,6 +88,13 @@ namespace Vanrise.GenericData.Business
             {
                 BusinessEntityDefinitionId = beDefinition.BusinessEntityDefinitionId,
                 Name = beDefinition.Name
+            };
+        }
+        BusinessEntityDefinitionDetail BusinessEntityDefinitionDetailMapper(BusinessEntityDefinition beDefinition)
+        {
+            return new BusinessEntityDefinitionDetail()
+            {
+                Entity = beDefinition,
             };
         }
         

@@ -55,6 +55,11 @@ namespace Vanrise.GenericData.Business
             var dataRecordTypes = GetCachedDataRecordTypes();
             return dataRecordTypes.MapRecords(DataRecordTypeInfoMapper);
         }
+        public DataRecordTypeInfo GetDataRecordTypeInfo(int dataRecordTypeId)
+        {
+            var dataRecordTypes = GetCachedDataRecordTypes();
+            return dataRecordTypes.MapRecord(DataRecordTypeInfoMapper, x => x.DataRecordTypeId == dataRecordTypeId);
+        }
         public Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail> AddDataRecordType(DataRecordType dataRecordType)
         {
             InsertOperationOutput<DataRecordTypeDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail>();

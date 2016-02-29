@@ -57,8 +57,14 @@ app.directive('vrGenericdataGenericeditorRuntimeRow', ['UtilsService', 'VRUIUtil
                 }
 
                 api.getData = function () {
-                    return {
-                    };
+                    var fields = {};
+                    for (var i = 0; i < ctrl.fields.length; i++)
+                    {
+                        var field = ctrl.fields[i];
+                        if (field.fieldAPI != undefined)
+                            fields[field.FieldPath] = field.fieldAPI.getData();
+                    }
+                    return  fields;
                 }
 
                 if (ctrl.onReady != null)
@@ -75,7 +81,7 @@ app.directive('vrGenericdataGenericeditorRuntimeRow', ['UtilsService', 'VRUIUtil
                 var payload = {
                     fieldTitle: field.FieldTitle,
                     fieldType: field.FieldType,
-                    fieldValue:undefined
+                    fieldValue: currentContext !=undefined? currentContext.getFieldPathValue(field.FieldPath):undefined
                 };
                 if (field.readyPromiseDeferred != undefined) {
                     field.readyPromiseDeferred.promise.then(function () {

@@ -32,6 +32,7 @@ app.directive('vrGenericdataGenericeditorRuntimeEditor', ['UtilsService','VRUIUt
         };
 
         function EditorCtor(ctrl, $scope) {
+            var selectedValues;
             function initializeController() {
                 ctrl.sections = [];
                 defineAPI();
@@ -41,8 +42,8 @@ app.directive('vrGenericdataGenericeditorRuntimeEditor', ['UtilsService','VRUIUt
                 var api = {};
 
                 api.load = function (payload) {
-                 
                     if (payload.sections != undefined) {
+                        selectedValues = payload.selectedValues;
                         ctrl.sections.length = 0;
                         var promises = [];
                         
@@ -72,8 +73,12 @@ app.directive('vrGenericdataGenericeditorRuntimeEditor', ['UtilsService','VRUIUt
                 }
 
                 api.getData = function () {
-                    return {
-                    };
+                    var sections = {};
+                    for (var i = 0; i < ctrl.sections.length; i++) {
+                        var section = ctrl.sections[i];
+                        sections = UtilsService.mergeObject(sections, section.rowsAPI.getData(), false);
+                    }
+                    return sections;
                 }
 
                 if (ctrl.onReady != null)
@@ -99,9 +104,16 @@ app.directive('vrGenericdataGenericeditorRuntimeEditor', ['UtilsService','VRUIUt
 
             function getContext() {
                 var context = {
-                    getRuntimeEditor: getRuntimeEditor
+                    getRuntimeEditor: getRuntimeEditor,
+                    getFieldPathValue: getFieldPathValue
                 };
                 return context;
+            }
+
+            function getFieldPathValue(fieldPath)
+            {
+                if (selectedValues != undefined && fieldPath != undefined)
+                return selectedValues[fieldPath];
             }
 
             function getRuntimeEditor(configId)

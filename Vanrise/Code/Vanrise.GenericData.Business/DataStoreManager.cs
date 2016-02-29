@@ -44,15 +44,15 @@ namespace Vanrise.GenericData.Business
             int dataStoreId = -1;
 
             IDataStoreDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataStoreDataManager>();
-            bool added = dataManager.AddDataStore(dataStore, out dataStoreId);
+            bool insertActionSucc = dataManager.AddDataStore(dataStore, out dataStoreId);
 
-            if (added)
+            if (insertActionSucc)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 dataStore.DataStoreId = dataStoreId;
                 insertOperationOutput.InsertedObject = DataStoreDetailMapper(dataStore);
 
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataStores");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -70,12 +70,12 @@ namespace Vanrise.GenericData.Business
             updateOperationOutput.UpdatedObject = null;
 
             IDataStoreDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataStoreDataManager>();
-            bool updated = dataManager.UpdateDataStore(dataStore);
+            bool updateActionSucc = dataManager.UpdateDataStore(dataStore);
 
-            if (updated)
+            if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataStores");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.UpdatedObject = DataStoreDetailMapper(dataStore);
             }
             else

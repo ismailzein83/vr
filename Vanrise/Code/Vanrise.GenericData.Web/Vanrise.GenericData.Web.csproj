@@ -190,6 +190,16 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-recordname-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-stepsequencedesign.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionGrid.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericEditorDefinitionGrid.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentitydefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericeditordefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionRowTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionSectionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\vr-genericdata-genericeditor-definition-editor.js" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\vr-genericdata-genericeditor-definition-row.js" />
+    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\vr-genericdata-genericeditor-definition-section.js" />
     <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\EditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\RowTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\SectionTemplate.html" />
@@ -322,6 +332,7 @@
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />
     <Content Include="VR_GenericData\Services\ExpressionBuilderService.js" />
+    <Content Include="VR_GenericData\Services\GenericEditorService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
@@ -343,6 +354,12 @@
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\TransformationRecordTypeEditorController.js" />
     <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditor.html" />
     <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditor.html" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditor.html" />

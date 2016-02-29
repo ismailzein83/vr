@@ -44,8 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessEntities\BusinessEntityDefinition.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinitionDetail.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinitionInfo.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinitionInfoFilter.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinitionQuery.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDescriptionContext.cs" />
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
@@ -84,6 +86,9 @@
     <Compile Include="DataStorage\IUpdateRecordStorageSettingsContext.cs" />
     <Compile Include="ExpressionBuilder\ExpressionBuilderConfig.cs" />
     <Compile Include="GenericEditor\GenericEditor.cs" />
+    <Compile Include="GenericEditor\GenericEditorDefinition.cs" />
+    <Compile Include="GenericEditor\GenericEditorDefinitionDetail.cs" />
+    <Compile Include="GenericEditor\GenericEditorDefinitionQuery.cs" />
     <Compile Include="GenericEditor\GenericEditorField.cs" />
     <Compile Include="GenericEditor\GenericEditorRow.cs" />
     <Compile Include="GenericEditor\GenericEditorSection.cs" />

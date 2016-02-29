@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericEditorController" vr-loader="scopeModal.isLoading" width="'60%'">
+    <vr-modalbody>
+        <vr-form validationcontext="genericEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="scopeModal.onRecordTypeSelectionChanged" selectedvalues="scopeModal.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Editor Design'">
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-show="scopeModal.selectedDataRecordType !=undefined">
+                            <vr-genericdata-genericeditor-definition-editor on-ready="scopeModal.onGenericEditorDirectiveReady"></vr-genericdata-genericeditor-definition-editor>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="genericEditorGroup" data-onclick="scopeModal.SaveGenericEditor"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>
