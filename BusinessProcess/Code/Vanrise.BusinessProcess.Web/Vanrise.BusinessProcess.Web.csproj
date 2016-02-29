@@ -152,6 +152,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BPInstanceController.cs" />
+    <Compile Include="Controllers\BPDefinitionController.cs" />
     <Compile Include="Controllers\BusinessProcessController.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
     <Compile Include="Models\SchedulerTaskModel.cs" />
@@ -163,19 +166,34 @@
   <ItemGroup>
     <Content Include="BusinessProcess\Constants\BPInstanceStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
+    <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
+    <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-management-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-selector.js" />
+    <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPDefinitionGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-monitor-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceGridTemplate.html" />
+    <Content Include="BusinessProcess\Services\APIServices\BPInstanceAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
+    <Content Include="BusinessProcess\Services\BPInstanceService.js" />
+    <Content Include="BusinessProcess\Services\BPDefinitionService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessService.js" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagement.html" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagementController.js" />
+    <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagement.html" />
+    <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagementController.js" />
     <Content Include="BusinessProcess\Views\BPHistory.html" />
     <Content Include="BusinessProcess\Views\BPHistoryController.js" />
     <Content Include="BusinessProcess\Views\BPTrackingModal.html" />
     <Content Include="BusinessProcess\Views\BPTrackingModalController.js" />
     <Content Include="BusinessProcess\Views\InstanceEditor.html" />
     <Content Include="BusinessProcess\Views\InstanceEditorController.js" />
+    <Content Include="BusinessProcess\Views\BPInstance\BPInstanceMonitor.html" />
+    <Content Include="BusinessProcess\Views\BPInstance\BPInstanceMonitorController.js" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditor.html" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditorController.js" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

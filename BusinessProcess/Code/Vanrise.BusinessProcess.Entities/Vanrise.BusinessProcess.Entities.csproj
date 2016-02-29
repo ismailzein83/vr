@@ -55,11 +55,18 @@
   <ItemGroup>
     <Compile Include="BaseProcessInputArgument.cs" />
     <Compile Include="BPDefinition.cs" />
+    <Compile Include="BPDefinitionDetail.cs" />
+    <Compile Include="BPDefinitionInfo.cs" />
+    <Compile Include="BPDefinitionInfoFilter.cs" />
     <Compile Include="BPDefinitionQuery.cs" />
     <Compile Include="BPEvent.cs" />
     <Compile Include="BPInstance.cs" />
+    <Compile Include="BPInstanceDetail.cs" />
     <Compile Include="BPInstanceQuery.cs" />
     <Compile Include="BPInstanceStatus.cs" />
+    <Compile Include="BPInstanceBeforeIdInput.cs" />
+    <Compile Include="BPInstanceUpdateInput.cs" />
+    <Compile Include="BPInstanceUpdateOutput.cs" />
     <Compile Include="Tasks\BPTask.cs" />
     <Compile Include="Tasks\BPTaskAction.cs" />
     <Compile Include="Tasks\BPTaskAssignee.cs" />
