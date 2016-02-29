@@ -17,11 +17,5 @@ namespace Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues
             var context = new BusinessEntityGroupContext();
             return this.BusinessEntityGroup.GetIds(context);
         }
-
-        public override string GetDescription()
-        {
-            var context = new BusinessEntityGroupContext();
-            return this.BusinessEntityGroup.GetDescription(context);
-        }
     }
 }

@@ -9,7 +9,5 @@ namespace Vanrise.GenericData.Entities
     public abstract class GenericRuleCriteriaFieldValues
     {
         public abstract IEnumerable<Object> GetValues();
-
-        public abstract string GetDescription();
     }
 }

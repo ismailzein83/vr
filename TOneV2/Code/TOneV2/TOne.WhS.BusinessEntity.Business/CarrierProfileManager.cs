@@ -97,7 +97,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var carrierProfileNames = new List<string>();
             foreach (var entityId in context.EntityIds)
-                carrierProfileNames.Add(GetCarrierProfileName(Convert.ToInt32(entityId)));
+            {
+                string carrierProfileName = GetCarrierProfileName(Convert.ToInt32(entityId));
+                if (carrierProfileName == null) throw new NullReferenceException("carrierProfileName");
+                carrierProfileNames.Add(carrierProfileName);
+            }
             return String.Join(",", carrierProfileNames);
         }
         public bool IsMatched(IBusinessEntityMatchContext context)

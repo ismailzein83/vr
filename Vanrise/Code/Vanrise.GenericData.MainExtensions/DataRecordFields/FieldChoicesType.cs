@@ -14,21 +14,31 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public List<Choice> Choices { get; set; }
 
+        #region Public Methods
+
         public override Type GetRuntimeType()
         {
             return typeof(int);
         }
 
-        public override string GetDescription(Object value)
+        public override string GetDescription(object value)
         {
+            if (value == null)
+                return null;
+
+            if (Choices == null)
+                throw new NullReferenceException("Choices");
+            
+            IEnumerable<int> selectedChoiceValues = ConvertValueToSelectedChoiceValues(value);
+            
+            if (selectedChoiceValues == null)
+                return GetChoiceText(Convert.ToInt32(value));
+
             var descriptions = new List<string>();
-            if (Choices != null && Choices.Count > 0)
-            {
-                var staticValues = value as StaticValues;
-                var selectedValues = staticValues.Values.MapRecords(itm => Convert.ToInt32(itm));
-                foreach (int selectedValue in selectedValues)
-                    descriptions.Add(Choices.FindRecord(itm => itm.Value == selectedValue).Text);
-            }
+
+            foreach (int selectedChoiceValue in selectedChoiceValues)
+                descriptions.Add(GetChoiceText(selectedChoiceValue));
+            
             return String.Join(",", descriptions);
         }
 
@@ -48,6 +58,32 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return true;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        IEnumerable<int> ConvertValueToSelectedChoiceValues(object value)
+        {
+            var staticValues = value as StaticValues;
+            if (staticValues != null)
+                return staticValues.Values.MapRecords(itm => Convert.ToInt32(itm));
+
+            var objList = value as List<object>;
+            if (objList != null)
+                return objList.MapRecords(itm => Convert.ToInt32(itm));
+
+            return null;
+        }
+
+        string GetChoiceText(int choiceValue)
+        {
+            Choice choice = Choices.FindRecord(itm => itm.Value == choiceValue);
+            if (choice == null) throw new NullReferenceException("choice");
+            return choice.Text;
+        }
+
+        #endregion
     }
 
     public class Choice

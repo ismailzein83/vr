@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
@@ -12,6 +13,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldBusinessEntityType : DataRecordFieldType
     {
+        #region Public Methods
+
         public int BusinessEntityDefinitionId { get; set; }
 
         public override Type GetRuntimeType()
@@ -23,22 +26,20 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return Type.GetType(beDefinition.Settings.IdType);
         }
 
-        public override string GetDescription(Object value)
+        public override string GetDescription(object value)
         {
-            var beValues = value as BusinessEntityValues;
+            if (value == null)
+                return null;
+
+            IEnumerable<object> selectedEntityIds = ConvertValueToSelectedEntityIds(value);
             var entityIds = new List<object>();
 
-            if (beValues == null)
-                entityIds.Add(value);
+            if (selectedEntityIds != null)
+                entityIds.AddRange(selectedEntityIds);
             else
-            {
-                var selectedValues = beValues.GetValues();
-                foreach (var beValue in selectedValues)
-                    entityIds.Add(beValue);
-            }
-
-            IBusinessEntityManager beManager = GetBusinessEntityManager();
-            return beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityIds = entityIds });
+                entityIds.Add(value);
+            
+            return GetBusinessEntityManager().GetEntityDescription(new BusinessEntityDescriptionContext() { EntityIds = entityIds });
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
@@ -50,16 +51,48 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return beManager.IsMatched(new BusinessEntityMatchContext() { FieldValueIds = fieldValueObjList, FilterIds = beFilter.BusinessEntityIds });
         }
 
-        IBusinessEntityManager GetBusinessEntityManager()
+        #endregion
+
+        #region Private Methods
+
+        IEnumerable<object> ConvertValueToSelectedEntityIds(object value)
         {
-            BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
-            BusinessEntityDefinition beDefinition = beDefinitionManager.GetBusinessEntityDefinition(BusinessEntityDefinitionId);
-            if (beDefinition != null && beDefinition.Settings != null && beDefinition.Settings.ManagerFQTN != null)
-            {
-                Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
-                return Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
-            }
+            var beValues = value as BusinessEntityValues;
+            if (beValues != null)
+                return beValues.GetValues();
+            
+            var staticValues = value as StaticValues;
+            if (staticValues != null)
+                return staticValues.Values;
+
+            var objList = value as List<object>;
+            if (objList != null)
+                return objList;
+
             return null;
         }
+
+        IBusinessEntityManager GetBusinessEntityManager()
+        {
+            BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(BusinessEntityDefinitionId);
+
+            if (beDefinition == null)
+                throw new NullReferenceException("beDefinition");
+
+            if (beDefinition.Settings == null)
+                throw new NullReferenceException("beDefinition.Settings");
+
+            if (beDefinition.Settings.ManagerFQTN == null)
+                throw new NullReferenceException("beDefinition.Settings.ManagerFQTN");
+
+            Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
+
+            if (beManagerType == null)
+                throw new NullReferenceException("beManagerType");
+
+            return Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
+        }
+
+        #endregion
     }
 }
