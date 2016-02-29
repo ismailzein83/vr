@@ -64,8 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCaseHistory\AccountCaseHistory.cs" />
-    <Compile Include="AssignCasesforItemsBatch.cs" />
-    <Compile Include="CancellingStrategyExecutionBatch.cs" />
+    <Compile Include="Batches\AssignCasesforItemsBatch.cs" />
+    <Compile Include="Batches\CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManager\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManager\IBusinessManager.cs" />
     <Compile Include="StrategyExecutionItemAccountInfo.cs" />
@@ -95,9 +95,9 @@
     <Compile Include="DWDimension.cs" />
     <Compile Include="DWFact.cs" />
     <Compile Include="StrategyExecution\StrategyExecutionQuery.cs" />
-    <Compile Include="RelatedNumber.cs" />
+    <Compile Include="RelatedNumber\RelatedNumber.cs" />
     <Compile Include="AccountCaseHistory\AccountCaseHistoryQuery.cs" />
-    <Compile Include="RelatedNumberQuery.cs" />
+    <Compile Include="RelatedNumber\RelatedNumberQuery.cs" />
     <Compile Include="AccountCase\AccountCaseQuery.cs" />
     <Compile Include="AccountSuspicionDetail.cs" />
     <Compile Include="AccountSuspicionSummary.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Strategy\StrategyQuery.cs" />
     <Compile Include="CallClass\CallClass.cs" />
     <Compile Include="FilterDefinition.cs" />
-    <Compile Include="NumberCriteriaBatch.cs" />
+    <Compile Include="Batches\NumberCriteriaBatch.cs" />
     <Compile Include="NumberProfile\NumberProfileBatch.cs" />
     <Compile Include="NumberProfile\NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
