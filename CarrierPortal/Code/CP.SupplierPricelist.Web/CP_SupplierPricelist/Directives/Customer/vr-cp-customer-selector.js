@@ -82,7 +82,6 @@ app.directive('vrCpCustomerSelector', ['CP_SupplierPricelist_CustomerManagmentAP
                         serializedFilter = UtilsService.serializetoJson(filter);
                     return customerManagmentAPIService.GetCustomerInfos(serializedFilter).then(function (response) {
                         ctrl.datasource.length = 0;
-                        ctrl.selectedvalues.length = 0;
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);
                         });
