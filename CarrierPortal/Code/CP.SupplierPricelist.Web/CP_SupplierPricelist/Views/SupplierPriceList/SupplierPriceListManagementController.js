@@ -2,21 +2,21 @@
     function (appControllers) {
         "use strict";
 
-        function supplierPriceListManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, priceListTypeEnum, supplierPriceListAPIService) {
+        function supplierPriceListManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, priceListTypeEnum, supplierPriceListApiService) {
             var gridAPI;
             var customerDirectiveApi;
             var customerReadyPromiseDeferred = utilsService.createPromiseDeferred();
+            var carrierDirectiveApi;
+            var carrierReadyPromiseDeferred = utilsService.createPromiseDeferred();
             function importPriceList() {
                 var priceListObject = {
                     FileId: $scope.file.fileId,
                     PriceListType: $scope.selectedpriceListType.pricelistID,
                     EffectiveOnDate: $scope.effectiveOn,
-                    UserId: 1,
-                    Satus: 0,
-                    CustomerId: 1,
-                    CarrierAccountId: 'C169'
+                    CustomerId: customerDirectiveApi.getSelectedIds(),
+                    CarrierAccountId: carrierDirectiveApi.getSelectedIds()
                 };
-                supplierPriceListAPIService.importPriceList(priceListObject);
+                supplierPriceListApiService.importPriceList(priceListObject);
             }
 
             function defineScope() {
@@ -28,20 +28,39 @@
                     gridAPI = api;
                     api.loadGrid();
                 }
+                $scope.onReadyCarrierAccountSelector = function(api) {
+                    carrierDirectiveApi = api;
+                    var setLoader = function (value) { $scope.isLoadingCarrierDirective = value };
+                    vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierDirectiveApi, undefined, setLoader, carrierReadyPromiseDeferred);
+                }
+                $scope.onCustomerSelectionChanged = function () {
+                    if (customerDirectiveApi.getSelectedIds() != undefined) {
+                        var obj =
+                        {
+                           filter: {
+                               CustomerIdForCurrentSupplier: customerDirectiveApi.getSelectedIds()
+                           }
+                        }
+                        carrierDirectiveApi.load(obj);
+                    }
+                    
+                }
+                $scope.onCustomerDirectiveReady = function (api) {
+                    customerDirectiveApi = api;
+                    customerReadyPromiseDeferred.resolve();
+                }
             }
 
             defineScope();
 
+          
             function loadPriceListType() {
                 angular.forEach(priceListTypeEnum, function (value, key) {
                     $scope.priceListTypes.push({ pricelistID: value.ID, title: value.Value });
                 }
                 );
             }
-            $scope.onCustomerDirectiveReady = function (api) {
-                customerDirectiveApi = api;
-                customerReadyPromiseDeferred.resolve();
-            }
+            
             function load() {
                 loadAllControls();
             }

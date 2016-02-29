@@ -82,7 +82,9 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
                         serializedFilter = UtilsService.serializetoJson(filter);
                     return supplierMappingAPIService.GetCustomerSuppliers(serializedFilter).then(function (response) {
                         ctrl.datasource.length = 0;
-                        ctrl.selectedvalues.length = 0;
+                        if (attrs.ismultipleselection != undefined) {
+                            ctrl.selectedvalues.length = 0;
+                        }
                         angular.forEach(response, function (item) {
                             ctrl.datasource.push(item);
                         });

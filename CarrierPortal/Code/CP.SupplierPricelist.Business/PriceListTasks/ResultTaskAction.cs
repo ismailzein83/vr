@@ -14,8 +14,8 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             ResultTaskActionArgument resultTaskActionArgument = taskActionArgument as ResultTaskActionArgument;
             if (resultTaskActionArgument == null)
                 throw new Exception("taskActionArgument  is not of type ResultTaskActionArgument ");
-            if (resultTaskActionArgument.SupplierPriceListConnector == null)
-                throw new Exception("SupplierPriceListConnector is null");
+            //if (resultTaskActionArgument.SupplierPriceListConnector == null)
+            //    throw new Exception("SupplierPriceListConnector is null");
 
             ImportPriceListManager manager = new ImportPriceListManager();
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
@@ -32,7 +32,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
                 try
                 {
-                    priceListProgressOutput = resultTaskActionArgument.SupplierPriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
+                    //priceListProgressOutput = resultTaskActionArgument.SupplierPriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
                 }
                 catch (Exception)
                 {

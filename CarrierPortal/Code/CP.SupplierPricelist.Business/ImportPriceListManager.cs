@@ -20,6 +20,7 @@ namespace CP.SupplierPricelist.Business
 
             return true;
         }
+
         public PriceListlUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows)
         {
             PriceListlUpdateOutput priceListUpdateOutputs = new PriceListlUpdateOutput();
@@ -36,6 +37,8 @@ namespace CP.SupplierPricelist.Business
         {
             UserManager userManager = new UserManager();
             User user = userManager.GetUserbyId(priceList.UserId);
+
+            CustomerManager customerManager = new CustomerManager();
             var priceListDetail = new PriceListDetail()
             {
                 Entity = priceList,
@@ -44,6 +47,12 @@ namespace CP.SupplierPricelist.Business
                 PriceListTypeValue = Utilities.GetEnumDescription(priceList.PriceListType),
                 UserName = user != null ? user.Name : ""
             };
+            Customer customer = customerManager.GetCustomer(priceList.CustomerId);
+            priceListDetail.CustomerName = customer != null ? customer.Name : "";
+
+            var customerSuppliers = new CustomerManager().GetCustomerSuppliers(priceList.CustomerId);
+            var accountInfo = customerSuppliers.SingleOrDefault(a => a.SupplierId.Equals(priceList.CarrierAccountId));
+            priceListDetail.CarrierAccountName = accountInfo != null ? accountInfo.SupplierName : "";
             return priceListDetail;
         }
         public List<PriceList> GetPriceLists(List<PriceListStatus> listPriceListStatuses)

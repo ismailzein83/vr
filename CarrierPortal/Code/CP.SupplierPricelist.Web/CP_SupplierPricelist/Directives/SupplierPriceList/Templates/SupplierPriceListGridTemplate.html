@@ -2,10 +2,12 @@
              on-ready="onGridReady"
              pagingtype="'PagingOnScroll'"
              menuactions="[]"
-             idfield="Id" loadmoredata="loadMoreData">
+             idfield="Id" loadmoredata="loadMoreData" vr-loader="isGettingData">
 
     <vr-datagridcolumn headertext="'PriceList ID'" field="'Entity.PriceListId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'User Name'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Carrier Account Name'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'PriceList Type'" field="'PriceListTypeValue'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Effective On Date'" field="'Entity.EffectiveOnDate'" type="'Datetime'"></vr-datagridcolumn>

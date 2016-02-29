@@ -63,7 +63,9 @@ namespace CP.SupplierPricelist.Data.SQL
                 EffectiveOnDate = GetReaderValue<DateTime>(reader, "EffectiveOnDate"),
                 ResultMaxRetryCount = GetReaderValue<int>(reader, "ResultRetryCount"),
                 UploadMaxRetryCount = GetReaderValue<int>(reader, "UploadRetryCount"),
-                AlertMessage = reader["AlertMessage"] as string
+                AlertMessage = reader["AlertMessage"] as string,
+                CustomerId = (int)reader["CustomerID"],
+                CarrierAccountId = reader["CarrierAccountID"] as string
             };
             string uploadedInformationSerialized = reader["UploadInformation"] as string;
             if (uploadedInformationSerialized != null)
