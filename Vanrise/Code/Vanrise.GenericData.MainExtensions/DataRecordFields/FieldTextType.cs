@@ -29,21 +29,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return String.Join(",", descriptions);
         }
 
-        public override bool IsMatched(object fieldValue, object filterValue)
+        public override bool IsMatched(object settingsValue, object filterValue)
         {
-            if (fieldValue != null && filterValue != null)
-            {
-                var fieldValueObjList = fieldValue as List<object>;
-                var fieldValueStringList = fieldValueObjList.MapRecords(itm => Convert.ToString(itm).ToUpper());
-                var filterValueString = filterValue.ToString().ToUpper();
-                foreach (var fieldValueStringItem in fieldValueStringList)
-                {
-                    if (fieldValueStringItem.Contains(filterValueString))
-                        return true;
-                }
-                return false;
-            }
-            return true;
+            return settingsValue.ToString().ToUpper().Contains(filterValue.ToString().ToUpper());
         }
     }
 }

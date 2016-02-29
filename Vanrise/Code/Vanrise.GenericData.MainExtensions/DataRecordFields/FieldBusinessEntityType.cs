@@ -42,13 +42,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return GetBusinessEntityManager().GetEntityDescription(new BusinessEntityDescriptionContext() { EntityIds = entityIds });
         }
 
-        public override bool IsMatched(object fieldValue, object filterValue)
+        public override bool IsMatched(object settingsValue, object filterValue)
         {
-            var fieldValueObjList = fieldValue as List<object>;
             var beFilter = filterValue as BusinessEntityFieldTypeFilter;
-
-            IBusinessEntityManager beManager = GetBusinessEntityManager();
-            return beManager.IsMatched(new BusinessEntityMatchContext() { FieldValueIds = fieldValueObjList, FilterIds = beFilter.BusinessEntityIds });
+            return GetBusinessEntityManager().IsMatched(new BusinessEntityMatchContext() { SettingsEntityId = settingsValue, FilterIds = beFilter.BusinessEntityIds });
         }
 
         #endregion
