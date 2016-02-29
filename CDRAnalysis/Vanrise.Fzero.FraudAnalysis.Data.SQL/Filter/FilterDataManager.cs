@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public List<FilterDefinition> GetFilters()
+        public List<Filter> GetFilters()
         {
             return GetItemsSP("FraudAnalysis.sp_Filter_GetAll", FilterDefinitionMapper);
         }
@@ -27,9 +27,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         #region Private Methods
 
-        private FilterDefinition FilterDefinitionMapper(IDataReader reader)
+        private Filter FilterDefinitionMapper(IDataReader reader)
         {
-            FilterDefinition filterDefinition = new FilterDefinition();
+            Filter filterDefinition = new Filter();
             filterDefinition.FilterId = (int)reader["ID"];
             filterDefinition.Abbreviation =  reader["Abbreviation"] as string;
             filterDefinition.OperatorTypeAllowed = (Vanrise.Fzero.Entities.OperatorType)reader["OperatorTypeAllowed"];

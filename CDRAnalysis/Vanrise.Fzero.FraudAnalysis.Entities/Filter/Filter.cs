@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Vanrise.Fzero.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class FilterDefinitionInfo
+    public enum CriteriaCompareOperator { GreaterThanorEqual, LessThanorEqual }
+
+    public class Filter
     {
+        public bool ExcludeHourly { get; set; }
+
         public int FilterId { get; set; }
+
+        public CriteriaCompareOperator CompareOperator { get; set; }
 
         public string Description { get; set; }
 
@@ -13,23 +19,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Label { get; set; }
 
+        public Func<NumberProfile, Decimal> Expression;
+
         public decimal MinValue { get; set; }
 
         public decimal MaxValue { get; set; }
 
         public int DecimalPrecision { get; set; }
 
-        public bool ExcludeHourly { get; set; }
-
         public string ToolTip { get; set; }
 
         public OperatorType OperatorTypeAllowed { get; set; }
-
-        public string UpSign { get; set; }
-
-        public string DownSign { get; set; }
-
-        public List<string> Parameters { get; set; }
-
     }
 }

@@ -120,14 +120,14 @@
     <Compile Include="DailyVolumeLoose.cs" />
     <Compile Include="AccountCase\AccountCaseType.cs" />
     <Compile Include="BlockedLines.cs" />
-    <Compile Include="FilterDefinitionInfo.cs" />
+    <Compile Include="Filter\FilterInfo.cs" />
     <Compile Include="BlockedLinesQuery.cs" />
     <Compile Include="NumberProfile\NumberProfileQuery.cs" />
     <Compile Include="CDR\CDRQuery.cs" />
     <Compile Include="CaseProductivityQuery.cs" />
     <Compile Include="Strategy\StrategyQuery.cs" />
     <Compile Include="CallClass\CallClass.cs" />
-    <Compile Include="FilterDefinition.cs" />
+    <Compile Include="Filter\Filter.cs" />
     <Compile Include="Batches\NumberCriteriaBatch.cs" />
     <Compile Include="NumberProfile\NumberProfileBatch.cs" />
     <Compile Include="NumberProfile\NumberProfile.cs" />

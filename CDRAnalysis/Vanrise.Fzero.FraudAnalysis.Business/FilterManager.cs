@@ -15,13 +15,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-        private static Dictionary<int, FilterDefinition> GetCachedFilters()
+        private static Dictionary<int, Filter> GetCachedFilters()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetFilters",
                () =>
                {
                    IFilterDataManager dataManager = FraudDataManagerFactory.GetDataManager<IFilterDataManager>();
-                   IEnumerable<FilterDefinition> filters = dataManager.GetFilters();
+                   IEnumerable<Filter> filters = dataManager.GetFilters();
                    return filters.ToDictionary(kvp => kvp.FilterId, kvp => kvp);
                });
         }
@@ -39,21 +39,21 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-        public Decimal GetCriteriaValue(FilterDefinition criteria, NumberProfile numberProfile)
+        public Decimal GetCriteriaValue(Filter criteria, NumberProfile numberProfile)
         {
             return s_criteriaDefinitions[criteria.FilterId].Expression(numberProfile);
         }
 
-        static Dictionary<int, FilterDefinition> s_criteriaDefinitions = BuildAndGetCriteriaDefinitions();
+        static Dictionary<int, Filter> s_criteriaDefinitions = BuildAndGetCriteriaDefinitions();
 
 
-        static Dictionary<int, FilterDefinition> BuildAndGetCriteriaDefinitions()
+        static Dictionary<int, Filter> BuildAndGetCriteriaDefinitions()
         {
 
 
 
 
-            Dictionary<int, FilterDefinition> dictionary = new Dictionary<int, FilterDefinition>();
+            Dictionary<int, Filter> dictionary = new Dictionary<int, Filter>();
 
             foreach (var i in GetCachedFilters())
             {
@@ -92,14 +92,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-        public Dictionary<int, FilterDefinition> GetCriteriaDefinitions()
+        public Dictionary<int, Filter> GetCriteriaDefinitions()
         {
             return s_criteriaDefinitions;
         }
 
-        public List<FilterDefinitionInfo> GetCriteriaNames()
+        public List<FilterInfo> GetCriteriaNames()
         {
-            List<FilterDefinitionInfo> names = new List<FilterDefinitionInfo>();
+            List<FilterInfo> names = new List<FilterInfo>();
             foreach (var i in s_criteriaDefinitions)
             {
                 string upSign = "";
@@ -116,7 +116,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     downSign = Constants._Critical;
                 }
 
-                FilterDefinitionInfo filterDef = new FilterDefinitionInfo()
+                FilterInfo filterDef = new FilterInfo()
                 {
                     FilterId = i.Value.FilterId,
                     OperatorTypeAllowed = i.Value.OperatorTypeAllowed,

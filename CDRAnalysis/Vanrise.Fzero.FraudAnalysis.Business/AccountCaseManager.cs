@@ -7,9 +7,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
     public class AccountCaseManager
     {
         IAccountCaseDataManager accountCaseDataManager;
+        IAccountSuspicionSummaryDataManager accountSuspicionSummaryDataManager;
+
         public AccountCaseManager()
         {
             accountCaseDataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseDataManager>();
+            accountSuspicionSummaryDataManager = FraudDataManagerFactory.GetDataManager<IAccountSuspicionSummaryDataManager>();
         }
         public AccountCase GetLastAccountCase(string accountNumber)
         {
@@ -17,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         }
         public Vanrise.Entities.IDataRetrievalResult<AccountSuspicionSummary> GetFilteredAccountSuspicionSummaries(Vanrise.Entities.DataRetrievalInput<AccountSuspicionSummaryQuery> input)
         {
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountCaseDataManager.GetFilteredAccountSuspicionSummaries(input));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountSuspicionSummaryDataManager.GetFilteredAccountSuspicionSummaries(input));
         }
         public Vanrise.Entities.IDataRetrievalResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
         {
@@ -39,7 +42,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             AccountCase accountCase = accountCaseDataManager.GetLastAccountCaseByAccountNumber(input.AccountNumber);
 
             if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-                accountCaseDataManager.InsertAccountCase(out caseID, input.AccountNumber, userID, input.CaseStatus, input.ValidTill, input.Reason);
+                accountCaseDataManager.InsertAccountCase( new AccountCase() { AccountNumber= input.AccountNumber, UserID=userID,  StatusID= input.CaseStatus, ValidTill = input.ValidTill, Reason = input.Reason }, out caseID);
             else
             {
                 caseID = accountCase.CaseID;
@@ -56,7 +59,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
 
-            updateOperationOutput.UpdatedObject = accountCaseDataManager.GetAccountSuspicionSummaryByCaseId(caseID);
+            updateOperationOutput.UpdatedObject = accountSuspicionSummaryDataManager.GetAccountSuspicionSummaryByCaseId(caseID);
 
             return updateOperationOutput;
         }

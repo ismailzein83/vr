@@ -16,7 +16,7 @@
         var strategyId;
         var strategyEntity;
 
-        var filterDefinitions;
+        var filters;
 
         loadParameters();
         defineScope();
@@ -316,41 +316,41 @@
             function loadFilters() {
                 return StrategyAPIService.GetFilters().then(function (response) {
                     if (response) {
-                        filterDefinitions = [];
+                        filters = [];
 
                         for (var i = 0; i < response.length; i++) {
-                            var filterDef = {};
+                            var filter = {};
 
-                            filterDef.filterId = response[i].FilterId,
-                            filterDef.description = response[i].Description,
-                            filterDef.abbreviation = response[i].Abbreviation,
-                            filterDef.label = response[i].Label,
-                            filterDef.minValue = response[i].MinValue,
-                            filterDef.maxValue = response[i].MaxValue,
-                            filterDef.decimalPrecision = response[i].DecimalPrecision,
-                            filterDef.excludeHourly = response[i].ExcludeHourly,
-                            filterDef.toolTip = response[i].ToolTip,
-                            filterDef.upSign = response[i].UpSign,
-                            filterDef.downSign = response[i].DownSign,
-                            filterDef.parameters = response[i].Parameters
+                            filter.filterId = response[i].FilterId,
+                            filter.description = response[i].Description,
+                            filter.abbreviation = response[i].Abbreviation,
+                            filter.label = response[i].Label,
+                            filter.minValue = response[i].MinValue,
+                            filter.maxValue = response[i].MaxValue,
+                            filter.decimalPrecision = response[i].DecimalPrecision,
+                            filter.excludeHourly = response[i].ExcludeHourly,
+                            filter.toolTip = response[i].ToolTip,
+                            filter.upSign = response[i].UpSign,
+                            filter.downSign = response[i].DownSign,
+                            filter.parameters = response[i].Parameters
 
-                            filterDefinitions.push(filterDef);
+                            filters.push(filter);
                         }
                     }
                 });
             }
             function loadStrategyFiltersForAddMode() {
-                if (filterDefinitions) {
-                    for (var i = 0; i < filterDefinitions.length; i++) {
-                        var strategyFilter = getStrategyFilterDataItemWithCommonProperties(filterDefinitions[i]);
+                if (filters) {
+                    for (var i = 0; i < filters.length; i++) {
+                        var strategyFilter = getStrategyFilterDataItemWithCommonProperties(filters[i]);
                         $scope.modalScope.strategyFilters.push(strategyFilter);
                     }
                 }
             }
             function loadStrategyFiltersForEditMode() {
-                if (filterDefinitions) {
-                    for (var i = 0; i < filterDefinitions.length; i++) {
-                        var strategyFilter = getStrategyFilterDataItemWithCommonProperties(filterDefinitions[i]);
+                if (filters) {
+                    for (var i = 0; i < filters.length; i++) {
+                        var strategyFilter = getStrategyFilterDataItemWithCommonProperties(filters[i]);
 
                         if (strategyEntity != null) {
                             var entityStrategyFilter = UtilsService.getItemByVal(strategyEntity.StrategyFilters, strategyFilter.filterId, 'FilterId');
@@ -364,21 +364,21 @@
                     }
                 }
             }
-            function getStrategyFilterDataItemWithCommonProperties(filterDef) {
+            function getStrategyFilterDataItemWithCommonProperties(filter) {
                 var item = {};
 
-                item.filterId = filterDef.filterId;
-                item.description = filterDef.description;
-                item.abbreviation = filterDef.abbreviation;
-                item.label = filterDef.label;
-                item.minValue = filterDef.minValue;
-                item.maxValue = filterDef.maxValue;
-                item.decimalPrecision = filterDef.decimalPrecision;
-                item.excludeHourly = filterDef.excludeHourly;
-                item.toolTip = filterDef.toolTip;
-                item.upSign = filterDef.upSign;
-                item.downSign = filterDef.downSign;
-                item.parameters = filterDef.parameters;
+                item.filterId = filter.filterId;
+                item.description = filter.description;
+                item.abbreviation = filter.abbreviation;
+                item.label = filter.label;
+                item.minValue = filter.minValue;
+                item.maxValue = filter.maxValue;
+                item.decimalPrecision = filter.decimalPrecision;
+                item.excludeHourly = filter.excludeHourly;
+                item.toolTip = filter.toolTip;
+                item.upSign = filter.upSign;
+                item.downSign = filter.downSign;
+                item.parameters = filter.parameters;
 
                 if (item.parameters != null && item.parameters.length > 0) {
                     item.hint = 'This filter requires the following parameter(s): ' + item.parameters.join(',');
@@ -399,15 +399,15 @@
                         StrategyLevelCriterias: []
                     };
 
-                    angular.forEach(filterDefinitions, function (filterDef) {
+                    angular.forEach(filters, function (filter) {
                         var levelCriteriaItem = {
-                            filterId: filterDef.FilterId,
-                            upSign: filterDef.upSign,
-                            downSign: filterDef.downSign,
+                            filterId: filter.FilterId,
+                            upSign: filter.upSign,
+                            downSign: filter.downSign,
                             percentage: 0
                         };
 
-                        var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filterDef.filterId, 'FilterId');
+                        var existingItem = UtilsService.getItemByVal(level.StrategyLevelCriterias, filter.filterId, 'FilterId');
                         if (existingItem != undefined && existingItem != null) {
                             levelCriteriaItem.isSelected = true;
                             levelCriteriaItem.percentage = parseInt((parseFloat(existingItem.Percentage) * 100) - 100); // The outer parseInt call is used for formatting purposes

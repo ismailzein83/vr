@@ -134,7 +134,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #endregion
 
-        private static List<DWDimension> GetToBeInserted(DWDimensionDictionary dwDictionary, Dictionary<int, FilterDefinition> dbDictionary)
+        private static List<DWDimension> GetToBeInserted(DWDimensionDictionary dwDictionary, Dictionary<int, Filter> dbDictionary)
         {
             List<DWDimension> toBeInsertedList = new List<DWDimension>();
             foreach (var item in dbDictionary)
@@ -270,7 +270,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started comparing filters");
             FilterManager filterManager = new FilterManager();
-            Dictionary<int, FilterDefinition> dictFilters = filterManager.GetCriteriaDefinitions();
+            Dictionary<int, Filter> dictFilters = filterManager.GetCriteriaDefinitions();
             ToBeInsertedFilters = GetToBeInserted(inputArgument.Filters, dictFilters);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished comparing filters");
 

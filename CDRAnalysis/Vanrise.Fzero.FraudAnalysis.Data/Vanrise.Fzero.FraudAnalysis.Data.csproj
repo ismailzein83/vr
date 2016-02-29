@@ -53,24 +53,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountSuspicionSummary\IAccountSuspicionSummaryDataManager.cs" />
     <Compile Include="IStrategyExecutionItemAccountInfoDataManager.cs" />
     <Compile Include="IDWAccountCaseManager.cs" />
     <Compile Include="IDWStrategyDataManager.cs" />
-    <Compile Include="FraudDataManagerFactory.cs" />
+    <Compile Include="Common\FraudDataManagerFactory.cs" />
     <Compile Include="IDWTimeDataManager.cs" />
     <Compile Include="IDWDimensionDataManager.cs" />
-    <Compile Include="IAccountCaseDataManager.cs" />
-    <Compile Include="IAccountCaseHistoryDataManager.cs" />
+    <Compile Include="AccountCase\IAccountCaseDataManager.cs" />
+    <Compile Include="AccountCaseHistory\IAccountCaseHistoryDataManager.cs" />
     <Compile Include="AccountInfo\IAccountInfoDataManager.cs" />
-    <Compile Include="IDataManager.cs" />
+    <Compile Include="Common\IDataManager.cs" />
     <Compile Include="AccountStatus\IAccountStatusDataManager.cs" />
-    <Compile Include="IAggregateDataManager.cs" />
+    <Compile Include="Aggregate\IAggregateDataManager.cs" />
     <Compile Include="IDWFactDataManager.cs" />
     <Compile Include="RelatedNumber\IRelatedNumberDataManager.cs" />
     <Compile Include="NumberProfile\INumberProfileDataManager.cs" />
     <Compile Include="CallClass\ICallClassDataManager.cs" />
     <Compile Include="IReportingDataManager.cs" />
-    <Compile Include="IFilterDataManager.cs" />
+    <Compile Include="Filter\IFilterDataManager.cs" />
     <Compile Include="StrategyExecution\IStrategyExecutionDataManager.cs" />
     <Compile Include="Strategy\IStrategyDataManager.cs" />
     <Compile Include="IStrategyExecutionItemDataManager.cs" />

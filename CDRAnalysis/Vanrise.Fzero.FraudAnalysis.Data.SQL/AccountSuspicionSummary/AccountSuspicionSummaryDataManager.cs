@@ -8,17 +8,17 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
-    public class AccountCaseDataManager : BaseSQLDataManager, IAccountCaseDataManager
+    public class AccountSuspicionSummaryDataManager : BaseSQLDataManager, IAccountSuspicionSummaryDataManager
     {
 
         #region ctor
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
-        public AccountCaseDataManager()
+        public AccountSuspicionSummaryDataManager()
             : base("CDRDBConnectionString")
         {
 
         }
-        static AccountCaseDataManager()
+        static AccountSuspicionSummaryDataManager()
         {
             _columnMapper.Add("UserName", "UserID");
             _columnMapper.Add("CaseStatusDescription", "StatusID");
@@ -38,126 +38,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             return RetrieveData(input, createTempTableAction, AccountSuspicionSummaryMapper, _columnMapper);
         }
 
-        public BigResult<AccountCase> GetFilteredCasesByAccountNumber(Vanrise.Entities.DataRetrievalInput<AccountCaseQuery> input)
-        {
-
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_CreateTempByAccountNumber", tempTableName, input.Query.AccountNumber);
-            };
-
-            return RetrieveData(input, createTempTableAction, AccountCaseMapper, _columnMapper);
-        }
-
         public AccountSuspicionSummary GetAccountSuspicionSummaryByCaseId(int caseID)
         {
             return GetItemSP("FraudAnalysis.sp_AccountCase_GetDetailsByID", AccountSuspicionSummaryMapper, caseID);
         }
 
-        public AccountCase GetAccountCase(int caseID)
-        {
-            return GetItemSP("FraudAnalysis.sp_AccountCase_GetByCaseID", AccountCaseMapper, caseID);
-        }
-
-        public AccountCase GetLastAccountCaseByAccountNumber(string accountNumber)
-        {
-            return GetItemSP("FraudAnalysis.sp_AccountCase_GetLastByAccountNumber", AccountCaseMapper, accountNumber);
-        }
-
-        public bool InsertAccountCase(out int insertedID, string accountNumber, int? userID, CaseStatus caseStatus, DateTime? validTill, string reason)
-        {
-            object accountCaseID;
-
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Insert", out accountCaseID, accountNumber, userID, caseStatus, validTill, reason);
-
-            insertedID = (recordsAffected > 0) ? (int)accountCaseID : -1;
-
-            return (recordsAffected > 0);
-        }
-
-        public bool UpdateAccountCase(int caseID, int userID, CaseStatus statusID, DateTime? validTill, string reason)
-        {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountCase_Update", caseID, userID, statusID, validTill, reason);
-            return (recordsAffected > 0);
-        }
-
-        public bool UpdateAccountCaseBatch(List<int> CaseIds, int userId, CaseStatus status)
-        {
-            DataTable dtAccountCasesToUpdate = GetAccountCaseTable();
-            DataRow dr;
-
-            foreach (var item in CaseIds)
-            {
-                dr = dtAccountCasesToUpdate.NewRow();
-                dr["ID"] = item;
-                dr["UserID"] = userId;
-                dr["Status"] = (int)status;
-                dtAccountCasesToUpdate.Rows.Add(dr);
-            }
-
-            int recordsAffected = 0;
-            if (dtAccountCasesToUpdate.Rows.Count > 0)
-            {
-                recordsAffected = ExecuteNonQuerySPCmd("[FraudAnalysis].[sp_AccountCase_BulkUpdate]",
-                       (cmd) =>
-                       {
-                           var dtPrm = new System.Data.SqlClient.SqlParameter("@AccountCase", SqlDbType.Structured);
-                           dtPrm.Value = dtAccountCasesToUpdate;
-                           cmd.Parameters.Add(dtPrm);
-                       });
-            }
-
-            return (recordsAffected > 0);
-
-
-        }
-
-        public void SavetoDB(List<AccountCase> records)
-        {
-            string[] s_Columns = new string[] {
-                "ID",
-                "AccountNumber"	,
-                "UserID"	,
-                "Status"	,
-                "StatusUpdatedTime"	,
-                "ValidTill"	,
-                "CreatedTime"	,
-                "Reason"
-        };
-
-
-            StreamForBulkInsert stream = InitializeStreamForBulkInsert();
-
-            foreach (AccountCase record in records)
-            {
-                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",record.CaseID, record.AccountNumber, record.UserID, (int)record.StatusID, record.StatusUpdatedTime, record.ValidTill, record.CreatedTime, record.Reason);
-            }
-
-            stream.Close();
-
-            InsertBulkToTable(
-                new StreamBulkInsertInfo
-                {
-                    TableName = "[FraudAnalysis].[AccountCase]",
-                    Stream = stream,
-                    TabLock = true,
-                    ColumnNames = s_Columns,
-                    KeepIdentity = false ,
-                    FieldSeparator = '^'
-                });
-        }
-
         #endregion
 
         #region Private Methods
-        private DataTable GetAccountCaseTable()
-        {
-            DataTable dt = new DataTable("FraudAnalysis.AccountCase");
-            dt.Columns.Add("ID", typeof(int));
-            dt.Columns.Add("UserID", typeof(int));
-            dt.Columns.Add("Status", typeof(int));
-            return dt;
-        }
         private string CreateTempTableIfNotExists(string tempTableName, string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
         {
             StringBuilder query = new StringBuilder(@"
@@ -183,6 +71,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return query.ToString();
         }
+
         private string GetWhereClause(string accountNumber, List<int> strategyIDs, List<CaseStatus> accountStatusIDs, List<SuspicionLevel> suspicionLevelIDs, DateTime fromDate, DateTime? toDate)
         {
             StringBuilder whereClause = new StringBuilder();
@@ -206,6 +95,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             return whereClause.ToString();
         }
+
         private List<int> GetCaseStatusListAsIntList(List<CaseStatus> items)
         {
             List<int> list = new List<int>();
@@ -227,20 +117,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Mappers
-        internal AccountCase AccountCaseMapper(IDataReader reader)
-        {
-            AccountCase accountCase = new AccountCase();
-
-            accountCase.CaseID = (int)reader["CaseID"];
-            accountCase.AccountNumber = reader["AccountNumber"] as string;
-            accountCase.UserID = GetReaderValue<int>(reader, "UserID");
-            accountCase.StatusID = (CaseStatus)reader["StatusID"];
-            accountCase.StatusUpdatedTime = (DateTime)reader["StatusUpdatedTime"];
-            accountCase.ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill");
-            accountCase.CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime");
-
-            return accountCase;
-        }
         private AccountSuspicionSummary AccountSuspicionSummaryMapper(IDataReader reader)
         {
             var summary = new AccountSuspicionSummary();

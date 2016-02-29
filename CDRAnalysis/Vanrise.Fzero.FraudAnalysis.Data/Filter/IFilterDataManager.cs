@@ -5,7 +5,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IFilterDataManager : IDataManager
     {
-        List<FilterDefinition> GetFilters();
+        List<Filter> GetFilters();
 
         bool AreFiltersUpdated(ref object updateHandle);
     }
