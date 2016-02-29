@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
 
 namespace InterConnect.BusinessEntity.Web.Controllers
@@ -27,6 +28,20 @@ namespace InterConnect.BusinessEntity.Web.Controllers
         {
             OperatorProfileManager manager = new OperatorProfileManager();
             return manager.GetOperatorProfile(operatorProfileId);
+        }
+        [HttpGet]
+        [Route("GetRunTimeExtendedSettings")]
+        public GenericEditorRuntime GetRunTimeExtendedSettings(int dataRecordTypeId)
+        {
+            OperatorProfileManager manager = new OperatorProfileManager();
+            return manager.GetRunTimeExtendedSettings(dataRecordTypeId);
+        }
+        [HttpGet]
+        [Route("GetDataRecordTypes")]
+        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo()
+        {
+            OperatorProfileManager manager = new OperatorProfileManager();
+            return manager.GetDataRecordTypesInfo();
         }
 
         [HttpGet]

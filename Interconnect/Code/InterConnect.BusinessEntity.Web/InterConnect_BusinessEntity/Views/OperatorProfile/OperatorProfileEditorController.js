@@ -8,6 +8,8 @@
         var isEditMode;
         var operatorProfileId;
         var operatorProfileEntity;
+        var businessEntityId;
+
         var countryId;
         var cityId;
 
@@ -36,25 +38,10 @@
         function defineScope() {
 
             $scope.scopeModal = {};
-
-            $scope.scopeModal.optionSettings =[{
-                value: 1,
-                Name:"Option1"
-
-            }, {
-                value: 2,
-                Name: "Option2"
-
-            }];
-            if ($scope.scopeModal.optionSettings.length == 1) {
-                loadExtendedSettings($scope.scopeModal.optionSettings[0].value).then(function () {
-                    loadExtendedSettingsDirective();
-
-                });
-            }
+            $scope.scopeModal.dataRecordTypes = [];
             $scope.scopeModal.onSettingSelectionChanged = function () {
-                if ($scope.scopeModal.selectedOptionSettings != undefined && $scope.scopeModal.optionSettings.length > 1)
-                        loadExtendedSettings($scope.scopeModal.selectedOptionSettings.value).then(function() {
+                if ($scope.scopeModal.selectedDataRecordTypes != undefined && $scope.scopeModal.dataRecordTypes.length > 1)
+                    loadExtendedSettings($scope.scopeModal.selectedDataRecordTypes.DataRecordTypeId).then(function () {
                                     loadExtendedSettingsDirective();
 
                 });
@@ -129,7 +116,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection, loadDataRecordTypes]).then(function () {
 
             })
                .catch(function (error) {
@@ -177,14 +164,29 @@
                 if (operatorProfileEntity.Settings != null) {
                     $scope.scopeModal.company = operatorProfileEntity.Settings.Company;
                 }
-                if (operatorProfileEntity.ExtendedSettingsRecordTypeId != null)
-                $scope.scopeModal.selectedOptionSettings = UtilsService.getItemByVal($scope.scopeModal.optionSettings, operatorProfileEntity.ExtendedSettingsRecordTypeId, 'value')
             }
         }
 
-        function loadExtendedSettings(id)
+        function loadDataRecordTypes()
         {
-            return VR_GenericData_GenericEditorAPIService.GetEditorRuntimeMock(id).then(function (response) {
+            InterConnect_BE_OperatorProfileAPIService.GetDataRecordTypes().then(function(response)
+            {
+                $scope.scopeModal.dataRecordTypes = response;
+                if (operatorProfileEntity != undefined && operatorProfileEntity.ExtendedSettingsRecordTypeId != undefined)
+                {
+                    $scope.scopeModal.selectedDataRecordTypes = UtilsService.getItemByVal($scope.scopeModal.dataRecordTypes, operatorProfileEntity.ExtendedSettingsRecordTypeId, "DataRecordTypeId");
+                }else if ($scope.scopeModal.dataRecordTypes.length == 1) {
+                    loadExtendedSettings($scope.scopeModal.dataRecordTypes[0].DataRecordTypeId).then(function () {
+                        loadExtendedSettingsDirective();
+
+                    });
+                }
+            })
+        }
+
+        function loadExtendedSettings(recordTypeId)
+        {
+            return InterConnect_BE_OperatorProfileAPIService.GetRunTimeExtendedSettings(recordTypeId).then(function (response) {
                 $scope.scopeModal.sections = response.Sections;
 
             });
@@ -206,7 +208,6 @@
             return loadExtendedSettingsPromiseDeferred.promise;
         }
 
-
         function buildOperatorProfileObjFromScope() {
 
             var obj = {
@@ -218,7 +219,7 @@
                     Company: $scope.scopeModal.company,
                 },
                 ExtendedSettings: extendedSettingsAPI != undefined ? extendedSettingsAPI.getData() : undefined,
-                ExtendedSettingsRecordTypeId: $scope.scopeModal.selectedOptionSettings != undefined ? $scope.scopeModal.selectedOptionSettings.value : undefined
+                ExtendedSettingsRecordTypeId: $scope.scopeModal.selectedDataRecordTypes != undefined ? $scope.scopeModal.selectedDataRecordTypes.DataRecordTypeId : undefined
             };
             return obj;
         }

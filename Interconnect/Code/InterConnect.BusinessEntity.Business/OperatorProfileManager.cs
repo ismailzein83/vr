@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 namespace InterConnect.BusinessEntity.Business
 {
     public class OperatorProfileManager
     {
+        private static string businessEntityName = "InterConnect_BE_OperatorProfile";
         public List<OperatorProfileExtendedSettingType> GetExtendedSettingTypes()
         {
             return new List<OperatorProfileExtendedSettingType> 
@@ -106,7 +109,28 @@ namespace InterConnect.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+
+        public int GetBusinessEntityDefinitionId()
+        {
+            BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
+            return manager.GetBusinessEntityDefinitionId(businessEntityName);
+        }
+
+        public GenericEditorRuntime GetRunTimeExtendedSettings(int dataRecordTypeId)
+        {
+            int businessEntityId = GetBusinessEntityDefinitionId();
+            GenericEditorManager manager = new GenericEditorManager();
+            return manager.GetEditorRuntime(businessEntityId, dataRecordTypeId);
+        }
+        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo()
+        {
+            int businessEntityId = GetBusinessEntityDefinitionId();
+            GenericEditorManager manager = new GenericEditorManager();
+            return manager.GetDataRecordTypesInfo(businessEntityId);
+        }
+
         #endregion
+
 
         #region Private Members
         private Dictionary<int, OperatorProfile> GetCachedOperatorProfiles()
