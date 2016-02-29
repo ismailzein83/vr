@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService'];
+    carrierAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountAPIService'];
 
-    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService) {
+    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountAPIService) {
         var gridAPI;
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -54,6 +54,10 @@
             $scope.selectedCarrierAccountTypes=[];
             $scope.selectedSellingNumberPlans = [];
             $scope.AddNewCarrierAccount = AddNewCarrierAccount;
+
+            $scope.hadAddCarrierAccountPermission = function () {
+                return WhS_BE_CarrierAccountAPIService.HasAddCarrierAccountPermission();
+            };
 
             function getFilterObject() {
                 var data = {
