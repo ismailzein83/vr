@@ -115,6 +115,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         public void SavetoDB(List<AccountCase> records)
         {
             string[] s_Columns = new string[] {
+                "ID",
                 "AccountNumber"	,
                 "UserID"	,
                 "Status"	,
@@ -129,15 +130,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
             foreach (AccountCase record in records)
             {
-                stream.WriteRecord("0^{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
-                                record.AccountNumber,
-                                record.UserID,
-                                (int)record.StatusID,
-                                record.StatusUpdatedTime,
-                                record.ValidTill,
-                                record.CreatedTime,
-                                record.Reason
-                                );
+                stream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",record.CaseID, record.AccountNumber, record.UserID, (int)record.StatusID, record.StatusUpdatedTime, record.ValidTill, record.CreatedTime, record.Reason);
             }
 
             stream.Close();
@@ -149,7 +142,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                     Stream = stream,
                     TabLock = true,
                     ColumnNames = s_Columns,
-                    KeepIdentity = false,
+                    KeepIdentity = false ,
                     FieldSeparator = '^'
                 });
         }

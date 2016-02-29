@@ -167,32 +167,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
 
-        public void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady)
-        {
-            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionItem_GetByNULLCaseID", (reader) =>
-            {
-                while (reader.Read())
-                {
-
-                    HashSet<string> iMEIs = new HashSet<string>();
-
-                    string IMEIs = GetReaderValue<string>(reader, "IMEIs");
-                    if (IMEIs != null)
-                        foreach (var i in IMEIs.Split(','))
-                        {
-                            iMEIs.Add(i);
-
-                        }
-
-                    onBatchReady(new StrategyExecutionItemSummary() { AccountNumber = (reader["AccountNumber"] as string), IMEIs = iMEIs });
-                }
-
-
-
-            }
-               );
-        }
-
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -233,11 +207,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(preparedStrategyExecutionItem as BaseBulkInsertInfo);
         }
 
-        public void GetStrategyExecutionItemsbyNULLCaseId(out List<AccountInfo> outItems, out List<AccountCase> outCases, out List<AccountInfo> outInfos)
+        public void GetStrategyExecutionItemsbyNULLCaseId(out List<StrategyExecutionItemAccountInfo> outItems, out List<AccountCase> outCases, out List<AccountInfo> outInfos)
         {
             AccountCaseDataManager accountCaseDataManager = new AccountCaseDataManager();
+            StrategyExecutionItemAccountInfoDataManager strategyExecutionItemAccountInfoDataManager = new StrategyExecutionItemAccountInfoDataManager();
             AccountInfoDataManager accountInfoDataManager = new AccountInfoDataManager();
-            List<AccountInfo> itemsInfo = new List<AccountInfo>();
+            List<StrategyExecutionItemAccountInfo> itemsInfo = new List<StrategyExecutionItemAccountInfo>();
             List<AccountCase> cases = new List<AccountCase>();
             List<AccountInfo> infos = new List<AccountInfo>();
 
@@ -245,7 +220,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             {
                 while (reader.Read())
                 {
-                    itemsInfo.Add(accountInfoDataManager.AccountInfoMapper(reader));
+                    itemsInfo.Add(strategyExecutionItemAccountInfoDataManager.StrategyExecutionItemAccountInfoMapper(reader));
                 }
                 reader.NextResult();
 

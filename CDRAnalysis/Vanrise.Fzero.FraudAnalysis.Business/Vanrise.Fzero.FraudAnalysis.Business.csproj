@@ -87,7 +87,6 @@
   <ItemGroup>
     <Compile Include="AccountCaseHistoryManager.cs" />
     <Compile Include="AccountCaseManager.cs" />
-    <Compile Include="AccountInfoManager.cs" />
     <Compile Include="AccountStatusManager.cs" />
     <Compile Include="AggregateManager.cs" />
     <Compile Include="DWAccountCaseManager.cs" />

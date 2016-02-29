@@ -20,8 +20,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 
         void ApplyStrategyExecutionItemsToDB(object preparedStrategyExecutionItems);
 
-        void LoadStrategyExecutionItemSummaries(Action<StrategyExecutionItemSummary> onBatchReady);
-
-        void GetStrategyExecutionItemsbyNULLCaseId(out List<AccountInfo> outItems, out List<AccountCase> outCases, out List<AccountInfo> outInfos);
+        void GetStrategyExecutionItemsbyNULLCaseId(out List<StrategyExecutionItemAccountInfo> outItems, out List<AccountCase> outCases, out List<AccountInfo> outInfos);
     }
 }

@@ -23,7 +23,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
         {
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountCaseDataManager.GetFilteredCasesByAccountNumber(input));
         }
-        
+
         public AccountCase GetAccountCase(int caseID)
         {
             return accountCaseDataManager.GetAccountCase(caseID);
@@ -45,9 +45,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 caseID = accountCase.CaseID;
                 accountCaseDataManager.UpdateAccountCase(caseID, userID, input.CaseStatus, input.ValidTill, input.Reason);
             }
-                AccountCaseHistoryManager accountCaseHistoryManager = new Business.AccountCaseHistoryManager();
-                accountCaseHistoryManager.InsertAccountCaseHistory(caseID, userID, input.CaseStatus, input.Reason);
-                AccountStatusManager accountStatusManager = new AccountStatusManager();
+            AccountCaseHistoryManager accountCaseHistoryManager = new Business.AccountCaseHistoryManager();
+            accountCaseHistoryManager.InsertAccountCaseHistory(caseID, userID, input.CaseStatus, input.Reason);
+            AccountStatusManager accountStatusManager = new AccountStatusManager();
             if (input.CaseStatus == CaseStatus.ClosedFraud || input.CaseStatus == CaseStatus.ClosedWhiteList)
                 accountStatusManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill);
 
@@ -60,27 +60,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
             return updateOperationOutput;
         }
-       
-        public bool AssignAccountCase(string accountNumber, HashSet<string> imeis)
-        {
-            AccountCaseHistoryManager accountCaseHistoryManager = new AccountCaseHistoryManager();
-            AccountInfoManager accountInfoManager = new AccountInfoManager();
-            StrategyExecutionItemManager strategyExecutionItemManager = new StrategyExecutionItemManager();
-            AccountCase accountCase = accountCaseDataManager.GetLastAccountCaseByAccountNumber(accountNumber);
-            int caseId;
 
-            if (accountCase == null || (accountCase.StatusID == CaseStatus.ClosedFraud) || (accountCase.StatusID == CaseStatus.ClosedWhiteList))
-            {
-                accountCaseDataManager.InsertAccountCase(out caseId, accountNumber, null, CaseStatus.Open, null, null);
-                accountCaseHistoryManager.InsertAccountCaseHistory(caseId, null, CaseStatus.Open, null);
-                accountInfoManager.InsertOrUpdateAccountInfo(accountNumber, new InfoDetail() { IMEIs = imeis });
-            }
-            else
-            {
-                caseId = accountCase.CaseID;
-            }
-
-            return strategyExecutionItemManager.LinkItemToCase(accountNumber, caseId, CaseStatus.Open);
-        }
     }
 }

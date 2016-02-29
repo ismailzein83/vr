@@ -68,6 +68,7 @@
     <Compile Include="CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManager\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManager\IBusinessManager.cs" />
+    <Compile Include="StrategyExecutionItemAccountInfo.cs" />
     <Compile Include="StrategyExecutionProgress.cs" />
     <Compile Include="Strategy\IStrategyManager.cs" />
     <Compile Include="DWBTSDictionary.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="AccountNumbersByIMEI.cs" />
     <Compile Include="AccountStatus\AccountStatus.cs" />
     <Compile Include="DWFactBatch.cs" />
-    <Compile Include="StrategyExecutionItemSummaryBatch.cs" />
     <Compile Include="AccountRelatedNumbers.cs" />
     <Compile Include="DWStrategy.cs" />
     <Compile Include="DWTime.cs" />
@@ -113,7 +113,6 @@
     <Compile Include="Strategy\StrategyInfo.cs" />
     <Compile Include="Strategy\Strategy.cs" />
     <Compile Include="StrategyExecution\StrategyExecutionDetail.cs" />
-    <Compile Include="StrategyExecutionItemSummary.cs" />
     <Compile Include="StrategyExecution\StrategyExecutionInfo.cs" />
     <Compile Include="StrategyCases.cs" />
     <Compile Include="BTSHighValueCases.cs" />

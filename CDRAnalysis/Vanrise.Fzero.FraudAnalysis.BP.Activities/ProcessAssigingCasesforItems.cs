@@ -36,7 +36,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<CancellingStrategyExecutionBatch>());
+                this.OutputQueue.Set(context, new MemoryQueue<AssignCasesforItemsBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
@@ -47,7 +47,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Processing Assign Cases for Items");
 
             IStrategyExecutionItemDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
-            List<AccountInfo> itemInfos = new List<AccountInfo>();
+            List<StrategyExecutionItemAccountInfo> itemInfos = new List<StrategyExecutionItemAccountInfo>();
             List<AccountCase> cases = new List<AccountCase>();
             List<AccountInfo> infos = new List<AccountInfo>();
 
@@ -80,9 +80,9 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     accountNumbers.Add(item.AccountNumber);
                     currentAccountInfo = infos.Where(x => x.AccountNumber == item.AccountNumber).FirstOrDefault();
                     if (currentAccountInfo == null)
-                        tobeInsertedAccountInfos.Add(new AccountInfo { AccountNumber = item.AccountNumber, InfoDetail = new InfoDetail { IMEIs = item.InfoDetail.IMEIs } });
-                    else if (currentAccountInfo.InfoDetail.IMEIs.Except(item.InfoDetail.IMEIs).Count() > 0)//If IMEIs changed
-                        tobeUpdatedAccountInfos.Add(new AccountInfo { AccountNumber = item.AccountNumber, InfoDetail = new InfoDetail { IMEIs = item.InfoDetail.IMEIs } });
+                        tobeInsertedAccountInfos.Add(new AccountInfo { AccountNumber = item.AccountNumber, InfoDetail = new InfoDetail { IMEIs = item.IMEIs } });
+                    else if (currentAccountInfo.InfoDetail.IMEIs.Except(item.IMEIs).Count() > 0)//If IMEIs changed
+                        tobeUpdatedAccountInfos.Add(new AccountInfo { AccountNumber = item.AccountNumber, InfoDetail = new InfoDetail { IMEIs = item.IMEIs } });
                 }
                 else
                 {

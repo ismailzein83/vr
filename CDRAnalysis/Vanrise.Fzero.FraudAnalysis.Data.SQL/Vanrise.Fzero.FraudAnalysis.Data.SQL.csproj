@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="AccountCaseDataManager.cs" />
     <Compile Include="AccountCaseHistoryDataManager.cs" />
+    <Compile Include="StrategyExecutionItemAccountInfoDataManager.cs" />
     <Compile Include="AccountInfo\AccountInfoDataManager.cs" />
     <Compile Include="AccountStatus\AccountStatusDataManager.cs" />
     <Compile Include="AggregateDataManager.cs" />

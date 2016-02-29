@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IStrategyExecutionItemAccountInfoDataManager.cs" />
     <Compile Include="IDWAccountCaseManager.cs" />
     <Compile Include="IDWStrategyDataManager.cs" />
     <Compile Include="FraudDataManagerFactory.cs" />
