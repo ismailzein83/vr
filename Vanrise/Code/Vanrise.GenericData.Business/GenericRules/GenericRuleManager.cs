@@ -18,6 +18,9 @@ namespace Vanrise.GenericData.Business
         {
             var ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(input.Query.RuleDefinitionId);
 
+            if (ruleDefinition == null)
+                throw new NullReferenceException("ruleDefinition");
+
             Func<T, bool> filterExpression = (rule) => rule.DefinitionId == input.Query.RuleDefinitionId
                 && (input.Query.CriteriaFieldValues == null || RuleCriteriaFilter(rule, ruleDefinition, input.Query.CriteriaFieldValues))
                 && (input.Query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, input.Query.SettingsFilterValue));
@@ -81,15 +84,28 @@ namespace Vanrise.GenericData.Business
         {
             if (rule.Criteria == null) return false;
 
-            foreach (KeyValuePair<string, object> kvp in filterValues)
+            foreach (KeyValuePair<string, object> filter in filterValues)
             {
-                DataRecordFieldType criteriaFieldType = ruleDefinition.CriteriaDefinition.Fields.MapRecord(itm => itm.FieldType, itm => itm.FieldName == kvp.Key);
-                GenericRuleCriteriaFieldValues criteriaFieldValue;
-                rule.Criteria.FieldsValues.TryGetValue(kvp.Key, out criteriaFieldValue);
+                if (filter.Value == null) 
+                    continue;
 
-                if (criteriaFieldValue != null && !criteriaFieldType.IsMatched(criteriaFieldValue.GetValues(), kvp.Value))
-                    return false;
+                DataRecordFieldType criteriaFieldType = ruleDefinition.CriteriaDefinition.Fields.MapRecord(itm => itm.FieldType, itm => itm.FieldName == filter.Key);
+                if (criteriaFieldType == null)
+                    throw new NullReferenceException("criteriaFieldType");
+
+                GenericRuleCriteriaFieldValues criteriaFieldValue;
+                rule.Criteria.FieldsValues.TryGetValue(filter.Key, out criteriaFieldValue);
+
+                if (criteriaFieldValue != null)
+                {
+                    IEnumerable<object> values = criteriaFieldValue.GetValues();
+                    if (values == null) throw new NullReferenceException("criteriaFieldValue.GetValues()");
+                    
+                    if (!criteriaFieldType.IsMatched(values, filter.Value))
+                        return false;
+                }
             }
+
             return true;
         }
 
