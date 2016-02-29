@@ -29,7 +29,7 @@ namespace Demo.Module.Business
         public RawCDRLogDetail RawCDRLogDetailMapper(RawCDRLog rawCDRLog)
         {
             string dataSourceName = "";
-            DataSourceDetail dataSource =  new DataSourceManager().GetDataSource(rawCDRLog.DataSourceId);
+            DataSourceDetail dataSource =  new DataSourceManager().GetDataSourceDetail(rawCDRLog.DataSourceId);
             if (dataSource != null)
                 dataSourceName = dataSource.Name;
 

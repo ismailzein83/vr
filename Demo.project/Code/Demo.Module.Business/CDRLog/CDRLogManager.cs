@@ -29,7 +29,7 @@ namespace Demo.Module.Business
        public CDRLogDetail CDRLogDetailMapper(CDRLog cDRLog)
         {
             string dataSourceName = "";
-            DataSourceDetail dataSource = new DataSourceManager().GetDataSource(cDRLog.DataSourceId);
+            DataSourceDetail dataSource = new DataSourceManager().GetDataSourceDetail(cDRLog.DataSourceId);
             if (dataSource != null)
                 dataSourceName = dataSource.Name;
 
