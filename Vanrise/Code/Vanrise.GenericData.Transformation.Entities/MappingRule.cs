@@ -24,12 +24,9 @@ namespace Vanrise.GenericData.Transformation.Entities
 
         public override bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue)
         {
-            if (Settings.Value == null) return false;
-
+            if (Settings == null || Settings.Value == null) return false; // Should a null exception be thrown instead?
             var mappingRuleDefinitionSettings = ruleDefinitionSettings as MappingRuleDefinitionSettings;
-            object settingsValue = new List<object> { Settings.Value };
-            
-            return mappingRuleDefinitionSettings.FieldType.IsMatched(settingsValue, settingsFilterValue);
+            return mappingRuleDefinitionSettings.FieldType.IsMatched(Settings.Value, settingsFilterValue);
         }
     }
 }
