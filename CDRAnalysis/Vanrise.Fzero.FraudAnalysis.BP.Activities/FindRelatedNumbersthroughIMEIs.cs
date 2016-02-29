@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     {
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
-        public AccountNumbersByIMEIDictionary AccountsNumbersByIMEI { get; set; }
+        public AccountNumbersByIMEIDictionary AccountsNumbersByIMEIDictionary { get; set; }
 
     }
 
@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
 
-        public InArgument<AccountNumbersByIMEIDictionary> AccountNumbersByIMEI { get; set; }
+        public InArgument<AccountNumbersByIMEIDictionary> AccountNumbersByIMEIDictionary { get; set; }
 
 
 
@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(FindRelatedNumbersthroughIMEIsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            AccountNumbersByIMEIDictionary accountNumbersByIMEI = inputArgument.AccountsNumbersByIMEI;
+            AccountNumbersByIMEIDictionary accountNumbersByIMEIDictionary = inputArgument.AccountsNumbersByIMEIDictionary;
             AccountRelatedNumbersDictionary accountRelatedNumbers = new AccountRelatedNumbersDictionary();
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -60,7 +60,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 if (cdr.IMEI == null)
                                     continue;
                                 HashSet<String> accountNumbers ;
-                                if (accountNumbersByIMEI.TryGetValue(cdr.IMEI, out accountNumbers))
+                                if (accountNumbersByIMEIDictionary.TryGetValue(cdr.IMEI, out accountNumbers))
                                 {
                                     foreach (var accountNumber in accountNumbers)
                                     {
@@ -96,7 +96,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return new FindRelatedNumbersthroughIMEIsInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                AccountsNumbersByIMEI = this.AccountNumbersByIMEI.Get(context)
+                AccountsNumbersByIMEIDictionary = this.AccountNumbersByIMEIDictionary.Get(context)
             };
         }
 

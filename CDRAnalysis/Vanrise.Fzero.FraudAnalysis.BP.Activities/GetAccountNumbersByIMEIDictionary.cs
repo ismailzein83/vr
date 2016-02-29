@@ -8,12 +8,12 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 {
 
-    public class GetAccountNumbersByIMEI : CodeActivity
+    public class GetAccountNumbersByIMEIDictionary : CodeActivity
     {
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<AccountNumbersByIMEIDictionary> AccountNumbersByIMEI { get; set; }
+        public InOutArgument<AccountNumbersByIMEIDictionary> AccountNumbersByIMEIDictionary { get; set; }
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IAccountInfoDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountInfoDataManager>();
-            AccountNumbersByIMEIDictionary accountNumbersByIMEI = new AccountNumbersByIMEIDictionary();
+            AccountNumbersByIMEIDictionary accountNumbersByIMEIDictionary = new AccountNumbersByIMEIDictionary();
 
             dataManager.LoadAccountInfo(new CaseStatus[] { CaseStatus.ClosedFraud, CaseStatus.Open, CaseStatus.Pending }, ((accountInfo) =>
                 {
@@ -30,14 +30,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                         foreach (var imei in accountInfo.InfoDetail.IMEIs)
                         {
                             // This code does two hash lookups.
-                            HashSet<String> accountNumbers = accountNumbersByIMEI.GetOrCreateItem(imei);
+                            HashSet<String> accountNumbers = accountNumbersByIMEIDictionary.GetOrCreateItem(imei);
                             accountNumbers.Add(accountInfo.AccountNumber);
                         }
                     }
                 }));
 
 
-            context.SetValue(AccountNumbersByIMEI, accountNumbersByIMEI);
+            context.SetValue(AccountNumbersByIMEIDictionary, accountNumbersByIMEIDictionary);
 
         }
 

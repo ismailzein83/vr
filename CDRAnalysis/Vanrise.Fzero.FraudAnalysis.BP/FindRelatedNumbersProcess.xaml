@@ -73,15 +73,15 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="vffe:AccountNumbersByIMEI" Name="accountNumbersByIMEI" />
+      <Variable x:TypeArguments="vffe:AccountNumbersByIMEIDictionary" Name="accountNumbersByIMEIDictionary" />
     </Sequence.Variables>
-    <vffba1:GetAccountNumbersByIMEI sap2010:WorkflowViewState.IdRef="GetAccountNumbersByIMEI_1">
-      <vffba1:GetAccountNumbersByIMEI.AccountNumbersByIMEI>
-        <InOutArgument x:TypeArguments="vffe:AccountNumbersByIMEI">
-          <mca:CSharpReference x:TypeArguments="vffe:AccountNumbersByIMEI">accountNumbersByIMEI</mca:CSharpReference>
+    <vffba1:GetAccountNumbersByIMEIDictionary sap2010:WorkflowViewState.IdRef="GetAccountNumbersByIMEIDictionary_1">
+      <vffba1:GetAccountNumbersByIMEIDictionary.AccountNumbersByIMEIDictionary>
+        <InOutArgument x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">
+          <mca:CSharpReference x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">accountNumbersByIMEIDictionary</mca:CSharpReference>
         </InOutArgument>
-      </vffba1:GetAccountNumbersByIMEI.AccountNumbersByIMEI>
-    </vffba1:GetAccountNumbersByIMEI>
+      </vffba1:GetAccountNumbersByIMEIDictionary.AccountNumbersByIMEIDictionary>
+    </vffba1:GetAccountNumbersByIMEIDictionary>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
@@ -110,11 +110,11 @@
         </vfcba:LoadCDRs.ToDate>
       </vfcba:LoadCDRs>
       <vffba1:FindRelatedNumbersthroughIMEIs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FindRelatedNumbersthroughIMEIs_1">
-        <vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEI>
-          <InArgument x:TypeArguments="vffe:AccountNumbersByIMEI">
-            <mca:CSharpValue x:TypeArguments="vffe:AccountNumbersByIMEI">accountNumbersByIMEI</mca:CSharpValue>
+        <vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEIDictionary>
+          <InArgument x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">
+            <mca:CSharpValue x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">accountNumbersByIMEIDictionary</mca:CSharpValue>
           </InArgument>
-        </vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEI>
+        </vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEIDictionary>
         <vffba1:FindRelatedNumbersthroughIMEIs.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
@@ -125,13 +125,14 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
           </InArgument>
         </vffba1:FindRelatedNumbersthroughIMEIs.PreviousActivityStatus>
-      </vffba1:FindRelatedNumbersthroughIMEIs>
+      
+    </vffba1:FindRelatedNumbersthroughIMEIs>
     </Parallel>
     <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbA1KA4MBDgIBAU4FVCYCAShVBYEBEAIBAlELUXYCASlaB28YAgETcAeAAS8CAQNdDV1bAgEjZw1nbwIBHmINYm4CARlsDWxZAgEUfQ19ZwIBDngNeG4CAQlzDXNwAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetAccountNumbersByIMEI_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="GetAccountNumbersByIMEIDictionary_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="LoadCDRs_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="FindRelatedNumbersthroughIMEIs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />

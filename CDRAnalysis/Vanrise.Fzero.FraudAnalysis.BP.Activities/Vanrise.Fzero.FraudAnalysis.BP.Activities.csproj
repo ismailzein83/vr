@@ -124,7 +124,7 @@
     <Compile Include="GetStrategyExecutionStatus.cs" />
     <Compile Include="GetStrategiesExecutionInfo.cs" />
     <Compile Include="GetStrategyExecutionItems.cs" />
-    <Compile Include="GetAccountNumbersByIMEI.cs" />
+    <Compile Include="GetAccountNumbersByIMEIDictionary.cs" />
     <Compile Include="GetDWDimensions.cs" />
     <Compile Include="ProcessStrategyExecutionCancellation.cs" />
     <Compile Include="CreateNumberProfiles.cs" />
