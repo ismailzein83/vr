@@ -104,22 +104,20 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         }
 
         function defineMenuActions() {
-            var menuActionsWithSellingProduct = [
-                {
-                    name: "Edit",
-                    clicked: editCarrierAccount,
-                },
-                {
-                    name: "Assign Selling Product",
-                    clicked: assignNew
-                }
-            ];
-            var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editCarrierAccount,
-                }
-            ];
+            var menuActionsWithSellingProduct = [{
+                name: "Edit",
+                clicked: editCarrierAccount,
+                haspermission: hasUpdateCarrierAccountPermission
+            }, {
+                name: "Assign Selling Product",
+                clicked: assignNew,
+                haspermission: hasUpdateCarrierAccountPermission
+            }];
+            var defaultMenuActions = [{
+                name: "Edit",
+                clicked: editCarrierAccount,
+                haspermission: hasUpdateCarrierAccountPermission
+            }];
 
             $scope.gridMenuActions = function (dataItem) {
                 if (dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Customer.value || dataItem.Entity.AccountType == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
@@ -127,6 +125,10 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                 } else {
                     return defaultMenuActions;
                 }
+            };
+
+            function hasUpdateCarrierAccountPermission() {
+                return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission();
             }
         }
 
