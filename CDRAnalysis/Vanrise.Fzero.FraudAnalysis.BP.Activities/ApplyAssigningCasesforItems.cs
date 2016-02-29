@@ -72,10 +72,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             //Bulk Update: Account Info
                             accountInfoDataManager.UpdateAccountInfoBatch(batch.TobeUpdatedAccountInfos);
 
-                            //Bulk Update: Strategy Execution Item
-                            IStrategyExecutionItemDataManager itemDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
-                            itemDataManager.UpdateStrategyExecutionItemBatch(batch.AccountNumberCaseIds);
-
 
                             //Bulk Insert: Account Case
                             long startingId;
@@ -93,6 +89,16 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                 accountCaseHistories.Add(new AccountCaseHistory() { CaseId = accountCase.CaseID, Status = accountCase.StatusID, StatusTime = accountCase.StatusUpdatedTime, UserId = accountCase.UserID });
                             IAccountCaseHistoryDataManager accountCaseHistoryDataManager = FraudDataManagerFactory.GetDataManager<IAccountCaseHistoryDataManager>();
                             accountCaseHistoryDataManager.SavetoDB(accountCaseHistories);
+
+
+                            foreach (var accountCase in accountCases)
+                                if (!batch.AccountNumberCaseIds.ContainsKey(accountCase.AccountNumber))
+                                    batch.AccountNumberCaseIds.Add(accountCase.AccountNumber, accountCase.CaseID);
+
+
+                            //Bulk Update: Strategy Execution Item
+                            IStrategyExecutionItemDataManager itemDataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
+                            itemDataManager.UpdateStrategyExecutionItemBatch(batch.AccountNumberCaseIds);
 
                         });
                 }

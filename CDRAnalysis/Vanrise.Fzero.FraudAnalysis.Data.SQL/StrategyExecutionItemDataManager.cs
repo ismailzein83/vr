@@ -100,8 +100,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             DataTable dt = new DataTable("FraudAnalysis.StrategyExecutionItem");
             dt.Columns.Add("ID", typeof(long));
             dt.Columns.Add("SuspicionOccuranceStatus", typeof(int));
-            dt.Columns.Add("AccountNumber", typeof(string));
             dt.Columns.Add("CaseId", typeof(int));
+            dt.Columns.Add("AccountNumber", typeof(string));
             return dt;
         }
 
@@ -147,6 +147,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                 dr = dtStrategyExecutionItemsToUpdate.NewRow();
                 dr["AccountNumber"] = item.Key;
                 dr["CaseId"] = item.Value;
+                dr["ID"] = 0;
+                dr["SuspicionOccuranceStatus"] = 0;
                 dtStrategyExecutionItemsToUpdate.Rows.Add(dr);
             }
 
