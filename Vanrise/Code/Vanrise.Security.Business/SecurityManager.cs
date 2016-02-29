@@ -189,45 +189,19 @@ namespace Vanrise.Security.Business
 
             return result;
         }
-
-        private Dictionary<string, List<string>> ParseRequiredPermissionsString(string value)
-        {
-            Dictionary<string, List<string>> requiredPermissions = null;
-
-            if (value != null)
-            {
-                requiredPermissions = new Dictionary<string, List<string>>();
-
-                string[] arrayOfPermissions = value.Split('|');
-
-                foreach (string permission in arrayOfPermissions)
-                {
-                    string[] keyValuesArray = permission.Split(':');
-                    List<string> flags = new List<string>();
-                    foreach (string flag in keyValuesArray[1].Split(','))
-                    {
-                        flags.Add(flag.Trim());
-                    }
-
-                    requiredPermissions.Add(keyValuesArray[0].Trim(), flags);
-                }
-            }
-
-            return requiredPermissions;
-        }
         
         #endregion
 
         #region Pending Methods
 
-        public bool IsAllowedBySystemActionNames(string systemActionNames, int userId)
+        public bool HasPermissionToActions(string systemActionNames, int userId)
         {
             return IsAllowed(GetRequiredPermissionsFromSystemActionNames(systemActionNames), userId);
         }
 
         string GetRequiredPermissionsFromSystemActionNames(string systemActionNames)
         {
-            string[] systemActionNamesArray = systemActionNames.Split('|');
+            string[] systemActionNamesArray = systemActionNames.Split('&');
             var requiredPermissions = new List<string>();
 
             SystemActionManager systemActionManager = new SystemActionManager();
@@ -241,7 +215,7 @@ namespace Vanrise.Security.Business
                 }
             }
 
-            return (requiredPermissions.Count > 0) ? String.Join("|", requiredPermissions) : null;
+            return (requiredPermissions.Count > 0) ? String.Join("&", requiredPermissions) : null;
         }
 
         Dictionary<string, List<string>> GetRequiredPermissionsByNodePath(string input)
@@ -249,7 +223,7 @@ namespace Vanrise.Security.Business
             var dictionary = new Dictionary<string, List<string>>();
             BusinessEntityNodeManager beNodeManager = new BusinessEntityNodeManager();
             
-            string[] permissionsByNodeNameArray = input.Split('|');
+            string[] permissionsByNodeNameArray = input.Split('&');
 
             foreach (string permissionsByNodeNameString in permissionsByNodeNameArray)
             {
@@ -269,45 +243,6 @@ namespace Vanrise.Security.Business
             return dictionary;
         }
 
-        #endregion
-
-        #region Junk Methods
-
-        //Dictionary<string, List<string>> GetRequiredPermissionsByNodePath(string systemActionNames)
-        //{
-        //    var permissionsByNodePath = new Dictionary<string, List<string>>();
-        //    string[] actionNames = systemActionNames.Split('|');
-        //    BusinessEntityNodeManager beNodeManager = new BusinessEntityNodeManager();
-
-        //    foreach (var actionName in actionNames)
-        //    {
-        //        SystemAction systemAction = new SystemActionManager().GetSystemAction(actionName);
-
-        //        if (systemAction.RequiredPermissions == null)
-        //            continue;
-
-        //        string[] permissionsByNodeNameStrings = systemAction.RequiredPermissions.Split('|');
-
-        //        foreach (string permissionsByNodeNameString in permissionsByNodeNameStrings)
-        //        {
-        //            string[] permissionsByNodeNameArray = permissionsByNodeNameString.Split(':');
-
-        //            string nodePath = beNodeManager.GetBusinessEntityNodePath(permissionsByNodeNameArray[0].Trim());
-        //            List<string> permissions = permissionsByNodeNameArray[1].Split(',').MapRecords(itm => itm.Trim()).ToList();
-
-        //            List<string> existingPermissionsByNodePath;
-        //            permissionsByNodePath.TryGetValue(nodePath, out existingPermissionsByNodePath);
-
-        //            if (existingPermissionsByNodePath != null)
-        //                existingPermissionsByNodePath.AddRange(permissions);
-        //            else
-        //                permissionsByNodePath.Add(nodePath, permissions);
-        //        }
-        //    }
-
-        //    return permissionsByNodePath;
-        //}
-        
         #endregion
     }
 }

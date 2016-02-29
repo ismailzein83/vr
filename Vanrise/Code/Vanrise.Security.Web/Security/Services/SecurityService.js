@@ -9,15 +9,15 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
         getLoggedInUserInfo: getLoggedInUserInfo,
         getUserToken: getUserToken,
         IsAllowed: IsAllowed,
-        IsAllowedBySystemActionNames: IsAllowedBySystemActionNames
+        HasPermissionToActions: HasPermissionToActions
     });
 
     function IsAllowed(requiredPermissions) {
         return VR_Sec_SecurityAPIService.IsAllowed(requiredPermissions);
     }
 
-    function IsAllowedBySystemActionNames(systemActionNames) {
-        return VR_Sec_SecurityAPIService.IsAllowedBySystemActionNames(systemActionNames);
+    function HasPermissionToActions(systemActionNames) {
+        return VR_Sec_SecurityAPIService.HasPermissionToActions(systemActionNames);
     }
 
     function isAllowed(attrValue) {

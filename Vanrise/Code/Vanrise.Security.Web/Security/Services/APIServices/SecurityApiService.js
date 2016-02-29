@@ -11,7 +11,7 @@
             Authenticate: Authenticate,
             ChangePassword: ChangePassword,
             IsAllowed: IsAllowed,
-            IsAllowedBySystemActionNames: IsAllowedBySystemActionNames
+            HasPermissionToActions: HasPermissionToActions
         });
 
         function Authenticate(credentialsObject) {
@@ -28,8 +28,8 @@
             });
         }
 
-        function IsAllowedBySystemActionNames(systemActionNames) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'IsAllowedBySystemActionNames'), {
+        function HasPermissionToActions(systemActionNames) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'HasPermissionToActions'), {
                 systemActionNames: systemActionNames
             });
         }

@@ -50,10 +50,10 @@ namespace Vanrise.Security.Business
             return manager.IsAllowed(requiredPermissions, this.GetSecurityToken().UserId);
         }
 
-        public bool IsAllowedBySystemActionNames(string systemActionNames)
+        public bool HasPermissionToActions(string systemActionNames)
         {
             SecurityManager manager = new SecurityManager();
-            return manager.IsAllowedBySystemActionNames(systemActionNames, this.GetSecurityToken().UserId);
+            return manager.HasPermissionToActions(systemActionNames, this.GetSecurityToken().UserId);
         }
 
         #endregion

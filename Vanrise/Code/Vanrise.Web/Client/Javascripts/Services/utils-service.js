@@ -582,7 +582,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         var actionNames = '';
         if (methodNames != undefined && methodNames != null) {
             for (var i = 0; i < methodNames.length; i++) {
-                if (i > 0) { actionNames += '|'; }
+                if (i > 0) { actionNames += '&'; }
                 actionNames += (moduleName + '/' + controllerName + '/' + methodNames[i]);
             }
         }

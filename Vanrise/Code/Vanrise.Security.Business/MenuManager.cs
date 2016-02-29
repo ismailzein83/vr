@@ -98,7 +98,7 @@ namespace Vanrise.Security.Business
                 menu.Childs = new List<MenuItem>();
                 foreach (View viewItem in childViews)
                 {
-                    if (viewItem.ActionNames == null || SecurityContext.Current.IsAllowedBySystemActionNames(viewItem.ActionNames))
+                    if (viewItem.ActionNames == null || SecurityContext.Current.HasPermissionToActions(viewItem.ActionNames))
                     {
                         MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem.Rank };
                         menu.Childs.Add(viewMenu);

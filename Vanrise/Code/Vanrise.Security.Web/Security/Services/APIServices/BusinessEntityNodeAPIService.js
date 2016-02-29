@@ -24,7 +24,7 @@
         }
 
         function HasBreakInheritancePermission() {
-            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['ToggleBreakInheritance']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['ToggleBreakInheritance']));
         }
     }
 

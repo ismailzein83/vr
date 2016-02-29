@@ -45,10 +45,10 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
-        [Route("IsAllowedBySystemActionNames")]
-        public bool IsAllowedBySystemActionNames(string systemActionNames)
+        [Route("HasPermissionToActions")]
+        public bool HasPermissionToActions(string systemActionNames)
         {
-            return SecurityContext.Current.IsAllowedBySystemActionNames(systemActionNames);
+            return SecurityContext.Current.HasPermissionToActions(systemActionNames);
         }
 
         public class CredentialsInput
