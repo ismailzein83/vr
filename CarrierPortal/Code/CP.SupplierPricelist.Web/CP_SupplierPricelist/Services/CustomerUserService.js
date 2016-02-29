@@ -7,7 +7,7 @@ app.service('CP_SupplierPricelist_CustomerUserService', ['VRModalService', 'CP_S
             var modalSettings = {
             };
             var parameters = {
-                customerId: customerId
+                CustomerId: customerId
             };
 
             modalSettings.onScopeReady = function (modalScope) {
@@ -29,9 +29,9 @@ app.service('CP_SupplierPricelist_CustomerUserService', ['VRModalService', 'CP_S
                     var query = {
                         CustomerId: customerItem.Entity.CustomerId
                     }
-                    var onCustomerUserAdded = function (codeGroupObj) {
+                    var onCustomerUserAdded = function (customerUserItem) {
                         if (customerItem.customerUserGridAPI != undefined) {
-                            customerItem.customerUserGridAPI.onCustomerUserAdded(codeGroupObj);
+                            customerItem.customerUserGridAPI.onCustomerUserAdded(customerUserItem);
                         }
                     };
                     assignUser(onCustomerUserAdded, customerItem.Entity.CustomerId);

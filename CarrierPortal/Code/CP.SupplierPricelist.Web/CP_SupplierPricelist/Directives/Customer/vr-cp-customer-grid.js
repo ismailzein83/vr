@@ -27,7 +27,7 @@ function (UtilsService, customeApiService, customerService, vRUIUtilsService, vR
                     }
 
                     directiveAPI.onCustomerAdded = function (customerObject) {
-                        gridDrillDownTabsObj.setDrillDownExtensionObject(countryObject);
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(customerObject);
                         gridAPI.itemAdded(customerObject);
                     }
                     return directiveAPI;
@@ -63,7 +63,7 @@ function (UtilsService, customeApiService, customerService, vRUIUtilsService, vR
     }
     function editCustomer(customer) {
         var onCustomerUpdated = function (updatedItem) {
-            gridDrillDownTabsObj.setDrillDownExtensionObject(countryObj);
+            gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);
             gridAPI.itemUpdated(updatedItem);
         };
         customerService.editcustomer(customer.Entity.CustomerId, onCustomerUpdated);

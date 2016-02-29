@@ -1,10 +1,10 @@
 ﻿"use strict";
 app.directive("vrCpCustomeruserGrid", ["UtilsService", "CP_SupplierPricelist_CustomerUserAPIService", "CP_SupplierPricelist_CustomerUserService", "VRNotificationService",
 function (UtilsService, customerUserApiService, customerUserService, vRNotificationService) {
-    var gridAPI;
-
+  
     function CustomerUserGrid($scope, ctrl) {
 
+        var gridAPI;
 
         this.initializeController = initializeController;
 
@@ -25,11 +25,6 @@ function (UtilsService, customerUserApiService, customerUserService, vRNotificat
                     directiveAPI.onCustomerUserAdded = function (customerUserObject) {
                         gridAPI.itemAdded(customerUserObject);
                     }
-                    directiveAPI.onCustomerUserDeleted = function (customerUserObject) {
-                        gridAPI.itemDeleted(customerUserObject);
-                    }
-
-                   
                     return directiveAPI;
                 }
 

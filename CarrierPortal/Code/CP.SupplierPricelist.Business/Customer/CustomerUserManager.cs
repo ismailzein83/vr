@@ -47,6 +47,7 @@ namespace CP.SupplierPricelist.Business
             bool updateActionSucc = dataManager.Insert(input);
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = MapToDetails(input);
             }
@@ -65,6 +66,7 @@ namespace CP.SupplierPricelist.Business
             bool updateActionSucc = dataManager.Delete(userId);
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
             }
             else

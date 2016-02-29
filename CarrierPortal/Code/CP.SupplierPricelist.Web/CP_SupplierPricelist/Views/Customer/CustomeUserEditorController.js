@@ -11,7 +11,7 @@
         function loadParameters() {
             var parameters = vrNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                customerId = parameters.customerId;
+                customerId = parameters.CustomerId;
             }
 
         }
