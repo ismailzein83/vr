@@ -85,16 +85,17 @@ app.directive("vrCommonCountrySourcereaderSelector", ['UtilsService', '$compile'
                 });
                 promises.push(loadCountryTypeTemplatesPromise);
 
-                var loadCountrySourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
-                countrySourceDirectiveReadyPromiseDeferred.promise.then(function () {
-                    var payload = {
-                        connectionString: connectionString
-                    };
-                    VRUIUtilsService.callDirectiveLoad(countrySourceDirectiveAPI, payload, loadCountrySourceTemplatePromiseDeferred);
-                });
+                if (payload != undefined && payload.sourceConfigId != undefined) {
+                    var loadCountrySourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
+                    countrySourceDirectiveReadyPromiseDeferred.promise.then(function() {
+                        var payload = {
+                            connectionString: connectionString
+                        };
+                        VRUIUtilsService.callDirectiveLoad(countrySourceDirectiveAPI, payload, loadCountrySourceTemplatePromiseDeferred);
+                    });
 
-                promises.push(loadCountrySourceTemplatePromiseDeferred.promise);
-
+                    promises.push(loadCountrySourceTemplatePromiseDeferred.promise);
+                }
                 return UtilsService.waitMultiplePromises(promises);
             }
 
