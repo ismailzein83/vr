@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InOutArgument<AccountNumbersByIMEI> AccountNumbersByIMEI { get; set; }
+        public InOutArgument<AccountNumbersByIMEIDictionary> AccountNumbersByIMEI { get; set; }
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IAccountInfoDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountInfoDataManager>();
-            AccountNumbersByIMEI accountNumbersByIMEI = new AccountNumbersByIMEI();
+            AccountNumbersByIMEIDictionary accountNumbersByIMEI = new AccountNumbersByIMEIDictionary();
 
             dataManager.LoadAccountInfo(new CaseStatus[] { CaseStatus.ClosedFraud, CaseStatus.Open, CaseStatus.Pending }, ((accountInfo) =>
                 {

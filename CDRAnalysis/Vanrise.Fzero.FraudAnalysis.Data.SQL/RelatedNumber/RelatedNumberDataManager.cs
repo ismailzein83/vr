@@ -21,7 +21,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumbers_CreateTempTable");
         }
-        public void SavetoDB(AccountRelatedNumbers records)
+        public void SavetoDB(AccountRelatedNumbersDictionary records)
         {
 
             StreamForBulkInsert stream = InitializeStreamForBulkInsert();

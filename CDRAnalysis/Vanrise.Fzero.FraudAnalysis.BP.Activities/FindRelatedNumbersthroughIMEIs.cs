@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
     {
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
-        public AccountNumbersByIMEI AccountsNumbersByIMEI { get; set; }
+        public AccountNumbersByIMEIDictionary AccountsNumbersByIMEI { get; set; }
 
     }
 
@@ -31,7 +31,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
 
-        public InArgument<AccountNumbersByIMEI> AccountNumbersByIMEI { get; set; }
+        public InArgument<AccountNumbersByIMEIDictionary> AccountNumbersByIMEI { get; set; }
 
 
 
@@ -40,8 +40,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(FindRelatedNumbersthroughIMEIsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            AccountNumbersByIMEI accountNumbersByIMEI = inputArgument.AccountsNumbersByIMEI;
-            AccountRelatedNumbers accountRelatedNumbers = new AccountRelatedNumbers();
+            AccountNumbersByIMEIDictionary accountNumbersByIMEI = inputArgument.AccountsNumbersByIMEI;
+            AccountRelatedNumbersDictionary accountRelatedNumbers = new AccountRelatedNumbersDictionary();
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {

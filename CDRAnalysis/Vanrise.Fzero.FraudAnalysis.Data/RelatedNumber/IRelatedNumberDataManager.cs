@@ -5,7 +5,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IRelatedNumberDataManager : IDataManager
     {
-        void SavetoDB(AccountRelatedNumbers record);
+        void SavetoDB(AccountRelatedNumbersDictionary record);
 
         void CreateTempTable();
 

@@ -63,82 +63,81 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountCaseHistory\AccountCaseHistory.cs" />
-    <Compile Include="Batches\AssignCasesforItemsBatch.cs" />
-    <Compile Include="Batches\CancellingStrategyExecutionBatch.cs" />
-    <Compile Include="BusinessManager\BusinessManagerFactory.cs" />
-    <Compile Include="BusinessManager\IBusinessManager.cs" />
+    <Compile Include="AccountCaseHistory.cs" />
+    <Compile Include="AssignCasesforItemsBatch.cs" />
+    <Compile Include="CancellingStrategyExecutionBatch.cs" />
+    <Compile Include="BusinessManagerFactory.cs" />
+    <Compile Include="IBusinessManager.cs" />
     <Compile Include="StrategyExecutionItemAccountInfo.cs" />
     <Compile Include="StrategyExecutionProgress.cs" />
-    <Compile Include="Strategy\IStrategyManager.cs" />
+    <Compile Include="IStrategyManager.cs" />
     <Compile Include="DWBTSDictionary.cs" />
     <Compile Include="CaseStatus.cs" />
     <Compile Include="SuspicionOccuranceStatus.cs" />
-    <Compile Include="SuspicionLevel\SuspicionLevel.cs" />
-    <Compile Include="Period\PeriodEnum.cs" />
-    <Compile Include="Strategy\StrategyStatus.cs" />
-    <Compile Include="NumberPrefix\NumberPrefixes.cs" />
+    <Compile Include="SuspicionLevel.cs" />
+    <Compile Include="PeriodEnum.cs" />
+    <Compile Include="StrategyStatus.cs" />
+    <Compile Include="NumberPrefixes.cs" />
     <Compile Include="InfoDetail.cs" />
-    <Compile Include="AccountInfo\AccountInfo.cs" />
-    <Compile Include="CDR\CDRDetail.cs" />
+    <Compile Include="AccountInfo.cs" />
+    <Compile Include="CDRDetail.cs" />
     <Compile Include="DWAccountCase.cs" />
     <Compile Include="DWAccountCaseDictionary .cs" />
     <Compile Include="DWTimeDictionary.cs" />
     <Compile Include="DWStrategyDictionary.cs" />
     <Compile Include="DWDimensionDictionary.cs" />
-    <Compile Include="AccountNumbersByIMEI.cs" />
-    <Compile Include="AccountStatus\AccountStatus.cs" />
+    <Compile Include="AccountNumbersByIMEIDictionary.cs" />
+    <Compile Include="AccountStatus.cs" />
     <Compile Include="DWFactBatch.cs" />
-    <Compile Include="RelatedNumber\AccountRelatedNumbers.cs" />
+    <Compile Include="AccountRelatedNumbersDictionary.cs" />
     <Compile Include="DWStrategy.cs" />
     <Compile Include="DWTime.cs" />
     <Compile Include="DWDimension.cs" />
     <Compile Include="DWFact.cs" />
-    <Compile Include="StrategyExecution\StrategyExecutionQuery.cs" />
-    <Compile Include="RelatedNumber\RelatedNumber.cs" />
-    <Compile Include="AccountCaseHistory\AccountCaseHistoryQuery.cs" />
-    <Compile Include="RelatedNumber\RelatedNumberQuery.cs" />
-    <Compile Include="AccountCase\AccountCaseQuery.cs" />
+    <Compile Include="StrategyExecutionQuery.cs" />
+    <Compile Include="RelatedNumber.cs" />
+    <Compile Include="AccountCaseHistoryQuery.cs" />
+    <Compile Include="RelatedNumberQuery.cs" />
+    <Compile Include="AccountCaseQuery.cs" />
     <Compile Include="AccountSuspicionDetail.cs" />
     <Compile Include="AccountSuspicionSummary.cs" />
     <Compile Include="AccountSuspicionSummaryQuery.cs" />
     <Compile Include="AccountThreshold.cs" />
-    <Compile Include="StrategyExecutionItem\StrategyExecutionItemBatch.cs" />
+    <Compile Include="StrategyExecutionItemBatch.cs" />
     <Compile Include="CaseDetailQuery.cs" />
     <Compile Include="CasesSummary.cs" />
-    <Compile Include="StrategyKind\StrategyKind.cs" />
-    <Compile Include="NumberProfile\INumberProfileParameters.cs" />
-    <Compile Include="NumberProfile\NumberProfileParameters.cs" />
-    <Compile Include="AccountCase\AccountCaseUpdateQuery.cs" />
-    <Compile Include="Strategy\StrategyInfo.cs" />
-    <Compile Include="Strategy\Strategy.cs" />
-    <Compile Include="StrategyExecution\StrategyExecutionDetail.cs" />
-    <Compile Include="StrategyExecution\StrategyExecutionInfo.cs" />
+    <Compile Include="StrategyKind.cs" />
+    <Compile Include="INumberProfileParameters.cs" />
+    <Compile Include="NumberProfileParameters.cs" />
+    <Compile Include="AccountCaseUpdateQuery.cs" />
+    <Compile Include="StrategyInfo.cs" />
+    <Compile Include="Strategy.cs" />
+    <Compile Include="StrategyExecutionDetail.cs" />
+    <Compile Include="StrategyExecutionInfo.cs" />
     <Compile Include="StrategyCases.cs" />
     <Compile Include="BTSHighValueCases.cs" />
     <Compile Include="BTSCases.cs" />
     <Compile Include="DailyVolumeLoose.cs" />
-    <Compile Include="AccountCase\AccountCaseType.cs" />
+    <Compile Include="AccountCaseType.cs" />
     <Compile Include="BlockedLines.cs" />
-    <Compile Include="Filter\FilterInfo.cs" />
+    <Compile Include="FilterInfo.cs" />
     <Compile Include="BlockedLinesQuery.cs" />
-    <Compile Include="NumberProfile\NumberProfileQuery.cs" />
-    <Compile Include="CDR\CDRQuery.cs" />
+    <Compile Include="NumberProfileQuery.cs" />
+    <Compile Include="CDRQuery.cs" />
     <Compile Include="CaseProductivityQuery.cs" />
-    <Compile Include="Strategy\StrategyQuery.cs" />
-    <Compile Include="CallClass\CallClass.cs" />
-    <Compile Include="Filter\Filter.cs" />
-    <Compile Include="Batches\NumberCriteriaBatch.cs" />
-    <Compile Include="NumberProfile\NumberProfileBatch.cs" />
-    <Compile Include="NumberProfile\NumberProfile.cs" />
+    <Compile Include="StrategyQuery.cs" />
+    <Compile Include="CallClass.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="NumberCriteriaBatch.cs" />
+    <Compile Include="NumberProfileBatch.cs" />
+    <Compile Include="NumberProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CaseProductivity.cs" />
-    <Compile Include="Strategy\StrategyDetail.cs" />
-    <Compile Include="AccountCase\AccountCase.cs" />
-    <Compile Include="StrategyExecution\StrategyExecution.cs" />
-    <Compile Include="StrategyExecutionItem\StrategyExecutionItem.cs" />
-    <Compile Include="Strategy\StrategyInfoFilter.cs" />
-    <Compile Include="SuspiciousNumber.cs" />
+    <Compile Include="StrategyDetail.cs" />
+    <Compile Include="AccountCase.cs" />
+    <Compile Include="StrategyExecution.cs" />
+    <Compile Include="StrategyExecutionItem.cs" />
+    <Compile Include="StrategyInfoFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
@@ -150,7 +149,28 @@
       <Name>Vanrise.Fzero.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="AccountCaseHistory\" />
+    <Folder Include="AccountCase\" />
+    <Folder Include="AccountInfo\" />
+    <Folder Include="AccountStatus\" />
+    <Folder Include="AccountSuspicionSummary\" />
+    <Folder Include="Batches\" />
+    <Folder Include="BusinessManager\" />
+    <Folder Include="CallClass\" />
+    <Folder Include="CDR\" />
+    <Folder Include="Dictionary\" />
+    <Folder Include="Filter\" />
+    <Folder Include="NumberPrefix\" />
+    <Folder Include="NumberProfile\" />
+    <Folder Include="Period\" />
+    <Folder Include="RelatedNumber\" />
+    <Folder Include="StrategyExecutionItem\" />
+    <Folder Include="StrategyExecution\" />
+    <Folder Include="StrategyKind\" />
+    <Folder Include="Strategy\" />
+    <Folder Include="SuspicionLevel\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
