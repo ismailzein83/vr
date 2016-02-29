@@ -61,19 +61,18 @@
     <Compile Include="IDWDimensionDataManager.cs" />
     <Compile Include="IAccountCaseDataManager.cs" />
     <Compile Include="IAccountCaseHistoryDataManager.cs" />
-    <Compile Include="IAccountInfoDataManager.cs" />
+    <Compile Include="AccountInfo\IAccountInfoDataManager.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IAccountStatusDataManager.cs" />
+    <Compile Include="AccountStatus\IAccountStatusDataManager.cs" />
     <Compile Include="IAggregateDataManager.cs" />
     <Compile Include="IDWFactDataManager.cs" />
-    <Compile Include="IRelatedNumberDataManager.cs" />
-    <Compile Include="INumberProfileDataManager.cs" />
-    <Compile Include="IClassDataManager.cs" />
-    <Compile Include="IRelatedNumbersDataManager.cs" />
+    <Compile Include="RelatedNumber\IRelatedNumberDataManager.cs" />
+    <Compile Include="NumberProfile\INumberProfileDataManager.cs" />
+    <Compile Include="CallClass\ICallClassDataManager.cs" />
     <Compile Include="IReportingDataManager.cs" />
     <Compile Include="IFilterDataManager.cs" />
-    <Compile Include="IStrategyExecutionDataManager.cs" />
-    <Compile Include="IStrategyDataManager.cs" />
+    <Compile Include="StrategyExecution\IStrategyExecutionDataManager.cs" />
+    <Compile Include="Strategy\IStrategyDataManager.cs" />
     <Compile Include="IStrategyExecutionItemDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

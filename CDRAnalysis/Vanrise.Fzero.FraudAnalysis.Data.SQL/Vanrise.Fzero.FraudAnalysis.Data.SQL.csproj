@@ -72,7 +72,7 @@
     <Compile Include="DWTimeDataManager.cs" />
     <Compile Include="DWDimensionDataManager.cs" />
     <Compile Include="DWFactDataManager.cs" />
-    <Compile Include="RelatedNumberDataManager.cs" />
+    <Compile Include="RelatedNumber\RelatedNumberDataManager.cs" />
     <Compile Include="NumberProfile\NumberProfileDataManager.cs" />
     <Compile Include="CallClass\CallClassDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -153,7 +153,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 whiteListNumbersHashSet = new HashSet<string>(whiteListNumbers);
             }
 
-            IClassDataManager manager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
+            ICallClassDataManager manager = FraudDataManagerFactory.GetDataManager<ICallClassDataManager>();
             IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
             INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
 

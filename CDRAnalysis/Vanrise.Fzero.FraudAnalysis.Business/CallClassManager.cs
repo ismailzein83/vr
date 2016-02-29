@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCallClasses",
                () =>
                {
-                   IClassDataManager dataManager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
+                   ICallClassDataManager dataManager = FraudDataManagerFactory.GetDataManager<ICallClassDataManager>();
                    IEnumerable<CallClass> callClasses = dataManager.GetCallClasses();
                    return callClasses.ToDictionary(kvp => kvp.Id, kvp => kvp);
                });
@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IClassDataManager _dataManager = FraudDataManagerFactory.GetDataManager<IClassDataManager>();
+            ICallClassDataManager _dataManager = FraudDataManagerFactory.GetDataManager<ICallClassDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)

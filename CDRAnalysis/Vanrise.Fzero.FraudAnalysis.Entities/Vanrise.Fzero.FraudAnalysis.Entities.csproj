@@ -89,7 +89,7 @@
     <Compile Include="AccountNumbersByIMEI.cs" />
     <Compile Include="AccountStatus\AccountStatus.cs" />
     <Compile Include="DWFactBatch.cs" />
-    <Compile Include="AccountRelatedNumbers.cs" />
+    <Compile Include="RelatedNumber\AccountRelatedNumbers.cs" />
     <Compile Include="DWStrategy.cs" />
     <Compile Include="DWTime.cs" />
     <Compile Include="DWDimension.cs" />

@@ -21,17 +21,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         {
             ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumbers_CreateTempTable");
         }
-        public void SavetoDB(AccountRelatedNumbers record)
+        public void SavetoDB(AccountRelatedNumbers records)
         {
 
             StreamForBulkInsert stream = InitializeStreamForBulkInsert();
 
-            foreach (KeyValuePair<string, HashSet<string>> entry in record)
+            foreach (KeyValuePair<string, HashSet<string>> record in records)
             {
-                if (entry.Value.Count > 0)
+                if (record.Value.Count > 0)
                     stream.WriteRecord("{0}*{1}",
-                                    entry.Key,
-                                    string.Join<string>(",", entry.Value)
+                                    record.Key,
+                                    string.Join<string>(",", record.Value)
                                     );
             }
 

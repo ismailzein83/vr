@@ -6,7 +6,7 @@ using Vanrise.Fzero.FraudAnalysis.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
-    public class CallClassDataManager : BaseSQLDataManager, IClassDataManager
+    public class CallClassDataManager : BaseSQLDataManager, ICallClassDataManager
     {
 
         public CallClassDataManager()
