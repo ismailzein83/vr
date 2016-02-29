@@ -87,13 +87,7 @@
     <Compile Include="SwitchBrandQuery.cs" />
     <Compile Include="TrunkFilter.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Query\" />
-    <Folder Include="Switch\" />
-    <Folder Include="TrunkDirection\" />
-    <Folder Include="TrunkType\" />
-    <Folder Include="Trunk\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -105,20 +105,7 @@
       <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AccountCaseHistory\" />
-    <Folder Include="AccountCase\" />
-    <Folder Include="AccountInfo\" />
-    <Folder Include="AccountStatus\" />
-    <Folder Include="AccountSuspicionSummary\" />
-    <Folder Include="Aggregate\" />
-    <Folder Include="CallClass\" />
-    <Folder Include="Filter\" />
-    <Folder Include="NumberProfile\" />
-    <Folder Include="RelatedNumber\" />
-    <Folder Include="StrategyExecution\" />
-    <Folder Include="Strategy\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
