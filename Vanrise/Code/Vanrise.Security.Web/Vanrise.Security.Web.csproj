@@ -154,7 +154,6 @@
     <Content Include="Security\Services\ViewService.js" />
     <Content Include="Security\Services\UserService.js" />
     <Content Include="Security\Services\WidgetService.js" />
-    <Content Include="Security\Views\PermissionTest.html" />
     <Content Include="Security\Views\Permission\BusinessEntityEditor.html" />
     <Content Include="Security\Views\Permission\BusinessEntityEditorController.js" />
     <Content Include="Security\Views\Permission\BusinessEntityManagement.html" />
