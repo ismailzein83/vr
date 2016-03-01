@@ -101,10 +101,12 @@ namespace Vanrise.GenericData.Business
                     IEnumerable<object> values = criteriaFieldValue.GetValues();
                     if (values == null)
                         return false;
-                    
+
                     if (!criteriaFieldType.IsMatched(values, filter.Value))
                         return false;
                 }
+                else
+                    return false;
             }
 
             return true;
