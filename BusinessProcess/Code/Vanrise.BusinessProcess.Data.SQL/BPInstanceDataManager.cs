@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
@@ -12,12 +10,19 @@ namespace Vanrise.BusinessProcess.Data.SQL
 {
     public class BPInstanceDataManager : BaseSQLDataManager, IBPInstanceDataManager
     {
+        private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
+        static BPInstanceDataManager()
+        {
+            _mapper.Add("ProcessInstanceID", "ID");
+            _mapper.Add("StatusDescription", "ExecutionStatus");
+        }
         public BPInstanceDataManager()
             : base(GetConnectionStringName("BusinessProcessDBConnStringKey", "BusinessProcessDBConnString"))
         {
 
         }
 
+        #region public methods
         public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId)
         {
             string definitionsIdAsString = null;
@@ -49,6 +54,22 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString);
         }
 
+        public Vanrise.Entities.BigResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
+        {
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
+
+            return RetrieveData(input, (tempTableName) =>
+            {
+                ExecuteNonQuerySP("bp.sp_BPInstance_CreateTempForFiltered", tempTableName, input.Query.DefinitionsId == null ? null : string.Join(",", input.Query.DefinitionsId.Select(n => n.ToString()).ToArray()),
+                    input.Query.InstanceStatus == null ? null : string.Join(",", input.Query.InstanceStatus.Select(n => ((int)n).ToString()).ToArray()), input.Query.DateFrom, input.Query.DateTo);
+
+            }, BPInstanceDetailMapper, _mapper);
+        }
+
+        #endregion
+
+        #region mapper
         private BPInstance BPInstanceMapper(IDataReader reader)
         {
             BPInstance instance = new BPInstance
@@ -71,5 +92,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             return instance;
         }
+
+        private BPInstanceDetail BPInstanceDetailMapper(IDataReader reader) 
+        {
+            return new BPInstanceDetail() {
+                Entity = BPInstanceMapper(reader)
+            };
+        }
+        #endregion
     }
 }

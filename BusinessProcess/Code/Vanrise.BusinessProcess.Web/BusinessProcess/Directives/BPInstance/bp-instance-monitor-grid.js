@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("bpInstanceMonitorGrid", ["BusinessProcess_BPInstanceAPIService","BusinessProcess_BPInstanceService",
+app.directive("bpInstanceMonitorGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService",
 function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService) {
 
     var directiveDefinitionObject = {
@@ -20,7 +20,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/BusinessProcess/Directives/BPInstance/Templates/BPInstanceGridTemplate.html"
+        templateUrl: "/Client/Modules/BusinessProcess/Directives/BPInstance/Templates/BPInstanceMonitorGridTemplate.html"
 
     };
 
@@ -74,7 +74,6 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                         if (!isGettingData) {
                             var pageInfo = gridAPI.getPageInfo();
                             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
-
                             BusinessProcess_BPInstanceAPIService.GetUpdated(input).then(function (response) {
                                 isGettingData = true;
                                 if (response != undefined) {
@@ -85,15 +84,15 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                                         var findBPInstance = false;
 
                                         for (var j = 0; j < $scope.bpInstances.length; j++) {
-                                            if (i === 1) {
-                                                if (j === 0)
+                                            //if (i === 1) {
+                                            if (j === 0)
+                                                minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
+                                            else {
+                                                if ($scope.bpInstances[j].Entity.ProcessInstanceID < minId) {
                                                     minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
-                                                else {
-                                                    if ($scope.bpInstances[j].Entity.ProcessInstanceID < minId) {
-                                                        minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
-                                                    }
                                                 }
                                             }
+                                            //}
                                             ///////////////////////////////////////////////////////////////////
 
                                             if ($scope.bpInstances[j].Entity.ProcessInstanceID == bpInstance.Entity.ProcessInstanceID) {
@@ -118,7 +117,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                         }
                     }, 2000);
                 };
-                
+
 
                 $scope.$on("$destroy", function () {
                     if (timer != undefined) {
@@ -137,14 +136,15 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
         }
 
         function getData() {
-
+            
             var pageInfo = gridAPI.getPageInfo();
             input.LessThanID = minId;
-            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
+            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
             return BusinessProcess_BPInstanceAPIService.GetBeforeId(input).then(function (response) {
-                if (response != undefined && response.ListBPInstanceDetails != undefined) {
-                    for (var i = 0; i < response.ListBPInstanceDetails.length; i++) {
-                        var bpInstance = response.ListBPInstanceDetails[i];
+                if (response != undefined && response) {
+                    for (var i = 0; i < response.length; i++) {
+                        var bpInstance = response[i];
+                        minId = response[i].Entity.ProcessInstanceID;
                         $scope.bpInstances.push(bpInstance);
                     }
                 }

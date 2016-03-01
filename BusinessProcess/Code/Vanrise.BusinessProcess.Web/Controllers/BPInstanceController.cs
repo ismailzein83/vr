@@ -35,5 +35,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             BPInstanceManager manager = new BPInstanceManager();
             return manager.GetBeforeId(input);
         }
+
+        [HttpPost]
+        [Route("GetFilteredBPInstances")]
+        public object GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
+        {
+            BPInstanceManager manager = new BPInstanceManager();
+            return GetWebResponse(input, manager.GetFilteredBPInstances(input));
+        }
+
     }
 }

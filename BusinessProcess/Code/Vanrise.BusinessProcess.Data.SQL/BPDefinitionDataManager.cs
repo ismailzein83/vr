@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
@@ -17,6 +14,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
 
         }
+        #region public methods
         public List<BPDefinition> GetBPDefinitions()
         {
             return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
@@ -26,6 +24,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return base.IsDataUpdated("[bp].[BPDefinition]", ref updateHandle);
         }
+        #endregion
+
         #region Mappers
 
         BPDefinition BPDefinitionMapper(IDataReader reader)

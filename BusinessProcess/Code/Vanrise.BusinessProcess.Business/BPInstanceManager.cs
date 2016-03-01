@@ -6,9 +6,9 @@ namespace Vanrise.BusinessProcess.Business
 {
     public class BPInstanceManager
     {
+        #region public methods
         public List<BPInstanceDetail> GetBeforeId(BPInstanceBeforeIdInput input)
         {
-
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
             List<BPInstance> bpInstances = dataManager.GetBeforeId(input);
@@ -38,6 +38,14 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstanceUpdateOutput;
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
+        {
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBPInstances(input));
+        }
+        #endregion
+
+        #region mapper
         private BPInstanceDetail BPInstanceDetailMapper(BPInstance bpInstance)
         {
             if (bpInstance == null)
@@ -47,5 +55,6 @@ namespace Vanrise.BusinessProcess.Business
                 Entity = bpInstance
             };
         }
+        #endregion
     }
 }

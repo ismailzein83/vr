@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
@@ -11,6 +9,7 @@ namespace Vanrise.BusinessProcess.Business
 {
     public class BPDefinitionManager
     {
+        #region public methods
         public Vanrise.Entities.IDataRetrievalResult<BPDefinitionDetail> GetFilteredBPDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
         {
             var allBPDefinitions = GetCachedBPDefinitions();
@@ -19,17 +18,6 @@ namespace Vanrise.BusinessProcess.Business
                  (input.Query.Title == null || prod.Title.ToLower().Contains(input.Query.Title.ToLower()));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allBPDefinitions.ToBigResult(input, filterExpression, BPDefinitionDetailMapper));
-        }
-
-        private Dictionary<int, BPDefinition> GetCachedBPDefinitions()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPDefinitions",
-               () =>
-               {
-                   IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
-                   IEnumerable<BPDefinition> accounts = dataManager.GetBPDefinitions();
-                   return accounts.ToDictionary(cn => cn.BPDefinitionID, cn => cn);
-               });
         }
 
         public IEnumerable<BPDefinitionInfo> GetBPDefinitionsInfo(BPDefinitionInfoFilter filter)
@@ -47,6 +35,20 @@ namespace Vanrise.BusinessProcess.Business
             }
         }
 
+        #endregion
+
+        #region private methods
+        private Dictionary<int, BPDefinition> GetCachedBPDefinitions()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPDefinitions",
+               () =>
+               {
+                   IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+                   IEnumerable<BPDefinition> accounts = dataManager.GetBPDefinitions();
+                   return accounts.ToDictionary(cn => cn.BPDefinitionID, cn => cn);
+               });
+        }
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
@@ -57,6 +59,9 @@ namespace Vanrise.BusinessProcess.Business
                 return dataManager.AreBPDefinitionsUpdated(ref _updateHandle);
             }
         }
+        #endregion
+
+        #region mapper
         private BPDefinitionDetail BPDefinitionDetailMapper(BPDefinition bpDefinition)
         {
             if (bpDefinition == null)
@@ -79,5 +84,6 @@ namespace Vanrise.BusinessProcess.Business
                 Name = bpDefinition.Title
             };
         }
+        #endregion
     }
 }
