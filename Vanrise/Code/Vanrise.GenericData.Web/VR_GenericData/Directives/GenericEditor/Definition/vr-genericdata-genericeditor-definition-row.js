@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataGenericeditorDefinitionRow', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericEditorService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_GenericEditorService) {
+app.directive('vrGenericdataGenericeditorDefinitionRow', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',

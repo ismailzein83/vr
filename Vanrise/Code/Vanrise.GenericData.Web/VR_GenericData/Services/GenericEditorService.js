@@ -11,7 +11,9 @@
             deleteSection: deleteSection,
             addRow: addRow,
             editRow: editRow,
-            deleteRow: deleteRow
+            deleteRow: deleteRow,
+            editSection: editSection,
+            addSection: addSection
         };
 
         function editGenericEditor(genericEditorDefinitionId, onGenericEditorUpdated) {
@@ -42,6 +44,36 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericEditor.html', modalParameters, modalSettings);
         }
 
+        function addSection(onSectionAdded, exitingSections) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onSectionAdded = onSectionAdded;
+            };
+
+            var parameters = {
+                exitingSections: exitingSections
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/SectionEditor.html', parameters, modalSettings);
+        }
+
+        function editSection(onSectionUpdated, exitingSections, sectionEntity) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onSectionUpdated = onSectionUpdated;
+            };
+
+            var parameters = {
+                sectionTitleValue: sectionEntity,
+                exitingSections: exitingSections
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/SectionEditor.html', parameters, modalSettings);
+        }
+
+
         function deleteSection($scope, sectionObj, onSectionDeleted) {
             VRNotificationService.showConfirmation()
                 .then(function (response) {
@@ -50,6 +82,7 @@
                     }
                 });
         }
+
         function addRow(onRowAdded, recordTypeFields) {
             var modalSettings = {};
 
@@ -63,7 +96,8 @@
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericRowEditor.html', parameters, modalSettings);
         }
-        function editRow(onRowUpdated, recordTypeFields,rowEntity) {
+
+        function editRow(onRowUpdated, recordTypeFields, rowEntity) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {

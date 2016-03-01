@@ -35,6 +35,7 @@ app.directive('vrGenericdataGenericeditorDefinitionSection', ['UtilsService', 'V
             var selectedValues;
             var gridAPI;
             var context;
+            var fieldSelectedText = " Fields Selected."
             function initializeController() {
                 ctrl.rows = [];
                 ctrl.datasource = [];
@@ -67,7 +68,7 @@ app.directive('vrGenericdataGenericeditorDefinitionSection', ['UtilsService', 'V
 
                 api.onAddRow = function (row) {
                     var rowObj = {
-                        numberOfFields: row.length + " Fields Selected.",
+                        numberOfFields: row.length + fieldSelectedText,
                         row:row,
                         onRowDirectiveReady :function(api)
                         {
@@ -99,7 +100,7 @@ app.directive('vrGenericdataGenericeditorDefinitionSection', ['UtilsService', 'V
 
             function prepareRowObject(row) {
                 var rowObj = {
-                    numberOfFields: row.Fields.length + " Fields Selected.",
+                    numberOfFields: row.Fields.length + fieldSelectedText,
                     row:  row.Fields,
                     onRowDirectiveReady: function (api) {
                         rowObj.rowAPI = api;
@@ -129,10 +130,10 @@ app.directive('vrGenericdataGenericeditorDefinitionSection', ['UtilsService', 'V
 
                     if (rowObj != undefined)
                     {
-                        rowObj.numberOfFields = row.length + " Fields Selected.";
+                        rowObj.numberOfFields = row.length + fieldSelectedText;
                         rowObj.row = row;
                         rowObj.rowAPI.applyChanges(row);
-                    }        
+                    }
                 };
                 VR_GenericData_GenericEditorService.editRow(onRowUpdated, context.getFilteredFields(dataItem.row), dataItem.row);
             }

@@ -53,12 +53,17 @@ namespace Vanrise.GenericData.Business
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypeInfo(DataRecordTypeInfoFilter filter)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
-            return dataRecordTypes.MapRecords(DataRecordTypeInfoMapper);
-        }
-        public DataRecordTypeInfo GetDataRecordTypeInfo(int dataRecordTypeId)
-        {
-            var dataRecordTypes = GetCachedDataRecordTypes();
-            return dataRecordTypes.MapRecord(DataRecordTypeInfoMapper, x => x.DataRecordTypeId == dataRecordTypeId);
+            if (filter != null)
+            {
+                Func<DataRecordType, bool> filterExpression = (x) => (filter.RecordTypeIds.Contains(x.DataRecordTypeId));
+                return dataRecordTypes.FindAllRecords(filterExpression).MapRecords(DataRecordTypeInfoMapper);
+            }
+            else
+            {
+                return dataRecordTypes.MapRecords(DataRecordTypeInfoMapper);
+            }
+           
+          
         }
         public Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail> AddDataRecordType(DataRecordType dataRecordType)
         {

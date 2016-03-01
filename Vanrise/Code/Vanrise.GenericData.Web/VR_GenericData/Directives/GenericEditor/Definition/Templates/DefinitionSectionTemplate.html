@@ -1,6 +1,6 @@
 ﻿<vr-datagrid datasource="ctrl.rows" norowhighlightonclick="true" menuactions="gridRowsMenuActions"
-             on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeSection" hidegridmenu>
-    <vr-datagridcolumn headertext="'Number Of Fields'" field="'numberOfFields'" widthfactor="5" disablesorting></vr-datagridcolumn>
+             on-ready="onGridReady" enabledraggablerow="true" hidegridmenu>
+    <vr-datagridcolumn headertext="'Number Of Fields'" field="'numberOfFields'" widthfactor="5" disablesorting isfielddynamic="true"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-genericdata-genericeditor-definition-row on-ready="dataItem.onRowDirectiveReady"></vr-genericdata-genericeditor-definition-row>
     </vr-datagridexpandablerow>

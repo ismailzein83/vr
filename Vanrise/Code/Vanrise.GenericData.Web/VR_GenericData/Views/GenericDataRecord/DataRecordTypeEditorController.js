@@ -33,6 +33,7 @@
             }
 
             $scope.scopeModal.SaveDataRecordType = function () {
+                $scope.scopeModal.isLoading = true;
                 if (isEditMode) {
                     return updateDataRecordType();
                 }
@@ -125,6 +126,7 @@
             var dataRecordTypeObject = buildDataRecordTypeObjFromScope();
             return VR_GenericData_DataRecordTypeAPIService.AddDataRecordType(dataRecordTypeObject)
             .then(function (response) {
+                $scope.scopeModal.isLoading = false;
                 if (VRNotificationService.notifyOnItemAdded("Record Type", response)) {
                     if ($scope.onDataRecordTypeAdded != undefined)
                         $scope.onDataRecordTypeAdded(response.InsertedObject);
@@ -140,6 +142,7 @@
             var dataRecordTypeObject = buildDataRecordTypeObjFromScope();
             VR_GenericData_DataRecordTypeAPIService.UpdateDataRecordType(dataRecordTypeObject)
             .then(function (response) {
+                $scope.scopeModal.isLoading = false;
                 if (VRNotificationService.notifyOnItemUpdated("Record Type", response)) {
                     if ($scope.onDataRecordTypeUpdated != undefined)
                         $scope.onDataRecordTypeUpdated(response.UpdatedObject);

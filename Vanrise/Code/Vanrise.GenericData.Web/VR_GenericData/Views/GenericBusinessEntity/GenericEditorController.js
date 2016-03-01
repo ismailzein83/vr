@@ -37,7 +37,7 @@
 
         function defineScope() {
             $scope.scopeModal = {}
-
+            $scope.scopeModal.isRecordTypeDisbled = (isEditMode ==true);
             $scope.scopeModal.onRecordTypeSelectionChanged = function () {
                 var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
                 if (selectedDataRecordTypeId != undefined)

@@ -6,7 +6,6 @@
 
     function GenericEditorAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return {
-            GetEditorRuntimeMock: GetEditorRuntimeMock,
             GetGenericEditorDefinition: GetGenericEditorDefinition,
             AddGenericEditor: AddGenericEditor,
             GetFilteredGenericEditorDefinitions: GetFilteredGenericEditorDefinitions,
@@ -19,9 +18,6 @@
                 businessEntityId: businessEntityId,
                 dataRecordTypeId: dataRecordTypeId
             });
-        }
-        function GetEditorRuntimeMock(editorId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericEditor', 'GetEditorRuntimeMock'), { editorId: editorId });
         }
         function GetGenericEditorDefinition(editorId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericEditor', 'GetGenericEditorDefinition'), { editorId: editorId });

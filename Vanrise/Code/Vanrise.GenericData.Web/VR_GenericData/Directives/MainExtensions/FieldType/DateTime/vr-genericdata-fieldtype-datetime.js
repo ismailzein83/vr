@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService','VR_GenericData_DateTimeDataTypeEnum',
+    function (UtilsService, VR_GenericData_DateTimeDataTypeEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -34,6 +34,7 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService',
         function datetimeTypeCtor(ctrl, $scope) {
 
             function initializeController() {
+
                 defineAPI();
             }
 
@@ -41,12 +42,21 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+                    var dataTypeValue;
+                    if (payload != undefined) {
+                        dataTypeValue = payload.DataType
+                    }
 
+                    ctrl.dateTimeDataTypes = UtilsService.getArrayEnum(VR_GenericData_DateTimeDataTypeEnum);
+                    if (dataTypeValue != undefined) {
+                        ctrl.selectedDateTimeDataType = UtilsService.getItemByVal(ctrl.dateTimeDataTypes, dataTypeValue, 'value');
+                    }
                 }
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldDateTimeType,Vanrise.GenericData.MainExtensions",
+                        DataType: ctrl.selectedDateTimeDataType.value
                     };
                 }
 

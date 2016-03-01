@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class DataRecordTypeInfoFilter
     {
-        public int DataRecordTypeId { get; set; }
+        public List<int> RecordTypeIds { get; set; }
     }
 }

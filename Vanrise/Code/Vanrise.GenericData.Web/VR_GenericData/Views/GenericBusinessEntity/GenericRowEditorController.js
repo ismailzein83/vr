@@ -2,9 +2,9 @@
 
     "use strict";
 
-    GenericRowEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService'];
+    GenericRowEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function GenericRowEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService) {
+    function GenericRowEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
         var recordTypeFields;
@@ -23,7 +23,8 @@
                 $scope.scopeModal.fields.length = 0;
                 for (var i = 0; i < recordTypeFields.length; i++)
                 {
-                    $scope.scopeModal.fields.push({ fieldPath: recordTypeFields[i].FieldPath });
+                    var field = recordTypeFields[i];
+                    $scope.scopeModal.fields.push({ fieldPath: field.FieldPath, fieldTitle: field.FieldPath });
                 }
                 rowEntity = parameters.rowEntity;
             }

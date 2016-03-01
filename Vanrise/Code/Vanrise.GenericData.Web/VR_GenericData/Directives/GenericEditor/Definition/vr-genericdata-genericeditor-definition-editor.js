@@ -32,19 +32,15 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
         };
 
         function EditorCtor(ctrl, $scope) {
-            var selectedValues;
             var gridAPI;
             var recordTypeFields;
             function initializeController() {
                 ctrl.sections = [];
-
                 ctrl.addSection = function () {
-                    if (ctrl.sectionTitle != undefined && UtilsService.getItemIndexByVal(ctrl.sections, ctrl.sectionTitle, "sectionTitle") == -1)
-                    {
+                    var onSectionAdded = function (sectionObj) {
                         var section = {
-                            sectionTitle: ctrl.sectionTitle,
-                            onRowsDirectiveReady: function (api)
-                            {
+                            sectionTitle: sectionObj,
+                            onRowsDirectiveReady: function (api) {
                                 section.rowsGridAPI = api;
                                 var payload = { context: getContext() };
                                 var setLoader = function (value) { $scope.isLoading = value; };
@@ -52,8 +48,18 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
                             }
                         };
                         ctrl.sections.push(section);
-                        ctrl.sectionTitle = undefined;
-                    }           
+                    };
+
+                    VR_GenericData_GenericEditorService.addSection(onSectionAdded, getExistingSections());
+                }
+
+                ctrl.validateEditor =function()
+                {
+                    if(ctrl.sections.length == 0)
+                    {
+                        return "At least one section should be added.";
+                    }
+                    return null;
                 }
 
                 $scope.onGridReady = function (api) {
@@ -71,8 +77,8 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
                     if(payload !=undefined)
                     {
                         recordTypeFields = payload.recordTypeFields;
+
                         if (payload.sections != undefined) {
-                            selectedValues = payload.selectedValues;
                             ctrl.sections.length = 0;
                             var promises = [];
                             for (var i = 0; i < payload.sections.length; i++) {
@@ -107,13 +113,16 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
                     ctrl.onReady(api);
             }
 
-
             function defineGridSectionsMenuAction()
             {
                 $scope.gridSectionsMenuActions = [{
                         name: "Add Row",
                         clicked: addRow,
-                    },
+                },
+                 {
+                     name: "Edit",
+                     clicked: editSection,
+                 },
                  {
                     name: "Delete",
                     clicked: deleteSection,
@@ -159,51 +168,74 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
             }
 
             function getFilteredFields(exceptedFields) {
+                
                 var filteredFields = [];
-
+                //var filteredFields = recordTypeFields;
                 for (var i = 0; i < recordTypeFields.length; i++) {
                     filteredFields.push({ FieldPath: recordTypeFields[i].Name });
                 }
                 for(var i=0;i<recordTypeFields.length;i++)
                 {
-                    var recordTypeField = recordTypeFields[i];
-                    for (var j = 0; j < ctrl.sections.length; j++)
-                    {
-                        var section = ctrl.sections[j];
-                        if(section.rowsGridAPI != undefined)
-                        {
-                            var rows = section.rowsGridAPI.getData();
-                            for (var k = 0; k < rows.Rows.length; k++)
-                            {
-                                var row = rows.Rows[k];
-                                for (var l = 0; l < row.Fields.length; l++) {
-                                    if (exceptedFields == undefined || UtilsService.getItemIndexByVal(exceptedFields, row.Fields[l].FieldPath, 'FieldPath') == -1)
-                                    {
-                                        var index = UtilsService.getItemIndexByVal(filteredFields, row.Fields[l].FieldPath, 'FieldPath');
-                                        if (index != -1)
-                                            filteredFields.splice(index, 1);
-                                    }
-                                   
-                                }
-                            }
-                           
-                        } else if (section.Rows != undefined) {
-                            for (var k = 0; k < section.Rows.length; k++) {
-                                var row = section.Rows[k];
-                                for (var l = 0; l < row.Fields.length; l++) {
-                                    if (exceptedFields == undefined || UtilsService.getItemIndexByVal(exceptedFields, row.Fields[l].FieldPath, 'FieldPath') == -1) {
-                                        var index = UtilsService.getItemIndexByVal(filteredFields, row.Fields[l].FieldPath, 'FieldPath');
-                                        if (index != -1)
-                                            filteredFields.splice(index, 1);
-                                    }
-                                }
-                            }
-
-                        }
-                    }
+                    filterSections(ctrl.sections, filteredFields, exceptedFields)
                    
                 }
                 return filteredFields;
+            }
+
+            function filterSections(sections, filteredFields, exceptedFields)
+            {
+                console.log(sections);
+                for (var j = 0; j < sections.length; j++) {
+                    var section = sections[j];
+                    if (section.rowsGridAPI != undefined) {
+                        var rows = section.rowsGridAPI.getData();
+                        filterRows(rows.Rows, filteredFields, exceptedFields)
+                    } else if (section.Rows != undefined) {
+                        filterRows(section.Rows, filteredFields, exceptedFields)
+                    }
+                }
+            }
+
+            function filterRows(rows, filteredFields, exceptedFields)
+            {
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    filterFields(row.Fields, filteredFields, exceptedFields);
+
+                }
+            }
+
+            function filterFields(fields, filteredFields, exceptedFields)
+            {
+                for (var i = 0; i < fields.length; i++) {
+                    var field = fields[i];
+                    if (exceptedFields == undefined || UtilsService.getItemIndexByVal(exceptedFields, field.FieldPath, 'FieldPath') == -1) {
+                        var index = UtilsService.getItemIndexByVal(filteredFields, field.FieldPath, 'FieldPath');
+                        if (index != -1)
+                            filteredFields.splice(index, 1);
+                    }
+                }
+               
+            }
+
+            function editSection(dataItem)
+            {
+                var onSectionUpdated = function (sectionObj) {
+                    var index = UtilsService.getItemIndexByVal(ctrl.sections, dataItem.sectionTitle, 'sectionTitle');
+                    ctrl.sections[index].sectionTitle = sectionObj;
+                };
+
+                VR_GenericData_GenericEditorService.editSection(onSectionUpdated, getExistingSections(), dataItem.sectionTitle);
+            }
+
+            function getExistingSections()
+            {
+                var exitingSections = [];
+                for (var i = 0; i < ctrl.sections.length; i++) {
+                    exitingSections.push(ctrl.sections[i].sectionTitle.toLowerCase());
+
+                }
+                return exitingSections;
             }
 
             this.initializeController = initializeController;

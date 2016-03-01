@@ -21,9 +21,9 @@ namespace Vanrise.GenericData.Business
         {
             var cachedGenericEditorDefinitions = GetCachedGenericEditorDefinitions();
             var genericEditor = cachedGenericEditorDefinitions.FindRecord(x => x.BusinessEntityId == businessEntityId && x.Details.DataRecordTypeId == dataRecordTypeId);
-            if (genericEditor != null)
-                return genericEditor.Details;
-            return null;
+            if (genericEditor == null)
+                throw new NullReferenceException(string.Format("GenericEditor for business entity {0} of data record type id {1}", businessEntityId, dataRecordTypeId));
+            return genericEditor.Details; ;
         }
         public GenericEditorRuntime GetEditorRuntime(int businessEntityId, int dataRecordTypeId)
         {
@@ -51,102 +51,18 @@ namespace Vanrise.GenericData.Business
             BuildEditorRuntime(genericEditor, editorRuntime);
             return editorRuntime;
         }
-        public GenericEditorRuntime GetEditorRuntimeMock(int editorId)
-        {
-            var genericEditor = new GenericEditor();
-            if (editorId == 1)
-            {
-                genericEditor.DataRecordTypeId = 1;
-                int i = 0;
-                genericEditor.Sections = new List<GenericEditorSection>();
 
-                genericEditor.Sections.Add(new GenericEditorSection
-                {
-                    Rows = new List<GenericEditorRow>()
-                });
-                foreach (GenericEditorSection section in genericEditor.Sections)
-                {
-                    section.SectionTitle = "Contacts" + i++;
-                    section.Rows.Add(new GenericEditorRow
-                    {
-                        Fields = new List<GenericEditorField>()
-                    });
-                    section.Rows.Add(new GenericEditorRow
-                    {
-                        Fields = new List<GenericEditorField>()
-                    });
-
-                    section.Rows[0].Fields.Add(new GenericEditorField
-                    {
-                        FieldTitle = "Email" + i++,
-                        FieldPath = "Email"
-                    });
-                    section.Rows[0].Fields.Add(new GenericEditorField
-                    {
-                        FieldTitle = "Mobile" + i++,
-                        FieldPath = "Mobile"
-                    });
-                    section.Rows[1].Fields.Add(new GenericEditorField
-                    {
-                        FieldTitle = "Address" + i++,
-                        FieldPath = "Address"
-                    });
-                    section.Rows[1].Fields.Add(new GenericEditorField
-                    {
-                        FieldTitle = "Phone" + i++,
-                        FieldPath = "Phone"
-                    });
-                }
-            }
-            else
-            {
-                genericEditor.DataRecordTypeId = 1;
-                int i = 0;
-                genericEditor.Sections = new List<GenericEditorSection>();
-
-                genericEditor.Sections.Add(new GenericEditorSection
-                {
-                    Rows = new List<GenericEditorRow>()
-                });
-              
-                foreach (GenericEditorSection section in genericEditor.Sections)
-                {
-                    section.SectionTitle = "Contacts" + i++;
-                    section.Rows.Add(new GenericEditorRow
-                    {
-                        Fields = new List<GenericEditorField>()
-                    });
-                    
-                    foreach (GenericEditorRow field in section.Rows)
-                    {
-                        field.Fields.Add(new GenericEditorField
-                        {
-                            FieldTitle = "Email" + i++,
-                            FieldPath = "Email"
-                        });
-                    }
-                }
-            }
-            
-
-            GenericEditorRuntime editorRuntime = new GenericEditorRuntime();
-            BuildEditorRuntime(genericEditor, editorRuntime);
-            return editorRuntime;
-        }
-
-        public List<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityId)
+        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityId)
         {
              var cachedGenericEditorDefinitions = GetCachedGenericEditorDefinitions();
              var genericEditors = cachedGenericEditorDefinitions.FindAllRecords(x=>x.BusinessEntityId == businessEntityId);
              var dataRecordTypeManager = new DataRecordTypeManager();
-             List<DataRecordTypeInfo> recordTypesInfo = new List<DataRecordTypeInfo>();
+             List<int> recordTypeIds = new List<int>();
              foreach(GenericEditorDefinition editor in genericEditors)
              {
-                var recordTypeInfo =  dataRecordTypeManager.GetDataRecordTypeInfo(editor.Details.DataRecordTypeId);
-                if(recordTypeInfo !=null)
-                    recordTypesInfo.Add(recordTypeInfo);
+                 recordTypeIds.Add(editor.Details.DataRecordTypeId);
              }
-             return recordTypesInfo;
+             return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds });
         }
         public Vanrise.Entities.InsertOperationOutput<GenericEditorDefinitionDetail> AddGenericEditor(GenericEditorDefinition genericEditorDefinition)
         {
@@ -155,21 +71,25 @@ namespace Vanrise.GenericData.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int genericEditorDefinitionId = -1;
-
-            IGenericEditorDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericEditorDataManager>();
-            bool insertActionSucc = dataManager.AddGenericEditorDefinition(genericEditorDefinition, out genericEditorDefinitionId);
-
-            if (insertActionSucc)
+            var cachedGenericEditorDefinitions = GetCachedGenericEditorDefinitions();
+            if(!cachedGenericEditorDefinitions.Any(x=>x.Value.BusinessEntityId == genericEditorDefinition.BusinessEntityId && x.Value.Details.DataRecordTypeId == genericEditorDefinition.Details.DataRecordTypeId))
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                genericEditorDefinition.GenericEditorDefinitionId = genericEditorDefinitionId;
-                insertOperationOutput.InsertedObject = GenericEditorDefinitionDetailMapper(genericEditorDefinition);
+                IGenericEditorDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericEditorDataManager>();
+                bool insertActionSucc = dataManager.AddGenericEditorDefinition(genericEditorDefinition, out genericEditorDefinitionId);
 
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                if (insertActionSucc)
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    genericEditorDefinition.GenericEditorDefinitionId = genericEditorDefinitionId;
+                    insertOperationOutput.InsertedObject = GenericEditorDefinitionDetailMapper(genericEditorDefinition);
+
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                }
             }
             else
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+
             }
 
             return insertOperationOutput;
@@ -190,11 +110,6 @@ namespace Vanrise.GenericData.Business
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.UpdatedObject = GenericEditorDefinitionDetailMapper(genericEditorDefinition);
             }
-            else
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-            }
-
             return updateOperationOutput;
         }
 

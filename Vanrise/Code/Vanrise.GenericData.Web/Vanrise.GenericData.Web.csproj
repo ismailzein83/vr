@@ -177,6 +177,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_GenericData\Constants\DateTimeDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldNumberDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\MappingRuleStructureBehaviorTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
@@ -206,8 +207,12 @@
     <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-editor.js" />
     <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-row.js" />
     <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-section.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-fieldtype-boolean-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-fieldtype-boolean-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-fieldtype-businessentity-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Choices\vr-genericdata-fieldtype-choices-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\vr-genericdata-fieldtype-datetime-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\vr-genericdata-fieldtype-datetime-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\vr-genericdata-fieldtype-number-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericrulesettings-mapping-filtereditor.js" />
@@ -360,6 +365,8 @@
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\SectionEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\SectionEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditor.html" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditor.html" />

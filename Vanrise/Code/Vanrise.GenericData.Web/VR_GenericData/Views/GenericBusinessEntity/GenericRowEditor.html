@@ -5,12 +5,12 @@
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-select datatextfield="fieldPath" datavaluefield="fieldPath" label="Fields"
+                            <vr-select datatextfield="fieldPath" datavaluefield="fieldPath" label="Fields" isrequired="true"
                                        entityname="Field Path" selectedvalues="scopeModal.selectedFields" datasource="scopeModal.fields" ismultipleselection hideselectedvaluessection></vr-select>      
                                           </vr-columns>
                         <vr-columns width="2/3row">
                             <vr-datalist maxitemsperrow="1" datasource="scopeModal.selectedFields" isitemdraggable onremoveitem="scopeModal.onRemoveField">
-                                <vr-textbox value="dataItem.fieldTitle" label="Field Title"></vr-textbox>
+                                <vr-textbox value="dataItem.fieldTitle" label="Field Title" isrequired="true"></vr-textbox>
                                 <vr-label>Field Name: {{dataItem.fieldPath}}</vr-label>
                             </vr-datalist>
                            </vr-columns>

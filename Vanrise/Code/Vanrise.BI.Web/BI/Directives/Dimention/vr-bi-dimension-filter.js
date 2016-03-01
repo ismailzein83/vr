@@ -114,34 +114,9 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
                             
                             for(var i = 0 ; i< payload.filter.length;i++)
                             {
-                                addFilterDataItemAPI(payload.filter[i]);
+                                addFilterDataItemAPI(payload.filter[i], promises);
                             }
-                            function addFilterDataItemAPI(filter)
-                            {
-                                var dataItem = {
-                                    entityNames: entityNames,
-                                    selectedEntityName: { Name: filter.EntityName },
-                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                    loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                    onDimensionSelectorReady: function (api) {
-                                        dataItem.dimensionAPI = api;
-                                        dataItem.readyPromiseDeferred.resolve();
-                                    },
-                                    onSelectItem: function (selectItem) {
-                                        if (dataItem.dimensionAPI != undefined) {
-                                            var setLoader = function (value) { dataItem.isLoadingDimentionDirective = value };
-                                            var payload = { entityName: selectItem.Name }
-                                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionAPI, payload, setLoader);
-                                        }
-                                    }
-                                };
-                                promises.push(dataItem.loadPromiseDeferred.promise);
-                                dataItem.readyPromiseDeferred.promise.then(function () {
-                                    var payload = { entityName: dataItem.selectedEntityName.Name, selectedIds: filter.Values }
-                                    VRUIUtilsService.callDirectiveLoad(dataItem.dimensionAPI, payload, dataItem.loadPromiseDeferred);
-                                }),
-                                ctrl.datasource.push(dataItem);
-                            }
+
                            
                         }
                         return UtilsService.waitMultiplePromises(promises);
@@ -150,6 +125,31 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function addFilterDataItemAPI(filter, promises) {
+                var dataItem = {
+                    entityNames: entityNames,
+                    selectedEntityName: { Name: filter.EntityName },
+                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                    loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                    onDimensionSelectorReady: function (api) {
+                        dataItem.dimensionAPI = api;
+                        dataItem.readyPromiseDeferred.resolve();
+                    },
+                    onSelectItem: function (selectItem) {
+                        if (dataItem.dimensionAPI != undefined) {
+                            var setLoader = function (value) { dataItem.isLoadingDimentionDirective = value };
+                            var payload = { entityName: selectItem.Name }
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionAPI, payload, setLoader);
+                        }
+                    }
+                };
+                promises.push(dataItem.loadPromiseDeferred.promise);
+                dataItem.readyPromiseDeferred.promise.then(function () {
+                    var payload = { entityName: dataItem.selectedEntityName.Name, selectedIds: filter.Values }
+                    VRUIUtilsService.callDirectiveLoad(dataItem.dimensionAPI, payload, dataItem.loadPromiseDeferred);
+                }),
+                ctrl.datasource.push(dataItem);
             }
         }
 

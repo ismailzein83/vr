@@ -20,13 +20,6 @@ namespace Vanrise.GenericData.Web.Controllers
             GenericEditorManager manager = new GenericEditorManager();
             return manager.GetEditor(businessEntityId, dataRecordTypeId);
         }
-        //[HttpGet]
-        //[Route("GetEditorRuntime")]
-        //public GenericEditorRuntime GetEditorRuntime(int editorId)
-        //{
-        //    GenericEditorManager manager = new GenericEditorManager();
-        //    return manager.GetEditorRuntime(editorId);
-        //}
         [HttpGet]
         [Route("GetEditorRuntime")]
         public GenericEditorRuntime GetEditorRuntime(int businessEntityId, int dataRecordTypeId)
@@ -34,13 +27,7 @@ namespace Vanrise.GenericData.Web.Controllers
             GenericEditorManager manager = new GenericEditorManager();
             return manager.GetEditorRuntime(businessEntityId, dataRecordTypeId);
         }
-        [HttpGet]
-        [Route("GetEditorRuntimeMock")]
-        public GenericEditorRuntime GetEditorRuntimeMock(int editorId)
-        {
-            GenericEditorManager manager = new GenericEditorManager();
-            return manager.GetEditorRuntimeMock(editorId);
-        }
+
         [HttpGet]
         [Route("GetGenericEditorDefinition")]
         public GenericEditorDefinition GetGenericEditorDefinition(int editorId)
