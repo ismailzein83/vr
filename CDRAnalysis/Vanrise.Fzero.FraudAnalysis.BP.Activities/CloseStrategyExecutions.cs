@@ -32,7 +32,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 if (strategyExecution != null)
                     executionDuration = Convert.ToInt32(DateTime.Now.Subtract(strategyExecution.ExecutionDate).TotalSeconds);
 
-                strategyExecutionManager.CloseStrategyExecution(item.StrategyExecutionId, context.GetValue(StrategyExecutionProgress).NumberOfSubscribers, context.GetValue(StrategyExecutionProgress).CDRsProcessed, context.GetValue(StrategyExecutionProgress).SuspicionsPerStrategy[item.StrategyId], executionDuration);
+                long numberOfSubscribers = context.GetValue(StrategyExecutionProgress).NumberOfSubscribers;
+                long cdrsProcessed = context.GetValue(StrategyExecutionProgress).CDRsProcessed;
+                Dictionary<int,long> suspicionsPerStrategy = context.GetValue(StrategyExecutionProgress).SuspicionsPerStrategy;
+                long suspicionPerCurrentStrategy=(suspicionsPerStrategy !=null && suspicionsPerStrategy.Count>0 ? suspicionsPerStrategy[item.StrategyId] :0);
+
+                strategyExecutionManager.CloseStrategyExecution(item.StrategyExecutionId, numberOfSubscribers, cdrsProcessed, suspicionPerCurrentStrategy, executionDuration);
             }
 
         }
