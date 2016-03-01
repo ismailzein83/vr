@@ -20,8 +20,6 @@ namespace Vanrise.Security.Entities
 
         public int ModuleId { get; set; }
 
-        public string RequiredPermissions { get; set; }
-
         public string ActionNames { get; set; }
 
         public AudienceWrapper Audience { get; set; }

@@ -41,7 +41,7 @@ namespace Vanrise.Security.Data.SQL
             }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
             object viewId;
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Name, view.Url, view.ModuleId, null,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Name, view.Url, view.ModuleId,
                serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
             insertedId = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);
@@ -61,7 +61,7 @@ namespace Vanrise.Security.Data.SQL
                     serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
             }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name, view.Url, view.ModuleId, null,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name, view.Url, view.ModuleId,
                serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
             return (recordesEffected > 0);
         }
@@ -94,7 +94,6 @@ namespace Vanrise.Security.Data.SQL
                 Title = reader["Title"] as string,
                 Url = reader["Url"] as string,
                 ModuleId = (int)reader["Module"],
-                RequiredPermissions = GetReaderValue<string>(reader, "RequiredPermissions"),
                 ActionNames = GetReaderValue<string>(reader, "ActionNames"),
                 Audience = ((reader["Audience"] as string) != null) ? Common.Serializer.Deserialize<AudienceWrapper>(reader["Audience"] as string) : null,
                 ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
