@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("bpInstanceMonitorGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService",
+app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService",
 function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService) {
 
     var directiveDefinitionObject = {

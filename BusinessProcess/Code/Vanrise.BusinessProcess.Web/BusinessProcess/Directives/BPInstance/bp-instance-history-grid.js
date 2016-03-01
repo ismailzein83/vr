@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("bpInstanceHistoryGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService","VRNotificationService",
+app.directive("businessprocessBpInstanceHistoryGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService","VRNotificationService",
 function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, VRNotificationService) {
 
     var directiveDefinitionObject = {

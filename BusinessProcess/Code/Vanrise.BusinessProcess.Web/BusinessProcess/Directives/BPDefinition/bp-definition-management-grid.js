@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("bpDefinitionManagementGrid", ["UtilsService", "VRNotificationService", "BusinessProcess_BPDefinitionAPIService", "BusinessProcess_BPDefinitionService", "VRUIUtilsService",
+app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService", "VRNotificationService", "BusinessProcess_BPDefinitionAPIService", "BusinessProcess_BPDefinitionService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPDefinitionService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -43,7 +43,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
                 var drillDownDefinition = {};
 
                 drillDownDefinition.title = "Monitor";
-                drillDownDefinition.directive = "bp-instance-monitor-grid";
+                drillDownDefinition.directive = "businessprocess-bp-instance-monitor-grid";
 
                 drillDownDefinition.loadDirective = function (directiveAPI, bpDefinitionItem) {
                     bpDefinitionItem.bpInstanceGridAPI = directiveAPI;
