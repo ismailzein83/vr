@@ -11,7 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	
-	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
+	IF OBJECT_ID(@TempTableName, N'U') IS NULL
 	    BEGIN
 		
 			SELECT [ID]
@@ -30,7 +30,8 @@ BEGIN
 			FROM bp.[BPInstance] as bps WITH(NOLOCK)
 			WHERE (@ArrStatus is NULL or bps.ExecutionStatus in (SELECT ParsedString FROM ParseStringList(@ArrStatus) ) ) and 
 			(@ArrDefinitionID is NULL or  bps.DefinitionID in (SELECT ParsedString FROM ParseStringList(@ArrDefinitionID) ) ) and 
-			bps.CreatedTime BETWEEN  @DateFrom and @DateTo
+			bps.CreatedTime >=  @DateFrom 
+			and (@DateTo is NULL or bps.CreatedTime < @DateTo)
 			ORDER BY CreatedTime DESC
 			
 			DECLARE @sql VARCHAR(1000)

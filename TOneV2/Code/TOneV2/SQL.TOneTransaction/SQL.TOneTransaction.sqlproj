@@ -188,6 +188,8 @@
     <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_InsertIfNotMaximum.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_Insert.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_DeleteBySource.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetUpdated.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_GetBeforeID.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
