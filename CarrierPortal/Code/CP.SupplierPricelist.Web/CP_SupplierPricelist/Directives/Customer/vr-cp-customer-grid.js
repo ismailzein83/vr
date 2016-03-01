@@ -31,36 +31,36 @@ function (UtilsService, customeApiService, customerService, vRUIUtilsService, vR
                         gridAPI.itemAdded(customerObject);
                     }
                     return directiveAPI;
-                }
+                    }
 
             }
-        };
+            };
 
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return customeApiService.GetFilteredCustomers(dataRetrievalInput)
-               .then(function (response) {
-                   if (response.Data != undefined) {
-                       for (var i = 0; i < response.Data.length; i++) {
-                           gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return customeApiService.GetFilteredCustomers(dataRetrievalInput)
+                   .then(function (response) {
+                       if (response.Data != undefined) {
+                           for (var i = 0; i < response.Data.length; i++) {
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                           }
                        }
-                   }
-                   onResponseReady(response);
-               })
-               .catch(function (error) {
-                   vRNotificationService.notifyExceptionWithClose(error, $scope);
-               });
-        };
+                       onResponseReady(response);
+                   })
+                   .catch(function (error) {
+                       vRNotificationService.notifyExceptionWithClose(error, $scope);
+                   });
+            };
 
-        defineMenuActions();
+            defineMenuActions();
 
 
-        function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Edit",
-                clicked: editCustomer
-            }];
+            function defineMenuActions() {
+                $scope.gridMenuActions = [{
+                    name: "Edit",
+                    clicked: editCustomer
+                }];
+            }
         }
-    }
     function editCustomer(customer) {
         var onCustomerUpdated = function (updatedItem) {
             gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);

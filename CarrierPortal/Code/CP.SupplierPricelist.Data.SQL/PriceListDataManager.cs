@@ -86,6 +86,13 @@ namespace CP.SupplierPricelist.Data.SQL
                 pricelistStatuIds = string.Join(",", Array.ConvertAll(listStatuses.ToArray(), value => (int)value));
             return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]", PriceListMapper, pricelistStatuIds);
         }
+        public List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses, int customerId)
+        {
+            string pricelistStatuIds = null;
+            if (listStatuses != null && listStatuses.Any())
+                pricelistStatuIds = string.Join(",", Array.ConvertAll(listStatuses.ToArray(), value => (int)value));
+            return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]", PriceListMapper, pricelistStatuIds, customerId);
+        }
 
         public bool UpdatePriceListUpload(long id, int result, object uploadInformation, int uploadRetryCount)
         {

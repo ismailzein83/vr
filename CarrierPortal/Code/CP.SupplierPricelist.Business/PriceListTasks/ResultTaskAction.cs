@@ -14,8 +14,10 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             ResultTaskActionArgument resultTaskActionArgument = taskActionArgument as ResultTaskActionArgument;
             if (resultTaskActionArgument == null)
                 throw new Exception("taskActionArgument  is not of type ResultTaskActionArgument ");
-            //if (resultTaskActionArgument.SupplierPriceListConnector == null)
-            //    throw new Exception("SupplierPriceListConnector is null");
+            if (resultTaskActionArgument.CustomerId == 0)
+                throw new Exception("CustomerId is undefined");
+            CustomerManager customerManager = new CustomerManager();
+            Customer customer = customerManager.GetCustomer(resultTaskActionArgument.CustomerId);
 
             ImportPriceListManager manager = new ImportPriceListManager();
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
@@ -23,7 +25,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 PriceListStatus.Uploaded,
                 PriceListStatus.GetStatusFailedWithRetry
             };
-            foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
+            foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
             {
                 var priceListProgressContext = new PriceListProgressContext
                 {
@@ -32,7 +34,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
                 try
                 {
-                    //priceListProgressOutput = resultTaskActionArgument.SupplierPriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
+                    priceListProgressOutput = customer.Settings.PriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
                 }
                 catch (Exception)
                 {
@@ -99,7 +101,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         break;
                 }
 
-              
+
             }
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
             {

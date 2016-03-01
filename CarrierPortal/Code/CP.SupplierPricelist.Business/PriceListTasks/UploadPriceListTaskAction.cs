@@ -16,29 +16,33 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             UploadPriceListTaskActionArgument uploadPriceListTaskActionArgument = taskActionArgument as UploadPriceListTaskActionArgument;
             if (uploadPriceListTaskActionArgument == null)
                 throw new Exception("taskActionArgument  is not of type UploadPriceListTaskActionArgument ");
-            if (uploadPriceListTaskActionArgument.SupplierPriceListConnector == null)
-                throw new Exception("SupplierPriceListConnector is null");
+            if (uploadPriceListTaskActionArgument.CustomerId == 0)
+                throw new Exception("customerID is undefined");
+            CustomerManager customerManager = new CustomerManager();
+            Customer customer = customerManager.GetCustomer(uploadPriceListTaskActionArgument.CustomerId);
+
             ImportPriceListManager manager = new ImportPriceListManager();
-            List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>()
+            List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
                     {
                         PriceListStatus.New,
                         PriceListStatus.UploadFailedWithRetry
                     };
             VRFileManager fileManager = new VRFileManager();
-            foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
+            foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
             {
                 var priceListUploadContext = new PriceListUploadContext
                 {
                     UserId = pricelist.UserId,
                     PriceListType = pricelist.PriceListType.ToString(),
                     File = fileManager.GetFile(pricelist.FileId),
-                    EffectiveOnDateTime = pricelist.EffectiveOnDate
+                    EffectiveOnDateTime = pricelist.EffectiveOnDate,
+                    CarrierAccountId = pricelist.CarrierAccountId
                 };
                 PriceListUploadOutput priceListUploadOutput = new PriceListUploadOutput();
                 try
                 {
                     priceListUploadOutput =
-                      uploadPriceListTaskActionArgument.SupplierPriceListConnector.PriceListUploadOutput(priceListUploadContext);
+                      customer.Settings.PriceListConnector.PriceListUploadOutput(priceListUploadContext);
                 }
                 catch (Exception ex)
                 {

@@ -29,15 +29,13 @@ app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VR
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
-        var sourceTypeDirectiveAPI;
-        var sourceDirectiveReadyPromiseDeferred;
+        var customerDirectiveApi;
+        var customerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
-            $scope.sourceTypeTemplates = [];
-            $scope.onSourceTypeDirectiveReady = function (api) {
-                sourceTypeDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
+            $scope.onCustomerDirectiveReady = function (api) {
+                customerDirectiveApi = api;
+                customerReadyPromiseDeferred.resolve();
             }
             defineAPI();
         }
@@ -46,60 +44,32 @@ app.directive("cpSupplierpricelistUploadsupplierpricelist", ['UtilsService', 'VR
 
             var api = {};
             api.getData = function () {
-                var obj;
-                if (sourceTypeDirectiveAPI != undefined)
-                    obj = sourceTypeDirectiveAPI.getData();
-                obj.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
                 return {
                     $type: "CP.SupplierPricelist.Business.PriceListTasks.UploadPriceListTaskActionArgument, CP.SupplierPricelist.Business",
-                    SupplierPriceListConnector: obj,
+                    CustomerId: customerDirectiveApi.getSelectedIds(),
                     MaximumRetryCount: $scope.maximumRetryCount
                 };
             };
 
 
             api.load = function (payload) {
+                var data;
                 if (payload != undefined && payload.data != undefined)
-                    $scope.maximumRetryCount = payload.data.MaximumRetryCount;
-                var promises = [];
-                var pricelistTemplatesLoad = CP_SupplierPricelist_SupplierPriceListAPIService.GetUploadPriceListTemplates().then(function (response) {
-                    if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined)
-                        var sourceConfigId = payload.data.SupplierPriceListConnector.ConfigId;
-                    angular.forEach(response, function (item) {
-                        $scope.sourceTypeTemplates.push(item);
-                    });
-
-                    if (sourceConfigId != undefined)
-                        $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
-                    //else
-                    //    $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, $scope.sourceTypeTemplates[0].TemplateConfigID, "TemplateConfigID");
+                    data = payload.data;
+                $scope.maximumRetryCount = (data != undefined) ? data.MaximumRetryCount : undefined;
+                var customerLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                customerReadyPromiseDeferred.promise.then(function () {
+                    var obj = {
+                        //filter: {
+                        //    AssignedToCurrentSupplier: true 
+                        //}
+                    }
+                    if (data != undefined && data.CustomerId != undefined)
+                        obj.selectedIds = data.CustomerId;
+                    VRUIUtilsService.callDirectiveLoad(customerDirectiveApi, obj, customerLoadPromiseDeferred);
                 });
-
-                promises.push(pricelistTemplatesLoad);
-
-                if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined) {
-
-                    sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                    var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
-                    sourceDirectiveReadyPromiseDeferred.promise.then(function () {
-                        sourceDirectiveReadyPromiseDeferred = undefined;
-                        var obj;
-                        if (payload != undefined && payload.data != undefined && payload.data.SupplierPriceListConnector != undefined)
-                            obj = {
-                                Url: payload.data.SupplierPriceListConnector.Url,
-                                Username: payload.data.SupplierPriceListConnector.UserName,
-                                Password: payload.data.SupplierPriceListConnector.Password
-                            };
-                        VRUIUtilsService.callDirectiveLoad(sourceTypeDirectiveAPI, obj, loadSourceTemplatePromiseDeferred);
-                    });
-                    promises.push(loadSourceTemplatePromiseDeferred.promise);
-                }
-
-
-                return UtilsService.waitMultiplePromises(promises);
+                return customerLoadPromiseDeferred.promise;
             }
-
-
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

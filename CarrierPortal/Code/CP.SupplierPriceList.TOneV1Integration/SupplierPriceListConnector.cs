@@ -22,7 +22,8 @@ namespace CP.SupplierPriceList.TOneV1Integration
                 PriceListType = cont.PriceListType,
                 FileName = cont.File.Name,
                 EffectiveOnDateTime = cont.EffectiveOnDateTime,
-                ContentFile = cont.File.Content
+                ContentFile = cont.File.Content,
+                CarrierAccountId = cont.CarrierAccountId
             };
             // Vanrise.Common.Compressor.Compress(context.File.Content)
             int insertedId = serviceActions.UploadOnline(userInput);
@@ -37,6 +38,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
         }
         public class SupplierPriceListUserInput
         {
+            public string CarrierAccountId { get; set; }
             public int UserId { get; set; }
             public string PriceListType { get; set; }
             public byte[] ContentFile { get; set; }

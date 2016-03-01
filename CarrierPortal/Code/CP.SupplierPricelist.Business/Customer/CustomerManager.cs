@@ -35,20 +35,20 @@ namespace CP.SupplierPricelist.Business
 
         }
 
-        public List<SupplierInfo> GetCustomerSuppliers(int customerId)
+        public IEnumerable<SupplierInfo> GetCustomerSuppliers(int customerId)
         {
-            Customer customer = GetCustomer(customerId);
-            if (customer == null)
-                throw new NullReferenceException("customer");
-            if (customer.Settings == null)
-                throw new NullReferenceException("customer.Settings");
-            if (customer.Settings.PriceListConnector == null)
-                throw new NullReferenceException("customer.Settings.PriceListConnector");
+            //Customer customer = GetCustomer(customerId);
+            //if (customer == null)
+            //    throw new NullReferenceException("customer");
+            //if (customer.Settings == null)
+            //    throw new NullReferenceException("customer.Settings");
+            //if (customer.Settings.PriceListConnector == null)
+            //    throw new NullReferenceException("customer.Settings.PriceListConnector");
 
-           return customer.Settings.PriceListConnector.GetSuppliers(null);
+            return GetCachedSuuplierAccounts(customerId).Values;
         }
 
-        public IEnumerable<CustomerInfo> GetCustomerInfos(CustomerFilter filter )
+        public IEnumerable<CustomerInfo> GetCustomerInfos(CustomerFilter filter)
         {
             var cachedCustomers = GetCachedCustomers();
             if (filter != null && filter.AssignedToCurrentSupplier == true)
@@ -138,6 +138,29 @@ namespace CP.SupplierPricelist.Business
                 return _dataManager.AreCustomersUpdated(ref _updateHandle);
             }
         }
+
+        public Dictionary<string, SupplierInfo> GetCachedSuuplierAccounts(int customerId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCacheManager>().GetOrCreateObject("GetSupplierAccounts",
+               () =>
+               {
+                   Customer customer = GetCustomer(customerId);
+                   if (customer == null)
+                       throw new NullReferenceException("customer");
+                   if (customer.Settings == null)
+                       throw new NullReferenceException("customer.Settings");
+                   if (customer.Settings.PriceListConnector == null)
+                       throw new NullReferenceException("customer.Settings.PriceListConnector");
+
+                   IEnumerable<SupplierInfo> supplierAccounts = customer.Settings.PriceListConnector.GetSuppliers(null);
+                   return supplierAccounts.ToDictionary(c => c.SupplierId, c => c);
+               });
+        }
+        private class SupplierCacheManager : Vanrise.Caching.BaseCacheManager
+        {
+
+        }
+
         public List<TemplateConfig> GetConnectorTemplates()
         {
             TemplateConfigManager manager = new TemplateConfigManager();

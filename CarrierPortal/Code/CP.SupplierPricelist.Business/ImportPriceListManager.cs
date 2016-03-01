@@ -50,9 +50,8 @@ namespace CP.SupplierPricelist.Business
             Customer customer = customerManager.GetCustomer(priceList.CustomerId);
             priceListDetail.CustomerName = customer != null ? customer.Name : "";
 
-            var customerSuppliers = new CustomerManager().GetCustomerSuppliers(priceList.CustomerId);
-            var accountInfo = customerSuppliers.SingleOrDefault(a => a.SupplierId.Equals(priceList.CarrierAccountId));
-            priceListDetail.CarrierAccountName = accountInfo != null ? accountInfo.SupplierName : "";
+            var customerSuppliers = new CustomerManager().GetCachedSuuplierAccounts(priceList.CustomerId);
+            priceListDetail.CarrierAccountName = customerSuppliers.ContainsKey(priceList.CarrierAccountId) ? customerSuppliers[priceList.CarrierAccountId].SupplierName : "";
             return priceListDetail;
         }
         public List<PriceList> GetPriceLists(List<PriceListStatus> listPriceListStatuses)
@@ -60,6 +59,12 @@ namespace CP.SupplierPricelist.Business
             IPriceListDataManager dataManager =
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
             return dataManager.GetPriceLists(listPriceListStatuses);
+        }
+        public List<PriceList> GetPriceLists(List<PriceListStatus> listPriceListStatuses, int customerId)
+        {
+            IPriceListDataManager dataManager =
+                ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
+            return dataManager.GetPriceLists(listPriceListStatuses, customerId);
         }
 
         public bool UpdatePriceListUpload(long id, int result, object uploadInformation, int uploadRetryCount)
