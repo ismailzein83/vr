@@ -99,7 +99,8 @@ namespace Vanrise.GenericData.Business
                 if (criteriaFieldValue != null)
                 {
                     IEnumerable<object> values = criteriaFieldValue.GetValues();
-                    if (values == null) throw new NullReferenceException("criteriaFieldValue.GetValues()");
+                    if (values == null)
+                        return false;
                     
                     if (!criteriaFieldType.IsMatched(values, filter.Value))
                         return false;

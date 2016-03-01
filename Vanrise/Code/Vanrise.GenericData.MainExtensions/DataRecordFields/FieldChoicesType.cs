@@ -42,10 +42,23 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return String.Join(",", descriptions);
         }
 
-        public override bool IsMatched(object settingsValue, object filterValue)
+        public override bool IsMatched(object fieldValue, object filterValue)
         {
             var choicesFilter = filterValue as ChoicesFieldTypeFilter;
-            return choicesFilter.ChoiceIds.Contains(Convert.ToInt32(settingsValue));
+            if (fieldValue != null && choicesFilter.ChoiceIds != null)
+            {
+                var fieldValueObjList = fieldValue as List<object>;
+                fieldValueObjList = (fieldValueObjList == null) ? new List<object>() { fieldValue } : fieldValueObjList;
+
+                var fieldValueIds = fieldValueObjList.MapRecords(itm => Convert.ToInt32(itm));
+                foreach (var filterId in choicesFilter.ChoiceIds)
+                {
+                    if (fieldValueIds.Contains(filterId))
+                        return true;
+                }
+                return false;
+            }
+            return true;
         }
 
         #endregion

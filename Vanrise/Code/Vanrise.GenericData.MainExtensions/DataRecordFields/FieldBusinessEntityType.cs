@@ -35,17 +35,27 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             var entityIds = new List<object>();
 
             if (selectedEntityIds != null)
-                entityIds.AddRange(selectedEntityIds);
+            {
+                if (selectedEntityIds.Count() == 0)
+                    return null;
+                else
+                    entityIds.AddRange(selectedEntityIds);
+            }
             else
                 entityIds.Add(value);
             
             return GetBusinessEntityManager().GetEntityDescription(new BusinessEntityDescriptionContext() { EntityIds = entityIds });
         }
 
-        public override bool IsMatched(object settingsValue, object filterValue)
+        public override bool IsMatched(object fieldValue, object filterValue)
         {
+            var fieldValueObjList = fieldValue as List<object>;
+            fieldValueObjList = (fieldValueObjList == null) ? new List<object>() { fieldValue } : fieldValueObjList;
+
             var beFilter = filterValue as BusinessEntityFieldTypeFilter;
-            return GetBusinessEntityManager().IsMatched(new BusinessEntityMatchContext() { SettingsEntityId = settingsValue, FilterIds = beFilter.BusinessEntityIds });
+
+            IBusinessEntityManager beManager = GetBusinessEntityManager();
+            return beManager.IsMatched(new BusinessEntityMatchContext() { FieldValueIds = fieldValueObjList, FilterIds = beFilter.BusinessEntityIds });
         }
 
         #endregion
@@ -56,7 +66,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             var beValues = value as BusinessEntityValues;
             if (beValues != null)
-                return beValues.GetValues();
+            {
+                var values = beValues.GetValues();
+                return (values != null) ? values : new List<object>();
+            }
             
             var staticValues = value as StaticValues;
             if (staticValues != null)
