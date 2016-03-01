@@ -48,6 +48,8 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
                 label = "Carrier Accounts";
                 multipleselection = "ismultipleselection";
             }
+            if (attrs.customlabel != undefined)
+                label = attrs.customlabel;
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="SupplierName" datavaluefield="SupplierId" isrequired="ctrl.isrequired" '
@@ -91,6 +93,16 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
 
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'SupplierId', attrs, ctrl);
+                        }
+
+                        else if (selectedIds == undefined && ctrl.datasource.length == 1) {
+                            var customSelection;
+                            if (attrs.ismultipleselection != undefined)
+                                customSelection = ctrl.datasource[0].SupplierId;
+                            else
+                                customSelection = [ctrl.datasource[0].SupplierId];
+                            VRUIUtilsService.setSelectedValues(customSelection, 'SupplierId', attrs, ctrl);
+
                         }
                     });
 

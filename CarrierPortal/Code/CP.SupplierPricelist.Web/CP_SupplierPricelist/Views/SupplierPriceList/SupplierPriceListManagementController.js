@@ -20,6 +20,7 @@
             }
 
             function defineScope() {
+                $scope.effectiveOn = new Date();
                 $scope.priceListTypes = [];
                 $scope.importPriceList = function () {
                     importPriceList();
@@ -35,8 +36,7 @@
                 }
                 $scope.onCustomerSelectionChanged = function () {
                     if (customerDirectiveApi.getSelectedIds() != undefined) {
-                        var obj =
-                        {
+                        var obj =                        {
                            filter: {
                                CustomerIdForCurrentSupplier: customerDirectiveApi.getSelectedIds()
                            }

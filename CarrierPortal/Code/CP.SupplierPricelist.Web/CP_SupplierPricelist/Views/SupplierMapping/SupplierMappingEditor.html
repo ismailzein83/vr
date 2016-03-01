@@ -3,10 +3,10 @@
         <vr-form name="formEditor">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-sec-user-selector on-ready="onUserDirectiveReady" isrequired="true" showaddbutton selectedvalues="selecteduser" isdisabled="disableUser" onselectionchanged="onUserSelectionChanged"></vr-sec-user-selector>
+                    <vr-sec-user-selector on-ready="onUserDirectiveReady" customlabel="Supplier User" isrequired="true" showaddbutton selectedvalues="selecteduser" isdisabled="disableUser" onselectionchanged="onUserSelectionChanged"></vr-sec-user-selector>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-cp-carrieraccount-selector selectedvalues="selectedCarriers" on-ready="onCarrierAccountDirectiveReady" isrequired="true" ismultipleselection isdisabled="!selecteduser"></vr-cp-carrieraccount-selector>
+                    <vr-cp-carrieraccount-selector selectedvalues="selectedCarriers" customlabel="Supplier Accounts" on-ready="onCarrierAccountDirectiveReady" isrequired="true" ismultipleselection isdisabled="!selecteduser"></vr-cp-carrieraccount-selector>
                 </vr-columns>
             </vr-row>
         </vr-form>

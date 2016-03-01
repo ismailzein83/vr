@@ -83,11 +83,20 @@ app.directive('vrCpCustomerSelector', ['CP_SupplierPricelist_CustomerManagmentAP
                     return customerManagmentAPIService.GetCustomerInfos(serializedFilter).then(function (response) {
                         ctrl.datasource.length = 0;
                         angular.forEach(response, function (item) {
-                            ctrl.datasource.push(item);
+                               ctrl.datasource.push(item);
                         });
 
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'CustomerId', attrs, ctrl);
+                        }
+                        else if (selectedIds == undefined && ctrl.datasource.length == 1) {
+                            var customSelection;
+                            if (attrs.ismultipleselection != undefined)
+                                customSelection = ctrl.datasource[0].CustomerId;
+                            else
+                                customSelection = [ctrl.datasource[0].CustomerId];
+                            VRUIUtilsService.setSelectedValues(customSelection, 'CustomerId', attrs, ctrl);
+
                         }
                     });
 
