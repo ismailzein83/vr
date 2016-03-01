@@ -49,15 +49,11 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                     {
                         case PriceListResult.Approved:
                             break;
-                        case PriceListResult.Completed:
-                            break;
                         case PriceListResult.NotCompleted:
                             break;
                         case PriceListResult.PartiallyApproved:
                             break;
                         case PriceListResult.Rejected:
-                            break;
-                        case PriceListResult.WaitingReview:
                             break;
                     }
                     if (priceListProgressOutput.AlertFile != null)

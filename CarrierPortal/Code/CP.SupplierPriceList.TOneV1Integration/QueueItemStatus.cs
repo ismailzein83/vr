@@ -45,7 +45,10 @@ namespace CP.SupplierPriceList.TOneV1Integration
         AwaitingSaveConfirmationbySystemparam = 13,
 
         [Description("Processed - No Changes")]
-        Processedwithnochanges = 14
+        Processedwithnochanges = 14,
+
+        [Description("Partially Rejected")]
+        PartiallyRejected = 15
 
     }
 }

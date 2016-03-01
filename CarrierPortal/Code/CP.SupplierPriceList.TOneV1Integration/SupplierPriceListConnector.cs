@@ -58,6 +58,13 @@ namespace CP.SupplierPriceList.TOneV1Integration
 
             switch (queueResult)
             {
+                case QueueItemStatus.PartiallyRejected:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                    priceListProgressOutput.PriceListResult = PriceListResult.PartiallyRejected;
+                    priceListProgressOutput.AlertMessage = "Due To Retro-active";
+                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    break;
                 case QueueItemStatus.Recieved:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     break;
@@ -80,9 +87,11 @@ namespace CP.SupplierPriceList.TOneV1Integration
                     break;
                 case QueueItemStatus.AwaitingWarningsConfirmation:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
+                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     break;
                 case QueueItemStatus.AwaitingSaveConfirmation:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
+                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     break;
                 case QueueItemStatus.WarningsConfirmed:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
@@ -135,8 +144,8 @@ namespace CP.SupplierPriceList.TOneV1Integration
                 case QueueItemStatus.AwaitingSaveConfirmationbySystemparam:
                     {
 
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.WaitingReview;
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
+                        priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                         break;
                     }
                 case QueueItemStatus.Processedwithnochanges:

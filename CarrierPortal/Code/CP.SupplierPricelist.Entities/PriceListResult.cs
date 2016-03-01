@@ -18,10 +18,8 @@ namespace CP.SupplierPricelist.Entities
 
         Rejected = 30,
 
-        [Description("Waiting Review")]
-        WaitingReview = 40,
-
-        Completed = 50
+        [Description("Partially Rejected")]
+        PartiallyRejected = 40
 
     }
 }
