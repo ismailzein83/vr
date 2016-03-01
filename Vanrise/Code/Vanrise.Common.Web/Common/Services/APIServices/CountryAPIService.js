@@ -1,34 +1,35 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    countryAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig'];
+    countryAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
-    function countryAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig) {
+    function countryAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
+        var controllerName = 'Country';
 
         function GetFilteredCountries(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "GetFilteredCountries"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredCountries"), input);
         }
         function GetCountriesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "GetCountriesInfo"));
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountriesInfo"));
         }
         function GetCountry(countryId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "GetCountry"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountry"), {
                 countryId: countryId
             });
 
         }
         function UpdateCountry(countryObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "UpdateCountry"), countryObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UpdateCountry"), countryObject);
         }
         function AddCountry(countryObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "AddCountry"), countryObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "AddCountry"), countryObject);
         }
         function GetCountrySourceTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "GetCountrySourceTemplates"));
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountrySourceTemplates"));
         }
 
         function DownloadCountriesTemplate() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "DownloadCountriesTemplate"),
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "DownloadCountriesTemplate"),
                 {},
                 {
                     returnAllResponseParameters: true,
@@ -37,8 +38,13 @@
             );
         }
         function UploadCountries(fileId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Country", "UploadCountries"), { fileId: fileId });
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UploadCountries"), { fileId: fileId });
         }
+
+        function HasAddCountryPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddCountry']));
+        }
+
         return ({
             GetFilteredCountries: GetFilteredCountries,
             GetCountriesInfo: GetCountriesInfo,
@@ -47,7 +53,8 @@
             AddCountry: AddCountry,
             GetCountrySourceTemplates: GetCountrySourceTemplates,
             DownloadCountriesTemplate: DownloadCountriesTemplate,
-            UploadCountries: UploadCountries
+            UploadCountries: UploadCountries,
+            HasAddCountryPermission: HasAddCountryPermission
         });
     }
 

@@ -43,7 +43,8 @@
                 onselectitem: '=',
                 ondeselectitem: '=',
                 onaddclicked: "=",
-                hint: '@'
+                hint: '@',
+                haspermission: '='
             },
             controller: function ($scope, $element, $attrs) {
                 if (rootScope == undefined)
@@ -65,7 +66,14 @@
                 $scope.$watchCollection('effectiveDataSource', function (newValue, oldValue) {
                     refreshBoundDataSource();
                 });
-                
+
+                controller.hideAddButton = false;
+                if (controller.haspermission != undefined && typeof (controller.haspermission) == 'function') {
+                    controller.haspermission().then(function (isAllowed) {
+                        if (!isAllowed)
+                            controller.hideAddButton = true;
+                    });
+                }
 
                 function refreshBoundDataSource()
                 {
