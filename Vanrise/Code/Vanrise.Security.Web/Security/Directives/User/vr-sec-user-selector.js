@@ -100,7 +100,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 api.load = function (payload) {
                    
                     var selectedIds;
-                    ctrl.filter = {};
+                    ctrl.filter;
                     if (payload != undefined) {
                         ctrl.filter = payload.filter;
                         selectedIds = payload.selectedIds;

@@ -49,7 +49,7 @@ namespace Vanrise.Security.Business
                 }
 
             }
-            return users.MapRecords(UserInfoMapper, user =>  ( filter.ExcludeInactive == false || (filter.ExcludeInactive == true && user.Status == UserStatus.Active)));
+            return users.MapRecords(UserInfoMapper, user =>  ( filter == null || (  filter.ExcludeInactive == true && user.Status == UserStatus.Active)));
         }
 
         public User GetUserbyId(int userId)
