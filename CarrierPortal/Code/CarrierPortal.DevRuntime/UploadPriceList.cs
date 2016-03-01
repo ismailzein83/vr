@@ -64,7 +64,7 @@ namespace CarrierPortal.DevRuntime
                             switch (initiatePriceListOutput.Result)
                             {
                                 case PriceListSupplierUploadResult.Uploaded:
-                                    priceListstatus = PriceListStatus.Uploaded;
+                                    priceListstatus = PriceListStatus.SuccessfullyImported;
                                     break;
                                 case PriceListSupplierUploadResult.Failed:
                                     priceListstatus = PriceListStatus.GetStatusFailedWithNoRetry;

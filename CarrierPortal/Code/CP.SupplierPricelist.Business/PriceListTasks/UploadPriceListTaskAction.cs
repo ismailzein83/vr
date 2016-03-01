@@ -53,7 +53,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 switch (priceListUploadOutput.Result)
                 {
                     case PriceListSupplierUploadResult.Uploaded:
-                        priceListstatus = PriceListStatus.Uploaded;
+                        priceListstatus = PriceListStatus.SuccessfullyImported;
                         break;
                     case PriceListSupplierUploadResult.Failed:
                         priceListstatus = PriceListStatus.GetStatusFailedWithNoRetry;

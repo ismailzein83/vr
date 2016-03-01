@@ -8,8 +8,8 @@ namespace CP.SupplierPricelist.Entities
         [Description("New")]
         New = 0,
 
-        [Description("Uploaded")]
-        Uploaded = 10,
+        [Description("Successfully Imported")]
+        SuccessfullyImported = 10,
 
         [Description("Failed")]
         UploadFailedWithRetry = 20,

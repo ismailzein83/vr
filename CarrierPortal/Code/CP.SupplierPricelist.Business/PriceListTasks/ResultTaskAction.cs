@@ -22,7 +22,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             ImportPriceListManager manager = new ImportPriceListManager();
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
             {
-                PriceListStatus.Uploaded,
+                PriceListStatus.SuccessfullyImported,
                 PriceListStatus.GetStatusFailedWithRetry
             };
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
@@ -71,7 +71,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 }
 
                 PriceListResult priceListResult = PriceListResult.NotCompleted;
-                PriceListStatus priceListStatus = PriceListStatus.Uploaded;
+                PriceListStatus priceListStatus = PriceListStatus.SuccessfullyImported;
                 switch (priceListProgressOutput.PriceListProgress)
                 {
                     case PriceListProgressResult.Completed:
@@ -85,7 +85,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                     case PriceListProgressResult.ProgressNotChanged:
                         break;
                     case PriceListProgressResult.FailedWithRetry:
-                        priceListStatus = PriceListStatus.Uploaded;
+                        priceListStatus = PriceListStatus.SuccessfullyImported;
                         priceListResult = PriceListResult.Completed;
                         if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
                             pricelist.ResultMaxRetryCount = pricelist.UploadMaxRetryCount + 1;
