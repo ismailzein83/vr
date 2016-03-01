@@ -223,9 +223,16 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
-            int settingsEntityId = Convert.ToInt32(context.SettingsEntityId);
-            IEnumerable<int> filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
-            return filterIds.Contains(settingsEntityId);
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
         }
         #endregion
 

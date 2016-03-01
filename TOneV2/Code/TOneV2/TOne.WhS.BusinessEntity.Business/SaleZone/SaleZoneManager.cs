@@ -7,11 +7,13 @@ using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleZoneManager
+    public class SaleZoneManager : IBusinessEntityManager
     {
+        #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
@@ -24,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, saleZonesBySellingNumberPlan.ToBigResult(input, filterExpression, SaleZoneDetailMapper));
         }
-        
+
         public IEnumerable<SaleZone> GetSaleZones(int sellingNumberPlanId, DateTime effectiveDate)
         {
             return GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(item => item.IsEffective(effectiveDate));
@@ -138,7 +140,34 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
         }
 
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var saleZoneNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string saleZoneName = GetSaleZoneName(Convert.ToInt64(entityId));
+                if (saleZoneName == null) throw new NullReferenceException("saleZoneName");
+                saleZoneNames.Add(saleZoneName);
+            }
+            return String.Join(",", saleZoneNames);
+        }
 
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt64(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt64(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
+        }
+
+        #endregion
+        
         #region Private Members
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
