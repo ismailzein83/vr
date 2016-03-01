@@ -209,7 +209,11 @@ namespace Vanrise.Security.Business
             foreach (string systemActionName in systemActionNamesArray)
             {
                 SystemAction systemAction = systemActionManager.GetSystemAction(systemActionName.Trim());
-                if (systemAction != null && systemAction.RequiredPermissions != null)
+                
+                if (systemAction == null)
+                    throw new NullReferenceException(String.Format("System action '{0}' was not found", systemActionName));
+
+                if (systemAction.RequiredPermissions != null)
                 {
                     requiredPermissions.Add(systemAction.RequiredPermissions);
                 }
@@ -228,7 +232,21 @@ namespace Vanrise.Security.Business
             foreach (string permissionsByNodeNameString in permissionsByNodeNameArray)
             {
                 string[] kvp = permissionsByNodeNameString.Split(':');
+
+                if (kvp.Length != 2)
+                    throw new FormatException(String.Format("'{0}' is an invalid key value pair", permissionsByNodeNameString));
+
+                if (kvp[0] == String.Empty)
+                    throw new FormatException("Node is not defined");
+
+                if (kvp[1] == String.Empty)
+                    throw new FormatException("Permissions are not defined");
+
                 string nodePath = beNodeManager.GetBusinessEntityNodePath(kvp[0].Trim());
+
+                if (nodePath == null)
+                    throw new NullReferenceException(String.Format("Node '{0}' was not found", kvp[0]));
+
                 List<string> permissions = kvp[1].Split(',').MapRecords(itm => itm.Trim()).ToList();
 
                 List<string> existingPermissions;
