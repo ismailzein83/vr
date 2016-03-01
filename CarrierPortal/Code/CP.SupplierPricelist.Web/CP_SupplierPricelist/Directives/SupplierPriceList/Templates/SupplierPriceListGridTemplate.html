@@ -1,8 +1,8 @@
 ﻿<vr-datagrid datasource="pricelist"
              on-ready="onGridReady"
              pagingtype="'PagingOnScroll'"
-             menuactions="[]"
-             idfield="Id" loadmoredata="loadMoreData" vr-loader="isGettingData">
+             menuactions="gridMenuActions"
+             idfield="Id" loadmoredata="loadMoreData">
 
     <vr-datagridcolumn headertext="'PriceList ID'" field="'Entity.PriceListId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'User Name'" field="'UserName'" type="'Text'"></vr-datagridcolumn>

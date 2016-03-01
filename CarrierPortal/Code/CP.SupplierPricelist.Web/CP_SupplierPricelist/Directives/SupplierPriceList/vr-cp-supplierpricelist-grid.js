@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCpSupplierpricelistGrid", ["UtilsService", "CP_SupplierPricelist_SupplierPriceListAPIService", "CP_SupplierPricelist_SupplierPriceListService",
-function (UtilsService, SupplierPriceListAPIService, SupplierPriceListService) {
+app.directive("vrCpSupplierpricelistGrid", ["UtilsService", "CP_SupplierPricelist_SupplierPriceListAPIService", "CP_SupplierPricelist_SupplierPriceListService", "FileAPIService",
+function (utilsService, supplierPriceListApiService, supplierPriceListService, fileApiService) {
 
     function SupplierPriceListGrid($scope, ctrl) {
 
@@ -16,20 +16,19 @@ function (UtilsService, SupplierPriceListAPIService, SupplierPriceListService) {
         var minId = undefined;
 
         function initializeController() {
-
             $scope.pricelist = [];
-           $scope.isGettingData = false;
+            var isGettingData = false;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
                 var timer = setInterval(function () {
                     if (!$scope.isGettingData) {
-                        $scope.isGettingData = true;
+                        isGettingData = true;
                         var pageInfo = gridAPI.getPageInfo();
                         input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
 
-                        SupplierPriceListAPIService.GetUpdated(input).then(function (response) {
-                         
+                        supplierPriceListApiService.GetUpdated(input).then(function (response) {
+
                             if (response != undefined) {
                                 for (var i = 0; i < response.ListPriceListDetails.length; i++) {
                                     var pricelist = response.ListPriceListDetails[i];
@@ -67,7 +66,7 @@ function (UtilsService, SupplierPriceListAPIService, SupplierPriceListService) {
                             input.LastUpdateHandle = response.MaxTimeStamp;
                         })
                             .finally(function () {
-                                $scope.isGettingData = false;
+                                isGettingData = false;
                             });
                     }
                 }, 2000);
@@ -76,11 +75,24 @@ function (UtilsService, SupplierPriceListAPIService, SupplierPriceListService) {
                     clearTimeout(timer);
                 });
             };
-        }
+            defineMenuActions();
 
+            function defineMenuActions() {
+                $scope.gridMenuActions = [{
+                    name: "download",
+                    clicked: downloadExcelSheet
+                }];
+            }
+        }
+        function downloadExcelSheet(dataItem) {
+            fileApiService.DownloadFile(dataItem.Entity.FileId)
+                    .then(function (response) {
+                        utilsService.downloadFile(response.data, response.headers);
+                    });
+        }
         this.initializeController = initializeController;
 
-     
+
         function getData() {
 
             //var pageInfo = gridAPI.getPageInfo();
@@ -100,11 +112,11 @@ function (UtilsService, SupplierPriceListAPIService, SupplierPriceListService) {
             return getData();
         }
         $scope.getColorStatus = function (dataItem) {
-            return SupplierPriceListService.getSupplierPriceListStatusColor(dataItem.Entity.Status);
+            return supplierPriceListService.getSupplierPriceListStatusColor(dataItem.Entity.Status);
         };
 
         $scope.getColorResult = function (dataItem) {
-            return SupplierPriceListService.getSupplierPriceListResultColor(dataItem.Entity.Result);
+            return supplierPriceListService.getSupplierPriceListResultColor(dataItem.Entity.Result);
         };
     }
 
