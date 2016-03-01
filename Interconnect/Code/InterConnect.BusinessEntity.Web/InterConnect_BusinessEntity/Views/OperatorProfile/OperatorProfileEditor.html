@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="InterConnect_BE_OperatorProfileEditorController" vr-loader="isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="InterConnect_BE_OperatorProfileEditorController" vr-loader="scopeModal.isLoading" width="'60%'">
     <vr-modalbody>
         <vr-form name="formOperatorProfileEditor">
             <vr-tabs>
@@ -20,8 +20,8 @@
                             <vr-common-city-selector vr-disabled="country== undefined || country ==  null" selectedvalues="scopeModal.city" on-ready="onCityDirectiveReady" isrequired showaddbutton></vr-common-city-selector>
                         </vr-columns>
                     </vr-row>
-                    <vr-row>
-                        <vr-columns width="1/2row" ng-show="scopeModal.dataRecordTypes.length>1">
+                    <vr-row vr-disabled="scopeModal.isEditMode">
+                        <vr-columns width="1/2row" ng-if="scopeModal.dataRecordTypes.length > 1 ">
                             <vr-select datatextfield="Name" datavaluefield="DataRecordTypeId"
                                        entityname="Data Record Types" selectedvalues="scopeModal.selectedDataRecordTypes" datasource="scopeModal.dataRecordTypes" label="Data Record Types" onselectionchanged="scopeModal.onSettingSelectionChanged" isrequired="true"></vr-select>
                         </vr-columns>
@@ -29,7 +29,7 @@
                 </vr-tab>
 
                 <vr-genericdata-genericeditor-runtime-editor on-ready="scopeModal.onExtendedSettingsDirectiveReady"></vr-genericdata-genericeditor-runtime-editor>
-                 
+
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

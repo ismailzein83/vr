@@ -14,7 +14,7 @@ namespace InterConnect.BusinessEntity.Business
 {
     public class OperatorProfileManager
     {
-        private static string businessEntityName = "InterConnect_BE_OperatorProfile";
+        private const string businessEntityName = "InterConnect_BE_OperatorProfile";
         public List<OperatorProfileExtendedSettingType> GetExtendedSettingTypes()
         {
             return new List<OperatorProfileExtendedSettingType> 
