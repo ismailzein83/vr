@@ -126,7 +126,8 @@ function GridDrillDownTabs(drillDownDefinitions, gridAPI, gridMenuActions) {
     function defineDrillDownMenuAction(drillDownDefinition) {
         var menuAction = {
             name: drillDownDefinition.name,
-            clicked: drillDownDefinition.clicked
+            clicked: drillDownDefinition.clicked,
+            haspermission: drillDownDefinition.haspermission
         };
         gridMenuActions.push(menuAction);
     }
