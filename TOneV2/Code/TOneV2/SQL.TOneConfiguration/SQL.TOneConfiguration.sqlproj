@@ -260,6 +260,7 @@
     <Build Include="genericdata\Tables\GenericEditorDefinition.sql" />
     <Build Include="genericdata\Stored Procedures\sp_GenericEditorDefinition_Update.sql" />
     <Build Include="genericdata\Stored Procedures\sp_GenericEditorDefinition_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericEditorDefinition_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

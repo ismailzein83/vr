@@ -9,7 +9,6 @@ CREATE PROCEDURE [sec].[sp_View_Insert]
 	@Title nvarchar(255),
 	@Url nvarchar(255),
 	@Module int,
-	@RequiredPermissions nvarchar(1000),
 	@Audience nvarchar(255),
 	@Content nvarchar(max),
 	@Settings nvarchar(max),
@@ -22,8 +21,8 @@ BEGIN
 	-- interfering with SELECT statements.
 IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName)
 	BEGIN	
-		INSERT INTO sec.[View](Name,Title,Url,Module,RequiredPermissions,Audience,[Content], Settings,[Type]) 
-		VALUES (@PageName,@Title,@Url,@Module,@RequiredPermissions,@Audience,@Content, @Settings,@Type)
+		INSERT INTO sec.[View](Name,Title,Url,Module,Audience,[Content], Settings,[Type]) 
+		VALUES (@PageName,@Title,@Url,@Module,@Audience,@Content, @Settings,@Type)
 	 -- Insert statements for procedure here
 		SET @pageID = @@IDENTITY
 	END
