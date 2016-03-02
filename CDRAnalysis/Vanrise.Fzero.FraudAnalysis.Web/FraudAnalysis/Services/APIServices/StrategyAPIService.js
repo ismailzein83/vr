@@ -36,11 +36,22 @@
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'AddStrategy'), strategy);
         }
 
+        function HasAddStrategyPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, ['AddStrategy']));
+        }
+
         function UpdateStrategy(strategy) {
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'UpdateStrategy'), strategy);
         }
 
+
+        function HasUpdateStrategyPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, ['UpdateStrategy']));
+        }
+
         return ({
+            HasAddStrategyPermission: HasAddStrategyPermission,
+            HasUpdateStrategyPermission: HasUpdateStrategyPermission,
             GetFilteredStrategies: GetFilteredStrategies,
             GetStrategiesInfo: GetStrategiesInfo,
             GetStrategy: GetStrategy,

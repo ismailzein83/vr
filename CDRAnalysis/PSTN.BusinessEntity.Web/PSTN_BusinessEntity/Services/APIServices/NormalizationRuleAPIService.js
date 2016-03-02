@@ -30,8 +30,16 @@
             return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "AddRule"), rule);
         }
 
+        function HasAddRulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['AddRule']));
+        }
+
         function UpdateRule(rule) {
             return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "UpdateRule"), rule);
+        }
+
+        function HasUpdateRulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['UpdateRule']));
         }
 
         function DeleteRule(ruleId) {
@@ -40,7 +48,14 @@
             });
         }
 
+        function HasDeleteRulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['DeleteRule']));
+        }
+
         return ({
+            HasAddRulePermission: HasAddRulePermission,
+            HasUpdateRulePermission: HasUpdateRulePermission,
+            HasDeleteRulePermission:HasDeleteRulePermission, 
             GetFilteredNormalizationRules: GetFilteredNormalizationRules,
             GetRule: GetRule,
             GetNormalizationRuleAdjustNumberActionSettingsTemplates: GetNormalizationRuleAdjustNumberActionSettingsTemplates,

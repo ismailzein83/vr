@@ -29,21 +29,36 @@
             return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "GetSwitchAssignedDataSources"));
         }
 
+        function AddSwitch(switchObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "AddSwitch"), switchObj);
+        }
+
+        function HasAddSwitchPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['AddSwitch']));
+        }
+
         function UpdateSwitch(switchObj) {
             return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "UpdateSwitch"), switchObj);
         }
 
-        function AddSwitch(switchObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "AddSwitch"), switchObj);
+        function HasUpdateSwitchPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['UpdateSwitch']));
         }
+
         function DeleteSwitch(switchId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "DeleteSwitch"), {
                 switchId: switchId
             });
         }
 
+        function HasDeleteSwitchPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['DeleteSwitch']));
+        }
 
         return ({
+            HasAddSwitchPermission: HasAddSwitchPermission,
+            HasUpdateSwitchPermission: HasUpdateSwitchPermission,
+            HasDeleteSwitchPermission: HasDeleteSwitchPermission,
             GetFilteredSwitches: GetFilteredSwitches,
             GetSwitchById: GetSwitchById,
             GetSwitches: GetSwitches,

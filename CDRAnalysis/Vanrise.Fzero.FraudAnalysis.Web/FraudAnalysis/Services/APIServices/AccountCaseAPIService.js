@@ -20,15 +20,23 @@
         function UpdateAccountCase(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'UpdateAccountCase'), input);
         }
+
+        function HasUpdateAccountCasePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, ['UpdateAccountCase']));
+        }
+
         function GetAccountCase(caseID) {
             return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'GetAccountCase'), {
                 caseID: caseID
             });
         }
+
         function GetFilteredCasesByAccountNumber(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'GetFilteredCasesByAccountNumber'), input);
         }
+
         return {
+            HasUpdateAccountCasePermission: HasUpdateAccountCasePermission,
             GetLastAccountCase: GetLastAccountCase,
             GetFilteredAccountSuspicionSummaries: GetFilteredAccountSuspicionSummaries,
             UpdateAccountCase: UpdateAccountCase,
