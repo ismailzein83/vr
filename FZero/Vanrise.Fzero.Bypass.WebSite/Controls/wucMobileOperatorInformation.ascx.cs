@@ -12,7 +12,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
 {
 
     #region Properties
-   
+
 
     public string MobileOperatorId
     {
@@ -181,11 +181,11 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
     {
         get
         {
-            return txtPrefix.Text ;
+            return txtPrefix.Text;
         }
         set
         {
-            txtPrefix.Text= value;
+            txtPrefix.Text = value;
         }
     }
 
@@ -232,7 +232,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
 
     public void ControlsEnabled(bool Enabled)
     {
-       
+
         txtMobile.ReadOnly = !Enabled;
         txtMobileOperatorConfirmPassword.ReadOnly = !Enabled;
         txtEmail.ReadOnly = !Enabled;
@@ -278,7 +278,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
 
 
-           
+
 
         if (string.IsNullOrWhiteSpace(ProfileName))
         {
@@ -290,7 +290,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
             return Resources.Resources.Websiteisnotavalid;
         }
 
-      
+
 
         if (string.IsNullOrWhiteSpace(Email))
         {
@@ -302,17 +302,17 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
 
 
-        if (string.IsNullOrWhiteSpace(AutoBlockEmail)&& EnableAutoBlock)
+        if (string.IsNullOrWhiteSpace(AutoBlockEmail) && EnableAutoBlock)
         {
             return "AutoBlock email required";
         }
-        else if (!Manager.IsValidEmail(AutoBlockEmail))
+        else if (!Manager.IsValidEmail(AutoBlockEmail) && EnableAutoBlock)
         {
             return "AutoBlock email not valid";
         }
 
 
-        if (! txtUserNameReadOnly)
+        if (!txtUserNameReadOnly)
         {
             if (string.IsNullOrWhiteSpace(MobileOperatorUserName))
             {
@@ -322,9 +322,9 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
 
         if (PasswordVisible)
         {
-          string errorMsg = Manager.IsValidPassword(MobileOperatorPassword, MobileOperatorRetypePassword);
-          if (!string.IsNullOrEmpty(errorMsg))
-              return errorMsg;
+            string errorMsg = Manager.IsValidPassword(MobileOperatorPassword, MobileOperatorRetypePassword);
+            if (!string.IsNullOrEmpty(errorMsg))
+                return errorMsg;
         }
 
         if (string.IsNullOrWhiteSpace(GMT))
@@ -363,7 +363,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
             lblPrefixes.Visible = true;
         }
 
-        
+
         Website = MobileOperator.User.Website.ToText().Trim();
         PasswordVisible = false;
         txtUserNameReadOnly = true;
@@ -379,13 +379,13 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         if (id == 0)
         {
             currentObject = new MobileOperator();
-            
+
         }
         MobileOperator MobileOperator = currentObject;
-     
 
-        if ( currentObject.User == null)
-                 currentObject.User = new User();
+
+        if (currentObject.User == null)
+            currentObject.User = new User();
 
 
 
