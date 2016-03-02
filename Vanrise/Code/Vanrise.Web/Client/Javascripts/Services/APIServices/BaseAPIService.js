@@ -25,13 +25,16 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetri
             urlParameters = {
                 params: params,
             };
-        
-        if (options != undefined && options.responseTypeAsBufferArray) 
-            urlParameters.responseType = 'arraybuffer';
+
+        if (options != undefined) {
+            if (options.responseTypeAsBufferArray != undefined)
+                urlParameters.responseType = 'arraybuffer';
+            if (options.useCache != undefined && options.useCache === true) {}
+                urlParameters.cache = true;
+        }
         
         $http.get(url, urlParameters)
             .success(function (response, status, headers, config) {
-               
                 var returnedResponse;
                 if (options != undefined && options.returnAllResponseParameters) {
                     returnedResponse = {

@@ -29,9 +29,7 @@
         }
 
         function HasPermissionToActions(systemActionNames) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'HasPermissionToActions'), {
-                systemActionNames: systemActionNames
-            });
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'HasPermissionToActions'), { systemActionNames: systemActionNames }, { useCache: true });
         }
     }
 
