@@ -53,7 +53,7 @@ function (UtilsService, customerUserApiService, customerUserService, vRNotificat
         }
        
         function hasDeleteCustomerUserPermission() {
-            return false //customerUserApiService.HasDeleteCustomerUser();
+            return customerUserApiService.HasDeleteCustomerUser();
         }
 
         function unassignUser(object) {
