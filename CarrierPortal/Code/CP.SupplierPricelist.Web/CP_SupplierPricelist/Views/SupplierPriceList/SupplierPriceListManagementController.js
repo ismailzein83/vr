@@ -46,6 +46,9 @@
                         }
                         carrierDirectiveApi.load(obj);
                     }
+                    else {
+                        $scope.carrierAccount = undefined;
+                    }
                     
                 }
                 $scope.onCustomerDirectiveReady = function (api) {
