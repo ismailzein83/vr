@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    SwitchManagementController.$inject = ["$scope", "CDRAnalysis_PSTN_SwitchService", "UtilsService", "VRNotificationService", "VRUIUtilsService"];
+    SwitchManagementController.$inject = ["$scope", "CDRAnalysis_PSTN_SwitchService", "UtilsService", "VRNotificationService", "VRUIUtilsService", "CDRAnalysis_PSTN_SwitchAPIService"];
 
-    function SwitchManagementController($scope, CDRAnalysis_PSTN_SwitchService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function SwitchManagementController($scope, CDRAnalysis_PSTN_SwitchService, UtilsService, VRNotificationService, VRUIUtilsService, CDRAnalysis_PSTN_SwitchAPIService) {
 
     var filter = {};
     var switchAPI;
@@ -13,6 +13,10 @@
     load();
 
     function defineScope() {
+        $scope.hasAddSwitchPermission = function () {
+            return CDRAnalysis_PSTN_SwitchAPIService.HasAddSwitchPermission();
+        };
+
         $scope.searchClicked = function () {
             setFilterObject();
             return switchAPI.retrieveData(filter);

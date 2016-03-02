@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'CDRAnalysis_FA_KindEnum', 'CDRAnalysis_FA_StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService'];
+    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'CDRAnalysis_FA_KindEnum', 'CDRAnalysis_FA_StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService', "CDRAnalysis_PSTN_StrategyAPIService"];
 
-    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, CDRAnalysis_FA_KindEnum, CDRAnalysis_FA_StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService) {
+    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, CDRAnalysis_FA_KindEnum, CDRAnalysis_FA_StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, CDRAnalysis_PSTN_StrategyAPIService) {
         var timeRangeDirectiveAPI;
         var timeRangeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -21,6 +21,11 @@
         load();
 
         function defineScope() {
+
+            $scope.hasAddStrategyPermission = function () {
+                return CDRAnalysis_PSTN_StrategyAPIService.HasAddStrategyPermission();
+            };
+
             $scope.onTimeRangeDirectiveReady = function (api) {
                 timeRangeDirectiveAPI = api;
                 timeRangeDirectiveReadyDeferred.resolve();
