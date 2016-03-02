@@ -82,7 +82,6 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         break;
                     case PriceListProgressResult.FailedWithRetry:
                         priceListStatus = PriceListStatus.SuccessfullyImported;
-                        priceListResult = PriceListResult.Completed;
                         if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
                             pricelist.ResultMaxRetryCount = pricelist.UploadMaxRetryCount + 1;
                         else

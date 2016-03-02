@@ -16,14 +16,15 @@ namespace CP.SupplierPriceList.TOneV1Integration
             PriceListUploadOutput priceListOutput = new PriceListUploadOutput();
             var cont = (PriceListUploadContext)context;
             ServiceActions serviceActions = new ServiceActions(Url, Password, UserName);
-            SupplierPriceListUserInput userInput = new SupplierPriceListUserInput()
+            SupplierPriceListUserInput userInput = new SupplierPriceListUserInput
             {
                 UserId = cont.UserId,
                 PriceListType = cont.PriceListType,
                 FileName = cont.File.Name,
                 EffectiveOnDateTime = cont.EffectiveOnDateTime,
                 ContentFile = cont.File.Content,
-                CarrierAccountId = cont.CarrierAccountId
+                CarrierAccountId = cont.CarrierAccountId,
+                UserEmail = cont.UserMail
             };
             // Vanrise.Common.Compressor.Compress(context.File.Content)
             int insertedId = serviceActions.UploadOnline(userInput);
@@ -44,6 +45,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
             public byte[] ContentFile { get; set; }
             public string FileName { get; set; }
             public DateTime EffectiveOnDateTime { get; set; }
+            public string UserEmail { get; set; }
         }
         public override PriceListProgressOutput GetPriceListProgressOutput(IPriceListProgressContext context)
         {

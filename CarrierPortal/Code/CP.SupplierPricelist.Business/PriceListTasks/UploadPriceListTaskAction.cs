@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Runtime.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace CP.SupplierPricelist.Business.PriceListTasks
 {
@@ -28,15 +30,18 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         PriceListStatus.UploadFailedWithRetry
                     };
             VRFileManager fileManager = new VRFileManager();
+            UserManager userManager = new UserManager();
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
             {
+                User user = userManager.GetUserbyId(pricelist.UserId);
                 var priceListUploadContext = new PriceListUploadContext
                 {
                     UserId = pricelist.UserId,
                     PriceListType = pricelist.PriceListType.ToString(),
                     File = fileManager.GetFile(pricelist.FileId),
                     EffectiveOnDateTime = pricelist.EffectiveOnDate,
-                    CarrierAccountId = pricelist.CarrierAccountId
+                    CarrierAccountId = pricelist.CarrierAccountId,
+                    UserMail = user.Email
                 };
                 PriceListUploadOutput priceListUploadOutput = new PriceListUploadOutput();
                 try
