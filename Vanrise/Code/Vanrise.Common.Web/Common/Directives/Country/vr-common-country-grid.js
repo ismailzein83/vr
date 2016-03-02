@@ -75,8 +75,13 @@ function (UtilsService, VRNotificationService, VRCommon_CountryAPIService, VRCom
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editCountry
+                clicked: editCountry,
+                haspermission: hasEditCountryPermission
             }];
+        }
+
+        function hasEditCountryPermission() {
+            return VRCommon_CountryAPIService.HasEditCountryPermission();
         }
 
         function editCountry(countryObj) {

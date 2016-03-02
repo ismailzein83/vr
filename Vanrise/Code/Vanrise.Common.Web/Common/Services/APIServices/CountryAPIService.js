@@ -45,6 +45,18 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddCountry']));
         }
 
+        function HasUploadCountryPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UploadCountries']));
+        }
+
+        function HasDownloadCountryPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['DownloadCountriesTemplate']));
+        }
+
+        function HasEditCountryPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateCountry']));
+        }
+
         return ({
             GetFilteredCountries: GetFilteredCountries,
             GetCountriesInfo: GetCountriesInfo,
@@ -54,7 +66,10 @@
             GetCountrySourceTemplates: GetCountrySourceTemplates,
             DownloadCountriesTemplate: DownloadCountriesTemplate,
             UploadCountries: UploadCountries,
-            HasAddCountryPermission: HasAddCountryPermission
+            HasAddCountryPermission: HasAddCountryPermission,
+            HasUploadCountryPermission: HasUploadCountryPermission,
+            HasDownloadCountryPermission: HasDownloadCountryPermission,
+            HasEditCountryPermission: HasEditCountryPermission
         });
     }
 

@@ -28,9 +28,17 @@
                 else
                     return insertCountry();
             };
+            $scope.hasSaveCountryPermission = function () {
+                if (editMode) {
+                    return VRCommon_CountryAPIService.HasEditCountryPermission();
+                }
+                else {
+                    return VRCommon_CountryAPIService.HasAddCountryPermission();
+                }
+            };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 

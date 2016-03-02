@@ -2,9 +2,9 @@
 
     "use strict";
 
-    countryManagementController.$inject = ['$scope', 'VRCommon_CountryService'];
+    countryManagementController.$inject = ['$scope', 'VRCommon_CountryService', 'VRCommon_CountryAPIService'];
 
-    function countryManagementController($scope, VRCommon_CountryService) {
+    function countryManagementController($scope, VRCommon_CountryService, VRCommon_CountryAPIService) {
         var gridAPI;
 
         defineScope();
@@ -22,12 +22,20 @@
                 gridAPI = api;
                 api.loadGrid(filter);
             }
+
             $scope.addNewCountry = addNewCountry;
+            $scope.hasAddCountryPermission = function () {
+                return VRCommon_CountryAPIService.HasAddCountryPermission();
+            };
+
 
             $scope.uploadNewCountries = function () {
                
                 VRCommon_CountryService.uploadCountrires(); 
             }
+            $scope.hasUploadCountryPermission = function () {
+                return VRCommon_CountryAPIService.HasUploadCountryPermission();
+            };
         }
 
         function load() {

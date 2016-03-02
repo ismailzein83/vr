@@ -15,12 +15,19 @@
                     UtilsService.downloadFile(response.data, response.headers);
                 });
             }
+            $scope.hasDownloadCountryPermission = function () {
+                return VRCommon_CountryAPIService.HasDownloadCountryPermission();
+            };
+
 
             $scope.uploadCountires = function () {                
                 return VRCommon_CountryAPIService.UploadCountries($scope.file.fileId).then(function (response) {
                     VRNotificationService.showInformation(response)
                 });
             }
+            $scope.hasUploadCountryPermission = function () {
+                return VRCommon_CountryAPIService.HasUploadCountryPermission();
+            };
         }
 
         function load() {

@@ -1,6 +1,6 @@
 ﻿
-app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService','VRCommon_CountryService',
-    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService) {
+app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService','VRCommon_CountryService', 'VRCommon_CityAPIService',
+    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService, VRCommon_CityAPIService) {
         var drillDownDefinitions = [];
         return ({
             editCity: editCity,
@@ -52,7 +52,8 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
                         }
                     };
                     addCity(onCityAdded, countryItem.Entity.CountryId);
-                }
+                },
+                haspermission: hasNewCityPermission
             }];
 
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
@@ -66,6 +67,9 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
         }
-      
+
+        function hasNewCityPermission() {
+            return VRCommon_CityAPIService.HasNewCityPermission();
+        }
 
     }]);
