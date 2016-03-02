@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_CityService', 'UtilsService', 'VRUIUtilsService',
-    function (VRCommon_CityAPIService, VRCommon_CityService, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_CityService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService',
+    function (VRCommon_CityAPIService, VRCommon_CityService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -11,33 +11,19 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                 isrequired: '=',
                 isdisabled: "=",
                 selectedvalues: "=",
-                showaddbutton: '@'
+                showaddbutton: '@',
+                normalcolnum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.datasource = [];
-                ctrl.filter;
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                $scope.addNewCity = function () {
-                    var onCityAdded = function (cityObj) {
-                        ctrl.datasource.push(cityObj.Entity);
-                        if ($attrs.ismultipleselection != undefined)
-                            ctrl.selectedvalues.push(cityObj.Entity);
-                        else
-                            ctrl.selectedvalues = cityObj.Entity;               
-                    };
-                   
-                    if (ctrl.filter != undefined)
-                        var countryId = ctrl.filter.CountryId;
-                    VRCommon_CityService.addCity(onCityAdded, countryId );
-                }
-                $scope.datasource = [];
-                var beCity = new City(ctrl, $scope, $attrs);
-                beCity.initializeController();
-               
+                var cityCtrl = new CityCtrl(ctrl, $scope, $attrs);
+                cityCtrl.initializeController();
+
 
             },
             controllerAs: 'ctrl',
@@ -50,13 +36,14 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                 }
             },
             template: function (element, attrs) {
-                return getBeCityTemplate(attrs);
+                return getCityTemplate(attrs);
             }
 
         };
-        function getBeCityTemplate(attrs) {
+        function getCityTemplate(attrs) {
 
             var multipleselection = "";
+
             var label = "City";
             if (attrs.ismultipleselection != undefined) {
                 label = "Cities";
@@ -65,61 +52,167 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
-                addCliked = 'onaddclicked="addNewCity"';
+                addCliked = 'onaddclicked="ctrl.addNewCity"';
 
-            return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CityId" isrequired="ctrl.isrequired" '
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="City" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-               + '</div>';
+            return '<vr-columns colnum="{{ctrl.normalcolnum}}"><vr-common-country-selector  onselectionchanged="ctrl.onCountrySelectionChanged"  ng-show="ctrl.showCountrySelector" on-ready="ctrl.onCountrySelectorReady"> </vr-common-country-selector> </vr-columns>'
+                + '<vr-columns colnum="{{ctrl.normalcolnum}}" vr-loader="ctrl.isLoadingCities"><vr-select ' + multipleselection + '  datatextfield="Name"   datavaluefield="CityId" isrequired="ctrl.isrequired" '
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onselectionchanged" entityName="City" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+               + '</vr-columns>';
         }
-        function City(ctrl, $scope, attrs) {
+
+        function CityCtrl(ctrl, $scope, attrs) {
+
+            var countrySelectorAPI;
+            var countrySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var selectorAPI;
+            var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var filter;
+            var countryId;
 
             function initializeController() {
-                $scope.onSelectorReady = function(api)
-                {
+
+                ctrl.onCountrySelectorReady = function (api) {
+                    countrySelectorAPI = api;
+                    countrySelectorReadyPromiseDeferred.resolve();
+                };
+
+                ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
+                    selectorReadyPromiseDeferred.resolve();
+
+                };
+
+                UtilsService.waitMultiplePromises([countrySelectorReadyPromiseDeferred.promise, selectorReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
+                });
+
+                ctrl.onCountrySelectionChanged = function () {
+
+                    selectorAPI.clearDataSource();
+
+                    var countryId = countrySelectorAPI.getSelectedIds();
+                    if (countryId != undefined) {
+                        ctrl.isLoadingCities = true;
+                        getCitiesInfo(attrs, ctrl, undefined, filter, countryId).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            ctrl.isLoadingCities = false;
+                        });
+                    }
                 }
+
+                ctrl.addNewCity = function () {
+                    var onCityAdded = function (cityObj) {
+                        ctrl.datasource.push(cityObj.Entity);
+                        if (attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(cityObj.Entity);
+                        else
+                            ctrl.selectedvalues = cityObj.Entity;
+                    };
+
+                    VRCommon_CityService.addCity(onCityAdded, countryId != undefined ? countryId : countrySelectorAPI.getSelectedIds());
+                }
+
             }
 
             function defineAPI() {
                 var api = {};
+
+                api.load = function (payload) {
+                    selectorAPI.clearDataSource();
+                    var selectedIds;
+
+                    if (payload != undefined) {
+                        filter = payload.filter != undefined ? payload.filter : {};
+                        selectedIds = payload.selectedIds;
+                        countryId = payload.countryId;
+                    }
+
+                    if (countryId != undefined) {
+                        ctrl.showCountrySelector = false;
+                        return getCitiesInfo(attrs, ctrl, selectedIds, filter, payload.countryId)
+                    }
+                    else {
+                        ctrl.showCountrySelector = true;
+
+                        if (selectedIds != undefined) {
+                            var selectedCityIds = [];
+
+                            if (attrs.ismultipleselection != undefined)
+                                selectedCityIds = selectedIds;
+                            else
+                                selectedCityIds.push(selectedIds);
+
+                            var loadAllSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                            countrySelectorReadyPromiseDeferred.promise.then(function () {
+
+                                var promises = [];
+                                var loadCountrySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                                promises.push(loadCountrySelectorPromiseDeferred.promise);
+
+                                var loadCitiesPromise = VRCommon_CityAPIService.GetCountryIdByCityIds(selectedCityIds).then(function (response) {
+
+                                    var selectedCountryIds = [];
+
+                                    for (var i = 0 ; i < response.length < 0 ; i++) {
+
+                                        if (selectedCountryIds.indexOf(response[i].CountryId) < 0)
+                                            selectedCountryIds.push(response[i].CountryId);
+                                    }
+
+                                    var countryPayload = {
+                                        selectedIds: selectedCountryIds
+                                    }
+                                    VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countryPayload, loadCountrySelectorPromiseDeferred);
+                                });
+
+                                promises.push(loadCitiesPromise);
+
+                                UtilsService.waitMultiplePromises(promises).then(function () {
+                                    loadAllSectionPromiseDeferred.resolve();
+                                }).catch(function (error) {
+                                    loadAllSectionPromiseDeferred.reject(error);
+                                });
+                            });
+
+                            return loadAllSectionPromiseDeferred.promise;
+                        }
+                        else {
+                            var loadCountrySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                            countrySelectorReadyPromiseDeferred.promise.then(function () {
+                                VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, undefined, loadCountrySelectorPromiseDeferred);
+                            });
+                            return loadCountrySelectorPromiseDeferred.promise;
+                        }
+                    }
+                }
+
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('CityId', attrs, ctrl);
-                }
-                api.load = function (payload) {
-                    var filter;
-                    var selectedIds;
-                    if (payload != undefined) {
-                        filter = payload.filter;
-                        selectedIds = payload.selectedIds;
-                    }
-                    var serializedFilter = {};
-                    ctrl.filter =  undefined
-                    if (filter != undefined) {
-                        ctrl.filter = filter;
-                        serializedFilter = UtilsService.serializetoJson(filter);
-                    }
-                       
-                  
-                      
-                    return getCitiesInfo(attrs, ctrl, selectedIds, serializedFilter);
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+
+                return api;
             }
 
             this.initializeController = initializeController;
 
         }
 
-        function getCitiesInfo(attrs, ctrl, selectedIds, serializedFilter) {
-            
-            return VRCommon_CityAPIService.GetCitiesInfo(serializedFilter).then(function (response) {
-                ctrl.datasource.length = 0;
+        function getCitiesInfo(attrs, ctrl, selectedIds, filter, countryId) {
+
+            var serializedFilter = {};
+            if (filter != undefined) {
+                serializedFilter = UtilsService.serializetoJson(filter);
+            }
+
+            return VRCommon_CityAPIService.GetCitiesInfo(serializedFilter, countryId).then(function (response) {
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);
                 });
@@ -129,6 +222,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                 }
             });
         }
+
         return directiveDefinitionObject;
     }]);
 

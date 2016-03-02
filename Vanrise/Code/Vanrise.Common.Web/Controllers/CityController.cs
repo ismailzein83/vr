@@ -7,6 +7,7 @@ using Vanrise.Entities;
 using Vanrise.Web.Base;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using System.Threading;
 
 namespace Vanrise.Common.Web.Controllers
 {
@@ -25,14 +26,23 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpGet]
         [Route("GetCitiesInfo")]
-        public IEnumerable<CityInfo> GetCitiesInfo(string serializedFilter)
+        public IEnumerable<CityInfo> GetCitiesInfo(string serializedFilter,int countryId)
         {
             CityInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<CityInfoFilter>(serializedFilter) : null;
             CityManager manager = new CityManager();
-            return manager.GetCitiesInfo(filter);
+            return manager.GetCitiesInfo(filter,countryId);
         }
 
-               
+
+        [HttpPost]
+        [Route("GetCountryIdByCityIds")]
+        public IEnumerable<CityInfo> GetCountryIdByCityIds(List<int> cityIds)
+        {
+           CityManager manager = new CityManager();
+           return manager.GetCountryIdByCityIds(cityIds);
+        }
+
+
         [HttpGet]
         [Route("GetCity")]
         public City GetCity(int cityId)
