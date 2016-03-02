@@ -4,42 +4,42 @@
     trunkAPIService.$inject = ['BaseAPIService', 'UtilsService', 'PSTN_BE_ModuleConfig'];
 
     function trunkAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig) {
-
+        var controllerName = 'Trunk';
 
         function GetFilteredTrunks(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetFilteredTrunks"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "GetFilteredTrunks"), input);
 
         }
 
         function GetTrunkById(trunkId) {
 
-            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetTrunkById"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "GetTrunkById"), {
                 trunkId: trunkId
             });
         }
         function GetTrunksInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetTrunksInfo"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "GetTrunksInfo"), {
                 serializedFilter:filter
             });
         }
         function GetTrunksBySwitchIds(trunkFilterObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetTrunksBySwitchIds"), trunkFilterObj);
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "GetTrunksBySwitchIds"), trunkFilterObj);
         }
 
         function GetTrunks() {
-            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "GetTrunks"));
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "GetTrunks"));
         }
 
         function AddTrunk(trunkObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "AddTrunk"), trunkObj);
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "AddTrunk"), trunkObj);
         }
 
         function UpdateTrunk(trunkObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "UpdateTrunk"), trunkObj);
+            return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "UpdateTrunk"), trunkObj);
         }
 
         function DeleteTrunk(trunkId, linkedToTrunkId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, "Trunk", "DeleteTrunk"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "DeleteTrunk"), {
                 trunkId: trunkId,
                 linkedToTrunkId: linkedToTrunkId
             });

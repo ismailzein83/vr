@@ -5,13 +5,17 @@
     AccountCaseHistoryAPIService.$inject = ['BaseAPIService', 'UtilsService', 'CDRAnalysis_FA_ModuleConfig'];
 
     function AccountCaseHistoryAPIService(BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig) {
+
+        var controllerName = 'AccountCaseHistory';
+       
+        function GetFilteredAccountCaseHistoryByCaseID(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, 'GetFilteredAccountCaseHistoryByCaseID'), input);
+        }
+
         return {
             GetFilteredAccountCaseHistoryByCaseID: GetFilteredAccountCaseHistoryByCaseID
         };
 
-        function GetFilteredAccountCaseHistoryByCaseID(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, 'AccountCaseHistory', 'GetFilteredAccountCaseHistoryByCaseID'), input);
-        }
     }
 
     appControllers.service('CDRAnalysis_FA_AccountCaseHistoryAPIService', AccountCaseHistoryAPIService);
