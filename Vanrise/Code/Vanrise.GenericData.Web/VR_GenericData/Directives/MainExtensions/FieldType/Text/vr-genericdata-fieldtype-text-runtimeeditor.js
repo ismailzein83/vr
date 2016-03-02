@@ -6,7 +6,8 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
         scope: {
             onReady: '=',
             selectionmode: '@',
-            normalColNum: '@'
+            normalColNum: '@',
+            isrequired: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -121,6 +122,8 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
     }
 
     function getDirectiveTemplate(attrs) {
+        var isRequired = (attrs.isrequired != undefined) ? 'isrequired="ctrl.isrequired"' : '';
+
         if (attrs.selectionmode == 'single') {
             return getSingleSelectionModeTemplate();
         }
@@ -142,7 +145,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
 
         function getSingleSelectionModeTemplate() {
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                    + '<vr-textbox type="text" label="{{scopeModel.label}}" value="scopeModel.value" onvaluechanged="scopeModel.onValueChange" customvalidate="scopeModel.validateValue()"></vr-textbox>'
+                    + '<vr-textbox type="text" label="{{scopeModel.label}}" value="scopeModel.value" onvaluechanged="scopeModel.onValueChange" customvalidate="scopeModel.validateValue()" ' + isRequired + '></vr-textbox>'
                 + '</vr-columns>';
         }
     }

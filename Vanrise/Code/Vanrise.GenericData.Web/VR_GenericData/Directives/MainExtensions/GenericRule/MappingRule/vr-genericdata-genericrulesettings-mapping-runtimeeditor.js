@@ -6,7 +6,8 @@ app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsSer
             restrict: 'E',
             scope: {
                 onReady: '=',
-                selectionmode: '@'
+                selectionmode: '@',
+                isrequired: '@'
             },
             controller: function ($scope, $element, $attrs) {
 

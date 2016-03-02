@@ -7,15 +7,15 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             scope: {
                 onReady: '=',
                 selectionmode: '@',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
 
                 $scope.scopeModel = {};
-                              
-
+                
                 ctrl.selectedvalues;
                 if ($attrs.selectionmode == "multiple")
                     ctrl.selectedvalues = [];
@@ -57,10 +57,12 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 multipleselection = "ismultipleselection";
             }            
 
+            var isRequired = (attrs.selectionmode == 'single' && attrs.isrequired != undefined) ? 'isrequired="ctrl.isrequired"' : '';
+
             return '<vr-columns colnum="{{scopeModel.calculatedColNum}}">' +
             '<vr-directivewrapper directive="selector.directive" on-ready="selector.onDirectiveReady" '
-                + multipleselection + '></vr-directivewrapper>'
-                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
+                + multipleselection + ' ' + isRequired + '></vr-directivewrapper>'
+                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode">{{dynamic.directive}}<vr-directivewrapper directive="dynamic.directive" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
                 '</vr-section></vr-columns>'
         }
 

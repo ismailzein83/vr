@@ -7,11 +7,14 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
             scope: {
                 onReady: '=',
                 selectionmode: '@',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
+
+                console.log(ctrl.isrequired);
 
                 ctrl.selectedvalues;
                 if (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple")
@@ -52,9 +55,12 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
             //if (attrs.hideremoveicon != undefined)
             //    hideremoveicon = "hideremoveicon";
 
+            //var isRequired = (attrs.selectionmode == "single" && attrs.isrequired != undefined) ? 'isrequired="ctrl.isrequired"' : '';
+            //console.log(isRequired);
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
             '<vr-select datatextfield="Text" label="{{ctrl.label}}" datavaluefield="Value" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" datasource="ctrl.datasource" '
-                + multipleselection + '></vr-select>' +
+                + multipleselection + ' isrequired="ctrl.isrequired"></vr-select>' +
                 '</vr-columns>'
         }
 
