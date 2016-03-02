@@ -301,16 +301,14 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
     function contains(array, obj) {
 
-        if (obj instanceof Object)
-        {
+        if (typeof obj == "number") {
             for (var i = 0; i < array.length; i++) {
                 if (array[i] === obj) {
                     return true;
                 }
             }
         }
-        else
-        {
+        else {
             for (var i = 0; i < array.length; i++) {
                 if (array[i].toLowerCase() === obj.toLowerCase()) {
                     return true;
@@ -549,15 +547,14 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         return 'dyn_' + replaceAll(guid(), '-', '');
     }
 
-    function safeApply(scope,callBack)
-    {
+    function safeApply(scope, callBack) {
         //var phase = scope.$$phase;
         //if (phase == '$apply' || phase == '$digest') {
         //    if (callBack && (typeof (callBack) === 'function')) {
         //        callBack();
         //    }
         //} else {
-          return  scope.$apply(callBack);
+        return scope.$apply(callBack);
         //}
     }
 
