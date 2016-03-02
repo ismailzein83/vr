@@ -8,7 +8,17 @@ namespace Vanrise.Fzero.CDRImport.QueueActivators
     {
         public override void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems)
         {
-            ImportedCDRBatch cdrBatch = (ImportedCDRBatch)item;
+            throw new NotImplementedException();
+        }
+
+        public override void OnDisposed()
+        {
+            
+        }
+
+        public override void ProcessItem(IQueueActivatorExecutionContext context)
+        {
+            ImportedCDRBatch cdrBatch = (ImportedCDRBatch)context.ItemToProcess;
             PSTN.BusinessEntity.Business.NormalizationRuleManager normalizationManager = new PSTN.BusinessEntity.Business.NormalizationRuleManager();
             PSTN.BusinessEntity.Business.SwitchManager switchManager = new PSTN.BusinessEntity.Business.SwitchManager();
             PSTN.BusinessEntity.Entities.Switch currentSwitch;
@@ -36,13 +46,7 @@ namespace Vanrise.Fzero.CDRImport.QueueActivators
                 normalizationManager.SetAreaCode(cdr);
             }
 
-            outputItems.Add("CDR Import", cdrBatch);
+            context.OutputItems.Add("Save Normal CDRs", cdrBatch);
         }
-
-        public override void OnDisposed()
-        {
-            
-        }
-
     }
 }

@@ -164,6 +164,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.QueueActivators">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.FileReceiveAdapter">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.FileReceiveAdapter.dll</HintPath>
     </Reference>
@@ -353,6 +369,10 @@
     <ProjectReference Include="..\Vanrise.Fzero.CDRImport.Entities\Vanrise.Fzero.CDRImport.Entities.csproj">
       <Project>{8ea7f723-709a-480a-9ecf-be40c336a0cb}</Project>
       <Name>Vanrise.Fzero.CDRImport.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.CDRImport.QueueActivators\Vanrise.Fzero.CDRImport.QueueActivators.csproj">
+      <Project>{a48c1e5f-edb2-4a90-9616-09adb4c7a2ed}</Project>
+      <Name>Vanrise.Fzero.CDRImport.QueueActivators</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Aggregates\Vanrise.Fzero.FraudAnalysis.Aggregates.csproj">
       <Project>{d141b2fc-57f5-40ea-b00e-69d953b1582e}</Project>

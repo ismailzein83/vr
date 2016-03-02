@@ -16,7 +16,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
     {
         public BaseQueue<CDRBatch> OutputQueue { get; set; }
 
-        public List<string> NumberPrefix { get; set; }
+        public string NumberPrefix { get; set; }
 
         public DateTime FromDate { get; set; }
 
@@ -38,7 +38,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> OutputQueue { get; set; }
 
-        public InArgument<List<string>> NumberPrefix { get; set; }
+        public InArgument<string> NumberPrefix { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> FromDate { get; set; }

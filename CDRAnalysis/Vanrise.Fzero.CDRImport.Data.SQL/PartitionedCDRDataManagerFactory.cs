@@ -25,6 +25,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             }
             
             var dataManager = Activator.CreateInstance<T>();
+            dataManager.DatabaseSettings = databaseInfo.Settings;
             dataManager.DatabaseName = databaseInfo.Settings.DatabaseName;
             return dataManager;
         }

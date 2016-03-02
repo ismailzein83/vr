@@ -3,6 +3,7 @@
  xmlns:local="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -11,9 +12,8 @@
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
- xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
+ xmlns:vfcba="clr-namespace:Vanrise.Fzero.CDRImport.BP.Activities;assembly=Vanrise.Fzero.CDRImport.BP.Activities"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
- xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vffba:NumberProfilingProcessInput)" />
@@ -75,24 +75,34 @@
       <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
       <Variable x:TypeArguments="x:Int64" Name="totalProcessedCDRs" />
       <Variable x:TypeArguments="x:Int64" Name="totalNumberOfSubscribers" />
-      <Variable x:TypeArguments="scg:List(x:String)" Name="numberPrefixes" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="numberPrefixes" />
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Profiling Started")</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <vffba1:GetNumberPrefixes sap2010:WorkflowViewState.IdRef="GetNumberPrefixes_1">
-      <vffba1:GetNumberPrefixes.NumberPrefixes>
-        <OutArgument x:TypeArguments="scg:List(x:String)">
-          <mca:CSharpReference x:TypeArguments="scg:List(x:String)">numberPrefixes</mca:CSharpReference>
+    <vfcba:GetNumberPrefixes sap2010:WorkflowViewState.IdRef="GetNumberPrefixes_2">
+      <vfcba:GetNumberPrefixes.FromTime>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+        </InArgument>
+      </vfcba:GetNumberPrefixes.FromTime>
+      <vfcba:GetNumberPrefixes.NumberPrefixes>
+        <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(x:String)">numberPrefixes</mca:CSharpReference>
         </OutArgument>
-      </vffba1:GetNumberPrefixes.NumberPrefixes>
-    </vffba1:GetNumberPrefixes>
+      </vfcba:GetNumberPrefixes.NumberPrefixes>
+      <vfcba:GetNumberPrefixes.ToTime>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+        </InArgument>
+      </vfcba:GetNumberPrefixes.ToTime>
+    </vfcba:GetNumberPrefixes>
     <If sap2010:WorkflowViewState.IdRef="If_2">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">numberPrefixes != null &amp;&amp; numberPrefixes.Count &gt; 0</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:Boolean">numberPrefixes != null &amp;&amp; numberPrefixes.Count() &gt; 0</mca:CSharpValue>
         </InArgument>
       </If.Condition>
       <If.Then>
@@ -122,7 +132,7 @@
                   <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                     <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new NumberProfilingForNumberRangeProcessInput
             {
-                NumberPrefixes = new List&lt;string&gt; { numberPrefix},
+                NumberPrefix = numberPrefix,
                 FromDate = Input.FromDate,
                 ToDate = Input.ToDate,
                 Parameters = Input.Parameters,
@@ -209,7 +219,7 @@
                     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
                       <vbw:WriteTrackingMessage.Message>
                         <InArgument x:TypeArguments="x:String">
-                          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefix '{0}' group completed. {1} groups remaining. {2} processed CDRs. {3} totalProcessedCDRs. {4} subscribers. {5} total subscribers", numberPrefix, (numberPrefixes.Count - subProcessByPrefixCompleted), numberProfilingSubProcessOutput.CDRsProcessed, totalProcessedCDRs, numberProfilingSubProcessOutput.NumberOfSubscribers, totalNumberOfSubscribers)</mca:CSharpValue>
+                          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefix '{0}' group completed. {1} groups remaining. {2} processed CDRs. {3} totalProcessedCDRs. {4} subscribers. {5} total subscribers", numberPrefix, (numberPrefixes.Count() - subProcessByPrefixCompleted), numberProfilingSubProcessOutput.CDRsProcessed, totalProcessedCDRs, numberProfilingSubProcessOutput.NumberOfSubscribers, totalNumberOfSubscribers)</mca:CSharpValue>
                         </InArgument>
                       </vbw:WriteTrackingMessage.Message>
                     </vbw:WriteTrackingMessage>
@@ -271,12 +281,12 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Ended Profiling")</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ1Byb2Nlc3MueGFtbCtJA5QCDgIBAVEFVREDAdkBVgVcIAMB0QFdBY0CCgIBCo4CBZICEQIBAlMJU2kDAdoBWQtZaQMB0gFgC2CHAQIBC2QJ3gEbAgEt4QEJiwIUAgESkAIJkAJnAgEDZw9nbAMBygFuDdwBGAIBLuUBC4MCOAIBHIQCC4oCJgIBE3IPeCoDAcABeQ+MASADAawBjQEP2wEUAgEv9AER9AGeAQIBJegBEe8BIAIBHYcCEYcC8wECARR1FXWdAQMBwQF8FYQBIAMBtwGJARWJAYgBAwGuAXmAAXmGAQMBrQGQARWQAbcBAgEwlAETmgEnAwGiAZ0BE9kBHgIBOZcBGZcB2AEDAaMBogEVrQEeAwGLAa4BFbkBHgIBdLoBFcUBHgIBXcYBFdEBHgIBRtIBFdgBMAIBOqoBG6oB0wEDAZcBpQEbpQGoAQMBjAG2ARu2AZoBAwGAAbEBG7EBcgIBdcIBG8IBpgECAWm9ARu9AXgCAV7OARvOAXcCAVLJARvJAXsCAUfVARvVAdgDAgE7</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXE51bWJlclByb2ZpbGluZ1Byb2Nlc3MueGFtbC1JA50CDgIBAVAFVBEDAdABVQVlHwMBvQFmBZYCCgIBCZcCBZsCEQIBAlIJUmkDAdEBXQtdcAMBygFYC1hZAwHEAWILYlcDAb4BaQtpiQECAQptCecBGwIBKOoBCZQCFAIBEJkCCZkCZwIBA3APcGwDAbcBdw3lARgCASnuAQuMAjgCARmNAguTAiYCARF7D4EBKgMBrgGCAQ+VASADAZwBlgEP5AEUAgEq/QER/QGeAQIBIfEBEfgBIAIBGpACEZAC8wECARJ+FX6dAQMBrwGFARWNASADAaYBkgEVkgGIAQMBngGCAYABggGGAQMBnQGZARWZAbcBAgErnQETowEnAwGTAaYBE+IBHgIBM6ABGaAB2AEDAZQBqwEVtgEeAgF+twEVwgEeAgFpwwEVzgEeAgFUzwEV2gEeAgE/2wEV4QEwAgE0swEbswHTAQMBiQGuARuuAagBAgF/vwEbvwGaAQIBdLoBG7oBcgIBassBG8sBpgECAV/GARvGAXgCAVXXARvXAXcCAUrSARvSAXsCAUDeARveAdoDAgE1</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="788,62" />
-      <sap2010:ViewStateData Id="GetNumberPrefixes_1" sap:VirtualizedContainerService.HintSize="788,22" />
+      <sap2010:ViewStateData Id="GetNumberPrefixes_2" sap:VirtualizedContainerService.HintSize="788,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />

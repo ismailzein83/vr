@@ -50,26 +50,18 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
           ,"DestinationAreaCode"
         };
 
-
-        static int s_MaxNumberOfReadThreads;
+        protected CDRDatabaseSettings _databaseSettings;
+        internal CDRDatabaseSettings DatabaseSettings
+        {
+            set
+            {
+                _databaseSettings = value;
+            }
+        }
         public PartitionedCDRDataManager()
             : base("FraudAnalysis_CDRConnStringTemplateKey")
         {
 
-        }
-
-        static PartitionedCDRDataManager()
-        {
-            if (!int.TryParse(ConfigurationManager.AppSettings["FraudAnalysis_CDRReadMaxConcurrentRead"], out s_MaxNumberOfReadThreads))
-                s_MaxNumberOfReadThreads = 1;
-        }
-
-        internal static int MaxNumberOfReadThreads
-        {
-            get
-            {
-                return s_MaxNumberOfReadThreads;
-            }
         }
 
         internal static DateTime GetDBFromTime(DateTime cdrTime)
@@ -94,9 +86,54 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             return dbTimeRanges;
         }
 
+        protected string GetCDRTableName(DateTime cdrTime, string number, bool createIfNotExists)
+        {
+            int prefixLength = this._databaseSettings.PrefixLength;
+            string numberPrefix;
+            if (number.Length == prefixLength)
+                numberPrefix = number;
+            else if (number.Length > prefixLength)
+                numberPrefix = number.Substring(0, prefixLength);
+            else
+                numberPrefix = number.PadRight(prefixLength, '_');
+
+            if (this._databaseSettings.CDRNumberPrefixes.Contains(numberPrefix))
+                return BuildCDRTableName(numberPrefix);
+            else if (createIfNotExists)
+            {
+                DateTime dbFromTime = GetDBFromTime(cdrTime);
+                CDRDatabaseDataManager cdrDatabaseDataManager = new CDRDatabaseDataManager();
+                CDRDatabaseInfo dataBaseInfo = cdrDatabaseDataManager.GetWithLock(dbFromTime);
+                if (dataBaseInfo == null)
+                    throw new NullReferenceException("dataBaseInfo");
+                string cdrTableName = BuildCDRTableName(numberPrefix);
+                if (!dataBaseInfo.Settings.CDRNumberPrefixes.Contains(numberPrefix))
+                {
+                    ExecuteNonQueryText(String.Format(CDR_CREATETABLE_QUERYTEMPLATE, cdrTableName), null);
+                    ExecuteNonQueryText(String.Format(CDR_CREATEINDEXES_QUERYTEMPLATE, cdrTableName), null);
+                    dataBaseInfo.Settings.CDRNumberPrefixes.Add(numberPrefix);
+                    cdrDatabaseDataManager.UpdateSettingsAndUnlock(dbFromTime, dataBaseInfo.Settings);
+                }
+                else
+                {
+                    cdrDatabaseDataManager.Unlock(dbFromTime);
+                }
+                cdrDatabaseDataManager.SetCacheExpired();
+                this._databaseSettings = dataBaseInfo.Settings;
+                return cdrTableName;
+            }
+            else
+                return null;
+        }
+
+        private string BuildCDRTableName(string numberPrefix)
+        {
+            return string.Format("NormalCDR_{0}", numberPrefix);
+        }
+
         protected string GetCDRTableName(DateTime cdrTime)
         {
-            return string.Format("CDR_{0:yyyyMMdd_HH}00", cdrTime);
+            throw new NotSupportedException();
         }
 
         internal string DatabaseName
@@ -128,15 +165,18 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             masterDatabaseManager.DropDatabaseWithForceIfExists(databaseName);
             masterDatabaseManager.CreateDatabase(databaseName, ConfigurationManager.AppSettings["FraudAnalysis_CDRDBDataFileDirectory"], ConfigurationManager.AppSettings["FraudAnalysis_CDRDBLogFileDirectory"]);
             toTime = fromTime.AddDays(1);
-            DateTime currentHour = fromTime;
-            while (currentHour < toTime)
+            CDRDatabaseDataManager cdrDatabaseDataManager = new CDRDatabaseDataManager();
+            var lastDatabase = cdrDatabaseDataManager.GetLastReadyDatabase();
+            if(lastDatabase != null && lastDatabase.Settings.PrefixLength == _databaseSettings.PrefixLength)
             {
-                string cdrTableName = GetCDRTableName(currentHour);
-                ExecuteNonQueryText(String.Format(CDR_CREATETABLE_QUERYTEMPLATE, cdrTableName), null);
-                ExecuteNonQueryText(String.Format(CDR_CREATEINDEXES_QUERYTEMPLATE, cdrTableName), null);
-                currentHour = currentHour.AddHours(1);
+                foreach(var prefix in lastDatabase.Settings.CDRNumberPrefixes)
+                {
+                    string cdrTableName = BuildCDRTableName(prefix);
+                    ExecuteNonQueryText(String.Format(CDR_CREATETABLE_QUERYTEMPLATE, cdrTableName), null);
+                    ExecuteNonQueryText(String.Format(CDR_CREATEINDEXES_QUERYTEMPLATE, cdrTableName), null);
+                    this._databaseSettings.CDRNumberPrefixes.Add(prefix);
+                }
             }
-
         }
 
         #region Constants
@@ -185,7 +225,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public void WriteRecordToStream(CDR record, object dbApplyStream)
         {
             PartitionedCDRDBApplyStream allStreams = dbApplyStream as PartitionedCDRDBApplyStream;
-            string tableName = GetCDRTableName(record.ConnectDateTime);
+            string tableName = GetCDRTableName(record.ConnectDateTime, record.MSISDN, true);
             StreamForBulkInsert matchStream;
             if(!allStreams.StreamsByTableNames.TryGetValue(tableName, out matchStream))
             {
@@ -240,39 +280,27 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public void ApplyCDRsToDB(object preparedCDRs)
         {
             PartitionedCDRDBApplyStream allStreams = preparedCDRs as PartitionedCDRDBApplyStream;
-            //foreach (var entry in allStreams.StreamsByTableNames)
-            Parallel.ForEach(allStreams.StreamsByTableNames, (entry) =>
+            foreach (var entry in allStreams.StreamsByTableNames)
             {
                 InsertBulkToTable(new StreamBulkInsertInfo
                 {
                     TableName = entry.Key,
                     ColumnNames = s_cdrColumns,
                     Stream = entry.Value,
-                    TabLock = false,
+                    TabLock = true,
                     KeepIdentity = false,
                     FieldSeparator = '^'
                 });
-            });
+            }
         }
 
-        public void LoadCDR(DateTime fromTime, IEnumerable<string> numberPrefixes, Action<CDR> onCDRReady)
+        public void LoadCDR(DateTime fromTime, string numberPrefix, Action<CDR> onCDRReady)
         {
             string filter = null;
-            if (numberPrefixes != null && numberPrefixes.Count() > 0)
-            {
-                StringBuilder filterBuilder = new StringBuilder();
-                foreach(var numberPrefix in numberPrefixes)
-                {
-                    if (filterBuilder.Length == 0)
-                        filterBuilder.Append(" WHERE ");
-                    else
-                        filterBuilder.Append(" OR ");
-                    filterBuilder.AppendFormat(" MSISDN LIKE '{0}%' ", numberPrefix);
-                }
-                filter = filterBuilder.ToString();
-            } 
+            if (numberPrefix != null)
+                numberPrefix = String.Format(" WHERE MSISDN LIKE '{0}%'", numberPrefix);
 
-            string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) {2}", CDR_COLUMNS, GetCDRTableName(fromTime), filter);
+            string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) {2}", CDR_COLUMNS, GetCDRTableName(fromTime, numberPrefix, false), filter);
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
@@ -288,7 +316,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             string query = String.Format(@"INSERT INTO {0}
                                         SELECT {1} 
                                         FROM {2} WITH(NOLOCK)
-                                        WHERE [MSISDN] = @MSISDN", tempTableName, CDR_COLUMNS, GetCDRTableName(fromTime));
+                                        WHERE [MSISDN] = @MSISDN", tempTableName, CDR_COLUMNS, GetCDRTableName(fromTime, msisdn, false));
 
             ExecuteNonQueryText(query, (cmd) =>
                 {

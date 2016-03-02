@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Runtime;
+using Vanrise.Common;
 
 namespace Vanrise.Fzero.CDRImport.Data.SQL
 {
@@ -27,11 +28,11 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         static CDRDatabaseDataManager()
         {
-            
+
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["FraudAnalysis_CDRDatabaseLockInterval"], out s_TryLockInterval))
-                s_TryLockInterval = new TimeSpan(0, 0, 2);
+                s_TryLockInterval = new TimeSpan(0, 0, 0, 0, 300);
             if (!int.TryParse(ConfigurationManager.AppSettings["FraudAnalysis_CDRDatabaseLockMaxRetryCount"], out s_lockMaxRetryCount))
-                s_lockMaxRetryCount = 3;
+                s_lockMaxRetryCount = 30;
         }
 
         internal void CreateNewDBIfNotCreated(DateTime fromTime)
@@ -40,19 +41,25 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             while(retryCount < s_lockMaxRetryCount)
             {
                 int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-                IEnumerable<int> runningRuntimeProcessesIds = _runningProcessManager.GetCachedRunningProcesses(new TimeSpan(0, 0, 15)).Select(itm => itm.ProcessId);
+                IEnumerable<int> runningRuntimeProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
                 bool isLocked = (bool)ExecuteScalarSP("FraudAnalysis.sp_CDRDatabase_TryLockIfDBNotReady", fromTime, currentRuntimeProcessId, runningRuntimeProcessesIds != null ? String.Join(",", runningRuntimeProcessesIds) : null);
                 if (isLocked)
                 {
+                    int prefixLength;
+                    if (!int.TryParse(ConfigurationManager.AppSettings["FraudAnalysis_CDRNormalPrefixLength"], out prefixLength))
+                        prefixLength = 5;
+                    CDRDatabaseSettings databaseSettings = new CDRDatabaseSettings
+                    {                      
+                        PrefixLength = prefixLength,
+                        CDRNumberPrefixes = new HashSet<string>()
+                    };
                     PartitionedCDRDataManager baseCDRDataManager = new PartitionedCDRDataManager();
+                    baseCDRDataManager.DatabaseSettings = databaseSettings;
                     string databaseName;
                     DateTime toTime;
                     baseCDRDataManager.CreateDatabase(fromTime, out databaseName, out toTime);
-                    CDRDatabaseSettings settings = new CDRDatabaseSettings
-                    {
-                        DatabaseName = databaseName
-                    };
-                    ExecuteNonQuerySP("[FraudAnalysis].[sp_CDRDatabase_SetReadyAndUnlock]", fromTime, toTime, Vanrise.Common.Serializer.Serialize(settings, true));
+                    databaseSettings.DatabaseName = databaseName;
+                    ExecuteNonQuerySP("[FraudAnalysis].[sp_CDRDatabase_SetReadyAndUnlock]", fromTime, toTime, Vanrise.Common.Serializer.Serialize(databaseSettings, true));
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     return;
                 }
@@ -60,18 +67,16 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 {
                     Thread.Sleep(s_TryLockInterval);
                     object isReadyObject = ExecuteScalarSP("[FraudAnalysis].[sp_CDRDatabase_GetIsReady]", fromTime);
-                    if (isReadyObject != null && (bool)isReadyObject)
+                    if (isReadyObject != null && isReadyObject != DBNull.Value && (bool)isReadyObject)
                         return;
                     else
                     {
+                        retryCount++;
                         if (retryCount >= s_lockMaxRetryCount)
                             throw new Exception(String.Format("Max Retry Count '{0}' reached when trying to create CDR database of Start Time '{1}'", retryCount, fromTime));
-                        retryCount++;
                     }
                 }
             }
-           
-            
         }
 
         internal bool TryGetReadyDatabase(DateTime fromTime, out CDRDatabaseInfo databaseInfo)
@@ -86,6 +91,47 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             }
         }
 
+        internal CDRDatabaseInfo GetLastReadyDatabase()
+        {
+            var cachedDbs = GetAllCachedReadyDatabases();
+            if (cachedDbs != null)
+                return cachedDbs.Values.LastOrDefault();
+            else
+                return null;
+        }
+
+        internal CDRDatabaseInfo GetWithLock(DateTime fromTime)
+        {
+            int retryCount = 0;
+            while (retryCount < s_lockMaxRetryCount)
+            {
+                int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
+                IEnumerable<int> runningRuntimeProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
+                CDRDatabaseInfo cdrDataBaseInfo = GetItemSP("[FraudAnalysis].[sp_CDRDatabase_TryGetWithLock]", CDRDatabaseInfoMapper, fromTime, currentRuntimeProcessId, runningRuntimeProcessesIds != null ? String.Join(",", runningRuntimeProcessesIds) : null);
+                if (cdrDataBaseInfo != null)
+                {
+                    return cdrDataBaseInfo;
+                }
+                else
+                {
+                    retryCount++;
+                    if (retryCount >= s_lockMaxRetryCount)
+                        throw new Exception(String.Format("Max Retry Count '{0}' reached when trying to lock and get CDR database of Start Time '{1}'", retryCount, fromTime));
+                }
+            }
+            return null;
+        }
+
+        internal void UpdateSettingsAndUnlock(DateTime fromTime, CDRDatabaseSettings settings)
+        {
+            ExecuteNonQuerySP("[FraudAnalysis].[sp_CDRDatabase_UpdateSettingsAndUnLock]", fromTime, Vanrise.Common.Serializer.Serialize(settings, true));
+        }
+
+        internal void Unlock(DateTime fromTime)
+        {
+            ExecuteNonQuerySP("[FraudAnalysis].[sp_CDRDatabase_UnLock]", fromTime);
+        }
+
         Dictionary<DateTime, CDRDatabaseInfo> GetAllCachedReadyDatabases()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCachedDatabases",
@@ -97,6 +143,15 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     else
                         return null;
                 });
+        }
+
+        internal IEnumerable<CDRDatabaseInfo> GetReadyDatabases(DateTime fromTime, DateTime toTime)
+        {
+            var cachedDBs = GetAllCachedReadyDatabases();
+            if (cachedDBs != null)
+                return cachedDBs.Values.FindAllRecords(itm => itm.FromTime >= fromTime && itm.FromTime < toTime);
+            else
+                return null;
         }
 
         private CDRDatabaseInfo CDRDatabaseInfoMapper(System.Data.IDataReader reader)
@@ -117,6 +172,10 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             return base.IsDataUpdated("FraudAnalysis.CDRDatabase", ref updateHandle);
         }
 
+        internal void SetCacheExpired()
+        {
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             CDRDatabaseDataManager _dataManager = new CDRDatabaseDataManager();
@@ -131,4 +190,5 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         
     }
+
 }

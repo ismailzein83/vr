@@ -81,13 +81,13 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public void ApplyCDRsToDB(object preparedCDRs)
         {
             CDRDBApplyStream cdrDBApplyStream = preparedCDRs as CDRDBApplyStream;
-            Parallel.ForEach(cdrDBApplyStream.PartitionedStreamsByDBFromTime.Values, (entry) =>
+            foreach(var stream in cdrDBApplyStream.PartitionedStreamsByDBFromTime.Values)
             {
-                entry.DataManager.ApplyCDRsToDB(entry.DBApplyStream);
-            });
+                stream.DataManager.ApplyCDRsToDB(stream.DBApplyStream);
+            };
         }
 
-        public void LoadCDR(List<string> numberPrefix, DateTime from, DateTime to, int? batchSize, Action<CDR> onCDRReady)
+        public void LoadCDR(string numberPrefix, DateTime from, DateTime to, int? batchSize, Action<CDR> onCDRReady)
         {
             var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(from, to);
             foreach (var dbTimeRange in dbTimeRanges)
@@ -119,15 +119,14 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     if(dbTimeRanges != null)
                     {
                         ExecuteNonQueryText(String.Format(PartitionedCDRDataManager.CDR_CREATETABLE_QUERYTEMPLATE, tempTableName), null);
-                        //foreach(var dbTimeRange in dbTimeRanges)
-                        Parallel.ForEach(dbTimeRanges, (dbTimeRange) =>
+                        foreach(var dbTimeRange in dbTimeRanges)
                         {
                             var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedCDRDataManager>(dbTimeRange.FromTime, true);
                             if (dataManager != null)
                             {
                                 dataManager.InsertCDRsByMSISDNToTempTable(tempTableName, input.Query.MSISDN, dbTimeRange.FromTime, dbTimeRange.ToTime);
                             }
-                        });
+                        }
                     }
                 }
             };
@@ -153,5 +152,30 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         }
 
         #endregion
+
+
+        public IEnumerable<string> GetNumberPrefixes(DateTime fromTime, DateTime toTime)
+        {
+            CDRDatabaseDataManager cdrDatabaseDataManager = new CDRDatabaseDataManager();
+            var databases = cdrDatabaseDataManager.GetReadyDatabases(fromTime, toTime);
+            if (databases != null)
+            {
+                HashSet<string> prefixes = new HashSet<string>();
+                foreach (var db in databases)
+                {
+                    if (db.Settings == null)
+                        throw new NullReferenceException("db.Settings");
+                    if (db.Settings == null)
+                        throw new NullReferenceException("db.Settings.CDRNumberPrefixes");
+                    foreach (var prefix in db.Settings.CDRNumberPrefixes)
+                    {
+                        prefixes.Add(prefix);
+                    }
+                }
+                return prefixes;
+            }
+            else
+                return null;
+        }
     }
 }

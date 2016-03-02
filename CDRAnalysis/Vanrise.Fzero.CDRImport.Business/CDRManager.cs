@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.Fzero.CDRImport.Data;
 using Vanrise.Fzero.CDRImport.Entities;
@@ -7,6 +8,12 @@ namespace Vanrise.Fzero.CDRImport.Business
 {
     public class CDRManager
     {
+        public IEnumerable<string> GetNumberPrefixes(DateTime fromTime, DateTime toTime)
+        {
+            ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
+            return dataManager.GetNumberPrefixes(fromTime, toTime);
+        }
+
         public IDataRetrievalResult<CDRDetail> GetCDRs(DataRetrievalInput<CDRQuery> input)
         {
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();

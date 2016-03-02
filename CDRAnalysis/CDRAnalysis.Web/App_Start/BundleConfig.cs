@@ -18,7 +18,9 @@ namespace CDRAnalysis.Web
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Integration", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/PSTN_BusinessEntity", "*.js", true));
+                "~/Client/Modules/PSTN_BusinessEntity", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/Queueing", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/VR_GenericData", "*.js", true));
         }
     }
 }

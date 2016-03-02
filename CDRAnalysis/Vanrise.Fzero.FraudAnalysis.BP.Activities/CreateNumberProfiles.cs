@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public bool IncludeWhiteList { get; set; }
 
-        public List<string> NumberPrefixes { get; set; }
+        public string NumberPrefix { get; set; }
 
 
     }
@@ -50,7 +50,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         #region Arguments
 
-        public InArgument<List<string>> NumberPrefixes { get; set; }
+        public InArgument<string> NumberPrefix { get; set; }
 
 
         [RequiredArgument]
@@ -131,7 +131,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             return new CreateNumberProfilesInput
             {
-                NumberPrefixes = this.NumberPrefixes.Get(context),
+                NumberPrefix = this.NumberPrefix.Get(context),
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 FromDate = this.FromDate.Get(context),
@@ -149,7 +149,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             if (!inputArgument.IncludeWhiteList)
             {
                 AccountStatusManager accountStatusManager = new AccountStatusManager();
-                var whiteListNumbers = accountStatusManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList }, inputArgument.NumberPrefixes);
+                var whiteListNumbers = accountStatusManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList }, new List<string> { inputArgument.NumberPrefix });
                 whiteListNumbersHashSet = new HashSet<string>(whiteListNumbers);
             }
 

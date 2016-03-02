@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Vanrise.Fzero.CDRImport.Entities
 {
@@ -14,5 +15,9 @@ namespace Vanrise.Fzero.CDRImport.Entities
     public class CDRDatabaseSettings
     {
         public string DatabaseName { get; set; }
+
+        public int PrefixLength { get; set; }
+
+        public HashSet<string> CDRNumberPrefixes { get; set; } 
     }
 }

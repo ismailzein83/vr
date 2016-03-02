@@ -15,8 +15,10 @@ namespace Vanrise.Fzero.CDRImport.Data
 
         void SaveCDRsToDB(List<CDR> cdrs);
 
-        void LoadCDR(List<string> numberPrefix, DateTime from, DateTime to, int? batchSize, Action<CDR> onCDRReady);
+        void LoadCDR(string numberPrefix, DateTime from, DateTime to, int? batchSize, Action<CDR> onCDRReady);
 
         BigResult<CDR> GetCDRs(Vanrise.Entities.DataRetrievalInput<CDRQuery> input);
+
+        IEnumerable<string> GetNumberPrefixes(DateTime fromTime, DateTime toTime);
     }
 }

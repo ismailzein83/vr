@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplyUnifiedCDRsToDB.cs" />
+    <Compile Include="GetNumberPrefixes.cs" />
     <Compile Include="LoadCDRs.cs" />
     <Compile Include="UnifyRepeatedCDRs.cs" />
     <Compile Include="LoadStagingCDRs.cs" />

@@ -8,7 +8,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
     {
         public NumberProfileParameters Parameters { get; set; }
 
-        public List<string> NumberPrefixes { get; set; }
+        public string NumberPrefix { get; set; }
 
         public DateTime FromDate { get; set; }
 
@@ -20,7 +20,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Number profiling For Number Prefixes '{0}', Time Range ({1:dd-MMM-yy HH:mm} to {2:dd-MMM-yy HH:mm})", string.Join(",", this.NumberPrefixes), this.FromDate, this.ToDate);
+            return String.Format("Number profiling For Number Prefix '{0}', Time Range ({1:dd-MMM-yy HH:mm} to {2:dd-MMM-yy HH:mm})", this.NumberPrefix, this.FromDate, this.ToDate);
         }
     }
 }

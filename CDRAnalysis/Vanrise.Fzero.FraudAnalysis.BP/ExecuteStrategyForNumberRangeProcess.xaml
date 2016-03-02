@@ -114,7 +114,6 @@
               <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="preparedNumberProfilesQueue" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareStrategyExecutionItemStatus" />
               <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareNumberProfilesStatus" />
-              <Variable x:TypeArguments="scg:List(x:String)" Name="numberOfPrefixes" />
             </Parallel.Variables>
             <vfcba:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_2">
               <vfcba:LoadCDRs.FromDate>
@@ -128,8 +127,8 @@
                 </OutArgument>
               </vfcba:LoadCDRs.NumberOfCDRs>
               <vfcba:LoadCDRs.NumberPrefix>
-                <InArgument x:TypeArguments="scg:List(x:String)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.NumberPrefixes</mca:CSharpValue>
+                <InArgument x:TypeArguments="x:String">
+                  <mca:CSharpValue x:TypeArguments="x:String">Input.NumberPrefix</mca:CSharpValue>
                 </InArgument>
               </vfcba:LoadCDRs.NumberPrefix>
               <vfcba:LoadCDRs.OutputQueue>
@@ -169,11 +168,11 @@
                   <mca:CSharpReference x:TypeArguments="x:Int64">numberOfSubscribers</mca:CSharpReference>
                 </OutArgument>
               </vffba1:CreateNumberProfiles.NumberOfSubscribers>
-              <vffba1:CreateNumberProfiles.NumberPrefixes>
-                <InArgument x:TypeArguments="scg:List(x:String)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.NumberPrefixes</mca:CSharpValue>
+              <vffba1:CreateNumberProfiles.NumberPrefix>
+                <InArgument x:TypeArguments="x:String">
+                  <mca:CSharpValue x:TypeArguments="x:String">Input.NumberPrefix</mca:CSharpValue>
                 </InArgument>
-              </vffba1:CreateNumberProfiles.NumberPrefixes>
+              </vffba1:CreateNumberProfiles.NumberPrefix>
               <vffba1:CreateNumberProfiles.OutputQueue>
                 <InOutArgument x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vffe:NumberProfileBatch)">numberProfileQueue</mca:CSharpReference>

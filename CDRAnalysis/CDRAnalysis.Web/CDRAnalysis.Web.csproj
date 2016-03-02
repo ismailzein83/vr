@@ -198,6 +198,28 @@
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.QueueActivators">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Web">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.dll</HintPath>
     </Reference>
@@ -222,12 +244,23 @@
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Queueing.Data.SQL">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing.Web">
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
