@@ -7,22 +7,12 @@ namespace CP.SupplierPricelist.Entities
     {
         [Description("New")]
         New = 0,
-
         [Description("Successfully Imported")]
         SuccessfullyImported = 10,
-
-        [Description("Failed")]
-        UploadFailedWithRetry = 20,
-        WaitingReview = 30,
-        GetStatusFailedWithRetry = 40,
-
-        Completed = 50,
-
-        [Description("Suspended")]
-        UploadFailedWithNoRetry = 60,
-
-        [Description("Suspended")]
-        GetStatusFailedWithNoRetry = 70
+        WaitingReview = 20,
+        Completed = 30,
+        Suspended = 40,
+        Failed= 50
     }
 
     public enum PriceListType

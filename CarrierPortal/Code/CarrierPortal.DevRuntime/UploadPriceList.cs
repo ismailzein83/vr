@@ -67,10 +67,10 @@ namespace CarrierPortal.DevRuntime
                                     priceListstatus = PriceListStatus.SuccessfullyImported;
                                     break;
                                 case PriceListSupplierUploadResult.Failed:
-                                    priceListstatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                                    priceListstatus = PriceListStatus.Failed;
                                     break;
                                 default:
-                                    priceListstatus = PriceListStatus.GetStatusFailedWithRetry;
+                                    priceListstatus = PriceListStatus.Suspended;
                                     break;
                             }
                             manager.UpdatePriceListUpload(pricelist.PriceListId, (int)priceListstatus,

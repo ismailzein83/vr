@@ -27,7 +27,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
                     {
                         PriceListStatus.New,
-                        PriceListStatus.UploadFailedWithRetry
+                        PriceListStatus.Suspended
                     };
             VRFileManager fileManager = new VRFileManager();
             UserManager userManager = new UserManager();
@@ -61,19 +61,19 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         priceListstatus = PriceListStatus.SuccessfullyImported;
                         break;
                     case PriceListSupplierUploadResult.Failed:
-                        priceListstatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                        priceListstatus = PriceListStatus.Failed;
                         break;
                     case PriceListSupplierUploadResult.FailedWithRetry:
                         {
-                            priceListstatus = PriceListStatus.UploadFailedWithRetry;
+                            priceListstatus = PriceListStatus.Suspended;
                             if (pricelist.UploadMaxRetryCount < uploadPriceListTaskActionArgument.MaximumRetryCount)
                                 pricelist.UploadMaxRetryCount = pricelist.UploadMaxRetryCount + 1;
                             else
-                                priceListstatus = PriceListStatus.UploadFailedWithNoRetry;
+                                priceListstatus = PriceListStatus.Failed;
                             break;
                         }
                     default:
-                        priceListstatus = PriceListStatus.GetStatusFailedWithRetry;
+                        priceListstatus = PriceListStatus.Suspended;
                         break;
                 }
                 manager.UpdatePriceListUpload(pricelist.PriceListId, (int)priceListstatus, priceListUploadOutput.UploadPriceListInformation, (int)pricelist.UploadMaxRetryCount);

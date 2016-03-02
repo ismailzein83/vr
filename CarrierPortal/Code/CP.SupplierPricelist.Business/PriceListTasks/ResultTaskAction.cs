@@ -23,7 +23,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
             {
                 PriceListStatus.SuccessfullyImported,
-                PriceListStatus.GetStatusFailedWithRetry
+                PriceListStatus.Suspended
             };
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
             {
@@ -38,65 +38,25 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 }
                 catch (Exception)
                 {
-                    priceListProgressOutput.PriceListProgress = PriceListProgressResult.FailedWithRetry;
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Suspended;
                     priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
+                    if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
+                        pricelist.ResultMaxRetryCount = pricelist.ResultMaxRetryCount + 1;
+                    else
+                    {
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.Failed;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Completed;
+                    }
                 }
 
                 if (pricelist.Status != priceListProgressOutput.PriceListStatus &&
                     pricelist.Result != priceListProgressOutput.PriceListResult)
                 {
-                    switch (priceListProgressOutput.PriceListResult)
-                    {
-                        case PriceListResult.Approved:
-                            break;
-                        case PriceListResult.NotCompleted:
-                            break;
-                        case PriceListResult.PartiallyApproved:
-                            break;
-                        case PriceListResult.Rejected:
-                            break;
-                    }
                     if (priceListProgressOutput.AlertFile != null)
                         pricelist.FileId = SaveLog(priceListProgressOutput.AlertFile, priceListProgressOutput.AlerFileName);
                     manager.UpdatePriceListProgress(pricelist.PriceListId, (int)priceListProgressOutput.PriceListStatus,
                   (int)priceListProgressOutput.PriceListResult, pricelist.ResultMaxRetryCount, pricelist.AlertMessage);
                 }
-                else
-                {
-                    priceListProgressOutput.PriceListProgress = PriceListProgressResult.ProgressNotChanged;
-                }
-
-                PriceListResult priceListResult = PriceListResult.NotCompleted;
-                PriceListStatus priceListStatus = PriceListStatus.SuccessfullyImported;
-                switch (priceListProgressOutput.PriceListProgress)
-                {
-                    case PriceListProgressResult.Completed:
-                        break;
-                    case PriceListProgressResult.FailedWithNoRetry:
-                        priceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
-                        priceListResult = PriceListResult.Rejected;
-                        break;
-                    case PriceListProgressResult.ProgressChanged:
-                        break;
-                    case PriceListProgressResult.ProgressNotChanged:
-                        break;
-                    case PriceListProgressResult.FailedWithRetry:
-                        priceListStatus = PriceListStatus.SuccessfullyImported;
-                        if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
-                            pricelist.ResultMaxRetryCount = pricelist.UploadMaxRetryCount + 1;
-                        else
-                        {
-                            priceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
-                            priceListResult = PriceListResult.NotCompleted;
-                        }
-                        break;
-                    default:
-                        priceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
-                        priceListResult = PriceListResult.NotCompleted;
-                        break;
-                }
-
-
             }
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
             {

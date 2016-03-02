@@ -74,14 +74,14 @@ namespace CP.SupplierPriceList.TOneV1Integration
                     priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     break;
                 case QueueItemStatus.SuspendedDueToBusinessErrors:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                     priceListProgressOutput.AlertMessage = "Suspended due to business errors";
                     priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
                     priceListProgressOutput.AlerFileName = uploadInformation.FileName;
                     break;
                 case QueueItemStatus.SuspendedToProcessingErrors:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.GetStatusFailedWithNoRetry;
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                     priceListProgressOutput.AlertMessage = "Suspended due to processing errors";
                     priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
@@ -157,7 +157,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
                         break;
                     }
                 default:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.GetStatusFailedWithRetry;
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                     break;
             }
