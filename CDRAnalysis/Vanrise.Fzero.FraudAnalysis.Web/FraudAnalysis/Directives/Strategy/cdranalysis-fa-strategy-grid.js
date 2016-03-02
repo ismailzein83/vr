@@ -52,7 +52,7 @@
 
             function defineMenuActions() {
 
-                $scope.menuActions = [
+                ctrl.menuActions = [
                    {
                        name: "Edit",
                        clicked: editStrategy,
@@ -63,7 +63,7 @@
                 function hasUpdateStrategyPermission() {
                     return StrategyAPIService.HasUpdateStrategyPermission();
                 }
-               
+
             }
 
 
