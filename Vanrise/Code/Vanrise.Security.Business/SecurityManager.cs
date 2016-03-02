@@ -210,10 +210,10 @@ namespace Vanrise.Security.Business
             {
                 SystemAction systemAction = systemActionManager.GetSystemAction(systemActionName.Trim());
                 
-                if (systemAction == null)
-                    throw new NullReferenceException(String.Format("System action '{0}' was not found", systemActionName));
+                //if (systemAction == null)
+                //    throw new NullReferenceException(String.Format("System action '{0}' was not found", systemActionName));
 
-                if (systemAction.RequiredPermissions != null)
+                if (systemAction != null && systemAction.RequiredPermissions != null)
                 {
                     requiredPermissions.Add(systemAction.RequiredPermissions);
                 }
