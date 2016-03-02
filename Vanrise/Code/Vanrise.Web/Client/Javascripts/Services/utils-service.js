@@ -301,16 +301,16 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
     function contains(array, obj) {
 
-        if (typeof obj == "number") {
+        if (typeof obj == "string") {
             for (var i = 0; i < array.length; i++) {
-                if (array[i] === obj) {
+                if (array[i].toLowerCase() === obj.toLowerCase()) {
                     return true;
                 }
             }
         }
         else {
             for (var i = 0; i < array.length; i++) {
-                if (array[i].toLowerCase() === obj.toLowerCase()) {
+                if (array[i] === obj) {
                     return true;
                 }
             }
