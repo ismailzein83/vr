@@ -25,22 +25,22 @@
             return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "AddBrand"), brandObj);
         }
 
+        function HasAddSwitchBrandPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['AddBrand']));
+        }
+
         function UpdateBrand(brandObj) {
             return BaseAPIService.post(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "UpdateBrand"), brandObj);
+        }
+
+        function HasUpdateSwitchBrandPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['UpdateBrand']));
         }
 
         function DeleteBrand(brandId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "DeleteBrand"), {
                 brandId: brandId
             });
-        }
-
-        function HasAddSwitchBrandPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['AddBrand']));
-        }
-
-        function HasUpdateSwitchBrandPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['UpdateBrand']));
         }
 
         function HasDeleteSwitchBrandPermission() {
