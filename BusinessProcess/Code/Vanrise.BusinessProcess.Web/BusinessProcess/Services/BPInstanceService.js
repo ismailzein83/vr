@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum','VRModalService'];
+    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService'];
     function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService) {
         function getStatusColor(status) {
 
@@ -27,9 +27,25 @@
             });
         };
 
+        function startNewInstance(bpDefinitionObj, onProcessInputCreated, onProcessInputsCreated) {
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.title = 'Start New Instance';
+                modalScope.onProcessInputCreated = onProcessInputCreated;
+                modalScope.onProcessInputsCreated = onProcessInputsCreated;
+            };
+            var parameters = {
+                BPDefinitionID: bpDefinitionObj.Entity.BPDefinitionID
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/NewInstanceEditor/NewInstanceEditor.html', parameters, modalSettings);
+        }
+
         return ({
             getStatusColor: getStatusColor,
-            openProcessTracking: openProcessTracking
+            openProcessTracking: openProcessTracking,
+            startNewInstance: startNewInstance
         });
     }
     appControllers.service('BusinessProcess_BPInstanceService', BusinessProcess_BPInstanceService);

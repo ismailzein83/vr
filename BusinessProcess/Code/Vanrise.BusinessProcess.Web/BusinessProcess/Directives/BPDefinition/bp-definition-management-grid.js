@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService", "VRNotificationService", "BusinessProcess_BPDefinitionAPIService", "BusinessProcess_BPDefinitionService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPDefinitionService, VRUIUtilsService) {
+app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService", "VRNotificationService", "BusinessProcess_BPDefinitionAPIService", "BusinessProcess_BPInstanceService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -95,7 +95,14 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
         }
 
         function startNewInstance(bpDefinitionObj) {
-            BusinessProcess_BPDefinitionService.startNewInstance(bpDefinitionObj);
+            var onProcessInputCreated = function (processInstanceId) {
+                BusinessProcess_BPInstanceService.openProcessTracking(processInstanceId);
+            };
+
+            var onProcessInputsCreated = function () {
+                VRNotificationService.showSuccess("Bussiness Instances created succesfully;  Open nested grid to see the created instances");
+            };
+            BusinessProcess_BPInstanceService.startNewInstance(bpDefinitionObj, onProcessInputCreated, onProcessInputsCreated);
         }
     }
 

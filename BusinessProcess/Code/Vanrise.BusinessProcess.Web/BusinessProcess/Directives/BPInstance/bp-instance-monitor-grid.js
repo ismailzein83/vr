@@ -56,6 +56,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                        $scope.isLoading = true;
                         input.LastUpdateHandle = undefined;
                         input.LessThanID = undefined;
                         input.NbOfRows = undefined;
@@ -73,7 +74,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                     timer = setInterval(function () {
                         if (!isGettingData) {
                             var pageInfo = gridAPI.getPageInfo();
-                            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
+                            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
                             BusinessProcess_BPInstanceAPIService.GetUpdated(input).then(function (response) {
                                 isGettingData = true;
                                 if (response != undefined) {
@@ -113,6 +114,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                             })
                             .finally(function () {
                                 isGettingData = false;
+                                $scope.isLoading = false;
                             });
                         }
                     }, 2000);
