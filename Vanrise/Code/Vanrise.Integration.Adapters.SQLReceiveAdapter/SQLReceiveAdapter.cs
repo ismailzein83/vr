@@ -113,7 +113,7 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
             }
 
             bool hasMoreRecords = false;
-            bool anotherInstanceStarted = false;
+            bool anotherInstanceIsStarted = false;
             do
             {
                 DateTime batchReadStart = DateTime.Now;
@@ -141,13 +141,11 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
                     matchCurrentRange.RangeEnd = rangeToRead.RangeEnd;
                     return state;
                 });
-
-                if (hasMoreRecords && !anotherInstanceStarted)
+                if (!anotherInstanceIsStarted)
                 {
                     context.StartNewInstanceIfAllowed();
-                    anotherInstanceStarted = true;
+                    anotherInstanceIsStarted = true;
                 }
-
             } while (hasMoreRecords);
 
             data.OnDisposed();
@@ -343,10 +341,9 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
                 if (rangeToRead == null)
                 {
                     DBAdapterRangeState lastRange = rangesState.Ranges.LastOrDefault();
-                    if(rangesState.Ranges.Count <= context.AdapterArgument.MaxParallelRuntimeInstances)
-                        if (lastRange == null //no ranges yes (first time import)
+                    if(lastRange == null //no ranges yet (first time import)
                             ||
-                            (lastRange.RangeEnd != null))
+                            lastRange.LastImportedId != null)//last range has imported data
                     {                        
                         rangeToRead = CreateRange(dbAdapterArgument, rangesState);
                         rangesState.Ranges.Add(rangeToRead);
