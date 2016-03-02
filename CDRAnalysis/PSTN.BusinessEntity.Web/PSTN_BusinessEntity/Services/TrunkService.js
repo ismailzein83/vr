@@ -61,9 +61,10 @@
         function registerDrillDownToSwitch() {
             var drillDownDefinition = {};
 
-            drillDownDefinition.title = "Truks";
+            drillDownDefinition.title = "Trunks";
             drillDownDefinition.directive = "cdranalysis-pstn-trunk-grid";
             drillDownDefinition.parentMenuActions = [{
+                haspermission: hasAddTrunkPermission,
                 name: "New Trunk",
                 clicked: function (switchItem) {
                     if (drillDownDefinition.setTabSelected != undefined)
@@ -77,6 +78,9 @@
                     addTrunk(onTrunkAdded, switchItem.Entity.SwitchId);
                 }
             }];
+            function hasAddTrunkPermission() {
+                return CDRAnalysis_PSTN_TrunkAPIService.HasAddTrunkPermission();
+            }
             drillDownDefinition.loadDirective = function (directiveAPI, switchItem) {
                switchItem.trunkGridAPI = directiveAPI;
                 var query = {
