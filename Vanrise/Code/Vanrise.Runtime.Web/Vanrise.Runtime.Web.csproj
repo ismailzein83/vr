@@ -122,8 +122,6 @@
     <Content Include="Runtime\Services\SchedulerTaskService.js" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplate.html" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplateController.js" />
-    <Content Include="Runtime\Views\NewSchedulerTaskEditor\NewSchedulerTaskEditor.html" />
-    <Content Include="Runtime\Views\NewSchedulerTaskEditor\NewSchedulerTaskEditorController.js" />
     <Content Include="Runtime\Views\SchedulerTaskEditor.html" />
     <Content Include="Runtime\Views\SchedulerTaskEditorController.js" />
     <Content Include="Runtime\Views\SchedulerTaskManagement.html" />

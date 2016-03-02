@@ -1,6 +1,6 @@
-﻿SchedulerTaskManagementController.$inject = ['$scope', 'VR_Runtime_SchedulerTaskService'];
+﻿SchedulerTaskManagementController.$inject = ['$scope', 'VR_Runtime_SchedulerTaskService', 'SchedulerTaskAPIService'];
 
-function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskService) {
+function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskService, SchedulerTaskAPIService) {
 
     var gridAPI;
 
@@ -26,6 +26,10 @@ function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskServi
         };
 
         $scope.AddNewTask = addTask;
+
+        $scope.hasAddSchedulerTaskPermission = function () {
+            return SchedulerTaskAPIService.HasAddSchedulerTaskPermission();
+        };
     }
 
     function load() {

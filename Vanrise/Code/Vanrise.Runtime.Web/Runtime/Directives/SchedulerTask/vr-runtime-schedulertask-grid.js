@@ -59,9 +59,13 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editTask
+                clicked: editTask,
+                haspermission: hasUpdateSchedulerTaskPermission
+            }];
+
+            function hasUpdateSchedulerTaskPermission() {
+                return SchedulerTaskAPIService.HasUpdateSchedulerTaskPermission();
             }
-            ];
         }
 
         function editTask(task) {

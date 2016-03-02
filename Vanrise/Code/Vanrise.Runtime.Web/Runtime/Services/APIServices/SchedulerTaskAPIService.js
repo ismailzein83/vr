@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SchedulerTaskAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Runtime_ModuleConfig'];
+    SchedulerTaskAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Runtime_ModuleConfig', 'SecurityService'];
 
-    function SchedulerTaskAPIService(BaseAPIService, UtilsService, VR_Runtime_ModuleConfig) {
+    function SchedulerTaskAPIService(BaseAPIService, UtilsService, VR_Runtime_ModuleConfig, SecurityService) {
         var controllerName = 'SchedulerTask';
 
         return ({
@@ -15,11 +15,13 @@
             AddTask: AddTask,
             UpdateTask: UpdateTask,
             DeleteTask: DeleteTask,
-            GetSchedulesInfo: GetSchedulesInfo
+            GetSchedulesInfo: GetSchedulesInfo,
+            HasAddSchedulerTaskPermission: HasAddSchedulerTaskPermission,
+            HasUpdateSchedulerTaskPermission: HasUpdateSchedulerTaskPermission
         });
 
         function GetFilteredTasks(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetFilteredTasks'));
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetFilteredTasks'), input);
         }
 
         function GetTask(taskId) {
@@ -52,6 +54,14 @@
 
         function GetSchedulesInfo() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetSchedulesInfo'));
+        }
+
+        function HasAddSchedulerTaskPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Runtime_ModuleConfig.moduleName, controllerName, ['AddTask']));
+        }
+
+        function HasUpdateSchedulerTaskPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Runtime_ModuleConfig.moduleName, controllerName, ['UpdateTask']));
         }
     }
 
