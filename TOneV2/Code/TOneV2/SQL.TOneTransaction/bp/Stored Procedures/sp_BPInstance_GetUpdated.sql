@@ -9,10 +9,13 @@ BEGIN
             INSERT INTO @BPDefinitionIDsTable (BPDefinitionId)
             select Convert(int, ParsedString) from [bp].[ParseStringList](@DefinitionsId)
 
-	IF (@TimestampAfter IS NULL)--If First Time Query, get the Last Test Calls
-		SELECT @TimestampAfter = MIN([timestamp])
-		FROM (SELECT TOP (@NbOfRows+1) [timestamp] FROM [BP].[BPInstance] WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) ORDER BY ID DESC) LastTestCalls
-	
+	IF (@TimestampAfter IS NULL)
+	Begin
+		Declare @Count int = (Select COUNT(1) from [BP].[BPInstance] WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)));
+		if(@Count>@NbOfRows)
+			SELECT @TimestampAfter = MIN([timestamp])
+			FROM (SELECT TOP (@NbOfRows+1) [timestamp] FROM [BP].[BPInstance] WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) ORDER BY ID DESC) LastTestCalls
+	END 
 	SELECT TOP (@NbOfRows) [ID]
 	  ,[Title]
       ,[ParentID]
@@ -30,8 +33,8 @@ BEGIN
 	INTO #Result
 	FROM [BP].[BPInstance] 
 	WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) 
-	AND ([timestamp] > @TimestampAfter) --ONLY Updated records
-	
+	AND ([timestamp] > @TimestampAfter or @TimestampAfter is null) --ONLY Updated records
+	Order BY ID DESC
 	
 	SELECT * FROM #Result
 	ORDER BY ID DESC
