@@ -17,12 +17,11 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
 
         function initializeController() {
             $scope.pricelist = [];
-            var isGettingData ;
+            var isGettingData;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
                 var timer = setInterval(function () {
-                    if (!$scope.isGettingData) {
+                    if (!isGettingData) {
                         isGettingData = true;
                         var pageInfo = gridAPI.getPageInfo();
                         input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
@@ -55,12 +54,8 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
                                         }
                                         //////////////////////////////////////////////////////////////
                                     }
-                                    if (input.LastUpdateHandle == undefined) {
-                                        $scope.pricelist.push(pricelist);
-                                    }
-                                    else
-                                        if (!findpricelist)
-                                            $scope.pricelist.unshift(pricelist);
+                                    if (!findpricelist)
+                                        $scope.pricelist.unshift(pricelist);
                                 }
                             }
                             input.LastUpdateHandle = response.MaxTimeStamp;
