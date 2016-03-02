@@ -351,3 +351,43 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [common].[TemplateConfig] off;
+
+--[sec].[SystemAction]------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[SystemAction] on;
+;with cte_data([ID],[Name],[RequiredPermissions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'VR_Sec/Users/GetFilteredUsers','Users:View'),
+(2,'VR_Sec/Users/GetMembers','Users:View'),
+(3,'VR_Sec/Users/GetUserbyId','Users:View'),
+(4,'VR_Sec/Users/UpdateUser','Users:Edit'),
+(5,'VR_Sec/Users/AddUser','Users:Add'),
+(6,'VR_Sec/Users/ResetPassword','Users:Reset Password'),
+(7,'VR_Sec/Group/AddGroup','Groups:Add'),
+(8,'VR_Sec/BusinessEntityNode/ToggleBreakInheritance','System Entities:Assign Permissions'),
+(9,'VR_Sec/Permission/UpdatePermissions','System Entities:Assign Permissions'),
+(10,'VR_Sec/View/AddView','Dynamic Pages:Add'),
+(11,'WhS_BE/RoutingProduct/GetFilteredRoutingProducts',null),
+(12,'WhS_BE/RoutingProduct/AddRoutingProduct',null),
+(13,'WhS_Routing/RouteRule/AddRule',null),
+(14,'WhS_BE/CarrierAccount/GetFilteredCarrierAccounts','Carrier:View'),
+(15,'WhS_BE/CarrierAccount/UpdateCarrierAccount','Carrier:Edit'),
+(16,'WhS_BE/CarrierAccount/AddCarrierAccount','Carrier:Add'),
+(17,'VRCommon/Country/AddCountry','Users:Add'),
+(18,'VR_Sec/Group/GetFilteredGroups','Groups:View')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[RequiredPermissions]))
+merge	[sec].[SystemAction] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
+when not matched by target then
+	insert([ID],[Name],[RequiredPermissions])
+	values(s.[ID],s.[Name],s.[RequiredPermissions])
+when not matched by source then
+	delete;
+set identity_insert [sec].[SystemAction] off;

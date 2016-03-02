@@ -226,8 +226,63 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [common].[TemplateConfig] off;
-
-
-
-
-
+--[sec].[SystemAction]------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[SystemAction] on;
+;with cte_data([ID],[Name],[RequiredPermissions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'QM_CLITester/TestCall/AddNewTestCall','Management: Add'),
+(2,'QM_CLITester/TestCall/GetUpdated','Management: View'),
+(3,'QM_CLITester/TestCall/GetTotalCallsByUserId',null),
+(4,'QM_CLITester/TestCall/GetBeforeId','Management: View'),
+(5,'QM_CLITester/TestCall/GetFilteredTestCalls','Management: View'),
+(6,'QM_CLITester/TestCall/GetInitiateTestTemplates',null),
+(7,'QM_CLITester/TestCall/GetTestProgressTemplates',null),
+(8,'QM_CLITester/Profile/GetFilteredProfiles',null),
+(9,'QM_CLITester/Profile/GetProfile',null),
+(10,'QM_CLITester/Profile/GetProfilesInfo',null),
+(11,'QM_CLITester/Profile/UpdateProfile',null),
+(12,'QM_CLITester/Profile/GetProfileSourceTemplates',null),
+(13,'QM_BE/Zone/GetZoneSourceTemplates',null),
+(14,'QM_BE/Zone/GetZonesInfo',null),
+(15,'QM_BE/Zone/GetFilteredZones',null),
+(16,'QM_BE/Supplier/GetFilteredSuppliers',null),
+(17,'QM_BE/Supplier/GetSupplier',null),
+(18,'QM_BE/Supplier/GetSuppliersInfo',null),
+(19,'QM_BE/Supplier/AddSupplier',null),
+(20,'QM_BE/Supplier/UpdateSupplier',null),
+(21,'QM_BE/Supplier/GetSupplierSourceTemplates',null),
+(22,'QM_BE/Supplier/DownloadImportSupplierTemplate',null),
+(23,'QM_BE/Supplier/UploadSuppliersList',null),
+(24,'VR_Runtime/SchedulerTask/GetFilteredTasks',null),
+(25,'VR_Runtime/SchedulerTask/GetTask',null),
+(26,'VR_Runtime/SchedulerTask/GetSchedulesInfo',null),
+(27,'VR_Runtime/SchedulerTask/GetSchedulerTaskTriggerTypes',null),
+(28,'VR_Runtime/SchedulerTask/GetSchedulerTaskActionTypes',null),
+(29,'VR_Runtime/SchedulerTask/AddTask',null),
+(30,'VR_Runtime/SchedulerTask/UpdateTask',null),
+(31,'VR_Runtime/SchedulerTask/DeleteTask',null),
+(32,'VRCommon/Country/GetFilteredCountries',null),
+(33,'VRCommon/Country/GetCountriesInfo',null),
+(34,'VRCommon/Country/GetCountry',null),
+(35,'VRCommon/Country/AddCountry',null),
+(36,'VRCommon/Country/UpdateCountry',null),
+(37,'VRCommon/Country/GetCountrySourceTemplates',null),
+(38,'VRCommon/Country/DownloadCountriesTemplate',null),
+(39,'VRCommon/Country/UploadCountries',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[RequiredPermissions]))
+merge	[sec].[SystemAction] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
+when not matched by target then
+	insert([ID],[Name],[RequiredPermissions])
+	values(s.[ID],s.[Name],s.[RequiredPermissions])
+when not matched by source then
+	delete;
+set identity_insert [sec].[SystemAction] off;

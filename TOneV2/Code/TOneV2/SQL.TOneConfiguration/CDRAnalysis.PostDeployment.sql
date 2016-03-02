@@ -286,9 +286,80 @@ when not matched by target then
 when not matched by source then
 	delete;
 set identity_insert [rules].[RuleType] off;
-
-
-
-
-
-
+--[sec].[SystemAction]------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[SystemAction] on;
+;with cte_data([ID],[Name],[RequiredPermissions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'VR_Sec/Users/GetFilteredUsers','Users:View'),
+(2,'VR_Sec/Users/GetMembers','Users:View'),
+(3,'VR_Sec/Users/GetUserbyId','Users:View'),
+(4,'VR_Sec/Users/UpdateUser','Users:Edit'),
+(5,'VR_Sec/Users/AddUser','Users:Add'),
+(6,'VR_Sec/Users/ResetPassword','Users:Reset Password'),
+(7,'VR_Sec/Permission/UpdatePermissions','System Entities:Assign Permissions'),
+(8,'PSTN_BE/SwitchBrand/GetFilteredBrands',null),
+(9,'PSTN_BE/SwitchBrand/GetBrands',null),
+(10,'PSTN_BE/SwitchBrand/GetBrandById',null),
+(11,'PSTN_BE/SwitchBrand/UpdateBrand',null),
+(12,'PSTN_BE/SwitchBrand/AddBrand',null),
+(13,'PSTN_BE/SwitchBrand/DeleteBrand',null),
+(14,'PSTN_BE/Switch/GetFilteredSwitches',null),
+(15,'PSTN_BE/Switch/GetSwitchById',null),
+(16,'PSTN_BE/Switch/GetSwitches',null),
+(17,'PSTN_BE/Switch/GetSwitchesInfo',null),
+(18,'PSTN_BE/Switch/GetSwitchAssignedDataSources',null),
+(19,'PSTN_BE/Switch/UpdateSwitch',null),
+(20,'PSTN_BE/Switch/AddSwitch',null),
+(21,'PSTN_BE/Switch/DeleteSwitch',null),
+(22,'PSTN_BE/Trunk/GetFilteredTrunks',null),
+(23,'PSTN_BE/Trunk/GetTrunkById',null),
+(24,'PSTN_BE/Trunk/GetTrunksBySwitchIds',null),
+(25,'PSTN_BE/Trunk/GetTrunks',null),
+(26,'PSTN_BE/Trunk/AddTrunk',null),
+(27,'PSTN_BE/Trunk/UpdateTrunk',null),
+(28,'PSTN_BE/Trunk/DeleteTrunk',null),
+(29,'PSTN_BE/Trunk/GetTrunksInfo',null),
+(30,'PSTN_BE/NormalizationRule/GetFilteredNormalizationRules',null),
+(31,'PSTN_BE/NormalizationRule/GetRule',null),
+(32,'PSTN_BE/NormalizationRule/GetNormalizationRuleAdjustNumberActionSettingsTemplates',null),
+(33,'PSTN_BE/NormalizationRule/GetNormalizationRuleSetAreaSettingsTemplates',null),
+(34,'PSTN_BE/NormalizationRule/AddRule',null),
+(35,'PSTN_BE/NormalizationRule/UpdateRule',null),
+(36,'PSTN_BE/NormalizationRule/DeleteRule',null),
+(37,'Fzero_FraudAnalysis/AccountCase/GetLastAccountCase',null),
+(38,'Fzero_FraudAnalysis/AccountCase/GetFilteredAccountSuspicionSummaries',null),
+(39,'Fzero_FraudAnalysis/AccountCase/UpdateAccountCase',null),
+(40,'Fzero_FraudAnalysis/AccountCase/GetAccountCase',null),
+(41,'Fzero_FraudAnalysis/AccountCase/GetFilteredCasesByAccountNumber',null),
+(42,'Fzero_FraudAnalysis/AccountCaseHistory/GetFilteredAccountCaseHistoryByCaseID',null),
+(43,'api/CDR/GetCDRs',null),
+(44,'Fzero_FraudAnalysis/NumberPrefix/GetPrefixes',null),
+(45,'Fzero_FraudAnalysis/NumberPrefix/UpdatePrefixes',null),
+(46,'Fzero_FraudAnalysis/NumberProfile/GetNumberProfiles',null),
+(47,'Fzero_FraudAnalysis/RelatedNumber/GetRelatedNumbersByAccountNumber',null),
+(48,'Fzero_FraudAnalysis/Strategy/GetFilteredStrategies',null),
+(49,'Fzero_FraudAnalysis/Strategy/GetStrategiesInfo',null),
+(50,'Fzero_FraudAnalysis/Strategy/GetStrategy',null),
+(51,'Fzero_FraudAnalysis/Strategy/GetFilters',null),
+(52,'Fzero_FraudAnalysis/Strategy/GetAggregates',null),
+(53,'Fzero_FraudAnalysis/Strategy/AddStrategy',null),
+(54,'Fzero_FraudAnalysis/Strategy/UpdateStrategy',null),
+(55,'Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions',null),
+(56,'Fzero_FraudAnalysis/StrategyExecutionItem/GetFilteredDetailsByCaseID',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[RequiredPermissions]))
+merge	[sec].[SystemAction] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
+when not matched by target then
+	insert([ID],[Name],[RequiredPermissions])
+	values(s.[ID],s.[Name],s.[RequiredPermissions])
+when not matched by source then
+	delete;
+set identity_insert [sec].[SystemAction] off;
