@@ -1,9 +1,9 @@
 ﻿"use strict";
 
-StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService',
+StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'CDRAnalysis_FA_StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService',
     'BusinessProcessAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService'];
 
-function StrategyExecutionManagementController($scope, VRUIUtilsService, StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService,
+function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService,
     UtilsService, VRValidationService, BusinessProcessAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum, WhS_BP_CreateProcessResultEnum, BusinessProcessService) {
 
     var strategySelectorAPI;
@@ -73,7 +73,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, Strateg
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-            return StrategyExecutionAPIService.GetFilteredStrategyExecutions(dataRetrievalInput)
+            return CDRAnalysis_FA_StrategyExecutionAPIService.GetFilteredStrategyExecutions(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 });
