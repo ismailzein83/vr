@@ -87,13 +87,23 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
             $scope.gridMenuActions = [
                {
                    name: "Edit",
-                   clicked: editNormalizationRule
+                   clicked: editNormalizationRule,
+                   haspermission: hasUpdateRulePermission
                },
                {
                    name: "Delete",
-                   clicked: deleteNormalizationRule
+                   clicked: deleteNormalizationRule,
+                   haspermission: hasDeleteRulePermission
                }
             ];
+
+            function hasUpdateRulePermission() {
+                return NormalizationRuleAPIService.HasUpdateRulePermission();
+            }
+
+            function hasDeleteRulePermission() {
+                return NormalizationRuleAPIService.HasDeleteRulePermission();
+            }
         }
     }
 

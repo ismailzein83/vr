@@ -49,13 +49,23 @@
                 defineMenuActions();
             }
 
+
             function defineMenuActions() {
-                ctrl.menuActions = [{
-                    name: 'Edit',
-                    permissions: 'Root/Strategy Module:Edit',
-                    clicked: editStrategy
-                }];
+
+                $scope.menuActions = [
+                   {
+                       name: "Edit",
+                       clicked: editNormalizationRule,
+                       haspermission: hasUpdateStrategyPermission
+                   }
+                ];
+
+                function hasUpdateStrategyPermission() {
+                    return StrategyAPIService.HasUpdateStrategyPermission();
+                }
+               
             }
+
 
             function getDirectiveAPI() {
                 var directiveAPI = {};

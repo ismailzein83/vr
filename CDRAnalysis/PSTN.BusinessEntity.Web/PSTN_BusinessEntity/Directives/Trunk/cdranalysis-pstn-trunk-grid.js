@@ -86,13 +86,23 @@ app.directive("cdranalysisPstnTrunkGrid", ["CDRAnalysis_PSTN_TrunkService", "CDR
             $scope.gridMenuActions = [
                {
                    name: "Edit",
-                   clicked: editTrunk
+                   clicked: editTrunk,
+                   haspermission: hasUpdateTrunkPermission
                },
                {
                    name: "Delete",
-                   clicked: deleteTrunk
+                   clicked: deleteTrunk,
+                   haspermission: hasDeleteTrunkPermission
                }
             ];
+
+            function hasUpdateTrunkPermission() {
+                return CDRAnalysis_PSTN_TrunkAPIService.HasUpdateTrunkPermission();
+            }
+
+            function hasDeleteTrunkPermission() {
+                return CDRAnalysis_PSTN_TrunkAPIService.HasDeleteTrunkPermission();
+            }
         }
         function editTrunk(gridObj) {
 

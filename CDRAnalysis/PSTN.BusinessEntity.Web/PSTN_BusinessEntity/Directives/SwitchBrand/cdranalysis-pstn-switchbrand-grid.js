@@ -67,13 +67,23 @@ app.directive("cdranalysisPstnSwitchbrandGrid", ["CDRAnalysis_PSTN_SwitchBrandSe
             $scope.gridMenuActions = [
                {
                    name: "Edit",
-                   clicked: editSwitchBrand
+                   clicked: editSwitchBrand,
+                   haspermission: hasUpdateSwitchBrandPermission
                },
                {
                    name: "Delete",
-                   clicked: deleteSwitchBrand
+                   clicked: deleteSwitchBrand,
+                   haspermission: hasDeleteSwitchBrandPermission
                }
             ];
+
+            function hasUpdateSwitchBrandPermission() {
+                return CDRAnalysis_PSTN_SwitchBrandAPIService.HasUpdateSwitchBrandPermission();
+            }
+            function hasDeleteSwitchBrandPermission() {
+                return CDRAnalysis_PSTN_SwitchBrandAPIService.HasDeleteSwitchBrandPermission();
+            }
+
         }
 
 

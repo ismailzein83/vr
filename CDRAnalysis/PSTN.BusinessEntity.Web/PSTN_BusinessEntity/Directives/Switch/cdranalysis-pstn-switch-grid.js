@@ -79,13 +79,23 @@ app.directive("cdranalysisPstnSwitchGrid", ["CDRAnalysis_PSTN_SwitchService", "C
             $scope.gridMenuActions = [
                {
                    name: "Edit",
-                   clicked: editSwitch
+                   clicked: editSwitch,
+                   haspermission: hasUpdateSwitchPermission
                },
                {
                    name: "Delete",
-                   clicked: deleteSwitch
+                   clicked: deleteSwitch,
+                   haspermission: hasDeleteSwitchPermission
                }
             ];
+
+            function hasUpdateSwitchPermission() {
+                return CDRAnalysis_PSTN_SwitchAPIService.HasUpdateSwitchPermission();
+            }
+            function hasDeleteSwitchPermission() {
+                return CDRAnalysis_PSTN_SwitchAPIService.HasDeleteSwitchPermission();
+            }
+
         }
 
 
