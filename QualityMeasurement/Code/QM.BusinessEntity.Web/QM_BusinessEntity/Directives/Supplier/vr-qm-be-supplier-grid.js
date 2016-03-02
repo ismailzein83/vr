@@ -68,8 +68,13 @@ function (UtilsService, VRNotificationService, QM_BE_SupplierAPIService, QM_BE_S
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editSupplier,
+                haspermission: hasEditSupplierPermission
             }
             ];
+        }
+
+        function hasEditSupplierPermission() {
+            return QM_BE_SupplierAPIService.HasEditSupplierPermission();
         }
 
         function editSupplier(supplier) {

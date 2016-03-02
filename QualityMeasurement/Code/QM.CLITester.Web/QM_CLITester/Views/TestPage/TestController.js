@@ -2,9 +2,9 @@
 
     "use strict";
 
-    testController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'VRNotificationService', 'UtilsService', 'QM_BE_SupplierAPIService', 'VRUIUtilsService'];
+    testController.$inject = ['$scope', 'Qm_CliTester_TestCallAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function testController($scope, Qm_CliTester_TestCallAPIService, VRNotificationService, UtilsService, QM_BE_SupplierAPIService, VRUIUtilsService) {
+    function testController($scope, Qm_CliTester_TestCallAPIService, VRNotificationService, UtilsService, VRUIUtilsService) {
         var gridAPI;
 
         var profileDirectiveAPI;
@@ -24,6 +24,10 @@
 
         function defineScope() {
             $scope.addNewTestCall = addNewTestCall;
+            $scope.hasAddTestCallPermission = function () {
+                return Qm_CliTester_TestCallAPIService.HasAddTestCallPermission();
+            };
+
             $scope.countries = [];
             $scope.zones = [];
             $scope.suppliers = [];

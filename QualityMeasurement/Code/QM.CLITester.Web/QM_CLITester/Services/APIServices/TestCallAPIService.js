@@ -1,45 +1,47 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    TestCallAPIService.$inject = ['BaseAPIService', 'UtilsService', 'QM_CLITester_ModuleConfig'];
+    TestCallAPIService.$inject = ['BaseAPIService', 'UtilsService', 'QM_CLITester_ModuleConfig', 'SecurityService'];
 
-    function TestCallAPIService(BaseAPIService, UtilsService, QM_CLITester_ModuleConfig) {
+    function TestCallAPIService(BaseAPIService, UtilsService, QM_CLITester_ModuleConfig, SecurityService) {
+
+        var controllerName = 'TestCall';
 
         function AddNewTestCall(testCallObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "AddNewTestCall"), testCallObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "AddNewTestCall"), testCallObject);
         }
 
-        //function ReTestCall(testCallObject) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "ReTestCall"), testCallObject);
-        //}
-
         function GetUpdated(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetUpdated"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetUpdated"), input);
         }
 
         function GetBeforeId(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetBeforeId"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetBeforeId"), input);
         }
 
         function GetTotalCallsByUserId() {
-            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetTotalCallsByUserId"));
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetTotalCallsByUserId"));
         }
 
         function GetFilteredTestCalls(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetFilteredTestCalls"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetFilteredTestCalls"), input);
         }
 
         function GetInitiateTestTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetInitiateTestTemplates"));
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetInitiateTestTemplates"));
         }
 
         function GetTestProgressTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, "TestCall", "GetTestProgressTemplates"));
+            return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetTestProgressTemplates"));
         }
 
+        function HasAddTestCallPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(QM_CLITester_ModuleConfig.moduleName, controllerName, ['AddNewTestCall']));
+
+        }
         return ({
             AddNewTestCall: AddNewTestCall,
-            //ReTestCall: ReTestCall,
+            HasAddTestCallPermission: HasAddTestCallPermission,
             GetFilteredTestCalls: GetFilteredTestCalls,
             GetTotalCallsByUserId: GetTotalCallsByUserId,
             GetInitiateTestTemplates: GetInitiateTestTemplates,

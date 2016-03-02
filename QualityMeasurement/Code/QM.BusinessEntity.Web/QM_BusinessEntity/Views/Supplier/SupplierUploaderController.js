@@ -10,7 +10,14 @@
 
         function defineScope() {
             $scope.uploadSuppliers = UploadSuppliers;
+            $scope.hasUploadSupplierPermission = function () {
+                return QM_BE_SupplierAPIService.HasUploadSupplierPermission();
+            };
+
             $scope.downloadTemplate = DownloadTemplate;
+            $scope.hasDownloadSupplierPermission = function () {
+                return QM_BE_SupplierAPIService.HasDownloadSupplierPermission();
+            };
         }
 
         function load() {

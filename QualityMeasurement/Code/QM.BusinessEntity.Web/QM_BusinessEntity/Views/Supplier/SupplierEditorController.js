@@ -40,9 +40,17 @@
                     return insertSupplier();
                 }
             };
+            $scope.hasSaveSupplierPermission = function () {
+                if (isEditMode) {
+                    return QM_BE_SupplierAPIService.HasEditSupplierPermission();
+                }
+                else {
+                    return QM_BE_SupplierAPIService.HasAddSupplierPermission();
+                }
+            };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
         }

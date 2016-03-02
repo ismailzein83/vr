@@ -15,8 +15,8 @@
         <div>
             <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
                 <div transclude-to="buttons">
-                    <vr-button type="Upload" formname="formSupplierUploader" data-onclick="uploadSuppliers"></vr-button>
-                    <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
+                    <vr-button type="Upload" haspermission="hasUploadSupplierPermission" formname="formSupplierUploader" data-onclick="uploadSuppliers"></vr-button>
+                    <vr-button type="Download" haspermission="hasDownloadSupplierPermission" data-onclick="downloadTemplate"></vr-button>
                 </div>
             </vr-actionbar>
         </div>

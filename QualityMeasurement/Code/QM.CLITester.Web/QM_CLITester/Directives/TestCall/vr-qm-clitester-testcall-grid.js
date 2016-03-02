@@ -67,9 +67,13 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
                 clicked: function (dataItem) {
                     var testCallObject = buildTestCallObj(dataItem);
                     Qm_CliTester_TestCallAPIService.AddNewTestCall(testCallObject);
-                }
+                },
+                haspermission: hasAddTestCallPermission
             }];
 
+            function hasAddTestCallPermission() {
+                return Qm_CliTester_TestCallAPIService.HasAddTestCallPermission();
+            }
 
             $scope.testcalls = [];
             var isGettingData = false;

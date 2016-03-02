@@ -2,9 +2,9 @@
 
     "use strict";
 
-    Qm_CliTester_ScheduleTestCallManagementController.$inject = ['$scope', 'VR_Runtime_SchedulerTaskService'];
+    Qm_CliTester_ScheduleTestCallManagementController.$inject = ['$scope', 'VR_Runtime_SchedulerTaskService', 'SchedulerTaskAPIService'];
 
-    function Qm_CliTester_ScheduleTestCallManagementController($scope, VR_Runtime_SchedulerTaskService) {
+    function Qm_CliTester_ScheduleTestCallManagementController($scope, VR_Runtime_SchedulerTaskService, SchedulerTaskAPIService) {
 
         var gridAPI;
 
@@ -26,6 +26,9 @@
             };
 
             $scope.AddNewTask = addTask;
+            $scope.hasAddSchedulerTaskPermission = function () {
+                return SchedulerTaskAPIService.HasAddSchedulerTaskPermission();
+            };
 
         }
 

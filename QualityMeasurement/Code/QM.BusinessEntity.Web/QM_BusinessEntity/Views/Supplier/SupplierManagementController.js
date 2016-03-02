@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierUploaderController.$inject = ['$scope', 'QM_BE_SupplierService'];
+    supplierUploaderController.$inject = ['$scope', 'QM_BE_SupplierService', 'QM_BE_SupplierAPIService'];
 
-    function supplierUploaderController($scope, QM_BE_SupplierService) {
+    function supplierUploaderController($scope, QM_BE_SupplierService, QM_BE_SupplierAPIService) {
         var gridAPI;
 
         defineScope();
@@ -17,13 +17,22 @@
                 api.loadGrid({});
             }
 
+
+
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.AddNewSupplier = AddNewSupplier;
+            $scope.hasAddSupplierPermission = function () {
+                return QM_BE_SupplierAPIService.HasAddSupplierPermission();
+            };
+
             $scope.UploadNewSuppliers = UploadNewSuppliers;
+            $scope.hasUploadSupplierPermission = function () {
+                return QM_BE_SupplierAPIService.HasUploadSupplierPermission();
+            };
 
             function getFilterObject() {
                 var query = {
