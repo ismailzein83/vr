@@ -34,6 +34,14 @@
                 $scope.modalContext.closeModal();
             };
         }
+        $scope.hasSaveUserPermission = function () {
+            if (isEditMode) {
+                return VR_Sec_UserAPIService.HasUpdateUserPermission();
+            }
+            else {
+                return VR_Sec_UserAPIService.HasAddUserPermission();
+            }
+        };
 
         function load() {
             $scope.isLoading = true;

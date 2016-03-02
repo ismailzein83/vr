@@ -7,6 +7,10 @@ function RankingPageManagementController($scope, VR_Sec_ViewAPIService, VRNotifi
     function defineScope() {
         $scope.menu = [];
        
+        $scope.hasSaveViewRankPermission = function () {
+            return VR_Sec_ViewAPIService.HasUpdateViewPermission();
+        };
+
         $scope.selectedMenuNode;
         $scope.menuReady = function (api) {
             treeAPI = api;

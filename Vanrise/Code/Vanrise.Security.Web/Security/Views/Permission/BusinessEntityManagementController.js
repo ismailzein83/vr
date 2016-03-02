@@ -51,7 +51,7 @@
             };
 
             $scope.hasAddPermissionPermission = function () {
-                return VR_Sec_PermissionAPIService.HasAddPermissionPermission();
+                return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
             };
         }
 

@@ -31,6 +31,10 @@
             $scope.permissions = []; // The saved permissions in the data base for a single holder type and id
             $scope.permissionFlagOptions = UtilsService.getEnumPropertyAsArray(VR_Sec_PermissionFlagEnum, 'description');
 
+            $scope.hasSaveAssignPermission = function () {
+                return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
+            };
+
             $scope.onTreeReady = function (api) {
                 treeAPI = api;
             }

@@ -33,6 +33,14 @@
                 else
                     return insertGroup();
             };
+            $scope.hasSaveGroupPermission = function () {
+                if (isEditMode) {
+                    return VR_Sec_GroupAPIService.HasEditGroupPermission();
+                }
+                else {
+                    return VR_Sec_GroupAPIService.HasAddGroupPermission();
+                }
+            };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()

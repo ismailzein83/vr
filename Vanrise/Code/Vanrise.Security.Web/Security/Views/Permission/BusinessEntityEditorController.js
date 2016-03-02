@@ -115,6 +115,10 @@
         function loadAllControls() {
             var loadPromise = $scope.isEditMode ? loadEditModeControls() : loadAddModeControls();
             
+            $scope.hasSavePermissionPermission = function () {
+                return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
+            };
+
             return loadPromise.catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {

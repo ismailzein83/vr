@@ -115,16 +115,25 @@
                 var gridMenuActions = [{
                     name: "Edit",
                     clicked: editPermissions,
-                    permissions: "Root/Administration Module/System Entities:Assign Permissions"
+                    //permissions: "Root/Administration Module/System Entities:Assign Permissions"
+                    haspermission: hasEditSystemEntitiesPermission
                 }, {
                     name: "Delete",
                     clicked: deletePermission,
-                    permissions: "Root/Administration Module/System Entities:Assign Permissions"
+                    //permissions: "Root/Administration Module/System Entities:Assign Permissions"
+                    haspermission: hasDeleteSystemEntitiesPermission
                 }];
 
                 ctrl.menuActions = function (dataItem) {
                     return dataItem.isInherited ? null : gridMenuActions;
                 };
+            }
+            function hasEditSystemEntitiesPermission() {
+                return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
+            }
+
+            function hasDeleteSystemEntitiesPermission() {
+                return VR_Sec_PermissionAPIService.HasDeleteSystemEntitiesPermission();
             }
 
             function editPermissions(dataItem) {

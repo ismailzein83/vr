@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService", "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', function (VR_Sec_GroupAPIService, VR_Sec_GroupService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService) {
+app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService", "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_PermissionAPIService', function (VR_Sec_GroupAPIService, VR_Sec_GroupService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_PermissionAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -69,14 +69,24 @@ app.directive("vrSecGroupGrid", ["VR_Sec_GroupAPIService", "VR_Sec_GroupService"
             $scope.gridMenuActions = [{
                     name: "Edit",
                     clicked: editGroup,
-                    permissions: "Root/Administration Module/Groups:Edit"
+                    //permissions: "Root/Administration Module/Groups:Edit"
+                    haspermission: hasEditGroupPermission
                 },
                 {
                     name: "Assign Permissions",
                     clicked: assignPermissions,
-                    permissions: "Root/Administration Module/System Entities:Assign Permissions"
+                    //permissions: "Root/Administration Module/System Entities:Assign Permissions"
+                    haspermission: hasEditPermissionPermission
                 }
             ];
+        }
+
+        function hasEditGroupPermission() {
+            return VR_Sec_GroupAPIService.HasEditGroupPermission();
+        }
+
+        function hasEditPermissionPermission() {
+            return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
         }
 
         function editGroup(groupObj) {

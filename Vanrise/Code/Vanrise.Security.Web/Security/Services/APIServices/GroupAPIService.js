@@ -12,7 +12,8 @@
             GetGroup: GetGroup,
             AddGroup: AddGroup,
             UpdateGroup: UpdateGroup,
-            HasAddGroupPermission: HasAddGroupPermission
+            HasAddGroupPermission: HasAddGroupPermission,
+            HasEditGroupPermission: HasEditGroupPermission
         });
 
         function GetFilteredGroups(input) {
@@ -41,6 +42,10 @@
 
         function HasAddGroupPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['AddGroup']));
+        }
+
+        function HasEditGroupPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateGroup']));
         }
     }
 

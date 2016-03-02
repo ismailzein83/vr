@@ -37,6 +37,9 @@
                     VRNotificationService.notifyException(error, $scope);
                 });
             };
+            $scope.hasSaveResetPasswordPermission = function () {
+                return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
+            };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();

@@ -15,7 +15,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formGroupEditor" data-onclick="saveGroup"></vr-button>
+                <vr-button type="Save" haspermission="hasSaveGroupPermission" formname="formGroupEditor" data-onclick="saveGroup"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

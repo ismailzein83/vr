@@ -13,8 +13,8 @@
             GetEffectivePermissions: GetEffectivePermissions,
             UpdatePermissions: UpdatePermissions,
             DeletePermissions: DeletePermissions,
-            HasAddPermissionPermission: HasAddPermissionPermission,
-            HasUpdatePermissionsPermission: HasUpdatePermissionsPermission
+            HasUpdatePermissionsPermission: HasUpdatePermissionsPermission,
+            HasDeleteSystemEntitiesPermission: HasDeleteSystemEntitiesPermission
         });
 
         function GetFilteredEntityPermissions(input) {
@@ -45,12 +45,13 @@
             });
         }
 
-        function HasAddPermissionPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdatePermissions']));
-        }
 
         function HasUpdatePermissionsPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdatePermissions']));
+        }
+
+        function HasDeleteSystemEntitiesPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['DeletePermissions']));
         }
     }
 
