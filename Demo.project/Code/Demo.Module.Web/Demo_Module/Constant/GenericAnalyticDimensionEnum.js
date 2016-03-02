@@ -14,8 +14,5 @@
     Month: { name: "Month", value: 12, description: "Month", type: "Text", isDimention: true },
     ServiceType: { name: "ServiceType", value: 13, description: "ServiceType", type: "Text", isDimention: true },
     Direction: { name: "Direction", value: 14, description: "Direction", type: "Text", isDimention: true },
-    CDRType: { name: "CDRType", value: 15, description: "CDRType", type: "Text", isDimention: true },
-
-   
-
+    CDRType: { name: "CDRType", value: 15, description: "CDRType", type: "Text", isDimention: true }
 });

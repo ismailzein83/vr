@@ -49,24 +49,26 @@ app.directive("vrWhsAnalyticsGenericgrid", ['UtilsService', 'VRNotificationServi
 
                 ctrl.mainGrid = (ctrl.parameters == undefined);
 
-                ctrl.gridMenuActions = [{
-                    name: "CDRs",
-                    clicked: function (dataItem) {
-                        var parameters = {
-                            fromDate: UtilsService.cloneDateTime(ctrl.fromTime),
-                            toDate: UtilsService.cloneDateTime(ctrl.toTime),
-                            customerIds: [],
-                            saleZoneIds: [],
-                            supplierIds: [],
-                            switchIds: [],
-                            supplierZoneIds:[]
-                        };
+                ctrl.gridMenuActions = [
+                    //{
+                    //name: "CDRs",
+                    //clicked: function (dataItem) {
+                    //    var parameters = {
+                    //        fromDate: UtilsService.cloneDateTime(ctrl.fromTime),
+                    //        toDate: UtilsService.cloneDateTime(ctrl.toTime),
+                    //        customerIds: [],
+                    //        saleZoneIds: [],
+                    //        supplierIds: [],
+                    //        switchIds: [],
+                    //        supplierZoneIds:[]
+                    //    };
 
-                        WhS_Analytics_GenericAnalyticService.updateParametersFromDimentions(parameters, ctrl, dataItem);
-                        WhS_Analytics_GenericAnalyticService.showCdrLog(parameters);
+                    //    WhS_Analytics_GenericAnalyticService.updateParametersFromDimentions(parameters, ctrl, dataItem);
+                    //    WhS_Analytics_GenericAnalyticService.showCdrLog(parameters);
 
-                    }
-                }];
+                    //}
+                    //}
+                ];
 
                 ctrl.gridLeftMenuActions = [
                 {

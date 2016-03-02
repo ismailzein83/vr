@@ -15,15 +15,15 @@ namespace Demo.Module.Entities
         //GateWayOut = 4,
         PortIn = 3,
         PortOut = 4,
-        Date = 5,
-        Hour = 6,
-        Currency = 7,
-        Day =8,
-        Week = 9,
-        Month = 10,
-        ServiceType = 11 ,
-        Direction = 12 ,
-        CDRType = 13
+        Date = 7,
+        Hour = 8,
+        Currency = 9,
+        Day = 10,
+        Week = 11,
+        Month = 12,
+        ServiceType = 13 ,
+        Direction = 14 ,
+        CDRType = 15
     }
 
     public enum AnalyticSummary

@@ -30,7 +30,7 @@
         }
 
         function showCdrLog(parameters) {
-            VRModalService.showModal('/Client/Modules/WhS_Analytics/Views/CDR/CDRLog.html', parameters, {
+            VRModalService.showModal('/Client/Modules/Demo_Module/Views/CDR/CDRLog.html', parameters, {
                 useModalTemplate: true,
                 width: "80%",
                 title: "CDR Log"

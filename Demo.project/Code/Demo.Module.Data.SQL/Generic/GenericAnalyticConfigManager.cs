@@ -185,9 +185,9 @@ namespace Demo.Module.Data.SQL
                new AnalyticDimensionConfig
                {
                    IdColumn = "ISNULL(ts.ServiceTypeID,'N/A')",
-                   NameColumn = "service.Name",
+                   NameColumn = "service.Description",
                    JoinStatements = new List<string>() { " JOIN dbo.ServiceType service WITH (NOLOCK) ON service.ID = ts.ServiceTypeID " },
-                   GroupByStatements = new List<string>() { " ts.ServiceTypeID, service.Name" },
+                   GroupByStatements = new List<string>() { " ts.ServiceTypeID, service.Description" },
                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                });
             #endregion
@@ -196,10 +196,10 @@ namespace Demo.Module.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.Direction,
                new AnalyticDimensionConfig
                {
-                   IdColumn = "ISNULL(ts.Direction,'N/A')",
-                   NameColumn = "ts.Direction",
+                   IdColumn = "ts.Direction",
+                   NameColumn = "ISNULL( case when ts.Direction = 1 THEN  'Outgoing'    when  ts.Direction = 2 THEN  'Incoming' when  ts.Direction = 3 THEN  'Interconnect'  end , 'N/A')",
                    JoinStatements = null,
-                   GroupByStatements = null,
+                   GroupByStatements = new List<string>() { "ts.Direction" },
                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                });
             #endregion
@@ -208,10 +208,10 @@ namespace Demo.Module.Data.SQL
             s_AllDimensionsConfig.Add(AnalyticDimension.CDRType,
                new AnalyticDimensionConfig
                {
-                   IdColumn = "ISNULL(ts.CDRType,'N/A')",
-                   NameColumn = "ts.CDRType",
+                   IdColumn = "ts.CDRType",
+                   NameColumn = "ISNULL( case when ts.CDRType = 1 THEN  'Interconnect' when  ts.CDRType = 2 THEN  'International' end , 'N/A')",
                    JoinStatements = null,
-                   GroupByStatements = null,
+                   GroupByStatements = new List<string>() { "ts.CDRType" },
                    ExpressionSummary = AnalyticSummary.Sum.ToString("G")
                });
             #endregion
