@@ -114,7 +114,9 @@ as (select * from (values
 (31,'Rules','Rules',null,24,null,10,null),
 (32,'Rules','Rules',null,1,null,10,null),
 (33,'Rules','Rules',null,18,null,11,null),
-(34,'Rules','Rules',null,19,null,11,null)
+(34,'Rules','Rules',null,19,null,11,null),
+(35,'Queueing','Queueing',null,5,null,15,null),
+(36,'Generic Data','Generic Data',null,5,null,14,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -134,20 +136,20 @@ set identity_insert [sec].[Module] off;
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
-;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
+;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (9,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',4,null,null,null,0,10),
 (12,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',4,null,null,null,0,12),
-(13,'Users','Users','#/view/Security/Views/User/UserManagement',28,'Root/Administration Module/Users:View',null,null,0,10),
-(14,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',28,'Root/Administration Module/Groups:View',null,null,0,11),
+(13,'Users','Users','#/view/Security/Views/User/UserManagement',28,null,null,null,0,10),
+(14,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',28,null,null,null,0,11),
 (17,'Carrier Accounts','Carrier Accounts','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountManagement',29,null,null,null,0,11),
-(35,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',28,'Root/Administration Module/System Entities:View',null,null,0,12),
-(39,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',23,'Root/Administration Module/Dynamic Pages:View',null,null,0,11),
+(35,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',28,null,null,null,0,12),
+(39,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',23,null,null,null,0,11),
 (41,'Log','Log History','#/view/BusinessProcess/Views/BPHistory',10,null,null,null,0,11),
 (42,'Management','Management','#/view/BusinessProcess/Views/BPDefinitionManagement',10,null,null,null,0,10),
 (43,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',5,null,null,null,0,16),
-(69,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',23,'Root/Administration Module/Dynamic Pages:View',null,null,0,10),
+(69,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',23,null,null,null,0,10),
 (134,'Organizational Charts','Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement',5,null,null,null,0,15),
 (173,'Account Manager','Account Manager','#/view/WhS_BusinessEntity/Views/AccountManager/AccountManagerManagement',22,null,null,null,0,10),
 (200,'Carrier Profiles','Carrier Profiles','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileManagement',29,null,null,null,0,10),
@@ -190,18 +192,28 @@ as (select * from (values
 (404,'Switch Identification Rules','Switch Identification Rules','#/view/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleManagement',31,null,null,null,0,12),
 (406,'Supplier Price Lists','Supplier Price Lists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',26,null,null,null,0,10),
 (412,'Data Record Types','Data Record Types','#/view/Common/Views/GenericDataRecord/DataRecordTypeManagement',5,null,null,null,0,14),
-(415,'Import Supplier Price List','Import Supplier Price List','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',18,null,null,null,0,12)
+(415,'Import Supplier Price List','Import Supplier Price List','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',18,null,null,null,0,12),
+(429,'Sale Price Lists','Sale Price Lists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceList',27,null,null,null,null,0,16),
+(431,'Selling Rules','Selling Rules','#/view/WhS_Sales/Views/SellingRule/SellingRuleManagement',34,null,null,null,null,0,11),
+(435,'Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement',35,null,null,null,null,0,11),
+(437,'Data Transformation Definition','Data Transformation Definition','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement',36,null,null,null,null,0,12),
+(440,'Generic Rule Definition','Generic Rule Definition','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement',36,null,null,null,null,0,11),
+(441,'Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement',35,null,null,null,null,0,12),
+(465,'Data Store','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement',36,null,null,null,null,0,13),
+(466,'Data Record Storage','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement',36,null,null,null,null,0,14),
+(470,'Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement',35,null,null,null,null,0,13),
+(475,'Execution Flow Definition','Execution Flow Definition','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement',35,null,null,null,null,0,10)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
+)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Type],[Rank]))
 merge	[sec].[View] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[RequiredPermissions] = s.[RequiredPermissions],[Audience] = s.[Audience],[Content] = s.[Content],[Type] = s.[Type],[Rank] = s.[Rank]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
-	insert([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[Audience],s.[Content],s.[Type],s.[Rank])
+	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Type],[Rank])
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Type],s.[Rank])
 when not matched by source then
 	delete;
 set identity_insert [sec].[View] off;
@@ -329,14 +341,24 @@ as (select * from (values
 (31,'Average','WhS_Sales_CostCalculationMethod','vr-whs-sales-avgcostcalculation',null,null),
 (32,'Custom Percentage','WhS_Sales_CostCalculationMethod','vr-whs-sales-percentagecostcalculation',null,null),
 (33,'Route Percentage','WhS_Sales_CostCalculationMethod','vr-whs-sales-routepercentagecostcalculation',null,null),
-(34,'Text','VRCommon__DataRecordFieldType','vr-common--text-selective','Vanrise.Common.MainExtensions.DataRecordFieldTextType, Vanrise.Common.MainExtensions',null),
-(36,'Number','VRCommon__DataRecordFieldType','vr-common--number-selective','Vanrise.Common.MainExtensions.DataRecordFieldNumberType, Vanrise.Common.MainExtensions',null),
-(37,'DateTime','VRCommon__DataRecordFieldType','vr-common-datetime-selective','Vanrise.Common.MainExtensions.DataRecordFieldDateTimeType,Vanrise.Common.MainExtensions',null),
-(38,'Choices','VRCommon__DataRecordFieldType','vr-common--choices-selective','Vanrise.Common.MainExtensions.DataRecordFieldChoicesType, Vanrise.Common.MainExtensions',null),
-(39,'Boolean','VRCommon__DataRecordFieldType','vr-common--boolean-selective','Vanrise.Common.MainExtensions.DataRecordFieldBooleanType, Vanrise.Common.MainExtensions',null),
+(34,'Text','VRGeneric_DataRecordFieldType','vr-genericdata-text','Vanrise.Common.MainExtensions.DataRecordFieldTextType, Vanrise.Common.MainExtensions',null),
+(36,'Number','VRGeneric_DataRecordFieldType','vr-genericdata-number','Vanrise.Common.MainExtensions.DataRecordFieldNumberType, Vanrise.Common.MainExtensions',null),
+(37,'DateTime','VRGeneric_DataRecordFieldType','vr-genericdata-datetime','Vanrise.Common.MainExtensions.DataRecordFieldDateTimeType,Vanrise.Common.MainExtensions',null),
+(38,'Choices','VRGeneric_DataRecordFieldType','vr-genericdata-choices','Vanrise.Common.MainExtensions.DataRecordFieldChoicesType, Vanrise.Common.MainExtensions',null),
+(39,'Boolean','VRGeneric_DataRecordFieldType','vr-genericdata-boolean','Vanrise.Common.MainExtensions.DataRecordFieldBooleanType, Vanrise.Common.MainExtensions',null),
 (40,'Fixed','WhS_Sales_RateCalculationMethod','vr-whs-sales-fixedratecalculation',null,null),
 (41,'Margin','WhS_Sales_RateCalculationMethod','vr-whs-sales-marginratecalculation',null,null),
-(42,'Margin Percentage','WhS_Sales_RateCalculationMethod','vr-whs-sales-marginpercentageratecalculation',null,null)
+(42,'Margin Percentage','WhS_Sales_RateCalculationMethod','vr-whs-sales-marginpercentageratecalculation',null,null),
+(44,'Carrier Portal Connector','CP_SupplierPriceList_ConnectorUploadPriceList','vr-cp-supplierpricelist-connector',null,null),
+(49,'Margin','WhS_Sales_SellingRuleSettingsType','vr-whs-sales-sellingrulesettings-margin',null,null),
+(51,'Fixed','WhS_Sales_SellingRuleSettingsType','vr-whs-sales-sellingrulesettings-fixed',null,null),
+(53,'Mapping','VR_GenericData_GenericRuleDefinitionSettings','vr-genericdata-genericruledefinitionsettings-mapping',null,null),
+(55,'Days Of Week','VR_Rules_PricingRuleRateTypeSettings','vr-rules-pricingrulesettings-ratetype-daysofweek',null,null),
+(57,'Specific','VR_Rules_PricingRuleRateTypeSettings','vr-rules-pricingrulesettings-ratetype-specific',null,null),
+(58,'rules','VR_Rules_PricingRuleTariffSettings','vr-rules-pricingrulesettings-tariff-regular',null,null),
+(59,'Fixed Extra Charge','VR_Rules_PricingRuleExtraChargeSettings','vr-rules-pricingrulesettings-extracharge-fixed',null,null),
+(60,'Percentage Extra Charge','VR_Rules_PricingRuleExtraChargeSettings','vr-rules-pricingrulesettings-extracharge-percentage',null,null),
+(61,'Fixed Rate Value','VR_Rules_PricingRuleRateValueSettings','vr-rules-pricingrulesettings-ratevalue-fixed',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t
