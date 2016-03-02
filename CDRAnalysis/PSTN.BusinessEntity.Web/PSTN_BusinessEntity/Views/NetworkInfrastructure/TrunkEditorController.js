@@ -4,7 +4,7 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
 
     var trunkId;
     var switchId;
-    var editMode;
+    var isEditMode;
     var trunkEntity;
     var switchDirectiveApi;
     var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -34,10 +34,18 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
             switchId = parameters.SwitchId;
         }
         $scope.disableSwitchMenu = switchId != undefined;
-        editMode = (trunkId != undefined);
+        isEditMode = (trunkId != undefined);
     }
 
     function defineScope() {
+
+        $scope.hasSaveTrunkPermission = function () {
+            if (isEditMode)
+                return CDRAnalysis_PSTN_TrunkAPIService.HasUpdateTrunkPermission();
+            else
+                return CDRAnalysis_PSTN_TrunkAPIService.HasAddTrunkPermission();
+        };
+
         $scope.selectedSwitch;
         $scope.selectedSwitchToLinkTo;
         $scope.selectedTrunkToLinkTo;
@@ -92,7 +100,7 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
         }
 
         $scope.saveTrunk = function () {
-            if (editMode)
+            if (isEditMode)
                 return updateTrunk();
             else
                 return insertTrunk();
@@ -106,7 +114,7 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
     function load() {
         $scope.isGettingData = true;
 
-        if (editMode) {
+        if (isEditMode) {
             getTrunk().then(function () {
                 loadAllControls().then(function () {
                     trunkEntity = undefined;
@@ -141,7 +149,7 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
 
 
     function setTitle() {
-        if (editMode && trunkEntity != undefined)
+        if (isEditMode && trunkEntity != undefined)
             $scope.title = UtilsService.buildTitleForUpdateEditor(trunkEntity.Name, "Trunk");
         else
             $scope.title = UtilsService.buildTitleForAddEditor("Trunk");

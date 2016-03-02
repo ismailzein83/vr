@@ -45,6 +45,14 @@
         }
 
         function defineScope() {
+
+            $scope.hasSaveStrategyPermission = function () {
+                if (isEditMode)
+                    return StrategyAPIService.HasUpdateStrategyPermission();
+                else
+                    return StrategyAPIService.HasAddStrategyPermission();
+            };
+
             $scope.modalScope = {};
             $scope.modalScope.strategyFilters = [];
 

@@ -6,7 +6,7 @@
 
     function NormalizationRuleEditorController($scope, NormalizationRuleAPIService, CDRAnalysis_PSTN_SwitchAPIService, CDRAnalysis_PSTN_TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
-        var editMode;
+        var isEditMode;
 
         var normalizationRuleId;
         var normalizationRuleType;
@@ -28,11 +28,16 @@
                 normalizationRuleType = UtilsService.getEnum(PSTN_BE_NormalizationRuleTypeEnum, "value", parameters.NormalizationRuleTypeValue);
             }
 
-            editMode = (normalizationRuleId != undefined);
+            isEditMode = (normalizationRuleId != undefined);
         }
 
         function defineScope() {
-
+            $scope.hasSaveRulePermission = function () {
+                if (isEditMode)
+                    return NormalizationRuleAPIService.HasUpdateRulePermission();
+                else
+                    return NormalizationRuleAPIService.HasAddRulePermission();
+            };
             $scope.onNormalizationRuleSettingsDirectiveReady = function (api) {
                 normalizationRuleSettingsDirectiveAPI = api;
                 normalizationRuleSettingsReadyPromiseDeferred.resolve();
@@ -93,7 +98,7 @@
             };
 
             $scope.saveNormalizationRule = function () {
-                if (editMode)
+                if (isEditMode)
                     return updateNormalizationRule();
                 else
                     return insertNormalizationRule();
@@ -113,7 +118,7 @@
 
             UtilsService.waitMultipleAsyncOperations([loadSwitches, loadTrunks])
                 .then(function () {
-                    if (editMode) {
+                    if (isEditMode) {
                         NormalizationRuleAPIService.GetRule(normalizationRuleId)
                             .then(function (response) {
                                 normalizationRuleEntity = response;

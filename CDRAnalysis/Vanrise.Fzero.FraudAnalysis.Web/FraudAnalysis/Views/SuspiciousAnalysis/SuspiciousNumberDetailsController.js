@@ -41,6 +41,10 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
 
     function defineScope() {
 
+        $scope.hasUpdateAccountCasePermission = function () {
+            return CDRAnalysis_FA_AccountCaseAPIService.HasUpdateAccountCasePermission();
+        };
+
         $scope.users = []; // the users array must be defined on the scope so that it can be passed to the case logs subgrid via viewScope
         $scope.selectedTabIndex = 0;
 

@@ -94,7 +94,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <span vr-disabled="!validateDirectiveData()">
-                    <vr-button type="Save" formname="formNormalizationRuleEditor" data-onclick="saveNormalizationRule"></vr-button>
+                    <vr-button type="Save" formname="formNormalizationRuleEditor" data-onclick="saveNormalizationRule" haspermission="hasSaveRulePermission"></vr-button>
                 </span>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>

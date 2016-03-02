@@ -15,12 +15,12 @@
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, "UpdatePrefixes"), input);
         }
 
-        function HasUpdatePrefixesPermission() {
+        function HasUpdateNumberPrefixesPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, ['UpdatePrefixes']));
         }
 
         return ({
-            HasUpdatePrefixesPermission: HasUpdatePrefixesPermission,
+            HasUpdateNumberPrefixesPermission: HasUpdateNumberPrefixesPermission,
             GetPrefixes: GetPrefixes,
             UpdatePrefixes: UpdatePrefixes
         });

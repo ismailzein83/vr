@@ -14,6 +14,10 @@
         load();
 
         function defineScope() {
+            $scope.hasUpdateNumberPrefixesPermission = function () {
+                return FraudAnalysis_NumberPrefixAPIService.HasUpdateNumberPrefixesPermission();
+            };
+
             $scope.nodes = [];
             $scope.currentNode;
             $scope.nodesUpdated = false;

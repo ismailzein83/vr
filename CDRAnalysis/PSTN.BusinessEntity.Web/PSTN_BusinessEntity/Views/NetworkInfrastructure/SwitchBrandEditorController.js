@@ -23,6 +23,13 @@
     }
 
     function defineScope() {
+        $scope.hasSaveSwitchBrandPermission = function () {
+            if (isEditMode)
+                return CDRAnalysis_PSTN_SwitchBrandAPIService.HasUpdateSwitchBrandPermission();
+            else
+                return CDRAnalysis_PSTN_SwitchBrandAPIService.HasAddSwitchBrandPermission();
+        };
+
         $scope.saveBrand = function () {
             $scope.isLoading = true;
             if (isEditMode)

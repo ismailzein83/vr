@@ -62,15 +62,14 @@
                             <vr-button type="Search" data-onclick="searchCDRs" standalone validationcontext="searchCDRsContext"></vr-button>
                         </vr-columns>
                     </vr-row>
-                </vr-form>  
+                </vr-form>
                 <vr-row>
                     <vr-columns width="fullrow" simplecol>
                         <vr-datagrid datasource="cdrs"
                                      on-ready="onGridReady_CDRs"
                                      dataretrievalfunction="dataRetrievalFunction_CDRs"
                                      pagingtype="'PagingOnScroll'"
-                                     maxheight="150px"
-                                     >
+                                     maxheight="150px">
 
                             <vr-datagridcolumn headertext="'IMSI'" field="'Entity.IMSI'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Connect Time'" field="'Entity.ConnectDateTime'" type="'Datetime'"></vr-datagridcolumn>
@@ -127,7 +126,7 @@
                             <vr-button type="Search" data-onclick="searchNumberProfiles" standalone validationcontext="searchNumberProfileContext"></vr-button>
                         </vr-columns>
                     </vr-row>
-                </vr-validation-group>                
+                </vr-validation-group>
                 <vr-row>
                     <vr-columns width="fullrow">
                         <div class="big-data-grid" ng-hide="showDate">
@@ -256,16 +255,16 @@
                                 </vr-columns>
                             </vr-row>
                         </vr-section>
-                    </vr-validation-group>                    
+                    </vr-validation-group>
                 </vr-columns>
             </vr-row>
-            
+
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" validationcontext="updateCaseContext" data-onclick="updateAccountCase"></vr-button>
+                <vr-button type="Save" validationcontext="updateCaseContext" data-onclick="updateAccountCase" haspermission="hasUpdateAccountCasePermission"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
