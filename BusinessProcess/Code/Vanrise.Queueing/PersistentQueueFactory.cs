@@ -40,27 +40,38 @@ namespace Vanrise.Queueing
         #endregion
         public PersistentQueue<T> GetQueue<T>(string queueName) where T : PersistentQueueItem
         {
-            QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
-            if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
-                return null;
+            string cacheName = String.Format("PersistentQueueFactory_GetQueue<T>_{0}_{1}", typeof(T).FullName, queueName);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
+                    if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
+                        return null;
 
-            Type queueItemType = Type.GetType(queueInstance.ItemFQTN);
-            if (typeof(T) != queueItemType)
-                throw new Exception(String.Format("Queue '{0}' is of item type {1}. Expected Item Type {2}", queueName, queueItemType, typeof(T)));
+                    Type queueItemType = Type.GetType(queueInstance.ItemFQTN);
+                    if (typeof(T) != queueItemType)
+                        throw new Exception(String.Format("Queue '{0}' is of item type {1}. Expected Item Type {2}", queueName, queueItemType, typeof(T)));
 
-            return new PersistentQueue<T>(queueInstance.QueueInstanceId, queueInstance.Settings);
+                    return new PersistentQueue<T>(queueInstance.QueueInstanceId, queueInstance.Settings);
+                });
         }
 
         public IPersistentQueue GetQueue(string queueName)
         {
-            QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
-            if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
-                return null;
+            string cacheName = String.Format("PersistentQueueFactory_GetQueue_{0}", queueName);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
+                    if (queueInstance == null || queueInstance.Status != QueueInstanceStatus.ReadyToUse)
+                        return null;
 
-            Type queueItemType = Type.GetType(queueInstance.ItemFQTN);
-            Type[] typeArgs = { queueItemType };
-            var queueType = typeof(PersistentQueue<>).MakeGenericType(typeArgs);
-            return Activator.CreateInstance(queueType, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { queueInstance.QueueInstanceId, queueInstance.Settings }, null) as IPersistentQueue;
+                    Type queueItemType = Type.GetType(queueInstance.ItemFQTN);
+                    Type[] typeArgs = { queueItemType };
+                    var queueType = typeof(PersistentQueue<>).MakeGenericType(typeArgs);
+                    return Activator.CreateInstance(queueType, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { queueInstance.QueueInstanceId, queueInstance.Settings }, null) as IPersistentQueue;
+                });
+           
         }
 
         public bool QueueExists(string queueName)

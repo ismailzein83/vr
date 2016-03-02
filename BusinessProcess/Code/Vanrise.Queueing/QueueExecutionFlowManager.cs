@@ -202,7 +202,7 @@ namespace Vanrise.Queueing
             var queueSettings = new QueueSettings
             {
                 Activator = stage.QueueActivator,
-                SingleConcurrentReader = stage.SingleConcurrentReader
+                MaximumConcurrentReaders = stage.MaximumConcurrentReaders
             };
 
             PersistentQueueFactory.Default.CreateQueueIfNotExists(executionFlow.ExecutionFlowId, stage.StageName, stage.QueueItemType.GetQueueItemType().AssemblyQualifiedName,

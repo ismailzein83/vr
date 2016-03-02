@@ -175,7 +175,7 @@
                 $scope.scopeModal.queueTemplateName = executionFlowStageEntity.QueueNameTemplate;
                 $scope.scopeModal.queueTemplateTitle = executionFlowStageEntity.QueueTitleTemplate;
                 $scope.scopeModal.batchDescription = executionFlowStageEntity.QueueItemType.BatchDescription;
-                $scope.scopeModal.singleConcurrentReader = executionFlowStageEntity.SingleConcurrentReader;
+                $scope.scopeModal.maximumConcurrentReaders = executionFlowStageEntity.MaximumConcurrentReaders;
             }
         }
 
@@ -252,7 +252,7 @@
             executionFlowStage.StageName = $scope.scopeModal.stageName;
             executionFlowStage.QueueNameTemplate = $scope.scopeModal.queueTemplateName;
             executionFlowStage.QueueTitleTemplate = $scope.scopeModal.queueTemplateTitle;
-            executionFlowStage.SingleConcurrentReader = $scope.scopeModal.singleConcurrentReader;
+            executionFlowStage.MaximumConcurrentReaders = $scope.scopeModal.maximumConcurrentReaders;
             executionFlowStage.SourceStages = [];
             executionFlowStage.SourceStages = UtilsService.getPropValuesFromArray($scope.scopeModal.selectedSourceStages, "stageName");
             executionFlowStage.QueueItemType = {

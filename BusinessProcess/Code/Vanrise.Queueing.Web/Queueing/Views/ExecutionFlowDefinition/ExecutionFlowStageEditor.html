@@ -26,7 +26,8 @@
                         </vr-columns>
 
                         <vr-columns width="1/3row">
-                            <vr-switch value="scopeModal.singleConcurrentReader" label="Single Concurrent Reader"  isrequired></vr-switch>
+                            <vr-textbox value="scopeModal.maximumConcurrentReaders" label="Maximum Concurrent Readers"
+                                        type="number" decimalprecision="0" minvalue="1" maxvalue="10"></vr-textbox>
                         </vr-columns>
 
                         <vr-columns width="1/3row" ng-show="isDataRecordTypeSelected">

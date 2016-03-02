@@ -156,8 +156,8 @@ namespace Vanrise.Queueing
         private bool TryDequeuePrivate(Action<T> onItemReady, bool rethrowOnError)
         {
             int currentProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-            IEnumerable<int> runningProcessesIds = _runningProcessManager.GetCachedRunningProcesses(new TimeSpan(0, 0, 15)).Select(itm => itm.ProcessId);
-            QueueItem queueItem = _dataManagerQueueItem.DequeueItem(_queueId, currentProcessId, runningProcessesIds, _queueSettings.SingleConcurrentReader);
+            IEnumerable<int> runningProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
+            QueueItem queueItem = _dataManagerQueueItem.DequeueItem(_queueId, currentProcessId, runningProcessesIds, _queueSettings.MaximumConcurrentReaders);
             if (queueItem != null)
             {
                 _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processing);

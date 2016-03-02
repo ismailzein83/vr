@@ -20,7 +20,7 @@ namespace Vanrise.Queueing.Data
 
         void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
-        QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, bool singleQueueReader);
+        QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, int? maximumConcurrentReaders);
 
         void DeleteItem(int queueId, long itemId);
 

@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomQueueActivator.cs" />
     <Compile Include="IPersistentQueue.cs" />
     <Compile Include="ItemExecutionFlowInfo.cs" />
     <Compile Include="ItemToEnqueue.cs" />

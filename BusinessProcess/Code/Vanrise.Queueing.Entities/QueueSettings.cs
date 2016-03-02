@@ -8,9 +8,7 @@ namespace Vanrise.Queueing.Entities
 {
     public class QueueSettings
     {
-        public bool SingleConcurrentReader { get; set; }
-
-        public string QueueActivatorFQTN { get; set; }
+        public int? MaximumConcurrentReaders { get; set; }
 
         public QueueActivator Activator { get; set; }
     }    

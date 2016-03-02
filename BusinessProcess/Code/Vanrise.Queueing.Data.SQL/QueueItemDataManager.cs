@@ -43,9 +43,6 @@ namespace Vanrise.Queueing.Data.SQL
 
         #region Public Methods
 
-     
-
-
         public void CreateQueue(int queueId)
         {
             ExecuteNonQueryText(String.Format(query_CreateQueueTable, queueId), null);
@@ -85,16 +82,19 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteEnqueueItemQuery(query, item, executionFlowTriggerItemId, description, queueItemStatus);
         }
       
-        public QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, bool singleQueueReader)
+        public QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, int? maximumConcurrentReaders)
         {
-            StringBuilder processIdsBuilder = new StringBuilder();
-            processIdsBuilder.Append(',');
-            foreach (var processId in runningProcessesIds)
+            StringBuilder queryBuilder = new StringBuilder(query_Dequeue);
+            if (maximumConcurrentReaders.HasValue)
             {
-                processIdsBuilder.Append(processId);
-                processIdsBuilder.Append(',');
+                queryBuilder.Replace("#VALIDATEMAXIMUMREADERS#", query_DequeueMaximumReadersValidation);
             }
-            return GetItemText(String.Format(query_Dequeue, queueId),
+            else
+            {
+                queryBuilder.Replace("#VALIDATEMAXIMUMREADERS#", "");
+            }
+            queryBuilder.Replace("#RUNNINGPROCESSIDS#", String.Join(",", runningProcessesIds));
+            return GetItemText(String.Format(queryBuilder.ToString(), queueId),
                     (reader) =>
                     {
                         return new QueueItem
@@ -103,13 +103,12 @@ namespace Vanrise.Queueing.Data.SQL
                             ExecutionFlowTriggerItemId = (long)reader["ExecutionFlowTriggerItemID"],
                             Content = (byte[])reader["Content"]
                         };
-
                     },
                     (cmd) =>
                     {
-                        cmd.Parameters.Add(new SqlParameter("@RunningProcessesIDs", processIdsBuilder.ToString()));
                         cmd.Parameters.Add(new SqlParameter("@ProcessID", currentProcessId));
-                        cmd.Parameters.Add(new SqlParameter("@SingleQueueReader", singleQueueReader));
+                        if(maximumConcurrentReaders.HasValue)
+                            cmd.Parameters.Add(new SqlParameter("@MaximumConcurrentReaders", maximumConcurrentReaders.Value));
                     });
         }
      
@@ -297,42 +296,43 @@ namespace Vanrise.Queueing.Data.SQL
 
         const string query_UnlockItem = @"UPDATE queue.QueueItem_{0} SET LockedByProcessID = NULL, [IsSuspended] = @IsSuspended WHERE [ID] = @ItemID";
 
-        const string query_Dequeue = @" 
-                                        BEGIN TRAN
-                                        DECLARE @ID bigint, @Content varbinary(max), @ExecutionFlowTriggerItemID bigint
-
-                                        IF @SingleQueueReader = 1
+        const string query_Dequeue = @"                                         
+                                        DECLARE @ID bigint, @IsLocked bit
+                                        
+                                        SELECT TOP 1 @ID = ID FROM [queue].[QueueItem_{0}] WITH(NOLOCK)
+			                                      WHERE (LockedByProcessID IS NULL OR LockedByProcessID NOT IN (#RUNNINGPROCESSIDS#)) 
+                                                        AND 
+                                                        ISNULL([IsSuspended], 0) = 0 
+			                                      ORDER BY ID                                       
+                                        IF @ID IS NOT NULL
                                         BEGIN
-                                            DECLARE @LockedItemID bigint
-            
-                                            --Check if any item is currently locked by another reader
-                                            UPDATE queue.QueueItem_{0} WITH (tablock)
-                                            SET @LockedItemID = ID
-                                            WHERE ISNULL([IsSuspended], 0) = 0 AND @RunningProcessesIDs LIKE '%,' + CONVERT(VARCHAR, LockedByProcessID) + ',%'
-
-                                            --if NO item locked by another reader, select the first item in the queue table
-                                            IF @LockedItemID IS NULL
-                                                SELECT TOP (1) @ID = [ID] , @Content = [Content], @ExecutionFlowTriggerItemID = ExecutionFlowTriggerItemID 
-                                                FROM queue.QueueItem_{0}
-                                                WHERE ISNULL([IsSuspended], 0) = 0
-                                                ORDER BY ID
-                                        END
-                                        ELSE
-                                        BEGIN
-                                            SELECT TOP (1) @ID = [ID] , @Content = [Content], @ExecutionFlowTriggerItemID = [ExecutionFlowTriggerItemID]
-                                            FROM queue.QueueItem_{0} WITH (updlock, readpast) 
-                                            WHERE
-                                            ISNULL([IsSuspended], 0) = 0
-                                            AND
-                                            LockedByProcessID IS NULL OR @RunningProcessesIDs NOT LIKE '%,' + CONVERT(VARCHAR, LockedByProcessID) + ',%'
-                                            ORDER BY ID
+                                            UPDATE [queue].[QueueItem_{0}]
+                                            SET LockedByProcessID = @ProcessID,
+                                                @IsLocked = 1
+                                            WHERE 
+                                                ID = @ID
+                                                AND 
+                                                (LockedByProcessID IS NULL OR LockedByProcessID NOT IN (#RUNNINGPROCESSIDS#)) 
+                                                AND 
+                                                ISNULL([IsSuspended], 0) = 0        
+                                              
+                                            #VALIDATEMAXIMUMREADERS#
                                         END
 
-                                        IF @ID IS NOT NULL 
-	                                        UPDATE queue.QueueItem_{0} SET LockedByProcessID = @ProcessID WHERE ID = @ID
-                                        COMMIT; 
-
-                                        SELECT @ID ID, @Content Content, @ExecutionFlowTriggerItemID ExecutionFlowTriggerItemID WHERE @ID IS NOT NULL";
+                                        SELECT ID, Content, ExecutionFlowTriggerItemID FROM [queue].[QueueItem_{0}] WITH(NOLOCK) WHERE ID = @ID AND ISNULL(@IsLocked, 0) = 1";
+        
+        const string query_DequeueMaximumReadersValidation = @"
+                                                            IF ((SELECT COUNT(*) FROM [queue].[QueueItem_{0}] WITH (NOLOCK)
+                                                            WHERE LockedByProcessID IN (#RUNNINGPROCESSIDS#) AND ISNULL([IsSuspended], 0) = 0
+                                                            ) > @MaximumConcurrentReaders )
+                                                            BEGIN
+                                                                UPDATE [queue].[QueueItem_{0}]
+                                                                SET LockedByProcessID = NULL,
+                                                                    @IsLocked = 0
+                                                                WHERE 
+                                                                    ID = @ID                                                     
+                                                            END
+                                                            ";
 
         const string query_DeleteFromQueue = "DELETE queue.QueueItem_{0} WHERE ID = @ID";
 
