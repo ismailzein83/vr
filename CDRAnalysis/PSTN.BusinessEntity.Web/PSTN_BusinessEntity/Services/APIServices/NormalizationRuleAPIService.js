@@ -2,9 +2,9 @@
 
     "use strict";
 
-    normalizationRuleAPIService.$inject = ["BaseAPIService", "UtilsService", "PSTN_BE_ModuleConfig"];
+    normalizationRuleAPIService.$inject = ["BaseAPIService", "UtilsService", "PSTN_BE_ModuleConfig", "SecurityService"];
 
-    function normalizationRuleAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig) {
+    function normalizationRuleAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig, SecurityService) {
 
         var controllerName = 'NormalizationRule';
 
@@ -55,7 +55,7 @@
         return ({
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,
-            HasDeleteRulePermission:HasDeleteRulePermission, 
+            HasDeleteRulePermission: HasDeleteRulePermission,
             GetFilteredNormalizationRules: GetFilteredNormalizationRules,
             GetRule: GetRule,
             GetNormalizationRuleAdjustNumberActionSettingsTemplates: GetNormalizationRuleAdjustNumberActionSettingsTemplates,

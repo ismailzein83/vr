@@ -55,7 +55,7 @@
                 $scope.menuActions = [
                    {
                        name: "Edit",
-                       clicked: editNormalizationRule,
+                       clicked: editStrategy,
                        haspermission: hasUpdateStrategyPermission
                    }
                 ];

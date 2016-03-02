@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    trunkAPIService.$inject = ['BaseAPIService', 'UtilsService', 'PSTN_BE_ModuleConfig'];
+    trunkAPIService.$inject = ['BaseAPIService', 'UtilsService', 'PSTN_BE_ModuleConfig', 'SecurityService'];
 
-    function trunkAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig) {
+    function trunkAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig, SecurityService) {
         var controllerName = 'Trunk';
 
         function GetFilteredTrunks(input) {

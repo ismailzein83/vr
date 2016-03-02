@@ -2,9 +2,9 @@
 
     'use strict';
 
-    StrategyAPIService.$inject = ['BaseAPIService', 'UtilsService', 'CDRAnalysis_FA_ModuleConfig'];
+    StrategyAPIService.$inject = ['BaseAPIService', 'UtilsService', 'CDRAnalysis_FA_ModuleConfig', 'SecurityService'];
 
-    function StrategyAPIService(BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig) {
+    function StrategyAPIService(BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig, SecurityService) {
 
         var controllerName = 'Strategy';
 

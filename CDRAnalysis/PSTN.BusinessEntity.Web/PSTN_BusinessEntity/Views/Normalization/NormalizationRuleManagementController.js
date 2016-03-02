@@ -1,6 +1,6 @@
-﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "CDRAnalysis_PSTN_SwitchAPIService", "CDRAnalysis_PSTN_TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "ValuesAPIService", "VRNotificationService", "CDRAnalysis_PSTN_RuleAPIService"];
+﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "CDRAnalysis_PSTN_SwitchAPIService", "CDRAnalysis_PSTN_TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "ValuesAPIService", "VRNotificationService", "NormalizationRuleAPIService"];
 
-function NormalizationRuleManagementController($scope, PSTN_BE_Service, CDRAnalysis_PSTN_SwitchAPIService, CDRAnalysis_PSTN_TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, ValuesAPIService, VRNotificationService, CDRAnalysis_PSTN_RuleAPIService) {
+function NormalizationRuleManagementController($scope, PSTN_BE_Service, CDRAnalysis_PSTN_SwitchAPIService, CDRAnalysis_PSTN_TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, ValuesAPIService, VRNotificationService, NormalizationRuleAPIService) {
 
     var gridAPI;
 
@@ -9,7 +9,7 @@ function NormalizationRuleManagementController($scope, PSTN_BE_Service, CDRAnaly
 
     function defineScope() {
         $scope.hasAddRulePermission = function () {
-            return CDRAnalysis_PSTN_RuleAPIService.HasAddRulePermission();
+            return NormalizationRuleAPIService.HasAddRulePermission();
         };
 
         $scope.phoneNumberTypes = UtilsService.getArrayEnum(PSTN_BE_PhoneNumberTypeEnum);

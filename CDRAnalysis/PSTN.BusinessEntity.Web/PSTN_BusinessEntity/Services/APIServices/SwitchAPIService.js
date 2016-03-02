@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    switchAPIService.$inject = ['BaseAPIService', 'UtilsService', 'PSTN_BE_ModuleConfig'];
+    switchAPIService.$inject = ['BaseAPIService', 'UtilsService', 'PSTN_BE_ModuleConfig', 'SecurityService'];
 
-    function switchAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig) {
+    function switchAPIService(BaseAPIService, UtilsService, PSTN_BE_ModuleConfig, SecurityService) {
 
         var controllerName = 'Switch';
 
