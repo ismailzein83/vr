@@ -3,7 +3,7 @@
     "use strict";
     supplierPriceListAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'CP_SupPriceList_ModuleConfig'];
 
-    function supplierPriceListAPIService(baseApiService, utilsService, SecurityService , moduleConfig) {
+    function supplierPriceListAPIService(baseApiService, utilsService, SecurityService, moduleConfig) {
 
         function importPriceList(obj) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "ImportPriceList"), obj);
@@ -20,12 +20,16 @@
         function HasImportPriceList() {
             return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(moduleConfig.moduleName, "PriceList", ['ImportPriceList']));
         }
+        function GetBeforeId(input) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "GetBeforeId"), input);
+        }
         return ({
             importPriceList: importPriceList,
             GetUpdated: GetUpdated,
             GetUploadPriceListTemplates: GetUploadPriceListTemplates,
             GetResultPriceListTemplates: GetResultPriceListTemplates,
-            HasImportPriceList: HasImportPriceList
+            HasImportPriceList: HasImportPriceList,
+            GetBeforeId: GetBeforeId
         });
 
     }

@@ -5,10 +5,10 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
 
     function SupplierPriceListGrid($scope, ctrl) {
 
-        var lastUpdateHandle, lessThanID, nbOfRows;
+        var lastUpdateHandle, lessThanId, nbOfRows;
         var input = {
             LastUpdateHandle: lastUpdateHandle,
-            LessThanID: lessThanID,
+            LessThanID: lessThanId,
             NbOfRows: nbOfRows
         };
 
@@ -17,7 +17,7 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
 
         function initializeController() {
             $scope.pricelist = [];
-            var isGettingData = false;
+            var isGettingData ;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
@@ -94,18 +94,17 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
 
 
         function getData() {
-
-            //var pageInfo = gridAPI.getPageInfo();
-            //input.LessThanID = minId;
-            //input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
-            //return SupplierPriceListAPIService.GetBeforeId(input).then(function (response) {
-            //    if (response != undefined) {
-            //        for (var i = 0; i < response.PriceLists.length; i++) {
-            //            var testCall = response.PriceLists[i];
-            //            $scope.testcalls.push(testCall);
-            //        }
-            //    }
-            //});
+            var pageInfo = gridAPI.getPageInfo();
+            input.LessThanID = minId;
+            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
+            return supplierPriceListService.GetBeforeId(input).then(function (response) {
+                if (response != undefined) {
+                    for (var i = 0; i < response.PriceLists.length; i++) {
+                        var testCall = response.PriceLists[i];
+                        $scope.testcalls.push(testCall);
+                    }
+                }
+            });
         }
 
         $scope.loadMoreData = function () {

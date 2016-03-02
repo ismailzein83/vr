@@ -107,5 +107,11 @@ namespace CP.SupplierPricelist.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdatePriceListProgress]", id, status, result, resultRetryCount, alertMessage);
             return (recordsEffected > 0);
         }
+
+
+        public List<PriceList> GetBeforeId(GetBeforeIdInput input)
+        {
+            return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetBeforeID]", PriceListMapper, input.LessThanID, input.NbOfRows, input.UserId);
+        }
     }
 }

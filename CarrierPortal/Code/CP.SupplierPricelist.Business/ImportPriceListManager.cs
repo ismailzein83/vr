@@ -20,7 +20,19 @@ namespace CP.SupplierPricelist.Business
 
             return true;
         }
-
+        public List<PriceListDetail> GetBeforeId(GetBeforeIdInput input)
+        {
+            input.UserId = SecurityContext.Current.GetLoggedInUserId();
+            IPriceListDataManager dataManager =
+                ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
+            List<PriceList> listTestCalls = dataManager.GetBeforeId(input);
+            List<PriceListDetail> listTestCallDetails = new List<PriceListDetail>();
+            foreach (PriceList priceList in listTestCalls)
+            {
+                listTestCallDetails.Add(priceListDetailMapper(priceList));
+            }
+            return listTestCallDetails;
+        }
         public PriceListlUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows)
         {
             PriceListlUpdateOutput priceListUpdateOutputs = new PriceListlUpdateOutput();

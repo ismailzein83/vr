@@ -61,6 +61,7 @@
     <Compile Include="Customer\CustomerSupplierMapping.cs" />
     <Compile Include="Customer\CustomerUser.cs" />
     <Compile Include="Customer\CustomerUserDetail.cs" />
+    <Compile Include="GetBeforeIdInput.cs" />
     <Compile Include="GetUpdatedInput.cs" />
     <Compile Include="PriceListlUpdateOutput.cs" />
     <Compile Include="PriceListResult.cs" />
