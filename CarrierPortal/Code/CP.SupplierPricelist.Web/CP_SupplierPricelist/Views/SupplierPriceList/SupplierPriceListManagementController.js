@@ -16,9 +16,15 @@
                     CustomerId: customerDirectiveApi.getSelectedIds(),
                     CarrierAccountId: carrierDirectiveApi.getSelectedIds()
                 };
-                supplierPriceListApiService.importPriceList(priceListObject);
-            }
+                return supplierPriceListApiService.importPriceList(priceListObject)
+                .then(function (response) {
+                    if (vrNotificationService.notifyOnItemAdded("PriceList", response, 'status')) {
 
+                    }
+                }).catch(function (error) {
+                    vrNotificationService.notifyException(error, $scope);
+                });
+            }
             function defineScope() {
                 $scope.effectiveOn = new Date();
                 $scope.priceListTypes = [];
@@ -32,24 +38,24 @@
                 $scope.hasImportPriceListPermission = function () {
                     return supplierPriceListApiService.HasImportPriceList();
                 }
-                $scope.onReadyCarrierAccountSelector = function(api) {
+                $scope.onReadyCarrierAccountSelector = function (api) {
                     carrierDirectiveApi = api;
                     var setLoader = function (value) { $scope.isLoadingCarrierDirective = value };
                     vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierDirectiveApi, undefined, setLoader, carrierReadyPromiseDeferred);
                 }
                 $scope.onCustomerSelectionChanged = function () {
                     if (customerDirectiveApi.getSelectedIds() != undefined) {
-                        var obj =                        {
-                           filter: {
-                               CustomerIdForCurrentSupplier: customerDirectiveApi.getSelectedIds()
-                           }
+                        var obj = {
+                            filter: {
+                                CustomerIdForCurrentSupplier: customerDirectiveApi.getSelectedIds()
+                            }
                         }
                         carrierDirectiveApi.load(obj);
                     }
                     else {
                         $scope.carrierAccount = undefined;
                     }
-                    
+
                 }
                 $scope.onCustomerDirectiveReady = function (api) {
                     customerDirectiveApi = api;
@@ -59,14 +65,14 @@
 
             defineScope();
 
-          
+
             function loadPriceListType() {
                 angular.forEach(priceListTypeEnum, function (value, key) {
                     $scope.priceListTypes.push({ pricelistID: value.ID, title: value.Value });
                 }
                 );
             }
-            
+
             function load() {
                 loadAllControls();
             }

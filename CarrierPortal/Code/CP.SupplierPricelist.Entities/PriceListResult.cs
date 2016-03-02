@@ -9,7 +9,7 @@ namespace CP.SupplierPricelist.Entities
 {
     public enum PriceListResult
     {
-        [Description("Not Completed")]
+        [Description(" ")]
         NotCompleted = 0,
 
         Approved = 10,

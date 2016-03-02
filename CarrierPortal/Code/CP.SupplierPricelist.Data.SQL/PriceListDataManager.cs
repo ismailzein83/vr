@@ -16,16 +16,19 @@ namespace CP.SupplierPricelist.Data.SQL
 
         }
 
-        public bool Insert(PriceList priceList)
+        public bool Insert(PriceList priceList, int resultIdtoBeExcluded, out int priceListId)
         {
-            int recordEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_Insert]"
+            object id;
+            int recordEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_Insert]", out id
                 , priceList.UserId
                 , priceList.FileId
                 , priceList.PriceListType
                 , 0
                 , priceList.EffectiveOnDate
                 , priceList.CustomerId
-                , priceList.CarrierAccountId);
+                , priceList.CarrierAccountId
+                , resultIdtoBeExcluded);
+            priceListId = (int)id;
             return (recordEffected > 0);
         }
 

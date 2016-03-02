@@ -17,7 +17,7 @@ app.service('CP_SupplierPricelist_SupplierPriceListService', ['LabelColorsEnum',
         function getSupplierPriceListResultColor(value) {
             switch (value) {
                 case cpSupplierPricelistResultEnum.NotCompleted.value:
-                    return labelColorsEnum.Error.color;
+                    return undefined;
                 case cpSupplierPricelistResultEnum.Succeeded.value:
                     return labelColorsEnum.Success.color;
                 case cpSupplierPricelistResultEnum.PartiallySucceeded.value:

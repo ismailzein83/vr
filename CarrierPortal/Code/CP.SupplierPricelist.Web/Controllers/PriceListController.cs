@@ -13,10 +13,10 @@ namespace CP.SupplierPricelist.Web.Controllers
     {
         [HttpPost]
         [Route("ImportPriceList")]
-        public void ImportPriceList(PriceList priceList)
+        public InsertOperationOutput<PriceListDetail> ImportPriceList(PriceList priceList)
         {
             ImportPriceListManager manager = new ImportPriceListManager();
-            bool succeded = manager.Insert(priceList);
+            return manager.Insert(priceList);
 
         }
         [HttpPost]

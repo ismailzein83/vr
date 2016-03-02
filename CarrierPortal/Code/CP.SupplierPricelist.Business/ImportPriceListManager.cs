@@ -6,19 +6,36 @@ using Vanrise.Common;
 using System.Linq;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Entities;
 
 namespace CP.SupplierPricelist.Business
 {
     public class ImportPriceListManager
     {
-        public bool Insert(PriceList priceList)
+        public InsertOperationOutput<PriceListDetail> Insert(PriceList inputPriceList)
         {
+            InsertOperationOutput<PriceListDetail> insertOperationOutput = new InsertOperationOutput<PriceListDetail>
+            {
+                Result = InsertOperationResult.Failed,
+                InsertedObject = null
+            };
             IPriceListDataManager dataManager =
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            priceList.UserId = SecurityContext.Current.GetLoggedInUserId();
-            dataManager.Insert(priceList);
-
-            return true;
+            int priceListId;
+            inputPriceList.UserId = SecurityContext.Current.GetLoggedInUserId();
+            bool insertActionSucc = dataManager.Insert(inputPriceList, (int)PriceListResult.NotCompleted, out priceListId);
+            inputPriceList.PriceListId = priceListId;
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = priceListDetailMapper(inputPriceList);
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+                insertOperationOutput.Message = "Another pricelist(s) with same customer and carrier account is not yet completed";
+            }
+            return insertOperationOutput;
         }
         public List<PriceListDetail> GetBeforeId(GetBeforeIdInput input)
         {
