@@ -17,6 +17,7 @@ namespace CP.SupplierPricelist.Entities
         public int ResultMaxRetryCount { get; set; }
         public int UploadMaxRetryCount { get; set; }
         public string AlertMessage { get; set; }
+        public long AlertFileId { get; set; }
         public int CustomerId { get; set; }
         public string CarrierAccountId { get; set; }
     }

@@ -65,6 +65,7 @@ namespace CP.SupplierPricelist.Data.SQL
                 UploadMaxRetryCount = GetReaderValue<int>(reader, "UploadRetryCount"),
                 AlertMessage = reader["AlertMessage"] as string,
                 CustomerId = (int)reader["CustomerID"],
+                AlertFileId = GetReaderValue<int>(reader, "AlertFileID"),
                 CarrierAccountId = reader["CarrierAccountID"] as string
             };
             string uploadedInformationSerialized = reader["UploadInformation"] as string;
