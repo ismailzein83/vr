@@ -30,7 +30,7 @@
             var object = buildCustomerFromScope();
             return customerUserAPIService.AddCustomerUser(object)
                 .then(function (response) {
-                    if (vrNotificationService.notifyOnItemAdded("Customer User", response)) {
+                    if (vrNotificationService.notifyOnItemAdded("User", response ,"Customer")) {
                         if ($scope.onCustomerUserAdded != undefined)
                             $scope.onCustomerUserAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();

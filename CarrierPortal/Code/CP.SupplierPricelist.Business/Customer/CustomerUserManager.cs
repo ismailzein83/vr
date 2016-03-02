@@ -54,6 +54,7 @@ namespace CP.SupplierPricelist.Business
             else
             {
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
+                insertOperationOutput.Message = "This user is already assigned to another customer.";
 
             }
             return insertOperationOutput;
