@@ -23,7 +23,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
             {
                 PriceListStatus.SuccessfullyImported,
-                PriceListStatus.Suspended
+                PriceListStatus.ResultFailedWithRetry
             };
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
             {
@@ -38,14 +38,14 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 }
                 catch (Exception)
                 {
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Suspended;
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.ResultFailedWithRetry;
                     priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
                         pricelist.ResultMaxRetryCount = pricelist.ResultMaxRetryCount + 1;
                     else
                     {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Failed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Completed;
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.ResultFailedWithNoRetry;
+                        priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
                     }
                 }
 

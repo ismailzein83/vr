@@ -11,8 +11,16 @@ namespace CP.SupplierPricelist.Entities
         SuccessfullyImported = 10,
         WaitingReview = 20,
         Completed = 30,
-        Suspended = 40,
-        Failed= 50
+
+        [Description("Suspended")]
+        UploadFailedWithRetry = 40,
+        [Description("Suspended")]
+        ResultFailedWithRetry = 50,
+
+        [Description("Aborted")]
+        UploadFailedWithNoRetry = 60,
+        [Description("Aborted")]
+        ResultFailedWithNoRetry = 70
     }
 
     public enum PriceListType

@@ -27,7 +27,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
                     {
                         PriceListStatus.New,
-                        PriceListStatus.Suspended
+                        PriceListStatus.UploadFailedWithRetry
                     };
             VRFileManager fileManager = new VRFileManager();
             UserManager userManager = new UserManager();
@@ -60,20 +60,17 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                     case PriceListSupplierUploadResult.Uploaded:
                         priceListstatus = PriceListStatus.SuccessfullyImported;
                         break;
-                    case PriceListSupplierUploadResult.Failed:
-                        priceListstatus = PriceListStatus.Failed;
-                        break;
                     case PriceListSupplierUploadResult.FailedWithRetry:
                         {
-                            priceListstatus = PriceListStatus.Suspended;
+                            priceListstatus = PriceListStatus.UploadFailedWithRetry;
                             if (pricelist.UploadMaxRetryCount < uploadPriceListTaskActionArgument.MaximumRetryCount)
                                 pricelist.UploadMaxRetryCount = pricelist.UploadMaxRetryCount + 1;
                             else
-                                priceListstatus = PriceListStatus.Failed;
+                                priceListstatus = PriceListStatus.UploadFailedWithNoRetry;
                             break;
                         }
                     default:
-                        priceListstatus = PriceListStatus.Suspended;
+                        priceListstatus = PriceListStatus.UploadFailedWithRetry;
                         break;
                 }
                 manager.UpdatePriceListUpload(pricelist.PriceListId, (int)priceListstatus, priceListUploadOutput.UploadPriceListInformation, (int)pricelist.UploadMaxRetryCount);

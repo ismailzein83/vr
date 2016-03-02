@@ -17,8 +17,6 @@ namespace CP.SupplierPricelist.Entities
         Rejected = 20,
 
         [Description("Partially Rejected")]
-        PartiallyRejected = 30,
-        Completed = 40
-
+        PartiallyRejected = 30
     }
 }
