@@ -47,9 +47,13 @@ function (UtilsService, customerUserApiService, customerUserService, vRNotificat
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Unassign User",
-                clicked: unassignUser
-             }
-            ];
+                clicked: unassignUser,
+                haspermission: hasDeleteCustomerUserPermission
+           }];
+        }
+       
+        function hasDeleteCustomerUserPermission() {
+            return false //customerUserApiService.HasDeleteCustomerUser();
         }
 
         function unassignUser(object) {

@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    function customerUserAPIService(baseApiService, utilsService, moduleConfig) {
+    function customerUserAPIService(baseApiService, utilsService, SecurityService, moduleConfig) {
        
         function GetFilteredCustomerUsers(input) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "CustomerUser", "GetFilteredCustomerUsers"), input);
@@ -14,15 +14,25 @@
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "CustomerUser", "DeleteCustomerUser"), { userId: userId });
         }
 
+        function HasAddCustomerUser() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(moduleConfig.moduleName, "CustomerUser", ['AddCustomerUser']));
+        }
+
+        function HasDeleteCustomerUser() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(moduleConfig.moduleName, "CustomerUser", ['DeleteCustomerUser']));
+        }
+
         return ({
             GetFilteredCustomerUsers: GetFilteredCustomerUsers,
             AddCustomerUser: AddCustomerUser,
-            DeleteCustomerUser: DeleteCustomerUser
+            DeleteCustomerUser: DeleteCustomerUser,
+            HasAddCustomerUser: HasAddCustomerUser,
+            HasDeleteCustomerUser: HasDeleteCustomerUser
         });
        
     }
 
-    customerUserAPIService.$inject = ['BaseAPIService', 'UtilsService', 'CP_SupPriceList_ModuleConfig'];
+    customerUserAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'CP_SupPriceList_ModuleConfig'];
     appControllers.service('CP_SupplierPricelist_CustomerUserAPIService', customerUserAPIService);
 
 })(appControllers);

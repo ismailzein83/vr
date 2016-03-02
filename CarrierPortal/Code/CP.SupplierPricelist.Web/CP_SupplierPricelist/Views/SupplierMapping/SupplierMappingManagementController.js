@@ -2,7 +2,7 @@
     function (appControllers) {
         "use strict";
 
-        function supplierManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, supplierMappingService) {
+        function supplierManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, supplierMappingService, supplierMappingAPIService) {
             var gridAPI;
 
             var userDirectiveApi;
@@ -32,7 +32,10 @@
                     carrierAccountDirectiveApi = api;
                     carrierAccountReadyPromiseDeferred.resolve();
                 }
-                        $scope.AddSupplierMapping = function () {
+                $scope.hasAddSupplierMappingPermission = function () {
+                    return supplierMappingAPIService.HasAddCustomerSupplierMapping();
+                }
+                $scope.AddSupplierMapping = function () {
                     var onSupplierMappingAdded = function (supplierMapping) {
                         gridAPI.onSupplierMappingAdded(supplierMapping);
                     };
@@ -84,7 +87,15 @@
 
         }
 
-        supplierManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'CP_SupplierPricelist_SupplierMappingService'];
+        supplierManagementController.$inject = [
+            '$scope',
+            'UtilsService',
+            'VRNotificationService',
+            'VRUIUtilsService',
+            'CP_SupplierPricelist_SupplierMappingService',
+            'CP_SupplierPricelist_SupplierMappingAPIService'
+
+        ];
         appControllers.controller('CP_SupplierPriceList_SupplierManagementController', supplierManagementController);
     }
 )(appControllers);

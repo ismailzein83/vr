@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    function customerManagmentApiService(baseApiService, utilsService, moduleConfig) {     
+    function customerManagmentApiService(baseApiService, utilsService, SecurityService, moduleConfig) {
         function UpdateCustomer(object) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "Customer", "UpdateCustomer"), object);
         }
@@ -24,16 +24,25 @@
                 serializedFilter: serializedFilter
             });
         }
+        function HasUpdateCustomer() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(moduleConfig.moduleName, "Customer", ['UpdateCustomer']));
+        }
+
+        function HasAddCustomer() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(moduleConfig.moduleName, "Customer", ['AddCustomer']));
+        }
         return ({
             GetCustomerTemplates: GetCustomerTemplates,
             UpdateCustomer: UpdateCustomer,
             AddCustomer: AddCustomer,
             GetFilteredCustomers: GetFilteredCustomers,
             GetCustomer: GetCustomer,
-            GetCustomerInfos: GetCustomerInfos
+            GetCustomerInfos: GetCustomerInfos,
+            HasUpdateCustomer: HasUpdateCustomer,
+            HasAddCustomer: HasAddCustomer
         });
     }
-    customerManagmentApiService.$inject = ['BaseAPIService', 'UtilsService', 'CP_SupPriceList_ModuleConfig'];
+    customerManagmentApiService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'CP_SupPriceList_ModuleConfig'];
     appControllers.service('CP_SupplierPricelist_CustomerManagmentAPIService', customerManagmentApiService);
 
 })(appControllers);

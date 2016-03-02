@@ -21,6 +21,9 @@
                     }
                     customerService.addCustomer(onCustomerAdded);
                 }
+                $scope.hasAddCustomerPermission = function () {
+                    return customerManagmentApiService.HasAddCustomer();
+                };
             }
 
             defineScope();

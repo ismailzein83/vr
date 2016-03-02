@@ -53,9 +53,12 @@ function (UtilsService, supplierMappingService , supplierMappingAPIService, VRNo
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editSupplierMapping
-            }
-            ];
+                clicked: editSupplierMapping,
+                haspermission: hasUpdateSupplierMappingPermission
+            }];
+        }
+        function hasUpdateSupplierMappingPermission () {
+            return supplierMappingAPIService.HasUpdateCustomerSupplierMapping();
         }
         function editSupplierMapping(supplierMapping) {
             var ontSupplierMappingUpdated = function (updatedItem) {

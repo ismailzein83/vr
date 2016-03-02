@@ -1,6 +1,6 @@
 ﻿"use strict";
 app.directive("vrCpCustomerGrid", ["UtilsService", "CP_SupplierPricelist_CustomerManagmentAPIService", "CP_SupplierPricelist_CustomerService","VRUIUtilsService", "VRNotificationService",
-function (UtilsService, customeApiService, customerService, vRUIUtilsService, vRNotificationService) {
+function (UtilsService, customerApiService, customerService, vRUIUtilsService, vRNotificationService) {
     var gridAPI;
     var gridDrillDownTabsObj;
 
@@ -37,7 +37,7 @@ function (UtilsService, customeApiService, customerService, vRUIUtilsService, vR
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return customeApiService.GetFilteredCustomers(dataRetrievalInput)
+                return customerApiService.GetFilteredCustomers(dataRetrievalInput)
                    .then(function (response) {
                        if (response.Data != undefined) {
                            for (var i = 0; i < response.Data.length; i++) {
@@ -57,10 +57,15 @@ function (UtilsService, customeApiService, customerService, vRUIUtilsService, vR
             function defineMenuActions() {
                 $scope.gridMenuActions = [{
                     name: "Edit",
-                    clicked: editCustomer
+                    clicked: editCustomer,
+                    haspermission: hasEditCustomerPermission
                 }];
             }
-        }
+    }
+    function hasEditCustomerPermission() {
+        return customerApiService.HasUpdateCustomer();
+
+    }
     function editCustomer(customer) {
         var onCustomerUpdated = function (updatedItem) {
             gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);

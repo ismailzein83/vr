@@ -18,7 +18,7 @@ app.service('CP_SupplierPricelist_CustomerUserService', ['VRModalService', 'CP_S
         
         function registerDrillDownToCustomer() {
             var drillDownDefinition = {};
-
+           
             drillDownDefinition.title = "Users";
             drillDownDefinition.directive = "vr-cp-customeruser-grid";
             drillDownDefinition.parentMenuActions = [{
@@ -35,9 +35,15 @@ app.service('CP_SupplierPricelist_CustomerUserService', ['VRModalService', 'CP_S
                         }
                     };
                     assignUser(onCustomerUserAdded, customerItem.Entity.CustomerId);
-                }
+                },
+                haspermission: hasAddCustomerUserPermission
+
             }];
 
+            function hasAddCustomerUserPermission() {
+                return customerUserAPIService.HasAddCustomerUser();
+            }
+           
             drillDownDefinition.loadDirective = function (directiveAPI, customerItem) {
                 customerItem.customerUserGridAPI = directiveAPI;
                 var query = {

@@ -29,6 +29,9 @@
                     gridAPI = api;
                     api.loadGrid();
                 }
+                $scope.hasImportPriceListPermission = function () {
+                    return supplierPriceListApiService.HasImportPriceList();
+                }
                 $scope.onReadyCarrierAccountSelector = function(api) {
                     carrierDirectiveApi = api;
                     var setLoader = function (value) { $scope.isLoadingCarrierDirective = value };

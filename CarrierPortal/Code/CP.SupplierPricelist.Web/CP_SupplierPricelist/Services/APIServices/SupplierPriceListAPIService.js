@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    supplierPriceListAPIService.$inject = ['BaseAPIService', 'UtilsService', 'CP_SupPriceList_ModuleConfig'];
+    supplierPriceListAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'CP_SupPriceList_ModuleConfig'];
 
-    function supplierPriceListAPIService(baseApiService, utilsService, moduleConfig) {
+    function supplierPriceListAPIService(baseApiService, utilsService, SecurityService , moduleConfig) {
 
         function importPriceList(obj) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "ImportPriceList"), obj);
@@ -17,11 +17,15 @@
         function GetResultPriceListTemplates() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "GetResultPriceListTemplates"));
         }
+        function HasImportPriceList() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(moduleConfig.moduleName, "PriceList", ['ImportPriceList']));
+        }
         return ({
             importPriceList: importPriceList,
             GetUpdated: GetUpdated,
             GetUploadPriceListTemplates: GetUploadPriceListTemplates,
-            GetResultPriceListTemplates: GetResultPriceListTemplates
+            GetResultPriceListTemplates: GetResultPriceListTemplates,
+            HasImportPriceList: HasImportPriceList
         });
 
     }
