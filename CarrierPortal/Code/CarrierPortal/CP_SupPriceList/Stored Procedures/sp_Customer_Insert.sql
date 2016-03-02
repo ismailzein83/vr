@@ -3,29 +3,24 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [CP_SupPriceList].[InsertCustomer] 
+CREATE PROCEDURE [CP_SupPriceList].[sp_Customer_Insert] 
 	(
-	@CustomerName varchar(100),
+	@CustomerName nvarchar(255),
 	@Settings nvarchar(max),
 	@customerID int out
 	)
 AS
 BEGIN
-	BEGIN TRANSACTION
-INSERT INTO [CP_SupPriceList].[Customer]
+IF NOT EXISTS(select 1 from  [CP_SupPriceList].[Customer] where Name = @CustomerName)
+BEGIN
+	INSERT INTO [CP_SupPriceList].[Customer]
            ([Name]
            ,[Settings]
            ,[CreatedTime])
      VALUES
            (@CustomerName,
            @Settings,
-           GETDATE())
-    IF @@ERROR <> 0
-	BEGIN
-    ROLLBACK
-    RAISERROR ('Error in inserting in Customer.', 16, 1)
-    RETURN
-    END
+           GETDATE())    
 	set @customerID = SCOPE_IDENTITY()
-	COMMIT
+	END
 END

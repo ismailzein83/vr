@@ -1,6 +1,8 @@
 ﻿CREATE TABLE [CP_SupPriceList].[PriceList] (
     [ID]                BIGINT         IDENTITY (1, 1) NOT NULL,
     [UserID]            INT            NOT NULL,
+    [CarrierAccountID]  NVARCHAR (500) NULL,
+    [CustomerID]        INT            NULL,
     [FileID]            BIGINT         NOT NULL,
     [PriceListType]     INT            NOT NULL,
     [Status]            INT            NOT NULL,
@@ -16,6 +18,8 @@
     [timestamp]         ROWVERSION     NULL,
     CONSTRAINT [PK_PriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

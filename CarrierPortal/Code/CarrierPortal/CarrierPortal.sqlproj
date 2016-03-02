@@ -78,13 +78,16 @@
     <Build Include="CP_SupPriceList\Tables\CustomerUser.sql" />
     <Build Include="CP_SupPriceList\Tables\CustomerSupplierMapping.sql" />
     <Build Include="CP_SupPriceList\Tables\Customer.sql" />
-    <Build Include="CP_SupPriceList\Stored Procedures\UpdateCustomer.sql" />
     <Build Include="CP_SupPriceList\Stored Procedures\sp_PriceList_UpdatePriceListProgress.sql" />
     <Build Include="CP_SupPriceList\Stored Procedures\sp_CustomerUser_GetAll.sql" />
     <Build Include="CP_SupPriceList\Stored Procedures\sp_CustomerSupplierMapping_Update.sql" />
     <Build Include="CP_SupPriceList\Stored Procedures\sp_CustomerSupplierMapping_Insert.sql" />
     <Build Include="CP_SupPriceList\Stored Procedures\sp_CustomerSupplierMapping_GetAll.sql" />
     <Build Include="CP_SupPriceList\Stored Procedures\sp_Customer_GetAll.sql" />
-    <Build Include="CP_SupPriceList\Stored Procedures\InsertCustomer.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_PriceList_GetBeforeID.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_CustomerUser_Insert.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_Customeruser_Delete.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_Customer_Update.sql" />
+    <Build Include="CP_SupPriceList\Stored Procedures\sp_Customer_Insert.sql" />
   </ItemGroup>
 </Project>

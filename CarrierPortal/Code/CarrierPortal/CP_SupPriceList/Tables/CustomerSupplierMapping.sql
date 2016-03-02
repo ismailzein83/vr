@@ -6,6 +6,9 @@
     [CreatedTime]     DATETIME       CONSTRAINT [DF_CustomerSupplierUser_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]       ROWVERSION     NULL,
     CONSTRAINT [PK_CustomerSupplierMapping] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [FK_CustomerSupplierMapping_Customer] FOREIGN KEY ([CustomerID]) REFERENCES [CP_SupPriceList].[Customer] ([ID]),
     CONSTRAINT [IX_CustomerSupplierMapping_CustUser] UNIQUE NONCLUSTERED ([CustomerID] ASC, [UserID] ASC)
 );
+
+
 

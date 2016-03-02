@@ -8,7 +8,9 @@ CREATE PROCEDURE [CP_SupPriceList].[sp_PriceList_Insert]
 @FileID int,
 @PriceListType int,
 @status int,
-@EffectiveOn datetime
+@EffectiveOn datetime,
+@CustomerID int,
+@CarrierAccountID nvarchar(500)
 
 AS
 BEGIN
@@ -18,7 +20,9 @@ BEGIN
            ,[PriceListType]
            ,[Status]
            ,[CreatedTime]
-           ,[EffectiveOnDate])
+           ,[EffectiveOnDate]
+           ,[CustomerID]
+           ,[CarrierAccountID])
      VALUES
-           (@UserID,@FileID,@PriceListType,@status,GETDATE(),@EffectiveOn)
+           (@UserID,@FileID,@PriceListType,@status,GETDATE(),@EffectiveOn,@CustomerID,@CarrierAccountID)
 END

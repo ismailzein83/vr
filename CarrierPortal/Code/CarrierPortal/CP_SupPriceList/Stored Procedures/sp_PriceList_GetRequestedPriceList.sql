@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]
-@PriceListStatusIDs varchar(max)
+@PriceListStatusIDs varchar(max),
+@CustomerId int = null
 AS
 BEGIN
 	DECLARE @PriceListStatusIDsTable TABLE (PriceListStatusID int)
@@ -22,6 +23,9 @@ BEGIN
       ,[ResultRetryCount]
       ,[UploadRetryCount]
       ,AlertMessage
+      ,CustomerID
+      ,CarrierAccountID
   FROM [CP_SupPriceList].[PriceList]
-  WHERE (@PriceListStatusIDs  is null or [CP_SupPriceList].[PriceList].[Status] in (select PriceListStatusID from @PriceListStatusIDsTable))	
+  WHERE (@PriceListStatusIDs  is null or [CP_SupPriceList].[PriceList].[Status] in (select PriceListStatusID from @PriceListStatusIDsTable))
+  and (@CustomerId  is null or	@CustomerId= CustomerID)
 END
