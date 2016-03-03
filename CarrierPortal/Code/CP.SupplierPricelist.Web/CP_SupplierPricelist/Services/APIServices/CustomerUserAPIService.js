@@ -6,10 +6,13 @@
         function GetFilteredCustomerUsers(input) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "CustomerUser", "GetFilteredCustomerUsers"), input);
         }
-
+        function GetHasCurrentCustomerId(){
+            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "CustomerUser", "GetHasCurrentCustomerId"));
+        }
         function AddCustomerUser(object) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "CustomerUser", "AddCustomerUser"), object);
         }
+
         function DeleteCustomerUser(userId) {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "CustomerUser", "DeleteCustomerUser"), { userId: userId });
         }
@@ -27,7 +30,8 @@
             AddCustomerUser: AddCustomerUser,
             DeleteCustomerUser: DeleteCustomerUser,
             HasAddCustomerUser: HasAddCustomerUser,
-            HasDeleteCustomerUser: HasDeleteCustomerUser
+            HasDeleteCustomerUser: HasDeleteCustomerUser,
+            GetHasCurrentCustomerId: GetHasCurrentCustomerId
         });
        
     }

@@ -11,6 +11,14 @@ namespace CP.SupplierPricelist.Web.Controllers
     public class CustomerUserController : BaseAPIController
     {
 
+        [HttpGet]
+        [Route("GetHasCurrentCustomerId")]
+        public bool GetHasCurrentCustomerId()
+        {
+            CustomerUserManager manager = new CustomerUserManager();
+            return  manager.GetHasCurrentCustomerId();
+        } 
+
         [HttpPost]
         [Route("GetFilteredCustomerUsers")]
         public object GetFilteredCustomerUsers(DataRetrievalInput<CustomerUserQuery> input)

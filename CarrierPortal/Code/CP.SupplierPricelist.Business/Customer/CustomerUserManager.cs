@@ -32,10 +32,18 @@ namespace CP.SupplierPricelist.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, MapToDetails));
         }
 
-        public int GetCustomerIdByUserId(int customerId)
+        public bool GetHasCurrentCustomerId()
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var customers = GetCachedCustomersUsers();
+            return customers.GetRecord(userId)!=null;
+        }
+
+
+        public int GetCustomerIdByUserId(int userId)
         {
             var customers = GetCachedCustomersUsers();
-            return customers.GetRecord(customerId).CustomerId;
+            return customers.GetRecord(userId).CustomerId;
         }
         public InsertOperationOutput<CustomerUserDetail> AddCustomerUser(CustomerUser input)
         {

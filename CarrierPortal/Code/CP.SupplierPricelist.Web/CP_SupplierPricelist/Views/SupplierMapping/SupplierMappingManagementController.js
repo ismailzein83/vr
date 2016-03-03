@@ -2,7 +2,7 @@
     function (appControllers) {
         "use strict";
 
-        function supplierManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, supplierMappingService, supplierMappingAPIService) {
+        function supplierManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, supplierMappingService, supplierMappingAPIService, customerUserAPIService) {
             var gridAPI;
 
             var userDirectiveApi;
@@ -21,7 +21,6 @@
                 }; 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-                    api.loadGrid({});
                 }
 
                 $scope.onUserDirectiveReady = function (api) {
@@ -53,7 +52,19 @@
 
             function load() {
                 $scope.isLoadingFilters = true;
-                loadAllControls();
+                return customerUserAPIService.GetHasCurrentCustomerId().then(function (response) {
+                    if (response==true)
+                        loadAllControls().then(function (response) {
+                            gridAPI.loadGrid({});
+                        })
+                    else {
+                        $scope.isLoadingFilters = false;
+                        VRNotificationService.notifyExceptionWithClose("This user has no related customer.");
+                    }
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoadingFilters = false;
+                });
             }
 
             function loadAllControls() {
@@ -93,7 +104,8 @@
             'VRNotificationService',
             'VRUIUtilsService',
             'CP_SupplierPricelist_SupplierMappingService',
-            'CP_SupplierPricelist_SupplierMappingAPIService'
+            'CP_SupplierPricelist_SupplierMappingAPIService',
+            'CP_SupplierPricelist_CustomerUserAPIService'
 
         ];
         appControllers.controller('CP_SupplierPriceList_SupplierManagementController', supplierManagementController);
