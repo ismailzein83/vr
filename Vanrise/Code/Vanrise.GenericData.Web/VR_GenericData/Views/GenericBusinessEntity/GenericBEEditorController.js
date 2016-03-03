@@ -35,7 +35,6 @@
             if (parameters != undefined && parameters != null) {
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
             }
-            console.log(businessEntityDefinitionId);
             isEditMode = (businessEntityDefinitionId != undefined);
         }
 

@@ -31,7 +31,7 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
             var gridAPI;
             function initializeController() {
 
-                $scope.genericEditorDefinitions = [];
+                $scope.extensibleBEItems = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -43,8 +43,8 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
                         }
-                        directiveAPI.onGenericEditorAdded = function (genericEditorObj) {
-                            gridAPI.itemAdded(genericEditorObj);
+                        directiveAPI.onExtensibleBEItemAdded = function (extensibleBEItemObj) {
+                            gridAPI.itemAdded(extensibleBEItemObj);
                         }
                         return directiveAPI;
                     }

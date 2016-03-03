@@ -20,17 +20,17 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onGenericEditorUpdated = onExtensibleBEItemUpdated;
+                modalScope.onExtensibleBEItemUpdated = onExtensibleBEItemUpdated;
             };
 
             var parameters = {
-                genericEditorDefinitionId: extensibleBEItemId
+                extensibleBEItemId: extensibleBEItemId
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericExtensibleBEEditor.html', parameters, modalSettings);
         }
 
-        function addExtendedSettings(businessEntityDefinitionId, onExtendedSettingsAdded) {
+        function addExtendedSettings(businessEntityDefinitionId, onExtensibleBEItemAdded) {
             var modalParameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId
             };
@@ -38,7 +38,7 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onGenericEditorAdded = onExtendedSettingsAdded;
+                modalScope.onExtensibleBEItemAdded = onExtensibleBEItemAdded;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericExtensibleBEEditor.html', modalParameters, modalSettings);

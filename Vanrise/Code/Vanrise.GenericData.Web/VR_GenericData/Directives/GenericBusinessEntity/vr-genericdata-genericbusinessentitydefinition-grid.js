@@ -43,12 +43,12 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                     drillDownDefinition.title = "Extensible BE Item";
                     drillDownDefinition.directive = "vr-genericdata-extensiblebeitem-grid";
 
-                    drillDownDefinition.loadDirective = function (directiveAPI, genericEditorObj) {
-                        genericEditorObj.genericEditorGridAPI = directiveAPI;
+                    drillDownDefinition.loadDirective = function (directiveAPI, extensibleBEItem) {
+                        extensibleBEItem.genericEditorGridAPI = directiveAPI;
                         var payload = {
-                                BusinessEntityDefinitionId: genericEditorObj.Entity.BusinessEntityDefinitionId
+                                BusinessEntityDefinitionId: extensibleBEItem.Entity.BusinessEntityDefinitionId
                         };
-                        return genericEditorObj.genericEditorGridAPI.loadGrid(payload);
+                        return extensibleBEItem.genericEditorGridAPI.loadGrid(payload);
                     };
                     drillDownDefinitions.push(drillDownDefinition);
                     gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
@@ -106,7 +106,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                 gridAPI.expandRow(dataItem);
                 var onExtendedSettingsAdded = function (extendedSettingsObj) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(extendedSettingsObj);
-                    dataItem.genericEditorGridAPI.onGenericEditorAdded(extendedSettingsObj);
+                    dataItem.genericEditorGridAPI.onExtensibleBEItemAdded(extendedSettingsObj);
                 }
 
                 VR_GenericData_ExtensibleBEItemService.addExtendedSettings(dataItem.Entity.BusinessEntityDefinitionId, onExtendedSettingsAdded);

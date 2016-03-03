@@ -7,16 +7,16 @@
     function GenericExtensibleBEEditorController($scope, VR_GenericData_ExtensibleBEItemAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
 
         var isEditMode;
-        var genericEditorEntity;
-        var genericEditorDefinitionId;
+        var extensibleBEItemEntity;
+        var extensibleBEItemId;
         var recordTypeEntity;
         var businessEntityDefinitionId;
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var genericEditorDesignAPI;
-        var genericEditorDesignReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var extensibleBEItemDesignAPI;
+        var extensibleBEItemDesignReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var editorDirectiveAPI;
 
@@ -29,10 +29,10 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                genericEditorDefinitionId = parameters.genericEditorDefinitionId;
+                extensibleBEItemId = parameters.extensibleBEItemId;
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
             }
-            isEditMode = (genericEditorDefinitionId != undefined);
+            isEditMode = (extensibleBEItemId != undefined);
         }
 
         function defineScope() {
@@ -45,7 +45,7 @@
                     getDataRecordType(selectedDataRecordTypeId).then(function () {
                         var payload = { recordTypeFields: recordTypeEntity.Fields };
                         var setLoader = function (value) { $scope.isLoading = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, genericEditorDesignAPI, payload, setLoader, genericEditorDesignReadyPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, extensibleBEItemDesignAPI, payload, setLoader, extensibleBEItemDesignReadyPromiseDeferred);
                     });
                 }
             }
@@ -55,12 +55,12 @@
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
             }
 
-            $scope.scopeModal.SaveGenericEditor = function () {
+            $scope.scopeModal.SaveExtensibleBEItem = function () {
                 if (isEditMode) {
-                    return updateGenericEditor();
+                    return updateExtensibleBEItem();
                 }
                 else {
-                    return insertGenericEditor();
+                    return insertExtensibleBEItem();
                 }
             };
 
@@ -68,9 +68,9 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.scopeModal.onGenericEditorDirectiveReady = function (api) {
-                genericEditorDesignAPI = api;
-                genericEditorDesignReadyPromiseDeferred.resolve();
+            $scope.scopeModal.onExtensibleBEItemDirectiveReady = function (api) {
+                extensibleBEItemDesignAPI = api;
+                extensibleBEItemDesignReadyPromiseDeferred.resolve();
             }
 
         }
@@ -79,8 +79,8 @@
             $scope.scopeModal.isLoading = true;
 
             if (isEditMode) {
-                getGenericEditor().then(function () {
-                    getDataRecordType(genericEditorEntity.DataRecordTypeId).then(function () {
+                getExtensibleBEItem().then(function () {
+                    getDataRecordType(extensibleBEItemEntity.DataRecordTypeId).then(function () {
                         loadAllControls();
                     }).catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -108,23 +108,23 @@
 
 
                 function setTitle() {
-                    if (isEditMode && genericEditorEntity != undefined)
-                        $scope.title = UtilsService.buildTitleForUpdateEditor(genericEditorEntity.Name, 'Generic Editor');
+                    if (isEditMode && extensibleBEItemEntity != undefined)
+                        $scope.title = UtilsService.buildTitleForUpdateEditor(extensibleBEItemEntity.Name, 'Extensible BE Item');
                     else
-                        $scope.title = UtilsService.buildTitleForAddEditor('Generic Editor');
+                        $scope.title = UtilsService.buildTitleForAddEditor('Extensible BE Item');
                 }
 
                 function loadEditorDesignSection() {
-                    var loadGenericEditorDesignPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var loadExtensibleBEItemDesignPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    genericEditorDesignReadyPromiseDeferred.promise
+                    extensibleBEItemDesignReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (genericEditorEntity != undefined && genericEditorEntity != undefined && recordTypeEntity != undefined) ? { sections: genericEditorEntity.Sections, recordTypeFields: recordTypeEntity.Fields } : undefined
-                            genericEditorDesignReadyPromiseDeferred = undefined;
-                            VRUIUtilsService.callDirectiveLoad(genericEditorDesignAPI, directivePayload, loadGenericEditorDesignPromiseDeferred);
+                            var directivePayload = (extensibleBEItemEntity != undefined && extensibleBEItemEntity != undefined && recordTypeEntity != undefined) ? { sections: extensibleBEItemEntity.Sections, recordTypeFields: recordTypeEntity.Fields } : undefined
+                            extensibleBEItemDesignReadyPromiseDeferred = undefined;
+                            VRUIUtilsService.callDirectiveLoad(extensibleBEItemDesignAPI, directivePayload, loadExtensibleBEItemDesignPromiseDeferred);
                         });
 
-                    return loadGenericEditorDesignPromiseDeferred.promise;
+                    return loadExtensibleBEItemDesignPromiseDeferred.promise;
                     
                 }
 
@@ -134,7 +134,7 @@
 
                     dataRecordTypeSelectorReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (genericEditorEntity != undefined) ? { selectedIds: genericEditorEntity.DataRecordTypeId } : undefined
+                            var directivePayload = (extensibleBEItemEntity != undefined) ? { selectedIds: extensibleBEItemEntity.DataRecordTypeId } : undefined
 
                             VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, directivePayload, loadDataRecordTypeSelectorPromiseDeferred);
                         });
@@ -145,9 +145,9 @@
 
             }
 
-            function getGenericEditor() {
-                return VR_GenericData_ExtensibleBEItemAPIService.GetExtensibleBEItem(genericEditorDefinitionId).then(function (genericEditor) {
-                    genericEditorEntity = genericEditor;
+            function getExtensibleBEItem() {
+                return VR_GenericData_ExtensibleBEItemAPIService.GetExtensibleBEItem(extensibleBEItemId).then(function (extensibleBEItem) {
+                    extensibleBEItemEntity = extensibleBEItem;
                 });
             }
         }
@@ -162,26 +162,26 @@
         }
 
         function buildExtensibleBEItemFromScope() {
-            if (genericEditorDesignAPI != undefined)
+            if (extensibleBEItemDesignAPI != undefined)
             {
-                var extensibleBEItem = genericEditorDesignAPI.getData();
+                var extensibleBEItem = extensibleBEItemDesignAPI.getData();
                 if (extensibleBEItem == undefined)
                     extensibleBEItem = {};
-                extensibleBEItem.BusinessEntityDefinitionId= genericEditorEntity != undefined ? genericEditorEntity.BusinessEntityId : businessEntityDefinitionId;
-                extensibleBEItem.ExtensibleBEItemId = genericEditorDefinitionId;
+                extensibleBEItem.BusinessEntityDefinitionId = extensibleBEItemEntity != undefined ? extensibleBEItemEntity.BusinessEntityDefinitionId : businessEntityDefinitionId;
+                extensibleBEItem.ExtensibleBEItemId = extensibleBEItemId;
                 extensibleBEItem.DataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
                 return extensibleBEItem;
             }
         }
 
-        function insertGenericEditor() {
+        function insertExtensibleBEItem() {
 
             var extensibleBEItem = buildExtensibleBEItemFromScope();
             return VR_GenericData_ExtensibleBEItemAPIService.AddExtensibleBEItem(extensibleBEItem)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Extensible BE Item", response)) {
-                    if ($scope.onGenericEditorAdded != undefined)
-                        $scope.onGenericEditorAdded(response.InsertedObject);
+                    if ($scope.onExtensibleBEItemAdded != undefined)
+                        $scope.onExtensibleBEItemAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -190,13 +190,13 @@
 
         }
 
-        function updateGenericEditor() {
+        function updateExtensibleBEItem() {
             var extensibleBEItem = buildExtensibleBEItemFromScope();
             VR_GenericData_ExtensibleBEItemAPIService.UpdateExtensibleBEItem(extensibleBEItem)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Extensible BE Item", response)) {
-                    if ($scope.onGenericEditorUpdated != undefined)
-                        $scope.onGenericEditorUpdated(response.UpdatedObject);
+                    if ($scope.onExtensibleBEItemUpdated != undefined)
+                        $scope.onExtensibleBEItemUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
