@@ -2,9 +2,9 @@
 
     "use strict";
 
-    operatorProfileEditorController.$inject = ['$scope', 'InterConnect_BE_OperatorProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_GenericData_GenericEditorAPIService'];
+    operatorProfileEditorController.$inject = ['$scope', 'InterConnect_BE_OperatorProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_GenericData_GenericEditorAPIService','VR_GenericData_BusinessEntityAPIService'];
 
-    function operatorProfileEditorController($scope, InterConnect_BE_OperatorProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_GenericEditorAPIService) {
+    function operatorProfileEditorController($scope, InterConnect_BE_OperatorProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_GenericEditorAPIService, VR_GenericData_BusinessEntityAPIService) {
         $scope.scopeModal = {};
         $scope.scopeModal.isEditMode;
         var operatorProfileId;
@@ -14,6 +14,8 @@
         var countryId;
         var cityId;
 
+        var singleValue;
+
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -22,6 +24,9 @@
 
         var extendedSettingsAPI;
         var extendedSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var dataRecordTypeAPI;
+        var dataRecordTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -39,16 +44,18 @@
         function defineScope() {
 
             $scope.scopeModal.dataRecordTypes = [];
+            $scope.scopeModal.showRecordTypeSelector = false;
+            $scope.scopeModal.onDataRecordTypeSelectorReady = function(api)
+            {
+                dataRecordTypeAPI = api;
+                dataRecordTypeReadyPromiseDeferred.resolve();
+            }
 
-            $scope.scopeModal.onSettingSelectionChanged = function () {
-                if ($scope.scopeModal.selectedDataRecordTypes != undefined && $scope.scopeModal.dataRecordTypes.length > 1 && !$scope.scopeModal.isLoading)
-                {
-                    $scope.scopeModal.isLoading = true;
-                    loadExtendedSettings($scope.scopeModal.selectedDataRecordTypes.DataRecordTypeId).then(function () {
-                        $scope.scopeModal.isLoading = false;
-                    });
-                }
-                   
+            $scope.scopeModal.onSettingSelectionChanged = function (item) {
+                $scope.scopeModal.isLoading = true;
+                loadExtendedSettings(item.DataRecordTypeId, businessEntityId).then(function () {
+                    $scope.scopeModal.isLoading = false;
+                });         
             }
 
             $scope.scopeModal.onExtendedSettingsDirectiveReady = function (api)
@@ -80,8 +87,7 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.onCountrySelctionChanged = function (item, datasource) {
-
+            $scope.onCountrySelctionChanged = function (item) {
                 if (item != undefined) {
                     var payload = {};
                     payload.filter = { CountryId: item.CountryId }
@@ -102,7 +108,6 @@
                     loadAllControls()
                         .finally(function () {
                             $scope.scopeModal.isLoading = false;
-
                            operatorProfileEntity = undefined;
                         });
                 }).catch(function (error) {
@@ -125,12 +130,9 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection, loadDataRecordTypes]).catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.isLoading = false;
-              });
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadCities, loadStaticSection, loadBusinessEntityId]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
         }
 
         function setTitle() {
@@ -173,38 +175,58 @@
             }
         }
 
-        function loadDataRecordTypes()
+        function loadDataRecordTypeSelector()
+        {
+            var loadDataRecordTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            dataRecordTypeReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    businessEntityId:businessEntityId,
+                    selectedIds: (operatorProfileEntity != undefined) ? operatorProfileEntity.ExtendedSettingsRecordTypeId : undefined
+                };
+
+                VRUIUtilsService.callDirectiveLoad(dataRecordTypeAPI, payload, loadDataRecordTypePromiseDeferred);
+            });
+
+            return loadDataRecordTypePromiseDeferred.promise;
+        }
+
+        function loadBusinessEntityId()
         {
             var promiseDeferred = UtilsService.createPromiseDeferred();
-            InterConnect_BE_OperatorProfileAPIService.GetDataRecordTypes().then(function (response) {
-               $scope.scopeModal.dataRecordTypes = response;
-               if ($scope.scopeModal.dataRecordTypes.length == 1 && !$scope.scopeModal.isEditMode) {
-                   loadExtendedSettings($scope.scopeModal.dataRecordTypes[0].DataRecordTypeId).then(function () {
-                       promiseDeferred.resolve();
-                   }).catch(function (error) {
-                       promiseDeferred.reject(error);
-                   });
-               } else if (operatorProfileEntity != undefined && operatorProfileEntity.ExtendedSettingsRecordTypeId != undefined) {
-                   $scope.scopeModal.selectedDataRecordTypes = UtilsService.getItemByVal($scope.scopeModal.dataRecordTypes, operatorProfileEntity.ExtendedSettingsRecordTypeId, "DataRecordTypeId");
-                   loadExtendedSettings($scope.scopeModal.selectedDataRecordTypes.DataRecordTypeId).then(function () {
-                       promiseDeferred.resolve();
-                   }).catch(function(error)
-                   {
-                       promiseDeferred.reject(error);
-                   });
-               } else {
-                   promiseDeferred.resolve();
-               }
+            return InterConnect_BE_OperatorProfileAPIService.GetBusinessEntityDefinitionId().then(function (response)
+            {
+                businessEntityId = response;
+                loadDataRecordTypeSelector().then(function () {
+                    singleValue = dataRecordTypeAPI.getIfSingleItem();
+                    $scope.scopeModal.showRecordTypeSelector = (singleValue == undefined);
 
+                    if ($scope.scopeModal.isEditMode) {
+                        loadExtendedSettings(dataRecordTypeAPI.getSelectedIds(), businessEntityId).then(function () {
+                            promiseDeferred.resolve();
+                        }).catch(function (error) {
+                            promiseDeferred.reject(error);
+                        });
+                    }else if(singleValue !=undefined)
+                    {
+                        loadExtendedSettings(singleValue.DataRecordTypeId, businessEntityId).then(function () {
+                            promiseDeferred.resolve();
+                        }).catch(function (error) {
+                            promiseDeferred.reject(error);
+                        });
+                    }
+                    else {
+                        promiseDeferred.resolve();
+                    }
+                });
             });
             return promiseDeferred.promise;
         }
 
-        function loadExtendedSettings(recordTypeId)
+        function loadExtendedSettings(recordTypeId, businessEntityId)
         {
             var promiseDeferred = UtilsService.createPromiseDeferred();
 
-            InterConnect_BE_OperatorProfileAPIService.GetRunTimeExtendedSettings(recordTypeId).then(function (response) {
+            VR_GenericData_BusinessEntityAPIService.GetExtensibleBEItemRuntime(recordTypeId, businessEntityId).then(function (response) {
                 $scope.scopeModal.sections = response.Sections;
                 loadExtendedSettingsDirective().then(function () {
                     promiseDeferred.resolve();
@@ -243,7 +265,7 @@
                     Company: $scope.scopeModal.company,
                 },
                 ExtendedSettings: extendedSettingsAPI != undefined ? extendedSettingsAPI.getData() : undefined,
-                ExtendedSettingsRecordTypeId: $scope.scopeModal.selectedDataRecordTypes != undefined ? $scope.scopeModal.selectedDataRecordTypes.DataRecordTypeId : undefined
+                ExtendedSettingsRecordTypeId: singleValue != undefined ? singleValue.DataRecordTypeId : dataRecordTypeAPI != undefined ? dataRecordTypeAPI.getSelectedIds() : undefined
             };
             return obj;
         }

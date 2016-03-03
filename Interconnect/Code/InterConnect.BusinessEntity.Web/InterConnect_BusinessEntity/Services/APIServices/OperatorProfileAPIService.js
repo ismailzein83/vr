@@ -9,9 +9,7 @@
             return BaseAPIService.post(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorProfile", "GetFilteredOperatorProfiles"), input);
         }
 
-        function GetDataRecordTypes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorProfile", "GetDataRecordTypes"));
-        }
+
 
         function GetOperatorProfile(operatorProfileId) {
             return BaseAPIService.get(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorProfile", "GetOperatorProfile"), {
@@ -27,11 +25,8 @@
 
         }
 
-        function GetRunTimeExtendedSettings(dataRecordTypeId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorProfile", "GetRunTimeExtendedSettings"), {
-                dataRecordTypeId: dataRecordTypeId
-            });
-
+        function GetBusinessEntityDefinitionId() {
+            return BaseAPIService.get(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorProfile", "GetBusinessEntityDefinitionId"));
         }
 
         function UpdateOperatorProfile(operatorProfile) {
@@ -43,8 +38,7 @@
         }
 
         return ({
-            GetDataRecordTypes:GetDataRecordTypes,
-            GetRunTimeExtendedSettings:GetRunTimeExtendedSettings,
+            GetBusinessEntityDefinitionId: GetBusinessEntityDefinitionId,
             GetOperatorProfilsInfo: GetOperatorProfilsInfo,
             GetFilteredOperatorProfiles: GetFilteredOperatorProfiles,
             GetOperatorProfile: GetOperatorProfile,

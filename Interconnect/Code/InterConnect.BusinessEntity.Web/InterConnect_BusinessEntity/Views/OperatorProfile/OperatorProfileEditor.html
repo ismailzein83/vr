@@ -21,14 +21,13 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row vr-disabled="scopeModal.isEditMode">
-                        <vr-columns width="1/2row" ng-if="scopeModal.dataRecordTypes.length > 1 ">
-                            <vr-select datatextfield="Name" datavaluefield="DataRecordTypeId"
-                                       entityname="Data Record Types" selectedvalues="scopeModal.selectedDataRecordTypes" datasource="scopeModal.dataRecordTypes" label="Data Record Types" onselectionchanged="scopeModal.onSettingSelectionChanged" isrequired="true"></vr-select>
+                        <vr-columns width="1/2row" ng-show="scopeModal.showRecordTypeSelector">
+                            <vr-genericdata-businessentity-recordtype-selector on-ready="scopeModal.onDataRecordTypeSelectorReady" onselectitem="scopeModal.onSettingSelectionChanged" isrequired="scopeModal.showRecordTypeSelector"></vr-genericdata-businessentity-recordtype-selector>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
 
-                <vr-genericdata-genericeditor-runtime-editor on-ready="scopeModal.onExtendedSettingsDirectiveReady"></vr-genericdata-genericeditor-runtime-editor>
+                <vr-genericdata-extensiblebeitem-runtime-editor on-ready="scopeModal.onExtendedSettingsDirectiveReady"></vr-genericdata-extensiblebeitem-runtime-editor>
 
             </vr-tabs>
         </vr-form>

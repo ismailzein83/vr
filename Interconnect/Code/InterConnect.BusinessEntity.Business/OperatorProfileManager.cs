@@ -12,9 +12,8 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 namespace InterConnect.BusinessEntity.Business
 {
-    public class OperatorProfileManager
+    public class OperatorProfileManager : ExtensibleBEManager
     {
-        private const string businessEntityName = "InterConnect_BE_OperatorProfile";
         public List<OperatorProfileExtendedSettingType> GetExtendedSettingTypes()
         {
             return new List<OperatorProfileExtendedSettingType> 
@@ -110,29 +109,16 @@ namespace InterConnect.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public int GetBusinessEntityDefinitionId()
-        {
-            BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
-            return manager.GetBusinessEntityDefinitionId(businessEntityName);
-        }
-
-        public GenericEditorRuntime GetRunTimeExtendedSettings(int dataRecordTypeId)
-        {
-            int businessEntityId = GetBusinessEntityDefinitionId();
-            GenericEditorManager manager = new GenericEditorManager();
-            return manager.GetEditorRuntime(businessEntityId, dataRecordTypeId);
-        }
-        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo()
-        {
-            int businessEntityId = GetBusinessEntityDefinitionId();
-            GenericEditorManager manager = new GenericEditorManager();
-            return manager.GetDataRecordTypesInfo(businessEntityId);
-        }
 
         #endregion
 
 
+
         #region Private Members
+        protected override string _businessEntityName
+        {
+            get { return "InterConnect_BE_OperatorProfile"; }
+        }
         private Dictionary<int, OperatorProfile> GetCachedOperatorProfiles()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetOperatorProfiles",
@@ -175,5 +161,8 @@ namespace InterConnect.BusinessEntity.Business
             return operatorProfileDetail;
         }
         #endregion
+
+
+
     }
 }

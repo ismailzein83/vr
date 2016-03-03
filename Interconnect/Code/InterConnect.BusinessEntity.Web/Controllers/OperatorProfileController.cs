@@ -30,19 +30,13 @@ namespace InterConnect.BusinessEntity.Web.Controllers
             return manager.GetOperatorProfile(operatorProfileId);
         }
         [HttpGet]
-        [Route("GetRunTimeExtendedSettings")]
-        public GenericEditorRuntime GetRunTimeExtendedSettings(int dataRecordTypeId)
+        [Route("GetBusinessEntityDefinitionId")]
+        public int GetBusinessEntityDefinitionId()
         {
             OperatorProfileManager manager = new OperatorProfileManager();
-            return manager.GetRunTimeExtendedSettings(dataRecordTypeId);
+            return manager.GetBusinessEntityDefinitionId();
         }
-        [HttpGet]
-        [Route("GetDataRecordTypes")]
-        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo()
-        {
-            OperatorProfileManager manager = new OperatorProfileManager();
-            return manager.GetDataRecordTypesInfo();
-        }
+
 
         [HttpGet]
         [Route("GetOperatorProfilsInfo")]
