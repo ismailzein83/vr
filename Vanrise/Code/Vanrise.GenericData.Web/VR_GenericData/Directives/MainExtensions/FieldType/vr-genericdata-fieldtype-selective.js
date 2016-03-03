@@ -34,11 +34,11 @@
 
             var payloadObj;
             function initializeController() {
-                $scope.scopeModal = {};
-                $scope.scopeModal.fieldTypeConfigs = [];
-                $scope.scopeModal.selectedFieldTypeConfig;
+                $scope.scopeModel = {};
+                $scope.scopeModel.fieldTypeConfigs = [];
+                $scope.scopeModel.selectedFieldTypeConfig;
 
-                $scope.scopeModal.onSelectorReady = function (api) {
+                $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -46,12 +46,12 @@
                     }
                 };
 
-                $scope.scopeModal.onDirectiveReady = function (api) {
+                $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) {
-                        $scope.scopeModal.isLoadingDirective = value;
+                        $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModal, directiveAPI, payloadObj, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, directiveAPI, payloadObj, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -59,26 +59,47 @@
                 var api = {};
                 
                 api.load = function (payload) {
-                    selectorAPI.clearDataSource();
-                    return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
-                        if (response) {
-                            for (var i = 0; i < response.length; i++) {
-                                $scope.scopeModal.fieldTypeConfigs.push(response[i]);
-                            }
-                            if (payload != undefined && payload.ConfigId != undefined) {
-                                payloadObj = payload;
-                                $scope.scopeModal.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModal.fieldTypeConfigs, payload.ConfigId, 'DataRecordFieldTypeConfigId');
-                            }
+                    var promises = [];
+                    var configId;
+
+                    if (payload != undefined) {
+                        configId = payload.ConfigId;
+                    }
+
+                    var getFieldTypeConfigsPromise = getFieldTypeConfigs();
+                    promises.push(getFieldTypeConfigsPromise);
+
+                    var loadDirectiveDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadDirectiveDeferred.promise);
+
+                    getFieldTypeConfigsPromise.then(function () {
+                        if (configId != undefined) {
+                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                            $scope.scopeModel.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModel.fieldTypeConfigs, configId, 'DataRecordFieldTypeConfigId');
                         }
                     });
+
+                    return UtilsService.waitMultiplePromises(promises);
+
+                    function getFieldTypeConfigs() {
+                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                            if (response != null) {
+                                selectorAPI.clearDataSource();
+
+                                for (var i = 0; i < response.length; i++) {
+                                    $scope.scopeModel.fieldTypeConfigs.push(response[i]);
+                                }
+                            }
+                        });
+                    }
                 };
 
                 api.getData = function () {
                     var data = null;
 
-                    if ($scope.scopeModal.selectedFieldTypeConfig != undefined) {
+                    if ($scope.scopeModel.selectedFieldTypeConfig != undefined) {
                         data = directiveAPI.getData();
-                        data.ConfigId = $scope.scopeModal.selectedFieldTypeConfig.DataRecordFieldTypeConfigId;
+                        data.ConfigId = $scope.scopeModel.selectedFieldTypeConfig.DataRecordFieldTypeConfigId;
                     }
 
                     return data;

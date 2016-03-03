@@ -81,10 +81,10 @@ namespace Vanrise.Security.Business
             //Assume that the view is allowed, and start looping until you find an exception that prevents the user from seeing this view
             bool result = true;
 
+            Dictionary<string, List<string>> reqPermissionsDic = GetRequiredPermissionsByNodePath(requiredPermissions);
+            
             PermissionManager manager = new PermissionManager();
             EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(userId);
-
-            Dictionary<string, List<string>> reqPermissionsDic = GetRequiredPermissionsByNodePath(requiredPermissions);
 
             foreach (KeyValuePair<string, List<string>> kvp in reqPermissionsDic)
             {

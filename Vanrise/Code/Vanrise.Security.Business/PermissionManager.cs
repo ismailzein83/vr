@@ -289,6 +289,9 @@ namespace Vanrise.Security.Business
             {
                 string relativePath = _beNodeManager.GetBusinessEntityNodePath(item.EntityType, item.EntityId);
 
+                if (relativePath == null)
+                    throw new NullReferenceException(String.Format("{0} {1} has permissions on {2} {3} that does not exist", item.HolderType, item.HolderId, item.EntityType, item.EntityId));
+
                 //Map the Permission Flags into a dictionary of strings
                 Dictionary<string, Flag> effectiveFlags = new Dictionary<string, Flag>();
 
