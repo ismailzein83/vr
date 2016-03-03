@@ -307,7 +307,7 @@ when not matched by source then
 	delete;
 
 
---[common].[TemplateConfig]-------------------------------------------------------------------------
+--[common].[TemplateConfig]-------------0 to 500------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
@@ -369,9 +369,7 @@ when matched then
 	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
 set identity_insert [common].[TemplateConfig] off;
 
 --[sec].[SystemAction]------------------------------------------------------------------------------

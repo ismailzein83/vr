@@ -64,7 +64,7 @@ when not matched by source then
 	delete;
 set identity_insert [BI].[SchemaConfiguration] off;
 
---sec.Module----------------------------------------------------------------------------------------
+--[sec].[Module]------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
@@ -72,8 +72,10 @@ set identity_insert [sec].[Module] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
-(2,'Quality Test','Quality Test','Quality Test',null,'/images/menu-icons/CLITester.png',12,0),
-(3,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0)
+(2,'CLI Tester','CLI Tester','CLI Tester',null,'/images/menu-icons/CLITester.png',12,0),
+(3,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0),
+(4,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,13,0),
+(5,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',null,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -93,83 +95,60 @@ set identity_insert [sec].[Module] off;
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
-;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
+;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users','Users','#/view/Security/Views/User/UserManagement',1,'Root/Administration Module/Users:View',null,null,0,10),
-(2,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',1,'Root/Administration Module/Groups:View',null,null,0,11),
-(3,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',1,'Root/Administration Module/System Entities:View',null,null,0,12),
-(4,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'Root/Administration Module:View',null,null,0,14),
-(5,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',2,null,null,null,0,11),
-(6,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',3,null,null,null,0,10),
-(7,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',1,null,null,null,0,13),
-(8,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',2,null,null,null,0,12),
-(9,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',2,null,null,null,0,10),
-(17,'Schedule Test Calls','Schedule Test Calls','#/view/QM_CLITester/Views/ScheduleTestCall/ScheduleTestCallManagement',2,null,null,null,0,16)
+(1,'Users','Users','#/view/Security/Views/User/UserManagement',1,'VR_Sec/Users/GetFilteredUsers',null,null,null,0,10),
+(2,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',1,'VR_Sec/Group/GetFilteredGroups',null,null,null,0,11),
+(3,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',1,'VR_Sec/BusinessEntityNode/GetEntityNodes &amp; VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,12),
+(4,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'VR_Sec/View/UpdateViewsRank',null,null,null,0,14),
+(5,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',2,'QM_CLITester/TestCall/GetFilteredTestCalls &amp; QM_CLITester/TestCall/GetUpdated &amp; QM_CLITester/TestCall/GetBeforeId',null,null,null,0,11),
+(6,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',3,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,10),
+(7,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',1,'VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,13),
+(8,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',2,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,12),
+(9,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',2,'QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,10),
+(10,'Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement',3,'QM_BE/Zone/GetFilteredZones',null,null,null,0,10),
+(11,'Country','Country','#/view/Common/Views/Country/CountryManagement',2,'VRCommon/Country/GetFilteredCountries',null,null,null,0,14),
+(12,'Schedule Test Calls','Schedule Test Calls','#/view/QM_CLITester/Views/ScheduleTestCall/ScheduleTestCallManagement',2,'VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,16),
+(13,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',4,null,null,null,null,0,11),
+(14,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',4,null,null,null,null,0,10)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank]))
+)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[RequiredPermissions] = s.[RequiredPermissions],[Audience] = s.[Audience],[Content] = s.[Content],[Type] = s.[Type],[Rank] = s.[Rank]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
-	insert([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[Audience],s.[Content],s.[Type],s.[Rank])
+	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank])
 when not matched by source then
 	delete;
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntityModule]-----
-set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Root',null,0,'["View","Full Control"]'),
-(6,'Business Process Module',1,0,'["View"]'),
-(8,'Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
-when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
-set identity_insert [sec].[BusinessEntityModule] off;
-
-
---[sec].[BusinessEntity]-----
+--[sec].[BusinessEntity]----------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions])
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users',8,0,'["View", "Add", "Edit", "Reset Password"]'),
-(2,'Groups',8,0,'["View", "Add", "Edit", "Delete"]'),
-(3,'System Entities',8,1,'["View", "Assign Permissions"]'),
-(4,'History',6,0,'["View"]'),
-(5,'Managment',6,0,'["View"]')
+(200,'QM_CLITester_Profile','Profile',1,0,'["View", "Edit"]'),
+(201,'QM_CLITester_TestCall','Test Call',1,0,'["View", "Test Call"]'),
+(202,'QM_BE_Supplier','Supplier',1,0,'["View", "Add", "Edit", "Download Template", "Upload"]'),
+(203,'QM_BE_Zone','Zone',1,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions]))
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
-	insert([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
 --[sec].[Permission]--------------------------------------------------------------------------------
@@ -194,24 +173,24 @@ when not matched by target then
 when not matched by source then
 	delete;
 
-	--[common].[TemplateConfig]-------------------------------------------------------------------------
+	--[common].[TemplateConfig]----------1001 to 1500---------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
-(3,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
-(4,'iTest Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
-(6,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
-(8,'Initiate Test - ITest','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
-(10,'Test Progress - ITest','QM_CLITester_ConnectorTestProgress','qm-clitester-testconnector-testprogress-itest',null,null),
-(11,'TOne V2 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev2',null,null),
-(12,'I-Test Countries','VRCommon_SourceCountryReader','qm-clitester-sourcecountryreader-itest',null,null),
-(13,'I-Test Zones','QM_BE_SourceZoneReader','qm-clitester-sourcezonereader-itest',null,null),
-(14,'TOne V1 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev1',null,null),
-(15,'TOne V1 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev1',null,null)
+(1001,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
+(1002,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
+(1003,'iTest Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
+(1004,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
+(1005,'Initiate Test - ITest','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
+(1006,'Test Progress - ITest','QM_CLITester_ConnectorTestProgress','qm-clitester-testconnector-testprogress-itest',null,null),
+(1007,'TOne V2 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev2',null,null),
+(1008,'I-Test Countries','VRCommon_SourceCountryReader','qm-clitester-sourcecountryreader-itest',null,null),
+(1009,'I-Test Zones','QM_BE_SourceZoneReader','qm-clitester-sourcezonereader-itest',null,null),
+(1010,'TOne V1 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev1',null,null),
+(1011,'TOne V1 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev1',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t
@@ -222,67 +201,45 @@ when matched then
 	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
 set identity_insert [common].[TemplateConfig] off;
+
 --[sec].[SystemAction]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [sec].[SystemAction] on;
-;with cte_data([ID],[Name],[RequiredPermissions])
+;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'QM_CLITester/TestCall/AddNewTestCall','Management: Add'),
-(2,'QM_CLITester/TestCall/GetUpdated','Management: View'),
-(3,'QM_CLITester/TestCall/GetTotalCallsByUserId',null),
-(4,'QM_CLITester/TestCall/GetBeforeId','Management: View'),
-(5,'QM_CLITester/TestCall/GetFilteredTestCalls','Management: View'),
-(6,'QM_CLITester/TestCall/GetInitiateTestTemplates',null),
-(7,'QM_CLITester/TestCall/GetTestProgressTemplates',null),
-(8,'QM_CLITester/Profile/GetFilteredProfiles',null),
-(9,'QM_CLITester/Profile/GetProfile',null),
-(10,'QM_CLITester/Profile/GetProfilesInfo',null),
-(11,'QM_CLITester/Profile/UpdateProfile',null),
-(12,'QM_CLITester/Profile/GetProfileSourceTemplates',null),
-(13,'QM_BE/Zone/GetZoneSourceTemplates',null),
-(14,'QM_BE/Zone/GetZonesInfo',null),
-(15,'QM_BE/Zone/GetFilteredZones',null),
-(16,'QM_BE/Supplier/GetFilteredSuppliers',null),
-(17,'QM_BE/Supplier/GetSupplier',null),
-(18,'QM_BE/Supplier/GetSuppliersInfo',null),
-(19,'QM_BE/Supplier/AddSupplier',null),
-(20,'QM_BE/Supplier/UpdateSupplier',null),
-(21,'QM_BE/Supplier/GetSupplierSourceTemplates',null),
-(22,'QM_BE/Supplier/DownloadImportSupplierTemplate',null),
-(23,'QM_BE/Supplier/UploadSuppliersList',null),
-(24,'VR_Runtime/SchedulerTask/GetFilteredTasks',null),
-(25,'VR_Runtime/SchedulerTask/GetTask',null),
-(26,'VR_Runtime/SchedulerTask/GetSchedulesInfo',null),
-(27,'VR_Runtime/SchedulerTask/GetSchedulerTaskTriggerTypes',null),
-(28,'VR_Runtime/SchedulerTask/GetSchedulerTaskActionTypes',null),
-(29,'VR_Runtime/SchedulerTask/AddTask',null),
-(30,'VR_Runtime/SchedulerTask/UpdateTask',null),
-(31,'VR_Runtime/SchedulerTask/DeleteTask',null),
-(32,'VRCommon/Country/GetFilteredCountries',null),
-(33,'VRCommon/Country/GetCountriesInfo',null),
-(34,'VRCommon/Country/GetCountry',null),
-(35,'VRCommon/Country/AddCountry',null),
-(36,'VRCommon/Country/UpdateCountry',null),
-(37,'VRCommon/Country/GetCountrySourceTemplates',null),
-(38,'VRCommon/Country/DownloadCountriesTemplate',null),
-(39,'VRCommon/Country/UploadCountries',null)
+('QM_CLITester/TestCall/AddNewTestCall','QM_CLITester_TestCall:Test Call'),
+('QM_CLITester/TestCall/GetUpdated','QM_CLITester_TestCall: View'),
+('QM_CLITester/TestCall/GetTotalCallsByUserId',null),
+('QM_CLITester/TestCall/GetBeforeId','QM_CLITester_TestCall: View'),
+('QM_CLITester/TestCall/GetFilteredTestCalls','QM_CLITester_TestCall: View'),
+('QM_CLITester/TestCall/GetInitiateTestTemplates',null),
+('QM_CLITester/TestCall/GetTestProgressTemplates',null),
+('QM_CLITester/Profile/GetFilteredProfiles','QM_CLITester_Profile: View'),
+('QM_CLITester/Profile/GetProfile',null),
+('QM_CLITester/Profile/GetProfilesInfo',null),
+('QM_CLITester/Profile/UpdateProfile','QM_CLITester_Profile: Edit'),
+('QM_CLITester/Profile/GetProfileSourceTemplates',null),
+('QM_BE/Zone/GetZoneSourceTemplates',null),
+('QM_BE/Zone/GetZonesInfo',null),
+('QM_BE/Zone/GetFilteredZones','QM_BE_Zone: View'),
+('QM_BE/Supplier/GetFilteredSuppliers','QM_BE_Supplier: View'),
+('QM_BE/Supplier/GetSupplier',null),
+('QM_BE/Supplier/GetSuppliersInfo',null),
+('QM_BE/Supplier/AddSupplier','QM_BE_Supplier: Add'),
+('QM_BE/Supplier/UpdateSupplier','QM_BE_Supplier: Edit'),
+('QM_BE/Supplier/GetSupplierSourceTemplates',null),
+('QM_BE/Supplier/DownloadImportSupplierTemplate','QM_BE_Supplier: Download Template'),
+('QM_BE/Supplier/UploadSuppliersList','QM_BE_Supplier: Upload')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[RequiredPermissions]))
+)c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[Name] = s.[Name]
 when matched then
 	update set
 	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
 when not matched by target then
-	insert([ID],[Name],[RequiredPermissions])
-	values(s.[ID],s.[Name],s.[RequiredPermissions])
-when not matched by source then
-	delete;
-set identity_insert [sec].[SystemAction] off;
+	insert([Name],[RequiredPermissions])
+	values(s.[Name],s.[RequiredPermissions]);

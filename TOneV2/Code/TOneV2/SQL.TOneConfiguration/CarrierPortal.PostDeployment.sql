@@ -16,8 +16,8 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',1,0),
-(2,'Pricelist Management','Pricelist Management','Pricelist Management',null,'/images/menu-icons/Purchase Area.png',2,0)
+(1,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
+(2,'Pricelist Management','Pricelist Management','Pricelist Management',null,'/images/menu-icons/Purchase Area.png',11,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -70,9 +70,7 @@ set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Root','Root',null,0,'["View","Full Control"]'),
-(6,'Business Process Module','Business Process Module',1,0,'["View"]'),
-(8,'Administration Module','Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]')
+(101,'Business Process Module','Business Process Module',1,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntityModule] as t
@@ -83,9 +81,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
 	insert([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntityModule] off;
 
 
@@ -96,14 +92,11 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users','Users',8,0,'["View", "Add", "Edit", "Reset Password"]'),
-(2,'Groups','Groups',8,0,'["View", "Add", "Edit", "Delete"]'),
-(3,'System Entities','System Entities',8,1,'["View", "Assign Permissions"]'),
-(4,'History','History',6,0,'["View"]'),
-(5,'Managment','Managment',6,0,'["View"]'),
-(8,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
-(14,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
-(15,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Import PriceList"]')
+(300,'History','History',101,0,'["View"]'),
+(301,'Managment','Managment',101,0,'["View"]'),
+(302,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
+(303,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
+(304,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Import PriceList"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -114,9 +107,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
 --[sec].[Permission]--------------------------------------------------------------------------------
@@ -146,21 +137,10 @@ when not matched by source then
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('VR_Sec/Users/GetFilteredUsers','Users:View'),
-('VR_Sec/Users/GetMembers','Users:View'),
-('VR_Sec/Users/GetUserbyId','Users:View'),
-('VR_Sec/Users/UpdateUser','Users:Edit'),
-('VR_Sec/Users/AddUser','Users:Add'),
-('VR_Sec/Users/ResetPassword','Users:Reset Password'),
-('VR_Sec/Group/AddGroup','Groups:Add'),
-('VR_Sec/BusinessEntityNode/ToggleBreakInheritance','System Entities:Assign Permissions'),
-('VR_Sec/Permission/UpdatePermissions','System Entities:Assign Permissions'),
-('VR_Sec/View/AddView','Dynamic Pages:Add'),
-('VR_Sec/Group/GetFilteredGroups','Groups:View'),
 ('CP_SupPriceList/Customer/GetFilteredCustomers','CP_SupPriceList_Customer:View'),
 ('CP_SupPriceList/PriceList/GetUpdated','CP_SupPriceList_PriceList:View'),
 ('CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings','CP_SupPriceList_SupplierMapping:View'),
-('CP_SupPriceList/PriceList/ImportPriceList','CP_SupPriceList_PriceList:ImportPriceList'),
+('CP_SupPriceList/PriceList/ImportPriceList','CP_SupPriceList_PriceList:Import PriceList'),
 ('CP_SupPriceList/CustomerUser/AddCustomerUser','CP_SupPriceList_Customer:Assign/Unassign User'),
 ('CP_SupPriceList/CustomerUser/DeleteCustomerUser','CP_SupPriceList_Customer:Assign/Unassign User'),
 ('CP_SupPriceList/SupplierMapping/AddCustomerSupplierMapping','CP_SupPriceList_SupplierMapping:Add/Edit'),
@@ -181,14 +161,14 @@ when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
 
---[common].[TemplateConfig]-------------------------------------------------------------------------
+--[common].[TemplateConfig]--------------501 to 1000-----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(2,'TOne V1','CP_SupplierPriceList_CustomerConnector','vr-cp-supplierpricelist-tonev1integration-customerconnector',null,null)
+(501,'TOne V1','CP_SupplierPriceList_CustomerConnector','vr-cp-supplierpricelist-tonev1integration-customerconnector',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t
