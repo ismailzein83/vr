@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Entities
     public class GenericEditorField
     {
         public string FieldTitle { get; set; }
-
+        public bool IsRequired { get; set; }
         public string FieldPath { get; set; }
     }
 }

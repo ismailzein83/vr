@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    GenericBusinessEntityDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_GenericEditorService'];
+    GenericBusinessEntityDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_GenericBEService'];
 
-    function GenericBusinessEntityDefinitionManagementController($scope, VR_GenericData_GenericEditorService) {
+    function GenericBusinessEntityDefinitionManagementController($scope, VR_GenericData_GenericBEService) {
 
         var gridAPI;
         var filter = {};
@@ -22,12 +22,12 @@
                 return gridAPI.loadGrid(filter);
             };
 
-            $scope.addGenericBusinessEntityDefinition = function () {
-                var onGenericBusinessEntityDefinitionAdded = function (onGenericBusinessEntityDefinitionObj) {
+            $scope.addGenericBE = function () {
+                var onGenericBEAdded = function (onGenericBusinessEntityDefinitionObj) {
                     gridAPI.onGenericBusinessEntityDefinitionAdded(onGenericBusinessEntityDefinitionObj);
                 };
 
-                VR_GenericData_GenericEditorService.addGenericBusinessEntityDefinition(onGenericBusinessEntityDefinitionAdded);
+                VR_GenericData_GenericBEService.addGenericBE(onGenericBEAdded);
             };
         }
 

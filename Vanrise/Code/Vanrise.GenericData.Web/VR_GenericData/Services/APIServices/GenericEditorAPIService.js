@@ -6,31 +6,14 @@
 
     function GenericEditorAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return {
-            GetGenericEditorDefinition: GetGenericEditorDefinition,
-            AddGenericEditor: AddGenericEditor,
-            GetFilteredGenericEditorDefinitions: GetFilteredGenericEditorDefinitions,
-            UpdateGenericEditor: UpdateGenericEditor,
-            GetEditorRuntime: GetEditorRuntime
+            GetExtensibleBEItemRuntime: GetExtensibleBEItemRuntime
         };
 
-        function GetEditorRuntime(businessEntityId, dataRecordTypeId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericEditor', 'GetEditorRuntime'), {
+        function GetExtensibleBEItemRuntime(businessEntityId, dataRecordTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericEditor', 'GetExtensibleBEItemRuntime'), {
                 businessEntityId: businessEntityId,
                 dataRecordTypeId: dataRecordTypeId
             });
-        }
-        function GetGenericEditorDefinition(editorId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericEditor', 'GetGenericEditorDefinition'), { editorId: editorId });
-        }
-        function AddGenericEditor(genericEditorObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericEditor', 'AddGenericEditor'), genericEditorObject);
-        }
-
-        function UpdateGenericEditor(genericEditorObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericEditor', 'UpdateGenericEditor'), genericEditorObject);
-        }
-        function GetFilteredGenericEditorDefinitions(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericEditor', 'GetFilteredGenericEditorDefinitions'), input);
         }
 
     }

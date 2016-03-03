@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericEditorDefinitionQuery
+    public class GenericFilterRuntime
     {
-        public int BusinessEntityDefinitionId { get; set; }
+        public List<GenericEditorRuntimeField> Fields { get; set; }
     }
 }

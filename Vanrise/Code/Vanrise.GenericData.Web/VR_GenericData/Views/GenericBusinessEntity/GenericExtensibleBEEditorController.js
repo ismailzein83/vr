@@ -2,9 +2,9 @@
 
     "use strict";
 
-    GenericEditorController.$inject = ['$scope', 'VR_GenericData_GenericEditorAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService'];
+    GenericExtensibleBEEditorController.$inject = ['$scope', 'VR_GenericData_ExtensibleBEItemAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService'];
 
-    function GenericEditorController($scope, VR_GenericData_GenericEditorAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
+    function GenericExtensibleBEEditorController($scope, VR_GenericData_ExtensibleBEItemAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
 
         var isEditMode;
         var genericEditorEntity;
@@ -80,7 +80,7 @@
 
             if (isEditMode) {
                 getGenericEditor().then(function () {
-                    getDataRecordType(genericEditorEntity.Details.DataRecordTypeId).then(function () {
+                    getDataRecordType(genericEditorEntity.DataRecordTypeId).then(function () {
                         loadAllControls();
                     }).catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -119,7 +119,7 @@
 
                     genericEditorDesignReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (genericEditorEntity != undefined && genericEditorEntity.Details != undefined && recordTypeEntity != undefined) ? { sections: genericEditorEntity.Details.Sections, recordTypeFields: recordTypeEntity.Fields } : undefined
+                            var directivePayload = (genericEditorEntity != undefined && genericEditorEntity != undefined && recordTypeEntity != undefined) ? { sections: genericEditorEntity.Sections, recordTypeFields: recordTypeEntity.Fields } : undefined
                             genericEditorDesignReadyPromiseDeferred = undefined;
                             VRUIUtilsService.callDirectiveLoad(genericEditorDesignAPI, directivePayload, loadGenericEditorDesignPromiseDeferred);
                         });
@@ -134,7 +134,7 @@
 
                     dataRecordTypeSelectorReadyPromiseDeferred.promise
                         .then(function () {
-                            var directivePayload = (genericEditorEntity != undefined && genericEditorEntity.Details != undefined) ? { selectedIds: genericEditorEntity.Details.DataRecordTypeId } : undefined
+                            var directivePayload = (genericEditorEntity != undefined) ? { selectedIds: genericEditorEntity.DataRecordTypeId } : undefined
 
                             VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, directivePayload, loadDataRecordTypeSelectorPromiseDeferred);
                         });
@@ -146,7 +146,7 @@
             }
 
             function getGenericEditor() {
-                return VR_GenericData_GenericEditorAPIService.GetGenericEditorDefinition(genericEditorDefinitionId).then(function (genericEditor) {
+                return VR_GenericData_ExtensibleBEItemAPIService.GetExtensibleBEItem(genericEditorDefinitionId).then(function (genericEditor) {
                     genericEditorEntity = genericEditor;
                 });
             }
@@ -161,30 +161,25 @@
             });
         }
 
-        function buildGenericEditorObjFromScope() {
+        function buildExtensibleBEItemFromScope() {
             if (genericEditorDesignAPI != undefined)
             {
-                var genericEditor={
-                    BusinessEntityId: genericEditorEntity != undefined ? genericEditorEntity.BusinessEntityId : businessEntityDefinitionId,
-                    Details: genericEditorDesignAPI.getData(),
-                    GenericEditorDefinitionId : genericEditorDefinitionId
-                }
-                if (genericEditor.Details != undefined)
-                {
-                    genericEditor.Details.DataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
-                }
-                return genericEditor;
+                var extensibleBEItem = genericEditorDesignAPI.getData();
+                if (extensibleBEItem == undefined)
+                    extensibleBEItem = {};
+                extensibleBEItem.BusinessEntityDefinitionId= genericEditorEntity != undefined ? genericEditorEntity.BusinessEntityId : businessEntityDefinitionId;
+                extensibleBEItem.ExtensibleBEItemId = genericEditorDefinitionId;
+                extensibleBEItem.DataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+                return extensibleBEItem;
             }
-            
-           
         }
 
         function insertGenericEditor() {
 
-            var genericEditorObject = buildGenericEditorObjFromScope();
-            return VR_GenericData_GenericEditorAPIService.AddGenericEditor(genericEditorObject)
+            var extensibleBEItem = buildExtensibleBEItemFromScope();
+            return VR_GenericData_ExtensibleBEItemAPIService.AddExtensibleBEItem(extensibleBEItem)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Generic Editor", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Extensible BE Item", response)) {
                     if ($scope.onGenericEditorAdded != undefined)
                         $scope.onGenericEditorAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -196,10 +191,10 @@
         }
 
         function updateGenericEditor() {
-            var genericEditorObject = buildGenericEditorObjFromScope();
-            VR_GenericData_GenericEditorAPIService.UpdateGenericEditor(genericEditorObject)
+            var extensibleBEItem = buildExtensibleBEItemFromScope();
+            VR_GenericData_ExtensibleBEItemAPIService.UpdateExtensibleBEItem(extensibleBEItem)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Generic Editor", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Extensible BE Item", response)) {
                     if ($scope.onGenericEditorUpdated != undefined)
                         $scope.onGenericEditorUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
@@ -211,5 +206,5 @@
 
     }
 
-    appControllers.controller('VR_GenericData_GenericEditorController', GenericEditorController);
+    appControllers.controller('VR_GenericData_GenericExtensibleBEEditorController', GenericExtensibleBEEditorController);
 })(appControllers);

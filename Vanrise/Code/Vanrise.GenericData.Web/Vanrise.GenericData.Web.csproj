@@ -127,11 +127,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ExtensibleBEController.cs" />
     <Compile Include="Controllers\BusinessEntityDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordFieldTypeConfigController.cs" />
     <Compile Include="Controllers\DataRecordStorageController.cs" />
     <Compile Include="Controllers\DataTransformationStepConfigController.cs" />
     <Compile Include="Controllers\ExpressionBuilderConfigController.cs" />
+    <Compile Include="Controllers\ExtensibleBEItemController.cs" />
+    <Compile Include="Controllers\GenericBEController.cs" />
     <Compile Include="Controllers\GenericEditorController.cs" />
     <Compile Include="Controllers\GenericRuleController.cs" />
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
@@ -182,6 +185,7 @@
     <Content Include="VR_GenericData\Constants\MappingRuleStructureBehaviorTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-selector.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-recordtype-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\Templates\DataRecordStorageGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-grid.js" />
     <Content Include="VR_GenericData\Directives\DataRecordStorage\vr-genericdata-datarecordstorage-selector.js" />
@@ -192,9 +196,13 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-recordname-selector.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformationdefinition-stepsequencedesign.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionGrid.html" />
-    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericEditorDefinitionGrid.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityFilterDesign.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityGridDesign.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\ExtensibleBEItemGrid.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-filterdesign.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-griddesign.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentitydefinition-grid.js" />
-    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericeditordefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-extensiblebeitem-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionRowTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionSectionTemplate.html" />
@@ -318,6 +326,7 @@
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageAPIService.js" />
@@ -325,6 +334,7 @@
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\ExtensibleBEItemAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericEditorAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
@@ -337,6 +347,8 @@
     <Content Include="VR_GenericData\Services\APIServices\DataRecordTypeAPIService.js" />
     <Content Include="VR_GenericData\Services\DataRecordTypeService.js" />
     <Content Include="VR_GenericData\Services\ExpressionBuilderService.js" />
+    <Content Include="VR_GenericData\Services\ExtensibleBEItemService.js" />
+    <Content Include="VR_GenericData\Services\GenericBEService.js" />
     <Content Include="VR_GenericData\Services\GenericEditorService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
@@ -359,8 +371,10 @@
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\TransformationRecordTypeEditorController.js" />
     <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditor.html" />
     <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBEEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBEEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericExtensibleBEEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericExtensibleBEEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagement.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditor.html" />
@@ -387,6 +401,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="VR_GenericData\Views\test.html" />
+    <Content Include="VR_GenericData\Views\test.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

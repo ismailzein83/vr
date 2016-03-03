@@ -92,9 +92,12 @@ namespace Vanrise.GenericData.Business
         }
         BusinessEntityDefinitionDetail BusinessEntityDefinitionDetailMapper(BusinessEntityDefinition beDefinition)
         {
+           Type beManagerType = Type.GetType(beDefinition.Settings.ManagerFQTN);
+           bool isExtensible = typeof(ExtensibleBEManager).IsAssignableFrom(beManagerType);
             return new BusinessEntityDefinitionDetail()
             {
                 Entity = beDefinition,
+                IsExtensible = isExtensible
             };
         }
         

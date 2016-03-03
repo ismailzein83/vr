@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class BusinessEntityDefinitionDetail
+    public class GenericManagementRuntime
     {
-        public BusinessEntityDefinition Entity { get; set; }
-
-        public bool IsExtensible { get; set; }
+        public GenericGridRuntime Grid { get; set; }
+        public GenericFilterRuntime Filter { get; set; }
     }
 }

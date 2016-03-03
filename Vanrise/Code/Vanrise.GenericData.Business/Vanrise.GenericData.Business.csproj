@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="BusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntityGroupContext.cs" />
+    <Compile Include="BaseBEManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordFieldTypeConfigManager.cs" />
     <Compile Include="DataRecordStorageManager.cs" />
@@ -55,6 +56,9 @@
     <Compile Include="DataStoreConfigManager.cs" />
     <Compile Include="DataStoreManager.cs" />
     <Compile Include="ExpressionBuilderConfigManager.cs" />
+    <Compile Include="ExtensibleBEItemManager.cs" />
+    <Compile Include="ExtensibleBEManager.cs" />
+    <Compile Include="GenericBEManager.cs" />
     <Compile Include="GenericEditorManager.cs" />
     <Compile Include="GenericRuleDefinitionManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />
@@ -63,6 +67,7 @@
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByKey.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByPrefix.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\IGenericRuleStructureBehavior.cs" />
+    <Compile Include="IExtensibleBEManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateRecordStorageContext.cs" />
   </ItemGroup>

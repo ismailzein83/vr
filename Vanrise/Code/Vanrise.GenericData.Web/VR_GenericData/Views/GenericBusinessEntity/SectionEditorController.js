@@ -81,12 +81,6 @@
 
 
             }
-
-            function getGenericEditor() {
-                return VR_GenericData_GenericEditorAPIService.GetGenericEditorDefinition(genericEditorDefinitionId).then(function (genericEditor) {
-                    genericEditorEntity = genericEditor;
-                });
-            }
         }
 
         function buildSectionObjFromScope() {

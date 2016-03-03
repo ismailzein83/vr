@@ -1,0 +1,52 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEEditorController" vr-loader="scopeModal.isLoading" width="'60%'">
+    <vr-modalbody>
+        <vr-form validationcontext="genericBEEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+
+                    <vr-row >
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModal.businessEntityName" isrequired="true" label="Business Entity Name" customvalidate="scopeModal.validate()"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModal.businessEntityTitle" isrequired="true" label="Business Entity Title" customvalidate="scopeModal.validate()"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="scopeModal.onRecordTypeSelectionChanged" selectedvalues="scopeModal.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Editor Design'">
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-show="scopeModal.selectedDataRecordType !=undefined">
+                            <vr-genericdata-genericeditor-definition-editor on-ready="scopeModal.onGenericEditorDirectiveReady"></vr-genericdata-genericeditor-definition-editor>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Grid Design'">
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-show="scopeModal.selectedDataRecordType !=undefined">
+                            <vr-genericdata-genericbusinessentity-griddesign on-ready="scopeModal.onGridFieldDesignReady"></vr-genericdata-genericbusinessentity-griddesign>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Filter Design'">
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-show="scopeModal.selectedDataRecordType !=undefined">
+                            <vr-genericdata-genericbusinessentity-filterdesign on-ready="scopeModal.onFilterFieldDesignReady"></vr-genericdata-genericbusinessentity-filterdesign>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="genericBEEditorGroup" data-onclick="scopeModal.SaveGenericBEEditor"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

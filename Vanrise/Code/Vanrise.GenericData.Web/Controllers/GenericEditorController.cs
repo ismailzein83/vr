@@ -14,47 +14,11 @@ namespace Vanrise.GenericData.Web.Controllers
     public class GenericEditorController:BaseAPIController
     {
         [HttpGet]
-        [Route("GetEditor")]
-        public GenericEditor GetEditor(int businessEntityId, int dataRecordTypeId)
+        [Route("GetExtensibleBEItemRuntime")]
+        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int businessEntityId, int dataRecordTypeId)
         {
             GenericEditorManager manager = new GenericEditorManager();
-            return manager.GetEditor(businessEntityId, dataRecordTypeId);
-        }
-        [HttpGet]
-        [Route("GetEditorRuntime")]
-        public GenericEditorRuntime GetEditorRuntime(int businessEntityId, int dataRecordTypeId)
-        {
-            GenericEditorManager manager = new GenericEditorManager();
-            return manager.GetEditorRuntime(businessEntityId, dataRecordTypeId);
-        }
-
-        [HttpGet]
-        [Route("GetGenericEditorDefinition")]
-        public GenericEditorDefinition GetGenericEditorDefinition(int editorId)
-        {
-            GenericEditorManager manager = new GenericEditorManager();
-            return manager.GetGenericEditorDefinition(editorId);
-        }
-        [Route("UpdateGenericEditor")]
-        public Vanrise.Entities.UpdateOperationOutput<GenericEditorDefinitionDetail> UpdateGenericEditor(GenericEditorDefinition genericEditor)
-        {
-            GenericEditorManager manager = new GenericEditorManager();
-            return manager.UpdateGenericEditor(genericEditor);
-        }
-
-        [HttpPost]
-        [Route("AddGenericEditor")]
-        public Vanrise.Entities.InsertOperationOutput<GenericEditorDefinitionDetail> AddGenericEditor(GenericEditorDefinition genericEditor)
-        {
-            GenericEditorManager manager = new GenericEditorManager();
-            return manager.AddGenericEditor(genericEditor);
-        }
-        [HttpPost]
-        [Route("GetFilteredGenericEditorDefinitions")]
-        public object GetFilteredGenericEditorDefinitions(Vanrise.Entities.DataRetrievalInput<GenericEditorDefinitionQuery> input)
-        {
-            GenericEditorManager manager = new GenericEditorManager();
-            return GetWebResponse(input, manager.GetFilteredGenericEditorDefinitions(input));
+            return manager.GetExtensibleBEItemRuntime(businessEntityId, dataRecordTypeId);
         }
     }
 }

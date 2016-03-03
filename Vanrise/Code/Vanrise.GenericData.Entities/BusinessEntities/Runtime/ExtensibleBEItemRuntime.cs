@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class BusinessEntityDefinitionDetail
+    public class ExtensibleBEItemRuntime
     {
-        public BusinessEntityDefinition Entity { get; set; }
-
-        public bool IsExtensible { get; set; }
+       public  List<GenericEditorRuntimeSection> Sections { get; set; }
     }
 }

@@ -1,0 +1,20 @@
+﻿<vr-columns width="1/3row">
+    <vr-select datatextfield="fieldPath" datavaluefield="fieldPath" label="Fields" isrequired="true"
+               entityname="Field Path" selectedvalues="ctrl.selectedFields" datasource="ctrl.fields" ismultipleselection hideselectedvaluessection></vr-select>
+</vr-columns>
+<vr-columns width="2/3row">
+    <vr-datalist maxitemsperrow="1" datasource="ctrl.selectedFields" isitemdraggable onremoveitem="ctrl.onRemoveField">
+        <vr-row>
+            <vr-columns colnum="12">
+                <vr-textbox value="dataItem.fieldTitle" label="Field Title" isrequired="true"></vr-textbox>
+
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns colnum="12">
+                <vr-label>Field Name: {{dataItem.fieldPath}}</vr-label>
+            </vr-columns>
+        </vr-row>
+       
+    </vr-datalist>
+</vr-columns>

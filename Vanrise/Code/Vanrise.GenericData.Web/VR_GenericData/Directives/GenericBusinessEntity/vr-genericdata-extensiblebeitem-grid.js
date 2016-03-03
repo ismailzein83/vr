@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericeditordefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericEditorAPIService", "VR_GenericData_GenericEditorService","VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VR_GenericData_GenericEditorAPIService, VR_GenericData_GenericEditorService, VRUIUtilsService) {
+app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_ExtensibleBEItemAPIService", "VR_GenericData_ExtensibleBEItemService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VR_GenericData_ExtensibleBEItemAPIService, VR_GenericData_ExtensibleBEItemService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -13,7 +13,7 @@ app.directive("vrGenericdataGenericeditordefinitionGrid", ["UtilsService", "VRNo
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new GenericBusinessEntityDefinitionGrid($scope, ctrl, $attrs);
+                var ctor = new ExtensibleBEItemGrid($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrGenericdataGenericeditordefinitionGrid", ["UtilsService", "VRNo
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/GenericEditorDefinitionGrid.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/ExtensibleBEItemGrid.html"
 
         };
 
-        function GenericBusinessEntityDefinitionGrid($scope, ctrl, $attrs) {
+        function ExtensibleBEItemGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var gridAPI;
@@ -51,7 +51,7 @@ app.directive("vrGenericdataGenericeditordefinitionGrid", ["UtilsService", "VRNo
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return VR_GenericData_GenericEditorAPIService.GetFilteredGenericEditorDefinitions(dataRetrievalInput)
+                    return VR_GenericData_ExtensibleBEItemAPIService.GetFilteredExtensibleBEItems(dataRetrievalInput)
                         .then(function (response) {
                             onResponseReady(response);
                         })
@@ -68,7 +68,7 @@ app.directive("vrGenericdataGenericeditordefinitionGrid", ["UtilsService", "VRNo
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editGenericEditor,
+                    clicked: editExtensibleBEItem,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -76,12 +76,12 @@ app.directive("vrGenericdataGenericeditordefinitionGrid", ["UtilsService", "VRNo
                 }
             }
 
-            function editGenericEditor(dataItem) {
-                var onGenericEditorUpdated = function (genericEditorObj) {
-                    gridAPI.itemUpdated(genericEditorObj);
+            function editExtensibleBEItem(dataItem) {
+                var onExtensibleBEItemUpdated = function (extensibleBEItem) {
+                    gridAPI.itemUpdated(extensibleBEItem);
                 }
 
-                VR_GenericData_GenericEditorService.editGenericEditor(dataItem.Entity.GenericEditorDefinitionId, onGenericEditorUpdated);
+                VR_GenericData_ExtensibleBEItemService.editExtensibleBEItem(dataItem.Entity.ExtensibleBEItemId, onExtensibleBEItemUpdated);
             }
         }
 

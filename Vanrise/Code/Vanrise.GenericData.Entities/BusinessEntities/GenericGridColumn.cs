@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericEditorDefinitionDetail
+    public class GenericGridColumn
     {
-        public GenericEditorDefinition Entity { get; set; }
-        public string RecordTypeName { get; set; }
     }
 }

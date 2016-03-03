@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataGenericeditorDefinitionSection', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericEditorService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_GenericEditorService) {
+app.directive('vrGenericdataGenericeditorDefinitionSection', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_ExtensibleBEItemService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_ExtensibleBEItemService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -135,7 +135,7 @@ app.directive('vrGenericdataGenericeditorDefinitionSection', ['UtilsService', 'V
                         rowObj.rowAPI.applyChanges(row);
                     }
                 };
-                VR_GenericData_GenericEditorService.editRow(onRowUpdated, context.getFilteredFields(dataItem.row), dataItem.row);
+                VR_GenericData_ExtensibleBEItemService.editRow(onRowUpdated, context.getFilteredFields(dataItem.row), dataItem.row);
             }
 
             function deleteRow(dataItem) {
@@ -145,7 +145,7 @@ app.directive('vrGenericdataGenericeditorDefinitionSection', ['UtilsService', 'V
                     ctrl.rows.splice(index, 1);
                 };
 
-                VR_GenericData_GenericEditorService.deleteRow($scope, dataItem, onRowDeleted);
+                VR_GenericData_ExtensibleBEItemService.deleteRow($scope, dataItem, onRowDeleted);
             }
             
 

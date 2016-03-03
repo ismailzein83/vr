@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_BusinessEntityDefinitionAPIService", "VR_GenericData_GenericEditorService","VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_GenericEditorService, VRUIUtilsService) {
+app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_BusinessEntityDefinitionAPIService", "VR_GenericData_ExtensibleBEItemService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_ExtensibleBEItemService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -40,8 +40,8 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                     var drillDownDefinitions = [];
                     var drillDownDefinition = {};
 
-                    drillDownDefinition.title = "Generic Editor Definition";
-                    drillDownDefinition.directive = "vr-genericdata-genericeditordefinition-grid";
+                    drillDownDefinition.title = "Extensible BE Item";
+                    drillDownDefinition.directive = "vr-genericdata-extensiblebeitem-grid";
 
                     drillDownDefinition.loadDirective = function (directiveAPI, genericEditorObj) {
                         genericEditorObj.genericEditorGridAPI = directiveAPI;
@@ -97,7 +97,8 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
+                    if (dataItem.IsExtensible)
+                     return defaultMenuActions;
                 }
             }
 
@@ -108,7 +109,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                     dataItem.genericEditorGridAPI.onGenericEditorAdded(extendedSettingsObj);
                 }
 
-                VR_GenericData_GenericEditorService.addExtendedSettings(dataItem.Entity.BusinessEntityDefinitionId, onExtendedSettingsAdded);
+                VR_GenericData_ExtensibleBEItemService.addExtendedSettings(dataItem.Entity.BusinessEntityDefinitionId, onExtendedSettingsAdded);
             }
         }
 

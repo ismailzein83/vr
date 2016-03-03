@@ -17,162 +17,117 @@ namespace Vanrise.GenericData.Business
         {
             return null;
         }
-        public GenericEditor GetEditor(int businessEntityId, int dataRecordTypeId)
+
+        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int businessEntityId, int dataRecordTypeId)
         {
-            var cachedGenericEditorDefinitions = GetCachedGenericEditorDefinitions();
-            var genericEditor = cachedGenericEditorDefinitions.FindRecord(x => x.BusinessEntityId == businessEntityId && x.Details.DataRecordTypeId == dataRecordTypeId);
-            if (genericEditor == null)
-                throw new NullReferenceException(string.Format("GenericEditor for business entity {0} of data record type id {1}", businessEntityId, dataRecordTypeId));
-            return genericEditor.Details; ;
+            ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
+            var extensibleBEItem = manager.GetExtensibleBEItem(businessEntityId, dataRecordTypeId);
+            if (extensibleBEItem == null)
+                return null;
+
+            ExtensibleBEItemRuntime extensibleBEItemRuntime = new ExtensibleBEItemRuntime();
+            BuildExtensibleBEItemRuntime(extensibleBEItem, extensibleBEItemRuntime, dataRecordTypeId);
+            return extensibleBEItemRuntime;
         }
-        public GenericEditorRuntime GetEditorRuntime(int businessEntityId, int dataRecordTypeId)
+
+        public GenericEditorRuntime GetGenericEditorRuntime(int businessEntityId, int dataRecordTypeId)
         {
-            var genericEditor = GetEditor(businessEntityId, dataRecordTypeId);
-            if (genericEditor == null)
+            ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
+            var extensibleBEItem = manager.GetExtensibleBEItem(businessEntityId, dataRecordTypeId);
+            if (extensibleBEItem == null)
                 return null;
 
             GenericEditorRuntime editorRuntime = new GenericEditorRuntime();
-            BuildEditorRuntime(genericEditor, editorRuntime);
+            BuildEditorRuntimeSections(extensibleBEItem.Sections, editorRuntime, dataRecordTypeId);
             return editorRuntime;
-        }
-        public GenericEditorDefinition GetGenericEditorDefinition(int editorId)
-        {
-            var cachedGenericEditorDefinitions = GetCachedGenericEditorDefinitions();
-            return cachedGenericEditorDefinitions.GetRecord(editorId);
-
         }
         public GenericEditorRuntime GetEditorRuntime(int editorId)
         {
-            var genericEditor = GetEditor(editorId);
-            if (genericEditor == null)
-                return null;
+            //var genericEditor = GetEditor(editorId);
+            //if (genericEditor == null)
+               return null;
 
-            GenericEditorRuntime editorRuntime = new GenericEditorRuntime();
-            BuildEditorRuntime(genericEditor, editorRuntime);
-            return editorRuntime;
+            //GenericEditorRuntime editorRuntime = new GenericEditorRuntime();
+            //BuildEditorRuntime(genericEditor, editorRuntime);
+            //return editorRuntime;
         }
 
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityId)
         {
-             var cachedGenericEditorDefinitions = GetCachedGenericEditorDefinitions();
-             var genericEditors = cachedGenericEditorDefinitions.FindAllRecords(x=>x.BusinessEntityId == businessEntityId);
+            ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
+            var allExtensibleBEItems = manager.GetAllExtensibleBEItems();
+            var extensibleBEItems = allExtensibleBEItems.FindAllRecords(x => x.BusinessEntityDefinitionId == businessEntityId);
              var dataRecordTypeManager = new DataRecordTypeManager();
              List<int> recordTypeIds = new List<int>();
-             foreach(GenericEditorDefinition editor in genericEditors)
+             foreach (ExtensibleBEItem extensibleBEItem in extensibleBEItems)
              {
-                 recordTypeIds.Add(editor.Details.DataRecordTypeId);
+                 recordTypeIds.Add(extensibleBEItem.DataRecordTypeId);
              }
              return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds });
         }
-        public Vanrise.Entities.InsertOperationOutput<GenericEditorDefinitionDetail> AddGenericEditor(GenericEditorDefinition genericEditorDefinition)
-        {
-            InsertOperationOutput<GenericEditorDefinitionDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericEditorDefinitionDetail>();
 
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-            int genericEditorDefinitionId = -1;
-            var cachedGenericEditorDefinitions = GetCachedGenericEditorDefinitions();
-            if(!cachedGenericEditorDefinitions.Any(x=>x.Value.BusinessEntityId == genericEditorDefinition.BusinessEntityId && x.Value.Details.DataRecordTypeId == genericEditorDefinition.Details.DataRecordTypeId))
-            {
-                IGenericEditorDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericEditorDataManager>();
-                bool insertActionSucc = dataManager.AddGenericEditorDefinition(genericEditorDefinition, out genericEditorDefinitionId);
 
-                if (insertActionSucc)
-                {
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    genericEditorDefinition.GenericEditorDefinitionId = genericEditorDefinitionId;
-                    insertOperationOutput.InsertedObject = GenericEditorDefinitionDetailMapper(genericEditorDefinition);
-
-                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                }
-            }
-            else
-            {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-
-            }
-
-            return insertOperationOutput;
-        }
-        public Vanrise.Entities.UpdateOperationOutput<GenericEditorDefinitionDetail> UpdateGenericEditor(GenericEditorDefinition genericEditorDefinition)
-        {
-            UpdateOperationOutput<GenericEditorDefinitionDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<GenericEditorDefinitionDetail>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            IGenericEditorDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericEditorDataManager>();
-            bool updateActionSucc = dataManager.UpdateGenericEditorDefinition(genericEditorDefinition);
-
-            if (updateActionSucc)
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.UpdatedObject = GenericEditorDefinitionDetailMapper(genericEditorDefinition);
-            }
-            return updateOperationOutput;
-        }
-
-        public Vanrise.Entities.IDataRetrievalResult<GenericEditorDefinitionDetail> GetFilteredGenericEditorDefinitions(Vanrise.Entities.DataRetrievalInput<GenericEditorDefinitionQuery> input)
-        {
-            var cachedGenericEditorDefinitions = GetCachedGenericEditorDefinitions();
-
-            Func<GenericEditorDefinition, bool> filterExpression = (genericEditor) => (input.Query.BusinessEntityDefinitionId == genericEditor.BusinessEntityId);
-            return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericEditorDefinitions.ToBigResult(input, filterExpression, GenericEditorDefinitionDetailMapper));
-        }
 
         #region Private Methods
-
-        private Dictionary<int, GenericEditorDefinition> GetCachedGenericEditorDefinitions()
+        private void BuildExtensibleBEItemRuntime(ExtensibleBEItem extensibleBEItem, ExtensibleBEItemRuntime extensibleBEItemRuntime, int dataRecordTypeId)
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetGenericEditorDefinitions",
-               () =>
-               {
-                   IGenericEditorDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericEditorDataManager>();
-                   IEnumerable<GenericEditorDefinition> genericEditorDefinitions = dataManager.GetGenericEditorDefinitions();
-                   return genericEditorDefinitions.ToDictionary(kvp => kvp.GenericEditorDefinitionId, kvp => kvp);
-               });
+            BuildExtensibleBEItemRuntimeSections(extensibleBEItem.Sections, extensibleBEItemRuntime, dataRecordTypeId);
         }
 
-        private void BuildEditorRuntime(GenericEditor genericEditor, GenericEditorRuntime editorRuntime)
+        private void BuildExtensibleBEItemRuntimeSections(List<GenericEditorSection> sections, ExtensibleBEItemRuntime extensibleBEItemRuntime, int dataRecordTypeId)
         {
-            BuildEditorRuntimeSections(genericEditor, editorRuntime);
+            if (sections != null)
+            {
+                extensibleBEItemRuntime.Sections = new List<GenericEditorRuntimeSection>();
+                foreach (var section in sections)
+                {
+                    var runtimeSection = new GenericEditorRuntimeSection();
+                    runtimeSection.SectionTitle = section.SectionTitle;
+                    extensibleBEItemRuntime.Sections.Add(runtimeSection);
+                    BuildEditorRuntimeRows(section, runtimeSection, dataRecordTypeId);
+                }
+            }
         }
 
-        private void BuildEditorRuntimeSections(GenericEditor genericEditor, GenericEditorRuntime editorRuntime)
+        private void BuildEditorRuntime(GenericEditor genericEditor, GenericEditorRuntime editorRuntime, int dataRecordTypeId)
         {
-            if (genericEditor.Sections != null)
+            BuildEditorRuntimeSections(genericEditor.Sections, editorRuntime, dataRecordTypeId);
+        }
+
+        private void BuildEditorRuntimeSections(List<GenericEditorSection> sections, GenericEditorRuntime editorRuntime, int dataRecordTypeId)
+        {
+            if (sections != null)
             {
                 editorRuntime.Sections = new List<GenericEditorRuntimeSection>();
-                foreach (var section in genericEditor.Sections)
+                foreach (var section in sections)
                 {
                     var runtimeSection = new GenericEditorRuntimeSection();
                     runtimeSection.SectionTitle = section.SectionTitle;
                     editorRuntime.Sections.Add(runtimeSection);
-                    BuildEditorRuntimeRows(genericEditor, section, runtimeSection);
+                    BuildEditorRuntimeRows(section, runtimeSection, dataRecordTypeId);
                 }
             }
         }
 
-        private void BuildEditorRuntimeRows(GenericEditor genericEditor, GenericEditorSection section, GenericEditorRuntimeSection runtimeSection)
+        private void BuildEditorRuntimeRows(GenericEditorSection section, GenericEditorRuntimeSection runtimeSection, int dataRecordTypeId)
         {
             if (section.Rows != null)
             {
                 var dataRecordTypeManager = new DataRecordTypeManager();
-                var fields = dataRecordTypeManager.GetDataRecordTypeFields(genericEditor.DataRecordTypeId);
+                var fields = dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
                 if (fields == null)
-                    throw new NullReferenceException(String.Format("fields of DataRecordType '{0}'", genericEditor.DataRecordTypeId));
+                    throw new NullReferenceException(String.Format("fields of DataRecordType '{0}'", dataRecordTypeId));
                 runtimeSection.Rows = new List<GenericEditorRuntimeRow>();
                 foreach (var row in section.Rows)
                 {
                     var runtimeRow = new GenericEditorRuntimeRow();
                     runtimeSection.Rows.Add(runtimeRow);
-                    BuildEditorRuntimeFields(genericEditor, row, runtimeRow, fields);
+                    BuildEditorRuntimeFields( row, runtimeRow, fields, dataRecordTypeId);
                 }
             }
         }
 
-        private void BuildEditorRuntimeFields(GenericEditor genericEditor, GenericEditorRow row, GenericEditorRuntimeRow runtimeRow, List<DataRecordField> dataRecordTypeFields)
+        private void BuildEditorRuntimeFields(GenericEditorRow row, GenericEditorRuntimeRow runtimeRow, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
         {
             if (row.Fields != null)
             {
@@ -185,7 +140,7 @@ namespace Vanrise.GenericData.Business
                     runtimeField.FieldPath = field.FieldPath;
                     var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == runtimeField.FieldPath);
                     if (dataRecordTypeField == null)
-                        throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", genericEditor.DataRecordTypeId, runtimeField.FieldPath));
+                        throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, runtimeField.FieldPath));
                     runtimeField.FieldType = dataRecordTypeField.Type;
                 }
             }
@@ -194,42 +149,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
 
-        #region Private Classes
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IGenericEditorDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericEditorDataManager>();
-            object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired()
-            {
-                return this.IsCacheExpired();
-            }
-
-            public bool IsCacheExpired()
-            {
-                return _dataManager.AreGenericEditorDefinitionUpdated(ref _updateHandle);
-            }
-        }
-
-
-        #endregion
-
-        #region Mappers
-
-        private GenericEditorDefinitionDetail GenericEditorDefinitionDetailMapper(GenericEditorDefinition genericEditorDefinition)
-        {
-            GenericEditorDefinitionDetail genericEditorDefinitionDetail = new GenericEditorDefinitionDetail();
-            genericEditorDefinitionDetail.Entity = genericEditorDefinition;
-
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            if (genericEditorDefinition.Details != null)
-            {
-               genericEditorDefinitionDetail.RecordTypeName= dataRecordTypeManager.GetDataRecordTypeName(genericEditorDefinition.Details.DataRecordTypeId);
-
-            }
-            return genericEditorDefinitionDetail;
-        }
-
-        #endregion
+       
     }
 }

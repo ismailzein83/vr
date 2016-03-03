@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericEditorService',
-    function (UtilsService, VRUIUtilsService, VR_GenericData_GenericEditorService) {
+app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_ExtensibleBEItemService',
+    function (UtilsService, VRUIUtilsService, VR_GenericData_ExtensibleBEItemService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -50,7 +50,7 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
                         ctrl.sections.push(section);
                     };
 
-                    VR_GenericData_GenericEditorService.addSection(onSectionAdded, getExistingSections());
+                    VR_GenericData_ExtensibleBEItemService.addSection(onSectionAdded, getExistingSections());
                 }
 
                 ctrl.validateEditor =function()
@@ -135,7 +135,7 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
                     var index = UtilsService.getItemIndexByVal(ctrl.sections, sectionObj.sectionTitle, 'sectionTitle');
                     ctrl.sections[index].rowsGridAPI.onAddRow(rowObj);
                 };
-                VR_GenericData_GenericEditorService.addRow(onRowAdded, getFilteredFields());
+                VR_GenericData_ExtensibleBEItemService.addRow(onRowAdded, getFilteredFields());
             }
 
             function deleteSection(sectionObj)
@@ -145,7 +145,7 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
                     ctrl.sections.splice(index, 1);
                 };
 
-                VR_GenericData_GenericEditorService.deleteSection($scope, sectionObj, onSectionDeleted);
+                VR_GenericData_ExtensibleBEItemService.deleteSection($scope, sectionObj, onSectionDeleted);
             }
 
             function prepareSectionObject(section) {
@@ -225,7 +225,7 @@ app.directive('vrGenericdataGenericeditorDefinitionEditor', ['UtilsService', 'VR
                     ctrl.sections[index].sectionTitle = sectionObj;
                 };
 
-                VR_GenericData_GenericEditorService.editSection(onSectionUpdated, getExistingSections(), dataItem.sectionTitle);
+                VR_GenericData_ExtensibleBEItemService.editSection(onSectionUpdated, getExistingSections(), dataItem.sectionTitle);
             }
 
             function getExistingSections()
