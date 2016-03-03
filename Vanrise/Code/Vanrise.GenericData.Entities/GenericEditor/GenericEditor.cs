@@ -8,8 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericEditor
     {
-        public int DataRecordTypeId { get; set; }
-
         public List<GenericEditorSection> Sections { get; set; }
     }
 }

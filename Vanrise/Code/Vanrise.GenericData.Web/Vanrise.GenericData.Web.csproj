@@ -203,18 +203,18 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-griddesign.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentitydefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-extensiblebeitem-grid.js" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionEditorTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionRowTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\Templates\DefinitionSectionTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\vr-genericdata-genericeditor-definition-editor.js" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\vr-genericdata-genericeditor-definition-row.js" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Definition\vr-genericdata-genericeditor-definition-section.js" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\EditorTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\RowTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\Templates\SectionTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-editor.js" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-row.js" />
-    <Content Include="VR_GenericData\Directives\GenericEditor\Runtime\vr-genericdata-genericeditor-runtime-section.js" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Definition\Templates\DefinitionEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Definition\Templates\DefinitionRowTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Definition\Templates\DefinitionSectionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Definition\vr-genericdata-extensiblebeitem-definition-editor.js" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Definition\vr-genericdata-extensiblebeitem-definition-row.js" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Definition\vr-genericdata-extensiblebeitem-definition-section.js" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Runtime\Templates\EditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Runtime\Templates\RowTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Runtime\Templates\SectionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Runtime\vr-genericdata-extensiblebeitem-runtime-editor.js" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Runtime\vr-genericdata-extensiblebeitem-runtime-row.js" />
+    <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Runtime\vr-genericdata-extensiblebeitem-runtime-section.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-fieldtype-boolean-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-fieldtype-boolean-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-fieldtype-businessentity-filtereditor.js" />
@@ -398,7 +398,10 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_GenericData\Directives\GenericEditor\Definition\" />
+    <Folder Include="VR_GenericData\Directives\GenericEditor\Runtime\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\test.html" />
