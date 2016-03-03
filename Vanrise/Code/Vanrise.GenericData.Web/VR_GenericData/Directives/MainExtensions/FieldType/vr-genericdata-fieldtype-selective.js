@@ -31,8 +31,8 @@
 
             var directiveAPI;
             var directiveReadyDeferred;
-
-            var payloadObj;
+            var directivePayload;
+            
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.fieldTypeConfigs = [];
@@ -40,7 +40,6 @@
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
-
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                         ctrl.onReady(getDirectiveAPI());
                     }
@@ -51,7 +50,7 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, directiveAPI, payloadObj, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -64,6 +63,7 @@
 
                     if (payload != undefined) {
                         configId = payload.ConfigId;
+                        directivePayload = payload;
                     }
 
                     var getFieldTypeConfigsPromise = getFieldTypeConfigs();
@@ -76,6 +76,14 @@
                         if (configId != undefined) {
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             $scope.scopeModel.selectedFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModel.fieldTypeConfigs, configId, 'DataRecordFieldTypeConfigId');
+
+                            directiveReadyDeferred.promise.then(function () {
+                                directiveReadyDeferred = undefined;
+                                VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, loadDirectiveDeferred);
+                            });
+                        }
+                        else {
+                            loadDirectiveDeferred.resolve();
                         }
                     });
 
@@ -85,7 +93,6 @@
                         return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
                             if (response != null) {
                                 selectorAPI.clearDataSource();
-
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.fieldTypeConfigs.push(response[i]);
                                 }
