@@ -21,6 +21,7 @@
                 }; 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    gridAPI.loadGrid({});
                 }
 
                 $scope.onUserDirectiveReady = function (api) {
@@ -53,10 +54,9 @@
             function load() {
                 $scope.isLoadingFilters = true;
                 return customerUserAPIService.GetHasCurrentCustomerId().then(function (response) {
-                    if (response==true)
-                        loadAllControls().then(function (response) {
-                            gridAPI.loadGrid({});
-                        })
+                    if (response == true) {
+                        loadAllControls()
+                    }
                     else {
                         $scope.isLoadingFilters = false;
                         VRNotificationService.notifyExceptionWithClose("This user has no related customer.");
