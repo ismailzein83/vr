@@ -34,7 +34,7 @@ namespace Vanrise.Common.Business
         }
 
 
-        public IEnumerable<CityInfo> GetCitiesInfo(CityInfoFilter filter)
+        public IEnumerable<CityInfo> GetCitiesInfo(CityInfoFilter filter,int countryId)
         {
             IEnumerable<City> cities = null;
 
@@ -49,7 +49,24 @@ namespace Vanrise.Common.Business
                     cities = cachedCities.Values;
             }
 
+            cities = this.GetCitiesByCountry(countryId);
+
+
             return cities.MapRecords(CityInfoMapper);
+        }
+
+
+
+        public IEnumerable<CityInfo> GetCountryIdByCityIds(List<int> cityIds)
+        {
+            IEnumerable<City> cities =this.GetCachedCities().Values;
+            Func<City, bool> cityFilter = (city) =>
+            {
+                if (!cityIds.Contains(city.CityId))
+                    return false;
+                return true;
+            };
+            return cities.MapRecords(CityInfoMapper, cityFilter);
         }
 
 
@@ -156,6 +173,7 @@ namespace Vanrise.Common.Business
             CityInfo cityInfo = new CityInfo();
             cityInfo.CityId = city.CityId;
             cityInfo.Name = city.Name;
+            cityInfo.CountryId = city.CountryId;
             return cityInfo;
         }
 
