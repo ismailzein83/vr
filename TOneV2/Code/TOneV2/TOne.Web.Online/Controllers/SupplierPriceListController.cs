@@ -13,7 +13,8 @@ namespace TOne.Web.Online.Controllers
             //return true;
             int insertedId;
             SupplierPricelistsManager manager = new SupplierPricelistsManager();
-            manager.SavePriceList(0, userInput.EffectiveOnDateTime, "C159", userInput.PriceListType, "portal@vanrise.com", userInput.ContentFile, userInput.FileName, out insertedId);
+            manager.SavePriceList(0, userInput.EffectiveOnDateTime, userInput.CarrierAccountId, userInput.PriceListType,
+                userInput.UserEmail, userInput.ContentFile, userInput.FileName, out insertedId);
             return insertedId;
         }
 
@@ -43,6 +44,8 @@ namespace TOne.Web.Online.Controllers
             public byte[] ContentFile { get; set; }
             public string FileName { get; set; }
             public DateTime EffectiveOnDateTime { get; set; }
+            public string CarrierAccountId { get; set; }
+            public string UserEmail { get; set; }
         }
     }
 }
