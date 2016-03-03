@@ -40,11 +40,11 @@
         }
 
         function HasUpdateCarrierAccountPermission() {
-            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateCarrierAccount']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateCarrierAccount']));
         }
         
         function HasAddCarrierAccountPermission() {
-            return SecurityService.IsAllowedBySystemActionNames(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddCarrierAccount']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddCarrierAccount']));
         }
         return ({
             GetCarrierAccountInfo: GetCarrierAccountInfo,
