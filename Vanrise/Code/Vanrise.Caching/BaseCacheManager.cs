@@ -32,9 +32,17 @@ namespace Vanrise.Caching
         }
         protected internal BaseCacheManager()
         {
-            string timeExpirationIntervalConfigKey = string.Format("{0}_TimeExpirationInterval", this.GetType().Name);
+            string timeExpirationIntervalConfigKey = string.Format("{0}_TimeExpirationInterval", this.CacheManagerName);
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings[timeExpirationIntervalConfigKey], out _timeExpirationInterval))
                 _timeExpirationInterval = new TimeSpan(0, 5, 0);
+        }
+
+        protected virtual string CacheManagerName
+        {
+            get
+            {
+                return this.GetType().FullName;
+            }
         }
 
         #region Local Variables
