@@ -79,7 +79,7 @@ namespace CP.SupplierPricelist.Business
             Customer customer = customerManager.GetCustomer(priceList.CustomerId);
             priceListDetail.CustomerName = customer != null ? customer.Name : "";
 
-            var customerSuppliers = new CustomerManager().GetCachedSuuplierAccounts(priceList.CustomerId);
+            var customerSuppliers = new CustomerManager().GetCachedSupplierAccounts(priceList.CustomerId);
             priceListDetail.CarrierAccountName = customerSuppliers.ContainsKey(priceList.CarrierAccountId) ? customerSuppliers[priceList.CarrierAccountId].SupplierName : "";
             return priceListDetail;
         }

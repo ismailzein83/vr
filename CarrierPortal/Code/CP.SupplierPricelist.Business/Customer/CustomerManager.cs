@@ -45,7 +45,7 @@ namespace CP.SupplierPricelist.Business
             //if (customer.Settings.PriceListConnector == null)
             //    throw new NullReferenceException("customer.Settings.PriceListConnector");
 
-            return GetCachedSuuplierAccounts(customerId).Values;
+            return GetCachedSupplierAccounts(customerId).Values;
         }
 
         public IEnumerable<CustomerInfo> GetCustomerInfos(CustomerFilter filter)
@@ -139,7 +139,7 @@ namespace CP.SupplierPricelist.Business
             }
         }
 
-        public Dictionary<string, SupplierInfo> GetCachedSuuplierAccounts(int customerId)
+        public Dictionary<string, SupplierInfo> GetCachedSupplierAccounts(int customerId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCacheManager>().GetOrCreateObject("GetSupplierAccounts",
                () =>
@@ -158,6 +158,13 @@ namespace CP.SupplierPricelist.Business
         }
         private class SupplierCacheManager : Vanrise.Caching.BaseCacheManager
         {
+            protected override bool IsTimeExpirable
+            {
+                get
+                {
+                    return true;
+                }
+            }
 
         }
 
