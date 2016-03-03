@@ -34,7 +34,7 @@ namespace Vanrise.Caching
         {
             string timeExpirationIntervalConfigKey = string.Format("{0}_TimeExpirationInterval", this.CacheManagerName);
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings[timeExpirationIntervalConfigKey], out _timeExpirationInterval))
-                _timeExpirationInterval = new TimeSpan(0, 5, 0);
+                _timeExpirationInterval = new TimeSpan(0, 5, 0);           
         }
 
         protected virtual string CacheManagerName
@@ -62,7 +62,7 @@ namespace Vanrise.Caching
             {
                 lock (GetCacheNameLockObject(cacheName, parameter))
                 {
-                    if (!TryGetObjectFromCache(cacheName, parameter, out cachedObject))
+                    if (!TryGetObjectFromCache(cacheName, parameter, out cachedObject) || IsExpired(cachedObject))
                     {
                         T obj = createObject();
                         cachedObject = new CachedObject(obj)
