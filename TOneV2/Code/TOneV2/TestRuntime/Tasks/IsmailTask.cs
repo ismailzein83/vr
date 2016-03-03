@@ -22,6 +22,7 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            
             //TestCacheCleaner();
 
             //var saleZoneDataManager = new SaleZoneDataManager();
@@ -41,97 +42,101 @@ namespace TestRuntime
             ////return;
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
 
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("DemoRawCDR");
+
             //Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>(0, "testCDRQueue");
             //var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
             
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
-
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             var runtimeServices = new List<RuntimeService>();
             runtimeServices.Add(queueActivationService);
-            
+
             runtimeServices.Add(bpService);
 
             runtimeServices.Add(schedulerService);
+            runtimeServices.Add(dsRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            var storeCDRRawsStage = new QueueStageExecutionActivity { StageName = "Store CDR Raws", QueueName = "CDRRaw", QueueTypeFQTN = typeof(CDRBatch).AssemblyQualifiedName , QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreCDRRawsActivator).AssemblyQualifiedName} };
-            var processRawCDRsStage = new QueueStageExecutionActivity { StageName = "Process Raw CDRs", QueueName = "CDRRawForBilling", QueueTypeFQTN = typeof(CDRBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(ProcessRawCDRsActivator).AssemblyQualifiedName } };
-            QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
-            {
-                Activities = new List<BaseExecutionActivity>
-                {
-                    new ParallelExecutionActivity {
-                         Activities = new List<BaseExecutionActivity>
-                         {
-                              storeCDRRawsStage,
-                              new SequenceExecutionActivity{ 
-                                  Activities = new List<BaseExecutionActivity>                              
-                                  {
-                                      processRawCDRsStage,
-                                      new ParallelExecutionActivity
-                                      {
-                                          Activities = new List<BaseExecutionActivity>
-                                          {
-                                              new SequenceExecutionActivity 
-                                              {
-                                                    Activities = new List<BaseExecutionActivity>
-                                                    {
-                                                        new QueueStageExecutionActivity  { StageName = "Process Billing CDRs", QueueName ="CDRBilling", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
-                                                        new SplitExecutionActivity 
-                                                        { 
-                                                            Activities = new List<BaseExecutionActivity>
-                                                            {
-                                                                new QueueStageExecutionActivity{ StageName = "Store CDR Main",  QueueName = "CDRMain", QueueTypeFQTN = typeof(CDRMainBatch).AssemblyQualifiedName},
-                                                                new QueueStageExecutionActivity  { StageName = "Store CDR Invalid",  QueueName = "CDRInvalid", QueueTypeFQTN = typeof(CDRInvalidBatch).AssemblyQualifiedName}
-                                                            }
-                                                        }
-                                                    }
-                                              },
-                                              new SequenceExecutionActivity
-                                              {
-                                                  Activities = new List<BaseExecutionActivity>
-                                                  {
-                                                      new QueueStageExecutionActivity { StageName = "Process Traffic Statistics",QueueName = "CDRBillingForTrafficStats", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
-                                                      new QueueStageExecutionActivity  { StageName = "Store Traffic Statistics", QueueName = "TrafficStatistics", QueueTypeFQTN = typeof(TrafficStatisticBatch).AssemblyQualifiedName}
-                                                  }
-                                              },
-                                              new SequenceExecutionActivity
-                                              {
-                                                  Activities = new List<BaseExecutionActivity>
-                                                  {
-                                                      new QueueStageExecutionActivity { StageName = "Process Daily Traffic Statistics",  QueueName = "CDRBillingForDailyTrafficStats", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
-                                                      new QueueStageExecutionActivity  { StageName = "Store Daily Traffic Statistics", QueueName = "TrafficStatisticsDaily", QueueTypeFQTN = typeof(TrafficStatisticDailyBatch).AssemblyQualifiedName}
-                                                  }
-                                              }
-                                          }
-                                      }
-                                  }
-                              }
-                         }
-                    }
-                }
-            };
-            var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
+            //var storeCDRRawsStage = new QueueStageExecutionActivity { StageName = "Store CDR Raws", QueueName = "CDRRaw", QueueTypeFQTN = typeof(CDRBatch).AssemblyQualifiedName , QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(StoreCDRRawsActivator).AssemblyQualifiedName} };
+            //var processRawCDRsStage = new QueueStageExecutionActivity { StageName = "Process Raw CDRs", QueueName = "CDRRawForBilling", QueueTypeFQTN = typeof(CDRBatch).AssemblyQualifiedName, QueueSettings = new QueueSettings { QueueActivatorFQTN = typeof(ProcessRawCDRsActivator).AssemblyQualifiedName } };
+            //QueueExecutionFlowTree queueFlowTree = new QueueExecutionFlowTree
+            //{
+            //    Activities = new List<BaseExecutionActivity>
+            //    {
+            //        new ParallelExecutionActivity {
+            //             Activities = new List<BaseExecutionActivity>
+            //             {
+            //                  storeCDRRawsStage,
+            //                  new SequenceExecutionActivity{ 
+            //                      Activities = new List<BaseExecutionActivity>                              
+            //                      {
+            //                          processRawCDRsStage,
+            //                          new ParallelExecutionActivity
+            //                          {
+            //                              Activities = new List<BaseExecutionActivity>
+            //                              {
+            //                                  new SequenceExecutionActivity 
+            //                                  {
+            //                                        Activities = new List<BaseExecutionActivity>
+            //                                        {
+            //                                            new QueueStageExecutionActivity  { StageName = "Process Billing CDRs", QueueName ="CDRBilling", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
+            //                                            new SplitExecutionActivity 
+            //                                            { 
+            //                                                Activities = new List<BaseExecutionActivity>
+            //                                                {
+            //                                                    new QueueStageExecutionActivity{ StageName = "Store CDR Main",  QueueName = "CDRMain", QueueTypeFQTN = typeof(CDRMainBatch).AssemblyQualifiedName},
+            //                                                    new QueueStageExecutionActivity  { StageName = "Store CDR Invalid",  QueueName = "CDRInvalid", QueueTypeFQTN = typeof(CDRInvalidBatch).AssemblyQualifiedName}
+            //                                                }
+            //                                            }
+            //                                        }
+            //                                  },
+            //                                  new SequenceExecutionActivity
+            //                                  {
+            //                                      Activities = new List<BaseExecutionActivity>
+            //                                      {
+            //                                          new QueueStageExecutionActivity { StageName = "Process Traffic Statistics",QueueName = "CDRBillingForTrafficStats", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
+            //                                          new QueueStageExecutionActivity  { StageName = "Store Traffic Statistics", QueueName = "TrafficStatistics", QueueTypeFQTN = typeof(TrafficStatisticBatch).AssemblyQualifiedName}
+            //                                      }
+            //                                  },
+            //                                  new SequenceExecutionActivity
+            //                                  {
+            //                                      Activities = new List<BaseExecutionActivity>
+            //                                      {
+            //                                          new QueueStageExecutionActivity { StageName = "Process Daily Traffic Statistics",  QueueName = "CDRBillingForDailyTrafficStats", QueueTypeFQTN = typeof(CDRBillingBatch).AssemblyQualifiedName},
+            //                                          new QueueStageExecutionActivity  { StageName = "Store Daily Traffic Statistics", QueueName = "TrafficStatisticsDaily", QueueTypeFQTN = typeof(TrafficStatisticDailyBatch).AssemblyQualifiedName}
+            //                                      }
+            //                                  }
+            //                              }
+            //                          }
+            //                      }
+            //                  }
+            //             }
+            //        }
+            //    }
+            //};
+            //var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
 
 
 
-            QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
-            var queuesByStages = executionFlowManager.GetQueuesByStages(7);
-            TOne.CDR.Entities.CDRBatch cdrBatch = new CDRBatch();
-            cdrBatch.CDRs = new List<TABS.CDR> { 
-             new TABS.CDR {  AttemptDateTime = DateTime.Now, CDPN = "343565436", CGPN = "5465436547", ConnectDateTime = DateTime.Now, Duration = new TimeSpan(0,2,4), IN_CARRIER="Trer", OUT_CARRIER = "6546"
-             }
-            };
-            cdrBatch.SwitchId = 8;
-            while (true)
-            {
-                Console.ReadKey();
-                queuesByStages["Store CDR Raws"].Queue.EnqueueObject(cdrBatch);
-            }
+            //QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
+            //var queuesByStages = executionFlowManager.GetQueuesByStages(7);
+            //TOne.CDR.Entities.CDRBatch cdrBatch = new CDRBatch();
+            //cdrBatch.CDRs = new List<TABS.CDR> { 
+            // new TABS.CDR {  AttemptDateTime = DateTime.Now, CDPN = "343565436", CGPN = "5465436547", ConnectDateTime = DateTime.Now, Duration = new TimeSpan(0,2,4), IN_CARRIER="Trer", OUT_CARRIER = "6546"
+            // }
+            //};
+            //cdrBatch.SwitchId = 8;
+            //while (true)
+            //{
+            //    Console.ReadKey();
+            //    queuesByStages["Store CDR Raws"].Queue.EnqueueObject(cdrBatch);
+            //}
             
             
 
