@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.Concurrent;
+using System.Configuration;
 
 namespace Vanrise.Caching
 {
@@ -21,8 +22,19 @@ namespace Vanrise.Caching
 
     public abstract class BaseCacheManager<ParamType> : ICacheManager
     {
+        TimeSpan _timeExpirationInterval;
+        protected virtual bool IsTimeExpirable
+        {
+            get
+            {
+                return false;
+            }
+        }
         protected internal BaseCacheManager()
         {
+            string timeExpirationIntervalConfigKey = string.Format("{0}_TimeExpirationInterval", this.GetType().Name);
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings[timeExpirationIntervalConfigKey], out _timeExpirationInterval))
+                _timeExpirationInterval = new TimeSpan(0, 5, 0);
         }
 
         #region Local Variables
@@ -38,7 +50,7 @@ namespace Vanrise.Caching
         {            
             CachedObject cachedObject;
             CheckCacheDictionaryExpiration(parameter);
-            if (!TryGetObjectFromCache(cacheName, parameter, out cachedObject))
+            if (!TryGetObjectFromCache(cacheName, parameter, out cachedObject) || IsExpired(cachedObject))
             {
                 lock (GetCacheNameLockObject(cacheName, parameter))
                 {
@@ -59,6 +71,16 @@ namespace Vanrise.Caching
                 cachedObject.LastAccessedTime = DateTime.Now;
             }
             return cachedObject.Object != null ? (T)cachedObject.Object : default(T);
+        }
+
+        private bool IsExpired(CachedObject cachedObject)
+        {
+            if(this.IsTimeExpirable)
+            {
+                if ((DateTime.Now - cachedObject.CreatedTime) > _timeExpirationInterval)
+                    return true;
+            }
+            return false;
         }
 
         public virtual void RemoveObjectFromCache(string cacheName, ParamType parameter)

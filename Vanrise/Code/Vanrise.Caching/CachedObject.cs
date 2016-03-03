@@ -12,6 +12,7 @@ namespace Vanrise.Caching
         public CachedObject(Object obj)
         {
             this.Object = obj;
+            this.CreatedTime = DateTime.Now;
         }
 
         public string CacheName { get; set; }
@@ -21,5 +22,7 @@ namespace Vanrise.Caching
         public CacheObjectSize ApproximateSize { get; set; }
 
         public DateTime LastAccessedTime { get; set; }
+
+        public DateTime CreatedTime { get; set; }
     }
 }
