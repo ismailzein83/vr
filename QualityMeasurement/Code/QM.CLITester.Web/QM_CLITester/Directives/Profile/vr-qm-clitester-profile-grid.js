@@ -75,8 +75,13 @@ function (UtilsService, VRNotificationService, QM_CLITester_ProfileAPIService, Q
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editProfile,
+                haspermission: hasEditTestCallPermission
             }
             ];
+        }
+
+        function hasEditTestCallPermission() {
+            return QM_CLITester_ProfileAPIService.HasEditProfilePermission();
         }
 
         function editProfile(profile) {

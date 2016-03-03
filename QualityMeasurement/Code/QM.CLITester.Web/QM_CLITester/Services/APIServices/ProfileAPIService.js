@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    profileAPIService.$inject = ['BaseAPIService', 'UtilsService', 'QM_CLITester_ModuleConfig'];
+    profileAPIService.$inject = ['BaseAPIService', 'UtilsService', 'QM_CLITester_ModuleConfig', 'SecurityService'];
 
-    function profileAPIService(BaseAPIService, UtilsService, QM_CLITester_ModuleConfig) {
+    function profileAPIService(BaseAPIService, UtilsService, QM_CLITester_ModuleConfig, SecurityService) {
 
         var controllerName = 'Profile';
 
@@ -29,7 +29,12 @@
             return BaseAPIService.get(UtilsService.getServiceURL(QM_CLITester_ModuleConfig.moduleName, controllerName, "GetProfilesInfo"));
         }
 
+        function HasEditProfilePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(QM_CLITester_ModuleConfig.moduleName, controllerName, ['UpdateProfile']));
+        }
+
         return ({
+            HasEditProfilePermission: HasEditProfilePermission,
             GetFilteredProfiles: GetFilteredProfiles,
             GetProfile: GetProfile,
             UpdateProfile: UpdateProfile,
