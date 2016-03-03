@@ -373,6 +373,8 @@
     <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBEEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBEEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericExtensibleBEEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericExtensibleBEEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagement.html" />
