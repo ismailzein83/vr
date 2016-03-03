@@ -7,7 +7,7 @@ CREATE PROCEDURE [CP_SupPriceList].[sp_Customer_Update]
 	)
 AS
 BEGIN
---IF NOT EXISTS(select 1 from  [CP_SupPriceList].[Customer] where Name = @CustomerName)
+IF NOT EXISTS(select 1 from  [CP_SupPriceList].[Customer] where Name = @CustomerName and ID<>@customeID)
 begin
 update [CP_SupPriceList].[Customer]
            set [Name]= @CustomerName
