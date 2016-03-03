@@ -115,15 +115,20 @@
                     });
 
                     UtilsService.waitMultiplePromises([getRuleDefinitionPromise, getFieldTypeConfigsPromise]).then(function () {
+                        var criteriaFilterPromises = [];
+
                         for (var i = 0; i < ruleDefinition.CriteriaDefinition.Fields.length; i++) {
                             var criteriaField = ruleDefinition.CriteriaDefinition.Fields[i];
                             var filter = getFilter(criteriaField);
                             if (filter != undefined) {
-                                promises.push(filter.directiveLoadDeferred.promise);
+                                criteriaFilterPromises.push(filter.directiveLoadDeferred.promise);
                                 $scope.filters.push(filter);
                             }
                         }
-                        getRuleDefinitionAndFieldTypeConfigsDeferred.resolve();
+
+                        UtilsService.waitMultiplePromises(criteriaFilterPromises).then(function () {
+                            getRuleDefinitionAndFieldTypeConfigsDeferred.resolve();
+                        });
                     }).catch(function (error) {
                         getRuleDefinitionAndFieldTypeConfigsDeferred.reject(error);
                     });
