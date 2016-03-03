@@ -43,7 +43,7 @@ namespace Vanrise.Security.Data.SQL
                 Title = reader["Title"] as string,
                 ParentId = GetReaderValue<int>(reader, "ParentId"),
                 BreakInheritance = (bool)reader["BreakInheritance"],
-                PermissionOptions = Common.Serializer.Deserialize<List<string>>(reader["PermissionOptions"] as string)
+                PermissionOptions = new List<string>() { "View", "Add", "Edit", "Delete", "Full Control" }
             };
             return module;
         }
