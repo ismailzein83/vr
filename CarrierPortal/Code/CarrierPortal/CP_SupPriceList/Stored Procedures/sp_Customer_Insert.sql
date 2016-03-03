@@ -11,6 +11,7 @@ CREATE PROCEDURE [CP_SupPriceList].[sp_Customer_Insert]
 	)
 AS
 BEGIN
+set @customerID=0
 IF NOT EXISTS(select 1 from  [CP_SupPriceList].[Customer] where Name = @CustomerName)
 BEGIN
 	INSERT INTO [CP_SupPriceList].[Customer]
