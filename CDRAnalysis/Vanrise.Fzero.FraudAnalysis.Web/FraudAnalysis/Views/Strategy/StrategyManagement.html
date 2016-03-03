@@ -24,10 +24,10 @@
                     <cdranalysis-fa-period-selector on-ready="onPeriodSelectorReady" label="Types" ismultipleselection></cdranalysis-fa-period-selector>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="advancedSelected">
-                    <vr-select datasource="kinds" selectedvalues="selectedKinds" datatextfield="name" datavaluefield="value" label="Kind" ismultipleselection></vr-select>
+                    <vr-select datasource="statuses" selectedvalues="selectedStatuses" datatextfield="name" datavaluefield="value" label="Status" ismultipleselection></vr-select>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="advancedSelected">
-                    <vr-select datasource="statuses" selectedvalues="selectedStatuses" datatextfield="name" datavaluefield="value" label="Status" ismultipleselection></vr-select>
+                    <vr-select datasource="kinds" selectedvalues="selectedKinds" datatextfield="name" datavaluefield="value" label="Kind" ismultipleselection ng-hide="true"></vr-select>
                 </vr-columns>
             </vr-row>
         </div>
