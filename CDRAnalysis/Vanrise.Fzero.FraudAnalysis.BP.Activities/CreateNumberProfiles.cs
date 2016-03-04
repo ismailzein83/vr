@@ -85,48 +85,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        private void FinishNumberProfileProcessing(ProcessingNumberProfileItem processingNumberProfileItem, List<AggregateDefinition> aggregateDefinitions, int aggregatesCount, ref List<NumberProfile> numberProfileBatch, CreateNumberProfilesInput inputArgument)
-        {
-            if (inputArgument.StrategiesExecutionInfo != null)
-            {
-                foreach (var strategyExecutionInfo in inputArgument.StrategiesExecutionInfo)
-                {
-                    NumberProfile numberProfile = new NumberProfile()
-                    {
-                        AccountNumber = processingNumberProfileItem.Number,
-                        FromDate = inputArgument.FromDate,
-                        ToDate = inputArgument.ToDate,
-                        StrategyId = strategyExecutionInfo.Strategy.Id,
-                        StrategyExecutionID = strategyExecutionInfo.StrategyExecutionId,
-                        IMEIs = processingNumberProfileItem.IMEIs
-                    };
-                    for (int i = 0; i < aggregatesCount; i++)
-                    {
-                        var aggregateDef = aggregateDefinitions[i];
-                        numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(processingNumberProfileItem.AggregateStates[i], strategyExecutionInfo.Strategy));
-                    }
-                    numberProfileBatch.Add(numberProfile);
-                }
-            }
-            else
-            {
-                NumberProfile numberProfile = new NumberProfile()
-                {
-                    AccountNumber = processingNumberProfileItem.Number,
-                    FromDate = inputArgument.FromDate,
-                    ToDate = inputArgument.ToDate,
-                    IMEIs = processingNumberProfileItem.IMEIs
-                };
-                for (int i = 0; i < aggregatesCount; i++)
-                {
-                    var aggregateDef = aggregateDefinitions[i];
-                    numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(processingNumberProfileItem.AggregateStates[i], inputArgument.Parameters));
-                }
-                numberProfileBatch.Add(numberProfile);
-            }
-
-        }
-
         protected override CreateNumberProfilesInput GetInputArgument2(System.Activities.AsyncCodeActivityContext context)
         {
             return new CreateNumberProfilesInput
@@ -147,25 +105,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             HashSet<string> whiteListNumbersHashSet = new HashSet<string>();
             if (!inputArgument.IncludeWhiteList)
-            {
-                AccountStatusManager accountStatusManager = new AccountStatusManager();
-                var whiteListNumbers = accountStatusManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList }, new List<string> { inputArgument.NumberPrefix });
-                whiteListNumbersHashSet = new HashSet<string>(whiteListNumbers);
-            }
+                whiteListNumbersHashSet = FillWhiteList(inputArgument, whiteListNumbersHashSet);
 
-            ICallClassDataManager manager = FraudDataManagerFactory.GetDataManager<ICallClassDataManager>();
-            IStrategyDataManager strategyManager = FraudDataManagerFactory.GetDataManager<IStrategyDataManager>();
-            INumberProfileDataManager dataManager = FraudDataManagerFactory.GetDataManager<INumberProfileDataManager>();
+            Dictionary<int, NetType> callClassNetTypes = GetCallClassNetTypes();
 
-            var callClasses = manager.GetCallClasses();
-            Dictionary<int, NetType> callClassNetTypes = new Dictionary<int, NetType>();
-            if (callClasses != null)
-            {
-                foreach (CallClass callClass in callClasses)
-                {
-                    callClassNetTypes.Add(callClass.Id, callClass.NetType);
-                }
-            }
             List<Strategy> strategies = new List<Strategy>();
             if (inputArgument.StrategiesExecutionInfo != null)
                 foreach (var i in inputArgument.StrategiesExecutionInfo)
@@ -180,10 +123,19 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 ;
             var aggregateDefinitions = aggregateManager.GetAggregateDefinitions(callClassNetTypes);
             int aggregatesCount = aggregateDefinitions.Count;
-            ProcessingNumberProfileItemByNumbers processingNumberProfileItemByNumbers = new ProcessingNumberProfileItemByNumbers();
+
+            ProcessingNumberProfileItem currentProcessingNumberProfileItem = null;
+
+            int batchSize;
+            if (!int.TryParse(System.Configuration.ConfigurationManager.AppSettings["FraudAnalysis_NumberProfileBatchSize"], out batchSize))
+                batchSize = 10000;
 
             int cdrsCount = 0;
             int cdrIndex = 0;
+
+            int numberProfilesCount = 0;
+            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
+            long numberOfSubscribers = 0;
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -197,22 +149,24 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             foreach (var cdr in cdrs)
                             {
                                 cdrsCount++;
-                                long msidnAsNumber;
-                                if (!long.TryParse(cdr.MSISDN, out msidnAsNumber))
-                                    continue;
-
-                                ProcessingNumberProfileItem currentProcessingNumberProfileItem;
-                                if (!processingNumberProfileItemByNumbers.TryGetValue(msidnAsNumber, out currentProcessingNumberProfileItem))//|| cdrProfilingCount == 2)
-                                {
-                                    if (whiteListNumbersHashSet.Contains(cdr.MSISDN))
+                                if (whiteListNumbersHashSet.Contains(cdr.MSISDN))
                                         continue;
+                                if(currentProcessingNumberProfileItem == null || currentProcessingNumberProfileItem.Number != cdr.MSISDN)
+                                {
+                                    numberOfSubscribers++;
+                                    if(currentProcessingNumberProfileItem != null)
+                                    {
+                                        FinishNumberProfileProcessing(currentProcessingNumberProfileItem, aggregateDefinitions, aggregatesCount, ref numberProfileBatch, inputArgument);
+
+                                        if (numberProfileBatch.Count >= batchSize)
+                                            SendNumberProfileBatch(inputArgument, handle, ref numberProfilesCount, ref numberProfileBatch);
+                                    }
                                     currentProcessingNumberProfileItem = new ProcessingNumberProfileItem
                                     {
                                         Number = cdr.MSISDN,
                                         AggregateStates = aggregateManager.CreateAggregateStates(aggregateDefinitions)
                                     };
-                                    processingNumberProfileItemByNumbers.Add(msidnAsNumber, currentProcessingNumberProfileItem);
-                                }
+                                }                               
                                 if (cdr.IMEI != null)
                                     currentProcessingNumberProfileItem.IMEIs.Add(cdr.IMEI);
 
@@ -232,49 +186,96 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                 }
                 while (!ShouldStop(handle) && hasItem);
             });
+            if (currentProcessingNumberProfileItem != null)
+                FinishNumberProfileProcessing(currentProcessingNumberProfileItem, aggregateDefinitions, aggregatesCount, ref numberProfileBatch, inputArgument);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} CDRs profiled", cdrsCount);
 
-            int batchSize;
-            if (!int.TryParse(System.Configuration.ConfigurationManager.AppSettings["FraudAnalysis_NumberProfileBatchSize"], out batchSize))
-                batchSize = 100000;
-
-            int numberProfilesCount = 0;
-            List<NumberProfile> numberProfileBatch = new List<NumberProfile>();
-            long numberOfSubscribers = 0;
-            foreach (var processingNumberProfileItem in processingNumberProfileItemByNumbers.Values)
-            {
-                numberOfSubscribers++;
-                FinishNumberProfileProcessing(processingNumberProfileItem, aggregateDefinitions, aggregatesCount, ref numberProfileBatch, inputArgument);
-
-
-                if (numberProfileBatch.Count >= batchSize)
-                {
-                    numberProfilesCount += numberProfileBatch.Count;
-                    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Number Profiles Sent", numberProfilesCount);
-                    inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
-                    {
-                        NumberProfiles = numberProfileBatch
-                    });
-                    numberProfileBatch = new List<NumberProfile>();
-                }
-            }
-
             if (numberProfileBatch.Count > 0)
-            {
-                numberProfilesCount += numberProfileBatch.Count;
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Number Profiles Sent", numberProfilesCount);
-                inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
-                {
-                    NumberProfiles = numberProfileBatch
-                });
-            }
+                SendNumberProfileBatch(inputArgument, handle, ref numberProfilesCount, ref numberProfileBatch);
 
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Profiling CDRs");
             return new CreateNumberProfilesOutput
             {
                 NumberOfSubscribers = numberOfSubscribers
             };
+        }
+
+        private static HashSet<string> FillWhiteList(CreateNumberProfilesInput inputArgument, HashSet<string> whiteListNumbersHashSet)
+        {
+            AccountStatusManager accountStatusManager = new AccountStatusManager();
+            var whiteListNumbers = accountStatusManager.GetAccountNumbersByNumberPrefixAndStatuses(new List<CaseStatus> { CaseStatus.ClosedWhiteList }, new List<string> { inputArgument.NumberPrefix });
+            whiteListNumbersHashSet = new HashSet<string>(whiteListNumbers);
+            return whiteListNumbersHashSet;
+        }
+
+        private static Dictionary<int, NetType> GetCallClassNetTypes()
+        {
+            CallClassManager manager = new CallClassManager();
+            Dictionary<int, NetType> callClassNetTypes = new Dictionary<int, NetType>();
+            var callClasses = manager.GetClasses();
+            if (callClasses != null)
+            {
+                foreach (CallClass callClass in callClasses)
+                {
+                    callClassNetTypes.Add(callClass.Id, callClass.NetType);
+                }
+            }
+            return callClassNetTypes;
+        }
+
+        private void FinishNumberProfileProcessing(ProcessingNumberProfileItem processingNumberProfileItem, List<AggregateDefinition> aggregateDefinitions, int aggregatesCount, ref List<NumberProfile> numberProfileBatch, CreateNumberProfilesInput inputArgument)
+        {
+            if (inputArgument.StrategiesExecutionInfo != null)
+            {
+                foreach (var strategyExecutionInfo in inputArgument.StrategiesExecutionInfo)
+                {
+                    NumberProfile numberProfile = new NumberProfile()
+                    {
+                        AccountNumber = processingNumberProfileItem.Number,
+                        FromDate = inputArgument.FromDate,
+                        ToDate = inputArgument.ToDate,
+                        StrategyId = strategyExecutionInfo.Strategy.Id,
+                        StrategyExecutionID = strategyExecutionInfo.StrategyExecutionId,
+                        IMEIs = processingNumberProfileItem.IMEIs
+                    };
+                    SetProfileAggregateValues(numberProfile, processingNumberProfileItem, aggregateDefinitions, aggregatesCount, strategyExecutionInfo.Strategy);
+                    numberProfileBatch.Add(numberProfile);
+                }
+            }
+            else
+            {
+                NumberProfile numberProfile = new NumberProfile()
+                {
+                    AccountNumber = processingNumberProfileItem.Number,
+                    FromDate = inputArgument.FromDate,
+                    ToDate = inputArgument.ToDate,
+                    IMEIs = processingNumberProfileItem.IMEIs
+                };
+                SetProfileAggregateValues(numberProfile, processingNumberProfileItem, aggregateDefinitions, aggregatesCount, inputArgument.Parameters);
+                numberProfileBatch.Add(numberProfile);
+            }
+
+        }
+
+        private static void SetProfileAggregateValues(NumberProfile numberProfile, ProcessingNumberProfileItem processingNumberProfileItem, List<AggregateDefinition> aggregateDefinitions, int aggregatesCount, INumberProfileParameters numberProfileParameters)
+        {
+            for (int i = 0; i < aggregatesCount; i++)
+            {
+                var aggregateDef = aggregateDefinitions[i];
+                numberProfile.AggregateValues.Add(aggregateDef.KeyName, aggregateDef.Aggregation.GetResult(processingNumberProfileItem.AggregateStates[i], numberProfileParameters));
+            }
+        }
+
+        private static void SendNumberProfileBatch(CreateNumberProfilesInput inputArgument, AsyncActivityHandle handle, ref int numberProfilesCount, ref List<NumberProfile> numberProfileBatch)
+        {
+            numberProfilesCount += numberProfileBatch.Count;
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Verbose, "{0} Number Profiles Sent", numberProfilesCount);
+            inputArgument.OutputQueue.Enqueue(new NumberProfileBatch()
+            {
+                NumberProfiles = numberProfileBatch
+            });
+            numberProfileBatch = new List<NumberProfile>();
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, CreateNumberProfilesOutput result)
@@ -283,13 +284,6 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         }
 
         #region Private Classes
-        
-        private class AggregateEvaluatuationTask
-        {
-            public ProcessingNumberProfileItem ProcessingNumberProfileItem { get; set; }
-
-            public CDR CDR { get; set; }
-        }
 
         private class ProcessingNumberProfileItem
         {
@@ -307,45 +301,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             public List<AggregateState> AggregateStates { get; set; }
         }
 
-        private class ProcessingNumberProfileItemByNumbers : BigDictionary<ProcessingNumberProfileItem>
-        {
-        }
-
         #endregion
 
-    }
-
-    public class BigDictionary<T>
-    {
-        Dictionary<long, Dictionary<long, T>> _dictionaryOfDictionaries = new Dictionary<long, Dictionary<long, T>>();
-        public void Add(long key, T value)
-        {
-           GetDictionary(key).Add(key, value);
-        }
-
-        public IEnumerable<T> Values
-        {
-            get
-            {
-                return _dictionaryOfDictionaries.SelectMany(itm => itm.Value.Values);
-            }
-        }
-
-        public bool TryGetValue(long key, out T value)
-        {
-            return GetDictionary(key).TryGetValue(key, out value);
-        }
-
-        Dictionary<long, T> GetDictionary(long key)
-        {
-            long dictionaryKey = key % 1000;
-            Dictionary<long, T> dictionary;
-            if(!_dictionaryOfDictionaries.TryGetValue(dictionaryKey, out dictionary))
-            {
-                dictionary = new Dictionary<long, T>();
-                _dictionaryOfDictionaries.Add(dictionaryKey, dictionary);
-            }
-            return dictionary;
-        }
     }
 }

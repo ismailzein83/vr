@@ -72,11 +72,12 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         internal static IEnumerable<CDRDBTimeRange> GetDBTimeRanges(DateTime fromTime, DateTime toTime)
         {
             List<CDRDBTimeRange> dbTimeRanges = new List<CDRDBTimeRange>();
-            for (DateTime date = fromTime; date < toTime; date = date.AddHours(1))
+            for (DateTime date = fromTime; date < toTime; date = date.AddDays(1))
             {
-                DateTime dbToTime = date.AddHours(1);
+                DateTime dbToTime = date.AddDays(1);
                 if (dbToTime > toTime)
                     dbToTime = toTime;
+
                 dbTimeRanges.Add(new CDRDBTimeRange
                 {
                     FromTime = date,
@@ -294,20 +295,24 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             }
         }
 
-        public void LoadCDR(DateTime fromTime, string numberPrefix, Action<CDR> onCDRReady)
+        public void LoadCDR(DateTime fromTime, DateTime toTime, string numberPrefix, Action<CDR> onCDRReady)
         {
-            string filter = null;
-            if (numberPrefix != null)
-                numberPrefix = String.Format(" WHERE MSISDN LIKE '{0}%'", numberPrefix);
-
-            string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) {2}", CDR_COLUMNS, GetCDRTableName(fromTime, numberPrefix, false), filter);
-            ExecuteReaderText(query, (reader) =>
-            {
-                while (reader.Read())
+            string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) 
+                                            WHERE MSISDN LIKE '{2}%' AND [ConnectDateTime] >= @FromTime AND [ConnectDateTime] < @ToTime 
+                                            ORDER BY MSISDN", CDR_COLUMNS, GetCDRTableName(fromTime, numberPrefix, false), numberPrefix);
+            ExecuteReaderText(query,
+                (reader) =>
                 {
-                    onCDRReady(CDRMapper(reader));
-                }
-            }, null);
+                    while (reader.Read())
+                    {
+                        onCDRReady(CDRMapper(reader));
+                    }
+                },
+            (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@FromTime", fromTime));
+                cmd.Parameters.Add(new SqlParameter("@ToTime", toTime));
+            });
         }
 
         public void InsertCDRsByMSISDNToTempTable(string tempTableName, string msisdn, DateTime fromTime, DateTime toTime)
@@ -316,11 +321,14 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             string query = String.Format(@"INSERT INTO {0}
                                         SELECT {1} 
                                         FROM {2} WITH(NOLOCK)
-                                        WHERE [MSISDN] = @MSISDN", tempTableName, CDR_COLUMNS, GetCDRTableName(fromTime, msisdn, false));
+                                        WHERE [MSISDN] = @MSISDN AND [ConnectDateTime] >= @FromTime AND [ConnectDateTime] < @ToTime"
+                , tempTableName, CDR_COLUMNS, GetCDRTableName(fromTime, msisdn, false));
 
             ExecuteNonQueryText(query, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@MSISDN", msisdn));
+                    cmd.Parameters.Add(new SqlParameter("@FromTime", fromTime));
+                    cmd.Parameters.Add(new SqlParameter("@ToTime", toTime));
                 });
         }
 

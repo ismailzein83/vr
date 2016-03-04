@@ -59,8 +59,6 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
 
-        static string configuredDirectory = ConfigurationManager.AppSettings["FraudAnalysis_LoadCDRsDirectory"];
-
         private CDRBatch BuildCDRBatch(List<CDR> cdrs)
         {
             return new CDRBatch
@@ -83,7 +81,7 @@ namespace Vanrise.Fzero.CDRImport.BP.Activities
         protected override LoadCDRsOutput DoWorkWithResult(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             List<CDR> cdrs = new List<CDR>();
-            int totalCount = 0;
+            long totalCount = 0;
             ICDRDataManager dataManager = CDRDataManagerFactory.GetDataManager<ICDRDataManager>();
             dataManager.LoadCDR(inputArgument.NumberPrefix, inputArgument.FromDate, inputArgument.ToDate, 0, (cdr) =>
             {

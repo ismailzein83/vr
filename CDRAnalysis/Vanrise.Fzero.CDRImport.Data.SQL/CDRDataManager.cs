@@ -95,7 +95,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedCDRDataManager>(dbTimeRange.FromTime, true);
                 if (dataManager != null)
                 {
-                    dataManager.LoadCDR(dbTimeRange.FromTime, numberPrefix, onCDRReady);
+                    dataManager.LoadCDR(dbTimeRange.FromTime, to, numberPrefix, onCDRReady);
                 }
             }
         }

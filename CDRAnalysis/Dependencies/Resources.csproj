@@ -60,7 +60,6 @@
     <Content Include="Libraries\MySql.Data.Entity.EF6.dll" />
     <Content Include="Libraries\MySql.Fabric.Plugin.dll" />
     <Content Include="Libraries\MySql.Web.dll" />
-    <Content Include="Libraries\Newtonsoft.Json.dll" />
     <Content Include="Libraries\protobuf-net.dll" />
     <Content Include="Libraries\Rebex.Net.Ftp.dll" />
     <Content Include="Libraries\Rebex.Net.ProxySocket.dll" />

@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             //return;
             //Console.ReadKey();
             Console.WriteLine("Ismail Task started");
-            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 5) };
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
@@ -28,7 +28,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             runtimeServices.Add(queueActivationService);
 
-            //runtimeServices.Add(bpService);
+            runtimeServices.Add(bpService);
 
             runtimeServices.Add(schedulerService);
             runtimeServices.Add(dsRuntimeService);
