@@ -7,8 +7,20 @@ app.service('CP_SupplierPricelist_SupplierPriceListService', ['LabelColorsEnum',
                     return labelColorsEnum.New.color;
                 case cpSupplierPricelistStatusEnum.Uploaded.value:
                     return labelColorsEnum.Success.color;
-                case cpSupplierPricelistStatusEnum.SuspendedDueToConfigurationErrors.value:
+                case cpSupplierPricelistStatusEnum.WaitingReview.value:
+                    return labelColorsEnum.WarningLevel1.color;
+                case cpSupplierPricelistStatusEnum.Completed.value:
+                    return labelColorsEnum.Success.color;
+                case cpSupplierPricelistStatusEnum.UploadFailedWithRetry.value:
                     return labelColorsEnum.Failed.color;
+                case cpSupplierPricelistStatusEnum.ResultFailedWithRetry.value:
+                    return labelColorsEnum.WarningLevel2.color;
+                case cpSupplierPricelistStatusEnum.UploadFailedWithNoRetry.value:
+                    return labelColorsEnum.WarningLevel2.color;
+                case cpSupplierPricelistStatusEnum.ResultFailedWithNoRetry.value:
+                    return labelColorsEnum.Failed.color;
+                case cpSupplierPricelistStatusEnum.UnderProcessing.value:
+                    return labelColorsEnum.Success.color;
                 default:
                     return undefined;
             }
@@ -18,14 +30,12 @@ app.service('CP_SupplierPricelist_SupplierPriceListService', ['LabelColorsEnum',
             switch (value) {
                 case cpSupplierPricelistResultEnum.NotCompleted.value:
                     return undefined;
-                case cpSupplierPricelistResultEnum.Succeeded.value:
+                case cpSupplierPricelistResultEnum.Approved.value:
                     return labelColorsEnum.Success.color;
-                case cpSupplierPricelistResultEnum.PartiallySucceeded.value:
+                case cpSupplierPricelistResultEnum.PartiallyApproved.value:
                     return labelColorsEnum.WarningLevel1.color;
-                case cpSupplierPricelistResultEnum.Failed.value:
+                case cpSupplierPricelistResultEnum.Rejected.value:
                     return labelColorsEnum.Failed.color;
-                case cpSupplierPricelistResultEnum.NotAnswered.value:
-                    return labelColorsEnum.Warning.color;
                 default:
                     return undefined;
             }
