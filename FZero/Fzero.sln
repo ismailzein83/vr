@@ -111,11 +111,9 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FMS", "FMS\FMS.sqlproj", "{
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PSTNCDRAnalysis", "PSTNCDRAnalysis\PSTNCDRAnalysis.sqlproj", "{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.CDRImport", "Vanrise.Fzero.Services.CDRImport\Vanrise.Fzero.Services.CDRImport.csproj", "{9CDA63FB-F3C1-4C27-B64E-AAAEE2F5C2C0}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -178,9 +176,6 @@ Global
 		SccProjectTopLevelParentUniqueName17 = Fzero.sln
 		SccProjectName17 = PSTNCDRAnalysis
 		SccLocalPath17 = PSTNCDRAnalysis
-		SccProjectUniqueName18 = Vanrise.Fzero.Services.CDRImport\\Vanrise.Fzero.Services.CDRImport.csproj
-		SccProjectName18 = Vanrise.Fzero.Services.CDRImport
-		SccLocalPath18 = Vanrise.Fzero.Services.CDRImport
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -259,10 +254,6 @@ Global
 		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C9629F70-CB2D-4D2E-99BA-E6CD5C9C3189}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{9CDA63FB-F3C1-4C27-B64E-AAAEE2F5C2C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CDA63FB-F3C1-4C27-B64E-AAAEE2F5C2C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CDA63FB-F3C1-4C27-B64E-AAAEE2F5C2C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CDA63FB-F3C1-4C27-B64E-AAAEE2F5C2C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
