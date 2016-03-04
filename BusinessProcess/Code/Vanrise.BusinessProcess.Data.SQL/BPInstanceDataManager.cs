@@ -67,6 +67,38 @@ namespace Vanrise.BusinessProcess.Data.SQL
             }, BPInstanceDetailMapper, _mapper);
         }
 
+
+        public List<BPInstance> GetPendingInstances(int definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
+        {
+            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsByDefinitionId]", BPInstanceMapper, definitionId, String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)), maxCounts, currentRuntimeProcessId, string.Join(",", runningRuntimeProcessesIds));
+        }
+
+        public bool TryLockProcessInstance(long processInstanceId, Guid workflowInstanceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses)
+        {
+            Object isLocked = ExecuteScalarSP("[bp].[sp_BPInstance_TryLockAndUpdateWorkflowInstanceID]", processInstanceId, workflowInstanceId, currentRuntimeProcessId, string.Join(",", runningRuntimeProcessesIds), String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)));
+            return isLocked != null && (bool)isLocked;
+        }
+
+        public void UnlockProcessInstance(long processInstanceId, int currentRuntimeProcessId)
+        {
+            ExecuteNonQuerySP("[bp].[sp_BPInstance_UnLock]", processInstanceId, currentRuntimeProcessId);
+        }
+
+        public void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, int retryCount)
+        {
+            ExecuteNonQuerySP("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, message, ToDBNullIfDefault(retryCount));
+        }
+
+        public void SetRunningStatusTerminated(BPInstanceStatus bPInstanceStatus, IEnumerable<int> runningRuntimeProcessesIds)
+        {
+            ExecuteNonQuerySP("[bp].[sp_BPInstance_SetRunningStatusTerminated]", (int)BPInstanceStatus.Terminated, (int)bPInstanceStatus, String.Join(",", runningRuntimeProcessesIds));
+        }
+
+        public void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> openStatuses, IEnumerable<int> runningRuntimeProcessesIds)
+        {
+            ExecuteNonQuerySP("[bp].[sp_BPInstance_SetChildrenStatusesTerminated]", (int)BPInstanceStatus.Terminated, String.Join(",", openStatuses.Select(itm => (int)itm)), String.Join(",", runningRuntimeProcessesIds));
+        }
+
         #endregion
 
         #region mapper
@@ -100,5 +132,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
         }
         #endregion
+
     }
 }

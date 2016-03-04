@@ -9,6 +9,7 @@ using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using System.Threading.Tasks;
 using Vanrise.Runtime;
+using Vanrise.BusinessProcess.Business;
 
 namespace Vanrise.BusinessProcess
 {
@@ -36,12 +37,12 @@ namespace Vanrise.BusinessProcess
 
         private BusinessProcessRuntime()
         {
-            _dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
         }
+        
+        BPDefinitionManager _definitionManager = new BPDefinitionManager();
+        IBPInstanceDataManager _instanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
-        IBPDataManager _dataManager;
-
-        Dictionary<string, BPDefinitionInitiator> _processDefinitionInitiators;
+        Dictionary<int, BPDefinitionInitiator> _processDefinitionInitiators;
 
         internal static IEnumerable<BPInstanceStatus> s_acceptableBPStatusesToRun = new BPInstanceStatus[] { BPInstanceStatus.New, BPInstanceStatus.ProcessFailed };
 
@@ -49,10 +50,11 @@ namespace Vanrise.BusinessProcess
 
         public void TerminatePendingProcesses()
         {
-            InitializeIfNotInitialized();
             RunningProcessManager runningProcessManager = new RunningProcessManager();
-            IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses(new TimeSpan(0, 0, 15)).Select(itm => itm.ProcessId);
-            _dataManager.UpdateProcessInstancesStatus(BPInstanceStatus.Running, BPInstanceStatus.Terminated, runningRuntimeProcessesIds);
+            IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
+            var openStatuses = BPInstanceStatusAttribute.GetNonClosedStatuses();
+            _instanceDataManager.SetRunningStatusTerminated(BPInstanceStatus.Running, runningRuntimeProcessesIds);
+            _instanceDataManager.SetChildrenStatusesTerminated(BPInstanceStatusAttribute.GetNonClosedStatuses(), runningRuntimeProcessesIds);
         }
 
         #region Process Execution
@@ -87,8 +89,11 @@ namespace Vanrise.BusinessProcess
         public void ExecutePendings()
         {
             GC.Collect();
-            InitializeIfNotInitialized();
-            LoadAndRunPendingProcesses();
+            LoadProcessDefinitionInitiators();
+            foreach (var processInitiator in this._processDefinitionInitiators.Values)
+            {
+                processInitiator.RunPendingProcesses();
+            }
         }
 
         bool _isTriggerPendingEventsRunning;
@@ -121,70 +126,29 @@ namespace Vanrise.BusinessProcess
         public void TriggerPendingEvents()
         {
             GC.Collect();
-            InitializeIfNotInitialized();
-            LoadAndSendPendingEvents();
+            foreach(var processInitiator in this._processDefinitionInitiators.Values)
+            {
+                processInitiator.TriggerPendingEvents();
+            }
         }
 
         #endregion
 
         #region Private Methods
 
-        bool _isInitialized;
-        private void InitializeIfNotInitialized()
+        private void LoadProcessDefinitionInitiators()
         {
             lock (this)
             {
-                if (_isInitialized)
-                    return;
-
-                _processDefinitionInitiators = new Dictionary<string, BPDefinitionInitiator>();
-                var definitions = _dataManager.GetDefinitions();
+                if (_processDefinitionInitiators == null)
+                    _processDefinitionInitiators = new Dictionary<int, BPDefinitionInitiator>();
+                var definitions = _definitionManager.GetBPDefinitions();
                 foreach (var bpDefinition in definitions)
                 {
-                    _processDefinitionInitiators.Add(bpDefinition.Name, new BPDefinitionInitiator(this, bpDefinition));
+                    if (!_processDefinitionInitiators.ContainsKey(bpDefinition.BPDefinitionID))
+                        _processDefinitionInitiators.Add(bpDefinition.BPDefinitionID, new BPDefinitionInitiator(this, bpDefinition));
                 }
-
-                _isInitialized = true;
             }
-        }
-
-        List<long> _loadedInstanceIds = new List<long>();
-
-        private void LoadAndRunPendingProcesses()
-        {
-            List<long> loadedInstanceIds = new List<long>();
-            lock (_loadedInstanceIds)
-                loadedInstanceIds.AddRange(_loadedInstanceIds);
-            _dataManager.LoadPendingProcesses(loadedInstanceIds, s_acceptableBPStatusesToRun, (bp) =>
-            {
-                BPDefinitionInitiator processInitiator = _processDefinitionInitiators.Values.First(itm => itm.Definition.BPDefinitionID == bp.DefinitionID);
-                lock (_loadedInstanceIds)
-                    _loadedInstanceIds.Add(bp.ProcessInstanceID);
-                processInitiator.ScheduleNewProcessRun(bp);
-                processInitiator.RunProcessExecutionIfNeeded();
-            });
-        }
-
-        internal void SetProcessInstanceNotLoaded(BPInstance instance)
-        {
-            lock (_loadedInstanceIds)
-            {
-                if (_loadedInstanceIds.Contains(instance.ProcessInstanceID))
-                    _loadedInstanceIds.Remove(instance.ProcessInstanceID);
-            }
-        }
-
-        long _lastRetrievedEventId;
-        private void LoadAndSendPendingEvents()
-        {
-            _dataManager.LoadPendingEvents(_lastRetrievedEventId, (evnt) =>
-            {
-                BPDefinitionInitiator processInitiator = _processDefinitionInitiators.Values.First(itm => itm.Definition.BPDefinitionID == evnt.ProcessDefinitionID);
-                if (processInitiator.TriggerWFEvent(evnt.ProcessInstanceID, evnt.Bookmark, evnt.Payload))
-                    _dataManager.DeleteEvent(evnt.BPEventID);
-                if (evnt.BPEventID > _lastRetrievedEventId)
-                    _lastRetrievedEventId = evnt.BPEventID;
-            });
         }
 
         #endregion

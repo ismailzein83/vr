@@ -11,5 +11,7 @@ namespace Vanrise.BusinessProcess
     {
         public BPInstance BPInstance { get; set; }
         public WorkflowApplication WFApplication { get; set; }
+
+        public bool IsIdle { get; set; }
     }
 }

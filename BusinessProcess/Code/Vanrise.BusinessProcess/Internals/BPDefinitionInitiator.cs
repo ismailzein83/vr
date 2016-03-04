@@ -12,6 +12,7 @@ using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.Common;
 using Vanrise.Runtime;
+using Vanrise.BusinessProcess.Business;
 
 namespace Vanrise.BusinessProcess
 {
@@ -19,119 +20,106 @@ namespace Vanrise.BusinessProcess
     {
         #region Members/Ctor
 
-        BPDefinition _definition;
-        public BPDefinition Definition
+        static bool s_AddConsoleTracking = ConfigurationManager.AppSettings["AddBusinessProcessConsoleTracking"] == "true";
+        static bool s_AddActivityEventsTracking = ConfigurationManager.AppSettings["BusinessProcess_ActivityEventsTracking"] == "true";
+        static int s_maxConcurrentWorkflowsPerDefinition;
+
+        static BPDefinitionInitiator()
         {
-            get
-            {
-                return _definition;
-            }
+            if (!int.TryParse(ConfigurationManager.AppSettings["BusinessProcess_MaxConcurrentWorkflowsPerDefinition"], out s_maxConcurrentWorkflowsPerDefinition))
+                s_maxConcurrentWorkflowsPerDefinition = 20;
         }
-        
-        IBPDataManager _dataManager;
-        IBPTrackingDataManager _trackingDataManager;
+
+        BPDefinition _definition;
+
+        IBPInstanceDataManager _instanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+        IBPEventDataManager _eventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
         Activity _workflowDefinition;
-        Task _processExecutionThread;
-        //Semaphore _semaphore;
-        int? _nbOfThreads;
-        BusinessProcessRuntime _runtime;
-        RunningProcessManager _runningProcessManager;
+
+        RunningProcessManager _runningProcessManager = new RunningProcessManager();
         //static SqlWorkflowInstanceStore s_InstanceStore = new SqlWorkflowInstanceStore(ConfigurationManager.ConnectionStrings["WFPersistence"].ConnectionString);
 
         private ConcurrentDictionary<long, BPRunningInstance> _runningInstances = new ConcurrentDictionary<long, BPRunningInstance>();
-        ConcurrentQueue<BPInstance> _qPendingInstances = new ConcurrentQueue<BPInstance>();
-        static bool s_AddConsoleTracking = ConfigurationManager.AppSettings["AddBusinessProcessConsoleTracking"] == "true";
-        static bool s_AddActivityEventsTracking = ConfigurationManager.AppSettings["BusinessProcess_ActivityEventsTracking"] == "true";
+
+        
+
+        BPDefinitionManager _definitionManager = new BPDefinitionManager();
+        int _definitionId;
+
+        BPInstanceManager _instanceManager = new BPInstanceManager();
 
         public BPDefinitionInitiator(BusinessProcessRuntime runtime, BPDefinition definition)
         {
-            _runtime = runtime;
-            _runningProcessManager = new RunningProcessManager();
-            _dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            _trackingDataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             _definition = definition;
-            _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;            
-            _nbOfThreads = _definition.Configuration != null && _definition.Configuration.MaxConcurrentWorkflows.HasValue ? _definition.Configuration.MaxConcurrentWorkflows.Value : default(int?);
-            //if (_nbOfThreads.HasValue)
-            //    _semaphore = new Semaphore(_nbOfThreads.Value, _nbOfThreads.Value);
+            _definitionId = definition.BPDefinitionID;
+            _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
+            if (_workflowDefinition == null)
+                throw new Exception(String.Format("'{0}' is not of type Activity", definition.WorkflowType));
         }
 
         #endregion
 
         #region Internal Methods
-
-        internal void ScheduleNewProcessRun(BPInstance bpInstance)
-        {
-            _qPendingInstances.Enqueue(bpInstance);
-        }
-
-        internal void RunProcessExecutionIfNeeded()
-        {
-            lock (this)
-            {
-                if (_qPendingInstances.Count > 0 &&
-                    (_processExecutionThread == null || _processExecutionThread.IsCompleted))
-                {                    
-                    _processExecutionThread = new Task(RunPendingProcesses);
-                    _processExecutionThread.Start();
-                }
-            }
-        }
-
-        internal bool TriggerWFEvent(long processInstanceId, string bookmarkName, object eventData)
-        {
-            BPRunningInstance runningInstance ;
-            if (_runningInstances.TryGetValue(processInstanceId, out runningInstance))
-            {
-                runningInstance.WFApplication.ResumeBookmark(bookmarkName, eventData);
-                BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
-                {
-                    ProcessInstanceId = processInstanceId,
-                    ParentProcessId = runningInstance.BPInstance.ParentProcessID,
-                    TrackingMessage = String.Format("Event '{0}' triggerred", bookmarkName),
-                    Severity = LogEntryType.Verbose,
-                    EventTime = DateTime.Now
-                });
-                return true;
-            }
-            else
-                return false;
-        }
-
-        internal BPRunningInstance GetBPInstance(Guid workflowInstanceId)
-        {
-            return _runningInstances.Values.FirstOrDefault(itm => itm.WFApplication != null && itm.WFApplication.Id == workflowInstanceId);
-        }
-
+        
+        
+        
         #endregion
 
         #region Workflow Execution
 
-
-        void RunPendingProcesses()
-        {            
-            while (_qPendingInstances.Count > 0)
+        internal void RunPendingProcesses()
+        {
+            _definition = _definitionManager.GetBPDefinition(_definitionId);
+            int nbOfThreads = _definition.Configuration != null && _definition.Configuration.MaxConcurrentWorkflows.HasValue ? _definition.Configuration.MaxConcurrentWorkflows.Value : s_maxConcurrentWorkflowsPerDefinition;
+            if (_runningInstances.Where(itm => itm.Value.BPInstance.Status == BPInstanceStatus.Running).Count() >= nbOfThreads)
+                return;
+            int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
+            IEnumerable<int> runningRuntimeProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
+            List<BPInstance> pendingInstances = _instanceDataManager.GetPendingInstances(_definitionId, BusinessProcessRuntime.s_acceptableBPStatusesToRun, nbOfThreads, currentRuntimeProcessId, runningRuntimeProcessesIds);
+            if(pendingInstances != null)
             {
-                BPInstance bpInstance = null;
-                if(_qPendingInstances.TryDequeue(out bpInstance))
+                foreach(var instance in pendingInstances)
                 {
-                    if (_nbOfThreads.HasValue)
-                    {
-                        while (_runningInstances.Where(itm => itm.Value.BPInstance.Status == BPInstanceStatus.Running).Count() >= _nbOfThreads.Value)
-                            Thread.Sleep(1000);
-                    }
-                    //if (_semaphore != null)
-                    //    _semaphore.WaitOne();
-                    //Task task = new Task(() => RunProcess(bpInstance)); 
-                    //task.Start();
-
-                    RunProcess(bpInstance);
+                    TryRunProcess(instance, currentRuntimeProcessId, runningRuntimeProcessesIds);
                 }
             }
         }
 
-        
-        void RunProcess(BPInstance bpInstance)
+
+        internal void TriggerPendingEvents()
+        {            
+            if (this._definition.Configuration.IsPersistable)
+            {
+                IEnumerable<BPEvent> events = _eventDataManager.GetDefinitionEvents(this._definitionId);
+                if(events != null)
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            else
+            {
+                List<long> idledInstancesIds = _runningInstances.Where(itm => itm.Value.IsIdle).Select(itm => itm.Key).ToList();
+                if(idledInstancesIds.Count > 0)
+                {
+                    IEnumerable<BPEvent> events = _eventDataManager.GetInstancesEvents(this._definitionId, idledInstancesIds);
+                    if(events != null)
+                    {
+                        foreach(var evnt in events)
+                        {
+                            TriggerWFEvent(evnt.ProcessInstanceID, evnt.Bookmark, evnt.Payload);
+                            _eventDataManager.DeleteEvent(evnt.BPEventID);
+                        }
+                    }
+                }
+                
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void TryRunProcess(BPInstance bpInstance, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
         {
             IDictionary<string, object> inputs = null;
             if (bpInstance.InputArgument != null)
@@ -141,10 +129,7 @@ namespace Vanrise.BusinessProcess
             }
 
             WorkflowApplication wfApp = inputs != null ? new WorkflowApplication(_workflowDefinition, inputs) : new WorkflowApplication(_workflowDefinition);
-
-            int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-            IEnumerable<int> runningRuntimeProcessesIds = _runningProcessManager.GetCachedRunningProcesses(new TimeSpan(0, 0, 15)).Select(itm => itm.ProcessId);
-            if (!_dataManager.TryLockProcessInstance(bpInstance.ProcessInstanceID, wfApp.Id, currentRuntimeProcessId, runningRuntimeProcessesIds, BusinessProcessRuntime.s_acceptableBPStatusesToRun))
+            if (!_instanceDataManager.TryLockProcessInstance(bpInstance.ProcessInstanceID, wfApp.Id, currentRuntimeProcessId, runningRuntimeProcessesIds, BusinessProcessRuntime.s_acceptableBPStatusesToRun))
                 return;
 
             bpInstance.WorkflowInstanceID = wfApp.Id;
@@ -167,11 +152,14 @@ namespace Vanrise.BusinessProcess
                 wfApp.Extensions.Add(new ActivityEventsTracking(bpInstance));
 
             wfApp.Completed = (e) =>
+            {
+                sharedInstanceData.ClearCacheManagers();
+                OnWorkflowCompleted(bpInstance, e);
+            };
+            wfApp.Idle = (e) =>
                 {
-                    sharedInstanceData.ClearCacheManagers();
-                    OnWorkflowCompleted(bpInstance, e);
+                    runningInstance.IsIdle = true;
                 };
-
 
             //wfApp.InstanceStore = s_InstanceStore;
             //wfApp.PersistableIdle = delegate(WorkflowApplicationIdleEventArgs e)
@@ -183,7 +171,7 @@ namespace Vanrise.BusinessProcess
             UpdateProcessStatus(bpInstance);
             wfApp.Run();
         }
-
+                
         void OnWorkflowCompleted(BPInstance bpInstance, WorkflowApplicationCompletedEventArgs e)
         {
             if (e.CompletionState == ActivityInstanceState.Closed)
@@ -200,8 +188,6 @@ namespace Vanrise.BusinessProcess
                 UpdateProcessStatus(bpInstance);
                 Console.WriteLine("{0}: {1}", DateTime.Now, bpInstance.LastMessage);
             }
-            //if (_semaphore != null)
-            //    _semaphore.Release();
 
             if (bpInstance.ParentProcessID.HasValue && BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).IsClosed)
             {
@@ -215,23 +201,35 @@ namespace Vanrise.BusinessProcess
                     LastProcessMessage = bpInstance.LastMessage,
                     ProcessOutput = processOutput
                 };
-                _dataManager.InsertEvent(bpInstance.ParentProcessID.Value, bpInstance.ProcessInstanceID.ToString(), eventData);
+                _eventDataManager.InsertEvent(bpInstance.ParentProcessID.Value, bpInstance.ProcessInstanceID.ToString(), eventData);
             }
 
-            _runtime.SetProcessInstanceNotLoaded(bpInstance);
-            _dataManager.UnlockProcessInstance(bpInstance.ProcessInstanceID, RunningProcessManager.CurrentProcess.ProcessId);
+            _instanceDataManager.UnlockProcessInstance(bpInstance.ProcessInstanceID, RunningProcessManager.CurrentProcess.ProcessId);
             BPRunningInstance dummy;
             _runningInstances.TryRemove(bpInstance.ProcessInstanceID, out dummy);
             GC.Collect();
         }
 
-        #endregion
-
-        #region Private Methods
+        void TriggerWFEvent(long processInstanceId, string bookmarkName, object eventData)
+        {
+            BPRunningInstance runningInstance;
+            if (_runningInstances.TryGetValue(processInstanceId, out runningInstance))
+            {
+                runningInstance.WFApplication.ResumeBookmark(bookmarkName, eventData);
+                BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
+                {
+                    ProcessInstanceId = processInstanceId,
+                    ParentProcessId = runningInstance.BPInstance.ParentProcessID,
+                    TrackingMessage = String.Format("Event '{0}' triggerred", bookmarkName),
+                    Severity = LogEntryType.Verbose,
+                    EventTime = DateTime.Now
+                });
+            }
+        }
 
         void UpdateProcessStatus(BPInstance bpInstance)
         {
-            _dataManager.UpdateInstanceStatus(bpInstance.ProcessInstanceID, bpInstance.Status, bpInstance.LastMessage, bpInstance.RetryCount);
+            _instanceDataManager.UpdateInstanceStatus(bpInstance.ProcessInstanceID, bpInstance.Status, bpInstance.LastMessage, bpInstance.RetryCount);
             LogEntryType statusChangedTrackingSeverity = BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).TrackingSeverity;
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
             {
@@ -244,5 +242,7 @@ namespace Vanrise.BusinessProcess
         }
 
         #endregion
+
+
     }
 }

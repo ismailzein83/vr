@@ -100,6 +100,10 @@
     <Compile Include="ValidationMessageManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.Business\Vanrise.BusinessProcess.Business.csproj">
+      <Project>{ce8a7fee-d6c7-43c6-851f-beba44b03b13}</Project>
+      <Name>Vanrise.BusinessProcess.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.BusinessProcess.Data\Vanrise.BusinessProcess.Data.csproj">
       <Project>{E7B7BE23-5ABB-4327-B716-127A19E7B6E6}</Project>
       <Name>Vanrise.BusinessProcess.Data</Name>

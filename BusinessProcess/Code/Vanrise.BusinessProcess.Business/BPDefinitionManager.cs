@@ -10,6 +10,16 @@ namespace Vanrise.BusinessProcess.Business
     public class BPDefinitionManager
     {
         #region public methods
+
+        public IEnumerable<BPDefinition> GetBPDefinitions()
+        {
+            var cachedDefinitions = GetCachedBPDefinitions();
+            if (cachedDefinitions != null)
+                return cachedDefinitions.Values;
+            else
+                return null;
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<BPDefinitionDetail> GetFilteredBPDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input)
         {
             var allBPDefinitions = GetCachedBPDefinitions();
@@ -33,6 +43,11 @@ namespace Vanrise.BusinessProcess.Business
             {
                 return bpDefinitions.MapRecords(BPDefinitionInfoMapper);
             }
+        }
+
+        public BPDefinition GetBPDefinition(int definitionId)
+        {
+            return GetCachedBPDefinitions().GetRecord(definitionId);
         }
 
         #endregion

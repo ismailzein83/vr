@@ -9,5 +9,17 @@ namespace Vanrise.BusinessProcess.Data
         List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId);
         List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input);
         BigResult<BPInstanceDetail> GetFilteredBPInstances(DataRetrievalInput<BPInstanceQuery> input);
+
+        List<BPInstance> GetPendingInstances(int definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds);
+
+        bool TryLockProcessInstance(long processInstanceId, System.Guid workflowInstanceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses);
+
+        void UnlockProcessInstance(long processInstanceId, int currentRuntimeProcessId);
+
+        void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, int retryCount);
+
+        void SetRunningStatusTerminated(BPInstanceStatus bPInstanceStatus, IEnumerable<int> runningRuntimeProcessesIds);
+
+        void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> enumerable, IEnumerable<int> runningRuntimeProcessesIds);
     }
 }

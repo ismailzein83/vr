@@ -27,5 +27,7 @@ namespace Vanrise.BusinessProcess.Entities
 
         public string ManualExecEditor { get; set; }
         public string ScheduledExecEditor { get; set; }
+
+        public bool IsPersistable { get; set; }
     }
 }
