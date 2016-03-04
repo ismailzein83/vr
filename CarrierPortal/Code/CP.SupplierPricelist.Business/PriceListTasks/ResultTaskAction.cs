@@ -34,7 +34,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
                 try
                 {
-                    priceListProgressOutput = customer.Settings.PriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
+                    priceListProgressOutput = customer.Settings.PriceListConnector.GetPriceListResult(priceListProgressContext);
                 }
                 catch (Exception)
                 {

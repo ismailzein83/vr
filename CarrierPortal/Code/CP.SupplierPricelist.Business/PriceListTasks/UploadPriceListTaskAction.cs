@@ -47,7 +47,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 try
                 {
                     priceListUploadOutput =
-                      customer.Settings.PriceListConnector.PriceListUploadOutput(priceListUploadContext);
+                      customer.Settings.PriceListConnector.UploadPriceList(priceListUploadContext);
                 }
                 catch (Exception ex)
                 {

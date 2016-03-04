@@ -11,7 +11,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
         public string Url { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public override PriceListUploadOutput PriceListUploadOutput(IPriceListUploadContext context)
+        public override PriceListUploadOutput UploadPriceList(IPriceListUploadContext context)
         {
             PriceListUploadOutput priceListOutput = new PriceListUploadOutput();
             var cont = (PriceListUploadContext)context;
@@ -47,7 +47,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
             public DateTime EffectiveOnDateTime { get; set; }
             public string UserEmail { get; set; }
         }
-        public override PriceListProgressOutput GetPriceListProgressOutput(IPriceListProgressContext context)
+        public override PriceListProgressOutput GetPriceListResult(IPriceListProgressContext context)
         {
             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
             int queueId = ((UploadInformation)((PriceListProgressContext)context).UploadInformation).QueueId;

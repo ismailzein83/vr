@@ -46,7 +46,7 @@ namespace CarrierPortal.DevRuntime
                             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
                             try
                             {
-                                priceListProgressOutput = _supplierPriceListConnector.GetPriceListProgressOutput(priceListProgressContext);
+                                priceListProgressOutput = _supplierPriceListConnector.GetPriceListResult(priceListProgressContext);
                             }
                             catch (Exception)
                             {

@@ -53,7 +53,7 @@ namespace CarrierPortal.DevRuntime
                             try
                             {
                                 initiatePriceListOutput =
-                                    SupplierPriceListConnector.PriceListUploadOutput(priceListUploadContext);
+                                    SupplierPriceListConnector.UploadPriceList(priceListUploadContext);
                             }
                             catch (Exception ex)
                             {
