@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBEService.$inject = ['VR_GenericData_GenericEditorAPIService', 'VRModalService', 'VRNotificationService'];
+    GenericBEService.$inject = ['VRModalService', 'VRNotificationService'];
 
-    function GenericBEService(VR_GenericData_GenericEditorAPIService, VRModalService, VRNotificationService) {
+    function GenericBEService( VRModalService, VRNotificationService) {
         return {
             addGenericBE: addGenericBE,
         };

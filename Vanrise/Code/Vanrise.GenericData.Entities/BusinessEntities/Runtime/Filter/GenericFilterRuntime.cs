@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericGridRuntime
+    public class GenericFilterRuntime
     {
-        public List<GenericEditorRuntimeField> Columns { get; set; }
+        public List<GenericFilterRuntimeField> Fields { get; set; }
     }
 }

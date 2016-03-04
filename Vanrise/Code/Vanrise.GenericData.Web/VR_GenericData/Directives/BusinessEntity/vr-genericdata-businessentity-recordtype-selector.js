@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BusinessentityRecordtypeSelectorDirective.$inject = ['VR_GenericData_BusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService'];
+    BusinessentityRecordtypeSelectorDirective.$inject = ['VR_GenericData_GenericUIRuntimeAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function BusinessentityRecordtypeSelectorDirective(VR_GenericData_BusinessEntityAPIService, UtilsService, VRUIUtilsService) {
+    function BusinessentityRecordtypeSelectorDirective(VR_GenericData_GenericUIRuntimeAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -67,7 +67,7 @@
                         selectedIds = payload.selectedIds;
                     }
                   
-                    return VR_GenericData_BusinessEntityAPIService.GetDataRecordTypesInfo(businessEntityId,UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_GenericData_GenericUIRuntimeAPIService.GetDataRecordTypesInfo(businessEntityId, UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {

@@ -135,7 +135,7 @@
     <Compile Include="Controllers\ExpressionBuilderConfigController.cs" />
     <Compile Include="Controllers\ExtensibleBEItemController.cs" />
     <Compile Include="Controllers\GenericBusinessEntityController.cs" />
-    <Compile Include="Controllers\GenericEditorController.cs" />
+    <Compile Include="Controllers\GenericUIRuntimeController.cs" />
     <Compile Include="Controllers\GenericRuleController.cs" />
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
     <Compile Include="Controllers\DataRecordTypeController.cs" />
@@ -340,7 +340,7 @@
     <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\ExtensibleBEItemAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericBEAPIService.js" />
-    <Content Include="VR_GenericData\Services\APIServices\GenericEditorAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\GenericUIRuntimeAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreConfigAPIService.js" />
@@ -355,7 +355,7 @@
     <Content Include="VR_GenericData\Services\ExpressionBuilderService.js" />
     <Content Include="VR_GenericData\Services\ExtensibleBEItemService.js" />
     <Content Include="VR_GenericData\Services\GenericBEService.js" />
-    <Content Include="VR_GenericData\Services\GenericEditorService.js" />
+    <Content Include="VR_GenericData\Services\GenericUIRuntimeAPIService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
@@ -416,8 +416,6 @@
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\GenericRule\Testoing.html" />
     <Content Include="VR_GenericData\Views\GenericRule\TestController.js" />
-    <Content Include="VR_GenericData\Views\test.html" />
-    <Content Include="VR_GenericData\Views\test.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

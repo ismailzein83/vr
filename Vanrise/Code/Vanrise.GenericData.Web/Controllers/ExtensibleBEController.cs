@@ -13,28 +13,6 @@ namespace Vanrise.GenericData.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "BusinessEntity")]
     public class ExtensibleBEController:BaseAPIController
     {
-        [HttpGet]
-        [Route("GetExtensibleBEItemRuntime")]
-        public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int dataRecordTypeId, int businessEntityDefinitionId)
-        {
-            var manager = GetManager(businessEntityDefinitionId);
-            return manager.GetExtensibleBEItemRuntime(dataRecordTypeId, businessEntityDefinitionId);
-        }
-        [HttpGet]
-        [Route("GetDataRecordTypesInfo")]
-        public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityDefinitionId)
-        {
-            var manager = GetManager(businessEntityDefinitionId);
-
-            return manager.GetDataRecordTypesInfo(businessEntityDefinitionId);
-        }
-        IExtensibleBEManager GetManager(int businessEntityDefinitionId)
-        {
-            BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
-            BusinessEntityDefinition businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
-
-            Type managerType = Type.GetType(businessEntityDefinition.Settings.ManagerFQTN);
-            return Activator.CreateInstance(managerType) as IExtensibleBEManager;
-        }
+     
     }
 }
