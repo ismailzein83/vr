@@ -1,1 +1,8 @@
-﻿
+﻿<vr-datagrid on-ready="onGridReady"
+             datasource="dataSource"
+             dataretrievalfunction="dataRetrievalFunction"
+             menuactions="menuActions"
+             pagingtype="'PagingOnScroll'">
+    <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" field="'ColumnValues[' + column.FieldType.Name + ']'"></vr-datagridcolumn>
+</vr-datagrid>
+

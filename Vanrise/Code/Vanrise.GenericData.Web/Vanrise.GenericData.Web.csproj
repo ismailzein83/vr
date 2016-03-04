@@ -380,16 +380,16 @@
     <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBEEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBEEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\Templates\GenericBusinessEntityManagement.html" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericExtensibleBEEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericExtensibleBEEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagement.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\Templates\GenericBusinessEntityEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\SectionEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\SectionEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditor.html" />
@@ -412,6 +412,7 @@
   <ItemGroup>
     <Folder Include="VR_GenericData\Directives\GenericEditor\Definition\" />
     <Folder Include="VR_GenericData\Directives\GenericEditor\Runtime\" />
+    <Folder Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -42,7 +42,7 @@ app.directive('vrGenericdataExtensiblebeitemRuntimeEditor', ['UtilsService', 'VR
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload.sections != undefined) {
+                    if (payload != undefined && payload.sections != undefined) {
                         selectedValues = payload.selectedValues;
                         ctrl.sections.length = 0;
                         var promises = [];

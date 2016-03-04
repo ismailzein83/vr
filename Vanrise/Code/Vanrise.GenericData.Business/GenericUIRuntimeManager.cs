@@ -76,7 +76,8 @@ namespace Vanrise.GenericData.Business
         {
             var dataRecordTypeManager = new DataRecordTypeManager();
             var fields = dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
-
+            genericManagementRuntime.Grid = new GenericGridRuntime();
+            genericManagementRuntime.Filter = new GenericFilterRuntime();
             BuildGridRuntime(genericManagement.GridDesign, genericManagementRuntime.Grid,fields, dataRecordTypeId);
             BuildFilterRuntime(genericManagement.FilterDesign, genericManagementRuntime.Filter,fields, dataRecordTypeId);
         }
