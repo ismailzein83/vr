@@ -22,7 +22,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             ImportPriceListManager manager = new ImportPriceListManager();
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
             {
-                PriceListStatus.SuccessfullyImported,
+                PriceListStatus.SuccessfullyUploaded,
                 PriceListStatus.ResultFailedWithRetry
             };
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
