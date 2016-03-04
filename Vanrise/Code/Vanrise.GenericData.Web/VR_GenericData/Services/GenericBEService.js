@@ -6,23 +6,8 @@
 
     function GenericBEService(VR_GenericData_GenericEditorAPIService, VRModalService, VRNotificationService) {
         return {
-            editGenericBE: editGenericBE,
             addGenericBE: addGenericBE,
         };
-
-        function editGenericBE(genericEditorDefinitionId, onGenericBEDefinitionUpdated) {
-            var modalSettings = {};
-
-            modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onGenericBEDefinitionUpdated = onGenericBEDefinitionUpdated;
-            };
-
-            var parameters = {
-                genericEditorDefinitionId: genericEditorDefinitionId
-            };
-
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBEEditor.html', parameters, modalSettings);
-        }
 
         function addGenericBE(onGenericBEDefinitionAdded) {
             var modalParameters = {

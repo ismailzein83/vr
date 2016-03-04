@@ -10,7 +10,8 @@
             GetBusinessEntityDefinitionsInfo: GetBusinessEntityDefinitionsInfo,
             GetFilteredBusinessEntityDefinitions: GetFilteredBusinessEntityDefinitions,
             AddBusinessEntityDefinition: AddBusinessEntityDefinition,
-            UpdateBusinessEntityDefinition: UpdateBusinessEntityDefinition
+            UpdateBusinessEntityDefinition: UpdateBusinessEntityDefinition,
+            GetGenericBEDefinitionView: GetGenericBEDefinitionView
         };
 
         function GetBusinessEntityDefinition(businessEntityDefinitionId) {
@@ -33,6 +34,12 @@
 
         function UpdateBusinessEntityDefinition(businessEntityDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'UpdateBusinessEntityDefinition'), businessEntityDefinition);
+        }
+
+        function GetGenericBEDefinitionView(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetGenericBEDefinitionView'), {
+                businessEntityDefinitionId: businessEntityDefinitionId
+            });
         }
     }
 

@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericGrid
     {
-        public List<GenericGridField> Fields { get; set; }
+        public List<GenericGridField> Columns { get; set; }
     }
 }

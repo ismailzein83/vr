@@ -60,6 +60,7 @@
     <Compile Include="BusinessEntities\GenericBESettings\Grid\GenericGrid.cs" />
     <Compile Include="BusinessEntities\GenericBESettings\Grid\GenericGridColumn.cs" />
     <Compile Include="BusinessEntities\GenericBESettings\Grid\GenericGridField.cs" />
+    <Compile Include="BusinessEntities\GenericBEViewSettings.cs" />
     <Compile Include="BusinessEntities\Runtime\GenericFilterRuntime.cs" />
     <Compile Include="BusinessEntities\Runtime\GenericGridRuntime.cs" />
     <Compile Include="BusinessEntities\GenericBESettings\GenericManagement.cs" />

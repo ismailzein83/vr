@@ -31,7 +31,7 @@ namespace Vanrise.GenericData.Business
         public BusinessEntityDefinition GetBusinessEntityDefinition(int businessEntityDefinitionId)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
-            return cachedBEDefinitions.FindRecord(beDefinition => beDefinition.BusinessEntityDefinitionId == businessEntityDefinitionId);
+            return cachedBEDefinitions.GetRecord(businessEntityDefinitionId);
         }
         public IEnumerable<BusinessEntityDefinitionInfo> GetBusinessEntityDefinitionsInfo(BusinessEntityDefinitionInfoFilter filter)
         {
@@ -89,7 +89,12 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
-
+        public Vanrise.Security.Entities.View GetGenericBEDefinitionView(int businessEntityDefinitionId)
+        {
+            var viewManager = new Vanrise.Security.Business.ViewManager();
+            var allViews = viewManager.GetViews();
+            return allViews.FirstOrDefault(v => (v.Settings as GenericBEViewSettings) != null && (v.Settings as GenericBEViewSettings).BusinessEntityDefinitionId == businessEntityDefinitionId);
+        }
         #endregion
 
         #region Private Methods

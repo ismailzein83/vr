@@ -53,6 +53,18 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                             var field = payload.recordTypeFields[i];
                             ctrl.fields.push({ fieldPath: field.Name, fieldTitle: field.Name });
                         }
+                        if(payload.selectedFields !=undefined)
+                        {
+                            for(var i=0;i<payload.selectedFields.length;i++)
+                            {
+                                var selectedField= payload.selectedFields[i];
+                                ctrl.selectedFields.push({
+                                    fieldPath: selectedField.FieldPath,
+                                    fieldTitle: selectedField.FieldTitle,
+                                    isRequired: selectedField.IsRequired
+                                });
+                            }
+                        }
                     }
                 }
                 api.getData = function () {

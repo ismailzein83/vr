@@ -54,6 +54,15 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
                             var field = payload.recordTypeFields[i];
                             ctrl.fields.push({ fieldPath: field.Name, fieldTitle: field.Name });
                         }
+                        if (payload.selectedColumns != undefined) {
+                            for (var i = 0; i < payload.selectedColumns.length; i++) {
+                                var selectedField = payload.selectedColumns[i];
+                                ctrl.selectedFields.push({
+                                    fieldPath: selectedField.FieldPath,
+                                    fieldTitle: selectedField.FieldTitle,
+                                });
+                            }
+                        }
                     }
                 }
 
