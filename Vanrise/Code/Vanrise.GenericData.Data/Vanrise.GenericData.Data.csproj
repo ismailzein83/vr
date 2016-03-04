@@ -55,6 +55,7 @@
     <Compile Include="IDataStoreDataManager.cs" />
     <Compile Include="IExpressionBuilderConfigDataManager.cs" />
     <Compile Include="IExtensibleBEItemDataManager.cs" />
+    <Compile Include="IGenericBusinessEntityDataManager.cs" />
     <Compile Include="IGenericEditorDataManager.cs" />
     <Compile Include="IGenericRuleDefinitionDataManager.cs" />
     <Compile Include="IDataStoreConfigDataManager.cs" />

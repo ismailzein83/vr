@@ -58,7 +58,7 @@
     <Compile Include="ExpressionBuilderConfigManager.cs" />
     <Compile Include="ExtensibleBEItemManager.cs" />
     <Compile Include="ExtensibleBEManager.cs" />
-    <Compile Include="GenericBEManager.cs" />
+    <Compile Include="GenericBusinessEntityManager.cs" />
     <Compile Include="GenericUIRuntimeManager.cs" />
     <Compile Include="GenericRuleDefinitionManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />

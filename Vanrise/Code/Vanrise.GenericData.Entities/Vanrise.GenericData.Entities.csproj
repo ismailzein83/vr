@@ -104,6 +104,9 @@
     <Compile Include="ExpressionBuilder\ExpressionBuilderConfig.cs" />
     <Compile Include="BusinessEntities\GenericBESettings\GenericBEDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntity.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBusinessEntityDetail.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBusinessEntityInfo.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBusinessEntityQuery.cs" />
     <Compile Include="GenericEditor\GenericEditor.cs" />
     <Compile Include="ExtensibleBEItem\ExtensibleBEItem.cs" />
     <Compile Include="ExtensibleBEItem\ExtensibleBEItemDetail.cs" />

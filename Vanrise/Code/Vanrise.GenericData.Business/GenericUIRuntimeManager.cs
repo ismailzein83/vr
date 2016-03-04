@@ -88,7 +88,7 @@ namespace Vanrise.GenericData.Business
             if (gridDesign.Columns != null)
             {
                 genericGridRuntime.Columns = new List<GenericGridRuntimeField>();
-                foreach (var column in genericGridRuntime.Columns)
+                foreach (var column in gridDesign.Columns)
                 {
                     var runtimeColumn = new GenericGridRuntimeField();
                     genericGridRuntime.Columns.Add(runtimeColumn);
@@ -97,6 +97,7 @@ namespace Vanrise.GenericData.Business
                     var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == runtimeColumn.FieldPath);
                     if (dataRecordTypeField == null)
                         throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, runtimeColumn.FieldPath));
+                    runtimeColumn.FieldType = dataRecordTypeField.Type;
                 }
             }
         }
@@ -108,7 +109,7 @@ namespace Vanrise.GenericData.Business
             if (genericFilter.Fields != null)
             {
                 genericFilterRuntime.Fields = new List<GenericFilterRuntimeField>();
-                foreach (var field in genericFilterRuntime.Fields)
+                foreach (var field in genericFilter.Fields)
                 {
                     var runtimeField = new GenericFilterRuntimeField();
                     genericFilterRuntime.Fields.Add(runtimeField);
@@ -119,6 +120,7 @@ namespace Vanrise.GenericData.Business
                     var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == runtimeField.FieldPath);
                     if (dataRecordTypeField == null)
                         throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, runtimeField.FieldPath));
+                    runtimeField.FieldType = dataRecordTypeField.Type;
                 }
             }
         }
