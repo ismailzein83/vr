@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Entities
         [JsonIgnore]
         public override string GroupSelectorUIControl { get; set; }
         [JsonIgnore]
-        public override string DefinitionEditor { get { return "/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBEEditor.html"} }
+        public override string DefinitionEditor { get { return "/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBEEditor.html"; } }
         [JsonIgnore]
         public override string SelectorUIControl
         {
