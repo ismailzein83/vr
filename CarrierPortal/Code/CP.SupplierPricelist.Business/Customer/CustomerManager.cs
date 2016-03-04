@@ -37,15 +37,7 @@ namespace CP.SupplierPricelist.Business
 
         public IEnumerable<SupplierInfo> GetCustomerSuppliers(int customerId)
         {
-            //Customer customer = GetCustomer(customerId);
-            //if (customer == null)
-            //    throw new NullReferenceException("customer");
-            //if (customer.Settings == null)
-            //    throw new NullReferenceException("customer.Settings");
-            //if (customer.Settings.PriceListConnector == null)
-            //    throw new NullReferenceException("customer.Settings.PriceListConnector");
-
-            return GetCachedSupplierAccounts(customerId).Values;
+                  return GetCachedSupplierAccounts(customerId).Values;
         }
 
         public IEnumerable<CustomerInfo> GetCustomerInfos(CustomerFilter filter)
@@ -141,7 +133,8 @@ namespace CP.SupplierPricelist.Business
 
         public Dictionary<string, SupplierInfo> GetCachedSupplierAccounts(int customerId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCacheManager>().GetOrCreateObject("GetSupplierAccounts",
+            string cacheName = String.Format("CustomerManager_GetCachedSupplierAccounts_{0}", customerId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCacheManager>().GetOrCreateObject(cacheName,
                () =>
                {
                    Customer customer = GetCustomer(customerId);

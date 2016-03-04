@@ -32,7 +32,7 @@ namespace CP.SupplierPricelist.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSupplierMappings.ToBigResult(input, filterExpression, MapToDetails));
         }
 
-        public bool GetHasCurrentCustomerId()
+        public bool IsCurrentUserCustomer()
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             var customers = GetCachedCustomersUsers();

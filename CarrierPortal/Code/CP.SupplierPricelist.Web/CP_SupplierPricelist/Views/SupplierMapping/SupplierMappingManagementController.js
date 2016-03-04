@@ -53,7 +53,7 @@
 
             function load() {
                 $scope.isLoadingFilters = true;
-                return customerUserAPIService.GetHasCurrentCustomerId().then(function (response) {
+                return customerUserAPIService.IsCurrentUserCustomer().then(function (response) {
                     if (response == true) {
                         loadAllControls()
                     }

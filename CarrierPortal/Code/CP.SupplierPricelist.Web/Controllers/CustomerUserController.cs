@@ -12,11 +12,11 @@ namespace CP.SupplierPricelist.Web.Controllers
     {
 
         [HttpGet]
-        [Route("GetHasCurrentCustomerId")]
-        public bool GetHasCurrentCustomerId()
+        [Route("IsCurrentUserCustomer")]
+        public bool IsCurrentUserCustomer()
         {
             CustomerUserManager manager = new CustomerUserManager();
-            return  manager.GetHasCurrentCustomerId();
+            return manager.IsCurrentUserCustomer();
         } 
 
         [HttpPost]
