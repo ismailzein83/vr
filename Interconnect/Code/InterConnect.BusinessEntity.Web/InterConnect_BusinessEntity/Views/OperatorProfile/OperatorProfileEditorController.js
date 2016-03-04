@@ -2,9 +2,9 @@
 
     "use strict";
 
-    operatorProfileEditorController.$inject = ['$scope', 'InterConnect_BE_OperatorProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_GenericData_GenericEditorAPIService','VR_GenericData_BusinessEntityAPIService'];
+    operatorProfileEditorController.$inject = ['$scope', 'InterConnect_BE_OperatorProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_GenericData_DataRecordFieldTypeConfigAPIService','VR_GenericData_GenericUIRuntimeAPIService'];
 
-    function operatorProfileEditorController($scope, InterConnect_BE_OperatorProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_GenericEditorAPIService, VR_GenericData_BusinessEntityAPIService) {
+    function operatorProfileEditorController($scope, InterConnect_BE_OperatorProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_GenericData_GenericUIRuntimeAPIService) {
         $scope.scopeModal = {};
         $scope.scopeModal.isEditMode;
         var operatorProfileId;
@@ -226,7 +226,7 @@
         {
             var promiseDeferred = UtilsService.createPromiseDeferred();
 
-            VR_GenericData_BusinessEntityAPIService.GetExtensibleBEItemRuntime(recordTypeId, businessEntityId).then(function (response) {
+            VR_GenericData_GenericUIRuntimeAPIService.GetExtensibleBEItemRuntime(recordTypeId, businessEntityId).then(function (response) {
                 $scope.scopeModal.sections = response.Sections;
                 loadExtendedSettingsDirective().then(function () {
                     promiseDeferred.resolve();
