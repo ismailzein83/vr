@@ -60,21 +60,62 @@ namespace CP.SupplierPriceList.TOneV1Integration
 
             switch (queueResult)
             {
-                case QueueItemStatus.PartiallyRejected:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                    priceListProgressOutput.PriceListResult = PriceListResult.PartiallyRejected;
-                    priceListProgressOutput.AlertMessage = "Due To Retro-active";
-                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
-                    break;
                 case QueueItemStatus.Recieved:
+                case QueueItemStatus.WarningsConfirmed:
+                case QueueItemStatus.SaveConfirmed:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.SuccessfullyUploaded;
                     priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     break;
+
+                case QueueItemStatus.PartiallyRejected:
+                    priceListProgressOutput.AlertMessage = "Due To Retro-active";
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                    priceListProgressOutput.PriceListResult = PriceListResult.PartiallyRejected;
+                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    break;
+
                 case QueueItemStatus.Processing:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.UnderProcessing;
                     priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     break;
+
+                case QueueItemStatus.AwaitingWarningsConfirmation:
+                case QueueItemStatus.AwaitingSaveConfirmation:
+                case QueueItemStatus.AwaitingSaveConfirmationbySystemparam:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
+                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
+                    break;
+
+                case QueueItemStatus.ProcessedSuccessfuly:
+                case QueueItemStatus.ProcessedSuccessfulyByImport:
+                case QueueItemStatus.Processedwithnochanges:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                    priceListProgressOutput.PriceListResult = PriceListResult.Approved;
+                    break;
+                    
+                case QueueItemStatus.FailedDuetoSheetError:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
+                    priceListProgressOutput.AlertMessage = "Failed due to sheet error";
+                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    break;
+                case QueueItemStatus.Rejected:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
+                    priceListProgressOutput.AlertMessage = "Rejected";
+                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    break;
+                case QueueItemStatus.SuspendedDueToConfigurationErrors:
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
+                    priceListProgressOutput.AlertMessage = "Suspended due to configurtaion errors";
+                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    break;
+
                 case QueueItemStatus.SuspendedDueToBusinessErrors:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
@@ -89,76 +130,6 @@ namespace CP.SupplierPriceList.TOneV1Integration
                     priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
                     priceListProgressOutput.AlerFileName = uploadInformation.FileName;
                     break;
-                case QueueItemStatus.AwaitingWarningsConfirmation:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
-                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
-                    break;
-                case QueueItemStatus.AwaitingSaveConfirmation:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
-                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
-                    break;
-                case QueueItemStatus.WarningsConfirmed:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.SuccessfullyUploaded;
-                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
-                    break;
-                case QueueItemStatus.SaveConfirmed:
-                    {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.SuccessfullyUploaded;
-                        priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
-                        break;
-                    }
-                case QueueItemStatus.ProcessedSuccessfuly:
-                    {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Approved;
-                        break;
-                    }
-                case QueueItemStatus.FailedDuetoSheetError:
-                    {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                        priceListProgressOutput.AlertMessage = "Failed due to sheet error";
-                        priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                        priceListProgressOutput.AlerFileName = uploadInformation.FileName;
-                        break;
-                    }
-                case QueueItemStatus.Rejected:
-                    {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                        priceListProgressOutput.AlertMessage = "Rejected";
-                        priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                        priceListProgressOutput.AlerFileName = uploadInformation.FileName;
-                        break;
-                    }
-                case QueueItemStatus.SuspendedDueToConfigurationErrors:
-                    {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                        priceListProgressOutput.AlertMessage = "Suspended due to configurtaion errors";
-                        priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                        priceListProgressOutput.AlerFileName = uploadInformation.FileName;
-                        break;
-                    }
-                case QueueItemStatus.ProcessedSuccessfulyByImport:
-                    {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Approved;
-                        break;
-                    }
-                case QueueItemStatus.AwaitingSaveConfirmationbySystemparam:
-                    {
-
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
-                        priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
-                        break;
-                    }
-                case QueueItemStatus.Processedwithnochanges:
-                    {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Approved;
-                        break;
-                    }
                 default:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
