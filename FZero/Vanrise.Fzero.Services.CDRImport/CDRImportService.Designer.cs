@@ -1,6 +1,6 @@
 ﻿namespace Vanrise.Fzero.Services.CDRImport
 {
-    partial class Service1
+    partial class CDRImportService
     {
         /// <summary> 
         /// Required designer variable.

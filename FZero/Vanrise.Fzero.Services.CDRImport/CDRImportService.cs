@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Fzero.Services.CDRImport
 {
-    public partial class Service1 : ServiceBase
+    public partial class CDRImportService : ServiceBase
     {
-        public Service1()
+        public CDRImportService()
         {
             InitializeComponent();
         }

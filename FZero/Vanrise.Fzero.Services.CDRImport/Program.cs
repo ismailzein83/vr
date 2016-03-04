@@ -17,7 +17,7 @@ namespace Vanrise.Fzero.Services.CDRImport
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
             { 
-                new Service1() 
+                new CDRImportService() 
             };
             ServiceBase.Run(ServicesToRun);
         }
