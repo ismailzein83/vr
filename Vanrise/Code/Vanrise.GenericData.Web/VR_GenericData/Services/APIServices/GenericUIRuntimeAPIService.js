@@ -4,7 +4,7 @@
 
     GenericUIRuntimeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
 
-    function GenericEditorAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
+    function GenericUIRuntimeAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
         return {
             GetExtensibleBEItemRuntime: GetExtensibleBEItemRuntime,
             GetGenericManagementRuntime: GetGenericManagementRuntime,
