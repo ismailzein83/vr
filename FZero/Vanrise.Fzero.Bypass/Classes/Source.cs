@@ -153,7 +153,7 @@ namespace Vanrise.Fzero.Bypass
             }
             catch (Exception err)
             {
-                FileLogger.Write("Error in Vanrise.Fzero.Bypass.Source.Load(" + Email.ToString() + ")", err);
+                throw err;
             }
 
 
