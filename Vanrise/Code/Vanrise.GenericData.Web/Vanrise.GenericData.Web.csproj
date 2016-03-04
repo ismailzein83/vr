@@ -355,6 +355,7 @@
     <Content Include="VR_GenericData\Services\ExpressionBuilderService.js" />
     <Content Include="VR_GenericData\Services\ExtensibleBEItemService.js" />
     <Content Include="VR_GenericData\Services\GenericBEService.js" />
+    <Content Include="VR_GenericData\Services\GenericBusinessEntityService.js" />
     <Content Include="VR_GenericData\Services\GenericUIRuntimeAPIService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
