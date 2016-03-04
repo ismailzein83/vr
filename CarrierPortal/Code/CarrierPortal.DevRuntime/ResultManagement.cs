@@ -34,7 +34,7 @@ namespace CarrierPortal.DevRuntime
                         ImportPriceListManager manager = new ImportPriceListManager();
                         List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>()
                         {
-                            PriceListStatus.SuccessfullyImported
+                            PriceListStatus.SuccessfullyUploaded
                         };
 
                         foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses))
