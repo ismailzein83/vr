@@ -3,18 +3,27 @@ CREATE PROCEDURE [bp].[sp_BPInstance_TryLockAndUpdateWorkflowInstanceID]
 	@ProcessInstanceID bigint,
 	@WorkflowInstanceID uniqueidentifier,
 	@CurrentRuntimeProcessID int,
-	@RunningProcessIDs bp.IDIntType readonly,
-	@BPStatuses bp.IDIntType readonly
+	@RunningProcessIDs varchar(max),
+	@Statuses varchar(max)
 	
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
+	DECLARE @StatusesTable TABLE ([Status] int)
+	INSERT INTO @StatusesTable ([Status])
+	SELECT Convert(int, ParsedString) FROM bp.[ParseStringList](@Statuses)
 	
+	DECLARE @RunningProcessIDsTable TABLE (ID int)
+	INSERT INTO @RunningProcessIDsTable (ID)
+	SELECT Convert(int, ParsedString) FROM bp.[ParseStringList](@RunningProcessIDs)
+	
+	DECLARE @IsLocked bit
     UPDATE bp.BPInstance
     SET	LockedByProcessID = @CurrentRuntimeProcessID,
+		@IsLocked = 1,
 	    WorkflowInstanceID = @WorkflowInstanceID
 	WHERE ID = @ProcessInstanceID
-		  AND ExecutionStatus IN (SELECT ID FROM @BPStatuses)
-		  AND (LockedByProcessID IS NULL OR LockedByProcessID NOT IN (SELECT ID FROM @RunningProcessIDs))
+		  AND ExecutionStatus IN (SELECT [Status] FROM @StatusesTable)
+		  AND (LockedByProcessID IS NULL OR LockedByProcessID NOT IN (SELECT ID FROM @RunningProcessIDsTable))
+	
+	SELECT CONVERT(BIT, @IsLocked)
 END
