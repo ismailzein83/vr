@@ -59,7 +59,7 @@
     <Compile Include="ExtensibleBEItemManager.cs" />
     <Compile Include="ExtensibleBEManager.cs" />
     <Compile Include="GenericBEManager.cs" />
-    <Compile Include="GenericEditorManager.cs" />
+    <Compile Include="GenericUIRuntimeManager.cs" />
     <Compile Include="GenericRuleDefinitionManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />
     <Compile Include="GenericRules\GenericRuleTypeConfigManager.cs" />

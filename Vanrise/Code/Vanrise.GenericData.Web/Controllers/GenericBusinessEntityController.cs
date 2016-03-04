@@ -6,7 +6,7 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.GenericData.Web.Controllers
 {
-    public class GenericBEController:BaseAPIController
+    public class GenericBusinessEntityController:BaseAPIController
     {
     }
 }

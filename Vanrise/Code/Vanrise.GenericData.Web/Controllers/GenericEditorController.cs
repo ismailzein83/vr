@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetExtensibleBEItemRuntime")]
         public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int businessEntityId, int dataRecordTypeId)
         {
-            GenericEditorManager manager = new GenericEditorManager();
+            GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
             return manager.GetExtensibleBEItemRuntime(businessEntityId, dataRecordTypeId);
         }
     }

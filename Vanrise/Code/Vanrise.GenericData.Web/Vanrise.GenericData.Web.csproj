@@ -134,7 +134,7 @@
     <Compile Include="Controllers\DataTransformationStepConfigController.cs" />
     <Compile Include="Controllers\ExpressionBuilderConfigController.cs" />
     <Compile Include="Controllers\ExtensibleBEItemController.cs" />
-    <Compile Include="Controllers\GenericBEController.cs" />
+    <Compile Include="Controllers\GenericBusinessEntityController.cs" />
     <Compile Include="Controllers\GenericEditorController.cs" />
     <Compile Include="Controllers\GenericRuleController.cs" />
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />

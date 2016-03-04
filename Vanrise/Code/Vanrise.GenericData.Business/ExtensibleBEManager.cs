@@ -18,12 +18,12 @@ namespace Vanrise.GenericData.Business
         }
         public ExtensibleBEItemRuntime GetExtensibleBEItemRuntime(int dataRecordTypeId, int businessEntityId)
         {
-            GenericEditorManager manager = new GenericEditorManager();
+            GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
             return manager.GetExtensibleBEItemRuntime(businessEntityId, dataRecordTypeId);
         }
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityId)
         {
-            GenericEditorManager manager = new GenericEditorManager();
+            GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
             return manager.GetDataRecordTypesInfo(businessEntityId);
         }
     }

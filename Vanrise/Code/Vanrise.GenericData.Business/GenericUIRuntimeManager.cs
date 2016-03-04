@@ -11,7 +11,7 @@ using Vanrise.Caching;
 
 namespace Vanrise.GenericData.Business
 {
-    public class GenericEditorManager
+    public class GenericUIRuntimeManager
     {
         public GenericEditor GetEditor(int editorId)
         {
@@ -41,16 +41,6 @@ namespace Vanrise.GenericData.Business
             BuildEditorRuntimeSections(extensibleBEItem.Sections, editorRuntime, dataRecordTypeId);
             return editorRuntime;
         }
-        public GenericEditorRuntime GetEditorRuntime(int editorId)
-        {
-            //var genericEditor = GetEditor(editorId);
-            //if (genericEditor == null)
-               return null;
-
-            //GenericEditorRuntime editorRuntime = new GenericEditorRuntime();
-            //BuildEditorRuntime(genericEditor, editorRuntime);
-            //return editorRuntime;
-        }
 
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(int businessEntityId)
         {
@@ -66,7 +56,18 @@ namespace Vanrise.GenericData.Business
              return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds });
         }
 
+        public GenericManagementRuntime GetManagementRuntime(int businessEntityDefinitionId)
+        {
+            BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+            var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
+            if (businessEntityDefinition == null)
+                return null;
 
+            var businessEntityDefinitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
+            GenericManagementRuntime genericManagementRuntime = new GenericManagementRuntime();
+            BuildManagementRuntime(businessEntityDefinitionSettings.ManagementDesign, genericManagementRuntime, businessEntityDefinitionSettings.DataRecordTypeId);
+            return genericManagementRuntime;
+        }
 
         #region Private Methods
         private void BuildExtensibleBEItemRuntime(ExtensibleBEItem extensibleBEItem, ExtensibleBEItemRuntime extensibleBEItemRuntime, int dataRecordTypeId)
@@ -146,6 +147,58 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+
+        private void BuildManagementRuntime(GenericManagement genericManagement, GenericManagementRuntime genericManagementRuntime, int dataRecordTypeId)
+        {
+            BuildGridRuntime(genericManagement.GridDesign, genericManagementRuntime.Grid, dataRecordTypeId);
+            BuildFilterRuntime(genericManagement.FilterDesign, genericManagementRuntime.Filter, dataRecordTypeId);
+        }
+        private void BuildGridRuntime(GenericGrid gridDesign, GenericGridRuntime genericGridRuntime, int dataRecordTypeId)
+        {
+            if (gridDesign.Columns != null)
+            {
+                genericGridRuntime.Columns = new List<GenericEditorRuntimeField>();
+                foreach (var column in genericGridRuntime.Columns)
+                {
+                    var runtimeColumn= new GenericEditorRuntimeField();
+                    runtimeColumn.FieldTitle = column.FieldTitle;
+                    genericGridRuntime.Columns.Add(runtimeColumn);
+                 //   BuildGridRuntimeFields(section, runtimeSection, dataRecordTypeId);
+                }
+            }
+        }
+        private void BuildGridRuntimeFields(GenericEditorRow row, GenericEditorRuntimeRow runtimeRow, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
+        {
+            if (row.Fields != null)
+            {
+                runtimeRow.Fields = new List<GenericEditorRuntimeField>();
+                foreach (var field in row.Fields)
+                {
+                    var runtimeField = new GenericEditorRuntimeField();
+                    runtimeRow.Fields.Add(runtimeField);
+                    runtimeField.FieldTitle = field.FieldTitle;
+                    runtimeField.FieldPath = field.FieldPath;
+                    var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == runtimeField.FieldPath);
+                    if (dataRecordTypeField == null)
+                        throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, runtimeField.FieldPath));
+                    runtimeField.FieldType = dataRecordTypeField.Type;
+                }
+            }
+        }
+        private void BuildFilterRuntime(GenericFilter genericFilter, GenericFilterRuntime genericFilterRuntime, int dataRecordTypeId)
+        {
+            //if (sections != null)
+            //{
+            //    extensibleBEItemRuntime.Sections = new List<GenericEditorRuntimeSection>();
+            //    foreach (var section in sections)
+            //    {
+            //        var runtimeSection = new GenericEditorRuntimeSection();
+            //        runtimeSection.SectionTitle = section.SectionTitle;
+            //        extensibleBEItemRuntime.Sections.Add(runtimeSection);
+            //        BuildEditorRuntimeRows(section, runtimeSection, dataRecordTypeId);
+            //    }
+            //}
+        }
         #endregion
 
 
