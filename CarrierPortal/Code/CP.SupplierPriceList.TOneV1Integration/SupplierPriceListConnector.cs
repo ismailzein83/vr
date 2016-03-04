@@ -68,10 +68,12 @@ namespace CP.SupplierPriceList.TOneV1Integration
                     priceListProgressOutput.AlerFileName = uploadInformation.FileName;
                     break;
                 case QueueItemStatus.Recieved:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.SuccessfullyUploaded;
+                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     break;
                 case QueueItemStatus.Processing:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.UnderProcessing;
+                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     break;
                 case QueueItemStatus.SuspendedDueToBusinessErrors:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
@@ -96,12 +98,13 @@ namespace CP.SupplierPriceList.TOneV1Integration
                     priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     break;
                 case QueueItemStatus.WarningsConfirmed:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.WaitingReview;
+                    priceListProgressOutput.PriceListStatus = PriceListStatus.SuccessfullyUploaded;
+                    priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                     break;
                 case QueueItemStatus.SaveConfirmed:
                     {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Approved;
+                        priceListProgressOutput.PriceListStatus = PriceListStatus.SuccessfullyUploaded;
+                        priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                         break;
                     }
                 case QueueItemStatus.ProcessedSuccessfuly:
