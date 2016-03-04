@@ -7,11 +7,10 @@ namespace CP.SupplierPricelist.Entities
     {
         [Description("New")]
         New = 0,
-        [Description("Successfully Imported")]
-        SuccessfullyImported = 10,
+        [Description("Successfully Uploaded")]
+        SuccessfullyUploaded = 10,
         WaitingReview = 20,
         Completed = 30,
-
         [Description("Suspended")]
         UploadFailedWithRetry = 40,
         [Description("Suspended")]
@@ -20,7 +19,9 @@ namespace CP.SupplierPricelist.Entities
         [Description("Aborted")]
         UploadFailedWithNoRetry = 60,
         [Description("Aborted")]
-        ResultFailedWithNoRetry = 70
+        ResultFailedWithNoRetry = 70,
+        [Description("Successfully Uploaded")]
+        UnderProcessing = 80
     }
 
     public enum PriceListType
