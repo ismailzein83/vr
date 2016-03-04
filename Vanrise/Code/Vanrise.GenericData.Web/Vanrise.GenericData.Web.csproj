@@ -411,6 +411,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="VR_GenericData\Views\GenericRule\Testoing.html" />
+    <Content Include="VR_GenericData\Views\GenericRule\TestController.js" />
     <Content Include="VR_GenericData\Views\test.html" />
     <Content Include="VR_GenericData\Views\test.js" />
     <Content Include="web.config" />
