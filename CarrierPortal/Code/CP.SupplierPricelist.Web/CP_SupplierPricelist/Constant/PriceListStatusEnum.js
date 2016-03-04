@@ -1,6 +1,6 @@
 ﻿app.constant('CP_SupplierPricelist_PriceListStatusEnum', {
     New: { value: 0, description: "New" },
-    Uploaded: { value: 10, description: "Successfully Imported" },
+    Uploaded: { value: 10, description: "Successfully Uploaded" },
     Failed: { value: 20, description: "Failed" },
     WaitingReview: { value: 30, description: "WaitingReview" },
     GetStatusFailedWithRetry: { value: 40, description: "GetStatusFailedWithRetry" },
