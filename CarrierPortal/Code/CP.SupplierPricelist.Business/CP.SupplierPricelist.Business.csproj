@@ -76,7 +76,6 @@
     <Compile Include="Customer\CustomerSupplierMappingManager.cs" />
     <Compile Include="Customer\CustomerTypeConfigManager.cs" />
     <Compile Include="Customer\CustomerUserManager.cs" />
-    <Compile Include="DummyCustomerConnector.cs" />
     <Compile Include="ImportPriceListManager.cs" />
     <Compile Include="PriceListUploadContext.cs" />
     <Compile Include="PriceListProgressContext.cs" />
