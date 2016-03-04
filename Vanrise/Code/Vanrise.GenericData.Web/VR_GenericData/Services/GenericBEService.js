@@ -10,11 +10,11 @@
             addGenericBE: addGenericBE,
         };
 
-        function editGenericBE(genericEditorDefinitionId, onGenericEditorUpdated) {
+        function editGenericBE(genericEditorDefinitionId, onGenericBEDefinitionUpdated) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onGenericEditorUpdated = onGenericEditorUpdated;
+                modalScope.onGenericBEDefinitionUpdated = onGenericBEDefinitionUpdated;
             };
 
             var parameters = {
@@ -24,14 +24,14 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBEEditor.html', parameters, modalSettings);
         }
 
-        function addGenericBE(onGenericBEAdded) {
+        function addGenericBE(onGenericBEDefinitionAdded) {
             var modalParameters = {
             };
 
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onGenericBEAdded = onGenericBEAdded;
+                modalScope.onGenericBEDefinitionAdded = onGenericBEDefinitionAdded;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBEEditor.html', modalParameters, modalSettings);

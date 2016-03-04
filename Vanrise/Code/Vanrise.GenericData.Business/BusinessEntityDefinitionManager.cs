@@ -7,13 +7,13 @@ using Vanrise.Caching;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Business
 {
     public class BusinessEntityDefinitionManager
     {
         #region Public Methods
-
         public Vanrise.Entities.IDataRetrievalResult<BusinessEntityDefinitionDetail> GetFilteredBusinessEntityDefinitions(Vanrise.Entities.DataRetrievalInput<BusinessEntityDefinitionQuery> input)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
@@ -28,13 +28,11 @@ namespace Vanrise.GenericData.Business
             var businessEntityDefinition = cachedBEDefinitions.FindRecord(x=>x.Name == businessEntityDefinitionName);
             return businessEntityDefinition.BusinessEntityDefinitionId;
         }
-
         public BusinessEntityDefinition GetBusinessEntityDefinition(int businessEntityDefinitionId)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
             return cachedBEDefinitions.FindRecord(beDefinition => beDefinition.BusinessEntityDefinitionId == businessEntityDefinitionId);
         }
-
         public IEnumerable<BusinessEntityDefinitionInfo> GetBusinessEntityDefinitionsInfo(BusinessEntityDefinitionInfoFilter filter)
         {
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
@@ -46,6 +44,50 @@ namespace Vanrise.GenericData.Business
             }
 
             return cachedBEDefinitions.MapRecords(BusinessEntityDefinitionInfoMapper, filterExpression);
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<BusinessEntityDefinitionDetail> UpdateBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
+        {
+            UpdateOperationOutput<BusinessEntityDefinitionDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BusinessEntityDefinitionDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
+            bool updateActionSucc = dataManager.UpdateBusinessEntityDefinition(businessEntityDefinition);
+
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.UpdatedObject = BusinessEntityDefinitionDetailMapper(businessEntityDefinition);
+            }
+            return updateOperationOutput;
+        }
+        public Vanrise.Entities.InsertOperationOutput<BusinessEntityDefinitionDetail> AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
+        {
+            InsertOperationOutput<BusinessEntityDefinitionDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BusinessEntityDefinitionDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int businessEntityDefinitionId = -1;
+            IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
+            bool insertActionSucc = dataManager.AddBusinessEntityDefinition(businessEntityDefinition, out businessEntityDefinitionId);
+            if (insertActionSucc)
+            {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    businessEntityDefinition.BusinessEntityDefinitionId = businessEntityDefinitionId;
+                    insertOperationOutput.InsertedObject = BusinessEntityDefinitionDetailMapper(businessEntityDefinition);
+
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+
+            }
+
+            return insertOperationOutput;
         }
 
         #endregion

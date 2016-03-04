@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_BusinessEntityDefinitionAPIService", "VR_GenericData_ExtensibleBEItemService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_ExtensibleBEItemService, VRUIUtilsService) {
+app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_BusinessEntityDefinitionAPIService", "VR_GenericData_ExtensibleBEItemService", "VRUIUtilsService","VR_GenericData_BusinessEntityDefinitionService",
+    function (UtilsService, VRNotificationService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_ExtensibleBEItemService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionService) {
 
         var directiveDefinitionObject = {
 
@@ -90,15 +90,23 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
 
 
             function defineMenuActions() {
-                var defaultMenuActions = [
+                var extensibleMenuActions = [
                 {
                     name: "Add Extended Settings",
                     clicked: addExtendedSettings,
                 }];
-
+                var genericMenuActions = [
+                {
+                     name: "Edit",
+                     clicked: editBusinessEntityDefinition,
+                 }];
                 $scope.gridMenuActions = function (dataItem) {
                     if (dataItem.IsExtensible)
-                     return defaultMenuActions;
+                        return extensibleMenuActions;
+                    else if(dataItem.Entity.Settings.DefinitionEditor !=undefined)
+                    {
+                        return genericMenuActions;
+                    }
                 }
             }
 
@@ -110,6 +118,15 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                 }
 
                 VR_GenericData_ExtensibleBEItemService.addExtendedSettings(dataItem.Entity.BusinessEntityDefinitionId, onExtendedSettingsAdded);
+            }
+            function editBusinessEntityDefinition(dataItem)
+            {
+                var onBusinessEntityDefinitionUpdated = function (businessEntityDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(businessEntityDefinition);
+                    dataItem.genericEditorGridAPI.onBusinessEntityDefinitionAdded(extendedSettingsObj);
+                }
+
+                VR_GenericData_BusinessEntityDefinitionService.editBusinessEntityDefinition(dataItem.Entity.BusinessEntityDefinitionId, onBusinessEntityDefinitionUpdated, dataItem.Entity.Settings.DefinitionEditor);
             }
         }
 

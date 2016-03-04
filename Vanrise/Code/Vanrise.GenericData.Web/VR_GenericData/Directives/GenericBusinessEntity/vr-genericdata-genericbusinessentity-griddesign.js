@@ -12,7 +12,7 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
 
                 var ctrl = this;
 
-                var ctor = new FielddesignCtor(ctrl, $scope);
+                var ctor = new GriddesignCtor(ctrl, $scope);
                 ctor.initializeController();
 
             },
@@ -31,7 +31,7 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
 
         };
 
-        function FielddesignCtor(ctrl, $scope) {
+        function GriddesignCtor(ctrl, $scope) {
             var gridAPI;
             function initializeController() {
                 ctrl.fields = [];
@@ -59,14 +59,14 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
 
                 api.getData = function () {
                     var fields = [];
-                    for (var i = 0; i < ctrl.fields.length; i++) {
-                        var field = ctrl.fields[i];
+                    for (var i = 0; i < ctrl.selectedFields.length; i++) {
+                        var field = ctrl.selectedFields[i];
                         fields.push({
-                            FieldTitle: field.FieldTitle,
-                            FieldPath: field.FieldPath
+                            FieldTitle: field.fieldTitle,
+                            FieldPath: field.fieldPath
                         });
                     }
-                    return { Fields: fields };
+                    return { Columns: fields };
                 }
 
                 if (ctrl.onReady != null)

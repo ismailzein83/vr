@@ -36,5 +36,17 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredBusinessEntityDefinitions(input));
         }
+        [Route("UpdateBusinessEntityDefinition")]
+        public Vanrise.Entities.UpdateOperationOutput<BusinessEntityDefinitionDetail> UpdateBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
+        {
+            return _manager.UpdateBusinessEntityDefinition(businessEntityDefinition);
+        }
+
+        [HttpPost]
+        [Route("AddBusinessEntityDefinition")]
+        public Vanrise.Entities.InsertOperationOutput<BusinessEntityDefinitionDetail> AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition)
+        {
+            return _manager.AddBusinessEntityDefinition(businessEntityDefinition);
+        }
     }
 }

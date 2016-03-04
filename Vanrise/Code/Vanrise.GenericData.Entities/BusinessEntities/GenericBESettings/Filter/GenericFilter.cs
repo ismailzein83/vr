@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericFilter
     {
-        public List<GenericEditorField> Fields { get; set; }
+        public List<GenericFilterField> Fields { get; set; }
     }
 }

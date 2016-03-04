@@ -10,7 +10,8 @@ namespace Vanrise.GenericData.Data
     public interface IBusinessEntityDefinitionDataManager : IDataManager
     {
         IEnumerable<BusinessEntityDefinition> GetBusinessEntityDefinitions();
-
+        bool UpdateBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition);
+        bool AddBusinessEntityDefinition(BusinessEntityDefinition businessEntityDefinition,out int insertedId);
         bool AreGenericRuleDefinitionsUpdated(ref object updateHandle);
     }
 }

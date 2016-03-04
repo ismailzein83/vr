@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericGrid
+    public class GenericFilterField
     {
-        public List<GenericEditorField> Fields { get; set; }
+        public string FieldTitle { get; set; }
+        public bool IsRequired { get; set; }
+        public string FieldPath { get; set; }
     }
 }

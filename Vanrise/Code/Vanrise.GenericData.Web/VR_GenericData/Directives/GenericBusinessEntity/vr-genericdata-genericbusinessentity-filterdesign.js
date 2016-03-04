@@ -57,11 +57,12 @@ app.directive('vrGenericdataGenericbusinessentityFilterdesign', ['UtilsService',
                 }
                 api.getData = function () {
                     var fields = [];
-                    for (var i = 0; i < ctrl.fields.length; i++) {
-                        var field = ctrl.fields[i];
+                    for (var i = 0; i < ctrl.selectedFields.length; i++) {
+                        var field = ctrl.selectedFields[i];
                         fields.push({
-                            FieldTitle: field.FieldTitle,
-                            FieldPath: field.FieldPath
+                            FieldTitle: field.fieldTitle,
+                            FieldPath: field.fieldPath,
+                            IsRequired: field.isRequired
                         });
                     }
                     return { Fields: fields };

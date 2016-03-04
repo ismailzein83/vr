@@ -340,6 +340,7 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordStorageService.js" />
     <Content Include="VR_GenericData\Services\DataStoreService.js" />
     <Content Include="VR_GenericData\Services\DataTransformationDefinitionService.js" />
