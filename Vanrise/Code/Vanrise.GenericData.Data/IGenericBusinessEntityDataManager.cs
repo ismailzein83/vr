@@ -11,7 +11,7 @@ namespace Vanrise.GenericData.Data
     {
         bool UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity);
         bool AddGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity, out long genericBusinessEntityId);
-        List<GenericBusinessEntity> GetGenericBusinessEntities(int businessDefinitionId);
-        bool AreGenericBusinessEntityUpdated(ref object updateHandle);
+        List<GenericBusinessEntity> GetGenericBusinessEntitiesByDefinition(int businessDefinitionId);
+        bool AreGenericBusinessEntityUpdated(int parameter,ref object updateHandle);
     }
 }

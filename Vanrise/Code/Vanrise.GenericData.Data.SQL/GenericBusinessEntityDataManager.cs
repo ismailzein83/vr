@@ -20,22 +20,26 @@ namespace Vanrise.GenericData.Data.SQL
         #region Public Methods
         public bool UpdateGenericBusinessEntity(Entities.GenericBusinessEntity genericBusinessEntity)
         {
-            throw new NotImplementedException();
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Update", genericBusinessEntity.GenericBusinessEntityId, genericBusinessEntity.BusinessEntityDefinitionId, Vanrise.Common.Serializer.Serialize(genericBusinessEntity.Details));
+            return (recordesEffected > 0);
         }
 
         public bool AddGenericBusinessEntity(Entities.GenericBusinessEntity genericBusinessEntity, out long genericBusinessEntityId)
         {
-            throw new NotImplementedException();
+            object insertedId;
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Insert", out insertedId, genericBusinessEntity.BusinessEntityDefinitionId, Vanrise.Common.Serializer.Serialize(genericBusinessEntity.Details));
+            genericBusinessEntityId = (recordesEffected > 0) ? (long)insertedId : -1;
+            return (recordesEffected > 0);
         }
 
-        public List<Entities.GenericBusinessEntity> GetGenericBusinessEntities(int businessDefinitionId)
+        public List<Entities.GenericBusinessEntity> GetGenericBusinessEntitiesByDefinition(int businessDefinitionId)
         {
-            throw new NotImplementedException();
+            return GetItemsSP("genericdata.sp_GenericBusinessEntity_GetByDefinition", GenericBusinessEntityMapper, businessDefinitionId);
         }
 
-        public bool AreGenericBusinessEntityUpdated(ref object updateHandle)
+        public bool AreGenericBusinessEntityUpdated(int parameter,ref object updateHandle)
         {
-            return base.IsDataUpdated("genericdata.GenericBusinessEntity", ref updateHandle);
+            return base.IsDataUpdated("genericdata.GenericBusinessEntity","BusinessEntityDefinitionID",parameter, ref updateHandle);
         }
         #endregion
 

@@ -8,6 +8,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using System.Collections.Concurrent;
 namespace Vanrise.GenericData.Business
 {
     public class GenericBusinessEntityManager:BaseBEManager
@@ -27,7 +28,7 @@ namespace Vanrise.GenericData.Business
             Func<GenericBusinessEntity, bool> filterExpression = (genericBusinessEntity) => (input.Query.BusinessEntityDefinitionId == genericBusinessEntity.BusinessEntityDefinitionId);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericBusinessEntities.ToBigResult(input, filterExpression, GenericBusinessEntityDetailMapper));
         }
-        public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateExtensibleBEItem(GenericBusinessEntity genericBusinessEntity)
+        public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
             UpdateOperationOutput<GenericBusinessEntityDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail>();
 
@@ -84,26 +85,26 @@ namespace Vanrise.GenericData.Business
                () =>
                {
                    IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-                   IEnumerable<GenericBusinessEntity> genericBusinessEntities = dataManager.GetGenericBusinessEntities(businessDefinitionId);
+                   IEnumerable<GenericBusinessEntity> genericBusinessEntities = dataManager.GetGenericBusinessEntitiesByDefinition(businessDefinitionId);
                    return genericBusinessEntities.ToDictionary(kvp => kvp.GenericBusinessEntityId, kvp => kvp);
                });
         }
         #endregion
 
         #region Private Classes
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager<int>
         {
             IGenericBusinessEntityDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
+            ConcurrentDictionary<int, Object> _updateHandlesByRuleType = new ConcurrentDictionary<int, Object>();
             object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired()
+            protected override bool ShouldSetCacheExpired(int parameter)
             {
-                return this.IsCacheExpired();
-            }
-
-            public bool IsCacheExpired()
-            {
-                return _dataManager.AreGenericBusinessEntityUpdated(ref _updateHandle);
+                Object updateHandle;
+                _updateHandlesByRuleType.TryGetValue(parameter, out updateHandle);
+                bool isCacheExpired = _dataManager.AreGenericBusinessEntityUpdated(parameter, ref updateHandle);
+                _updateHandlesByRuleType.AddOrUpdate(parameter, updateHandle, (key, existingHandle) => updateHandle);
+                return isCacheExpired;
             }
         }
         #endregion
