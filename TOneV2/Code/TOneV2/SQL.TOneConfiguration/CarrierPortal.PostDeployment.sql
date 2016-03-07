@@ -42,8 +42,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Users','Users','#/view/Security/Views/User/UserManagement',1,'VR_Sec/Users/GetFilteredUsers',null,null,null,0,10),
 (2,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',1,'VR_Sec/Group/GetFilteredGroups',null,null,null,0,11),
-(3,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',1,'VR_Sec/BusinessEntityNode/GetEntityNodes',null,null,null,0,12),
-(5,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'VR_Sec/Menu/GetMenuItems',null,null,null,0,13),
+(3,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',1,'VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,12),
+(5,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'VR_Sec/View/UpdateViewsRank',null,null,null,0,13),
 (6,'Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement',2,'CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
 (7,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',1,'VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,14),
 (8,'Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement',2,'CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11),
@@ -92,11 +92,9 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(300,'History','History',101,0,'["View"]'),
-(301,'Managment','Managment',101,0,'["View"]'),
-(302,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
-(303,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
-(304,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Import PriceList"]')
+(300,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
+(301,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
+(302,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Import PriceList"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
