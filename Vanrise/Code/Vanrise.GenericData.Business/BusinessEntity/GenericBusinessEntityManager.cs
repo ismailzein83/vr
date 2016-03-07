@@ -235,11 +235,11 @@ namespace Vanrise.GenericData.Business
             GenericBusinessEntityInfo entityInfo = new GenericBusinessEntityInfo();
             entityInfo.GenericBusinessEntityId = genericBusinessEntity.BusinessEntityDefinitionId;
 
-            var columnValue = GetFieldPathValue(genericBusinessEntity, definitionSettings.TitleField.FieldPath);
+            var columnValue = GetFieldPathValue(genericBusinessEntity, definitionSettings.FieldPath);
             if (columnValue != null)
             {
-                var uiRuntimeField = uiRuntimeManager.BuildRuntimeField<GenericUIRuntimeField>(definitionSettings.TitleField, recordType.Fields, recordType.DataRecordTypeId);
-                entityInfo.Name  = uiRuntimeField.FieldType.GetDescription(columnValue.Value);
+                var uiRuntimeField = uiRuntimeManager.GetFieldType(definitionSettings.FieldPath, recordType.Fields, recordType.DataRecordTypeId);
+                entityInfo.Name  = uiRuntimeField.GetDescription(columnValue.Value);
             }
 
             return entityInfo;
