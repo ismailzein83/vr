@@ -14,7 +14,8 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
-                customlabel: "@"
+                customlabel: "@",
+                onitemadded: "="
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -33,6 +34,9 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                                 ctrl.selectedvalues.push(userObj.Entity);
                             else
                                 ctrl.selectedvalues = userObj.Entity;
+
+                            if (ctrl.onitemadded != null && typeof (ctrl.onitemadded) == 'function')
+                                ctrl.onitemadded(userObj.Entity)
                         }
                         
                     };
