@@ -339,7 +339,7 @@
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\ExtensibleBEItemAPIService.js" />
-    <Content Include="VR_GenericData\Services\APIServices\GenericBEAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\GenericBusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericUIRuntimeAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />

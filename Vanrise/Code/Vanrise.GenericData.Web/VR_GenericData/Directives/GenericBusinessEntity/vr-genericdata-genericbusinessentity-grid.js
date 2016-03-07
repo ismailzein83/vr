@@ -21,13 +21,13 @@
         };
 
         function GenericBusinessEntityGrid($scope, ctrl, $attrs) {
-            this.initializeController = initializeController();
+            this.initializeController = initializeController;
             
             var gridAPI;
 
             function initializeController() {
                 ctrl.dataSource = [];
-                ctrl.column = [];
+                ctrl.columns = [];
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
@@ -37,22 +37,21 @@
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntities(dataRetrievalInput).then(function (response) {
+                    console.log('in');
+                    return VR_GenericData_GenericBusinessEntityAPIService.GetFilteredGenericBusinessEntities(dataRetrievalInput).then(function (response) {
+                        console.log(response);
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
-
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                    ctrl.onReady(getDirectiveAPI());
-                }
             }
 
             function getDirectiveAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+
                     var runtimeGrid;
                     var gridQuery;
 
@@ -62,14 +61,17 @@
                     }
 
                     setGridColumns();
-                    return gridAPI.retrieveData(gridQuery);
+                    setTimeout(function () {
+                        return gridAPI.retrieveData(gridQuery);
+                    });
 
                     function setGridColumns() {
                         if (runtimeGrid != undefined && runtimeGrid.Columns != undefined) {
                             for (var i = 0; i < runtimeGrid.Columns.length; i++) {
-                                ctrl.column.push(runtimeGrid.Columns[i]);
+                                ctrl.columns.push(runtimeGrid.Columns[i]);
                             }
                         }
+                        console.log(ctrl.columns);
                     }
                 };
 

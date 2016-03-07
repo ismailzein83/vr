@@ -60,7 +60,7 @@
                 promises.push(loadDeferred.promise);
 
                 getRuntimeManagementPromise.then(function () {
-                    UtilsService.waitMultipleAsyncOperations([loadFilterDirective]).then(function () {
+                    UtilsService.waitMultipleAsyncOperations([loadFilterDirective, loadGridDirective]).then(function () {
                         loadDeferred.resolve();
                     }).catch(function (error) {
                         loadDeferred.reject(error);
@@ -76,7 +76,6 @@
                 function getRuntimeManagement() {
                     return VR_GenericData_GenericUIRuntimeAPIService.GetGenericManagementRuntime(definitionId).then(function (response) {
                         runtimeManagement = response;
-                        console.log(runtimeManagement);
                     });
                 }
                 function loadFilterDirective() {
@@ -96,7 +95,10 @@
                     
                     gridDirectiveReadyDeferred.promise.then(function () {
                         var gridDirectivePayload = {
-                            runtimeGrid: runtimeManagement.Grid
+                            runtimeGrid: runtimeManagement.Grid,
+                            gridQuery: {
+                                BusinessEntityDefinitionId: definitionId
+                            }
                         };
                         VRUIUtilsService.callDirectiveLoad(gridDirectiveAPI, gridDirectivePayload, gridDirectiveLoadDeferred);
                     });

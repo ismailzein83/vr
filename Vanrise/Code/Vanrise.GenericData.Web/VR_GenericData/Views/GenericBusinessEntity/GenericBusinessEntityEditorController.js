@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityEditorController.$inject = ['$scope', 'VR_GenericData_GenericUIRuntimeAPIService', 'VR_GenericData_GenericBEAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    GenericBusinessEntityEditorController.$inject = ['$scope', 'VR_GenericData_GenericUIRuntimeAPIService', 'VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function GenericBusinessEntityEditorController($scope, VR_GenericData_GenericUIRuntimeAPIService, VR_GenericData_GenericBEAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function GenericBusinessEntityEditorController($scope, VR_GenericData_GenericUIRuntimeAPIService, VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
 
@@ -41,7 +41,7 @@
             };
 
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateRouteRule() : insertRouteRule();
+                return (isEditMode) ? updateBusinessEntity() : insertBusinessEntity();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -78,7 +78,7 @@
         }
 
         function getGenericBusinessEntity() {
-            return VR_GenericData_GenericBEAPIService.GetGenericBusinessEntity(genericBusinessEntityId).then(function (response) {
+            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(genericBusinessEntityId).then(function (response) {
                 genericBusinessEntity = response;
             });
         }
@@ -138,7 +138,7 @@
         function updateBusinessEntity() {
             $scope.scopeModel.isLoading = true;
 
-            return VR_GenericData_GenericBusinessEntityAPIService.UpdateGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
+            return VR_GenericData_GenericBusinessEntityAPIService.UpdateExtensibleBEItem(buildGenericBusinessEntityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Generic Business Entity', response)) {
                     if ($scope.onGenericBusinessEntityUpdated != undefined)
                         $scope.onGenericBusinessEntityUpdated(response.UpdatedObject);
