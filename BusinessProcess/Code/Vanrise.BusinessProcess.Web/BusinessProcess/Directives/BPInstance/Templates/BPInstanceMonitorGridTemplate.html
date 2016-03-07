@@ -1,4 +1,4 @@
-﻿<vr-panel vr-loader="isLoading">
+﻿<div vr-loader="isLoading">
     <vr-datagrid datasource="bpInstances" loadmoredata="loadMoreData"
                  on-ready="onGridReady"
                  pagingtype="'PagingOnScroll'"
@@ -10,4 +10,4 @@
         <vr-datagridcolumn headertext="'Created On'" field="'Entity.CreatedTime'" type="'LongDatetime'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Last Status Update'" field="'Entity.StatusUpdatedTime'" type="'LongDatetime'"></vr-datagridcolumn>
     </vr-datagrid>
-</vr-panel>
+</div>

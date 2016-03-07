@@ -179,6 +179,7 @@
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
     <Content Include="BusinessProcess\Services\BPInstanceService.js" />
     <Content Include="BusinessProcess\Services\BPDefinitionService.js" />
+    <Content Include="BusinessProcess\Services\BPSchedulerTaskService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessService.js" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagement.html" />

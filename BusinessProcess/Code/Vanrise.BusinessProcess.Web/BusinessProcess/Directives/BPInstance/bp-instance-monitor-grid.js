@@ -44,12 +44,13 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
         var minId = undefined;
 
         function initializeController() {
+            var maximumCount = 600;
             $scope.bpInstances = [];
             var timer;
+            var isGettingDataFirstTime = true;
             var isGettingData = false;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -62,6 +63,8 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                         input.NbOfRows = undefined;
                         input.DefinitionsId = query.DefinitionsId;
                         $scope.bpInstances.length = 0;
+                        isGettingDataFirstTime = true;
+                        minId = undefined;
                         createTimer();
                     }
                     return directiveAPI;
@@ -73,46 +76,61 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                     }
                     timer = setInterval(function () {
                         if (!isGettingData) {
+                            isGettingData = true;
                             var pageInfo = gridAPI.getPageInfo();
                             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
                             BusinessProcess_BPInstanceAPIService.GetUpdated(input).then(function (response) {
-                                isGettingData = true;
                                 if (response != undefined) {
                                     for (var i = 0; i < response.ListBPInstanceDetails.length; i++) {
-
                                         var bpInstance = response.ListBPInstanceDetails[i];
+
+                                        if (!isGettingDataFirstTime && bpInstance.Entity.ProcessInstanceID < minId) {
+                                            continue;
+                                        }
 
                                         var findBPInstance = false;
 
                                         for (var j = 0; j < $scope.bpInstances.length; j++) {
-                                            //if (i === 1) {
-                                            if (j === 0)
-                                                minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
-                                            else {
-                                                if ($scope.bpInstances[j].Entity.ProcessInstanceID < minId) {
-                                                    minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
-                                                }
-                                            }
+
+                                            //if (minId == undefined) {
+                                            //    minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
                                             //}
-                                            ///////////////////////////////////////////////////////////////////
+                                            //else if ($scope.bpInstances[j].Entity.ProcessInstanceID < minId) {
+                                            //    minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
+                                            //};
 
                                             if ($scope.bpInstances[j].Entity.ProcessInstanceID == bpInstance.Entity.ProcessInstanceID) {
                                                 $scope.bpInstances[j] = bpInstance;
                                                 findBPInstance = true;
+                                                continue;
                                             }
-                                            //////////////////////////////////////////////////////////////
+
                                         }
-                                        if (input.LastUpdateHandle == undefined) {
+                                        if (!findBPInstance) {
+                                            //if (bpInstance.Entity.ProcessInstanceID < minId) {
+                                            //    minId = bpInstance.Entity.ProcessInstanceID;
+                                            //}
                                             $scope.bpInstances.push(bpInstance);
                                         }
-                                        else
-                                            if (!findBPInstance)
-                                                $scope.bpInstances.unshift(bpInstance);
+                                    }
+
+                                    if ($scope.bpInstances.length > 0) {
+                                        $scope.bpInstances.sort(function (a, b) {
+                                            return b.Entity.ProcessInstanceID - a.Entity.ProcessInstanceID;
+                                        });
+
+                                        if ($scope.bpInstances.length > maximumCount) {
+                                            $scope.bpInstances.length = maximumCount;
+                                        }
+                                        minId = $scope.bpInstances[$scope.bpInstances.length - 1].Entity.ProcessInstanceID;
+                                        isGettingDataFirstTime = false;
                                     }
                                 }
                                 input.LastUpdateHandle = response.MaxTimeStamp;
                             })
                             .finally(function () {
+
+
                                 isGettingData = false;
                                 $scope.isLoading = false;
                             });
@@ -138,7 +156,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
         }
 
         function getData() {
-            
+
             var pageInfo = gridAPI.getPageInfo();
             input.LessThanID = minId;
             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
