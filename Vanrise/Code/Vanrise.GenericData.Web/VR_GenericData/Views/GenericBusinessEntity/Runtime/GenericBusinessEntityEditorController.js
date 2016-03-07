@@ -78,7 +78,7 @@
         }
 
         function getGenericBusinessEntity() {
-            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(genericBusinessEntityId).then(function (response) {
+            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
                 genericBusinessEntity = response;
             });
         }
@@ -138,7 +138,7 @@
         function updateBusinessEntity() {
             $scope.scopeModel.isLoading = true;
 
-            return VR_GenericData_GenericBusinessEntityAPIService.UpdateExtensibleBEItem(buildGenericBusinessEntityObjFromScope()).then(function (response) {
+            return VR_GenericData_GenericBusinessEntityAPIService.UpdateGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Generic Business Entity', response)) {
                     if ($scope.onGenericBusinessEntityUpdated != undefined)
                         $scope.onGenericBusinessEntityUpdated(response.UpdatedObject);

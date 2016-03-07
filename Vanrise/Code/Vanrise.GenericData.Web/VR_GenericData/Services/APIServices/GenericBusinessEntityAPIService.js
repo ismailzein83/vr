@@ -11,7 +11,7 @@
             GetFilteredGenericBusinessEntities: GetFilteredGenericBusinessEntities,
             GetGenericBusinessEntity: GetGenericBusinessEntity,
             AddGenericBusinessEntity: AddGenericBusinessEntity,
-            UpdateExtensibleBEItem: UpdateExtensibleBEItem
+            UpdateGenericBusinessEntity: UpdateGenericBusinessEntity
         };
 
         function GetFilteredGenericBusinessEntities(input) {
@@ -29,8 +29,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddGenericBusinessEntity'), genericBusinessEntity);
         }
 
-        function UpdateExtensibleBEItem(genericBusinessEntity) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateExtensibleBEItem'), genericBusinessEntity);
+        function UpdateGenericBusinessEntity(genericBusinessEntity) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateGenericBusinessEntity'), genericBusinessEntity);
         }
     }
 

@@ -13,18 +13,20 @@ namespace Vanrise.GenericData.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "GenericBusinessEntity")]
     public class GenericBusinessEntityController:BaseAPIController
     {
+        [HttpPost]
+        [Route("GetFilteredGenericBusinessEntities")]
+        public object GetFilteredGenericBusinessEntities(Vanrise.Entities.DataRetrievalInput<GenericBusinessEntityQuery> input)
+        {
+            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+            return GetWebResponse(input, manager.GetFilteredGenericBusinessEntities(input));
+        }
+
         [HttpGet]
         [Route("GetGenericBusinessEntity")]
         public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, int businessEntityDefinitionId)
         {
             GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
             return manager.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
-        }
-        [Route("UpdateGenericBusinessEntity")]
-        public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
-        {
-            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-            return manager.UpdateGenericBusinessEntity(genericBusinessEntity);
         }
 
         [HttpPost]
@@ -34,13 +36,13 @@ namespace Vanrise.GenericData.Web.Controllers
             GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
             return manager.AddGenericBusinessEntity(genericBusinessEntity);
         }
+
         [HttpPost]
-        [Route("GetFilteredGenericBusinessEntities")]
-        public object GetFilteredGenericBusinessEntities(Vanrise.Entities.DataRetrievalInput<GenericBusinessEntityQuery> input)
+        [Route("UpdateGenericBusinessEntity")]
+        public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
             GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-            return GetWebResponse(input, manager.GetFilteredGenericBusinessEntities(input));
+            return manager.UpdateGenericBusinessEntity(genericBusinessEntity);
         }
-
     }
 }

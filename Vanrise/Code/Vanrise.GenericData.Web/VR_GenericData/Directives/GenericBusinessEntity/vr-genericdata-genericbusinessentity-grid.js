@@ -74,9 +74,7 @@
                     }
 
                     setGridColumns();
-                    setTimeout(function () {
-                        return gridAPI.retrieveData(gridQuery);
-                    });
+                    return gridAPI.retrieveData(gridQuery);
 
                     function setGridColumns() {
                         if (runtimeGrid != undefined && runtimeGrid.Columns != undefined) {
