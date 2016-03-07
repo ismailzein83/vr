@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'VRNotificationService'];
+    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRNotificationService'];
 
-    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBusinessEntityAPIService, VRNotificationService) {
+    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -37,21 +37,34 @@
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    console.log('in');
                     return VR_GenericData_GenericBusinessEntityAPIService.GetFilteredGenericBusinessEntities(dataRetrievalInput).then(function (response) {
-                        console.log(response);
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
+
+                setMenuActions();
+            }
+
+            function setMenuActions() {
+                ctrl.menuActions = [{
+                    name: 'Edit',
+                    clicked: editGenericBusinessEntity
+                }];
+            }
+
+            function editGenericBusinessEntity(genericBusinessEntity) {
+                var onGenericBusinessEntityUpdated = function (updatedGenericBusinessEntity) {
+                    gridAPI.itemUpdated(updatedGenericBusinessEntity);
+                };
+                VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(genericBusinessEntity.Entity.GenericBusinessEntityId, genericBusinessEntity.Entity.BusinessEntityDefinitionId, onGenericBusinessEntityUpdated);
             }
 
             function getDirectiveAPI() {
                 var api = {};
                  
                 api.load = function (payload) {
-                    console.log(payload);
                     var runtimeGrid;
                     var gridQuery;
 
@@ -67,11 +80,11 @@
 
                     function setGridColumns() {
                         if (runtimeGrid != undefined && runtimeGrid.Columns != undefined) {
+                            ctrl.columns.length = 0;
                             for (var i = 0; i < runtimeGrid.Columns.length; i++) {
                                 ctrl.columns.push(runtimeGrid.Columns[i]);
                             }
                         }
-                        console.log(ctrl.columns);
                     }
                 };
 

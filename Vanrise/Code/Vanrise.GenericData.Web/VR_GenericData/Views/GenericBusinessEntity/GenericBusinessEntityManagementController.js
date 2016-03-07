@@ -14,6 +14,8 @@
         var gridDirectiveAPI;
         var gridDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var runtimeManagement;
+
         loadParameters();
         defineScope();
         load();
@@ -37,6 +39,10 @@
                 gridDirectiveReadyDeferred.resolve();
             };
 
+            $scope.search = function () {
+                return gridDirectiveAPI.load(getGridDirectivePayload(true));
+            };
+
             $scope.add = function () {
                 var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity) {
                     gridDirectiveAPI.onGenericBusinessEntityAdded(addedGenericBusinessEntity);
@@ -46,65 +52,75 @@
         }
 
         function load() {
-            loadAllControls();
+            $scope.isLoading = true;
+            loadAllControls().catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
 
-            function loadAllControls() {
-                $scope.isLoading = true;
-                var promises = [];
-                var runtimeManagement;
+        function loadAllControls() {
+            var promises = [];
 
-                var getRuntimeManagementPromise = getRuntimeManagement();
-                promises.push(getRuntimeManagementPromise);
+            var getRuntimeManagementPromise = getRuntimeManagement();
+            promises.push(getRuntimeManagementPromise);
 
-                var loadDeferred = UtilsService.createPromiseDeferred();
-                promises.push(loadDeferred.promise);
+            var loadDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadDeferred.promise);
 
-                getRuntimeManagementPromise.then(function () {
-                    UtilsService.waitMultipleAsyncOperations([loadFilterDirective, loadGridDirective]).then(function () {
-                        loadDeferred.resolve();
-                    }).catch(function (error) {
-                        loadDeferred.reject(error);
-                    });
+            getRuntimeManagementPromise.then(function () {
+                UtilsService.waitMultipleAsyncOperations([loadFilterDirective, loadGridDirective]).then(function () {
+                    loadDeferred.resolve();
+                }).catch(function (error) {
+                    loadDeferred.reject(error);
+                });
+            });
+
+            return UtilsService.waitMultiplePromises(promises);
+
+            function getRuntimeManagement() {
+                return VR_GenericData_GenericUIRuntimeAPIService.GetGenericManagementRuntime(definitionId).then(function (response) {
+                    runtimeManagement = response;
+                });
+            }
+            function loadFilterDirective() {
+                var filterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                filterDirectiveReadyDeferred.promise.then(function () {
+                    var filterDirectivePayload = {
+                        runtimeFilter: runtimeManagement.Filter
+                    };
+                    VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
                 });
 
-                return UtilsService.waitMultiplePromises(promises).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.isLoading = false;
+                return filterDirectiveLoadDeferred.promise;
+            }
+            function loadGridDirective() {
+                var gridDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                gridDirectiveReadyDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(gridDirectiveAPI, getGridDirectivePayload(false), gridDirectiveLoadDeferred);
                 });
 
-                function getRuntimeManagement() {
-                    return VR_GenericData_GenericUIRuntimeAPIService.GetGenericManagementRuntime(definitionId).then(function (response) {
-                        runtimeManagement = response;
-                    });
-                }
-                function loadFilterDirective() {
-                    var filterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                return gridDirectiveLoadDeferred.promise;
+            }
+        }
 
-                    filterDirectiveReadyDeferred.promise.then(function () {
-                        var filterDirectivePayload = {
-                            runtimeFilter: runtimeManagement.Filter
-                        };
-                        VRUIUtilsService.callDirectiveLoad(filterDirectiveAPI, filterDirectivePayload, filterDirectiveLoadDeferred);
-                    });
+        function getGridDirectivePayload(withFilters) {
+            return {
+                runtimeGrid: runtimeManagement.Grid,
+                gridQuery: getGridQuery(withFilters)
+            };
 
-                    return filterDirectiveLoadDeferred.promise;
+            function getGridQuery(withFilters) {
+                var gridQuery = {
+                    BusinessEntityDefinitionId: definitionId
+                };
+                if (withFilters) {
+                    gridQuery.FilterValuesByFieldPath = filterDirectiveAPI.getData();
                 }
-                function loadGridDirective() {
-                    var gridDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                    
-                    gridDirectiveReadyDeferred.promise.then(function () {
-                        var gridDirectivePayload = {
-                            runtimeGrid: runtimeManagement.Grid,
-                            gridQuery: {
-                                BusinessEntityDefinitionId: definitionId
-                            }
-                        };
-                        VRUIUtilsService.callDirectiveLoad(gridDirectiveAPI, gridDirectivePayload, gridDirectiveLoadDeferred);
-                    });
-
-                    return gridDirectiveLoadDeferred.promise;
-                }
+                return gridQuery;
             }
         }
     }

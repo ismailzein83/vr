@@ -16,19 +16,23 @@ namespace Vanrise.GenericData.Business
     {
         
         #region Public Methods
-        public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId,int businessEntityDefinitionId)
-        {
-            var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
-            return cachedGenericBusinessEntities.GetRecord(genericBusinessEntityId);
-
-        }
+        
         public Vanrise.Entities.IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(Vanrise.Entities.DataRetrievalInput<GenericBusinessEntityQuery> input)
         {
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(input.Query.BusinessEntityDefinitionId);
+            IEnumerable<GenericFilterRuntimeField> runtimeFilters = GetGenericFilterRuntimeFields(input.Query.BusinessEntityDefinitionId);
 
-            Func<GenericBusinessEntity, bool> filterExpression = (genericBusinessEntity) => (input.Query.BusinessEntityDefinitionId == genericBusinessEntity.BusinessEntityDefinitionId);
+            Func<GenericBusinessEntity, bool> filterExpression = (itm) => (input.Query.BusinessEntityDefinitionId == itm.BusinessEntityDefinitionId && (input.Query.FilterValuesByFieldPath == null || MatchGenericBusinessEntity(runtimeFilters, input.Query.FilterValuesByFieldPath, itm)));
+            
             return DataRetrievalManager.Instance.ProcessResult(input, cachedGenericBusinessEntities.ToBigResult(input, filterExpression, GenericBusinessEntityDetailMapper));
         }
+
+        public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, int businessEntityDefinitionId)
+        {
+            var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
+            return cachedGenericBusinessEntities.GetRecord(genericBusinessEntityId);
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
             UpdateOperationOutput<GenericBusinessEntityDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail>();
@@ -47,6 +51,7 @@ namespace Vanrise.GenericData.Business
             }
             return updateOperationOutput;
         }
+        
         public Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
             InsertOperationOutput<GenericBusinessEntityDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail>();
@@ -71,6 +76,7 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
+        
         public IEnumerable<GenericBusinessEntity> GetGenericBusinessEntities(int businessEntityDefinitionId)
         {
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
@@ -93,9 +99,9 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-     
+        
         #region Private Methods
-
+        
         private Dictionary<long, GenericBusinessEntity> GetCachedGenericBusinessEntities(int businessDefinitionId)
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetGenericBusinessEntities_{0}", businessDefinitionId), businessDefinitionId,
@@ -106,9 +112,40 @@ namespace Vanrise.GenericData.Business
                    return genericBusinessEntities.ToDictionary(kvp => kvp.GenericBusinessEntityId, kvp => kvp);
                });
         }
+        
+        IEnumerable<GenericFilterRuntimeField> GetGenericFilterRuntimeFields(int businessEntityDefinitionId)
+        {
+            GenericManagementRuntime managementRuntime = new GenericUIRuntimeManager().GetManagementRuntime(businessEntityDefinitionId);
+            if (managementRuntime == null)
+                throw new NullReferenceException("managementRuntime");
+            if (managementRuntime.Filter == null)
+                throw new NullReferenceException("managementRuntime.Filter");
+            if (managementRuntime.Filter.Fields == null || managementRuntime.Filter.Fields.Count == 0)
+                throw new NullReferenceException("managementRuntime.Filter.Fields");
+            return managementRuntime.Filter.Fields;
+        }
+
+        bool MatchGenericBusinessEntity(IEnumerable<GenericFilterRuntimeField> runtimeFilters, Dictionary<string, object> filterValuesByFieldPath, GenericBusinessEntity genericBusinessEntity)
+        {
+            foreach (var runtimeFilter in runtimeFilters)
+            {
+                object filterValue;
+                filterValuesByFieldPath.TryGetValue(runtimeFilter.FieldPath, out filterValue);
+
+                if (filterValue == null)
+                    continue;
+
+                if (!runtimeFilter.FieldType.IsMatched(GetFieldPathValue(genericBusinessEntity, runtimeFilter.FieldPath).Value, filterValue))
+                    return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Private Classes
+        
         public class CacheManager : Vanrise.Caching.BaseCacheManager<int>
         {
             IGenericBusinessEntityDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
@@ -124,6 +161,7 @@ namespace Vanrise.GenericData.Business
                 return isCacheExpired;
             }
         }
+
         #endregion
 
         #region Mappers

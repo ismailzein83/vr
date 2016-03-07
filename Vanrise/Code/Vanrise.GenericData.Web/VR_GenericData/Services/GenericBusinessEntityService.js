@@ -7,7 +7,7 @@
     function GenericBusinessEntityService(VRModalService) {
         return ({
             addGenericBusinessEntity: addGenericBusinessEntity,
-            updateGenericBusinessEntity: updateGenericBusinessEntity
+            editGenericBusinessEntity: editGenericBusinessEntity
         });
 
         function addGenericBusinessEntity(businessEntityDefinitionId, onGenericBusinessEntityAdded) {
@@ -24,7 +24,7 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
 
-        function updateGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId, onGenericBusinessEntityUpdated) {
+        function editGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId, onGenericBusinessEntityUpdated) {
             var parameters = {
                 genericBusinessEntityId: genericBusinessEntityId,
                 businessEntityDefinitionId: businessEntityDefinitionId

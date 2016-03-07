@@ -87,7 +87,7 @@
                         }
                         
                         filter = {};
-                        filter.fieldName = fieldTypeConfig.Name;
+                        filter.fieldPath = filterField.FieldPath;
 
                         filter.directiveEditor = fieldTypeConfig.FilterEditor;
                         filter.directiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -109,7 +109,7 @@
                     var isDataEmpty = true;
 
                     for (var i = 0; i < ctrl.filters.length; i++) {
-                        var filterData = ctrl.filters.directiveAPI.getData();
+                        var filterData = ctrl.filters[i].directiveAPI.getData();
                         if (filterData != undefined) {
                             data[ctrl.filters[i].fieldPath] = filterData;
                             isDataEmpty = false;
