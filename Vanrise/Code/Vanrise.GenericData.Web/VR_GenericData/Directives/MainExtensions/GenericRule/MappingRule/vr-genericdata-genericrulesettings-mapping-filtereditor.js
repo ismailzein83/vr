@@ -43,6 +43,7 @@
             function getDirectiveAPI() {
                 var api = {};
                 api.load = function (payload) {
+                    
                     var fieldTitle;
                     var fieldType;
 
@@ -91,7 +92,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-directivewrapper directive="isolatedCtrl.directiveEditor" on-ready="isolatedCtrl.onDirectiveReady" normal-col-num="ctrl.normalColNum" />';
+            return '<vr-directivewrapper directive="isolatedCtrl.directiveEditor" on-ready="isolatedCtrl.onDirectiveReady" normal-col-num="{{isolatedCtrl.normalColNum}}"" />';
         }
     }
 

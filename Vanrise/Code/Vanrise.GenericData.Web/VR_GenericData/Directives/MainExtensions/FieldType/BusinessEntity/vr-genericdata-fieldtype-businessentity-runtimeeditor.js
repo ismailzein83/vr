@@ -59,11 +59,10 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
             var isRequired = (attrs.selectionmode == 'single' && attrs.isrequired != undefined) ? 'isrequired="ctrl.isrequired"' : '';
 
-            return '<vr-columns colnum="{{scopeModel.calculatedColNum}}">' +
-            '<vr-directivewrapper directive="selector.directive" on-ready="selector.onDirectiveReady" '
+            return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" '
                 + multipleselection + ' ' + isRequired + '></vr-directivewrapper>'
-                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode">{{dynamic.directive}}<vr-directivewrapper directive="dynamic.directive" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
-                '</vr-section></vr-columns>'
+                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode">{{dynamic.directive}}<vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
+                '</vr-section>'
         }
 
         function selectorCtor(ctrl, $scope, $attrs) {

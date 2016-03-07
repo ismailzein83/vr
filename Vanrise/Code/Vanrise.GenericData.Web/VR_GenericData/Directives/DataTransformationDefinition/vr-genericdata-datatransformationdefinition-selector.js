@@ -91,7 +91,7 @@ app.directive('vrGenericdataDatatransformationdefinitionSelector', ['VR_GenericD
                     var selectedIds;
 
                     if (payload) {
-                        filter = payload.filter;
+                        //filter = payload.filter;
                         selectedIds = payload.selectedIds;
 
 

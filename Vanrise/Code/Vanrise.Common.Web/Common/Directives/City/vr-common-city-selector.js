@@ -12,7 +12,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                 isdisabled: "=",
                 selectedvalues: "=",
                 showaddbutton: '@',
-                normalcolnum: '@'
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -54,8 +54,8 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="ctrl.addNewCity"';
 
-            return '<vr-columns colnum="{{ctrl.normalcolnum}}"><vr-common-country-selector  onselectionchanged="ctrl.onCountrySelectionChanged"  ng-show="ctrl.showCountrySelector" on-ready="ctrl.onCountrySelectorReady"> </vr-common-country-selector> </vr-columns>'
-                + '<vr-columns colnum="{{ctrl.normalcolnum}}" vr-loader="ctrl.isLoadingCities"><vr-select ' + multipleselection + '  datatextfield="Name"   datavaluefield="CityId" isrequired="ctrl.isrequired" '
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-common-country-selector  onselectionchanged="ctrl.onCountrySelectionChanged"  ng-show="ctrl.showCountrySelector" on-ready="ctrl.onCountrySelectorReady"> </vr-common-country-selector> </vr-columns>'
+                + '<vr-columns colnum="{{ctrl.normalColNum}}" vr-loader="ctrl.isLoadingCities"><vr-select ' + multipleselection + '  datatextfield="Name"   datavaluefield="CityId" isrequired="ctrl.isrequired" '
             + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="ctrl.onSelectorReady" onselectionchanged="ctrl.onselectionchanged" entityName="City" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</vr-columns>';
         }

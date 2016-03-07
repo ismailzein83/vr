@@ -7,14 +7,15 @@
 
         var gridAPI;
 
+        var settingsFilterDirectiveAPI;
+        var settingsFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        
         loadParameters();
         defineScope();
         load();
 
         var ruleDefinitionId
-
-        var settingsFilterDirectiveAPI;
-        var settingsFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -25,7 +26,11 @@
         }
 
         function defineScope() {
-            $scope.filters = [];
+            $scope.scopeModel = {};
+            
+            $scope.scopeModel.filters = [];
+
+             
 
             $scope.onSettingsFilterDirectiveReady = function (api) {
                 settingsFilterDirectiveAPI = api;
@@ -59,10 +64,10 @@
                 gridQuery.CriteriaFieldValues = {};
                 var criteriaFilterValuesExist = false;
 
-                for (var i = 0; i < $scope.filters.length; i++) {
-                    var criteriaFilterData = $scope.filters[i].directiveAPI.getData();
+                for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
+                    var criteriaFilterData = $scope.scopeModel.filters[i].directiveAPI.getData();
                     if (criteriaFilterData != undefined) {
-                        gridQuery.CriteriaFieldValues[$scope.filters[i].criteriaFieldName] = criteriaFilterData;
+                        gridQuery.CriteriaFieldValues[$scope.scopeModel.filters[i].criteriaFieldName] = criteriaFilterData;
                         criteriaFilterValuesExist = true;
                     }
                 }
@@ -122,7 +127,7 @@
                             var filter = getFilter(criteriaField);
                             if (filter != undefined) {
                                 criteriaFilterPromises.push(filter.directiveLoadDeferred.promise);
-                                $scope.filters.push(filter);
+                                $scope.scopeModel.filters.push(filter);
                             }
                         }
 
@@ -181,9 +186,9 @@
                         settingsPromises.push(settingsFilterEditorLoadDeferred.promise);
 
                         getRuleTypesPromise.then(function () {
-                            $scope.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'GenericRuleTypeConfigId').FilterEditor;
+                            $scope.scopeModel.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'GenericRuleTypeConfigId').FilterEditor;
 
-                            if ($scope.settingsFilterEditor != null) {
+                            if ($scope.scopeModel.settingsFilterEditor != null) {
                                 settingsFilterDirectiveReadyDeferred.promise.then(function () {
                                     var settingsFilterDirectivePayload = {
                                         genericRuleDefinition: ruleDefinition,
@@ -209,6 +214,8 @@
                         }
                     }
                 }
+
+             
             }
         }
     }

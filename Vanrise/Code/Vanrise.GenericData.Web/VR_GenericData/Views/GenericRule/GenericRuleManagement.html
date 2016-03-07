@@ -3,12 +3,14 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <vr-columns width="normal" ng-repeat="filter in filters">
-                    <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="12"></vr-directivewrapper>
-                </vr-columns>
-                <vr-columns width="normal">
-                    <vr-directivewrapper directive="settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="12"></vr-directivewrapper>
-                </vr-columns>
+                <span ng-repeat="filter in scopeModel.filters">
+                    <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+                </span>
+                <span>
+                    <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+                </span>
+                
+                    
             </vr-row>
         </div>
         <vr-row removeline>
