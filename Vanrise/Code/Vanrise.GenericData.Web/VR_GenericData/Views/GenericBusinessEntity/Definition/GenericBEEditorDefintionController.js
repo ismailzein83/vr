@@ -269,7 +269,8 @@
         function buildGenericBEDefinitionFromScope() {
             var genericBEDefinitionSettings = {
                 $type:"Vanrise.GenericData.Entities.GenericBEDefinitionSettings, Vanrise.GenericData.Entities",
-                DataRecordTypeId : dataRecordTypeSelectorAPI.getSelectedIds(),
+                DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
+                FieldPath: $scope.scopeModal.selectedTitleFieldPath.Name,
                 EditorDesign: genericEditorDesignAPI.getData(),
                 ManagementDesign: {
                     GridDesign:gridFieldsDirectiveAPI.getData(),

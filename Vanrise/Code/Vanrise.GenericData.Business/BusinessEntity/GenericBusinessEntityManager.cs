@@ -82,6 +82,15 @@ namespace Vanrise.GenericData.Business
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
             return cachedGenericBusinessEntities.Values;
         }
+        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo( int businessEntityDefinitionId,GenericBusinessEntityFilter filter)
+        {
+            var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
+            if (filter != null)
+            {
+                
+            }
+            return cachedGenericBusinessEntities.MapRecords(GenericBusinessEntityInfoMapper);
+        }
 
         public dynamic GetFieldPathValue(GenericBusinessEntity entity, string fieldPath)
         {
@@ -195,7 +204,7 @@ namespace Vanrise.GenericData.Business
                 if (columnValue != null)
                 {
                     var uiRuntimeField = uiRuntimeManager.BuildRuntimeField<GenericEditorRuntimeField>(columnConfig, recordType.Fields, recordType.DataRecordTypeId);
-                    entityDetail.FieldValueDescriptions.Add(uiRuntimeField.FieldType.GetDescription(columnValue));
+                    entityDetail.FieldValueDescriptions.Add(uiRuntimeField.FieldType.GetDescription(columnValue.Value));
                 }
                 else
                     entityDetail.FieldValueDescriptions.Add(null);
@@ -203,8 +212,46 @@ namespace Vanrise.GenericData.Business
           
             return entityDetail;
         }
+        private GenericBusinessEntityInfo GenericBusinessEntityInfoMapper(GenericBusinessEntity genericBusinessEntity)
+        {
+            BusinessEntityDefinitionManager businessEntityDefinitionManager = new Business.BusinessEntityDefinitionManager();
+            var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(genericBusinessEntity.BusinessEntityDefinitionId);
 
+            if (businessEntityDefinition == null)
+                throw new NullReferenceException("businessEntityDefinition");
+
+            GenericBEDefinitionSettings definitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
+
+            if (definitionSettings == null)
+                throw new NullReferenceException("definitionSettings");
+
+             DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
+          
+            var recordType = recordTypeManager.GetDataRecordType(definitionSettings.DataRecordTypeId);
+            if (recordType == null)
+                throw new NullReferenceException("recordType");
+
+            GenericUIRuntimeManager uiRuntimeManager = new GenericUIRuntimeManager();
+            GenericBusinessEntityInfo entityInfo = new GenericBusinessEntityInfo();
+            entityInfo.GenericBusinessEntityId = genericBusinessEntity.BusinessEntityDefinitionId;
+
+            var columnValue = GetFieldPathValue(genericBusinessEntity, definitionSettings.TitleField.FieldPath);
+            if (columnValue != null)
+            {
+                var uiRuntimeField = uiRuntimeManager.BuildRuntimeField<GenericUIRuntimeField>(definitionSettings.TitleField, recordType.Fields, recordType.DataRecordTypeId);
+                entityInfo.Name  = uiRuntimeField.FieldType.GetDescription(columnValue.Value);
+            }
+
+            return entityInfo;
+        }
         #endregion
+
+
+
+    }
+    public class GenericBusinessEntityFilter
+    {
+        public int BusinessEntityDefinitionId { get; set; }
     }
 }
  

@@ -11,7 +11,8 @@
             GetFilteredGenericBusinessEntities: GetFilteredGenericBusinessEntities,
             GetGenericBusinessEntity: GetGenericBusinessEntity,
             AddGenericBusinessEntity: AddGenericBusinessEntity,
-            UpdateGenericBusinessEntity: UpdateGenericBusinessEntity
+            UpdateGenericBusinessEntity: UpdateGenericBusinessEntity,
+            GetGenericBusinessEntityInfo: GetGenericBusinessEntityInfo
         };
 
         function GetFilteredGenericBusinessEntities(input) {
@@ -24,14 +25,19 @@
                 businessEntityDefinitionId: businessEntityDefinitionId
             });
         }
-        
+        function GetGenericBusinessEntityInfo(businessEntityDefinitionId,serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBusinessEntityInfo'), {
+                businessEntityDefinitionId:businessEntityDefinitionId,
+                serializedFilter: serializedFilter
+            });
+        }
         function AddGenericBusinessEntity(genericBusinessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddGenericBusinessEntity'), genericBusinessEntity);
         }
 
         function UpdateGenericBusinessEntity(genericBusinessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateGenericBusinessEntity'), genericBusinessEntity);
-        }
+        } 
     }
 
     appControllers.service('VR_GenericData_GenericBusinessEntityAPIService', GenericBusinessEntityAPIService);

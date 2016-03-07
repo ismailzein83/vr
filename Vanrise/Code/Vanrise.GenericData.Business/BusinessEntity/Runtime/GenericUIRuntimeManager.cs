@@ -77,11 +77,16 @@ namespace Vanrise.GenericData.Business
             var runtimeField = Activator.CreateInstance<T>();
             runtimeField.FieldTitle = field.FieldTitle;
             runtimeField.FieldPath = field.FieldPath;
-            var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == runtimeField.FieldPath);
-            if (dataRecordTypeField == null)
-                throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, runtimeField.FieldPath));
-            runtimeField.FieldType = dataRecordTypeField.Type;
+            runtimeField.FieldType = GetFieldType(field.FieldPath, dataRecordTypeFields, dataRecordTypeId);
             return runtimeField;
+        }
+
+        public DataRecordFieldType GetFieldType(string fieldPath, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
+        {
+            var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == fieldPath);
+            if (dataRecordTypeField == null)
+                throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, fieldPath));
+            return dataRecordTypeField.Type;
         }
         #endregion
 

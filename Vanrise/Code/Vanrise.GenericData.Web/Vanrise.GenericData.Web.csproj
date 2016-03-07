@@ -205,6 +205,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-filterdesign.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-griddesign.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-selector.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentitydefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-extensiblebeitem-grid.js" />
     <Content Include="VR_GenericData\Directives\ExtensibleBEItem\Definition\Templates\DefinitionEditorTemplate.html" />

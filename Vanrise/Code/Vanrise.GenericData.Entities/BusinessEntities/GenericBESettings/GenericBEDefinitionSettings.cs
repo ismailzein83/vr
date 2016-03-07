@@ -13,8 +13,7 @@ namespace Vanrise.GenericData.Entities
         public override string DefinitionEditor { get { return "/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html"; } }
         public override string SelectorUIControl
         {
-            get;
-            set;
+            get { return "vr-genericdata-genericbusinessentity-selector"; }
         }
         public override string ManagerFQTN
         {
@@ -26,6 +25,7 @@ namespace Vanrise.GenericData.Entities
         }
 
         public int DataRecordTypeId { get; set; }
+        public string FieldPath { get; set; }
         public GenericEditor EditorDesign { get; set; }
         public GenericManagement ManagementDesign { get; set; }
         
