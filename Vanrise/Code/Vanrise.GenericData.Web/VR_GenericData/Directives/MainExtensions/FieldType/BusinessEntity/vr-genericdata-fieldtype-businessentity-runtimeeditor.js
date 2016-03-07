@@ -79,10 +79,10 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-
+                     console.log(payload)
                     var fieldType;
                     var fieldValue;
-
+                    var fieldTitle;
                     if (payload != undefined) {
                         $scope.scopeModel.fieldTitle = payload.fieldTitle;
                         fieldType = payload.fieldType;
@@ -142,12 +142,15 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                     innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
 
                                     $scope.selector.directiveReadyPromiseDeferred.promise.then(function () {
-                                        var payload;
+                                        var payload = {
+                                            businessEntityDefinitionId: fieldType.BusinessEntityDefinitionId,
+                                            fieldTitle: $scope.scopeModel.fieldTitle
+                                        };
                                         if (fieldValue != undefined)
                                         {
-                                            payload = {
-                                                selectedIds: ($attrs.selectionmode == "dynamic" && missingGroupSelectorUIControl) ? fieldValue.Values : fieldValue
-                                            }
+                                            payload.selectedIds = ($attrs.selectionmode == "dynamic" && missingGroupSelectorUIControl) ? fieldValue.Values : fieldValue;
+                                              
+
                                         }
 
                                         VRUIUtilsService.callDirectiveLoad($scope.selector.directiveAPI, payload, $scope.selector.directiveLoadPromiseDeferred);

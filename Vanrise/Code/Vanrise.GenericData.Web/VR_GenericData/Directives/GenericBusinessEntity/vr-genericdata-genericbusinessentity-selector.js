@@ -15,7 +15,8 @@
                 onselectionchanged: '=',
                 ismultipleselection: "@",
                 isrequired: "=",
-                customlabel: "@"
+                customlabel: "@",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -58,17 +59,19 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     var filter;
                     var selectedIds;
-                    var businessEntityId;
+                    var businessEntityDefinitionId;
                     if (payload != undefined) {
                         ctrl.fieldTitle = payload.fieldTitle;
-                        businessEntityId = payload.businessEntityId;
+                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         filter = payload.filter;
+                        
                         selectedIds = payload.selectedIds;
                     }
 
-                    return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityId, UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {
@@ -82,12 +85,8 @@
                         }
                     });
                 }
-                api.getIfSingleItem = function () {
-                    if (ctrl.datasource.length == 1)
-                        return ctrl.datasource[0];
-                }
-
                 api.getSelectedIds = function () {
+                    console.log(VRUIUtilsService.getIdSelectedIds('GenericBusinessEntityId', attrs, ctrl));
                     return VRUIUtilsService.getIdSelectedIds('GenericBusinessEntityId', attrs, ctrl);
                 }
 
@@ -113,7 +112,9 @@
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-            return '<vr-select on-ready="ctrl.onSelectorReady"'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                    + '<vr-label>' + label + '</vr-label>'
+                    + '<vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
                     + ' selectedvalues="ctrl.selectedvalues"'
                     + ' onselectionchanged="ctrl.onselectionchanged"'
@@ -125,9 +126,7 @@
                     + ' ' + hideselectedvaluessection
                     + ' isrequired="ctrl.isrequired"'
                     + ' ' + hideremoveicon
-                    + ' label="' + label + '"'
-                    + ' entityName="' + label + '"'
-                + '</vr-select>';
+                + '</vr-select></vr-columns>';
         }
     }
 

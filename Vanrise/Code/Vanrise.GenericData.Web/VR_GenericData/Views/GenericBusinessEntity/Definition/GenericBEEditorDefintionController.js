@@ -153,8 +153,11 @@
                 {
                     if(businessEntityDefinitionEntity != undefined )
                     {
+                        console.log(businessEntityDefinitionEntity);
                         $scope.scopeModal.businessEntityName = businessEntityDefinitionEntity.Name;
                         $scope.scopeModal.businessEntityTitle = businessEntityDefinitionEntity.Title;
+                        if(businessEntityDefinitionEntity.Settings != undefined)
+                            $scope.scopeModal.selectedTitleFieldPath = UtilsService.getItemByVal($scope.scopeModal.fields, businessEntityDefinitionEntity.Settings.FieldPath, "Name");
                     }
                 }
                 function loadEditorDesignSection() {
