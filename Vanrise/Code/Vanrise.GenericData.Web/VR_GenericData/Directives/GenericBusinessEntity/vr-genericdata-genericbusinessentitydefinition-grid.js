@@ -40,7 +40,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                     var drillDownDefinitions = [];
                     var drillDownDefinition = {};
 
-                    drillDownDefinition.title = "Extensible BE Item";
+                    drillDownDefinition.title = "Extensible Types";
                     drillDownDefinition.directive = "vr-genericdata-extensiblebeitem-grid";
 
                     drillDownDefinition.loadDirective = function (directiveAPI, extensibleBEItem) {
@@ -122,8 +122,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
             function editBusinessEntityDefinition(dataItem)
             {
                 var onBusinessEntityDefinitionUpdated = function (businessEntityDefinition) {
-                    gridDrillDownTabsObj.setDrillDownExtensionObject(businessEntityDefinition);
-                    dataItem.genericEditorGridAPI.onBusinessEntityDefinitionAdded(extendedSettingsObj);
+                    gridAPI.itemUpdated(businessEntityDefinition);
                 }
 
                 VR_GenericData_BusinessEntityDefinitionService.editBusinessEntityDefinition(dataItem.Entity.BusinessEntityDefinitionId, onBusinessEntityDefinitionUpdated, dataItem.Entity.Settings.DefinitionEditor);

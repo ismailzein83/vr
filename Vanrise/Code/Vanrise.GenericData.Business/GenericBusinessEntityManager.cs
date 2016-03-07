@@ -9,6 +9,7 @@ using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using System.Collections.Concurrent;
+using System.Reflection;
 namespace Vanrise.GenericData.Business
 {
     public class GenericBusinessEntityManager:BaseBEManager
@@ -75,6 +76,22 @@ namespace Vanrise.GenericData.Business
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
             return cachedGenericBusinessEntities.Values;
         }
+
+        public dynamic GetFieldPathValue(GenericBusinessEntity entity, string fieldPath)
+        {
+            if (entity.Details == null)
+                return null;
+           // Type entityType = entity.Details.GetType();
+            return entity.Details[fieldPath];
+            //var obj = entityType.GetProperties();
+            //var ds = obj.First(x => x.Name == fieldPath).GetValue(entity.Details);
+            //return ds;
+            //var entityField = entityType.GetField(fieldPath, BindingFlags.NonPublic | BindingFlags.Instance);
+            //if (entityField == null)
+            //    return null;
+            //return entityField.GetValue(entity.Details);
+        }
+
         #endregion
      
         #region Private Methods
@@ -110,12 +127,43 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Mappers
-
+        
         private GenericBusinessEntityDetail GenericBusinessEntityDetailMapper(GenericBusinessEntity genericBusinessEntity)
         {
-            GenericBusinessEntityDetail genericBusinessEntityDetail = new GenericBusinessEntityDetail();
-            genericBusinessEntityDetail.Entity = genericBusinessEntity;
-            return genericBusinessEntityDetail;
+            BusinessEntityDefinitionManager businessEntityDefinitionManager = new Business.BusinessEntityDefinitionManager();
+            var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(genericBusinessEntity.BusinessEntityDefinitionId);
+
+            if(businessEntityDefinition == null)
+                throw new NullReferenceException("businessEntityDefinition");
+
+            GenericBEDefinitionSettings definitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
+      
+            if (definitionSettings == null)
+                throw new NullReferenceException("definitionSettings");
+          
+            DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
+          
+            var recordType = recordTypeManager.GetDataRecordType(definitionSettings.DataRecordTypeId);
+            if (recordType == null)
+                throw new NullReferenceException("recordType");
+           
+            GenericUIRuntimeManager uiRuntimeManager = new GenericUIRuntimeManager();
+            GenericBusinessEntityDetail entityDetail = new GenericBusinessEntityDetail();
+            entityDetail.Entity = genericBusinessEntity;
+            entityDetail.FieldValueDescriptions = new List<string>();
+            foreach (var columnConfig in definitionSettings.ManagementDesign.GridDesign.Columns)
+            {
+                var columnValue = GetFieldPathValue(genericBusinessEntity, columnConfig.FieldPath);
+                if (columnValue != null)
+                {
+                    var uiRuntimeField = uiRuntimeManager.BuildRuntimeField(columnConfig, recordType.Fields, recordType.DataRecordTypeId);
+                    entityDetail.FieldValueDescriptions.Add(uiRuntimeField.FieldType.GetDescription(columnValue));
+                }
+                else
+                    entityDetail.FieldValueDescriptions.Add(null);
+            }
+          
+            return entityDetail;
         }
 
         #endregion

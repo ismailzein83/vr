@@ -49,9 +49,9 @@
 
             function getDirectiveAPI() {
                 var api = {};
-
+                 
                 api.load = function (payload) {
-
+                    console.log(payload);
                     var runtimeGrid;
                     var gridQuery;
 

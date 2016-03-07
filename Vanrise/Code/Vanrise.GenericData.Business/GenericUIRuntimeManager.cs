@@ -171,14 +171,8 @@ namespace Vanrise.GenericData.Business
                 runtimeRow.Fields = new List<GenericEditorRuntimeField>();
                 foreach (var field in row.Fields)
                 {
-                    var runtimeField = new GenericEditorRuntimeField();
+                    var runtimeField = BuildRuntimeField(field, dataRecordTypeFields, dataRecordTypeId);
                     runtimeRow.Fields.Add(runtimeField);
-                    runtimeField.FieldTitle = field.FieldTitle;
-                    runtimeField.FieldPath = field.FieldPath;
-                    var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == runtimeField.FieldPath);
-                    if (dataRecordTypeField == null)
-                        throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, runtimeField.FieldPath));
-                    runtimeField.FieldType = dataRecordTypeField.Type;
                 }
             }
         }
@@ -227,19 +221,26 @@ namespace Vanrise.GenericData.Business
                 runtimeRow.Fields = new List<GenericEditorRuntimeField>();
                 foreach (var field in row.Fields)
                 {
-                    var runtimeField = new GenericEditorRuntimeField();
+                    var runtimeField = BuildRuntimeField(field, dataRecordTypeFields, dataRecordTypeId);
                     runtimeRow.Fields.Add(runtimeField);
-                    runtimeField.FieldTitle = field.FieldTitle;
-                    runtimeField.FieldPath = field.FieldPath;
-                    var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == runtimeField.FieldPath);
-                    if (dataRecordTypeField == null)
-                        throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, runtimeField.FieldPath));
-                    runtimeField.FieldType = dataRecordTypeField.Type;
                 }
             }
         }
+
         #endregion
-     
+
+        public GenericEditorRuntimeField BuildRuntimeField(GenericUIField field, List<DataRecordField> dataRecordTypeFields, int dataRecordTypeId)
+        {
+            var runtimeField = new GenericEditorRuntimeField();
+            runtimeField.FieldTitle = field.FieldTitle;
+            runtimeField.FieldPath = field.FieldPath;
+            var dataRecordTypeField = dataRecordTypeFields.FindRecord(itm => itm.Name == runtimeField.FieldPath);
+            if (dataRecordTypeField == null)
+                throw new NullReferenceException(String.Format("DataRecordType '{0}' dataRecordTypeField '{1}'", dataRecordTypeId, runtimeField.FieldPath));
+            runtimeField.FieldType = dataRecordTypeField.Type;
+            return runtimeField;
+        }
+
         #endregion
 
 

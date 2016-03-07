@@ -35,7 +35,7 @@ app.directive('vrGenericdataExtensiblebeitemDefinitionSection', ['UtilsService',
             var selectedValues;
             var gridAPI;
             var context;
-            var fieldSelectedText = " Fields Selected."
+            var fieldSelectedText = " Fields."
             function initializeController() {
                 ctrl.rows = [];
                 ctrl.datasource = [];

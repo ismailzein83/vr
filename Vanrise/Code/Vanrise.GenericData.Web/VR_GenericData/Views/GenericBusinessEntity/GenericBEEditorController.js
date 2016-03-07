@@ -327,9 +327,9 @@
 
 
             return UtilsService.waitMultiplePromises(promises).then(function () {
-                if (VRNotificationService.notifyOnItemAdded('Generic Rule Definition', serverResponse, 'Name')) {
-                    if ($scope.onGenericRuleDefinitionAdded != undefined && typeof ($scope.onGenericRuleDefinitionAdded) == 'function') {
-                        $scope.onGenericRuleDefinitionAdded(serverResponse.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded('Business Entity Definition', serverResponse, 'Name')) {
+                    if ($scope.onGenericBEDefinitionAdded != undefined) {
+                        $scope.onGenericBEDefinitionAdded(serverResponse.InsertedObject);
                     }
                     $scope.modalContext.closeModal();
                 }
@@ -355,8 +355,8 @@
             var genericBEDefinition = buildGenericBEDefinitionFromScope();
             return UtilsService.waitMultipleAsyncOperations([updateGenericBEDefinition, updateView]).then(function () {
                 if (VRNotificationService.notifyOnItemUpdated('Business Entity Definition', genericBEDefinitionResponse, 'Name')) {
-                    if ($scope.onGenericBEDefinitionUpdated != undefined) {
-                        $scope.onGenericBEDefinitionUpdated(genericBEDefinitionResponse.UpdatedObject);
+                    if ($scope.onBusinessEntityDefinitionUpdated != undefined) {
+                        $scope.onBusinessEntityDefinitionUpdated(genericBEDefinitionResponse.UpdatedObject);
                     }
                     $scope.modalContext.closeModal();
                 }

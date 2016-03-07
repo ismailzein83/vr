@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericGridField
+    public class GenericGridField : GenericUIField
     {
-        public string FieldTitle { get; set; }
-        public string FieldPath { get; set; }
     }
 }

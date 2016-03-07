@@ -107,6 +107,7 @@
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityDetail.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityInfo.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityQuery.cs" />
+    <Compile Include="GenericEditor\GenericUIField.cs" />
     <Compile Include="GenericEditor\GenericEditor.cs" />
     <Compile Include="ExtensibleBEItem\ExtensibleBEItem.cs" />
     <Compile Include="ExtensibleBEItem\ExtensibleBEItemDetail.cs" />
