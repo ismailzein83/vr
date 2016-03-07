@@ -58,7 +58,6 @@
     <Compile Include="GenericManagement\GenericFilter\Definition\GenericFilter.cs" />
     <Compile Include="GenericManagement\GenericFilter\Definition\GenericFilterField.cs" />
     <Compile Include="GenericManagement\GenericGrid\Definition\GenericGrid.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\Grid\GenericGridColumn.cs" />
     <Compile Include="GenericManagement\GenericGrid\Definition\GenericGridField.cs" />
     <Compile Include="BusinessEntities\GenericBEViewSettings.cs" />
     <Compile Include="GenericManagement\GenericFilter\Runtime\GenericFilterRuntime.cs" />
@@ -155,11 +154,7 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BusinessEntities\GenericBESettings\Filter\" />
-    <Folder Include="BusinessEntities\Runtime\Filter\" />
-    <Folder Include="BusinessEntities\Runtime\Grid\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
