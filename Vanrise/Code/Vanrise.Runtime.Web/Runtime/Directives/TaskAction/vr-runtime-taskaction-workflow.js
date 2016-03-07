@@ -55,17 +55,22 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
 
         function defineAPI() {
             var api = {};
-           
+            var bpDefinitionId;
+            $scope.disableBPDefinitionColumn = false;
             api.getData = function () {
 
                 return {
                     $type: "Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskActionArgument, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments",
-                    RawExpressions: (bpDefenitionDirectiveAPI!=undefined)?bpDefenitionDirectiveAPI.getExpressionsData():null,
+                    RawExpressions: (bpDefenitionDirectiveAPI != undefined) ? bpDefenitionDirectiveAPI.getExpressionsData() : null,
                     BPDefinitionID: bpDefenitionSelectorAPI.getSelectedIds(),
-                    ProcessInputArguments:(bpDefenitionDirectiveAPI!=undefined)? bpDefenitionDirectiveAPI.getData() : null
+                    ProcessInputArguments: (bpDefenitionDirectiveAPI != undefined) ? bpDefenitionDirectiveAPI.getData() : null
                 };
             };
-
+            api.setAdditionalParamter = function (additionalParameter) {
+                if (additionalParameter != undefined) {
+                    bpDefinitionId = additionalParameter.bpDefinitionID;
+                }
+            }
             api.load = function (payload) {
                 var data;
                 if (payload != undefined && payload.data != undefined)
@@ -73,13 +78,21 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
 
                 var promises = [];
 
-                var loadBPDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();  
+                var loadBPDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 bpDefenitionSelectorReadyPromiseDeferred.promise.then(function () {
                     var payloadSelector;
-                    if (data != undefined)
+                    if (data != undefined) {
+                        $scope.disableBPDefinitionColumn = true;
                         payloadSelector = {
-                            selectedIds: (data != undefined) ? data.BPDefinitionID: null 
+                            selectedIds: (data != undefined) ? data.BPDefinitionID : null
                         };
+                    }
+                    else if (bpDefinitionId != undefined) {
+                        $scope.disableBPDefinitionColumn = true;
+                        payloadSelector = {
+                            selectedIds: bpDefinitionId
+                        };
+                    }
                     VRUIUtilsService.callDirectiveLoad(bpDefenitionSelectorAPI, payloadSelector, loadBPDefinitionSelectorPromiseDeferred);
                 });
                 promises.push(loadBPDefinitionSelectorPromiseDeferred.promise);
@@ -103,7 +116,7 @@ function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
                     promises.push(loadBPDefinitionPromiseDeferred.promise);
                 }
                 return UtilsService.waitMultiplePromises(promises);
-               
+
             }
 
             if (ctrl.onReady != null)

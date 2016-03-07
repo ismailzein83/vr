@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.Runtime.Entities;
 
@@ -17,34 +12,15 @@ namespace Vanrise.Runtime.Data.SQL
         {
 
         }
-
-        public Vanrise.Entities.BigResult<Vanrise.Runtime.Entities.SchedulerTask> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<string> input, int ownerId)
+        #region public methods
+        public IEnumerable<SchedulerTask> GetSchedulerTasks()
         {
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySP("runtime.sp_SchedulerTask_CreateTempByName", tempTableName, input.Query, ownerId);
-            };
-
-            return RetrieveData(input, createTempTableAction, TaskMapper);
-        }
-        public Entities.SchedulerTask GetTask(int taskId)
-        {
-            return GetItemSP("runtime.sp_SchedulerTask_Get", TaskMapper, taskId);
+            return GetItemsSP("runtime.sp_SchedulerTask_GetAll", TaskMapper);
         }
 
-        public List<SchedulerTask> GetTasksbyActionType(int actionTypeId)
+        public bool AreSchedulerTasksUpdated(ref object updateHandle)
         {
-            return GetItemsSP("runtime.sp_SchedulerTask_GetByActionTypeId", TaskMapper, actionTypeId);
-        }
-
-        public List<Entities.SchedulerTask> GetAllTasks(int ownerId)
-        {
-            return GetItemsSP("runtime.sp_SchedulerTask_GetAll", TaskMapper, ownerId);
-        }
-
-        public List<Entities.SchedulerTask> GetDueTasks()
-        {
-            return GetItemsSP("runtime.sp_SchedulerTask_GetDueTasks", TaskMapper);
+            return base.IsDataUpdated("[runtime].[ScheduleTask]", ref updateHandle);
         }
 
         public bool AddTask(Entities.SchedulerTask taskObject, out int insertedId)
@@ -52,17 +28,9 @@ namespace Vanrise.Runtime.Data.SQL
             object taskId;
 
             int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Insert", out taskId, taskObject.Name, 
-                taskObject.IsEnabled, taskObject.TaskType, SchedulerTaskStatus.NotStarted, taskObject.TriggerTypeId, taskObject.ActionTypeId,
+                taskObject.IsEnabled, taskObject.TaskType, taskObject.TriggerTypeId, taskObject.ActionTypeId,
                 Common.Serializer.Serialize(taskObject.TaskSettings), taskObject.OwnerId);
             insertedId = (int)taskId;
-            return (recordesEffected > 0);
-        }
-
-        public bool UpdateTask(Entities.SchedulerTask taskObject)
-        {
-            int recordesEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Update", taskObject.TaskId, taskObject.Name,
-                taskObject.IsEnabled, taskObject.Status, taskObject.LastRunTime, taskObject.NextRunTime, taskObject.TriggerTypeId, taskObject.ActionTypeId,
-                Common.Serializer.Serialize(taskObject.TaskSettings), Common.Serializer.Serialize(taskObject.ExecutionInfo));
             return (recordesEffected > 0);
         }
 
@@ -78,26 +46,9 @@ namespace Vanrise.Runtime.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("runtime.sp_SchedulerTask_Delete", taskId);
             return (recordsEffected > 0);
         }
+        #endregion
 
-        public bool TryLockTask(int taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
-        {
-            int rslt = ExecuteNonQuerySPCmd("runtime.sp_SchedulerTask_TryLockAndUpdateScheduleTask",
-                (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@TaskId", taskId));
-                    cmd.Parameters.Add(new SqlParameter("@CurrentRuntimeProcessID", currentRuntimeProcessId));
-                    var dtPrm = new SqlParameter("@RunningProcessIDs", SqlDbType.Structured);
-                    dtPrm.Value = BuildIDDataTable(runningRuntimeProcessesIds);
-                    cmd.Parameters.Add(dtPrm);
-                });
-            return rslt > 0;
-        }
-
-        public void UnlockTask(int taskId)
-        {
-            ExecuteNonQuerySP("runtime.sp_SchedulerTask_UnlockTask", taskId);
-        }
-
+        #region mapper
         SchedulerTask TaskMapper(IDataReader reader)
         {
             SchedulerTask task = new SchedulerTask
@@ -105,35 +56,15 @@ namespace Vanrise.Runtime.Data.SQL
                 TaskId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 IsEnabled = bool.Parse(reader["IsEnabled"].ToString()),
-                Status = (SchedulerTaskStatus) int.Parse(reader["Status"].ToString()),
-                LastRunTime =  GetReaderValue<DateTime?>(reader, "LastRunTime"),
-                NextRunTime = GetReaderValue<DateTime?>(reader, "NextRunTime"),
                 TriggerTypeId = (int)reader["TriggerTypeId"],
                 ActionTypeId = (int)reader["ActionTypeId"],
                 TriggerInfo = Common.Serializer.Deserialize<TriggerTypeInfo>(reader["TriggerTypeInfo"] as string),
                 ActionInfo = Common.Serializer.Deserialize<ActionTypeInfo>(reader["ActionTypeInfo"] as string),
                 TaskSettings = Common.Serializer.Deserialize<SchedulerTaskSettings>(reader["TaskSettings"] as string),
-                OwnerId = GetReaderValue<int>(reader, "OwnerId"),
-                ExecutionInfo = reader["ExecutionInfo"] == DBNull.Value ? null : Common.Serializer.Deserialize<Object>(reader["ExecutionInfo"] as string)
+                OwnerId = GetReaderValue<int>(reader, "OwnerId")
             };
             return task;
         }
-
-        DataTable BuildIDDataTable<T>(IEnumerable<T> ids)
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(T));
-            dt.BeginLoadData();
-            if (ids != null)
-            {
-                foreach (var id in ids)
-                {
-                    dt.Rows.Add(id);
-                }
-            }
-            dt.EndLoadData();
-            return dt;
-        }
-
+        #endregion
     }
 }

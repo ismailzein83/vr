@@ -9,13 +9,13 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.Runtime.Web.Controllers
 {
-    [JSONWithTypeAttribute]
+    [Vanrise.Web.Base.JSONWithType]
     [RoutePrefix(Constants.ROUTE_PREFIX + "SchedulerTask")]
     public class SchedulerTaskController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
         [Route("GetFilteredTasks")]
-        public object GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<string> input)
+        public object GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return GetWebResponse(input, manager.GetFilteredTasks(input));
@@ -36,7 +36,7 @@ namespace Vanrise.Runtime.Web.Controllers
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.GetSchedulesInfo();
         }
-        
+
         [HttpGet]
         [Route("GetSchedulerTaskTriggerTypes")]
         public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()
@@ -76,5 +76,14 @@ namespace Vanrise.Runtime.Web.Controllers
             SchedulerTaskManager manager = new SchedulerTaskManager();
             return manager.DeleteTask(taskId);
         }
+
+        [HttpPost]
+        [Route("GetUpdated")]
+        public SchedulerTaskStateUpdateOutput GetUpdated(SchedulerTaskUpdateInput input)
+        {
+            SchedulerTaskStateManager manager = new SchedulerTaskStateManager();
+            return manager.GetUpdated(input.Filter.TaskIds);
+        }
+
     }
 }

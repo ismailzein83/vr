@@ -11,7 +11,7 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 {
     public class WeeklyTimeSchedulerTaskTrigger : TimeSchedulerTaskTrigger
     {
-        public override DateTime CalculateNextTimeToRun(SchedulerTask task, BaseTaskTriggerArgument taskTriggerArgument)
+        public override DateTime CalculateNextTimeToRun(SchedulerTask task, SchedulerTaskState taskState, BaseTaskTriggerArgument taskTriggerArgument)
         {
             WeeklyTimeTaskTriggerArgument weeklyTimeTaskTriggerArgument = (WeeklyTimeTaskTriggerArgument)taskTriggerArgument;
 

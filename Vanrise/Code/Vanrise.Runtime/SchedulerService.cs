@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Vanrise.Common;
-using Vanrise.Runtime.Data;
+using Vanrise.Runtime.Business;
 using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime
@@ -27,18 +26,28 @@ namespace Vanrise.Runtime
 
         protected override void Execute()
         {
-            ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            List<Entities.SchedulerTask> tasks = dataManager.GetDueTasks();
+            List<Entities.SchedulerTaskState> schedulerTaskStates = GetDueTasks();
+            if (schedulerTaskStates == null)
+                return;
+
+            SchedulerTaskStateManager scheduleTaskStateManager = new SchedulerTaskStateManager();
+            SchedulerTaskManager scheduleTaskManager = new SchedulerTaskManager();
 
             RunningProcessManager runningProcessManager = new RunningProcessManager();
-            IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses(new TimeSpan(0, 0, 15)).Select(itm => itm.ProcessId);
+            IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
 
             int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
 
-            foreach (Entities.SchedulerTask item in tasks)
+            foreach (Entities.SchedulerTaskState schedulerTaskState in schedulerTaskStates)
             {
-                if (item.IsEnabled && item.TaskSettings.StartEffDate < DateTime.Now && (item.TaskSettings.EndEffDate == null || item.TaskSettings.EndEffDate > DateTime.Now) &&
-                    dataManager.TryLockTask(item.TaskId, currentRuntimeProcessId, runningRuntimeProcessesIds))
+                SchedulerTask schedulerTask = scheduleTaskManager.GetTask(schedulerTaskState.TaskId);
+                if (schedulerTask == null)
+                {
+                    return;
+                }
+
+                if (schedulerTask.IsEnabled && schedulerTask.TaskSettings.StartEffDate < DateTime.Now && (schedulerTask.TaskSettings.EndEffDate == null || schedulerTask.TaskSettings.EndEffDate > DateTime.Now) &&
+                    scheduleTaskStateManager.TryLockTask(schedulerTaskState.TaskId, currentRuntimeProcessId, runningRuntimeProcessesIds))
                 {
                     Task task = new Task(() =>
                         {
@@ -47,31 +56,31 @@ namespace Vanrise.Runtime
                             SchedulerTaskTrigger taskTrigger = null;
                             try
                             {
-                                if ( item.Status == SchedulerTaskStatus.WaitingEvent)
+                                if (schedulerTaskState.Status == SchedulerTaskStatus.WaitingEvent)
                                 {
-                                    SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(item.ActionInfo.FQTN));
+                                    SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(schedulerTask.ActionInfo.FQTN));
                                     var checkProgressContext = new SchedulerTaskCheckProgressContext
                                     {
-                                        Task = item,
-                                        ExecutionInfo = item.ExecutionInfo
+                                        Task = schedulerTask,
+                                        ExecutionInfo = schedulerTaskState.ExecutionInfo
                                     };
                                     SchedulerTaskCheckProgressOutput output =
-                                        taskAction.CheckProgress(checkProgressContext, item.OwnerId);
+                                        taskAction.CheckProgress(checkProgressContext, schedulerTask.OwnerId);
                                     if (output.Result == ExecuteOutputResult.Completed)
-                                        item.Status = SchedulerTaskStatus.Completed;
+                                        schedulerTaskState.Status = SchedulerTaskStatus.Completed;
                                 }
                                 else
                                 {
-                                    taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(item.TriggerInfo.FQTN));
-                                    if (item.NextRunTime != null)
+                                    taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(schedulerTask.TriggerInfo.FQTN));
+                                    if (schedulerTaskState.NextRunTime != null)
                                     {
-                                        SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(item.ActionInfo.FQTN));
+                                        SchedulerTaskAction taskAction = (SchedulerTaskAction)Activator.CreateInstance(Type.GetType(schedulerTask.ActionInfo.FQTN));
                                         isHeavyTask = taskAction.IsHeavyTask;
 
-                                        if(isHeavyTask)
+                                        if (isHeavyTask)
                                         {
                                             int retry = 0;
-                                            while(retry < s_TryExecuteHeavyTaskMaxRetryCount)
+                                            while (retry < s_TryExecuteHeavyTaskMaxRetryCount)
                                             {
                                                 lock (s_lockObj)
                                                 {
@@ -87,36 +96,36 @@ namespace Vanrise.Runtime
                                                 retry++;
                                                 Thread.Sleep(s_TryExecuteHeavyTaskWaitTurnInterval);
                                             }
-                                            
+
                                         }
 
                                         if (!isExecutionPostponed)
                                         {
-                                            Dictionary<string, object> evaluatedExpressions = taskTrigger.EvaluateExpressions(item);
+                                            Dictionary<string, object> evaluatedExpressions = taskTrigger.EvaluateExpressions(schedulerTask, schedulerTaskState);
 
-                                            item.Status = Entities.SchedulerTaskStatus.InProgress;
-                                            dataManager.UpdateTask(item);
+                                            schedulerTaskState.Status = Entities.SchedulerTaskStatus.InProgress;
+                                            scheduleTaskStateManager.UpdateTaskState(schedulerTaskState);
 
                                             SchedulerTaskExecuteOutput taskExecuteOutput = new SchedulerTaskExecuteOutput();
-                                            Console.WriteLine("Executing Task Id: {0}, Type: {1}", item.TaskId, taskAction.GetType().Name);
-                                            taskExecuteOutput = taskAction.Execute(item, item.TaskSettings.TaskActionArgument, evaluatedExpressions);
-                                            Console.WriteLine("Task Id: {0}, Type: {1} Executed", item.TaskId, taskAction.GetType().Name);
+                                            Console.WriteLine("Executing Task Id: {0}, Type: {1}", schedulerTaskState.TaskId, taskAction.GetType().Name);
+                                            taskExecuteOutput = taskAction.Execute(schedulerTask, schedulerTask.TaskSettings.TaskActionArgument, evaluatedExpressions);
+                                            Console.WriteLine("Task Id: {0}, Type: {1} Executed", schedulerTaskState.TaskId, taskAction.GetType().Name);
                                             if (taskExecuteOutput != null)
-                                                item.ExecutionInfo = taskExecuteOutput.ExecutionInfo;
+                                                schedulerTaskState.ExecutionInfo = taskExecuteOutput.ExecutionInfo;
                                             if (taskExecuteOutput == null || taskExecuteOutput.Result == ExecuteOutputResult.Completed)
-                                                item.Status = SchedulerTaskStatus.Completed;
+                                                schedulerTaskState.Status = SchedulerTaskStatus.Completed;
                                             else
-                                                item.Status = SchedulerTaskStatus.WaitingEvent;
-                                            item.LastRunTime = DateTime.Now;
+                                                schedulerTaskState.Status = SchedulerTaskStatus.WaitingEvent;
+                                            schedulerTaskState.LastRunTime = DateTime.Now;
                                         }
                                         else
-                                            Console.WriteLine("Task Id: {0}, Type: {1} Postponed", item.TaskId, taskAction.GetType().Name);
+                                            Console.WriteLine("Task Id: {0}, Type: {1} Postponed", schedulerTaskState.TaskId, taskAction.GetType().Name);
                                     }
                                 }
                             }
-                            catch(Exception ex)
+                            catch (Exception ex)
                             {
-                                item.Status = Entities.SchedulerTaskStatus.Failed;
+                                schedulerTaskState.Status = Entities.SchedulerTaskStatus.Failed;
                                 LoggerFactory.GetExceptionLogger().WriteException(ex);
                             }
                             finally
@@ -125,20 +134,20 @@ namespace Vanrise.Runtime
                                 {
                                     if (taskTrigger != null)
                                     {
-                                        item.NextRunTime = taskTrigger.CalculateNextTimeToRun(item, item.TaskSettings.TaskTriggerArgument);
+                                        schedulerTaskState.NextRunTime = taskTrigger.CalculateNextTimeToRun(schedulerTask, schedulerTaskState, schedulerTask.TaskSettings.TaskTriggerArgument);
                                     }
-                                    dataManager.UpdateTask(item);
+                                    scheduleTaskStateManager.UpdateTaskState(schedulerTaskState);
                                 }
-                                
-                                if(isHeavyTask && !isExecutionPostponed)
+
+                                if (isHeavyTask && !isExecutionPostponed)
                                 {
-                                    lock(s_lockObj)
+                                    lock (s_lockObj)
                                     {
                                         s_nbOfExecutingHeavyTasks--;
                                     }
-                                }                                
-                                
-                                dataManager.UnlockTask(item.TaskId);
+                                }
+
+                                scheduleTaskStateManager.UnlockTask(schedulerTaskState.TaskId);
                             }
                         }
                     );
@@ -146,6 +155,41 @@ namespace Vanrise.Runtime
                     task.Start();
                 }
             }
+        }
+
+        private List<SchedulerTaskState> GetDueTasks()
+        {
+            List<SchedulerTaskState> dueTasks = new List<SchedulerTaskState>();
+            SchedulerTaskStateManager scheduleTaskStateManager = new SchedulerTaskStateManager();
+            SchedulerTaskManager scheduleTaskManager = new SchedulerTaskManager();
+
+            List<SchedulerTask> allTasks = scheduleTaskManager.GetAllScheduleTasks();
+            if (allTasks == null || allTasks.Count == 0)
+                return null;
+
+            List<SchedulerTaskState> allTaskStates = scheduleTaskStateManager.GetAllScheduleTaskStates();
+
+            IEnumerable<SchedulerTask> newTasks = allTasks.FindAll(itm => allTaskStates == null || allTaskStates.FirstOrDefault(item => item.TaskId == itm.TaskId) == null);
+
+            DateTime now = DateTime.Now;
+
+            if (allTaskStates != null) {
+                IEnumerable<SchedulerTaskState> existingDueTasks = allTaskStates.FindAll(itm => itm.NextRunTime == default(DateTime?) || itm.NextRunTime <= now);
+                if (existingDueTasks != null)
+                    dueTasks.AddRange(existingDueTasks);
+            }
+
+            if (newTasks != null)
+            {
+                List<SchedulerTask> newTaskList = newTasks.ToList();
+                foreach (SchedulerTask task in newTaskList)
+                {
+                    dueTasks.Add(new SchedulerTaskState(task.TaskId, SchedulerTaskStatus.NotStarted, null, null, null));
+                    scheduleTaskStateManager.InsertSchedulerTaskState(task.TaskId);
+                }
+            }
+
+            return dueTasks.Count > 0 ? dueTasks : null;
         }
     }
 }

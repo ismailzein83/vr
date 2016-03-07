@@ -17,7 +17,8 @@
             DeleteTask: DeleteTask,
             GetSchedulesInfo: GetSchedulesInfo,
             HasAddSchedulerTaskPermission: HasAddSchedulerTaskPermission,
-            HasUpdateSchedulerTaskPermission: HasUpdateSchedulerTaskPermission
+            HasUpdateSchedulerTaskPermission: HasUpdateSchedulerTaskPermission,
+            GetUpdated: GetUpdated
         });
 
         function GetFilteredTasks(input) {
@@ -62,6 +63,10 @@
 
         function HasUpdateSchedulerTaskPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Runtime_ModuleConfig.moduleName, controllerName, ['UpdateTask']));
+        }
+
+        function GetUpdated(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetUpdated'), input);
         }
     }
 

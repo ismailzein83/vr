@@ -9,7 +9,7 @@ namespace Vanrise.Runtime.Entities
     public class SchedulerTaskQuery
     {
         public string NameFilter { get; set; }
-
         public List<ISchedulerTaskFilter> Filters { get; set; }
+        public List<int> TaskIds { get; set; }
     }
 }

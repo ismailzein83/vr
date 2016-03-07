@@ -6,14 +6,13 @@ function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskServi
 
     defineScope();
     load();
+    var filter = {};
 
     function defineScope() {
 
         $scope.name = undefined;
         $scope.schedulerTasks = [];
         $scope.gridMenuActions = [];
-
-        var filter = {};
 
         $scope.onGridReady = function (api) {
             gridAPI = api;
@@ -36,12 +35,16 @@ function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskServi
     }
 
     function setFilterObject() {
-        filter = ($scope.name != undefined && $scope.name != '') ? $scope.name : null;
+        filter =
+            {
+                NameFilter: ($scope.name != undefined && $scope.name != '') ? $scope.name : null
+            };
     }
 
     function addTask() {
         var onTaskAdded = function (addedItem) {
-            gridAPI.onTaskAdded(addedItem);
+            var addedItemObj = { Entity: addedItem };
+            gridAPI.onTaskAdded(addedItemObj);
         };
 
         VR_Runtime_SchedulerTaskService.addTask(onTaskAdded);

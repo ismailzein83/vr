@@ -60,6 +60,14 @@
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime.Business\Vanrise.Runtime.Business.csproj">
+      <Project>{7b928ba5-c19b-4d8c-912f-8d2d8a679718}</Project>
+      <Name>Vanrise.Runtime.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Data\Vanrise.Runtime.Data.csproj">
       <Project>{2b79fccf-afbe-43f2-9ddc-3a91f5ff2489}</Project>
       <Name>Vanrise.Runtime.Data</Name>

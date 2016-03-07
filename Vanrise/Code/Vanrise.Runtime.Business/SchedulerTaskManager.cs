@@ -1,42 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
 using Vanrise.Security.Business;
+using Vanrise.Common;
 
 namespace Vanrise.Runtime.Business
 {
     public class SchedulerTaskManager
     {
-        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Runtime.Entities.SchedulerTask> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<string> input)
+        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Runtime.Entities.SchedulerTaskDetail> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
         {
-            ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+            var allScheduledTasks = GetCachedSchedulerTasks();
             int ownerId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTasks(input, ownerId));
+            Func<SchedulerTask, bool> filterExpression = (itm) =>
+                (input.Query == null || ((string.IsNullOrEmpty(input.Query.NameFilter) || itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
+                && (input.Query.Filters == null || input.Query.Filters.Where(item => item.IsMatched(itm)).ToList().Count == input.Query.Filters.Count)))
+                && itm.OwnerId == ownerId;
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allScheduledTasks.ToBigResult(input, filterExpression, SchedulerTaskDetailMapper));
         }
 
         public List<SchedulerTask> GetSchedulesInfo()
         {
-            ISchedulerTaskDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+            var allScheduledTasks = GetCachedSchedulerTasks();
             int ownerId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            return datamanager.GetAllTasks(ownerId);
+            Func<SchedulerTask, bool> filterExpression = (itm) =>
+                 itm.OwnerId == ownerId;
+
+            IEnumerable<SchedulerTask> tasks = allScheduledTasks.FindAllRecords(filterExpression);
+            if (tasks == null)
+                return null;
+            return tasks.ToList();
+        }
+
+        public List<SchedulerTask> GetAllScheduleTasks()
+        {
+            var allScheduledTasks = GetCachedSchedulerTasks();
+            Func<SchedulerTask, bool> filterExpression = (itm) => (true);
+
+            IEnumerable<SchedulerTask> tasks = allScheduledTasks.FindAllRecords(filterExpression);
+            if (tasks == null)
+                return null;
+            return tasks.ToList();
         }
 
         public Vanrise.Runtime.Entities.SchedulerTask GetTask(int taskId)
         {
-            ISchedulerTaskDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            return datamanager.GetTask(taskId);
-
+            var allScheduledTasks = GetCachedSchedulerTasks();
+            SchedulerTask task;
+            allScheduledTasks.TryGetValue(taskId, out task);
+            return task;
         }
         public List<SchedulerTask> GetTasksbyActionType(int actionType)
         {
-            ISchedulerTaskDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
-            return datamanager.GetTasksbyActionType(actionType);
+            var allScheduledTasks = GetCachedSchedulerTasks();
+            Func<SchedulerTask, bool> filterExpression = (itm) =>
+                 itm.ActionTypeId == actionType;
+
+            IEnumerable<SchedulerTask> tasks = allScheduledTasks.FindAllRecords(filterExpression);
+            if (tasks == null)
+                return null;
+            return tasks.ToList();
         }
 
         public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()
@@ -59,7 +87,7 @@ namespace Vanrise.Runtime.Business
                 }
                 else
                     lsSchedulerTaskActionTypesOutput.Add(actionType);
-                
+
             }
             return lsSchedulerTaskActionTypesOutput;
         }
@@ -77,6 +105,7 @@ namespace Vanrise.Runtime.Business
 
             if (insertActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 taskObject.TaskId = taskId;
                 insertOperationOutput.InsertedObject = taskObject;
@@ -89,7 +118,7 @@ namespace Vanrise.Runtime.Business
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
 
-            bool updateActionSucc = dataManager.UpdateTaskInfo(taskObject.TaskId, taskObject.Name, taskObject.IsEnabled, taskObject.TriggerTypeId, taskObject.ActionTypeId, 
+            bool updateActionSucc = dataManager.UpdateTaskInfo(taskObject.TaskId, taskObject.Name, taskObject.IsEnabled, taskObject.TriggerTypeId, taskObject.ActionTypeId,
                 taskObject.TaskSettings);
             UpdateOperationOutput<SchedulerTask> updateOperationOutput = new UpdateOperationOutput<SchedulerTask>();
 
@@ -98,6 +127,7 @@ namespace Vanrise.Runtime.Business
 
             if (updateActionSucc)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = taskObject;
             }
@@ -114,10 +144,42 @@ namespace Vanrise.Runtime.Business
 
             if (deleted)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
             }
 
             return deleteOperationOutput;
         }
+
+        #region private methods
+        private Dictionary<int, SchedulerTask> GetCachedSchedulerTasks()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSchedulerTasks",
+               () =>
+               {
+                   ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+                   IEnumerable<SchedulerTask> data = dataManager.GetSchedulerTasks();
+                   return data.ToDictionary(cn => cn.TaskId, cn => cn);
+               });
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return dataManager.AreSchedulerTasksUpdated(ref _updateHandle);
+            }
+        }
+
+        private SchedulerTaskDetail SchedulerTaskDetailMapper(SchedulerTask task)
+        {
+            if (task == null)
+                return null;
+            return new SchedulerTaskDetail() { Entity = task };
+        }
+        #endregion
     }
 }

@@ -76,7 +76,9 @@
                     $scope.isLoadingAction = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, taskActionDirectiveAPI, undefined, setLoader, taskActionDirectiveReadyPromiseDeferred);
-
+                if (api.setAdditionalParamter != undefined && typeof (api.setAdditionalParamter) == "function") {
+                    api.setAdditionalParamter(additionalParameter);
+                }
             }
             $scope.scopeModel.validateDates = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.startEffDate, $scope.scopeModel.endEffDate);

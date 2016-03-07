@@ -10,11 +10,11 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 {
     public class IntervalTimeSchedulerTaskTrigger : TimeSchedulerTaskTrigger
     {
-        public override DateTime CalculateNextTimeToRun(SchedulerTask task, BaseTaskTriggerArgument taskTriggerArgument)
+        public override DateTime CalculateNextTimeToRun(SchedulerTask task, SchedulerTaskState taskState, BaseTaskTriggerArgument taskTriggerArgument)
         {
             DateTime nextRunTime = DateTime.MinValue;
 
-            if (task.NextRunTime == null)
+            if (taskState.NextRunTime == null)
             {
                 nextRunTime = task.TaskSettings.StartEffDate;
             }

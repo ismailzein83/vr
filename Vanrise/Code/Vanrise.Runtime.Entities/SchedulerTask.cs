@@ -11,21 +11,26 @@ namespace Vanrise.Runtime.Entities
 
     public enum SchedulerTaskStatus
     {
-        [Description("Not Started")] NotStarted = 0,
+        [Description("Not Started")]
+        NotStarted = 0,
 
-        [Description("Running")] InProgress = 1,
+        [Description("Running")]
+        InProgress = 1,
 
-        [Description("Completed")] Completed = 2,
+        [Description("Completed")]
+        Completed = 2,
 
-        [Description("Failed")] Failed = 3,
-        [Description("Running")] WaitingEvent = 4
+        [Description("Failed")]
+        Failed = 3,
+        [Description("Running")]
+        WaitingEvent = 4
     }
 
     public enum SchedulerTaskType
     {
         System = 0,
         User = 1
-    } 
+    }
 
     public class SchedulerTask
     {
@@ -37,12 +42,6 @@ namespace Vanrise.Runtime.Entities
 
         public SchedulerTaskType TaskType { get; set; }
 
-        public SchedulerTaskStatus Status { get; set; }
-
-        public DateTime? NextRunTime { get; set; }
-
-        public DateTime? LastRunTime { get; set; }
-
         public int TriggerTypeId { get; set; }
 
         public int ActionTypeId { get; set; }
@@ -50,8 +49,8 @@ namespace Vanrise.Runtime.Entities
         public TriggerTypeInfo TriggerInfo { get; set; }
 
         public ActionTypeInfo ActionInfo { get; set; }
+
         public int OwnerId { get; set; }
-        public Object ExecutionInfo { get; set; }
 
         public SchedulerTaskSettings TaskSettings { get; set; }
 
@@ -80,5 +79,30 @@ namespace Vanrise.Runtime.Entities
         public DateTime StartEffDate { get; set; }
 
         public DateTime? EndEffDate { get; set; }
+    }
+
+    public class SchedulerTaskState
+    {
+        public SchedulerTaskState()
+        {
+
+        }
+        public SchedulerTaskState(int taskId, SchedulerTaskStatus status, DateTime? nextRunTime, DateTime? lastRunTime, Object executionInfo)
+        {
+            this.TaskId = taskId;
+            this.Status = status;
+            this.NextRunTime = nextRunTime;
+            this.LastRunTime = lastRunTime;
+            this.ExecutionInfo = executionInfo;
+        }
+        public int TaskId { get; set; }
+
+        public SchedulerTaskStatus Status { get; set; }
+
+        public DateTime? NextRunTime { get; set; }
+
+        public DateTime? LastRunTime { get; set; }
+
+        public Object ExecutionInfo { get; set; }
     }
 }

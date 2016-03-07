@@ -1,0 +1,11 @@
+﻿using Vanrise.Common;
+
+namespace Vanrise.Runtime.Entities
+{
+    public class SchedulerTaskStateDetail
+    {
+        public SchedulerTaskState Entity { get; set; }
+       
+        public string StatusDescription { get { if (this.Entity != null) return Utilities.GetEnumDescription(this.Entity.Status); return null; } }
+    }
+}
