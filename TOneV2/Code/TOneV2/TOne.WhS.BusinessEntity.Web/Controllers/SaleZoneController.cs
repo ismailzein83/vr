@@ -32,12 +32,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetSellingNumberPlanIdBySaleZoneId")]
-        public int GetSellingNumberPlanIdBySaleZoneId(int saleZoneId)
+        public IEnumerable<SaleZoneInfo> GetSellingNumberPlanIdBySaleZoneIds(List<long> saleZoneIds)
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZone(saleZoneId).SellingNumberPlanId;
+            return manager.GetSellingNumberPlanIdBySaleZoneIds(saleZoneIds);
         }
 
         [HttpGet]

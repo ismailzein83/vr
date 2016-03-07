@@ -6,12 +6,12 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: '@'
+                ismultipleselection: '@',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
-
                 var obj = new supplierSelector(ctrl, $scope);
                 obj.initializeController();
 
@@ -46,8 +46,8 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
             //    hideremoveicon = "hideremoveicon";
 
 
-            return '<vr-whs-be-carrieraccount-selector getsuppliers on-ready="onCarrierAccountDirectiveReady" ' +
-                multipleselection + ' ></vr-whs-be-carrieraccount-selector>'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-whs-be-carrieraccount-selector getsuppliers on-ready="onCarrierAccountDirectiveReady" ' +
+                multipleselection + ' ></vr-whs-be-carrieraccount-selector></vr-columns>'
         }
 
         function supplierSelector(ctrl, $scope) {

@@ -10,7 +10,6 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 onselectionchanged: '=',
                 selectedvalues: '=',
                 isrequired: "=",
-                isdisabled: "=",
                 onselectitem: "=",
                 ondeselectitem: "="
             },
@@ -26,7 +25,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
                 var ctor = new sellingNumberPlanCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
-                
+
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -48,8 +47,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
             var multipleselection = "";
             var label = "Selling Number Plan";
-            if (attrs.ismultipleselection != undefined)
-            {
+            if (attrs.ismultipleselection != undefined) {
                 label = "Selling Number Plans";
                 multipleselection = "ismultipleselection";
             }
@@ -57,7 +55,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
             return '<div>'
                + '<vr-select ' + multipleselection + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" '
-               + ' label="' + label + '" datasource="ctrl.datasource" vr-disabled="ctrl.isdisabled" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+               + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</div>'
         }
 
@@ -96,7 +94,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            
+
             this.initializeController = initializeController;
         }
 

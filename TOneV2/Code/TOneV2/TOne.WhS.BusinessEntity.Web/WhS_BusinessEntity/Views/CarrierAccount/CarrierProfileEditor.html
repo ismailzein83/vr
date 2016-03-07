@@ -15,12 +15,12 @@
 
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-common-country-selector selectedvalues="country" onselectionchanged="onCountrySelctionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
+                            <vr-common-country-selector selectedvalues="country" onselectionchanged="onCountrySelectionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <!--<vr-common-city-selector vr-disabled="country== undefined || country ==  null" selectedvalues="scopeModal.city" on-ready="onCityDirectiveReady" isrequired showaddbutton></vr-common-city-selector>-->
-                            <vr-common-cityy-selector on-ready="onCityyDirectiveReady" ></vr-common-cityy-selector>
-                         </vr-columns>
+                        <span vr-loader="isLoadingCities">
+                            <vr-common-city-selector showaddbutton normal-col-num="6" on-ready="onCityyDirectiveReady"></vr-common-city-selector>
+                        </span>
+                        
                     </vr-row>
 
                     <vr-row>

@@ -10,7 +10,8 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
             isdisabled: "=",
             onselectionchanged: '=',
             isrequired: "@",
-            selectedvalues:'='
+            selectedvalues: '=',
+            normalColNum:'@'
 
         },
         controller: function ($scope, $element, $attrs) {
@@ -51,8 +52,8 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
             required = "isrequired";
         var disabled = "";
         return '<div  vr-loader="isLoadingDirective">'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
-        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+            + '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
+        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select></vr-columns>'
            + '</div>'
     }
 

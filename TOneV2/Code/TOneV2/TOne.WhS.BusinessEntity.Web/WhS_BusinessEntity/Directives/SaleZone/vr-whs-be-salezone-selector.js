@@ -10,7 +10,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 onselectionchanged: '=',
                 isrequired: "=",
                 isdisabled: "=",
-                selectedvalues: '='
+                selectedvalues: '=',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -23,7 +24,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
             bindToController: true,
             compile: function (element, attrs) {
                 return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
+                    pre: function ($scope, iElem, iAttrs, saleZoneSelectorCtrl) {
 
                     }
                 }
@@ -36,7 +37,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
 
         function getBeSaleZoneTemplate(attrs) {
-
             var label = "Sale Zone";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
@@ -44,14 +44,14 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 multipleselection = "ismultipleselection";
             }
 
-            return '<vr-columns width="normal" ng-if="ctrl.showselling">'
-                   + '   <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberReady" onselectionchanged="ctrl.onSellingNumberPlanChange"></vr-whs-be-sellingnumberplan-selector>'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                   + ' <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberReady" ng-show="ctrl.isSellingNumberPlanVisible" onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
                    + ' </vr-columns>'
-                   + ' <vr-columns width="normal" ng-if="ctrl.showselling">'
+                   + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '  <vr-select on-ready="ctrl.onSelectorReady"'
-                   + '  datasource="ctrl.search"'
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
+                   + '  datasource="ctrl.search"'
                    + '  datavaluefield="SaleZoneId"'
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
@@ -61,73 +61,51 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + '  entityName="' + label + '">'
                    + '</vr-select>'
                    + '</vr-columns>'
-                   + ' <div ng-if="!ctrl.showselling">'
-                   + '  <vr-select on-ready="ctrl.onSelectorReady"'
-                   + '  datasource="ctrl.search"'
-                   + '  selectedvalues="ctrl.selectedvalues"'
-                   + '  onselectionchanged="ctrl.onselectionchanged"'
-                   + '  datavaluefield="SaleZoneId"'
-                   + '  datatextfield="Name"'
-                   + '  ' + multipleselection
-                   + '  isrequired="ctrl.isrequired"'
-                   + '  vr-disabled="ctrl.isdisabled"'
-                   + '  label="' + label + '"'
-                   + '  entityName="' + label + '">'
-                   + '</vr-select>'
-                   + '</div>'
-
         }
 
-        function saleZoneCtor(ctrl, $scope, attrs) {
-
+        function saleZoneCtor(saleZoneSelectorCtrl, $scope, attrs) {
             var filter;
             var selectorApi;
+            var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var sellingDirectiveApi;
             var sellingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var sellingNumberPlanId;
-            var newsellingNumberPlanId;
             var oldsellingNumberPlanId;
-            var isDirectiveLoaded = false;
 
-            ctrl.onSellingNumberReady = function (api) {
-                sellingDirectiveApi = api;
-                sellingReadyPromiseDeferred.resolve();
-            }
-            ctrl.onSellingNumberPlanChange = function (item, datasource) {
-                //UtilsService.safeApply($scope);
 
-                oldsellingNumberPlanId = sellingNumberPlanId;
-                newsellingNumberPlanId = sellingDirectiveApi.getSelectedIds();
-
-                if (newsellingNumberPlanId == undefined && oldsellingNumberPlanId != undefined) {
-                    sellingNumberPlanId = undefined;
-                    selectorApi.clearDataSource();
-                }
-                else if (oldsellingNumberPlanId == undefined && newsellingNumberPlanId == undefined && oldsellingNumberPlanId == newsellingNumberPlanId) {
-                    sellingNumberPlanId = newsellingNumberPlanId;
-                }
-                else if (oldsellingNumberPlanId != undefined && newsellingNumberPlanId != undefined && oldsellingNumberPlanId != newsellingNumberPlanId) {
-                    sellingNumberPlanId = newsellingNumberPlanId;
-                    selectorApi.clearDataSource();
-
-                }
-                else {
-                    sellingNumberPlanId = newsellingNumberPlanId;
-                }
-            }
             function initializeController() {
 
-                ctrl.selectedvalues;
+                saleZoneSelectorCtrl.selectedvalues;
+
                 if (attrs.ismultipleselection != undefined)
-                    ctrl.selectedvalues = [];
+                    saleZoneSelectorCtrl.selectedvalues = [];
 
-                ctrl.onSelectorReady = function (api) {
-                    selectorApi = api;
 
+                saleZoneSelectorCtrl.onSellingNumberReady = function (api) {
+                    sellingDirectiveApi = api;
+                    sellingReadyPromiseDeferred.resolve();
                 }
 
-                ctrl.search = function (nameFilter) {
-                    console.log(sellingNumberPlanId)
+
+                saleZoneSelectorCtrl.onSelectorReady = function (api) {
+                    selectorApi = api;
+                    selectorReadyPromiseDeferred.resolve();
+                }
+
+
+                saleZoneSelectorCtrl.onSellingNumberPlanSelectionchanged = function () {
+                    selectorApi.clearDataSource();
+                    var oldsellingNumberPlanId = sellingNumberPlanId;
+
+                    sellingNumberPlanId = sellingDirectiveApi.getSelectedIds();
+                    if (sellingNumberPlanId == undefined)
+                        sellingNumberPlanId = oldsellingNumberPlanId;
+                }
+
+
+                saleZoneSelectorCtrl.search = function (nameFilter) {
                     if (sellingNumberPlanId == undefined)
                         return function () { };
 
@@ -137,7 +115,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                     return WhS_BE_SaleZoneAPIService.GetSaleZonesInfo(nameFilter, sellingNumberPlanId, serializedFilter);
                 }
-                defineAPI();
+
+
+                UtilsService.waitMultiplePromises([sellingReadyPromiseDeferred.promise, selectorReadyPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
 
             }
 
@@ -145,81 +127,125 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 var api = {};
 
                 api.load = function (payload) {
-                    if (selectorApi)
-                        selectorApi.clearDataSource();
-                    ctrl.showselling = true;
+
+                    selectorApi.clearDataSource();
                     var selectedIds;
+                    var payloadSellingNumberPlanId;
+
                     if (payload != undefined) {
-                        sellingNumberPlanId = payload.sellingNumberPlanId;
-                        ctrl.showselling = payload.sellingNumberPlanId != undefined ? false : true;
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
+                        payloadSellingNumberPlanId = payload.sellingNumberPlanId;
                     }
-                    var promises = [];
-                    if (selectedIds != undefined) {
-                        ctrl.datasource = [];
-                        var defaultId = (attrs.ismultipleselection != undefined) ? selectedIds[0] : selectedIds;
-                        WhS_BE_SaleZoneAPIService.GetSellingNumberPlanIdBySaleZoneId(defaultId).then(function (response) {
+
+                    if (payloadSellingNumberPlanId != undefined) {
+
+                        sellingNumberPlanId = payload.sellingNumberPlanId;
+
+                        saleZoneSelectorCtrl.isSellingNumberPlanVisible = false;
+                        if (selectedIds != undefined) {
                             var input = {
-                                SellingNumberPlanId: response,
                                 SaleZoneIds: selectedIds,
+                                SellingNumberPlanId: payload.sellingNumberPlanId,
                                 SaleZoneFilterSettings: { RoutingProductId: (filter != undefined && filter.SaleZoneFilterSettings != undefined) ? filter.SaleZoneFilterSettings.RoutingProductId : undefined }
                             };
+                            return GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input);
+                        }
+                    }
 
-                            if (ctrl.showselling) {
+                    else {
+                        saleZoneSelectorCtrl.isSellingNumberPlanVisible = true;
+
+                        if (selectedIds != undefined) {
+
+                            var selectedSaleZoneIds = [];
+
+                            if (attrs.ismultipleselection != undefined)
+                                selectedSaleZoneIds = selectedIds;
+                            else
+                                selectedSaleZoneIds.push(selectedIds);
+
+                            var loadSellingNumberPlanSectionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                            sellingReadyPromiseDeferred.promise.then(function () {
+
+                                var promises = [];
+
                                 var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
-                                sellingReadyPromiseDeferred.promise.then(function () {
-                                    var payloadDirective = {
-                                        selectedIds: response
-                                    };
-                                    VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, payloadDirective, loadSellingNumberPlanPromiseDeferred);
-                                });
-                                loadSellingNumberPlanPromiseDeferred.promise.then(function () {
-                                    WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
-                                        angular.forEach(response, function (item) {
-                                            ctrl.datasource.push(item);
-                                        });
-                                        VRUIUtilsService.setSelectedValues(selectedIds, 'SaleZoneId', attrs, ctrl);
-                                    });
-                                });
+
                                 promises.push(loadSellingNumberPlanPromiseDeferred.promise);
-                            }
-                            else {
-                                WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
-                                    angular.forEach(response, function (item) {
-                                        ctrl.datasource.push(item);
-                                    });
-                                    VRUIUtilsService.setSelectedValues(selectedIds, 'SaleZoneId', attrs, ctrl);
+
+                                var loadSaleZonePromise = WhS_BE_SaleZoneAPIService.GetSellingNumberPlanIdBySaleZoneIds(selectedSaleZoneIds).then(function (response) {
+
+                                    var selectedSellingNumberPlanIds = [];
+                                    for (var i = 0 ; i < response.length; i++) {
+                                        if (selectedSellingNumberPlanIds.indexOf(response[i].SellingNumberPlanId) < 0)
+                                            selectedSellingNumberPlanIds.push(response[i].SellingNumberPlanId);
+                                    }
+
+                                    var payloadDirective = {
+                                        selectedIds: selectedSellingNumberPlanIds
+                                    };
+
+                                    VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, payloadDirective, loadSellingNumberPlanPromiseDeferred);
+
+                                    var input = {
+                                        SaleZoneIds: selectedSaleZoneIds,
+                                        SaleZoneFilterSettings: { RoutingProductId: undefined }
+                                    };
+                                    GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input);
+
                                 });
 
-                            }
+                                promises.push(loadSaleZonePromise);
 
-                        });
+                                UtilsService.waitMultiplePromises(promises).then(function () {
+                                    loadSellingNumberPlanSectionPromiseDeferred.resolve();
+                                }).catch(function (error) {
+                                    loadSellingNumberPlanSectionPromiseDeferred.reject(error);
+                                });
 
+                            });
+
+                            return loadSellingNumberPlanSectionPromiseDeferred.promise;
+
+                        }
+
+                        else {
+                            var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+                            sellingReadyPromiseDeferred.promise.then(function () {
+                                var payloadDirective;
+                                VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, payloadDirective, loadSellingNumberPlanPromiseDeferred);
+                            });
+                            return loadSellingNumberPlanPromiseDeferred.promise;
+                        }
                     }
-                    if (!sellingNumberPlanId && selectedIds == undefined) {
-                        var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
-                        sellingReadyPromiseDeferred.promise.then(function () {
-                            var payloadDirective;
-                            VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, payloadDirective, loadSellingNumberPlanPromiseDeferred);
-
-                        });
-                        promises.push(loadSellingNumberPlanPromiseDeferred.promise);
-                    }
-                    return UtilsService.waitMultiplePromises(promises);
-
-
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('SaleZoneId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('SaleZoneId', attrs, saleZoneSelectorCtrl);
                 }
 
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
+                if (saleZoneSelectorCtrl.onReady != null)
+                    saleZoneSelectorCtrl.onReady(api);
+
+                return api;
             }
 
             this.initializeController = initializeController;
         }
+
+
+        function GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input) {
+            saleZoneSelectorCtrl.datasource = [];
+            return WhS_BE_SaleZoneAPIService.GetSaleZonesInfoByIds(input).then(function (response) {
+                angular.forEach(response, function (item) {
+                    saleZoneSelectorCtrl.datasource.push(item);
+                });
+                if (selectedIds != undefined)
+                    VRUIUtilsService.setSelectedValues(selectedIds, 'SaleZoneId', attrs, saleZoneSelectorCtrl);
+            });
+        }
+
         return directiveDefinitionObject;
     }]);

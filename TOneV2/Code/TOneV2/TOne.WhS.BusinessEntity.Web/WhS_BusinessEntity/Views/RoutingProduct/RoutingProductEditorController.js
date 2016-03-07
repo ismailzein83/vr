@@ -16,7 +16,7 @@
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneDirectiveAPI;
-        var saleZoneReadyPromiseDeferred;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -44,8 +44,8 @@
 
             $scope.scopeModal.onSaleZoneSelectorReady = function (api) {
                 saleZoneDirectiveAPI = api;
-                saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-                saleZoneReadyPromiseDeferred.resolve(); 
+                saleZoneReadyPromiseDeferred.resolve();
+
             };
 
             $scope.scopeModal.onCarrierAccountSelectorReady = function (api) {
@@ -57,14 +57,9 @@
                 var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
 
                 if (selectedSellingNumberPlanId && saleZoneDirectiveAPI) {
-                   // var setLoader = function (value) {
-                        //$scope.scopeModal.isLoadingSaleZonesSelector = value;
-                    //};
-
-                    var payload = {
-                        sellingNumberPlanId: selectedSellingNumberPlanId,
-                    };
-                    
+                    var payload = {};
+                    payload.selectedIds = routingProductEntity && routingProductEntity.Settings && routingProductEntity.Settings.Zones ? getSaleZoneSelectorPayload() : undefined;
+                    payload.sellingNumberPlanId = selectedSellingNumberPlanId;
                     saleZoneDirectiveAPI.load(payload);
                 }
             }
@@ -74,7 +69,7 @@
                     $scope.scopeModal.selectedSaleZones.length = 0;
                 }
 
-                $scope.scopeModal.showSaleZoneSelector = ($scope.scopeModal.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones );
+                $scope.scopeModal.showSaleZoneSelector = ($scope.scopeModal.selectedSaleZoneRelationType == WhS_BE_RoutingProductSaleZoneRelationTypeEnum.SpecificZones);
             }
 
             $scope.scopeModal.onSupplierRelationTypeSelectionChanged = function () {
@@ -131,7 +126,7 @@
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadSellingNumberPlanSelector, loadSaleZoneRelationTypes,
-                loadSaleZoneSelector, loadSupplierRelationTypes, loadSupplierSelector, loadStaticSection])
+                loadSupplierRelationTypes, loadSupplierSelector, loadStaticSection])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -167,33 +162,14 @@
                 $scope.scopeModal.selectedSaleZoneRelationType = UtilsService.getEnum(WhS_BE_RoutingProductSaleZoneRelationTypeEnum, 'value', WhS_BE_RoutingProductSaleZoneRelationTypeEnum.AllZones.value);
         }
 
-        function loadSaleZoneSelector() {
-            var saleZoneLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        function getSaleZoneSelectorPayload() {
+            var zoneIds = [];
 
-            if (routingProductEntity && routingProductEntity.Settings && routingProductEntity.Settings.Zones) {
-                saleZoneReadyPromiseDeferred.promise.then(function () {
-                    saleZoneReadyPromiseDeferred = undefined;
-                    VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, getSaleZoneSelectorPayload(), saleZoneLoadPromiseDeferred);
-                });
-            }
-            else {
-                saleZoneLoadPromiseDeferred.resolve();
+            for (var i = 0; i < routingProductEntity.Settings.Zones.length; i++) {
+                zoneIds.push(routingProductEntity.Settings.Zones[i].ZoneId);
             }
 
-            return saleZoneLoadPromiseDeferred.promise;
-
-            function getSaleZoneSelectorPayload() {
-                var zoneIds = [];
-
-                for (var i = 0; i < routingProductEntity.Settings.Zones.length; i++) {
-                    zoneIds.push(routingProductEntity.Settings.Zones[i].ZoneId);
-                }
-
-                return {
-                    //sellingNumberPlanId: routingProductEntity.SellingNumberPlanId,
-                    selectedIds: zoneIds
-                };
-            }
+            return zoneIds;
         }
 
         function loadSupplierRelationTypes() {
@@ -256,9 +232,8 @@
         function buildRoutingProductZoneObj() {
             var routingProductZones = undefined;
             var zoneIds = saleZoneDirectiveAPI.getSelectedIds();
-            
-            if (zoneIds != undefined && zoneIds.length > 0)
-            {
+
+            if (zoneIds != undefined && zoneIds.length > 0) {
                 routingProductZones = [];
 
                 for (var i = 0; i < zoneIds.length; i++) {
@@ -271,13 +246,11 @@
             return routingProductZones;
         }
 
-        function buildRoutingProductSupplierObj()
-        {
+        function buildRoutingProductSupplierObj() {
             var routingProductSuppliers = undefined;
             var supplierIds = carrierAccountDirectiveAPI.getSelectedIds();
 
-            if (supplierIds != undefined && supplierIds.length > 0)
-            {
+            if (supplierIds != undefined && supplierIds.length > 0) {
                 routingProductSuppliers = [];
 
                 for (var i = 0; i < supplierIds.length; i++) {

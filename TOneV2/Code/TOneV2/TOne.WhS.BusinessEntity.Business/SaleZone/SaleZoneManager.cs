@@ -124,6 +124,18 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, zoneFilter);
         }
 
+        public IEnumerable<SaleZoneInfo> GetSellingNumberPlanIdBySaleZoneIds(List<long> saleZoneIds)
+        {
+            IEnumerable<SaleZone> saleZones = this.GetCachedSaleZones().Values;
+            Func<SaleZone, bool> saleZoneFilter = (salezone) =>
+            {
+                if (!saleZoneIds.Contains(salezone.SaleZoneId))
+                    return false;
+                return true;
+            };
+            return saleZones.MapRecords(SaleZoneInfoMapper, saleZoneFilter);
+        }
+
         public string GetSaleZoneName(long saleZoneId)
         {
             SaleZone saleZone = GetSaleZone(saleZoneId);

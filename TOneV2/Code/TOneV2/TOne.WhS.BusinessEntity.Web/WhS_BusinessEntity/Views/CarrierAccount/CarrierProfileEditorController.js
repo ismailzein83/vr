@@ -10,15 +10,13 @@
         var carrierProfileEntity;
         var countryId;
         var cityId;
-        var receivedCityId;
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var cityDirectiveApi;
+        var cityDirectiveAPI;
         var cityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var city1DirectiveAPI;
-        var city1ReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var isCountrySelectedProgramatically;
 
         loadParameters();
         defineScope();
@@ -29,43 +27,40 @@
 
             if (parameters != undefined && parameters != null) {
                 carrierProfileId = parameters.CarrierProfileId;
-               
+
             }
             isEditMode = (carrierProfileId != undefined);
 
         }
 
         function defineScope() {
-            
+
             $scope.scopeModal = {
                 contacts: [],
                 faxes: [],
-                phoneNumbers : []
-               
+                phoneNumbers: []
+
             };
-           
+
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             }
 
             $scope.onCityyDirectiveReady = function (api) {
-                city1DirectiveAPI = api;
-                city1ReadyPromiseDeferred.resolve();
+                cityDirectiveAPI = api;
+                cityReadyPromiseDeferred.resolve();
             }
 
             $scope.scopeModal.disabledfax = true;
             $scope.scopeModal.onFaxValueChange = function (value) {
-                $scope.scopeModal.disabledfax = (value== undefined);
+                $scope.scopeModal.disabledfax = (value == undefined);
             }
             $scope.scopeModal.disabledphone = true;
             $scope.scopeModal.onPhoneValueChange = function (value) {
-                    $scope.scopeModal.disabledphone = (value == undefined);
-           }
-            $scope.onCityDirectiveReady = function (api) {
-                cityDirectiveApi = api;
-                cityReadyPromiseDeferred.resolve();
+                $scope.scopeModal.disabledphone = (value == undefined);
             }
+
 
             $scope.SaveCarrierProfile = function () {
                 if (isEditMode) {
@@ -81,25 +76,33 @@
 
 
             $scope.addPhoneNumberOption = function () {
-               
+
                 $scope.scopeModal.phoneNumbers.push({
                     phoneNumber: $scope.scopeModal.phoneNumberValue
                 });
                 $scope.scopeModal.phoneNumberValue = undefined;
                 $scope.scopeModal.disabledphone = true;
             };
-            $scope.onCountrySelctionChanged = function (item, datasource) {
-               
-                if (item != undefined) {
-                    var payload = {};
-                    payload.countryId = item.CountryId;
-                    if(isEditMode)
-                        payload.selectedIds = receivedCityId;                    
-                    city1DirectiveAPI.load(payload);
-                }
-                else {                  
-                    $scope.scopeModal.city = undefined;
 
+
+            $scope.onCountrySelectionChanged = function () {
+
+                if (!isCountrySelectedProgramatically)
+                {
+                    var selectedCountryId = countryDirectiveApi.getSelectedIds();
+                    if (selectedCountryId != undefined)
+                    {
+                        $scope.isLoadingCities = true;
+                        var payload = {
+                            countryId: selectedCountryId
+                        };
+
+                        cityDirectiveAPI.load(payload).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.isLoadingCities = false;
+                        });
+                    }
                 }
             }
 
@@ -137,7 +140,7 @@
         function getCarrierProfile() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
                 carrierProfileEntity = carrierProfile;
-                receivedCityId = carrierProfileEntity.Settings.CityId;
+                cityId = carrierProfileEntity.Settings.CityId;
             });
         }
 
@@ -148,6 +151,7 @@
                })
               .finally(function () {
                   $scope.isLoading = false;
+                  isCountrySelectedProgramatically = false;
               });
         }
 
@@ -156,59 +160,57 @@
         }
 
 
-        function loadCity1() {
-            var loadCity1SelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-            city1ReadyPromiseDeferred.promise.then(function () {
-                var payload = {};
-                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CityId != undefined) {
-                    payload.countryId = carrierProfileEntity.Settings.CountryId;
-                    payload.selectedIds= (carrierProfileEntity != undefined) ? carrierProfileEntity.Settings.CityId : undefined
-                }
-                
-                VRUIUtilsService.callDirectiveLoad(city1DirectiveAPI, payload, loadCity1SelectorPromiseDeferred);
-            })
-            return loadCity1SelectorPromiseDeferred.promise;
-        }
-
         function loadCountries() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var promises = [];
+            promises.push(loadCountryPromiseDeferred.promise);
+
             countryReadyPromiseDeferred.promise.then(function () {
-                var payload = {
-                    selectedIds: (carrierProfileEntity != undefined) ? carrierProfileEntity.Settings.CountryId : undefined
-                };
+                var payload;
+
+                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined)
+                {
+                    payload = {};
+                    payload.selectedIds = carrierProfileEntity.Settings.CountryId;
+                    isCountrySelectedProgramatically = true;
+                }
 
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
             });
 
-            return loadCountryPromiseDeferred.promise;
+            if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined)
+            {
+                var loadCitiesPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                promises.push(loadCitiesPromiseDeferred.promise);
+
+                cityReadyPromiseDeferred.promise.then(function () {
+                    var citiesPayload = {
+                        countryId: carrierProfileEntity.Settings.CountryId,
+                        selectedIds: carrierProfileEntity.Settings.CityId
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);
+                });
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
         }
 
-        function loadCities() {
-            var loadCityPromiseDeferred = UtilsService.createPromiseDeferred();
-            cityReadyPromiseDeferred.promise.then(function () {
-                var payload = {
-                    selectedIds: (carrierProfileEntity != undefined) ? carrierProfileEntity.Settings.CityId : undefined
-                };
-                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined)
-                    payload.filter = { CountryId: carrierProfileEntity.Settings.CountryId }
-                VRUIUtilsService.callDirectiveLoad(cityDirectiveApi, payload, loadCityPromiseDeferred);
-            });
-
-            return loadCityPromiseDeferred.promise;
-        }
-
+        
         function loadContacts() {
             for (var x in WhS_BE_ContactTypeEnum) {
                 $scope.scopeModal.contacts.push(addcontactObj(x));
             }
-           
-            if (carrierProfileEntity!=undefined &&  carrierProfileEntity.Settings.Contacts != null)
+
+            if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.Contacts != null)
                 for (var y = 0; y < carrierProfileEntity.Settings.Contacts.length; y++) {
-                        var item = carrierProfileEntity.Settings.Contacts[y];
-                        var matchedItem = UtilsService.getItemByVal($scope.scopeModal.contacts, item.Type, 'value');
-                        if (matchedItem != null)
-                            matchedItem.description = item.Description;
-             }
+                    var item = carrierProfileEntity.Settings.Contacts[y];
+                    var matchedItem = UtilsService.getItemByVal($scope.scopeModal.contacts, item.Type, 'value');
+                    if (matchedItem != null)
+                        matchedItem.description = item.Description;
+                }
         }
 
         function addcontactObj(x) {
@@ -253,9 +255,9 @@
                             fax: carrierProfileEntity.Settings.Faxes[j]
                         });
                     }
-                    
 
-                   
+
+
                 }
 
             }
@@ -266,36 +268,36 @@
 
             var obj = {
                 CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
-                Name:  $scope.scopeModal.name,
+                Name: $scope.scopeModal.name,
                 Settings: {
                     CountryId: countryDirectiveApi.getSelectedIds(),
-                    CityId: city1DirectiveAPI.getSelectedIds(),
+                    CityId: cityDirectiveAPI.getSelectedIds(),
                     Company: $scope.scopeModal.company,
                     Website: $scope.scopeModal.website,
                     RegistrationNumber: $scope.scopeModal.registrationNumber,
                     Address: $scope.scopeModal.address,
                     PostalCode: $scope.scopeModal.postalCode,
                     Town: $scope.scopeModal.town,
-                    CompanyLogo:( $scope.scopeModal.companyLogo!=null)? $scope.scopeModal.companyLogo.fileId : 0,
+                    CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : 0,
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax")
                 }
             };
-           
+
             obj.Settings.Contacts = [];
             for (var i = 0; i < $scope.scopeModal.contacts.length; i++) {
                 var item = $scope.scopeModal.contacts[i];
-                if (item.description != undefined )
+                if (item.description != undefined)
                     obj.Settings.Contacts.push({ Type: item.value, Description: item.description })
-            }; 
-           return obj;
+            };
+            return obj;
         }
 
         function insertCarrierProfile() {
             $scope.isLoading = true;
 
             var carrierProfileObject = buildCarrierProfileObjFromScope();
-            
+
             return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(carrierProfileObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response, "Name")) {
@@ -315,10 +317,10 @@
             $scope.isLoading = true;
 
             var carrierProfileObject = buildCarrierProfileObjFromScope();
-            
+
             WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(carrierProfileObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response ,"Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response, "Name")) {
                     if ($scope.onCarrierProfileUpdated != undefined)
                         $scope.onCarrierProfileUpdated(response.UpdatedObject);
 

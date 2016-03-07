@@ -7,7 +7,8 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             scope: {
                 onReady: '=',
                 ismultipleselection: '@',
-                isrequired: '@'
+                isrequired: '@',
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -47,8 +48,8 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             //    hideremoveicon = "hideremoveicon";
 
 
-            return '<vr-whs-be-carrieraccount-selector getcustomers on-ready="onCarrierAccountDirectiveReady" ' + 
-                multipleselection + ' isrequired="ctrl.isrequired"></vr-whs-be-carrieraccount-selector>'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-whs-be-carrieraccount-selector getcustomers on-ready="onCarrierAccountDirectiveReady" ' +
+                multipleselection + ' isrequired="ctrl.isrequired"></vr-whs-be-carrieraccount-selector></vr-columns>'
         }
 
         function customerSelector(ctrl, $scope) {

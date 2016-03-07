@@ -21,10 +21,12 @@
         }
 
         function GetSaleZone(saleZoneId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZone"), { saleZoneId: saleZoneId });
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZone"), {
+                saleZoneId: saleZoneId
+            });
         }
-        function GetSellingNumberPlanIdBySaleZoneId(saleZoneId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSellingNumberPlanIdBySaleZoneId"), { saleZoneId: saleZoneId });
+        function GetSellingNumberPlanIdBySaleZoneIds(saleZoneIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSellingNumberPlanIdBySaleZoneId"), saleZoneIds);
         }
         function GetSaleZoneGroupTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SaleZone", "GetSaleZoneGroupTemplates"));
@@ -45,7 +47,7 @@
         return ({
             GetFilteredSaleZones: GetFilteredSaleZones,
             GetSaleZonesInfo: GetSaleZonesInfo,
-            GetSellingNumberPlanIdBySaleZoneId:GetSellingNumberPlanIdBySaleZoneId,
+            GetSellingNumberPlanIdBySaleZoneIds: GetSellingNumberPlanIdBySaleZoneIds,
             GetSaleZonesInfoByIds: GetSaleZonesInfoByIds,
             GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
             GetSaleZonesByName: GetSaleZonesByName,
