@@ -151,7 +151,8 @@ as (select * from (values
 ('CP_SupPriceList/Customer/GetCustomerTemplates',null),
 ('CP_SupPriceList/Customer/GetCustomerInfos',null),
 ('CP_SupPriceList/Customer/AddCustomer','CP_SupPriceList_Customer:Add'),
-('CP_SupPriceList/Customer/UpdateCustomer','CP_SupPriceList_Customer:Edit')
+('CP_SupPriceList/Customer/UpdateCustomer','CP_SupPriceList_Customer:Edit'),
+('CP_SupPriceList/CustomerUser/IsCurrentUserCustomer',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
