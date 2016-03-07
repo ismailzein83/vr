@@ -45,6 +45,7 @@
                 }
                 $scope.onCustomerSelectionChanged = function () {
                     if (customerDirectiveApi.getSelectedIds() != undefined) {
+                        $scope.carrierAccount = undefined;
                         var obj = {
                             filter: {
                                 CustomerIdForCurrentSupplier: customerDirectiveApi.getSelectedIds()
