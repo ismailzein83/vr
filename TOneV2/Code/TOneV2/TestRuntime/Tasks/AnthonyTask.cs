@@ -12,9 +12,12 @@ namespace TestRuntime.Tasks
     {
         public void Execute()
         {
-            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             var runtimeServices = new List<RuntimeService>();
-            runtimeServices.Add(bpService);
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(bpService);
+
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(schedulerService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();

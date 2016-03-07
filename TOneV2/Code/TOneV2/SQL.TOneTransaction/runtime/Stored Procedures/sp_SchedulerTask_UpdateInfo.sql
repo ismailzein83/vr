@@ -15,7 +15,6 @@ BEGIN
 	UPDATE runtime.ScheduleTask
 	SET Name = @Name,
 		IsEnabled = @IsEnabled,
-		NextRunTime = NULL,
 		TriggerTypeId = @TriggerTypeId,
 		ActionTypeId = @ActionTypeId,
 		TaskSettings = @TaskSettings

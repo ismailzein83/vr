@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [bp].[sp_BPInstance_GetUpdated]
+﻿CREATE PROCEDURE [bp].[sp_BPInstance_GetUpdated]
 	@TimestampAfter timestamp,
 	@NbOfRows INT,
 	@DefinitionsId varchar(max)
@@ -9,14 +8,9 @@ BEGIN
             INSERT INTO @BPDefinitionIDsTable (BPDefinitionId)
             select Convert(int, ParsedString) from [bp].[ParseStringList](@DefinitionsId)
 
-	IF (@TimestampAfter IS NULL)
-	Begin
-		Declare @Count int = (Select COUNT(1) from [BP].[BPInstance] WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)));
-		if(@Count>@NbOfRows)
-			SELECT @TimestampAfter = MIN([timestamp])
-			FROM (SELECT TOP (@NbOfRows+1) [timestamp] FROM [BP].[BPInstance] WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) ORDER BY ID DESC) LastTestCalls
-	END 
-	SELECT TOP (@NbOfRows) [ID]
+IF (@TimestampAfter IS NULL)
+	BEGIN
+	SELECT TOP(@NbOfRows) [ID]
 	  ,[Title]
       ,[ParentID]
       ,[DefinitionID]
@@ -29,19 +23,43 @@ BEGIN
       ,[CreatedTime]
       ,[StatusUpdatedTime]
 	  ,[timestamp]
-		  
-	INTO #Result
-	FROM [BP].[BPInstance] 
-	WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) 
-	AND ([timestamp] > @TimestampAfter or @TimestampAfter is null) --ONLY Updated records
-	Order BY ID DESC
+            INTO #temp_table
+            FROM [BP].[BPInstance] 
+            WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) 
+            ORDER BY ID DESC
+            
+            SELECT * FROM #temp_table
+      
+            SELECT MAX([timestamp]) MaxTimestamp FROM #temp_table
+	END
 	
-	SELECT * FROM #Result
-	ORDER BY ID DESC
-	
-	IF((SELECT COUNT(*) FROM #Result) = 0)
+	ELSE
+	BEGIN
+	SELECT TOP(@NbOfRows) [ID]
+	  ,[Title]
+      ,[ParentID]
+      ,[DefinitionID]
+      ,[WorkflowInstanceID]
+      ,[InputArgument]
+      ,[ExecutionStatus]
+      ,[LockedByProcessID]
+      ,[LastMessage]
+      ,[RetryCount]
+      ,[CreatedTime]
+      ,[StatusUpdatedTime]
+	  ,[timestamp]
+            INTO #temp2_table
+            FROM [BP].[BPInstance] 
+            WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))  AND
+            ([timestamp] > @TimestampAfter) --ONLY Updated records
+            ORDER BY [timestamp]
+            
+            SELECT * FROM #temp2_table
+      
+IF((SELECT COUNT(*) FROM #temp2_table) = 0)
 		SELECT @TimestampAfter AS MaxTimestamp
 	ELSE
-		SELECT MAX([timestamp]) MaxTimestamp FROM #Result
-	
-END
+		SELECT MAX([timestamp]) MaxTimestamp FROM #temp2_table
+
+	END
+	END

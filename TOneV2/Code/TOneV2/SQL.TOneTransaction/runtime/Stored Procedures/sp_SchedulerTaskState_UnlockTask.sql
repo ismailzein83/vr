@@ -1,12 +1,11 @@
-﻿
-CREATE PROCEDURE [runtime].[sp_SchedulerTask_UnlockTask]	
+﻿CREATE PROCEDURE [runtime].[sp_SchedulerTaskState_UnlockTask]	
 	@TaskId int	
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	
-    UPDATE [runtime].ScheduleTask
+    UPDATE [runtime].ScheduleTaskState
     SET	LockedByProcessID = NULL
-	WHERE ID = @TaskId
+	WHERE TaskId = @TaskId
 END
