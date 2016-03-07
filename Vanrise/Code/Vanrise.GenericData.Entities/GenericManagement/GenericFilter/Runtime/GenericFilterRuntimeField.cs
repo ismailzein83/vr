@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericFilterRuntimeField:GenericUIRuntimeField
+    public class GenericFilterRuntimeField : GenericUIRuntimeField
     {
         public bool IsRequired { get; set; }
     }

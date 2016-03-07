@@ -378,20 +378,20 @@
     <Content Include="VR_GenericData\Views\DataTransformationDefinition\TransformationRecordTypeEditorController.js" />
     <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditor.html" />
     <Content Include="VR_GenericData\Views\ExpressionBuilder\ExpressionBuilderEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBEEditor.html" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBEEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityManagement.html" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityManagementController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericExtensibleBEEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericExtensibleBEEditor.html" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagement.html" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityDefinitionManagementController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditor.html" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericRowEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityEditorController.js" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\GenericBusinessEntityEditor.html" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\SectionEditor.html" />
-    <Content Include="VR_GenericData\Views\GenericBusinessEntity\SectionEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericBEEditorDefintion.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericBEEditorDefintionController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericExtensibleBEEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericExtensibleBEEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericBEDefinitionManagement.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericBEDefinitionManagementController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericRowEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericRowEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\SectionEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\SectionEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditor.html" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditor.html" />
@@ -412,7 +412,6 @@
   <ItemGroup>
     <Folder Include="VR_GenericData\Directives\GenericEditor\Definition\" />
     <Folder Include="VR_GenericData\Directives\GenericEditor\Runtime\" />
-    <Folder Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

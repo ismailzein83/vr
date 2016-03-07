@@ -19,7 +19,7 @@
                 modalScope.onGenericBEDefinitionAdded = onGenericBEDefinitionAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBEEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html', modalParameters, modalSettings);
         }
     }
 

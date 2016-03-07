@@ -34,6 +34,12 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
 
                 $scope.businessEntityDefinitions = [];
 
+                $scope.isExpandable = function (dataItem) {
+                    if (dataItem.IsExtensible)
+                        return true;
+                    return false
+                }
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
 
@@ -75,7 +81,10 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                         .then(function (response) {
                             if (response && response.Data) {
                                 for (var i = 0; i < response.Data.length; i++) {
-                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                    if (response.Data[i].IsExtensible) {
+                                        gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                   }
+                                    
                                 }
                             }
                             onResponseReady(response);
@@ -92,7 +101,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
             function defineMenuActions() {
                 var extensibleMenuActions = [
                 {
-                    name: "Add Extended Settings",
+                    name: "Add Extensible Type",
                     clicked: addExtendedSettings,
                 }];
                 var genericMenuActions = [

@@ -27,7 +27,7 @@
                 extensibleBEItemId: extensibleBEItemId
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericExtensibleBEEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericExtensibleBEEditor.html', parameters, modalSettings);
         }
 
         function addExtendedSettings(businessEntityDefinitionId, onExtensibleBEItemAdded) {
@@ -41,7 +41,7 @@
                 modalScope.onExtensibleBEItemAdded = onExtensibleBEItemAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericExtensibleBEEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericExtensibleBEEditor.html', modalParameters, modalSettings);
         }
 
         function addSection(onSectionAdded, exitingSections) {
@@ -55,7 +55,7 @@
                 exitingSections: exitingSections
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/SectionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/SectionEditor.html', parameters, modalSettings);
         }
 
         function editSection(onSectionUpdated, exitingSections, sectionEntity) {
@@ -70,7 +70,7 @@
                 exitingSections: exitingSections
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/SectionEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/SectionEditor.html', parameters, modalSettings);
         }
 
 
@@ -94,7 +94,7 @@
                 recordTypeFields: recordTypeFields,
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericRowEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericRowEditor.html', parameters, modalSettings);
         }
 
         function editRow(onRowUpdated, recordTypeFields, rowEntity) {
@@ -109,7 +109,7 @@
                 rowEntity: rowEntity
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericRowEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericRowEditor.html', parameters, modalSettings);
         }
 
         function deleteRow($scope, rowObj, onRowDeleted) {

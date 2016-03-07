@@ -21,7 +21,7 @@
                 modalScope.onGenericBusinessEntityAdded = onGenericBusinessEntityAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBusinessEntityEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
 
         function updateGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId, onGenericBusinessEntityUpdated) {
@@ -36,7 +36,7 @@
                 modalScope.onGenericBusinessEntityUpdated = onGenericBusinessEntityUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBusinessEntityEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
     };
 

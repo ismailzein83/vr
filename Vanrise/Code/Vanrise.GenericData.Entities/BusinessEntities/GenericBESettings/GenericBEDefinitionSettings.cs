@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Entities
     public class GenericBEDefinitionSettings:BusinessEntityDefinitionSettings
     {
         public override string GroupSelectorUIControl { get; set; }
-        public override string DefinitionEditor { get { return "/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/GenericBEEditor.html"; } }
+        public override string DefinitionEditor { get { return "/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEEditorDefintion.html"; } }
         public override string SelectorUIControl
         {
             get;

@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    GenericBusinessEntityDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_GenericBEService'];
+    GenericBEDefinitionManagementController.$inject = ['$scope', 'VR_GenericData_GenericBEService'];
 
-    function GenericBusinessEntityDefinitionManagementController($scope, VR_GenericData_GenericBEService) {
+    function GenericBEDefinitionManagementController($scope, VR_GenericData_GenericBEService) {
 
         var gridAPI;
         var filter = {};
@@ -42,6 +42,6 @@
         }
     }
 
-    appControllers.controller('VR_GenericData_GenericBusinessEntityDefinitionManagementController', GenericBusinessEntityDefinitionManagementController);
+    appControllers.controller('VR_GenericData_GenericBEDefinitionManagementController', GenericBEDefinitionManagementController);
 
 })(appControllers);

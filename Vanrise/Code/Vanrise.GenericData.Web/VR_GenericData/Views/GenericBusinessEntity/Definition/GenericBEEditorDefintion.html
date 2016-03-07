@@ -1,10 +1,10 @@
-﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEEditorController" vr-loader="scopeModal.isLoading" width="'60%'">
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEEditorDefintionController" vr-loader="scopeModal.isLoading" width="'60%'">
     <vr-modalbody>
         <vr-form validationcontext="genericBEEditorGroup">
             <vr-tabs>
                 <vr-tab header="'Definition'">
 
-                    <vr-row >
+                    <vr-row>
                         <vr-columns width="1/3row">
                             <vr-section title="Page Setting">
                                 <vr-row removeline>
@@ -16,8 +16,12 @@
                                 <vr-row>
                                     <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="scopeModal.onRecordTypeSelectionChanged" selectedvalues="scopeModal.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
                                 </vr-row>
+                                <vr-row>
+                                    <vr-select datatextfield="Name" datavaluefield="Name" label="Title field" isrequired="true"
+                                               entityname="Title field" selectedvalues="scopeModal.selectedTitleField" datasource="scopeModal.fields" hideselectedvaluessection></vr-select>
+                                </vr-row>
                             </vr-section>
-                       </vr-columns>
+                        </vr-columns>
                         <vr-columns width="2/3row">
                             <vr-section title="Menu Location">
                                 <vr-validator validate="scopeModal.validateMenuLocation()">
