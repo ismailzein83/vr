@@ -47,30 +47,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessEntities\BusinessEntityDefinition.cs" />
-    <Compile Include="BusinessEntities\BusinessEntityDefinitionDetail.cs" />
-    <Compile Include="BusinessEntities\BusinessEntityDefinitionInfo.cs" />
-    <Compile Include="BusinessEntities\BusinessEntityDefinitionInfoFilter.cs" />
-    <Compile Include="BusinessEntities\BusinessEntityDefinitionQuery.cs" />
-    <Compile Include="BusinessEntities\BusinessEntityDefinitionSettings.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinition.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionDetail.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionInfo.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionInfoFilter.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionQuery.cs" />
+    <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\BusinessEntityDescriptionContext.cs" />
     <Compile Include="BusinessEntities\BusinessEntityMatchContext.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\Filter\GenericFilter.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\Filter\GenericFilterField.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\Grid\GenericGrid.cs" />
+    <Compile Include="GenericManagement\GenericFilter\Definition\GenericFilter.cs" />
+    <Compile Include="GenericManagement\GenericFilter\Definition\GenericFilterField.cs" />
+    <Compile Include="GenericManagement\GenericGrid\Definition\GenericGrid.cs" />
     <Compile Include="BusinessEntities\GenericBESettings\Grid\GenericGridColumn.cs" />
-    <Compile Include="BusinessEntities\GenericBESettings\Grid\GenericGridField.cs" />
+    <Compile Include="GenericManagement\GenericGrid\Definition\GenericGridField.cs" />
     <Compile Include="BusinessEntities\GenericBEViewSettings.cs" />
-    <Compile Include="BusinessEntities\Runtime\Filter\GenericFilterRuntime.cs" />
-    <Compile Include="BusinessEntities\Runtime\Filter\GenericFilterRuntimeField.cs" />
-    <Compile Include="BusinessEntities\Runtime\Grid\GenericGridRuntime.cs" />
+    <Compile Include="GenericManagement\GenericFilter\Runtime\GenericFilterRuntime.cs" />
+    <Compile Include="GenericManagement\GenericFilter\Runtime\GenericFilterRuntimeField.cs" />
+    <Compile Include="GenericManagement\GenericGrid\Runtime\GenericGridRuntime.cs" />
     <Compile Include="BusinessEntities\GenericBESettings\GenericManagement.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityDescriptionContext.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityGroupContext.cs" />
     <Compile Include="BusinessEntities\IBusinessEntityMatchContext.cs" />
     <Compile Include="BusinessEntities\Runtime\ExtensibleBEItemRuntime.cs" />
     <Compile Include="BusinessEntities\Runtime\GenericManagementRuntime.cs" />
-    <Compile Include="BusinessEntities\Runtime\Grid\GenericGridRuntimeField.cs" />
+    <Compile Include="GenericManagement\GenericGrid\Runtime\GenericGridRuntimeField.cs" />
     <Compile Include="DataRecords\DataRecord.cs" />
     <Compile Include="DataRecords\DataRecordField.cs" />
     <Compile Include="DataRecords\DataRecordFieldDetail.cs" />
@@ -107,19 +107,19 @@
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityDetail.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityInfo.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityQuery.cs" />
-    <Compile Include="GenericEditor\GenericUIField.cs" />
-    <Compile Include="GenericEditor\GenericEditor.cs" />
+    <Compile Include="GenericField\Definition\GenericUIField.cs" />
+    <Compile Include="GenericEditor\Definition\GenericEditor.cs" />
     <Compile Include="ExtensibleBEItem\ExtensibleBEItem.cs" />
     <Compile Include="ExtensibleBEItem\ExtensibleBEItemDetail.cs" />
     <Compile Include="ExtensibleBEItem\ExtensibleBEItemQuery.cs" />
-    <Compile Include="GenericEditor\GenericEditorField.cs" />
-    <Compile Include="GenericEditor\GenericEditorRow.cs" />
-    <Compile Include="GenericEditor\GenericEditorSection.cs" />
+    <Compile Include="GenericEditor\Definition\GenericEditorField.cs" />
+    <Compile Include="GenericEditor\Definition\GenericEditorRow.cs" />
+    <Compile Include="GenericEditor\Definition\GenericEditorSection.cs" />
     <Compile Include="GenericEditor\Runtime\GenericEditorRuntime.cs" />
     <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeField.cs" />
     <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeRow.cs" />
     <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeSection.cs" />
-    <Compile Include="GenericEditor\Runtime\GenericUIRuntimeField.cs" />
+    <Compile Include="GenericField\Runtime\GenericUIRuntimeField.cs" />
     <Compile Include="GenericRules\GenericRule.cs" />
     <Compile Include="GenericRules\GenericRuleCriteria.cs" />
     <Compile Include="GenericRules\GenericRuleCriteriaFieldValues.cs" />
@@ -155,7 +155,11 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BusinessEntities\GenericBESettings\Filter\" />
+    <Folder Include="BusinessEntities\Runtime\Filter\" />
+    <Folder Include="BusinessEntities\Runtime\Grid\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
