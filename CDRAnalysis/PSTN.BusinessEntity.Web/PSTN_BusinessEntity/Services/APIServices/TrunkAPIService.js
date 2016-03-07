@@ -46,7 +46,7 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(PSTN_BE_ModuleConfig.moduleName, controllerName, ['UpdateTrunk']));
         }
 
-        function DeleteTrunk(trunkId) {
+        function DeleteTrunk(trunkId, linkedToTrunkId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PSTN_BE_ModuleConfig.moduleName, controllerName, "DeleteTrunk"), {
                 trunkId: trunkId,
                 linkedToTrunkId: linkedToTrunkId
