@@ -4,7 +4,8 @@ CREATE PROCEDURE [CP_SupPriceList].[sp_PriceList_UpdatePriceListProgress]
 	@PriceListStatus int,
 	@PriceListResult int,
 	@ResultRetryCount int,
-	@AlertMessage nvarchar(max)
+	@AlertMessage nvarchar(max),
+	@AlertFileID int
 AS
 BEGIN
 SELECT 1 FROM CP_SupPriceList.PriceList WHERE ID = @Id
@@ -14,7 +15,8 @@ SELECT 1 FROM CP_SupPriceList.PriceList WHERE ID = @Id
 			[Status] = @PriceListStatus,
 			[Result] = @PriceListResult,
 			[ResultRetryCount] = @ResultRetryCount,
-			[AlertMessage] = @AlertMessage
+			[AlertMessage] = @AlertMessage,
+			[AlertFileID] = @AlertFileID			
 	Where ID = @ID
 	END	
 END

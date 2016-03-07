@@ -60,11 +60,15 @@ BEGIN
 		FROM [CP_SupPriceList].[PriceList] 
 		WHERE 
 		 UserID = @UserId AND
-		([timestamp] > @TimestampAfter) --ONLY Updated records
+		([timestamp] > @TimestampAfter) 
 		ORDER BY [timestamp]
 		
 		SELECT * FROM #temp2_table
 	
+		IF((SELECT COUNT(*) FROM #temp2_table) = 0)
+		SELECT @TimestampAfter AS MaxTimestamp
+		ELSE
 		SELECT MAX([timestamp]) MaxTimestamp FROM #temp2_table
-	END	
+		END
+
 END
