@@ -259,7 +259,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             item.ID = (long)reader["ID"];
             item.AggregateValues = Vanrise.Common.Serializer.Deserialize<Dictionary<string, decimal>>(GetReaderValue<string>(reader, "AggregateValues"));
             item.FilterValues = Vanrise.Common.Serializer.Deserialize<Dictionary<int, decimal>>(GetReaderValue<string>(reader, "FilterValues"));
-            item.IMEIs = new HashSet<string>((GetReaderValue<string>(reader, "IMEIs")).Split(','));
+            string imies = GetReaderValue<string>(reader, "IMEIs");
+            if (imies != null)
+                item.IMEIs = new HashSet<string>((imies).Split(','));
             item.StrategyExecutionID = (int)reader["StrategyExecutionID"];
             item.AccountNumber = reader["AccountNumber"] as string;
             item.SuspicionLevelID = (int)reader["SuspicionLevelID"];
