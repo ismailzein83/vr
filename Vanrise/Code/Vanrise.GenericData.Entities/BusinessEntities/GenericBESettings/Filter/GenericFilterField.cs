@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericFilterField
+    public class GenericFilterField : GenericUIField
     {
-        public string FieldTitle { get; set; }
         public bool IsRequired { get; set; }
-        public string FieldPath { get; set; }
+
     }
 }

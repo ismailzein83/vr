@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericGridRuntimeField
+    public class GenericGridRuntimeField : GenericUIRuntimeField
     {
-        public string FieldTitle { get; set; }
-        public string FieldPath { get; set; }
-        public DataRecordFieldType FieldType { get; set; }
+      
     }
 }

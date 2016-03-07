@@ -87,7 +87,7 @@
                             var field = recordTypeFields[j];
                             if (field.FieldPath == selectedField.FieldPath)
                             {
-                                $scope.scopeModal.selectedFields.push({ fieldPath: field.FieldPath, fieldTitle: selectedField.FieldTitle });
+                                $scope.scopeModal.selectedFields.push({ fieldPath: field.FieldPath, fieldTitle: selectedField.FieldTitle, isRequired: selectedField.IsRequired });
                             }
                         }
                     }
@@ -102,7 +102,8 @@
             {
                 rowObject.push({
                     FieldPath: $scope.scopeModal.selectedFields[i].fieldPath,
-                    FieldTitle: $scope.scopeModal.selectedFields[i].fieldTitle
+                    FieldTitle: $scope.scopeModal.selectedFields[i].fieldTitle,
+                    IsRequired: $scope.scopeModal.selectedFields[i].isRequired,
                 });
             }
             return rowObject;

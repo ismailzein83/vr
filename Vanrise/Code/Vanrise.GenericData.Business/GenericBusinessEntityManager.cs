@@ -156,7 +156,7 @@ namespace Vanrise.GenericData.Business
                 var columnValue = GetFieldPathValue(genericBusinessEntity, columnConfig.FieldPath);
                 if (columnValue != null)
                 {
-                    var uiRuntimeField = uiRuntimeManager.BuildRuntimeField(columnConfig, recordType.Fields, recordType.DataRecordTypeId);
+                    var uiRuntimeField = uiRuntimeManager.BuildRuntimeField<GenericEditorRuntimeField>(columnConfig, recordType.Fields, recordType.DataRecordTypeId);
                     entityDetail.FieldValueDescriptions.Add(uiRuntimeField.FieldType.GetDescription(columnValue));
                 }
                 else

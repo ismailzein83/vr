@@ -119,6 +119,7 @@
     <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeField.cs" />
     <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeRow.cs" />
     <Compile Include="GenericEditor\Runtime\GenericEditorRuntimeSection.cs" />
+    <Compile Include="GenericEditor\Runtime\GenericUIRuntimeField.cs" />
     <Compile Include="GenericRules\GenericRule.cs" />
     <Compile Include="GenericRules\GenericRuleCriteria.cs" />
     <Compile Include="GenericRules\GenericRuleCriteriaFieldValues.cs" />

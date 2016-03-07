@@ -184,7 +184,6 @@ app.directive('vrGenericdataExtensiblebeitemDefinitionEditor', ['UtilsService', 
 
             function filterSections(sections, filteredFields, exceptedFields)
             {
-                console.log(sections);
                 for (var j = 0; j < sections.length; j++) {
                     var section = sections[j];
                     if (section.rowsGridAPI != undefined) {

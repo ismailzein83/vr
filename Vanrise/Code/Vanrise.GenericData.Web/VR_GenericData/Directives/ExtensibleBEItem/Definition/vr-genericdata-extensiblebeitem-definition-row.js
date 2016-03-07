@@ -65,7 +65,8 @@ app.directive('vrGenericdataExtensiblebeitemDefinitionRow', ['UtilsService', 'VR
                         var field = ctrl.fields[i];
                         fields.push({
                             FieldTitle: field.FieldTitle,
-                            FieldPath: field.FieldPath
+                            FieldPath: field.FieldPath,
+                            IsRequired: field.IsRequired,
                         });
                     }
                     return { Fields: fields };
