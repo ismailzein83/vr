@@ -57,7 +57,7 @@ namespace CarrierPortal.DevRuntime
                                 (int)priceListProgressOutput.PriceListProgress,
                                 (int)priceListProgressOutput.PriceListResult,
                                 (int)pricelist.ResultMaxRetryCount,
-                                pricelist.AlertMessage);
+                                pricelist.AlertMessage,pricelist.AlertFileId);
                         }
                     }
                 }

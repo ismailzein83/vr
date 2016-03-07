@@ -109,11 +109,11 @@ namespace CP.SupplierPricelist.Business
             return manager.GetTemplateConfigurations(Constants.CustomerConnector);
         }
 
-        public bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage)
+        public bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage, long alertFileId)
         {
             IPriceListDataManager dataManager =
                    ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            return dataManager.UpdatePriceListProgress(id, status, result, resultRetryCount, alertMessage);
+            return dataManager.UpdatePriceListProgress(id, status, result, resultRetryCount, alertMessage, alertFileId);
 
         }
     }

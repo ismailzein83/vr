@@ -68,7 +68,7 @@ namespace CP.SupplierPricelist.Data.SQL
                 UploadMaxRetryCount = GetReaderValue<int>(reader, "UploadRetryCount"),
                 AlertMessage = reader["AlertMessage"] as string,
                 CustomerId = (int)reader["CustomerID"],
-                AlertFileId = GetReaderValue<int>(reader, "AlertFileID"),
+                AlertFileId = GetReaderValue<long>(reader, "AlertFileID"),
                 CarrierAccountId = reader["CarrierAccountID"] as string
             };
             string uploadedInformationSerialized = reader["UploadInformation"] as string;
@@ -106,9 +106,9 @@ namespace CP.SupplierPricelist.Data.SQL
         }
 
 
-        public bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage)
+        public bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage, long alertFileId)
         {
-            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdatePriceListProgress]", id, status, result, resultRetryCount, alertMessage);
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdatePriceListProgress]", id, status, result, resultRetryCount, alertMessage, alertFileId);
             return (recordsEffected > 0);
         }
 

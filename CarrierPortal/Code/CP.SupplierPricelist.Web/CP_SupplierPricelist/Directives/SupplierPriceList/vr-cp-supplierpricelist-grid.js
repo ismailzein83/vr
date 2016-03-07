@@ -74,13 +74,23 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
 
             function defineMenuActions() {
                 $scope.gridMenuActions = [{
-                    name: "download",
+                    name: "Download PriceList",
                     clicked: downloadExcelSheet
-                }];
+                }, {
+                    name: "Download Alert File",
+                    clicked: downloadAlertSheet
+                }
+                ];
             }
         }
         function downloadExcelSheet(dataItem) {
             fileApiService.DownloadFile(dataItem.Entity.FileId)
+                    .then(function (response) {
+                        utilsService.downloadFile(response.data, response.headers);
+                    });
+        }
+        function downloadAlertSheet(dataItem) {
+            fileApiService.DownloadFile(dataItem.Entity.AlertFileId)
                     .then(function (response) {
                         utilsService.downloadFile(response.data, response.headers);
                     });

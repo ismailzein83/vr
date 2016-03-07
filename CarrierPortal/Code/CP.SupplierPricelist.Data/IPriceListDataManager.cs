@@ -11,7 +11,7 @@ namespace CP.SupplierPricelist.Data
         List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses);
         List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses, int customerId);
         bool UpdatePriceListUpload(long id, int result, object uploadInformation, int uploadRetryCount);
-        bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage);
+        bool UpdatePriceListProgress(long id, int status, int result, int resultRetryCount, string alertMessage, long alertFileId);
         List<PriceList> GetBeforeId(GetBeforeIdInput input);
     }
 }

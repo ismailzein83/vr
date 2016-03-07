@@ -53,9 +53,9 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                     pricelist.Result != priceListProgressOutput.PriceListResult)
                 {
                     if (priceListProgressOutput.AlertFile != null)
-                        pricelist.FileId = SaveLog(priceListProgressOutput.AlertFile, priceListProgressOutput.AlerFileName);
+                        pricelist.AlertFileId = SaveLog(priceListProgressOutput.AlertFile, priceListProgressOutput.AlerFileName);
                     manager.UpdatePriceListProgress(pricelist.PriceListId, (int)priceListProgressOutput.PriceListStatus,
-                  (int)priceListProgressOutput.PriceListResult, pricelist.ResultMaxRetryCount, pricelist.AlertMessage);
+                  (int)priceListProgressOutput.PriceListResult, pricelist.ResultMaxRetryCount, priceListProgressOutput.AlertMessage, pricelist.AlertFileId);
                 }
             }
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
