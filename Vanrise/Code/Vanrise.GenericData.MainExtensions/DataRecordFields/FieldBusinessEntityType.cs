@@ -43,8 +43,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             else
                 entityIds.Add(value);
-            
-            return GetBusinessEntityManager().GetEntityDescription(new BusinessEntityDescriptionContext() { EntityIds = entityIds });
+
+            BusinessEntityDefinition beDefinition;
+            var obj = GetBusinessEntityManager(out beDefinition);
+            return GetBusinessEntityManager(out beDefinition).GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityIds = entityIds });
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
@@ -54,7 +56,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             var beFilter = filterValue as BusinessEntityFieldTypeFilter;
 
-            IBusinessEntityManager beManager = GetBusinessEntityManager();
+            BusinessEntityDefinition beDefinition;
+            IBusinessEntityManager beManager = GetBusinessEntityManager(out beDefinition); // This statement is not necassary
             return beManager.IsMatched(new BusinessEntityMatchContext() { FieldValueIds = fieldValueObjList, FilterIds = beFilter.BusinessEntityIds });
         }
 
@@ -82,9 +85,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return null;
         }
 
-        IBusinessEntityManager GetBusinessEntityManager()
+        IBusinessEntityManager GetBusinessEntityManager(out BusinessEntityDefinition businessEntityDefinition)
         {
             BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(BusinessEntityDefinitionId);
+            businessEntityDefinition = beDefinition;
 
             if (beDefinition == null)
                 throw new NullReferenceException("beDefinition");

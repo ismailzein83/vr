@@ -12,7 +12,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 namespace InterConnect.BusinessEntity.Business
 {
-    public class OperatorProfileManager : ExtensibleBEManager
+    public class OperatorProfileManager : ExtensibleBEManager, IBusinessEntityManager
     {
         public List<OperatorProfileExtendedSettingType> GetExtendedSettingTypes()
         {
@@ -108,11 +108,31 @@ namespace InterConnect.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             return updateOperationOutput;
         }
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var operatorProfileNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string operatorProfileName = GetOperatorProfileName(Convert.ToInt32(entityId));
+                if (operatorProfileName == null) throw new NullReferenceException("operatorProfileName");
+                operatorProfileNames.Add(operatorProfileName);
+            }
+            return String.Join(",", operatorProfileNames);
+        }
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
 
-
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
+        }
         #endregion
-
-
 
         #region Private Members
         protected override string _businessEntityName
@@ -139,7 +159,6 @@ namespace InterConnect.BusinessEntity.Business
                 return _dataManager.AreOperatorProfilesUpdated(ref _updateHandle);
             }
         }
-
         #endregion
 
         #region  Mappers
@@ -161,8 +180,5 @@ namespace InterConnect.BusinessEntity.Business
             return operatorProfileDetail;
         }
         #endregion
-
-
-
     }
 }

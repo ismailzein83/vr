@@ -26,7 +26,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            return true;
+            return Convert.ToDateTime(fieldValue).CompareTo(Convert.ToDateTime(filterValue)) == 0;
         }
     }
     public enum FieldDateTimeDataType

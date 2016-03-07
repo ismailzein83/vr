@@ -12,9 +12,8 @@ using System.Collections.Concurrent;
 using System.Reflection;
 namespace Vanrise.GenericData.Business
 {
-    public class GenericBusinessEntityManager:BaseBEManager
+    public class GenericBusinessEntityManager : BaseBEManager, IBusinessEntityManager
     {
-        
         #region Public Methods
         
         public Vanrise.Entities.IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(Vanrise.Entities.DataRetrievalInput<GenericBusinessEntityQuery> input)
@@ -82,6 +81,7 @@ namespace Vanrise.GenericData.Business
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
             return cachedGenericBusinessEntities.Values;
         }
+        
         public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo( int businessEntityDefinitionId,GenericBusinessEntityFilter filter)
         {
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
@@ -105,6 +105,29 @@ namespace Vanrise.GenericData.Business
             //if (entityField == null)
             //    return null;
             //return entityField.GetValue(entity.Details);
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var entityDefinitionSettings = context.EntityDefinition.Settings as GenericBEDefinitionSettings;
+            Dictionary<long, GenericBusinessEntity> cachedEntities = GetCachedGenericBusinessEntities(context.EntityDefinition.BusinessEntityDefinitionId);
+
+            List<string> descriptions = new List<string>();
+
+            foreach (long entityId in context.EntityIds)
+            {
+                GenericBusinessEntity entity = GetGenericBusinessEntity(entityId, context.EntityDefinition.BusinessEntityDefinitionId);
+                if (entity == null) throw new NullReferenceException("entity");
+                string entityDescription = GetFieldPathValue(entity, entityDefinitionSettings.FieldPath);
+                descriptions.Add(entityDescription);
+            }
+
+            return (descriptions.Count > 0) ? String.Join(",", descriptions) : null;
+        }
+
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -204,7 +227,8 @@ namespace Vanrise.GenericData.Business
                 if (columnValue != null)
                 {
                     var uiRuntimeField = uiRuntimeManager.BuildRuntimeField<GenericEditorRuntimeField>(columnConfig, recordType.Fields, recordType.DataRecordTypeId);
-                    entityDetail.FieldValueDescriptions.Add(uiRuntimeField.FieldType.GetDescription(columnValue.Value));
+                    var value = (columnValue.Value != null) ? columnValue.Value : columnValue;
+                    entityDetail.FieldValueDescriptions.Add(uiRuntimeField.FieldType.GetDescription(value));
                 }
                 else
                     entityDetail.FieldValueDescriptions.Add(null);
@@ -239,15 +263,13 @@ namespace Vanrise.GenericData.Business
             if (columnValue != null)
             {
                 var uiRuntimeField = uiRuntimeManager.GetFieldType(definitionSettings.FieldPath, recordType.Fields, recordType.DataRecordTypeId);
-                entityInfo.Name  = uiRuntimeField.GetDescription(columnValue.Value);
+                var value = (columnValue.Value != null) ? columnValue.Value : columnValue;
+                entityInfo.Name = uiRuntimeField.GetDescription(value);
             }
 
             return entityInfo;
         }
         #endregion
-
-
-
     }
     public class GenericBusinessEntityFilter
     {

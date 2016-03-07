@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Entities
         }
         public override string ManagerFQTN
         {
-            get { return "Vanrise.GenericData.Entities.GenericBEDefinitionSettings, Vanrise.GenericData.Entities"; }
+            get { return "Vanrise.GenericData.Business.GenericBusinessEntityManager, Vanrise.GenericData.Business"; }
         }
         public override string IdType
         {

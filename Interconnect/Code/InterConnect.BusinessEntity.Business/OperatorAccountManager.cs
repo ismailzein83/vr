@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace InterConnect.BusinessEntity.Business
 {
-    public class OperatorAccountManager
+    public class OperatorAccountManager : IBusinessEntityManager
     {
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<OperatorAccountDetail> GetFilteredOperatorAccounts(Vanrise.Entities.DataRetrievalInput<OperatorAccountQuery> input)
         {
             var allOperatorAccounts = GetCachedOperatorAccounts();
@@ -28,6 +30,11 @@ namespace InterConnect.BusinessEntity.Business
             return operatorProfiles.GetRecord(operatorAccountId);
         }
 
+        public string GetOperatorAccountName(int operatorAccountId)
+        {
+            OperatorAccount operatorAccount = GetOperatorAccount(operatorAccountId);
+            return (operatorAccount != null) ? operatorAccount.Suffix : null;
+        }
         public Vanrise.Entities.InsertOperationOutput<OperatorAccountDetail> AddOperatorAccount(OperatorAccount operatorAccount)
         {
             InsertOperationOutput<OperatorAccountDetail> insertOperationOutput = new InsertOperationOutput<OperatorAccountDetail>();
@@ -73,9 +80,36 @@ namespace InterConnect.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            var operatorAccountNames = new List<string>();
+            foreach (var entityId in context.EntityIds)
+            {
+                string operatorAccountName = GetOperatorAccountName(Convert.ToInt32(entityId));
+                if (operatorAccountName == null) throw new NullReferenceException("operatorAccountName");
+                operatorAccountNames.Add(operatorAccountName);
+            }
+            return String.Join(",", operatorAccountNames);
+        }
+
+        public bool IsMatched(IBusinessEntityMatchContext context)
+        {
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
+        }
+
         #endregion
 
         #region Private Members
+
         private Dictionary<int, OperatorAccount> GetCachedOperatorAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetOperatorAccounts",
@@ -112,6 +146,7 @@ namespace InterConnect.BusinessEntity.Business
                 OperatorProfileName = operatorProfileName
             };
         }
+
         #endregion
     }
 }
