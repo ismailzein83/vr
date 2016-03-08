@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataExtensiblebeitemDefinitionEditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_ExtensibleBEItemService',
+app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_ExtensibleBEItemService',
     function (UtilsService, VRUIUtilsService, VR_GenericData_ExtensibleBEItemService) {
 
         var directiveDefinitionObject = {
@@ -26,7 +26,7 @@ app.directive('vrGenericdataExtensiblebeitemDefinitionEditor', ['UtilsService', 
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/ExtensibleBEItem/Definition/Templates/DefinitionEditorTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/DefinitionEditorTemplate.html';
             }
 
         };

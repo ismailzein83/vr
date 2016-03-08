@@ -17,7 +17,7 @@
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Templates/GenericBusinessEntityFilterTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/Management/Filter/Templates/GenericBusinessEntityFilterTemplate.html'
         };
 
         function GenericBusinessEntityFilter($scope, ctrl, $attrs) {
@@ -126,4 +126,4 @@
 
     app.directive('vrGenericdataGenericbusinessentityFilter', GenericBusinessEntityFilterDirective);
 
-})(app);
+})(app); 

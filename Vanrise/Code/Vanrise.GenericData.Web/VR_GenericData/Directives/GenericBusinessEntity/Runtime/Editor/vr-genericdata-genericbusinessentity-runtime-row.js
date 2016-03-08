@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataExtensiblebeitemRuntimeRow', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -26,7 +26,7 @@ app.directive('vrGenericdataExtensiblebeitemRuntimeRow', ['UtilsService', 'VRUIU
                 }
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/ExtensibleBEItem/Runtime/Templates/RowTemplate.html';
+                return '/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/Editor/Templates/RowTemplate.html';
             }
 
         };
