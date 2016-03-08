@@ -267,6 +267,11 @@
     <None Include="TOne.PostDeployment.sql" />
     <None Include="CDRAnalysis.PostDeployment.sql" />
     <None Include="CarrierPortal.PostDeployment.sql" />
+    <None Include="Security.PostDeployment.sql" />
+    <None Include="Generic.PostDeployment.sql" />
+    <None Include="BusinessProcess.PostDeployment.sql" />
+    <None Include="SchedulerService.PostDeployment.sql" />
+    <None Include="Integration.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
