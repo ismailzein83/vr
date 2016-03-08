@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRNotificationService'];
+    GenericBusinessEntityGridDirective.$inject = [ 'VR_GenericData_GenericBusinessEntityAPIService', 'VRNotificationService','VR_GenericData_GenericBusinessEntityService'];
 
-    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, VRNotificationService) {
+    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBusinessEntityAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityService) {
         return {
             restrict: 'E',
             scope: {

@@ -1,5 +1,5 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEEditorDefintionController" vr-loader="scopeModal.isLoading" width="'60%'">
-    <vr-modalbody>
+    <vr-modalbody maxheight="'600px'">
         <vr-form validationcontext="genericBEEditorGroup">
             <vr-tabs>
                 <vr-tab header="'Definition'">
@@ -39,24 +39,18 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Editor Design'">
-                    <vr-row>
-                        <vr-columns width="fullrow" ng-show="scopeModal.selectedDataRecordType !=undefined">
+                    <vr-row ng-show="scopeModal.selectedDataRecordType !=undefined">
                             <vr-genericdata-genericbusinessentity-definition-editor on-ready="scopeModal.onGenericEditorDirectiveReady"></vr-genericdata-genericbusinessentity-definition-editor>
-                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Grid Design'">
-                    <vr-row>
-                        <vr-columns width="fullrow" ng-show="scopeModal.selectedDataRecordType !=undefined">
-                            <vr-genericdata-genericbusinessentity-griddesign on-ready="scopeModal.onGridFieldDesignReady"></vr-genericdata-genericbusinessentity-griddesign>
-                        </vr-columns>
+                    <vr-row ng-show="scopeModal.selectedDataRecordType !=undefined">
+                         <vr-genericdata-genericbusinessentity-griddesign on-ready="scopeModal.onGridFieldDesignReady"></vr-genericdata-genericbusinessentity-griddesign>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Filter Design'">
-                    <vr-row>
-                        <vr-columns width="fullrow" ng-show="scopeModal.selectedDataRecordType !=undefined">
-                            <vr-genericdata-genericbusinessentity-filterdesign on-ready="scopeModal.onFilterFieldDesignReady"></vr-genericdata-genericbusinessentity-filterdesign>
-                        </vr-columns>
+                    <vr-row ng-show="scopeModal.selectedDataRecordType !=undefined">
+                       <vr-genericdata-genericbusinessentity-filterdesign on-ready="scopeModal.onFilterFieldDesignReady"></vr-genericdata-genericbusinessentity-filterdesign>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    GenericRowEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    GenericRowEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function GenericRowEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function GenericRowEditorController($scope, UtilsService, VRNotificationService, VRNavigationService) {
 
         var isEditMode;
         var recordTypeFields;

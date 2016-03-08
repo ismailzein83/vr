@@ -37,7 +37,7 @@ app.directive('vrGenericdataGenericbusinessentityGriddesign', ['UtilsService', '
                 ctrl.fields = [];
                 ctrl.selectedFields = [];
                 ctrl.onRemoveField = function (dataItem) {
-                    var index = $scope.scopeModal.selectedFields.indexOf(dataItem);
+                    var index = ctrl.selectedFields.indexOf(dataItem);
                     if (index != -1)
                         ctrl.selectedFields.splice(index, 1);
                 }
