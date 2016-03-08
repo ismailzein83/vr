@@ -411,8 +411,6 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="VR_GenericData\Directives\ExtensibleBEItem\Definition\Templates\" />
-    <Folder Include="VR_GenericData\Directives\ExtensibleBEItem\Runtime\Templates\" />
     <Folder Include="VR_GenericData\Directives\GenericEditor\Definition\" />
     <Folder Include="VR_GenericData\Directives\GenericEditor\Runtime\" />
   </ItemGroup>
