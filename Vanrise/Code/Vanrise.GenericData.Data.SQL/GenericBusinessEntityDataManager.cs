@@ -9,7 +9,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Data.SQL
 {
-    public class GenericBusinessEntityDataManager:BaseSQLDataManager,IGenericBusinessEntityDataManager
+    public class GenericBusinessEntityDataManager : BaseSQLDataManager, IGenericBusinessEntityDataManager
     {
         public GenericBusinessEntityDataManager()
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
@@ -40,6 +40,12 @@ namespace Vanrise.GenericData.Data.SQL
         public bool AreGenericBusinessEntityUpdated(int parameter,ref object updateHandle)
         {
             return base.IsDataUpdated("genericdata.GenericBusinessEntity","BusinessEntityDefinitionID",parameter, ref updateHandle);
+        }
+
+        public bool DeleteGenericBusinessEntity(long genericBusinessEntityId, int businessEntityDefinitionId)
+        {
+            int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Delete", genericBusinessEntityId, businessEntityDefinitionId);
+            return (affectedRows > 0);
         }
         #endregion
 

@@ -2,12 +2,13 @@
 
     'use strict';
 
-    GenericBusinessEntityService.$inject = ['VRModalService'];
+    GenericBusinessEntityService.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'VRModalService', 'VRNotificationService'];
 
-    function GenericBusinessEntityService(VRModalService) {
+    function GenericBusinessEntityService(VR_GenericData_GenericBusinessEntityAPIService, VRModalService, VRNotificationService) {
         return ({
             addGenericBusinessEntity: addGenericBusinessEntity,
-            editGenericBusinessEntity: editGenericBusinessEntity
+            editGenericBusinessEntity: editGenericBusinessEntity,
+            deleteGenericBusinessEntity: deleteGenericBusinessEntity
         });
 
         function addGenericBusinessEntity(businessEntityDefinitionId, onGenericBusinessEntityAdded) {
@@ -37,6 +38,23 @@
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
+        }
+
+        function deleteGenericBusinessEntity(scope, genericBusinessEntity, onGenericBusinessEntityDeleted) {
+            VRNotificationService.showConfirmation().then(function (confirmed) {
+                if (confirmed) {
+                    var entityId = genericBusinessEntity.Entity.GenericBusinessEntityId;
+                    var definitionId = genericBusinessEntity.Entity.BusinessEntityDefinitionId;
+                    return VR_GenericData_GenericBusinessEntityAPIService.DeleteGenericBusinessEntity(entityId, definitionId).then(function (deletionResponse) {
+                        var deleted = VRNotificationService.notifyOnItemDeleted("Generic Business Entity", deletionResponse);
+                        if (deleted && onGenericBusinessEntityDeleted != undefined) {
+                            onGenericBusinessEntityDeleted();
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, scope);
+                    });
+                }
+            });
         }
     };
 

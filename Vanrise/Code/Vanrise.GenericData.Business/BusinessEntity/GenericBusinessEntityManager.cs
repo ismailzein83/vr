@@ -14,7 +14,6 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericBusinessEntityManager : BaseBEManager, IBusinessEntityManager
     {
-
         #region Public Methods
         private GenericUIRuntimeManager _uiRuntimeManager;
         private BusinessEntityDefinitionManager _businessEntityDefinitionManager;
@@ -84,7 +83,22 @@ namespace Vanrise.GenericData.Business
             }
 
             return insertOperationOutput;
-        }      
+        }
+        public Vanrise.Entities.DeleteOperationOutput<object> DeleteGenericBusinessEntity(long genericBusinessEntityId, int businessEntityDefinitionId)
+        {
+            var deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<object>()
+            {
+                Result = Vanrise.Entities.DeleteOperationResult.Failed
+            };
+
+            IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
+            bool deleted = dataManager.DeleteGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
+
+            if (deleted)
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+
+            return deleteOperationOutput;
+        }
         public IEnumerable<GenericBusinessEntity> GetGenericBusinessEntities(int businessEntityDefinitionId)
         {
             var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);

@@ -51,6 +51,9 @@
                 ctrl.menuActions = [{
                     name: 'Edit',
                     clicked: editGenericBusinessEntity
+                }, {
+                    name: 'Delete',
+                    clicked: deleteGenericBusinessEntity
                 }];
             }
 
@@ -59,6 +62,13 @@
                     gridAPI.itemUpdated(updatedGenericBusinessEntity);
                 };
                 VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(genericBusinessEntity.Entity.GenericBusinessEntityId, genericBusinessEntity.Entity.BusinessEntityDefinitionId, onGenericBusinessEntityUpdated);
+            }
+
+            function deleteGenericBusinessEntity(genericBusinessEntity) {
+                var onGenericBusinessEntityDeleted = function () {
+                    gridAPI.itemDeleted(genericBusinessEntity);
+                };
+                VR_GenericData_GenericBusinessEntityService.deleteGenericBusinessEntity($scope, genericBusinessEntity, onGenericBusinessEntityDeleted);
             }
 
             function getDirectiveAPI() {
