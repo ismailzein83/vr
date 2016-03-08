@@ -47,6 +47,7 @@
             $scope.selectedTransformationRecord = [];
             $scope.transformationRecords = [];
             $scope.showTransformationRecordSelector = false;
+            $scope.scopeModal = {};
 
             function initializeController() {
                 var isTriggered = false;
