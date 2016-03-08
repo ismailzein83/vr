@@ -95,7 +95,10 @@ namespace Vanrise.GenericData.Business
             bool deleted = dataManager.DeleteGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
 
             if (deleted)
+            {
                 deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(businessEntityDefinitionId);
+            }
 
             return deleteOperationOutput;
         }
