@@ -153,7 +153,10 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
                                 promises.push(loadCountrySelectorPromiseDeferred.promise);
 
-                                var loadCitiesPromise = VRCommon_CityAPIService.GetCountryIdByCityIds(selectedCityIds).then(function (response) {
+                                var setSelectedCityPromiseDeferred = UtilsService.createPromiseDeferred();
+                                promises.push(setSelectedCityPromiseDeferred.promise);
+
+                                VRCommon_CityAPIService.GetCountryIdByCityIds(selectedCityIds).then(function (response) {
 
                                     var selectedCountryIds = [];
 
@@ -167,9 +170,13 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                                         selectedIds: selectedCountryIds
                                     }
                                     VRUIUtilsService.callDirectiveLoad(countrySelectorAPI, countryPayload, loadCountrySelectorPromiseDeferred);
-                                });
 
-                                promises.push(loadCitiesPromise);
+                                    loadCountrySelectorPromiseDeferred.promise.then(function () {
+                                        VRUIUtilsService.setSelectedValues(selectedIds, 'CityId', attrs, ctrl);
+                                        setSelectedCityPromiseDeferred.resolve();
+                                    })
+
+                                });
 
                                 UtilsService.waitMultiplePromises(promises).then(function () {
                                     loadAllSectionPromiseDeferred.resolve();
