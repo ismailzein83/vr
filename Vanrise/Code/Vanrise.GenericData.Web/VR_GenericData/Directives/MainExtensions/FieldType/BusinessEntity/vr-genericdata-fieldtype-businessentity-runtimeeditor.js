@@ -61,7 +61,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
             return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" '
                 + multipleselection + ' ' + isRequired + '></vr-directivewrapper>'
-                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode">{{dynamic.directive}}<vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
+                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
                 '</vr-section>'
         }
 
@@ -79,7 +79,6 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 var api = {};
 
                 api.load = function (payload) {
-                     console.log(payload)
                     var fieldType;
                     var fieldValue;
                     var fieldTitle;
