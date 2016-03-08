@@ -44,8 +44,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 multipleselection = "ismultipleselection";
             }
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                   + ' <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberReady" ng-show="ctrl.isSellingNumberPlanVisible" onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-show="ctrl.isSellingNumberPlanVisible">'
+                   + ' <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberReady"  onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
                    + ' </vr-columns>'
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '  <vr-select on-ready="ctrl.onSelectorReady"'
@@ -172,8 +172,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                                 var promises = [];
 
                                 var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
-
                                 promises.push(loadSellingNumberPlanPromiseDeferred.promise);
+
+                                var setSelectedSaleZonesPromiseDeferred = UtilsService.createPromiseDeferred();
+                                promises.push(setSelectedSaleZonesPromiseDeferred.promise);
+                               
 
                                 var loadSaleZonePromise = WhS_BE_SaleZoneAPIService.GetSellingNumberPlanIdBySaleZoneIds(selectedSaleZoneIds).then(function (response) {
 
@@ -189,11 +192,18 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
 
                                     VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, payloadDirective, loadSellingNumberPlanPromiseDeferred);
 
-                                    var input = {
-                                        SaleZoneIds: selectedSaleZoneIds,
-                                        SaleZoneFilterSettings: { RoutingProductId: undefined }
-                                    };
-                                    GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input);
+                                    loadSellingNumberPlanPromiseDeferred.promise.then(function () {
+                                        var input = {
+                                            SaleZoneIds: selectedSaleZoneIds,
+                                            SaleZoneFilterSettings: { RoutingProductId: undefined }
+                                        };
+
+                                        GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input).then(function () {
+                                            setSelectedSaleZonesPromiseDeferred.resolve();
+                                        });
+
+                                    })
+                                   
 
                                 });
 

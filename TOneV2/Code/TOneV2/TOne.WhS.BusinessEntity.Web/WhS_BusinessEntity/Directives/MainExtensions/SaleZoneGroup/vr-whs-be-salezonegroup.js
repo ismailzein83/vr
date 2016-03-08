@@ -56,9 +56,9 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, VRNotificationServi
                     saleZoneGroupPayload = {
                         sellingNumberPlanId: payload.sellingNumberPlanId != undefined ? payload.sellingNumberPlanId : undefined,
                         saleZoneFilterSettings: payload.saleZoneFilterSettings,
-                        saleZoneGroupSettings: payload.saleZoneGroupSettings
+                        saleZoneGroupSettings: payload.saleZoneGroupSettings != undefined ? payload.saleZoneGroupSettings : payload
                     }
-                    saleZoneConfigId = payload.saleZoneGroupSettings != undefined ? payload.saleZoneGroupSettings.ConfigId : undefined;
+                    saleZoneConfigId = payload.saleZoneGroupSettings != undefined ? payload.saleZoneGroupSettings.ConfigId : payload.ConfigId;
                 }
                 var promises = [];
                 var loadSaleZoneGroupTemplatesPromise = WhS_BE_SaleZoneAPIService.GetSaleZoneGroupTemplates().then(function (response) {
