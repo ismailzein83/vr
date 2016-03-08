@@ -125,19 +125,19 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         var modalSettings = {
         };
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.title = "Change my Password";
-          
-
+            modalScope.title = "Change my Password";           
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/ChangePassword.html', null, modalSettings);
     }
 
     $scope.openEditProfileModal = function () {
-
         var modalSettings = {
         };
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit my profile";
+            modalScope.onProfileUpdated = function (response) {              
+                $scope.userDisplayName = response.Name;
+            }
 
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);

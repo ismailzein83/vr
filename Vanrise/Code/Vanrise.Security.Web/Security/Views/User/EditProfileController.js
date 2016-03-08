@@ -22,6 +22,8 @@
 
                 return VR_Sec_UserAPIService.EditUserProfile(userProfileObject).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("User's Name", response)) {
+                        if ($scope.onProfileUpdated != undefined)
+                            $scope.onProfileUpdated(response.UpdatedObject);
                         $scope.modalContext.closeModal();
                     }
                 }).catch(function (error) {
