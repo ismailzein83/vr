@@ -410,10 +410,7 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_GenericData\Directives\GenericEditor\Definition\" />
-    <Folder Include="VR_GenericData\Directives\GenericEditor\Runtime\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\GenericRule\Testoing.html" />
