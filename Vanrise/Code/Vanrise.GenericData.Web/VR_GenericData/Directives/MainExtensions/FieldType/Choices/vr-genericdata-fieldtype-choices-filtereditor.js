@@ -9,10 +9,12 @@
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
+
                 var choicesFieldTypeFilterEditor = new ChoicesFieldTypeFilterEditor(ctrl, $scope, $attrs);
                 choicesFieldTypeFilterEditor.initializeController();
             },
@@ -61,7 +63,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-fieldtype-choices-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="multiple" normal-col-num="{{ctrl.normalColNum}}" />';
+            return '<vr-genericdata-fieldtype-choices-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="multiple" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" />';
         }
     }
 

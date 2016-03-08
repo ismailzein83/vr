@@ -6,17 +6,16 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
         scope: {
             onReady: '=',
             selectionmode: '@',
-            normalColNum: '@'
+            normalColNum: '@',
+            isrequired: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
             $scope.scopeModel = {};
-
             var ctor = new dateTimeCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
-        controllerAs: 'ctrl',
+        controllerAs: 'runtimeEditorCtrl',
         bindToController: true,
         compile: function (element, attrs) {
             return {
@@ -74,9 +73,9 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
     }
 
     function getDirectiveTemplate(attrs) {
-        return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.fieldType !=undefined && scopeModel.label != undefined ">'
+        return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType !=undefined && scopeModel.label != undefined ">'
                      + '<vr-label>{{scopeModel.label}}</vr-label>'
-                    + '<vr-directivewrapper  directive="\'vr-datetimepicker\'" on-ready="scopeModel.onDateTimeReady" type="{{scopeModel.fieldType.type}}" value="scopeModel.value"></vr-directivewrapper>'
+                    + '<vr-directivewrapper  directive="\'vr-datetimepicker\'" on-ready="scopeModel.onDateTimeReady" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                 + '</vr-columns>';
     }
 

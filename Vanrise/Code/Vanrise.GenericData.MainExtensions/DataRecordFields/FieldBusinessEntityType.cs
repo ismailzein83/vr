@@ -104,7 +104,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (beManagerType == null)
                 throw new NullReferenceException("beManagerType");
 
-            return Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
+            var beManagerInstance = Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
+            if (beManagerInstance == null)
+                throw new NullReferenceException(String.Format("'{0}' does not implement IBusinessEntityManager", beManagerType.Name));
+
+            return beManagerInstance;
         }
 
         #endregion

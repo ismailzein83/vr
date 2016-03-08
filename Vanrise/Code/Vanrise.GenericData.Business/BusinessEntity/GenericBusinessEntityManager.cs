@@ -127,7 +127,16 @@ namespace Vanrise.GenericData.Business
 
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
-            throw new NotImplementedException();
+            if (context.FieldValueIds == null || context.FilterIds == null) return true;
+
+            var fieldValueIds = context.FieldValueIds.MapRecords(itm => Convert.ToInt32(itm));
+            var filterIds = context.FilterIds.MapRecords(itm => Convert.ToInt32(itm));
+            foreach (var filterId in filterIds)
+            {
+                if (fieldValueIds.Contains(filterId))
+                    return true;
+            }
+            return false;
         }
 
         #endregion
@@ -257,7 +266,7 @@ namespace Vanrise.GenericData.Business
 
             GenericUIRuntimeManager uiRuntimeManager = new GenericUIRuntimeManager();
             GenericBusinessEntityInfo entityInfo = new GenericBusinessEntityInfo();
-            entityInfo.GenericBusinessEntityId = genericBusinessEntity.BusinessEntityDefinitionId;
+            entityInfo.GenericBusinessEntityId = genericBusinessEntity.GenericBusinessEntityId;
 
             var columnValue = GetFieldPathValue(genericBusinessEntity, definitionSettings.FieldPath);
             if (columnValue != null)

@@ -8,14 +8,13 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 onReady: '=',
                 selectionmode: '@',
                 normalColNum: '@',
-                isrequired: '@'
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
-
                 $scope.scopeModel = {};
-                
+
                 ctrl.selectedvalues;
                 if ($attrs.selectionmode == "multiple")
                     ctrl.selectedvalues = [];
@@ -35,7 +34,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 ctor.initializeController();
 
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'runtimeEditorCtrl',
             bindToController: true,
             compile: function (element, attrs) {
                 return {
@@ -51,17 +50,16 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
 
         function getTemplate(attrs) {
+
             var multipleselection = "";
 
             if (attrs.selectionmode == "dynamic" || attrs.selectionmode == "multiple") {
                 multipleselection = "ismultipleselection";
             }            
 
-            var isRequired = (attrs.selectionmode == 'single' && attrs.isrequired != undefined) ? 'isrequired="ctrl.isrequired"' : '';
-
             return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" '
-                + multipleselection + ' ' + isRequired + '></vr-directivewrapper>'
-                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady"></vr-directivewrapper>' +
+                + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
+                + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                 '</vr-section>'
         }
 

@@ -9,14 +9,15 @@
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var businessEntityFieldTypeFilterEditor = new BusinessEntityFieldTypeFilterEditor(ctrl, $scope, $attrs);
                 businessEntityFieldTypeFilterEditor.initializeController();
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'filterEditorCtrl',
             bindToController: true,
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -61,7 +62,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-fieldtype-businessentity-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="multiple" normal-col-num="{{ctrl.normalColNum}}" />';
+            return '<vr-genericdata-fieldtype-businessentity-runtimeeditor on-ready="filterEditorCtrl.onDirectiveReady" selectionmode="multiple" normal-col-num="{{filterEditorCtrl.normalColNum}}" isrequired="filterEditorCtrl.isrequired" />';
         }
     }
 

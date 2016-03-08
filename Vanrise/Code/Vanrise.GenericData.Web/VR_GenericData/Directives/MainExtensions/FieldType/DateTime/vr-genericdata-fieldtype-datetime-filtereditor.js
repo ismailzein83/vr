@@ -9,14 +9,15 @@
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var dateTimeFieldTypeFilterEditor = new DateTimeFieldTypeFilterEditor(ctrl, $scope, $attrs);
                 dateTimeFieldTypeFilterEditor.initializeController();
             },
-            controllerAs: 'ctrl',
+            controllerAs: 'filterEditorCtrl',
             bindToController: true,
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -51,7 +52,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-fieldtype-datetime-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" normal-col-num="{{ctrl.normalColNum}}" />';
+            return '<vr-genericdata-fieldtype-datetime-runtimeeditor on-ready="filterEditorCtrl.onDirectiveReady" selectionmode="single" normal-col-num="{{filterEditorCtrl.normalColNum}}" isrequired="filterEditorCtrl.isrequired" />';
         }
     }
 

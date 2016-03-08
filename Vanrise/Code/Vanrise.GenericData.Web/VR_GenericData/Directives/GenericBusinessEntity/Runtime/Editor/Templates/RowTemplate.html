@@ -1,6 +1,3 @@
-﻿<!--<vr-columns width="1/3row" ng-repeat="field in ctrl.fields">-->
-<span ng-repeat="field in ctrl.fields">
-    <vr-directivewrapper directive="field.runTimeEditor" on-ready="field.onFieldDirectiveReady" selectionmode="single" normal-col-num="4"></vr-directivewrapper>
-
+﻿<span ng-repeat="field in ctrl.fields">
+    <vr-directivewrapper directive="field.runTimeEditor" on-ready="field.onFieldDirectiveReady" selectionmode="single" normal-col-num="4" isrequired="field.IsRequired"></vr-directivewrapper>
 </span>
-<!--</vr-columns>-->

@@ -8,13 +8,11 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                 onReady: '=',
                 selectionmode: '@',
                 normalColNum: '@',
-                isrequired: '@'
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
-
-                console.log(ctrl.isrequired);
 
                 ctrl.selectedvalues;
                 if (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple")

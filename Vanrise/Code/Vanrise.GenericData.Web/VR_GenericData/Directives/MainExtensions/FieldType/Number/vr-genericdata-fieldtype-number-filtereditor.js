@@ -9,7 +9,8 @@
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -51,7 +52,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-fieldtype-number-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" normal-col-num="{{ctrl.normalColNum}}" />';
+            return '<vr-genericdata-fieldtype-number-runtimeeditor on-ready="ctrl.onDirectiveReady" selectionmode="single" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" />';
         }
     }
 
