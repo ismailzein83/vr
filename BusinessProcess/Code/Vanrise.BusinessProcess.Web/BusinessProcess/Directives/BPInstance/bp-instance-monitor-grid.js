@@ -79,6 +79,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                             isGettingData = true;
                             var pageInfo = gridAPI.getPageInfo();
                             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
+                            var itemAddedInThisCall = false;
                             BusinessProcess_BPInstanceAPIService.GetUpdated(input).then(function (response) {
                                 if (response != undefined) {
                                     for (var i = 0; i < response.ListBPInstanceDetails.length; i++) {
@@ -110,21 +111,25 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                                             //if (bpInstance.Entity.ProcessInstanceID < minId) {
                                             //    minId = bpInstance.Entity.ProcessInstanceID;
                                             //}
+                                            itemAddedInThisCall = true;
                                             $scope.bpInstances.push(bpInstance);
                                         }
                                     }
 
-                                    if ($scope.bpInstances.length > 0) {
-                                        $scope.bpInstances.sort(function (a, b) {
-                                            return b.Entity.ProcessInstanceID - a.Entity.ProcessInstanceID;
-                                        });
+                                    if (itemAddedInThisCall) {
+                                        if ($scope.bpInstances.length > 0) {
+                                            $scope.bpInstances.sort(function (a, b) {
+                                                return b.Entity.ProcessInstanceID - a.Entity.ProcessInstanceID;
+                                            });
 
-                                        if ($scope.bpInstances.length > maximumCount) {
-                                            $scope.bpInstances.length = maximumCount;
+                                            if ($scope.bpInstances.length > maximumCount) {
+                                                $scope.bpInstances.length = maximumCount;
+                                            }
+                                            minId = $scope.bpInstances[$scope.bpInstances.length - 1].Entity.ProcessInstanceID;
+                                            isGettingDataFirstTime = false;
                                         }
-                                        minId = $scope.bpInstances[$scope.bpInstances.length - 1].Entity.ProcessInstanceID;
-                                        isGettingDataFirstTime = false;
                                     }
+
                                 }
                                 input.LastUpdateHandle = response.MaxTimeStamp;
                             })
