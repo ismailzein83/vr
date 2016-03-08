@@ -85,7 +85,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadRuntimeEditor, loadBusinessEntityDefinition]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRuntimeEditor, loadBusinessEntityTitle]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -97,7 +97,7 @@
                 $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor(businessEntityTitle.EntityName,businessEntityTitle.Title) : UtilsService.buildTitleForAddEditor(businessEntityTitle.Title);
         }
 
-        function loadBusinessEntityDefinition()
+        function loadBusinessEntityTitle()
         {
             return VR_GenericData_GenericBusinessEntityAPIService.GetBusinessEntityTitle(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
                 businessEntityTitle = response;
