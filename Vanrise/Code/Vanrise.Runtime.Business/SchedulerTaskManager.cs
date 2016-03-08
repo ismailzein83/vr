@@ -18,10 +18,21 @@ namespace Vanrise.Runtime.Business
 
             Func<SchedulerTask, bool> filterExpression = (itm) =>
                 (input.Query == null || ((string.IsNullOrEmpty(input.Query.NameFilter) || itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
-                && (input.Query.Filters == null || input.Query.Filters.Where(item => item.IsMatched(itm)).ToList().Count == input.Query.Filters.Count)))
-                && itm.OwnerId == ownerId;
+                && (input.Query.Filters == null || input.Query.Filters.Where(item => item.IsMatched(itm)).ToList().Count == input.Query.Filters.Count)));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allScheduledTasks.ToBigResult(input, filterExpression, SchedulerTaskDetailMapper));
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Runtime.Entities.SchedulerTaskDetail> GetFilteredMyTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
+        {
+            if (input.Query == null)
+                input.Query = new SchedulerTaskQuery();
+
+            if (input.Query.Filters == null)
+                input.Query.Filters = new List<ISchedulerTaskFilter>();
+
+            input.Query.Filters.Add(new UserTaskFilter() { UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId() });
+            return GetFilteredTasks(input);
         }
 
         public List<SchedulerTask> GetSchedulesInfo()

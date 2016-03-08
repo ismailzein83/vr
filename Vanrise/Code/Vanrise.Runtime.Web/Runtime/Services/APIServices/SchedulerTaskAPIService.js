@@ -18,11 +18,16 @@
             GetSchedulesInfo: GetSchedulesInfo,
             HasAddSchedulerTaskPermission: HasAddSchedulerTaskPermission,
             HasUpdateSchedulerTaskPermission: HasUpdateSchedulerTaskPermission,
-            GetUpdated: GetUpdated
+            GetUpdated: GetUpdated,
+            GetFilteredMyTasks: GetFilteredMyTasks
         });
 
         function GetFilteredTasks(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetFilteredTasks'), input);
+        }
+
+        function GetFilteredMyTasks(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetFilteredMyTasks'), input);
         }
 
         function GetTask(taskId) {

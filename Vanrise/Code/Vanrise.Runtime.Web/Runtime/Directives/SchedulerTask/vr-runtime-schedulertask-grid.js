@@ -35,6 +35,7 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
         var taskIds = [];
         var gridAPI;
         var timer;
+        var isMyTaskSelected;
         this.initializeController = initializeController;
         var isGettingData = false;
         function initializeController() {
@@ -55,6 +56,10 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
                     };
                     directiveAPI.onTaskAdded = function (taskObject) {
                         gridAPI.itemAdded(taskObject);
+                    }
+
+                    directiveAPI.isMyTasksSelected = function (isMyTask) {
+                        isMyTaskSelected = isMyTask;
                     }
                     return directiveAPI;
                 }
@@ -142,13 +147,24 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
         }
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return SchedulerTaskAPIService.GetFilteredTasks(dataRetrievalInput)
-                .then(function (response) {
-                    onResponseReady(response);
-                })
-                .catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                });
+            if (isMyTaskSelected) {
+                return SchedulerTaskAPIService.GetFilteredMyTasks(dataRetrievalInput)
+                    .then(function (response) {
+                        onResponseReady(response);
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
+            }
+            else {
+                return SchedulerTaskAPIService.GetFilteredTasks(dataRetrievalInput)
+                    .then(function (response) {
+                        onResponseReady(response);
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
+            }
         };
     }
 

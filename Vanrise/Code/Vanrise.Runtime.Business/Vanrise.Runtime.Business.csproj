@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filter\UserTaskFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchedulerTaskStateManager.cs" />
     <Compile Include="SchedulerTaskManager.cs" />

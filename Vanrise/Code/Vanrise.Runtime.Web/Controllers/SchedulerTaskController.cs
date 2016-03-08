@@ -21,6 +21,14 @@ namespace Vanrise.Runtime.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredTasks(input));
         }
 
+        [HttpPost]
+        [Route("GetFilteredMyTasks")]
+        public object GetFilteredMyTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
+        {
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return GetWebResponse(input, manager.GetFilteredMyTasks(input));
+        }
+
         [HttpGet]
         [Route("GetTask")]
         public SchedulerTask GetTask(int taskId)

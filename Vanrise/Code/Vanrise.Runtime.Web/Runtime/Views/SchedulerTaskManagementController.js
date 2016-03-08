@@ -1,12 +1,21 @@
-﻿SchedulerTaskManagementController.$inject = ['$scope', 'VR_Runtime_SchedulerTaskService', 'SchedulerTaskAPIService'];
+﻿SchedulerTaskManagementController.$inject = ['$scope', 'VR_Runtime_SchedulerTaskService', 'SchedulerTaskAPIService', 'VRNavigationService'];
 
-function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskService, SchedulerTaskAPIService) {
+function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskService, SchedulerTaskAPIService, VRNavigationService) {
 
     var gridAPI;
 
     defineScope();
+    
     load();
     var filter = {};
+
+    var isMyTasks = false;
+    function loadParameters() {
+        var parameters = VRNavigationService.getParameters($scope);
+        if (parameters != undefined && parameters != null) {
+            isMyTasks = true;
+        }
+    }
 
     function defineScope() {
 
@@ -16,6 +25,8 @@ function SchedulerTaskManagementController($scope, VR_Runtime_SchedulerTaskServi
 
         $scope.onGridReady = function (api) {
             gridAPI = api;
+            loadParameters();
+            gridAPI.isMyTasksSelected(isMyTasks);
             gridAPI.loadGrid(filter);
         };
 
