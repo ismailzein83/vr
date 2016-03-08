@@ -89,7 +89,7 @@ app.directive('vrGenericdataDatatransformationdefinitionRecordnameSelector', ['U
             api.load = function (payload) {
                 if (selectorAPI != undefined)
                     selectorAPI.clearDataSource();
-                console.log(payload)
+                
                 var selectedIds;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
