@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericBusinessEntityManager : BaseBEManager, IBusinessEntityManager
     {
-        #region Public Methods
+        #region Fields / Constructors
         private GenericUIRuntimeManager _uiRuntimeManager;
         private BusinessEntityDefinitionManager _businessEntityDefinitionManager;
         private DataRecordTypeManager _recordTypeManager;
@@ -44,42 +44,54 @@ namespace Vanrise.GenericData.Business
         }
         public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
-            UpdateOperationOutput<GenericBusinessEntityDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail>();
             updateOperationOutput.UpdatedObject = null;
 
-            IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-            bool updateActionSucc = dataManager.UpdateGenericBusinessEntity(genericBusinessEntity);
-
-            if (updateActionSucc)
+            if (IsEntityTitleValid(genericBusinessEntity))
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(genericBusinessEntity.BusinessEntityDefinitionId);
-                updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntity);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+
+                IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
+                bool updated = dataManager.UpdateGenericBusinessEntity(genericBusinessEntity);
+
+                if (updated)
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(genericBusinessEntity.BusinessEntityDefinitionId);
+                    updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntity);
+                }
             }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
             return updateOperationOutput;
         }        
         public Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
-            InsertOperationOutput<GenericBusinessEntityDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail>();
-
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail>();
             insertOperationOutput.InsertedObject = null;
-            long genericBusinessEntityId = -1;
-            IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-            bool insertActionSucc = dataManager.AddGenericBusinessEntity(genericBusinessEntity, out genericBusinessEntityId);
-            if (insertActionSucc)
+
+            if (IsEntityTitleValid(genericBusinessEntity))
             {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+                long genericBusinessEntityId = -1;
+
+                IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
+                bool inserted = dataManager.AddGenericBusinessEntity(genericBusinessEntity, out genericBusinessEntityId);
+
+                if (inserted)
+                {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     genericBusinessEntity.GenericBusinessEntityId = genericBusinessEntityId;
                     insertOperationOutput.InsertedObject = GenericBusinessEntityDetailMapper(genericBusinessEntity);
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(genericBusinessEntity.BusinessEntityDefinitionId);
+                }
             }
             else
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-
             }
 
             return insertOperationOutput;
@@ -179,7 +191,7 @@ namespace Vanrise.GenericData.Business
             }
             return false;
         }
-
+        
         #endregion
         
         #region Private Methods
@@ -275,6 +287,31 @@ namespace Vanrise.GenericData.Business
             }
 
             return true;
+        }
+        bool IsEntityTitleValid(GenericBusinessEntity entity)
+        {
+            BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(entity.BusinessEntityDefinitionId);
+            if (beDefinition == null)
+                throw new NullReferenceException("beDefinition");
+
+            var genericBEDefinitionSettings = beDefinition.Settings as GenericBEDefinitionSettings;
+            if (genericBEDefinitionSettings == null)
+                throw new NullReferenceException("genericBEDefinitionSettings");
+
+            string fieldPath = genericBEDefinitionSettings.FieldPath;
+            if (fieldPath == null)
+                throw new NullReferenceException("genericBEDefinitionSettings.FieldPath");
+
+            dynamic entityTitle = GetFieldPathValue(entity, fieldPath);
+            if (entityTitle == null)
+                throw new NullReferenceException("entityTitle");
+
+            string entityTitleString = entityTitle.ToString().ToLower();
+
+            Dictionary<long, GenericBusinessEntity> cachedEntites = GetCachedGenericBusinessEntities(entity.BusinessEntityDefinitionId);
+            GenericBusinessEntity entityMatch = cachedEntites.FindRecord(itm => (entity.GenericBusinessEntityId == 0 || itm.GenericBusinessEntityId != entity.GenericBusinessEntityId) && GetFieldPathValue(itm, fieldPath).ToString().ToLower() == entityTitleString);
+
+            return (entityMatch == null);
         }
 
         #endregion

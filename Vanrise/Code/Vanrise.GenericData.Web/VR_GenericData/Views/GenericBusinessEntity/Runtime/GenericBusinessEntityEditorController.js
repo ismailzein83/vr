@@ -133,7 +133,7 @@
             $scope.scopeModel.isLoading = true;
 
             return VR_GenericData_GenericBusinessEntityAPIService.AddGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Generic Business Entity', response)) {
+                if (VRNotificationService.notifyOnItemAdded(businessEntityTitle.Title, response, 'Title')) {
                     if ($scope.onGenericBusinessEntityAdded != undefined)
                         $scope.onGenericBusinessEntityAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -149,7 +149,7 @@
             $scope.scopeModel.isLoading = true;
 
             return VR_GenericData_GenericBusinessEntityAPIService.UpdateGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('Generic Business Entity', response)) {
+                if (VRNotificationService.notifyOnItemUpdated(businessEntityTitle.Title, response, 'Title')) {
                     if ($scope.onGenericBusinessEntityUpdated != undefined)
                         $scope.onGenericBusinessEntityUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
