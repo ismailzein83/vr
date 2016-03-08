@@ -150,8 +150,8 @@
                         if (executionFlowStageEntity != undefined && existingExecutionFlowStage.StageName != executionFlowStageEntity.StageName && existingExecutionFlowStage.QueueItemType.DataRecordTypeId == executionFlowStageEntity.QueueItemType.DataRecordTypeId)
                             $scope.scopeModal.sourceStages.push({ stageName: existingExecutionFlowStages[i].StageName });
                         if (executionFlowStageEntity.SourceStages != undefined) {
-                            for (var i = 0; i < executionFlowStageEntity.SourceStages.length; i++) {
-                                var selectedValue = UtilsService.getItemByVal($scope.scopeModal.sourceStages, executionFlowStageEntity.SourceStages[i], "stageName");
+                            for (var j = 0; j < executionFlowStageEntity.SourceStages.length; j++) {
+                                var selectedValue = UtilsService.getItemByVal($scope.scopeModal.sourceStages, executionFlowStageEntity.SourceStages[j], "stageName");
                                 if (selectedValue != null)
                                     $scope.scopeModal.selectedSourceStages.push(selectedValue);
                             }
@@ -184,12 +184,16 @@
             var laodDataRecordTypeSelectorPromise = loadDataRecordTypeSelector();
             promises.push(laodDataRecordTypeSelectorPromise);
 
+            var loadQueueActivatorPromiseDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadQueueActivatorPromiseDeferred.promise);
+
             laodDataRecordTypeSelectorPromise.then(function () {
 
                 if (executionFlowStageEntity != undefined) {
                     loadSourceStages(false);
-                    var loadQueueActivatorSectionPromise = loadQueueActivatorSection(executionFlowStageEntity.QueueItemType.dataRecordTypeId, true);
-                    promises.push(loadQueueActivatorSectionPromise);
+                    loadQueueActivatorSection(executionFlowStageEntity.QueueItemType.dataRecordTypeId, true).then(function () {
+                        loadQueueActivatorPromiseDeferred.resolve();
+                    })
                 }
                 else
                     loadSourceStages(false);
