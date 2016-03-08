@@ -30,6 +30,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
 
             var gridAPI;
             var gridDrillDownTabsObj;
+
             function initializeController() {
 
                 $scope.businessEntityDefinitions = [];
@@ -97,7 +98,6 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                 defineMenuActions();
             }
 
-
             function defineMenuActions() {
                 var extensibleMenuActions = [
                 {
@@ -128,6 +128,7 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
 
                 VR_GenericData_ExtensibleBEItemService.addExtendedSettings(dataItem.Entity.BusinessEntityDefinitionId, onExtendedSettingsAdded);
             }
+
             function editBusinessEntityDefinition(dataItem)
             {
                 var onBusinessEntityDefinitionUpdated = function (businessEntityDefinition) {

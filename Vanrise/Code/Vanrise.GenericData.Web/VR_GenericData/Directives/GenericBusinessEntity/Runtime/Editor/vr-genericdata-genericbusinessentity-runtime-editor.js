@@ -33,6 +33,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeEditor', ['UtilsService'
 
         function EditorCtor(ctrl, $scope) {
             var selectedValues;
+
             function initializeController() {
                 ctrl.sections = [];
                 defineAPI();

@@ -33,6 +33,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
 
         function SectionCtor(ctrl, $scope) {
             var currentContext;
+
             function initializeController() {
                 ctrl.rows = [];
                 defineAPI();
@@ -96,6 +97,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeSection', ['UtilsService
 
             this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }
 ]);

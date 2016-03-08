@@ -33,6 +33,7 @@ app.directive('vrGenericdataGenericbusinessentityRuntimeRow', ['UtilsService', '
 
         function RowCtor(ctrl, $scope) {
             var currentContext;
+
             function initializeController() {
                 ctrl.fields = [];
                 defineAPI();

@@ -29,6 +29,7 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
             this.initializeController = initializeController;
 
             var gridAPI;
+
             function initializeController() {
 
                 $scope.extensibleBEItems = [];
@@ -62,7 +63,6 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
 
                 defineMenuActions();
             }
-
 
             function defineMenuActions() {
                 var defaultMenuActions = [
