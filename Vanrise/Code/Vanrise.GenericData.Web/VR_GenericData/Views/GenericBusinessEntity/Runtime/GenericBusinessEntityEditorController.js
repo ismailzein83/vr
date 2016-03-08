@@ -10,6 +10,7 @@
 
         var businessEntityDefinitionId;
         var runtimeEditor;
+        var businessEntityTitle;
 
         var genericBusinessEntityId;
         var genericBusinessEntity;
@@ -84,7 +85,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadRuntimeEditor]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRuntimeEditor, loadBusinessEntityDefinition]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -92,7 +93,16 @@
         }
 
         function setTitle() {
-            $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor('Generic Business Entity') : UtilsService.buildTitleForAddEditor('Generic Business Entity');
+            if (businessEntityTitle != undefined)
+                $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor(businessEntityTitle.EntityName,businessEntityTitle.Title) : UtilsService.buildTitleForAddEditor(businessEntityTitle.Title);
+        }
+
+        function loadBusinessEntityDefinition()
+        {
+            return VR_GenericData_GenericBusinessEntityAPIService.GetBusinessEntityTitle(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+                businessEntityTitle = response;
+                setTitle();
+            });
         }
 
         function loadRuntimeEditor() {

@@ -52,6 +52,14 @@ namespace Vanrise.GenericData.Web.Controllers
             GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
             GenericBusinessEntityFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<GenericBusinessEntityFilter>(serializedFilter) : null;
             return manager.GetGenericBusinessEntityInfo(businessEntityDefinitionId,filter);
-        }
+        } 
+        [HttpGet]
+        [Route("GetBusinessEntityTitle")]
+        public GenericBusinessEntityTitle GetBusinessEntityTitle(int businessEntityDefinitionId, long? genericBussinessEntityId = null)
+        {
+            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+            return manager.GetBusinessEntityTitle(businessEntityDefinitionId, genericBussinessEntityId);
+        } 
+         
     }
 }

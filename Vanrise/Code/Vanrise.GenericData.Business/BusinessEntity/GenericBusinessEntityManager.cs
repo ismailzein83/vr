@@ -125,6 +125,43 @@ namespace Vanrise.GenericData.Business
             return (descriptions.Count > 0) ? String.Join(",", descriptions) : null;
         }
 
+        public GenericBusinessEntityTitle GetBusinessEntityTitle(int businessEntityDefinitionId,long? genericBussinessEntityId = null)
+        {
+            BusinessEntityDefinitionManager businessEntityDefinitionManager = new Business.BusinessEntityDefinitionManager();
+            var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
+
+            if (businessEntityDefinition == null)
+                throw new NullReferenceException("businessEntityDefinition");
+
+            GenericBusinessEntityTitle entityTitle = new GenericBusinessEntityTitle();
+            entityTitle.Title = businessEntityDefinition.Title;
+           
+            if(genericBussinessEntityId !=null)
+            {
+                GenericBEDefinitionSettings definitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
+
+                if (definitionSettings == null)
+                    throw new NullReferenceException("definitionSettings");
+
+                DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
+
+                var recordType = recordTypeManager.GetDataRecordType(definitionSettings.DataRecordTypeId);
+                if (recordType == null)
+                    throw new NullReferenceException("recordType");
+
+                GenericUIRuntimeManager uiRuntimeManager = new GenericUIRuntimeManager();
+                var genericBusinessEntity = GetGenericBusinessEntity((long)genericBussinessEntityId, businessEntityDefinitionId);
+                var columnValue = GetFieldPathValue(genericBusinessEntity, definitionSettings.FieldPath);
+                if (columnValue != null)
+                {
+                    var uiRuntimeField = uiRuntimeManager.GetFieldType(definitionSettings.FieldPath, recordType.Fields, recordType.DataRecordTypeId);
+                    var value = (columnValue.Value != null) ? columnValue.Value : columnValue;
+                    entityTitle.EntityName = uiRuntimeField.GetDescription(value);
+                }
+            }
+            return entityTitle;
+        }
+
         public bool IsMatched(IBusinessEntityMatchContext context)
         {
             if (context.FieldValueIds == null || context.FilterIds == null) return true;
@@ -206,7 +243,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Mappers
-        
+         
         private GenericBusinessEntityDetail GenericBusinessEntityDetailMapper(GenericBusinessEntity genericBusinessEntity)
         {
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new Business.BusinessEntityDefinitionManager();
@@ -283,6 +320,11 @@ namespace Vanrise.GenericData.Business
     public class GenericBusinessEntityFilter
     {
         public int BusinessEntityDefinitionId { get; set; }
+    }
+    public class GenericBusinessEntityTitle
+    {
+        public string Title { get; set; }
+        public string EntityName { get; set; }
     }
 }
  
