@@ -153,7 +153,6 @@
                 {
                     if(businessEntityDefinitionEntity != undefined )
                     {
-                        console.log(businessEntityDefinitionEntity);
                         $scope.scopeModal.businessEntityName = businessEntityDefinitionEntity.Name;
                         $scope.scopeModal.businessEntityTitle = businessEntityDefinitionEntity.Title;
                         if(businessEntityDefinitionEntity.Settings != undefined)

@@ -59,7 +59,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var filter;
                     var selectedIds;
                     var businessEntityDefinitionId;
@@ -86,7 +85,6 @@
                     });
                 }
                 api.getSelectedIds = function () {
-                    console.log(VRUIUtilsService.getIdSelectedIds('GenericBusinessEntityId', attrs, ctrl));
                     return VRUIUtilsService.getIdSelectedIds('GenericBusinessEntityId', attrs, ctrl);
                 }
 
