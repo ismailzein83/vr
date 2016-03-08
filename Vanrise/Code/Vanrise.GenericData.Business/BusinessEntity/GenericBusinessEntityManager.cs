@@ -213,7 +213,11 @@ namespace Vanrise.GenericData.Business
                 if (filterValue == null)
                     continue;
 
-                if (!runtimeFilter.FieldType.IsMatched(GetFieldPathValue(genericBusinessEntity, runtimeFilter.FieldPath).Value, filterValue))
+                dynamic fieldValue = GetFieldPathValue(genericBusinessEntity, runtimeFilter.FieldPath);
+                if (fieldValue == null)
+                    continue;
+
+                if (!runtimeFilter.FieldType.IsMatched(fieldValue.Value, filterValue))
                     return false;
             }
 
