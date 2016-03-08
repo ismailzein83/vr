@@ -1,5 +1,5 @@
 ﻿<vr-row removeline>
-    <vr-columns width="normal" ng-repeat="filter in ctrl.filters">
-        <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" isrequired="filter.isRequired"></vr-directivewrapper>
-    </vr-columns>
+    <span ng-repeat="filter in ctrl.filters">
+        <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2" isrequired="filter.isRequired"></vr-directivewrapper>
+    </span>
 </vr-row>
