@@ -94,6 +94,8 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 },
                 fail: function (e, data) {
                     $scope.broken = true;
+                    $scope.isUploading = false;
+                   
                 }
             });
             $scope.$watch('ctrl.value', function () {
@@ -183,7 +185,14 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                             $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
                         }, 1)
                     }
-                    
+                    ctrl.remove = function () {
+                        $scope.complet = false;
+                        $scope.broken = false;
+                        $scope.isUploading = false;
+                        ctrl.value = null;
+                        ctrl.file = null;
+                    }
+
                     //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                 }
@@ -209,7 +218,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                                + ' <div ng-show="broken ==true " class="vr-file-process" style="font-size: 10px;top: 20px;"><span>fail</span></div>'
                                +'</div>'
                            + '</div>'
-                            + '<span ng-show="ctrl.file !=null" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.value = null;ctrl.file = null"></span>'
+                            + '<span ng-show="ctrl.file !=null || broken ==true" class="glyphicon glyphicon-remove hand-cursor vr-file-remove" aria-hidden="true" ng-click="ctrl.remove()"></span>'
                             + '<span vr-disabled="ctrl.file !=null" class="btn btn-success fileinput-button vr-file-btn">'
                                 +'<i class="glyphicon glyphicon-paperclip " style="top:0px"></i>'
                                 + '<input type="file" id="fileUpload">'
