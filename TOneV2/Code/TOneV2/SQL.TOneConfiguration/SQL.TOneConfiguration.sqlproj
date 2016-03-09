@@ -278,6 +278,7 @@
     <None Include="BusinessProcess.PostDeployment.sql" />
     <None Include="Integration.PostDeployment.sql" />
     <None Include="Runtime.PostDeployment.sql" />
+    <None Include="InterConnect.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

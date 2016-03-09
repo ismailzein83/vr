@@ -76,8 +76,8 @@ when not matched by source then
 	delete;
 set identity_insert [BI].[SchemaConfiguration] off;
 
---[sec].[Module]------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[Module]------------------------------601 to 700------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -104,8 +104,8 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
---[sec].[View]--------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[View]-----------------------------6001 to 7000--------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])

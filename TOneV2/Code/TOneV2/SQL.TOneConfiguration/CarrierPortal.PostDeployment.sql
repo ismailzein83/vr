@@ -9,8 +9,8 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[sec].[Module]------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[Module]---------------------------701 to 800---------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -31,8 +31,8 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
---[sec].[View]--------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[View]-----------------------------7001 to 8000-------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
@@ -59,7 +59,7 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntityModule]------------------------501 to 600----------------------------------------------
+--[sec].[BusinessEntityModule]-------------701 to 800---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
@@ -81,8 +81,8 @@ when not matched by target then
 set identity_insert [sec].[BusinessEntityModule] off;
 
 
---[sec].[BusinessEntity]------------------1501 to 1800----------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------
+--[sec].[BusinessEntity]-------------------2101 to 2400-------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])

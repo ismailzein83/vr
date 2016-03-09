@@ -9,7 +9,8 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[sec].[User]------
+--[sec].[User]--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[User] on;
 ;with cte_data([ID],[Name],[Password],[Email],[Status])
@@ -122,8 +123,8 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
---[sec].[Module]------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[Module]------------------------------1 to 100------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -143,8 +144,8 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
---[sec].[View]--------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[View]-----------------------------1 to 1000---------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])

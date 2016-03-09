@@ -62,8 +62,8 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank]);
 set identity_insert [BI].[SchemaConfiguration] off;
 
---[sec].[Module]------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[Module]------------------------------701 to 800------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
@@ -87,8 +87,8 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
---[sec].[View]--------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[View]-----------------------------7001 to 8000--------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
@@ -128,10 +128,10 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(200,'QM_CLITester_Profile','Profile',1,0,'["View", "Edit"]'),
-(201,'QM_CLITester_TestCall','Test Call',1,0,'["View", "Test Call"]'),
-(202,'QM_BE_Supplier','Supplier',1,0,'["View", "Add", "Edit", "Download Template", "Upload"]'),
-(203,'QM_BE_Zone','Zone',1,0,'["View"]')
+(2101,'QM_CLITester_Profile','Profile',1,0,'["View", "Edit"]'),
+(2102,'QM_CLITester_TestCall','Test Call',1,0,'["View", "Test Call"]'),
+(2103,'QM_BE_Supplier','Supplier',1,0,'["View", "Add", "Edit", "Download Template", "Upload"]'),
+(2104,'QM_BE_Zone','Zone',1,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -152,17 +152,17 @@ set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(10001,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
-(10002,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
-(10003,'iTest Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
-(10004,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
-(10005,'Initiate Test - ITest','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
-(10006,'Test Progress - ITest','QM_CLITester_ConnectorTestProgress','qm-clitester-testconnector-testprogress-itest',null,null),
-(10007,'TOne V2 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev2',null,null),
-(10008,'I-Test Countries','VRCommon_SourceCountryReader','qm-clitester-sourcecountryreader-itest',null,null),
-(10009,'I-Test Zones','QM_BE_SourceZoneReader','qm-clitester-sourcezonereader-itest',null,null),
-(10010,'TOne V1 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev1',null,null),
-(10011,'TOne V1 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev1',null,null)
+(40001,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
+(40002,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
+(40003,'iTest Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
+(40004,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
+(40005,'Initiate Test - ITest','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
+(40006,'Test Progress - ITest','QM_CLITester_ConnectorTestProgress','qm-clitester-testconnector-testprogress-itest',null,null),
+(40007,'TOne V2 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev2',null,null),
+(40008,'I-Test Countries','VRCommon_SourceCountryReader','qm-clitester-sourcecountryreader-itest',null,null),
+(40009,'I-Test Zones','QM_BE_SourceZoneReader','qm-clitester-sourcezonereader-itest',null,null),
+(40010,'TOne V1 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev1',null,null),
+(40011,'TOne V1 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev1',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t
