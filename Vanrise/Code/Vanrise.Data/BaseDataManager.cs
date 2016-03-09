@@ -79,6 +79,14 @@ namespace Vanrise.Data
                 return value;
         }
 
+        protected object ToDBNullIfDefault(long value)
+        {
+            if (value == default(long))
+                return DBNull.Value;
+            else
+                return value;
+        }
+
         protected object ToDBNullIfDefault(DateTime value)
         {
             if (value == default(DateTime))
