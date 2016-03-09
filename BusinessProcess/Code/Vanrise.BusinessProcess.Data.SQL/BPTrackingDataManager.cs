@@ -28,7 +28,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         static DataTable s_trackingMessagesSchemaTable;
         static void CreateSchemaTable()
         {
-            s_trackingMessagesSchemaTable = new DataTable {TableName = "bp.BPTracking"};
+            s_trackingMessagesSchemaTable = new DataTable { TableName = "bp.BPTracking" };
             s_trackingMessagesSchemaTable.Columns.Add("ProcessInstanceID", typeof(long));
             s_trackingMessagesSchemaTable.Columns.Add("ParentProcessID", typeof(long));
             s_trackingMessagesSchemaTable.Columns.Add("TrackingMessage", typeof(string));
@@ -61,7 +61,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs)
         {
-            DataTable dt = s_trackingMessagesSchemaTable.Clone();            
+            DataTable dt = s_trackingMessagesSchemaTable.Clone();
             dt.BeginLoadData();
             foreach (var msg in lstTrackingMsgs)
             {
@@ -78,9 +78,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
-        public BigResult<BPTrackingMessage> GetFilteredTrackings(DataRetrievalInput<TrackingQuery> input)
+        public BigResult<BPTrackingMessage> GetFilteredTrackings(DataRetrievalInput<BPTrackingQuery> input)
         {
-            int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?) (input.ToRow ?? 0) - (input.FromRow ?? 0) + 1 : null;
+            int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?)(input.ToRow ?? 0) - (input.FromRow ?? 0) + 1 : null;
 
             return new BigResult<BPTrackingMessage>()
             {
@@ -93,11 +93,51 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
         }
 
-        public List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input)
+        public BigResult<BPTrackingMessageDetail> GetFilteredBPInstanceTracking(DataRetrievalInput<BPTrackingQuery> input)
+        {
+            int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?)(input.ToRow ?? 0) - (input.FromRow ?? 0) + 1 : null;
+
+            return new BigResult<BPTrackingMessageDetail>()
+            {
+                Data = GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingDetailMapper, input.Query.ProcessInstanceId, input.Query.FromTrackingId,
+                input.Query.Message,
+                input.Query.Severities == null
+                    ? null
+                    : string.Join(",", input.Query.Severities.Select(n => ((int)n).ToString()).ToArray()),
+                top)
+            };
+        }
+        public List<BPTrackingMessage> GetTrackingsFrom(BPTrackingQuery input)
         {
             return GetItemsSP("bp.sp_BPTrackings_GetFromInstanceId", BPTrackingMapper, input.ProcessInstanceId, input.FromTrackingId);
         }
 
+        public List<BPTrackingMessage> GetUpdated(BPTrackingUpdateInput input)
+        {
+            string severityIdsAsString = null;
+            if (input.Severities != null && input.Severities.Count() > 0)
+                severityIdsAsString = string.Join<int>(",", input.Severities.Select(n => ((int)n)));
+
+            List<BPTrackingMessage> bpTrackingMessages = new List<BPTrackingMessage>();
+
+            ExecuteReaderSP("[bp].[sp_BPTrackings_GetUpdated]", (reader) =>
+            {
+                while (reader.Read())
+                    bpTrackingMessages.Add(BPTrackingMapper(reader));
+            },
+               input.NbOfRows, ToDBNullIfDefault(input.GreaterThanID), input.BPInstanceID, severityIdsAsString);
+
+            return bpTrackingMessages;
+        }
+
+        public List<BPTrackingMessage> GetBeforeId(BPTrackingBeforeIdInput input)
+        {
+            string severityIdsAsString = null;
+            if (input.Severities != null && input.Severities.Count() > 0)
+                severityIdsAsString = string.Join<int>(",", input.Severities.Select(n => ((int)n)));
+
+            return GetItemsSP("[bp].[sp_BPTrackings_GetBeforeID]", BPTrackingMapper, input.LessThanID, input.NbOfRows, input.BPInstanceID, severityIdsAsString);
+        }
         #endregion
 
         #region Private Methods
@@ -117,9 +157,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return bpTrackingMessage;
         }
 
+        BPTrackingMessageDetail BPTrackingDetailMapper(IDataReader reader)
+        {
+            return new BPTrackingMessageDetail() { Entity = BPTrackingMapper(reader) };
+        }
+
         private LogEntryType MapSeverity(ActionSeverity actionSeverity)
         {
-            switch(actionSeverity)
+            switch (actionSeverity)
             {
                 case ActionSeverity.Information:
                     return LogEntryType.Information;

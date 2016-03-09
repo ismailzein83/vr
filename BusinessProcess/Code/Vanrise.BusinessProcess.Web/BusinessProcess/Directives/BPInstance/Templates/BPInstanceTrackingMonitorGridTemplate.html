@@ -1,0 +1,26 @@
+﻿<div ng-hide="filterSectionCollapsed">
+    <vr-row removeline>
+        <vr-columns width="large">
+            <vr-select label="Severity" ismultipleselection hideselectedvaluessection="true" datatextfield="description" datavaluefield="value"
+                       datasource="::trackingSeverity" selectedvalues="selectedTrackingSeverity"></vr-select>
+        </vr-columns>
+    </vr-row>
+</div>
+
+<vr-row removeline>
+    <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+        <div transclude-to="buttons">
+            <vr-button type="Search" data-onclick="searchClicked"></vr-button>
+        </div>
+    </vr-actionbar>
+</vr-row>
+<vr-row vr-loader="isLoading">
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="::bpInstanceTracking" pagingtype="'PagingOnScroll'" dataretrievalfunction="dataRetrievalFunction" on-ready="onGridReady" hidepaginginfo loadmoredata="loadMoreData">
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.Id'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Message'" field="'Entity.TrackingMessage'" widthfactor="80" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" getcolor="getSeverityColor" widthfactor="10" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Event Time'" field="'Entity.EventTime'" widthfactor="10" type="'LongDatetime'" disablesorting="true"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

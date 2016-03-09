@@ -22,12 +22,10 @@ namespace Vanrise.BusinessProcess.Entities
         public int? MaxConcurrentWorkflows { get; set; }
         public bool RetryOnProcessFailed { get; set; }
         public string Url { get; set; }
-
         public string ScheduleTemplateURL { get; set; }
-
         public string ManualExecEditor { get; set; }
         public string ScheduledExecEditor { get; set; }
-
         public bool IsPersistable { get; set; }
+        public bool HasChildProcesses { get; set; }
     }
 }

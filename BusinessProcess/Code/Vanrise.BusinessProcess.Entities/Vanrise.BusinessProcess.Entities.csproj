@@ -61,12 +61,16 @@
     <Compile Include="BPDefinitionQuery.cs" />
     <Compile Include="BPEvent.cs" />
     <Compile Include="BPInstance.cs" />
+    <Compile Include="BPTrackingBeforeIdInput.cs" />
     <Compile Include="BPInstanceDetail.cs" />
     <Compile Include="BPInstanceQuery.cs" />
     <Compile Include="BPInstanceStatus.cs" />
     <Compile Include="BPInstanceBeforeIdInput.cs" />
+    <Compile Include="BPTrackingUpdateInput.cs" />
     <Compile Include="BPInstanceUpdateInput.cs" />
+    <Compile Include="BPTrackingUpdateOutput.cs" />
     <Compile Include="BPInstanceUpdateOutput.cs" />
+    <Compile Include="BPTrackingMessageDetail.cs" />
     <Compile Include="Tasks\BPTask.cs" />
     <Compile Include="Tasks\BPTaskAction.cs" />
     <Compile Include="Tasks\BPTaskAssignee.cs" />
@@ -88,7 +92,7 @@
     <Compile Include="Tasks\ExecuteBPTaskOutput.cs" />
     <Compile Include="Tasks\IBPTaskActionContext.cs" />
     <Compile Include="Tasks\IBPTaskAssigneeContext.cs" />
-    <Compile Include="TrackingQuery.cs" />
+    <Compile Include="BPTrackingQuery.cs" />
     <Compile Include="CreateProcessInput.cs" />
     <Compile Include="CreateProcessOutput.cs" />
     <Compile Include="IBPService.cs" />

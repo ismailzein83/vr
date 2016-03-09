@@ -4,10 +4,10 @@
                  pagingtype="'PagingOnScroll'"
                  menuactions="gridMenuActions"
                  idfield="Entity.ProcessInstanceID">
-        <vr-datagridcolumn headertext="'ID'" field="'Entity.ProcessInstanceID'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" type="'Text'" isclickable="true" onclicked="processInstanceClicked"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="getStatusColor"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Created On'" field="'Entity.CreatedTime'" type="'LongDatetime'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Last Status Update'" field="'Entity.StatusUpdatedTime'" type="'LongDatetime'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'ID'" field="'Entity.ProcessInstanceID'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" type="'Text'" isclickable="true" onclicked="processInstanceClicked" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" widthfactor="5" getcolor="getStatusColor" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Created On'" field="'Entity.CreatedTime'" type="'LongDatetime'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Last Status Update'" field="'Entity.StatusUpdatedTime'" type="'LongDatetime'" disablesorting="true"></vr-datagridcolumn>
     </vr-datagrid>
 </div>

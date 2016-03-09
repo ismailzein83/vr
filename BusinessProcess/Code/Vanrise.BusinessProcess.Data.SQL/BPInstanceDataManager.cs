@@ -23,7 +23,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
         #region public methods
-        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId)
+        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId, int parentId)
         {
             string definitionsIdAsString = null;
             if (definitionsId != null && definitionsId.Count() > 0)
@@ -40,7 +40,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                     while (reader.Read())
                         timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
             },
-               maxTimeStamp, nbOfRows, definitionsIdAsString);
+               maxTimeStamp, nbOfRows, definitionsIdAsString, ToDBNullIfDefault(parentId));
             maxTimeStamp = timestamp;
             return bpInstances;
         }
@@ -51,7 +51,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (input.DefinitionsId != null && input.DefinitionsId.Count() > 0)
                 definitionsIdAsString = string.Join<int>(",", input.DefinitionsId);
 
-            return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString);
+            return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString, ToDBNullIfDefault(input.ParentId));
         }
 
         public Vanrise.Entities.BigResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
@@ -99,6 +99,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
             ExecuteNonQuerySP("[bp].[sp_BPInstance_SetChildrenStatusesTerminated]", (int)BPInstanceStatus.Terminated, String.Join(",", openStatuses.Select(itm => (int)itm)), String.Join(",", runningRuntimeProcessesIds));
         }
 
+        public BPInstance GetBPInstance(int bpInstanceId)
+        {
+            return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
+        }
         #endregion
 
         #region mapper
@@ -132,6 +136,5 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
         }
         #endregion
-
     }
 }

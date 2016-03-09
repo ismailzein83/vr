@@ -17,10 +17,17 @@
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "GetFilteredBPInstances"), input);
         }
 
+        function GetBPInstance(id) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "GetBPInstance"), {
+                id: id
+            });
+        }
+
         return ({
             GetUpdated: GetUpdated,
             GetBeforeId: GetBeforeId,
-            GetFilteredBPInstances: GetFilteredBPInstances
+            GetFilteredBPInstances: GetFilteredBPInstances,
+            GetBPInstance: GetBPInstance
         });
     }
 

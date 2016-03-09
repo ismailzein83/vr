@@ -112,13 +112,13 @@ namespace Vanrise.BusinessProcess.Client
             return dataManager.GetInstance(instanceId);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<BPTrackingMessage> GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<BPTrackingMessage> GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<BPTrackingQuery> input)
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredTrackings(input));
         }
 
-        public List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input)
+        public List<BPTrackingMessage> GetTrackingsFrom(BPTrackingQuery input)
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             return dataManager.GetTrackingsFrom(input);

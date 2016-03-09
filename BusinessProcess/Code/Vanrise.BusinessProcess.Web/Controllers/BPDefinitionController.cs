@@ -35,5 +35,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             BPDefinitionManager manager = new BPDefinitionManager();
             return manager.GetBPDefinitionsInfo(filter);
         }
+
+        [HttpGet]
+        [Route("GetBPDefintion")]
+        public BPDefinition GetBPDefintion(int bpDefinitionId)
+        {
+            BPDefinitionManager manager = new BPDefinitionManager();
+            return manager.GetBPDefinition(bpDefinitionId);
+        }
     }
 }

@@ -18,7 +18,8 @@
 
         function openProcessTracking(processInstanceId) {
 
-            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
+            //VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPInstance/BPInstanceTrackingModal.html', {
                 BPInstanceID: processInstanceId
             }, {
                 onScopeReady: function (modalScope) {

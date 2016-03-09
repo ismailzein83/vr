@@ -25,7 +25,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             BPInstanceManager manager = new BPInstanceManager();
             byte[] maxTimeStamp = input.LastUpdateHandle;
-            return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows, input.DefinitionsId);
+            return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows, input.DefinitionsId, input.ParentId);
         }
 
         [HttpPost]
@@ -44,5 +44,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredBPInstances(input));
         }
 
+        [HttpGet]
+        [Route("GetBPInstance")]
+        public BPInstanceModel GetBPInstance(int id)
+        {
+           BPInstanceManager manager = new BPInstanceManager();
+           return BPMappers.MapInstance(manager.GetBPInstance(id));
+        }
     }
 }

@@ -62,10 +62,17 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                         input.LessThanID = undefined;
                         input.NbOfRows = undefined;
                         input.DefinitionsId = query.DefinitionsId;
+                        input.ParentId = query.BPInstanceID;
                         $scope.bpInstances.length = 0;
                         isGettingDataFirstTime = true;
                         minId = undefined;
                         createTimer();
+                    }
+
+                    directiveAPI.clearTimer = function () {
+                        if (timer != undefined) {
+                            clearTimeout(timer);
+                        }
                     }
                     return directiveAPI;
                 }
@@ -79,7 +86,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                             isGettingData = true;
                             var pageInfo = gridAPI.getPageInfo();
                             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
-                            var itemAddedInThisCall = false;
+                            var itemAddedOrUpdatedInThisCall = false;
                             BusinessProcess_BPInstanceAPIService.GetUpdated(input).then(function (response) {
                                 if (response != undefined) {
                                     for (var i = 0; i < response.ListBPInstanceDetails.length; i++) {
@@ -103,6 +110,7 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                                             if ($scope.bpInstances[j].Entity.ProcessInstanceID == bpInstance.Entity.ProcessInstanceID) {
                                                 $scope.bpInstances[j] = bpInstance;
                                                 findBPInstance = true;
+                                                itemAddedOrUpdatedInThisCall = true;
                                                 continue;
                                             }
 
@@ -111,12 +119,12 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                                             //if (bpInstance.Entity.ProcessInstanceID < minId) {
                                             //    minId = bpInstance.Entity.ProcessInstanceID;
                                             //}
-                                            itemAddedInThisCall = true;
+                                            itemAddedOrUpdatedInThisCall = true;
                                             $scope.bpInstances.push(bpInstance);
                                         }
                                     }
 
-                                    if (itemAddedInThisCall) {
+                                    if (itemAddedOrUpdatedInThisCall) {
                                         if ($scope.bpInstances.length > 0) {
                                             $scope.bpInstances.sort(function (a, b) {
                                                 return b.Entity.ProcessInstanceID - a.Entity.ProcessInstanceID;

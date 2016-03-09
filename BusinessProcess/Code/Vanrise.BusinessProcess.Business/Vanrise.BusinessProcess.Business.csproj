@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPInstanceTrackingManager.cs" />
     <Compile Include="BPInstanceManager.cs" />
     <Compile Include="BPDefinitionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

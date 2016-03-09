@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BPInstanceTrackingController.cs" />
     <Compile Include="Controllers\BPInstanceController.cs" />
     <Compile Include="Controllers\BPDefinitionController.cs" />
     <Compile Include="Controllers\BusinessProcessController.cs" />
@@ -170,11 +171,16 @@
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-management-grid.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-selector.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPDefinitionGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-tracking-monitor.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-tracking-history.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-history-grid.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-status-selector.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-monitor-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceTrackingMonitorGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceTrackingHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
+    <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
     <Content Include="BusinessProcess\Services\BPInstanceService.js" />
@@ -190,6 +196,8 @@
     <Content Include="BusinessProcess\Views\BPHistoryController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistory.html" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistoryController.js" />
+    <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModal.html" />
+    <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModalController.js" />
     <Content Include="BusinessProcess\Views\BPTrackingModal.html" />
     <Content Include="BusinessProcess\Views\BPTrackingModalController.js" />
     <Content Include="BusinessProcess\Views\InstanceEditor.html" />

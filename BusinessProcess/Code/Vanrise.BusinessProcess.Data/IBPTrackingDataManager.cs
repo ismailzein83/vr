@@ -13,8 +13,13 @@ namespace Vanrise.BusinessProcess.Data
 
         void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs);
 
-        BigResult<BPTrackingMessage> GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input);
+        BigResult<BPTrackingMessageDetail> GetFilteredBPInstanceTracking(Vanrise.Entities.DataRetrievalInput<BPTrackingQuery> input);
+        BigResult<BPTrackingMessage> GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<BPTrackingQuery> input);
 
-        List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input);
+        List<BPTrackingMessage> GetTrackingsFrom(BPTrackingQuery input);
+
+        List<BPTrackingMessage> GetBeforeId(BPTrackingBeforeIdInput input);
+
+        List<BPTrackingMessage> GetUpdated(BPTrackingUpdateInput input);
     }
 }

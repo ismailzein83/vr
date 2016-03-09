@@ -6,7 +6,7 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPInstanceDataManager : IDataManager
     {
-        List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId);
+        List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId, int parentId);
         List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input);
         BigResult<BPInstanceDetail> GetFilteredBPInstances(DataRetrievalInput<BPInstanceQuery> input);
 
@@ -21,5 +21,7 @@ namespace Vanrise.BusinessProcess.Data
         void SetRunningStatusTerminated(BPInstanceStatus bPInstanceStatus, IEnumerable<int> runningRuntimeProcessesIds);
 
         void SetChildrenStatusesTerminated(IEnumerable<BPInstanceStatus> enumerable, IEnumerable<int> runningRuntimeProcessesIds);
+
+        BPInstance GetBPInstance(int bpInstanceId);
     }
 }

@@ -1,0 +1,41 @@
+﻿<div vr-modalcontent width="'80%'" ng-controller="BusinessProcess_BP_TrackingModalController">
+    <vr-modalbody>
+        <vr-form name="formBPTrackingModal">
+
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <h4><strong>{{process.Title}}</strong></h4>
+                    <small> {{process.Date | date:'yyyy-MM-dd hh:mm:ss' }}  {{process.Status}}</small>
+                </vr-columns>
+            </vr-row>
+
+
+
+            <vr-tabs>
+                <vr-tab header="'Not Used'" ng-if="false">
+                </vr-tab>
+                <vr-tab header="'Live Progress'">
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <businessprocess-bp-instance-tracking-monitor on-ready="onInstanceTrackingMonitorGridReady"></businessprocess-bp-instance-tracking-monitor>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Log Search'">
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <businessprocess-bp-instance-tracking-history on-ready="onInstanceTrackingHistoryGridReady"></businessprocess-bp-instance-tracking-history>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Child Processes'" ng-if="process.HasChildProcesses">
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <businessprocess-bp-instance-monitor-grid on-ready="onInstanceMonitorGridReady"></businessprocess-bp-instance-monitor-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+</div>

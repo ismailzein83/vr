@@ -20,13 +20,13 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstanceDetails;
         }
 
-        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId)
+        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<int> definitionsId, int parentId)
         {
             BPInstanceUpdateOutput bpInstanceUpdateOutput = new BPInstanceUpdateOutput();
 
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
-            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId);
+            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId);
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
             {
@@ -42,6 +42,12 @@ namespace Vanrise.BusinessProcess.Business
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBPInstances(input));
+        }
+
+        public BPInstance GetBPInstance(int bpInstanceId)
+        {
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            return dataManager.GetBPInstance(bpInstanceId);
         }
         #endregion
 

@@ -14,11 +14,17 @@
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetBPDefinitionsInfo"), {
                 serializedFilter: serializedFilter
             });
-
         }
+
+        function GetBPDefintion(bpDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", "GetBPDefintion"), {
+                bpDefinitionId: bpDefinitionId
+            });
+        } 
         return ({
             GetFilteredBPDefinitions: GetFilteredBPDefinitions,
-            GetBPDefinitionsInfo: GetBPDefinitionsInfo
+            GetBPDefinitionsInfo: GetBPDefinitionsInfo,
+            GetBPDefintion: GetBPDefintion
         });
     }
 
