@@ -8,7 +8,8 @@
         return ({
             addDynamicPage: addDynamicPage,
             updateDynamicPage: updateDynamicPage,
-            deleteDynamicPage: deleteDynamicPage
+            deleteDynamicPage: deleteDynamicPage,
+            editView: editView
         });
  
         function addDynamicPage(onDynamicPageAdded) {
@@ -50,6 +51,22 @@
                     })
                 }
             });
+        }
+
+        function editView(viewId, onViewUpdated)
+        {
+            var modalParameters = {
+                viewId: viewId
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onViewUpdated = onViewUpdated
+            };
+
+            VRModalService.showModal('/Client/Modules/Security/Views/Menu/ViewEditor.html', modalParameters, modalSettings);
+
         }
     }
    

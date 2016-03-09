@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService', function (VRNotificationService, VR_Sec_ViewAPIService) {
+app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService','VR_Sec_ViewService', function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService) {
 
     var directiveDefinitionObject = {
 
@@ -62,27 +62,18 @@ app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIServ
         }
 
         function defineMenuActions() {
-            //$scope.gridMenuActions = [{
-            //    name: "Edit",
-            //    clicked: editUser,
-            //    haspermission: hasUpdateUserPermission
-            //}, {
-            //    name: "Reset Password",
-            //    clicked: resetPassword,
-            //    haspermission: hasResetUserPasswordPermission
-            //}, {
-            //    name: "Assign Permissions",
-            //    clicked: assignPermissions,
-            //    haspermission: hasUpdateSystemEntityPermissionsPermission // System Entities:Assign Permissions
-            //}];
+            $scope.gridMenuActions = [{
+                name: "Edit",
+                clicked: editView
+            }];
         }
 
         function editView(viewObj) {
-            //var onUserUpdated = function (userObj) {
-            //    gridAPI.itemUpdated(userObj);
-            //}
+            var onViewUpdated = function (viewObj) {
+                gridAPI.itemUpdated(viewObj);
+            }
 
-            //VR_Sec_UserService.editUser(userObj.Entity.UserId, onUserUpdated);
+            VR_Sec_ViewService.editView(viewObj.Entity.ViewId, onViewUpdated);
         }
     }
 

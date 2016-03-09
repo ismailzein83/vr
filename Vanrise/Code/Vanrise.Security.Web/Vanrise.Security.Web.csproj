@@ -153,6 +153,7 @@
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetDefinitionAPIService.js" />
+    <Content Include="Security\Services\MenuService.js" />
     <Content Include="Security\Services\ModuleService.js" />
     <Content Include="Security\Services\OrgChartService.js" />
     <Content Include="Security\Services\PermissionService.js" />
@@ -165,6 +166,10 @@
     <Content Include="Security\Views\Menu\MenuManagementController.js" />
     <Content Include="Security\Views\Menu\ModuleEditor.html" />
     <Content Include="Security\Views\Menu\ModuleEditorController.js" />
+    <Content Include="Security\Views\Menu\RankingEditor.html" />
+    <Content Include="Security\Views\Menu\RankingEditorController.js" />
+    <Content Include="Security\Views\Menu\ViewEditor.html" />
+    <Content Include="Security\Views\Menu\ViewEditorController.js" />
     <Content Include="Security\Views\Permission\BusinessEntityEditor.html" />
     <Content Include="Security\Views\Permission\BusinessEntityEditorController.js" />
     <Content Include="Security\Views\Permission\BusinessEntityManagement.html" />

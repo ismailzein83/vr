@@ -2,9 +2,9 @@
 
     'use strict';
 
-    MenuManagementController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService','VRModalService', 'VRNotificationService','VR_Sec_MenuAPIService','VR_Sec_ViewAPIService','VR_Sec_ModuleService'];
+    MenuManagementController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService','VRModalService', 'VRNotificationService','VR_Sec_MenuAPIService','VR_Sec_ViewAPIService','VR_Sec_ModuleService','VR_Sec_MenuService'];
 
-    function MenuManagementController($scope, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, VR_Sec_ModuleService) {
+    function MenuManagementController($scope, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, VR_Sec_ModuleService, VR_Sec_MenuService) {
 
         //#region Global Variables
         var treeAPI;
@@ -24,8 +24,6 @@
         //#region Functions
 
         function defineScope() {
-            $scope.nodes = [];
-            $scope.currentNode;
 
             $scope.onModulesTreeReady = function (api) {
                 treeAPI = api;
@@ -52,10 +50,52 @@
             $scope.addModule = function () {
                 var onModuleAdded = function (moduleObj) {
                     console.log(moduleObj);
-                    treeAPI.createNode(mapModuleNode(moduleObj.Entity));
+                    var node = mapModuleNode(moduleObj.Entity)
+                    treeAPI.createNode(node);
+                    for (var i = 0; i < menuItems.length; i++) {
+                        if (menuItems[i].nodeId == moduleObj.ParentId) {
+                            if (menuItems[i].Childs == undefined)
+                                menuItems[i].Childs = [];
+                            menuItems[i].Childs.push(node);
+                        }
+                    }
+                    treeAPI.refreshTree(menuItems);
                 };
 
                 VR_Sec_ModuleService.addModule(onModuleAdded);
+            }
+
+            $scope.editModule = function()
+            {
+                var onModuleUpdated = function (moduleObj) {
+                    console.log(moduleObj);
+                    var node = mapModuleNode(moduleObj.Entity)
+                    treeAPI.createNode(node);
+                    console.log($scope.nodes)
+                    for (var i = 0; i < menuItems.length; i++) {
+                        var menuItem = menuItems[i];
+                        if (menuItems[i].nodeId == moduleObj.ParentId) {
+                            for (var j = 0; j < menuItem.Childs.length; j++)
+                            {
+                                if (menuItem.Childs[j].Id == node.Id)
+                                    menuItem.Childs[j] = node;
+                            }
+                        }
+                       
+                    }
+                    treeAPI.refreshTree(menuItems);
+                };
+
+                VR_Sec_ModuleService.editModule($scope.selectedMenuItem.Id,onModuleUpdated);
+            }
+
+            $scope.ranking = function()
+            {
+                var onRankingSuccess = function (moduleObj) {
+                };
+
+                VR_Sec_MenuService.openRankingEditor(onRankingSuccess);
+                
             }
         }
 
@@ -78,10 +118,6 @@
 
             loadMenuItems().then(function () {
                 treeReadyDeferred.promise.then(function () {
-                    //if (viewEntity != undefined) {
-
-                    //    $scope.selectedMenuItem = treeAPI.setSelectedNode(menuItems, viewEntity.ModuleId, "Id", "Childs");
-                    //}
                     treeAPI.refreshTree(menuItems);
                     treeLoadDeferred.resolve();
                 });
@@ -103,43 +139,12 @@
             }
         }
 
-        function onZoneAdded(addedZones) {
-            if (addedZones != undefined) {
-                $scope.hasState = true;
-                for (var i = 0; i < addedZones.length; i++) {
-                    var node = mapZoneToNode(addedZones[i]);
-                    treeAPI.createNode(node);
-                    for (var i = 0; i < $scope.nodes.length; i++) {
-                        if ($scope.nodes[i].nodeId == $scope.currentNode.nodeId) {
-                            $scope.nodes[i].effectiveZones.push(node);
-                        }
-
-                    }
-                }
-
-
-            }
-        }
-
-        function addNewZone() {
-            var parameters = {
-                CountryId: $scope.currentNode.nodeId,
-                CountryName: $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onZoneAdded = onZoneAdded;
-            };
-
-            VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewZoneDialog.html", parameters, settings);
-        }
-
         function mapModuleNode(moduleObj)
         {
             var node = {
                 Id:moduleObj.ModuleId,
                 Name: moduleObj.Name,
+                Childs:[]
             }
             return node;
         }
