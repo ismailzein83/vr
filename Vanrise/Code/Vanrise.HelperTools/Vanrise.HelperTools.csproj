@@ -54,8 +54,17 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EncryptDecryptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EncryptDecryptForm.Designer.cs">
+      <DependentUpon>EncryptDecryptForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GenerateProtoBufTypeMetaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +79,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="EncryptDecryptForm.resx">
+      <DependentUpon>EncryptDecryptForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GenerateProtoBufTypeMetaForm.resx">
       <DependentUpon>GenerateProtoBufTypeMetaForm.cs</DependentUpon>
     </EmbeddedResource>

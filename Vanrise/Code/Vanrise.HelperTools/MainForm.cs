@@ -22,11 +22,16 @@ namespace Vanrise.HelperTools
             OpenForm(new GenerateProtoBufTypeMetaForm());
         }
 
-        private void OpenForm(GenerateProtoBufTypeMetaForm form)
+        private void OpenForm(Form form)
         {
             form.Show();
             form.FormClosed += (sender, e) => this.Close();
             this.Hide();
+        }
+
+        private void EncryptDecrypt_Click(object sender, EventArgs e)
+        {
+            OpenForm(new EncryptDecryptForm());
         }
     }
 }
