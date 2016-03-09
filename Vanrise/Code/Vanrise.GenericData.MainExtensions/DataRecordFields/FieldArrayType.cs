@@ -10,25 +10,22 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldArrayType : DataRecordFieldType
     {
-        public int DataRecordFieldTypeConfigId { get; set; }
-        public List<DataRecordFieldType> Items { get; set; }
+        public DataRecordFieldType FieldType { get; set; }
 
         public override Type GetRuntimeType()
         {
-            //DataRecordFieldTypeConfig dataRecordFieldTypeConfig = new DataRecordFieldTypeConfigManager().GetDataRecordFieldTypeConfig(DataRecordFieldTypeConfigId);
-            //if (dataRecordFieldTypeConfig == null)
-            //    throw new NullReferenceException("dataRecordFieldTypeConfig");
-            throw new NotImplementedException();
+            Type fieldType = FieldType.GetRuntimeType();
+            return typeof(List<>).MakeGenericType(fieldType);
         }
 
         public override string GetDescription(object value)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
