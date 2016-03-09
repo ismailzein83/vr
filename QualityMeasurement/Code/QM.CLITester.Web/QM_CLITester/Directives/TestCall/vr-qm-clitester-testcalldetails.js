@@ -44,7 +44,7 @@ function () {
             function getDirectiveAPI() {
 
                 directiveAPI.load = function (item) {
-
+                    
                     if (item.Entity.InitiateTestInformation != null && item.Entity.InitiateTestInformation != undefined) {
                         ctrl.testId = item.Entity.InitiateTestInformation.Test_ID;
                     }
@@ -53,7 +53,7 @@ function () {
                         
                         ctrl.name = item.Entity.TestProgress.Name;
                         
-                        $scope.testcallsdetails = (item.Entity.TestProgress.CallResults)?item.Entity.TestProgress.CallResults:[];
+                        $scope.testcallsdetails = (item.Entity.TestProgress.CallResults) ? item.Entity.TestProgress.CallResults : [];
                         // $scope.testcallsdetails =  item.Entity.TestProgress.l                       
                         //ctrl.callTotal = item.Entity.TestProgress.TotalCalls;
                         //ctrl.callComplete = item.Entity.TestProgress.CompletedCalls;
@@ -62,13 +62,12 @@ function () {
                         //ctrl.fail = item.Entity.TestProgress.CliFail;
                         //ctrl.pdd = item.Entity.Measure.Pdd;
 
-                        ctrl.ReceivedCli = item.Entity.TestProgress.ReceivedCli;
-                        ctrl.ReleaseCode = item.Entity.TestProgress.ReleaseCode;
-                        ctrl.Source = item.Entity.TestProgress.Source;
-                        ctrl.Destination = item.Entity.TestProgress.Destination;
+                        //ctrl.ReceivedCli = item.Entity.TestProgress.ReceivedCli;
+                        //ctrl.ReleaseCode = item.Entity.TestProgress.ReleaseCode;
+                        //ctrl.Source = item.Entity.TestProgress.Source;
+                        //ctrl.Destination = item.Entity.TestProgress.Destination;
                     }
                     if (item.Entity.Measure != null && item.Entity.Measure != undefined) {
-
                         //ctrl.ReceivedCli = item.Entity.Measure.ReceivedCli;
                         //ctrl.ReleaseCode = item.Entity.Measure.ReleaseCode;
                         ctrl.Duration = item.Entity.Measure.Duration;

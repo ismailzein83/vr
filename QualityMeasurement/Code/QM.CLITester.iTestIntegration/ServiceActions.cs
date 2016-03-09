@@ -15,9 +15,13 @@ namespace QM.CLITester.iTestIntegration
     {
         public string PostRequest(string functionCode, string parameters)
         {
-            var request = (HttpWebRequest)WebRequest.Create(String.Format("{0}/?t={1}{2}", ConfigurationSettings.AppSettings["CliTester_ITest_Url"], functionCode, (parameters ?? "")));
-            
-            var postData = String.Format("email={0}&pass={1}", ConfigurationSettings.AppSettings["CliTester_ITest_Email"], ConfigurationSettings.AppSettings["CliTester_ITest_Password"]);
+            string decryptedConnectorUrl = Vanrise.Common.Cryptography.Decrypt(ConfigurationSettings.AppSettings["ConnectorUrl"], ConfigurationSettings.AppSettings["EncryptionSecretKey"]);
+            string decryptedConnectorEmail = Vanrise.Common.Cryptography.Decrypt(ConfigurationSettings.AppSettings["ConnectorEmail"], ConfigurationSettings.AppSettings["EncryptionSecretKey"]);
+            string decryptedConnectorPassword = Vanrise.Common.Cryptography.Decrypt(ConfigurationSettings.AppSettings["ConnectorPassword"], ConfigurationSettings.AppSettings["EncryptionSecretKey"]);
+
+            var request = (HttpWebRequest)WebRequest.Create(String.Format("{0}/?t={1}{2}", decryptedConnectorUrl, functionCode, (parameters ?? "")));
+
+            var postData = String.Format("email={0}&pass={1}", decryptedConnectorEmail, decryptedConnectorPassword);
             
             var data = Encoding.ASCII.GetBytes(postData);
 
@@ -36,11 +40,15 @@ namespace QM.CLITester.iTestIntegration
             return CleanResponse(responseString);
         }
 
-        public string PostRequest(string url, string functionCode, string parameters)
+        public string PostRequestBeta(string functionCode, string parameters)
         {
-            var request = (HttpWebRequest)WebRequest.Create(String.Format("{0}/?t={1}{2}", String.IsNullOrEmpty(url) ?  ConfigurationSettings.AppSettings["CliTester_ITest_Url"] : url, functionCode, (parameters ?? "")));
+            string decryptedConnectorUrl = Vanrise.Common.Cryptography.Decrypt(ConfigurationSettings.AppSettings["ConnectorUrlBeta"], ConfigurationSettings.AppSettings["EncryptionSecretKey"]);
+            string decryptedConnectorEmail = Vanrise.Common.Cryptography.Decrypt(ConfigurationSettings.AppSettings["ConnectorEmail"], ConfigurationSettings.AppSettings["EncryptionSecretKey"]);
+            string decryptedConnectorPassword = Vanrise.Common.Cryptography.Decrypt(ConfigurationSettings.AppSettings["ConnectorPassword"], ConfigurationSettings.AppSettings["EncryptionSecretKey"]);
 
-            var postData = String.Format("email={0}&pass={1}", ConfigurationSettings.AppSettings["CliTester_ITest_Email"], ConfigurationSettings.AppSettings["CliTester_ITest_Password"]);
+            var request = (HttpWebRequest)WebRequest.Create(String.Format("{0}/?t={1}{2}", decryptedConnectorUrl, functionCode, (parameters ?? "")));
+
+            var postData = String.Format("email={0}&pass={1}", decryptedConnectorEmail, decryptedConnectorPassword);
 
             var data = Encoding.ASCII.GetBytes(postData);
 
@@ -61,7 +69,7 @@ namespace QM.CLITester.iTestIntegration
 
         const string GoodAmpersand = "&amp;";
 
-        public string CleanResponse(string response)
+        private string CleanResponse(string response)
         {
             Regex badAmpersand = new Regex("&(?![a-zA-Z]{2,6};|#[0-9]{2,4};)");
             response = badAmpersand.Replace(response, GoodAmpersand);

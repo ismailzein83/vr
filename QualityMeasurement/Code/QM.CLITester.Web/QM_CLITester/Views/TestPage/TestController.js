@@ -35,7 +35,7 @@
             $scope.selectedProfile;
             $scope.selectedSupplier = [];
             $scope.selectedCountry;
-            $scope.selectedZone;
+            $scope.selectedZone = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -128,11 +128,10 @@
 
         function buildTestCallObjFromScope() {
             var obj = {
-                //TestCallId: 0,
                 SuppliersIds: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
                 SuppliersSourceIds:"",
                 CountryID: $scope.selectedCountry.CountryId,
-                ZoneID: $scope.selectedZone.ZoneId,
+                ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedZone, "ZoneId"),
                 ZoneSourceId:"",
                 ProfileID: $scope.selectedProfile.ProfileId,
                 UserId: 0,

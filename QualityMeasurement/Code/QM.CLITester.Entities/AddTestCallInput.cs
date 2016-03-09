@@ -11,7 +11,7 @@ namespace QM.CLITester.Entities
         public List<int?> SuppliersIds { get; set; }
         public List<string> SuppliersSourceIds { get; set; }
         public int? CountryID { get; set; }
-        public long? ZoneID { get; set; }
+        public List<long?> ZoneIds { get; set; }
         public string ZoneSourceId { get; set; }
         public int ProfileID { get; set; }
         public int UserId { get; set; }

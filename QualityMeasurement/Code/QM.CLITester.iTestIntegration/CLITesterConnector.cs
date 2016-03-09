@@ -80,13 +80,13 @@ namespace QM.CLITester.iTestIntegration
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)
         {
             ServiceActions serviceActions = new ServiceActions();
-            return ResponseTestProgress(
-                serviceActions.PostRequest("3011", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
-                ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
-
             //return ResponseTestProgress(
-            //    serviceActions.PostRequest("https://api-now.i-test.net", "3024", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
+            //    serviceActions.PostRequest("3011", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
             //    ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
+
+            return ResponseTestProgressBeta(
+                serviceActions.PostRequestBeta("3024", String.Format("&jid={0}", ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID)),
+                ((InitiateTestInformation)(context.InitiateTestInformation)).Test_ID, context.RecentTestProgress, context.RecentMeasure);
         }
 
         #region Private Members
@@ -191,7 +191,7 @@ namespace QM.CLITester.iTestIntegration
             testProgressOutput.Result = GetTestProgressResult.FailedWithRetry;
             return testProgressOutput;
         }
-        private GetTestProgressOutput ResponseTestProgressNew(string response, string testId, Object recentTestProgress, Measure recentMeasure)
+        private GetTestProgressOutput ResponseTestProgressBeta(string response, string testId, Object recentTestProgress, Measure recentMeasure)
         {
             GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
 
@@ -200,14 +200,14 @@ namespace QM.CLITester.iTestIntegration
             {
                 xml.LoadXml(response);
 
-                XmlNodeList xnList = xml.SelectNodes("/Test_Status/Call");
-                XmlNodeList xnList2 = xml.SelectNodes("/Test_Status/Test_Overview");
-                if (xnList != null && xnList2!= null)
+                XmlNodeList xnListCall = xml.SelectNodes("/Test_Status/Call");
+                XmlNodeList xnListTestOverView = xml.SelectNodes("/Test_Status/Test_Overview");
+                if (xnListCall != null && xnListTestOverView!= null)
                 {
                     string xmlResponse = Regex.Replace(response, @"\t|\n|\r", "");
                     
-                    var node = xnList[0];
-                    var node2 = xnList2[0];
+                    var node = xnListCall[0];
+                    var node2 = xnListTestOverView[0];
                     
                     var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                     long unixTime = node["Start"] != null ? long.Parse(node["Start"].InnerText) : 0;
@@ -226,9 +226,10 @@ namespace QM.CLITester.iTestIntegration
                     {
                         Name = node2["Name"] != null ? node2["Name"].InnerText : "",
                         Result = node["Result"] != null ? node["Result"].InnerText : "",
+                        CallResults = new List<CallResult>(),
                         XmlResponse = xmlResponse
                     };
-                    foreach (XmlNode callNode in xnList)
+                    foreach (XmlNode callNode in xnListCall)
                     {
                         CallResult callResult = new CallResult
                         {
@@ -255,7 +256,7 @@ namespace QM.CLITester.iTestIntegration
                     }
 
                     if (recentTestProgress != null || recentMeasure != null)
-                        testProgressOutput.Result = CompareTestProgress((TestProgress)recentTestProgress, (TestProgress)testProgressOutput.TestProgress, recentMeasure, testProgressOutput.Measure) ?
+                        testProgressOutput.Result = CompareTestProgressBeta((TestProgress)recentTestProgress, (TestProgress)testProgressOutput.TestProgress, recentMeasure, testProgressOutput.Measure) ?
                             GetTestProgressResult.ProgressNotChanged : GetTestProgressResult.ProgressChanged;
                     else
                         testProgressOutput.Result = (testProgressOutput.TestProgress == null && testProgressOutput.Measure == null) ? GetTestProgressResult.ProgressNotChanged :
@@ -293,7 +294,7 @@ namespace QM.CLITester.iTestIntegration
 
             return same;
         }
-        private bool CompareTestProgressNew(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
+        private bool CompareTestProgressBeta(TestProgress recentTestProgress, TestProgress testProgress, Measure recentMeasure, Measure measure)
         {
             bool same = true;
             if (recentTestProgress != null)

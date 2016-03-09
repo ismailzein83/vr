@@ -46,12 +46,11 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
 
         function initializeController() {
             $scope.countries = [];
-            
             $scope.zones = [];
-
             $scope.suppliers = [];
 
             $scope.selectedSupplier = [];
+            $scope.selectedZone = [];
 
             $scope.onProfileDirectiveReady = function (api) {
                 profileDirectiveAPI = api;
@@ -131,7 +130,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                     SuppliersIds: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
                     SuppliersSourceIds: "",
                     CountryID: $scope.selectedCountry.CountryId,
-                    ZoneID: $scope.selectedZone.ZoneId,
+                    ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedZone, "ZoneId"),//$scope.selectedZone.ZoneId,
                     ZoneSourceId: "",
                     ProfileID: $scope.selectedProfile.ProfileId,
                     ListEmails: listEmailsObj
@@ -193,7 +192,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                                 }
                             }
                             if (payload.data != undefined)
-                                directivePayload.selectedIds = payload.data.ZoneID;
+                                directivePayload.selectedIds = payload.data.ZoneIds;
 
                             VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, directivePayload, zoneLoadPromiseDeferred);
 

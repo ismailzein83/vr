@@ -169,7 +169,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tasks\AliBalloukTask.cs" />
+    <Compile Include="Tasks\ScheduleTestCallsTask.cs" />
     <Compile Include="Tasks\HadiTask.cs" />
   </ItemGroup>
   <ItemGroup>

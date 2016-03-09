@@ -42,7 +42,7 @@ namespace QM.CLITester.Business
                 ProfileID = testCallTaskActionArgument.ProfileID,
                 SuppliersIds = testCallTaskActionArgument.SuppliersIds,
                 SuppliersSourceIds = testCallTaskActionArgument.SuppliersSourceIds,
-                ZoneID = testCallTaskActionArgument.ZoneID,
+                ZoneIds = testCallTaskActionArgument.ZoneIds,
                 ZoneSourceId = testCallTaskActionArgument.ZoneSourceId,
                 UserId = task.OwnerId,
                 ScheduleId = task.TaskId
@@ -104,7 +104,7 @@ namespace QM.CLITester.Business
                         License license = new License();
                         license.SetLicense("Aspose.Cells.lic");
 
-                        CreateWorkSheet(wbk, testCallExecInfo.BatchNumber.ToString(), listTestCalls, listTestCallsCount);
+                        CreateWorkSheet(wbk, "BatchNb " + testCallExecInfo.BatchNumber, listTestCalls, listTestCallsCount);
                         MemoryStream memoryStream = wbk.SaveToStream();
 
                         var testCallTaskArg = context.Task.TaskSettings.TaskActionArgument as TestCallTaskActionArgument;
@@ -112,8 +112,8 @@ namespace QM.CLITester.Business
 
                         SendMail(memoryStream, user.Email, testCallTaskArg.ListEmails);
 
-                        string filename = "D:\\" + DateTime.Now.Minute + DateTime.Now.Second + "book1.xls";
-                        wbk.Save(filename);
+                        //string filename = "D:\\" + DateTime.Now.Minute + DateTime.Now.Second + "book1.xls";
+                        //wbk.Save(filename);
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace QM.CLITester.Business
                 SetColumnValueStyle(worksheet, style, "Country", 3);
                 SetColumnValueStyle(worksheet, style, "Zone", 4);
                 SetColumnValueStyle(worksheet, style, "Creation Date", 5);
-                SetColumnValueStyle(worksheet, style, "Pdd", 6);
+                SetColumnValueStyle(worksheet, style, "PDD", 6);
                 SetColumnValueStyle(worksheet, style, "Call Status", 7);
                 SetColumnValueStyle(worksheet, style, "Call Result", 8);
 

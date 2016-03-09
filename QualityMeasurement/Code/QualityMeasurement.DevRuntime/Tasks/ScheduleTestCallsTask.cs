@@ -7,7 +7,7 @@ using Vanrise.Runtime;
 
 namespace QualityMeasurement.DevRuntime.Tasks
 {
-    public class AliBalloukTask : ITask
+    public class ScheduleTestCallsTask : ITask
     {
         public void Execute()
         {

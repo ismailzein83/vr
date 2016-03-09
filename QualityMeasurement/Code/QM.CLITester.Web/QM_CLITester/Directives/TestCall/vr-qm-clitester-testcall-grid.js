@@ -47,10 +47,9 @@ function (UtilsService, VRNotificationService, Qm_CliTester_TestCallAPIService, 
         var minId = undefined;
         function buildTestCallObj(dataItem) {
             var obj = {
-                TestCallId: 0,
-                SupplierID: [dataItem.Entity.SupplierID],
+                SuppliersIds: [dataItem.Entity.SupplierID],
                 CountryID: dataItem.Entity.CountryID,
-                ZoneID: dataItem.Entity.ZoneID,
+                ZoneIds: [dataItem.Entity.ZoneID],
                 ProfileID: dataItem.Entity.ProfileID
             };
             return obj;
