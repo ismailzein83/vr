@@ -214,9 +214,9 @@
 
 
             if ($scope.selectedProfiles.length == 0)
-                filter.ProfileIDs = null;
+                filter.ProfileIds = null;
             else {
-                filter.ProfileIDs = UtilsService.getPropValuesFromArray($scope.selectedProfiles, "ProfileId");
+                filter.ProfileIds = [$scope.selectedProfiles.ProfileId];
             }
 
             if ($scope.selectedScheduleTasks.length == 0)
