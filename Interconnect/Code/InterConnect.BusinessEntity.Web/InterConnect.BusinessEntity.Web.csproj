@@ -153,6 +153,7 @@
     <Content Include="InterConnect_BusinessEntity\Constant\ModuleConfig.js" />
     <Content Include="InterConnect_BusinessEntity\Directives\OperatorAccount\Templates\OperatorAccountGridTemplate.html" />
     <Content Include="InterConnect_BusinessEntity\Directives\OperatorAccount\vr-interconnect-be-operatoraccount-grid.js" />
+    <Content Include="InterConnect_BusinessEntity\Directives\OperatorAccount\vr-interconnect-be-operatoraccount-selector.js" />
     <Content Include="InterConnect_BusinessEntity\Directives\OperatorProfile\Templates\OperatorProfileGridTemplate.html" />
     <Content Include="InterConnect_BusinessEntity\Directives\OperatorProfile\vr-interconnect-be-operatorprofile-selector.js" />
     <Content Include="InterConnect_BusinessEntity\Directives\OperatorProfile\vr-interconnect-be-operatorprofile-grid.js" />

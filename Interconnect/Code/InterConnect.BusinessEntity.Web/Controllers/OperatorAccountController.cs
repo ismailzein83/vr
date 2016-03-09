@@ -21,6 +21,17 @@ namespace InterConnect.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredOperatorAccounts(input));
         }
 
+
+
+        [HttpGet]
+        [Route("GetOperatorAccountsInfo")]
+        public IEnumerable<OperatorAccountInfo> GetOperatorAccountsInfo(string serializedFilter)
+        {
+            OperatorAccountInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<OperatorAccountInfoFilter>(serializedFilter) : null;
+            OperatorAccountManager manager = new OperatorAccountManager();
+            return manager.GetOperatorAccountsInfo(filter);
+        }
+
         [HttpGet]
         [Route("GetOperatorAccount")]
         public OperatorAccount GetOperatorAccount(int operatorAccountId)

@@ -9,6 +9,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorAccount", "GetFilteredOperatorAccounts"), input);
         }
 
+
+        function GetOperatorAccountsInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorAccount", "GetOperatorAccountsInfo"), {
+                serializedFilter: serializedFilter
+            });
+        }
+
         function GetOperatorAccount(operatorAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(InterConnect_BE_ModuleConfig.moduleName, "OperatorAccount", "GetOperatorAccount"), {
                 operatorAccountId: operatorAccountId
@@ -25,6 +32,7 @@
 
         return ({
             GetFilteredOperatorAccounts: GetFilteredOperatorAccounts,
+            GetOperatorAccountsInfo:GetOperatorAccountsInfo,
             GetOperatorAccount: GetOperatorAccount,
             AddOperatorAccount: AddOperatorAccount,
             UpdateOperatorAccount: UpdateOperatorAccount

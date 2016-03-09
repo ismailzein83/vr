@@ -24,6 +24,21 @@ namespace InterConnect.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allOperatorAccounts.ToBigResult(input, filterExpression, OperatorAccountDetailMapper));
         }
 
+        public IEnumerable<OperatorAccountInfo> GetOperatorAccountsInfo(OperatorAccountInfoFilter filter)
+        {
+            var operatorAccounts = GetCachedOperatorAccounts();
+
+            if (filter != null)
+            {
+                Func<OperatorAccount, bool> filterExpression = (x) => (true);
+                return operatorAccounts.FindAllRecords(filterExpression).MapRecords(OperatorAccountInfoMapper);
+            }
+            else
+            {
+                return operatorAccounts.MapRecords(OperatorAccountInfoMapper);
+            }
+        }  
+
         public OperatorAccount GetOperatorAccount(int operatorAccountId)
         {
             var operatorProfiles = GetCachedOperatorAccounts();
@@ -145,6 +160,17 @@ namespace InterConnect.BusinessEntity.Business
                 Entity = operatorAccount,
                 OperatorProfileName = operatorProfileName
             };
+        }
+
+        private OperatorAccountInfo OperatorAccountInfoMapper(OperatorAccount operatorAccount)
+        {
+            var profileManager = new OperatorProfileManager();
+            var profileName = profileManager.GetOperatorProfileName(operatorAccount.ProfileId);
+            return new OperatorAccountInfo()
+             {
+                 OperatorAccountId = operatorAccount.OperatorAccountId,
+                 Name = String.Format("{0} ({1})", profileName, operatorAccount.Suffix)
+             };
         }
 
         #endregion
