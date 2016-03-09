@@ -46,11 +46,8 @@ namespace Vanrise.Security.Business
         {
             List<Module> modules = _moduleManager.GetModules();
 
-            GroupManager groupManager = new GroupManager();
-            List<int> groups = groupManager.GetUserGroups(userId);
-
             List<View> views = _viewManager.GetViews();
-            views = this.FilterViewsPerAudience(views, userId, groups);
+            views = this.FilterViewsPerAudience(views, userId);
 
             List<MenuItem> retVal = new List<MenuItem>();
 
@@ -119,16 +116,17 @@ namespace Vanrise.Security.Business
             return menu;
         }
 
-        private List<View> FilterViewsPerAudience(List<View> views, int userId, List<int> subscribedGroups)
+        private List<View> FilterViewsPerAudience(List<View> views, int userId)
         {
             List<View> filteredResults = new List<View>();
+            GroupManager groupManager = new GroupManager();
 
             foreach (View item in views)
             {
                 if (item.Audience != null)
                 {
                     //Check if the user is an audience then add the view; otherwise the view will not be in the filtered results
-                    if ((item.Audience.Users != null && item.Audience.Users.Find(x => x == userId) != 0) || isAudienceInSubscribedGroups(item, subscribedGroups))
+                    if ((item.Audience.Users != null && item.Audience.Users.Find(x => x == userId) != 0) || groupManager.IsUserMemberInGroups(userId, item.Audience.Groups))
                         filteredResults.Add(item);
                 }
                 else
@@ -139,22 +137,6 @@ namespace Vanrise.Security.Business
             }
 
             return filteredResults;
-        }
-
-        private bool isAudienceInSubscribedGroups(View view, List<int> subscribedGroups)
-        {
-            if (view.Audience.Groups != null)
-            {
-                foreach (int groupId in subscribedGroups)
-                {
-                    if (view.Audience.Groups.Find(x => x == groupId) != 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         private MenuItem GetModuleMenu(Module module, List<Module> modules, bool getOnlyAllowDynamic )

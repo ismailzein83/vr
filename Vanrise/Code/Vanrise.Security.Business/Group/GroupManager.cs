@@ -108,8 +108,29 @@ namespace Vanrise.Security.Business
 
         public List<int> GetUserGroups(int userId)
         {
-            IGroupDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IGroupDataManager>();
-            return dataManager.GetUserGroups(userId);
+            IEnumerable<Group> allGroups = this.GetCachedGroups().Values;
+            List<int> assignedGroups = new List<int>();
+
+            foreach (var group in allGroups)
+            {
+                if (group.Settings != null && group.Settings.IsMember(new GroupSettingsContext() { UserId = userId}))
+                    assignedGroups.Add(group.GroupId);
+            }
+
+            return assignedGroups;
+        }
+
+        public bool IsUserMemberInGroups(int userId, List<int> groups)
+        {
+            IEnumerable<Group> selectedGroups = this.GetCachedGroups().FindAllRecords(x => groups.Contains(x.GroupId));
+
+            foreach (var group in selectedGroups)
+            {
+                if (group.Settings != null && group.Settings.IsMember(new GroupSettingsContext() { UserId = userId}))
+                    return true;
+            }
+
+            return false;
         }
         
         #endregion

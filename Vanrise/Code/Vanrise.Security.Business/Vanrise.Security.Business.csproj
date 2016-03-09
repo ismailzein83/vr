@@ -51,6 +51,9 @@
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="BusinessEntityModuleManager.cs" />
     <Compile Include="BusinessEntityNodeManager.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Group\GroupSettingsContext.cs" />
+    <Compile Include="Group\StaticGroup.cs" />
     <Compile Include="HashingUtility.cs" />
     <Compile Include="ModuleManager.cs" />
     <Compile Include="OrgChartManager.cs" />
@@ -61,7 +64,7 @@
     <Compile Include="MenuManager.cs" />
     <Compile Include="PermissionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GroupManager.cs" />
+    <Compile Include="Group\GroupManager.cs" />
     <Compile Include="SecurityManager.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="WidgetDefinitionManager.cs" />

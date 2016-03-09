@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Security.Entities;
 
@@ -79,7 +80,8 @@ namespace Vanrise.Security.Data.SQL
             {
                 GroupId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                Description = reader["Description"] as string
+                Description = reader["Description"] as string,
+                Settings = Serializer.Deserialize<GroupSettings>(reader["Settings"] as string)
             };
 
             return group;

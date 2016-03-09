@@ -55,6 +55,8 @@
     <Compile Include="Group\GroupFilter.cs" />
     <Compile Include="Group\GroupInfo.cs" />
     <Compile Include="Group\GroupQuery.cs" />
+    <Compile Include="Group\GroupSettings.cs" />
+    <Compile Include="Group\IGroupSettingsContext.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="OrgChart\OrgChart.cs" />

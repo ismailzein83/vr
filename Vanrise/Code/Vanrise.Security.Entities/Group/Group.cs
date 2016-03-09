@@ -13,5 +13,7 @@ namespace Vanrise.Security.Entities
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public GroupSettings Settings { get; set; }
     }
 }
