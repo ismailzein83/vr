@@ -126,7 +126,8 @@ namespace Vanrise.Security.Business
                 if (item.Audience != null)
                 {
                     //Check if the user is an audience then add the view; otherwise the view will not be in the filtered results
-                    if ((item.Audience.Users != null && item.Audience.Users.Find(x => x == userId) != 0) || groupManager.IsUserMemberInGroups(userId, item.Audience.Groups))
+                    if ((item.Audience.Users != null && item.Audience.Users.Find(x => x == userId) != 0) ||
+                        item.Audience.Groups != null && groupManager.IsUserMemberInGroups(userId, item.Audience.Groups))
                         filteredResults.Add(item);
                 }
                 else
