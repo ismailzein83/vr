@@ -149,6 +149,10 @@
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
