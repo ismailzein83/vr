@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.Caching;
 namespace Vanrise.Security.Business
 {
     public class ModuleManager
@@ -45,6 +47,55 @@ namespace Vanrise.Security.Business
             return GetCachedModules().Values.ToList();
         }
 
+        public Vanrise.Entities.InsertOperationOutput<ModuleDetail> AddModule(Module moduleObject)
+        {
+            InsertOperationOutput<ModuleDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<ModuleDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int moduleId = -1;
+
+            IModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
+            bool insertActionSucc = dataManager.AddModule(moduleObject, out moduleId);
+
+            if (insertActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                moduleObject.ModuleId = moduleId;
+                insertOperationOutput.InsertedObject = ModuleDetailMapper(moduleObject);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<ModuleDetail> UpdateModule(Module moduleObject)
+        {
+            IModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IModuleDataManager>();
+            bool updateActionSucc = dataManager.UpdateModule(moduleObject);
+            UpdateOperationOutput<ModuleDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ModuleDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = ModuleDetailMapper(moduleObject);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
         #endregion
 
         #region Private Members
@@ -73,6 +124,12 @@ namespace Vanrise.Security.Business
         #endregion
 
         #region  Mappers
+        private ModuleDetail ModuleDetailMapper(Module moduleObject)
+        {
+            ModuleDetail moduleDetail = new ModuleDetail();
+            moduleDetail.Entity = moduleObject;
+            return moduleDetail;
+        }
 
         #endregion
       

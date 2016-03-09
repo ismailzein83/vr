@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -24,6 +25,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,6 +127,8 @@
     <Content Include="Security\Directives\Group\Templates\GroupGrid.html" />
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
     <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />
+    <Content Include="Security\Directives\Menu\View\Templates\ViewGridTemplate.html" />
+    <Content Include="Security\Directives\Menu\View\vr-sec-menu-view-grid.js" />
     <Content Include="Security\Directives\OrgChart\Templates\OrgChartGrid.html" />
     <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-selector.js" />
     <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-grid.js" />
@@ -138,6 +142,7 @@
     <Content Include="Security\Directives\Widget\vr-sec-widget-grid.js" />
     <Content Include="Security\Directives\Widget\vr-sec-widgetpreview.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityNodeAPIService.js" />
+    <Content Include="Security\Services\APIServices\ModuleAPIService.js" />
     <Content Include="Security\Services\APIServices\OrgChartAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityAPIService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
@@ -147,6 +152,7 @@
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetDefinitionAPIService.js" />
+    <Content Include="Security\Services\ModuleService.js" />
     <Content Include="Security\Services\OrgChartService.js" />
     <Content Include="Security\Services\PermissionService.js" />
     <Content Include="Security\Services\SecurityService.js" />
@@ -154,6 +160,10 @@
     <Content Include="Security\Services\ViewService.js" />
     <Content Include="Security\Services\UserService.js" />
     <Content Include="Security\Services\WidgetService.js" />
+    <Content Include="Security\Views\Menu\MenuManagement.html" />
+    <Content Include="Security\Views\Menu\MenuManagementController.js" />
+    <Content Include="Security\Views\Menu\ModuleEditor.html" />
+    <Content Include="Security\Views\Menu\ModuleEditorController.js" />
     <Content Include="Security\Views\Permission\BusinessEntityEditor.html" />
     <Content Include="Security\Views\Permission\BusinessEntityEditorController.js" />
     <Content Include="Security\Views\Permission\BusinessEntityManagement.html" />
@@ -192,6 +202,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BusinessEntityNodeController.cs" />
+    <Compile Include="Controllers\ModuleController.cs" />
     <Compile Include="Controllers\OrgChartController.cs" />
     <Compile Include="Controllers\ViewController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
@@ -242,12 +253,12 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

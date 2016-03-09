@@ -15,7 +15,8 @@
             UpdateViewsRank: UpdateViewsRank,
             DeleteView: DeleteView,
             HasAddViewPermission: HasAddViewPermission,
-            HasUpdateViewPermission: HasUpdateViewPermission
+            HasUpdateViewPermission: HasUpdateViewPermission,
+            GetFilteredViews: GetFilteredViews
         });
 
         function GetView(ViewId) {
@@ -23,7 +24,10 @@
                 ViewId: ViewId
             });
         }
-
+        function GetFilteredViews(input)
+        {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetFilteredViews'), input);
+        }
         function GetFilteredDynamicPages(filter) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetFilteredDynamicViews'), filter);
         }

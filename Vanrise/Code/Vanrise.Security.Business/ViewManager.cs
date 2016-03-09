@@ -150,6 +150,17 @@ namespace Vanrise.Security.Business
             var allViews = GetCachedViews().Values;
             return allViews.FindAllRecords(x => x.Type == ViewType.Dynamic);
         }
+
+        public IDataRetrievalResult<ViewDetail> GetFilteredViews(DataRetrievalInput<ViewQuery> input)
+        {
+            var allItems = GetCachedViews();
+
+            Func<View, bool> filterExpression = (itemObject) =>
+                 (input.Query.ModuleId == null || itemObject.ModuleId == input.Query.ModuleId);
+
+            return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, ViewDetailMapper));
+        }
+
         #endregion
         
         #region Private Members

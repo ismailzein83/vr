@@ -58,7 +58,8 @@
     <Compile Include="Group\GroupSettings.cs" />
     <Compile Include="Group\IGroupSettingsContext.cs" />
     <Compile Include="MenuItem.cs" />
-    <Compile Include="Module.cs" />
+    <Compile Include="Module\Module.cs" />
+    <Compile Include="Module\ModuleDetail.cs" />
     <Compile Include="OrgChart\OrgChart.cs" />
     <Compile Include="OrgChart\OrgChartInfo.cs" />
     <Compile Include="OrgChart\OrgChartLinkedEntityInfo.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="View\ViewContentItem.cs" />
     <Compile Include="View\ViewContent.cs" />
     <Compile Include="View\ViewDetail.cs" />
+    <Compile Include="View\ViewQuery.cs" />
     <Compile Include="View\ViewSettings.cs" />
     <Compile Include="Widget\Widget.cs" />
     <Compile Include="Widget\WidgetDefinition.cs" />

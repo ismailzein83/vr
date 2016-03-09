@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Data
 {
@@ -10,6 +11,9 @@ namespace Vanrise.Security.Data
     {
         List<Vanrise.Security.Entities.Module> GetModules();
         bool UpdateModuleRank(int moduleId, int rank);
-       bool AreModulesUpdated(ref object _updateHandle);
+
+        bool AddModule(Module moduleObject, out int moduleId);
+        bool UpdateModule(Module moduleObject);
+        bool AreModulesUpdated(ref object _updateHandle);
     }
 }

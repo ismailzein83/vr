@@ -59,5 +59,12 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.UpdateViewsRank(updatedMenuItem);
         }
+
+        [HttpPost]
+        [Route("GetFilteredViews")]
+        public object GetFilteredViews(Vanrise.Entities.DataRetrievalInput<ViewQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredViews(input));
+        }
     }
 }
