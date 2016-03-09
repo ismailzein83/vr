@@ -212,8 +212,7 @@
                 filter.CountryIds = UtilsService.getPropValuesFromArray($scope.selectedCountries, "CountryId");
             }
 
-
-            if ($scope.selectedProfiles.length == 0)
+            if ($scope.selectedProfiles.length == 0 || $scope.selectedProfiles == undefined)
                 filter.ProfileIds = null;
             else {
                 filter.ProfileIds = [$scope.selectedProfiles.ProfileId];
