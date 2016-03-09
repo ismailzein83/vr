@@ -101,9 +101,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
 --[sec].[View]--------------------------------------------------------------------------------------
@@ -149,70 +147,66 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[RequiredPermissions] = s.[RequiredPermissions],[Audience] = s.[Audience],[Content] = s.[Content],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[Audience],s.[Content],s.[Type],s.[Rank])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[Audience],s.[Content],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntityModule]-----
+--[sec].[BusinessEntityModule]------------------------601 to 700----------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
+;with cte_data([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Root',null,0,'["View","Full Control"]'),
-(2,'Strategy Module',1,0,'["View","Add","Edit", "Add System built in", "Full Control"]'),
-(3,'Suspicious Cases Module',1,0,'["View"]'),
-(4,'Reporting Module',1,0,'["View"]'),
-(5,'Dashboard Module',1,0,'["View"]'),
-(6,'Business Process Module',1,0,'["View"]'),
-(7,'Integration Module',1,0,'["View"]'),
-(8,'Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]')
+(4,'Fraud Analysis Module','Fraud Analysis Module',1,0,'["View","Add","Edit", "Full Control"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions]))
+)c([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntityModule] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+	[Name] = s.[Name],[Title] = s.[Title],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	insert([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntityModule] off;
 
 
---[sec].[BusinessEntity]-----
+--[sec].[BusinessEntity]------------------1801 to 2100----------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions])
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users',8,0,'["View", "Add", "Edit", "Reset Password"]'),
-(2,'Groups',8,0,'["View", "Add", "Edit", "Delete"]'),
-(3,'System Entities',8,1,'["View", "Assign Permissions"]'),
-(4,'History',6,0,'["View"]'),
-(5,'Managment',6,0,'["View"]')
+(13,'Integration','Integration',2,0,'["View"]'),
+(14,'Business Process','Business Process',2,0,'["View"]'),
+(15,'Strategy','Strategy',4,0,'["View","Add","Edit", "Full Control"]'),
+(16,'Network Infrastructure','Network Infrastructure',2,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(17,'Normalization Rule','Normalization Rule',2,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(18,'Case Management','Case Management',4,0,'["View","Edit"]'),
+(19,'Number Prefixes','Number Prefixes',2,0,'["View","Edit"]'),
+(20,'Strategy Execution','Strategy Execution',4,0,'["View"]'),
+(21,'Related Numbers','Related Numbers',4,0,'["View"]'),
+(22,'CDR','CDR',4,0,'["View"]'),
+(24,'VR_Runtime_SchedulerTask','Schedule Services',3,0,'["View", "Add", "Edit", "ViewMyTask"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions]))
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
-	insert([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
 --[sec].[Permission]--------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
+set identity_insert [sec].[Permission] on;
 ;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,24 +222,20 @@ when matched then
 	[PermissionFlags] = s.[PermissionFlags]
 when not matched by target then
 	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags])
-when not matched by source then
-	delete;
+	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+set identity_insert [sec].[Permission] off;
 
-
-
-
-	--common.TemplateConfig-----------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[common].[TemplateConfig]----------30001 to 40000---------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(9,'Add Prefix','PSTN_BE_AdjustNumberAction','vr-pstn-be-addprefix','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.AddPrefixActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
-(10,'Substring','PSTN_BE_AdjustNumberAction','vr-pstn-be-substring','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.SubstringActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
-(11,'Replace Characters','PSTN_BE_AdjustNumberAction','vr-pstn-be-replacestring','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.ReplaceStringActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
-(12,'Set Area Prefix','PSTN_BE_SetArea','vr-pstn-be-setareaprefix','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.SetArea.Behaviors.SetAreaPrefixBehavior, PSTN.BusinessEntity.MainExtensions',null)
+(30001,'Add Prefix','PSTN_BE_AdjustNumberAction','vr-pstn-be-addprefix','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.AddPrefixActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
+(30002,'Substring','PSTN_BE_AdjustNumberAction','vr-pstn-be-substring','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.SubstringActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
+(30003,'Replace Characters','PSTN_BE_AdjustNumberAction','vr-pstn-be-replacestring','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.NormalizeNumber.Actions.ReplaceStringActionBehavior, PSTN.BusinessEntity.MainExtensions',null),
+(30004,'Set Area Prefix','PSTN_BE_SetArea','vr-pstn-be-setareaprefix','PSTN.BusinessEntity.MainExtensions.Normalization.RuleTypes.SetArea.Behaviors.SetAreaPrefixBehavior, PSTN.BusinessEntity.MainExtensions',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t
@@ -256,13 +246,8 @@ when matched then
 	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
-	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
 set identity_insert [common].[TemplateConfig] off;
-
-
-
 
 --rules.RuleType------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -289,77 +274,66 @@ set identity_insert [rules].[RuleType] off;
 --[sec].[SystemAction]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [sec].[SystemAction] on;
-;with cte_data([ID],[Name],[RequiredPermissions])
+;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'VR_Sec/Users/GetFilteredUsers','Users:View'),
-(2,'VR_Sec/Users/GetMembers','Users:View'),
-(3,'VR_Sec/Users/GetUserbyId','Users:View'),
-(4,'VR_Sec/Users/UpdateUser','Users:Edit'),
-(5,'VR_Sec/Users/AddUser','Users:Add'),
-(6,'VR_Sec/Users/ResetPassword','Users:Reset Password'),
-(7,'VR_Sec/Permission/UpdatePermissions','System Entities:Assign Permissions'),
-(8,'PSTN_BE/SwitchBrand/GetFilteredBrands',null),
-(9,'PSTN_BE/SwitchBrand/GetBrands',null),
-(10,'PSTN_BE/SwitchBrand/GetBrandById',null),
-(11,'PSTN_BE/SwitchBrand/UpdateBrand',null),
-(12,'PSTN_BE/SwitchBrand/AddBrand',null),
-(13,'PSTN_BE/SwitchBrand/DeleteBrand',null),
-(14,'PSTN_BE/Switch/GetFilteredSwitches',null),
-(15,'PSTN_BE/Switch/GetSwitchById',null),
-(16,'PSTN_BE/Switch/GetSwitches',null),
-(17,'PSTN_BE/Switch/GetSwitchesInfo',null),
-(18,'PSTN_BE/Switch/GetSwitchAssignedDataSources',null),
-(19,'PSTN_BE/Switch/UpdateSwitch',null),
-(20,'PSTN_BE/Switch/AddSwitch',null),
-(21,'PSTN_BE/Switch/DeleteSwitch',null),
-(22,'PSTN_BE/Trunk/GetFilteredTrunks',null),
-(23,'PSTN_BE/Trunk/GetTrunkById',null),
-(24,'PSTN_BE/Trunk/GetTrunksBySwitchIds',null),
-(25,'PSTN_BE/Trunk/GetTrunks',null),
-(26,'PSTN_BE/Trunk/AddTrunk',null),
-(27,'PSTN_BE/Trunk/UpdateTrunk',null),
-(28,'PSTN_BE/Trunk/DeleteTrunk',null),
-(29,'PSTN_BE/Trunk/GetTrunksInfo',null),
-(30,'PSTN_BE/NormalizationRule/GetFilteredNormalizationRules',null),
-(31,'PSTN_BE/NormalizationRule/GetRule',null),
-(32,'PSTN_BE/NormalizationRule/GetNormalizationRuleAdjustNumberActionSettingsTemplates',null),
-(33,'PSTN_BE/NormalizationRule/GetNormalizationRuleSetAreaSettingsTemplates',null),
-(34,'PSTN_BE/NormalizationRule/AddRule',null),
-(35,'PSTN_BE/NormalizationRule/UpdateRule',null),
-(36,'PSTN_BE/NormalizationRule/DeleteRule',null),
-(37,'Fzero_FraudAnalysis/AccountCase/GetLastAccountCase',null),
-(38,'Fzero_FraudAnalysis/AccountCase/GetFilteredAccountSuspicionSummaries',null),
-(39,'Fzero_FraudAnalysis/AccountCase/UpdateAccountCase',null),
-(40,'Fzero_FraudAnalysis/AccountCase/GetAccountCase',null),
-(41,'Fzero_FraudAnalysis/AccountCase/GetFilteredCasesByAccountNumber',null),
-(42,'Fzero_FraudAnalysis/AccountCaseHistory/GetFilteredAccountCaseHistoryByCaseID',null),
-(43,'api/CDR/GetCDRs',null),
-(44,'Fzero_FraudAnalysis/NumberPrefix/GetPrefixes',null),
-(45,'Fzero_FraudAnalysis/NumberPrefix/UpdatePrefixes',null),
-(46,'Fzero_FraudAnalysis/NumberProfile/GetNumberProfiles',null),
-(47,'Fzero_FraudAnalysis/RelatedNumber/GetRelatedNumbersByAccountNumber',null),
-(48,'Fzero_FraudAnalysis/Strategy/GetFilteredStrategies',null),
-(49,'Fzero_FraudAnalysis/Strategy/GetStrategiesInfo',null),
-(50,'Fzero_FraudAnalysis/Strategy/GetStrategy',null),
-(51,'Fzero_FraudAnalysis/Strategy/GetFilters',null),
-(52,'Fzero_FraudAnalysis/Strategy/GetAggregates',null),
-(53,'Fzero_FraudAnalysis/Strategy/AddStrategy',null),
-(54,'Fzero_FraudAnalysis/Strategy/UpdateStrategy',null),
-(55,'Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions',null),
-(56,'Fzero_FraudAnalysis/StrategyExecutionItem/GetFilteredDetailsByCaseID',null)
+('PSTN_BE/SwitchBrand/GetFilteredBrands','Network Infrastructure:View'),
+('PSTN_BE/SwitchBrand/GetBrands','Network Infrastructure:View'),
+('PSTN_BE/SwitchBrand/GetBrandById','Network Infrastructure:View'),
+('PSTN_BE/SwitchBrand/UpdateBrand','Network Infrastructure:View &amp; Network Infrastructure:Add'),
+('PSTN_BE/SwitchBrand/AddBrand','Network Infrastructure:View &amp; Network Infrastructure:Edit'),
+('PSTN_BE/SwitchBrand/DeleteBrand','Network Infrastructure:View &amp; Network Infrastructure:Delete'),
+('PSTN_BE/Switch/GetFilteredSwitches','Network Infrastructure:View'),
+('PSTN_BE/Switch/GetSwitchById','Network Infrastructure:View'),
+('PSTN_BE/Switch/GetSwitches','Network Infrastructure:View'),
+('PSTN_BE/Switch/GetSwitchesInfo','Network Infrastructure:View'),
+('PSTN_BE/Switch/GetSwitchAssignedDataSources','Network Infrastructure:View'),
+('PSTN_BE/Switch/UpdateSwitch','Network Infrastructure:View &amp; Network Infrastructure:Edit'),
+('PSTN_BE/Switch/AddSwitch','Network Infrastructure:View &amp; Network Infrastructure:Add'),
+('PSTN_BE/Switch/DeleteSwitch','Network Infrastructure:View &amp; Network Infrastructure:Delete'),
+('PSTN_BE/Trunk/GetFilteredTrunks','Network Infrastructure:View'),
+('PSTN_BE/Trunk/GetTrunkById','Network Infrastructure:View'),
+('PSTN_BE/Trunk/GetTrunksBySwitchIds','Network Infrastructure:View'),
+('PSTN_BE/Trunk/GetTrunks','Network Infrastructure:View'),
+('PSTN_BE/Trunk/AddTrunk','Network Infrastructure:View &amp; Network Infrastructure:Add'),
+('PSTN_BE/Trunk/UpdateTrunk','Network Infrastructure:View &amp; Network Infrastructure:Edit'),
+('PSTN_BE/Trunk/DeleteTrunk','Network Infrastructure:View &amp; Network Infrastructure:Delete'),
+('PSTN_BE/Trunk/GetTrunksInfo','Network Infrastructure:View'),
+('PSTN_BE/NormalizationRule/GetFilteredNormalizationRules','Normalization Rule:View'),
+('PSTN_BE/NormalizationRule/GetRule','Normalization Rule:View'),
+('PSTN_BE/NormalizationRule/GetNormalizationRuleAdjustNumberActionSettingsTemplates','Normalization Rule:View'),
+('PSTN_BE/NormalizationRule/GetNormalizationRuleSetAreaSettingsTemplates','Normalization Rule:View'),
+('PSTN_BE/NormalizationRule/AddRule','Normalization Rule:View &amp; Normalization Rule:Add'),
+('PSTN_BE/NormalizationRule/UpdateRule','Normalization Rule:View &amp;Normalization Rule:Edit'),
+('PSTN_BE/NormalizationRule/DeleteRule','Normalization Rule:View &amp;Normalization Rule:Delete'),
+('Fzero_FraudAnalysis/AccountCase/GetLastAccountCase','Case Management:View'),
+('Fzero_FraudAnalysis/AccountCase/GetFilteredAccountSuspicionSummaries','Case Management:View'),
+('Fzero_FraudAnalysis/AccountCase/UpdateAccountCase','Case Management:View &amp; Case Management:Edit'),
+('Fzero_FraudAnalysis/AccountCase/GetAccountCase','Case Management:View'),
+('Fzero_FraudAnalysis/AccountCase/GetFilteredCasesByAccountNumber','Case Management:View'),
+('Fzero_FraudAnalysis/AccountCaseHistory/GetFilteredAccountCaseHistoryByCaseID','Case Management:View'),
+('api/CDR/GetCDRs','CDR:View'),
+('Fzero_FraudAnalysis/NumberPrefix/GetPrefixes','Number Prefixes:View'),
+('Fzero_FraudAnalysis/NumberPrefix/UpdatePrefixes','Number Prefixes:View &amp; Number Prefixes:Edit'),
+('Fzero_FraudAnalysis/NumberProfile/GetNumberProfiles','Strategy Module:View'),
+('Fzero_FraudAnalysis/RelatedNumber/GetRelatedNumbersByAccountNumber','Related Numbers :View'),
+('Fzero_FraudAnalysis/Strategy/GetFilteredStrategies','Strategy:View'),
+('Fzero_FraudAnalysis/Strategy/GetStrategiesInfo','Strategy:View'),
+('Fzero_FraudAnalysis/Strategy/GetStrategy','Strategy:View'),
+('Fzero_FraudAnalysis/Strategy/GetFilters','Strategy:View'),
+('Fzero_FraudAnalysis/Strategy/GetAggregates','Strategy:View'),
+('Fzero_FraudAnalysis/Strategy/AddStrategy','Strategy:View &amp; Strategy:Add'),
+('Fzero_FraudAnalysis/Strategy/UpdateStrategy','Strategy:View &amp; Strategy:Edit'),
+('Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions','Strategy Execution:View'),
+('Fzero_FraudAnalysis/StrategyExecutionItem/GetFilteredDetailsByCaseID','Strategy Execution:View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[RequiredPermissions]))
+)c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[Name] = s.[Name]
 when matched then
 	update set
 	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
 when not matched by target then
-	insert([ID],[Name],[RequiredPermissions])
-	values(s.[ID],s.[Name],s.[RequiredPermissions])
-when not matched by source then
-	delete;
-set identity_insert [sec].[SystemAction] off;
+	insert([Name],[RequiredPermissions])
+	values(s.[Name],s.[RequiredPermissions]);

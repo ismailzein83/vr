@@ -13,5 +13,6 @@ BEGIN
     -- Insert statements for procedure here
 	SELECT [ID]
       ,[Name]
-      ,[Description] from sec.[Group]
+      ,[Description]
+      ,[Settings] from sec.[Group]
 END

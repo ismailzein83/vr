@@ -59,9 +59,7 @@ when matched then
 	[Name] = s.[Name],[DisplayName] = s.[DisplayName],[Type] = s.[Type],[Configuration] = s.[Configuration],[Rank] = s.[Rank]
 when not matched by target then
 	insert([ID],[Name],[DisplayName],[Type],[Configuration],[Rank])
-	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank]);
 set identity_insert [BI].[SchemaConfiguration] off;
 
 --[sec].[Module]------------------------------------------------------------------------------------
@@ -86,9 +84,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
 --[sec].[View]--------------------------------------------------------------------------------------
@@ -122,13 +118,11 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntity]----------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[BusinessEntity]------------------2101 to 2400----------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -151,46 +145,24 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
---[sec].[Permission]--------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(0,'1',0,'1','[{"Name":"Full Control","Value":1}]'),
-(0,'1',1,'3','[{"Name":"View","Value":1}, {"Name":"Assign Permissions","Value":1}]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
-merge	[sec].[Permission] as t
-using	cte_data as s
-on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
-when matched then
-	update set
-	[PermissionFlags] = s.[PermissionFlags]
-when not matched by target then
-	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags])
-when not matched by source then
-	delete;
-
-	--[common].[TemplateConfig]----------1001 to 1500---------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[common].[TemplateConfig]----------40001 to 50000---------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1001,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
-(1002,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
-(1003,'iTest Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
-(1004,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
-(1005,'Initiate Test - ITest','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
-(1006,'Test Progress - ITest','QM_CLITester_ConnectorTestProgress','qm-clitester-testconnector-testprogress-itest',null,null),
-(1007,'TOne V2 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev2',null,null),
-(1008,'I-Test Countries','VRCommon_SourceCountryReader','qm-clitester-sourcecountryreader-itest',null,null),
-(1009,'I-Test Zones','QM_BE_SourceZoneReader','qm-clitester-sourcezonereader-itest',null,null),
-(1010,'TOne V1 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev1',null,null),
-(1011,'TOne V1 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev1',null,null)
+(10001,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
+(10002,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
+(10003,'iTest Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
+(10004,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
+(10005,'Initiate Test - ITest','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
+(10006,'Test Progress - ITest','QM_CLITester_ConnectorTestProgress','qm-clitester-testconnector-testprogress-itest',null,null),
+(10007,'TOne V2 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev2',null,null),
+(10008,'I-Test Countries','VRCommon_SourceCountryReader','qm-clitester-sourcecountryreader-itest',null,null),
+(10009,'I-Test Zones','QM_BE_SourceZoneReader','qm-clitester-sourcezonereader-itest',null,null),
+(10010,'TOne V1 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev1',null,null),
+(10011,'TOne V1 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev1',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t

@@ -1,4 +1,15 @@
-﻿--sec.WidgetDefinition--------
+﻿/*
+Post-Deployment Script Template							
+--------------------------------------------------------------------------------------
+ This file contains SQL statements that will be appended to the build script.		
+ Use SQLCMD syntax to include a file in the post-deployment script.			
+ Example:      :r .\myfile.sql								
+ Use SQLCMD syntax to reference a variable in the post-deployment script.		
+ Example:      :setvar TableName MyTable							
+               SELECT * FROM [$(TableName)]					
+--------------------------------------------------------------------------------------
+*/
+--sec.WidgetDefinition--------
 set nocount on;
 set identity_insert [sec].[WidgetDefinition] on;
 ;with cte_data([ID],[Name],[DirectiveName],[Setting])
@@ -17,23 +28,8 @@ when matched then
 	[Name] = s.[Name],[DirectiveName] = s.[DirectiveName],[Setting] = s.[Setting]
 when not matched by target then
 	insert([ID],[Name],[DirectiveName],[Setting])
-	values(s.[ID],s.[Name],s.[DirectiveName],s.[Setting])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[DirectiveName],s.[Setting]);
 set identity_insert [sec].[WidgetDefinition] off; 
-
-
-/*
-Post-Deployment Script Template							
---------------------------------------------------------------------------------------
- This file contains SQL statements that will be appended to the build script.		
- Use SQLCMD syntax to include a file in the post-deployment script.			
- Example:      :r .\myfile.sql								
- Use SQLCMD syntax to reference a variable in the post-deployment script.		
- Example:      :setvar TableName MyTable							
-               SELECT * FROM [$(TableName)]					
---------------------------------------------------------------------------------------
-*/
 --BI.SchemaConfiguration----
 set nocount on;
 set identity_insert [BI].[SchemaConfiguration] on;
@@ -81,9 +77,7 @@ when matched then
 	[Name] = s.[Name],[DisplayName] = s.[DisplayName],[Type] = s.[Type],[Configuration] = s.[Configuration],[Rank] = s.[Rank]
 when not matched by target then
 	insert([ID],[Name],[DisplayName],[Type],[Configuration],[Rank])
-	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank]);
 set identity_insert [BI].[SchemaConfiguration] off;
 --sec.Module-----
 set nocount on;
@@ -105,9 +99,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
 --sec.[View]-----
@@ -134,9 +126,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[RequiredPermissions] = s.[RequiredPermissions],[Audience] = s.[Audience],[Content] = s.[Content],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[Audience],[Content],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[Audience],s.[Content],s.[Type],s.[Rank])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[Audience],s.[Content],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
 --[sec].[BusinessEntityModule]----
@@ -163,9 +153,7 @@ when matched then
 	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntityModule] off;
 
 
@@ -200,12 +188,13 @@ when matched then
 	[Name] = s.[Name],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
 	insert([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
---[sec].[Permission]---
+--[sec].[Permission]--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[Permission] on;
 set nocount on;
 ;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 as (select * from (values
@@ -223,6 +212,5 @@ when matched then
 	[PermissionFlags] = s.[PermissionFlags]
 when not matched by target then
 	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags])
-when not matched by source then
-	delete;
+	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+set identity_insert [sec].[Permission] off;

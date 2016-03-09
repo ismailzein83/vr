@@ -14,19 +14,15 @@ Post-Deployment Script Template
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('VRCommon/Country/GetFilteredCountries','VRCommon_Country: View'),
-('VRCommon/Country/GetCountriesInfo',null),
-('VRCommon/Country/GetCountry',null),
-('VRCommon/Country/AddCountry','VRCommon_Country: Add'),
-('VRCommon/Country/UpdateCountry','VRCommon_Country: Edit'),
-('VRCommon/Country/GetCountrySourceTemplates',null),
-('VRCommon/Country/DownloadCountriesTemplate','VRCommon_Country: Download Template'),
-('VRCommon/Country/UploadCountries','VRCommon_Country: Upload'),
-('VRCommon/City/GetFilteredCities',null),
-('VRCommon/City/GetCitiesInfo',null),
-('VRCommon/City/GetCity',null),
-('VRCommon/City/AddCity','VRCommon_Country: Add City'),
-('VRCommon/City/UpdateCity',null)
+('VR_Runtime/SchedulerTask/GetFilteredTasks','VR_Runtime_SchedulerTask: View'),
+('VR_Runtime/SchedulerTask/GetFilteredMyTasks','VR_Runtime_SchedulerTask: ViewMyTask'),
+('VR_Runtime/SchedulerTask/GetTask',null),
+('VR_Runtime/SchedulerTask/GetSchedulesInfo',null),
+('VR_Runtime/SchedulerTask/GetSchedulerTaskTriggerTypes',null),
+('VR_Runtime/SchedulerTask/GetSchedulerTaskActionTypes',null),
+('VR_Runtime/SchedulerTask/AddTask','VR_Runtime_SchedulerTask: Add'),
+('VR_Runtime/SchedulerTask/UpdateTask','VR_Runtime_SchedulerTask: Edit'),
+('VR_Runtime/SchedulerTask/DeleteTask',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -39,18 +35,17 @@ when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
 
---[sec].[BusinessEntityModule]------------------------101 to 200----------------------------------------------
+--[sec].[BusinessEntityModule]------------------------301 to 400----------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 
-
---[sec].[BusinessEntity]------------------301 to 600----------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+--[sec].[BusinessEntity]------------------901 to 1200----------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'VRCommon_Country','Country',2,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]')
+(901,'VR_Runtime_SchedulerTask','Scheduler Task',2,0,'["View", "Add", "Edit", "ViewMyTask"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t

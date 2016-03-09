@@ -79,9 +79,7 @@ when matched then
 	[Name] = s.[Name],[DisplayName] = s.[DisplayName],[Type] = s.[Type],[Configuration] = s.[Configuration],[Rank] = s.[Rank]
 when not matched by target then
 	insert([ID],[Name],[DisplayName],[Type],[Configuration],[Rank])
-	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank]);
 set identity_insert [BI].[SchemaConfiguration] off;
 --[sec].[Module]------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -127,9 +125,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
 --[sec].[View]--------------------------------------------------------------------------------------
@@ -213,23 +209,20 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Type],s.[Rank])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntityModule]----
+--[sec].[BusinessEntityModule]------------------------401 to 500----------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Root',null,0,'["View","Add","Edit", "Delete", "Full Control"]'),
 (2,'Routing Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
 (3,'Business Intelligence Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
 (4,'Sales Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
 (5,'Business Entity Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(6,'Administration Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
 (7,'Billing Module',3,0,'["View","Add","Edit", "Delete", "Full Control"]'),
 (8,'Trafic Module',3,0,'["View","Add","Edit", "Delete", "Full Control"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -242,46 +235,39 @@ when matched then
 	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
 	insert([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntityModule] off;
 
 
---[sec].[BusinessEntity]-----
+--[sec].[BusinessEntity]------------------1201 to 1500----------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
-;with cte_data([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions])
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Routes',2,0,'["View"]'),
-(2,'Route Rules',2,0,'["View","Add Block Route","Edit Block Route", "Add Override Route", "Edit Override Route"]'),
-(3,'Billing Statistics',7,0,'["View"]'),
-(4,'CDRs',7,0,'["View"]'),
-(6,'Traffic Statistics',8,0,'["View"]'),
-(7,'CDRs',8,0,'["View"]'),
-(8,'Rates',4,0,'["View", "Edit"]'),
-(9,'LCR',4,0,'["View"]'),
-(10,'Carrier',5,0,'["View", "Edit", "Delete"]'),
-(11,'Code',5,0,'["View", "Edit"]'),
-(12,'Zone',5,0,'["View", "Edit"]'),
-(13,'Users',6,0,'["View", "Add", "Edit", "Reset Password"]'),
-(14,'Groups',6,0,'["View", "Add", "Edit", "Delete"]'),
-(15,'System Entities',6,1,'["View", "Assign Permissions"]'),
-(17,'Dynamic Pages',6,1,'["View", "Add", "Edit", "Delete","Validate"]')
+(13,'Integration','Integration',2,0,'["View"]'),
+(14,'Business Process','Business Process',2,0,'["View"]'),
+(15,'Strategy','Strategy',4,0,'["View","Add","Edit", "Full Control"]'),
+(16,'Network Infrastructure','Network Infrastructure',2,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(17,'Normalization Rule','Normalization Rule',2,0,'["View","Add","Edit", "Delete", "Full Control"]'),
+(18,'Case Management','Case Management',4,0,'["View","Edit"]'),
+(19,'Number Prefixes','Number Prefixes',2,0,'["View","Edit"]'),
+(20,'Strategy Execution','Strategy Execution',4,0,'["View"]'),
+(21,'Related Numbers','Related Numbers',4,0,'["View"]'),
+(22,'CDR','CDR',4,0,'["View"]'),
+(24,'VR_Runtime_SchedulerTask','Schedule Services',3,0,'["View", "Add", "Edit", "ViewMyTask"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions]))
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
 when not matched by target then
-	insert([Id],[Name],[ModuleId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions])
-when not matched by source then
-	delete;
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
 --[sec].[Permission]---
@@ -307,7 +293,7 @@ when not matched by source then
 	delete;
 
 
---[common].[TemplateConfig]-------------0 to 500------------------------------------------------------------
+--[common].[TemplateConfig]----------1 to 10000---------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
@@ -375,39 +361,23 @@ set identity_insert [common].[TemplateConfig] off;
 --[sec].[SystemAction]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [sec].[SystemAction] on;
-;with cte_data([ID],[Name],[RequiredPermissions])
+;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'VR_Sec/Users/GetFilteredUsers','Users:View'),
-(2,'VR_Sec/Users/GetMembers','Users:View'),
-(3,'VR_Sec/Users/GetUserbyId','Users:View'),
-(4,'VR_Sec/Users/UpdateUser','Users:Edit'),
-(5,'VR_Sec/Users/AddUser','Users:Add'),
-(6,'VR_Sec/Users/ResetPassword','Users:Reset Password'),
-(7,'VR_Sec/Group/AddGroup','Groups:Add'),
-(8,'VR_Sec/BusinessEntityNode/ToggleBreakInheritance','System Entities:Assign Permissions'),
-(9,'VR_Sec/Permission/UpdatePermissions','System Entities:Assign Permissions'),
-(10,'VR_Sec/View/AddView','Dynamic Pages:Add'),
-(11,'WhS_BE/RoutingProduct/GetFilteredRoutingProducts',null),
-(12,'WhS_BE/RoutingProduct/AddRoutingProduct',null),
-(13,'WhS_Routing/RouteRule/AddRule',null),
-(14,'WhS_BE/CarrierAccount/GetFilteredCarrierAccounts','Carrier:View'),
-(15,'WhS_BE/CarrierAccount/UpdateCarrierAccount','Carrier:Edit'),
-(16,'WhS_BE/CarrierAccount/AddCarrierAccount','Carrier:Add'),
-(17,'VRCommon/Country/AddCountry','Users:Add'),
-(18,'VR_Sec/Group/GetFilteredGroups','Groups:View')
+('WhS_BE/RoutingProduct/GetFilteredRoutingProducts',null),
+('WhS_BE/RoutingProduct/AddRoutingProduct',null),
+('WhS_Routing/RouteRule/AddRule',null),
+('WhS_BE/CarrierAccount/GetFilteredCarrierAccounts','Carrier:View'),
+('WhS_BE/CarrierAccount/UpdateCarrierAccount','Carrier:Edit'),
+('WhS_BE/CarrierAccount/AddCarrierAccount','Carrier:Add')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[RequiredPermissions]))
+)c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[Name] = s.[Name]
 when matched then
 	update set
 	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
 when not matched by target then
-	insert([ID],[Name],[RequiredPermissions])
-	values(s.[ID],s.[Name],s.[RequiredPermissions])
-when not matched by source then
-	delete;
-set identity_insert [sec].[SystemAction] off;
+	insert([Name],[RequiredPermissions])
+	values(s.[Name],s.[RequiredPermissions]);

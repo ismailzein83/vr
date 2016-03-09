@@ -28,9 +28,7 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
 --[sec].[View]--------------------------------------------------------------------------------------
@@ -58,13 +56,11 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank])
-when not matched by source then
-	delete;
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---sec.BusinessEntityModule--------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[BusinessEntityModule]------------------------501 to 600----------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
@@ -85,8 +81,8 @@ when not matched by target then
 set identity_insert [sec].[BusinessEntityModule] off;
 
 
---sec.BusinessEntity--------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[sec].[BusinessEntity]------------------1501 to 1800----------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
@@ -160,14 +156,14 @@ when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
 
---[common].[TemplateConfig]--------------501 to 1000-----------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--[common].[TemplateConfig]----------20001 to 30000---------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(501,'TOne V1','CP_SupplierPriceList_CustomerConnector','vr-cp-supplierpricelist-tonev1integration-customerconnector',null,null)
+(20001,'TOne V1','CP_SupplierPriceList_CustomerConnector','vr-cp-supplierpricelist-tonev1integration-customerconnector',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t
