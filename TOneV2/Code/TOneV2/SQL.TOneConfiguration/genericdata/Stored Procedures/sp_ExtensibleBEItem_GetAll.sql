@@ -1,4 +1,4 @@
-﻿create PROCEDURE [genericdata].[sp_GenericEditorDefinition_GetAll]
+﻿CREATE PROCEDURE [genericdata].[sp_ExtensibleBEItem_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -7,7 +7,6 @@ BEGIN
 
     -- Insert statements for procedure here
 	SELECT [ID]
-		   ,[BusinessEntityID]
-		   ,Details
-      FROM genericdata.GenericEditorDefinition
+      ,Details
+      FROM genericdata.ExtensibleBEItem
 END

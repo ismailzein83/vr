@@ -257,10 +257,16 @@
     <Build Include="common\Stored Procedures\sp_RateType_GetAll.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueActivatorConfig_GetAll.sql" />
     <Build Include="Security\queue.sql" />
-    <Build Include="genericdata\Tables\GenericEditorDefinition.sql" />
-    <Build Include="genericdata\Stored Procedures\sp_GenericEditorDefinition_Update.sql" />
-    <Build Include="genericdata\Stored Procedures\sp_GenericEditorDefinition_Insert.sql" />
-    <Build Include="genericdata\Stored Procedures\sp_GenericEditorDefinition_GetAll.sql" />
+    <Build Include="genericdata\Tables\GenericBusinessEntity.sql" />
+    <Build Include="genericdata\Tables\ExtensibleBEItem.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericBusinessEntity_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericBusinessEntity_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_GenericBusinessEntity_GetByDefinition.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_ExtensibleBEItem_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_ExtensibleBEItem_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_ExtensibleBEItem_GetAll.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityDefinition_Update.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityDefinition_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

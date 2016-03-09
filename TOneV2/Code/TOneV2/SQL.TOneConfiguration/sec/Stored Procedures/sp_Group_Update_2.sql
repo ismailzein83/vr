@@ -6,7 +6,7 @@
 CREATE PROCEDURE [sec].[sp_Group_Update]
 	@ID int,
 	@Name Nvarchar(255),
-	@Description ntext
+	@Description nvarchar(MAX)
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM sec.[Group] WHERE ID != @ID AND Name = @Name)

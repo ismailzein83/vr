@@ -3,17 +3,16 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [genericdata].[sp_GenericEditorDefinition_Update]
+CREATE PROCEDURE [genericdata].[sp_ExtensibleBEItem_Update]
 	@ID INT,
-	@BusinessEntityID int,
 	@Details VARCHAR(MAX)
 	
 AS
 BEGIN
-IF EXISTS(SELECT 1 FROM genericdata.GenericEditorDefinition WHERE ID = @ID)
+IF EXISTS(SELECT 1 FROM genericdata.ExtensibleBEItem WHERE ID = @ID)
 	BEGIN
-		Update genericdata.GenericEditorDefinition
-		Set BusinessEntityID = @BusinessEntityID, Details = @Details
+		Update genericdata.ExtensibleBEItem
+		Set  Details = @Details
 		Where ID = @ID
 	END
 END

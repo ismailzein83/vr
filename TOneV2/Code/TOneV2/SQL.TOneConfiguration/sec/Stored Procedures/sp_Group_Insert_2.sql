@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [sec].[sp_Group_Insert] 
 	@Name Nvarchar(255),
-	@Description ntext,
+	@Description nvarchar(MAX),
 	@Id int out
 AS
 BEGIN

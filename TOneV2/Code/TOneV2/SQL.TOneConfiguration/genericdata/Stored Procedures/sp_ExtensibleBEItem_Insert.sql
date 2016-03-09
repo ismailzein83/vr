@@ -3,13 +3,12 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [genericdata].[sp_GenericEditorDefinition_Insert]
-	@BusinessEntityID int,
+CREATE PROCEDURE [genericdata].[sp_ExtensibleBEItem_Insert]
 	@Details VARCHAR(MAX),
 	@ID INT OUT
 AS
 BEGIN
-	INSERT INTO genericdata.GenericEditorDefinition(BusinessEntityID,Details)
-	VALUES (@BusinessEntityID,@Details)
+	INSERT INTO genericdata.ExtensibleBEItem(Details)
+	VALUES (@Details)
 	SET @ID = @@IDENTITY 
 END
