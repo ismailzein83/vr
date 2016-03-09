@@ -220,6 +220,10 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Editor\vr-genericdata-genericbusinessentity-runtime-editor.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Editor\vr-genericdata-genericbusinessentity-runtime-row.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Editor\vr-genericdata-genericbusinessentity-runtime-section.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\Templates\ArrayFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\vr-genericdata-fieldtype-array-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\vr-genericdata-fieldtype-array-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Array\vr-genericdata-fieldtype-array.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-fieldtype-boolean-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-fieldtype-boolean-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-fieldtype-businessentity-filtereditor.js" />
