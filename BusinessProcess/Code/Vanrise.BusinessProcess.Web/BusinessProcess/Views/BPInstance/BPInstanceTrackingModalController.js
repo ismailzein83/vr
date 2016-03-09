@@ -13,6 +13,9 @@
         var instanceMonitorGridAPI;
         var instanceTrackingHistoryGridAPI;
         var instanceTrackingMonitorGridAPI;
+
+        var timer;
+        var isGettingData = false;
         function defineScope() {
 
             $scope.onInstanceMonitorGridReady = function (api) {
@@ -30,19 +33,18 @@
             };
 
             $scope.onInstanceTrackingMonitorGridReady = function (api) {
-
                 instanceTrackingMonitorGridAPI = api;
                 getFilterObject();
                 instanceTrackingMonitorGridAPI.loadGrid(filter);
-
             }
 
 
             $scope.modalContext.onModalHide = function () {
-                instanceMonitorGridAPI.clearTimer();
+                instanceTrackingMonitorGridAPI.clearTimer();
                 if ($scope.process.HasChildProcesses) {
-                    instanceTrackingMonitorGridAPI.clearTimer();
+                    instanceMonitorGridAPI.clearTimer();
                 }
+                clearTimeout(timer);
             };
         }
 
@@ -85,7 +87,23 @@
             loadParameters();
             getInstance();
             defineScope();
+            createTimer();
         }
+
+        function createTimer() {
+            timer = setInterval(function () {
+                if (!isGettingData) {
+                    isGettingData = true;
+                    BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
+                        $scope.process.Status = response.StatusDescription;
+
+                    })
+                    .finally(function () {
+                        isGettingData = false;
+                    });
+                }
+            }, 5000);
+        };
 
         load();
     }
