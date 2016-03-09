@@ -9,7 +9,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
 {
-    public class SecurityContext
+    public class SecurityContext : ISecurityContext
     {
         #region Constants
 
@@ -47,13 +47,13 @@ namespace Vanrise.Security.Business
         public bool IsAllowed(string requiredPermissions)
         {
             SecurityManager manager = new SecurityManager();
-            return manager.IsAllowed(requiredPermissions, this.GetSecurityToken().UserId);
+            return manager.IsAllowed(requiredPermissions, GetLoggedInUserId());
         }
 
         public bool HasPermissionToActions(string systemActionNames)
         {
             SecurityManager manager = new SecurityManager();
-            return manager.HasPermissionToActions(systemActionNames, this.GetSecurityToken().UserId);
+            return manager.HasPermissionToActions(systemActionNames, GetLoggedInUserId());
         }
 
         #endregion

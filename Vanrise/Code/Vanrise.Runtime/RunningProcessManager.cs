@@ -10,7 +10,7 @@ using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime
 {
-    public class RunningProcessManager
+    public class RunningProcessManager : IRunningProcessManager
     {
         static RunningProcessManager()
         {
@@ -139,6 +139,11 @@ namespace Vanrise.Runtime
                 }
             }
             return s_runningProcesses;
+        }
+
+        RunningProcessInfo IRunningProcessManager.CurrentProcess
+        {
+            get { return RunningProcessManager.CurrentProcess; }
         }
     }
 }

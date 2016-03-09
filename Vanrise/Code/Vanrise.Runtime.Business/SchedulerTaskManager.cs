@@ -4,7 +4,6 @@ using System.Linq;
 using Vanrise.Entities;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
-using Vanrise.Security.Business;
 using Vanrise.Common;
 
 namespace Vanrise.Runtime.Business
@@ -14,7 +13,6 @@ namespace Vanrise.Runtime.Business
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Runtime.Entities.SchedulerTaskDetail> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
-            int ownerId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
 
             Func<SchedulerTask, bool> filterExpression = (itm) =>
                 (input.Query == null || ((string.IsNullOrEmpty(input.Query.NameFilter) || itm.Name.ToLower().Contains(input.Query.NameFilter.ToLower()))
@@ -31,14 +29,14 @@ namespace Vanrise.Runtime.Business
             if (input.Query.Filters == null)
                 input.Query.Filters = new List<ISchedulerTaskFilter>();
 
-            input.Query.Filters.Add(new UserTaskFilter() { UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId() });
+            input.Query.Filters.Add(new UserTaskFilter() { UserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId() });
             return GetFilteredTasks(input);
         }
 
         public List<SchedulerTask> GetSchedulesInfo()
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
-            int ownerId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            int ownerId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             Func<SchedulerTask, bool> filterExpression = (itm) =>
                  itm.OwnerId == ownerId;
 
@@ -93,7 +91,7 @@ namespace Vanrise.Runtime.Business
             {
                 if (actionType.Info.RequiredPermissions != null)
                 {
-                    if (SecurityContext.Current.IsAllowed(actionType.Info.RequiredPermissions))
+                    if (Vanrise.Security.Entities.ContextFactory.GetContext().IsAllowed(actionType.Info.RequiredPermissions))
                         lsSchedulerTaskActionTypesOutput.Add(actionType);
                 }
                 else
@@ -110,7 +108,7 @@ namespace Vanrise.Runtime.Business
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int taskId = -1;
-            taskObject.OwnerId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            taskObject.OwnerId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
             bool insertActionSucc = dataManager.AddTask(taskObject, out taskId);
 
