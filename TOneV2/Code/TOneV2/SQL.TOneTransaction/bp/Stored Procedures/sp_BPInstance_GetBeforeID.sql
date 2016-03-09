@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [bp].[sp_BPInstance_GetBeforeID]
 	@LessThanID BIGINT,
 	@NbOfRows INT,
-	@DefinitionsId varchar(max)
+	@DefinitionsId varchar(max),
+	@ParentId int
 AS
 BEGIN	
 	DECLARE @BPDefinitionIDsTable TABLE (BPDefinitionId int)
@@ -23,5 +24,6 @@ BEGIN
 	  ,[timestamp]
 	FROM [BP].[BPInstance] 
 	WHERE ID < @LessThanID AND  (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) 
+	AND (@ParentId is null or ParentID = @ParentId)
 	ORDER BY ID DESC
 END

@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [bp].[sp_BPInstance_GetUpdated]
 	@TimestampAfter timestamp,
 	@NbOfRows INT,
-	@DefinitionsId varchar(max)
+	@DefinitionsId varchar(max),
+	@ParentId int
 AS
 BEGIN
 	DECLARE @BPDefinitionIDsTable TABLE (BPDefinitionId int)
@@ -25,7 +26,8 @@ IF (@TimestampAfter IS NULL)
 	  ,[timestamp]
             INTO #temp_table
             FROM [BP].[BPInstance] 
-            WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) 
+            WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))
+            AND (@ParentId is null or ParentID = @ParentId) 
             ORDER BY ID DESC
             
             SELECT * FROM #temp_table
@@ -52,6 +54,7 @@ IF (@TimestampAfter IS NULL)
             FROM [BP].[BPInstance] 
             WHERE (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))  AND
             ([timestamp] > @TimestampAfter) --ONLY Updated records
+            AND (@ParentId is null or ParentID = @ParentId)
             ORDER BY [timestamp]
             
             SELECT * FROM #temp2_table
