@@ -60,7 +60,7 @@
             var customerObject = buildCustomerFromScope();
             return customerManagmentAPIService.AddCustomer(customerObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Customer", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Customer", response, 'name')) {
                     if ($scope.onCustomerAdded != undefined)
                         $scope.onCustomerAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -129,7 +129,7 @@
             $scope.name = customerEntity.Name;
         }
         function LoadCustomerTemplates() {
-             return customerManagmentAPIService.GetCustomerTemplates().then(function (response) {
+            return customerManagmentAPIService.GetCustomerTemplates().then(function (response) {
                 angular.forEach(response, function (item) {
                     $scope.sourceTypeTemplates.push(item);
                 });
