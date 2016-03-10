@@ -27,6 +27,13 @@
         function HasUpdateCustomerSupplierMapping() {
             return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(moduleConfig.moduleName, "SupplierMapping", ['UpdateCustomerSupplierMapping']));
         }
+        function DeleteCustomerSupplierMapping(supplierMappingId) {
+            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, "SupplierMapping", "DeleteCustomerSupplierMapping"), { supplierMappingId: supplierMappingId });
+        }
+        function HasDeleteCustomerSupplierMapping() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(moduleConfig.moduleName, "SupplierMapping", ['DeleteCustomerSupplierMapping']));
+        }
+
         return ({
             GetCustomerSuppliers: GetCustomerSuppliers,
             GetFilteredCustomerSupplierMappings: GetFilteredCustomerSupplierMappings,
@@ -34,7 +41,9 @@
             AddCustomerSupplierMapping: AddCustomerSupplierMapping,
             HasAddCustomerSupplierMapping: HasAddCustomerSupplierMapping,
             UpdateCustomerSupplierMapping: UpdateCustomerSupplierMapping,           
-            HasUpdateCustomerSupplierMapping: HasUpdateCustomerSupplierMapping
+            HasUpdateCustomerSupplierMapping: HasUpdateCustomerSupplierMapping,
+            DeleteCustomerSupplierMapping: DeleteCustomerSupplierMapping,
+            HasDeleteCustomerSupplierMapping: HasDeleteCustomerSupplierMapping
         });
        
     }

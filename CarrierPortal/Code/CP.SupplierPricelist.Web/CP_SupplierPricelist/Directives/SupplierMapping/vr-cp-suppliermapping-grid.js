@@ -55,7 +55,22 @@ function (UtilsService, supplierMappingService , supplierMappingAPIService, VRNo
                 name: "Edit",
                 clicked: editSupplierMapping,
                 haspermission: hasUpdateSupplierMappingPermission
-            }];
+            },{
+                name: "Delete",
+                clicked: deleteSupplierMaping,
+                haspermission: hasDeleteCustomerSupplierMappingPermission
+             }];
+        }
+
+        function hasDeleteCustomerSupplierMappingPermission() {
+            return supplierMappingAPIService.HasDeleteCustomerSupplierMapping();
+        }
+
+        function deleteSupplierMaping(object) {
+            var onCustomerSupplierMappingDeleted = function () {
+                gridAPI.itemDeleted(object);
+            }
+            supplierMappingService.deleteSupplierMapping($scope, object.Entity.SupplierMappingId, onCustomerSupplierMappingDeleted);
         }
         function hasUpdateSupplierMappingPermission () {
             return supplierMappingAPIService.HasUpdateCustomerSupplierMapping();

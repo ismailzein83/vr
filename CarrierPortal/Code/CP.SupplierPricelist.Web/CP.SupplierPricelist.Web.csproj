@@ -167,8 +167,8 @@
     <Content Include="CP_SupplierPricelist\Directives\Customer\vr-cp-customer-grid.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\cp-supplierpricelist-resultsupplierpricelist.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\cp-supplierpricelist-uploadsupplierpricelist.js" />
-    <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Customer\vr-sec-group-customer.js" />
-    <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Supplier\vr-sec-group-supplier.js" />
+    <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Customer\vr-cp-group-customer.js" />
+    <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Supplier\vr-cp-group-supplier.js" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Templates\SupplierpricelistConnectorTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\Templates\ResultPriceListTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\MainExtensions\ToneV1Integration\Templates\CustomerConnectorTemplate.html" />

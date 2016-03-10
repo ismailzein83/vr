@@ -8,6 +8,7 @@ namespace CP.SupplierPricelist.Data
         List<CustomerSupplierMapping> GetAllCustomerSupplierMappings();
         bool Insert(CustomerSupplierMapping customerSupplierMapping, out int insertedId);
         bool Update(CustomerSupplierMapping customerSupplierMapping);
+        bool Delete(int customerSupplierMappingId);
         bool AreCustomerSupplierMappingsUpdated(ref object updateHandle);
     }
 }

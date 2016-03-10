@@ -87,7 +87,7 @@
 
         function loadAllControls()
         {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGroupTemplateSelector, loadGroupType])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGroupTemplate])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -113,34 +113,38 @@
             $scope.scopeModal.description = groupEntity.Description;
         }
         
-        function loadGroupTemplateSelector() {
-             
-            return VR_Sec_GroupAPIService.GetGroupTemplate().then(function (response) {
+        function loadGroupTemplate() {
+            var promises = [];
+            var goupPayload;
+            if (groupEntity != undefined && groupEntity.Settings!=undefined) {
+                goupPayload = {
+                    settings: groupEntity.Settings
+                };
+            }
+            var groupTemplateLoad = VR_Sec_GroupAPIService.GetGroupTemplate().then(function (response) {
                 $scope.scopeModal.groupTypeTemplates.length = 0;
                 angular.forEach(response, function (item) {
                     $scope.scopeModal.groupTypeTemplates.push(item);
                 });
 
-                if (groupEntity != undefined && groupEntity.Settings) {
-                    $scope.scopeModal.selectedGroupTypeTemplate = UtilsService.getItemByVal($scope.scopeModal.groupTypeTemplates, groupEntity.Settings.ConfigId, "TemplateConfigID");
+                if (goupPayload) {
+                    $scope.scopeModal.selectedGroupTypeTemplate = UtilsService.getItemByVal($scope.scopeModal.groupTypeTemplates, goupPayload.settings.ConfigId, "TemplateConfigID");
                 }
             });
-        }
-        function loadGroupType() {         
-            if (groupEntity != undefined && groupEntity.Settings) {
+            promises.push(groupTemplateLoad);
+            if (goupPayload) {
                 var loadGroupTypePromiseDeferred = UtilsService.createPromiseDeferred();
                 groupeTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadGroupTypePromiseDeferred.promise);
                 groupeTypeReadyPromiseDeferred.promise.then(function () {
-                    groupeTypeReadyPromiseDeferred = undefined;
-                    var payloadDirective = {
-                        data: groupEntity.Settings 
-                    };
-                    VRUIUtilsService.callDirectiveLoad(groupeTypeAPI, payloadDirective, loadGroupTypePromiseDeferred);
+                    groupeTypeReadyPromiseDeferred = undefined;                  
+                    VRUIUtilsService.callDirectiveLoad(groupeTypeAPI, goupPayload, loadGroupTypePromiseDeferred);
 
                 });
-                return loadGroupTypePromiseDeferred.promise;
             }
+            return UtilsService.waitMultiplePromises(promises);
         }
+       
         function buildGroupObjFromScope() {
             var settings = VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, groupeTypeAPI, 'selectedGroupTypeTemplate')
             var groupObj = {

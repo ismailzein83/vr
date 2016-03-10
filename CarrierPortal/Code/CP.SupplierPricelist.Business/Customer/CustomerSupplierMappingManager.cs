@@ -132,6 +132,21 @@ namespace CP.SupplierPricelist.Business
 
             return updateOperationOutput;
         }
+
+        public Vanrise.Entities.DeleteOperationOutput<CustomerSupplierMappingDetail> DeleteCustomerSupplierMapping(int customerrSupplierMapping)
+        {
+            ICustomerSupplierMappingDataManager dataManager = CustomerDataManagerFactory.GetDataManager<ICustomerSupplierMappingDataManager>();
+            Vanrise.Entities.DeleteOperationOutput<CustomerSupplierMappingDetail> deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<CustomerSupplierMappingDetail>();
+            bool updateActionSucc = dataManager.Delete(customerrSupplierMapping);
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+            }
+            else
+                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
+            return deleteOperationOutput;
+        }
         #region Private Methods
 
         private List<SupplierInfo> GetAllCustomerSuppliersByLoggedInUser() 

@@ -35,9 +35,7 @@
                     };
                 };
 
-                api.load = function () {
-
-                };
+                api.load = function (payload) {};
                 if (ctrl.onReady && typeof ctrl.onReady == 'function') {
                     ctrl.onReady(api);
                 }
@@ -51,6 +49,6 @@
         return directiveDefinitionObject;
     }
 
-    app.directive('vrSecGroupSupplier', GroupSupplierDirective)
+    app.directive('vrCpGroupSupplier', GroupSupplierDirective)
 
 })(app);

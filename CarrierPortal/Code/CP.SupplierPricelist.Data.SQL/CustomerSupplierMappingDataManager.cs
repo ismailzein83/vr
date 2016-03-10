@@ -48,6 +48,11 @@ namespace CP.SupplierPricelist.Data.SQL
         {
             return base.IsDataUpdated("[CP_SupPriceList].[CustomerSupplierMapping]", ref updateHandle);
         }
+        public bool Delete(int customerSupplierMappingId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_CustomerSupplierMaping_Delete]", customerSupplierMappingId);
+            return (recordsEffected > 0);
+        }
         CustomerSupplierMapping CustomerSupplierMapper(IDataReader reader)
         {
             CustomerSupplierMapping customerSupplier = new CustomerSupplierMapping

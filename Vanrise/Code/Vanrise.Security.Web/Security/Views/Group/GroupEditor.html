@@ -10,7 +10,7 @@
                         <vr-columns width="fullrow">
                             <vr-textarea label="Description" value="scopeModal.description" />
                         </vr-columns>
-                    </vr-row>                    
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">
                     <vr-row>
@@ -19,10 +19,8 @@
                                        selectedvalues="scopeModal.selectedGroupTypeTemplate" isrequired="true">
                             </vr-select>
                         </vr-columns>
-                        <vr-columns width="fullrow">
-                            <div vr-loader="scopeModal.isLoadingGroupType" ng-if="scopeModal.selectedGroupTypeTemplate.Editor">
-                                <vr-directivewrapper directive="scopeModal.selectedGroupTypeTemplate.Editor" on-ready="scopeModal.onGroupeTypeDirectiveReady"></vr-directivewrapper>
-                            </div>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingGroupType" ng-if="scopeModal.selectedGroupTypeTemplate.Editor">
+                            <vr-directivewrapper directive="scopeModal.selectedGroupTypeTemplate.Editor" on-ready="scopeModal.onGroupeTypeDirectiveReady"></vr-directivewrapper>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

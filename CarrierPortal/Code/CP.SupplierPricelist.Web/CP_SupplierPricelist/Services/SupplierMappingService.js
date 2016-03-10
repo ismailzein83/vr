@@ -1,6 +1,6 @@
 ﻿
-app.service('CP_SupplierPricelist_SupplierMappingService', ['VRModalService',
-    function ( VRModalService) {
+app.service('CP_SupplierPricelist_SupplierMappingService', ['VRModalService', 'VRNotificationService', 'CP_SupplierPricelist_SupplierMappingAPIService',
+    function (VRModalService, vRNotificationService, supplierMappingAPIService) {
 
         function addSupplierMapping(onSupplierMappingAdded) {
             var settings = {
@@ -26,9 +26,25 @@ app.service('CP_SupplierPricelist_SupplierMappingService', ['VRModalService',
                     modalScope.onSupplierMappingUpdated = onSupplierMappingUpdated
                 };
                 VRModalService.showModal('/Client/Modules/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingEditor.html', parameters, modalSettings);
-            }
+        }
+        function deleteSupplierMapping(scope, supplierMappingId, onCustomerSupplierMappingDeleted) {
+            vRNotificationService.showConfirmation()
+                .then(function (response) {
+                    if (response) {
+                        return supplierMappingAPIService.DeleteCustomerSupplierMapping(supplierMappingId)
+                            .then(function (deletionResponse) {
+                                vRNotificationService.notifyOnItemDeleted("Supplier Mapping", deletionResponse);
+                                onCustomerSupplierMappingDeleted();
+                            })
+                            .catch(function (error) {
+                                vRNotificationService.notifyException(error, scope);
+                            });
+                    }
+                });
+        }
         return ({
             addSupplierMapping: addSupplierMapping,
-            editSupplierMapping: editSupplierMapping
+            editSupplierMapping: editSupplierMapping,
+            deleteSupplierMapping: deleteSupplierMapping
         });
     }]);

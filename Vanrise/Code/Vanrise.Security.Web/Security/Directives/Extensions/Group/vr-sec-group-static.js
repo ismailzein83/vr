@@ -31,9 +31,8 @@
                 $scope.onUserSelectorReady = function (api) {
                     userSelectorAPI = api;
                     userSelectorReadyPromiseDeferred.resolve();
+                    getDirectiveAPI();
                 }
-
-                getDirectiveAPI();
             }
 
             function getDirectiveAPI() {
@@ -47,8 +46,8 @@
 
                 api.load = function (payload) {
                     var data;
-                    if (payload != undefined && payload.data != undefined)
-                        data = payload.data;
+                    if (payload != undefined )
+                        data = payload.settings;
 
                     var promises = [];
 
@@ -57,7 +56,7 @@
                         var payloadSelector;
                         if (data != undefined) {
                             payloadSelector = {
-                                selectedIds: (data != undefined) ? data.MemberIds : null
+                                selectedIds:  data.MemberIds 
                             };
                         }
                         VRUIUtilsService.callDirectiveLoad(userSelectorAPI, payloadSelector, loadUserSelectorPromiseDeferred);

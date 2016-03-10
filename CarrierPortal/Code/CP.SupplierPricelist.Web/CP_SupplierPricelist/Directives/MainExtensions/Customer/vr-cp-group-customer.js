@@ -24,8 +24,6 @@
            
 
             function initializeController() {
-                
-
                 getDirectiveAPI();
             }
 
@@ -37,9 +35,8 @@
                     };
                 };
 
-                api.load = function () {
-                    
-                };
+                api.load = function (payload) { };
+
                 if (ctrl.onReady && typeof ctrl.onReady == 'function') {
                     ctrl.onReady(api);
                 }
@@ -53,6 +50,6 @@
         return directiveDefinitionObject;
     }
 
-    app.directive('vrSecGroupCustomer', GroupCustomerDirective)
+    app.directive('vrCpGroupCustomer', GroupCustomerDirective)
 
 })(app);
