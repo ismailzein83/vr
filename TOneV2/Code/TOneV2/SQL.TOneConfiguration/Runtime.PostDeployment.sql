@@ -14,7 +14,24 @@ Post-Deployment Script Template
 
 --[sec].[View]-----------------------------5001 to 6000-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
-
+set nocount on;
+set identity_insert [sec].[View] on;
+;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[timestamp])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(5001,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',1,'VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,10)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[timestamp]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[timestamp] = s.[timestamp]
+when not matched by target then
+	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[timestamp])
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[timestamp]);
+set identity_insert [sec].[View] off;
 --[sec].[SystemAction]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 ;with cte_data([Name],[RequiredPermissions])
@@ -51,7 +68,7 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(901,'VR_Runtime_SchedulerTask','Scheduler Task',2,0,'["View", "Add", "Edit", "ViewMyTask"]')
+(1501,'VR_Runtime_SchedulerTask','Scheduler Task',2,0,'["View", "Add", "Edit", "ViewMyTask"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t

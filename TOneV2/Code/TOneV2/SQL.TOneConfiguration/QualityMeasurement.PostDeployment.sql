@@ -62,18 +62,17 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank]);
 set identity_insert [BI].[SchemaConfiguration] off;
 
---[sec].[Module]------------------------------701 to 800------------------------------------------------------
+--[sec].[Module]------------------------------1001 to 1100------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
-(2,'CLI Tester','CLI Tester','CLI Tester',null,'/images/menu-icons/CLITester.png',12,0),
-(3,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0),
-(4,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,13,0),
-(5,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',null,1)
+(1001,'CLI Tester','CLI Tester','CLI Tester',null,'/images/menu-icons/CLITester.png',12,0),
+(1002,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0),
+(1003,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,13,0),
+(1004,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',null,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -87,27 +86,22 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
---[sec].[View]-----------------------------7001 to 8000--------------------------------------------------------
+--[sec].[View]-----------------------------10001 to 11000------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users','Users','#/view/Security/Views/User/UserManagement',1,'VR_Sec/Users/GetFilteredUsers',null,null,null,0,10),
-(2,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',1,'VR_Sec/Group/GetFilteredGroups',null,null,null,0,11),
-(3,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',1,'VR_Sec/BusinessEntityNode/GetEntityNodes &amp; VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,12),
-(4,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'VR_Sec/View/UpdateViewsRank',null,null,null,0,14),
-(5,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',2,'QM_CLITester/TestCall/GetFilteredTestCalls &amp; QM_CLITester/TestCall/GetUpdated &amp; QM_CLITester/TestCall/GetBeforeId',null,null,null,0,11),
-(6,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',3,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,10),
-(7,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',1,'VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,13),
-(8,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',2,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,12),
-(9,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',2,'QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,10),
-(10,'Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement',3,'QM_BE/Zone/GetFilteredZones',null,null,null,0,10),
-(11,'Country','Country','#/view/Common/Views/Country/CountryManagement',2,'VRCommon/Country/GetFilteredCountries',null,null,null,0,14),
-(12,'Schedule Test Calls','Schedule Test Calls','#/view/QM_CLITester/Views/ScheduleTestCall/ScheduleTestCallManagement',2,'VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,16),
-(13,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',4,null,null,null,null,0,11),
-(14,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',4,null,null,null,null,0,10)
+(10001,'Country','Country','#/view/Common/Views/Country/CountryManagement',1001,'VRCommon/Country/GetFilteredCountries',null,null,null,0,1),
+(10002,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',1001,'QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,2),
+(10003,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',1001,'QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,0,3),
+(10004,'Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',2,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,4),
+(10005,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',1001,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,5),
+(10006,'Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement',1002,'QM_BE/Zone/GetFilteredZones',null,null,null,0,1),
+(10007,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',1002,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,2),
+(10008,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1003,null,null,null,null,0,1),
+(10009,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',1003,null,null,null,null,0,2)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -121,17 +115,20 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntity]------------------2101 to 2400----------------------------------------------------------
+--[sec].[BusinessEntityModule]-------------1001 to 1100---------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+
+--[sec].[BusinessEntity]------------------2701 to 3000----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(2101,'QM_CLITester_Profile','Profile',1,0,'["View", "Edit"]'),
-(2102,'QM_CLITester_TestCall','Test Call',1,0,'["View", "Test Call"]'),
-(2103,'QM_BE_Supplier','Supplier',1,0,'["View", "Add", "Edit", "Download Template", "Upload"]'),
-(2104,'QM_BE_Zone','Zone',1,0,'["View"]')
+(2701,'QM_CLITester_Profile','Profile',1,0,'["View", "Edit"]'),
+(2702,'QM_CLITester_TestCall','Test Call',1,0,'["View", "Test Call"]'),
+(2703,'QM_BE_Supplier','Supplier',1,0,'["View", "Add", "Edit", "Download Template", "Upload"]'),
+(2704,'QM_BE_Zone','Zone',1,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -145,24 +142,24 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
---[common].[TemplateConfig]----------40001 to 50000---------------------------------------------------------------
+--[common].[TemplateConfig]----------30001 to 40000---------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(40001,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
-(40002,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
-(40003,'iTest Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
-(40004,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
-(40005,'Initiate Test - ITest','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
-(40006,'Test Progress - ITest','QM_CLITester_ConnectorTestProgress','qm-clitester-testconnector-testprogress-itest',null,null),
-(40007,'TOne V2 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev2',null,null),
-(40008,'I-Test Countries','VRCommon_SourceCountryReader','qm-clitester-sourcecountryreader-itest',null,null),
-(40009,'I-Test Zones','QM_BE_SourceZoneReader','qm-clitester-sourcezonereader-itest',null,null),
-(40010,'TOne V1 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev1',null,null),
-(40011,'TOne V1 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev1',null,null)
+(30001,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
+(30001,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
+(30003,'iTest Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
+(30004,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
+(30005,'Initiate Test - ITest','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
+(30006,'Test Progress - ITest','QM_CLITester_ConnectorTestProgress','qm-clitester-testconnector-testprogress-itest',null,null),
+(30007,'TOne V2 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev2',null,null),
+(30008,'I-Test Countries','VRCommon_SourceCountryReader','qm-clitester-sourcecountryreader-itest',null,null),
+(30009,'I-Test Zones','QM_BE_SourceZoneReader','qm-clitester-sourcezonereader-itest',null,null),
+(30010,'TOne V1 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev1',null,null),
+(30011,'TOne V1 Countries','VRCommon_SourceCountryReader','vr-common-sourcecountryreader-tonev1',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t

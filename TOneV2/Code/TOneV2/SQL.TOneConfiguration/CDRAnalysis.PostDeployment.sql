@@ -76,7 +76,7 @@ when not matched by source then
 	delete;
 set identity_insert [BI].[SchemaConfiguration] off;
 
---[sec].[Module]------------------------------601 to 700------------------------------------------------------
+--[sec].[Module]------------------------------901 to 1000------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
@@ -104,7 +104,7 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
---[sec].[View]-----------------------------6001 to 7000--------------------------------------------------------
+--[sec].[View]-----------------------------9001 to 10000--------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
@@ -150,7 +150,7 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[Audience],s.[Content],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntityModule]------------------------601 to 700----------------------------------------------
+--[sec].[BusinessEntityModule]------------------------901 to 1000----------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
@@ -172,7 +172,7 @@ when not matched by target then
 set identity_insert [sec].[BusinessEntityModule] off;
 
 
---[sec].[BusinessEntity]------------------1801 to 2100----------------------------------------------------------
+--[sec].[BusinessEntity]------------------2401 to 2700----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
@@ -225,7 +225,7 @@ when not matched by target then
 	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
 set identity_insert [sec].[Permission] off;
 
---[common].[TemplateConfig]----------30001 to 40000---------------------------------------------------------------
+--[common].[TemplateConfig]----------20001 to 30000---------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;

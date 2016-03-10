@@ -9,15 +9,14 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[sec].[Module]---------------------------701 to 800---------------------------------------------------------
+--[sec].[Module]---------------------------801 to 900---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
-(2,'Pricelist Management','Pricelist Management','Pricelist Management',null,'/images/menu-icons/Purchase Area.png',11,0)
+(801,'Pricelist Management','Pricelist Management','Pricelist Management',null,'/images/menu-icons/Purchase Area.png',10,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -31,21 +30,17 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
---[sec].[View]-----------------------------7001 to 8000-------------------------------------------------------
+--[sec].[View]-----------------------------8001 to 9000-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Users','Users','#/view/Security/Views/User/UserManagement',1,'VR_Sec/Users/GetFilteredUsers',null,null,null,0,10),
-(2,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',1,'VR_Sec/Group/GetFilteredGroups',null,null,null,0,11),
-(3,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',1,'VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,12),
-(5,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'VR_Sec/View/UpdateViewsRank',null,null,null,0,13),
-(6,'Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement',2,'CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
-(7,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',1,'VR_Runtime/SchedulerTask/GetFilteredTasks',null,null,null,0,14),
-(8,'Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement',2,'CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11),
-(9,'Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement',1,'CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,0,15)
+(8001,'Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement',1,'CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,0,15),
+(8001,'Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement',801,'CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
+(8001,'Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement',801,'CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11)
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -59,14 +54,14 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntityModule]-------------701 to 800---------------------------------------------------------
+--[sec].[BusinessEntityModule]-------------801 to 900---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(101,'Business Process Module','Business Process Module',1,0,'["View"]')
+(801,'Business Process Module','Business Process Module',1,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntityModule] as t
@@ -80,7 +75,6 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntityModule] off;
 
-
 --[sec].[BusinessEntity]-------------------2101 to 2400-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
@@ -88,9 +82,9 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(300,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
-(301,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
-(302,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Import PriceList"]')
+(2101,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
+(2102,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
+(2103,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Import PriceList"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -103,28 +97,6 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
-
---[sec].[Permission]--------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(0,'1',0,'1','[{"Name":"Full Control","Value":1}]'),
-(0,'1',1,'3','[{"Name":"View","Value":1}, {"Name":"Assign Permissions","Value":1}]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
-merge	[sec].[Permission] as t
-using	cte_data as s
-on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
-when matched then
-	update set
-	[PermissionFlags] = s.[PermissionFlags]
-when not matched by target then
-	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags])
-when not matched by source then
-	delete;
 
 --[sec].[SystemAction]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -156,14 +128,14 @@ when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
 
---[common].[TemplateConfig]----------20001 to 30000---------------------------------------------------------------
+--[common].[TemplateConfig]----------10001 to 20000---------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(20001,'TOne V1','CP_SupplierPriceList_CustomerConnector','vr-cp-supplierpricelist-tonev1integration-customerconnector',null,null)
+(10001,'TOne V1','CP_SupplierPriceList_CustomerConnector','vr-cp-supplierpricelist-tonev1integration-customerconnector',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t

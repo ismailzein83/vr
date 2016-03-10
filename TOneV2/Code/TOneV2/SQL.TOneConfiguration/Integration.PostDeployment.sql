@@ -54,5 +54,5 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntityModule] off;
 
---[sec].[BusinessEntity]-------------------1201 to 1500-------------------------------------------------------
+--[sec].[BusinessEntity]-------------------901 to 1200--------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------

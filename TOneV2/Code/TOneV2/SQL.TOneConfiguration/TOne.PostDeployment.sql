@@ -81,7 +81,7 @@ when not matched by target then
 	insert([ID],[Name],[DisplayName],[Type],[Configuration],[Rank])
 	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank]);
 set identity_insert [BI].[SchemaConfiguration] off;
---[sec].[Module]---------------------------601 to 700---------------------------------------------------------
+--[sec].[Module]---------------------------701 to 800---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
@@ -128,7 +128,7 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
---[sec].[View]-----------------------------6001 to 7000-------------------------------------------------------
+--[sec].[View]-----------------------------7001 to 8000-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
@@ -212,7 +212,7 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntityModule]-------------601 to 700---------------------------------------------------------
+--[sec].[BusinessEntityModule]-------------701 to 800---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
@@ -294,7 +294,7 @@ when not matched by source then
 
 
 --[common].[TemplateConfig]----------1 to 10000---------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
