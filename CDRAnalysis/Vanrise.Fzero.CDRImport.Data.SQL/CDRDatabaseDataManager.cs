@@ -149,7 +149,8 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         {
             var cachedDBs = GetAllCachedReadyDatabases();
             if (cachedDBs != null)
-                return cachedDBs.Values.FindAllRecords(itm => itm.FromTime >= fromTime && itm.FromTime < toTime);
+                return cachedDBs.Values.FindAllRecords(itm => (itm.FromTime <= fromTime && fromTime <= itm.FromTime)
+                    || (itm.FromTime <= toTime && toTime <= itm.ToTime));
             else
                 return null;
         }
