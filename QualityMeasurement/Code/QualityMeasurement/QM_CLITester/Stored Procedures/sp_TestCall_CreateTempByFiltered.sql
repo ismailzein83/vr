@@ -75,8 +75,6 @@ BEGIN
 			  ,tc.[PDD]
 			  ,tc.[MOS]
 			  ,tc.[Duration]
-			  ,tc.[ReleaseCode]
-			  ,tc.[ReceivedCLI]
 			  ,tc.[RingDuration]
 			  
 			INTO #RESULT

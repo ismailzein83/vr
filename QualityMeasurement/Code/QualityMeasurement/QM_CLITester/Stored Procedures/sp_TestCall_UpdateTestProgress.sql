@@ -8,8 +8,6 @@
 	@PDD decimal(18,6),
 	@MOS decimal(18,6),
 	@Duration datetime,
-	@ReleaseCode varchar(10),
-	@ReceivedCLI varchar(50),
 	@RingDuration varchar(20)
 AS
 BEGIN
@@ -26,8 +24,6 @@ SELECT 1 FROM QM_CLITester.TestCall WHERE ID = @Id
 			PDD = @PDD,
 			MOS = @MOS,
 			Duration = @Duration,
-			ReleaseCode = @ReleaseCode,
-			ReceivedCLI = @ReceivedCLI,
 			RingDuration = @RingDuration,
 			UpdateStatusTime = GETDATE()
 	Where ID = @ID

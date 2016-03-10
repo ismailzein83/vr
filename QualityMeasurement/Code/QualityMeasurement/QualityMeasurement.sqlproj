@@ -102,5 +102,7 @@
     <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetTotalCallsByUserId.sql" />
     <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetAllbyUserId.sql" />
     <Build Include="QM_CLITester\Stored Procedures\sp_TestCall_GetAllbyBatchNumber.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Zone_GetBySourceID.sql" />
+    <Build Include="QM_BE\Stored Procedures\sp_Supplier_GetBySourceID.sql" />
   </ItemGroup>
 </Project>

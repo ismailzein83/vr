@@ -30,8 +30,6 @@ BEGIN
           ,[PDD]
 		  ,[MOS]
 		  ,[Duration]
-		  ,[ReleaseCode]
-		  ,[ReceivedCLI]
 		  ,[RingDuration]
 		  
 	INTO #Result

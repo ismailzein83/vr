@@ -26,8 +26,6 @@ BEGIN
           ,[PDD]
 		  ,[MOS]
 		  ,[Duration]
-		  ,[ReleaseCode]
-		  ,[ReceivedCLI]
 		  ,[RingDuration]
 	FROM [QM_CLITester].[TestCall] 
 	WHERE ID < @LessThanID AND  UserID = @UserId

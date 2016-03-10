@@ -34,8 +34,6 @@ select Convert(int, ParsedString) from [QM_CLITester].[ParseStringList](@CallTes
 	  ,[PDD]
       ,[MOS]
       ,[Duration]
-      ,[ReleaseCode]
-      ,[ReceivedCLI]
       ,[RingDuration]
       
 	FROM	[QM_CLITester].[TestCall] where

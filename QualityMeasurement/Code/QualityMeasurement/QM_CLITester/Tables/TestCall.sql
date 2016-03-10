@@ -4,7 +4,7 @@
     [ProfileID]               INT             NULL,
     [SupplierID]              INT             NULL,
     [CountryID]               INT             NULL,
-    [ZoneID]                  INT             NULL,
+    [ZoneID]                  BIGINT          NULL,
     [CreationDate]            DATETIME        NULL,
     [CallTestStatus]          INT             NULL,
     [CallTestResult]          INT             NULL,
@@ -19,12 +19,12 @@
     [PDD]                     DECIMAL (18, 6) NULL,
     [MOS]                     DECIMAL (18, 6) NULL,
     [Duration]                DATETIME        NULL,
-    [ReleaseCode]             VARCHAR (500)   NULL,
-    [ReceivedCLI]             VARCHAR (50)    NULL,
     [RingDuration]            VARCHAR (20)    NULL,
     [UpdateStatusTime]        DATETIME        NULL,
     CONSTRAINT [PK_TestCall] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
