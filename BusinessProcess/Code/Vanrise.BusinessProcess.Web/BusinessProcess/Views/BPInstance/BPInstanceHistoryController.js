@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_BP_InstanceHistoryController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceService', 'VRValidationService'];
+    BusinessProcess_BP_InstanceHistoryController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceService', 'VRValidationService','VRNotificationService'];
 
-    function BusinessProcess_BP_InstanceHistoryController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRValidationService) {
+    function BusinessProcess_BP_InstanceHistoryController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRValidationService, VRNotificationService) {
         var gridAPI;
         var filter = {};
 

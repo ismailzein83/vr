@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_BP_InstanceMonitorController.$inject = ['$scope', 'UtilsService','VRUIUtilsService','BusinessProcess_BPInstanceService'];
+    BusinessProcess_BP_InstanceMonitorController.$inject = ['$scope', 'UtilsService','VRUIUtilsService','BusinessProcess_BPInstanceService','VRNotificationService'];
 
-    function BusinessProcess_BP_InstanceMonitorController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService) {
+    function BusinessProcess_BP_InstanceMonitorController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRNotificationService) {
         var gridAPI;
         var filter = {};
 
