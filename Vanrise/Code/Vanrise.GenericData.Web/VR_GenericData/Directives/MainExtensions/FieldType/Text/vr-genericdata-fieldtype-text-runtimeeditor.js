@@ -15,7 +15,7 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
             var ctor = new textCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
-        controllerAs: 'ctrl',
+        controllerAs: 'runtimeEditorCtrl',
         bindToController: true,
         compile: function (element, attrs) {
             return {
@@ -32,34 +32,37 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
     function textCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
+            $scope.scopeModel.value;
+            
+            if (ctrl.selectionmode != 'single') {
+                defineScopeForMultiModes();
+            }
+
+            defineAPI();
+        }
+
+        function defineScopeForMultiModes() {
 
             $scope.scopeModel.values = [];
-            
-            $scope.scopeModel.showInMultipleMode = (ctrl.selectionmode == "dynamic" || ctrl.selectionmode == "multiple");
+            $scope.scopeModel.isAddButtonDisabled = true;
 
-            $scope.scopeModel.disableAddButton = true;
             $scope.scopeModel.addValue = function () {
                 $scope.scopeModel.values.push($scope.scopeModel.value);
                 $scope.scopeModel.value = undefined;
-                $scope.scopeModel.disableAddButton = true;
-            }
-
-            $scope.scopeModel.onValueChange = function (value) {
-                $scope.scopeModel.disableAddButton = (value == undefined);
-            }
-
-            $scope.scopeModel.validateValue = function () {
-                for (var i = 0; i < $scope.scopeModel.values.length; i++) {
-                    if ($scope.scopeModel.value == $scope.scopeModel.values[i]) {
-                        $scope.scopeModel.disableAddButton = true;
-                        return 'Value already exists';
-                    }
-                }
-                $scope.scopeModel.disableAddButton = false;
-                return null;
             };
 
-            defineAPI();
+            $scope.scopeModel.validateValue = function () {
+                if ($scope.scopeModel.value == undefined || $scope.scopeModel.value == null || $scope.scopeModel.value == '') {
+                    $scope.scopeModel.isAddButtonDisabled = true;
+                    return null;
+                }
+                if (UtilsService.contains($scope.scopeModel.values, $scope.scopeModel.value)) {
+                    $scope.scopeModel.isAddButtonDisabled = true;
+                    return 'Value already exists';
+                }
+                $scope.scopeModel.isAddButtonDisabled = false;
+                return null;
+            };
         }
 
         function defineAPI() {
@@ -83,6 +86,11 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                             $scope.scopeModel.values.push(val);
                         });
                     }
+                    else if (ctrl.selectionmode == "multiple") {
+                        for (var i = 0; i < fieldValue.length; i++) {
+                            $scope.scopeModel.values.push(fieldValue[i]);
+                        }
+                    }
                     else
                     {
                         $scope.scopeModel.value = fieldValue;
@@ -103,8 +111,12 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
                         };
                     }
                 }
-                else
-                {
+                else if (ctrl.selectionmode == "multiple") {
+                    if ($scope.scopeModel.values.length > 0) {
+                        retVal = $scope.scopeModel.values;
+                    }
+                }
+                else {
                     retVal = $scope.scopeModel.value;
                 }
 
@@ -116,7 +128,6 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
         }
 
         this.initializeController = initializeController;
-
     }
 
     function getDirectiveTemplate(attrs) {
@@ -125,15 +136,15 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
             return getSingleSelectionModeTemplate();
         }
         else {
-            return '<vr-columns colnum="{{ctrl.normalColNum * 4}}">'
+            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 4}}">'
                     + '<vr-row>'
                         + getSingleSelectionModeTemplate()
                         + '<vr-columns withemptyline>'
-                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.disableAddButton"></vr-button>'
+                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
                         + '</vr-columns>'
                     + '</vr-row>'
                     + '<vr-row>'
-                        + '<vr-columns colnum="{{ctrl.normalColNum * 2}}">'
+                        + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 2}}">'
                             + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
                         + '</vr-columns>'
                     + '</vr-row>'
@@ -141,8 +152,8 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
         }
 
         function getSingleSelectionModeTemplate() {
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                    + '<vr-textbox type="text" label="{{scopeModel.label}}" value="scopeModel.value" onvaluechanged="scopeModel.onValueChange" customvalidate="scopeModel.validateValue()" isrequired="ctrl.isrequired"></vr-textbox>'
+            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}">'
+                    + '<vr-textbox type="text" label="{{scopeModel.label}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-textbox>'
                 + '</vr-columns>';
         }
     }

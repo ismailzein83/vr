@@ -19,7 +19,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                     ctrl.selectedvalues = [];
 
                 ctrl.datasource = [];
-                var ctor = new selectorCtor(ctrl, $scope, $attrs);
+                var ctor = new choicesCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
             },
@@ -36,7 +36,6 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
             }
 
         };
-
 
         function getTemplate(attrs) {
             var multipleselection = "";
@@ -62,7 +61,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                 '</vr-columns>'
         }
 
-        function selectorCtor(ctrl, $scope, $attrs) {
+        function choicesCtor(ctrl, $scope, $attrs) {
 
             var selectorApi;
 

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ArrayFieldTypeRuntimeEditorDirective.$inject = ['UtilsService'];
+    ArrayFieldTypeRuntimeEditorDirective.$inject = ['VR_GenericData_DataRecordFieldTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function ArrayFieldTypeRuntimeEditorDirective(UtilsService) {
+    function ArrayFieldTypeRuntimeEditorDirective(VR_GenericData_DataRecordFieldTypeConfigAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -18,7 +18,7 @@
                 var arrayFieldTypeRuntimeEditor = new ArrayFieldTypeRuntimeEditor(ctrl, $scope, $attrs);
                 arrayFieldTypeRuntimeEditor.initializeController();
             },
-            controllerAs: 'runtimeCtrl',
+            controllerAs: 'runtimeEditorCtrl',
             bindToController: true,
             compile: function (element, attrs) {
                 return {
@@ -34,75 +34,103 @@
 
         function ArrayFieldTypeRuntimeEditor(ctrl, $scope, $attrs) {
 
-            var fieldTypeDirectiveAPI;
+            var fieldTypeRuntimeEditorAPI;
+            var fieldTypeRuntimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                ctrl.onFieldTypeDirectiveReady = function (api) {
-                    fieldTypeDirectiveAPI;
+                $scope.scopeModel = {};
 
-                    if (ctrl.onReady != undefined) {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                ctrl.onFieldTypeRuntimeEditorReady = function (api) {
+                    fieldTypeRuntimeEditorAPI = api;
+                    fieldTypeRuntimeEditorReadyDeferred.resolve();
                 };
+
+                defineAPI();
             }
 
-            function getDirectiveAPI() {
+            function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var fieldTitle;
                     var fieldType;
                     var fieldValue;
 
                     if (payload != undefined) {
-                        $scope.scopeModel.label = payload.fieldTitle;
+                        fieldTitle = payload.fieldTitle;
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
                     }
 
-                    if (fieldValue != undefined) {
-                        if (ctrl.selectionmode == "dynamic") {
-                            angular.forEach(fieldValue.Values, function (val) {
-                                $scope.scopeModel.values.push(val);
-                            });
-                        }
-                        else {
-                            $scope.scopeModel.value = fieldValue;
-                        }
+                    var promises = [];
+                    var fieldTypeConfigs;
+
+                    var getFieldTypeConfigsPromise = getFieldTypeConfigs();
+                    promises.push(getFieldTypeConfigsPromise);
+
+                    var fieldTypeRuntimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(fieldTypeRuntimeEditorLoadDeferred.promise);
+
+                    getFieldTypeConfigsPromise.then(function () {
+                        var fieldTypeConfig = UtilsService.getItemByVal(fieldTypeConfigs, fieldType.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                        ctrl.fieldTypeRuntimeEditorDirective = fieldTypeConfig.RuntimeEditor;
+
+                        fieldTypeRuntimeEditorReadyDeferred.promise.then(function () {
+                            var fieldValuePayload;
+                            if (fieldValue != undefined) {
+                                fieldValuePayload = (ctrl.selectionmode == 'dynamic') ? fieldValue.Values : fieldValue;
+                            }
+                            var fieldTypeRuntimeEditorPaylaod = {
+                                fieldTitle: fieldTitle,
+                                fieldType: fieldType.FieldType,
+                                fieldValue: fieldValuePayload
+                            };
+                            VRUIUtilsService.callDirectiveLoad(fieldTypeRuntimeEditorAPI, fieldTypeRuntimeEditorPaylaod, fieldTypeRuntimeEditorLoadDeferred);
+                        });
+                    });
+
+                    function getFieldTypeConfigs() {
+                        return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
+                            fieldTypeConfigs = [];
+                            for (var i = 0; i < response.length; i++) {
+                                fieldTypeConfigs.push(response[i]);
+                            }
+                        });
                     }
-                }
+                };
 
                 api.getData = function () {
                     var retVal;
+                    var data = fieldTypeRuntimeEditorAPI.getData();
 
                     if (ctrl.selectionmode == "dynamic") {
-                        if ($scope.scopeModel.values.length > 0) {
+                        if (data != undefined && data.length > 0) {
                             retVal = {
                                 $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                                Values: $scope.scopeModel.values
+                                Values: data
                             };
                         }
                     }
                     else {
-                        retVal = $scope.scopeModel.value;
+                        if (data != undefined && data.length > 0) {
+                            retVal = data;
+                        }
                     }
 
                     return retVal;
                 }
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != undefined) {
                     ctrl.onReady(api);
+                }
             }
 
             this.initializeController = initializeController;
-
         }
 
         function getDirectiveTemplate(attrs) {
-
-            var selectionMode = (attrs.selectionmode == 'single') ? 'single' : 'multiple';
-
-            return '<vr-columns colnum="{{runtimeCtrl.normalColNum}}">'
-                        + '<vr-directivewrapper directive="runtimeCtrl.fieldTypeDirectiveEditor" on-ready="runtimeCtrl.onFieldTypeDirectiveReady" selectionmode="' + selectionMode + '" isrequired="runtimeCtrl.isrequired" />'
+            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 4}}">'
+                        + '<vr-directivewrapper directive="runtimeEditorCtrl.fieldTypeRuntimeEditorDirective" on-ready="runtimeEditorCtrl.onFieldTypeRuntimeEditorReady" selectionmode="multiple" normal-col-num="{{runtimeEditorCtrl.normalColNum}}" isrequired="runtimeEditorCtrl.isrequired" />'
                 + '</vr-columns>';
         }
     }

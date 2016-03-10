@@ -20,12 +20,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(object value)
         {
-            return null;
+            return FieldType.GetDescription(value);
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            return true;
+            return FieldType.IsMatched(fieldValue, filterValue);
         }
     }
 }

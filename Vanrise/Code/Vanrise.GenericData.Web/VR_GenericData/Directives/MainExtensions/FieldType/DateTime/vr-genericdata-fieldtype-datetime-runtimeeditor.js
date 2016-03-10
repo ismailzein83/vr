@@ -35,10 +35,40 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
 
             $scope.scopeModel.value;
 
-            defineAPI();
+            if (ctrl.selectionmode != 'single') {
+                defineScopeForMultiModes();
+            }
+            
+            if (ctrl.onReady != undefined) {
+                ctrl.onReady(getDirectiveAPI());
+            }
         }
 
-        function defineAPI() {
+        function defineScopeForMultiModes() {
+            $scope.scopeModel.values = [];
+            $scope.scopeModel.isAddButtonDisabled = true;
+
+            $scope.scopeModel.addValue = function () {
+                $scope.scopeModel.values.push(UtilsService.getShortDate($scope.scopeModel.value));
+                $scope.scopeModel.value = undefined;
+            };
+
+            $scope.scopeModel.validateValue = function () {
+                
+                if ($scope.scopeModel.value == undefined || $scope.scopeModel.value == null || $scope.scopeModel.value == '') {
+                    $scope.scopeModel.isAddButtonDisabled = true;
+                    return null;
+                }
+                if (UtilsService.contains($scope.scopeModel.values, UtilsService.getShortDate($scope.scopeModel.value))) {
+                    $scope.scopeModel.isAddButtonDisabled = true;
+                    return 'Value already exists';
+                }
+                $scope.scopeModel.isAddButtonDisabled = false;
+                return null;
+            };
+        }
+
+        function getDirectiveAPI() {
             var api = {};
 
             api.load = function (payload) {
@@ -52,20 +82,48 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     var dataTypes = UtilsService.getArrayEnum(VR_GenericData_DateTimeDataTypeEnum);
                     $scope.scopeModel.fieldType = UtilsService.getItemByVal(dataTypes, fieldType.DataType, 'value');
                 }
-            
+
                 if (fieldValue != undefined) {
-                     $scope.scopeModel.value = fieldValue;
+                    if (ctrl.selectionmode == "dynamic") {
+                        angular.forEach(fieldValue.Values, function (val) {
+                            $scope.scopeModel.values.push(val);
+                        });
+                    }
+                    else if (ctrl.selectionmode == "multiple") {
+                        for (var i = 0; i < fieldValue.length; i++) {
+                            $scope.scopeModel.values.push(fieldValue[i]);
+                        }
+                    }
+                    else {
+                        $scope.scopeModel.value = fieldValue;
+                    }
                 }
-            }
+            };
 
             api.getData = function () {
-                var retVal = $scope.scopeModel.value;
+                var retVal;
+
+                if (ctrl.selectionmode == "dynamic") {
+                    if ($scope.scopeModel.values.length > 0) {
+                        retVal = {
+                            $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                            Values: $scope.scopeModel.values
+                        };
+                    }
+                }
+                else if (ctrl.selectionmode == "multiple") {
+                    if ($scope.scopeModel.values.length > 0) {
+                        retVal = $scope.scopeModel.values;
+                    }
+                }
+                else {
+                    retVal = $scope.scopeModel.value;
+                }
 
                 return retVal;
-            }
+            };
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+            return api;
         }
 
         this.initializeController = initializeController;
@@ -73,10 +131,31 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
     }
 
     function getDirectiveTemplate(attrs) {
-        return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType !=undefined && scopeModel.label != undefined ">'
-                     + '<vr-label>{{scopeModel.label}}</vr-label>'
-                    + '<vr-directivewrapper  directive="\'vr-datetimepicker\'" on-ready="scopeModel.onDateTimeReady" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
+        if (attrs.selectionmode == 'single') {
+            return getSingleSelectionModeTemplate();
+        }
+        else {
+            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 4}}">'
+                    + '<vr-row>'
+                        + getSingleSelectionModeTemplate()
+                        + '<vr-columns withemptyline>'
+                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
+                        + '</vr-columns>'
+                    + '</vr-row>'
+                    + '<vr-row>'
+                        + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 2}}">'
+                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
+                        + '</vr-columns>'
+                    + '</vr-row>'
                 + '</vr-columns>';
+        }
+
+        function getSingleSelectionModeTemplate() {
+            return '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum}}" ng-if="scopeModel.fieldType != undefined && scopeModel.label != undefined ">'
+                        + '<vr-label>{{scopeModel.label}}</vr-label>'
+                        + '<vr-directivewrapper directive="\'vr-datetimepicker\'" type="{{scopeModel.fieldType.type}}" value="scopeModel.value" customvalidate="scopeModel.validateValue()" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
+                + '</vr-columns>';
+        }
     }
 
     return directiveDefinitionObject;

@@ -35,8 +35,24 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
         function initializeController() {
 
             $scope.scopeModel.value;
+            
+            if (ctrl.selectionmode != 'single') {
+                defineScopeForMultiModes();
+            }
 
             defineAPI();
+        }
+
+        function defineScopeForMultiModes() {
+            $scope.scopeModel.values = [];
+
+            $scope.scopeModel.addValue = function () {
+                var dataItem = {
+                    id: $scope.scopeModel.length + 1,
+                    value: $scope.scopeModel.value
+                };
+                $scope.scopeModel.values.push(dataItem);
+            };
         }
 
         function defineAPI() {
@@ -53,12 +69,49 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                 }
 
                 if (fieldValue != undefined) {
-                    $scope.scopeModel.value = fieldValue;
+                        if (ctrl.selectionmode == "dynamic") {
+                        angular.forEach(fieldValue.Values, function (val) {
+                            var dataItem = {
+                                id: $scope.scopeModel.length + 1,
+                                value: val
+                            };
+                            $scope.scopeModel.values.push(dataItem);
+                        });
+                    }
+                    else if (ctrl.selectionmode == "multiple") {
+                        for (var i = 0; i < fieldValue.length; i++) {
+                            var dataItem = {
+                                id: $scope.scopeModel.length + 1,
+                                value: fieldValue[i]
+                            };
+                            $scope.scopeModel.values.push(dataItem);
+                        }
+                    }
+                    else {
+                        $scope.scopeModel.value = fieldValue;
+                    }
                 }
             }
 
             api.getData = function () {
-                var retVal = $scope.scopeModel.value;
+                var retVal;
+
+                if (ctrl.selectionmode == "dynamic") {
+                    if ($scope.scopeModel.values.length > 0) {
+                        retVal = {
+                            $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
+                            Values: UtilsService.getPropValuesFromArray($scope.scopeModel.values, 'value')
+                        };
+                    }
+                }
+                else if (ctrl.selectionmode == "multiple") {
+                    if ($scope.scopeModel.values.length > 0) {
+                        retVal = UtilsService.getPropValuesFromArray($scope.scopeModel.values, 'value');
+                    }
+                }
+                else {
+                    retVal = $scope.scopeModel.value;
+                }
 
                 return retVal;
             }
@@ -72,10 +125,31 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
     }
 
     function getDirectiveTemplate(attrs) {
-        return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.label != undefined ">'
-                     + '<vr-label>{{scopeModel.label}}</vr-label>'
-                    + '<vr-switch value="scopeModel.value"></vr-switch>'
+        if (attrs.selectionmode == 'single') {
+            return getSingleSelectionModeTemplate();
+        }
+        else {
+            return '<vr-columns colnum="{{ctrl.normalColNum * 4}}">'
+                    + '<vr-row>'
+                        + getSingleSelectionModeTemplate()
+                        + '<vr-columns withemptyline>'
+                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone></vr-button>'
+                        + '</vr-columns>'
+                    + '</vr-row>'
+                    + '<vr-row>'
+                        + '<vr-columns colnum="{{ctrl.normalColNum * 2}}">'
+                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem.value}}</vr-datalist>'
+                        + '</vr-columns>'
+                    + '</vr-row>'
                 + '</vr-columns>';
+        }
+
+        function getSingleSelectionModeTemplate() {
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.label != undefined ">'
+                        + '<vr-label>{{scopeModel.label}}</vr-label>'
+                        + '<vr-switch value="scopeModel.value"></vr-switch>'
+                + '</vr-columns>';
+        }
     }
 
     return directiveDefinitionObject;

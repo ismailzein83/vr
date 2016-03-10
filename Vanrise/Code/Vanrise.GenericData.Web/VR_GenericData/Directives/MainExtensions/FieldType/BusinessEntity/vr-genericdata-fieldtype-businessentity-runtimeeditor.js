@@ -30,7 +30,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 }
 
                 ctrl.datasource = [];
-                var ctor = new selectorCtor(ctrl, $scope, $attrs);
+                var ctor = new businessEntityCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
             },
@@ -63,7 +63,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 '</vr-section>'
         }
 
-        function selectorCtor(ctrl, $scope, $attrs) {
+        function businessEntityCtor(ctrl, $scope, $attrs) {
 
             var missingGroupSelectorUIControl;
 
