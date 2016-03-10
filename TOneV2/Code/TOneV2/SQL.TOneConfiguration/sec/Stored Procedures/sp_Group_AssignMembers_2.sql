@@ -22,10 +22,4 @@ BEGIN
 			AND 
 			UserId NOT IN (SELECT ID FROM @UserIds)
 	
-	--Perform Dummy update on one record to enforce the timestamp column to increment
-	--this is needed to refresh the Caching in case only delete happened on the table		
-    UPDATE [sec].[UserGroup]
-	SET UserId = UserId
-	WHERE UserId = (SELECT TOP 1 UserID FROM [sec].[UserGroup])			
-	
 END
