@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', function (UtilsService) {
+app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', 'VR_GenericData_FieldNumberDataTypeEnum', function (UtilsService, VR_GenericData_FieldNumberDataTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -30,7 +30,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', func
     };
 
     function textCtor(ctrl, $scope, $attrs) {
-
+        var fieldType;
         function initializeController() {
 
             $scope.scopeModel.values = [];
@@ -67,7 +67,7 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', func
 
             api.load = function (payload) {
 
-                var fieldType;
+                
                 var fieldValue;
 
                 if (payload != undefined) {
@@ -95,12 +95,12 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', func
                     if ($scope.scopeModel.values.length > 0) {
                         retVal = {
                             $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                            Values: $scope.scopeModel.values
+                            Values: getValuesAsNumber($scope.scopeModel.values)
                         };
                     }
                 }
                 else {
-                    retVal = $scope.scopeModel.value;
+                    retVal = getValueAsNumber( $scope.scopeModel.value);
                 }
 
                 return retVal;
@@ -108,6 +108,24 @@ app.directive('vrGenericdataFieldtypeNumberRuntimeeditor', ['UtilsService', func
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function getValuesAsNumber(valuesAsString) {
+            if (valuesAsString != undefined) {
+                var values = [];
+                for (var i = 0; i < valuesAsString.length; i++) {
+                    values.push(getValueAsNumber(valuesAsString[i]));
+                }
+                return values;
+            }
+            return null;
+        }
+
+        function getValueAsNumber(valueAsString) {
+            if (valueAsString != undefined)
+                return parseFloat(valueAsString);
+            else
+                return null;
         }
 
         this.initializeController = initializeController;
