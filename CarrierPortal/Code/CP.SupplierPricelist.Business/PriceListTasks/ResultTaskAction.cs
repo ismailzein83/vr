@@ -50,7 +50,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                     }
                 }
 
-                if (pricelist.Status != priceListProgressOutput.PriceListStatus &&
+                if (pricelist.Status != priceListProgressOutput.PriceListStatus ||
                     pricelist.Result != priceListProgressOutput.PriceListResult)
                 {
                     if (priceListProgressOutput.AlertFile != null)
