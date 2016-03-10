@@ -61,6 +61,19 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
             defineAPI();
         }
 
+        function fillDataSource(response, selectedIds) {
+            angular.forEach(response, function (item) {
+                ctrl.datasource.push(item);
+
+            });
+
+            if ($attrs.ismultipleselection == undefined) {
+                ctrl.selectedvalues = response[0];
+            }
+
+            if (selectedIds != undefined)
+                VRUIUtilsService.setSelectedValues(selectedIds, 'TaskId', $attrs, ctrl);
+        }
         function defineAPI() {
             var api = {};
             api.getSelectedIds = function () {
@@ -73,21 +86,21 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
                     selectedIds = payload.selectedIds;
                 }
 
-                return SchedulerTaskAPIService.GetSchedulesInfo().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        ctrl.datasource.push(item);
+                var isMySchedule;
+                if (payload != undefined) {
+                    isMySchedule = payload.isMySchedule;
+                }
 
+                if (isMySchedule == true) {
+                    return SchedulerTaskAPIService.GetMySchedulesInfo().then(function (response) {
+                        fillDataSource(response, selectedIds);
                     });
-
-                    if ($attrs.ismultipleselection == undefined) {
-                        ctrl.selectedvalues = response[0];
-                    }
-
-                    if (selectedIds != undefined)
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'TaskId', $attrs, ctrl);
-
-                });
-
+                }
+                else {
+                    return SchedulerTaskAPIService.GetSchedulesInfo().then(function (response) {
+                        fillDataSource(response, selectedIds);
+                    });
+                }
             }
 
             if (ctrl.onReady != null)

@@ -8,6 +8,7 @@
         var controllerName = 'SchedulerTask';
 
         return ({
+            GetMySchedulesInfo: GetMySchedulesInfo,
             GetFilteredTasks: GetFilteredTasks,
             GetTask: GetTask,
             GetSchedulerTaskTriggerTypes: GetSchedulerTaskTriggerTypes,
@@ -60,6 +61,10 @@
 
         function GetSchedulesInfo() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetSchedulesInfo'));
+        }
+
+        function GetMySchedulesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetMySchedulesInfo'));
         }
 
         function HasAddSchedulerTaskPermission() {

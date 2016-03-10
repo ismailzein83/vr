@@ -33,7 +33,7 @@ namespace Vanrise.Runtime.Business
             return GetFilteredTasks(input);
         }
 
-        public List<SchedulerTask> GetSchedulesInfo()
+        public List<SchedulerTask> GetMySchedulesInfo()
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
             int ownerId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
@@ -45,6 +45,7 @@ namespace Vanrise.Runtime.Business
                 return null;
             return tasks.ToList();
         }
+
 
         public List<SchedulerTask> GetAllScheduleTasks()
         {
