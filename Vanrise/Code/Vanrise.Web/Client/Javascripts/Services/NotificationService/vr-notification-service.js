@@ -82,12 +82,13 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         }
     }
 
-    function notifyOnItemAction(notificationType, message, additionalMessage)
+    function notifyOnItemAction(notificationType, message, operationOutput)
     {
-        if (additionalMessage != null && additionalMessage != undefined && additionalMessage != "")
-        {
+        var additionalMessage = operationOutput.Message;
+        if (operationOutput.ShowExactMessage)
+            message = additionalMessage;
+        else if (additionalMessage != null && additionalMessage != undefined && additionalMessage != "")
             message += " (" + additionalMessage + ")";
-        }
 
         switch(notificationType)
         {
@@ -104,18 +105,18 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         switch (insertOperationOutput.Result) {
             case InsertOperationResultEnum.Succeeded.value:
                 var msg = itemType + " added successfully";
-                notifyOnItemAction("success", msg, insertOperationOutput.Message);
+                notifyOnItemAction("success", msg, insertOperationOutput);
                 return true;
                 break;
             case InsertOperationResultEnum.Failed.value:
                 var msg = "Failed to add " + itemType;
-                notifyOnItemAction("error", msg, insertOperationOutput.Message);
+                notifyOnItemAction("error", msg, insertOperationOutput);
                 break;
             case InsertOperationResultEnum.SameExists.value:
                 if (keyProperty == null && keyProperty == undefined && keyProperty == "")
                     keyProperty = "key";
                 var msg = itemType + " with the same " + keyProperty + " already exists";
-                notifyOnItemAction("warning", msg, insertOperationOutput.Message);
+                notifyOnItemAction("warning", msg, insertOperationOutput);
                 break;
         }
         return false;
@@ -124,18 +125,18 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         switch (deleteOperationOutput.Result) {
             case DeleteOperationResultEnum.Succeeded.value:
                 var msg = itemType + " deleted successfully"
-                notifyOnItemAction("success", msg, deleteOperationOutput.Message);
+                notifyOnItemAction("success", msg, deleteOperationOutput);
                 return true;
                 break;
             case DeleteOperationResultEnum.InUse.value:
                 var msg = "Failed to delete " + itemType + ". It is already in use";
                 if (usedIn != null && usedIn != undefined && usedIn != "")
                     msg += " in " + usedIn;
-                notifyOnItemAction("error", msg, deleteOperationOutput.Message);
+                notifyOnItemAction("error", msg, deleteOperationOutput);
                 break;
             case DeleteOperationResultEnum.Failed.value:
                 var msg = "Failed to delete " + itemType;
-                notifyOnItemAction("error", msg, deleteOperationOutput.Message);
+                notifyOnItemAction("error", msg, deleteOperationOutput);
                 break;
         }
         return false;
@@ -144,18 +145,18 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         switch (updateOperationOutput.Result) {
             case UpdateOperationResultEnum.Succeeded.value:
                 var msg = itemType + " updated successfully";
-                notifyOnItemAction("success", msg, updateOperationOutput.Message);
+                notifyOnItemAction("success", msg, updateOperationOutput);
                 return true;
                 break;
             case UpdateOperationResultEnum.Failed.value:
                 var msg = "Failed to update " + itemType;
-                notifyOnItemAction("error", msg, updateOperationOutput.Message);
+                notifyOnItemAction("error", msg, updateOperationOutput);
                 break;
             case UpdateOperationResultEnum.SameExists.value:
                 if (keyProperty == null && keyProperty == undefined && keyProperty == "")
                     keyProperty = "key";
                 var msg = itemType + " with the same " + keyProperty + " already exists";
-                notifyOnItemAction("warning", msg, updateOperationOutput.Message);
+                notifyOnItemAction("warning", msg, updateOperationOutput);
                 break;
         }
         return false;

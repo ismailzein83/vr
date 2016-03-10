@@ -11,5 +11,7 @@ namespace Vanrise.Entities
     {
         public DeleteOperationResult Result { get; set; }
         public string Message { get; set; }
+
+        public bool ShowExactMessage { get; set; }
     }
 }

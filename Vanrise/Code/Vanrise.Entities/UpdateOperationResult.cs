@@ -12,6 +12,8 @@ namespace Vanrise.Entities
     {
         public UpdateOperationResult Result { get; set; }
         public string Message { get; set; }
+
+        public bool ShowExactMessage { get; set; }
         public T UpdatedObject { get; set; }
     }
 }
