@@ -171,7 +171,6 @@ set identity_insert [sec].[View] off;
 --[sec].[Permission]--------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [sec].[Permission] on;
 ;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,4 +187,3 @@ when matched then
 when not matched by target then
 	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
-set identity_insert [sec].[Permission] off;
