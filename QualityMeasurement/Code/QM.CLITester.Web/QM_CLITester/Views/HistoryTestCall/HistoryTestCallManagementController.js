@@ -171,7 +171,9 @@
 
             scheduleReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload;
+                    var directivePayload = {
+                        isMySchedule: true
+                    }
 
                     VRUIUtilsService.callDirectiveLoad(scheduleDirectiveAPI, directivePayload, scheduleLoadPromiseDeferred);
                 });
