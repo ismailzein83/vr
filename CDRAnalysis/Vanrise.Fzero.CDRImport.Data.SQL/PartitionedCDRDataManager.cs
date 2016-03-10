@@ -71,17 +71,23 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         internal static IEnumerable<CDRDBTimeRange> GetDBTimeRanges(DateTime fromTime, DateTime toTime)
         {
+            if (toTime == default(DateTime))
+                toTime = DateTime.Today.AddDays(1);
             List<CDRDBTimeRange> dbTimeRanges = new List<CDRDBTimeRange>();
-            for (DateTime date = fromTime; date < toTime; date = date.AddDays(1))
+            for (DateTime date = fromTime.Date; date < toTime; date = date.AddDays(1))
             {
-                DateTime dbToTime = date.AddDays(1);
-                if (dbToTime > toTime)
-                    dbToTime = toTime;
+                DateTime rangeStart = date;
+                if (rangeStart < fromTime)//could only happens in FIRST iteration
+                    rangeStart = fromTime;
+                
+                DateTime rangeEnd = date.AddDays(1);
+                if (rangeEnd > toTime)//could only happens in LAST iteration
+                    rangeEnd = toTime;
 
                 dbTimeRanges.Add(new CDRDBTimeRange
                 {
-                    FromTime = date,
-                    ToTime = dbToTime
+                    FromTime = rangeStart,
+                    ToTime = rangeEnd
                 });
             }
             return dbTimeRanges;
