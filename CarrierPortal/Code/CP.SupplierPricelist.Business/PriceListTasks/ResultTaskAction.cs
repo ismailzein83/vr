@@ -23,7 +23,8 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             List<PriceListStatus> listPriceListStatuses = new List<PriceListStatus>
             {
                 PriceListStatus.SuccessfullyUploaded,
-                PriceListStatus.ResultFailedWithRetry
+                PriceListStatus.ResultFailedWithRetry,
+                PriceListStatus.WaitingReview
             };
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
             {
