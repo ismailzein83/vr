@@ -43,28 +43,24 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("AddGroup")]
-        public Vanrise.Entities.InsertOperationOutput<GroupDetail> AddGroup(GroupEditorInput groupObj)
+        public Vanrise.Entities.InsertOperationOutput<GroupDetail> AddGroup(Group groupObj)
         {
-            Group group = new Group() 
-            { 
-                Name = groupObj.Name,
-                Description = groupObj.Description
-            };
-
-            return _manager.AddGroup(group, groupObj.Members);
+            return _manager.AddGroup(groupObj);
         }
 
         [HttpPost]
         [Route("UpdateGroup")]
-        public Vanrise.Entities.UpdateOperationOutput<GroupDetail> UpdateGroup(GroupEditorInput groupObj)
+        public Vanrise.Entities.UpdateOperationOutput<GroupDetail> UpdateGroup(Group groupObj)
         {
-            Group group = new Group()
-            {
-                GroupId = groupObj.GroupId,
-                Name = groupObj.Name,
-                Description = groupObj.Description
-            };
-            return _manager.UpdateGroup(groupObj, groupObj.Members);
+            return _manager.UpdateGroup(groupObj);
+        }
+
+        [HttpGet]
+        [Route("GetGroupTemplate")]
+        public List<Vanrise.Entities.TemplateConfig> GetGroupTemplate()
+        {
+
+            return _manager.GetGroupTemplate();
         }
     }
 

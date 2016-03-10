@@ -9,7 +9,6 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
 using CP.SupplierPricelist.Data;
-using CP.SupplierPricelist.Entities;
 using Vanrise.Security.Entities;
 
 
@@ -76,6 +75,12 @@ namespace CP.SupplierPricelist.Business
         {
             var customerSupplierMappings = GetCachedCustomerSupplierMappings();
             return customerSupplierMappings.Values.FindRecord(x => x.UserId == userId && x.CustomerId == GetLoggedInCustomerId());
+        }
+
+        public bool IsUserSupplier(int userId)
+        {
+            var customerSupplierMappings = GetCachedCustomerSupplierMappings();
+            return customerSupplierMappings.Values.FindRecord(x => x.UserId == userId)!=null;
         }
 
         public IEnumerable<CustomerSupplierMapping> GetCustomerSupplierMappings()

@@ -9,8 +9,8 @@
         var groupEntity;
         var members;
 
-        var userSelecorDirectiveAPI;
-        var userSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var groupeTypeAPI;
+        var groupeTypeReadyPromiseDeferred; 
 
         loadParameters();
         defineScope();
@@ -27,6 +27,8 @@
         }
 
         function defineScope() {
+            $scope.scopeModal = {};
+            $scope.scopeModal.groupTypeTemplates = [];
             $scope.saveGroup = function () {
                 if (isEditMode)
                     return updateGroup();
@@ -46,9 +48,13 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.onUserSelectorReady = function (api) {
-                userSelecorDirectiveAPI = api;
-                userSelectorReadyPromiseDeferred.resolve();
+            $scope.scopeModal.onGroupeTypeDirectiveReady = function (api) {
+                groupeTypeAPI = api;
+
+                var setLoader = function (value) {
+                    $scope.scopeModal.isLoadingGroupType = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, groupeTypeAPI, undefined, setLoader, groupeTypeReadyPromiseDeferred);
             };
         }
 
@@ -81,7 +87,7 @@
 
         function loadAllControls()
         {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGroupMembers])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGroupTemplateSelector, loadGroupType])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -103,46 +109,45 @@
             if (groupEntity == undefined)
                 return;
 
-            $scope.name = groupEntity.Name;
-            $scope.description = groupEntity.Description;
+            $scope.scopeModal.name = groupEntity.Name;
+            $scope.scopeModal.description = groupEntity.Description;
         }
+        
+        function loadGroupTemplateSelector() {
+             
+            return VR_Sec_GroupAPIService.GetGroupTemplate().then(function (response) {
+                $scope.scopeModal.groupTypeTemplates.length = 0;
+                angular.forEach(response, function (item) {
+                    $scope.scopeModal.groupTypeTemplates.push(item);
+                });
 
-        function loadGroupMembers()
-        {
-            var userSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            userSelectorReadyPromiseDeferred.promise.then(function () {
-                var directivePayload = {
-                    filter: null,
-                    selectedIds: undefined
-                };
-
-                if (groupEntity) {
-                    VR_Sec_UserAPIService.GetMembers(groupEntity.GroupId).then(function (memberIds) {
-                        if (memberIds) {
-                            directivePayload.selectedIds = [];
-
-                            for (var i = 0; i < memberIds.length; i++) {
-                                directivePayload.selectedIds.push(memberIds[i]);
-                            }
-                        }
-                        VRUIUtilsService.callDirectiveLoad(userSelecorDirectiveAPI, directivePayload, userSelectorLoadPromiseDeferred);
-                    });
-                }
-                else {
-                    VRUIUtilsService.callDirectiveLoad(userSelecorDirectiveAPI, directivePayload, userSelectorLoadPromiseDeferred);
+                if (groupEntity != undefined && groupEntity.Settings) {
+                    $scope.scopeModal.selectedGroupTypeTemplate = UtilsService.getItemByVal($scope.scopeModal.groupTypeTemplates, groupEntity.Settings.ConfigId, "TemplateConfigID");
                 }
             });
-            
-            return userSelectorLoadPromiseDeferred.promise;
         }
+        function loadGroupType() {         
+            if (groupEntity != undefined && groupEntity.Settings) {
+                var loadGroupTypePromiseDeferred = UtilsService.createPromiseDeferred();
+                groupeTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                groupeTypeReadyPromiseDeferred.promise.then(function () {
+                    groupeTypeReadyPromiseDeferred = undefined;
+                    var payloadDirective = {
+                        data: groupEntity.Settings 
+                    };
+                    VRUIUtilsService.callDirectiveLoad(groupeTypeAPI, payloadDirective, loadGroupTypePromiseDeferred);
 
+                });
+                return loadGroupTypePromiseDeferred.promise;
+            }
+        }
         function buildGroupObjFromScope() {
+            var settings = VRUIUtilsService.getSettingsFromDirective($scope.scopeModal, groupeTypeAPI, 'selectedGroupTypeTemplate')
             var groupObj = {
                 groupId: ($scope.groupId != null) ? $scope.groupId : 0,
-                name: $scope.name,
-                description: $scope.description,
-                members: userSelecorDirectiveAPI.getSelectedIds()
+                name: $scope.scopeModal.name,
+                description: $scope.scopeModal.description,
+                Settings: settings
             };
 
             return groupObj;

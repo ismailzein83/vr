@@ -13,7 +13,8 @@
             AddGroup: AddGroup,
             UpdateGroup: UpdateGroup,
             HasAddGroupPermission: HasAddGroupPermission,
-            HasEditGroupPermission: HasEditGroupPermission
+            HasEditGroupPermission: HasEditGroupPermission,
+            GetGroupTemplate: GetGroupTemplate
         });
 
         function GetFilteredGroups(input) {
@@ -24,6 +25,9 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "GetGroupInfo"), {
                 filter: filter
             });
+        }
+        function GetGroupTemplate() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "GetGroupTemplate"));
         }
 
         function GetGroup(groupId) {

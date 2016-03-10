@@ -39,6 +39,13 @@ namespace CP.SupplierPricelist.Business
             return customers.GetRecord(userId)!=null;
         }
 
+        public bool IsUserCustomer(int userId)
+        {
+            var customers = GetCachedCustomersUsers();
+            return customers.GetRecord(userId) != null;
+        }
+
+
 
         public int GetCustomerIdByUserId(int userId)
         {

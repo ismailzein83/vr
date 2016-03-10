@@ -28,7 +28,13 @@ namespace Vanrise.Security.Data.SQL
         {
             object groupID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Group_Insert", out groupID, groupObj.Name, groupObj.Description);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Group_Insert",
+                out groupID,
+                groupObj.Name,
+                groupObj.Description,
+                groupObj.Settings != null ? Serializer.Serialize(groupObj.Settings) : null  
+
+                );
 
             insertedId = (recordesEffected > 0) ? (int)groupID : -1;
             return (recordesEffected > 0);
@@ -36,7 +42,11 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateGroup(Entities.Group groupObj)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Group_Update", groupObj.GroupId, groupObj.Name, groupObj.Description);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Group_Update",
+                groupObj.GroupId,
+                groupObj.Name,
+                groupObj.Description,
+                groupObj.Settings != null ? Serializer.Serialize(groupObj.Settings) : null );
             return (recordesEffected > 0);
         }
 

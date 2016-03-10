@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Customer\SupplierGroup.cs" />
     <Compile Include="Customer\CustomerGroup.cs" />
     <Compile Include="Customer\CustomerManager.cs" />
     <Compile Include="Customer\CustomerSupplierMappingManager.cs" />

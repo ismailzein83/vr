@@ -7,14 +7,14 @@ using Vanrise.Security.Entities;
 
 namespace CP.SupplierPricelist.Business
 {
-    public class CustomerGroup : GroupSettings
+    public class SupplierGroup : GroupSettings
     {
         public override bool IsMember(IGroupSettingsContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            return new CustomerUserManager().IsUserCustomer(context.UserId);
+            return new CustomerSupplierMappingManager().IsUserSupplier(context.UserId);
 
         }
     }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
@@ -55,7 +56,7 @@ namespace Vanrise.Security.Business
             return group != null ? group.Name : null;
         }
 
-        public Vanrise.Entities.InsertOperationOutput<GroupDetail> AddGroup(Group groupObj, int[] members)
+        public Vanrise.Entities.InsertOperationOutput<GroupDetail> AddGroup(Group groupObj)
         {
             InsertOperationOutput<GroupDetail> insertOperationOutput = new InsertOperationOutput<GroupDetail>();
 
@@ -68,7 +69,6 @@ namespace Vanrise.Security.Business
 
             if (insertActionSucc)
             {
-                dataManager.AssignMembers(groupId, members);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetGroups");
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 groupObj.GroupId = groupId;
@@ -82,7 +82,7 @@ namespace Vanrise.Security.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<GroupDetail> UpdateGroup(Group groupObj, int[] members)
+        public Vanrise.Entities.UpdateOperationOutput<GroupDetail> UpdateGroup(Group groupObj)
         {
             IGroupDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IGroupDataManager>();
             bool updateActionSucc = dataManager.UpdateGroup(groupObj);
@@ -93,7 +93,6 @@ namespace Vanrise.Security.Business
 
             if (updateActionSucc)
             {
-                dataManager.AssignMembers(groupObj.GroupId, members);
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetGroups");
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GroupDetailMapper(groupObj);
@@ -132,7 +131,12 @@ namespace Vanrise.Security.Business
 
             return false;
         }
-        
+
+        public List<Vanrise.Entities.TemplateConfig> GetGroupTemplate()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.GroupSettingsConfigType);
+        }
         #endregion
         
         #region Private Methods

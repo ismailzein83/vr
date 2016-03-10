@@ -46,6 +46,9 @@
     <Reference Include="Vanrise.Caching">
       <HintPath>..\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessEntityManager.cs" />
