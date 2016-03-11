@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountCaseAPIService.$inject = ['BaseAPIService', 'UtilsService', 'CDRAnalysis_FA_ModuleConfig'];
+    AccountCaseAPIService.$inject = ['BaseAPIService', 'UtilsService', 'CDRAnalysis_FA_ModuleConfig', 'SecurityService'];
 
-    function AccountCaseAPIService(BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig) {
+    function AccountCaseAPIService(BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig, SecurityService) {
         var controllerName = 'AccountCase';
 
         function GetLastAccountCase(accountNumber) {
