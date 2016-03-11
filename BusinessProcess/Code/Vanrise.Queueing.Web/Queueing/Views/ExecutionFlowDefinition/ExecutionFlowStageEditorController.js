@@ -104,6 +104,7 @@
                 if (dataRecordTypeId != undefined) {
                     $scope.isDataRecordTypeSelected = true;
                     if (!secondtimeChanged) {
+                        
                         loadSourceStages(true);
                         loadQueueActivatorSection(dataRecordTypeId, false);
                         secondtimeChanged = true;
@@ -134,11 +135,11 @@
         }
 
         function loadSourceStages(isUserSelected) {
-            $scope.scopeModal.selectedSourceStages.length = 0;
-            $scope.scopeModal.sourceStages.length = 0;
             existingStages.length = 0;
             var existingExecutionFlowStage;
             if (existingExecutionFlowStages != undefined) {
+                $scope.scopeModal.sourceStages.length = 0;
+                
                 for (var i = 0; i < existingExecutionFlowStages.length; i++) {
                     existingExecutionFlowStage = existingExecutionFlowStages[i];
                     existingStages.push({ stageName: existingExecutionFlowStage.StageName, DataRecordTypeId: existingExecutionFlowStage.QueueItemType.DataRecordTypeId });
@@ -146,6 +147,7 @@
                 for (var i = 0; i < existingExecutionFlowStages.length; i++) {
                     existingExecutionFlowStage = existingExecutionFlowStages[i];
                     if (isEditMode && !isUserSelected) {
+                        $scope.scopeModal.selectedSourceStages.length = 0;
                         existingStages.push({ stageName: existingExecutionFlowStage.StageName, DataRecordTypeId: existingExecutionFlowStage.QueueItemType.DataRecordTypeId });
                         if (executionFlowStageEntity != undefined && existingExecutionFlowStage.StageName != executionFlowStageEntity.StageName && existingExecutionFlowStage.QueueItemType.DataRecordTypeId == executionFlowStageEntity.QueueItemType.DataRecordTypeId)
                             $scope.scopeModal.sourceStages.push({ stageName: existingExecutionFlowStages[i].StageName });
@@ -195,8 +197,9 @@
                         loadQueueActivatorPromiseDeferred.resolve();
                     })
                 }
-                else
+                else {
                     loadSourceStages(false);
+                }
             });
             return UtilsService.waitMultiplePromises(promises);
         }
