@@ -13,6 +13,7 @@ Common.PostDeployment
 [sec].[BusinessEntity] 301 to 600
 [sec].[Module] 101 to 200
 [sec].[View] 1001 to 2000
+[common].[TemplateConfig] 50001 to 60000
 -------------------------------------------------
 Generic.PostDeployment
 [sec].[BusinessEntityModule] 301 to 400
