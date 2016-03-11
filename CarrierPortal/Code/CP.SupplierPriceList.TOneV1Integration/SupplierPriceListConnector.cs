@@ -47,6 +47,15 @@ namespace CP.SupplierPriceList.TOneV1Integration
             public DateTime EffectiveOnDateTime { get; set; }
             public string UserEmail { get; set; }
         }
+
+        private void UpdateRejectedPricelistOutput(PriceListProgressOutput priceListProgressOutput, string message, UploadInfo uploadInformation)
+        {
+            priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
+            priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
+            priceListProgressOutput.AlertMessage = message;
+            priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
+            priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+        }
         public override PriceListProgressOutput GetPriceListResult(IPriceListProgressContext context)
         {
             PriceListProgressOutput priceListProgressOutput = new PriceListProgressOutput();
@@ -93,42 +102,22 @@ namespace CP.SupplierPriceList.TOneV1Integration
                     priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
                     priceListProgressOutput.PriceListResult = PriceListResult.Approved;
                     break;
-                    
+
                 case QueueItemStatus.FailedDuetoSheetError:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                    priceListProgressOutput.AlertMessage = "Failed due to sheet error";
-                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    UpdateRejectedPricelistOutput(priceListProgressOutput, "Failed due to sheet error", uploadInformation);
                     break;
                 case QueueItemStatus.Rejected:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                    priceListProgressOutput.AlertMessage = "Rejected";
-                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    UpdateRejectedPricelistOutput(priceListProgressOutput, "Rejected", uploadInformation);
                     break;
                 case QueueItemStatus.SuspendedDueToConfigurationErrors:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                    priceListProgressOutput.AlertMessage = "Suspended due to configurtaion errors";
-                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    UpdateRejectedPricelistOutput(priceListProgressOutput, "Suspended due to configurtaion errors", uploadInformation);
                     break;
 
                 case QueueItemStatus.SuspendedDueToBusinessErrors:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                    priceListProgressOutput.AlertMessage = "Suspended due to business errors";
-                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    UpdateRejectedPricelistOutput(priceListProgressOutput, "Suspended due to business errors", uploadInformation);
                     break;
                 case QueueItemStatus.SuspendedToProcessingErrors:
-                    priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                    priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                    priceListProgressOutput.AlertMessage = "Suspended due to processing errors";
-                    priceListProgressOutput.AlertFile = uploadInformation.ContentBytes;
-                    priceListProgressOutput.AlerFileName = uploadInformation.FileName;
+                    UpdateRejectedPricelistOutput(priceListProgressOutput, "Suspended due to processing errors", uploadInformation);
                     break;
                 default:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
