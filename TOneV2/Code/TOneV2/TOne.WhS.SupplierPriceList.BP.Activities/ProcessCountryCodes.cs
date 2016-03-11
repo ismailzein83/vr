@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Business;
 using Vanrise.BusinessProcess;
+using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -65,8 +66,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
 
+        const string ImportSPLContext_CustomeDataKey = "ImportSPLContext";
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            handle.CustomData.Add(ImportSPLContext_CustomeDataKey, context.GetSPLParameterContext());
+            base.OnBeforeExecute(context, handle);
+        }
+
         protected override ProcessCountryCodesOutput DoWorkWithResult(ProcessCountryCodesInput inputArgument, AsyncActivityHandle handle)
         {
+            IImportSPLContext splContext = handle.CustomData[ImportSPLContext_CustomeDataKey] as IImportSPLContext;
             IEnumerable<ExistingZone> existingZones = null;
 
             if (inputArgument.ExistingZonesByZoneId != null)

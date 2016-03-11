@@ -114,6 +114,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReserveIdForPriceList.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />
+    <Compile Include="SetImportSPLContext.cs" />
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="StructureDataByCountries.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />
