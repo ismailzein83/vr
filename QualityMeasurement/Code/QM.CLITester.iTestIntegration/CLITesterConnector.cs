@@ -57,24 +57,19 @@ namespace QM.CLITester.iTestIntegration
                     FailureMessage = "Missing Profile Configuration!"
                 };
 
-            string itestCountryId = context.Country.SourceId;//Temporary
+            ITestExtendedZoneSetting itestZoneSettings = null;
+            if (context.Zone.Settings != null && context.Zone.Settings.ExtendedSettings != null
+                && context.Zone.Settings.ExtendedSettings.ContainsKey(ITestExtendedZoneSettingBehavior.EXTENDEDZONESETTING_KEYNAME))
+                itestZoneSettings = context.Zone.Settings.ExtendedSettings[ITestExtendedZoneSettingBehavior.EXTENDEDZONESETTING_KEYNAME] as ITestExtendedZoneSetting;
 
-            if (itestCountryId == null)
-                return new InitiateTestOutput
-                {
-                    Result = InitiateTestResult.FailedWithNoRetry,
-                    FailureMessage = "Missing Country Configuration!"
-                };
-
-            string itestBreakoutId = context.Zone.SourceId;
-
-            if (itestBreakoutId == null)
+            if (itestZoneSettings == null)
                 return new InitiateTestOutput
                 {
                     Result = InitiateTestResult.FailedWithNoRetry,
                     FailureMessage = "Missing Breakout Configuration!"
                 };
-            return ResponseInitiateTest(serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}", itestProfileId, itestSupplierId, itestCountryId, itestBreakoutId)));
+
+            return ResponseInitiateTest(serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}", itestProfileId, itestSupplierId, itestZoneSettings.ITestCountryId, itestZoneSettings.ITestZoneId)));
         }
 
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)

@@ -10,11 +10,13 @@ namespace QM.BusinessEntity.Entities
     {
         public string SourceId { get; set; }
 
-        public string CountryName { get; set; }
+        public string Name { get; set; }
 
         public string SourceCountryId { get; set; }
 
-        public string Name { get; set; }
+        public string CountryName { get; set; }
+
+        public bool IsFromTestingConnectorZone { get; set; }
 
         public DateTime BeginEffectiveDate { get; set; }
 

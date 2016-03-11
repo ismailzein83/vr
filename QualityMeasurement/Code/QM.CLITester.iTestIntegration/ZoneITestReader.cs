@@ -15,35 +15,34 @@ namespace QM.CLITester.iTestIntegration
             get { return false; }
         }
 
-        ServiceActions _serviceActions = new ServiceActions();
-
         public override IEnumerable<SourceZone> GetChangedItems(ref object updatedHandle)
         {
-            string breakoutResponse = _serviceActions.PostRequest("1022", null);
-            return ParseZoneResponse(breakoutResponse);
-        }
-
-        private IEnumerable<SourceZone> ParseZoneResponse(string breakoutResponse)
-        {
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(breakoutResponse);
-
-            List<SourceZone> zones = new List<SourceZone>();
-            XmlNodeList xnList = xml.SelectNodes("/NDB_List/Breakout");
-            if (xnList != null)
-                foreach (XmlNode xn in xnList)
+            ITestZoneManager zoneManager = new ITestZoneManager();
+            var itestZones = zoneManager.GetAllZones();
+            if (itestZones != null)
+            {
+                List<SourceZone> zones = new List<SourceZone>();
+                foreach (var z in itestZones.Values)
                 {
-                    SourceZone zone = new SourceZone
+                    var zone = new SourceZone
                     {
-                        SourceId = xn["Breakout_ID"] != null ? xn["Breakout_ID"].InnerText : "",
-                        Name = xn["Breakout_Name"] != null ? xn["Breakout_Name"].InnerText : "",
-                        SourceCountryId = xn["Country_ID"] != null ? xn["Country_ID"].InnerText : "",
-                        CountryName = xn["Country_Name"] != null ? xn["Country_Name"].InnerText : "",
-                        BeginEffectiveDate = DateTime.Today
+                        IsFromTestingConnectorZone = true,
+                        SourceId = z.ZoneId,
+                        Name = z.ZoneName,
+                        SourceCountryId = z.CountryId,
+                        CountryName = z.CountryName
                     };
                     zones.Add(zone);
                 }
-            return zones;
+                return zones;
+            }
+            else
+                return null;
+        }
+
+        public override IEnumerable<SourceZoneCode> GetAllCodes()
+        {
+            return null;
         }
     }
 }

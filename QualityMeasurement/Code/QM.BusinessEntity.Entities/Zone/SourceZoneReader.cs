@@ -23,5 +23,7 @@ namespace QM.BusinessEntity.Entities
             get;
             set;
         }
+
+        public abstract IEnumerable<SourceZoneCode> GetAllCodes();
     }
 }

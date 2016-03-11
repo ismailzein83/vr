@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -65,13 +69,17 @@
     <Compile Include="CLITesterConnector.cs" />
     <Compile Include="CountryITestReader.cs" />
     <Compile Include="InitiateTestInformation.cs" />
+    <Compile Include="ITestExtendedZoneSetting.cs" />
+    <Compile Include="ITestZone.cs" />
     <Compile Include="ProfileExtensionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceActions.cs" />
     <Compile Include="SourceProfilesReaders\ProfileiTestReader.cs" />
     <Compile Include="TestProgress.cs" />
+    <Compile Include="ITestExtendedZoneSettingBehavior.cs" />
     <Compile Include="ZoneITestReader.cs" />
     <Compile Include="SupplierExtensionSettings.cs" />
+    <Compile Include="ITestZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QM.BusinessEntity.Business\QM.BusinessEntity.Business.csproj">

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace QM.BusinessEntity.Business
 {
@@ -29,12 +30,36 @@ namespace QM.BusinessEntity.Business
             base.Synchronize();
         }
 
+        Dictionary<string, List<string>> _codesBySourceZoneId;
+        private List<string> GetZoneCodes(Zone zone)
+        {
+            if(_codesBySourceZoneId == null)
+            {
+                var allZoneCodes = base.SourceItemReader.GetAllCodes();                
+                _codesBySourceZoneId = new Dictionary<string, List<string>>();
+                if (allZoneCodes != null)
+                {
+                    foreach (var zoneCode in allZoneCodes)
+                    {
+                        List<string> codes = _codesBySourceZoneId.GetOrCreateItem(zoneCode.SourceZoneId);
+                        codes.Add(zoneCode.Code);
+                    }
+                }
+            }
+            List<string> zoneCodes;
+            string zoneId = this.SourceItemReader.UseSourceItemId ? zone.ZoneId.ToString() : zone.SourceId;
+            if (_codesBySourceZoneId.TryGetValue(zoneId, out zoneCodes))
+                return zoneCodes;
+            else
+                return null;
+        }
+
         protected override void AddItems(List<Zone> itemsToAdd)
         {
             ZoneManager zoneManager = new ZoneManager();
             foreach (var z in itemsToAdd)
             {
-                zoneManager.AddZoneFromeSource(z);
+                zoneManager.AddZoneFromeSource(z, GetZoneCodes(z));
             }
         }
 
@@ -43,7 +68,7 @@ namespace QM.BusinessEntity.Business
              ZoneManager zoneManager = new ZoneManager();
              foreach (var z in itemsToUpdate)
             {
-                zoneManager.UpdateZoneFromeSource(z);
+                zoneManager.UpdateZoneFromeSource(z, GetZoneCodes(z));
             }
         }
 
@@ -53,6 +78,7 @@ namespace QM.BusinessEntity.Business
             {
                 Name = sourceItem.Name,
                 SourceId = sourceItem.SourceId,
+                IsFromTestingConnectorZone = sourceItem.IsFromTestingConnectorZone,
                 BeginEffectiveDate = sourceItem.BeginEffectiveDate,
                 EndEffectiveDate = sourceItem.EndEffectiveDate
             };

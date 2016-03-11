@@ -13,6 +13,8 @@ namespace QM.BusinessEntity.Entities
 
         public string SourceId { get; set; }
 
+        public bool IsFromTestingConnectorZone { get; set; }
+
         public int CountryId { get; set; }
 
         public string Name { get; set; }
@@ -20,6 +22,8 @@ namespace QM.BusinessEntity.Entities
         public DateTime BeginEffectiveDate { get; set; }
 
         public DateTime? EndEffectiveDate { get; set; }
+
+        public ZoneSettings Settings { get; set; }
 
         long IItem.ItemId
         {

@@ -60,5 +60,10 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                   ,[EndEffectiveDate]
                 FROM [dbo].[Zone] z join [dbo].[CodeGroup] c on z.CodeGroup = c.Code where ZoneID > 0 and z.SupplierID ='SYS' ";
         }
+
+        public override IEnumerable<SourceZoneCode> GetAllCodes()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

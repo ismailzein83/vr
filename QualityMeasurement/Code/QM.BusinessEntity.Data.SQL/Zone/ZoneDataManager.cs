@@ -48,7 +48,7 @@ namespace QM.BusinessEntity.Data.SQL
 
         public void InsertZoneFromSource(Zone zone)
         {
-            ExecuteNonQuerySP("[QM_BE].[sp_Zone_InsertFromSource]", zone.ZoneId, zone.Name, zone.SourceId , zone.CountryId , zone.BeginEffectiveDate);
+            ExecuteNonQuerySP("[QM_BE].[sp_Zone_InsertFromSource]", zone.ZoneId, zone.Name, zone.SourceId , zone.CountryId , ToDBNullIfDefault(zone.BeginEffectiveDate));
         }
 
         public void UpdateZoneFromSource(Zone zone)

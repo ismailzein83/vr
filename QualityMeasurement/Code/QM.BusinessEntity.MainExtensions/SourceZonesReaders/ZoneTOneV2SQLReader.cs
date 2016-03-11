@@ -60,5 +60,10 @@ namespace QM.BusinessEntity.MainExtensions.SourceZonesReaders
                FROM [TOneWhS_BE].[SaleZone]
                where [CountryID] > 0";
         }
+
+        public override IEnumerable<SourceZoneCode> GetAllCodes()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

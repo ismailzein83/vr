@@ -82,21 +82,41 @@ namespace QM.BusinessEntity.Business
 
 
 
-        public void AddZoneFromeSource(Zone zone)
-        {
-            long startingId;
-            ReserveIDRange(1, out startingId);
-            zone.ZoneId = (int)startingId;
+        public void AddZoneFromeSource(Zone zone, List<string> zoneCodes)
+        {            
+            UpdateSettings(zone, zoneCodes);
             IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
             dataManager.InsertZoneFromSource(zone);
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
-        public void UpdateZoneFromeSource(Zone zone)
-        {
 
+        public void UpdateZoneFromeSource(Zone zone, List<string> zoneCodes)
+        {
+            UpdateSettings(zone, zoneCodes);
             IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
             dataManager.UpdateZoneFromSource(zone);
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+        }
+
+        private void UpdateSettings(Zone zone, List<string> zoneCodes)
+        {
+            if(zone.Settings == null)
+                zone.Settings = new ZoneSettings();
+            if (zone.Settings.ExtendedSettings == null)
+                zone.Settings.ExtendedSettings = new Dictionary<string, object>();
+            IEnumerable<Type> extendedSettingsBehaviorsImplementations = Utilities.GetAllImplementations<ExtendedZoneSettingBehavior>();
+            if (extendedSettingsBehaviorsImplementations != null)
+            {
+                foreach (var extendedSettingsBehaviorType in extendedSettingsBehaviorsImplementations)
+                {
+                    var extendedSettingsBehavior = Activator.CreateInstance(extendedSettingsBehaviorType) as ExtendedZoneSettingBehavior;
+                    extendedSettingsBehavior.ApplyExtendedSettings(new ApplyExtendedZoneSettingsContext
+                    {
+                        Zone = zone,
+                        ZoneCodes = zoneCodes
+                    });
+                }
+            }
         }
 
         public Zone GetZone(long zoneId)

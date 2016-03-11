@@ -210,11 +210,9 @@ namespace QM.BusinessEntity.Business
         private static void ApplySettings(DataTable supplierDataTable, ref int insertedCount, ref int notInsertedCount, ref int updatedCount, ISupplierDataManager dataManager, IEnumerable<Type> implementations, List<string> extendedFields, int i, ref Supplier supplier)
         {
             if (supplier.Settings == null)
-            {
                 supplier.Settings = new SupplierSettings();
-                if (supplier.Settings.ExtendedSettings == null)
-                    supplier.Settings.ExtendedSettings = new List<ExtendedSupplierSetting>();
-            } 
+            if (supplier.Settings.ExtendedSettings == null)
+                supplier.Settings.ExtendedSettings = new List<ExtendedSupplierSetting>();
             Dictionary<string, object> excelFields = new Dictionary<string, object>();
             for (int j = 1; j < supplierDataTable.Columns.Count; j++)
             {

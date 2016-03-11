@@ -15,36 +15,33 @@ namespace QM.CLITester.iTestIntegration
             get { return false; }
         }
 
-        ServiceActions _serviceActions = new ServiceActions();
 
         public override IEnumerable<Vanrise.Entities.SourceCountry> GetChangedItems(ref object updatedHandle)
         {
-            string breakoutResponse = _serviceActions.PostRequest("1022", null);
-            return ParseCountryResponse(breakoutResponse);
-        }
-
-        private IEnumerable<Vanrise.Entities.SourceCountry> ParseCountryResponse(string breakoutResponse)
-        {
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(breakoutResponse);
-
-            Dictionary<string, SourceCountry> countries = new Dictionary<string, SourceCountry>();
-            XmlNodeList xnList = xml.SelectNodes("/NDB_List/Breakout");
-            if (xnList != null)
-                foreach (XmlNode xn in xnList)
+            ITestZoneManager zoneManager = new ITestZoneManager();
+            var itestZones = zoneManager.GetAllZones();
+            if (itestZones != null)
+            {
+                List<Vanrise.Entities.SourceCountry> countries = new List<SourceCountry>();
+                HashSet<string> addedCountryIds = new HashSet<string>();
+                foreach (var z in itestZones.Values)
                 {
-                    string sourceCountryId = xn["Country_ID"] != null ? xn["Country_ID"].InnerText : "";
-                    if(!countries.ContainsKey(sourceCountryId))
+                    if (!addedCountryIds.Contains(z.CountryId))
                     {
-                        SourceCountry country = new SourceCountry
+                        var country = new SourceCountry
                         {
-                            SourceId = sourceCountryId,
-                            Name = xn["Country_Name"] != null ? xn["Country_Name"].InnerText : ""
+                            SourceId = z.CountryId,
+                            Name = z.CountryName
                         };
-                        countries.Add(sourceCountryId, country);
+                        countries.Add(country);
+                        addedCountryIds.Add(country.SourceId);
                     }
                 }
-            return countries.Values;
+                return countries;
+            }
+            else
+                return null;
+
         }
     }
 }
