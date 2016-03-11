@@ -30,7 +30,7 @@ BEGIN
 		FROM [CP_SupPriceList].[PriceList] 
 		WHERE 
 		 UserID = @UserId
-		ORDER BY ID DESC
+		ORDER BY ID asc
 		
 		SELECT * FROM #temp_table
 	
@@ -61,7 +61,7 @@ BEGIN
 		WHERE 
 		 UserID = @UserId AND
 		([timestamp] > @TimestampAfter) 
-		ORDER BY [timestamp]
+		ORDER BY [timestamp] desc
 		
 		SELECT * FROM #temp2_table
 	
