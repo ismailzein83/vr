@@ -28,8 +28,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             if (Choices == null)
                 throw new NullReferenceException("Choices");
-            
-            IEnumerable<int> selectedChoiceValues = ConvertValueToSelectedChoiceValues(value);
+
+            IEnumerable<long> selectedChoiceValues = ConvertFieldValueToList<long>(value);
             
             if (selectedChoiceValues == null)
                 return GetChoiceText(Convert.ToInt32(value));
@@ -64,19 +64,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         #endregion
 
         #region Private Methods
-
-        IEnumerable<int> ConvertValueToSelectedChoiceValues(object value)
-        {
-            var staticValues = value as StaticValues;
-            if (staticValues != null)
-                return staticValues.Values.MapRecords(itm => Convert.ToInt32(itm));
-
-            var objList = value as List<object>;
-            if (objList != null)
-                return objList.MapRecords(itm => Convert.ToInt32(itm));
-
-            return null;
-        }
 
         string GetChoiceText(int choiceValue)
         {

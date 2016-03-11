@@ -45,6 +45,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.GenericData.MainExtensions">
+      <HintPath>..\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessEntities\BusinessEntityDefinition\BusinessEntityDefinition.cs" />

@@ -15,12 +15,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return typeof(bool);
         }
+
         public override string GetDescription(Object value)
         {
             if (value == null)
                 return null;
 
-            IEnumerable<bool> selectedBooleanValues = ConvertValueToSelectedBooleanValues(value);
+            IEnumerable<bool> selectedBooleanValues = ConvertFieldValueToList<bool>(value);
 
             if (selectedBooleanValues == null)
                 return value.ToString();
@@ -35,24 +36,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            return Convert.ToBoolean(fieldValue).CompareTo(Convert.ToBoolean(filterValue)) == 0;
+            IEnumerable<bool> boolValues = ConvertFieldValueToList<bool>(fieldValue);
+            return (boolValues != null) ? boolValues.Contains(Convert.ToBoolean(filterValue)) : Convert.ToBoolean(fieldValue).CompareTo(Convert.ToBoolean(filterValue)) == 0;
         }
-
-        #region Private Methods
-
-        IEnumerable<bool> ConvertValueToSelectedBooleanValues(object value)
-        {
-            var staticValues = value as StaticValues;
-            if (staticValues != null)
-                return staticValues.Values.MapRecords(itm => Convert.ToBoolean(itm));
-
-            var objList = value as List<object>;
-            if (objList != null)
-                return objList.MapRecords(itm => Convert.ToBoolean(itm));
-
-            return null;
-        }
-
-        #endregion
     }
 }

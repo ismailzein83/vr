@@ -31,7 +31,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (value == null)
                 return null;
 
-            IEnumerable<object> selectedEntityIds = ConvertValueToSelectedEntityIds(value);
+            IEnumerable<object> selectedEntityIds = ConvertFieldValueToList<object>(value);
             var entityIds = new List<object>();
 
             if (selectedEntityIds != null)
@@ -64,26 +64,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         #endregion
 
         #region Private Methods
-
-        IEnumerable<object> ConvertValueToSelectedEntityIds(object value)
-        {
-            var beValues = value as BusinessEntityValues;
-            if (beValues != null)
-            {
-                var values = beValues.GetValues();
-                return (values != null) ? values : new List<object>();
-            }
-            
-            var staticValues = value as StaticValues;
-            if (staticValues != null)
-                return staticValues.Values;
-
-            var objList = value as List<object>;
-            if (objList != null)
-                return objList;
-
-            return null;
-        }
 
         IBusinessEntityManager GetBusinessEntityManager(out BusinessEntityDefinition businessEntityDefinition)
         {

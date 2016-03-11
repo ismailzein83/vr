@@ -119,6 +119,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                    
                     if ($attrs.type == "time") {
                         $scope.ctrl.value = {
+                            $type: 'Vanrise.Entities.Time, Vanrise.Entities',
                             Hour: selectedDate.getHours(),
                             Minute: selectedDate.getMinutes(),
                             Second: selectedDate.getSeconds(),

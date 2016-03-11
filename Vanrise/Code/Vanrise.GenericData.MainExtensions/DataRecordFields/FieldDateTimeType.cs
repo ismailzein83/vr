@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
@@ -11,6 +12,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldDateTimeType : DataRecordFieldType
     {
+        #region Public Methods
+
         public FieldDateTimeDataType DataType { get; set; }
 
         public override Type GetRuntimeType()
@@ -21,44 +24,55 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return attributeInfo.RuntimeType;
         }
 
-        public override string GetDescription(Object value)
+        public override string GetDescription(object value)
         {
-            if (value == null)
-                return null;
-
-            IEnumerable<DateTime> selectedDateTimeValues = ConvertValueToSelectedDateTimeValues(value);
-
-            if (selectedDateTimeValues == null)
-                return Convert.ToDateTime(value).ToShortDateString();
-
-            var descriptions = new List<string>();
-
-            foreach (DateTime selectedDateTimeValue in selectedDateTimeValues)
-                descriptions.Add(selectedDateTimeValue.ToShortDateString());
-
-            return String.Join(",", descriptions);
+            if (value == null) { return null; }
+            return (DataType == FieldDateTimeDataType.Time) ? GetTimeDescription(value) : GetDateTimeDescription(value);
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            return Convert.ToDateTime(fieldValue).CompareTo(Convert.ToDateTime(filterValue)) == 0;
+            IEnumerable<DateTime> dateTimeValues = ConvertFieldValueToList<DateTime>(fieldValue);
+            return (dateTimeValues != null) ? dateTimeValues.Contains(Convert.ToDateTime(filterValue)) : Convert.ToDateTime(fieldValue).CompareTo(Convert.ToDateTime(filterValue)) == 0;
         }
+        
+        #endregion
 
         #region Private Methods
 
-        IEnumerable<DateTime> ConvertValueToSelectedDateTimeValues(object value)
+        string GetTimeDescription(object fieldValue)
         {
-            var staticValues = value as StaticValues;
-            if (staticValues != null)
-                return staticValues.Values.MapRecords(itm => Convert.ToDateTime(itm));
+            IEnumerable<Time> timeValues = ConvertFieldValueToList<Time>(fieldValue);
 
-            var objList = value as List<object>;
-            if (objList != null)
-                return objList.MapRecords(itm => Convert.ToDateTime(itm));
+            if (timeValues == null)
+            {
+                Time time = Serializer.Deserialize<Time>(fieldValue.ToString());
+                return time.ToLongTimeString();
+            }
 
-            return null;
+            var descriptions = new List<string>();
+
+            foreach (Time timeValue in timeValues)
+                descriptions.Add(timeValue.ToLongTimeString());
+
+            return String.Join(",", descriptions);
         }
 
+        string GetDateTimeDescription(object fieldValue)
+        {
+            IEnumerable<DateTime> dateTimeValues = ConvertFieldValueToList<DateTime>(fieldValue);
+
+            if (dateTimeValues == null)
+                return Convert.ToDateTime(fieldValue).ToString();
+
+            var descriptions = new List<string>();
+
+            foreach (DateTime dateTimeValue in dateTimeValues)
+                descriptions.Add(GetDateTimeDescription(dateTimeValue));
+
+            return String.Join(",", descriptions);
+        }
+        
         #endregion
     }
     public enum FieldDateTimeDataType

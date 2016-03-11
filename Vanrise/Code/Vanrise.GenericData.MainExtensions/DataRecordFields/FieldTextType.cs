@@ -18,14 +18,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(Object value)
         {
-            var staticValues = value as StaticValues;
+            if (value == null)
+                return null;
 
-            if (staticValues == null)
+            IEnumerable<string> textValues = ConvertFieldValueToList<string>(value);
+
+            if (textValues == null)
                 return value.ToString();
             
             var descriptions = new List<string>();
-            foreach (var staticValue in staticValues.Values)
-                descriptions.Add(staticValue.ToString());
+            foreach (var textValue in textValues)
+                descriptions.Add(textValue.ToString());
             return String.Join(",", descriptions);
         }
 

@@ -49,7 +49,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             $scope.scopeModel.isAddButtonDisabled = true;
 
             $scope.scopeModel.addValue = function () {
-                $scope.scopeModel.values.push(UtilsService.getShortDate($scope.scopeModel.value));
+                $scope.scopeModel.values.push(getDataItem($scope.scopeModel.value));
                 $scope.scopeModel.value = undefined;
             };
 
@@ -59,9 +59,11 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     $scope.scopeModel.isAddButtonDisabled = true;
                     return null;
                 }
-                if (UtilsService.contains($scope.scopeModel.values, UtilsService.getShortDate($scope.scopeModel.value))) {
-                    $scope.scopeModel.isAddButtonDisabled = true;
-                    return 'Value already exists';
+                for (var i = 0; i < $scope.scopeModel.values.length; i++) {
+                    if (UtilsService.areDateTimesEqual($scope.scopeModel.values[i].value, $scope.scopeModel.value)) {
+                        $scope.scopeModel.isAddButtonDisabled = true;
+                        return 'Value already exists';
+                    }
                 }
                 $scope.scopeModel.isAddButtonDisabled = false;
                 return null;
@@ -86,12 +88,12 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                 if (fieldValue != undefined) {
                     if (ctrl.selectionmode == "dynamic") {
                         angular.forEach(fieldValue.Values, function (val) {
-                            $scope.scopeModel.values.push(val);
+                            $scope.scopeModel.values.push(getDataItem(val));
                         });
                     }
                     else if (ctrl.selectionmode == "multiple") {
                         for (var i = 0; i < fieldValue.length; i++) {
-                            $scope.scopeModel.values.push(fieldValue[i]);
+                            $scope.scopeModel.values.push(getDataItem(fieldValue[i]));
                         }
                     }
                     else {
@@ -107,13 +109,13 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     if ($scope.scopeModel.values.length > 0) {
                         retVal = {
                             $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                            Values: $scope.scopeModel.values
+                            Values: UtilsService.getPropValuesFromArray($scope.scopeModel.values, 'value')
                         };
                     }
                 }
                 else if (ctrl.selectionmode == "multiple") {
                     if ($scope.scopeModel.values.length > 0) {
-                        retVal = $scope.scopeModel.values;
+                        retVal = UtilsService.getPropValuesFromArray($scope.scopeModel.values, 'value')
                     }
                 }
                 else {
@@ -126,8 +128,29 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             return api;
         }
 
-        this.initializeController = initializeController;
+        function getDataItem(value) {
+            return {
+                id: $scope.scopeModel.values.length + 1,
+                value: value,
+                displayValue: getDateTimeString(value)
+            };
 
+            function getDateTimeString(dateTime) {
+                var type = $scope.scopeModel.fieldType.type;
+                var dateTimeObject = new Date(dateTime);
+
+                switch (type) {
+                    case 'dateTime':
+                        return dateTimeObject.toString();
+                    case 'date':
+                        return dateTimeObject.toDateString();
+                    case 'time':
+                        return dateTime.Hour + ':' + dateTime.Minute;
+                }
+            }
+        }
+
+        this.initializeController = initializeController;
     }
 
     function getDirectiveTemplate(attrs) {
@@ -144,7 +167,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     + '</vr-row>'
                     + '<vr-row>'
                         + '<vr-columns colnum="{{runtimeEditorCtrl.normalColNum * 2}}">'
-                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
+                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem.displayValue}}</vr-datalist>'
                         + '</vr-columns>'
                     + '</vr-row>'
                 + '</vr-columns>';
@@ -160,4 +183,3 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
 
     return directiveDefinitionObject;
 }]);
-

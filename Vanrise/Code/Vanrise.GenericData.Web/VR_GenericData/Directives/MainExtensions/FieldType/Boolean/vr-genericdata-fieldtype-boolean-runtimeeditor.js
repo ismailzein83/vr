@@ -45,13 +45,23 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
 
         function defineScopeForMultiModes() {
             $scope.scopeModel.values = [];
+            $scope.scopeModel.isAddButtonDisabled = false;
 
             $scope.scopeModel.addValue = function () {
-                var dataItem = {
-                    id: $scope.scopeModel.length + 1,
-                    value: $scope.scopeModel.value
-                };
-                $scope.scopeModel.values.push(dataItem);
+                $scope.scopeModel.values.push($scope.scopeModel.value);
+            };
+
+            $scope.scopeModel.validateValue = function () {
+                if ($scope.scopeModel.values.length == 2) {
+                    $scope.scopeModel.isAddButtonDisabled = true;
+                    return null;
+                }
+                if (UtilsService.contains($scope.scopeModel.values, $scope.scopeModel.value)) {
+                    $scope.scopeModel.isAddButtonDisabled = true;
+                    return 'Value already exists';
+                }
+                $scope.scopeModel.isAddButtonDisabled = false;
+                return null;
             };
         }
 
@@ -71,20 +81,12 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                 if (fieldValue != undefined) {
                         if (ctrl.selectionmode == "dynamic") {
                         angular.forEach(fieldValue.Values, function (val) {
-                            var dataItem = {
-                                id: $scope.scopeModel.length + 1,
-                                value: val
-                            };
-                            $scope.scopeModel.values.push(dataItem);
+                            $scope.scopeModel.values.push(value);
                         });
                     }
                     else if (ctrl.selectionmode == "multiple") {
                         for (var i = 0; i < fieldValue.length; i++) {
-                            var dataItem = {
-                                id: $scope.scopeModel.length + 1,
-                                value: fieldValue[i]
-                            };
-                            $scope.scopeModel.values.push(dataItem);
+                            $scope.scopeModel.values.push(fieldValue[i]);
                         }
                     }
                     else {
@@ -100,13 +102,13 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                     if ($scope.scopeModel.values.length > 0) {
                         retVal = {
                             $type: "Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues.StaticValues, Vanrise.GenericData.MainExtensions",
-                            Values: UtilsService.getPropValuesFromArray($scope.scopeModel.values, 'value')
+                            Values: $scope.scopeModel.values
                         };
                     }
                 }
                 else if (ctrl.selectionmode == "multiple") {
                     if ($scope.scopeModel.values.length > 0) {
-                        retVal = UtilsService.getPropValuesFromArray($scope.scopeModel.values, 'value');
+                        retVal = $scope.scopeModel.values;
                     }
                 }
                 else {
@@ -133,12 +135,12 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
                     + '<vr-row>'
                         + getSingleSelectionModeTemplate()
                         + '<vr-columns withemptyline>'
-                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone></vr-button>'
+                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
                         + '</vr-columns>'
                     + '</vr-row>'
                     + '<vr-row>'
                         + '<vr-columns colnum="{{ctrl.normalColNum * 2}}">'
-                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem.value}}</vr-datalist>'
+                            + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
                         + '</vr-columns>'
                     + '</vr-row>'
                 + '</vr-columns>';
@@ -147,7 +149,7 @@ app.directive('vrGenericdataFieldtypeBooleanRuntimeeditor', ['UtilsService', fun
         function getSingleSelectionModeTemplate() {
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-if="scopeModel.label != undefined ">'
                         + '<vr-label>{{scopeModel.label}}</vr-label>'
-                        + '<vr-switch value="scopeModel.value"></vr-switch>'
+                        + '<vr-validator validate="scopeModel.validateValue()"><vr-switch value="scopeModel.value"></vr-switch></vr-validator>'
                 + '</vr-columns>';
         }
     }

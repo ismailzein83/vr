@@ -586,6 +586,22 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         return actionNames;
     }
 
+    function areDateTimesEqual(first, second) {
+        return (serializetoJson(first) == serializetoJson(second));
+
+        //if (isTimeObject(first) && isTimeObject(second)) {
+        //    return compareEqualsTimes(first, second);
+        //}
+
+        //var firstDate = new Date(first);
+        //var secondDate = new Date(second);
+        //return firstDate.getTime() == secondDate.getTime();
+
+        //function isTimeObject(object) {
+        //    return (object.Hour != undefined && object.Minute != undefined);
+        //}
+    }
+
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -624,7 +640,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         safeApply: safeApply,
         compareEqualsTimes: compareEqualsTimes,
         mergeObject: mergeObject,
-        getSystemActionNames: getSystemActionNames
+        getSystemActionNames: getSystemActionNames,
+        areDateTimesEqual: areDateTimesEqual
     });
 
 }]);
