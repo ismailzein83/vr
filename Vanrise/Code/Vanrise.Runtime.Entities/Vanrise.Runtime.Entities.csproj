@@ -55,6 +55,7 @@
     <Compile Include="SchedulerTaskCheckProgressOutput.cs" />
     <Compile Include="SchedulerTaskExecuteOutput.cs" />
     <Compile Include="ISchedulerTaskCheckProgressContext.cs" />
+    <Compile Include="SchedulerTaskInfo.cs" />
     <Compile Include="SchedulerTaskQuery.cs" />
     <Compile Include="SchedulerTaskStateDetail.cs" />
     <Compile Include="SchedulerTaskTrigger.cs" />

@@ -33,7 +33,7 @@ namespace Vanrise.Runtime.Business
             return GetFilteredTasks(input);
         }
 
-        public List<SchedulerTask> GetMySchedulesInfo()
+        public List<SchedulerTaskInfo> GetMyTasksInfo()
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
             int ownerId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
@@ -43,9 +43,41 @@ namespace Vanrise.Runtime.Business
             IEnumerable<SchedulerTask> tasks = allScheduledTasks.FindAllRecords(filterExpression);
             if (tasks == null)
                 return null;
-            return tasks.ToList();
+
+            List<SchedulerTaskInfo> listTasksInfos = new List<SchedulerTaskInfo>();
+            foreach (SchedulerTask schedulerTask in tasks)
+            {
+                listTasksInfos.Add(
+                 new SchedulerTaskInfo()
+                {
+                    TaskId = schedulerTask.TaskId,
+                    Name = schedulerTask.Name
+                });
+            }
+            return listTasksInfos;
         }
 
+        public List<SchedulerTaskInfo> GetTasksInfo()
+        {
+            var allScheduledTasks = GetCachedSchedulerTasks();
+            Func<SchedulerTask, bool> filterExpression = (itm) => (true);
+            
+            IEnumerable<SchedulerTask> tasks = allScheduledTasks.FindAllRecords(filterExpression);
+            if (tasks == null)
+                return null;
+
+            List<SchedulerTaskInfo> listTasksInfos = new List<SchedulerTaskInfo>();
+            foreach (SchedulerTask schedulerTask in tasks)
+            {
+                listTasksInfos.Add(
+                 new SchedulerTaskInfo()
+                 {
+                     TaskId = schedulerTask.TaskId,
+                     Name = schedulerTask.Name
+                 });
+            }
+            return listTasksInfos;
+        }
 
         public List<SchedulerTask> GetAllScheduleTasks()
         {

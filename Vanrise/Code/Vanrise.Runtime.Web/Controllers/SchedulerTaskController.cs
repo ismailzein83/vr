@@ -39,18 +39,18 @@ namespace Vanrise.Runtime.Web.Controllers
 
         [HttpGet]
         [Route("GetSchedulesInfo")]
-        public List<SchedulerTask> GetSchedulesInfo()
+        public List<SchedulerTaskInfo> GetSchedulesInfo()
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetAllScheduleTasks();
+            return manager.GetTasksInfo();
         }
 
         [HttpGet]
         [Route("GetMySchedulesInfo")]
-        public List<SchedulerTask> GetMySchedulesInfo()
+        public List<SchedulerTaskInfo> GetMySchedulesInfo()
         {
             SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetMySchedulesInfo();
+            return manager.GetMyTasksInfo();
         }
 
         [HttpGet]
