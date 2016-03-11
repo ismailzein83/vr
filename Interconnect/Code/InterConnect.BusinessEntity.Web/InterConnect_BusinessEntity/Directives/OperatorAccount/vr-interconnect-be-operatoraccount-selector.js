@@ -12,7 +12,8 @@ app.directive('vrInterconnectBeOperatoraccountSelector', ['InterConnect_BE_Opera
                 isrequired: "=",
                 onselectitem: "=",
                 ondeselectitem: "=",
-                isdisabled: "="
+                isdisabled: "=",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -52,12 +53,10 @@ app.directive('vrInterconnectBeOperatoraccountSelector', ['InterConnect_BE_Opera
                 multipleselection = "ismultipleselection";
             }
 
-
-
-            return '<div>'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="OperatorAccountId" isrequired="ctrl.isrequired"'
                 + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="OperatorAccount" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
-                + '</div>'
+                + '</vr-columns>'
         }
 
         function operatorAccountCtor(ctrl, $scope, attrs) {
