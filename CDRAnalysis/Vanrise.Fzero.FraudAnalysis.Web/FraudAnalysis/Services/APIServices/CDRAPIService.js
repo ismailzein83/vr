@@ -1,12 +1,20 @@
-﻿app.service('CDRAPIService', function (BaseAPIService) {
+﻿(function (appControllers) {
 
-    var controllerName = 'CDR';
+    "use strict";
+    cdrAPIService.$inject = ['BaseAPIService', 'UtilsService'];
 
-    function GetCDRs(input) {
-        return BaseAPIService.post(UtilsService.getServiceURL('api', controllerName, 'GetCDRs'), input);
+    function cdrAPIService(BaseAPIService, UtilsService) {
+
+        var controllerName = 'CDR';
+
+        function GetCDRs(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL('api', controllerName, 'GetCDRs'), input);
+        }
+
+        return ({
+            GetCDRs: GetCDRs
+        });
     }
 
-    return ({
-        GetCDRs: GetCDRs
-    });
-});
+    appControllers.service('CDRAPIService', cdrAPIService);
+})(appControllers);
