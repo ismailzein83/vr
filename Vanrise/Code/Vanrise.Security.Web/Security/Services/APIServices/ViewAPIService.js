@@ -16,7 +16,8 @@
             DeleteView: DeleteView,
             HasAddViewPermission: HasAddViewPermission,
             HasUpdateViewPermission: HasUpdateViewPermission,
-            GetFilteredViews: GetFilteredViews
+            GetFilteredViews: GetFilteredViews,
+            HasUpdateViewsRankPermission: HasUpdateViewsRankPermission
         });
 
         function GetView(ViewId) {
@@ -49,7 +50,9 @@
                 viewId: viewId
             });
         }
-
+        function HasUpdateViewsRankPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateViewsRank']));
+        }
         function HasAddViewPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['AddView']));
         }

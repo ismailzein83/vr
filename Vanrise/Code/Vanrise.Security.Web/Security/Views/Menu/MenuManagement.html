@@ -1,32 +1,15 @@
 ﻿<vr-panel ng-controller="VR_Sec_MenuManagementController">
-    <vr-form validationcontext="filterGroupValid">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isInitializing">
-            <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-row>
-                        <vr-validation-group validationcontext="SearchGroup">
-                            <vr-columns width="normal">
-                            </vr-columns>
-                        </vr-validation-group>
-                    </vr-row>
-                </vr-columns>
-            </vr-row>
-
-        </div>
-    </vr-form>
-
     <vr-row>
-        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+        <vr-actionbar showcollapsebutton="false">
             <div transclude-to="buttons">
-                <vr-button type="Move" validationcontext="SearchGroup" data-onclick="ranking"></vr-button>
-                <vr-button type="Edit" ng-show="selectedMenuItem !=undefined" validationcontext="SearchGroup" data-onclick="editModule"></vr-button>
-                <vr-button type="Add" formname="formFilter" validationcontext="SearchGroup" data-onclick="addModule"></vr-button>
+                <vr-button type="Ranking" validationcontext="SearchGroup" data-onclick="ranking" haspermission="hasRankingPermission"></vr-button>
+                <vr-button type="Edit" ng-show="selectedMenuItem !=undefined && selectedMenuItem.Id != undefined" validationcontext="SearchGroup" data-onclick="editModule" haspermission="hasUpdateModulePermission"></vr-button>
+                <vr-button type="Add" ng-show="selectedMenuItem !=undefined" formname="formFilter" validationcontext="SearchGroup" data-onclick="addModule" haspermission="hasAddModulePermission"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
     <vr-row removeline>
         <vr-columns width="1/4row">
-            <div style="max-height:700px;overflow-y:auto">
                 <vr-treeview on-ready="onModulesTreeReady"
                              datavaluefield="Id"
                              datatextfield="Name"
@@ -35,7 +18,6 @@
                              wholerow
                              onvaluechanged="treeValueChanged">
                 </vr-treeview>
-            </div>
         </vr-columns>
         <vr-columns width="3/4row" ng-show="showGrid">
             <vr-sec-menu-view-grid on-ready="onViewGridReady"></vr-sec-menu-view-grid>

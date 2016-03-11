@@ -24,9 +24,9 @@ namespace Vanrise.Security.Business
       
         #region Public Members
 
-        public bool UpdateModuleRank(int viewId, int rank)
+        public bool UpdateModuleRank(int moduleId,int? parentId, int rank)
         {
-            return _dataManager.UpdateModuleRank(viewId, rank);
+            return _dataManager.UpdateModuleRank(moduleId,parentId, rank);
         }
         public Module GetModule(int moduleId)
         {

@@ -9,9 +9,8 @@
         $scope.scopeModal.isEditMode;
         var moduleId;
         var moduleEntity;
+        var parentId;
         var menuItems = [];
-        var treeAPI;
-        var treeReadyDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -20,7 +19,12 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null)
+            {
+                parentId = parameters.parentId;
                 moduleId = parameters.moduleId;
+                console.log(parentId);
+            }
+                
 
             $scope.scopeModal.isEditMode = (moduleId != undefined);
         }
@@ -32,9 +36,12 @@
                 else
                     return insertModule();
             };
-            $scope.scopeModal.onModulesTreeReady = function (api) {
-                treeAPI = api;
-                treeReadyDeferred.resolve();
+
+            $scope.hasSaveModulePermission = function () {
+                if ($scope.scopeModal.isEditMode)
+                    return VR_Sec_ModuleAPIService.HasUpdateModulePermission();
+                else
+                    return VR_Sec_ModuleAPIService.HasAddModulePermission();
             };
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal();
@@ -66,7 +73,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTree])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -74,35 +81,7 @@
                   $scope.scopeModal.isLoading = false;
               });
         }
-        function loadTree() {
-            var treeLoadDeferred = UtilsService.createPromiseDeferred();
-
-            loadMenuItems().then(function () {
-                treeReadyDeferred.promise.then(function () {
-                    //if (viewEntity != undefined) {
-
-                    //    $scope.selectedMenuItem = treeAPI.setSelectedNode(menuItems, viewEntity.ModuleId, "Id", "Childs");
-                    //}
-                    treeAPI.refreshTree(menuItems);
-                    treeLoadDeferred.resolve();
-                });
-            }).catch(function (error) {
-                treeLoadDeferred.reject(error);
-            });
-
-            return treeLoadDeferred.promise;
-
-            function loadMenuItems() {
-                return VR_Sec_MenuAPIService.GetAllMenuItems(false).then(function (response) {
-                    if (response) {
-                        menuItems = [];
-                        for (var i = 0; i < response.length; i++) {
-                            menuItems.push(response[i]);
-                        }
-                    }
-                });
-            }
-        }
+       
         function setTitle() {
             if ($scope.scopeModal.isEditMode && moduleEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(moduleEntity.Name, 'Module');
@@ -116,17 +95,26 @@
                 return;
 
             $scope.scopeModal.name = moduleEntity.Name;
-            $scope.scopeModal.titleValue = moduleEntity.Title;
             $scope.scopeModal.isDynamic = moduleEntity.AllowDynamic;
         }
 
         function buildModuleObjFromScope() {
+            var selectedMenuItem = $scope.scopeModal.selectedMenuItem;
+            var selectedMenuItemId;
+            if (selectedMenuItem != undefined)
+            {
+                if ($scope.scopeModal.selectedMenuItem.Name == 'Root')
+                    selectedMenuItemId = null;
+                else {
+                    selectedMenuItemId = selectedMenuItem.Id;
+                }
+            }
+            
             var moduleObject = {
                 ModuleId: moduleId,
                 Name: $scope.scopeModal.name,
-                Title: $scope.scopeModal.titleValue,
                 AllowDynamic: $scope.scopeModal.isDynamic,
-                ParentId: moduleEntity !=undefined ?moduleEntity.ParentId: $scope.scopeModal.selectedMenuItem.Id
+                ParentId: moduleEntity != undefined ? moduleEntity.ParentId : parentId
             };
             return moduleObject;
         }
@@ -168,6 +156,8 @@
                 $scope.scopeModal.isLoading = false;
             });
         }
+
+
     }
 
     appControllers.controller('VR_Sec_ModuleEditorController', ModuleEditorController);

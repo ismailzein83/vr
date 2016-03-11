@@ -428,6 +428,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         }
         $scope.scopeModal.View = {
             Name: $scope.scopeModal.pageName,
+            Title: $scope.scopeModal.pageName,
             Type: VR_Sec_ViewTypeEnum.Dynamic.value,
             Url: "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview",
             ModuleId: $scope.scopeModal.selectedMenuNode.Id,

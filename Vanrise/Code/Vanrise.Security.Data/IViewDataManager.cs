@@ -13,7 +13,7 @@ namespace Vanrise.Security.Data
         bool AddView(View view, out int insertedId);
         bool UpdateView(View view);
         bool DeleteView(int viewId);
-        bool UpdateViewRank(int viewId,int rank);
+        bool UpdateViewRank(int viewId,int moduleId,int rank);
 
         bool AreViewsUpdated(ref object updateHandle);
     }

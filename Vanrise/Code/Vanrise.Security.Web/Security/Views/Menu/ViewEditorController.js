@@ -36,7 +36,9 @@
                     return updateView();
             };
 
-
+            $scope.hasSaveViewPermission = function () {
+                return VR_Sec_ViewAPIService.HasUpdateViewPermission();
+            };
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal();
             };

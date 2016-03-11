@@ -64,10 +64,13 @@ app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIServ
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editView
+                clicked: editView,
+                haspermission: hasUpdateViewPermission // System Entities:Assign Permissions
             }];
         }
-
+        function hasUpdateViewPermission() {
+            return VR_Sec_ViewAPIService.HasUpdateViewPermission();
+        }
         function editView(viewObj) {
             var onViewUpdated = function (viewObj) {
                 gridAPI.itemUpdated(viewObj);

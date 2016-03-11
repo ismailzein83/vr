@@ -24,9 +24,9 @@ namespace Vanrise.Security.Data.SQL
         {
             return GetItemsSP("sec.sp_Module_GetAll", ModuleMapper);
         }
-        public bool UpdateModuleRank(int moduleId, int rank)
+        public bool UpdateModuleRank(int moduleId,int? parentId, int rank)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_UpdateRank", moduleId, rank);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_UpdateRank", moduleId, parentId,rank);
             return (recordesEffected > 0);
         }
         public bool AreModulesUpdated(ref object _updateHandle)
@@ -37,7 +37,7 @@ namespace Vanrise.Security.Data.SQL
         {
             object moduleID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert", out moduleID, moduleObject.Name, moduleObject.Title,moduleObject.ParentId, moduleObject.AllowDynamic);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert", out moduleID, moduleObject.Name,moduleObject.ParentId, moduleObject.AllowDynamic);
             moduleId = (recordesEffected > 0) ? (int)moduleID : -1;
 
             return (recordesEffected > 0);
@@ -45,7 +45,7 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateModule(Entities.Module moduleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.Title,moduleObject.ParentId, moduleObject.AllowDynamic);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name,moduleObject.ParentId, moduleObject.AllowDynamic);
             return (recordesEffected > 0);
         }
         #endregion
@@ -57,7 +57,6 @@ namespace Vanrise.Security.Data.SQL
             {
                 ModuleId = (int)reader["Id"],
                 Name = reader["Name"] as string,
-                Title = reader["Title"] as string,
                 Url = reader["Url"] as string,
                 ParentId = GetReaderValue<int>(reader, "ParentId"),
                 Icon = reader["Icon"] as string,

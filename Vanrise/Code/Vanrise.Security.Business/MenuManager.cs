@@ -24,7 +24,7 @@ namespace Vanrise.Security.Business
 
         #region Public Methods
 
-        public List<MenuItem> GetMenuItems(bool getOnlyAllowDynamic)
+        public List<MenuItem> GetMenuItems(bool getOnlyAllowDynamic,bool withEmptyChilds)
         {
             List<Module> modules = _moduleManager.GetModules();
             List<MenuItem> retVal = new List<MenuItem>();
@@ -34,15 +34,21 @@ namespace Vanrise.Security.Business
                 if (item.ParentId == 0)
                 {
                     MenuItem rootItem = GetModuleMenu(item, modules, getOnlyAllowDynamic);
-                    if ((rootItem.AllowDynamic || !getOnlyAllowDynamic) || rootItem.Childs != null)
-                        retVal.Add(rootItem);
+                    if ((rootItem.AllowDynamic || !getOnlyAllowDynamic))
+                    {
+                        if(withEmptyChilds)
+                            retVal.Add(rootItem);
+                        else if(!withEmptyChilds && rootItem.Childs != null)
+                            retVal.Add(rootItem);
+                    }
+
                 }
             }
 
             return retVal;
         }
 
-        public List<MenuItem> GetMenuItems(int userId)
+        public List<MenuItem> GetAllMenuItems(int userId, bool withEmptyChilds)
         {
             List<Module> modules = _moduleManager.GetModules();
 
@@ -53,10 +59,12 @@ namespace Vanrise.Security.Business
 
             foreach (Module item in modules)
             {
-                if (item.ParentId == 0)
+                if (item.ParentId == 0 || item.ParentId == null)
                 {
-                    MenuItem rootItem = GetModuleMenu(item, modules, views);
-                    if (rootItem.Childs != null && rootItem.Childs.Count > 0)
+                    MenuItem rootItem = GetModuleMenu(item, modules, views, withEmptyChilds);
+                    if (withEmptyChilds)
+                        retVal.Add(rootItem);
+                    else if (rootItem.Childs != null && rootItem.Childs.Count > 0)
                         retVal.Add(rootItem);
                 }
             }
@@ -82,9 +90,9 @@ namespace Vanrise.Security.Business
 
         #region Private Methods
 
-        private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views)
+        private MenuItem GetModuleMenu(Module module, List<Module> modules, List<View> views, bool withEmptyChilds)
         {
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon, Rank = module.Rank };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Location = module.Url, Icon = module.Icon, Rank = module.Rank, MenuType = MenuType.Module};
 
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId);
 
@@ -97,7 +105,7 @@ namespace Vanrise.Security.Business
                 {
                     if (viewItem.ActionNames == null || SecurityContext.Current.HasPermissionToActions(viewItem.ActionNames))
                     {
-                        MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem.Rank };
+                        MenuItem viewMenu = new MenuItem() { Id = viewItem.ViewId, Name = viewItem.Name, Title = viewItem.Title, Location = viewItem.Url, Type = viewItem.Type, Rank = viewItem.Rank, MenuType = MenuType.View };
                         menu.Childs.Add(viewMenu);
                     }
                 }
@@ -109,7 +117,9 @@ namespace Vanrise.Security.Business
                     menu.Childs = new List<MenuItem>();
                 foreach (Module item in subModules)
                 {
-                    menu.Childs.Add(GetModuleMenu(item, modules, views));
+                    List<View> viewsOfSubModules = views.FindAll(x => x.ModuleId == item.ModuleId);
+                    if ((viewsOfSubModules != null && viewsOfSubModules.Count > 0) || withEmptyChilds)
+                        menu.Childs.Add(GetModuleMenu(item, modules, views, withEmptyChilds));
                 }
             }
 
@@ -144,7 +154,7 @@ namespace Vanrise.Security.Business
         {
 
 
-            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name, Title = module.Title, Location = module.Url, Icon = module.Icon, AllowDynamic = module.AllowDynamic };
+            MenuItem menu = new MenuItem() { Id = module.ModuleId, Name = module.Name,  Location = module.Url, Icon = module.Icon, AllowDynamic = module.AllowDynamic };
 
             List<Module> subModules = modules.FindAll(x => x.ParentId == module.ModuleId && (x.AllowDynamic || !getOnlyAllowDynamic));
 

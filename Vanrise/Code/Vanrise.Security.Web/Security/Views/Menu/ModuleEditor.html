@@ -8,28 +8,9 @@
                             <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.titleValue" label="Title" isrequired></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
                             <vr-switch value="scopeModal.isDynamic" label="Allow Dynamic"></vr-switch>
                         </vr-columns>
                     </vr-row>
-                </vr-tab>
-                <vr-tab header="'Settings'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="Location" ng-show="!scopeModal.isEditMode">
-                                <vr-treeview on-ready="scopeModal.onModulesTreeReady"
-                                             datavaluefield="Id"
-                                             datatextfield="Name"
-                                             datachildrenfield="Childs"
-                                             selecteditem="scopeModal.selectedMenuItem"
-                                             wholerow>
-                                </vr-treeview>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-
                 </vr-tab>
             </vr-tabs>
         </vr-form>
@@ -37,7 +18,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formModuleEditor" data-onclick="scopeModal.save"></vr-button>
+                <vr-button type="Save" formname="formModuleEditor" data-onclick="scopeModal.save" haspermission="hasSaveModulePermission"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>

@@ -14,10 +14,18 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
                 treeAPI.refreshTree($scope.menu);
             }
         }
+        $scope.hasRankingPermission = function () {
+            return VR_Sec_ViewAPIService.HasUpdateViewsRankPermission();
+
+        };
         $scope.save = function () {
-            if (treeAPI.getTree != undefined) {
+            if (treeAPI.getTree() != undefined) {
                 var menu = treeAPI.getTree();
-                return VR_Sec_ViewAPIService.UpdateViewsRank(menu[0].Childs).then(function (response) {
+                var changedMenu = menu[0].Childs;
+                console.log(changedMenu);
+                var modules = [];
+                var views = [];
+                return VR_Sec_ViewAPIService.UpdateViewsRank(changedMenu).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("MenuItems", response)) {
                         if ($scope.onPageUpdated != undefined)
                             $scope.onPageUpdated(response.UpdatedObject);
@@ -53,10 +61,10 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
     }
 
     function loadViews() {
-        return VR_Sec_MenuAPIService.GetMenuItems().then(function (response) {
+        return VR_Sec_MenuAPIService.GetMenuItems(true).then(function (response) {
             $scope.menuItems = [];
+            setLeafNodes(response);
             angular.forEach(response, function (item) {
-
                 $scope.menuItems.push(item);
             })
             var menu = {
@@ -69,6 +77,60 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
                 treeAPI.refreshTree($scope.menu);
             }
         });
+    }
+
+    function setLeafNodes(childs)
+    {
+        if (childs == null || childs.length == 0)
+            return;
+        for(var i=0 ; i<childs.length;i++)
+        {
+
+            if (childs[i].MenuType == 1)
+            {
+                childs[i].isLeaf = true;
+                setLeafNodes(childs[i].Childs)
+            }
+                
+            else
+            {
+                childs[i].isLeaf = false;
+                setLeafNodes(childs[i].Childs)
+            }
+                
+        }
+    }
+
+    function prepareChangedViews(menuItems)
+    {
+        var menu = [];
+        for (var i = 0; i < menuItems.length ; i++) {
+           var  menuItem = menuItems[i];
+            if (!menuItem.isLeaf)///module
+            {
+                prepareViews(menuItem.Childs, menuItem, menu);
+            } else if (menuItem.MenuType == 1) //View
+            {
+                views.push({ ModuleId: menuItem.Id })
+            }
+        }
+    }
+    function prepareViews(childs, parent, menu)
+    {
+       
+        if (childs != undefined)
+        {
+            for (var i = 0; i < childs.length; i++) {
+                var child = childs[i];
+                if (child.isLeaf)
+                    views.push({ ModuleId: child.Id, Rank: viewIndex++ });
+                else {
+                    modules.push({ ParentId: parent.Id, Rank: moduleIndex++ });
+                    prepareViews(child.Childs, child,views, modules, viewIndex, moduleIndex)
+                }
+            }
+        }
+       
     }
 };
 

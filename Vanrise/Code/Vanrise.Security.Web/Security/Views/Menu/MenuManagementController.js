@@ -2,9 +2,9 @@
 
     'use strict';
 
-    MenuManagementController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService','VRModalService', 'VRNotificationService','VR_Sec_MenuAPIService','VR_Sec_ViewAPIService','VR_Sec_ModuleService','VR_Sec_MenuService'];
+    MenuManagementController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService','VRModalService', 'VRNotificationService','VR_Sec_MenuAPIService','VR_Sec_ViewAPIService','VR_Sec_ModuleService','VR_Sec_MenuService','VR_Sec_ModuleAPIService'];
 
-    function MenuManagementController($scope, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, VR_Sec_ModuleService, VR_Sec_MenuService) {
+    function MenuManagementController($scope, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, VR_Sec_ModuleService, VR_Sec_MenuService, VR_Sec_ModuleAPIService) {
 
         //#region Global Variables
         var treeAPI;
@@ -24,6 +24,20 @@
         //#region Functions
 
         function defineScope() {
+            $scope.hasRankingPermission = function () {
+                return VR_Sec_ViewAPIService.HasUpdateViewsRankPermission();
+
+            };
+
+            $scope.hasUpdateModulePermission = function () {
+                return VR_Sec_ModuleAPIService.HasUpdateModulePermission();
+
+            };
+
+            $scope.hasAddModulePermission = function () {
+                return VR_Sec_ModuleAPIService.HasAddModulePermission();
+
+            };
 
             $scope.onModulesTreeReady = function (api) {
                 treeAPI = api;
@@ -41,7 +55,7 @@
                 if ($scope.selectedMenuItem != undefined) {
                     var query = {
                         ModuleId: $scope.selectedMenuItem.Id
-                        };
+                    };
                     gridAPI.loadGrid(query);
                     $scope.showGrid = true;
                 }
@@ -49,41 +63,22 @@
 
             $scope.addModule = function () {
                 var onModuleAdded = function (moduleObj) {
-                    console.log(moduleObj);
-                    var node = mapModuleNode(moduleObj.Entity)
+                    var node = mapModuleNode(moduleObj.Entity);
+                    onAddedModule(menuItems, node);
                     treeAPI.createNode(node);
-                    for (var i = 0; i < menuItems.length; i++) {
-                        if (menuItems[i].nodeId == moduleObj.ParentId) {
-                            if (menuItems[i].Childs == undefined)
-                                menuItems[i].Childs = [];
-                            menuItems[i].Childs.push(node);
-                        }
-                    }
                     treeAPI.refreshTree(menuItems);
                 };
 
-                VR_Sec_ModuleService.addModule(onModuleAdded);
+                VR_Sec_ModuleService.addModule(onModuleAdded, $scope.selectedMenuItem.Id);
             }
 
             $scope.editModule = function()
             {
                 var onModuleUpdated = function (moduleObj) {
-                    console.log(moduleObj);
-                    var node = mapModuleNode(moduleObj.Entity)
+                    var node = mapModuleNode(moduleObj.Entity);
                     treeAPI.createNode(node);
-                    console.log($scope.nodes)
-                    for (var i = 0; i < menuItems.length; i++) {
-                        var menuItem = menuItems[i];
-                        if (menuItems[i].nodeId == moduleObj.ParentId) {
-                            for (var j = 0; j < menuItem.Childs.length; j++)
-                            {
-                                if (menuItem.Childs[j].Id == node.Id)
-                                    menuItem.Childs[j] = node;
-                            }
-                        }
-                       
-                    }
-                    treeAPI.refreshTree(menuItems);
+                    onEditModule(menuItems[0].Childs, moduleObj.Entity, node);
+                    //  treeAPI.refreshTree(menuItems);
                 };
 
                 VR_Sec_ModuleService.editModule($scope.selectedMenuItem.Id,onModuleUpdated);
@@ -92,6 +87,7 @@
             $scope.ranking = function()
             {
                 var onRankingSuccess = function (moduleObj) {
+
                 };
 
                 VR_Sec_MenuService.openRankingEditor(onRankingSuccess);
@@ -128,12 +124,18 @@
             return treeLoadDeferred.promise;
 
             function loadMenuItems() {
-                return VR_Sec_MenuAPIService.GetAllMenuItems(false).then(function (response) {
+                return VR_Sec_MenuAPIService.GetAllMenuItems(false,true).then(function (response) {
                     if (response) {
-                        menuItems = [];
+                        var menus = [];
                         for (var i = 0; i < response.length; i++) {
-                            menuItems.push(response[i]);
+                            menus.push(response[i]);
                         }
+                        var menu = {
+                            Name: "Root",
+                            Childs: menus,
+                            isOpened: true
+                        }
+                        menuItems.push(menu);
                     }
                 });
             }
@@ -148,6 +150,44 @@
             }
             return node;
         }
+
+        function onEditModule(menuItems, changedObject, newNode) {
+
+            if (menuItems != undefined)
+            {
+                for (var i = 0; i < menuItems.length ; i++) {
+                    var menuItem = menuItems[i];
+                    if (menuItem.Id != changedObject.ModuleId)///module
+                    {
+                        onEditModule(menuItem.Childs, changedObject, newNode);
+                    } else if (menuItem.Id == changedObject.ModuleId)//View
+                    {
+                        menuItems[i] = newNode;
+                    }
+                }
+            }
+           
+        }
+
+        function onAddedModule(menuItems, newNode) {
+
+            if (menuItems != undefined) {
+                for (var i = 0; i < menuItems.length ; i++) {
+                    var menuItem = menuItems[i];
+                    if (menuItem.Id != $scope.selectedMenuItem.Id)///module
+                    {
+                        onAddedModule(menuItem.Childs, newNode);
+                    } else if (menuItem.Id == $scope.selectedMenuItem.Id)//View
+                    {
+                        if (menuItems[i].Childs == undefined)
+                            menuItems[i].Childs = [];
+                        menuItems[i].Childs.push(newNode);
+                    }
+                }
+            }
+
+        }
+    
         //#endregion
     };
 

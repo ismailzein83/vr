@@ -41,7 +41,7 @@ namespace Vanrise.Security.Data.SQL
             }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
             object viewId;
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Name, view.Url, view.ModuleId,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Title, view.Url, view.ModuleId,
                serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
             insertedId = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);
@@ -61,7 +61,7 @@ namespace Vanrise.Security.Data.SQL
                     serialziedAudience = Common.Serializer.Serialize(view.Audience, true);
             }
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name, view.Url, view.ModuleId,
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Update", view.ViewId, view.Name,view.Title, view.Url, view.ModuleId,
                serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
             return (recordesEffected > 0);
         }
@@ -71,9 +71,9 @@ namespace Vanrise.Security.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool UpdateViewRank(int viewId, int rank)
+        public bool UpdateViewRank(int viewId,int moduleId, int rank)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_UpdateRank", viewId, rank);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_View_UpdateRank", viewId,moduleId, rank);
             return (recordesEffected > 0);
         }
         public bool AreViewsUpdated(ref object updateHandle)

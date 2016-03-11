@@ -10,14 +10,15 @@
             GetAllMenuItems:GetAllMenuItems
         });
 
-        function GetMenuItems() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Menu', 'GetMenuItems'));
+        function GetMenuItems(withEmptyChilds) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Menu', 'GetMenuItems'), { withEmptyChilds: withEmptyChilds });
         }
 
-        function GetAllMenuItems(getOnlyAllowDynamic) {
+        function GetAllMenuItems(getOnlyAllowDynamic, withEmptyChilds) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, 'Menu', 'GetAllMenuItems'),
                 {
-                    getOnlyAllowDynamic: getOnlyAllowDynamic
+                    getOnlyAllowDynamic: getOnlyAllowDynamic,
+                    withEmptyChilds: withEmptyChilds
                 });
         }
     }

@@ -121,29 +121,50 @@ namespace Vanrise.Security.Business
             {
 
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                List<MenuItem> updatedView = menuManager.GetMenuItems(SecurityContext.Current.GetLoggedInUserId());
+                List<MenuItem> updatedView = menuManager.GetAllMenuItems(SecurityContext.Current.GetLoggedInUserId(), false);
                 updateOperationOutput.UpdatedObject = updatedView;
             }
             return updateOperationOutput;
         }
         public bool updateMenuChilds(List<MenuItem> updatedChildsMenuItem)
         {
+            int moduleIndex = 0;
             for (int i = 0; i < updatedChildsMenuItem.Count; i++)
             {
-                if (updatedChildsMenuItem[i].Childs == null || updatedChildsMenuItem[i].Childs.Count == 0)
-                    _dataManager.UpdateViewRank(updatedChildsMenuItem[i].Id, (i + 1 * 10));
-                else
+                var menuItem = updatedChildsMenuItem[i];
+                if(menuItem.MenuType == MenuType.Module)
                 {
-                    _moduleManager.UpdateModuleRank(updatedChildsMenuItem[i].Id, (i + 1 * 10));
-                    updateMenuChilds(updatedChildsMenuItem[i].Childs);
-                }
+                    _moduleManager.UpdateModuleRank(menuItem.Id, null, moduleIndex);
+                    PrepareViewsAndModulesObjects(menuItem.Childs, menuItem, 0, moduleIndex++);
 
+                }else if (menuItem.MenuType == MenuType.View)
+                { 
+                    UpdateViewRank(menuItem.Id,1,0);
+                }               
             }
             return true;
         }
-        public bool UpdateViewRank(int viewId,int rank)
+        public void PrepareViewsAndModulesObjects(List<MenuItem> childs, MenuItem parent, int viewIndex, int moduleIndex)
         {
-            return _dataManager.UpdateViewRank(viewId, rank);
+            if (childs != null)
+             {
+                for (int i = 0; i < childs.Count; i++) {
+                    var child = childs[i];
+                    if (child.MenuType == MenuType.View)
+                        UpdateViewRank(child.Id,parent.Id,viewIndex++);
+                    else {
+                        _moduleManager.UpdateModuleRank(child.Id,parent.Id, moduleIndex++);
+                        PrepareViewsAndModulesObjects(child.Childs, child,viewIndex, moduleIndex);
+                    }
+                }
+            }
+        }
+
+
+
+        public bool UpdateViewRank(int viewId,int moduleId,int rank)
+        {
+            return _dataManager.UpdateViewRank(viewId, moduleId,rank);
         }
         public IEnumerable<View> GetDynamicViews()
         {

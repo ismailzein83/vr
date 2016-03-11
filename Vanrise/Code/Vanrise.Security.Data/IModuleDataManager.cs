@@ -10,7 +10,7 @@ namespace Vanrise.Security.Data
     public interface IModuleDataManager : IDataManager
     {
         List<Vanrise.Security.Entities.Module> GetModules();
-        bool UpdateModuleRank(int moduleId, int rank);
+        bool UpdateModuleRank(int moduleId, int? parentId, int rank);
 
         bool AddModule(Module moduleObject, out int moduleId);
         bool UpdateModule(Module moduleObject);

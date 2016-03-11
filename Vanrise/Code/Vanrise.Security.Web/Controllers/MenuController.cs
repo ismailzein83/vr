@@ -21,16 +21,16 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("GetMenuItems")]
-        public IEnumerable<MenuItem> GetMenuItems()
+        public IEnumerable<MenuItem> GetMenuItems(bool withEmptyChilds = false)
         {
-            return _manager.GetMenuItems(SecurityContext.Current.GetLoggedInUserId());
+            return _manager.GetAllMenuItems(SecurityContext.Current.GetLoggedInUserId(), withEmptyChilds);
         }
 
         [HttpGet]
         [Route("GetAllMenuItems")]
-        public IEnumerable<MenuItem> GetAllMenuItems(bool getOnlyAllowDynamic = true)
+        public IEnumerable<MenuItem> GetAllMenuItems(bool getOnlyAllowDynamic = true,bool withEmptyChilds = false)
         {
-            return _manager.GetMenuItems(getOnlyAllowDynamic);
+            return _manager.GetMenuItems(getOnlyAllowDynamic, withEmptyChilds);
         }
     }
 }

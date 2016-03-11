@@ -187,6 +187,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Move',
                     class: 'glyphicon glyphicon-move'
                 }
+            case 'Ranking':
+                return {
+                    text: 'Ranking',
+                    class: 'glyphicon glyphicon-move'
+                }
             case 'Pricing':
                 return {
                     text: 'Pricing',

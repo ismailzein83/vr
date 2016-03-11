@@ -10,14 +10,17 @@
             editModule: editModule,
         });
 
-        function addModule(onModuleAdded) {
+        function addModule(onModuleAdded, parentId) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onModuleAdded = onModuleAdded;
             };
+            var parameters = {
+                parentId: parentId
+            };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/Menu/ModuleEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/Menu/ModuleEditor.html', parameters, modalSettings);
         }
 
         function editModule(moduleId, onModuleUpdated) {

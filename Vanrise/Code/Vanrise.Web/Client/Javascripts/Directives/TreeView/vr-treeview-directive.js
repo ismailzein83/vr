@@ -35,6 +35,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
             }
 
             function createTreeItemFromSource(sourceItem) {
+
                 var treeItem = {
                     sourceItem: sourceItem,
                     id: sourceItem[ctrl.datavaluefield],
@@ -56,6 +57,8 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                     treeItem.children = true;
                     treeItem.state.opened = false;
                 }
+                if (sourceItem.isLeaf)
+                    treeItem.icon = "glyphicon glyphicon-file";
                 return treeItem;
             }
 
@@ -92,9 +95,11 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 fillTreeFromDataSource(treeArray, datasource);
                 var treeData={
                     core: {
-                        'check_callback': true,
-                        data: function (obj, callback) {
 
+                        'check_callback': true,
+                        
+                        data: function (obj, callback) {
+                           
                             if (obj.id == '#')//root node
                                 callback.call(this, treeArray);
                             else {
@@ -114,8 +119,9 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                                 
                         }
                     },
-                    "state": { "key": "state_demo" },
-                   
+
+                    state: { "key": "state_demo" },
+          
                 }
                 var plugins = [];
                 if (ctrl.checkbox !== undefined)
@@ -124,14 +130,16 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                   
                 }
                 plugins.push("json_data");
+
+
                 if (ctrl.draggabletree != undefined) {
                     plugins.push("dnd");
                     treeData.core.check_callback = function (operation, node, parent, position, more) {
-                        
+                        //console.log(parent.original.sourceItem.Childs[position])
                         if (ctrl.movesettings != undefined) {
                           
                             if (ctrl.movesettings == 'samelevel') {
-                                
+
                                 if (operation === "copy_node" || operation === "move_node") {
                                     if (parent.id != node.parent) {
                                         return false;
@@ -141,10 +149,20 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                             }
                             else if (ctrl.movesettings == 'alllevels')
                                 return true;
-                        }
+                           
 
-                        
+                        }  else if (parent.original.sourceItem.Childs != null || parent.original.sourceItem.Childs.length > 0)//|| (parent.original.sourceItem.Childs[position] != undefined && parent.original.sourceItem.Childs[position].isLeaf))
+                        {
+                            if (parent.original.sourceItem.isLeaf) {
+                                return false;
+                            }
+                            else
+                                return true;
+                           // console.log(parent.original.sourceItem.Childs[position])
+                           
+                        }
                     };
+
                    
                 }
                 if (ctrl.state != undefined) {
@@ -158,6 +176,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 treeData.check_callback = true;
                 treeElement.jstree(treeData);
                 treeElement.bind("move_node.jstree", function (e, data) {
+
                     var jsonTree = treeElement.jstree(true).get_json('#', {});
                     var returnedTree=[];
                     getFullTreeData(returnedTree, jsonTree, treeElement);

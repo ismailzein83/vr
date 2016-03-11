@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Vanrise.Security.Entities
 {
+    public enum MenuType { Module = 0, View = 1 }
     public class MenuItem
     {
         public int Id { get; set; }
@@ -21,5 +22,7 @@ namespace Vanrise.Security.Entities
         public ViewType Type { get; set; }
         public bool AllowDynamic { get; set; }
         public int Rank { get; set; }
+
+        public MenuType MenuType { get; set; }
     }
 }

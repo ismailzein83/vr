@@ -1,6 +1,6 @@
 ﻿<div vr-modalcontent ng-controller="VR_Sec_RankingEditorController" vr-loader="isLoading" width="'30%'">
-    <vr-modalbody>
-        <vr-form name="formModuleEditor">
+    <vr-modalbody maxheight="'500px'">
+        <vr-form name="formRankingEditor">
             <vr-row>
                 <vr-columns width="fullrow">
                     <vr-section title="Location">
@@ -9,7 +9,6 @@
                                      on-ready="menuReady"
                                      selecteditem="selectedMenuNode"
                                      onvaluechanged="onSelectedMenuNodechanged"
-                                     movesettings="alllevels"
                                      wholerow
                                      draggabletree
                                      state>
@@ -22,7 +21,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formModuleEditor" data-onclick="save"></vr-button>
+                <vr-button type="Save" formname="formRankingEditor" data-onclick="save" haspermission="hasRankingPermission"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
