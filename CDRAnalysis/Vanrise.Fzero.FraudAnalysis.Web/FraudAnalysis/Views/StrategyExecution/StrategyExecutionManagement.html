@@ -71,7 +71,7 @@
                     <vr-datagridcolumn headertext="'To CDR Date'" field="'Entity.ToDate'" type="'Datetime'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Exec. By'" field="'ExecutedByName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Exec. Date'" field="'Entity.ExecutionDate'" type="'Datetime'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Duration (min)'" field="'Entity.ExecutionDuration'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Duration (min)'">{{dataItem.Entity.ExecutionDuration/60 | number:1}}</vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Cancelled By'" field="'CancelledByName'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Cancellation Date'" field="'Entity.CancellationDate'" type="'Datetime'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Subscribers'" field="'Entity.NumberofSubscribers'"></vr-datagridcolumn>
