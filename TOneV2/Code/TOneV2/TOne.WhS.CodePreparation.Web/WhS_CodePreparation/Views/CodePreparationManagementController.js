@@ -152,13 +152,12 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.isLoadingFilter = true;
 
-            UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans]).then(function () {
-                $scope.isLoading = false;
-            }).catch(function (error) {
-                $scope.isLoading = false;
+            UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoadingFilter = false;
             });
         }
 

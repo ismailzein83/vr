@@ -80,13 +80,13 @@
         }
 
         function loadAllControls() {
-            $scope.isLoading = true;
+            $scope.isLoadingFilter = true;
             return UtilsService.waitMultipleAsyncOperations([loadSellingProduct, loadCarrierAccount])
               .catch(function (error) {
                   VRNotificationService.notifyExceptionWithClose(error, $scope);
               })
              .finally(function () {
-                 $scope.isLoading = false;
+                 $scope.isLoadingFilter = false;
              });
         }
 

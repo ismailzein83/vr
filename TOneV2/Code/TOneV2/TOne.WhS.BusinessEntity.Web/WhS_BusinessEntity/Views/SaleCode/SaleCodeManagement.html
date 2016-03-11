@@ -1,6 +1,6 @@
-﻿<vr-panel ng-controller="WhS_BE_SaleCodeManagementController" vr-loader="isGettingData">
+﻿<vr-panel ng-controller="WhS_BE_SaleCodeManagementController" >
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="true"></vr-whs-be-sellingnumberplan-selector>

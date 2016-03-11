@@ -89,7 +89,7 @@
           
         }
         function load() {           
-            $scope.isLoading = true;
+            $scope.isLoadingFilter = true;
             loadAllControls();
         }
         function loadAllControls() {
@@ -98,7 +98,7 @@
                   VRNotificationService.notifyExceptionWithClose(error, $scope);
               })
              .finally(function () {
-                 $scope.isLoading = false;
+                 $scope.isLoadingFilter = false;
              });
         }
       

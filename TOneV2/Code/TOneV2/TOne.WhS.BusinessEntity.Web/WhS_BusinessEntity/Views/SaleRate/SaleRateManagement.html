@@ -1,12 +1,12 @@
-﻿<vr-panel ng-controller="WhS_BE_SaleRateManagementController" vr-loader="isGettingData">
+﻿<vr-panel ng-controller="WhS_BE_SaleRateManagementController" >
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="true"></vr-whs-be-sellingnumberplan-selector>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="selectedSellingNumberPlan!=undefined">
-                    <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" >
+                    <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady">
                     </vr-whs-be-salezone-selector>
                 </vr-columns>
                 <vr-columns width="normal">
@@ -35,7 +35,7 @@
                                                        hideremoveicon isrequired="showCarrierAccountSelector">
 
                     </vr-whs-be-carrieraccount-selector>
-                </vr-columns>     
+                </vr-columns>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="Effective On" value="effectiveOn"></vr-datetimepicker>
                 </vr-columns>
