@@ -102,12 +102,7 @@ namespace Vanrise.Queueing
                     return Caching.CacheObjectSize.ExtraSmall;
                 }
             }
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return this.IsCacheExpired();
-            }
-
-            public bool IsCacheExpired()
+            protected override bool ShouldSetCacheExpired()
             {
                 return _queueDataManager.AreQueuesUpdated(ref _updateHandle);
             }

@@ -140,7 +140,7 @@ namespace Vanrise.Queueing
 
         public void CreateQueueIfNotExists(int executionFlowId, string stageName, string queueItemFQTN, string queueName, string queueTitle = null, IEnumerable<string> sourceQueueNames = null, QueueSettings queueSettings = null)
         {
-            queueTitle = queueTitle ?? queueName;
+            queueTitle = queueTitle ?? queueName;            
             if (!QueueExists(queueName))
             {
                 try
@@ -155,9 +155,25 @@ namespace Vanrise.Queueing
             }
             else
             {
-                IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
-                dataManagerQueue.UpdateQueueInstance(queueName, stageName, queueTitle, queueSettings);
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>().SetCacheExpired();
+                QueueInstance queueInstance = _queueManager.GetQueueInstance(queueName);
+                if (queueInstance.StageName != stageName || queueInstance.Title != queueTitle || !AreSameSettings(queueInstance.Settings, queueSettings))
+                {
+                    IQueueDataManager dataManagerQueue = QDataManagerFactory.GetDataManager<IQueueDataManager>();
+                    dataManagerQueue.UpdateQueueInstance(queueName, stageName, queueTitle, queueSettings);
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<QueueInstanceManager.CacheManager>().SetCacheExpired();
+                }
+            }
+        }
+
+        private bool AreSameSettings(QueueSettings queueSettings1, QueueSettings queueSettings2)
+        {
+            if(queueSettings1 == null || queueSettings2 == null)
+            {
+                return queueSettings1 == queueSettings2;
+            }
+            else
+            {
+                return Serializer.Serialize(queueSettings1) == Serializer.Serialize(queueSettings2);
             }
         }
     }

@@ -237,12 +237,7 @@ namespace Vanrise.Queueing
             IQueueExecutionFlowDataManager _dataManager = QDataManagerFactory.GetDataManager<IQueueExecutionFlowDataManager>();
             object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return this.IsCacheExpired();
-            }
-
-            public bool IsCacheExpired()
+            protected override bool ShouldSetCacheExpired()
             {
                 return _dataManager.AreExecutionFlowsUpdated(ref _updateHandle);
             }

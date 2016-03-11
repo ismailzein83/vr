@@ -164,11 +164,6 @@ namespace Vanrise.Queueing
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return this.IsCacheExpired();
-            }
-
-            public bool IsCacheExpired()
-            {
                 return _dataManager.AreQueueExecutionFlowDefinitionUpdated(ref _updateHandle);
             }
         }
