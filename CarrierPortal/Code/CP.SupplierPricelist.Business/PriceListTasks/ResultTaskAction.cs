@@ -41,15 +41,19 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                 {
                     priceListProgressOutput.PriceListStatus = PriceListStatus.ResultFailedWithRetry;
                     priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
-                    if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
-                        pricelist.ResultMaxRetryCount = pricelist.ResultMaxRetryCount + 1;
-                    else
-                    {
-                        priceListProgressOutput.PriceListStatus = PriceListStatus.ResultFailedWithNoRetry;
-                        priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
-                    }
                 }
-
+                switch (priceListProgressOutput.PriceListStatus)
+                {
+                    case PriceListStatus.ResultFailedWithRetry:
+                        if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
+                            pricelist.ResultMaxRetryCount = pricelist.ResultMaxRetryCount + 1;
+                        else
+                        {
+                            priceListProgressOutput.PriceListStatus = PriceListStatus.ResultFailedWithNoRetry;
+                            priceListProgressOutput.PriceListResult = PriceListResult.Rejected;
+                        }
+                        break;
+                }
                 if (pricelist.Status != priceListProgressOutput.PriceListStatus ||
                     pricelist.Result != priceListProgressOutput.PriceListResult)
                 {
