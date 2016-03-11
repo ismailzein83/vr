@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{80c3bd4f-47ba-4a62-8ccf-296334a40376}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -61,5 +61,20 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="InterConnect_BE\" />
+    <Folder Include="InterConnect_BE\Tables\" />
+    <Folder Include="InterConnect_BE\Stored Procedures\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="InterConnect_BE\Tables\OperatorProfile.sql" />
+    <Build Include="InterConnect_BE\Tables\OperatorAccount.sql" />
+    <Build Include="InterConnect_BE\Stored Procedures\sp_OperatorAccount_Update.sql" />
+    <Build Include="InterConnect_BE\Stored Procedures\sp_OperatorAccount_Insert.sql" />
+    <Build Include="InterConnect_BE\Stored Procedures\sp_OperatorAccount_GetAll.sql" />
+    <Build Include="InterConnect_BE\Stored Procedures\sp_OperatorProfile_GetAll.sql" />
+    <Build Include="InterConnect_BE\Stored Procedures\sp_OperatorProfile_insert.sql" />
+    <Build Include="InterConnect_BE\Stored Procedures\sp_OperatorProfile_Update.sql" />
+    <Build Include="Security\InterConnect_BE.sql" />
   </ItemGroup>
 </Project>
