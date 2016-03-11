@@ -2,33 +2,35 @@
 RankingEditorController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRNotificationService', 'UtilsService', 'VR_Sec_MenuAPIService'];
 function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationService, UtilsService, VR_Sec_MenuAPIService) {
     var treeAPI;
+    var maxMenuLevels = 2;
+    var menuItemId = 0;
     defineScope();
     load();
     function defineScope() {
         $scope.menu = [];
 
         $scope.selectedMenuNode;
+
         $scope.menuReady = function (api) {
             treeAPI = api;
             if ($scope.menu.length > 0) {
                 treeAPI.refreshTree($scope.menu);
             }
         }
+
         $scope.hasRankingPermission = function () {
             return VR_Sec_ViewAPIService.HasUpdateViewsRankPermission();
 
         };
+
         $scope.save = function () {
-            if (treeAPI.getTree() != undefined) {
-                var menu = treeAPI.getTree();
-                var changedMenu = menu[0].Childs;
-                console.log(changedMenu);
-                var modules = [];
-                var views = [];
+            if (treeAPI.getTree != undefined) {
+
+                var changedMenu = builMenuItemsForSave();
                 return VR_Sec_ViewAPIService.UpdateViewsRank(changedMenu).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("MenuItems", response)) {
-                        if ($scope.onPageUpdated != undefined)
-                            $scope.onPageUpdated(response.UpdatedObject);
+                        if ($scope.onRankingSuccess != undefined)
+                            $scope.onRankingSuccess(response.UpdatedObject);
                         $scope.modalContext.closeModal();
                     }
                 })
@@ -38,6 +40,21 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
         $scope.close = function () {
             $scope.modalContext.closeModal();
         };
+
+        $scope.onMoveMenuItem = function (node, parent)
+        {
+            if (parent.isRoot && node.isLeaf)
+                return false;
+            if (parent.isLeaf)
+                return false;
+
+            var menu = $scope.menu;
+            if (treeAPI.getTree != undefined)
+                menu = treeAPI.getTree();
+            console.log(getNodeLevel(parent, menu));
+            return isAllowedNodeLevel(node, getNodeLevel(parent, menu) + 1);
+          
+        }
     }
 
     function load() {
@@ -70,6 +87,7 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
             var menu = {
                 Name: "Root",
                 Childs: $scope.menuItems,
+                isRoot:true,
                 isOpened: true
             }
             $scope.menu.push(menu);
@@ -85,36 +103,53 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
             return;
         for(var i=0 ; i<childs.length;i++)
         {
-
-            if (childs[i].MenuType == 1)
+            var child = childs[i];
+            if (child.MenuType == 1)
             {
                 childs[i].isLeaf = true;
-                setLeafNodes(childs[i].Childs)
+                childs[i].ItemId = menuItemId++;
+                setLeafNodes(child.Childs)
             }
                 
             else
             {
                 childs[i].isLeaf = false;
-                setLeafNodes(childs[i].Childs)
+                childs[i].ItemId = menuItemId++;
+                setLeafNodes(child.Childs)
             }
                 
         }
     }
 
-    function prepareChangedViews(menuItems)
+    function builMenuItemsForSave()
     {
-        var menu = [];
+        var preparedMenuItems = [];
+        var menu = treeAPI.getTree();
+        prepareMenuItems(menu[0].Childs, preparedMenuItems);
+        console.log(preparedMenuItems);
+        return preparedMenuItems;
+    }
+
+    function prepareMenuItems(menuItems, preparedMenuItems)
+    {
         for (var i = 0; i < menuItems.length ; i++) {
-           var  menuItem = menuItems[i];
-            if (!menuItem.isLeaf)///module
-            {
-                prepareViews(menuItem.Childs, menuItem, menu);
-            } else if (menuItem.MenuType == 1) //View
-            {
-                views.push({ ModuleId: menuItem.Id })
+            var menuItem = menuItems[i];
+            var preparedMenuItem = {
+                Id: menuItem.Id,
+                Location: menuItem.Location,
+                MenuType: menuItem.MenuType,
+                Name: menuItem.Name,
+                Rank: menuItem.Rank,
+                Type: menuItem.Type,
+                Title: menuItem.Title,
+                AllowDynamic: menuItem.AllowDynamic,
+                Childs: []
             }
+            preparedMenuItems.push(preparedMenuItem);
+            prepareMenuItems(menuItem.Childs, preparedMenuItem.Childs);
         }
     }
+
     function prepareViews(childs, parent, menu)
     {
        
@@ -132,6 +167,42 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
         }
        
     }
+
+    function getNodeLevel(node,items)
+    {
+        if (items == undefined)
+            return;
+        for (var i = 0; i < items.length; i++) {
+            var menuItem = items[i];
+            if (node.ItemId == menuItem.ItemId)
+                return 0;
+            var obj = getNodeLevel(node, menuItem.Childs);
+            if (obj != undefined)
+                return obj + 1;
+        }     
+    }
+    function isAllowedNodeLevel(node, level) {
+        if (node == undefined)
+            return true;
+        if (node.isLeaf)
+            return level <= maxMenuLevels + 1;
+
+        //not leaf
+        if (level > maxMenuLevels)
+            return false;
+
+        //level < 2
+        if (node.Childs == undefined || node.Childs.length == 0)
+            return true;
+
+        for (var i = 0; i < node.Childs.length; i++) {
+            if (!isAllowedNodeLevel(node.Childs[i], level + 1))
+                return false;
+        }
+
+        return true;
+    }
+
 };
 
 appControllers.controller('VR_Sec_RankingEditorController', RankingEditorController);

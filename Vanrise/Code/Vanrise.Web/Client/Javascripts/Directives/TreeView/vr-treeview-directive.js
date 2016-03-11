@@ -19,10 +19,13 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
             state: '@',
             movesettings: '@',
             hasremotechildrenfield:'@',
-            loadremotechildren: '='
+            loadremotechildren: '=',
+            maxlevel: '@',
+            onmoveitem:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+            
             var treeElement = $element.find('#divTree');
 
             var incrementalId = 0;
@@ -135,7 +138,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 if (ctrl.draggabletree != undefined) {
                     plugins.push("dnd");
                     treeData.core.check_callback = function (operation, node, parent, position, more) {
-                        //console.log(parent.original.sourceItem.Childs[position])
+                       
                         if (ctrl.movesettings != undefined) {
                           
                             if (ctrl.movesettings == 'samelevel') {
@@ -151,17 +154,17 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                                 return true;
                            
 
-                        }  else if (parent.original.sourceItem.Childs != null || parent.original.sourceItem.Childs.length > 0)//|| (parent.original.sourceItem.Childs[position] != undefined && parent.original.sourceItem.Childs[position].isLeaf))
-                        {
-                            if (parent.original.sourceItem.isLeaf) {
-                                return false;
-                            }
-                            else
-                                return true;
-                           // console.log(parent.original.sourceItem.Childs[position])
-                           
                         }
-                    };
+                        if (ctrl.onmoveitem != undefined && typeof (ctrl.onmoveitem) == 'function') {
+                            if (parent.original != undefined)
+                            {
+                                return ctrl.onmoveitem(node.original.sourceItem, parent.original.sourceItem);
+                            }
+
+                            
+                        }
+                    }
+                    
 
                    
                 }

@@ -121,7 +121,7 @@ namespace Vanrise.Security.Business
             {
 
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                List<MenuItem> updatedView = menuManager.GetAllMenuItems(SecurityContext.Current.GetLoggedInUserId(), false);
+                List<MenuItem> updatedView = menuManager.GetMenuItems(false, true);
                 updateOperationOutput.UpdatedObject = updatedView;
             }
             return updateOperationOutput;

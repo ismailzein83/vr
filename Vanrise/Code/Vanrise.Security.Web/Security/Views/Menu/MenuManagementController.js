@@ -87,7 +87,19 @@
             $scope.ranking = function()
             {
                 var onRankingSuccess = function (moduleObj) {
-
+                    menuItems.length = 0;
+                    var menus = [];
+                    for (var i = 0; i < moduleObj.length; i++) {
+                        menus.push(moduleObj[i]);
+                    }
+                    var menu = {
+                        Name: "Root",
+                        Childs: menus,
+                        isRoot: true,
+                        isOpened: true
+                    }
+                    menuItems.push(menu);
+                    treeAPI.refreshTree(menuItems);
                 };
 
                 VR_Sec_MenuService.openRankingEditor(onRankingSuccess);
@@ -133,6 +145,7 @@
                         var menu = {
                             Name: "Root",
                             Childs: menus,
+                            isRoot:true,
                             isOpened: true
                         }
                         menuItems.push(menu);
@@ -177,7 +190,7 @@
                     if (menuItem.Id != $scope.selectedMenuItem.Id)///module
                     {
                         onAddedModule(menuItem.Childs, newNode);
-                    } else if (menuItem.Id == $scope.selectedMenuItem.Id)//View
+                    } else if (menuItem.Id == $scope.selectedMenuItem.Id || $scope.selectedMenuItem.isRoot)//View
                     {
                         if (menuItems[i].Childs == undefined)
                             menuItems[i].Childs = [];
