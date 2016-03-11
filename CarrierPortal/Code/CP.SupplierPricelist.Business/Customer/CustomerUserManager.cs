@@ -36,7 +36,7 @@ namespace CP.SupplierPricelist.Business
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             var customers = GetCachedCustomersUsers();
-            return customers.GetRecord(userId)!=null;
+            return customers.GetRecord(userId) != null;
         }
 
         public bool IsUserCustomer(int userId)
@@ -70,6 +70,7 @@ namespace CP.SupplierPricelist.Business
             {
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
                 insertOperationOutput.Message = "This user is already assigned to another customer.";
+                insertOperationOutput.ShowExactMessage = true;
 
             }
             return insertOperationOutput;
