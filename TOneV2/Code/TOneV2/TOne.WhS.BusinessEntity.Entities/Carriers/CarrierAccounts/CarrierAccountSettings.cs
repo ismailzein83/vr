@@ -9,6 +9,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     public enum ActivationStatus { Active = 0, Inactive = 1, Testing = 2 }
     public class CarrierAccountSettings
     {
-        public ActivationStatus ActivationStatus { get; set; } 
+        public ActivationStatus ActivationStatus { get; set; }
+
+        public int CurrencyId { get; set; }
+
     }
 }

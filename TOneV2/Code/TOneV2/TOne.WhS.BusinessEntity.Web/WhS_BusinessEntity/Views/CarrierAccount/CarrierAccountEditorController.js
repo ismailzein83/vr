@@ -8,6 +8,9 @@
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var currencySelectorAPI;
+        var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var sellingNumberPlanDirectiveAPI;
             
         var isEditMode;
@@ -48,6 +51,12 @@
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
 
+            }
+
+
+            $scope.scopeModal.onCurrencySelectorReady = function (api) {
+                currencySelectorAPI = api;
+                currencySelectorReadyPromiseDeferred.resolve();
             }
 
             $scope.scopeModal.onCarrierTypeSelectionChanged = function () {
@@ -97,7 +106,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadFilterBySection, loadCarrierProfileDirective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCarrierAccountType, loadCarrierActivationStatusType, loadFilterBySection, loadCarrierProfileDirective, loadCurrencySelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -125,6 +134,23 @@
             return loadCarrierProfilePromiseDeferred.promise;
         }
 
+        function loadCurrencySelector() {
+            var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            currencySelectorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = {
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.CurrencyId :  undefined)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, payload, loadCurrencySelectorPromiseDeferred);
+
+            })
+
+            return loadCurrencySelectorPromiseDeferred.promise;
+
+        }
+
         function getCarrierAccount() {
             return WhS_BE_CarrierAccountAPIService.GetCarrierAccount(carrierAccountId)
                 .then(function (carrierAccount) {
@@ -138,10 +164,13 @@
                 NameSuffix: $scope.scopeModal.name,
                 AccountType: $scope.scopeModal.selectedCarrierAccountType.value,
                 CarrierProfileId: carrierProfileDirectiveAPI.getSelectedIds(),
-                SellingNumberPlanId:sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 SupplierSettings: {},
                 CustomerSettings: {},
-                CarrierAccountSettings: { ActivationStatus: $scope.scopeModal.selectedActivationStatus.value}
+                CarrierAccountSettings: {
+                    ActivationStatus: $scope.scopeModal.selectedActivationStatus.value,
+                    CurrencyId: currencySelectorAPI.getSelectedIds()
+                }
             };
             return obj;
         }
