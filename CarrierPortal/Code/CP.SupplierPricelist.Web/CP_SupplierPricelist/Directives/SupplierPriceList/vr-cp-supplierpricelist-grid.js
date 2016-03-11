@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCpSupplierpricelistGrid", ["UtilsService", "CP_SupplierPricelist_SupplierPriceListAPIService", "CP_SupplierPricelist_SupplierPriceListService", "FileAPIService",
-function (utilsService, supplierPriceListApiService, supplierPriceListService, fileApiService) {
+app.directive("vrCpSupplierpricelistGrid", ["UtilsService", "CP_SupplierPricelist_SupplierPriceListAPIService", "CP_SupplierPricelist_SupplierPriceListService", "FileAPIService", "VRNotificationService",
+function (utilsService, supplierPriceListApiService, supplierPriceListService, fileApiService, vrNotificationService) {
 
     function SupplierPriceListGrid($scope, ctrl) {
 
@@ -90,10 +90,14 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
                     });
         }
         function downloadAlertSheet(dataItem) {
-            fileApiService.DownloadFile(dataItem.Entity.AlertFileId)
+            if (dataItem.Entity.AlertFileId != 0) {
+                fileApiService.DownloadFile(dataItem.Entity.AlertFileId)
                     .then(function (response) {
                         utilsService.downloadFile(response.data, response.headers);
                     });
+            } else {
+                vrNotificationService.showWarning("No alert file generated.");
+            }
         }
         this.initializeController = initializeController;
 
