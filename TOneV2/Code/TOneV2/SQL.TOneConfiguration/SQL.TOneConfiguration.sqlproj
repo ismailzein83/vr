@@ -267,6 +267,8 @@
     <Build Include="genericdata\Stored Procedures\sp_ExtensibleBEItem_GetAll.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BusinessEntityDefinition_Update.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BusinessEntityDefinition_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_Module_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_Module_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
