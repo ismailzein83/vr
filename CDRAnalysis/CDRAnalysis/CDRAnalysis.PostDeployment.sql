@@ -100,7 +100,7 @@ as (select * from (values
 (1,'_Filter_1',0,'Ratio Incoming Calls on Outgoing Calls','Ratio','MinValue = 0.01, MaxValue = 0.99, DecimalPrecision = 2',0,1,0.010,0.990,2),
 (2,'_Filter_2',0,'Count of Distinct Called Parties','Count','MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0',0,0,1.000,999999.000,0),
 (3,'_Filter_3',0,'Count of Outgoing Calls','Count','MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0',0,0,1.000,999999.000,0),
-(4,'_Filter_4',1,'Count of Total Connected BTS','Count','MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0',0,1,1.000,999999.000,0),
+(4,'_Filter_4',1,'Count of Total Connected BTS','Count','MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0',0,0,1.000,999999.000,0),
 (5,'_Filter_5',0,'Total Originated Volume in Minutes','Volume','MinValue = 0.01, MaxValue = float.MaxValue, DecimalPrecision = 2',0,0,0.010,999999.000,2),
 (6,'_Filter_6',1,'Count of Total IMEIs','Count','MinValue = 0, MaxValue = 100, DecimalPrecision = 0',0,0,0.000,100.000,0),
 (7,'_Filter_7',0,'Ratio Average Incoming Duration on Average Outgoing Duration','Ratio','MinValue = 0.01, MaxValue = 0.99, DecimalPrecision = 2',0,1,0.010,0.990,2),
