@@ -99,9 +99,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Databases\IDs ranges\Transaction.txt" />
     <Content Include="Databases\PersistenceDB\SqlWorkflowInstanceStoreLogic.sql" />
     <Content Include="Databases\PersistenceDB\SqlWorkflowInstanceStoreSchema.sql" />
-    <Content Include="Databases\PostScripts IDs ranges.txt" />
+    <Content Include="Databases\IDs ranges\Configuration.txt" />
     <Content Include="Databases\TrackingDB\Data.sql" />
     <Content Include="Databases\TrackingDB\Schema.sql" />
     <Content Include="Databases\TransactionDB\Data.sql" />

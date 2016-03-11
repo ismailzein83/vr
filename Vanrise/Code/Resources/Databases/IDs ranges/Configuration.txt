@@ -1,4 +1,4 @@
-﻿Below Ranges should be respected while adding new data to post deployment scripts in order to prevent conflicts in merging data
+﻿Below Ranges should be respected while adding new data to post deployment scripts for Configuration DB  in order to prevent conflicts in merging data
 
 Components
 ==========
