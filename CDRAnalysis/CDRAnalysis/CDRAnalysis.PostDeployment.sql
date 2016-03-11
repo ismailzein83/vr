@@ -107,7 +107,7 @@ as (select * from (values
 (8,'_Filter_8',1,'Ratio OffNet Originated Calls on OnNet Originated Calls','Ratio','MinValue = 0.01, MaxValue = float.MaxValue, DecimalPrecision = 2',0,1,0.010,999999.000,2),
 (9,'_Filter_9',0,'Count of Daily Active Hours','Count','MinValue = 1, MaxValue = 24, DecimalPrecision = 0',1,0,1.000,24.000,0),
 (10,'_Filter_10',0,'Distinct Called Parties during Night Period','Count','MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0',1,0,1.000,999999.000,0),
-(11,'_Filter_11',1,'Count of Sent SMSs','Count','MinValue = 0, MaxValue = int.MaxValue, DecimalPrecision = 0',0,1,0.000,999999.000,0),
+(11,'_Filter_11',1,'Count of Sent SMSs','Count','MinValue = 0, MaxValue = int.MaxValue, DecimalPrecision = 0',0,0,0.000,999999.000,0),
 (12,'_Filter_12',0,'Ratio Distinct Called Parties on Total Outgoing Calls','Ratio','MinValue = 0.01, MaxValue = 1.00, DecimalPrecision = 2',0,0,0.010,1.000,2),
 (13,'_Filter_13',1,'Ratio International Outgoing Calls on Outgoing Calls','Ratio','MinValue = 0.01, MaxValue = 1.00, DecimalPrecision = 2',0,0,0.010,1.000,2),
 (14,'_Filter_14',0,'Count of Outgoing Calls during Peak Hours','Count','MinValue = 1, MaxValue = int.MaxValue, DecimalPrecision = 0',1,0,1.000,999999.000,0),
