@@ -230,7 +230,7 @@
             function resolveDeferredAndNotifyInfo() {
                 saveDeferred.resolve();
                 $scope.isLoading = false;
-                VRNotificationService.showInformation('No changes made');
+                VRNotificationService.showInformation('No changes were made');
             }
         }
     }
