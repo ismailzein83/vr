@@ -12,6 +12,13 @@ namespace Vanrise.Common.Business.EntitySynchronization
         where TItem : IItem
         where TSourceItemReader : ISourceItemReader<TSourceItem>
     {
+        protected TSourceItemReader SourceItemReader
+        {
+            get
+            {
+                return _sourceItemReader;
+            }
+        }
         TSourceItemReader _sourceItemReader;
 
         public SourceItemSynchronizer(TSourceItemReader sourceItemReader)

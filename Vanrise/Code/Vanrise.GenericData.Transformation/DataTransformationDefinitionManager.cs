@@ -73,7 +73,7 @@ namespace Vanrise.GenericData.Transformation
 
             if (insertActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataTransformationDefinitions");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 dataTransformationDefinition.DataTransformationDefinitionId = dataTransformationDefinitionId;
                 insertOperationOutput.InsertedObject = DataTransformationDefinitionDetailMapper(dataTransformationDefinition);
@@ -96,7 +96,7 @@ namespace Vanrise.GenericData.Transformation
 
             if (updateActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataTransformationDefinitions");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataTransformationDefinitionDetailMapper(dataTransformationDefinition);
             }
@@ -172,11 +172,6 @@ namespace Vanrise.GenericData.Transformation
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired()
-            {
-                return this.IsCacheExpired();
-            }
-            
-            public bool IsCacheExpired()
             {
                 return _dataManager.AreDataTransformationDefinitionUpdated(ref _updateHandle);
             }

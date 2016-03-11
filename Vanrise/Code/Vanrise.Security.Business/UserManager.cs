@@ -86,7 +86,7 @@ namespace Vanrise.Security.Business
 
             if (insertActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetUsers");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 userObject.UserId = userId;
                 insertOperationOutput.InsertedObject = UserDetailMapper(userObject);
@@ -110,7 +110,7 @@ namespace Vanrise.Security.Business
 
             if (updateActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetUsers");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = UserDetailMapper(userObject);
             }
@@ -149,7 +149,7 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             if (updateActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetUsers");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = userProfileObject;
             }

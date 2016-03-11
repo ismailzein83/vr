@@ -242,7 +242,7 @@ namespace Vanrise.Security.Business
                 }
             }
 
-            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetPermissions");
+            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return updateOperationOutput;
         }
 
@@ -256,7 +256,7 @@ namespace Vanrise.Security.Business
             if (deleted)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetPermissions");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {

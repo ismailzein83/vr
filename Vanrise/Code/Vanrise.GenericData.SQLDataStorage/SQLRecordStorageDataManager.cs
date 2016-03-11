@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.SQLDataStorage
 {
-    internal class SQLRecordStorageDataManager : BaseSQLDataManager, IDataRecordDataManager
+    internal class SQLRecordStorageDataManager : BaseSQLDataManager, IDataRecordDataManager, ISummaryRecordDataManager
     {
         SQLDataStoreSettings _dataStoreSettings;
         SQLDataRecordStorageSettings _dataRecordStorageSettings;
         DataRecordStorage _dataRecordStorage;
+        SummaryTransformationDefinition _summaryTransformationDefinition;
 
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings)
             : base(dataStoreSettings.ConnectionString, false)
@@ -25,6 +28,12 @@ namespace Vanrise.GenericData.SQLDataStorage
             : this(dataStoreSettings, dataRecordStorageSettings)
         {
             this._dataRecordStorage = dataRecordStorage;
+        }
+
+        internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage, SummaryTransformationDefinition summaryTransformationDefinition)
+            : this(dataStoreSettings, dataRecordStorageSettings, dataRecordStorage)
+        {
+            this._summaryTransformationDefinition = summaryTransformationDefinition;
         }
 
         public void ApplyStreamToDB(object stream)
@@ -170,5 +179,68 @@ namespace Vanrise.GenericData.SQLDataStorage
         }
 
         #endregion
+
+        public void InsertSummaryRecords(List<dynamic> records)
+        {
+            var dbApplyStream = this.InitialiazeStreamForDBApply();
+            foreach(var record in records)
+            {
+                this.WriteRecordToStream(record, dbApplyStream);
+            }
+            var readyStream = this.FinishDBApplyStream(dbApplyStream);
+            this.ApplyStreamToDB(readyStream);
+        }
+
+        public void UpdateSummaryRecords(List<dynamic> records)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<dynamic> GetExistingSummaryRecords(DateTime batchStart, DateTime batchEnd)
+        {
+            var recortTypeManager = new DataRecordTypeManager();
+            var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
+            if (recordRuntimeType == null)
+                throw new NullReferenceException(String.Format("recordRuntimeType '{0}'", _dataRecordStorage.DataRecordTypeId));
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT #COLUMNS# FROM #TABLE# WHERE #BATCHSTARTCOLUMN# >= @BatchStart AND #BATCHENDCOLUMN# < @BatchEnd");
+            StringBuilder columnsBuilder = new StringBuilder();
+            string batchStartColumnName = null;
+            string batchEndColumnName = null;
+            foreach(var columnSetting in _dataRecordStorageSettings.Columns)
+            {
+                if (columnsBuilder.Length > 0)
+                    columnsBuilder.Append(", ");
+                columnsBuilder.Append(columnSetting.ColumnName);
+                if (columnSetting.ValueExpression == _summaryTransformationDefinition.BatchStartFieldName)
+                    batchStartColumnName = columnSetting.ColumnName;
+                else if (columnSetting.ValueExpression == _summaryTransformationDefinition.BatchEndFieldName)
+                    batchEndColumnName = columnSetting.ColumnName;
+            }
+            if (batchStartColumnName == null)
+                throw new NullReferenceException(String.Format("batchStartColumnName '{0}'", _summaryTransformationDefinition.BatchStartFieldName));
+            if (batchEndColumnName == null)
+                throw new NullReferenceException(String.Format("batchEndColumnName '{0}'", _summaryTransformationDefinition.BatchEndFieldName));
+
+            queryBuilder.Replace("#COLUMNS#", columnsBuilder.ToString());
+            queryBuilder.Replace("#TABLE#", _dataRecordStorageSettings.TableName);
+
+            queryBuilder.Replace("#BATCHSTARTCOLUMN#", batchStartColumnName);
+            queryBuilder.Replace("#BATCHENDCOLUMN#", batchEndColumnName);
+            return GetItemsText(queryBuilder.ToString(),
+                (reader) =>
+                {
+                    dynamic item = Activator.CreateInstance(recordRuntimeType) as dynamic;
+                    foreach (var columnSetting in _dataRecordStorageSettings.Columns)
+                    {
+                        item[columnSetting.ValueExpression] = reader[columnSetting.ColumnName];
+                    }
+                    return item;
+                },
+                (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart));
+                    cmd.Parameters.Add(new SqlParameter("@BatchEnd", batchEnd));
+                });
+        }
     }
 }

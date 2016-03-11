@@ -17,5 +17,7 @@ namespace Vanrise.GenericData.Entities
         public string Editor { get; set; }
 
         public string DataRecordSettingsEditor { get; set; }
+
+        public string SummaryTransformationSettingsEditor { get; set; }
     }
 }

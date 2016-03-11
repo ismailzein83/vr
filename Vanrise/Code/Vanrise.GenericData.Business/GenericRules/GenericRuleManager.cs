@@ -16,10 +16,7 @@ namespace Vanrise.GenericData.Business
 
         public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
         {
-            var ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(input.Query.RuleDefinitionId);
-
-            if (ruleDefinition == null)
-                throw new NullReferenceException("ruleDefinition");
+            var ruleDefinition = GetRuleDefinition(input.Query.RuleDefinitionId);
 
             Func<T, bool> filterExpression = (rule) => rule.DefinitionId == input.Query.RuleDefinitionId
                 && (input.Query.CriteriaFieldValues == null || RuleCriteriaFilter(rule, ruleDefinition, input.Query.CriteriaFieldValues))
@@ -44,17 +41,55 @@ namespace Vanrise.GenericData.Business
         {
             if (rule == null)
                 throw new ArgumentNullException("rule");
-            if (rule.Criteria == null)
-                throw new ArgumentNullException("rule.Criteria");
-            if (rule.Criteria.FieldsValues == null)
-                throw new ArgumentNullException("rule.Criteria.FieldsValues");
+            if(rule.Criteria == null || rule.Criteria.FieldsValues == null)
+                return null;
+            //if (rule.Criteria == null)
+            //    throw new ArgumentNullException("rule.Criteria");
+            //if (rule.Criteria.FieldsValues == null)
+            //    throw new ArgumentNullException("rule.Criteria.FieldsValues");
             GenericRuleCriteriaFieldValues genericRuleCriteriaFieldValues;
             if (rule.Criteria.FieldsValues.TryGetValue(fieldName, out genericRuleCriteriaFieldValues))
             {
-                return genericRuleCriteriaFieldValues.GetValues();
+                var fieldType = GetCritieriaFieldType(rule, fieldName);
+
+                var fieldRuntimeType = fieldType.GetRuntimeType();
+
+                var values = genericRuleCriteriaFieldValues.GetValues();
+                if (values != null)
+                    return values.Select(itm => Convert.ChangeType(itm, fieldRuntimeType));
+                else
+                    return null;
             }
             else
                 return null;
+        }
+
+        private static DataRecordFieldType GetCritieriaFieldType(GenericRule rule, string fieldName)
+        {
+            var ruleDefinition = GetRuleDefinition(rule.DefinitionId);
+
+            if (ruleDefinition.CriteriaDefinition == null)
+                throw new NullReferenceException(String.Format("ruleDefinition.CriteriaDefinition {0}", rule.DefinitionId));
+
+            if (ruleDefinition.CriteriaDefinition.Fields == null)
+                throw new NullReferenceException(String.Format("ruleDefinition.CriteriaDefinition.Fields {0}", rule.DefinitionId));
+
+            var fieldDefinition = ruleDefinition.CriteriaDefinition.Fields.FirstOrDefault(itm => itm.FieldName == fieldName);
+            if (fieldDefinition == null)
+                throw new NullReferenceException(String.Format("fieldDefinition . Rule Definition Id {0}. Field Name {1}", rule.DefinitionId, fieldName));
+
+            if (fieldDefinition.FieldType == null)
+                throw new NullReferenceException(String.Format("fieldDefinition.FieldType . Rule Definition Id {0}. Field Name {1}", rule.DefinitionId, fieldName));
+            return fieldDefinition.FieldType;
+        }
+
+        private static GenericRuleDefinition GetRuleDefinition(int ruleDefinitionId)
+        {
+            var ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(ruleDefinitionId);
+
+            if (ruleDefinition == null)
+                throw new NullReferenceException(String.Format("ruleDefinition {0}", ruleDefinitionId));
+            return ruleDefinition;
         }
 
         public static bool TryGetTargetFieldValue(GenericRuleTarget target, string fieldName, out Object value)

@@ -58,10 +58,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseCacheManager_ParamType.cs" />
     <Compile Include="CacheCleaner.cs" />
     <Compile Include="CachedObject.cs" />
     <Compile Include="CacheManagerFactory.cs" />
     <Compile Include="BaseCacheManager.cs" />
+    <Compile Include="CacheObjectSize.cs" />
+    <Compile Include="ICacheManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

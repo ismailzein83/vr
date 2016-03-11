@@ -10,4 +10,13 @@ namespace Vanrise.GenericData.Entities
     {
         void ApplyStreamToDB(object stream);
     }
+
+    public interface ISummaryRecordDataManager
+    {
+        void InsertSummaryRecords(List<dynamic> records);
+
+        void UpdateSummaryRecords(List<dynamic> records);
+
+        List<dynamic> GetExistingSummaryRecords(DateTime batchStart, DateTime batchEnd);
+    }
 }

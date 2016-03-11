@@ -117,11 +117,6 @@ namespace Vanrise.GenericData.Business
 
             protected override bool ShouldSetCacheExpired()
             {
-                return this.IsCacheExpired();
-            }
-
-            public bool IsCacheExpired()
-            {
                 return _dataManager.AreExtensibleBEItemUpdated(ref _updateHandle);
             }
         }

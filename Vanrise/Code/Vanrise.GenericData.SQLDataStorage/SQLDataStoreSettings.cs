@@ -30,5 +30,18 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             return new SQLRecordStorageDataManager(context.DataStore.Settings as SQLDataStoreSettings, context.DataRecordStorage.Settings as SQLDataRecordStorageSettings, context.DataRecordStorage);
         }
+
+        public override ISummaryRecordDataManager GetSummaryDataRecordDataManager(IGetSummaryRecordStorageDataManagerContext context)
+        {
+            var sqlDataRecordStorageSettings = context.DataRecordStorage.Settings as SQLDataRecordStorageSettings;
+            if (sqlDataRecordStorageSettings == null)
+                throw new NullReferenceException("sqlDataRecordStorageSettings");
+            if (sqlDataRecordStorageSettings.SummarySettings == null)
+                return null;
+            return new SQLRecordStorageDataManager(context.DataStore.Settings as SQLDataStoreSettings, 
+                context.DataRecordStorage.Settings as SQLDataRecordStorageSettings, 
+                context.DataRecordStorage,
+                context.SummaryTransformationDefinition);
+        }
     }
 }

@@ -140,15 +140,16 @@ namespace Vanrise.GenericData.Business
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            DataRecordTypeManager.CacheManager _dataRecordTypeCacheManager =
-               Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordTypeManager.CacheManager>(Guid.NewGuid());
+            DateTime? _dataRecordTypeCacheLastCheck;
 
             IDataRecordStorageDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordStorageDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreDataRecordStoragesUpdated(ref _updateHandle) || _dataRecordTypeCacheManager.IsCacheExpired();
+                return _dataManager.AreDataRecordStoragesUpdated(ref _updateHandle) 
+                    |
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordTypeManager.CacheManager>().IsCacheExpired(ref _dataRecordTypeCacheLastCheck);
             }
         }
 

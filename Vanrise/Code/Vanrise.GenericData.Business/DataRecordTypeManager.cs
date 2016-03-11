@@ -79,7 +79,7 @@ namespace Vanrise.GenericData.Business
 
             if (insertActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataRecordTypes");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 dataRecordType.DataRecordTypeId = dataRecordTypeId;
                 insertOperationOutput.InsertedObject = DataRecordTypeDetailMapper(dataRecordType);
@@ -102,7 +102,7 @@ namespace Vanrise.GenericData.Business
 
             if (updateActionSucc)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetDataRecordTypes");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = DataRecordTypeDetailMapper(dataRecordType);
             }
@@ -247,11 +247,6 @@ namespace Vanrise.GenericData.Business
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired()
-            {
-                return this.IsCacheExpired();
-            }
-
-            public bool IsCacheExpired()
             {
                 return _dataManager.AreDataRecordTypeUpdated(ref _updateHandle);
             }
