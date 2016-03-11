@@ -118,27 +118,34 @@
                 var dataItem;
                 var transformationRecord;
                 $scope.nextRecords.length = 0;
-                for (var i = 0; i < transformationRecords.length; i++) {
-                    transformationRecord = transformationRecords[i];
-                    dataItem = {};
-                    dataItem.RecordName = transformationRecord.RecordName;
-                    dataItem.nextStages = [];
-                    for (var j = 0; j < existingStages.length; j++) {
-                        if (existingStages[j].DataRecordTypeId == transformationRecord.DataRecordTypeId)
-                            dataItem.nextStages.push({ stageName: existingStages[j].stageName });
+                if (transformationRecords != undefined) {
+                    for (var i = 0; i < transformationRecords.length; i++) {
+                        transformationRecord = transformationRecords[i];
+                        dataItem = {};
+                        dataItem.RecordName = transformationRecord.RecordName;
+                        dataItem.nextStages = [];
+                        for (var j = 0; j < existingStages.length; j++) {
+                            if (existingStages[j].DataRecordTypeId == transformationRecord.DataRecordTypeId)
+                                dataItem.nextStages.push({ stageName: existingStages[j].stageName });
+                        }
+                        dataItem.selectedStages = transformationRecord.NextStages != undefined ? transformationRecord.NextStages : [];
+                        $scope.nextRecords.push(dataItem);
                     }
-                    dataItem.selectedStages = transformationRecord.NextStages != undefined ? transformationRecord.NextStages : [];
-                    $scope.nextRecords.push(dataItem);
                 }
-
                 if (isEditMode) {
                     var selectedRecord;
-                    for (var i = 0; i < $scope.nextRecords.length; i++) {
-                        selectedRecord = UtilsService.getItemByVal(receivedQueueActivator.NextStagesRecords, $scope.nextRecords[i].RecordName, "RecordName");
-                        for (var j = 0; j < selectedRecord.NextStages.length; j++) {
-                            var selectedStage = UtilsService.getItemByVal($scope.nextRecords[i].nextStages, selectedRecord.NextStages[j], "stageName");
-                            if (selectedStage != null)
-                                $scope.nextRecords[i].selectedStages.push(selectedStage);
+                    if ($scope.nextRecords != undefined) {
+                        for (var i = 0; i < $scope.nextRecords.length; i++) {
+                            if (receivedQueueActivator.NextStagesRecords != undefined) {
+                                selectedRecord = UtilsService.getItemByVal(receivedQueueActivator.NextStagesRecords, $scope.nextRecords[i].RecordName, "RecordName");
+                                if (selectedRecord != undefined && selectedRecord.NextStages != undefined) {
+                                    for (var j = 0; j < selectedRecord.NextStages.length; j++) {
+                                        var selectedStage = UtilsService.getItemByVal($scope.nextRecords[i].nextStages, selectedRecord.NextStages[j], "stageName");
+                                        if (selectedStage != null)
+                                            $scope.nextRecords[i].selectedStages.push(selectedStage);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
