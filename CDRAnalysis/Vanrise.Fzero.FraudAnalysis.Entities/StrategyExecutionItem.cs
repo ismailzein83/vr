@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public int SuspicionLevelID { get; set; }
 
-        public Dictionary<int,Decimal> FilterValues { get; set; }
+        public Dictionary<int,decimal?> FilterValues { get; set; }
 
         public SuspicionOccuranceStatus SuspicionOccuranceStatus { get; set; }
 

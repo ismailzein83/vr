@@ -25,16 +25,17 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
             List<int> StrategyIds = new List<int>();
-            StrategyIds.Add(new StrategyManager().GetStrategies().FirstOrDefault().Id);
+            StrategyIds.Add(6);
             BPClient bpClient = new BPClient();
             var input = new CreateProcessInput
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput
                 {
-                    FromDate = DateTime.Parse("2016-01-15"),
-                    ToDate = DateTime.Parse("2016-01-16"),
-                    IncludeWhiteList =false,
+                    FromDate = DateTime.Parse("2016-03-14 00:00:00"),
+                    ToDate = DateTime.Parse("2016-03-15 00:00:00"),
+                    IncludeWhiteList = false,
                     StrategyIds = StrategyIds,
+                    UserId = 1
                 }
             };
             bpClient.CreateNewProcess(input);

@@ -39,7 +39,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
 
 
-        public Decimal GetCriteriaValue(Filter criteria, NumberProfile numberProfile)
+        public Decimal? GetCriteriaValue(Filter criteria, NumberProfile numberProfile)
         {
             return s_criteriaDefinitions[criteria.FilterId].Expression(numberProfile);
         }
@@ -63,24 +63,23 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     case 1: i.Value.Expression = CalculateRatioIncomingCallsvsOutgoingCalls; break;
                     case 2: i.Value.Expression = CalculateCountofDistinctDestinations; break;
                     case 3: i.Value.Expression = CalculateCountOutgoingCalls; break;
+                    case 4: i.Value.Expression = CalculateCountofTotalBTSPerMSISDN; break;
                     case 5: i.Value.Expression = CalculateTotalOriginatedVolume; break;
+                    case 6: i.Value.Expression = CalculateCountofTotalIMEIPerMSISDN; break;
                     case 7: i.Value.Expression = CalculateRatioAverageIncomingDurationvsAverageOutgoingDuration; break;
+                    case 8: i.Value.Expression = CalculateRatioOffNetOriginatedCallsvsOnNetOriginatedCalls; break;
                     case 9: i.Value.Expression = CalculateCountofDailyActiveHours; break;
                     case 10: i.Value.Expression = CalculateDistinctDestinationofNightCalls; break;
+                    case 11: i.Value.Expression = CalculateVoiceOnlyServiceUsage; break;
                     case 12: i.Value.Expression = CalculateRatioofDistinctDestinationvsTotalNumberofCalls; break;
+                    case 13: i.Value.Expression = CalculateRatioInternationalOriginatedvsOutgoingCalls; break;
                     case 14: i.Value.Expression = CalculateCountofOutgoingDuringPeakHours; break;
+                    case 15: i.Value.Expression = CalculateDataUsage; break;
                     case 16: i.Value.Expression = CalculateConsecutiveCalls; break;
                     case 17: i.Value.Expression = CalculateFailConsecutiveCalls; break;
                     case 18: i.Value.Expression = CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls; break;
-                    case 4: i.Value.Expression = CalculateCountofTotalBTSPerMSISDN; break;
-                    case 6: i.Value.Expression = CalculateCountofTotalIMEIPerMSISDN; break;
-                    case 8: i.Value.Expression = CalculateRatioOffNetOriginatedCallsvsOnNetOriginatedCalls; break;
-                    case 11: i.Value.Expression = CalculateVoiceOnlyServiceUsage; break;
-                    case 13: i.Value.Expression = CalculateRatioInternationalOriginatedvsOutgoingCalls; break;
-                    case 15: i.Value.Expression = CalculateDataUsage; break;
                     case 19: i.Value.Expression = CalculateDifferentDestinationZones; break;
                     case 20: i.Value.Expression = CalculateDifferentSourceZones; break;
-
                 }
 
                 dictionary.Add(i.Key, i.Value);
@@ -166,133 +165,131 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         // Funcs
 
-        static decimal CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls(NumberProfile numberProfile)
+        static decimal? CalculateRatioCountIncominglowdurationCallsVsCountIncomingCalls(NumberProfile numberProfile)
         {
             Decimal countInCalls = numberProfile.AggregateValues[Constants._CountInCalls];
             if (countInCalls != 0)
                 return (numberProfile.AggregateValues[Constants._CountInLowDurationCalls] / countInCalls);
             else
-                return 0;
+                return null;
         }
 
 
-        static decimal CalculateRatioIncomingCallsvsOutgoingCalls(NumberProfile numberProfile)
+        static decimal? CalculateRatioIncomingCallsvsOutgoingCalls(NumberProfile numberProfile)
         {
             Decimal countOutCalls = numberProfile.AggregateValues[Constants._CountOutCalls];
             if (countOutCalls != 0)
                 return (numberProfile.AggregateValues[Constants._CountInCalls] / countOutCalls);
             else
-                return 0;
+                return null;
         }
 
-        static decimal CalculateCountofDistinctDestinations(NumberProfile numberProfile)
+        static decimal? CalculateCountofDistinctDestinations(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._DiffOutputNumbers];
         }
 
-        static decimal CalculateCountOutgoingCalls(NumberProfile numberProfile)
+        static decimal? CalculateCountOutgoingCalls(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountOutCalls];
         }
 
-        static decimal CalculateCountofTotalBTSPerMSISDN(NumberProfile numberProfile)
+        static decimal? CalculateCountofTotalBTSPerMSISDN(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._TotalBTS];
         }
 
-        static decimal CalculateTotalOriginatedVolume(NumberProfile numberProfile)
+        static decimal? CalculateTotalOriginatedVolume(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._TotalOutVolume];
         }
 
-        static decimal CalculateCountofTotalIMEIPerMSISDN(NumberProfile numberProfile)
+        static decimal? CalculateCountofTotalIMEIPerMSISDN(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._TotalIMEI];
         }
 
-        static decimal CalculateRatioAverageIncomingDurationvsAverageOutgoingDuration(NumberProfile numberProfile)
+        static decimal? CalculateRatioAverageIncomingDurationvsAverageOutgoingDuration(NumberProfile numberProfile)
         {
             decimal callOutDurAvg = numberProfile.AggregateValues[Constants._CallOutDurAvg];
             if (callOutDurAvg != 0)
                 return (numberProfile.AggregateValues[Constants._CallInDurAvg] / callOutDurAvg);
             else
-                return 0;
+                return null;
         }
 
-        static decimal CalculateRatioOffNetOriginatedCallsvsOnNetOriginatedCalls(NumberProfile numberProfile)
+        static decimal? CalculateRatioOffNetOriginatedCallsvsOnNetOriginatedCalls(NumberProfile numberProfile)
         {
             decimal countOutOnNets = numberProfile.AggregateValues[Constants._CountOutOnNets];
             if (countOutOnNets != 0)
                 return (numberProfile.AggregateValues[Constants._CountOutOffNets] / countOutOnNets);
             else
-                return 0;
+                return null;
         }
 
-        static decimal CalculateCountofDailyActiveHours(NumberProfile numberProfile)
+        static decimal? CalculateCountofDailyActiveHours(NumberProfile numberProfile)
         {
 
             return numberProfile.AggregateValues[Constants._CountActiveHours];
 
         }
 
-        static decimal CalculateDistinctDestinationofNightCalls(NumberProfile numberProfile)
+        static decimal? CalculateDistinctDestinationofNightCalls(NumberProfile numberProfile)
         {
 
             return numberProfile.AggregateValues[Constants._DiffOutputNumbersNightCalls];
 
         }
 
-        static decimal CalculateVoiceOnlyServiceUsage(NumberProfile numberProfile)
+        static decimal? CalculateVoiceOnlyServiceUsage(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountOutSMSs];
         }
 
-        static decimal CalculateRatioofDistinctDestinationvsTotalNumberofCalls(NumberProfile numberProfile)
+        static decimal? CalculateRatioofDistinctDestinationvsTotalNumberofCalls(NumberProfile numberProfile)
         {
             decimal countOutCalls = numberProfile.AggregateValues[Constants._CountOutCalls];
             if (countOutCalls != 0)
                 return (numberProfile.AggregateValues[Constants._DiffOutputNumbers] / countOutCalls);
             else
-                return 0;
+                return null;
         }
 
-        static decimal CalculateRatioInternationalOriginatedvsOutgoingCalls(NumberProfile numberProfile)
+        static decimal? CalculateRatioInternationalOriginatedvsOutgoingCalls(NumberProfile numberProfile)
         {
             decimal countOutCalls = numberProfile.AggregateValues[Constants._CountOutCalls];
             if (countOutCalls != 0)
                 return (numberProfile.AggregateValues[Constants._CountOutInters] / countOutCalls);
             else
-                return 0;
+                return null;
         }
 
-        static decimal CalculateCountofOutgoingDuringPeakHours(NumberProfile numberProfile)
+        static decimal? CalculateCountofOutgoingDuringPeakHours(NumberProfile numberProfile)
         {
-
             return numberProfile.AggregateValues[Constants._CountOutCallsPeakHours];
-
         }
 
-        static decimal CalculateDataUsage(NumberProfile numberProfile)
+        static decimal? CalculateDataUsage(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._TotalDataVolume];
         }
 
-        static decimal CalculateDifferentDestinationZones(NumberProfile numberProfile)
+        static decimal? CalculateDifferentDestinationZones(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._DiffDestZones];
         }
 
-        static decimal CalculateDifferentSourceZones(NumberProfile numberProfile)
+        static decimal? CalculateDifferentSourceZones(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._DiffSourcesZones];
         }
 
-        static decimal CalculateConsecutiveCalls(NumberProfile numberProfile)
+        static decimal? CalculateConsecutiveCalls(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountConsecutiveCalls];
         }
 
-        static decimal CalculateFailConsecutiveCalls(NumberProfile numberProfile)
+        static decimal? CalculateFailConsecutiveCalls(NumberProfile numberProfile)
         {
             return numberProfile.AggregateValues[Constants._CountFailConsecutiveCalls];
         }

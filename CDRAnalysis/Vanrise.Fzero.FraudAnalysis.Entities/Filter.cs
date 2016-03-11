@@ -19,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public string Label { get; set; }
 
-        public Func<NumberProfile, Decimal> Expression;
+        public Func<NumberProfile, decimal?> Expression;
 
         public decimal MinValue { get; set; }
 

@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             CDRDBApplyStream cdrDBApplyStream = dbApplyStream as CDRDBApplyStream;
             var dbFromTime = PartitionedCDRDataManager.GetDBFromTime(record.ConnectDateTime);
             PartitionedCDRStream matchStream;
-            if(!cdrDBApplyStream.PartitionedStreamsByDBFromTime.TryGetValue(dbFromTime, out matchStream))
+            if (!cdrDBApplyStream.PartitionedStreamsByDBFromTime.TryGetValue(dbFromTime, out matchStream))
             {
                 PartitionedCDRStream newStream = new PartitionedCDRStream { DataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedCDRDataManager>(dbFromTime, false) };
                 newStream.DBApplyStream = newStream.DataManager.InitialiazeStreamForDBApply();
@@ -81,7 +81,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public void ApplyCDRsToDB(object preparedCDRs)
         {
             CDRDBApplyStream cdrDBApplyStream = preparedCDRs as CDRDBApplyStream;
-            foreach(var stream in cdrDBApplyStream.PartitionedStreamsByDBFromTime.Values)
+            foreach (var stream in cdrDBApplyStream.PartitionedStreamsByDBFromTime.Values)
             {
                 stream.DataManager.ApplyCDRsToDB(stream.DBApplyStream);
             };
@@ -113,13 +113,13 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                                                             BEGIN
                                                                 SELECT 0
                                                             END", tempTableName);
-                if(Convert.ToBoolean(ExecuteScalarText(queryTempTableNotExists, null)))
+                if (Convert.ToBoolean(ExecuteScalarText(queryTempTableNotExists, null)))
                 {
                     var dbTimeRanges = PartitionedCDRDataManager.GetDBTimeRanges(input.Query.FromDate, input.Query.ToDate);
-                    if(dbTimeRanges != null)
+                    if (dbTimeRanges != null)
                     {
                         ExecuteNonQueryText(String.Format(PartitionedCDRDataManager.CDR_CREATETABLE_QUERYTEMPLATE, tempTableName), null);
-                        foreach(var dbTimeRange in dbTimeRanges)
+                        foreach (var dbTimeRange in dbTimeRanges)
                         {
                             var dataManager = PartitionedCDRDataManagerFactory.GetCDRDataManager<PartitionedCDRDataManager>(dbTimeRange.FromTime, true);
                             if (dataManager != null)
@@ -158,14 +158,14 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         {
             CDRDatabaseDataManager cdrDatabaseDataManager = new CDRDatabaseDataManager();
             var databases = cdrDatabaseDataManager.GetReadyDatabases(fromTime, toTime);
-            if (databases != null)
+            if (databases != null && new List<object>(databases).Count > 0)
             {
                 HashSet<string> prefixes = new HashSet<string>();
                 foreach (var db in databases)
                 {
                     if (db.Settings == null)
                         throw new NullReferenceException("db.Settings");
-                    if (db.Settings == null)
+                    if (db.Settings.CDRNumberPrefixes == null)
                         throw new NullReferenceException("db.Settings.CDRNumberPrefixes");
                     foreach (var prefix in db.Settings.CDRNumberPrefixes)
                     {

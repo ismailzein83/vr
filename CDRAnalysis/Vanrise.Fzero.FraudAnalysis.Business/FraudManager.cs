@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 foreach (var j in i.StrategyLevelCriterias)
                 {
                     LevelCriteriaInfo levelCriteriasThresholdPercentage = new LevelCriteriaInfo();
-                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new Filter() { CompareOperator = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.CompareOperator, FilterId = j.FilterId,  Description = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.Description };
+                    levelCriteriasThresholdPercentage.CriteriaDefinitions = new Filter() { CompareOperator = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.CompareOperator, FilterId = j.FilterId, Description = criteriaDefinitions.Where(x => x.Value.FilterId == j.FilterId).FirstOrDefault().Value.Description };
                     levelCriteriasThresholdPercentage.Percentage = j.Percentage;
                     levelCriteriasThresholdPercentage.Threshold = strategy.StrategyFilters.Where(x => x.FilterId == j.FilterId).FirstOrDefault().Threshold;
                     strategyLevelWithCriterias.LevelCriteriasThresholdPercentage.Add(levelCriteriasThresholdPercentage);
@@ -55,22 +55,22 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             }
         }
 
-        public bool IsNumberSuspicious(NumberProfile numberProfile, out StrategyExecutionItem strategyExecutionDetail)
+        public bool IsNumberSuspicious(NumberProfile numberProfile, out StrategyExecutionItem strategyExecutionItem)
         {
 
-            strategyExecutionDetail = null;
+            strategyExecutionItem = null;
 
-            Dictionary<int, Decimal> criteriaValues = new Dictionary<int, decimal>();
+            Dictionary<int, Decimal?> criteriaValues = new Dictionary<int, decimal?>();
 
 
             foreach (StrategyLevelWithCriterias strategyLevelWithCriterias in _levelsByPriority)
             {
                 bool isLevelMatch = false;
-                Dictionary<int, decimal> criteriaValuesThresholds = new Dictionary<int, decimal>();
+                Dictionary<int, decimal?> criteriaValuesThresholds = new Dictionary<int, decimal?>();
 
                 foreach (LevelCriteriaInfo levelCriteriaThresholdPercentage in strategyLevelWithCriterias.LevelCriteriasThresholdPercentage)
                 {
-                    Decimal criteriaValue;
+                    Decimal? criteriaValue;
                     if (!criteriaValues.TryGetValue(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, out criteriaValue))
                     {
                         criteriaValue = _FilterManager.GetCriteriaValue(levelCriteriaThresholdPercentage.CriteriaDefinitions, numberProfile);
@@ -78,13 +78,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                     }
 
 
-                    decimal criteriaValuesThreshold = criteriaValue / levelCriteriaThresholdPercentage.Threshold;
+                    decimal? criteriaValuesThreshold = criteriaValue / levelCriteriaThresholdPercentage.Threshold;
                     criteriaValuesThresholds.Add(levelCriteriaThresholdPercentage.CriteriaDefinitions.FilterId, criteriaValuesThreshold);
 
-                    isLevelMatch =
-                        (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual && criteriaValuesThreshold >= levelCriteriaThresholdPercentage.Percentage)
-                        ||
-                        (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual && criteriaValuesThreshold <= levelCriteriaThresholdPercentage.Percentage);
+                    if (criteriaValuesThreshold != null)
+                        isLevelMatch =
+                            (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.GreaterThanorEqual && criteriaValuesThreshold >= levelCriteriaThresholdPercentage.Percentage)
+                            ||
+                            (levelCriteriaThresholdPercentage.CriteriaDefinitions.CompareOperator == CriteriaCompareOperator.LessThanorEqual && criteriaValuesThreshold <= levelCriteriaThresholdPercentage.Percentage);
                     if (!isLevelMatch)
                         break;
                 }
@@ -92,14 +93,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
                 if (isLevelMatch)
                 {
-                    strategyExecutionDetail = new StrategyExecutionItem();
-                    strategyExecutionDetail.AccountNumber = numberProfile.AccountNumber;
-                    strategyExecutionDetail.SuspicionLevelID = strategyLevelWithCriterias.SuspicionLevelId;
-                    strategyExecutionDetail.FilterValues = criteriaValuesThresholds;
-                    strategyExecutionDetail.AggregateValues = numberProfile.AggregateValues;
-                    strategyExecutionDetail.SuspicionOccuranceStatus = SuspicionOccuranceStatus.Open;
-                    strategyExecutionDetail.StrategyExecutionID = numberProfile.StrategyExecutionID;
-                    strategyExecutionDetail.IMEIs = numberProfile.IMEIs;
+                    strategyExecutionItem = new StrategyExecutionItem();
+                    strategyExecutionItem.AccountNumber = numberProfile.AccountNumber;
+                    strategyExecutionItem.SuspicionLevelID = strategyLevelWithCriterias.SuspicionLevelId;
+                    strategyExecutionItem.FilterValues = criteriaValuesThresholds;
+                    strategyExecutionItem.AggregateValues = numberProfile.AggregateValues;
+                    strategyExecutionItem.SuspicionOccuranceStatus = SuspicionOccuranceStatus.Open;
+                    strategyExecutionItem.StrategyExecutionID = numberProfile.StrategyExecutionID;
+                    strategyExecutionItem.IMEIs = numberProfile.IMEIs;
                     return true;
                 }
             }
