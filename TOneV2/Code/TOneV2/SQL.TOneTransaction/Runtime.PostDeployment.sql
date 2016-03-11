@@ -9,14 +9,13 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[runtime].[SchedulerTaskActionType]------------301 to 400-----------------------------------------
+--[runtime].[SchedulerTaskActionType]-------101 to 200--------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[ActionTypeInfo])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'Upload PriceList','{"URL":"","SystemType":false,"Editor":"cp-supplierpricelist-uploadsupplierpricelist","FQTN":"CP.SupplierPricelist.Business.PriceListTasks.UploadPriceListTaskAction, CP.SupplierPricelist.Business"}'),
-(302,'Get PriceList Result','{"URL":"","SystemType":false,"Editor":"cp-supplierpricelist-resultsupplierpricelist","FQTN":"CP.SupplierPricelist.Business.PriceListTasks.ResultTaskAction, CP.SupplierPricelist.Business"}')
+(101,'Workflow','{"URL":"/Client/Modules/Runtime/Views/ActionTemplates/WFActionTemplate.html","Editor":"vr-runtime-taskaction-workflow","SystemType":false,"FQTN":"Vanrise.BusinessProcess.Extensions.WFTaskAction.WFSchedulerTaskAction, Vanrise.BusinessProcess.Extensions.WFTaskAction"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ActionTypeInfo]))
 merge	[runtime].[SchedulerTaskActionType] as t
@@ -28,3 +27,24 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[ActionTypeInfo])
 	values(s.[ID],s.[Name],s.[ActionTypeInfo]);
+
+
+MERGE INTO runtime.[SchedulerTaskTriggerType] AS Target 
+USING (VALUES 
+(1,'Timer','{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html","Editor":"vr-runtime-tasktrigger-timer","FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger"}')
+) 
+AS Source ([ID], [Name], [TriggerTypeInfo])
+ON Target.[ID] = Source.[ID] 
+-- update matched rows 
+WHEN MATCHED THEN 
+UPDATE SET	[ID] = Source.[ID],
+			[Name] = Source.[Name],
+			[TriggerTypeInfo]  = Source.[TriggerTypeInfo]
+-- insert new rows 
+WHEN NOT MATCHED BY TARGET THEN 
+INSERT ([ID], [Name], [TriggerTypeInfo])
+VALUES ([ID], [Name], [TriggerTypeInfo])
+---- delete rows that are in the target but not the source 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE
+;

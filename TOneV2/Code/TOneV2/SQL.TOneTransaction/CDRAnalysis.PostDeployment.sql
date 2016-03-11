@@ -9,13 +9,12 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-
 --[bp].[BPDefinition]-------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
-
-
-MERGE INTO bp.[BPDefinition] AS Target 
-USING (VALUES 
+set nocount on;
+;with cte_data([Name],[Title],[FQTN],[Config])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
 ('Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyProcessInput','Execute Strategy Process','Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ScheduledExecEditor":"vr-cdr-fraudanalysis-executestrategy","ManualExecEditor":"vr-cdr-fraudanalysis-executestrategy-manual","RetryOnProcessFailed":false, "HasChildProcesses":true}'),
 ('Vanrise.Fzero.FraudAnalysis.BP.Arguments.ExecuteStrategyForNumberRangeProcessInput','Execute Strategy Process for Number Range','Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyForNumberRangeProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}'),
 ('Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput','Number Profiling Process','Vanrise.Fzero.FraudAnalysis.BP.NumberProfilingProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ScheduledExecEditor":"vr-cdr-fraudanalysis-numberprofiling","ManualExecEditor":"vr-cdr-fraudanalysis-numberprofiling-manual","RetryOnProcessFailed":false, "HasChildProcesses":true}'),
@@ -25,24 +24,17 @@ USING (VALUES
 ('Vanrise.Fzero.CDRImport.BP.Arguments.StagingtoCDRProcessInput','Staging to CDR Process','Vanrise.Fzero.CDRImport.BP.StagingtoCDRProcess, Vanrise.Fzero.CDRImport.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ScheduledExecEditor":"vr-cdr-pstnbe-stagingtocdr","ManualExecEditor":"vr-cdr-pstnbe-stagingtocdr-manual","RetryOnProcessFailed":false}'),
 ('Vanrise.Fzero.FraudAnalysis.BP.Arguments.FillDataWarehouseProcessInput','Fill Data Warehouse Process','Vanrise.Fzero.FraudAnalysis.BP.FillDataWarehouseProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ScheduledExecEditor":"vr-cdr-fraudanalysis-filldatawarehouse","ManualExecEditor":"vr-cdr-fraudanalysis-filldatawarehouse-manual","RetryOnProcessFailed":false}'),
 ('Vanrise.Fzero.FraudAnalysis.BP.Arguments.CancelStrategyExecutionProcessInput','Cancel Strategy Execution Process','Vanrise.Fzero.FraudAnalysis.BP.CancelStrategyExecutionProcess, Vanrise.Fzero.FraudAnalysis.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ScheduledExecEditor":"","ManualExecEditor":"","RetryOnProcessFailed":false}')
-) 
-
-AS Source ([Name], [Title], [FQTN], [Config])
-ON Target.[Name] = Source.[Name] 
--- update matched rows 
-WHEN MATCHED THEN 
-UPDATE SET	[Title] = Source.[Title],
-			[FQTN] = Source.[FQTN],
-			[Config]  = Source.[Config]
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Name], [Title], [FQTN], [Config])
-VALUES ([Name], [Title], [FQTN], [Config])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
-
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Name],[Title],[FQTN],[Config]))
+merge	[bp].[BPDefinition] as t
+using	cte_data as s
+on		1=1 and t.[Name] = s.[Name]
+when matched then
+	update set
+	[Title] = s.[Title],[FQTN] = s.[FQTN],[Config] = s.[Config]
+when not matched by target then
+	insert([Name],[Title],[FQTN],[Config])
+	values(s.[Name],s.[Title],s.[FQTN],s.[Config]);
 
 --[queue].[ExecutionFlowDefinition]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------

@@ -9,31 +9,27 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-
-
-
-MERGE INTO bp.[BPDefinition] AS Target 
-USING (VALUES 
-	(N'TOne.WhS.SupplierPriceList.BP.Arguments.SupplierPriceListProcessInput',N'Import Supplier PriceList Process',N'TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList, TOne.WhS.SupplierPriceList.BP',N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}'),
-(N'TOne.WhS.Routing.BP.Arguments.RoutingProcessInput',N'Whole Sale Routing Process Process',N'TOne.WhS.Routing.BP.RoutingProcess, TOne.WhS.Routing.BP',N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"ScheduledExecEditor":"","ManualExecEditor":"vr-whs-routing-buildrouteprocess","RetryOnProcessFailed":false,"Url":"/Client/Modules/WhS_Routing/Views/ProcessInputTemplates/BuildRouteProcess.html","ManualExecEditor":"vr-whs-routing-buildrouteprocess"}'),
-(N'TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput',N'Routing Product Routing Process',N'TOne.WhS.Routing.BP.RPRoutingProcess, TOne.WhS.Routing.BP',N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"ScheduledExecEditor":"","ManualExecEditor":"vr-whs-routing-rpbuildproduct","RetryOnProcessFailed":false,"Url":"/Client/Modules/WhS_Routing/Views/ProcessInputTemplates/RPBuildProductRoutesProcess.html","ManualExecEditor":"vr-whs-routing-rpbuildproduct"}'),
-(N'TOne.WhS.Routing.BP.Arguments.BuildRoutesByCodePrefixInput',N'Build Routes By Code Prefix',N'TOne.WhS.Routing.BP.BuildRoutesByCodePrefix, TOne.WhS.Routing.BP',N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"ScheduledExecEditor":"","ManualExecEditor":"vr-whs-routing-buildbycodeprefix","RetryOnProcessFailed":false,"Url":"/Client/Modules/WhS_Routing/Views/ProcessInputTemplates/BuildRoutesByCodePrefix.html","ManualExecEditor":"vr-whs-routing-buildbycodeprefix"}'),
-(N'TOne.WhS.Routing.BP.Arguments.RPBuildCodeMatchesByCodePrefixInput',N'Routing Product Build Code Matches By Code Prefix',N'TOne.WhS.Routing.BP.RPBuildCodeMatchesByCodePrefix, TOne.WhS.Routing.BP',N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}'),
-(N'TOne.WhS.Routing.BP.Arguments.RPBuildRoutingProductInput',N'Routing Product Build Process Input',N'TOne.WhS.Routing.BP.RPBuildRoutingProducts, TOne.WhS.Routing.BP',N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}'),
-(N'TOne.WhS.CodePreparation.BP.Arguments.CodePreparationInput',N'Code Preparation Process',N'TOne.WhS.CodePreparation.BP.CodePreparation, TOne.WhS.CodePreparation.BP',N'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}')
-) 
-AS Source ([Name], [Title], [FQTN], [Config])
-ON Target.[Name] = Source.[Name] 
--- update matched rows 
-WHEN MATCHED THEN 
-UPDATE SET	[Title] = Source.[Title],
-			[FQTN] = Source.[FQTN],
-			[Config]  = Source.[Config]
--- insert new rows 
-WHEN NOT MATCHED BY TARGET THEN 
-INSERT ([Name], [Title], [FQTN], [Config])
-VALUES ([Name], [Title], [FQTN], [Config])
----- delete rows that are in the target but not the source 
-WHEN NOT MATCHED BY SOURCE THEN 
-DELETE
-;
+--[bp].[BPDefinition]-------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([Name],[Title],[FQTN],[Config])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('TOne.WhS.SupplierPriceList.BP.Arguments.SupplierPriceListProcessInput','Import Supplier PriceList Process','TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList, TOne.WhS.SupplierPriceList.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}'),
+('TOne.WhS.Routing.BP.Arguments.RoutingProcessInput','Whole Sale Routing Process Process','TOne.WhS.Routing.BP.RoutingProcess, TOne.WhS.Routing.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false, "Url": "/Client/Modules/WhS_Routing/Views/ProcessInputTemplates/BuildRouteProcess.html"}'),
+('TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput','Routing Product Routing Process','TOne.WhS.Routing.BP.RPRoutingProcess, TOne.WhS.Routing.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false,"Url":"/Client/Modules/WhS_Routing/Views/ProcessInputTemplates/RPBuildProductRoutesProcess.html"}'),
+('TOne.WhS.Routing.BP.Arguments.BuildRoutesByCodePrefixInput','Build Routes By Code Prefix','TOne.WhS.Routing.BP.BuildRoutesByCodePrefix, TOne.WhS.Routing.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false,"Url":"/Client/Modules/WhS_Routing/Views/ProcessInputTemplates/BuildRoutesByCodePrefix.html"}'),
+('TOne.WhS.Routing.BP.Arguments.RPBuildCodeMatchesByCodePrefixInput','Routing Product Build Code Matches By Code Prefix','TOne.WhS.Routing.BP.RPBuildCodeMatchesByCodePrefix, TOne.WhS.Routing.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}'),
+('TOne.WhS.Routing.BP.Arguments.RPBuildRoutingProductInput','Routing Product Build Process Input','TOne.WhS.Routing.BP.RPBuildRoutingProducts, TOne.WhS.Routing.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":10,"RetryOnProcessFailed":false}'),
+('TOne.WhS.CodePreparation.BP.Arguments.CodePreparationInput','Code Preparation Process','TOne.WhS.CodePreparation.BP.CodePreparation, TOne.WhS.CodePreparation.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"RetryOnProcessFailed":false}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Name],[Title],[FQTN],[Config]))
+merge	[bp].[BPDefinition] as t
+using	cte_data as s
+on		1=1 and t.[Name] = s.[Name]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[FQTN] = s.[FQTN],[Config] = s.[Config]
+when not matched by target then
+	insert([Name],[Title],[FQTN],[Config])
+	values(s.[Name],s.[Title],s.[FQTN],s.[Config]);
