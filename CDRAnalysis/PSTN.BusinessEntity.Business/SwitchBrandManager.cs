@@ -64,7 +64,7 @@ namespace PSTN.BusinessEntity.Business
 
             if (updated)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitchBrands");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = brandObj;
             }
@@ -89,7 +89,7 @@ namespace PSTN.BusinessEntity.Business
 
             if (inserted)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitchBrands");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 brandObj.BrandId = brandId;
                 insertOperationOutput.InsertedObject = brandObj;
@@ -112,7 +112,7 @@ namespace PSTN.BusinessEntity.Business
 
             if (deleted)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetSwitchBrands");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
             }
 

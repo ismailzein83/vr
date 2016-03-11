@@ -92,7 +92,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 strategyObj.Id = strategyId;
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = StrategyDetailMapper(strategyObj);
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetStrategies");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -117,7 +117,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = StrategyDetailMapper(strategyObj);
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetStrategies");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {

@@ -123,7 +123,7 @@ namespace PSTN.BusinessEntity.Business
                 }
 
                 insertOperationOutput.InsertedObject = TrunkDetailMapper(trunkObj);
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetTrunks");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -160,7 +160,7 @@ namespace PSTN.BusinessEntity.Business
 
                 updateOperationOutput.UpdatedObject = TrunkDetailMapper(trunkObj);
 
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetTrunks");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -188,7 +188,7 @@ namespace PSTN.BusinessEntity.Business
             if (deleted)
             {
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired("GetTrunks");
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
 
 
