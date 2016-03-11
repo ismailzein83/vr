@@ -74,7 +74,7 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
     }
     function setTitle() {
 
-        $scope.title = UtilsService.buildTitleForAddEditor('Ranking MenuItems');
+        $scope.title = 'Ranking MenuItems';
     }
 
     function loadViews() {
