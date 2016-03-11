@@ -135,7 +135,9 @@ set identity_insert [common].[TemplateConfig] on;
 ;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(10001,'TOne V1','CP_SupplierPriceList_CustomerConnector','vr-cp-supplierpricelist-tonev1integration-customerconnector',null,null)
+(10001,'TOne V1','CP_SupplierPriceList_CustomerConnector','vr-cp-supplierpricelist-tonev1integration-customerconnector',null,null),
+(10002,'Customer Group','VR_Sec_GroupSettings','vr-cp-group-customer',null,null),
+(10003,'Supplier Group','VR_Sec_GroupSettings','vr-cp-group-supplier',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t

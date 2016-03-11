@@ -68,3 +68,24 @@ set identity_insert [sec].[BusinessEntity] off;
 
 --[sec].[View]-----------------------------1001 to 2000--------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------
+
+--[common].[TemplateConfig]----------50001 to 60000---------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[TemplateConfig] on;
+;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(50001,'Static Group','VR_Sec_GroupSettings','vr-sec-group-static',null,null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
+merge	[common].[TemplateConfig] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
+	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
+set identity_insert [common].[TemplateConfig] off;
