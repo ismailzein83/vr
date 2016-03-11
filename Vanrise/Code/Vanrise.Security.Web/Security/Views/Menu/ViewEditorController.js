@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ViewEditorController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VR_Sec_MenuAPIService','VRUIUtilsService'];
+    ViewEditorController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService','VRUIUtilsService'];
 
-    function ViewEditorController($scope, VR_Sec_ViewAPIService, VRNotificationService, VRNavigationService, UtilsService, VR_Sec_MenuAPIService, VRUIUtilsService) {
+    function ViewEditorController($scope, VR_Sec_ViewAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
         $scope.scopeModal = {};
         $scope.scopeModal.isEditMode;
         var viewId;
