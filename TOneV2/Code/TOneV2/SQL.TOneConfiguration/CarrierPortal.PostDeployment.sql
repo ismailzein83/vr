@@ -61,7 +61,7 @@ set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(801,'Business Process Module','Business Process Module',1,0,'["View"]')
+(801,'Business Process Module','Business Process Module',1,0,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntityModule] as t
@@ -84,7 +84,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (2101,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
 (2102,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
-(2103,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Import PriceList"]')
+(2103,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Upload Pricelist"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -106,7 +106,7 @@ as (select * from (values
 ('CP_SupPriceList/Customer/GetFilteredCustomers','CP_SupPriceList_Customer:View'),
 ('CP_SupPriceList/PriceList/GetUpdated','CP_SupPriceList_PriceList:View'),
 ('CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings','CP_SupPriceList_SupplierMapping:View'),
-('CP_SupPriceList/PriceList/ImportPriceList','CP_SupPriceList_PriceList:Import PriceList'),
+('CP_SupPriceList/PriceList/ImportPriceList','CP_SupPriceList_PriceList:Upload Pricelist'),
 ('CP_SupPriceList/CustomerUser/AddCustomerUser','CP_SupPriceList_Customer:Assign/Unassign User'),
 ('CP_SupPriceList/CustomerUser/DeleteCustomerUser','CP_SupPriceList_Customer:Assign/Unassign User'),
 ('CP_SupPriceList/SupplierMapping/AddCustomerSupplierMapping','CP_SupPriceList_SupplierMapping:Add/Edit'),
