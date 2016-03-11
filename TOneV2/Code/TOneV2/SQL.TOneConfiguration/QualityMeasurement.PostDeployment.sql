@@ -69,7 +69,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1001,'CLI Tester','CLI Tester','CLI Tester',null,'/images/menu-icons/CLITester.png',12,0),
+(1001,'Quality Measurement','Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0),
 (1002,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0),
 (1003,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,13,0),
 (1004,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',null,1)
