@@ -18,7 +18,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
                 var ctrl = this;
                 ctrl.datasource = [];
-           
+
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
@@ -33,11 +33,11 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                     };
                     VRCommon_CurrencyService.addCurrency(onCurrencyAdded);
                 }
-                
+
 
                 var ctor = new currencyCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
-                
+
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -59,8 +59,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
             var multipleselection = "";
             var label = "Currency";
-            if (attrs.ismultipleselection != undefined)
-            {
+            if (attrs.ismultipleselection != undefined) {
                 label = "Currencies";
                 multipleselection = "ismultipleselection";
             }
@@ -73,23 +72,33 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                 addCliked = 'onaddclicked="addNewCurrency"';
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CurrencyId" '
+                + '<vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="CurrencyId" '
             + required + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</div>'
         }
 
         function currencyCtor(ctrl, $scope, attrs) {
+            var selectorAPI;
 
             function initializeController() {
-                defineAPI();
+                
+                ctrl.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                }
+
+
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-
                     var selectedIds;
+
+                    if (selectorAPI != undefined)
+                        selectorAPI.clearDataSource();
+
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
@@ -100,10 +109,12 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('CurrencyId', attrs, ctrl);
                 }
+
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            
+
             this.initializeController = initializeController;
         }
 

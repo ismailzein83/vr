@@ -54,14 +54,14 @@ namespace Vanrise.Security.Business
 
         public User GetUserbyId(int userId)
         {
-            var users = GetCachedUsers();
+            var users = GetCachedUsers(); 
             return users.GetRecord(userId);
         }
 
         public User GetUserbyEmail(string email)
         {
             var users = GetCachedUsers();
-            return users.FindRecord(x => x.Email == email);
+            return users.FindRecord(x => string.Equals(x.Email,email,StringComparison.CurrentCultureIgnoreCase));
         }
 
         public string GetUserPassword(int userId)
