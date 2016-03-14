@@ -90,6 +90,66 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("Start Executing Strategies Count: {0}",Input.StrategyIds.Count)</mca:CSharpValue>
       </InArgument>
     </WriteLine>
+    <vbw:AssignTask ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask_1">
+      <vbw:AssignTask.TaskInformation>
+        <InArgument x:TypeArguments="vbe:BPTaskInformation">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskInformation" xml:space="preserve">new Vanrise.BusinessProcess.Entities.TestBPTaskInformation() 
+            { 
+                AssignedTo = new Vanrise.BusinessProcess.Entities.TestBPTaskAssignee()
+            }</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskInformation>
+      <vbw:AssignTask.TaskTitle>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Dummy Task {0}", DateTime.Now.ToString("yyyyMMMdd_HH:mm:ss"))</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskTitle>
+      <vbw:AssignTask.TaskType>
+        <InArgument x:TypeArguments="vbe:TaskType">
+          <mca:CSharpValue x:TypeArguments="vbe:TaskType">TaskType.Test</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskType>
+    </vbw:AssignTask>
+    <vbw:AssignTask ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask_2">
+      <vbw:AssignTask.TaskInformation>
+        <InArgument x:TypeArguments="vbe:BPTaskInformation">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskInformation" xml:space="preserve">new Vanrise.BusinessProcess.Entities.TestBPTaskInformation() 
+            { 
+                AssignedTo = new Vanrise.BusinessProcess.Entities.TestBPTaskAssignee()
+            }</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskInformation>
+      <vbw:AssignTask.TaskTitle>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Dummy Task {0}", DateTime.Now.ToString("yyyyMMMdd_HH:mm:ss"))</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskTitle>
+      <vbw:AssignTask.TaskType>
+        <InArgument x:TypeArguments="vbe:TaskType">
+          <mca:CSharpValue x:TypeArguments="vbe:TaskType">TaskType.Test</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskType>
+    </vbw:AssignTask>
+    <vbw:AssignTask ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask_3">
+      <vbw:AssignTask.TaskInformation>
+        <InArgument x:TypeArguments="vbe:BPTaskInformation">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskInformation" xml:space="preserve">new Vanrise.BusinessProcess.Entities.TestBPTaskInformation() 
+            { 
+                AssignedTo = new Vanrise.BusinessProcess.Entities.TestBPTaskAssignee()
+            }</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskInformation>
+      <vbw:AssignTask.TaskTitle>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Dummy Task {0}", DateTime.Now.ToString("yyyyMMMdd_HH:mm:ss"))</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskTitle>
+      <vbw:AssignTask.TaskType>
+        <InArgument x:TypeArguments="vbe:TaskType">
+          <mca:CSharpValue x:TypeArguments="vbe:TaskType">TaskType.Test</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskType>
+    </vbw:AssignTask>
     <vffba1:CreateExecuteStrategyExecutionItems sap2010:WorkflowViewState.IdRef="CreateExecuteStrategyExecutionItems_1">
       <vffba1:CreateExecuteStrategyExecutionItems.ExecuteStrategyExecutionItems>
         <OutArgument x:TypeArguments="scg:List(vffba:ExecuteStrategyExecutionItem)">
@@ -334,11 +394,14 @@
         </InArgument>
       </vffba1:CloseStrategyExecutions.StrategyExecutionProgress>
     </vffba1:CloseStrategyExecutions>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbDhNA9ICDgIBAVQLVLsBAgECWAVcEQMB+gFdBXcyAwHbAXgFxAIKAgEVxQIF0AImAgEIWglalQEDAfsBagtqYwMB9AFgC2CUAQMB7gFlC2VZAwHoAW8Lb1cDAeIBdAt0VAMB3AF7C3upAQIBFn8JuQIUAgEkvAIJwgIkAgEczQILzQJ4AgEPyAILyAKMAQIBCYMBC5MBJQMBxQGUAQu4AhACASW/Ag+/AoMBAgEevAJkvAKBAQIBHYsBEYsBdgMB1AGGARGGAV8DAc0BkAERkAFdAwHGAZcBEZcBjwECASabAQ/4ASECAVn7AQ+2AhoCAS2eARWeAXIDAb4BpQET9gEeAgFa/wERogI+AgFIowIRrgI6AgE3rwIRtQIsAgEuqQEVrwEwAwG0AbABFcIBJgMBoAHDARX1ARoCAVuOAheOAqkBAgFRggIXiQIgAgFJqwIXqwKEAQIBQKYCF6YCoQECATiyAheyAoMCAgEvrAEbrAGjAQMBtQGzARu6ASADAasBvwEbvwGOAQMBogGwAYYBsAGMAQMBoQHGARvGAb0BAgFcygEZ0AEtAwGWAdMBGfMBJAIBZc0BH80B3wEDAZcB1AEb3wFEAwGDAeABG+sBJAIBcOwBG/IBNgIBZtwBIdwBjgEDAY0B1wEh1wHZAQMBhAHoASHoAX0CAXrjASHjAYEBAgFx7wEh7wHgBgIBZw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEV4ZWN1dGVTdHJhdGVneVByb2Nlc3MueGFtbERNA44DDgIBAVQLVLsBAgECWAVcEQMBswJdBXAWAwGgAnEFhAEWAwGNAoUBBZgBFgMB+gGZAQWzATIDAdsBtAEFgAMKAgEVgQMFjAMmAgEIWglalQEDAbQCYAtjIAMBrQJtC21aAwGnAmgLaJUBAwGhAnQLdyADAZoCgQELgQFaAwGUAnwLfJUBAwGOAogBC4sBIAMBhwKVAQuVAVoDAYECkAELkAGVAQMB+wGmAQumAWMDAfQBnAELnAGUAQMB7gGhAQuhAVkDAegBqwELqwFXAwHiAbABC7ABVAMB3AG3AQu3AakBAgEWuwEJ9QIUAgEk+AIJ/gIkAgEciQMLiQN4AgEPhAMLhAOMAQIBCb8BC88BJQMBxQHQAQv0AhACASX7Ag/7AoMBAgEe+AJk+AKBAQIBHccBEccBdgMB1AHCARHCAV8DAc0BzAERzAFdAwHGAdMBEdMBjwECASbXAQ+0AiECAVm3Ag/yAhoCAS3aARXaAXIDAb4B4QETsgIeAgFauwIR3gI+AgFI3wIR6gI6AgE36wIR8QIsAgEu5QEV6wEwAwG0AewBFf4BJgMBoAH/ARWxAhoCAVvKAhfKAqkBAgFRvgIXxQIgAgFJ5wIX5wKEAQIBQOICF+ICoQECATjuAhfuAoMCAgEv6AEb6AGjAQMBtQHvARv2ASADAasB+wEb+wGOAQMBogHsAYYB7AGMAQMBoQGCAhuCAr0BAgFchgIZjAItAwGWAY8CGa8CJAIBZYkCH4kC3wEDAZcBkAIbmwJEAwGDAZwCG6cCJAIBcKgCG64CNgIBZpgCIZgCjgEDAY0BkwIhkwLZAQMBhAGkAiGkAn0CAXqfAiGfAoEBAgFxqwIhqwLgBgIBZw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="1035,62" />
+      <sap2010:ViewStateData Id="AssignTask_1" sap:VirtualizedContainerService.HintSize="1035,22" />
+      <sap2010:ViewStateData Id="AssignTask_2" sap:VirtualizedContainerService.HintSize="1035,22" />
+      <sap2010:ViewStateData Id="AssignTask_3" sap:VirtualizedContainerService.HintSize="1035,22" />
       <sap2010:ViewStateData Id="CreateExecuteStrategyExecutionItems_1" sap:VirtualizedContainerService.HintSize="1035,22" />
       <sap2010:ViewStateData Id="GetNumberPrefixes_2" sap:VirtualizedContainerService.HintSize="788,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="489,22" />
@@ -409,14 +472,14 @@
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1035,1344" />
       <sap2010:ViewStateData Id="CloseStrategyExecutions_2" sap:VirtualizedContainerService.HintSize="1035,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1057,1694">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1057,1880">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1097,1774" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.ExecuteStrategyProcess_1" sap:VirtualizedContainerService.HintSize="1097,1960" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
