@@ -193,19 +193,24 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
     }
 
     function cancelStrategyExecution(gridObject) {
-        $scope.isInitializing = true;
-        var createProcessInput = buildInstanceObjFromScope(gridObject.Entity.ID);
+        VRNotificationService.showConfirmation()
+               .then(function (response) {
+                   if (response == true) {
+                       $scope.isInitializing = true;
+                       var createProcessInput = buildInstanceObjFromScope(gridObject.Entity.ID);
 
-        BusinessProcessAPIService.CreateNewProcess(createProcessInput).then(function (response) {
-            if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
-                return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error);
-        })
-        .finally(function () {
-            $scope.isInitializing = false;
-        });
+                       BusinessProcessAPIService.CreateNewProcess(createProcessInput).then(function (response) {
+                           if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                               return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
+                           }
+                       }).catch(function (error) {
+                           VRNotificationService.notifyException(error);
+                       })
+                       .finally(function () {
+                           $scope.isInitializing = false;
+                       });
+                   }
+               });
     }
 
 }
