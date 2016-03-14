@@ -43,13 +43,13 @@ namespace Vanrise.Security.Business
                 {
                     PermissionManager permissionManager = new PermissionManager();
                     IEnumerable<Permission> entityPermissions = permissionManager.GetEntityPermissions((EntityType)filter.EntityType, filter.EntityId);
-                    
+
                     IEnumerable<int> excludedUserIds = entityPermissions.MapRecords(permission => Convert.ToInt32(permission.HolderId), permission => permission.HolderType == HolderType.USER);
                     return users.MapRecords(UserInfoMapper, user => !excludedUserIds.Contains(user.UserId) || (filter.ExcludeInactive == true && user.Status == UserStatus.Active));
                 }
 
             }
-            return users.MapRecords(UserInfoMapper, user =>  ( filter == null || (  filter.ExcludeInactive == true && user.Status == UserStatus.Active)));
+            return users.MapRecords(UserInfoMapper, user => (filter == null || (filter.ExcludeInactive == true && user.Status == UserStatus.Active)));
         }
 
         public User GetUserbyId(int userId)
@@ -175,10 +175,28 @@ namespace Vanrise.Security.Business
             return user != null ? user.Name : null;
         }
 
+        public string GetUsersNames(List<int> userIds)
+        {
+            if (userIds == null || userIds.Count == 0)
+                return null;
+
+            List<string> names = new List<string>();
+            List<int> filteredUserIds = (from a in userIds
+                                select a).Distinct().ToList();
+
+            foreach (int userId in filteredUserIds)
+            {
+                User user = GetUserbyId(userId);
+                if (user == null)
+                    continue;
+                names.Add(user.Name);
+            }
+            return string.Join<string>(",", names);
+        }
         #endregion
 
         #region Private Methods
-        
+
         private Dictionary<int, User> GetCachedUsers()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",
