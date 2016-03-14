@@ -41,7 +41,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(FindRelatedNumbersthroughIMEIsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             AccountNumbersByIMEIDictionary accountNumbersByIMEIDictionary = inputArgument.AccountsNumbersByIMEIDictionary;
-            AccountRelatedNumbersDictionary accountRelatedNumbers = new AccountRelatedNumbersDictionary();
+            AccountRelatedNumberDictionary accountRelatedNumbers = new AccountRelatedNumberDictionary();
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
