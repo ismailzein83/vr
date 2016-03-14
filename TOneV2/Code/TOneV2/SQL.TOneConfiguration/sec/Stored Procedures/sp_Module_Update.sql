@@ -1,7 +1,6 @@
 ﻿CREATE PROCEDURE [sec].[sp_Module_Update] 
 	@ID int,
 	@Name Nvarchar(255),
-	@Title Nvarchar(255),
 	@ParentId int,
 	@AllowDynamic bit
 AS
@@ -10,7 +9,6 @@ BEGIN
 	begin
 		UPDATE sec.[Module]
 		SET Name = @Name,
-			Title = @Title,
 			ParentId = @ParentId,
 			[AllowDynamic] = @AllowDynamic
 		WHERE ID = @ID

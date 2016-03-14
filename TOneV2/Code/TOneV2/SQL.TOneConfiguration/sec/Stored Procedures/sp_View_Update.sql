@@ -7,6 +7,7 @@ CREATE PROCEDURE [sec].[sp_View_Update]
 	-- Add the parameters for the stored procedure here
 	@pageID INT ,
 	@PageName NVARCHAR(255),
+	@Title NVARCHAR(255),
 	@Url NVARCHAR(255),
 	@Module INT,
 	@Audience NVARCHAR(255),
@@ -24,6 +25,7 @@ IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName and Id!=@pageID)
 		SET		Name = @PageName,
 				Url = @Url,
 				Module=@Module,
+				Title = @Title,
 				Audience=@Audience,
 				[Content]=@Content,
 				Settings = @Settings,
