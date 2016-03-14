@@ -52,6 +52,7 @@
 
                     if (payload != undefined) {
                         selectedId = payload.BusinessEntityDefinitionId;
+                        ctrl.isNullable = payload.IsNullable;
                     }
 
                     return loadSelector();
@@ -67,7 +68,8 @@
                 api.getData = function () {
                     return {
                         $type: 'Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType, Vanrise.GenericData.MainExtensions',
-                        BusinessEntityDefinitionId: selectorAPI.getSelectedIds()
+                        BusinessEntityDefinitionId: selectorAPI.getSelectedIds(),
+                        IsNullable: ctrl.isNullable
                     };
                 }
 

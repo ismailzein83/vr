@@ -67,15 +67,17 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.Choices != undefined && payload.Choices.length>0) {
+                    if (payload != undefined && payload.Choices != undefined && payload.Choices.length > 0) {
                         ctrl.values = payload.Choices;
+                        ctrl.isNullable = payload.IsNullable
                     }
                 }
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldChoicesType, Vanrise.GenericData.MainExtensions",
-                        Choices: ctrl.values
+                        Choices: ctrl.values,
+                        IsNullable: ctrl.isNullable
                     };
                 }
 

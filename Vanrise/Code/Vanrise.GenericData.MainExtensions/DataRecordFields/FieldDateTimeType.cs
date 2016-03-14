@@ -47,6 +47,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (timeValues == null)
             {
                 Time time = Serializer.Deserialize<Time>(fieldValue.ToString());
+                //Time time = fieldValue as Time;
                 return time.ToLongTimeString();
             }
 

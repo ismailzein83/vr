@@ -47,7 +47,8 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
                 var dataTypeValue;
 
                 if (payload != undefined) {
-                    dataTypeValue = payload.DataType
+                    dataTypeValue = payload.DataType;
+                    ctrl.isNullable = payload.IsNullable;
                 }
 
                 selectorAPI.clearDataSource();
@@ -61,7 +62,8 @@ app.directive('vrGenericdataFieldtypeNumber', ['VR_GenericData_FieldNumberDataTy
             api.getData = function () {
                 return {
                     $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldNumberType, Vanrise.GenericData.MainExtensions",
-                    DataType: ctrl.selectedNumberDataType.value
+                    DataType: ctrl.selectedNumberDataType.value,
+                    IsNullable: ctrl.isNullable
                 };
             };
 

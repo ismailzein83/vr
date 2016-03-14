@@ -13,12 +13,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     public class FieldChoicesType : DataRecordFieldType
     {
         public List<Choice> Choices { get; set; }
+        public bool IsNullable { get; set; }
 
         #region Public Methods
 
         public override Type GetRuntimeType()
         {
-            return typeof(int);
+            return (IsNullable) ? typeof(int?) : typeof(int);
         }
 
         public override string GetDescription(object value)

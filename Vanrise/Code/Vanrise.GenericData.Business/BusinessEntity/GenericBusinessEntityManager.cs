@@ -15,6 +15,7 @@ namespace Vanrise.GenericData.Business
     public class GenericBusinessEntityManager : BaseBEManager, IBusinessEntityManager
     {
         #region Fields / Constructors
+
         private GenericUIRuntimeManager _uiRuntimeManager;
         private BusinessEntityDefinitionManager _businessEntityDefinitionManager;
         private DataRecordTypeManager _recordTypeManager;
@@ -44,6 +45,7 @@ namespace Vanrise.GenericData.Business
         }
         public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
+            ConvertGenericBEDetailsToRecordRuntimeType(genericBusinessEntity);
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail>();
             updateOperationOutput.UpdatedObject = null;
 
@@ -70,9 +72,10 @@ namespace Vanrise.GenericData.Business
         }        
         public Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
+            ConvertGenericBEDetailsToRecordRuntimeType(genericBusinessEntity);
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail>();
             insertOperationOutput.InsertedObject = null;
-
+            
             if (IsEntityTitleValid(genericBusinessEntity))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -132,8 +135,12 @@ namespace Vanrise.GenericData.Business
         {
             if (entity.Details == null)
                 return null;
-           // Type entityType = entity.Details.GetType();
-            return entity.Details[fieldPath];
+            Type entityType = entity.Details.GetType();
+            var field = entityType.GetField(fieldPath);
+            if (field == null)
+                throw new NullReferenceException(String.Format("field {0}", fieldPath));
+            return field.GetValue(entity.Details);
+            //return entity.Details[fieldPath];
             //var obj = entityType.GetProperties();
             //var ds = obj.First(x => x.Name == fieldPath).GetValue(entity.Details);
             //return ds;
@@ -230,8 +237,7 @@ namespace Vanrise.GenericData.Business
             if (columnValue != null)
             {
                 var uiRuntimeField = _uiRuntimeManager.GetFieldType(fieldPath, recordType.Fields, recordType.DataRecordTypeId);
-                var value = (columnValue.Value != null) ? columnValue.Value : columnValue;
-                return uiRuntimeField.GetDescription(value);
+                return uiRuntimeField.GetDescription(columnValue);
             }
             return null;
         }
@@ -242,8 +248,8 @@ namespace Vanrise.GenericData.Business
             if (columnValue != null)
             {
                 var uiRuntimeField = _uiRuntimeManager.BuildRuntimeField<T>(field, recordType.Fields, recordType.DataRecordTypeId);
-                var value = (columnValue.Value != null) ? columnValue.Value : columnValue;
-                return uiRuntimeField.FieldType.GetDescription(value);
+                //var value = (columnValue.Value != null) ? columnValue.Value : columnValue;
+                return uiRuntimeField.FieldType.GetDescription(columnValue);
             }
             return null;
         }
@@ -253,7 +259,7 @@ namespace Vanrise.GenericData.Business
                () =>
                {
                    IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-                   IEnumerable<GenericBusinessEntity> genericBusinessEntities = dataManager.GetGenericBusinessEntitiesByDefinition(businessDefinitionId);
+                   IEnumerable<GenericBusinessEntity> genericBusinessEntities = dataManager.GetGenericBusinessEntitiesByDefinition(businessDefinitionId, GetDataRecordRuntimeType(businessDefinitionId));
                    return genericBusinessEntities.ToDictionary(kvp => kvp.GenericBusinessEntityId, kvp => kvp);
                });
         }        
@@ -282,7 +288,7 @@ namespace Vanrise.GenericData.Business
                 if (fieldValue == null)
                     continue;
 
-                if (!runtimeFilter.FieldType.IsMatched(fieldValue.Value, filterValue))
+                if (!runtimeFilter.FieldType.IsMatched(fieldValue, filterValue))
                     return false;
             }
 
@@ -312,6 +318,31 @@ namespace Vanrise.GenericData.Business
             GenericBusinessEntity entityMatch = cachedEntites.FindRecord(itm => (entity.GenericBusinessEntityId == 0 || itm.GenericBusinessEntityId != entity.GenericBusinessEntityId) && GetFieldPathValue(itm, fieldPath).ToString().ToLower() == entityTitleString);
 
             return (entityMatch == null);
+        }
+        void ConvertGenericBEDetailsToRecordRuntimeType(GenericBusinessEntity genericBusinessEntity)
+        {
+            if (genericBusinessEntity == null || genericBusinessEntity.Details == null)
+                return;
+            var recordRuntimeType = GetDataRecordRuntimeType(genericBusinessEntity.BusinessEntityDefinitionId);
+            genericBusinessEntity.Details = Serializer.Deserialize(Serializer.Serialize(genericBusinessEntity.Details), recordRuntimeType);
+        }
+        Type GetDataRecordRuntimeType(int beDefinitionId)
+        {
+            BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(beDefinitionId);
+            if (beDefinition == null)
+                throw new NullReferenceException("beDefinition");
+            if (beDefinition.Settings == null)
+                throw new NullReferenceException("beDefinition.Settings");
+
+            GenericBEDefinitionSettings gbeDefinitionSettings = beDefinition.Settings as GenericBEDefinitionSettings;
+            if (gbeDefinitionSettings == null)
+                throw new NullReferenceException("gbeDefinitionSettings");
+
+            Type dataRecordRuntimeType = new DataRecordTypeManager().GetDataRecordRuntimeType(gbeDefinitionSettings.DataRecordTypeId);
+            if (dataRecordRuntimeType == null)
+                throw new NullReferenceException("dataRecordRuntimeType");
+
+            return dataRecordRuntimeType;
         }
 
         #endregion

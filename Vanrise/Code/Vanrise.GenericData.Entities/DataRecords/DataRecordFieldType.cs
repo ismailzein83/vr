@@ -36,5 +36,10 @@ namespace Vanrise.GenericData.Entities
 
             return null;
         }
+
+        protected Type GetNullableType(Type type)
+        {
+            return (type.IsValueType) ? typeof(Nullable<>).MakeGenericType(type) : type;
+        }
     }   
 }

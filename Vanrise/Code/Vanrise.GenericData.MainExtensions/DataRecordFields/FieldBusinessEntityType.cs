@@ -13,9 +13,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldBusinessEntityType : DataRecordFieldType
     {
-        #region Public Methods
-
         public int BusinessEntityDefinitionId { get; set; }
+        public bool IsNullable { get; set; }
+
+        #region Public Methods
 
         public override Type GetRuntimeType()
         {
@@ -23,7 +24,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             BusinessEntityDefinition beDefinition = beDefinitionManager.GetBusinessEntityDefinition(BusinessEntityDefinitionId);
             if (beDefinition == null)
                 throw new NullReferenceException(string.Format("beDefinition '{0}'", this.BusinessEntityDefinitionId));
-            return Type.GetType(beDefinition.Settings.IdType);
+            if (beDefinition.Settings == null)
+                throw new NullReferenceException("beDefinition.Settings");
+            if (beDefinition.Settings.IdType == null)
+                throw new NullReferenceException("beDefinition.Settings.IdType");
+            Type type = Type.GetType(beDefinition.Settings.IdType);
+            return (IsNullable) ? GetNullableType(type) : type;
         }
 
         public override string GetDescription(object value)

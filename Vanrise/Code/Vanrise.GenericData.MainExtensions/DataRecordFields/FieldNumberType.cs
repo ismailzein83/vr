@@ -12,13 +12,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     public class FieldNumberType : DataRecordFieldType
     {
         public FieldNumberDataType DataType { get; set; }
+        public bool IsNullable { get; set; }
+
+        #region Public Methods
 
         public override Type GetRuntimeType()
         {
             var attributeInfo = Utilities.GetEnumAttribute<FieldNumberDataType, FieldNumberDataTypeInfoAttribute>(this.DataType);
             if (attributeInfo == null)
                 throw new NullReferenceException("FieldNumberDataTypeInfoAttribute");
-            return attributeInfo.RuntimeType;
+            return (IsNullable) ? GetNullableType(attributeInfo.RuntimeType) : attributeInfo.RuntimeType;
         }
 
         public override string GetDescription(Object value)
@@ -41,18 +44,23 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (fieldValue != null && filterValue != null)
             {
-                var fieldValueIds = fieldValue as List<object>;
-                fieldValueIds = (fieldValueIds == null) ? new List<object>() { fieldValue } : fieldValueIds;
+                string filterValueString = filterValue.ToString();
+                IEnumerable<string> fieldValues = ConvertFieldValueToList<string>(fieldValue);
 
-                foreach (var fieldValueId in fieldValueIds)
+                if (fieldValues == null)
+                    return (fieldValue.ToString() == filterValueString);
+
+                foreach (var fieldValueString in fieldValues)
                 {
-                    if (fieldValueId.Equals(filterValue))
+                    if (fieldValueString.Equals(filterValueString))
                         return true;
                 }
                 return false;
             }
             return true;
         }
+        
+        #endregion
     }
 
     public enum FieldNumberDataType

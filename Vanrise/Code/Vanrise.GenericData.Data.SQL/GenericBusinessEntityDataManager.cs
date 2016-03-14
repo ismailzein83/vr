@@ -11,29 +11,37 @@ namespace Vanrise.GenericData.Data.SQL
 {
     public class GenericBusinessEntityDataManager : BaseSQLDataManager, IGenericBusinessEntityDataManager
     {
+        #region Constructors / Fields
+
+        Type _dataRecordRuntimeType;
+
         public GenericBusinessEntityDataManager()
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
         {
 
         }
+        
+        #endregion
 
         #region Public Methods
+
         public bool UpdateGenericBusinessEntity(Entities.GenericBusinessEntity genericBusinessEntity)
         {
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Update", genericBusinessEntity.GenericBusinessEntityId, genericBusinessEntity.BusinessEntityDefinitionId, Vanrise.Common.Serializer.Serialize(genericBusinessEntity.Details));
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Update", genericBusinessEntity.GenericBusinessEntityId, genericBusinessEntity.BusinessEntityDefinitionId, Vanrise.Common.Serializer.Serialize(genericBusinessEntity.Details, true));
             return (recordesEffected > 0);
         }
 
         public bool AddGenericBusinessEntity(Entities.GenericBusinessEntity genericBusinessEntity, out long genericBusinessEntityId)
         {
             object insertedId;
-            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Insert", out insertedId, genericBusinessEntity.BusinessEntityDefinitionId, Vanrise.Common.Serializer.Serialize(genericBusinessEntity.Details));
+            int recordesEffected = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Insert", out insertedId, genericBusinessEntity.BusinessEntityDefinitionId, Vanrise.Common.Serializer.Serialize(genericBusinessEntity.Details, true));
             genericBusinessEntityId = (recordesEffected > 0) ? (long)insertedId : -1;
             return (recordesEffected > 0);
         }
 
-        public List<Entities.GenericBusinessEntity> GetGenericBusinessEntitiesByDefinition(int businessDefinitionId)
+        public List<Entities.GenericBusinessEntity> GetGenericBusinessEntitiesByDefinition(int businessDefinitionId, Type dataRecordRuntimeTime)
         {
+            _dataRecordRuntimeType = dataRecordRuntimeTime;
             return GetItemsSP("genericdata.sp_GenericBusinessEntity_GetByDefinition", GenericBusinessEntityMapper, businessDefinitionId);
         }
 
@@ -47,6 +55,7 @@ namespace Vanrise.GenericData.Data.SQL
             int affectedRows = ExecuteNonQuerySP("genericdata.sp_GenericBusinessEntity_Delete", genericBusinessEntityId, businessEntityDefinitionId);
             return (affectedRows > 0);
         }
+
         #endregion
 
         #region Mappers
@@ -55,13 +64,13 @@ namespace Vanrise.GenericData.Data.SQL
             GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntity
             {
                 BusinessEntityDefinitionId = GetReaderValue<int>(reader, "BusinessEntityDefinitionID"),
-                Details =Vanrise.Common.Serializer.Deserialize<dynamic>(reader["Details"] as string),
+                //Details = Vanrise.Common.Serializer.Deserialize<dynamic>(reader["Details"] as string),
+                Details = Vanrise.Common.Serializer.Deserialize(reader["Details"] as string, _dataRecordRuntimeType),
                 GenericBusinessEntityId =(long)reader["ID"],
             };
             
             return genericBusinessEntity;
         }
         #endregion
-
     }
 }
