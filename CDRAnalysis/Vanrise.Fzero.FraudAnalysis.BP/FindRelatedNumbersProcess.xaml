@@ -76,7 +76,12 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="numberPrefixes" />
       <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
-      <Variable x:TypeArguments="vffe:FindRelatedNumbersProgress" Name="findRelatedNumberProgress" />
+      <Variable x:TypeArguments="vffe:FindRelatedNumbersProgress" Name="findRelatedNumberProgress">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vffe:FindRelatedNumbersProgress">new FindRelatedNumbersProgress()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Name="variable1" />
     </Sequence.Variables>
     <vfcba:GetNumberPrefixes sap2010:WorkflowViewState.IdRef="GetNumberPrefixes_1">
       <vfcba:GetNumberPrefixes.FromTime>
@@ -251,7 +256,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbCZLA/8BDgIBAVEFYR8DAYUBYgX9AQoCAQJZC1lwAwGQAVQLVFkDAYsBXgteVwMBhgFlC2WJAQIBA2kJxAEbAgEvxwEJ+wEUAgEIbA9sbAMBgAFzDcIBGAIBMMwBC+cBOwIBIOgBC/MBNQIBEfQBC/oBJgIBCXcPfSoCAXh+D44BIAIBaI8BD8EBFAIBMdkBEdkBqAECASjPARHUASACASHrARHrAX8CARnwARHwAaABAgES9wER9wGtAQIBCnoVep0BAgF5gQEVhgEgAgFxiwEViwGIAQIBan6AAX6GAQIBaZIBFZIBtwECATKWAROcAScCAWCfARO/AR4CATmZARmZAdkBAgFhoAEVqwE/AgFRrAEVtwEeAgFCuAEVvgEwAgE6owEbowGJAQIBWagBG6gB2QECAVK0ARu0AXcCAUqvARuvAXsCAUO7ARu7AbQDAgE7</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbCdLA4QCDgIBAVELUYABAgECVgVmHwMBnAFnBYICCgIBCF4LXnADAakBWQtZWQMBowFjC2NXAwGdAWoLaokBAgEJbgnJARsCATvMAQmAAhQCAQ9xD3FsAwGWAXgNxwEYAgE80QEL7AE7AgEq7QEL+AE1AgEZ+QEL/wEmAgEQfA+CASoDAY0BgwEPkwEgAgF7lAEPxgEUAgE93gER3gGoAQIBM9QBEdkBIAIBK/ABEfABfwIBIvUBEfUBoAECARr8ARH8Aa0BAgERfxV/nQEDAY4BhgEViwEgAwGFAZABFZABiAECAX2DAYABgwGGAQIBfJcBFZcBtwECAT6bAROhAScCAXKkARPEAR4CAUaeARmeAdkBAgFzpQEVsAE/AgFhsQEVvAEeAgFQvQEVwwEwAgFHqAEbqAGJAQIBaq0BG60B2QECAWK5ARu5AXcCAVm0ARu0AXsCAVHAARvAAbQDAgFI</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
