@@ -26,10 +26,3 @@ Post-Deployment Script Template
 
 --[sec].[SystemAction]----------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
-
-
-[sec].[BusinessEntityModule] 1101 to 1200
-[sec].[BusinessEntity] 3001 to 3300
-[sec].[Module] 1101 to 1200
-[sec].[View] 11001 to 12000
-[common].[TemplateConfig] 40001 to 50000
