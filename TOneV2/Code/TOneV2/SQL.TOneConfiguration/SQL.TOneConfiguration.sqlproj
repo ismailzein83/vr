@@ -281,6 +281,7 @@
     <None Include="Integration.PostDeployment.sql" />
     <None Include="Runtime.PostDeployment.sql" />
     <None Include="InterConnect.PostDeployment.sql" />
+    <None Include="Queueing.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

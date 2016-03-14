@@ -70,9 +70,8 @@ set identity_insert [sec].[Module] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1001,'Quality Measurement','Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0),
-(1002,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0),
-(1003,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,13,0),
-(1004,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',null,1)
+(1002,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,13,0),
+(1003,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',null,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -93,15 +92,14 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(10001,'Country','Country','#/view/Common/Views/Country/CountryManagement',1001,'VRCommon/Country/GetFilteredCountries',null,null,null,0,1),
-(10002,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',1001,'QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,2),
-(10003,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',1001,'QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,0,3),
-(10004,'Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',2,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,4),
-(10005,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',1001,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,5),
-(10006,'Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement',1002,'QM_BE/Zone/GetFilteredZones',null,null,null,0,1),
-(10007,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',1002,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,2),
-(10008,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1003,null,null,null,null,0,1),
-(10009,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',1003,null,null,null,null,0,2)
+(10001,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',1001,'QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,2),
+(10002,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',1001,'QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,0,3),
+(10003,'Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',2,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,4),
+(10004,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',1001,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,5),
+(10005,'Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement',101,'QM_BE/Zone/GetFilteredZones',null,null,null,0,20),
+(10006,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',101,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,21),
+(10007,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1003,null,null,null,null,0,1),
+(10008,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',1003,null,null,null,null,0,2)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

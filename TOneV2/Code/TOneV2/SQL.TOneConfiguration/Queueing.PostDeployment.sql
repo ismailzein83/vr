@@ -9,14 +9,14 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[sec].[Module]---------------------------1101 to 1200---------------------------------------------------------
+--[sec].[Module]------------------------------701 to 800------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1101,'Operators','Operators','Operators',1,null,5,0)
+(701,'Queueing','Queueing',null,1,null,3,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -29,16 +29,17 @@ when not matched by target then
 	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
-
---[sec].[View]-----------------------------11001 to 12000-------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
+--[sec].[View]-----------------------------7001 to 8000--------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(11001,'Operator Profiles','Operator Profiles','#/view/InterConnect_BusinessEntity/Views/OperatorProfile/OperatorProfileManagement',1101,null,null,null,null,null,0,1),
-(11002,'Operator Accounts','Operator Accounts','#/view/InterConnect_BusinessEntity/Views/OperatorAccount/OperatorAccountManagement',1101,null,null,null,null,null,0,2)
+(7001,'Execution Flow Definitions','Execution Flow Definitions','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement',701,null,null,null,null,'0',10,3),
+(7002,'Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement',701,null,null,null,null,'0',11,4),
+(7003,'Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement',701,null,null,null,null,'0',12,5),
+(7004,'Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement',701,null,null,null,null,'0',13,6)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -51,33 +52,25 @@ when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[RequiredPermissions],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
---[sec].[BusinessEntityModule]-------------1101 to 1200---------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
-
---[sec].[BusinessEntity]-------------------3001 to 3300-------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
-
---[common].[TemplateConfig]----------40001 to 50000---------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------
-
---[sec].[SystemAction]----------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
---[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
+--[queue].[QueueActivatorConfig]--------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([Name],[Title],[Settings])
+set identity_insert [queue].[QueueActivatorConfig] on;
+;with cte_data([ID],[Name],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('InterConnect_BE_OperatorProfile','Operator Profile','{"SelectorUIControl":"vr-interconnect-be-operatorprofile-selector","GroupSelectorUIControl":"","ManagerFQTN":"InterConnect.BusinessEntity.Business.OperatorProfileManager,InterConnect.BusinessEntity.Business", "IdType": "System.Int32"}'),
-('InterConnect_BE_OperatorAccount','Operator Account','{"SelectorUIControl":"vr-interconnect-be-operatoraccount-selector","GroupSelectorUIControl":"","ManagerFQTN":"InterConnect.BusinessEntity.Business.OperatorAccountManager, InterConnect.BusinessEntity.Business", "IdType": "System.Int32"}')
+(1,'Store Batch Queue Activator','{ "QueueActivatorConfigId": "2" , "Name": "Store Batch Queue Activator" ,"Title" : "Store Batch Queue Activator", "Editor" :"vr-genericdata-queueactivator-storebatch"}'),
+(2,'Transform Batch Queue Activator','{ "QueueActivatorConfigId": "2" , "Name": "Transform  Batch Queue Activator" ,"Title" : "Transform  Batch Queue Activator", "Editor" :"vr-genericdata-queueactivator-transformbatch"}'),
+(3,'Custom Activator','{ "QueueActivatorConfigId": "7" , "Name": "Custom Activator" ,"Title" : "Custom Activator", "Editor" :"vr-queueing-queueactivator-customactivator"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Name],[Title],[Settings]))
-merge	[genericdata].[BusinessEntityDefinition] as t
+)c([ID],[Name],[Details]))
+merge	[queue].[QueueActivatorConfig] as t
 using	cte_data as s
-on		1=1 and t.[Name] = s.[Name]
+on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Title] = s.[Title],[Settings] = s.[Settings]
+	[Name] = s.[Name],[Details] = s.[Details]
 when not matched by target then
-	insert([Name],[Title],[Settings])
-	values(s.[Name],s.[Title],s.[Settings]);
+	insert([ID],[Name],[Details])
+	values(s.[ID],s.[Name],s.[Details]);
+set identity_insert [queue].[QueueActivatorConfig] off;
