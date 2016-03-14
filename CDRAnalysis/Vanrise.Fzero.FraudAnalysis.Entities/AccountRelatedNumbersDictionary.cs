@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vanrise.Fzero.FraudAnalysis.Entities
 {
-    public class AccountRelatedNumbersDictionary : Dictionary<String, HashSet<String>> //  Dictionary<AccountNumber, HashSet<IMEI>>
+    public class AccountRelatedNumberDictionary : Dictionary<String, HashSet<String>> //  Dictionary<AccountNumber, HashSet<IMEI>>
     {
     }
 }
