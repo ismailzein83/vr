@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -7,7 +7,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 {
     public class RelatedNumberDataManager : BaseSQLDataManager, IRelatedNumberDataManager
     {
-      
+
         #region ctor
         public RelatedNumberDataManager()
             : base("CDRDBConnectionString")
@@ -15,7 +15,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         }
         #endregion
-        
+
         #region Public Methods
         public void CreateTempTable()
         {
@@ -29,10 +29,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             foreach (KeyValuePair<string, HashSet<string>> record in records)
             {
                 if (record.Value.Count > 0)
-                    stream.WriteRecord("{0}*{1}",
-                                    record.Key,
-                                    string.Join<string>(",", record.Value)
-                                    );
+                    foreach (var relatedNumber in record.Value)
+                        stream.WriteRecord("{0}*{1}",
+                                        record.Key,
+                                        relatedNumber
+                                        );
             }
 
             stream.Close();
@@ -54,24 +55,19 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
 
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
-            string result = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumber_GetRelatedNumbersByAccountNumber", accountNumber) as string;
-
-            List<RelatedNumber> list = new List<RelatedNumber>();
-
-            if (result != null)
-            {
-                List<string> relatedNumbers = result.ToString().Split(',').ToList();
-
-                foreach (string number in relatedNumbers)
-                {
-                    list.Add(new RelatedNumber() { AccountNumber = number });
-                }
-            }
-
-            return list;
-
+            return GetItemsSP("FraudAnalysis.sp_RelatedNumber_GetRelatedNumbersByAccountNumber", RelatedNumberMapper, accountNumber);
         }
+
         #endregion
-       
+
+        # region Mappers
+        private RelatedNumber RelatedNumberMapper(IDataReader reader)
+        {
+            RelatedNumber relatedNumber = new RelatedNumber();
+            relatedNumber.AccountNumber = reader["RelatedNumber"] as string;
+            return relatedNumber;
+        }
+        # endregion
+
     }
 }
