@@ -38,8 +38,8 @@ set identity_insert [sec].[View] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (8001,'Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement',1,'CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,0,15),
-(8001,'Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement',801,'CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
-(8001,'Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement',801,'CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11)
+(8002,'Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement',801,'CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
+(8003,'Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement',801,'CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
