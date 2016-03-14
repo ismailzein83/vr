@@ -69,6 +69,7 @@
     <Compile Include="BusinessManagerFactory.cs" />
     <Compile Include="IBusinessManager.cs" />
     <Compile Include="StrategyExecutionItemAccountInfo.cs" />
+    <Compile Include="FindRelatedNumbersProgress.cs" />
     <Compile Include="StrategyExecutionProgress.cs" />
     <Compile Include="IStrategyManager.cs" />
     <Compile Include="DWBTSDictionary.cs" />

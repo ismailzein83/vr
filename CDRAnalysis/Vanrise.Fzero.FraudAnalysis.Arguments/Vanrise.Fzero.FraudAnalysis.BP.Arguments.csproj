@@ -54,8 +54,10 @@
   <ItemGroup>
     <Compile Include="CancelStrategyExecutionProcessInput.cs" />
     <Compile Include="ExecuteStrategyForNumberRangeProcessInput.cs" />
+    <Compile Include="FindRelatedNumbersForNumberRangeProcessOutput.cs" />
     <Compile Include="ExecuteStrategyForNumberRangeProcessOutput.cs" />
     <Compile Include="FillDataWarehouseProcessInput.cs" />
+    <Compile Include="FindRelatedNumbersForNumberRangeProcessInput.cs" />
     <Compile Include="FindRelatedNumbersProcessInput.cs" />
     <Compile Include="AssignStrategyCasesProcessInput.cs" />
     <Compile Include="NumberProfilingForNumberRangeProcessInput.cs" />

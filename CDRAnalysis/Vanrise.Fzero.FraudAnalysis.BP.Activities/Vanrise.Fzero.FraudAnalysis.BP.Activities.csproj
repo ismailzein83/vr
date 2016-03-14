@@ -103,6 +103,7 @@
     <Compile Include="ApplyAssigningCasesforItems.cs" />
     <Compile Include="ApplyStrategyExecutionCancellation.cs" />
     <Compile Include="ProcessAssigingCasesforItems.cs" />
+    <Compile Include="UpdateFindRelatedNumbersProgress.cs" />
     <Compile Include="UpdateStrategyExecutionProgress.cs" />
     <Compile Include="ConvertExecuteStrategyExecutionItemsToInfos.cs" />
     <Compile Include="CloseStrategyExecutions.cs" />

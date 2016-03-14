@@ -1,5 +1,6 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -9,12 +10,12 @@
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vfcba="clr-namespace:Vanrise.Fzero.CDRImport.BP.Activities;assembly=Vanrise.Fzero.CDRImport.BP.Activities"
- xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
  xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
  xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
  xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
- xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vffba:FindRelatedNumbersProcessInput)" />
@@ -73,77 +74,242 @@
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="vffe:AccountNumbersByIMEIDictionary" Name="accountNumbersByIMEIDictionary" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="numberPrefixes" />
+      <Variable x:TypeArguments="x:Int32" Name="subProcessByPrefixCompleted" />
+      <Variable x:TypeArguments="vffe:FindRelatedNumbersProgress" Name="findRelatedNumberProgress" />
     </Sequence.Variables>
-    <vffba1:GetAccountNumbersByIMEIDictionary sap2010:WorkflowViewState.IdRef="GetAccountNumbersByIMEIDictionary_1">
-      <vffba1:GetAccountNumbersByIMEIDictionary.AccountNumbersByIMEIDictionary>
-        <InOutArgument x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">
-          <mca:CSharpReference x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">accountNumbersByIMEIDictionary</mca:CSharpReference>
-        </InOutArgument>
-      </vffba1:GetAccountNumbersByIMEIDictionary.AccountNumbersByIMEIDictionary>
-    </vffba1:GetAccountNumbersByIMEIDictionary>
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
-      <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
-        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
-      </Parallel.Variables>
-      <vfcba:LoadCDRs NumberOfCDRs="{x:Null}" NumberPrefix="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadCDRs_3">
-        <vfcba:LoadCDRs.FromDate>
-          <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
-          </InArgument>
-        </vfcba:LoadCDRs.FromDate>
-        <vfcba:LoadCDRs.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
-          </InOutArgument>
-        </vfcba:LoadCDRs.OutputQueue>
-        <vfcba:LoadCDRs.Status>
-          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpReference>
-          </OutArgument>
-        </vfcba:LoadCDRs.Status>
-        <vfcba:LoadCDRs.ToDate>
-          <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
-          </InArgument>
-        </vfcba:LoadCDRs.ToDate>
-      </vfcba:LoadCDRs>
-      <vffba1:FindRelatedNumbersthroughIMEIs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FindRelatedNumbersthroughIMEIs_1">
-        <vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEIDictionary>
-          <InArgument x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">
-            <mca:CSharpValue x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">accountNumbersByIMEIDictionary</mca:CSharpValue>
-          </InArgument>
-        </vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEIDictionary>
-        <vffba1:FindRelatedNumbersthroughIMEIs.InputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
-          </InOutArgument>
-        </vffba1:FindRelatedNumbersthroughIMEIs.InputQueue>
-        <vffba1:FindRelatedNumbersthroughIMEIs.PreviousActivityStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
-          </InArgument>
-        </vffba1:FindRelatedNumbersthroughIMEIs.PreviousActivityStatus>
-      
-    </vffba1:FindRelatedNumbersthroughIMEIs>
-    </Parallel>
-    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbA1KA4MBDgIBAU4FVCYCAShVBYEBEAIBAlELUXYCASlaB28YAgETcAeAAS8CAQNdDV1bAgEjZw1nbwIBHmINYm4CARlsDWxZAgEUfQ19ZwIBDngNeG4CAQlzDXNwAgEE</sads:DebugSymbol.Symbol>
+    <vfcba:GetNumberPrefixes sap2010:WorkflowViewState.IdRef="GetNumberPrefixes_1">
+      <vfcba:GetNumberPrefixes.FromTime>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+        </InArgument>
+      </vfcba:GetNumberPrefixes.FromTime>
+      <vfcba:GetNumberPrefixes.NumberPrefixes>
+        <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(x:String)">numberPrefixes</mca:CSharpReference>
+        </OutArgument>
+      </vfcba:GetNumberPrefixes.NumberPrefixes>
+      <vfcba:GetNumberPrefixes.ToTime>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+        </InArgument>
+      </vfcba:GetNumberPrefixes.ToTime>
+    </vfcba:GetNumberPrefixes>
+    <If sap2010:WorkflowViewState.IdRef="If_4">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">numberPrefixes != null &amp;&amp; numberPrefixes.Count() &gt; 0</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <ParallelForEach x:TypeArguments="x:String" DisplayName="ParallelForEach&lt;NumberPrefix&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_2">
+          <ParallelForEach.Values>
+            <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">numberPrefixes</mca:CSharpValue>
+            </InArgument>
+          </ParallelForEach.Values>
+          <ActivityAction x:TypeArguments="x:String">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:String" Name="numberPrefix" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="SequenceHasNumberPrefix" sap2010:WorkflowViewState.IdRef="Sequence_6">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="subProcessEventPayload" />
+              </Sequence.Variables>
+              <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4">
+                <vbw:WriteTrackingMessage.Message>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Sub Process created for Number Prefix '{0}'", numberPrefix)</mca:CSharpValue>
+                  </InArgument>
+                </vbw:WriteTrackingMessage.Message>
+              </vbw:WriteTrackingMessage>
+              <vbw:RunProcess ProcessInstanceId="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_2" WaitProcessCompleted="True">
+                <vbw:RunProcess.Input>
+                  <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                    <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new FindRelatedNumbersForNumberRangeProcessInput
+            {
+                NumberPrefix = numberPrefix,
+                FromDate = Input.FromDate,
+                ToDate = Input.ToDate
+            }</mca:CSharpValue>
+                  </InArgument>
+                </vbw:RunProcess.Input>
+                <vbw:RunProcess.ProcessCompletedEventPayload>
+                  <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                    <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">subProcessEventPayload</mca:CSharpReference>
+                  </OutArgument>
+                </vbw:RunProcess.ProcessCompletedEventPayload>
+              </vbw:RunProcess>
+              <If sap2010:WorkflowViewState.IdRef="If_3">
+                <If.Condition>
+                  <InArgument x:TypeArguments="x:Boolean">
+                    <mca:CSharpValue x:TypeArguments="x:Boolean">subProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                  </InArgument>
+                </If.Condition>
+                <If.Then>
+                  <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_2">
+                    <TerminateWorkflow.Reason>
+                      <InArgument x:TypeArguments="x:String">
+                        <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing number prefixe '{0}' failed due to error: {1}", numberPrefix, subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                      </InArgument>
+                    </TerminateWorkflow.Reason>
+                  </TerminateWorkflow>
+                </If.Then>
+                <If.Else>
+                  <Sequence DisplayName="SequenceRunProcessCompleted" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                    <vffba1:UpdateFindRelatedNumbersProgress sap2010:WorkflowViewState.IdRef="UpdateFindRelatedNumbersProgress_2">
+                      <vffba1:UpdateFindRelatedNumbersProgress.FindRelatedNumbersProgress>
+                        <InArgument x:TypeArguments="vffe:FindRelatedNumbersProgress">
+                          <mca:CSharpValue x:TypeArguments="vffe:FindRelatedNumbersProgress">findRelatedNumberProgress</mca:CSharpValue>
+                        </InArgument>
+                      </vffba1:UpdateFindRelatedNumbersProgress.FindRelatedNumbersProgress>
+                      <vffba1:UpdateFindRelatedNumbersProgress.FindRelatedNumbersSubProcessEventOutput>
+                        <InArgument x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">
+                          <mca:CSharpValue x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">subProcessEventPayload.ProcessOutput as FindRelatedNumbersForNumberRangeProcessOutput</mca:CSharpValue>
+                        </InArgument>
+                      </vffba1:UpdateFindRelatedNumbersProgress.FindRelatedNumbersSubProcessEventOutput>
+                    </vffba1:UpdateFindRelatedNumbersProgress>
+                    <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpReference x:TypeArguments="x:Int32">subProcessByPrefixCompleted</mca:CSharpReference>
+                        </OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">subProcessByPrefixCompleted + 1</mca:CSharpValue>
+                        </InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
+                      <vbw:WriteTrackingMessage.Message>
+                        <InArgument x:TypeArguments="x:String">
+                          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Number Prefix '{0}' group completed. {1} groups remaining. {2} processed CDRs. {3} total processed CDRs. ", numberPrefix, (numberPrefixes.Count() - subProcessByPrefixCompleted), (subProcessEventPayload.ProcessOutput as FindRelatedNumbersForNumberRangeProcessOutput).CDRsProcessed, findRelatedNumberProgress.CDRsProcessed)</mca:CSharpValue>
+                        </InArgument>
+                      </vbw:WriteTrackingMessage.Message>
+                    </vbw:WriteTrackingMessage>
+                  </Sequence>
+                </If.Else>
+              </If>
+            </Sequence>
+          </ActivityAction>
+        </ParallelForEach>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="SequenceNoNumberPrefixes" sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vffba:ExecuteStrategyForNumberRangeProcessOutput" Name="executeStrategySubProcessEventOutput" />
+            <Variable x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput" Name="findRelatedNumberSubProcessEventOutput" />
+          </Sequence.Variables>
+          <local:FindRelatedNumbersForNumberRangeProcess sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1">
+            <local:FindRelatedNumbersForNumberRangeProcess.Input>
+              <InArgument x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessInput">
+                <mca:CSharpValue x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessInput" xml:space="preserve">new FindRelatedNumbersForNumberRangeProcessInput
+            {
+                FromDate = Input.FromDate,
+                ToDate = Input.ToDate,
+                UserId = Input.UserId
+            }</mca:CSharpValue>
+              </InArgument>
+            </local:FindRelatedNumbersForNumberRangeProcess.Input>
+            <local:FindRelatedNumbersForNumberRangeProcess.Output>
+              <OutArgument x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">
+                <mca:CSharpReference x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">findRelatedNumberSubProcessEventOutput</mca:CSharpReference>
+              </OutArgument>
+            </local:FindRelatedNumbersForNumberRangeProcess.Output>
+            <sap2010:WorkflowViewState.ViewStateManager>
+              <sap2010:ViewStateManager>
+                <sap2010:ViewStateData Id="GetAccountNumbersByIMEIDictionary_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+                <sap2010:ViewStateData Id="LoadCDRs_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+                <sap2010:ViewStateData Id="FindRelatedNumbersthroughIMEIs_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+                <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+                <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+                <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+                <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+              </sap2010:ViewStateManager>
+            </sap2010:WorkflowViewState.ViewStateManager>
+          </local:FindRelatedNumbersForNumberRangeProcess>
+          <vffba1:UpdateFindRelatedNumbersProgress sap2010:WorkflowViewState.IdRef="UpdateFindRelatedNumbersProgress_1">
+            <vffba1:UpdateFindRelatedNumbersProgress.FindRelatedNumbersProgress>
+              <InArgument x:TypeArguments="vffe:FindRelatedNumbersProgress">
+                <mca:CSharpValue x:TypeArguments="vffe:FindRelatedNumbersProgress">findRelatedNumberProgress</mca:CSharpValue>
+              </InArgument>
+            </vffba1:UpdateFindRelatedNumbersProgress.FindRelatedNumbersProgress>
+            <vffba1:UpdateFindRelatedNumbersProgress.FindRelatedNumbersSubProcessEventOutput>
+              <InArgument x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">
+                <mca:CSharpValue x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">findRelatedNumberSubProcessEventOutput</mca:CSharpValue>
+              </InArgument>
+            </vffba1:UpdateFindRelatedNumbersProgress.FindRelatedNumbersSubProcessEventOutput>
+          </vffba1:UpdateFindRelatedNumbersProgress>
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6">
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0} total processed CDRs.", executeStrategySubProcessEventOutput.CDRsProcessed)</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
+          </vbw:WriteTrackingMessage>
+        </Sequence>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbCZLA/8BDgIBAVEFYR8DAYUBYgX9AQoCAQJZC1lwAwGQAVQLVFkDAYsBXgteVwMBhgFlC2WJAQIBA2kJxAEbAgEvxwEJ+wEUAgEIbA9sbAMBgAFzDcIBGAIBMMwBC+cBOwIBIOgBC/MBNQIBEfQBC/oBJgIBCXcPfSoCAXh+D44BIAIBaI8BD8EBFAIBMdkBEdkBqAECASjPARHUASACASHrARHrAX8CARnwARHwAaABAgES9wER9wGtAQIBCnoVep0BAgF5gQEVhgEgAgFxiwEViwGIAQIBan6AAX6GAQIBaZIBFZIBtwECATKWAROcAScCAWCfARO/AR4CATmZARmZAdkBAgFhoAEVqwE/AgFRrAEVtwEeAgFCuAEVvgEwAgE6owEbowGJAQIBWagBG6gB2QECAVK0ARu0AXcCAUqvARuvAXsCAUO7ARu7AbQDAgE7</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetAccountNumbersByIMEIDictionary_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="LoadCDRs_3" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="FindRelatedNumbersthroughIMEIs_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,272">
+      <sap2010:ViewStateData Id="GetNumberPrefixes_1" sap:VirtualizedContainerService.HintSize="788,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="UpdateFindRelatedNumbersProgress_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="264,310">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess_1" sap:VirtualizedContainerService.HintSize="616,352" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="489,460" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="511,708">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,858" />
+      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="554,62" />
+      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="576,374">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="616,454" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="UpdateFindRelatedNumbersProgress_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="222,270">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="788,1008" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="810,1194">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess_1" sap:VirtualizedContainerService.HintSize="850,1274" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

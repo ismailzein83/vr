@@ -1,0 +1,173 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vfcba="clr-namespace:Vanrise.Fzero.CDRImport.BP.Activities;assembly=Vanrise.Fzero.CDRImport.BP.Activities"
+ xmlns:vfce="clr-namespace:Vanrise.Fzero.CDRImport.Entities;assembly=Vanrise.Fzero.CDRImport.Entities"
+ xmlns:vffba="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Arguments;assembly=Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+ xmlns:vffba1="clr-namespace:Vanrise.Fzero.FraudAnalysis.BP.Activities;assembly=Vanrise.Fzero.FraudAnalysis.BP.Activities"
+ xmlns:vffe="clr-namespace:Vanrise.Fzero.FraudAnalysis.Entities;assembly=Vanrise.Fzero.FraudAnalysis.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vffba:FindRelatedNumbersForNumberRangeProcessInput)" />
+    <x:Property Name="Output" Type="OutArgument(vffba:FindRelatedNumbersForNumberRangeProcessOutput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.Fzero.FraudAnalysis.Entities</x:String>
+      <x:String>Vanrise.Fzero.FraudAnalysis.BP.Arguments</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Data</AssemblyReference>
+      <AssemblyReference>Vanrise.Security.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.CDRImport.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Fzero.FraudAnalysis.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vffe:AccountNumbersByIMEIDictionary" Name="accountNumbersByIMEIDictionary" />
+      <Variable x:TypeArguments="x:Int64" Name="processedCDRs" />
+    </Sequence.Variables>
+    <vffba1:GetAccountNumbersByIMEIDictionary sap2010:WorkflowViewState.IdRef="GetAccountNumbersByIMEIDictionary_1">
+      <vffba1:GetAccountNumbersByIMEIDictionary.AccountNumbersByIMEIDictionary>
+        <InOutArgument x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">
+          <mca:CSharpReference x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">accountNumbersByIMEIDictionary</mca:CSharpReference>
+        </InOutArgument>
+      </vffba1:GetAccountNumbersByIMEIDictionary.AccountNumbersByIMEIDictionary>
+    </vffba1:GetAccountNumbersByIMEIDictionary>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
+      </Parallel.Variables>
+      <vfcba:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_1">
+        <vfcba:LoadCDRs.FromDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vfcba:LoadCDRs.FromDate>
+        <vfcba:LoadCDRs.NumberOfCDRs>
+          <OutArgument x:TypeArguments="x:Int64">
+            <mca:CSharpReference x:TypeArguments="x:Int64">processedCDRs</mca:CSharpReference>
+          </OutArgument>
+        </vfcba:LoadCDRs.NumberOfCDRs>
+        <vfcba:LoadCDRs.NumberPrefix>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">Input.NumberPrefix</mca:CSharpValue>
+          </InArgument>
+        </vfcba:LoadCDRs.NumberPrefix>
+        <vfcba:LoadCDRs.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vfcba:LoadCDRs.OutputQueue>
+        <vfcba:LoadCDRs.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpReference>
+          </OutArgument>
+        </vfcba:LoadCDRs.Status>
+        <vfcba:LoadCDRs.ToDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vfcba:LoadCDRs.ToDate>
+      </vfcba:LoadCDRs>
+      <vffba1:FindRelatedNumbersthroughIMEIs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FindRelatedNumbersthroughIMEIs_1">
+        <vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEIDictionary>
+          <InArgument x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">
+            <mca:CSharpValue x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">accountNumbersByIMEIDictionary</mca:CSharpValue>
+          </InArgument>
+        </vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEIDictionary>
+        <vffba1:FindRelatedNumbersthroughIMEIs.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vffba1:FindRelatedNumbersthroughIMEIs.InputQueue>
+        <vffba1:FindRelatedNumbersthroughIMEIs.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpValue>
+          </InArgument>
+        </vffba1:FindRelatedNumbersthroughIMEIs.PreviousActivityStatus>
+      </vffba1:FindRelatedNumbersthroughIMEIs>
+    </Parallel>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">
+          <mca:CSharpReference x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">Output</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput">
+          <mca:CSharpValue x:TypeArguments="vffba:FindRelatedNumbersForNumberRangeProcessOutput" xml:space="preserve">new FindRelatedNumbersForNumberRangeProcessOutput
+            {
+                CDRsProcessed = processedCDRs
+            }</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <sads:DebugSymbol.Symbol>d15DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sEkgDmwEOAgEBTQVTMAIBT1QFigEQAgENiwEFmQEOAgECUAtQigECAVBZB3gYAgEkeQeJAS8CAQ6TAQuWASACAQiOAQuOAYIBAgEDYQ1hXwIBSGYNZl0CAUFcDVxbAgE6cA1wbwIBM2sNa24CASx1DXVZAgElhgENhgFnAgEdgQENgQFuAgEWfA18hAECAQ8=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetAccountNumbersByIMEIDictionary_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="FindRelatedNumbersthroughIMEIs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="554,62" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,374">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="616,454" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
