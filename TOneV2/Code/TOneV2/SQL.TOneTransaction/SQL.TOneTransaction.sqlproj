@@ -161,7 +161,6 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_UpdateInfo.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_GetAll.sql" />
     <Build Include="bp\Tables\BPTaskType.sql" />
-    <Build Include="bp\Tables\BPTaskAssignedUser.sql" />
     <Build Include="bp\Tables\BPTask.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetStatusesByIDs.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlow_Update.sql" />
@@ -195,6 +194,12 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetByTaskIds_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetByTaskId_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetAll_1.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTask_UpdateTaskExecution.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTask_Insert.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTask_GetUpdated.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTask_GetByID.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTask_GetBeforeId.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTaskType_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
