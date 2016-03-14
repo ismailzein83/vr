@@ -39,6 +39,10 @@ BusinessProcess.PostDeployment
 [sec].[Module] 601 to 700
 [sec].[View] 6001 to 7000
 -------------------------------------------------
+Queueing.PostDeployment
+[sec].[Module] 701 to 800
+[sec].[View] 7001 to 8000
+-------------------------------------------------
 
 Products
 ========
