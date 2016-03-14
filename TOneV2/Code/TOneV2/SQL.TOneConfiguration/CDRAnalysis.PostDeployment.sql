@@ -132,7 +132,6 @@ as (select * from (values
 (21,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement',8,'Root/PSTN_BusinessEntity Module:View',null,null,0,11),
 (22,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',1,'Root/Administration Module:View',null,null,0,13),
 (23,'Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement',3,'Root/PSTN_BusinessEntity Module:View',null,null,0,13),
-(26,'Number Prefixes','Number Prefixes','#/view/FraudAnalysis/Views/NumberPrefix/NumberPrefixManagement',1,'Root/Business Process Module/Management:View',null,null,0,	14	),
 (27,'Strategy Execution Log','Strategy Execution Log','#/view/FraudAnalysis/Views/StrategyExecution/StrategyExecutionManagement',	2,'	Root/Suspicion Analysis Module:View',null,null,0,	12	)
 
 
