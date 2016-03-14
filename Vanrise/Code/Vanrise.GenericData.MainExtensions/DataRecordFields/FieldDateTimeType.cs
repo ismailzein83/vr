@@ -79,7 +79,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
         DateTime = 0,
-        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
+        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(Vanrise.Entities.Time))]
         Time = 1,
         [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
         Date = 2

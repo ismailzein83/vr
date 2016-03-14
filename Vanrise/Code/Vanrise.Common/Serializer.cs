@@ -48,5 +48,12 @@ namespace Vanrise.Common
             return JsonConvert.DeserializeObject(serialized, null, s_Settings);
         }
 
+        public static object Deserialize(string serialized, Type type)
+        {
+            if (serialized == null)
+                return null;
+            return JsonConvert.DeserializeObject(serialized, type, s_Settings);
+        }
+
     }
 }
