@@ -19,9 +19,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #region Public Methods
         public void CreateTempTable()
         {
-            ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumbers_CreateTempTable");
+            ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumber_CreateTempTable");
         }
-        public void SavetoDB(AccountRelatedNumbersDictionary records)
+        public void SavetoDB(AccountRelatedNumberDictionary records)
         {
 
             StreamForBulkInsert stream = InitializeStreamForBulkInsert();
@@ -40,7 +40,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(
                 new StreamBulkInsertInfo
                 {
-                    TableName = "[FraudAnalysis].[RelatedNumbers_temp]",
+                    TableName = "[FraudAnalysis].[RelatedNumber_temp]",
                     Stream = stream,
                     TabLock = true,
                     KeepIdentity = false,
@@ -49,12 +49,12 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         }
         public void SwapTableWithTemp()
         {
-            ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumbers_SwapTableWithTemp");
+            ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumber_SwapTableWithTemp");
         }
 
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
-            string result = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumbers_GetRelatedNumbersByAccountNumber", accountNumber) as string;
+            string result = ExecuteScalarSP("FraudAnalysis.sp_RelatedNumber_GetRelatedNumbersByAccountNumber", accountNumber) as string;
 
             List<RelatedNumber> list = new List<RelatedNumber>();
 
