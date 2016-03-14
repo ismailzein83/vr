@@ -32,12 +32,6 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             );
         }
 
-        public bool InsertOrUpdateAccountInfo(string accountNumber, InfoDetail infoDetail)
-        {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountInfo_InsertOrUpdate", accountNumber, Vanrise.Common.Serializer.Serialize(infoDetail));
-            return (recordsAffected > 0);
-        }
-
         public void SavetoDB(List<AccountInfo> records)
         {
             string[] s_Columns = new string[] {
@@ -52,7 +46,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             {
                 stream.WriteRecord("{0}^{1}",
                                 record.AccountNumber,
-                                Vanrise.Common.Serializer.Serialize(record.InfoDetail)
+                                Vanrise.Common.Serializer.Serialize(record.InfoDetail, true)
                                 );
             }
 
