@@ -52,8 +52,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPTaskManager.cs" />
     <Compile Include="BPInstanceTrackingManager.cs" />
     <Compile Include="BPInstanceManager.cs" />
     <Compile Include="BPDefinitionManager.cs" />

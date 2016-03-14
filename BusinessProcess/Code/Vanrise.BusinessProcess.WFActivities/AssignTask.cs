@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.BusinessProcess.Business;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -16,6 +17,8 @@ namespace Vanrise.BusinessProcess.WFActivities
         [RequiredArgument]
         public InArgument<BPTaskInformation> TaskInformation { get; set; }
 
+        [RequiredArgument]
+        public InArgument<TaskType> TaskType { get; set; }
         public OutArgument<BPTask> ExecutedTask { get; set; }
 
         protected override bool CanInduceIdle
@@ -31,13 +34,15 @@ namespace Vanrise.BusinessProcess.WFActivities
             var sharedData = context.GetSharedInstanceData();
 
             var taskInformation = this.TaskInformation.Get(context);
+            var taskType = this.TaskType.Get(context);
 
             BPTaskManager bpTaskManager = new BPTaskManager();
             var createBPTaskInput = new CreateBPTaskInput
             {
                 ProcessInstanceId = sharedData.InstanceInfo.ProcessInstanceID,
                 Title = this.TaskTitle.Get(context),
-                TaskInformation = taskInformation
+                TaskInformation = taskInformation,
+                TypeId = (int)taskType
             };
             var createTaskOutput = bpTaskManager.CreateTask(createBPTaskInput);
             if (createTaskOutput != null && createTaskOutput.Result == CreateBPTaskResult.Succeeded)

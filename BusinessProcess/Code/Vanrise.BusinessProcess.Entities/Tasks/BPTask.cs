@@ -23,6 +23,8 @@ namespace Vanrise.BusinessProcess.Entities
 
         public string Title { get; set; }
 
+        public List<int> AssignedUsers { get; set; }
+
         public int? ExecutedById { get; set; }
 
         public BPTaskStatus Status { get; set; }

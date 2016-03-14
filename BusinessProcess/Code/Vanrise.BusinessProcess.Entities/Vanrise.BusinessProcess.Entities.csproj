@@ -71,6 +71,8 @@
     <Compile Include="BPTrackingUpdateOutput.cs" />
     <Compile Include="BPInstanceUpdateOutput.cs" />
     <Compile Include="BPTrackingMessageDetail.cs" />
+    <Compile Include="Tasks\BPTaskBeforeIdInput.cs" />
+    <Compile Include="Tasks\BPTaskDetail.cs" />
     <Compile Include="Tasks\BPTask.cs" />
     <Compile Include="Tasks\BPTaskAction.cs" />
     <Compile Include="Tasks\BPTaskAssignee.cs" />
@@ -86,6 +88,8 @@
     <Compile Include="BusinessRules\IRuleTarget.cs" />
     <Compile Include="BusinessRules\ValidationMessage.cs" />
     <Compile Include="Tasks\BPTaskTypeSettings.cs" />
+    <Compile Include="Tasks\BPTaskUpdateInput.cs" />
+    <Compile Include="Tasks\BPTaskUpdateOutput.cs" />
     <Compile Include="Tasks\CreateBPTaskInput.cs" />
     <Compile Include="Tasks\CreateBPTaskOutput.cs" />
     <Compile Include="Tasks\ExecuteBPTaskInput.cs" />
@@ -98,6 +102,7 @@
     <Compile Include="IBPService.cs" />
     <Compile Include="ProcessCompletedEventPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\IBPTaskFilter.cs" />
     <Compile Include="TriggerProcessEventInput.cs" />
     <Compile Include="TriggerProcessEventOutput.cs" />
   </ItemGroup>

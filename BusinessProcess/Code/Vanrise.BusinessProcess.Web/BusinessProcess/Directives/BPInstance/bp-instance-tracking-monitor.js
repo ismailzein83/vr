@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpInstanceTrackingMonitor", ["BusinessProcess_BPInstanceTrackingAPIService", "UtilsService",
-function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService) {
+app.directive("businessprocessBpInstanceTrackingMonitor", ["BusinessProcess_BPInstanceTrackingAPIService", "UtilsService","BusinessProcess_GridMaxSize",
+function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService,BusinessProcess_GridMaxSize) {
 
     var directiveDefinitionObject = {
 
@@ -49,7 +49,6 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService) {
         function initializeController() {
             loadFilters();
             $scope.selectedTrackingSeverity = [];
-            var maximumCount = 600;
             $scope.bpInstanceTracking = [];
             var timer;
             var isGettingData = false;
@@ -113,8 +112,8 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService) {
                                                 return b.Entity.Id - a.Entity.Id;
                                             });
 
-                                            if ($scope.bpInstanceTracking.length > maximumCount) {
-                                                $scope.bpInstanceTracking.length = maximumCount;
+                                            if ($scope.bpInstanceTracking.length > BusinessProcess_GridMaxSize.maximumCount) {
+                                                $scope.bpInstanceTracking.length = BusinessProcess_GridMaxSize.maximumCount;
                                             }
                                             input.LessThanID = $scope.bpInstanceTracking[$scope.bpInstanceTracking.length - 1].Entity.Id;
                                             input.GreaterThanID = $scope.bpInstanceTracking[0].Entity.Id;

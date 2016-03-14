@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BPTaskController.cs" />
     <Compile Include="Controllers\BPInstanceTrackingController.cs" />
     <Compile Include="Controllers\BPInstanceController.cs" />
     <Compile Include="Controllers\BPDefinitionController.cs" />
@@ -169,8 +170,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BusinessProcess\Constants\BPTaskStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\BPInstanceStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
+    <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-management-grid.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-selector.js" />
@@ -184,12 +187,18 @@
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceTrackingHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPTask\bp-task-monitor-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\bp-task-test-editor.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskTestEditor.html" />
+    <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\BPTaskAPIService.js" />
     <Content Include="BusinessProcess\Services\BPInstanceService.js" />
     <Content Include="BusinessProcess\Services\BPDefinitionService.js" />
     <Content Include="BusinessProcess\Services\BPSchedulerTaskService.js" />
+    <Content Include="BusinessProcess\Services\BPTaskService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessService.js" />
     <Content Include="BusinessProcess\Views\BPDefinitionManagement.html" />
@@ -202,6 +211,10 @@
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistoryController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModal.html" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModalController.js" />
+    <Content Include="BusinessProcess\Views\BPTask\BPTaskMonitor.html" />
+    <Content Include="BusinessProcess\Views\BPTask\BPTaskMonitorController.js" />
+    <Content Include="BusinessProcess\Views\BPTask\BPTaskEditor.html" />
+    <Content Include="BusinessProcess\Views\BPTask\BPTaskEditorController.js" />
     <Content Include="BusinessProcess\Views\BPTrackingModal.html" />
     <Content Include="BusinessProcess\Views\BPTrackingModalController.js" />
     <Content Include="BusinessProcess\Views\InstanceEditor.html" />

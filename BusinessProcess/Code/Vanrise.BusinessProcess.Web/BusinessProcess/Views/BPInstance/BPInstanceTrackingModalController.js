@@ -13,6 +13,7 @@
         var instanceMonitorGridAPI;
         var instanceTrackingHistoryGridAPI;
         var instanceTrackingMonitorGridAPI;
+        var taskTrackingMonitorGridAPI;
 
         var timer;
         var isGettingData = false;
@@ -38,12 +39,18 @@
                 instanceTrackingMonitorGridAPI.loadGrid(filter);
             }
 
+            $scope.onTaskMonitorGridReady = function (api) {
+                taskTrackingMonitorGridAPI = api;
+                getFilterObject();
+                taskTrackingMonitorGridAPI.loadGrid(filter);
+            }
 
             $scope.modalContext.onModalHide = function () {
                 instanceTrackingMonitorGridAPI.clearTimer();
                 if ($scope.process.HasChildProcesses) {
                     instanceMonitorGridAPI.clearTimer();
                 }
+                taskTrackingMonitorGridAPI.clearTimer();
                 clearTimeout(timer);
             };
         }

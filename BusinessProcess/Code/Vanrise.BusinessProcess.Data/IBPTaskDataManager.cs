@@ -9,10 +9,18 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPTaskDataManager : IDataManager
     {
-        bool InsertTask(string title, long processInstanceId, int typeId, IEnumerable<int> assignedUserIds, BPTaskStatus status, BPTaskInformation taskInformation, out long taskId);
+        bool InsertTask(string title, long processInstanceId, int typeId, IEnumerable<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskInformation taskInformation, out long taskId);
 
-        BPTask GetTask(long p);
+        BPTask GetTask(long taskId);
 
-        void UpdateTaskExecution(long taskId, int executedByUserId, BPTaskStatus bPTaskStatus, BPTaskExecutionInformation bPTaskExecutionInformation);
+        void UpdateTaskExecution(long taskId, int executedByUserId, BPTaskStatus bpTaskStatus, BPTaskExecutionInformation bPTaskExecutionInformation);
+
+        List<BPTask> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int? processInstanceId, int? userId);
+
+        List<BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId);
+
+        IEnumerable<BPTaskType> GetBPTaskTypes();
+
+        bool AreBPTaskTypesUpdated(ref object _updateHandle);
     }
 }

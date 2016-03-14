@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService",
-function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService) {
+app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService","BusinessProcess_GridMaxSize",
+function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, BusinessProcess_GridMaxSize) {
 
     var directiveDefinitionObject = {
 
@@ -44,7 +44,6 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
         var minId = undefined;
 
         function initializeController() {
-            var maximumCount = 600;
             $scope.bpInstances = [];
             var timer;
             var isGettingDataFirstTime = true;
@@ -130,8 +129,8 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                                                 return b.Entity.ProcessInstanceID - a.Entity.ProcessInstanceID;
                                             });
 
-                                            if ($scope.bpInstances.length > maximumCount) {
-                                                $scope.bpInstances.length = maximumCount;
+                                            if ($scope.bpInstances.length > BusinessProcess_GridMaxSize.maximumCount) {
+                                                $scope.bpInstances.length = BusinessProcess_GridMaxSize.maximumCount;
                                             }
                                             minId = $scope.bpInstances[$scope.bpInstances.length - 1].Entity.ProcessInstanceID;
                                             isGettingDataFirstTime = false;
