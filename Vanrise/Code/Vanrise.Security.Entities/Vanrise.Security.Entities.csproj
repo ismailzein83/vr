@@ -50,8 +50,10 @@
   <ItemGroup>
     <Compile Include="AuthenticationToken.cs" />
     <Compile Include="BusinessEntity\BusinessEntity.cs" />
+    <Compile Include="BusinessEntity\BusinessEntityDetail.cs" />
     <Compile Include="BusinessEntity\BusinessEntityNode.cs" />
     <Compile Include="BusinessEntity\BusinessEntityModule.cs" />
+    <Compile Include="BusinessEntity\BusinessEntityQuery.cs" />
     <Compile Include="ContextFactory.cs" />
     <Compile Include="Group\GroupFilter.cs" />
     <Compile Include="Group\GroupInfo.cs" />

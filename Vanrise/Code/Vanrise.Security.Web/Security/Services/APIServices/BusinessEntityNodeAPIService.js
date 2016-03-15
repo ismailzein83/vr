@@ -9,7 +9,8 @@
         return {
             GetEntityNodes: GetEntityNodes,
             ToggleBreakInheritance: ToggleBreakInheritance,
-            HasBreakInheritancePermission: HasBreakInheritancePermission
+            HasBreakInheritancePermission: HasBreakInheritancePermission,
+            GetEntityModules:GetEntityModules
         };
 
         function GetEntityNodes() {
@@ -25,6 +26,9 @@
 
         function HasBreakInheritancePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['ToggleBreakInheritance']));
+        }
+        function GetEntityModules() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetEntityModules'));
         }
     }
 

@@ -31,6 +31,31 @@ namespace Vanrise.Security.Data.SQL
         {
             return base.IsDataUpdated("sec.BusinessEntity", ref updateHandle);
         }
+        public bool AddBusinessEntity(BusinessEntity businessEntity, out int entityId)
+        {
+            string sertializedObject = null;
+            if(businessEntity.PermissionOptions !=null)
+            {
+                sertializedObject = Vanrise.Common.Serializer.Serialize(businessEntity.PermissionOptions, true);
+            }
+            object entityID;
+
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_Insert", out entityID, businessEntity.Name,businessEntity.Title, businessEntity.ModuleId, businessEntity.BreakInheritance, sertializedObject);
+            entityId = (recordesEffected > 0) ? (int)entityID : -1;
+
+            return (recordesEffected > 0);
+        }
+
+        public bool UpdateBusinessEntity(BusinessEntity businessEntity)
+        {
+            string sertializedObject = null;
+            if (businessEntity.PermissionOptions != null)
+            {
+                sertializedObject = Vanrise.Common.Serializer.Serialize(businessEntity.PermissionOptions, true);
+            }
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_Update", businessEntity.EntityId, businessEntity.Name,businessEntity.Title, businessEntity.ModuleId, businessEntity.BreakInheritance, sertializedObject);
+            return (recordesEffected > 0);
+        }
 
         #region Mappers
 
@@ -49,5 +74,8 @@ namespace Vanrise.Security.Data.SQL
         }
         
         #endregion
+
+
+       
     }
 }

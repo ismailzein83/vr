@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
@@ -35,7 +36,54 @@ namespace Vanrise.Security.Business
         {
             CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
-        
+        public Vanrise.Entities.InsertOperationOutput<BusinessEntityModule> AddBusinessEntityModule(BusinessEntityModule moduleObject)
+        {
+            InsertOperationOutput<BusinessEntityModule> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BusinessEntityModule>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int moduleId = -1;
+
+            IBusinessEntityModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
+            bool insertActionSucc = dataManager.AddBusinessEntityModule(moduleObject, out moduleId);
+
+            if (insertActionSucc)
+            {
+                SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                moduleObject.ModuleId = moduleId;
+                insertOperationOutput.InsertedObject = moduleObject;
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<BusinessEntityModule> UpdateBusinessEntityModule(BusinessEntityModule moduleObject)
+        {
+            IBusinessEntityModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
+            bool updateActionSucc = dataManager.UpdateBusinessEntityModule(moduleObject);
+            UpdateOperationOutput<BusinessEntityModule> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BusinessEntityModule>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = moduleObject;
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
         #endregion
         
         #region Private Methods

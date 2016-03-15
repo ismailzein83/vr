@@ -120,6 +120,8 @@
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
     <Content Include="Security\Constants\ViewTypeEnum.js" />
     <Content Include="Security\Constants\WidgetSectionEnum.js" />
+    <Content Include="Security\Directives\BusinessEntity\Templates\BusinessEntityGridTemplate.html" />
+    <Content Include="Security\Directives\BusinessEntity\vr-sec-businessentity-grid.js" />
     <Content Include="Security\Directives\DynamicPage\Templates\DynamicPageViewer.html" />
     <Content Include="Security\Directives\DynamicPage\Templates\DynamicPagesGrid.html" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpage-grid.js" />
@@ -142,6 +144,8 @@
     <Content Include="Security\Directives\Widget\Templates\WidgetsGrid.html" />
     <Content Include="Security\Directives\Widget\vr-sec-widget-grid.js" />
     <Content Include="Security\Directives\Widget\vr-sec-widgetpreview.js" />
+    <Content Include="Security\Services\APIServices\BusinessEntityAPIService.js" />
+    <Content Include="Security\Services\APIServices\BusinessEntityModuleAPIService.js" />
     <Content Include="Security\Services\APIServices\BusinessEntityNodeAPIService.js" />
     <Content Include="Security\Services\APIServices\ModuleAPIService.js" />
     <Content Include="Security\Services\APIServices\OrgChartAPIService.js" />
@@ -153,6 +157,8 @@
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetDefinitionAPIService.js" />
+    <Content Include="Security\Services\BusinessEntityDefinitionService.js" />
+    <Content Include="Security\Services\BusinessEntityModuleService.js" />
     <Content Include="Security\Services\MenuService.js" />
     <Content Include="Security\Services\ModuleService.js" />
     <Content Include="Security\Services\OrgChartService.js" />
@@ -162,6 +168,12 @@
     <Content Include="Security\Services\ViewService.js" />
     <Content Include="Security\Services\UserService.js" />
     <Content Include="Security\Services\WidgetService.js" />
+    <Content Include="Security\Views\BusinessEntity\BusinessEntityDefinitionEditor.html" />
+    <Content Include="Security\Views\BusinessEntity\BusinessEntityDefinitionEditorController.js" />
+    <Content Include="Security\Views\BusinessEntity\BusinessEntityModuleEditor.html" />
+    <Content Include="Security\Views\BusinessEntity\BusinessEntityModuleEditorController.js" />
+    <Content Include="Security\Views\BusinessEntity\BusinessEntityDefinitionManagement.html" />
+    <Content Include="Security\Views\BusinessEntity\BusinessEntityDefinitionManagementController.js" />
     <Content Include="Security\Views\Menu\MenuManagement.html" />
     <Content Include="Security\Views\Menu\MenuManagementController.js" />
     <Content Include="Security\Views\Menu\ModuleEditor.html" />
@@ -207,6 +219,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BusinessEntityController.cs" />
+    <Compile Include="Controllers\BusinessEntityModuleController.cs" />
     <Compile Include="Controllers\BusinessEntityNodeController.cs" />
     <Compile Include="Controllers\ModuleController.cs" />
     <Compile Include="Controllers\OrgChartController.cs" />

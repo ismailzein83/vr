@@ -34,13 +34,33 @@ namespace Vanrise.Security.Business
             {
                 if (item.ParentId == 0)
                 {
-                    retVal.Add(GetModuleNode(item, modules, entities, null));
+                    retVal.Add(GetModuleNode(item, modules, entities, null,true));
+                }
+            }
+
+            return retVal;
+        }
+        public List<BusinessEntityNode> GetEntityModules()
+        {
+            //TODO: pass the holder id to load the saved permissions
+            IEnumerable<BusinessEntityModule> modules = _beModuleManager.GetBusinessEntityModules();
+           
+            List<BusinessEntityNode> retVal = new List<BusinessEntityNode>();
+
+            foreach (BusinessEntityModule item in modules)
+            {
+                if (item.ParentId == 0)
+                {
+                    retVal.Add(GetModuleNode(item, modules, null, null, true));
                 }
             }
 
             return retVal;
         }
 
+
+      
+        
         public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(EntityType entityType, string entityId)
         {
             UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
@@ -91,7 +111,7 @@ namespace Vanrise.Security.Business
 
         #region Private Methods
 
-        private BusinessEntityNode GetModuleNode(BusinessEntityModule module, IEnumerable<BusinessEntityModule> modules, IEnumerable<BusinessEntity> entities, BusinessEntityNode parent)
+        private BusinessEntityNode GetModuleNode(BusinessEntityModule module, IEnumerable<BusinessEntityModule> modules, IEnumerable<BusinessEntity> entities, BusinessEntityNode parent, bool withchildEntities)
         {
             BusinessEntityNode node = new BusinessEntityNode()
             {
@@ -104,11 +124,15 @@ namespace Vanrise.Security.Business
                 Parent = parent
             };
 
+
             IEnumerable<BusinessEntityModule> subModules = modules.FindAllRecords(x => x.ParentId == module.ModuleId);
 
-            IEnumerable<BusinessEntity> childEntities = entities.FindAllRecords(x => x.ModuleId == module.ModuleId);
+            IEnumerable<BusinessEntity> childEntities = null ;
 
-            if (childEntities.Count() > 0)
+            if (entities != null)
+                childEntities = entities.FindAllRecords(x => x.ModuleId == module.ModuleId);
+           
+            if (childEntities !=null && childEntities.Count() > 0 && withchildEntities)
             {
                 node.Children = new List<BusinessEntityNode>();
                 foreach (BusinessEntity entityItem in childEntities)
@@ -135,7 +159,7 @@ namespace Vanrise.Security.Business
 
                 foreach (BusinessEntityModule item in subModules)
                 {
-                    node.Children.Add(GetModuleNode(item, modules, entities, node));
+                    node.Children.Add(GetModuleNode(item, modules, entities, node, withchildEntities));
                 }
             }
 

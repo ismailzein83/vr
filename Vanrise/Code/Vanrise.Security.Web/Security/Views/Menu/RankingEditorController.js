@@ -126,7 +126,6 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
         var preparedMenuItems = [];
         var menu = treeAPI.getTree();
         prepareMenuItems(menu[0].Childs, preparedMenuItems);
-        console.log(preparedMenuItems);
         return preparedMenuItems;
     }
 
@@ -139,7 +138,7 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
                 Location: menuItem.Location,
                 MenuType: menuItem.MenuType,
                 Name: menuItem.Name,
-                Rank: menuItem.Rank,
+                Rank: i+1,
                 Type: menuItem.Type,
                 Title: menuItem.Title,
                 AllowDynamic: menuItem.AllowDynamic,
@@ -148,24 +147,6 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
             preparedMenuItems.push(preparedMenuItem);
             prepareMenuItems(menuItem.Childs, preparedMenuItem.Childs);
         }
-    }
-
-    function prepareViews(childs, parent, menu)
-    {
-       
-        if (childs != undefined)
-        {
-            for (var i = 0; i < childs.length; i++) {
-                var child = childs[i];
-                if (child.isLeaf)
-                    views.push({ ModuleId: child.Id, Rank: viewIndex++ });
-                else {
-                    modules.push({ ParentId: parent.Id, Rank: moduleIndex++ });
-                    prepareViews(child.Childs, child,views, modules, viewIndex, moduleIndex)
-                }
-            }
-        }
-       
     }
 
     function getNodeLevel(node,items)

@@ -31,7 +31,21 @@ namespace Vanrise.Security.Data.SQL
         {
             return base.IsDataUpdated("sec.BusinessEntityModule", ref updateHandle);
         }
+        public bool AddBusinessEntityModule(Entities.BusinessEntityModule moduleObject, out int moduleId)
+        {
+            object moduleID;
 
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_Insert", out moduleID, moduleObject.Name, moduleObject.ParentId, moduleObject.BreakInheritance);
+            moduleId = (recordesEffected > 0) ? (int)moduleID : -1;
+
+            return (recordesEffected > 0);
+        }
+
+        public bool UpdateBusinessEntityModule(Entities.BusinessEntityModule moduleObject)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntityModule_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.BreakInheritance);
+            return (recordesEffected > 0);
+        }
         #region Mappers
 
         Entities.BusinessEntityModule ModuleMapper(IDataReader reader)
@@ -49,5 +63,8 @@ namespace Vanrise.Security.Data.SQL
         }
         
         #endregion
+
+
+     
     }
 }

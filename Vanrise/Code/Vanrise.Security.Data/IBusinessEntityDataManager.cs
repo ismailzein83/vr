@@ -12,7 +12,8 @@ namespace Vanrise.Security.Data
         IEnumerable<Vanrise.Security.Entities.BusinessEntity> GetEntities();
 
         bool ToggleBreakInheritance(string entityId);
-
+        bool AddBusinessEntity(BusinessEntity businessEntity, out int entityId);
+        bool UpdateBusinessEntity(BusinessEntity businessEntity);
         bool AreBusinessEntitiesUpdated(ref object updateHandle);
     }
 }

@@ -31,12 +31,28 @@ namespace Vanrise.Security.Business
             return GetCachedBusinessEntities().Values;
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<BusinessEntityDetail> GetFilteredBusinessEntities(Vanrise.Entities.DataRetrievalInput<BusinessEntityQuery> input)
+        {
+            var businessEntites = GetBusinessEntites();
+
+            Func<BusinessEntity, bool> filterExpression = (prod) =>
+                 (prod.ModuleId == input.Query.ModuleId);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, businessEntites.ToBigResult(input, filterExpression, BusinessEntityDetailMapper));
+        }
+
         public BusinessEntity GetBusinessEntityById(int entityId)
         {
             var cachedEntities = GetCachedBusinessEntities();
             return cachedEntities.FindRecord(entity => entity.EntityId == entityId);
         }
 
+        public IEnumerable<BusinessEntity> GetBusinessEntitiesByModuleId(int moduleId)
+        {
+            //TODO: pass the holder id to load the saved permissions
+              var cachedEntities = GetCachedBusinessEntities();
+              return cachedEntities.FindAllRecords(entity => entity.ModuleId == moduleId);
+        }
         public string GetBusinessEntityName(EntityType entityType, string entityId)
         {
             int convertedEntityId = Convert.ToInt32(entityId);
@@ -52,7 +68,54 @@ namespace Vanrise.Security.Business
         {
             CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
+        public Vanrise.Entities.InsertOperationOutput<BusinessEntityDetail> AddBusinessEntity(BusinessEntity businessEntity)
+        {
+            InsertOperationOutput<BusinessEntityDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BusinessEntityDetail>();
 
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int entityId = -1;
+
+            IBusinessEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
+            bool insertActionSucc = dataManager.AddBusinessEntity(businessEntity, out entityId);
+
+            if (insertActionSucc)
+            {
+                SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                businessEntity.EntityId = entityId;
+                insertOperationOutput.InsertedObject = BusinessEntityDetailMapper(businessEntity);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<BusinessEntityDetail> UpdateBusinessEntity(BusinessEntity businessEntity)
+        {
+            IBusinessEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
+            bool updateActionSucc = dataManager.UpdateBusinessEntity(businessEntity);
+            UpdateOperationOutput<BusinessEntityDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BusinessEntityDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = BusinessEntityDetailMapper(businessEntity);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
         #endregion
 
         #region Private Methods
@@ -83,6 +146,16 @@ namespace Vanrise.Security.Business
             }
         }
         
+        #endregion
+
+        #region Mapper
+        BusinessEntityDetail BusinessEntityDetailMapper(BusinessEntity businessEntity)
+        {
+            return new BusinessEntityDetail
+            {
+                Entity = businessEntity
+            };
+        }
         #endregion
     }
 }

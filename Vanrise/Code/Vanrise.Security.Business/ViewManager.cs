@@ -128,33 +128,41 @@ namespace Vanrise.Security.Business
         }
         public bool updateMenuChilds(List<MenuItem> updatedChildsMenuItem)
         {
-            int moduleIndex = 0;
+            var rank = 1;
             for (int i = 0; i < updatedChildsMenuItem.Count; i++)
             {
                 var menuItem = updatedChildsMenuItem[i];
                 if(menuItem.MenuType == MenuType.Module)
                 {
-                    _moduleManager.UpdateModuleRank(menuItem.Id, null, moduleIndex);
-                    PrepareViewsAndModulesObjects(menuItem.Childs, menuItem, 0, moduleIndex++);
+                    rank++;
+                    _moduleManager.UpdateModuleRank(menuItem.Id, null, rank);
+                    PrepareViewsAndModulesObjects(menuItem.Childs, menuItem);
 
                 }else if (menuItem.MenuType == MenuType.View)
-                { 
-                    UpdateViewRank(menuItem.Id,1,0);
+                {
+                    rank++;
+                    UpdateViewRank(menuItem.Id, 1, rank);
                 }               
             }
             return true;
         }
-        public void PrepareViewsAndModulesObjects(List<MenuItem> childs, MenuItem parent, int viewIndex, int moduleIndex)
+        public void PrepareViewsAndModulesObjects(List<MenuItem> childs, MenuItem parent)
         {
             if (childs != null)
              {
+                 var rank = 1;
                 for (int i = 0; i < childs.Count; i++) {
                     var child = childs[i];
                     if (child.MenuType == MenuType.View)
-                        UpdateViewRank(child.Id,parent.Id,viewIndex++);
-                    else {
-                        _moduleManager.UpdateModuleRank(child.Id,parent.Id, moduleIndex++);
-                        PrepareViewsAndModulesObjects(child.Childs, child,viewIndex, moduleIndex);
+                    {
+                        rank++;
+                        UpdateViewRank(child.Id, parent.Id, rank);
+                    }
+                    else
+                    {
+                        rank++;
+                        _moduleManager.UpdateModuleRank(child.Id, parent.Id, rank);
+                        PrepareViewsAndModulesObjects(child.Childs, child);
                     }
                 }
             }

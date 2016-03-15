@@ -99,17 +99,6 @@
         }
 
         function buildModuleObjFromScope() {
-            var selectedMenuItem = $scope.scopeModal.selectedMenuItem;
-            var selectedMenuItemId;
-            if (selectedMenuItem != undefined)
-            {
-                if ($scope.scopeModal.selectedMenuItem.Name == 'Root')
-                    selectedMenuItemId = null;
-                else {
-                    selectedMenuItemId = selectedMenuItem.Id;
-                }
-            }
-            
             var moduleObject = {
                 ModuleId: moduleId,
                 Name: $scope.scopeModal.name,

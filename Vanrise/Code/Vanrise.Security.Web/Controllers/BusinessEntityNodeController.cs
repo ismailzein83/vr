@@ -28,5 +28,11 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.ToggleBreakInheritance(entityType, entityId);
         }
+        [HttpGet]
+        [Route("GetEntityModules")]
+        public List<BusinessEntityNode> GetEntityModules()
+        {
+            return _manager.GetEntityModules();
+        }
     }
 }
