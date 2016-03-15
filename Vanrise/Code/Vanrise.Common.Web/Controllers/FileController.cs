@@ -80,7 +80,7 @@ namespace Vanrise.Common.Web
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = String.Format(file.Name) 
+                FileName = HttpUtility.UrlPathEncode(file.Name)
             };
             return response;
 

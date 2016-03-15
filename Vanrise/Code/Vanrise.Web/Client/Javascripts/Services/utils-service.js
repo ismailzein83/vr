@@ -373,6 +373,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         var matcher = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/i;
 
         var results = headers['content-disposition'].match(matcher);
+        //var name = replaceAll(results[1], "\"", ""); for UI side fixing
         var filename = replaceAll(results[1], "%20", " ");
         var contentType = headers['content-type'] || octetStreamMime;
         try {
