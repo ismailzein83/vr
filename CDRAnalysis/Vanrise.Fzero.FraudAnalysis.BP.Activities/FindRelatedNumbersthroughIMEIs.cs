@@ -60,29 +60,29 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                             {
                                 if (cdr.IMEI == null)
                                     continue;
-                                HashSet<String> relatedAccountNumbers;
-                                if (accountNumbersByIMEIDictionary.TryGetValue(cdr.IMEI, out relatedAccountNumbers))
+                                HashSet<String> accountNumberswithSameIMEI;
+                                if (accountNumbersByIMEIDictionary.TryGetValue(cdr.IMEI, out accountNumberswithSameIMEI))
                                 {
-                                    foreach (var relatedAccountNumber in relatedAccountNumbers)
+                                    foreach (var accountNumberwithSameIMEI in accountNumberswithSameIMEI)
                                     {
-                                        if (relatedAccountNumber != cdr.MSISDN)
+                                        if (accountNumberwithSameIMEI != cdr.MSISDN)
                                         {
                                             HashSet<String> relatedNumbers = new HashSet<string>();
-                                            if (accountRelatedNumbersDictionary.TryGetValue(cdr.MSISDN, out relatedNumbers))
+                                            if (accountRelatedNumbersDictionary.TryGetValue(accountNumberwithSameIMEI, out relatedNumbers))
                                             {
-                                                if (!relatedNumbers.Contains(relatedAccountNumber))
+                                                if (!relatedNumbers.Contains(cdr.MSISDN))
                                                 {
-                                                    relatedNumbers.Add(relatedAccountNumber);
-                                                    accountRelatedNumbersDictionary[cdr.MSISDN] = relatedNumbers;
-                                                    accountRelatedNumbersToBeInserted.Add(new RelatedNumber { AccountNumber = cdr.MSISDN, RelatedAccountNumber = relatedAccountNumber });
+                                                    relatedNumbers.Add(cdr.MSISDN);
+                                                    accountRelatedNumbersDictionary[accountNumberwithSameIMEI] = relatedNumbers;
+                                                    accountRelatedNumbersToBeInserted.Add(new RelatedNumber { AccountNumber = accountNumberwithSameIMEI, RelatedAccountNumber = cdr.MSISDN });
                                                 }
                                             }
                                             else
                                             {
                                                 relatedNumbers = new HashSet<string>();
-                                                relatedNumbers.Add(relatedAccountNumber);
-                                                accountRelatedNumbersDictionary.Add(cdr.MSISDN, relatedNumbers);
-                                                accountRelatedNumbersToBeInserted.Add(new RelatedNumber { AccountNumber = cdr.MSISDN, RelatedAccountNumber = relatedAccountNumber });
+                                                relatedNumbers.Add(cdr.MSISDN);
+                                                accountRelatedNumbersDictionary.Add(accountNumberwithSameIMEI, relatedNumbers);
+                                                accountRelatedNumbersToBeInserted.Add(new RelatedNumber { AccountNumber = accountNumberwithSameIMEI, RelatedAccountNumber = cdr.MSISDN });
                                             }
                                         }
                                     }
