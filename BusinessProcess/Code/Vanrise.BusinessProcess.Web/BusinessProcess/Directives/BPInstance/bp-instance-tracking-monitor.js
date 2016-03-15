@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpInstanceTrackingMonitor", ["BusinessProcess_BPInstanceTrackingAPIService", "UtilsService","BusinessProcess_GridMaxSize",
-function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService,BusinessProcess_GridMaxSize) {
+app.directive("businessprocessBpInstanceTrackingMonitor", ["BusinessProcess_BPInstanceTrackingAPIService", "UtilsService", "BusinessProcess_GridMaxSize","VRTimerService",
+function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessProcess_GridMaxSize, VRTimerService) {
 
     var directiveDefinitionObject = {
 
@@ -50,8 +50,8 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService,BusinessPro
             loadFilters();
             $scope.selectedTrackingSeverity = [];
             $scope.bpInstanceTracking = [];
-            var timer;
-            var isGettingData = false;
+            var job;
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -65,8 +65,8 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService,BusinessPro
                     }
 
                     directiveAPI.clearTimer = function () {
-                        if (timer != undefined) {
-                            clearTimeout(timer);
+                        if (job) {
+                            VRTimerService.unregisterJob(job);
                         }
                     }
                     return directiveAPI;
@@ -83,57 +83,59 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService,BusinessPro
                     input.GreaterThanID = undefined;
                     input.NbOfRows = undefined;
                     $scope.bpInstanceTracking.length = 0;
-                    createTimer();
+                    job = createTimer();
+                }
+
+                function manipulateDataUpdated(response) {
+                    var itemAddedOrUpdatedInThisCall = false;
+                    if (response != undefined) {
+                        for (var i = 0; i < response.ListBPInstanceTrackingDetails.length; i++) {
+                            var bpInstanceTracking = response.ListBPInstanceTrackingDetails[i];
+
+                            itemAddedOrUpdatedInThisCall = true;
+                            $scope.bpInstanceTracking.push(bpInstanceTracking);
+
+                        }
+
+                        if (itemAddedOrUpdatedInThisCall) {
+                            if ($scope.bpInstanceTracking.length > 0) {
+                                $scope.bpInstanceTracking.sort(function (a, b) {
+                                    return b.Entity.Id - a.Entity.Id;
+                                });
+
+                                if ($scope.bpInstanceTracking.length > BusinessProcess_GridMaxSize.maximumCount) {
+                                    $scope.bpInstanceTracking.length = BusinessProcess_GridMaxSize.maximumCount;
+                                }
+                                input.LessThanID = $scope.bpInstanceTracking[$scope.bpInstanceTracking.length - 1].Entity.Id;
+                                input.GreaterThanID = $scope.bpInstanceTracking[0].Entity.Id;
+                            }
+                        }
+                    }
                 }
 
                 function createTimer() {
-                    if (timer != undefined) {
-                        clearTimeout(timer);
+                    if (job) {
+                        VRTimerService.unregisterJob(job);
                     }
-                    timer = setInterval(function () {
-                        if (!isGettingData) {
-                            isGettingData = true;
-                            var pageInfo = gridAPI.getPageInfo();
-                            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
-                            var itemAddedInThisCall = false;
-                            BusinessProcess_BPInstanceTrackingAPIService.GetUpdated(input).then(function (response) {
-                                if (response != undefined) {
-                                    for (var i = 0; i < response.ListBPInstanceTrackingDetails.length; i++) {
-                                        var bpInstanceTracking = response.ListBPInstanceTrackingDetails[i];
+                    var pageInfo = gridAPI.getPageInfo();
+                    input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
+                    return VRTimerService.registerJob(onTimerElapsed);
+                }
 
-                                        itemAddedInThisCall = true;
-                                        $scope.bpInstanceTracking.push(bpInstanceTracking);
-
-                                    }
-
-                                    if (itemAddedInThisCall) {
-                                        if ($scope.bpInstanceTracking.length > 0) {
-                                            $scope.bpInstanceTracking.sort(function (a, b) {
-                                                return b.Entity.Id - a.Entity.Id;
-                                            });
-
-                                            if ($scope.bpInstanceTracking.length > BusinessProcess_GridMaxSize.maximumCount) {
-                                                $scope.bpInstanceTracking.length = BusinessProcess_GridMaxSize.maximumCount;
-                                            }
-                                            input.LessThanID = $scope.bpInstanceTracking[$scope.bpInstanceTracking.length - 1].Entity.Id;
-                                            input.GreaterThanID = $scope.bpInstanceTracking[0].Entity.Id;
-                                        }
-                                    }
-
-                                }
-                            })
-                            .finally(function () {
-                                isGettingData = false;
-                                $scope.isLoading = false;
-                            });
-                        }
-                    }, 2000);
-                };
-
+                function onTimerElapsed() {
+                    return BusinessProcess_BPInstanceTrackingAPIService.GetUpdated(input).then(function (response) {
+                        manipulateDataUpdated(response);
+                        $scope.isLoading = false;
+                    },
+                     function (excpetion) {
+                         console.log(excpetion);
+                         $scope.isLoading = false;
+                     });
+                }
 
                 $scope.$on("$destroy", function () {
-                    if (timer != undefined) {
-                        clearTimeout(timer);
+                    if (job) {
+                        VRTimerService.unregisterJob(job);
                     }
                 });
             };
@@ -152,7 +154,7 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService,BusinessPro
                     for (var i = 0; i < response.length; i++) {
                         var bpInstanceTracking = response[i];
                         $scope.bpInstanceTracking.push(bpInstanceTracking);
-                        
+
                     }
                     $scope.bpInstanceTracking.sort(function (a, b) {
                         return b.Entity.Id - a.Entity.Id;

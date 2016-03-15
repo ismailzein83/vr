@@ -2,9 +2,9 @@
 
     "use strict";
 
-    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService'];
+    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService','VRTimerService'];
 
-    function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService) {
+    function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRTimerService) {
 
         var bpInstanceID;
         var bpDefinitionID;
@@ -16,8 +16,8 @@
         var taskTrackingMonitorGridAPI;
 
         var bpInstance;
-        var timer;
-        var isGettingData = false;
+        var job;
+
         function defineScope() {
 
             $scope.onInstanceMonitorGridReady = function (api) {
@@ -52,7 +52,9 @@
                     instanceMonitorGridAPI.clearTimer();
                 }
                 taskTrackingMonitorGridAPI.clearTimer();
-                clearTimeout(timer);
+                if (job) {
+                    VRTimerService.unregisterJob(job);
+                }
             };
 
             $scope.getStatusColor = function () {
@@ -102,24 +104,27 @@
             loadParameters();
             getInstance();
             defineScope();
-            createTimer();
+            job = createTimer();
         }
 
         function createTimer() {
-            timer = setInterval(function () {
-                if (!isGettingData) {
-                    isGettingData = true;
-                    BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
-                        $scope.process.Status = response.StatusDescription;
-                        $scope.process.StatusUpdatedTime = response.StatusUpdatedTime;
-                        bpInstance = response;
-                    })
-                    .finally(function () {
-                        isGettingData = false;
-                    });
-                }
-            }, 5000);
-        };
+            if (job) {
+                VRTimerService.unregisterJob(job);
+            }
+            return VRTimerService.registerJob(onTimerElapsed);
+        }
+
+        function onTimerElapsed() {
+            return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
+                $scope.process.Status = response.StatusDescription;
+                $scope.process.StatusUpdatedTime = response.StatusUpdatedTime;
+                bpInstance = response;
+            },
+             function (excpetion) {
+                 console.log(excpetion);
+                 $scope.isLoading = false;
+             });
+        }
 
         load();
     }

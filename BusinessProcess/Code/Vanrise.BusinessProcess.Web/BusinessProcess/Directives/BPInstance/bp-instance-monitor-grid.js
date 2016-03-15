@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService","BusinessProcess_GridMaxSize",
-function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, BusinessProcess_GridMaxSize) {
+app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService", "BusinessProcess_GridMaxSize", "VRTimerService",
+function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, BusinessProcess_GridMaxSize, VRTimerService) {
 
     var directiveDefinitionObject = {
 
@@ -45,9 +45,9 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
 
         function initializeController() {
             $scope.bpInstances = [];
-            var timer;
+            var job;
             var isGettingDataFirstTime = true;
-            var isGettingData = false;
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -65,95 +65,84 @@ function (BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceServic
                         $scope.bpInstances.length = 0;
                         isGettingDataFirstTime = true;
                         minId = undefined;
-                        createTimer();
+                        job = createTimer();
                     }
 
                     directiveAPI.clearTimer = function () {
-                        if (timer != undefined) {
-                            clearTimeout(timer);
+                        if (job) {
+                            VRTimerService.unregisterJob(job);
                         }
                     }
                     return directiveAPI;
                 }
 
-                function createTimer() {
-                    if (timer != undefined) {
-                        clearTimeout(timer);
-                    }
-                    timer = setInterval(function () {
-                        if (!isGettingData) {
-                            isGettingData = true;
-                            var pageInfo = gridAPI.getPageInfo();
-                            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
-                            var itemAddedOrUpdatedInThisCall = false;
-                            BusinessProcess_BPInstanceAPIService.GetUpdated(input).then(function (response) {
-                                if (response != undefined) {
-                                    for (var i = 0; i < response.ListBPInstanceDetails.length; i++) {
-                                        var bpInstance = response.ListBPInstanceDetails[i];
+                function manipulateDataUpdated(response) {
+                    var itemAddedOrUpdatedInThisCall = false;
+                    if (response != undefined) {
+                        for (var i = 0; i < response.ListBPInstanceDetails.length; i++) {
+                            var bpInstance = response.ListBPInstanceDetails[i];
 
-                                        if (!isGettingDataFirstTime && bpInstance.Entity.ProcessInstanceID < minId) {
-                                            continue;
-                                        }
+                            if (!isGettingDataFirstTime && bpInstance.Entity.ProcessInstanceID < minId) {
+                                continue;
+                            }
 
-                                        var findBPInstance = false;
+                            var findBPInstance = false;
 
-                                        for (var j = 0; j < $scope.bpInstances.length; j++) {
-
-                                            //if (minId == undefined) {
-                                            //    minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
-                                            //}
-                                            //else if ($scope.bpInstances[j].Entity.ProcessInstanceID < minId) {
-                                            //    minId = $scope.bpInstances[j].Entity.ProcessInstanceID;
-                                            //};
-
-                                            if ($scope.bpInstances[j].Entity.ProcessInstanceID == bpInstance.Entity.ProcessInstanceID) {
-                                                $scope.bpInstances[j] = bpInstance;
-                                                findBPInstance = true;
-                                                itemAddedOrUpdatedInThisCall = true;
-                                                continue;
-                                            }
-
-                                        }
-                                        if (!findBPInstance) {
-                                            //if (bpInstance.Entity.ProcessInstanceID < minId) {
-                                            //    minId = bpInstance.Entity.ProcessInstanceID;
-                                            //}
-                                            itemAddedOrUpdatedInThisCall = true;
-                                            $scope.bpInstances.push(bpInstance);
-                                        }
-                                    }
-
-                                    if (itemAddedOrUpdatedInThisCall) {
-                                        if ($scope.bpInstances.length > 0) {
-                                            $scope.bpInstances.sort(function (a, b) {
-                                                return b.Entity.ProcessInstanceID - a.Entity.ProcessInstanceID;
-                                            });
-
-                                            if ($scope.bpInstances.length > BusinessProcess_GridMaxSize.maximumCount) {
-                                                $scope.bpInstances.length = BusinessProcess_GridMaxSize.maximumCount;
-                                            }
-                                            minId = $scope.bpInstances[$scope.bpInstances.length - 1].Entity.ProcessInstanceID;
-                                            isGettingDataFirstTime = false;
-                                        }
-                                    }
-
+                            for (var j = 0; j < $scope.bpInstances.length; j++) {
+                                if ($scope.bpInstances[j].Entity.ProcessInstanceID == bpInstance.Entity.ProcessInstanceID) {
+                                    $scope.bpInstances[j] = bpInstance;
+                                    findBPInstance = true;
+                                    itemAddedOrUpdatedInThisCall = true;
+                                    continue;
                                 }
-                                input.LastUpdateHandle = response.MaxTimeStamp;
-                            })
-                            .finally(function () {
-
-
-                                isGettingData = false;
-                                $scope.isLoading = false;
-                            });
+                            }
+                            if (!findBPInstance) {
+                                itemAddedOrUpdatedInThisCall = true;
+                                $scope.bpInstances.push(bpInstance);
+                            }
                         }
-                    }, 2000);
-                };
 
+                        if (itemAddedOrUpdatedInThisCall) {
+                            if ($scope.bpInstances.length > 0) {
+                                $scope.bpInstances.sort(function (a, b) {
+                                    return b.Entity.ProcessInstanceID - a.Entity.ProcessInstanceID;
+                                });
+
+                                if ($scope.bpInstances.length > BusinessProcess_GridMaxSize.maximumCount) {
+                                    $scope.bpInstances.length = BusinessProcess_GridMaxSize.maximumCount;
+                                }
+                                minId = $scope.bpInstances[$scope.bpInstances.length - 1].Entity.ProcessInstanceID;
+                                isGettingDataFirstTime = false;
+                            }
+                        }
+
+                    }
+                    input.LastUpdateHandle = response.MaxTimeStamp;
+                }
+
+                function createTimer() {
+                    if (job) {
+                        VRTimerService.unregisterJob(job);
+                    }
+                    var pageInfo = gridAPI.getPageInfo();
+                    input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
+                    return VRTimerService.registerJob(onTimerElapsed);
+                }
+
+                function onTimerElapsed() {
+                    return BusinessProcess_BPInstanceAPIService.GetUpdated(input).then(function (response) {
+                        manipulateDataUpdated(response);
+                        $scope.isLoading = false;
+                    },
+                     function (excpetion) {
+                         console.log(excpetion);
+                         $scope.isLoading = false;
+                     });
+                }
 
                 $scope.$on("$destroy", function () {
-                    if (timer != undefined) {
-                        clearTimeout(timer);
+                    if (job) {
+                        VRTimerService.unregisterJob(job);
                     }
                 });
             };

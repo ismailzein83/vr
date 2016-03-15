@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPIService", "BusinessProcess_GridMaxSize", "BusinessProcess_BPTaskService",
-function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, BusinessProcess_BPTaskService) {
+app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPIService", "BusinessProcess_GridMaxSize", "BusinessProcess_BPTaskService","VRTimerService",
+function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, BusinessProcess_BPTaskService, VRTimerService) {
 
     var directiveDefinitionObject = {
 
@@ -47,9 +47,9 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
         function initializeController() {
             var myTaskSelected;
             $scope.bpTasks = [];
-            var timer;
             var isGettingDataFirstTime = true;
-            var isGettingData = false;
+            var job;
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -67,12 +67,12 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                         $scope.bpTasks.length = 0;
                         isGettingDataFirstTime = true;
                         minId = undefined;
-                        createTimer();
+                        job = createTimer();
                     }
 
                     directiveAPI.clearTimer = function () {
-                        if (timer != undefined) {
-                            clearTimeout(timer);
+                        if (job) {
+                            VRTimerService.unregisterJob(job);
                         }
                     }
                     return directiveAPI;
@@ -125,41 +125,43 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
 
 
                 function createTimer() {
-                    if (timer != undefined) {
-                        clearTimeout(timer);
+                    if (job) {
+                        VRTimerService.unregisterJob(job);
                     }
-                    timer = setInterval(function () {
-                        if (!isGettingData) {
-                            isGettingData = true;
-                            var pageInfo = gridAPI.getPageInfo();
-                            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
+                    var pageInfo = gridAPI.getPageInfo();
+                    input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
+                    if (myTaskSelected) {
+                        return VRTimerService.registerJob(onMyTimerElapsed);
+                    }
+                    else {
+                        return VRTimerService.registerJob(onTimerElapsed);
+                    }
+                }
+                function onTimerElapsed() {
+                    return BusinessProcess_BPTaskAPIService.GetProcessTaskUpdated(input).then(function (response) {
+                        manipulateDataUpdated(response);
+                        $scope.isLoading = false;
+                    },
+                     function (excpetion) {
+                         console.log(excpetion);
+                         $scope.isLoading = false;
+                     });
+                }
 
-                            if (myTaskSelected) {
-                                BusinessProcess_BPTaskAPIService.GetMyUpdatedTasks(input).then(function (response) {
-                                    manipulateDataUpdated(response);
-                                })
-                                .finally(function () {
-                                    isGettingData = false;
-                                    $scope.isLoading = false;
-                                });
-                            }
-                            else {
-                                BusinessProcess_BPTaskAPIService.GetProcessTaskUpdated(input).then(function (response) {
-                                    manipulateDataUpdated(response);
-                                })
-                                .finally(function () {
-                                    isGettingData = false;
-                                    $scope.isLoading = false;
-                                });
-                            }
-                        }
-                    }, 2000);
-                };
-
+                function onMyTimerElapsed() {
+                    return BusinessProcess_BPTaskAPIService.GetMyTaskUpdated(input).then(function (response) {
+                        manipulateDataUpdated(response);
+                        $scope.isLoading = false;
+                    },
+                     function (excpetion) {
+                         console.log(excpetion);
+                         $scope.isLoading = false;
+                     });
+                }
 
                 $scope.$on("$destroy", function () {
-                    if (timer != undefined) {
-                        clearTimeout(timer);
+                    if (job) {
+                        VRTimerService.unregisterJob(job);
                     }
                 });
             };
