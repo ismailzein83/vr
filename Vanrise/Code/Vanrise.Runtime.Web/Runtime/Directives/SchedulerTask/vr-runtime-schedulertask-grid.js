@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationService", "SchedulerTaskAPIService", "VR_Runtime_SchedulerTaskService",
-function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runtime_SchedulerTaskService) {
+app.directive("vrRuntimeSchedulertaskGrid", ["UtilsService", "VRNotificationService", "SchedulerTaskAPIService", "VR_Runtime_SchedulerTaskService", "VRTimerService",
+function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runtime_SchedulerTaskService, VRTimerService) {
 
     var directiveDefinitionObject = {
 
@@ -34,14 +34,14 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
         };
         var taskIds = [];
         var gridAPI;
-        var timer;
+        var job;
         var isMyTaskSelected;
         this.initializeController = initializeController;
-        var isGettingData = false;
+
         function initializeController() {
 
             $scope.schedulerTasks = [];
-            
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
@@ -63,66 +63,71 @@ function (UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runti
                     }
                     return directiveAPI;
                 }
-
+                job = createTimer();
             };
-            createTimer();
+            
             defineMenuActions();
         }
 
-        function createTimer() {
-            if (timer != undefined) {
-                clearTimeout(timer);
-            }
-            timer = setInterval(function () {
-                if (!isGettingData) {
-                    var pageInfo = gridAPI.getPageInfo();
+        function manipulateDataUpdated(response) {
+            var itemAddedOrUpdatedInThisCall = false;
+            if (response != undefined) {
+                for (var i = 0; i < response.ListSchedulerTaskStateDetails.length; i++) {
 
-                    input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
-                    taskIds.length = 0;
+                    var schedulerTaskState = response.ListSchedulerTaskStateDetails[i];
 
-                    for (var x = 0; x < $scope.schedulerTasks.length; x++) {
-                        taskIds.push($scope.schedulerTasks[x].Entity.TaskId);
-                    }
-                    input.Filter.TaskIds = taskIds;
-                    SchedulerTaskAPIService.GetUpdated(input).then(function (response) {
-                        isGettingData = true;
-                        
-
-                        if (response != undefined) {
-                            for (var i = 0; i < response.ListSchedulerTaskStateDetails.length; i++) {
-
-                                var schedulerTaskState = response.ListSchedulerTaskStateDetails[i];
-
-                                for (var j = 0; j < $scope.schedulerTasks.length; j++) {
-                                    if ($scope.schedulerTasks[j].Entity.TaskId == schedulerTaskState.Entity.TaskId) {
-                                        var Entity = {
-                                            TaskId: $scope.schedulerTasks[j].Entity.TaskId,
-                                            Name: $scope.schedulerTasks[j].Entity.Name,
-                                            IsEnabled: $scope.schedulerTasks[j].Entity.IsEnabled,
-                                            LastRunTime: schedulerTaskState.Entity.LastRunTime,
-                                            NextRunTime: schedulerTaskState.Entity.NextRunTime,
-                                            StatusDescription: schedulerTaskState.StatusDescription
-                                        };
-                                        var obj = { Entity: Entity};
-                                        $scope.schedulerTasks[j] = obj;
-                                        continue;
-                                    }
-                                }
-                            }
+                    for (var j = 0; j < $scope.schedulerTasks.length; j++) {
+                        if ($scope.schedulerTasks[j].Entity.TaskId == schedulerTaskState.Entity.TaskId) {
+                            var Entity = {
+                                TaskId: $scope.schedulerTasks[j].Entity.TaskId,
+                                Name: $scope.schedulerTasks[j].Entity.Name,
+                                IsEnabled: $scope.schedulerTasks[j].Entity.IsEnabled,
+                                LastRunTime: schedulerTaskState.Entity.LastRunTime,
+                                NextRunTime: schedulerTaskState.Entity.NextRunTime,
+                                StatusDescription: schedulerTaskState.StatusDescription
+                            };
+                            var obj = { Entity: Entity };
+                            $scope.schedulerTasks[j] = obj;
+                            continue;
                         }
-                        input.LastUpdateHandle = response.MaxTimeStamp;
-                    })
-                    .finally(function () {
-                        isGettingData = false;
-                    });
+                    }
                 }
-            }, 2000);
-        };
+                input.LastUpdateHandle = response.MaxTimeStamp;
+            }
+        }
 
+        function createTimer() {
+            if (job) {
+                VRTimerService.unregisterJob(job);
+            }
+            var pageInfo = gridAPI.getPageInfo();
+
+            input.NbOfRows = pageInfo.toRow - pageInfo.fromRow + 1;
+            return VRTimerService.registerJob(onTimerElapsed);
+        }
+
+        function onTimerElapsed() {
+
+            taskIds.length = 0;
+
+            for (var x = 0; x < $scope.schedulerTasks.length; x++) {
+                taskIds.push($scope.schedulerTasks[x].Entity.TaskId);
+            }
+            input.Filter.TaskIds = taskIds;
+
+            return SchedulerTaskAPIService.GetUpdated(input).then(function (response) {
+                manipulateDataUpdated(response);
+                $scope.isLoading = false;
+            },
+             function (excpetion) {
+                 console.log(excpetion);
+                 $scope.isLoading = false;
+             });
+        }
 
         $scope.$on("$destroy", function () {
-            if (timer != undefined) {
-                clearTimeout(timer);
+            if (job) {
+                VRTimerService.unregisterJob(job);
             }
         });
 
