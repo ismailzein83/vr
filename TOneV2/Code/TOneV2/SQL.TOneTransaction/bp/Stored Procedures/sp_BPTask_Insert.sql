@@ -7,9 +7,10 @@ CREATE PROCEDURE [bp].[sp_BPTask_Insert]
 	@Title nvarchar(1000),
 	@ProcessInstanceId bigint,
 	@TypeId int,
-	@TaskInformation nvarchar(max),
+	@TaskData nvarchar(max),
 	@Status int,
 	@AssignedUsers varchar(max),
+	@AssignedUsersDescription nvarchar(max),
 	@ID bigint out
 	
 AS
@@ -18,17 +19,19 @@ BEGIN
            ([Title]
            ,[ProcessInstanceID]
            ,[TypeID] 
-           ,[TaskInformation] 
+           ,[TaskData] 
            ,[Status] 
-           ,[AssignedUsers] 
+           ,[AssignedUsers]
+           ,[AssignedUsersDescription] 
            ,[LastUpdatedTime])
      VALUES
            (@Title
            ,@ProcessInstanceId
            ,@TypeId
-           ,@TaskInformation
+           ,@TaskData
            ,@Status
            ,@AssignedUsers
+           ,@AssignedUsersDescription
            ,GETDATE())
      SET @ID = @@identity
 END
