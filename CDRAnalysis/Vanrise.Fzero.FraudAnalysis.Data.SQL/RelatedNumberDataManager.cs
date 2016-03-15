@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Fzero.FraudAnalysis.Entities;
@@ -17,23 +18,17 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Public Methods
-        public void CreateTempTable()
-        {
-            ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumber_CreateTempTable");
-        }
-        public void SavetoDB(AccountRelatedNumberDictionary records)
+        public void SavetoDB(Dictionary<string, string> records)
         {
 
             StreamForBulkInsert stream = InitializeStreamForBulkInsert();
 
-            foreach (KeyValuePair<string, HashSet<string>> record in records)
+            foreach (KeyValuePair<string, string> record in records)
             {
-                if (record.Value.Count > 0)
-                    foreach (var relatedNumber in record.Value)
-                        stream.WriteRecord("{0}*{1}",
-                                        record.Key,
-                                        relatedNumber
-                                        );
+                stream.WriteRecord("{0}*{1}",
+                                record.Key,
+                                record.Value
+                                );
             }
 
             stream.Close();
@@ -41,21 +36,29 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             InsertBulkToTable(
                 new StreamBulkInsertInfo
                 {
-                    TableName = "[FraudAnalysis].[RelatedNumber_temp]",
+                    TableName = "[FraudAnalysis].[RelatedNumber]",
                     Stream = stream,
                     TabLock = true,
                     KeepIdentity = false,
                     FieldSeparator = '*'
                 });
         }
-        public void SwapTableWithTemp()
-        {
-            ExecuteNonQuerySP("FraudAnalysis.sp_RelatedNumber_SwapTableWithTemp");
-        }
 
         public List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber)
         {
-            return GetItemsSP("FraudAnalysis.sp_RelatedNumber_GetRelatedNumbersByAccountNumber", RelatedNumberMapper, accountNumber);
+            return GetItemsSP("FraudAnalysis.sp_RelatedNumber_GetByAccountNumber", RelatedNumberMapper, accountNumber);
+        }
+
+        public void LoadRelatedNumberByNumberPrefix(string numberPrefix, Action<RelatedNumber> onBatchReady)
+        {
+
+            ExecuteReaderSP("[FraudAnalysis].[sp_RelatedNumber_GetByNumberPrefix]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    onBatchReady(RelatedNumberMapper(reader));
+                }
+            }, numberPrefix);
         }
 
         #endregion
@@ -64,7 +67,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private RelatedNumber RelatedNumberMapper(IDataReader reader)
         {
             RelatedNumber relatedNumber = new RelatedNumber();
-            relatedNumber.AccountNumber = reader["RelatedNumber"] as string;
+            relatedNumber.AccountNumber = reader["AccountNumber"] as string;
+            relatedNumber.RelatedAccountNumber = reader["RelatedAccountNumber"] as string;
             return relatedNumber;
         }
         # endregion

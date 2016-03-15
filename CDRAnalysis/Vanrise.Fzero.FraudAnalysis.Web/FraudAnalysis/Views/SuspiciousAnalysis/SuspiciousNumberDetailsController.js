@@ -499,7 +499,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
             .then(function (response) {
 
                 angular.forEach(response, function (item) {
-                    $scope.relatedNumbers.push({ RelatedNumber: item.AccountNumber });
+                    $scope.relatedNumbers.push({ RelatedNumber: item.RelatedAccountNumber });
                 });
             })
             .catch(function (error) {

@@ -73,6 +73,11 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="vffe:AccountNumbersByIMEIDictionary" Name="accountNumbersByIMEIDictionary" />
       <Variable x:TypeArguments="x:Int64" Name="processedCDRs" />
+      <Variable x:TypeArguments="vffe:AccountRelatedNumberDictionary" Name="relatedNumbersByNumberRange">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vffe:AccountRelatedNumberDictionary">new AccountRelatedNumberDictionary()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <vffba1:GetAccountNumbersByIMEIDictionary sap2010:WorkflowViewState.IdRef="GetAccountNumbersByIMEIDictionary_1">
       <vffba1:GetAccountNumbersByIMEIDictionary.AccountNumbersByIMEIDictionary>
@@ -81,6 +86,18 @@
         </InOutArgument>
       </vffba1:GetAccountNumbersByIMEIDictionary.AccountNumbersByIMEIDictionary>
     </vffba1:GetAccountNumbersByIMEIDictionary>
+    <vffba1:GetRelatedNumbersByNumberRange sap2010:WorkflowViewState.IdRef="GetRelatedNumbersByNumberRange_1">
+      <vffba1:GetRelatedNumbersByNumberRange.AccountRelatedNumbersDictionary>
+        <InOutArgument x:TypeArguments="vffe:AccountRelatedNumberDictionary">
+          <mca:CSharpReference x:TypeArguments="vffe:AccountRelatedNumberDictionary">relatedNumbersByNumberRange</mca:CSharpReference>
+        </InOutArgument>
+      </vffba1:GetRelatedNumbersByNumberRange.AccountRelatedNumbersDictionary>
+      <vffba1:GetRelatedNumbersByNumberRange.NumberPrefix>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">Input.NumberPrefix</mca:CSharpValue>
+        </InArgument>
+      </vffba1:GetRelatedNumbersByNumberRange.NumberPrefix>
+    </vffba1:GetRelatedNumbersByNumberRange>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)" Name="cdrQueue" />
@@ -124,6 +141,11 @@
             <mca:CSharpValue x:TypeArguments="vffe:AccountNumbersByIMEIDictionary">accountNumbersByIMEIDictionary</mca:CSharpValue>
           </InArgument>
         </vffba1:FindRelatedNumbersthroughIMEIs.AccountNumbersByIMEIDictionary>
+        <vffba1:FindRelatedNumbersthroughIMEIs.AccountRelatedNumbersDictionary>
+          <InArgument x:TypeArguments="vffe:AccountRelatedNumberDictionary">
+            <mca:CSharpValue x:TypeArguments="vffe:AccountRelatedNumberDictionary">relatedNumbersByNumberRange</mca:CSharpValue>
+          </InArgument>
+        </vffba1:FindRelatedNumbersthroughIMEIs.AccountRelatedNumbersDictionary>
         <vffba1:FindRelatedNumbersthroughIMEIs.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vfce:CDRBatch)">cdrQueue</mca:CSharpReference>
@@ -151,23 +173,24 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d15DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sEkgDmwEOAgEBTQVTMAIBT1QFigEQAgENiwEFmQEOAgECUAtQigECAVBZB3gYAgEkeQeJAS8CAQ6TAQuWASACAQiOAQuOAYIBAgEDYQ1hXwIBSGYNZl0CAUFcDVxbAgE6cA1wbwIBM2sNa24CASx1DXVZAgElhgENhgFnAgEdgQENgQFuAgEWfA18hAECAQ8=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d15DOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc0Zvck51bWJlclJhbmdlUHJvY2Vzcy54YW1sF0gDsQEOAgEBTgtOiAECAQJSBVgwAgF1WQVkLQIBaGUFoAEQAgEVoQEFrwEOAgEIVQtVigECAXZhC2FbAgFvXAtchwECAWlqB4kBGAIBN4oBB58BLwIBFqkBC6wBIAIBD6QBC6QBggECAQlyDXJfAgFgdw13XQIBWG0NbVsCAVCBAQ2BAW8CAUh8DXxuAgFAhgENhgFZAgE4nAENnAFnAgEvlwENlwFuAgEnkgENkgGBAQIBH40BDY0BhAECARc=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetAccountNumbersByIMEIDictionary_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="GetRelatedNumbersByNumberRange_1" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="LoadCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="FindRelatedNumbersthroughIMEIs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="554,62" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,374">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,436">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="616,454" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="616,516" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

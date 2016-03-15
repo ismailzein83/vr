@@ -19,6 +19,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public AccountNumbersByIMEIDictionary AccountsNumbersByIMEIDictionary { get; set; }
 
+        public AccountRelatedNumberDictionary AccountRelatedNumbersDictionary { get; set; }
+
     }
 
     #endregion
@@ -33,7 +35,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public InArgument<AccountNumbersByIMEIDictionary> AccountNumbersByIMEIDictionary { get; set; }
 
-
+        public InArgument<AccountRelatedNumberDictionary> AccountRelatedNumbersDictionary { get; set; }
 
         #endregion
 
@@ -41,7 +43,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         protected override void DoWork(FindRelatedNumbersthroughIMEIsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             AccountNumbersByIMEIDictionary accountNumbersByIMEIDictionary = inputArgument.AccountsNumbersByIMEIDictionary;
-            AccountRelatedNumberDictionary accountRelatedNumbers = new AccountRelatedNumberDictionary();
+            AccountRelatedNumberDictionary accountRelatedNumbersDictionary = inputArgument.AccountRelatedNumbersDictionary;
+            Dictionary<string, string> accountRelatedNumbersToBeInsertedDictionary = new Dictionary<string, string>();
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -51,23 +54,36 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue(
                         (cdrBatch) =>
                         {
-                            //var serializedCDRs = Vanrise.Common.Compressor.Decompress(System.IO.File.ReadAllBytes(cdrBatch.CDRBatchFilePath));
-                            //System.IO.File.Delete(cdrBatch.CDRBatchFilePath);
                             var cdrs = cdrBatch.CDRs;
-                            
+
                             foreach (var cdr in cdrs)
                             {
                                 if (cdr.IMEI == null)
                                     continue;
-                                HashSet<String> accountNumbers ;
-                                if (accountNumbersByIMEIDictionary.TryGetValue(cdr.IMEI, out accountNumbers))
+                                HashSet<String> relatedAccountNumbers;
+                                if (accountNumbersByIMEIDictionary.TryGetValue(cdr.IMEI, out relatedAccountNumbers))
                                 {
-                                    foreach (var accountNumber in accountNumbers)
+                                    foreach (var relatedAccountNumber in relatedAccountNumbers)
                                     {
-                                        if (accountNumber != cdr.MSISDN)
+                                        if (relatedAccountNumber != cdr.MSISDN)
                                         {
-                                            HashSet<String> relatedNumbers = accountRelatedNumbers.GetOrCreateItem(accountNumber);
-                                            relatedNumbers.Add(cdr.MSISDN);
+                                            HashSet<String> relatedNumbers = new HashSet<string>();
+                                            if (accountRelatedNumbersDictionary.TryGetValue(cdr.MSISDN, out relatedNumbers))
+                                            {
+                                                if (!relatedNumbers.Contains(relatedAccountNumber))
+                                                {
+                                                    relatedNumbers.Add(relatedAccountNumber);
+                                                    accountRelatedNumbersDictionary[cdr.MSISDN] = relatedNumbers;
+                                                    accountRelatedNumbersToBeInsertedDictionary.Add(cdr.MSISDN, relatedAccountNumber);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                relatedNumbers = new HashSet<string>();
+                                                relatedNumbers.Add(relatedAccountNumber);
+                                                accountRelatedNumbersDictionary.Add(cdr.MSISDN, relatedNumbers);
+                                                accountRelatedNumbersToBeInsertedDictionary.Add(cdr.MSISDN, relatedAccountNumber);
+                                            }
                                         }
                                     }
                                 }
@@ -81,9 +97,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             });
 
             IRelatedNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<IRelatedNumberDataManager>();
-            dataManager.CreateTempTable();
-            dataManager.SavetoDB(accountRelatedNumbers);
-            dataManager.SwapTableWithTemp();
+            dataManager.SavetoDB(accountRelatedNumbersToBeInsertedDictionary);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
 
@@ -96,7 +110,8 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             return new FindRelatedNumbersthroughIMEIsInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                AccountsNumbersByIMEIDictionary = this.AccountNumbersByIMEIDictionary.Get(context)
+                AccountsNumbersByIMEIDictionary = this.AccountNumbersByIMEIDictionary.Get(context),
+                AccountRelatedNumbersDictionary = this.AccountRelatedNumbersDictionary.Get(context)
             };
         }
 
