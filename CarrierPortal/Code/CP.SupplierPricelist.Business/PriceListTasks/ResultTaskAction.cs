@@ -24,7 +24,8 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
             {
                 PriceListStatus.SuccessfullyUploaded,
                 PriceListStatus.ResultFailedWithRetry,
-                PriceListStatus.WaitingReview
+                PriceListStatus.WaitingReview,
+                PriceListStatus.UnderProcessing
             };
             foreach (var pricelist in manager.GetPriceLists(listPriceListStatuses, customer.CustomerId))
             {
