@@ -44,7 +44,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         {
             AccountNumbersByIMEIDictionary accountNumbersByIMEIDictionary = inputArgument.AccountsNumbersByIMEIDictionary;
             AccountRelatedNumberDictionary accountRelatedNumbersDictionary = inputArgument.AccountRelatedNumbersDictionary;
-            Dictionary<string, string> accountRelatedNumbersToBeInsertedDictionary = new Dictionary<string, string>();
+            List<RelatedNumber> accountRelatedNumbersToBeInserted = new List<RelatedNumber>();
             int cdrsCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -74,7 +74,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                                 {
                                                     relatedNumbers.Add(relatedAccountNumber);
                                                     accountRelatedNumbersDictionary[cdr.MSISDN] = relatedNumbers;
-                                                    accountRelatedNumbersToBeInsertedDictionary.Add(cdr.MSISDN, relatedAccountNumber);
+                                                    accountRelatedNumbersToBeInserted.Add(new RelatedNumber { AccountNumber = cdr.MSISDN, RelatedAccountNumber = relatedAccountNumber });
                                                 }
                                             }
                                             else
@@ -82,7 +82,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
                                                 relatedNumbers = new HashSet<string>();
                                                 relatedNumbers.Add(relatedAccountNumber);
                                                 accountRelatedNumbersDictionary.Add(cdr.MSISDN, relatedNumbers);
-                                                accountRelatedNumbersToBeInsertedDictionary.Add(cdr.MSISDN, relatedAccountNumber);
+                                                accountRelatedNumbersToBeInserted.Add(new RelatedNumber { AccountNumber = cdr.MSISDN, RelatedAccountNumber = relatedAccountNumber });
                                             }
                                         }
                                     }
@@ -97,7 +97,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             });
 
             IRelatedNumberDataManager dataManager = FraudDataManagerFactory.GetDataManager<IRelatedNumberDataManager>();
-            dataManager.SavetoDB(accountRelatedNumbersToBeInsertedDictionary);
+            dataManager.SavetoDB(accountRelatedNumbersToBeInserted);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs from Database to Memory");
 

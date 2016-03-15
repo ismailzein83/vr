@@ -27,8 +27,8 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput
                 {
-                    FromDate = DateTime.Parse("2015-03-10"),
-                    ToDate = DateTime.Parse("2015-03-20"),
+                    FromDate = DateTime.Parse("2016-03-14"),
+                    ToDate = DateTime.Parse("2016-03-15"),
                     Parameters = new Vanrise.Fzero.FraudAnalysis.Entities.NumberProfileParameters()
                     {
                         GapBetweenConsecutiveCalls = 10,

@@ -6,7 +6,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Data
 {
     public interface IRelatedNumberDataManager : IDataManager
     {
-        void SavetoDB(Dictionary<string,string> record);
+        void SavetoDB(List<RelatedNumber> record);
 
         List<RelatedNumber> GetRelatedNumbersByAccountNumber(string accountNumber);
 

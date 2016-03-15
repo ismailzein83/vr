@@ -145,6 +145,11 @@
                   </OutArgument>
                 </vbw:RunProcess.ProcessCompletedEventPayload>
               </vbw:RunProcess>
+              <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
+                <InArgument x:TypeArguments="x:String">
+                  <mca:CSharpValue x:TypeArguments="x:String">subProcessEventPayload.ProcessStatus.ToString()</mca:CSharpValue>
+                </InArgument>
+              </WriteLine>
               <If sap2010:WorkflowViewState.IdRef="If_3">
                 <If.Condition>
                   <InArgument x:TypeArguments="x:Boolean">
@@ -225,12 +230,13 @@
             <sap2010:WorkflowViewState.ViewStateManager>
               <sap2010:ViewStateManager>
                 <sap2010:ViewStateData Id="GetAccountNumbersByIMEIDictionary_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
-                <sap2010:ViewStateData Id="LoadCDRs_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
-                <sap2010:ViewStateData Id="FindRelatedNumbersthroughIMEIs_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
-                <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
-                <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
-                <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
-                <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+                <sap2010:ViewStateData Id="GetRelatedNumbersByNumberRange_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+                <sap2010:ViewStateData Id="LoadCDRs_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+                <sap2010:ViewStateData Id="FindRelatedNumbersthroughIMEIs_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+                <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+                <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+                <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+                <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
               </sap2010:ViewStateManager>
             </sap2010:WorkflowViewState.ViewStateManager>
           </local:FindRelatedNumbersForNumberRangeProcess>
@@ -256,13 +262,14 @@
         </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbCdLA4QCDgIBAVELUYABAgECVgVmHwMBnAFnBYICCgIBCF4LXnADAakBWQtZWQMBowFjC2NXAwGdAWoLaokBAgEJbgnJARsCATvMAQmAAhQCAQ9xD3FsAwGWAXgNxwEYAgE80QEL7AE7AgEq7QEL+AE1AgEZ+QEL/wEmAgEQfA+CASoDAY0BgwEPkwEgAgF7lAEPxgEUAgE93gER3gGoAQIBM9QBEdkBIAIBK/ABEfABfwIBIvUBEfUBoAECARr8ARH8Aa0BAgERfxV/nQEDAY4BhgEViwEgAwGFAZABFZABiAECAX2DAYABgwGGAQIBfJcBFZcBtwECAT6bAROhAScCAXKkARPEAR4CAUaeARmeAdkBAgFzpQEVsAE/AgFhsQEVvAEeAgFQvQEVwwEwAgFHqAEbqAGJAQIBaq0BG60B2QECAWK5ARu5AXcCAVm0ARu0AXsCAVHAARvAAbQDAgFI</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXEZpbmRSZWxhdGVkTnVtYmVyc1Byb2Nlc3MueGFtbClLA4oCDgIBAVELUYABAgECVgVmHwMBpQFnBYgCCgIBCF4LXnADAbIBWQtZWQMBrAFjC2NXAwGmAWoLaokBAgEJbgnOARsCATvRAQmGAhQCAQ9xD3FsAwGfAXgNzAEYAgE81gEL8gE7AgEq8wEL/gE1AgEZ/wELhQImAgEQfA+CASoDAZYBgwEPkwEgAwGEAZQBD5gBGwIBe5kBD8sBFAIBPeMBEeMBqAECATPZARHeASACASv2ARH2AX8CASL7ARH7AaABAgEaggIRggKtAQIBEX8Vf50BAwGXAYYBFYsBIAMBjgGQARWQAYgBAwGGAYMBgAGDAYYBAwGFAZYBE5YBgAECAXycARWcAbcBAgE+oAETpgEnAgFyqQETyQEeAgFGowEZowHZAQIBc6oBFbUBPwIBYbYBFcEBHgIBUMIBFcgBMAIBR60BG60BiQECAWqyARuyAdkBAgFivgEbvgF3AgFZuQEbuQF7AgFRxQEbxQG0AwIBSA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetNumberPrefixes_1" sap:VirtualizedContainerService.HintSize="788,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_2" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="TerminateWorkflow_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="UpdateFindRelatedNumbersProgress_2" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
@@ -275,27 +282,28 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="489,460" />
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="511,708">
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="511,810">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,858" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="541,960" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="554,22" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="554,62" />
-      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="576,374">
+      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="554,62" />
+      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="576,436">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="616,454" />
+      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="616,516" />
       <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersForNumberRangeProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="UpdateFindRelatedNumbersProgress_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -306,15 +314,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="788,1008" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="810,1194">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="788,1110" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="810,1296">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess_1" sap:VirtualizedContainerService.HintSize="850,1274" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.FindRelatedNumbersProcess_1" sap:VirtualizedContainerService.HintSize="850,1376" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

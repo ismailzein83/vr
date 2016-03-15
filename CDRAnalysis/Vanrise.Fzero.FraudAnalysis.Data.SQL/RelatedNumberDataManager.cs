@@ -18,16 +18,16 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Public Methods
-        public void SavetoDB(Dictionary<string, string> records)
+        public void SavetoDB(List<RelatedNumber> records)
         {
 
             StreamForBulkInsert stream = InitializeStreamForBulkInsert();
 
-            foreach (KeyValuePair<string, string> record in records)
+            foreach (var record in records)
             {
                 stream.WriteRecord("{0}*{1}",
-                                record.Key,
-                                record.Value
+                                record.AccountNumber,
+                                record.RelatedAccountNumber
                                 );
             }
 
