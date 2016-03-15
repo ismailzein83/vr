@@ -133,6 +133,10 @@
     <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.MainExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.WFActivities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
