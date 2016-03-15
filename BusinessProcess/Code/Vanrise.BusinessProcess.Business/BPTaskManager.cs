@@ -13,14 +13,18 @@ namespace Vanrise.BusinessProcess.Business
         {
             if (createBPTaskInput == null)
                 throw new ArgumentNullException("createBPTaskInput");
-            if (createBPTaskInput.TaskInformation == null)
+            if (createBPTaskInput.TaskData == null)
                 throw new ArgumentNullException("createBPTaskInput.TaskInformation");
-            if (createBPTaskInput.TaskInformation.AssignedTo == null)
-                throw new ArgumentNullException("createBPTaskInput.TaskInformation.AssignedTo");
+            if (createBPTaskInput.AssignedTo == null)
+                throw new ArgumentNullException("createBPTaskInput.AssignedTo");
 
-            var assignedUserIds = createBPTaskInput.TaskInformation.AssignedTo.GetUserIds(null);
+            var assignedUserIds = createBPTaskInput.AssignedTo.GetUserIds(null);
             if (assignedUserIds == null || assignedUserIds.Count() == 0)
-                throw new Exception(String.Format("Could not resolve AssignedTo '{0}'", createBPTaskInput.TaskInformation.AssignedTo));
+                throw new Exception(String.Format("Could not resolve AssignedTo '{0}'", createBPTaskInput.AssignedTo));
+
+            var bpTaskType = GetBPTaskType(createBPTaskInput.TaskName);
+            if (bpTaskType == null)
+                throw new Exception(String.Format("Could not resolve BPTaskType '{0}'", createBPTaskInput.TaskName));
 
             IBPDataManager bpDataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
             var processInstance = bpDataManager.GetInstance(createBPTaskInput.ProcessInstanceId);
@@ -33,7 +37,7 @@ namespace Vanrise.BusinessProcess.Business
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
 
             long taskId;
-            bool taskCreated = taskDataManager.InsertTask(createBPTaskInput.Title, createBPTaskInput.ProcessInstanceId, createBPTaskInput.TypeId, assignedUserIds, BPTaskStatus.New, createBPTaskInput.TaskInformation, out taskId);
+            bool taskCreated = taskDataManager.InsertTask(createBPTaskInput.Title, createBPTaskInput.ProcessInstanceId, bpTaskType.BPTaskTypeId, assignedUserIds, BPTaskStatus.New, createBPTaskInput.TaskData, createBPTaskInput.AssignedTo.GetDescription(null), out taskId);
             var output = new CreateBPTaskOutput
             {
                 Result = taskCreated ? CreateBPTaskResult.Succeeded : CreateBPTaskResult.Failed,
@@ -49,11 +53,11 @@ namespace Vanrise.BusinessProcess.Business
             task = taskDataManager.GetTask(executeBPTaskInput.TaskId);
             if (task.TaskExecutionInformation == null)
                 task.TaskExecutionInformation = new BPTaskExecutionInformation();
-            if (task.TaskExecutionInformation.Comments == null)
-                task.TaskExecutionInformation.Comments = new List<BPTaskComment>();
+
+            task.TaskExecutionInformation.Notes = executeBPTaskInput.Notes;
+            task.TaskExecutionInformation.Decision = executeBPTaskInput.Decision;
             task.TaskExecutionInformation.TakenAction = executeBPTaskInput.TakenAction;
-            if (executeBPTaskInput.Comment != null)
-                task.TaskExecutionInformation.Comments.Add(executeBPTaskInput.Comment);
+
             taskDataManager.UpdateTaskExecution(executeBPTaskInput.TaskId, executeBPTaskInput.ExecutedBy, BPTaskStatus.Completed, task.TaskExecutionInformation);
         }
 
@@ -78,7 +82,7 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetBeforeId(input.LessThanID, input.NbOfRows, input.ProcessInstanceId, null);
         }
-        
+
         public void ExecuteTask(ExecuteBPTaskInput input)
         {
             BPTask task = GetTask(input.TaskId);
@@ -95,14 +99,29 @@ namespace Vanrise.BusinessProcess.Business
         public BPTaskType GetBPTaskType(int taskTypeId)
         {
             var bpTaskTypes = GetCachedBPTaskTypes();
-            
+
             if (bpTaskTypes == null)
                 return null;
 
             BPTaskType bpTaskType;
             if (bpTaskTypes.TryGetValue(taskTypeId, out bpTaskType))
                 return bpTaskType;
-            
+
+            return null;
+        }
+
+        public BPTaskType GetBPTaskType(string taskTypeName)
+        {
+            var bpTaskTypes = GetCachedBPTaskTypes();
+
+            if (bpTaskTypes == null)
+                return null;
+
+            foreach (KeyValuePair<int, BPTaskType> item in bpTaskTypes)
+            {
+                if (item.Value.Name == taskTypeName)
+                    return item.Value;
+            }
             return null;
         }
         #endregion

@@ -25,11 +25,13 @@ namespace Vanrise.BusinessProcess.Entities
 
         public List<int> AssignedUsers { get; set; }
 
+        public string AssignedUsersDescription { get; set; }
+
         public int? ExecutedById { get; set; }
 
         public BPTaskStatus Status { get; set; }
 
-        public BPTaskInformation TaskInformation { get; set; }
+        public BPTaskData TaskData { get; set; }
 
         public BPTaskExecutionInformation TaskExecutionInformation { get; set; }
 

@@ -3,31 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Entities;
+using Vanrise.Security.Business;
 
-namespace Vanrise.BusinessProcess.Entities
+namespace Vanrise.BusinessProcess.MainExtensions
 {
-    public abstract class BPTaskInformation
-    {
-        public BPTaskAssignee AssignedTo { get; set; }
-
-        public List<BPTaskAction> Actions { get; set; }
-    }
-
-    public class TestBPTaskInformation : BPTaskInformation
-    {
-
-    }
-
     public class TestBPTaskAssignee : BPTaskAssignee
     {
+        public List<int> UserIds { get; set; }
         public override IEnumerable<int> GetUserIds(IBPTaskAssigneeContext context)
         {
-            return new List<int>() { 1, 3, 5, 7 };
+            return UserIds;
         }
 
         public override string GetDescription(IBPTaskAssigneeContext context)
         {
-            return "Test Description";
+            UserManager userManager = new UserManager();
+            return userManager.GetUsersNames(UserIds);
         }
     }
 }

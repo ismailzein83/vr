@@ -14,6 +14,8 @@ namespace Vanrise.BusinessProcess.Entities
 
         public BPTaskAction TakenAction { get; set; }
 
-        public BPTaskComment Comment { get; set; }
+        public string Notes { get; set; }
+
+        public string Decision { get; set; }
     }
 }

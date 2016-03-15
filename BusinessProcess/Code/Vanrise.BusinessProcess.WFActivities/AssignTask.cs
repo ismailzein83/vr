@@ -8,17 +8,17 @@ using Vanrise.BusinessProcess.Business;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
-    public sealed class AssignTask : NativeActivity
+    public sealed class AssignTask<T> : NativeActivity
     {
-        
         [RequiredArgument]
         public InArgument<string> TaskTitle { get; set; }
 
         [RequiredArgument]
-        public InArgument<BPTaskInformation> TaskInformation { get; set; }
+        public InArgument<BPTaskData> TaskData { get; set; }
 
         [RequiredArgument]
-        public InArgument<TaskType> TaskType { get; set; }
+        public InArgument<BPTaskAssignee> Users { get; set; }
+
         public OutArgument<BPTask> ExecutedTask { get; set; }
 
         protected override bool CanInduceIdle
@@ -33,17 +33,19 @@ namespace Vanrise.BusinessProcess.WFActivities
         {
             var sharedData = context.GetSharedInstanceData();
 
-            var taskInformation = this.TaskInformation.Get(context);
-            var taskType = this.TaskType.Get(context);
+            var taskData = this.TaskData.Get(context);
+            var users = this.Users.Get(context);
 
             BPTaskManager bpTaskManager = new BPTaskManager();
             var createBPTaskInput = new CreateBPTaskInput
             {
                 ProcessInstanceId = sharedData.InstanceInfo.ProcessInstanceID,
                 Title = this.TaskTitle.Get(context),
-                TaskInformation = taskInformation,
-                TypeId = (int)taskType
+                TaskData = taskData,
+                TaskName = typeof(T).FullName,
+                AssignedTo = users
             };
+
             var createTaskOutput = bpTaskManager.CreateTask(createBPTaskInput);
             if (createTaskOutput != null && createTaskOutput.Result == CreateBPTaskResult.Succeeded)
             {

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace Vanrise.BusinessProcess.Entities
 {
     public class BPTaskExecutionInformation
     {
-        public BPTaskAction TakenAction { get; set; }
+        [IgnoreDataMember]
+        public string Decision { get; set; }
 
-        public List<BPTaskComment> Comments { get; set; }
+        [IgnoreDataMember]
+        public string Notes { get; set; }
+
+        public BPTaskAction TakenAction { get; set; }
     }
 }

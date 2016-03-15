@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -78,7 +79,7 @@
     <Compile Include="Tasks\BPTaskAssignee.cs" />
     <Compile Include="Tasks\BPTaskComment.cs" />
     <Compile Include="Tasks\BPTaskExecutionInformation.cs" />
-    <Compile Include="Tasks\BPTaskInformation.cs" />
+    <Compile Include="Tasks\BPTaskData.cs" />
     <Compile Include="Tasks\BPTaskType.cs" />
     <Compile Include="BPTrackingMessage.cs" />
     <Compile Include="BusinessRules\BusinessRule.cs" />

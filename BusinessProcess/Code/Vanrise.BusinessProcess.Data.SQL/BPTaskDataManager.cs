@@ -17,7 +17,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
         #region public methods
 
-        public bool InsertTask(string title, long processInstanceId, int typeId, IEnumerable<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskInformation taskInformation, out long taskId)
+        public bool InsertTask(string title, long processInstanceId, int typeId, IEnumerable<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskData taskData, string assignedUsersDescription, out long taskId)
         {
             string assignedUsers = null;
             if (assignedUserIds != null && assignedUserIds.Count() > 0)
@@ -26,7 +26,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
             object obj;
             taskId = default(long);
 
-            if (ExecuteNonQuerySP("[bp].[sp_BPTask_Insert]", out obj, title, processInstanceId, typeId, taskInformation != null ? Serializer.Serialize(taskInformation) : null, (int)bpTaskStatus, assignedUsers) > 0)
+
+            if (ExecuteNonQuerySP("[bp].[sp_BPTask_Insert]", out obj, title, processInstanceId, typeId, taskData != null ? Serializer.Serialize(taskData) : null, (int)bpTaskStatus, assignedUsers, assignedUsersDescription) > 0)
             {
                 taskId = (long)obj;
                 return true;
@@ -42,7 +43,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public void UpdateTaskExecution(long taskId, int executedByUserId, BPTaskStatus bpTaskStatus, BPTaskExecutionInformation bPTaskExecutionInformation)
         {
-            ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTaskExecution]", taskId, executedByUserId, (int)bpTaskStatus, bPTaskExecutionInformation != null ? Serializer.Serialize(bPTaskExecutionInformation) : null);
+            if (bPTaskExecutionInformation != null)
+            {
+                ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTaskExecution]", taskId, executedByUserId, (int)bpTaskStatus, Serializer.Serialize(bPTaskExecutionInformation), bPTaskExecutionInformation.Notes, bPTaskExecutionInformation.Decision);
+            }
+            else
+            {
+                ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTaskExecution]", taskId, executedByUserId, (int)bpTaskStatus, DBNull.Value, DBNull.Value, DBNull.Value);
+            }
         }
 
         public List<BPTask> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int? processInstanceId, int? userId)
@@ -92,16 +100,21 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 ExecutedById = GetReaderValue<int?>(reader, "ExecutedBy"),
                 Status = (BPTaskStatus)reader["Status"],
                 CreatedTime = (DateTime)reader["CreatedTime"],
-                LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime")
+                LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime"),
+                AssignedUsersDescription = reader["AssignedUsersDescription"] as string
             };
 
-            string taskInformation = reader["TaskInformation"] as string;
-            if (!String.IsNullOrWhiteSpace(taskInformation))
-                bpTask.TaskInformation = Serializer.Deserialize<BPTaskInformation>(taskInformation);
+            string taskData = reader["TaskData"] as string;
+            if (!String.IsNullOrWhiteSpace(taskData))
+                bpTask.TaskData = Serializer.Deserialize<BPTaskData>(taskData);
 
             string taskExecutionInformation = reader["TaskExecutionInformation"] as string;
             if (!String.IsNullOrWhiteSpace(taskExecutionInformation))
+            {
                 bpTask.TaskExecutionInformation = Serializer.Deserialize<BPTaskExecutionInformation>(taskExecutionInformation);
+                bpTask.TaskExecutionInformation.Notes = reader["Notes"] as string;
+                bpTask.TaskExecutionInformation.Decision = reader["Decision"] as string;
+            }
 
             string assignedUsers = reader["AssignedUsers"] as string;
             if (!String.IsNullOrWhiteSpace(assignedUsers))
@@ -128,7 +141,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
             string settings = reader["Settings"] as string;
             if (!String.IsNullOrWhiteSpace(settings))
                 bpTaskType.Settings = Serializer.Deserialize<BPTaskTypeSettings>(settings);
-                        
+
+            string actions = reader["Actions"] as string;
+            if (!String.IsNullOrWhiteSpace(actions))
+                bpTaskType.Actions = Serializer.Deserialize<List<BPTaskAction>>(actions);
+
             return bpTaskType;
         }
         #endregion

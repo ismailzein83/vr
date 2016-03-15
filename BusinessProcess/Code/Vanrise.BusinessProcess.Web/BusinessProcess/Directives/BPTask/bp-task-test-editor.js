@@ -37,15 +37,11 @@ function (UtilsService) {
         function defineAPI() {
             var api = {};
             api.getData = function (bpTaskId) {
-                var comment = {
-                    $type: "Vanrise.BusinessProcess.Entities.BPTaskComment, Vanrise.BusinessProcess.Entities",
-                    Comment: $scope.comments
-                };
-
                 var input = {
                     $type: "Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities",
                     TaskId: bpTaskId,
-                    Comment: comment
+                    Notes: $scope.notes,
+                    Decision:'Dummy Decision'
                 };
                 return input;
             };
