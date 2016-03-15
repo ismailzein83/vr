@@ -55,10 +55,12 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                     priceListUploadOutput.FailureMessage = ex.Message;
                 }
                 PriceListStatus priceListstatus;
+                PriceListResult priceListResult = PriceListResult.NotCompleted;
                 switch (priceListUploadOutput.Result)
                 {
                     case PriceListSupplierUploadResult.Uploaded:
                         priceListstatus = PriceListStatus.SuccessfullyUploaded;
+                        priceListResult = PriceListResult.NotCompleted;
                         break;
                     case PriceListSupplierUploadResult.FailedWithRetry:
                         {
@@ -66,14 +68,18 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                             if (pricelist.UploadMaxRetryCount < uploadPriceListTaskActionArgument.MaximumRetryCount)
                                 pricelist.UploadMaxRetryCount = pricelist.UploadMaxRetryCount + 1;
                             else
+                            {
                                 priceListstatus = PriceListStatus.UploadFailedWithNoRetry;
+                                priceListResult = PriceListResult.Rejected;
+                            }
                             break;
                         }
                     default:
                         priceListstatus = PriceListStatus.UploadFailedWithRetry;
+                        priceListResult = PriceListResult.NotCompleted;
                         break;
                 }
-                manager.UpdatePriceListUpload(pricelist.PriceListId, (int)priceListstatus, priceListUploadOutput.UploadPriceListInformation, (int)pricelist.UploadMaxRetryCount);
+                manager.UpdatePriceListUpload(pricelist.PriceListId, (int)priceListResult, (int)priceListstatus, priceListUploadOutput.UploadPriceListInformation, (int)pricelist.UploadMaxRetryCount);
             }
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput
             {

@@ -33,7 +33,8 @@ namespace CP.SupplierPricelist.Business
             else
             {
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
-                insertOperationOutput.Message = "Another pricelist(s) with same customer and carrier account is not yet completed";
+                insertOperationOutput.ShowExactMessage = true;
+                insertOperationOutput.Message = "Another pricelist for the same customer and carrier account is not yet completed";
             }
             return insertOperationOutput;
         }
@@ -96,11 +97,11 @@ namespace CP.SupplierPricelist.Business
             return dataManager.GetPriceLists(listPriceListStatuses, customerId);
         }
 
-        public bool UpdatePriceListUpload(long id, int result, object uploadInformation, int uploadRetryCount)
+        public bool UpdatePriceListUpload(long id, int result, int status, object uploadInformation, int uploadRetryCount)
         {
             IPriceListDataManager dataManager =
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            return dataManager.UpdatePriceListUpload(id, result, uploadInformation, uploadRetryCount);
+            return dataManager.UpdatePriceListUpload(id, result, status, uploadInformation, uploadRetryCount);
         }
 
         public List<Vanrise.Entities.TemplateConfig> GetConnectorTemplates()
