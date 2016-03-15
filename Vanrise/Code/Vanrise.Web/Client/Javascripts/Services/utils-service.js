@@ -589,18 +589,6 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
     function areDateTimesEqual(first, second) {
         return (serializetoJson(first) == serializetoJson(second));
-
-        //if (isTimeObject(first) && isTimeObject(second)) {
-        //    return compareEqualsTimes(first, second);
-        //}
-
-        //var firstDate = new Date(first);
-        //var secondDate = new Date(second);
-        //return firstDate.getTime() == secondDate.getTime();
-
-        //function isTimeObject(object) {
-        //    return (object.Hour != undefined && object.Minute != undefined);
-        //}
     }
 
     return ({
