@@ -73,7 +73,7 @@ namespace CarrierPortal.DevRuntime
                                     priceListstatus = PriceListStatus.UploadFailedWithNoRetry;
                                     break;
                             }
-                            manager.UpdatePriceListUpload(pricelist.PriceListId, (int)priceListstatus,
+                            manager.UpdatePriceListUpload(pricelist.PriceListId, (int)PriceListResult.NotCompleted, (int)priceListstatus,
                                 1,
                                 pricelist.UploadMaxRetryCount);
                         }

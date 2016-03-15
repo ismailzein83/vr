@@ -12,7 +12,7 @@ namespace CP.SupplierPricelist.Entities
         [Description(" ")]
         NotCompleted = 0,
 
-        Approved = 10,
+        Imported = 10,
 
         Rejected = 20,
 

@@ -100,7 +100,7 @@ namespace CP.SupplierPriceList.TOneV1Integration
                 case QueueItemStatus.ProcessedSuccessfulyByImport:
                 case QueueItemStatus.Processedwithnochanges:
                     priceListProgressOutput.PriceListStatus = PriceListStatus.Completed;
-                    priceListProgressOutput.PriceListResult = PriceListResult.Approved;
+                    priceListProgressOutput.PriceListResult = PriceListResult.Imported;
                     break;
 
                 case QueueItemStatus.FailedDuetoSheetError:

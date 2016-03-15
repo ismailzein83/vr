@@ -98,10 +98,10 @@ namespace CP.SupplierPricelist.Data.SQL
             return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]", PriceListMapper, pricelistStatuIds, customerId);
         }
 
-        public bool UpdatePriceListUpload(long id, int result, object uploadInformation, int uploadRetryCount)
+        public bool UpdatePriceListUpload(long id, int result, int status, object uploadInformation, int uploadRetryCount)
         {
             int recordsEffected = ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_UpdateInitiatePriceList]",
-                id, result, uploadInformation != null ? Serializer.Serialize(uploadInformation) : null, uploadRetryCount);
+                id, result, status, uploadInformation != null ? Serializer.Serialize(uploadInformation) : null, uploadRetryCount);
             return (recordsEffected > 0);
         }
 

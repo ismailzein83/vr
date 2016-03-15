@@ -30,7 +30,7 @@ app.service('CP_SupplierPricelist_SupplierPriceListService', ['LabelColorsEnum',
             switch (value) {
                 case cpSupplierPricelistResultEnum.NotCompleted.value:
                     return undefined;
-                case cpSupplierPricelistResultEnum.Approved.value:
+                case cpSupplierPricelistResultEnum.Imported.value:
                     return labelColorsEnum.Success.color;
                 case cpSupplierPricelistResultEnum.PartiallyApproved.value:
                     return labelColorsEnum.WarningLevel1.color;
