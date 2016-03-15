@@ -89,4 +89,4 @@ function BPTaskEditorController($scope, VRNavigationService, BusinessProcess_BPT
         else return null;
     }
 }
-appControllers.controller('BusinessProccess_BPTaskEditorController', BPTaskEditorController);
+appControllers.controller('BusinessProcess_BPTaskEditorController', BPTaskEditorController);

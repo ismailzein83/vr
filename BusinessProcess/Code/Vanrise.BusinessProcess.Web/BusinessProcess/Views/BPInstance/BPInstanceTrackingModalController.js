@@ -2,9 +2,9 @@
 
     "use strict";
 
-    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService'];
+    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService'];
 
-    function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService) {
+    function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService) {
 
         var bpInstanceID;
         var bpDefinitionID;
@@ -15,6 +15,7 @@
         var instanceTrackingMonitorGridAPI;
         var taskTrackingMonitorGridAPI;
 
+        var bpInstance;
         var timer;
         var isGettingData = false;
         function defineScope() {
@@ -53,6 +54,12 @@
                 taskTrackingMonitorGridAPI.clearTimer();
                 clearTimeout(timer);
             };
+
+            $scope.getStatusColor = function () {
+                if (bpInstance) {
+                    return BusinessProcess_BPInstanceService.getStatusColor(bpInstance.Status);
+                }
+            };
         }
 
         function getFilterObject() {
@@ -65,11 +72,12 @@
         function getInstance() {
             return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
                 bpDefinitionID = response.DefinitionID;
-
+                bpInstance = response;
                 $scope.process = {
                     InstanceStatus: response.InstanceStatus,
                     Title: response.Title,
-                    Date: response.CreatedTime,
+                    CreatedTime: response.CreatedTime,
+                    StatusUpdatedTime: response.StatusUpdatedTime,
                     Status: response.StatusDescription,
                     HasChildProcesses: false
                 };
@@ -103,7 +111,8 @@
                     isGettingData = true;
                     BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
                         $scope.process.Status = response.StatusDescription;
-
+                        $scope.process.StatusUpdatedTime = response.StatusUpdatedTime;
+                        bpInstance = response;
                     })
                     .finally(function () {
                         isGettingData = false;

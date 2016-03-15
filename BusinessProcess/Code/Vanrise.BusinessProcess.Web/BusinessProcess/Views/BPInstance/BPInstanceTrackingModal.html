@@ -2,14 +2,28 @@
     <vr-modalbody>
         <vr-form name="formBPTrackingModal">
 
-            <vr-row removeline>
+            <!--<vr-row removeline>
                 <vr-columns width="fullrow">
                     <h4><strong>{{process.Title}}</strong></h4>
-                    <small> {{process.Date | date:'yyyy-MM-dd hh:mm:ss' }}  {{process.Status}}</small>
+                    <small> {{process.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}  {{process.Status}}</small>
                 </vr-columns>
+            </vr-row>-->
+
+            <vr-row>
+                <vr-columns colnum="1"><vr-label>Process Title:</vr-label></vr-columns>
+                <vr-columns colnum="11"><vr-label isvalue>{{process.Title}}</vr-label></vr-columns>
             </vr-row>
 
+            <vr-row>
+                <vr-columns colnum="1"><vr-label>Created On:</vr-label></vr-columns>
+                <vr-columns colnum="3"><vr-label isvalue>{{process.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-label></vr-columns>
 
+                <vr-columns colnum="1"><vr-label>Updated On:</vr-label></vr-columns>
+                <vr-columns colnum="3"><vr-label isvalue>{{process.StatusUpdatedTime | date:'yyyy-MM-dd hh:mm:ss' }}</vr-label></vr-columns>
+
+                <vr-columns colnum="1"><vr-label>Status</vr-label></vr-columns>
+                <vr-columns colnum="3"><vr-label isvalue color="'label label-success'">{{process.Status}}</vr-label></vr-columns>
+            </vr-row>
 
             <vr-tabs>
                 <vr-tab header="'Not Used'" ng-if="false">
