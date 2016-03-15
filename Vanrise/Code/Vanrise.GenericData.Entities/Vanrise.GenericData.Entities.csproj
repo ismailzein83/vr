@@ -61,6 +61,7 @@
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
+    <Compile Include="BusinessManagers\IGenericBusinessEntityManager.cs" />
     <Compile Include="DataStorage\IGetSummaryRecordStorageDataManagerContext.cs" />
     <Compile Include="GenericManagement\GenericFilter\Definition\GenericFilter.cs" />
     <Compile Include="GenericManagement\GenericFilter\Definition\GenericFilterField.cs" />

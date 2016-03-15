@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 namespace Vanrise.GenericData.Business
 {
-    public class DataRecordTypeManager
+    public class DataRecordTypeManager : IDataRecordTypeManager
     {
         #region Public Methods
         public IDataRetrievalResult<DataRecordTypeDetail> GetFilteredDataRecordTypes(DataRetrievalInput<DataRecordTypeQuery> input)
@@ -30,7 +30,6 @@ namespace Vanrise.GenericData.Business
             var dataRecordTypes = GetCachedDataRecordTypes();
             return dataRecordTypes.GetRecord(dataRecordTypeId);
         }
-
         public List<DataRecordField> GetDataRecordTypeFields(int dataRecordTypeId)
         {
             var dataRecordType = GetDataRecordType(dataRecordTypeId);
@@ -38,7 +37,6 @@ namespace Vanrise.GenericData.Business
                 return null;
             return dataRecordType.Fields;
         }
-
         public string GetDataRecordTypeName(int dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
@@ -117,7 +115,13 @@ namespace Vanrise.GenericData.Business
             TemplateConfigManager manager = new TemplateConfigManager();
             return manager.GetTemplateConfigurations(Constants.DataRecordFieldConfigType);
         }
-
+        public dynamic CreateDataRecordObject(string dataRecordTypeName)
+        {
+            Type dataRecordRuntimeType = GetDataRecordRuntimeType(dataRecordTypeName);
+            if (dataRecordRuntimeType != null)
+                return Activator.CreateInstance(dataRecordRuntimeType);
+            return null;
+        }
         public Type GetDataRecordRuntimeType(int dataRecordTypeId)
         {
             string cacheName = String.Format("GetDataRecordRuntimeTypeById_{0}", dataRecordTypeId);
@@ -134,7 +138,6 @@ namespace Vanrise.GenericData.Business
                 throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type Id '{0}'", dataRecordTypeId));
             return runtimeType;
         }
-
         public Type GetDataRecordRuntimeType(string dataRecordTypeName)
         {
             string cacheName = String.Format("GetDataRecordRuntimeTypeByName_{0}", dataRecordTypeName);
@@ -151,15 +154,18 @@ namespace Vanrise.GenericData.Business
                 throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type Name '{0}'", dataRecordTypeName));
             return runtimeType;
         }
-
-        public dynamic CreateDataRecordObject(string dataRecordTypeName)
+        public dynamic ConvertDynamicToDataRecord(dynamic dynamicObject, int dataRecordTypeId)
         {
-            Type dataRecordRuntimeType = GetDataRecordRuntimeType(dataRecordTypeName);
-            if (dataRecordRuntimeType != null)
-                return Activator.CreateInstance(dataRecordRuntimeType);
-            return null;
+            return Serializer.Deserialize(SerializeRecord(dynamicObject, dataRecordTypeId), GetDataRecordRuntimeType(dataRecordTypeId));
         }
-    
+        public string SerializeRecord(dynamic record, int dataRecordTypeId)
+        {
+            return Serializer.Serialize(record, true);
+        }
+        public dynamic DeserializeRecord(string serializedRecord, int dataRecordTypeId)
+        {
+            return Serializer.Deserialize(serializedRecord, GetDataRecordRuntimeType(dataRecordTypeId));
+        }
         #endregion
       
         #region Private Methods

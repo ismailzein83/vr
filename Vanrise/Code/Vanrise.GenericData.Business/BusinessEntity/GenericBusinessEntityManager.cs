@@ -12,7 +12,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 namespace Vanrise.GenericData.Business
 {
-    public class GenericBusinessEntityManager : BaseBEManager, IBusinessEntityManager
+    public class GenericBusinessEntityManager : BaseBEManager, IBusinessEntityManager, IGenericBusinessEntityManager
     {
         #region Fields / Constructors
 
@@ -45,7 +45,7 @@ namespace Vanrise.GenericData.Business
         }
         public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
-            ConvertGenericBEDetailsToRecordRuntimeType(genericBusinessEntity);
+            ConvertDetailsToDataRecord(genericBusinessEntity);
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail>();
             updateOperationOutput.UpdatedObject = null;
 
@@ -72,7 +72,7 @@ namespace Vanrise.GenericData.Business
         }        
         public Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         {
-            ConvertGenericBEDetailsToRecordRuntimeType(genericBusinessEntity);
+            ConvertDetailsToDataRecord(genericBusinessEntity);
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail>();
             insertOperationOutput.InsertedObject = null;
             
@@ -198,11 +198,23 @@ namespace Vanrise.GenericData.Business
             }
             return false;
         }
-        
+        int GetDataRecordTypeId(int businessEntityDefinitionId)
+        {
+            BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
+            if (beDefinition == null)
+                throw new NullReferenceException("beDefinition");
+            if (beDefinition.Settings == null)
+                throw new NullReferenceException("beDefinition.Settings");
+
+            GenericBEDefinitionSettings gbeDefinitionSettings = beDefinition.Settings as GenericBEDefinitionSettings;
+            if (gbeDefinitionSettings == null)
+                throw new NullReferenceException("gbeDefinitionSettings");
+
+            return gbeDefinitionSettings.DataRecordTypeId;
+        }
         #endregion
         
         #region Private Methods
-
         private BusinessEntityDefinition GetBusinessEntityDefinition(int businessEntityDefinitionId)
         {
              var businessEntityDefinition = _businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
@@ -259,7 +271,7 @@ namespace Vanrise.GenericData.Business
                () =>
                {
                    IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-                   IEnumerable<GenericBusinessEntity> genericBusinessEntities = dataManager.GetGenericBusinessEntitiesByDefinition(businessDefinitionId, GetDataRecordRuntimeType(businessDefinitionId));
+                   IEnumerable<GenericBusinessEntity> genericBusinessEntities = dataManager.GetGenericBusinessEntitiesByDefinition(businessDefinitionId);
                    return genericBusinessEntities.ToDictionary(kvp => kvp.GenericBusinessEntityId, kvp => kvp);
                });
         }        
@@ -319,32 +331,13 @@ namespace Vanrise.GenericData.Business
 
             return (entityMatch == null);
         }
-        void ConvertGenericBEDetailsToRecordRuntimeType(GenericBusinessEntity genericBusinessEntity)
+        void ConvertDetailsToDataRecord(GenericBusinessEntity genericBusinessEntity)
         {
             if (genericBusinessEntity == null || genericBusinessEntity.Details == null)
                 return;
-            var recordRuntimeType = GetDataRecordRuntimeType(genericBusinessEntity.BusinessEntityDefinitionId);
-            genericBusinessEntity.Details = Serializer.Deserialize(Serializer.Serialize(genericBusinessEntity.Details), recordRuntimeType);
+            int dataRecordTypeId = GetDataRecordTypeId(genericBusinessEntity.BusinessEntityDefinitionId);
+            genericBusinessEntity.Details = _recordTypeManager.ConvertDynamicToDataRecord(genericBusinessEntity.Details, dataRecordTypeId);
         }
-        Type GetDataRecordRuntimeType(int beDefinitionId)
-        {
-            BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(beDefinitionId);
-            if (beDefinition == null)
-                throw new NullReferenceException("beDefinition");
-            if (beDefinition.Settings == null)
-                throw new NullReferenceException("beDefinition.Settings");
-
-            GenericBEDefinitionSettings gbeDefinitionSettings = beDefinition.Settings as GenericBEDefinitionSettings;
-            if (gbeDefinitionSettings == null)
-                throw new NullReferenceException("gbeDefinitionSettings");
-
-            Type dataRecordRuntimeType = new DataRecordTypeManager().GetDataRecordRuntimeType(gbeDefinitionSettings.DataRecordTypeId);
-            if (dataRecordRuntimeType == null)
-                throw new NullReferenceException("dataRecordRuntimeType");
-
-            return dataRecordRuntimeType;
-        }
-
         #endregion
 
         #region Private Classes
@@ -389,7 +382,6 @@ namespace Vanrise.GenericData.Business
             entityInfo.Name = GetFieldDescription(genericBusinessEntity, definitionSettings.FieldPath, definitionSettings.DataRecordTypeId);
             return entityInfo;
         }
-
        
         #endregion
     }

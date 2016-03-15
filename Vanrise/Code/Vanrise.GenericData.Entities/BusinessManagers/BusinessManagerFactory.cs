@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.Entities
             s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.GenericData.Business"));
         }
 
-        public static T GetDataManager<T>() where T : class, IBusinessManager
+        public static T GetManager<T>() where T : class, IBusinessManager
         {
             return s_objectFactory.CreateObjectFromType<T>();
         }
