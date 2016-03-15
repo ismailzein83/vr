@@ -44,15 +44,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (fieldValue != null && filterValue != null)
             {
-                string filterValueString = filterValue.ToString();
-                IEnumerable<string> fieldValues = ConvertFieldValueToList<string>(fieldValue);
+                FieldNumberDataTypeInfoAttribute infoAttribute = Utilities.GetEnumAttribute<FieldNumberDataType, FieldNumberDataTypeInfoAttribute>(DataType);
+                Type dataType = infoAttribute.RuntimeType;
+
+                IEnumerable<object> fieldValues = ConvertFieldValueToList<object>(fieldValue);
+                object convertedFilterValue = Convert.ChangeType(filterValue, dataType);
 
                 if (fieldValues == null)
-                    return (fieldValue.ToString() == filterValueString);
+                    return (Convert.ChangeType(fieldValue, dataType).Equals(convertedFilterValue));
 
-                foreach (var fieldValueString in fieldValues)
+                foreach (var fieldValueObject in fieldValues)
                 {
-                    if (fieldValueString.Equals(filterValueString))
+                    if (Convert.ChangeType(fieldValueObject, dataType).Equals(convertedFilterValue))
                         return true;
                 }
                 return false;
