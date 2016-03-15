@@ -97,8 +97,17 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                         }
                     }
                     else {
-                        $scope.scopeModel.value = fieldValue;
+                        $scope.scopeModel.value = convertTimeToDate(fieldValue);
                     }
+                }
+
+                function convertTimeToDate(time) {
+                    var date = new Date();
+                    date.setHours(time.Hour);
+                    date.setMinutes(time.Minute);
+                    date.setSeconds(time.Second);
+                    date.setMilliseconds(time.MilliSecond);
+                    return date;
                 }
             };
 

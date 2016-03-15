@@ -8,8 +8,6 @@ namespace Vanrise.Entities
 {
     public class Time
     {
-        
-      
         #region ctor/Local Variables
        
         public Time() { }
@@ -74,7 +72,10 @@ namespace Vanrise.Entities
         {
             return !GreaterThan(time);
         }
-
+        public bool Equals(Time time)
+        {
+            return (time.Hour == Hour && time.Minute == Minute && time.Second == Second && time.MilliSecond == MilliSecond);
+        }
         #endregion
 
         #region Private Methods
@@ -93,6 +94,5 @@ namespace Vanrise.Entities
         }
       
         #endregion
-
     }
 }

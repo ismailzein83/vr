@@ -32,8 +32,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            IEnumerable<DateTime> dateTimeValues = ConvertFieldValueToList<DateTime>(fieldValue);
-            return (dateTimeValues != null) ? dateTimeValues.Contains(Convert.ToDateTime(filterValue)) : Convert.ToDateTime(fieldValue).CompareTo(Convert.ToDateTime(filterValue)) == 0;
+            return (DataType == FieldDateTimeDataType.Time) ? DoTimesMatch(fieldValue, filterValue) : DoDateTimesMatch(fieldValue, filterValue);
         }
         
         #endregion
@@ -46,8 +45,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             if (timeValues == null)
             {
-                Time time = Serializer.Deserialize<Time>(fieldValue.ToString());
-                //Time time = fieldValue as Time;
+                Time time = fieldValue as Time;
                 return time.ToLongTimeString();
             }
 
@@ -74,6 +72,31 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return String.Join(",", descriptions);
         }
         
+        bool DoDateTimesMatch(object fieldValue, object filterValue)
+        {
+            IEnumerable<DateTime> dateTimeValues = ConvertFieldValueToList<DateTime>(fieldValue);
+            return (dateTimeValues != null) ? dateTimeValues.Contains(Convert.ToDateTime(filterValue)) : Convert.ToDateTime(fieldValue).CompareTo(Convert.ToDateTime(filterValue)) == 0;
+        }
+
+        bool DoTimesMatch(object fieldValue, object filterValue)
+        {
+            IEnumerable<Time> timeValues = ConvertFieldValueToList<Time>(fieldValue);
+            var filterValueAsTime = filterValue as Time;
+            if (timeValues != null) {
+                foreach (Time timeValue in timeValues)
+                {
+                    if (timeValue.Equals(filterValueAsTime))
+                        return true;
+                }
+                return false;
+            }
+            else
+            {
+                var fieldValueAsTime = fieldValue as Time;
+                return fieldValueAsTime.Equals(filterValueAsTime);
+            }
+        }
+
         #endregion
     }
     public enum FieldDateTimeDataType
