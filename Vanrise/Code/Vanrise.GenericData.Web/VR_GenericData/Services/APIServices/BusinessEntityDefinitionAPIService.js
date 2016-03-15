@@ -2,14 +2,15 @@
 
     'use strict';
 
-    BusinessEntityDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
+    BusinessEntityDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService','SecurityService', 'VR_GenericData_ModuleConfig'];
 
-    function BusinessEntityDefinitionAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
+    function BusinessEntityDefinitionAPIService(BaseAPIService, UtilsService, SecurityService, VR_GenericData_ModuleConfig) {
         return {
             GetBusinessEntityDefinition: GetBusinessEntityDefinition,
             GetBusinessEntityDefinitionsInfo: GetBusinessEntityDefinitionsInfo,
             GetFilteredBusinessEntityDefinitions: GetFilteredBusinessEntityDefinitions,
             AddBusinessEntityDefinition: AddBusinessEntityDefinition,
+            HasAddBusinessEntityDefinition: HasAddBusinessEntityDefinition,
             UpdateBusinessEntityDefinition: UpdateBusinessEntityDefinition,
             GetGenericBEDefinitionView: GetGenericBEDefinitionView
         };
@@ -31,7 +32,9 @@
         function AddBusinessEntityDefinition(businessEntityDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'AddBusinessEntityDefinition'), businessEntityDefinition);
         }
-
+        function HasAddBusinessEntityDefinition() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "BusinessEntityDefinition", ['AddBusinessEntityDefinition']));
+        }
         function UpdateBusinessEntityDefinition(businessEntityDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'UpdateBusinessEntityDefinition'), businessEntityDefinition);
         }
