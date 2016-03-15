@@ -37,9 +37,9 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(4001,'Management','Data Sources Management','#/view/Integration/Views/DataSourceManagement',401,null,null,null,null,null,0,4),
-(4002,'Log','Log History','#/view/Integration/Views/DataSourceLogManagement',401,null,null,null,null,null,0,3),
-(4003,'Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement',401,null,null,null,null,null,0,5)
+(4001,'Management','Data Sources Management','#/view/Integration/Views/DataSourceManagement',401,null,null,null,null,null,0,1),
+(4002,'Log','Log History','#/view/Integration/Views/DataSourceLogManagement',401,null,null,null,null,null,0,2),
+(4003,'Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement',401,null,null,null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
