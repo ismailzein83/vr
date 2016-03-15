@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class BPTaskData
+    public abstract class BPTaskData
     {
+        public virtual string TaskType
+        {
+            get
+            {
+                return this.GetType().FullName;
+            }
+        }
+
 
     }
 }

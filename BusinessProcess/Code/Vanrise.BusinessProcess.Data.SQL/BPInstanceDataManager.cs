@@ -124,7 +124,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             string inputArg = reader["InputArgument"] as string;
             if (!String.IsNullOrWhiteSpace(inputArg))
-                instance.InputArgument = Serializer.Deserialize(inputArg);
+                instance.InputArgument = Serializer.Deserialize(inputArg) as BaseProcessInputArgument;
 
             return instance;
         }

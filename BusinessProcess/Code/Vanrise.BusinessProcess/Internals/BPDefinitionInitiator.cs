@@ -138,6 +138,7 @@ namespace Vanrise.BusinessProcess
                 BPInstance = bpInstance,
                 WFApplication = wfApp
             };
+            bpInstance.InitiatorUserId = bpInstance.InputArgument.UserId;
             _runningInstances.TryAdd(bpInstance.ProcessInstanceID, runningInstance);
 
             var sharedInstanceData = new BPSharedInstanceData()

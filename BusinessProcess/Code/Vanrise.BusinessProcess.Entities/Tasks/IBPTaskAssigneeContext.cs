@@ -8,6 +8,6 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public interface IBPTaskAssigneeContext
     {
-
+        int ProcessInitiaterUserId { get; }
     }
 }

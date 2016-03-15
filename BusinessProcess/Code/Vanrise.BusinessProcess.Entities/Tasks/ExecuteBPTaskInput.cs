@@ -10,6 +10,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public long TaskId { get; set; }
 
+        public BPTaskExecutionInformation ExecutionInformation { get; set; }
+
         public int ExecutedBy { get; set; }
 
         public BPTaskAction TakenAction { get; set; }

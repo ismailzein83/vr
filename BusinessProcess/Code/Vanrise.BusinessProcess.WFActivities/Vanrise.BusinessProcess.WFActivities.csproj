@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssignTask.cs" />
+    <Compile Include="BPTaskAssigneeContext.cs" />
     <Compile Include="CombineLists.cs" />
     <Compile Include="CreateCacheManager.cs" />
     <Compile Include="Designer\ParallelForEachDesigner.xaml.cs">
