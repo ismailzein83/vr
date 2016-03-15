@@ -104,13 +104,13 @@
                 if (dataRecordTypeId != undefined) {
                     $scope.isDataRecordTypeSelected = true;
                     if (!secondtimeChanged) {
-                        
+
                         loadSourceStages(true);
                         loadQueueActivatorSection(dataRecordTypeId, false);
                         secondtimeChanged = true;
                     }
                     secondtimeChanged = false;
-                   
+
                 }
                 else
                     $scope.isDataRecordTypeSelected = false;
@@ -139,7 +139,7 @@
             var existingExecutionFlowStage;
             if (existingExecutionFlowStages != undefined) {
                 $scope.scopeModal.sourceStages.length = 0;
-                
+
                 for (var i = 0; i < existingExecutionFlowStages.length; i++) {
                     existingExecutionFlowStage = existingExecutionFlowStages[i];
                     existingStages.push({ stageName: existingExecutionFlowStage.StageName, DataRecordTypeId: existingExecutionFlowStage.QueueItemType.DataRecordTypeId });
@@ -186,21 +186,22 @@
             var laodDataRecordTypeSelectorPromise = loadDataRecordTypeSelector();
             promises.push(laodDataRecordTypeSelectorPromise);
 
-            var loadQueueActivatorPromiseDeferred = UtilsService.createPromiseDeferred();
-            promises.push(loadQueueActivatorPromiseDeferred.promise);
+            loadSourceStages(false);
 
-            laodDataRecordTypeSelectorPromise.then(function () {
+            if (executionFlowStageEntity) {
+                var loadQueueActivatorPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadQueueActivatorPromiseDeferred.promise);
 
-                if (executionFlowStageEntity != undefined) {
-                    loadSourceStages(false);
+                laodDataRecordTypeSelectorPromise.then(function () {
+
+
                     loadQueueActivatorSection(executionFlowStageEntity.QueueItemType.dataRecordTypeId, true).then(function () {
                         loadQueueActivatorPromiseDeferred.resolve();
                     })
-                }
-                else {
-                    loadSourceStages(false);
-                }
-            });
+
+                });
+            }
+
             return UtilsService.waitMultiplePromises(promises);
         }
 

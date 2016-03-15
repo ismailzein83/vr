@@ -38,7 +38,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         ZoneName = item.ZoneName,
                         ChangeType = item.ChangeType,
                         RecentRate = item.ProcessInfo.RecentRate,
-                        NewRate = item.NormalRate,
+                        NewRate =(decimal) item.NormalRate,
                         BED = item.BED,
                         EED = item.EED
                     });

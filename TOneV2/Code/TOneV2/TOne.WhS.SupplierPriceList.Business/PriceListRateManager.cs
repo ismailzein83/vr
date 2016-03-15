@@ -194,7 +194,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             shouldAddMoreRates = false;
             var newRate = new NewRate
             {
-                NormalRate = importedRate.NormalRate,
+                NormalRate =(decimal) importedRate.NormalRate,
                 OtherRates = importedRate.OtherRates,
                 CurrencyId = importedRate.CurrencyId,
                 Zone = zone,
