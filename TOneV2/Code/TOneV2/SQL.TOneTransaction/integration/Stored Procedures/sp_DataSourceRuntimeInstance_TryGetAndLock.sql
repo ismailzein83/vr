@@ -4,19 +4,21 @@ CREATE PROCEDURE [integration].[sp_DataSourceRuntimeInstance_TryGetAndLock]
 AS
 BEGIN
 	
-	DECLARE @ID UNIQUEIDENTIFIER
-	IF EXISTS (SELECT TOP 1 ID FROM integration.DataSourceRuntimeInstance WHERE LockedByProcessID IS NULL)
+	DECLARE @ID UNIQUEIDENTIFIER, @IsLocked bit
+	SELECT TOP 1 @ID = ID FROM integration.DataSourceRuntimeInstance WITH(NOLOCK) WHERE LockedByProcessID IS NULL
+	
+	IF (@ID IS NOT NULL)
 	BEGIN
 		UPDATE integration.DataSourceRuntimeInstance
 		SET 
-			@ID = ID,
-			LockedByProcessID = @CurrentRuntimeProcessID
-		WHERE ID = (SELECT TOP 1 ID FROM integration.DataSourceRuntimeInstance WHERE LockedByProcessID IS NULL)
+			LockedByProcessID = @CurrentRuntimeProcessID,
+			@IsLocked = 1
+		WHERE ID = @ID AND LockedByProcessID IS NULL
 	END
 	
 	SELECT [ID]
       ,[DataSourceID]
     FROM integration.DataSourceRuntimeInstance
-    WHERE ID = @ID
+    WHERE ID = @ID AND @IsLocked = 1
 	
 END

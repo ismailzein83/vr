@@ -84,6 +84,10 @@
     <Folder Include="runtime\User Defined Types\" />
     <Folder Include="integration\Functions\" />
     <Folder Include="runtime\Functions\" />
+    <Folder Include="summarytransformation\" />
+    <Folder Include="summarytransformation\Tables\" />
+    <Folder Include="summarytransformation\Functions\" />
+    <Folder Include="summarytransformation\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -200,6 +204,11 @@
     <Build Include="bp\Stored Procedures\sp_BPTask_GetByID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_GetBeforeId.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTaskType_GetAll.sql" />
+    <Build Include="summarytransformation\Tables\SummaryBatchLock.sql" />
+    <Build Include="summarytransformation\Functions\ParseStringList.sql" />
+    <Build Include="summarytransformation\Stored Procedures\sp_SummaryBatchLock_TryLock.sql" />
+    <Build Include="summarytransformation\Stored Procedures\sp_SummaryBatchLock_UnLock.sql" />
+    <Build Include="Security\summarytransformation.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

@@ -156,6 +156,8 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_UpdateStatuses.sql" />
+    <Build Include="queue\Stored Procedures\sp_QueueItemHeader_UpdateMultiple.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

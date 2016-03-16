@@ -12,10 +12,10 @@ IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
 	    DECLARE @QueueIDsTable TABLE (QueueID int)
 		INSERT INTO @QueueIDsTable (QueueID)
-		select Convert(int, ParsedString) from [TOneQueueDB].[queue].[ParseStringList](@QueueIDs)
+		select Convert(int, ParsedString) from [queue].[ParseStringList](@QueueIDs)
 		 DECLARE @QueueStatusIDsTable TABLE (StatusID int)
 		INSERT INTO @QueueStatusIDsTable (StatusID)
-		select Convert(int, ParsedString) from [TOneQueueDB].[queue].[ParseStringList](@QueueStatusIds)
+		select Convert(int, ParsedString) from [queue].[ParseStringList](@QueueStatusIds)
 			SELECT itemHeader.ItemID,
 				   itemHeader.QueueID,
 			       itemHeader.[Description],
