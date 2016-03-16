@@ -198,7 +198,7 @@ namespace Vanrise.GenericData.Business
             }
             return false;
         }
-        int GetDataRecordTypeId(int businessEntityDefinitionId)
+        public int GetDataRecordTypeId(int businessEntityDefinitionId)
         {
             BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(businessEntityDefinitionId);
             if (beDefinition == null)
