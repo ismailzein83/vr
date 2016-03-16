@@ -68,9 +68,13 @@
                 $scope.gridMenuActions = [{
                     name: 'Edit',
                     clicked: editGenericRuleDefinition,
+                    haspermission: hasEditGenericRuleDefinitionPermission
+
                 }];
             }
-
+            function hasEditGenericRuleDefinitionPermission() {
+                return VR_GenericData_GenericRuleDefinitionAPIService.HasUpdateGenericRuleDefinition();
+            }
             function editGenericRuleDefinition(genericRuleDefinition) {
                 var onGenericRuleDefinitionUpdated = function (updatedGenericRuleDefinition) {
                     gridAPI.itemUpdated(updatedGenericRuleDefinition);
