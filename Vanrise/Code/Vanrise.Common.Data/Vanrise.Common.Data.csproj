@@ -55,6 +55,7 @@
     <Compile Include="IIDManagerDataManager.cs" />
     <Compile Include="IRateTypeDataManager.cs" />
     <Compile Include="IStatisticBatchDataManager.cs" />
+    <Compile Include="ISummaryTransformationDataManager.cs" />
     <Compile Include="ITemplateConfigDataManager.cs" />
     <Compile Include="ITypeDataManager.cs" />
     <Compile Include="IVRFileDataManager.cs" />

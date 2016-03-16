@@ -8,7 +8,7 @@ using Vanrise.GenericData.Transformation.Entities;
 
 namespace Vanrise.GenericData.Transformation
 {
-    public class DataTransformer
+    public class DataTransformer : IDataTransformer
     {
         public DataTransformationExecutionOutput ExecuteDataTransformation(int dataTransformationDefinitionId, Action<IDataTransformationExecutionContext> onContextReady)
         {

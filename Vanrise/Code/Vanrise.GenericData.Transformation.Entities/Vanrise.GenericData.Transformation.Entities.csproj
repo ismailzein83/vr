@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseGenericRuleMappingStep.cs" />
+    <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
+    <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="DataTransformationCompilationOutput.cs" />
     <Compile Include="DataTransformationDefinition.cs" />
     <Compile Include="DataTransformationDefinitionDetail.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="GenericRuleCriteriaFieldMapping.cs" />
     <Compile Include="IDataTransformationExecutionContext.cs" />
     <Compile Include="IDataTransformationCodeGenerationContext.cs" />
+    <Compile Include="BusinessManagers\IDataTransformer.cs" />
     <Compile Include="MappingRule.cs" />
     <Compile Include="MappingRuleDefinitionSettings.cs" />
     <Compile Include="MappingRuleSettings.cs" />
@@ -63,6 +66,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>

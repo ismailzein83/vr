@@ -10,7 +10,14 @@ namespace Vanrise.Data
 {
     public abstract class BaseDataManager
     {
+        static int s_decimalPrecision;
         private string _connectionString;
+
+        static BaseDataManager()
+        {
+            if (!int.TryParse(ConfigurationManager.AppSettings["BCP_DecimalPrecision"], out s_decimalPrecision))
+                s_decimalPrecision = 6;
+        }
         public BaseDataManager(string connectionStringName): this(connectionStringName, true)
         {
 
@@ -27,9 +34,9 @@ namespace Vanrise.Data
                 _connectionString = connectionString;
         }
 
-        protected object GetDecimalForBCP(Decimal value)
+        public static object GetDecimalForBCP(Decimal value)
         {
-            return Math.Round(value, 6);
+            return Math.Round(value, s_decimalPrecision);
         }
 
         public BaseDataManager()

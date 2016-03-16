@@ -4,35 +4,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Data;
+using Vanrise.Entities.SummaryTransformation;
+using Vanrise.Runtime;
 
 namespace Vanrise.Common.Business.SummaryTransformation
 {
-    public abstract class SummaryTransformationManager<T, Q>
-        where T : IRawItem
-        where Q : ISummaryItem
+
+    public abstract class SummaryTransformationManager<T, Q, R> : ISummaryTransformationManager
+        where Q : class, ISummaryItem
+        where R : class, ISummaryBatch<Q>
     {
         #region ctor/Local Variables
+
+        static ConcurrentDictionary<DateTime, Dictionary<string, SummaryItemInProcess<Q>>> s_existingSummaryBatches = new ConcurrentDictionary<DateTime, Dictionary<string, SummaryItemInProcess<Q>>>();
+        ISummaryTransformationDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ISummaryTransformationDataManager>();
 
         #endregion
 
         #region Public Methods
 
-        public IEnumerable<SummaryBatch<Q>> ConvertRawItemsToBatches(IEnumerable<T> items)
+        public IEnumerable<R> ConvertRawItemsToBatches(IEnumerable<T> items, Func<R> createSummaryBatchObj)
         {
             Dictionary<DateTime, SummaryBatchInProcess<Q>> batches = new Dictionary<DateTime, SummaryBatchInProcess<Q>>();
             
             foreach (var item in items)
             {
                 DateTime batchStart;
-                DateTime batchEnd;
-                GetRawItemBatchTimeRange(item, out batchStart, out batchEnd);
+                GetRawItemBatchTimeRange(item, out batchStart);
 
                 SummaryBatchInProcess<Q> batch;
                 if (!batches.TryGetValue(batchStart, out batch))
                 {
                     batch = new SummaryBatchInProcess<Q>();
                     batch.BatchStart = batchStart;
-                    batch.BatchEnd = batchEnd;
                     batch.ItemsBySummaryKey = new Dictionary<string, Q>();
                     batches.Add(batchStart, batch);
                 }
@@ -42,51 +47,82 @@ namespace Vanrise.Common.Business.SummaryTransformation
                 if (!batch.ItemsBySummaryKey.TryGetValue(itemKey, out summaryItem))
                 {
                     summaryItem = Activator.CreateInstance<Q>();
+                    summaryItem.BatchStart = batch.BatchStart;
                     SetSummaryItemGroupingFields(summaryItem, item);
                     batch.ItemsBySummaryKey.Add(itemKey, summaryItem);
                 }
                 UpdateSummaryItemFromRawItem(summaryItem, item);
             }
-            return batches.Values.Select(itm => new SummaryBatch<Q>
-            {
-                BatchStart = itm.BatchStart,
-                BatchEnd = itm.BatchEnd,
-                Items = itm.ItemsBySummaryKey.Values
-            });
+            return batches.Values.Select(
+                itm =>
+                {
+                    var summaryBatch = createSummaryBatchObj();
+                    summaryBatch.BatchStart = itm.BatchStart;
+                    summaryBatch.Items = itm.ItemsBySummaryKey.Values;
+                    return summaryBatch;
+                });
         }
 
-        public void UpdateNewBatches(DateTime batchStart, Func<IEnumerable<SummaryBatch<Q>>> getNewBatches)
+        public void UpdateNewBatches(DateTime batchStart, IEnumerable<R> newBatches)
         {
+            Dictionary<string, SummaryItemInProcess<Q>> existingSummaryBatch;
+            if (!s_existingSummaryBatches.TryGetValue(batchStart, out existingSummaryBatch))
+                throw new Exception(String.Format("Summary Transformation should be locked before calling the UpdateNewBatches. Batch Start: '{0}'", batchStart));
+
             try
             {
-                if (!TryLockBatch(batchStart))
-                    return;
-
-                SummaryBatch<Q> existingSummaryBatch = GetBatchFromDB(batchStart);
-                var newBatches = getNewBatches();
                 foreach (var newBatch in newBatches)
                 {
                     if (newBatch.BatchStart != batchStart)
                         throw new Exception(String.Format("newBatch.BatchStart '{0}' is not same as batchStart '{1}'.", newBatch.BatchStart, batchStart));
-                    if (existingSummaryBatch == null)
-                        existingSummaryBatch = newBatch;
-                    else
-                        UpdateExistingFromNew(existingSummaryBatch, newBatch);
+                    UpdateExistingFromNew(existingSummaryBatch, newBatch);
                 }
 
-                SaveSummaryBatchToDB(existingSummaryBatch);
+                SaveSummaryBatchToDB(existingSummaryBatch.Values);
+
             }
-            finally
+            catch
             {
-                UnlockBatch(batchStart);
+                Unlock(batchStart);
+                throw;
             }
+        }
+
+
+        public bool TryLock(DateTime batchStart)
+        {
+            int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
+            IEnumerable<int> runningRuntimeProcessesIds = (new RunningProcessManager()).GetCachedRunningProcesses().Select(itm => itm.ProcessId);
+            if (_dataManager.TryLock(GetTypeId(), batchStart, currentRuntimeProcessId, runningRuntimeProcessesIds))
+            {
+                var items = GetItemsFromDB(batchStart);
+                Dictionary<string, SummaryItemInProcess<Q>> itemsByKey = new Dictionary<string, SummaryItemInProcess<Q>>();
+                if(items != null)
+                {
+                    foreach(var itm in items)
+                    {
+                        itemsByKey.Add(GetSummaryItemKey(itm), new SummaryItemInProcess<Q> { SummaryItem = itm });
+                    }
+                }
+                s_existingSummaryBatches.TryAdd(batchStart, itemsByKey);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public void Unlock(DateTime batchStart)
+        {
+            _dataManager.UnLock(GetTypeId(), batchStart);
+            Dictionary<string, SummaryItemInProcess<Q>> dummy;
+            s_existingSummaryBatches.TryRemove(batchStart, out dummy);
         }
         
         #endregion
 
         #region abstract Methods
 
-        protected abstract void GetRawItemBatchTimeRange(T rawItem, out DateTime batchStart, out DateTime batchEnd);
+        protected abstract void GetRawItemBatchTimeRange(T rawItem, out DateTime batchStart);
 
         protected abstract void SetSummaryItemGroupingFields(Q summaryItem, T item);
 
@@ -102,7 +138,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         protected abstract void InsertItemsToDB(List<Q> itemsToAdd);
 
-        protected abstract SummaryBatch<Q> GetBatchFromDB(DateTime batchStart);
+        protected abstract IEnumerable<Q> GetItemsFromDB(DateTime batchStart);
 
         #endregion
 
@@ -125,52 +161,44 @@ namespace Vanrise.Common.Business.SummaryTransformation
             }
         }
 
-        private bool TryLockBatch(DateTime batchStart)
+        private void UpdateExistingFromNew(Dictionary<string, SummaryItemInProcess<Q>> existingSummaryItemsByKey, R newSummaryBatch)
         {
-            //if locked successfully
-
-            throw new NotImplementedException();
-        }
-
-        private void UpdateExistingFromNew(SummaryBatch<Q> existingSummaryBatch, SummaryBatch<Q> newSummaryBatch)
-        {
-            if (existingSummaryBatch == null)
-                throw new NullReferenceException("existingSummaryBatch");
-            if (existingSummaryBatch.Items == null)
-                throw new NullReferenceException("existingSummaryBatch.Items");
             if (newSummaryBatch == null)
                 throw new NullReferenceException("newSummaryBatch");
             if (newSummaryBatch.Items == null)
                 throw new NullReferenceException("newSummaryBatch.Items");
-
-
-            Dictionary<string, Q> existingSummaryItemsByKey = existingSummaryBatch.Items.ToDictionary((itm) => GetSummaryItemKey(itm), (itm) => itm);
-
+            
             foreach (var newSummaryItem in newSummaryBatch.Items)
             {
                 string summaryItemKey = GetSummaryItemKey(newSummaryItem);
-                Q matchSummaryItem;
+                SummaryItemInProcess<Q> matchSummaryItem;
                 if (!existingSummaryItemsByKey.TryGetValue(summaryItemKey, out matchSummaryItem))
-                    existingSummaryItemsByKey.Add(summaryItemKey, newSummaryItem);
+                {
+                    matchSummaryItem = new SummaryItemInProcess<Q> { SummaryItem = newSummaryItem};
+                    existingSummaryItemsByKey.Add(summaryItemKey, matchSummaryItem);
+                }
                 else
-                    UpdateSummaryItemFromSummaryItem(matchSummaryItem, newSummaryItem);
+                {
+                    UpdateSummaryItemFromSummaryItem(matchSummaryItem.SummaryItem, newSummaryItem);
+                }
+                matchSummaryItem.ShouldUpdate = true;
             }
         }
 
-        private void SaveSummaryBatchToDB(SummaryBatch<Q> summaryBatch)
-        {
-            if (summaryBatch == null)
-                throw new NullReferenceException("summaryBatch");
-            if (summaryBatch.Items == null)
-                throw new NullReferenceException("summaryBatch.Items");
+        private void SaveSummaryBatchToDB(IEnumerable<SummaryItemInProcess<Q>> summaryBatch)
+        {           
             List<Q> itemsToAdd = new List<Q>();
             List<Q> itemsToUpdate = new List<Q>();
-            foreach (var summaryItem in summaryBatch.Items)
+            foreach (var itm in summaryBatch)
             {
-                if (summaryItem.SummaryItemId > 0)
-                    itemsToUpdate.Add(summaryItem);
-                else
-                    itemsToAdd.Add(summaryItem);
+                if (itm.ShouldUpdate)
+                {
+                    if (itm.SummaryItem.SummaryItemId > 0)
+                        itemsToUpdate.Add(itm.SummaryItem);
+                    else
+                        itemsToAdd.Add(itm.SummaryItem);
+                    itm.ShouldUpdate = false;
+                }
             }
             if (itemsToAdd.Count > 0)
                 GenerateSummaryItemsIds(itemsToAdd);
@@ -178,13 +206,6 @@ namespace Vanrise.Common.Business.SummaryTransformation
                 InsertItemsToDB(itemsToAdd);
             if (itemsToUpdate.Count > 0)
                 UpdateItemsInDB(itemsToUpdate);
-        }
-
-        private void UnlockBatch(DateTime batchStart)
-        {
-            throw new NotImplementedException();
-            //unlock from DB
-
         }
 
         #endregion
@@ -195,33 +216,21 @@ namespace Vanrise.Common.Business.SummaryTransformation
         {
             public DateTime BatchStart { get; set; }
 
-            public DateTime BatchEnd { get; set; }
-
             public Dictionary<string, T> ItemsBySummaryKey { get; set; }
         }
 
+        private class SummaryItemInProcess<T> where T : ISummaryItem
+        {
+            public T SummaryItem { get; set; }
+
+            public bool ShouldUpdate { get; set; }
+        }
+
         #endregion
+
+        void ISummaryTransformationManager.UpdateNewBatches(DateTime batchStart, IEnumerable<object> newBatches)
+        {
+            this.UpdateNewBatches(batchStart, newBatches.Select(itm => itm as R));
+        }
     }
-
-    public interface IRawItem
-    {
-    }
-
-    public interface ISummaryItem
-    {
-        long SummaryItemId { get; set; }
-
-    }
-
-    public class SummaryBatch<T> where T : ISummaryItem
-    {
-        public DateTime BatchStart { get; set; }
-
-        public DateTime BatchEnd { get; set; }
-
-        public IEnumerable<T> Items { get; set; }
-    }
-
-    
-    
 }

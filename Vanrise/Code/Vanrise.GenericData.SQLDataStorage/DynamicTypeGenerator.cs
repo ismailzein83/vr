@@ -52,7 +52,10 @@ namespace Vanrise.GenericData.SQLDataStorage
                         if (columnIndex > 0)
                             recordFormatBuilder.Append("^");
                         recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");
-                        columnsValuesBuider.Append(String.Format(", record.{0}", columnSettings.ValueExpression));
+                        if (columnSettings.SQLDataType.ToLower().Contains("decimal"))
+                            columnsValuesBuider.Append(String.Format(", Vanrise.Data.BaseDataManager.GetDecimalForBCP(record.{0})", columnSettings.ValueExpression));
+                        else
+                            columnsValuesBuider.Append(String.Format(", record.{0}", columnSettings.ValueExpression));
                         columnIndex++;
                         if (columnNamesBuilder.Length > 0)
                             columnNamesBuilder.Append(", ");
