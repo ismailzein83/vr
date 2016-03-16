@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="ApplyAssigningCasesforItems.cs" />
     <Compile Include="ApplyStrategyExecutionCancellation.cs" />
+    <Compile Include="GetStrategyExecutionItemswithCases.cs" />
     <Compile Include="GetRelatedNumbersByNumberRange.cs" />
     <Compile Include="ProcessAssigingCasesforItems.cs" />
     <Compile Include="UpdateFindRelatedNumbersProgress.cs" />

@@ -18,6 +18,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         public int UserId { get; set; }
 
+        public List<StrategyExecutionItem> Items { get; set; }
+
+        public List<AccountCase> Cases { get; set; }
+
+        public List<StrategyExecutionItem> ItemsofCases { get; set; }
+
         public BaseQueue<CancellingStrategyExecutionBatch> OutputQueue { get; set; }
     }
 
@@ -33,6 +39,14 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
         [RequiredArgument]
         public InArgument<int> UserId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<List<StrategyExecutionItem>> Items { get; set; }
+
+        [RequiredArgument]
+        public InArgument<List<AccountCase>> Cases { get; set; }
+
+        [RequiredArgument]
+        public InArgument<List<StrategyExecutionItem>> ItemsofCases { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<CancellingStrategyExecutionBatch>> OutputQueue { get; set; }
@@ -51,14 +65,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
         protected override void DoWork(ProcessStrategyExecutionCancellationInput inputArgument, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Processing Strategy Execution Cancellation");
 
-            IStrategyExecutionItemDataManager dataManager = FraudDataManagerFactory.GetDataManager<IStrategyExecutionItemDataManager>();
-            List<StrategyExecutionItem> items = new List<StrategyExecutionItem>();
-            List<AccountCase> cases = new List<AccountCase>();
-            List<StrategyExecutionItem> itemsofCases = new List<StrategyExecutionItem>();
-
-            dataManager.GetStrategyExecutionItemsbyExecutionId(inputArgument.StrategyExecutionId, out items, out cases, out itemsofCases);
 
             List<long> tobeDeletedItems = new List<long>();
             List<int> tobeDeletedCases = new List<int>();
@@ -67,7 +74,7 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             int index = 0;
             int totalIndex = 0;
 
-            foreach (StrategyExecutionItem item in items)
+            foreach (StrategyExecutionItem item in inputArgument.Items)
             {
                 index++;
                 totalIndex++;
@@ -79,12 +86,12 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
 
                 if (item.CaseID != null)
                 {
-                    relatedCase = cases.Where(x => x.CaseID == item.CaseID).FirstOrDefault();
+                    relatedCase = inputArgument.Cases.Where(x => x.CaseID == item.CaseID).FirstOrDefault();
                     if (relatedCase != null)
                     {
                         if (relatedCase.StatusID == CaseStatus.Pending || relatedCase.StatusID == CaseStatus.Open)
                         {
-                            if (!itemsofCases.Exists(x => x.CaseID == relatedCase.CaseID && x.StrategyExecutionID != inputArgument.StrategyExecutionId && x.SuspicionOccuranceStatus != SuspicionOccuranceStatus.Cancelled))
+                            if (!inputArgument.ItemsofCases.Exists(x => x.CaseID == relatedCase.CaseID && x.StrategyExecutionID != inputArgument.StrategyExecutionId && x.SuspicionOccuranceStatus != SuspicionOccuranceStatus.Cancelled))
                             {
                                 tobeDeletedItems.Add(item.ID);
                                 tobeDeletedCases.Add(relatedCase.CaseID);
@@ -131,7 +138,10 @@ namespace Vanrise.Fzero.FraudAnalysis.BP.Activities
             {
                 OutputQueue = this.OutputQueue.Get(context),
                 StrategyExecutionId = this.StrategyExecutionId.Get(context),
-                UserId = this.UserId.Get(context)
+                UserId = this.UserId.Get(context),
+                Items = this.Items.Get(context),
+                Cases = this.Cases.Get(context),
+                ItemsofCases = this.ItemsofCases.Get(context)
             };
         }
     }
