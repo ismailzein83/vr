@@ -411,6 +411,10 @@
       <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.MainExtensions\Vanrise.Fzero.FraudAnalysis.MainExtensions.csproj">
+      <Project>{564c314c-3ed1-46e3-be77-1873ed5d8166}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.MainExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

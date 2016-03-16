@@ -440,6 +440,10 @@
       <Project>{516b5fb8-205f-44c7-9ce9-949ad88ec87b}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.MainExtensions\Vanrise.Fzero.FraudAnalysis.MainExtensions.csproj">
+      <Project>{564c314c-3ed1-46e3-be77-1873ed5d8166}</Project>
+      <Name>Vanrise.Fzero.FraudAnalysis.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Fzero.FraudAnalysis.Web\Vanrise.Fzero.FraudAnalysis.Web.csproj">
       <Project>{459a8a67-4cbc-4c83-a94f-53ada1178fa4}</Project>
       <Name>Vanrise.Fzero.FraudAnalysis.Web</Name>
