@@ -57,6 +57,14 @@ namespace Vanrise.Security.Data.SQL
             return (recordesEffected > 0);
         }
 
+
+
+        public bool UpdateBusinessEntityRank(int entityId, int moduleId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_BusinessEntity_UpdateModule", entityId, moduleId);
+            return (recordesEffected > 0);
+        }
+
         #region Mappers
 
         Entities.BusinessEntity EntityMapper(IDataReader reader)
@@ -76,6 +84,6 @@ namespace Vanrise.Security.Data.SQL
         #endregion
 
 
-       
+
     }
 }

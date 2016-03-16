@@ -57,10 +57,6 @@ namespace Vanrise.Security.Business
 
             return retVal;
         }
-
-
-      
-        
         public Vanrise.Entities.UpdateOperationOutput<object> ToggleBreakInheritance(EntityType entityType, string entityId)
         {
             UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
@@ -106,6 +102,68 @@ namespace Vanrise.Security.Business
         {
             return GetBusinessEntityNodePathRecursively(GetEntityNodes(), nodeName);
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<List<BusinessEntityNode>> UpdateEntityNodesRank(List<BusinessEntityNode> businessEntityNodes)
+        {
+            UpdateOperationOutput<List<BusinessEntityNode>> updateOperationOutput = new UpdateOperationOutput<List<BusinessEntityNode>>();
+
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool updateActionSucc = false;
+
+            updateActionSucc = UpdateEntityNodesChildren(businessEntityNodes);
+
+            MenuManager menuManager = new MenuManager();
+            if (updateActionSucc)
+            {
+
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                List<BusinessEntityNode> updatedBusinessEntityNodes = GetEntityModules();
+                updateOperationOutput.UpdatedObject = updatedBusinessEntityNodes;
+            }
+            return updateOperationOutput;
+        }
+        public bool UpdateEntityNodesChildren(List<BusinessEntityNode> businessEntityNodes)
+        {
+            for (int i = 0; i < businessEntityNodes.Count; i++)
+            {
+                var businessEntityNode = businessEntityNodes[i];
+                if (businessEntityNode.EntType == EntityType.MODULE)
+                {
+                    _beModuleManager.UpdateBusinessEntityModuleRank(businessEntityNode.EntityId, null);
+                    PrepareEntitiesAndModulesObjects(businessEntityNode.Children, businessEntityNode);
+
+                }
+                else if (businessEntityNode.EntType == EntityType.ENTITY)
+                {
+                    _beManager.UpdateBusinessEntityRank(businessEntityNode.EntityId, 1);
+                }
+            }
+            return true;
+        }
+        public void PrepareEntitiesAndModulesObjects(List<BusinessEntityNode> children, BusinessEntityNode parent)
+        {
+            if (children != null)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    var child = children[i];
+                    if (child.EntType == EntityType.ENTITY)
+                    {
+                        _beManager.UpdateBusinessEntityRank(child.EntityId, parent.EntityId);
+                    }
+                    else
+                    {
+                        _beModuleManager.UpdateBusinessEntityModuleRank(child.EntityId, parent.EntityId);
+                        PrepareEntitiesAndModulesObjects(child.Children, child);
+                    }
+                }
+            }
+        }
+
+
+
 
         #endregion
 

@@ -3,29 +3,29 @@ BusinessEntityRankingEditorController.$inject = ['$scope', 'VRNotificationServic
 function BusinessEntityRankingEditorController($scope, VRNotificationService, UtilsService, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_EntityTypeEnum) {
     var treeAPI;
     var maxMenuLevels = 2;
-    var menuItemId = 0;
+    var businessEntitiesItemId = 0;
     defineScope();
     load();
     function defineScope() {
-        $scope.menu = [];
+        $scope.BusinessEntities = [];
 
         $scope.businessEntitiesReady = function (api) {
             treeAPI = api;
-            if ($scope.menu.length > 0) {
-                treeAPI.refreshTree($scope.menu);
+            if ($scope.BusinessEntities.length > 0) {
+                treeAPI.refreshTree($scope.BusinessEntities);
             }
         }
 
-        //$scope.hasRankingPermission = function () {
-        //    return VR_Sec_ViewAPIService.HasUpdateViewsRankPermission();
+        $scope.hasRankingPermission = function () {
+            return VR_Sec_BusinessEntityNodeAPIService.HasUpdateEntityNodesRankPermission();
 
-        //};
+        };
 
         $scope.save = function () {
             if (treeAPI.getTree != undefined) {
 
-                var changedMenu = builMenuItemsForSave();
-                return VR_Sec_ViewAPIService.UpdateViewsRank(changedMenu).then(function (response) {
+                var changedBusinessEntities = builBusinessEntityItemsForSave();
+                return VR_Sec_BusinessEntityNodeAPIService.UpdateEntityNodesRank(changedBusinessEntities).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("Business Entities", response)) {
                         if ($scope.onRankingSuccess != undefined)
                             $scope.onRankingSuccess(response.UpdatedObject);
@@ -39,7 +39,8 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
             $scope.modalContext.closeModal();
         };
 
-        $scope.onMoveMenuItem = function (node, parent) {
+        $scope.onMoveItem = function (node, parent) {
+            
             if (parent.isLeaf)
                 return false;
         }
@@ -68,13 +69,13 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
 
     function loadBusinessEntities() {
         return VR_Sec_BusinessEntityNodeAPIService.GetEntityNodes().then(function (response) {
-            $scope.menuItems = [];
+            $scope.businessEntitiesItems = [];
             setLeafNodes(response);
             angular.forEach(response, function (item) {
-                $scope.menuItems.push(item);
+                $scope.businessEntitiesItems.push(item);
             })
             if (treeAPI != undefined) {
-                treeAPI.refreshTree($scope.menuItems);
+                treeAPI.refreshTree($scope.businessEntitiesItems);
             }
         });
     }
@@ -86,42 +87,41 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
             var child = children[i];
             if (child.EntType == VR_Sec_EntityTypeEnum.ENTITY.value) {
                 children[i].isLeaf = true;
-                children[i].ItemId = menuItemId++;
+                children[i].ItemId = businessEntitiesItemId++;
                 setLeafNodes(child.Children)
             }
 
             else {
                 children[i].isLeaf = false;
-                children[i].ItemId = menuItemId++;
+                children[i].ItemId = businessEntitiesItemId++;
                 setLeafNodes(child.Children)
             }
 
         }
     }
 
-    function builMenuItemsForSave() {
-        var preparedMenuItems = [];
-        var menu = treeAPI.getTree();
-        prepareMenuItems(menu, preparedMenuItems);
-        return preparedMenuItems;
+    function builBusinessEntityItemsForSave() {
+        var preparedBusinessEntityItems = [];
+        var businessEntities = treeAPI.getTree();
+        prepareBusinessEntityItems(businessEntities, preparedBusinessEntityItems);
+        return preparedBusinessEntityItems;
     }
 
-    function prepareMenuItems(menuItems, preparedMenuItems) {
-        for (var i = 0; i < menuItems.length ; i++) {
-            var menuItem = menuItems[i];
-            var preparedMenuItem = {
-                Id: menuItem.Id,
-                Location: menuItem.Location,
-                MenuType: menuItem.MenuType,
-                Name: menuItem.Name,
-                Rank: i + 1,
-                Type: menuItem.Type,
-                Title: menuItem.Title,
-                AllowDynamic: menuItem.AllowDynamic,
-                Childs: []
+    function prepareBusinessEntityItems(businessEntities, preparedBusinessEntityItems, parent) {
+        for (var i = 0; i < businessEntities.length ; i++) {
+            var businessEntity = businessEntities[i];
+            var preparedBusinessEntityItem = {
+                EntityId: businessEntity.EntityId,
+                Name: businessEntity.Name,
+                Title: businessEntity.Title,
+                EntType: businessEntity.EntType,
+                PermissionOptions: businessEntity.PermissionOptions,
+                BreakInheritance: businessEntity.BreakInheritance,
+                Parent: parent,
+                Children: []
             }
-            preparedMenuItems.push(preparedMenuItem);
-            prepareMenuItems(menuItem.Children, preparedMenuItem.Children);
+            preparedBusinessEntityItems.push(preparedBusinessEntityItem);
+            prepareBusinessEntityItems(businessEntity.Children, preparedBusinessEntityItem.Children, businessEntity);
         }
     }
 };

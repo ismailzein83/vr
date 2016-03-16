@@ -15,5 +15,6 @@ namespace Vanrise.Security.Data
         bool AddBusinessEntity(BusinessEntity businessEntity, out int entityId);
         bool UpdateBusinessEntity(BusinessEntity businessEntity);
         bool AreBusinessEntitiesUpdated(ref object updateHandle);
+        bool UpdateBusinessEntityRank(int entityId, int moduleId);
     }
 }

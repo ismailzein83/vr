@@ -31,7 +31,11 @@ namespace Vanrise.Security.Business
             BusinessEntityModule module = GetBusinessEntityModuleById(moduleId);
             return module != null ? module.Name : null;
         }
-
+        public  bool UpdateBusinessEntityModuleRank(int moduleId, int? parentId)
+        {
+            IBusinessEntityModuleDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
+            return dataManager.UpdateBusinessEntityModuleRank(moduleId, parentId);
+        }
         public void SetCacheExpired()
         {
             CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();

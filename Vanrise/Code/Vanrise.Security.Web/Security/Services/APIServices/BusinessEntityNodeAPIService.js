@@ -10,7 +10,9 @@
             GetEntityNodes: GetEntityNodes,
             ToggleBreakInheritance: ToggleBreakInheritance,
             HasBreakInheritancePermission: HasBreakInheritancePermission,
-            GetEntityModules:GetEntityModules
+            GetEntityModules: GetEntityModules,
+            UpdateEntityNodesRank: UpdateEntityNodesRank,
+            HasUpdateEntityNodesRankPermission: HasUpdateEntityNodesRankPermission
         };
 
         function GetEntityNodes() {
@@ -29,6 +31,12 @@
         }
         function GetEntityModules() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetEntityModules'));
+        }
+        function UpdateEntityNodesRank(businessEntityNodes) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateEntityNodesRank'), businessEntityNodes);
+        }
+        function HasUpdateEntityNodesRankPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateEntityNodesRank']));
         }
     }
 

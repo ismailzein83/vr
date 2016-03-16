@@ -35,12 +35,12 @@
                     return insertBusinessEntityModule();
             };
           
-            //$scope.hasSaveModulePermission = function () {
-            //    if ($scope.scopeModal.isEditMode)
-            //        return VR_Sec_ModuleAPIService.HasUpdateModulePermission();
-            //    else
-            //        return VR_Sec_ModuleAPIService.HasAddModulePermission();
-            //};
+            $scope.hasSaveModulePermission = function () {
+                if ($scope.scopeModal.isEditMode)
+                    return VR_Sec_BusinessEntityModuleAPIService.HasUpdateBusinessEntityModulePermission();
+                else
+                    return VR_Sec_BusinessEntityModuleAPIService.HasAddBusinessEntityModulePermission();
+            };
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal();
             };

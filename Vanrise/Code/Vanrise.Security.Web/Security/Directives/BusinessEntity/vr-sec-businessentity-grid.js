@@ -68,14 +68,13 @@ app.directive("vrSecBusinessentityGrid", ['VRNotificationService', 'VR_Sec_Busin
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editBusinessEntity,
-                //haspermission: hasUpdateViewPermission // System Entities:Assign Permissions
+                haspermission: hasUpdateBusinessEntityPermission // System Entities:Assign Permissions
             }];
         }
-        //function hasUpdateViewPermission() {
-        //    return VR_Sec_ViewAPIService.HasUpdateViewPermission();
-        //}
+        function hasUpdateBusinessEntityPermission() {
+            return VR_Sec_BusinessEntityAPIService.HasUpdateBusinessEntityPermission();
+        }
         function editBusinessEntity(businessEntityObj) {
-            console.log(businessEntityObj);
             var onBusinessEntityUpdated = function (businessEntity) {
                 gridAPI.itemUpdated(businessEntity);
             }

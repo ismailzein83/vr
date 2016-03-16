@@ -34,5 +34,12 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.GetEntityModules();
         }
+
+        [HttpPost]
+        [Route("UpdateEntityNodesRank")]
+        public Vanrise.Entities.UpdateOperationOutput<List<BusinessEntityNode>> UpdateEntityNodesRank(List<BusinessEntityNode> businessEntityNodes)
+        {
+            return _manager.UpdateEntityNodesRank(businessEntityNodes);
+        }
     }
 }

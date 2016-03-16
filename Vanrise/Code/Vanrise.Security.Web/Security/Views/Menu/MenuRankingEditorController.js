@@ -43,6 +43,7 @@ function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificati
 
         $scope.onMoveMenuItem = function (node, parent)
         {
+        
             if (parent.isRoot && node.isLeaf)
                 return false;
             if (parent.isLeaf)

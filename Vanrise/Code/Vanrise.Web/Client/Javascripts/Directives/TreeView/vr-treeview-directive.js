@@ -138,7 +138,6 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 if (ctrl.draggabletree != undefined) {
                     plugins.push("dnd");
                     treeData.core.check_callback = function (operation, node, parent, position, more) {
-                       
                         if (ctrl.movesettings != undefined) {
                           
                             if (ctrl.movesettings == 'samelevel') {
@@ -155,6 +154,10 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                            
 
                         }
+                        if (parent.id == "#")
+                        {
+                            return false;
+                        }
                         if (ctrl.onmoveitem != undefined && typeof (ctrl.onmoveitem) == 'function') {
                             if (parent.original != undefined)
                             {
@@ -163,6 +166,7 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
 
                             
                         }
+                        
                     }
                     
 

@@ -46,15 +46,21 @@
             $scope.scopeModal.validate = function () {
                 return validate();
             }
-            $scope.scopeModal.validatePremissionOptions = function()
+
+            $scope.scopeModal.validatePremissionOptions = function ()
             {
                 if ($scope.scopeModal.permissionOptions == undefined || $scope.scopeModal.permissionOptions.length == 0)
                     return "At least one option should be added.";
                 return null;
             }
-            //$scope.hasSaveViewPermission = function () {
-            //    return VR_Sec_ViewAPIService.HasUpdateViewPermission();
-            //};
+
+            $scope.hasSaveBusinessEntityPermission = function () {
+                if ($scope.scopeModal.isEditMode)
+                    return VR_Sec_BusinessEntityAPIService.HasUpdateBusinessEntityPermission();
+                else
+                    return VR_Sec_BusinessEntityAPIService.HasAddBusinessEntityPermission();
+            };
+
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal();
             };

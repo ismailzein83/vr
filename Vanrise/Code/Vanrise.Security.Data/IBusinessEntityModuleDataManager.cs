@@ -14,6 +14,7 @@ namespace Vanrise.Security.Data
         bool ToggleBreakInheritance(string entityId);
         bool AddBusinessEntityModule(BusinessEntityModule moduleObject, out int moduleId);
         bool UpdateBusinessEntityModule(BusinessEntityModule moduleObject);
+        bool UpdateBusinessEntityModuleRank(int moduleId, int? parentId);
         bool AreBusinessEntityModulesUpdated(ref object updateHandle);
     }
 }

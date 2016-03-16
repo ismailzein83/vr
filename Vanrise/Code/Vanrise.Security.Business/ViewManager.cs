@@ -114,7 +114,7 @@ namespace Vanrise.Security.Business
 
             bool updateActionSucc = false;
 
-            updateActionSucc = updateMenuChilds(updatedMenuItem);
+            updateActionSucc = UpdateMenuChilds(updatedMenuItem);
 
             MenuManager menuManager = new MenuManager();
             if (updateActionSucc)
@@ -126,7 +126,7 @@ namespace Vanrise.Security.Business
             }
             return updateOperationOutput;
         }
-        public bool updateMenuChilds(List<MenuItem> updatedChildsMenuItem)
+        public bool UpdateMenuChilds(List<MenuItem> updatedChildsMenuItem)
         {
             var rank = 1;
             for (int i = 0; i < updatedChildsMenuItem.Count; i++)

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BusinessEntityDefinitionManagementController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VR_Sec_MenuAPIService', 'VR_Sec_BusinessEntityDefinitionService', 'VR_Sec_BusinessEntityModuleService', 'VR_Sec_MenuService', 'VR_Sec_BusinessEntityNodeAPIService'];
+    BusinessEntityDefinitionManagementController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VR_Sec_MenuAPIService', 'VR_Sec_BusinessEntityDefinitionService', 'VR_Sec_BusinessEntityModuleService', 'VR_Sec_MenuService', 'VR_Sec_BusinessEntityNodeAPIService','VR_Sec_BusinessEntityModuleAPIService'];
 
-    function BusinessEntityDefinitionManagementController($scope, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService, VR_Sec_MenuAPIService, VR_Sec_BusinessEntityDefinitionService, VR_Sec_BusinessEntityModuleService, VR_Sec_MenuService, VR_Sec_BusinessEntityNodeAPIService) {
+    function BusinessEntityDefinitionManagementController($scope, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService, VR_Sec_MenuAPIService, VR_Sec_BusinessEntityDefinitionService, VR_Sec_BusinessEntityModuleService, VR_Sec_MenuService, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_BusinessEntityModuleAPIService) {
 
         //#region Global Variables
         var treeAPI;
@@ -36,7 +36,12 @@
                             };
 
                             return VR_Sec_BusinessEntityModuleService.addBusinessEntityModule(onBusinessEntityModuleAdded, $scope.selectedMenuItem.EntityId);
+                    },
+                    haspermission: function () {
+                        return VR_Sec_BusinessEntityModuleAPIService.HasAddBusinessEntityModulePermission();
+
                     }
+
                 },
             {
                 name: "Add Entity",
@@ -47,20 +52,15 @@
                     return VR_Sec_BusinessEntityDefinitionService.addBusinessEntityDefinition(onBusinessEntityDefinitionAdded, $scope.selectedMenuItem.EntityId);
                 }
             }];
-            //$scope.hasRankingPermission = function () {
-            //    return VR_Sec_ViewAPIService.HasUpdateViewsRankPermission();
+            $scope.hasRankingPermission = function () {
+                return VR_Sec_BusinessEntityNodeAPIService.HasUpdateEntityNodesRankPermission();
 
-            //};
+            };
 
-            //$scope.hasUpdateModulePermission = function () {
-            //    return VR_Sec_ModuleAPIService.HasUpdateModulePermission();
+            $scope.hasUpdateModulePermission = function () {
+                return VR_Sec_BusinessEntityModuleAPIService.HasUpdateBusinessEntityModulePermission();
 
-            //};
-
-            //$scope.hasAddModulePermission = function () {
-            //    return VR_Sec_ModuleAPIService.HasAddModulePermission();
-
-            //};
+            };
 
             $scope.onModulesTreeReady = function (api) {
                 treeAPI = api;
@@ -85,7 +85,6 @@
 
             $scope.editBusinessEntityModule = function () {
                 var onBusinessEntityModuleUpdated = function (moduleObj) {
-                    console.log(moduleObj);
                     var node = mapBusinessEntityModuleNode(moduleObj);
                     treeAPI.createNode(node);
                     onEditModule(menuItems, moduleObj, node);

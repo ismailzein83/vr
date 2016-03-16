@@ -9,7 +9,9 @@
         return {
             GetBusinessEntityModuleById: GetBusinessEntityModuleById,
             UpdateBusinessEntityModule: UpdateBusinessEntityModule,
-            AddBusinessEntityModule: AddBusinessEntityModule
+            AddBusinessEntityModule: AddBusinessEntityModule,
+            HasUpdateBusinessEntityModulePermission: HasUpdateBusinessEntityModulePermission,
+            HasAddBusinessEntityModulePermission: HasAddBusinessEntityModulePermission
         };
 
         function GetBusinessEntityModuleById(moduleId) {
@@ -20,8 +22,14 @@
         function UpdateBusinessEntityModule(moduleObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateBusinessEntityModule'), moduleObject);
         }
+        function HasUpdateBusinessEntityModulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateBusinessEntityModule']));
+        }
         function AddBusinessEntityModule(moduleObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'AddBusinessEntityModule'), moduleObject);
+        }
+        function HasAddBusinessEntityModulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['AddBusinessEntityModule']));
         }
     }
 

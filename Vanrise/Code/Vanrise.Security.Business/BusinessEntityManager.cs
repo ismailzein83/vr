@@ -116,6 +116,12 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
+
+        public bool UpdateBusinessEntityRank(int entityId, int moduleId)
+        {
+            IBusinessEntityDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityDataManager>();
+            return dataManager.UpdateBusinessEntityRank(entityId, moduleId);
+        }
         #endregion
 
         #region Private Methods
