@@ -81,7 +81,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
             var selectorAPI;
 
             function initializeController() {
-                
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
@@ -95,9 +95,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
                 api.load = function (payload) {
                     var selectedIds;
-
-                    if (selectorAPI != undefined)
-                        selectorAPI.clearDataSource();
+                    selectorAPI.clearDataSource();
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
