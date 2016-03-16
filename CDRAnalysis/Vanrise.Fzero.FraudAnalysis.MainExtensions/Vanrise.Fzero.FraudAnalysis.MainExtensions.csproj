@@ -46,8 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BPTaskData\TestBPTaskData.cs" />
-    <Compile Include="BPTaskExecution\TestBPTaskExecutionInformation.cs" />
+    <Compile Include="BPTaskData\BPTaskDataConfirmCancelStrategyonCaseCount.cs" />
+    <Compile Include="BPTaskExecution\BPTaskConfirmCancelStrategyonCaseCount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

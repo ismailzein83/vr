@@ -240,6 +240,8 @@
     <Content Include="FraudAnalysis\Services\APIServices\NumberPrefixAPIService.js" />
     <Content Include="FraudAnalysis\Services\ParametersService.js" />
     <Content Include="FraudAnalysis\Services\StrategyService.js" />
+    <Content Include="FraudAnalysis\Views\BPTask\BPTaskConfirmCancelStrategyonCaseCount.html" />
+    <Content Include="FraudAnalysis\Views\BPTask\BPTaskConfirmCancelStrategyonCaseCountController.js" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialog.html" />
     <Content Include="FraudAnalysis\Views\Dialogs\NewNumberPrefixDialogController.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberProfileAPIService.js" />

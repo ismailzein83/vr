@@ -7,8 +7,8 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.Fzero.FraudAnalysis.MainExtensions
 {
-    public class TestBPTaskExecutionInformation : BPTaskExecutionInformation
+    public class BPTaskDataConfirmCancelStrategyonCaseCount : BPTaskData
     {
-        public bool Continue { get; set; }
+        public string Content { get; set; }
     }
 }

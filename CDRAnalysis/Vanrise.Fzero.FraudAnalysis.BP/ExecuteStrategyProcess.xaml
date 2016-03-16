@@ -88,7 +88,7 @@
           <mca:CSharpValue x:TypeArguments="vffe:StrategyExecutionProgress">new StrategyExecutionProgress() { SuspicionsPerStrategy = new Dictionary&lt;int,long&gt;() }</mca:CSharpValue>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="vffm:TestBPTaskExecutionInformation" Name="executionInformation" />
+      <Variable x:TypeArguments="vffm:BPTaskConfirmCancelStrategyonCaseCount" Name="executionInformation" />
     </Sequence.Variables>
     <WriteLine sap2010:WorkflowViewState.IdRef="WriteLine_1">
       <InArgument x:TypeArguments="x:String">
