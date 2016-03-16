@@ -21,7 +21,7 @@
                 getFilterObject();
                 return gridAPI.loadGrid(filter);
             };
-            $scope.hasGenericBEPermission = function () {
+            $scope.hasAddGenericBEPermission = function () {
                 return businessEntityDefinitionAPIService.HasAddBusinessEntityDefinition();
             }
             $scope.addGenericBE = function () {

@@ -91,6 +91,15 @@
                 return savePromiseDeferred.promise;
             };
 
+            $scope.hasSaveDataTransformationDefinition = function () {
+                 if (isEditMode) {
+                     return VR_GenericData_DataTransformationDefinitionAPIService.HasUpdateDataTransformationDefinition();
+                }
+                else {
+                     return VR_GenericData_DataTransformationDefinitionAPIService.HasAddDataTransformationDefinition();
+                }
+            }
+
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -125,6 +134,9 @@
                       VRNotificationService.showSuccess("All steps compiled successfully.");
                 });
 
+            }
+            $scope.hasTryCompilePermission = function () {
+                return VR_GenericData_DataTransformationDefinitionAPIService.HasTryCompileSteps();
             }
 
             $scope.scopeModal.refreshEditor = function ()

@@ -72,11 +72,16 @@ app.directive("vrGenericdataDatatransformationdefinitionGrid", ["UtilsService", 
                 {
                     name: "Edit",
                     clicked: editDataTransformationDefinition,
+                    haspermission: hasEditDataTransformationDefinitionPermission
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
                 }
+            }
+
+            function hasEditDataTransformationDefinitionPermission() {                
+                return VR_GenericData_DataTransformationDefinitionAPIService.HasUpdateDataTransformationDefinition();
             }
 
             function editDataTransformationDefinition(dataItem) {

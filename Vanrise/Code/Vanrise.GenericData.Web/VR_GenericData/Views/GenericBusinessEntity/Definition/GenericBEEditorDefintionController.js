@@ -49,7 +49,7 @@
                 gridFieldsDirectiveAPI = api;
                 gridFieldsDesignReadyPromiseDeferred.resolve();
             }
-
+            
             $scope.scopeModal.onFilterFieldDesignReady = function (api) {
                 filterFieldsDirectiveAPI = api;
                 filterFieldsDesignReadyPromiseDeferred.resolve();
@@ -91,7 +91,14 @@
                     return insert();
                 }
             };
-
+            $scope.scopeModal.hasSaveGenericBEEditor = function () {
+                if (isEditMode) {
+                    return VR_GenericData_BusinessEntityDefinitionAPIService.HasUpdateBusinessEntityDefinition();
+                }
+                else {
+                    return VR_GenericData_BusinessEntityDefinitionAPIService.HasAddBusinessEntityDefinition();
+                }
+            }
             $scope.scopeModal.close = function () {
                 $scope.modalContext.closeModal()
             };

@@ -69,6 +69,8 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
                 {
                     name: "Edit",
                     clicked: editExtensibleBEItem,
+                    haspermission: hasEditExtensibleBEItem
+
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -82,6 +84,10 @@ app.directive("vrGenericdataExtensiblebeitemGrid", ["UtilsService", "VRNotificat
                 }
 
                 VR_GenericData_ExtensibleBEItemService.editExtensibleBEItem(dataItem.Entity.ExtensibleBEItemId, onExtensibleBEItemUpdated);
+            }
+
+            function hasEditExtensibleBEItem() {
+                return VR_GenericData_ExtensibleBEItemAPIService.HasUpdateExtensibleBEItem();
             }
         }
 

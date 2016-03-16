@@ -60,6 +60,14 @@
                 else
                     return insert();
             };
+            $scope.hasSaveGenericRuleDefinition = function () {
+                if (isEditMode) {
+                    return VR_GenericData_GenericRuleDefinitionAPIService.HasUpdateGenericRuleDefinition();
+                }
+                else {
+                    return VR_GenericData_GenericRuleDefinitionAPIService.HasAddGenericRuleDefinition();
+                }
+            }
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };

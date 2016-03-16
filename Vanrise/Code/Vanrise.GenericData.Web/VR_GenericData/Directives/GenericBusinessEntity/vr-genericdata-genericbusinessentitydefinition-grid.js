@@ -1,7 +1,14 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_BusinessEntityDefinitionAPIService", "VR_GenericData_ExtensibleBEItemService", "VRUIUtilsService","VR_GenericData_BusinessEntityDefinitionService",
-    function (UtilsService, VRNotificationService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_ExtensibleBEItemService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionService) {
+app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", [
+    "UtilsService",
+    "VRNotificationService",
+    "VR_GenericData_BusinessEntityDefinitionAPIService",
+    "VR_GenericData_ExtensibleBEItemService",
+    "VRUIUtilsService",
+    "VR_GenericData_BusinessEntityDefinitionService",
+    "VR_GenericData_ExtensibleBEItemAPIService",
+    function (UtilsService, VRNotificationService, VR_GenericData_BusinessEntityDefinitionAPIService, VR_GenericData_ExtensibleBEItemService, VRUIUtilsService, VR_GenericData_BusinessEntityDefinitionService, extensibleBEItemAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -103,11 +110,14 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                 {
                     name: "Add Extensible Type",
                     clicked: addExtendedSettings,
+                    haspermission: hasAddExtendedSettings
                 }];
                 var genericMenuActions = [
                 {
                      name: "Edit",
                      clicked: editBusinessEntityDefinition,
+                     haspermission: hasEditBusinessEntityDefinition
+
                  }];
                 $scope.gridMenuActions = function (dataItem) {
                     if (dataItem.IsExtensible)
@@ -117,6 +127,14 @@ app.directive("vrGenericdataGenericbusinessentitydefinitionGrid", ["UtilsService
                         return genericMenuActions;
                     }
                 }
+            }
+
+            function hasEditBusinessEntityDefinition() {
+                return VR_GenericData_BusinessEntityDefinitionAPIService.HasUpdateBusinessEntityDefinition();
+            }
+
+            function hasAddExtendedSettings() {
+                return extensibleBEItemAPIService.HasAddExtensibleBEItem();
             }
 
             function addExtendedSettings(dataItem) {

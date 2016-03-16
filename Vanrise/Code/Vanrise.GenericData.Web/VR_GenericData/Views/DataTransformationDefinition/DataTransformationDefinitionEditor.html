@@ -71,8 +71,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Compile" data-onclick="scopeModal.onCompileClick"></vr-button>
-                <vr-button type="Save" validationcontext="dataTransformationDefinitionEditorGroup" data-onclick="scopeModal.SaveDataTransformationDefinition"></vr-button>
+                <vr-button type="Compile" data-onclick="scopeModal.onCompileClick" haspermission="hasTryCompilePermission"></vr-button>
+                <vr-button type="Save" validationcontext="dataTransformationDefinitionEditorGroup" data-onclick="scopeModal.SaveDataTransformationDefinition" haspermission="hasSaveDataTransformationDefinition"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>

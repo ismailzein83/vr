@@ -12,6 +12,7 @@
             AddBusinessEntityDefinition: AddBusinessEntityDefinition,
             HasAddBusinessEntityDefinition: HasAddBusinessEntityDefinition,
             UpdateBusinessEntityDefinition: UpdateBusinessEntityDefinition,
+            HasUpdateBusinessEntityDefinition: HasUpdateBusinessEntityDefinition,
             GetGenericBEDefinitionView: GetGenericBEDefinitionView
         };
 
@@ -38,7 +39,9 @@
         function UpdateBusinessEntityDefinition(businessEntityDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'UpdateBusinessEntityDefinition'), businessEntityDefinition);
         }
-
+        function HasUpdateBusinessEntityDefinition() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "BusinessEntityDefinition", ['UpdateBusinessEntityDefinition']));
+        }
         function GetGenericBEDefinitionView(businessEntityDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'BusinessEntityDefinition', 'GetGenericBEDefinitionView'), {
                 businessEntityDefinitionId: businessEntityDefinitionId
