@@ -17,7 +17,7 @@
                 modalScope.onRankingSuccess = onRankingSuccess;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/Menu/RankingEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Security/Views/Menu/MenuRankingEditor.html', null, modalSettings);
         }
     }
 

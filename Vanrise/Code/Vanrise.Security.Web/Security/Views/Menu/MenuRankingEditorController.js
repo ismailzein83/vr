@@ -1,6 +1,6 @@
 ﻿'use strict'
-RankingEditorController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRNotificationService', 'UtilsService', 'VR_Sec_MenuAPIService'];
-function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationService, UtilsService, VR_Sec_MenuAPIService) {
+MenuRankingEditorController.$inject = ['$scope', 'VR_Sec_ViewAPIService', 'VRNotificationService', 'UtilsService', 'VR_Sec_MenuAPIService','VR_Sec_MenuTypeEnum'];
+function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationService, UtilsService, VR_Sec_MenuAPIService, VR_Sec_MenuTypeEnum) {
     var treeAPI;
     var maxMenuLevels = 2;
     var menuItemId = 0;
@@ -51,7 +51,6 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
             var menu = $scope.menu;
             if (treeAPI.getTree != undefined)
                 menu = treeAPI.getTree();
-            console.log(getNodeLevel(parent, menu));
             return isAllowedNodeLevel(node, getNodeLevel(parent, menu) + 1);
           
         }
@@ -63,6 +62,7 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
             $scope.isLoading = false;
         });
     }
+
     function loadAllControls() {
         return UtilsService.waitMultipleAsyncOperations([setTitle, loadViews])
            .catch(function (error) {
@@ -72,6 +72,7 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
               $scope.scopeModal.isLoading = false;
           });
     }
+
     function setTitle() {
 
         $scope.title = 'Ranking MenuItems';
@@ -104,7 +105,7 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
         for(var i=0 ; i<childs.length;i++)
         {
             var child = childs[i];
-            if (child.MenuType == 1)
+            if (child.MenuType == VR_Sec_MenuTypeEnum.View.value)
             {
                 childs[i].isLeaf = true;
                 childs[i].ItemId = menuItemId++;
@@ -162,6 +163,7 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
                 return obj + 1;
         }     
     }
+
     function isAllowedNodeLevel(node, level) {
         if (node == undefined)
             return true;
@@ -186,4 +188,4 @@ function RankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificationSe
 
 };
 
-appControllers.controller('VR_Sec_RankingEditorController', RankingEditorController);
+appControllers.controller('VR_Sec_MenuRankingEditorController', MenuRankingEditorController);

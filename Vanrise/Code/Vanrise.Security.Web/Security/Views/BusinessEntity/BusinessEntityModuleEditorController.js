@@ -21,7 +21,6 @@
             if (parameters != undefined && parameters != null) {
                 parentId = parameters.parentId;
                 businessEntityModuleId = parameters.businessEntityModuleId;
-                console.log(parentId);
             }
 
             $scope.scopeModal.isEditMode = (businessEntityModuleId != undefined);

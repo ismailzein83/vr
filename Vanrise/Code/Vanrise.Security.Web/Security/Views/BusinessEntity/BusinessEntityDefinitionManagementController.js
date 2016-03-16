@@ -94,26 +94,19 @@
                 VR_Sec_BusinessEntityModuleService.updateBusinessEntityModule($scope.selectedMenuItem.EntityId, onBusinessEntityModuleUpdated);
             }
 
-            //$scope.ranking = function () {
-            //    var onRankingSuccess = function (moduleObj) {
-            //        menuItems.length = 0;
-            //        var menus = [];
-            //        for (var i = 0; i < moduleObj.length; i++) {
-            //            menus.push(moduleObj[i]);
-            //        }
-            //        var menu = {
-            //            Name: "Root",
-            //            Childs: menus,
-            //            isRoot: true,
-            //            isOpened: true
-            //        }
-            //        menuItems.push(menu);
-            //        treeAPI.refreshTree(menuItems);
-            //    };
+            $scope.ranking = function () {
+                var onRankingSuccess = function (moduleObj) {
+                    menuItems.length = 0;
 
-            //    VR_Sec_MenuService.openRankingEditor(onRankingSuccess);
+                    for (var i = 0; i < moduleObj.length; i++) {
+                        menuItems.push(moduleObj[i]);
+                    }
+                    treeAPI.refreshTree(menuItems);
+                };
 
-            //}
+                VR_Sec_BusinessEntityDefinitionService.openBusinessEntityRankingEditor(onRankingSuccess);
+
+            }
         }
 
         function loadParameters() {

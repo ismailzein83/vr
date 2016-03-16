@@ -8,6 +8,7 @@
         return ({
             addBusinessEntityDefinition: addBusinessEntityDefinition,
             updateBusinessEntityDefinition: updateBusinessEntityDefinition,
+            openBusinessEntityRankingEditor: openBusinessEntityRankingEditor
         });
 
         function addBusinessEntityDefinition(onBusinessEntityDefinitionAdded, moduleId) {
@@ -35,6 +36,16 @@
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/BusinessEntity/BusinessEntityDefinitionEditor.html', modalParameters, modalSettings);
+        }
+        function openBusinessEntityRankingEditor(onRankingSuccess) {
+            var modalSettings = {
+            };
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onRankingSuccess = onRankingSuccess;
+            };
+
+            VRModalService.showModal('/Client/Modules/Security/Views/BusinessEntity/BusinessEntityRankingEditor.html', null, modalSettings);
         }
     }
 

@@ -1,0 +1,30 @@
+﻿<div vr-modalcontent ng-controller="VR_Sec_BusinessEntityRankingEditorController" vr-loader="isLoading" width="'30%'">
+    <vr-modalbody maxheight="'500px'">
+        <vr-form name="formRankingEditor">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-section title="Location">
+                        <vr-treeview datatextfield="Name"
+                                     datachildrenfield="Children"
+                                     on-ready="businessEntitiesReady"
+                                     selecteditem="selectedBusinessEntityNode"
+                                     onvaluechanged="onSelectedBusinessEntityNodechanged"
+                                     wholerow
+                                     draggabletree
+                                     state
+                                     onmoveitem="onMoveMenuItem">
+                        </vr-treeview>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formRankingEditor" data-onclick="save" haspermission="hasRankingPermission"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
