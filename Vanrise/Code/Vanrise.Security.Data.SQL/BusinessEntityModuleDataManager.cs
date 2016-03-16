@@ -63,7 +63,7 @@ namespace Vanrise.Security.Data.SQL
             {
                 ModuleId = (int)reader["Id"],
                 Name = reader["Name"] as string,
-                Title = reader["Title"] as string,
+               // Title = reader["Title"] as string,
                 ParentId = GetReaderValue<int>(reader, "ParentId"),
                 BreakInheritance = (bool)reader["BreakInheritance"],
                 PermissionOptions = new List<string>() { "View", "Add", "Edit", "Delete", "Full Control" }
