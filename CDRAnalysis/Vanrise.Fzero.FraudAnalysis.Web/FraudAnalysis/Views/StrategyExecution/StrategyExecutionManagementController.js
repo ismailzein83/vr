@@ -1,10 +1,10 @@
 ﻿"use strict";
 
 StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'CDRAnalysis_FA_StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService',
-    'BusinessProcessAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService'];
+    'BusinessProcessAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService', 'BusinessProcess_BPInstanceService'];
 
 function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService,
-    UtilsService, VRValidationService, BusinessProcessAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum, WhS_BP_CreateProcessResultEnum, BusinessProcessService) {
+    UtilsService, VRValidationService, BusinessProcessAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum, WhS_BP_CreateProcessResultEnum, BusinessProcessService, BusinessProcess_BPInstanceService) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -201,7 +201,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
 
                        BusinessProcessAPIService.CreateNewProcess(createProcessInput).then(function (response) {
                            if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
-                               return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
+                               return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
                            }
                        }).catch(function (error) {
                            VRNotificationService.notifyException(error);
