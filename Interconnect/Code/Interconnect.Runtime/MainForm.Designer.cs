@@ -58,6 +58,8 @@
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.cmbTask);
             this.Name = "MainForm";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
