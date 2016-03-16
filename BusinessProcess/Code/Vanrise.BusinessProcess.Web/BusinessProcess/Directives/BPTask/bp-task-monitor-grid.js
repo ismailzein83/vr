@@ -149,7 +149,7 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                 }
 
                 function onMyTimerElapsed() {
-                    return BusinessProcess_BPTaskAPIService.GetMyTaskUpdated(input).then(function (response) {
+                    return BusinessProcess_BPTaskAPIService.GetMyUpdatedTasks(input).then(function (response) {
                         manipulateDataUpdated(response);
                         $scope.isLoading = false;
                     },
