@@ -50,9 +50,9 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     xhr.setRequestHeader('Auth-Token', SecurityService.getUserToken());
                 },
                 formData: function (form) { return form },
-                replaceFileInput: false,
+                replaceFileInput: true,
                 datatype: 'json',
-                add: function (e, data) {                   
+                add: function (e, data) {
                     var nameAsTab = data.originalFiles[0].name.split(".");
                     var fileExt = nameAsTab[nameAsTab.length - 1];
                     if ($scope.extensionList.indexOf(fileExt) == -1 && $scope.extensionList.length > 0 ) {
@@ -61,7 +61,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                         filecontrol.val("");
                         return false;
                     }
-                    else{
+                    else {
                         $scope.isUploading = true;
                         var file = data.files[data.files.length - 1];
                         ctrl.file = {
@@ -84,13 +84,13 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 drop: function (e, data) {
                 },
                 done: function (e, data) {
-                    
                     ctrl.value = {
                         fileId: data.result.FileId
                     };
                     isInternalSetValue = true;        
                     $timeout(function () { $scope.complet = true }, 2000);
                     $scope.isUploading = false;
+                    data.originalFiles.length = 0;
                 },
                 fail: function (e, data) {
                     $scope.broken = true;
