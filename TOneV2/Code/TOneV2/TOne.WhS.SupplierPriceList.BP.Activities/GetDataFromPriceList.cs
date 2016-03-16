@@ -65,17 +65,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             while (count < worksheet.Cells.Rows.Count)
             {
-                if(string.IsNullOrWhiteSpace(worksheet.Cells[count, 0].StringValue) || string.IsNullOrWhiteSpace(worksheet.Cells[count, 1].StringValue) ||
-                    string.IsNullOrWhiteSpace(worksheet.Cells[count, 2].StringValue) || string.IsNullOrWhiteSpace(worksheet.Cells[count, 3].StringValue))
-                {
-                    context.WriteTrackingMessage(LogEntryType.Warning, "Process has skipped Row {0} due to missing data", count);
-                    count++;
-                    continue;
-                }
+                //if (string.IsNullOrWhiteSpace(worksheet.Cells[count, 0].StringValue) || string.IsNullOrWhiteSpace(worksheet.Cells[count, 1].StringValue) ||
+                //    string.IsNullOrWhiteSpace(worksheet.Cells[count, 2].StringValue) || string.IsNullOrWhiteSpace(worksheet.Cells[count, 3].StringValue))
+                //{
+                //    context.WriteTrackingMessage(LogEntryType.Warning, "Process has skipped Row {0} due to missing data", count);
+                //    count++;
+                //    continue;
+                //}
 
-                DateTime? bEDDateFromExcel = null;
-                if (worksheet.Cells[count, 3].Value != null)
-                    bEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 3].StringValue);
+
+               DateTime? bEDDateFromExcel = worksheet.Cells[count, 3].Value != null ? Convert.ToDateTime(worksheet.Cells[count, 3].StringValue) : DateTime.MinValue;
 
                 DateTime? eEDDateFromExcel = null;
                 if (worksheet.Cells[count, 4].Value != null)
@@ -98,7 +97,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         Code = codeValue.Trim(),
                         CodeGroup = codeGroup,
                         ZoneName = zoneName,
-                        BED = bEDDateFromExcel.Value,
+                        BED =bEDDateFromExcel.Value,
                         EED = eEDDateFromExcel
                     });
                 }
@@ -111,18 +110,21 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     dicImportedRates.Add(zoneName, zoneRates);
                 }
 
-                decimal normalRate = (decimal)worksheet.Cells[count, 2].FloatValue;
-
-                if(zoneRates.Count == 0 || (zoneRates.Any(x => x.NormalRate != normalRate) && zoneRates.Find(x => x.NormalRate == normalRate) == null))
+                if (!string.IsNullOrEmpty(worksheet.Cells[count, 2].StringValue))
                 {
-                    zoneRates.Add(new ImportedRate()
+                    decimal normalRate = (decimal)worksheet.Cells[count, 2].FloatValue;
+
+                    if (zoneRates.Count == 0 || (zoneRates.Any(x => x.NormalRate != normalRate) && zoneRates.Find(x => x.NormalRate == normalRate) == null))
                     {
-                        ZoneName = zoneName,
-                        NormalRate = normalRate,
-                        CurrencyId = currencyId,
-                        BED = bEDDateFromExcel.Value,
-                        EED = eEDDateFromExcel,
-                    });
+                        zoneRates.Add(new ImportedRate()
+                        {
+                            ZoneName = zoneName,
+                            NormalRate = normalRate,
+                            CurrencyId = currencyId,
+                            BED = bEDDateFromExcel.Value,
+                            EED = eEDDateFromExcel,
+                        });
+                    }
                 }
 
                 count++;

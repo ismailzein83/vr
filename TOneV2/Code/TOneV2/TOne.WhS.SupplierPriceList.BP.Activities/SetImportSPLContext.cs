@@ -38,7 +38,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         public TimeSpan CodeCloseDateOffset
         {
-            get { return new TimeSpan(7, 0, 0); }
+            get { return new TimeSpan(7, 0, 0,0); }
         }
     }
 }

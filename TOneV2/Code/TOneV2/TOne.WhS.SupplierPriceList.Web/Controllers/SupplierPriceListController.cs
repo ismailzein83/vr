@@ -32,7 +32,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
                     FileId = input.FileId,
                     SupplierAccountId = input.SupplierId,
                     CurrencyId = input.CurrencyId,
-                    DeletedCodesDate = DateTime.Today.AddDays(7)
+                    DeletedCodesDate = input.PriceListDate
                 }
 
             });
@@ -70,5 +70,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         public int FileId { get; set; }
 
         public DateTime? EffectiveDate { get; set; }
+
+        public DateTime PriceListDate { get; set; }
     }
 }

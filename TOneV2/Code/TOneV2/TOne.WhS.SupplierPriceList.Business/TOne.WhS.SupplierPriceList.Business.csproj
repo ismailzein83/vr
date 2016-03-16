@@ -58,6 +58,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessRules\Conditions\MissingCodesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\MissingRatesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\MissingBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\SameCodeWithDifferentZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\SameZoneWithDifferentRatesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\SameCodeInSameZoneCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\MissingZonesCondition.cs" />
     <Compile Include="ImportPriceListManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="PriceListRateManager.cs" />

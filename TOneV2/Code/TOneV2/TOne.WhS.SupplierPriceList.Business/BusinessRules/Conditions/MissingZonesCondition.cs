@@ -10,28 +10,27 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class SameZoneWithDifferentRatesCondition : BusinessRuleCondition
+    public class MissingZonesCondition : BusinessRuleCondition
     {
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedZone != null);
+            return (target as ImportedCode != null);
         }
 
         public override bool Validate(IRuleTarget target)
         {
-            ImportedZone zone = target as ImportedZone;
+            ImportedCode code = target as ImportedCode;
 
-            var distinctImportedRates = from importedRate in zone.ImportedRates
-                                    group importedRate by importedRate.NormalRate into newRates
-                                    select newRates;
+            if (code == null)
+                return false;
 
-            return !(distinctImportedRates.Count() > 1);
+            return !(string.IsNullOrEmpty(code.ZoneName));
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has Different Rates", (target as ImportedZone).ZoneName);
+            return string.Format("Code {0} has a Missing Zone",(target as ImportedCode).Code);
         }
 
     }

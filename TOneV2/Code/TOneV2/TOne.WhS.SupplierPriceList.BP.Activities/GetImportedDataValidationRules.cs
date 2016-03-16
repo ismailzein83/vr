@@ -41,9 +41,51 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 Action = new ExcludeItemAction()
             };
 
+            BusinessRule missingZones = new BusinessRule()
+            {
+                Condition = new MissingZonesCondition(),
+                Action = new StopExecutionAction()
+            };
+
+            BusinessRule missingCodes = new BusinessRule()
+            {
+                Condition = new MissingCodesCondition(),
+                Action = new StopExecutionAction()
+            };
+
+            BusinessRule missingRates = new BusinessRule()
+            {
+                Condition = new MissingRatesCondition(),
+                Action = new StopExecutionAction()
+            };
+
+            BusinessRule missingBED = new BusinessRule()
+            {
+                Condition = new MissingBEDCondition(),
+                Action = new StopExecutionAction()
+            };
+
+            BusinessRule sameCodeInSameZone = new BusinessRule()
+            {
+                Condition = new SameCodeInSameZoneCondition(),
+                Action = new StopExecutionAction()
+            };
+
+            BusinessRule sameZoneWithDifferentRates = new BusinessRule()
+            {
+                Condition = new SameZoneWithDifferentRatesCondition(),
+                Action = new StopExecutionAction()
+            };
+
             List<BusinessRule> rules = new List<BusinessRule>();
+            rules.Add(missingZones);
+            rules.Add(missingCodes);
+            rules.Add(missingRates);
+            rules.Add(missingBED);
             rules.Add(codeGroupNotFoundRule);
             rules.Add(multipleCountriesInSameZoneRule);
+            rules.Add(sameCodeInSameZone);
+            rules.Add(sameZoneWithDifferentRates);
 
             return rules;
         }

@@ -7,33 +7,37 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class SameCodeInSameZoneCondition : BusinessRuleCondition
+    public class SameCodeWithDifferentZonesCondition : BusinessRuleCondition
     {
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedZone != null);
+            return (target as ImportedCountry != null);
         }
 
         public override bool Validate(IRuleTarget target)
         {
-            ImportedZone zone = target as ImportedZone;
+            ImportedCountry country = target as ImportedCountry;
 
-            foreach (var importedCode in zone.ImportedCodes)
+
+            foreach (var importedCode in country.ImportedCodes)
             {
-                if (zone.ImportedCodes.Where(x => x.Code == importedCode.Code).Count() > 1)
+                if (country.ImportedCodes.Where(x => x.Code == importedCode.Code && x.ZoneName != importedCode.ZoneName).Count() > 0)
                     return false;
             }
+
 
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has one or more same Code",(target as ImportedZone).ZoneName);
+            CountryManager manager = new CountryManager();
+            return string.Format("Country {0} has one or more same Code on Different Zones", manager.GetCountryName((target as ImportedCountry).CountryId));
         }
 
     }

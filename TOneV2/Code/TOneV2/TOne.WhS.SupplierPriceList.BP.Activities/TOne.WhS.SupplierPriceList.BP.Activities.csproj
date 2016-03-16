@@ -97,6 +97,7 @@
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingRates.cs" />
     <Compile Include="GetExistingZones.cs" />
+    <Compile Include="GetImportedCountriesDataValidationRules.cs" />
     <Compile Include="PrepareChangedCodesToDB.cs" />
     <Compile Include="PrepareChangedRatesToDB.cs" />
     <Compile Include="PrepareChangedZonesToDB.cs" />

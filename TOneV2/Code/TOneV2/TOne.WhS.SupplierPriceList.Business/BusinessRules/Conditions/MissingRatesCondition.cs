@@ -22,17 +22,15 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedZone zone = target as ImportedZone;
 
-            foreach (var importedRate in zone.ImportedRates)
-            {
-                if (string.IsNullOrEmpty(importedRate.NormalRate.ToString()))
-                    return false;
-            }
+            if (zone.ImportedRates.Count() == 0)
+                return false;
+           
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("The Zone {0}  has a Missing Rate",target.Key);
+            return string.Format("Zone {0} has a Missing Rate",(target as ImportedZone).ZoneName);
         }
 
     }
