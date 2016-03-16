@@ -85,11 +85,11 @@
             };
 
 
-            $scope.onCountrySelectionChanged = function () {
+            $scope.onCountrySelectItem= function (dataItem) {
 
                 if (!isCountrySelectedProgramatically)
                 {
-                    var selectedCountryId = countryDirectiveApi.getSelectedIds();
+                    var selectedCountryId = dataItem.CountryId;
                     if (selectedCountryId != undefined)
                     {
                         $scope.isLoadingCities = true;
