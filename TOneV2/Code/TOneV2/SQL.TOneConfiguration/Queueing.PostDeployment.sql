@@ -36,10 +36,10 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(7001,'Execution Flow Definitions','Execution Flow Definitions','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement',701,null,null,null,null,'0',10,3),
-(7002,'Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement',701,null,null,null,null,'0',11,4),
-(7003,'Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement',701,null,null,null,null,'0',12,5),
-(7004,'Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement',701,null,null,null,null,'0',13,6)
+(7001,'Execution Flow Definitions','Execution Flow Definitions','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement',701,null,null,null,null,'0',0,1),
+(7002,'Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement',701,null,null,null,null,'0',0,2),
+(7003,'Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement',701,null,null,null,null,'0',0,3),
+(7004,'Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement',701,null,null,null,null,'0',0,4)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[RequiredPermissions],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t

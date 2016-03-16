@@ -16,7 +16,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1101,'Operators','Operators','Operators',1,null,5,0)
+(1101,'Operators','Operators','Operators',1,null,20,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
