@@ -53,12 +53,12 @@ namespace Vanrise.Queueing.Data.SQL
             return (long)ExecuteScalarSP("queue.sp_QueueItemIDGen_GenerateID");
         }
 
-        public void EnqueueItem(int queueId, long itemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
+        public void EnqueueItem(int queueId, long itemId, DateTime? batchStart, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
         {
-            ExecuteEnqueueItemQuery(String.Format(s_query_EnqueueItemAndHeaderTemplate, queueId, itemId, "null"), item, executionFlowTriggerItemId, description, queueItemStatus);
+            ExecuteEnqueueItemQuery(String.Format(s_query_EnqueueItemAndHeaderTemplate, queueId, itemId, "null"), batchStart, item, executionFlowTriggerItemId, description, queueItemStatus);
         }
 
-        public void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
+        public void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, DateTime? batchStart, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
         {
 
             StringBuilder queryItemBuilder = new StringBuilder();
@@ -79,7 +79,7 @@ namespace Vanrise.Queueing.Data.SQL
                                             queryItemBuilder,
                                             queryItemHeaderBuilder);
 
-            ExecuteEnqueueItemQuery(query, item, executionFlowTriggerItemId, description, queueItemStatus);
+            ExecuteEnqueueItemQuery(query, batchStart, item, executionFlowTriggerItemId, description, queueItemStatus);
         }
       
         public QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, int? maximumConcurrentReaders)
@@ -95,21 +95,23 @@ namespace Vanrise.Queueing.Data.SQL
             }
             queryBuilder.Replace("#RUNNINGPROCESSIDS#", String.Join(",", runningProcessesIds));
             return GetItemText(String.Format(queryBuilder.ToString(), queueId),
-                    (reader) =>
-                    {
-                        return new QueueItem
-                        {
-                            ItemId = (long)reader["ID"],
-                            ExecutionFlowTriggerItemId = (long)reader["ExecutionFlowTriggerItemID"],
-                            Content = (byte[])reader["Content"]
-                        };
-                    },
+                    QueueItemMapper,
                     (cmd) =>
                     {
                         cmd.Parameters.Add(new SqlParameter("@ProcessID", currentProcessId));
                         if(maximumConcurrentReaders.HasValue)
                             cmd.Parameters.Add(new SqlParameter("@MaximumConcurrentReaders", maximumConcurrentReaders.Value));
                     });
+        }
+
+        private static QueueItem QueueItemMapper(IDataReader reader)
+        {
+            return new QueueItem
+                 {
+                     ItemId = (long)reader["ID"],
+                     ExecutionFlowTriggerItemId = (long)reader["ExecutionFlowTriggerItemID"],
+                     Content = (byte[])reader["Content"]
+                 };
         }
      
         public void DeleteItem(int queueId, long itemId)
@@ -197,7 +199,7 @@ namespace Vanrise.Queueing.Data.SQL
         #endregion
 
         #region Private Methods
-        void ExecuteEnqueueItemQuery(string query, byte[] item, long executionFlowTriggerItemID, string description, QueueItemStatus queueItemStatus)
+        void ExecuteEnqueueItemQuery(string query, DateTime? batchStart, byte[] item, long executionFlowTriggerItemID, string description, QueueItemStatus queueItemStatus)
         {
             query = String.Format(@" BEGIN TRANSACTION 
                                      {0}
@@ -207,6 +209,7 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteNonQueryText(query,
                (cmd) =>
                {
+                   cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart.HasValue ? (object)batchStart.Value : DBNull.Value));
                    cmd.Parameters.Add(new SqlParameter("@ExecutionFlowTriggerItemID", executionFlowTriggerItemID));
                    cmd.Parameters.Add(new SqlParameter("@Content", item));
                    cmd.Parameters.Add(new SqlParameter("@Description", description));
@@ -256,6 +259,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         const string query_CreateQueueTable = @"CREATE TABLE [queue].[QueueItem_{0}](
 									                                                [ID] [bigint] NOT NULL,
+                                                                                    [BatchStart] [datetime] NULL,
 									                                                [Content] [varbinary](max) NOT NULL,
                                                                                     [ExecutionFlowTriggerItemID] [bigint] NOT NULL,
 									                                                [LockedByProcessID] [int] NULL,
@@ -269,9 +273,9 @@ namespace Vanrise.Queueing.Data.SQL
 
         const string query_EnqueueItemTemplate = @" 
                                                      INSERT INTO queue.QueueItem_{0}
-                                                           ([ID], [Content], [ExecutionFlowTriggerItemID])
+                                                           ([ID], [BatchStart], [Content], [ExecutionFlowTriggerItemID])
                                                      VALUES
-                                                           ({1}, @Content, @ExecutionFlowTriggerItemID)
+                                                           ({1}, @BatchStart, @Content, @ExecutionFlowTriggerItemID)
                                                          ";
 
         const string query_EnqueueItemHeaderTemplate = @" INSERT INTO [queue].[QueueItemHeader]
@@ -336,7 +340,53 @@ namespace Vanrise.Queueing.Data.SQL
 
         const string query_DeleteFromQueue = "DELETE queue.QueueItem_{0} WHERE ID = @ID";
 
+        const string query_DeleteItemsFromQueue = "DELETE queue.QueueItem_{0} WHERE ID IN ({1})";
+
+        const string query_SetItemsSuspended = @"UPDATE queue.QueueItem_{0} SET [IsSuspended] = 1 WHERE ID IN ({1})";
+
+        const string query_GetAvailableBatchStarts = @"SELECT DISTINCT [BatchStart] FROM queue.QueueItem_{0} WHERE ISNULL([IsSuspended], 0) = 0";
+
+        const string query_GetSummaryBatchesByBatchStart = @"SELECT TOP(@NbOfRows) ID, Content, ExecutionFlowTriggerItemID 
+                                                            FROM queue.QueueItem_{0} 
+                                                            WHERE [BatchStart] = @BatchStart AND ISNULL([IsSuspended], 0) = 0
+                                                            ORDER BY ID "; 
+
         #endregion
 
+
+        public List<DateTime> GetAvailableBatchStarts(int queueId)
+        {
+           return GetItemsText(String.Format(query_GetAvailableBatchStarts, queueId),
+                (reader) => (DateTime)reader["BatchStart"], null);
+        }
+
+        public IEnumerable<QueueItem> DequeueSummaryBatches(int queueId, DateTime batchStart, int nbOfBatches)
+        {
+            return GetItemsText(String.Format(query_GetSummaryBatchesByBatchStart, queueId), QueueItemMapper, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart));
+                    cmd.Parameters.Add(new SqlParameter("@NbOfRows", nbOfBatches));
+                });
+        }
+
+        public void DeleteItems(int queueId, IEnumerable<long> itemsIds)
+        {
+            ExecuteNonQueryText(string.Format(query_DeleteItemsFromQueue, queueId, String.Join(",", itemsIds)), null);
+        }
+
+        public void UpdateHeaderStatuses(IEnumerable<long> itemsIds, QueueItemStatus queueItemStatus)
+        {
+            ExecuteNonQuerySP("[queue].[sp_QueueItemHeader_UpdateStatuses]", String.Join(",", itemsIds), (int)queueItemStatus);
+        }
+
+        public void UpdateHeaders(IEnumerable<long> itemsIds, QueueItemStatus status, int retryCount, string errorMessage)
+        {
+            ExecuteNonQuerySP("[queue].[sp_QueueItemHeader_UpdateMultiple]", String.Join(",", itemsIds), (int)status, retryCount, errorMessage);
+        }
+
+        public void SetItemsSuspended(int queueId, IEnumerable<long> itemsIds)
+        {
+            ExecuteNonQueryText(string.Format(query_SetItemsSuspended, queueId, String.Join(",", itemsIds)), null);
+        }
     }
 }

@@ -10,7 +10,12 @@ namespace Vanrise.Queueing.Entities
     {
         public int ConfigId { get; set; }
 
-        public abstract void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems);
+        /// <summary>
+        /// to be removed
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="outputItems"></param>
+        public virtual void ProcessItem(PersistentQueueItem item, ItemsToEnqueue outputItems){}
 
         public virtual void ProcessItem(IQueueActivatorExecutionContext context)
         {
@@ -22,7 +27,7 @@ namespace Vanrise.Queueing.Entities
             OnDisposed();
         }
 
-        public abstract void OnDisposed();
+        public virtual void OnDisposed() { }
     }
 
     public interface IQueueActivatorExecutionContext

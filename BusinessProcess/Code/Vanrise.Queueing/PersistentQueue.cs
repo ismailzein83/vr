@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Vanrise.Entities.SummaryTransformation;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
@@ -24,9 +25,19 @@ namespace Vanrise.Queueing
         RunningProcessManager _runningProcessManager;
         int _queueId;
         QueueSettings _queueSettings;
+
+        public QueueSettings QueueSettings
+        {
+            get
+            {
+                return _queueSettings;
+            }
+        }
+
         T _emptyObject;
 
-        static int s_maxRetryDequeueTime;
+        int _maxRetryDequeueTime;
+        int _nbOfSummaryBatchesToDequeue;
 
         internal PersistentQueue(int queueId, QueueSettings settings)
         {
@@ -37,8 +48,10 @@ namespace Vanrise.Queueing
             _emptyObject = Activator.CreateInstance<T>();
             _queueId = queueId;
             _queueSettings = settings;
-            if (!int.TryParse(ConfigurationManager.AppSettings["Queue_MaxRetryDequeueTime"], out s_maxRetryDequeueTime))
-                s_maxRetryDequeueTime = 5;
+            if (!int.TryParse(ConfigurationManager.AppSettings["Queue_MaxRetryDequeueTime"], out _maxRetryDequeueTime))
+                _maxRetryDequeueTime = 5;
+            if (!int.TryParse(ConfigurationManager.AppSettings["Queue_NbOfSummaryBatchesToDequeue"], out _nbOfSummaryBatchesToDequeue))
+                _nbOfSummaryBatchesToDequeue = 20;
         }
 
         #endregion
@@ -58,6 +71,14 @@ namespace Vanrise.Queueing
 
         long EnqueuePrivate(T item)
         {
+            DateTime? batchStart = null;
+            if (_queueSettings.SummaryBatchManager != null)
+            {
+                ISummaryBatch summaryBatch = item as ISummaryBatch;
+                if (summaryBatch == null)
+                    throw new Exception(String.Format("Queue Item is not of type ISummaryBatch. Item Type: '{0}'", item.GetType()));
+                batchStart = summaryBatch.BatchStart;
+            }
             string itemDescription = item.GenerateDescription();
             byte[] serialized = item.Serialize();
             byte[] compressed = Vanrise.Common.Compressor.Compress(serialized);
@@ -68,7 +89,7 @@ namespace Vanrise.Queueing
             var subscribedQueueIds = queueSubscriptionManager.GetSubscribedQueueIds(_queueId);
             if (subscribedQueueIds == null || subscribedQueueIds.Count == 0)
             {
-                _dataManagerQueueItem.EnqueueItem(_queueId, itemId, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(_queueId, itemId, batchStart, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
             else
             {
@@ -79,7 +100,7 @@ namespace Vanrise.Queueing
                     foreach (int queueId in subscribedQueueIds)
                         targetQueuesItemsIds.Add(queueId, _dataManagerQueueItem.GenerateItemID());
                 }
-                _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(targetQueuesItemsIds, _queueId, itemId, batchStart, executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
             return itemId;
         }
@@ -88,72 +109,15 @@ namespace Vanrise.Queueing
         {
             if (processItem == null)
                 throw new ArgumentNullException("processItem");
-            if (this.IsListening)
-                throw new InvalidOperationException("TryDequeue cannot be called while this Queue is listening");
 
-            return TryDequeuePrivate(processItem, true);
+            return TryDequeuePrivate(processItem);
         }
-
-        #region Disabled Functionalities
-
-        //public void StartListening(Action<T> processItem, int maxThreads = 1)
-        //{
-        //    if (processItem == null)
-        //        throw new ArgumentNullException("processItem");
-            
-        //    lock (this)
-        //    {
-        //        if (this.IsListening)
-        //            throw new InvalidOperationException("Listening is already started on this queue");
-        //        this.IsListening = true;
-        //    }
-
-        //    Task task = new Task(() =>
-        //    {
-        //        int consecutiveFoundItems = 0;
-        //        do
-        //        {
-        //            if (TryDequeuePrivate(processItem, false))//if item is returned from the queue
-        //                consecutiveFoundItems++;
-        //            else
-        //            {
-        //                if (consecutiveFoundItems > 0)
-        //                    consecutiveFoundItems--;
-        //                Thread.Sleep(1000);
-        //            }
-
-        //            //if many items are found in the queue consecutively, initialize multiple concurrent threads to dequeue and process items
-        //            if (consecutiveFoundItems > 1 && maxThreads > 1)
-        //            {
-        //                Parallel.For(0, maxThreads, (i) =>
-        //                {
-        //                    bool hasItem = false;
-        //                    do
-        //                    {
-        //                        hasItem = TryDequeuePrivate(processItem, false);
-        //                    }
-        //                    while (this.IsListening && hasItem);
-        //                });
-        //            }
-        //        }
-        //        while (this.IsListening);
-        //    });
-        //    task.Start();
-        //}
-
-        //public void StopListening()
-        //{
-        //    lock (this)
-        //        this.IsListening = false;
-        //}
-
-        #endregion
 
         #endregion
 
         #region Private Methods
 
-        private bool TryDequeuePrivate(Action<T> onItemReady, bool rethrowOnError)
+        private bool TryDequeuePrivate(Action<T> processItem)
         {
             int currentProcessId = RunningProcessManager.CurrentProcess.ProcessId;
             IEnumerable<int> runningProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
@@ -161,12 +125,10 @@ namespace Vanrise.Queueing
             if (queueItem != null)
             {
                 _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processing);
-                byte[] decompressed = Vanrise.Common.Compressor.Decompress(queueItem.Content);
-                T deserialized = _emptyObject.Deserialize<T>(decompressed);
-                deserialized.ExecutionFlowTriggerItemId = queueItem.ExecutionFlowTriggerItemId;
+                T deserialized = DeserializeQueueItem(queueItem);
                 try
                 {
-                    onItemReady(deserialized);
+                    processItem(deserialized);
                     _dataManagerQueueItem.DeleteItem(_queueId, queueItem.ItemId);
                     _dataManagerQueueItem.UpdateHeaderStatus(queueItem.ItemId, QueueItemStatus.Processed);
                 }
@@ -175,19 +137,24 @@ namespace Vanrise.Queueing
                     QueueItemHeader itemHeader = _dataManagerQueueItem.GetHeader(queueItem.ItemId, _queueId);
                     QueueItemStatus failedStatus = QueueItemStatus.Failed;
                     int retryCount = itemHeader.RetryCount + 1;
-                    if (retryCount >= s_maxRetryDequeueTime)
+                    if (retryCount >= _maxRetryDequeueTime)
                         failedStatus = QueueItemStatus.Suspended;
                     _dataManagerQueueItem.UpdateHeader(queueItem.ItemId, failedStatus, retryCount, ex.ToString());
                     _dataManagerQueueItem.UnlockItem(_queueId, queueItem.ItemId, (failedStatus == QueueItemStatus.Suspended));
-                    if (rethrowOnError)
-                        throw;
-                    else
-                        return false;
+                    throw;
                 }
                 return true;
             }
             else
                 return false;
+        }
+
+        private T DeserializeQueueItem(QueueItem queueItem)
+        {
+            byte[] decompressed = Vanrise.Common.Compressor.Decompress(queueItem.Content);
+            T deserialized = _emptyObject.Deserialize<T>(decompressed);
+            deserialized.ExecutionFlowTriggerItemId = queueItem.ExecutionFlowTriggerItemId;
+            return deserialized;
         }
 
         #endregion
@@ -210,6 +177,49 @@ namespace Vanrise.Queueing
 
         #endregion
 
+        public List<DateTime> GetAvailableBatchStarts()
+        {
+            return _dataManagerQueueItem.GetAvailableBatchStarts(_queueId);
+        }
 
+        public bool TryDequeueSummaryBatches(DateTime batchStart, Action<IEnumerable<PersistentQueueItem>> processBatches)
+        {
+            IEnumerable<QueueItem> summaryBatches = _dataManagerQueueItem.DequeueSummaryBatches(_queueId, batchStart, _nbOfSummaryBatchesToDequeue);
+            if (summaryBatches != null && summaryBatches.Count() > 0)
+            {
+                var itemsIds = summaryBatches.Select(itm => itm.ItemId);
+                _dataManagerQueueItem.UpdateHeaderStatuses(itemsIds, QueueItemStatus.Processing);
+                List<PersistentQueueItem> deserializedBatches = new List<PersistentQueueItem>();
+                foreach(var summaryBatch in summaryBatches)
+                {
+                    T deserialized = DeserializeQueueItem(summaryBatch);
+                    deserializedBatches.Add(deserialized);
+                }
+                
+                try
+                {
+                    processBatches(deserializedBatches);
+                    _dataManagerQueueItem.DeleteItems(_queueId, itemsIds);
+                    _dataManagerQueueItem.UpdateHeaderStatuses(itemsIds, QueueItemStatus.Processed);
+                }
+                catch (Exception ex)
+                {
+                    QueueItemHeader itemHeader = _dataManagerQueueItem.GetHeader(itemsIds.First(), _queueId);
+                    QueueItemStatus failedStatus = QueueItemStatus.Failed;
+                    int retryCount = itemHeader.RetryCount + 1;
+                    if (retryCount >= _maxRetryDequeueTime)
+                        failedStatus = QueueItemStatus.Suspended;
+                    _dataManagerQueueItem.UpdateHeaders(itemsIds, failedStatus, retryCount, ex.ToString());
+                    if(failedStatus == QueueItemStatus.Suspended)
+                        _dataManagerQueueItem.SetItemsSuspended(_queueId, itemsIds);
+                    throw;
+                }
+                return true;
+            }
+            else
+                return false;
+        }
     }
+
+
 }

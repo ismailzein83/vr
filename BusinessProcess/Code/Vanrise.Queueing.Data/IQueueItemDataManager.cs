@@ -9,16 +9,13 @@ namespace Vanrise.Queueing.Data
 {
     public interface IQueueItemDataManager : IDataManager
     {
-
-        
-
         void CreateQueue(int queueId);
 
         long GenerateItemID();
 
-        void EnqueueItem(int queueId, long itemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
+        void EnqueueItem(int queueId, long itemId, DateTime? batchStart, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
-        void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
+        void EnqueueItem(Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, DateTime? batchStart, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
         QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, int? maximumConcurrentReaders);
 
@@ -36,6 +33,18 @@ namespace Vanrise.Queueing.Data
 
         List<ItemExecutionFlowInfo> GetItemExecutionFlowInfo(List<long> itemIds);
 
-        Vanrise.Entities.BigResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input);
+        Vanrise.Entities.BigResult<QueueItemHeader> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input);       
+
+        List<DateTime> GetAvailableBatchStarts(int queueId);
+
+        IEnumerable<QueueItem> DequeueSummaryBatches(int queueId, DateTime batchStart, int nbOfBatches);
+
+        void DeleteItems(int queueId, IEnumerable<long> itemsIds);
+
+        void UpdateHeaderStatuses(IEnumerable<long> itemsIds, QueueItemStatus queueItemStatus);
+
+        void UpdateHeaders(IEnumerable<long> itemsIds, QueueItemStatus status, int retryCount, string errorMessage);
+
+        void SetItemsSuspended(int queueId, IEnumerable<long> itemsIds);
     }
 }

@@ -202,6 +202,7 @@ namespace Vanrise.Queueing
             var queueSettings = new QueueSettings
             {
                 Activator = stage.QueueActivator,
+                SummaryBatchManager = stage.SummaryBatchManager,
                 MaximumConcurrentReaders = stage.MaximumConcurrentReaders
             };
 

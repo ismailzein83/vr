@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities.SummaryTransformation;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
@@ -95,25 +96,31 @@ namespace Vanrise.Queueing
             try
             {
                 var queue = PersistentQueueFactory.Default.GetQueue(queueInstance.Name);
-                if (queueInstance.ExecutionFlowId != null)
+                if (queueInstance.Settings.SummaryBatchManager != null)
+                    return TryDequeueFromSummaryBatchQueue(queue, queueInstance);
+                else
                 {
-                    if (queue.TryDequeueObject((itemToProcess) =>
+                    if (queueInstance.ExecutionFlowId != null)
                     {
-                        QueueActivatorExecutionContext context = new QueueActivatorExecutionContext(itemToProcess, queueInstance);
-                        queueInstance.Settings.Activator.ProcessItem(context);
-                        if (context.OutputItems != null && context.OutputItems.Count > 0)
+                        if (queue.TryDequeueObject((itemToProcess) =>
                         {
-                            QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
-                            var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
-                            foreach (var outputItem in context.OutputItems)
+                            QueueActivatorExecutionContext context = new QueueActivatorExecutionContext(itemToProcess, queueInstance);
+                            queueInstance.Settings.Activator.ProcessItem(context);
+                            if (context.OutputItems != null && context.OutputItems.Count > 0)
                             {
-                                outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
-                                queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+                                QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
+                                var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
+                                foreach (var outputItem in context.OutputItems)
+                                {
+                                    outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
+                                    var outputQueue = queuesByStages[outputItem.StageName].Queue;
+                                    outputQueue.EnqueueObject(outputItem.Item);
+                                }
                             }
+                        }))
+                        {
+                            return true;
                         }
-                    }))
-                    {
-                        return true;
                     }
                 }
             }
@@ -121,6 +128,39 @@ namespace Vanrise.Queueing
             {
                 LoggerFactory.GetExceptionLogger().WriteException(ex);
             }
+            return false;
+        }
+
+        private bool TryDequeueFromSummaryBatchQueue(IPersistentQueue batchPersistentQueue, QueueInstance queueInstance)
+        {
+            var batchStarts = batchPersistentQueue.GetAvailableBatchStarts();
+            foreach (var batchStart in batchStarts)
+            {
+                if (queueInstance.Settings.SummaryBatchManager.TryLock(batchStart))
+                {
+                    bool batchesUpdated;
+                    bool anyItemUpdated = false;
+                    try
+                    {
+                        do
+                        {
+                            batchesUpdated = batchPersistentQueue.TryDequeueSummaryBatches(batchStart, (newBatches) =>
+                            {
+                                queueInstance.Settings.SummaryBatchManager.UpdateNewBatches(batchStart, newBatches);
+                            });
+                            if (batchesUpdated)
+                                anyItemUpdated = true;
+                        }
+                        while (batchesUpdated);
+                    }
+                    finally
+                    {
+                        queueInstance.Settings.SummaryBatchManager.Unlock(batchStart);
+                    }
+                    return anyItemUpdated;
+                }
+            }
+
             return false;
         }
     }

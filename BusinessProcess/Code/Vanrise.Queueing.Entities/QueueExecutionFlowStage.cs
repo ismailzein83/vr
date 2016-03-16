@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities.SummaryTransformation;
 
 namespace Vanrise.Queueing.Entities
 {
@@ -17,6 +18,8 @@ namespace Vanrise.Queueing.Entities
         public QueueExecutionFlowStageItemType QueueItemType { get; set; }
 
         public QueueActivator QueueActivator { get; set; }
+
+        public ISummaryTransformationManager SummaryBatchManager { get; set; }
 
         public int? MaximumConcurrentReaders { get; set; }
 
