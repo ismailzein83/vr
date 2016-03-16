@@ -22,7 +22,6 @@
             {
                 parentId = parameters.parentId;
                 moduleId = parameters.moduleId;
-                console.log(parentId);
             }
                 
 
