@@ -15,7 +15,8 @@
                 onselectionchanged: '=',
                 ismultipleselection: "@",
                 isrequired: "=",
-                customlabel: "@"
+                customlabel: "@",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -113,7 +114,7 @@
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-            return  '<vr-select on-ready="ctrl.onSelectorReady"'
+            return  '<vr-columns colnum={{ctrl.normalColNum}}"><vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
                     + ' selectedvalues="ctrl.selectedvalues"'
                     + ' onselectionchanged="ctrl.onselectionchanged"'
@@ -127,7 +128,7 @@
                     + ' ' + hideremoveicon
                     + ' label="' + label + '"'
                     + ' entityName="' + label + '"'
-                + '</vr-select>';
+                + '</vr-select></vr-columns>';
         }
     }
 

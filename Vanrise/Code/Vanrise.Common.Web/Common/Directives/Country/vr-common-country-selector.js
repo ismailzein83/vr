@@ -11,7 +11,8 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
             isrequired: "=",
             onselectitem: "=",
             ondeselectitem: "=",
-            isdisabled: "="
+            isdisabled: "=",
+            hideremoveicon: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -67,8 +68,10 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
         if (attrs.showaddbutton != undefined)
             addCliked = 'onaddclicked="addNewCountry"';
 
+        var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
+
         return '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '></vr-select>'
     }
 
     function countryCtor(ctrl, $scope, attrs) {
