@@ -17,10 +17,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
         #region public methods
 
-        public bool InsertTask(string title, long processInstanceId, int typeId, IEnumerable<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskData taskData, string assignedUsersDescription, out long taskId)
+        public bool InsertTask(string title, long processInstanceId, int typeId, List<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskData taskData, string assignedUsersDescription, out long taskId)
         {
             string assignedUsers = null;
-            if (assignedUserIds != null && assignedUserIds.Count() > 0)
+            if (assignedUserIds != null && assignedUserIds.Count > 0)
                 assignedUsers = string.Join<int>(",", assignedUserIds);
 
             object obj;
@@ -41,16 +41,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemSP("[bp].[sp_BPTask_GetByID]", BPTaskMapper, taskId);
         }
 
-        public void UpdateTaskExecution(long taskId, int executedByUserId, BPTaskStatus bpTaskStatus, BPTaskExecutionInformation bPTaskExecutionInformation)
+        public void UpdateTaskExecution(ExecuteBPTaskInput input, BPTaskStatus bpTaskStatus)
         {
-            if (bPTaskExecutionInformation != null)
-            {
-                ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTaskExecution]", taskId, executedByUserId, (int)bpTaskStatus, Serializer.Serialize(bPTaskExecutionInformation), bPTaskExecutionInformation.Notes, bPTaskExecutionInformation.Decision);
-            }
-            else
-            {
-                ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTaskExecution]", taskId, executedByUserId, (int)bpTaskStatus, DBNull.Value, DBNull.Value, DBNull.Value);
-            }
+            ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTaskExecution]", input.TaskId, input.ExecutedBy, (int)bpTaskStatus, input.ExecutionInformation != null ? Serializer.Serialize(input.ExecutionInformation) : null, input.Notes, input.Decision);
         }
 
         public List<BPTask> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int? processInstanceId, int? userId)
@@ -75,16 +68,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return GetItemsSP("[bp].[sp_BPTask_GetBeforeID]", BPTaskMapper, lessThanID, nbOfRows, processInstanceId, userId);
         }
-
-        public IEnumerable<BPTaskType> GetBPTaskTypes()
-        {
-            return GetItemsSP("bp.sp_BPTaskType_GetAll", BPTaskTypeMapper);
-        }
-
-        public bool AreBPTaskTypesUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("[bp].[BPTask]", ref updateHandle);
-        }
         #endregion
 
         #region Mappers
@@ -101,7 +84,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 Status = (BPTaskStatus)reader["Status"],
                 CreatedTime = (DateTime)reader["CreatedTime"],
                 LastUpdatedTime = GetReaderValue<DateTime>(reader, "LastUpdatedTime"),
-                AssignedUsersDescription = reader["AssignedUsersDescription"] as string
+                AssignedUsersDescription = reader["AssignedUsersDescription"] as string,
+                Notes = reader["Notes"] as string,
+                Decision = reader["Decision"] as string
             };
 
             string taskData = reader["TaskData"] as string;
@@ -112,8 +97,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (!String.IsNullOrWhiteSpace(taskExecutionInformation))
             {
                 bpTask.TaskExecutionInformation = Serializer.Deserialize<BPTaskExecutionInformation>(taskExecutionInformation);
-                bpTask.TaskExecutionInformation.Notes = reader["Notes"] as string;
-                bpTask.TaskExecutionInformation.Decision = reader["Decision"] as string;
             }
 
             string assignedUsers = reader["AssignedUsers"] as string;
@@ -129,24 +112,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             {
                 Entity = BPTaskMapper(reader)
             };
-        }
-
-        BPTaskType BPTaskTypeMapper(IDataReader reader)
-        {
-            var bpTaskType = new BPTaskType
-            {
-                BPTaskTypeId = (int)reader["ID"],
-                Name = reader["Name"] as string
-            };
-            string settings = reader["Settings"] as string;
-            if (!String.IsNullOrWhiteSpace(settings))
-                bpTaskType.Settings = Serializer.Deserialize<BPTaskTypeSettings>(settings);
-
-            string actions = reader["Actions"] as string;
-            if (!String.IsNullOrWhiteSpace(actions))
-                bpTaskType.Actions = Serializer.Deserialize<List<BPTaskAction>>(actions);
-
-            return bpTaskType;
         }
         #endregion
     }

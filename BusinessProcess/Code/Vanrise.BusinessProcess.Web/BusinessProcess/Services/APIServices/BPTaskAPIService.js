@@ -25,11 +25,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "ExecuteTask"), input);
         }
 
-        function GetBPTaskType(taskTypeId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "GetBPTaskType"), {
-                taskTypeId: taskTypeId
+        function GetTask(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPTask", "GetTask"), {
+                taskId: taskId
             });
         }
+
+        
 
         return ({
             GetProcessTaskUpdated: GetProcessTaskUpdated,
@@ -37,7 +39,7 @@
             GetMyUpdatedTasks: GetMyUpdatedTasks,
             GetMyTasksBeforeId: GetMyTasksBeforeId,
             ExecuteTask: ExecuteTask,
-            GetBPTaskType: GetBPTaskType
+            GetTask: GetTask
         });
     }
 

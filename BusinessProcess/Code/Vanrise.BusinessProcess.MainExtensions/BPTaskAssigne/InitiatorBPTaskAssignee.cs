@@ -8,11 +8,13 @@ using Vanrise.Security.Business;
 
 namespace Vanrise.BusinessProcess.MainExtensions
 {
-    public class TestBPTaskAssignee : BPTaskAssignee
+    public class InitiatorBPTaskAssignee : BPTaskAssignee
     {
         public List<int> UserIds { get; set; }
         public override IEnumerable<int> GetUserIds(IBPTaskAssigneeContext context)
         {
+            UserIds = new List<int>();
+            UserIds.Add(context.ProcessInitiaterUserId);
             return UserIds;
         }
 

@@ -8,7 +8,7 @@ using Vanrise.BusinessProcess.Business;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
-    public sealed class AssignTask<T> : NativeActivity
+    public sealed class AssignTask<T> : NativeActivity where T : BPTaskExecutionInformation
     {
         [RequiredArgument]
         public InArgument<string> TaskTitle { get; set; }
@@ -17,10 +17,11 @@ namespace Vanrise.BusinessProcess.WFActivities
         public InArgument<BPTaskData> TaskData { get; set; }
 
         [RequiredArgument]
-        public InArgument<BPTaskAssignee> Users { get; set; }
+        public InArgument<BPTaskAssignee> AssignedTo { get; set; }
 
         public OutArgument<BPTask> ExecutedTask { get; set; }
 
+        public OutArgument<T> TaskExecutionInformation { get; set; }
         protected override bool CanInduceIdle
         {
             get
@@ -34,7 +35,13 @@ namespace Vanrise.BusinessProcess.WFActivities
             var sharedData = context.GetSharedInstanceData();
 
             var taskData = this.TaskData.Get(context);
-            var users = this.Users.Get(context);
+            var assignedTo = this.AssignedTo.Get(context);
+
+            BPTaskAssigneeContext bpTaskAssigneeContext = new BPTaskAssigneeContext() { ProcessInitiaterUserId = sharedData.InstanceInfo.InitiatorUserId };
+
+            var assignedUserIds = assignedTo.GetUserIds(bpTaskAssigneeContext);
+            if (assignedUserIds == null || assignedUserIds.Count() == 0)
+                throw new Exception(String.Format("Could not resolve AssignedTo '{0}'", AssignedTo));
 
             BPTaskManager bpTaskManager = new BPTaskManager();
             var createBPTaskInput = new CreateBPTaskInput
@@ -42,8 +49,9 @@ namespace Vanrise.BusinessProcess.WFActivities
                 ProcessInstanceId = sharedData.InstanceInfo.ProcessInstanceID,
                 Title = this.TaskTitle.Get(context),
                 TaskData = taskData,
-                TaskName = typeof(T).FullName,
-                AssignedTo = users
+                TaskName = taskData.TaskType,
+                AssignedUserIds = assignedUserIds.ToList(),
+                AssignedUserIdsDescription = assignedTo.GetDescription(bpTaskAssigneeContext),
             };
 
             var createTaskOutput = bpTaskManager.CreateTask(createBPTaskInput);
@@ -55,9 +63,7 @@ namespace Vanrise.BusinessProcess.WFActivities
                 throw new Exception(String.Format("Could not create Task. Title '{0}'", this.TaskTitle.Get(context)));
         }
 
-        private void OnTaskCompleted(NativeActivityContext context,
-              Bookmark bookmark,
-              object value)
+        private void OnTaskCompleted(NativeActivityContext context, Bookmark bookmark, object value)
         {
             ExecuteBPTaskInput executeBPTaskInput = value as ExecuteBPTaskInput;
             if (executeBPTaskInput == null)
@@ -66,6 +72,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             BPTaskManager bpTaskManager = new BPTaskManager();
             bpTaskManager.SetTaskCompleted(executeBPTaskInput, out task);
             context.SetValue(this.ExecutedTask, task);
+            context.SetValue(this.TaskExecutionInformation, executeBPTaskInput.ExecutionInformation as T);
         }
     }
 }

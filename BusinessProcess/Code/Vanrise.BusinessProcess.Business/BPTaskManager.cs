@@ -14,30 +14,25 @@ namespace Vanrise.BusinessProcess.Business
             if (createBPTaskInput == null)
                 throw new ArgumentNullException("createBPTaskInput");
             if (createBPTaskInput.TaskData == null)
-                throw new ArgumentNullException("createBPTaskInput.TaskInformation");
-            if (createBPTaskInput.AssignedTo == null)
-                throw new ArgumentNullException("createBPTaskInput.AssignedTo");
+                throw new ArgumentNullException("createBPTaskInput.TaskData");
 
-            var assignedUserIds = createBPTaskInput.AssignedTo.GetUserIds(null);
-            if (assignedUserIds == null || assignedUserIds.Count() == 0)
-                throw new Exception(String.Format("Could not resolve AssignedTo '{0}'", createBPTaskInput.AssignedTo));
-
-            var bpTaskType = GetBPTaskType(createBPTaskInput.TaskName);
+            BPTaskTypeManager bpTaskTypeManager = new BPTaskTypeManager();
+            var bpTaskType = bpTaskTypeManager.GetBPTaskType(createBPTaskInput.TaskName);
             if (bpTaskType == null)
                 throw new Exception(String.Format("Could not resolve BPTaskType '{0}'", createBPTaskInput.TaskName));
 
-            IBPDataManager bpDataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            var processInstance = bpDataManager.GetInstance(createBPTaskInput.ProcessInstanceId);
-            if (processInstance == null)
-                throw new Exception(String.Format("Process Instance '{0}' not exists!", createBPTaskInput.ProcessInstanceId));
-            var statusAttribute = BPInstanceStatusAttribute.GetAttribute(processInstance.Status);
-            if (statusAttribute != null && statusAttribute.IsClosed)
-                throw new Exception(String.Format("Process Instance '{0}' is closed. Status is '{1}'", createBPTaskInput.ProcessInstanceId, processInstance.Status));
+            //IBPDataManager bpDataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            //var processInstance = bpDataManager.GetInstance(createBPTaskInput.ProcessInstanceId);
+            //if (processInstance == null)
+            //    throw new Exception(String.Format("Process Instance '{0}' not exists!", createBPTaskInput.ProcessInstanceId));
+            //var statusAttribute = BPInstanceStatusAttribute.GetAttribute(processInstance.Status);
+            //if (statusAttribute != null && statusAttribute.IsClosed)
+            //    throw new Exception(String.Format("Process Instance '{0}' is closed. Status is '{1}'", createBPTaskInput.ProcessInstanceId, processInstance.Status));
 
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
 
             long taskId;
-            bool taskCreated = taskDataManager.InsertTask(createBPTaskInput.Title, createBPTaskInput.ProcessInstanceId, bpTaskType.BPTaskTypeId, assignedUserIds, BPTaskStatus.New, createBPTaskInput.TaskData, createBPTaskInput.AssignedTo.GetDescription(null), out taskId);
+            bool taskCreated = taskDataManager.InsertTask(createBPTaskInput.Title, createBPTaskInput.ProcessInstanceId, bpTaskType.BPTaskTypeId, createBPTaskInput.AssignedUserIds, BPTaskStatus.New, createBPTaskInput.TaskData, createBPTaskInput.AssignedUserIdsDescription, out taskId);
             var output = new CreateBPTaskOutput
             {
                 Result = taskCreated ? CreateBPTaskResult.Succeeded : CreateBPTaskResult.Failed,
@@ -50,15 +45,9 @@ namespace Vanrise.BusinessProcess.Business
         public void SetTaskCompleted(ExecuteBPTaskInput executeBPTaskInput, out BPTask task)
         {
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
+            taskDataManager.UpdateTaskExecution(executeBPTaskInput, BPTaskStatus.Completed);
+            
             task = taskDataManager.GetTask(executeBPTaskInput.TaskId);
-            if (task.TaskExecutionInformation == null)
-                task.TaskExecutionInformation = new BPTaskExecutionInformation();
-
-            task.TaskExecutionInformation.Notes = executeBPTaskInput.Notes;
-            task.TaskExecutionInformation.Decision = executeBPTaskInput.Decision;
-            task.TaskExecutionInformation.TakenAction = executeBPTaskInput.TakenAction;
-
-            taskDataManager.UpdateTaskExecution(executeBPTaskInput.TaskId, executeBPTaskInput.ExecutedBy, BPTaskStatus.Completed, task.TaskExecutionInformation);
         }
 
         public BPTaskUpdateOutput GetMyTasksUpdated(ref byte[] maxTimeStamp, int nbOfRows)
@@ -85,6 +74,7 @@ namespace Vanrise.BusinessProcess.Business
 
         public void ExecuteTask(ExecuteBPTaskInput input)
         {
+            input.ExecutedBy = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             BPTask task = GetTask(input.TaskId);
             IBPEventDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
             dataManager.InsertEvent(task.ProcessInstanceId, BPTask.GetTaskWFBookmark(task.BPTaskId), input);
@@ -94,35 +84,6 @@ namespace Vanrise.BusinessProcess.Business
         {
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
             return taskDataManager.GetTask(taskId);
-        }
-
-        public BPTaskType GetBPTaskType(int taskTypeId)
-        {
-            var bpTaskTypes = GetCachedBPTaskTypes();
-
-            if (bpTaskTypes == null)
-                return null;
-
-            BPTaskType bpTaskType;
-            if (bpTaskTypes.TryGetValue(taskTypeId, out bpTaskType))
-                return bpTaskType;
-
-            return null;
-        }
-
-        public BPTaskType GetBPTaskType(string taskTypeName)
-        {
-            var bpTaskTypes = GetCachedBPTaskTypes();
-
-            if (bpTaskTypes == null)
-                return null;
-
-            foreach (KeyValuePair<int, BPTaskType> item in bpTaskTypes)
-            {
-                if (item.Value.Name == taskTypeName)
-                    return item.Value;
-            }
-            return null;
         }
         #endregion
 
@@ -170,29 +131,6 @@ namespace Vanrise.BusinessProcess.Business
             return bpTaskUpdateOutput;
         }
 
-        private Dictionary<int, BPTaskType> GetCachedBPTaskTypes()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPTaskTypes",
-               () =>
-               {
-                   IBPTaskDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
-                   IEnumerable<BPTaskType> data = dataManager.GetBPTaskTypes();
-                   return data.ToDictionary(cn => cn.BPTaskTypeId, cn => cn);
-               });
-        }
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IBPTaskDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return dataManager.AreBPTaskTypesUpdated(ref _updateHandle);
-            }
-        }
         #endregion
-
-
     }
 }

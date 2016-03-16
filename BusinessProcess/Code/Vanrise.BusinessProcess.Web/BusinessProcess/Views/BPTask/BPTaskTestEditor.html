@@ -1,9 +1,9 @@
-﻿<div vr-modalcontent width="'50%'" ng-controller="BusinessProcess_BPTaskEditorController">
+﻿<div vr-modalcontent width="'50%'" ng-controller="BusinessProcess_BPTaskTestEditorController">
     <vr-modalbody>
-        <vr-form name="formCreateProcessInput" vr-loader="isLoading">
+        <vr-form name="formCreateProcessInput">
             <vr-row>
-                <vr-columns width="fullrow" ng-if="bpTaskType && bpTaskType.Settings && bpTaskType.Settings.Editor">
-                    <vr-directivewrapper directive="bpTaskType.Settings.Editor" on-ready="onBPTaskDirectiveReady"></vr-directivewrapper>
+                <vr-columns width="large">
+                    <vr-textbox label="Notes:" value="notes" isrequired></vr-textbox>
                 </vr-columns>
             </vr-row>
         </vr-form>

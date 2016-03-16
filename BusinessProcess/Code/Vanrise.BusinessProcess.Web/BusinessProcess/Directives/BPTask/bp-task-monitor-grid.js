@@ -173,7 +173,7 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
 
         $scope.taskClicked = function (dataItem) {
             if (dataItem.Entity.Status == 0) {
-                return BusinessProcess_BPTaskService.openTask(dataItem.Entity.BPTaskId, dataItem.Entity.TypeId);
+                return BusinessProcess_BPTaskService.openTask(dataItem.Entity.BPTaskId);
             }
         }
 

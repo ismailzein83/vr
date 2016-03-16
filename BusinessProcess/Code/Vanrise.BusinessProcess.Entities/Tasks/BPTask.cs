@@ -34,6 +34,10 @@ namespace Vanrise.BusinessProcess.Entities
         public BPTaskData TaskData { get; set; }
 
         public BPTaskExecutionInformation TaskExecutionInformation { get; set; }
+        
+        public string Notes { get; set; }
+
+        public string Decision { get; set; }
 
         public DateTime CreatedTime { get; set; }
 

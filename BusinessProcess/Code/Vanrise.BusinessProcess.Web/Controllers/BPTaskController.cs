@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Business;
-using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.BusinessProcess.Extensions;
-using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
-using Vanrise.BusinessProcess.Web.ModelMappers;
-using Vanrise.BusinessProcess.Web.Models;
-using Vanrise.Common;
-using Vanrise.Runtime.Business;
-using Vanrise.Runtime.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
+    [Vanrise.Web.Base.JSONWithType]
     [RoutePrefix(Constants.ROUTE_PREFIX + "BPTask")]
     public class BPTaskController : BaseAPIController
     {
@@ -58,16 +49,15 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public void ExecuteTask(ExecuteBPTaskInput input)
         {
             BPTaskManager manager = new BPTaskManager();
-            input.ExecutedBy = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             manager.ExecuteTask(input);
         }
 
         [HttpGet]
-        [Route("GetBPTaskType")]
-        public BPTaskType GetBPTaskType(int taskTypeId)
+        [Route("GetTask")]
+        public BPTask GetTask(long taskId)
         {
             BPTaskManager manager = new BPTaskManager();
-            return manager.GetBPTaskType(taskTypeId);
+            return manager.GetTask(taskId);
         }
 
     }

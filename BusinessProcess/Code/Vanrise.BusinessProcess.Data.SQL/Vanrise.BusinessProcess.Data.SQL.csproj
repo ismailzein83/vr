@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BPDataManager.cs" />
+    <Compile Include="BPTaskTypeDataManager.cs" />
     <Compile Include="BPTaskDataManager.cs" />
     <Compile Include="BPEventDataManager.cs" />
     <Compile Include="BPInstanceDataManager.cs" />

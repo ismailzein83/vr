@@ -16,6 +16,8 @@ namespace Vanrise.BusinessProcess.Entities
 
         public BPTaskData TaskData { get; set; }
 
-        public BPTaskAssignee AssignedTo { get; set; }
+        public List<int> AssignedUserIds { get; set; }
+
+        public string AssignedUserIdsDescription { get; set; }
     }
 }

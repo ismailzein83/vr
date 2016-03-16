@@ -46,9 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BPTaskAssigne\TestBPTaskAssignee.cs" />
-    <Compile Include="BPTaskData\TestBPTaskData.cs" />
-    <Compile Include="BPTaskType\TestBPTaskType.cs" />
+    <Compile Include="BPTaskAssigne\InitiatorBPTaskAssignee.cs" />
+    <Compile Include="BPTaskAssigne\FixedUsersBPTaskAssignee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +55,10 @@
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BPTaskData\" />
+    <Folder Include="BPTaskType\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

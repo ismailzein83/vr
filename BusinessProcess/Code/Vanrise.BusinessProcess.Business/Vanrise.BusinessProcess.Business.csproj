@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPTaskTypeManager.cs" />
     <Compile Include="BPTaskManager.cs" />
     <Compile Include="BPInstanceTrackingManager.cs" />
     <Compile Include="BPInstanceManager.cs" />
