@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'WhS_BE_CarrierAccountAPIService', 'BusinessProcessService', 'VRUIUtilsService', 'UtilsService', 'WhS_SupPL_SupplierPriceListService'];
+    SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'WhS_BE_CarrierAccountAPIService', 'BusinessProcess_BPInstanceService', 'VRUIUtilsService', 'UtilsService', 'WhS_SupPL_SupplierPriceListService'];
 
-    function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, WhS_BE_CarrierAccountAPIService, BusinessProcessService, VRUIUtilsService, UtilsService, WhS_SupPL_SupplierPriceListService) {
+    function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService, UtilsService, WhS_SupPL_SupplierPriceListService) {
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred;
 
@@ -38,7 +38,7 @@
 
                 return WhS_SupPL_SupplierPriceListAPIService.UploadSupplierPriceList(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
-                        return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
+                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
                 });
             }
 
