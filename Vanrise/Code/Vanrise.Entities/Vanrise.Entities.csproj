@@ -95,6 +95,10 @@
     <Compile Include="StatisticManagement\IStatisticBatch.cs" />
     <Compile Include="StatisticManagement\StatisticBatchLockOutput.cs" />
     <Compile Include="StatisticManagement\IStatisticItem.cs" />
+    <Compile Include="SummaryTransformation\ISummaryBatch.cs" />
+    <Compile Include="SummaryTransformation\ISummaryItem.cs" />
+    <Compile Include="SummaryTransformation\ISummaryTransformationManager.cs" />
+    <Compile Include="SummaryTransformation\SummaryBatch.cs" />
     <Compile Include="TemplateConfig.cs" />
     <Compile Include="TempTableName.cs" />
     <Compile Include="Time.cs" />
