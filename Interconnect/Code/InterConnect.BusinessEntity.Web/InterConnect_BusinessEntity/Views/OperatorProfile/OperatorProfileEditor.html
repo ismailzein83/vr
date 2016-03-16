@@ -1,33 +1,36 @@
-﻿<div vr-modalcontent ng-controller="InterConnect_BE_OperatorProfileEditorController" vr-loader="scopeModal.isLoading" width="'60%'">
+﻿<div vr-modalcontent ng-controller="InterConnect_BE_OperatorProfileEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
     <vr-modalbody>
         <vr-form name="formOperatorProfileEditor">
             <vr-tabs>
                 <vr-tab header="'General Info'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.name" label="Profile Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModel.name" label="Profile Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-common-country-selector selectedvalues="country" onselectionchanged="onCountrySelctionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
-                        </vr-columns>
-                    </vr-row>
 
-                    <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.company" label="Company" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModel.company" label="Company" isrequired></vr-textbox>
                         </vr-columns>
+
                         <vr-columns width="1/2row">
-                            <vr-common-city-selector vr-disabled="country== undefined || country ==  null" selectedvalues="scopeModal.city" on-ready="onCityDirectiveReady" isrequired showaddbutton></vr-common-city-selector>
+                            <vr-common-country-selector on-ready="onCountryDirectiveReady" onselectionchanged="onCountrySelctionChanged" isrequired="true" showaddbutton hideremoveicon></vr-common-country-selector>
                         </vr-columns>
-                    </vr-row>
-                    <vr-row vr-disabled="scopeModal.isEditMode">
-                        <vr-columns width="1/2row" ng-show="scopeModal.showRecordTypeSelector">
-                            <vr-genericdata-businessentity-recordtype-selector on-ready="scopeModal.onDataRecordTypeSelectorReady" onselectitem="scopeModal.onSettingSelectionChanged" isrequired="scopeModal.showRecordTypeSelector"></vr-genericdata-businessentity-recordtype-selector>
-                        </vr-columns>
+
+                        <vr-common-city-selector on-ready="onCityDirectiveReady" selectedvalues="scopeModel.selectedCity" normal-col-num="6" isrequired="true" showaddbutton hideremoveicon></vr-common-city-selector>
+
+                        <span ng-show="scopeModel.showRecordTypeSelector">
+                            <vr-genericdata-businessentity-recordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                                               onselectitem="scopeModel.onSettingSelectionChanged"
+                                                                               normal-col-num="6"
+                                                                               isrequired="scopeModel.showRecordTypeSelector"
+                                                                               vr-disabled="scopeModel.isEditMode"
+                                                                               hideremoveicon>
+                            </vr-genericdata-businessentity-recordtype-selector>
+                        </span>
                     </vr-row>
                 </vr-tab>
 
-                <vr-genericdata-genericbusinessentity-runtime-editor on-ready="scopeModal.onExtendedSettingsDirectiveReady"></vr-genericdata-genericbusinessentity-runtime-editor>
+                <vr-genericdata-genericbusinessentity-runtime-editor on-ready="scopeModel.onExtendedSettingsDirectiveReady"></vr-genericdata-genericbusinessentity-runtime-editor>
 
             </vr-tabs>
         </vr-form>
@@ -39,6 +42,5 @@
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>
-
     </div>
 </div>

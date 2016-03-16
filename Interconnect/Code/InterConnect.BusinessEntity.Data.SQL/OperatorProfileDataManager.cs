@@ -6,18 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.GenericData.Entities;
 
 namespace InterConnect.BusinessEntity.Data.SQL
 {
     public class OperatorProfileDataManager:BaseSQLDataManager,IOperatorProfileDataManager
     {
-       
         #region ctor/Local Variables
+
+        IDataRecordTypeManager _recordTypeManager = BusinessManagerFactory.GetManager<IDataRecordTypeManager>();
+        
         public OperatorProfileDataManager()
             : base(GetConnectionStringName("Interconnect_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
 
         }
+        
         #endregion
 
         #region Public Methods
@@ -25,7 +29,7 @@ namespace InterConnect.BusinessEntity.Data.SQL
         {
             object operatorProfileId;
 
-            int recordsEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorProfile_Insert", out operatorProfileId, operatorProfile.Name, Vanrise.Common.Serializer.Serialize(operatorProfile.Settings), operatorProfile.ExtendedSettingsRecordTypeId, Vanrise.Common.Serializer.Serialize(operatorProfile.ExtendedSettings));
+            int recordsEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorProfile_Insert", out operatorProfileId, operatorProfile.Name, Vanrise.Common.Serializer.Serialize(operatorProfile.Settings), operatorProfile.ExtendedSettingsRecordTypeId, GetSerializedExtendedSettings(operatorProfile));
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)operatorProfileId;
@@ -35,7 +39,7 @@ namespace InterConnect.BusinessEntity.Data.SQL
         }
         public bool Update(OperatorProfile operatorProfile)
         {
-            int recordsEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorProfile_Update", operatorProfile.OperatorProfileId, operatorProfile.Name, Vanrise.Common.Serializer.Serialize(operatorProfile.Settings), operatorProfile.ExtendedSettingsRecordTypeId, Vanrise.Common.Serializer.Serialize(operatorProfile.ExtendedSettings));
+            int recordsEffected = ExecuteNonQuerySP("InterConnect_BE.sp_OperatorProfile_Update", operatorProfile.OperatorProfileId, operatorProfile.Name, Vanrise.Common.Serializer.Serialize(operatorProfile.Settings), operatorProfile.ExtendedSettingsRecordTypeId, GetSerializedExtendedSettings(operatorProfile));
             return (recordsEffected > 0);
         }
         public bool AreOperatorProfilesUpdated(ref object updateHandle)
@@ -48,6 +52,17 @@ namespace InterConnect.BusinessEntity.Data.SQL
         }
         #endregion
 
+        #region Private Methods
+
+        string GetSerializedExtendedSettings(OperatorProfile operatorProfile)
+        {
+            if (operatorProfile.ExtendedSettingsRecordTypeId == null || operatorProfile.ExtendedSettings == null)
+                return null;
+            return _recordTypeManager.SerializeRecord(operatorProfile.ExtendedSettings, (int)operatorProfile.ExtendedSettingsRecordTypeId);
+        }
+        
+        #endregion
+
         #region  Mappers
         private OperatorProfile OperatorProfileMapper(IDataReader reader)
         {
@@ -56,9 +71,13 @@ namespace InterConnect.BusinessEntity.Data.SQL
                 OperatorProfileId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<OperatorProfileSettings>(reader["Settings"] as string),
-                ExtendedSettingsRecordTypeId = GetReaderValue<int?>(reader, "ExtendedSettingsRecordTypeID"),
-                ExtendedSettings = reader["ExtendedSettings"] as string != null ? Vanrise.Common.Serializer.Deserialize<dynamic>(reader["ExtendedSettings"] as string) : null,
+                ExtendedSettingsRecordTypeId = GetReaderValue<int?>(reader, "ExtendedSettingsRecordTypeID")
             };
+            var extendedSettings = reader["ExtendedSettings"] as string;
+            if (operatorProfile.ExtendedSettingsRecordTypeId != null && extendedSettings != null)
+            {
+                operatorProfile.ExtendedSettings = _recordTypeManager.DeserializeRecord(reader["ExtendedSettings"] as string, (int)operatorProfile.ExtendedSettingsRecordTypeId);
+            }
             return operatorProfile;
         }
 

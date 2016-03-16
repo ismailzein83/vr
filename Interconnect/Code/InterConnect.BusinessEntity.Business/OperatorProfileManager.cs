@@ -67,6 +67,7 @@ namespace InterConnect.BusinessEntity.Business
         }
         public InsertOperationOutput<OperatorProfileDetail> AddOperatorProfile(OperatorProfile operatorProfile)
         {
+            ConvertExtendedSettingsToRecordType(operatorProfile);
             InsertOperationOutput<OperatorProfileDetail> insertOperationOutput = new InsertOperationOutput<OperatorProfileDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -90,6 +91,7 @@ namespace InterConnect.BusinessEntity.Business
         }
         public UpdateOperationOutput<OperatorProfileDetail> UpdateOperatorProfile(OperatorProfile operatorProfile)
         {
+            ConvertExtendedSettingsToRecordType(operatorProfile);
             IOperatorProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<IOperatorProfileDataManager>();
 
             bool updateActionSucc = dataManager.Update(operatorProfile);
@@ -157,6 +159,14 @@ namespace InterConnect.BusinessEntity.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreOperatorProfilesUpdated(ref _updateHandle);
+            }
+        }
+        private void ConvertExtendedSettingsToRecordType(OperatorProfile operatorProfile)
+        {
+            if (operatorProfile.ExtendedSettingsRecordTypeId != null && operatorProfile.ExtendedSettings != null)
+            {
+                var recordTypeManager = new DataRecordTypeManager();
+                operatorProfile.ExtendedSettings = recordTypeManager.ConvertDynamicToDataRecord(operatorProfile.ExtendedSettings, (int)operatorProfile.ExtendedSettingsRecordTypeId);
             }
         }
         #endregion
