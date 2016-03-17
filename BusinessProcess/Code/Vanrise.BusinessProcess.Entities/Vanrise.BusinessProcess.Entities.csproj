@@ -72,6 +72,9 @@
     <Compile Include="BPTrackingUpdateOutput.cs" />
     <Compile Include="BPInstanceUpdateOutput.cs" />
     <Compile Include="BPTrackingMessageDetail.cs" />
+    <Compile Include="BusinessRules\BPBusinessRuleAction.cs" />
+    <Compile Include="BusinessRules\BPBusinessRule.cs" />
+    <Compile Include="BusinessRules\BPViolatedRule.cs" />
     <Compile Include="Tasks\BPTaskBeforeIdInput.cs" />
     <Compile Include="Tasks\BPTaskDetail.cs" />
     <Compile Include="Tasks\BPTask.cs" />
