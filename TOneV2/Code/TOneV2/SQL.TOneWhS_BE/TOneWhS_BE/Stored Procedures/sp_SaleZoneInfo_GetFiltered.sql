@@ -12,6 +12,7 @@ BEGIN
 	SET NOCOUNT ON;
 SELECT  [ID]
       ,[Name]
+      ,[SellingNumberPlanID]
   FROM [TOneWhS_BE].[SaleZone]
   Where SellingNumberPlanID=@SellingNumberPlanID
   and Name like('%' + @Filter + '%')

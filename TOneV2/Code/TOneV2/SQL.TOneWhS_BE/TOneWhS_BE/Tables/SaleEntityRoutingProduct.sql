@@ -12,3 +12,10 @@
     CONSTRAINT [FK_SaleEntityRoutingProduct_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SaleEntityRoutingProduct_timestamp]
+    ON [TOneWhS_BE].[SaleEntityRoutingProduct]([timestamp] DESC);
+

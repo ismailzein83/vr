@@ -18,7 +18,7 @@ BEGIN
 			  ,[EED]
 		    INTO #RESULT
 		    FROM [TOneWhS_SPL].[SupplierCode_Preview]
-			WHERE [SupplierCode_Preview].PriceListId = @PriceListId				
+			WHERE [SupplierCode_Preview].ProcessInstanceID = @PriceListId				
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

@@ -13,7 +13,7 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_CarrierAccount_Update]
 	@CarrierAccountSettings nvarchar(MAX)
 AS
 BEGIN
-IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierProfile where Name = @Name and Id!=@ID) 
+IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierAccount WHERE [NameSuffix] = @Name and Id!=@ID) 
 BEGIN
 	Update TOneWhS_BE.CarrierAccount
 	Set NameSuffix = @Name,

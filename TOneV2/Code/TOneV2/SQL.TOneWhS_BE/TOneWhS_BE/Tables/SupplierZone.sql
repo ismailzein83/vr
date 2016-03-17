@@ -14,3 +14,10 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SupplierZone_timestamp]
+    ON [TOneWhS_BE].[SupplierZone]([timestamp] DESC);
+
