@@ -16,23 +16,24 @@ namespace Vanrise.BusinessProcess.WFActivities
         [RequiredArgument]
         public InArgument<IEnumerable<BusinessRule>> BusinessRules { get; set; }
 
-        private List<ViolatedRule> _violatedBusinessRulesByTarget = new List<ViolatedRule>();
 
-        private bool _stopExecutionFlag;
+        
 
         protected override void Execute(CodeActivityContext context)
         {
+            bool stopExecutionFlag=false;
             IEnumerable<IRuleTarget> importedDataToValidate = this.ImportedDataToValidate.Get(context);
             IEnumerable<BusinessRule> rules = this.BusinessRules.Get(context);
-
-            this.ExecuteValidation(rules, importedDataToValidate);
-            this.AppendValidationMessages(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, context.GetSharedInstanceData().InstanceInfo.ParentProcessID);
-            if (this._stopExecutionFlag)
+            List<ViolatedRule> violatedBusinessRulesByTarget =new List<ViolatedRule>();;
+            this.ExecuteValidation(rules, importedDataToValidate,ref violatedBusinessRulesByTarget, ref stopExecutionFlag);
+            this.AppendValidationMessages(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, context.GetSharedInstanceData().InstanceInfo.ParentProcessID,violatedBusinessRulesByTarget);
+            if (stopExecutionFlag)
                 throw new InvalidWorkflowException("One or more business rules were not satisfied and led to stop the execution of the worklfow");
         }
 
-        private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets)
+        private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets, ref List<ViolatedRule> violatedBusinessRulesByTarget, ref bool stopExecutionFlag)
         {
+
             foreach (BusinessRule rule in rules)
             {
                 foreach (IRuleTarget target in targets)
@@ -45,23 +46,23 @@ namespace Vanrise.BusinessProcess.WFActivities
                         {
                             BusinessRuleActionExecutionContext actionContext = new BusinessRuleActionExecutionContext() { Target = target };
                             rule.Action.Execute(actionContext);
-                            this._violatedBusinessRulesByTarget.Add(new ViolatedRule() { Target = target, Rule = rule });
+                            violatedBusinessRulesByTarget.Add(new ViolatedRule() { Target = target, Rule = rule });
                             if (actionContext.StopExecution)
                             {
-                                this._stopExecutionFlag = true;
+                                stopExecutionFlag = true;
                                 return;
                             }
-                           
+
                         }
                     }
                 }
             }
         }
 
-        private void AppendValidationMessages(long processIntanceId, long? parentProcessId)
+        private void AppendValidationMessages(long processIntanceId, long? parentProcessId, List<ViolatedRule> violatedBusinessRulesByTarget)
         {
             List<ValidationMessage> messages = new List<ValidationMessage>();
-            foreach (ViolatedRule violatedRule in this._violatedBusinessRulesByTarget)
+            foreach (ViolatedRule violatedRule in violatedBusinessRulesByTarget)
             {
                 ValidationMessage msg = new ValidationMessage()
                 {
@@ -79,7 +80,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             ValidationMessageManager manager = new ValidationMessageManager();
             manager.InsertIntoTrackingTable(messages);
             manager.Insert(messages);
-           
+
         }
     }
 
