@@ -79,7 +79,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                 DateTime rangeStart = date;
                 if (rangeStart < fromTime)//could only happens in FIRST iteration
                     rangeStart = fromTime;
-                
+
                 DateTime rangeEnd = date.AddDays(1);
                 if (rangeEnd > toTime)//could only happens in LAST iteration
                     rangeEnd = toTime;
@@ -174,9 +174,9 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             toTime = fromTime.AddDays(1);
             CDRDatabaseDataManager cdrDatabaseDataManager = new CDRDatabaseDataManager();
             var lastDatabase = cdrDatabaseDataManager.GetLastReadyDatabase();
-            if(lastDatabase != null && lastDatabase.Settings.PrefixLength == _databaseSettings.PrefixLength)
+            if (lastDatabase != null && lastDatabase.Settings.PrefixLength == _databaseSettings.PrefixLength)
             {
-                foreach(var prefix in lastDatabase.Settings.CDRNumberPrefixes)
+                foreach (var prefix in lastDatabase.Settings.CDRNumberPrefixes)
                 {
                     string cdrTableName = BuildCDRTableName(prefix);
                     ExecuteNonQueryText(String.Format(CDR_CREATETABLE_QUERYTEMPLATE, cdrTableName), null);
@@ -234,7 +234,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             PartitionedCDRDBApplyStream allStreams = dbApplyStream as PartitionedCDRDBApplyStream;
             string tableName = GetCDRTableName(record.ConnectDateTime, record.MSISDN, true);
             StreamForBulkInsert matchStream;
-            if(!allStreams.StreamsByTableNames.TryGetValue(tableName, out matchStream))
+            if (!allStreams.StreamsByTableNames.TryGetValue(tableName, out matchStream))
             {
                 StreamForBulkInsert newStream = base.InitializeStreamForBulkInsert();
                 if (allStreams.StreamsByTableNames.TryAdd(tableName, newStream))
@@ -277,7 +277,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         public object FinishDBApplyStream(object dbApplyStream)
         {
             PartitionedCDRDBApplyStream allStreams = dbApplyStream as PartitionedCDRDBApplyStream;
-            foreach(var entry in allStreams.StreamsByTableNames)
+            foreach (var entry in allStreams.StreamsByTableNames)
             {
                 entry.Value.Close();
             }
@@ -303,7 +303,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void LoadCDR(DateTime fromTime, DateTime toTime, string numberPrefix, Action<CDR> onCDRReady)
         {
-            string query = String.Format( @"SELECT {0} FROM {1} WITH(NOLOCK) 
+            string query = String.Format(@"SELECT {0} FROM {1} WITH(NOLOCK) 
                                             WHERE MSISDN LIKE '{2}%' AND [ConnectDateTime] >= @FromTime AND [ConnectDateTime] < @ToTime 
                                             ORDER BY MSISDN", CDR_COLUMNS, GetCDRTableName(fromTime, numberPrefix, false), numberPrefix);
             ExecuteReaderText(query,
@@ -323,19 +323,24 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void InsertCDRsByMSISDNToTempTable(string tempTableName, string msisdn, DateTime fromTime, DateTime toTime)
         {
-            StringBuilder queryBuilder = new StringBuilder();
-            string query = String.Format(@"INSERT INTO {0}
+            string tableName = GetCDRTableName(fromTime, msisdn, false);
+            if (tableName != null)
+            {
+                StringBuilder queryBuilder = new StringBuilder();
+                string query = String.Format(@"INSERT INTO {0}
                                         SELECT {1} 
                                         FROM {2} WITH(NOLOCK)
                                         WHERE [MSISDN] = @MSISDN AND [ConnectDateTime] >= @FromTime AND [ConnectDateTime] < @ToTime"
-                , tempTableName, CDR_COLUMNS, GetCDRTableName(fromTime, msisdn, false));
+                    , tempTableName, CDR_COLUMNS, tableName);
 
-            ExecuteNonQueryText(query, (cmd) =>
+                ExecuteNonQueryText(query, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@MSISDN", msisdn));
                     cmd.Parameters.Add(new SqlParameter("@FromTime", fromTime));
                     cmd.Parameters.Add(new SqlParameter("@ToTime", toTime));
                 });
+            }
+
         }
 
         #region Private Methods
