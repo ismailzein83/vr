@@ -37,12 +37,12 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(3001,'Data Record Types','Data Record Type','#/view/VR_GenericData/Views/GenericDataRecord/DataRecordTypeManagement',301,null,null,null,null,0,1),
-(3002,'Generic Rule Definitions','Generic Rule Definition','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement',301,null,null,null,null,0,2),
-(3003,'Data Transformation Definitions','Data Transformation Definition','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement',301,null,null,null,null,0,3),
-(3004,'Data Stores','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement',301,null,null,null,null,0,4),
+(3001,'Data Record Types','Data Record Type','#/view/VR_GenericData/Views/GenericDataRecord/DataRecordTypeManagement',301,'VR_GenericData/DataRecordType/GetFilteredDataRecordTypes',null,null,null,0,1),
+(3002,'Generic Rule Definitions','Generic Rule Definition','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement',301,'VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions',null,null,null,0,2),
+(3003,'Data Transformation Definitions','Data Transformation Definition','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement',301,'VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions',null,null,null,0,3),
+(3004,'Data Stores','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement',301,'VR_GenericData/DataStore/GetFilteredDataStores',null,null,null,0,4),
 (3005,'Data Record Storages','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement',301,null,null,null,null,0,5),
-(3006,'Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement',301,null,null,null,null,0,6)
+(3006,'Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement',301,'VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions',null,null,null,0,6)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -61,9 +61,112 @@ set identity_insert [sec].[View] off;
 
 --[sec].[BusinessEntity]-------------------601 to 900--------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntity] on;
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(601,'VR_GenericData_BusinessEntityDefinition','Business Entity Definitions',2,0,'["View","Add","Edit"]'),
+(602,'VR_GenericData_GenericRuleDefinition','Generic Rule Definition',2,0,'["View","Add","Edit"]'),
+(603,'VR_GenericData_DataTransformationDefinition','Data Transformation Definition',2,0,'["View","Add","Edit","Compile"]'),
+(604,'VR_GenericData_ExtensibleBEItem','Extensible BE Item',2,0,'["Add","Edit"]'),
+(605,'VR_GenericData_DataRecordType','Data Record Type',2,0,'["View","Add","Edit"]'),
+(606,'VR_GenericData_DataStore','Data Store',2,0,'["View","Add","Edit"]'),
+(607,'VR_GenericData_DataRecordStorage','Data Record Storage',2,0,'["View","Add","Edit"]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
+merge	[sec].[BusinessEntity] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+when not matched by target then
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set identity_insert [sec].[BusinessEntity] off;
 
 --[sec].[SystemAction]----------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([Name],[RequiredPermissions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions','VR_GenericData_BusinessEntityDefinition: View'),
+('VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinition',null),
+('VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinitionsInfo',null),
+('VR_GenericData/BusinessEntityDefinition/UpdateBusinessEntityDefinition','VR_GenericData_BusinessEntityDefinition: Edit'),
+('VR_GenericData/BusinessEntityDefinition/AddBusinessEntityDefinition','VR_GenericData_BusinessEntityDefinition: Add'),
+('VR_GenericData/BusinessEntityDefinition/GetGenericBEDefinitionView',null),
+('VR_GenericData/DataRecordFieldTypeConfig/GetDataRecordFieldTypes',null),
+('VR_GenericData/DataRecordFieldTypeConfig/GetDataRecordFieldTypeConfig',null),
+('VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages','VR_GenericData_DataRecordStorage: View'),
+('VR_GenericData/DataRecordStorage/GetDataRecordsStorageInfo',null),
+('VR_GenericData/DataRecordStorage/GetDataRecordStorage',null),
+('VR_GenericData/DataRecordStorage/AddDataRecordStorage','VR_GenericData_DataRecordStorage: Add'),
+('VR_GenericData/DataRecordStorage/UpdateDataRecordStorage','VR_GenericData_DataRecordStorage: Edit'),
+('VR_GenericData/DataRecordType/GetDataRecordType',null),
+('VR_GenericData/DataRecordType/GetFilteredDataRecordTypes','VR_GenericData_DataRecordType: View'),
+('VR_GenericData/DataRecordType/UpdateDataRecordType','VR_GenericData_DataRecordType: Edit'),
+('VR_GenericData/DataRecordType/AddDataRecordType','VR_GenericData_DataRecordType: Add'),
+('VR_GenericData/DataRecordType/GetDataRecordFieldTypeTemplates',null),
+('VR_GenericData/DataRecordType/GetDataRecordTypeInfo',null),
+('VR_GenericData/DataStoreConfig/GetDataStoreConfigs',null),
+('VR_GenericData/DataStoreConfig/GetDataStoreConfig',null),
+('VR_GenericData/DataStore/GetFilteredDataStores','VR_GenericData_DataStore: View'),
+('VR_GenericData/DataStore/GetDataStoresInfo',null),
+('VR_GenericData/DataStore/GetDataStore',null),
+('VR_GenericData/DataStore/AddDataStore','VR_GenericData_DataStore: Add'),
+('VR_GenericData/DataStore/UpdateDataStore','VR_GenericData_DataStore: Edit'),
+('VR_GenericData/DataTransformationDefinition/GetDataTransformationDefinition',null),
+('VR_GenericData/DataTransformationDefinition/GetDataTransformationDefinitionRecords',null),
+('VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions','VR_GenericData_DataTransformationDefinition: View'),
+('VR_GenericData/DataTransformationDefinition/UpdateDataTransformationDefinition','VR_GenericData_DataTransformationDefinition: Edit'),
+('VR_GenericData/DataTransformationDefinition/AddDataTransformationDefinition','VR_GenericData_DataTransformationDefinition: Add'),
+('VR_GenericData/DataTransformationDefinition/GetDataTransformationDefinitions',null),
+('VR_GenericData/DataTransformationDefinition/TryCompileSteps','VR_GenericData_DataTransformationDefinition: Compile'),
+('VR_GenericData/DataTransformationDefinition/ExportCompilationResult','VR_GenericData_DataTransformationDefinition: Compile'),
+('VR_GenericData/DataTransformationStepConfig/GetDataTransformationSteps',null),
+('VR_GenericData/ExpressionBuilderConfig/GetExpressionBuilderTemplates',null),
+('VR_GenericData/ExtensibleBEItem/GetExtensibleBEItem',null),
+('VR_GenericData/ExtensibleBEItem/UpdateExtensibleBEItem','VR_GenericData_ExtensibleBEItem: Edit'),
+('VR_GenericData/ExtensibleBEItem/AddExtensibleBEItem','VR_GenericData_ExtensibleBEItem: Add'),
+('VR_GenericData/ExtensibleBEItem/GetFilteredExtensibleBEItems',null),
+('VR_GenericData/GenericBusinessEntity/GetFilteredGenericBusinessEntities',null),
+('VR_GenericData/GenericBusinessEntity/GetGenericBusinessEntity',null),
+('VR_GenericData/GenericBusinessEntity/AddGenericBusinessEntity',null),
+('VR_GenericData/GenericBusinessEntity/UpdateGenericBusinessEntity',null),
+('VR_GenericData/GenericBusinessEntity/GetGenericBusinessEntityInfo',null),
+('VR_GenericData/GenericBusinessEntity/GetBusinessEntityTitle',null),
+('VR_GenericData/GenericBusinessEntity/DeleteGenericBusinessEntity',null),
+('VR_GenericData/GenericRule/GetFilteredGenericRules',null),
+('VR_GenericData/GenericRule/GetGenericRule',null),
+('VR_GenericData/GenericRule/AddGenericRule',null),
+('VR_GenericData/GenericRule/UpdateGenericRule',null),
+('VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions','VR_GenericData_GenericRuleDefinition: View '),
+('VR_GenericData/GenericRuleDefinition/GetGenericRuleDefinition',null),
+('VR_GenericData/GenericRuleDefinition/AddGenericRuleDefinition','VR_GenericData_GenericRuleDefinition: Add'),
+('VR_GenericData/GenericRuleDefinition/UpdateGenericRuleDefinition','VR_GenericData_GenericRuleDefinition: Edit'),
+('VR_GenericData/GenericRuleDefinition/GetGenericRuleDefinitionsInfo',null),
+('VR_GenericData/GenericRuleDefinition/GetGenericRuleDefinitionView',null),
+('VR_GenericData/GenericRuleTypeConfig/GetGenericRuleTypes',null),
+('VR_GenericData/GenericRuleTypeConfig/GetGenericRuleTypeByName',null),
+('VR_GenericData/GenericRuleTypeConfig/GetGenericRuleTypeById',null),
+('VR_GenericData/GenericUIRuntime/GetExtensibleBEItemRuntime',null),
+('VR_GenericData/GenericUIRuntime/GetGenericManagementRuntime',null),
+('VR_GenericData/GenericUIRuntime/GetGenericEditorRuntime',null),
+('VR_GenericData/GenericUIRuntime/GetDataRecordTypesInfo',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Name],[RequiredPermissions]))
+merge	[sec].[SystemAction] as t
+using	cte_data as s
+on		1=1 and t.[Name] = s.[Name]
+when matched then
+	update set
+	[RequiredPermissions] = s.[RequiredPermissions]
+when not matched by target then
+	insert([Name],[RequiredPermissions])
+	values(s.[Name],s.[RequiredPermissions]);
 
 --[genericdata].[GenericRuleTypeConfig]-------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
