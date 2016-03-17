@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataRecordTypeManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordTypeService'];
+    DataRecordTypeManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordTypeService', 'VR_GenericData_DataRecordTypeAPIService'];
 
-    function DataRecordTypeManagementController($scope, VR_GenericData_DataRecordTypeService) {
+    function DataRecordTypeManagementController($scope, VR_GenericData_DataRecordTypeService,dataRecordTypeAPIService) {
 
         var gridAPI;
         var filter = {};
@@ -21,7 +21,9 @@
                 getFilterObject();
                 return gridAPI.loadGrid(filter);
             };
-
+            $scope.hasAddDataRecordType = function () { 
+                return dataRecordTypeAPIService.HasAddDataRecordType();
+            }
             $scope.addDataRecordType = function () {
                 var onDataRecordTypeAdded = function (onDataRecordTypeObj) {
                     gridAPI.onDataRecordTypeAdded(onDataRecordTypeObj);

@@ -2,14 +2,16 @@
 
     'use strict';
 
-    DataRecordTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
+    DataRecordTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'VR_GenericData_ModuleConfig'];
 
-    function DataRecordTypeAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
+    function DataRecordTypeAPIService(BaseAPIService, UtilsService, SecurityService , VR_GenericData_ModuleConfig) {
         return ({
             GetDataRecordType: GetDataRecordType,
             GetFilteredDataRecordTypes: GetFilteredDataRecordTypes,
             AddDataRecordType: AddDataRecordType,
+            HasAddDataRecordType:HasAddDataRecordType,
             UpdateDataRecordType: UpdateDataRecordType,
+            HasUpdateDataRecordType:HasUpdateDataRecordType,
             GetDataRecordFieldTypeTemplates: GetDataRecordFieldTypeTemplates,
             GetDataRecordTypeInfo: GetDataRecordTypeInfo
         });
@@ -26,8 +28,14 @@
         function AddDataRecordType(dataRecordTypeObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'AddDataRecordType'), dataRecordTypeObject);
         }
+        function HasAddDataRecordType() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", ['AddDataRecordType']));
+        }
         function UpdateDataRecordType(dataRecordTypeObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'UpdateDataRecordType'), dataRecordTypeObject);
+        }
+        function HasUpdateDataRecordType() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", ['UpdateDataRecordType']));
         }
         function GetDataRecordFieldTypeTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", "GetDataRecordFieldTypeTemplates"));

@@ -32,6 +32,14 @@
                 dataRecordFieldReadyPromiseDeferred.resolve();
             }
 
+            $scope.hasSaveDataRecordType = function () {
+                if (isEditMode) {
+                    return VR_GenericData_DataRecordTypeAPIService.HasUpdateDataRecordType();
+                }
+                else {
+                    return VR_GenericData_DataRecordTypeAPIService.HasAddDataRecordType();
+                }
+            }
             $scope.scopeModal.SaveDataRecordType = function () {
                 $scope.scopeModal.isLoading = true;
                 if (isEditMode) {

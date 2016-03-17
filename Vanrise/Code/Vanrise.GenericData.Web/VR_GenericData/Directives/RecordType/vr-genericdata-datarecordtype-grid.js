@@ -71,6 +71,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                 {
                     name: "Edit",
                     clicked: editDataRecordField,
+                    haspermission: hasEditDataRecordTypePermission
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -78,6 +79,9 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
                 }
             }
 
+            function hasEditDataRecordTypePermission() {
+                return VR_GenericData_DataRecordTypeAPIService.HasUpdateDataRecordType()
+            }
             function editDataRecordField(dataItem) {
                 var onDataRecordFieldUpdated = function (dataRecordFieldObj) {
                     gridAPI.itemUpdated(dataRecordFieldObj);
