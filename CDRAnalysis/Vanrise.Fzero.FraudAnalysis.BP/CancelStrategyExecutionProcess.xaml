@@ -105,6 +105,7 @@
             <Variable x:TypeArguments="scg:List(vffe:StrategyExecutionItem)" Name="itemsofCases" />
             <Variable x:TypeArguments="scg:List(vffe:AccountCase)" Name="cases" />
             <Variable x:TypeArguments="vffm:BPTaskConfirmCancelStrategyonCaseCount" Name="executionInformation" />
+            <Variable x:TypeArguments="x:Int32" Name="countClosedCases" />
           </Sequence.Variables>
           <vffba1:GetStrategyExecutionItemswithCases sap2010:WorkflowViewState.IdRef="GetStrategyExecutionItemswithCases_1">
             <vffba1:GetStrategyExecutionItemswithCases.Cases>
@@ -128,32 +129,53 @@
               </InArgument>
             </vffba1:GetStrategyExecutionItemswithCases.StrategyExecutionId>
           </vffba1:GetStrategyExecutionItemswithCases>
-          <vbw:AssignTask x:TypeArguments="vffm:BPTaskConfirmCancelStrategyonCaseCount" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_2">
-            <vbw:AssignTask.AssignedTo>
-              <InArgument x:TypeArguments="vbe:BPTaskAssignee">
-                <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
-              </InArgument>
-            </vbw:AssignTask.AssignedTo>
-            <vbw:AssignTask.TaskData>
-              <InArgument x:TypeArguments="vbe:BPTaskData">
-                <mca:CSharpValue x:TypeArguments="vbe:BPTaskData" xml:space="preserve">new Vanrise.Fzero.FraudAnalysis.MainExtensions.BPTaskDataConfirmCancelStrategyonCaseCount() {   Content=string.Format("Number of Closed Cases: {0}." , cases.Where(x=&gt;x.StatusID == CaseStatus.ClosedFraud || x.StatusID == CaseStatus.ClosedWhiteList).Count()) }</mca:CSharpValue>
-              </InArgument>
-            </vbw:AssignTask.TaskData>
-            <vbw:AssignTask.TaskExecutionInformation>
-              <OutArgument x:TypeArguments="vffm:BPTaskConfirmCancelStrategyonCaseCount">
-                <mca:CSharpReference x:TypeArguments="vffm:BPTaskConfirmCancelStrategyonCaseCount">executionInformation</mca:CSharpReference>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">
+                <mca:CSharpReference x:TypeArguments="x:Int32">countClosedCases</mca:CSharpReference>
               </OutArgument>
-            </vbw:AssignTask.TaskExecutionInformation>
-            <vbw:AssignTask.TaskTitle>
-              <InArgument x:TypeArguments="x:String">
-                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Confirm Cancellation")</mca:CSharpValue>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">cases == null ? 0 : cases.Where(x =&gt; x.StatusID == CaseStatus.ClosedFraud || x.StatusID == CaseStatus.ClosedWhiteList).Count()</mca:CSharpValue>
               </InArgument>
-            </vbw:AssignTask.TaskTitle>
-          </vbw:AssignTask>
+            </Assign.Value>
+          </Assign>
+          <If sap2010:WorkflowViewState.IdRef="If_3">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">countClosedCases &gt; 0</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <vbw:AssignTask x:TypeArguments="vffm:BPTaskConfirmCancelStrategyonCaseCount" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_2">
+                <vbw:AssignTask.AssignedTo>
+                  <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                    <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+                  </InArgument>
+                </vbw:AssignTask.AssignedTo>
+                <vbw:AssignTask.TaskData>
+                  <InArgument x:TypeArguments="vbe:BPTaskData">
+                    <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new Vanrise.Fzero.FraudAnalysis.MainExtensions.BPTaskDataConfirmCancelStrategyonCaseCount() { Content = string.Format("Number of Closed Cases: {0}, are you sure you want to continue cancelling strategy execution?", countClosedCases) }</mca:CSharpValue>
+                  </InArgument>
+                </vbw:AssignTask.TaskData>
+                <vbw:AssignTask.TaskExecutionInformation>
+                  <OutArgument x:TypeArguments="vffm:BPTaskConfirmCancelStrategyonCaseCount">
+                    <mca:CSharpReference x:TypeArguments="vffm:BPTaskConfirmCancelStrategyonCaseCount">executionInformation</mca:CSharpReference>
+                  </OutArgument>
+                </vbw:AssignTask.TaskExecutionInformation>
+                <vbw:AssignTask.TaskTitle>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">string.Format("Confirm Cancellation with {0} closed cases.", countClosedCases)</mca:CSharpValue>
+                  </InArgument>
+                </vbw:AssignTask.TaskTitle>
+              </vbw:AssignTask>
+            </If.Then>
+          </If>
           <If sap2010:WorkflowViewState.IdRef="If_2">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">executionInformation.Continue</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:Boolean">countClosedCases == 0 || (executionInformation !=null &amp;&amp; executionInformation.Continue)</mca:CSharpValue>
               </InArgument>
             </If.Condition>
             <If.Then>
@@ -219,22 +241,15 @@
               </Parallel>
             </If.Then>
             <If.Else>
-              <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
-                <TerminateWorkflow.Reason>
+              <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
+                <vbw:WriteTrackingMessage.Message>
                   <InArgument x:TypeArguments="x:String">
-                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Cancelling strategy execution stopped due to rejection by Initiator")</mca:CSharpValue>
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Cancelling aborted due to rejection by Initiator")</mca:CSharpValue>
                   </InArgument>
-                </TerminateWorkflow.Reason>
-              </TerminateWorkflow>
+                </vbw:WriteTrackingMessage.Message>
+              </vbw:WriteTrackingMessage>
             </If.Else>
           </If>
-          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4">
-            <vbw:WriteTrackingMessage.Message>
-              <InArgument x:TypeArguments="x:String">
-                <mca:CSharpValue x:TypeArguments="x:String">String.Format("Value Continue in Execution Information: {0}'", executionInformation.Continue)</mca:CSharpValue>
-              </InArgument>
-            </vbw:WriteTrackingMessage.Message>
-          </vbw:WriteTrackingMessage>
         </Sequence>
       </If.Then>
       <If.Else>
@@ -248,21 +263,22 @@
       </If.Else>
     </If>
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Strategy Execution Cancellation" />
-    <sads:DebugSymbol.Symbol>d1VDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXENhbmNlbFN0cmF0ZWd5RXhlY3V0aW9uUHJvY2Vzcy54YW1sK04D/AEOAgEBUgVSoAEDAcQBUwVeKQMBvQFfBfkBCgIBBPoBBfoBoQECAQJSdFKdAQMBxQFbC1thAwHBAVYLVn0DAb4BYgtiiQECAQVmCe4BFAIBDfEBCfcBJAIBCPoBdPoBngECAQNtC4IBNwMBoAGDAQuYARwDAYMBmQEL5gEQAgEW5wEL7QEmAgEO9AEP9AGBAQIBCvEBZPEBigECAQl/EX9nAwG2AXoRen8DAa8BdRF1eAMBqAFwEXBuAwGhAZABEZABjgEDAZkBiwERiwHvAgMBkgGVARGVAXQDAYsBhgERhgGdAQMBhAGcARGcAW0CARegAQ/bARoCASbeAQ/kASMCAR7qARHqAawBAgEPpQERyQE/AgFDygER2gE9AgEn4QEV4QGnAQIBH8EBF8EBbQIBerIBF7IBfQIBca0BF60BdgIBaLwBF7wBnQECAV+3ARe3AagBAgFWxgEXxgFgAgFNqAEXqAFsAgFE0gEX0gGVAQIBOs0BF80BoAECATHXARfXAWACASg=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1VDOlxURlNcQ0RSQW5hbHlzaXNcVmFucmlzZS5GemVyby5GcmF1ZEFuYWx5c2lzLkJQXENhbmNlbFN0cmF0ZWd5RXhlY3V0aW9uUHJvY2Vzcy54YW1sLk4DiwIOAgEBUgVSoAEDAeoBUwVeKQMB4wFfBYgCCgIBBIkCBYkCoQECAQJSdFKdAQMB6wFbC1thAwHnAVYLVn0DAeQBYgtiiQECAQVmCf0BFAIBDYACCYYCJAIBCIkCdIkCngECAQNuC4MBNwMBwgGEAQuPARQDAbEBkAELrgEQAwGHAa8BC/wBEAIBDoMCD4MCgQECAQqAAmSAAooBAgEJgAERgAFnAwHbAXsRe38DAdMBdhF2eAMBywFxEXFuAwHDAYwBEYwBzwEDAboBhwERhwFmAwGyAZMBEZMBZwMBiAGXAQ+sASADAZABsgERsgGvAQIBD7YBD/EBGgIBIPQBD/oBKgIBF6QBFaQBkgEDAakBnwEVnwHDAgMBoQGpARWpAaEBAwGZAZoBFZoBoQEDAZEBuwER3wE/AgFA4AER8AE9AgEh9wEV9wGUAQIBGNcBF9cBbQIBfcgBF8gBfQIBc8MBF8MBdgIBadIBF9IBnQECAV/NARfNAagBAgFV3AEX3AFgAgFLvgEXvgFsAgFB6AEX6AGVAQIBNuMBF+MBoAECASztARftAWACASI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1026,22" />
       <sap2010:ViewStateData Id="GetStrategyExecutionStatus_1" sap:VirtualizedContainerService.HintSize="1026,22" />
       <sap2010:ViewStateData Id="GetStrategyExecutionItemswithCases_1" sap:VirtualizedContainerService.HintSize="779,22" />
-      <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="779,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="779,62" />
+      <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="779,210" />
       <sap2010:ViewStateData Id="ProcessStrategyExecutionCancellation_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyStrategyExecutionCancellation_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="779,236" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="779,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="801,546">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="801,774">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -270,16 +286,16 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1026,696" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1026,924" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1026,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1048,1006">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1048,1234">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.CancelStrategyExecutionProcess_1" sap:VirtualizedContainerService.HintSize="1088,1086" />
+      <sap2010:ViewStateData Id="Vanrise.Fzero.FraudAnalysis.BP.CancelStrategyExecutionProcess_1" sap:VirtualizedContainerService.HintSize="1088,1314" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
