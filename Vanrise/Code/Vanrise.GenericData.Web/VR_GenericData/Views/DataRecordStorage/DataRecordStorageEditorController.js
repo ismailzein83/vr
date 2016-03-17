@@ -73,6 +73,14 @@
                 else
                     return insertDataRecordStorage();
             };
+            $scope.hasSaveDataRecordStorage = function () {
+                if (isEditMode) {
+                    return VR_GenericData_DataRecordStorageAPIService.HasUpdateDataRecordStorage();
+                }
+                else {
+                    return VR_GenericData_DataRecordStorageAPIService.HasAddDataRecordStorage();
+                }
+            }
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };

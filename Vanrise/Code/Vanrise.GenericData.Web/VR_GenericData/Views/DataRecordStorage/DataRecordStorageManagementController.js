@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    DataRecordStorageManagementController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageService', 'VR_GenericData_DataRecordStorageAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function DataRecordStorageManagementController($scope, VR_GenericData_DataRecordStorageService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function DataRecordStorageManagementController($scope, VR_GenericData_DataRecordStorageService, dataRecordStorageAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -42,6 +42,9 @@
                 };
                 VR_GenericData_DataRecordStorageService.addDataRecordStorage(onDataRecordStorageAdded);
             };
+            $scope.hasAddDataRecordStorage = function () {
+                return dataRecordStorageAPIService.HasAddDataRecordStorage();
+            }
         }
 
         function load() {

@@ -68,9 +68,13 @@
                 ctrl.menuActions = [{
                     name: 'Edit',
                     clicked: editDataRecordStorage,
+                    haspermission: hasEditDataRecordStorage 
                 }];
             }
 
+            function hasEditDataRecordStorage() {
+                return VR_GenericData_DataRecordStorageAPIService.HasUpdateDataRecordStorage();
+            }
             function editDataRecordStorage(dataRecordStorage) {
                 var onDataRecordStorageUpdated = function (updatedDataRecordStorage) {
                     gridAPI.itemUpdated(updatedDataRecordStorage);
