@@ -205,9 +205,10 @@
             var temp = [];
 
             for (var i = 0; i < members.length; i++) {
+                var user = UtilsService.getItemByVal(users, members[i].Id, 'UserId');
                 var obj = {
                     nodeId: members[i].Id,
-                    nodeName: UtilsService.getItemByVal(users, members[i].Id, 'UserId').Name,
+                    nodeName: user!=undefined? user.Name:undefined,
                     nodeChildren: mapMembersToNodes(members[i].Members),
                     isOpened: true
                 };
