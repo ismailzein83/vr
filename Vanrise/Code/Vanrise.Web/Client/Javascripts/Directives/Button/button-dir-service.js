@@ -157,6 +157,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Assign Operators',
                     class: 'glyphicon glyphicon-link'
                 };
+            case 'AssignCarriers':
+                return {
+                    text: 'Assign Carriers',
+                    class: 'glyphicon glyphicon-link'
+                };
             case 'Validate':
                 return {
                     text: 'Validate',
