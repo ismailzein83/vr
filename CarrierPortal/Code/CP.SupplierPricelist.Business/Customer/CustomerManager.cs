@@ -37,7 +37,7 @@ namespace CP.SupplierPricelist.Business
 
         public IEnumerable<SupplierInfo> GetCustomerSuppliers(int customerId)
         {
-                  return GetCachedSupplierAccounts(customerId).Values;
+            return GetCachedSupplierAccounts(customerId).Values;
         }
 
         public IEnumerable<CustomerInfo> GetCustomerInfos(CustomerFilter filter)
@@ -55,7 +55,7 @@ namespace CP.SupplierPricelist.Business
         {
             var cachedCustomers = GetCachedCustomers();
             Func<Customer, bool> filterExpression = item =>
-                   (string.IsNullOrEmpty(input.Query.Name) || input.Query.Name.ToLower().Contains(item.Name.ToLower()));
+                   (string.IsNullOrEmpty(input.Query.Name) || item.Name.ToLower().Contains(input.Query.Name.ToLower()));
             return DataRetrievalManager.Instance.ProcessResult(input, cachedCustomers.ToBigResult(input, filterExpression, MapToDetails));
         }
         public InsertOperationOutput<CustomerDetail> AddCustomer(Customer inputCustomer)
