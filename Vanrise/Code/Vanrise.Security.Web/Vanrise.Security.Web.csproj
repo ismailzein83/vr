@@ -206,8 +206,6 @@
     <Content Include="Security\Views\OrgChart\OrgChartManagement.html" />
     <Content Include="Security\Views\Permission\PermissionEditor.html" />
     <Content Include="Security\Views\Permission\PermissionEditorController.js" />
-    <Content Include="Security\Views\Pages\RankingPageManagement.html" />
-    <Content Include="Security\Views\Pages\RankingPageManagementController.js" />
     <Content Include="Security\Views\User\ChangePassword.html" />
     <Content Include="Security\Views\User\ChangePasswordController.js" />
     <Content Include="Security\Views\User\ResetPasswordEditor.html" />
