@@ -22,6 +22,9 @@
                 var ctrl = this;
                 ctrl.datasource = [];
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
+                ctrl.haspermission = function () {
+                    return VR_GenericData_DataStoreAPIService.HasAddDataStore();
+                };
 
                 var dataStoreSelector = new DataStoreSelector(ctrl, $scope, $attrs);
                 dataStoreSelector.initializeController();
@@ -134,6 +137,7 @@
                     + ' vr-disabled="ctrl.isdisabled"'
                     + ' label="' + label + '"'
                     + ' entityName="' + label + '"'
+                    + ' haspermission="ctrl.haspermission" '
                 + '</vr-select>'
             + '</div>';
         }

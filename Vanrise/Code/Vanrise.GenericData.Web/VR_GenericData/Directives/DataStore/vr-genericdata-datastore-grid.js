@@ -70,7 +70,8 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                   clicked: editDataStore
+                    clicked: editDataStore,
+                    haspermission: hasEditDataStorePermission
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -78,6 +79,9 @@ app.directive("vrGenericdataDatastoreGrid", ["UtilsService", "VRNotificationServ
                 }
             }
 
+            function hasEditDataStorePermission() {
+               return VR_GenericData_DataStoreAPIService.HasUpdateDataStore();
+            };
             function editDataStore(dataItem) {
                 var onDataStoreUpdated = function (dataStoreObj) {
                     gridAPI.itemUpdated(dataStoreObj);

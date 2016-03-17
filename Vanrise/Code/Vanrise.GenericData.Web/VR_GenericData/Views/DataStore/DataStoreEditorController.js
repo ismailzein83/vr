@@ -44,6 +44,14 @@
                 else
                     return insertDataStore();
             };
+            $scope.hasSaveDataStore = function () { 
+                if (isEditMode) {
+                    return VR_GenericData_DataStoreAPIService.HasUpdateDataStore();
+                }
+                else {
+                    return VR_GenericData_DataStoreAPIService.HasUpdateDataStore();
+                }
+            };
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             }

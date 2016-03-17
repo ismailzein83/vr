@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    DataStoreManagementController.$inject = ['$scope', 'VR_GenericData_DataStoreService'];
+    DataStoreManagementController.$inject = ['$scope', 'VR_GenericData_DataStoreService', 'VR_GenericData_DataStoreAPIService'];
 
-    function DataStoreManagementController($scope, VR_GenericData_DataStoreService) {
+    function DataStoreManagementController($scope, VR_GenericData_DataStoreService, VR_GenericData_DataStoreAPIService) {
 
         var DatStoreGridAPI;
         var filter = {};
@@ -21,7 +21,9 @@
                 getFilterObject();
                 return DatStoreGridAPI.loadGrid(filter);
             };
-
+            $scope.hasAddDataStore = function () {
+                return VR_GenericData_DataStoreAPIService.HasAddDataStore();
+            }
             $scope.addDataStore = function () {
                 var onDataStoreAdded = function (dataStoreObj) {
                     DatStoreGridAPI.onDataStoreAdded(dataStoreObj);

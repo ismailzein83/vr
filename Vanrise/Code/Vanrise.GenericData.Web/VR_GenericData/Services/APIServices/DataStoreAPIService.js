@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataStoreAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
+    DataStoreAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'VR_GenericData_ModuleConfig'];
 
-    function DataStoreAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
+    function DataStoreAPIService(BaseAPIService, UtilsService, SecurityService , VR_GenericData_ModuleConfig) {
        
 
         function GetDataStoresInfo(input) {
@@ -24,19 +24,25 @@
         function AddDataStore(dataStore) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataStore', 'AddDataStore'), dataStore)
         }
-
+        function HasAddDataStore() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataStore", ['AddDataStore']));
+        }
         function UpdateDataStore(dataStore) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataStore', 'UpdateDataStore'), dataStore);
         }
-
+        function HasUpdateDataStore() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataStore", ['UpdateDataStore']));
+        }
 
 
         return {
             GetDataStoresInfo: GetDataStoresInfo,
             GetFilteredDataStores :GetFilteredDataStores ,
             GetDataStore : GetDataStore ,
-            AddDataStore : AddDataStore ,
-            UpdateDataStore : UpdateDataStore
+            AddDataStore: AddDataStore,
+            HasAddDataStore:HasAddDataStore,
+            UpdateDataStore: UpdateDataStore,
+            HasUpdateDataStore: HasUpdateDataStore
         };
     }
 
