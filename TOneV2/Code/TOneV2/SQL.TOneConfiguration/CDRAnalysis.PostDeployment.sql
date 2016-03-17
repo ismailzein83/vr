@@ -109,19 +109,15 @@ set identity_insert [sec].[View] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (9001,'Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement',1,'Root/PSTN_BusinessEntity Module:View',null,null,0,31),
-
 (9002,'Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement',901,'Root/Strategy Module:View',null,null,0,1),
 (9003,'Strategy Execution Log','Strategy Execution Log','#/view/FraudAnalysis/Views/StrategyExecution/StrategyExecutionManagement',	901,'	Root/Suspicion Analysis Module:View',null,null,0,	2	),
 (9004,'Suspicious Numbers','Suspicious Numbers','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis',901,'Root/Suspicion Analysis Module:View',null,null,0,3),
-
 (9005,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',902,'Root/Reporting Module:View',null,null,0,1),
 (9006,'Detected Lines Summary','Detected Lines Summary','#/view/FraudAnalysis/Views/Reports/BlockedLines',902,'Root/Reporting Module:View',null,null,0,2),
 (9007,'Detected Lines Details','Detected Lines Details','#/view/FraudAnalysis/Views/Reports/LinesDetected',902,'Root/Reporting Module:View',null,null,0,3),
-
 (9008,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchManagement',903,'Root/PSTN_BusinessEntity Module:View',null,null,0,1),
 (9009,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkManagement',903,'Root/PSTN_BusinessEntity Module:View',null,null,0,2),
 (9010,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement',903,'Root/PSTN_BusinessEntity Module:View',null,null,0,3),
-
 (9011,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',904,'Root/Administration Module/Dynamic Pages:View',null,null,0,1),
 (9012,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',904,'Root/Administration Module/Dynamic Pages:View',null,null,0,2)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

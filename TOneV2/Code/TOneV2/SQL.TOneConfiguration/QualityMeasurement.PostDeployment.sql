@@ -71,7 +71,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1001,'Quality Measurement','Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0),
 (1002,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,13,0),
-(1003,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',null,1)
+(1003,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',120,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

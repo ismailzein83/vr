@@ -88,33 +88,25 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Routing','Routing','Routing',null,'/images/menu-icons/Routing.png',16,0),
-(2,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',20,1),
-(3,'Business Entities','Business Entities','Business Entities',null,'/images/menu-icons/Business Entities.png',11,0),
-(4,'Traffic Analysis','Traffic Analysis','NOC',null,'/images/menu-icons/NOC.png',18,1),
-(5,'Administration','Administration','Administration',null,'/images/menu-icons/Administration.png',10,0),
-(10,'Business Process','Business Process','Business Process',5,null,12,0),
-(11,'Billing','Billing','Billing',null,'/images/menu-icons/billing.png',16,0),
-(14,'Plugins','Plugins','Plugins',null,'/images/menu-icons/plug.png',22,0),
-(18,'Purchase Area','Purchase Area','Purchase Area',null,'/images/menu-icons/Purchase Area.png',13,0),
-(19,'Sale Area','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',14,0),
-(20,'Prepaid-Postpaid','Prepaid-Postpaid','Prepaid-Postpaid',null,'/images/menu-icons/post paid - pre paid.png',21,0),
-(21,'Management','Management','Management',null,'/images/menu-icons/Management.png',15,0),
-(22,'Account Manager','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',17,0),
-(23,'Dynamic Management','Dynamic Management','Dynamic Management',5,null,13,0),
-(24,'CDR Process','CDR Process','CDR Process',null,null,12,0),
-(25,'Data Sources','Data Sources','Data Sources',5,null,11,0),
-(26,'Entities','Entities',null,18,null,10,null),
-(27,'Entities','Entities',null,19,null,10,null),
-(28,'Security','Security',null,5,null,10,null),
-(29,'Carriers','Carriers',null,3,null,10,null),
-(30,'Lookups','Lookups',null,3,null,11,null),
-(31,'Rules','Rules',null,24,null,10,null),
-(32,'Rules','Rules',null,1,null,10,null),
-(33,'Rules','Rules',null,18,null,11,null),
-(34,'Rules','Rules',null,19,null,11,null),
-(35,'Queueing','Queueing',null,5,null,15,null),
-(36,'Generic Data','Generic Data',null,5,null,14,null)
+(701,'Carriers','Carriers',null,101,null,2,10),
+(702,'Account Manager','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',20,0),
+(703,'Management','Management','Management',null,'/images/menu-icons/Management.png',30,0),
+(704,'Sale Area','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',40,0),
+(705,'Sale Entities','Entities',null,704,null,1,0),
+(706,'Sale Rules','Rules',null,704,null,1,0),
+(707,'Purchase Area','Purchase Area','Purchase Area',null,'/images/menu-icons/Purchase Area.png',50,0),
+(708,'Purchase Entities','Entities',null,707,null,1,0),
+(709,'Purchase Rules','Rules',null,707,null,1,0),
+(710,'Routing',null,null,null,null,10,0),
+(711,'Routing Rules','Rules',null,710,null,1,0),
+(712,'CDR Process','CDR Process','CDR Process',null,null,60,0),
+(713,'CDR Process Rules','Rules',null,712,null,1,0),
+(714,'Traffic Analysis','Traffic Analysis','NOC',null,'/images/menu-icons/NOC.png',70,1),
+(715,'Billing','Billing','Billing',null,'/images/menu-icons/billing.png',80,0),
+(716,'Prepaid-Postpaid','Prepaid-Postpaid','Prepaid-Postpaid',null,'/images/menu-icons/post paid - pre paid.png',90,0),
+(717,'Plugins','Plugins','Plugins',null,'/images/menu-icons/plug.png',100,0),
+(718,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,110,0),
+(719,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',120,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -132,84 +124,59 @@ set identity_insert [sec].[Module] off;
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[View] on;
-;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Type],[Rank])
+;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(9,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',4,null,null,null,0,10),
-(12,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',4,null,null,null,0,12),
-(13,'Users','Users','#/view/Security/Views/User/UserManagement',28,null,null,null,0,10),
-(14,'Groups','Groups','#/view/Security/Views/Group/GroupManagement',28,null,null,null,0,11),
-(17,'Carrier Accounts','Carrier Accounts','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountManagement',29,null,null,null,0,11),
-(35,'System Entities','System Entities','#/view/Security/Views/Permission/BusinessEntityManagement',28,null,null,null,0,12),
-(39,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',23,null,null,null,0,11),
-(41,'Log','Log History','#/view/BusinessProcess/Views/BPHistory',10,null,null,null,0,11),
-(42,'Management','Management','#/view/BusinessProcess/Views/BPDefinitionManagement',10,null,null,null,0,10),
-(43,'Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement',5,null,null,null,0,16),
-(69,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',23,null,null,null,0,10),
-(134,'Organizational Charts','Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement',5,null,null,null,0,15),
-(173,'Account Manager','Account Manager','#/view/WhS_BusinessEntity/Views/AccountManager/AccountManagerManagement',22,null,null,null,0,10),
-(200,'Carrier Profiles','Carrier Profiles','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileManagement',29,null,null,null,0,10),
-(236,'Ranking Pages','Ranking Pages','#/view/Security/Views/Pages/RankingPageManagement',5,'Root/Administration Module:View',null,null,0,17),
-(253,'Hourly Report','Hourly Report','#/view/WhS_Analytics/Views/HourlyReport',4,null,null,null,0,11),
-(254,'Daily Report','Daily Report','#/view/WhS_Analytics/Views/DailyReport',21,null,null,null,0,11),
-(257,'Carrier Summary',' Carrier Summary','#/view/WhS_Analytics/Views/CarrierSummary',21,null,null,null,0,10),
-(258,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',4,null,null,null,0,13),
-(323,'Routing Products','Routing Products','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',1,null,null,null,0,11),
-(334,'Route Rules','Route Rules','#/view/WhS_Routing/Views/RouteRule/RouteRuleManagement',32,null,null,null,0,10),
-(337,'Selling Products','Selling Products','#/view/WhS_BusinessEntity/Views/SellingProduct/SellingProductManagement',27,null,null,null,0,11),
-(338,'Customer Selling Product','Customer Selling Product','#/view/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductManagement',27,null,null,null,0,12),
-(341,'Sale Pricing Rules','Sale Pricing Rules','#/view/WhS_BusinessEntity/Views/PricingRule/SalePricingRuleManagement',34,null,null,null,0,10),
-(342,'Purchase Pricing Rules','Purchase Pricing Rules','#/view/WhS_BusinessEntity/Views/PricingRule/PurchasePricingRuleManagement',33,null,null,null,0,10),
-(351,'Rate Plan','Rate Plan','#/view/Whs_Sales/Views/RatePlan',19,null,null,null,0,12),
-(352,'Customer Identification Rules','Customer Identification Rules','#/view/WhS_CDRProcessing/Views/CustomerRule/CustomerIdentificationRuleManagement',31,null,null,null,0,10),
-(353,'Supplier Identification Rules','Supplier Identification Rules','#/view/WhS_CDRProcessing/Views/SupplierRule/SupplierIdentificationRuleManagement',31,null,null,null,0,11),
-(354,'Code Groups','Code Groups','#/view/WhS_BusinessEntity/Views/CodeGroup/CodeGroupManagement',30,null,null,null,0,14),
-(355,'Normalization Rules','Normalization Rules','#/view/WhS_CDRProcessing/Views/NormalizationRule/NormalizationRuleManagement',31,null,null,null,0,13),
-(356,'Management','Data Sources Management','#/view/Integration/Views/DataSourceManagement',25,'Root/Integration Module:View',null,null,0,10),
-(357,'Log','Log History','#/view/Integration/Views/DataSourceLogManagement',25,'Root/Integration Module:View',null,null,0,12),
-(358,'Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement',25,'Root/Integration Module:View',null,null,0,11),
-(360,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',30,null,null,null,0,12),
-(363,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',30,null,null,null,0,13),
-(364,'Rate Types','Rate Types','#/view/WhS_BusinessEntity/Views/RateType/RateTypeManagement',30,null,null,null,0,15),
-(365,'Zone Service Config','Zone Service Config','#/view/WhS_BusinessEntity/Views/ZoneServiceConfig/ZoneServiceConfigManagement',30,null,null,null,0,16),
-(366,'Countries','Countries','#/view/Common/Views/Country/CountryManagement',30,null,null,null,0,10),
-(367,'Sale Zones','Sale Zones','#/view/WhS_BusinessEntity/Views/SaleZone/SaleZoneManagement',27,null,null,null,0,13),
-(368,'Cities','Cities','#/view/Common/Views/City/CityManagement',30,null,null,null,0,11),
-(369,'Supplier Zones','Supplier Zones','#/view/WhS_BusinessEntity/Views/SupplierZone/SupplierZoneManagement',26,null,null,null,0,11),
-(371,'Selling Number Plans','Selling Number Plans','#/view/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanManagement',27,null,null,null,0,10),
-(374,'Customer Routes','Customer Routes','#/view/WhS_Routing/Views/CustomerRoute/CustomerRouteManagement',1,null,null,null,0,13),
-(375,'Sale Rates','Sale Rates','#/view/WhS_BusinessEntity/Views/SaleRate/SaleRateManagement',27,null,null,null,0,15),
-(376,'Supplier Rates','Supplier Rates','#/view/WhS_BusinessEntity/Views/SupplierRate/SupplierRateManagement',26,null,null,null,0,13),
-(377,'Supplier Codes','Supplier Codes','#/view/WhS_BusinessEntity/Views/SupplierCode/SupplierCodeManagement',26,null,null,null,0,12),
-(378,'Sale Codes','Sale Codes','#/view/WhS_BusinessEntity/Views/SaleCode/SaleCodeManagement',27,null,null,null,0,14),
-(381,'Product Routes','Product Routes','#/view/WhS_Routing/Views/RPRoute/RPRouteManagement',1,null,null,null,0,12),
-(387,'Switches','Switches','#/view/WhS_BusinessEntity/Views/Switch/SwitchManagement',3,null,null,null,0,12),
-(403,'Code Preparation','Code Preparation','#/view/WhS_CodePreparation/Views/CodePreparationManagement',19,null,null,null,0,13),
-(404,'Switch Identification Rules','Switch Identification Rules','#/view/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleManagement',31,null,null,null,0,12),
-(406,'Supplier Price Lists','Supplier Price Lists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',26,null,null,null,0,10),
-(412,'Data Record Types','Data Record Types','#/view/Common/Views/GenericDataRecord/DataRecordTypeManagement',5,null,null,null,0,14),
-(415,'Import Supplier Price List','Import Supplier Price List','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',18,null,null,null,0,12),
-(429,'Sale Price Lists','Sale Price Lists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceList',27,null,null,null,null,0,16),
-(431,'Selling Rules','Selling Rules','#/view/WhS_Sales/Views/SellingRule/SellingRuleManagement',34,null,null,null,null,0,11),
-(435,'Execution Flows','Execution Flows','#/view/Queueing/Views/ExecutionFlow/ExecutionFlowManagement',35,null,null,null,null,0,11),
-(437,'Data Transformation Definition','Data Transformation Definition','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement',36,null,null,null,null,0,12),
-(440,'Generic Rule Definition','Generic Rule Definition','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement',36,null,null,null,null,0,11),
-(441,'Queues','Queues','#/view/Queueing/Views/QueueInstance/QueueInstanceManagement',35,null,null,null,null,0,12),
-(465,'Data Store','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement',36,null,null,null,null,0,13),
-(466,'Data Record Storage','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement',36,null,null,null,null,0,14),
-(470,'Queue Items','Queue Items','#/view/Queueing/Views/QueueItemHeader/QueueItemHeaderManagement',35,null,null,null,null,0,13),
-(475,'Execution Flow Definition','Execution Flow Definition','#/view/Queueing/Views/ExecutionFlowDefinition/ExecutionFlowDefinitionManagement',35,null,null,null,null,0,10)
+(7002,'Switches','Switches','#/view/WhS_BusinessEntity/Views/Switch/SwitchManagement',101,null,null,null,null,0,5),
+(7003,'Code Groups','Code Groups','#/view/WhS_BusinessEntity/Views/CodeGroup/CodeGroupManagement',102,null,null,null,null,0,7),
+(7004,'Zone Service Config','Zone Service Config','#/view/WhS_BusinessEntity/Views/ZoneServiceConfig/ZoneServiceConfigManagement',102,null,null,null,null,0,8),
+(7005,'Carrier Profiles','Carrier Profiles','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierProfileManagement',701,null,null,null,null,0,2),
+(7006,'Carrier Accounts','Carrier Accounts','#/view/WhS_BusinessEntity/Views/CarrierAccount/CarrierAccountManagement',701,null,null,null,null,0,3),
+(7007,'Account Manager','Account Manager','#/view/WhS_BusinessEntity/Views/AccountManager/AccountManagerManagement',702,null,null,null,null,0,2),
+(7008,'Carrier Summary',' Carrier Summary','#/view/WhS_Analytics/Views/CarrierSummary',703,null,null,null,null,0,2),
+(7009,'Daily Report','Daily Report','#/view/WhS_Analytics/Views/DailyReport',703,null,null,null,null,0,3),
+(7010,'Rate Plan','Rate Plan','#/view/Whs_Sales/Views/RatePlan',704,null,null,null,null,0,4),
+(7011,'Code Preparation','Code Preparation','#/view/WhS_CodePreparation/Views/CodePreparationManagement',704,null,null,null,null,0,5),
+(7012,'Sale Price Lists','Sale Price Lists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceList',705,null,null,null,null,0,8),
+(7013,'Sale Zones','Sale Zones','#/view/WhS_BusinessEntity/Views/SaleZone/SaleZoneManagement',705,null,null,null,null,0,5),
+(7014,'Sale Codes','Sale Codes','#/view/WhS_BusinessEntity/Views/SaleCode/SaleCodeManagement',705,null,null,null,null,0,6),
+(7015,'Sale Rates','Sale Rates','#/view/WhS_BusinessEntity/Views/SaleRate/SaleRateManagement',705,null,null,null,null,0,7),
+(7016,'Selling Products','Selling Products','#/view/WhS_BusinessEntity/Views/SellingProduct/SellingProductManagement',705,null,null,null,null,0,3),
+(7017,'Customer Selling Product','Customer Selling Product','#/view/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductManagement',705,null,null,null,null,0,4),
+(7018,'Selling Number Plans','Selling Number Plans','#/view/WhS_BusinessEntity/Views/SellingNumberPlan/SellingNumberPlanManagement',705,null,null,null,null,0,2),
+(7019,'Sale Pricing Rules','Sale Pricing Rules','#/view/WhS_BusinessEntity/Views/PricingRule/SalePricingRuleManagement',706,null,null,null,null,0,2),
+(7020,'Selling Rules','Selling Rules','#/view/WhS_Sales/Views/SellingRule/SellingRuleManagement',706,null,null,null,null,0,3),
+(7021,'Import Supplier Price List','Import Supplier Price List','#/view/WhS_SupplierPriceList/Views/SupplierPriceList',707,null,null,null,null,0,4),
+(7022,'Supplier Zones','Supplier Zones','#/view/WhS_BusinessEntity/Views/SupplierZone/SupplierZoneManagement',708,null,null,null,null,0,3),
+(7023,'Supplier Codes','Supplier Codes','#/view/WhS_BusinessEntity/Views/SupplierCode/SupplierCodeManagement',708,null,null,null,null,0,4),
+(7024,'Supplier Rates','Supplier Rates','#/view/WhS_BusinessEntity/Views/SupplierRate/SupplierRateManagement',708,null,null,null,null,0,5),
+(7025,'Supplier Price Lists','Supplier Price Lists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',708,null,null,null,null,0,2),
+(7026,'Purchase Pricing Rules','Purchase Pricing Rules','#/view/WhS_BusinessEntity/Views/PricingRule/PurchasePricingRuleManagement',709,null,null,null,null,0,10),
+(7027,'Routing Products','Routing Products','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',710,null,null,null,null,0,4),
+(7028,'Product Routes','Product Routes','#/view/WhS_Routing/Views/RPRoute/RPRouteManagement',710,null,null,null,null,0,5),
+(7029,'Customer Routes','Customer Routes','#/view/WhS_Routing/Views/CustomerRoute/CustomerRouteManagement',710,null,null,null,null,0,3),
+(7030,'Route Rules','Route Rules','#/view/WhS_Routing/Views/RouteRule/RouteRuleManagement',711,null,null,null,null,0,2),
+(7031,'Customer Identification Rules','Customer Identification Rules','#/view/WhS_CDRProcessing/Views/CustomerRule/CustomerIdentificationRuleManagement',713,null,null,null,null,0,2),
+(7032,'Supplier Identification Rules','Supplier Identification Rules','#/view/WhS_CDRProcessing/Views/SupplierRule/SupplierIdentificationRuleManagement',713,null,null,null,null,0,3),
+(7033,'Switch Identification Rules','Switch Identification Rules','#/view/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleManagement',713,null,null,null,null,0,4),
+(7034,'Normalization Rules','Normalization Rules','#/view/WhS_CDRProcessing/Views/NormalizationRule/NormalizationRuleManagement',713,null,null,null,null,0,5),
+(7035,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',714,null,null,null,null,0,2),
+(7036,'Hourly Report','Hourly Report','#/view/WhS_Analytics/Views/HourlyReport',714,null,null,null,null,0,3),
+(7037,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',714,null,null,null,null,0,4),
+(7038,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',714,null,null,null,null,0,5),
+(7039,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',718,null,null,null,null,0,2),
+(7040,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',718,null,null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Type],[Rank]))
+)c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Type] = s.[Type],[Rank] = s.[Rank]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
-	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Type],[Rank])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Type],s.[Rank]);
+	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
 --[sec].[BusinessEntityModule]-------------701 to 800---------------------------------------------------------
