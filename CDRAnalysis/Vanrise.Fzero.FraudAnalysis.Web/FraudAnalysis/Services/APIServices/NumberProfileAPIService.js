@@ -1,4 +1,4 @@
-﻿app.service('NumberProfileAPIService', function (BaseAPIService) {
+﻿app.service('NumberProfileAPIService', function (BaseAPIService, UtilsService, CDRAnalysis_FA_ModuleConfig) {
 
     var controllerName = 'NumberProfile';
 

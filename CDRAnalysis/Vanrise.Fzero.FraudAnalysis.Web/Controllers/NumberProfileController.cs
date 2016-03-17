@@ -7,10 +7,13 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
 {
+    [RoutePrefix(Constants.ROUTE_PREFIX + "NumberProfile")]
+    [JSONWithTypeAttribute]
     public class NumberProfileController : BaseAPIController
     {
 
         [HttpPost]
+        [Route("GetNumberProfiles")]
         public object GetNumberProfiles(Vanrise.Entities.DataRetrievalInput<NumberProfileQuery> input)
         {
             NumberProfileManager manager = new NumberProfileManager();
