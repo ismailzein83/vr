@@ -69,8 +69,13 @@ app.directive("vrQueueingExecutionflowdefinitionGrid", ["VR_Queueing_ExecutionFl
             function defineMenuActions() {
                 $scope.gridMenuActions = [{
                     name: "Edit",
-                    clicked: editExecutionFlowDefinition
+                    clicked: editExecutionFlowDefinition,
+                    haspermission: hasEditExecutionFlowDefinitionPermission
                 }];
+            }
+
+            function hasEditExecutionFlowDefinitionPermission() {
+                return VR_Queueing_ExecutionFlowDefinitionAPIService.HasUpdateExecutionFlowDefinition();
             }
 
             function editExecutionFlowDefinition(executionFlowDefinitionObj) {

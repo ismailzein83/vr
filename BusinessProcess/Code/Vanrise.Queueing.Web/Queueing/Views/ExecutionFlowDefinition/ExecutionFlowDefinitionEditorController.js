@@ -43,6 +43,15 @@
                 }
             };
 
+            $scope.haseSaveExecutionFlowDefinitionPermession = function () {
+                if (isEditMode) {
+                    return VR_Queueing_ExecutionFlowDefinitionAPIService.HasUpdateExecutionFlowDefinition();
+                }
+                else {
+                    return VR_Queueing_ExecutionFlowDefinitionAPIService.HasAddExecutionFlowDefinition();
+                }
+            };
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };

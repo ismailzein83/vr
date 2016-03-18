@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    ExecutionFlowDefinitionController.$inject = ['$scope', 'VR_Queueing_ExecutionFlowDefinitionService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    ExecutionFlowDefinitionController.$inject = ['$scope', 'VR_Queueing_ExecutionFlowDefinitionService', 'VR_Queueing_ExecutionFlowDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function ExecutionFlowDefinitionController($scope, VR_Queueing_ExecutionFlowDefinitionService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function ExecutionFlowDefinitionController($scope, VR_Queueing_ExecutionFlowDefinitionService, VR_Queueing_ExecutionFlowDefinitionAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var gridAPI;
         var filter = {};
@@ -29,6 +29,9 @@
                 };
                 VR_Queueing_ExecutionFlowDefinitionService.addExecutionFlowDefinition(onExecutionFlowDefinitionAdded);
             };
+            $scope.hasAddExecutionFlowDefinition = function () {
+                return VR_Queueing_ExecutionFlowDefinitionAPIService.HasAddExecutionFlowDefinition();
+            }
         }
 
         function getFilterObject() {
