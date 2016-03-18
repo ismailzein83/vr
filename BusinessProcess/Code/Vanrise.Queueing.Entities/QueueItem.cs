@@ -11,6 +11,8 @@ namespace Vanrise.Queueing.Entities
         public long ItemId { get; set; }
 
         public long ExecutionFlowTriggerItemId { get; set; }
+
+        public DateTime BatchStart { get; set; }
         
         public byte[] Content { get; set; }
     }

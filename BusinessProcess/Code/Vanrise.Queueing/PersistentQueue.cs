@@ -154,6 +154,7 @@ namespace Vanrise.Queueing
             byte[] decompressed = Vanrise.Common.Compressor.Decompress(queueItem.Content);
             T deserialized = _emptyObject.Deserialize<T>(decompressed);
             deserialized.ExecutionFlowTriggerItemId = queueItem.ExecutionFlowTriggerItemId;
+            deserialized.BatchStart = queueItem.BatchStart;
             return deserialized;
         }
 

@@ -104,12 +104,13 @@ namespace Vanrise.Queueing.Data.SQL
                     });
         }
 
-        private static QueueItem QueueItemMapper(IDataReader reader)
+        private QueueItem QueueItemMapper(IDataReader reader)
         {
             return new QueueItem
                  {
                      ItemId = (long)reader["ID"],
                      ExecutionFlowTriggerItemId = (long)reader["ExecutionFlowTriggerItemID"],
+                     BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
                      Content = (byte[])reader["Content"]
                  };
         }
@@ -323,7 +324,7 @@ namespace Vanrise.Queueing.Data.SQL
                                             #VALIDATEMAXIMUMREADERS#
                                         END
 
-                                        SELECT ID, Content, ExecutionFlowTriggerItemID FROM [queue].[QueueItem_{0}] WITH(NOLOCK) WHERE ID = @ID AND ISNULL(@IsLocked, 0) = 1";
+                                        SELECT ID, Content, ExecutionFlowTriggerItemID, BatchStart FROM [queue].[QueueItem_{0}] WITH(NOLOCK) WHERE ID = @ID AND ISNULL(@IsLocked, 0) = 1";
         
         const string query_DequeueMaximumReadersValidation = @"
                                                             IF ((SELECT COUNT(*) FROM [queue].[QueueItem_{0}] WITH (NOLOCK)
@@ -346,7 +347,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         const string query_GetAvailableBatchStarts = @"SELECT DISTINCT [BatchStart] FROM queue.QueueItem_{0} WHERE ISNULL([IsSuspended], 0) = 0";
 
-        const string query_GetSummaryBatchesByBatchStart = @"SELECT TOP(@NbOfRows) ID, Content, ExecutionFlowTriggerItemID 
+        const string query_GetSummaryBatchesByBatchStart = @"SELECT TOP(@NbOfRows) ID, Content, ExecutionFlowTriggerItemID, BatchStart
                                                             FROM queue.QueueItem_{0} 
                                                             WHERE [BatchStart] = @BatchStart AND ISNULL([IsSuspended], 0) = 0
                                                             ORDER BY ID "; 

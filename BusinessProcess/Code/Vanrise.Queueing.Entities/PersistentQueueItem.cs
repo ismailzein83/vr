@@ -9,6 +9,8 @@ namespace Vanrise.Queueing.Entities
     public abstract class PersistentQueueItem
     {        
         public long ExecutionFlowTriggerItemId { get; set; }
+
+        public DateTime BatchStart { get; set; }
         
         public virtual byte[] Serialize()
         {
