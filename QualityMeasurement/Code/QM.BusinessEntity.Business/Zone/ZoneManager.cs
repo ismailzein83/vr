@@ -129,8 +129,7 @@ namespace QM.BusinessEntity.Business
         {
             Dictionary<long, Zone> zones = GetCachedZones();
 
-            Func<Zone, bool> filterExpression = (x) =>
-                (sourceZoneId == null || sourceZoneId == x.SourceId);
+            Func<Zone, bool> filterExpression = (x) => (sourceZoneId == x.SourceId);
             return zones.FindRecord(filterExpression);
         }
 
