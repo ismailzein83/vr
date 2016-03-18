@@ -417,6 +417,10 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryTransformationDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryTransformationDefinitionEditorController.js" />
+    <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryTransformationDefinitionManagement.html" />
+    <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryTransformationDefinitionManagementController.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
