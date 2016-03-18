@@ -24,7 +24,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         #region Public Methods
 
-        public IEnumerable<R> ConvertRawItemsToBatches(IEnumerable<T> items, Func<R> createSummaryBatchObj)
+        public IEnumerable<R> ConvertRawItemsToBatches(IEnumerable<T> items, Func<R> createSummaryBatchObj, Func<Q> createSummaryItemObj = null)
         {
             Dictionary<DateTime, SummaryBatchInProcess<Q>> batches = new Dictionary<DateTime, SummaryBatchInProcess<Q>>();
             
@@ -46,7 +46,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
                 Q summaryItem;
                 if (!batch.ItemsBySummaryKey.TryGetValue(itemKey, out summaryItem))
                 {
-                    summaryItem = Activator.CreateInstance<Q>();
+                    summaryItem = createSummaryItemObj != null ? createSummaryItemObj() : Activator.CreateInstance<Q>();
                     summaryItem.BatchStart = batch.BatchStart;
                     SetSummaryItemGroupingFields(summaryItem, item);
                     batch.ItemsBySummaryKey.Add(itemKey, summaryItem);

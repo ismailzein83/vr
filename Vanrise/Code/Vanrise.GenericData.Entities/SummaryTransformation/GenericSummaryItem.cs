@@ -16,11 +16,11 @@ namespace Vanrise.GenericData.Entities
         public dynamic DataRecord { get; set; }
     }
 
-    public class GenericSummaryBatch : ISummaryBatch<GenericSummaryItem>
-    {
-        public IEnumerable<GenericSummaryItem> Items { get; set; }
+    //public class GenericSummaryBatch : ISummaryBatch<GenericSummaryItem>
+    //{
+    //    public IEnumerable<GenericSummaryItem> Items { get; set; }
 
-        public DateTime BatchStart { get; set; }
-    }
+    //    public DateTime BatchStart { get; set; }
+    //}
 
 }

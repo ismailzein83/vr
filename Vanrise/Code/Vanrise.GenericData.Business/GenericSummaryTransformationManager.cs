@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities.SummaryTransformation;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Transformation.Entities;
 
 namespace Vanrise.GenericData.Business
 {
-    public class GenericSummaryTransformationManager : Vanrise.Common.Business.SummaryTransformation.SummaryTransformationManager<dynamic, GenericSummaryItem, GenericSummaryBatch>
+    public class GenericSummaryTransformationManager<T> : Vanrise.Common.Business.SummaryTransformation.SummaryTransformationManager<dynamic, GenericSummaryItem, T>
+        where T : class, ISummaryBatch<GenericSummaryItem>
     {
         public int SummaryTransformationDefinitionId { get; set; }
         
@@ -30,18 +32,8 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        IGenericSummaryTransformer _genericSummaryTransformer;
         SummaryTransformationDefinition _summaryTransformationDefinition;
-        void LoadSummaryTransformerAndDefinition()
-        {
-            _genericSummaryTransformer = DynamicTypeGenerator.GetSummaryTransformer(this.SummaryTransformationDefinitionId, out _summaryTransformationDefinition);
-            if (_genericSummaryTransformer == null)
-                throw new NullReferenceException(String.Format("_genericSummaryTransformer {0}", this.SummaryTransformationDefinitionId));
-            if (_summaryTransformationDefinition == null)
-                throw new NullReferenceException(String.Format("_summaryTransformationDefinition {0}", this.SummaryTransformationDefinitionId));
-        }
-
-        SummaryTransformationDefinition SummaryTransformationDefinition
+        public SummaryTransformationDefinition SummaryTransformationDefinition
         {
             get
             {
@@ -51,6 +43,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        IGenericSummaryTransformer _genericSummaryTransformer;
         IGenericSummaryTransformer GenericSummaryTransformer
         {
             get
@@ -61,11 +54,37 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        void LoadSummaryTransformerAndDefinition()
+        {
+            _genericSummaryTransformer = DynamicTypeGenerator.GetSummaryTransformer(this.SummaryTransformationDefinitionId, out _summaryTransformationDefinition);
+            if (_genericSummaryTransformer == null)
+                throw new NullReferenceException(String.Format("_genericSummaryTransformer {0}", this.SummaryTransformationDefinitionId));
+            if (_summaryTransformationDefinition == null)
+                throw new NullReferenceException(String.Format("_summaryTransformationDefinition {0}", this.SummaryTransformationDefinitionId));
+        }
+
+        ISummaryRecordDataManager _summaryRecordDataManager;
+        ISummaryRecordDataManager SummaryRecordDataManager
+        {
+            get
+            {
+                if(_summaryRecordDataManager == null)
+                {
+                    GetSummaryRecordStorageDataManagerContext context = new GetSummaryRecordStorageDataManagerContext(this.SummaryTransformationDefinition);
+                    _summaryRecordDataManager = context.DataStore.Settings.GetSummaryDataRecordDataManager(context);
+                    if (_summaryRecordDataManager == null)
+                        throw new NullReferenceException("_summaryRecordDataManager");
+                }
+                return _summaryRecordDataManager;
+            }
+        }
+
         #endregion
 
         protected override IEnumerable<GenericSummaryItem> GetItemsFromDB(DateTime batchStart)
         {
-            throw new NotImplementedException();
+            IEnumerable<dynamic> dataRecords = this.SummaryRecordDataManager.GetExistingSummaryRecords(batchStart);
+            return GetSummaryItemsFromDataRecords(dataRecords);
         }
 
         protected override void GetRawItemBatchTimeRange(dynamic rawItem, out DateTime batchStart)
@@ -73,7 +92,7 @@ namespace Vanrise.GenericData.Business
             var batchRangeRetrieval = this.SummaryTransformationDefinition.BatchRangeRetrieval;
             if (batchRangeRetrieval == null)
                 throw new NullReferenceException("batchRangeRetrieval");
-            batchRangeRetrieval.GetRawItemBatchTimeRange(rawItem, this.SummaryTransformationDefinition.RawTimeFieldName, out batchStart);
+            batchRangeRetrieval.GetRawItemBatchTimeRange(rawItem, out batchStart);
         }
 
         protected override string GetSummaryItemKey(GenericSummaryItem summaryItem)
@@ -88,8 +107,8 @@ namespace Vanrise.GenericData.Business
 
         protected override void InsertItemsToDB(List<GenericSummaryItem> itemsToAdd)
         {
-            SetSummaryItemFieldsToDataRecord(itemsToAdd);
-            throw new NotImplementedException();
+            var dataRecords = GetDataRecordsFromSummaryItems(itemsToAdd);
+            this.SummaryRecordDataManager.InsertSummaryRecords(dataRecords);
         }
 
         protected override void SetSummaryItemGroupingFields(GenericSummaryItem summaryItem, dynamic rawItem)
@@ -99,8 +118,8 @@ namespace Vanrise.GenericData.Business
 
         protected override void UpdateItemsInDB(List<GenericSummaryItem> itemsToUpdate)
         {
-            SetSummaryItemFieldsToDataRecord(itemsToUpdate);
-            throw new NotImplementedException();
+            var dataRecords = GetDataRecordsFromSummaryItems(itemsToUpdate);
+            this.SummaryRecordDataManager.UpdateSummaryRecords(dataRecords);
         }
 
         protected override void UpdateSummaryItemFromRawItem(GenericSummaryItem summaryItem, dynamic rawItem)
@@ -129,15 +148,40 @@ namespace Vanrise.GenericData.Business
                 });
         }
 
-        void SetSummaryItemFieldsToDataRecord(IEnumerable<GenericSummaryItem> items)
+        public List<dynamic> GetDataRecordsFromSummaryItems(IEnumerable<GenericSummaryItem> summaryItems)
         {
-            if(items != null)
+            if (summaryItems != null)
             {
-                foreach(var itm in items)
+                List<dynamic> dataRecords = new List<dynamic>();
+                foreach (var itm in summaryItems)
                 {
                     this.GenericSummaryTransformer.SetSummaryItemFieldsToDataRecord(itm);
+                    dataRecords.Add(itm.DataRecord);
                 }
+                return dataRecords;
             }
+            else
+                return null;
+        }
+
+        public List<GenericSummaryItem> GetSummaryItemsFromDataRecords(IEnumerable<dynamic> dataRecords)
+        {
+            if (dataRecords != null)
+            {
+                List<GenericSummaryItem> genericSummaryItems = new List<GenericSummaryItem>();
+                foreach (var dr in dataRecords)
+                {
+                    var summaryItem = new GenericSummaryItem
+                    {
+                        DataRecord = dr
+                    };
+                    this.GenericSummaryTransformer.SetDataRecordFieldsToSummaryItem(summaryItem);
+                    genericSummaryItems.Add(summaryItem);
+                }
+                return genericSummaryItems;
+            }
+            else
+                return null;
         }
     }
 
@@ -157,7 +201,10 @@ namespace Vanrise.GenericData.Business
     {
         public static IGenericSummaryTransformer GetSummaryTransformer(int summaryTransformationDefinitionId, out SummaryTransformationDefinition summaryTransformationDefinition)
         {
-            summaryTransformationDefinition = null;
+            var transformationDefManager = new GenericSummaryTransformationDefinitionManager();
+            summaryTransformationDefinition = transformationDefManager.GetSummaryTransformationDefinition(summaryTransformationDefinitionId);
+            if (summaryTransformationDefinition == null)
+                throw new NullReferenceException(String.Format("summaryTransformationDefinition {0}", summaryTransformationDefinitionId));
 
             StringBuilder classDefinitionBuilder = new StringBuilder(@"
                 using System;                
@@ -181,12 +228,12 @@ namespace Vanrise.GenericData.Business
                             #SetGroupingFieldsImplementation#                            
                         }
 
-                        public void SetSummaryItemFieldsToDataRecord(GenericSummaryItem summaryItem)
+                        public void SetSummaryItemFieldsToDataRecord(Vanrise.GenericData.Entities.GenericSummaryItem summaryItem)
                         {
                             #SetSummaryItemFieldsToDataRecordImplementation#                            
                         }
 
-                        public void SetDataRecordFieldsToSummaryItem(GenericSummaryItem summaryItem)
+                        public void SetDataRecordFieldsToSummaryItem(Vanrise.GenericData.Entities.GenericSummaryItem summaryItem)
                         {
                             #SetDataRecordFieldsToSummaryItemImplementation#                            
                         }
@@ -248,7 +295,7 @@ namespace Vanrise.GenericData.Business
                 formatBuilder.Append("{" + columnIndex.ToString() + "}");
                 fldValuesBuilder.AppendFormat(", {0}.{1}", itemVariableName, getFieldName(fld));
             }
-            return String.Format(@"return String.Format(""{0}"", {1});", formatBuilder, fldValuesBuilder);
+            return String.Format(@"return String.Format(""{0}""{1});", formatBuilder, fldValuesBuilder);
         }
 
         private static string BuildSetGroupingFieldsImpl(SummaryTransformationDefinition summaryTransformationDefinition)
@@ -278,6 +325,19 @@ namespace Vanrise.GenericData.Business
                                     summaryItem.SummaryItemId = summaryItem.DataRecord.{0};
                                     summaryItem.BatchStart = summaryItem.DataRecord.{1};"
                , summaryTransformationDefinition.SummaryIdFieldName, summaryTransformationDefinition.SummaryBatchStartFieldName);
+        }
+    }
+
+    public class SummaryBatchTimeInterval : SummaryTransformationBatchRangeRetrieval
+    {
+        public string RawTimeFieldName { get; set; }
+
+        public int IntervalInMinutes { get; set; }
+
+        public override void GetRawItemBatchTimeRange(dynamic rawItem, out DateTime batchStart)
+        {
+            DateTime time = rawItem.AttemptTime;//[RawTimeFieldName];
+            batchStart = new DateTime(time.Year, time.Month, time.Day, time.Hour, ((int)(time.Minute / this.IntervalInMinutes)) * this.IntervalInMinutes, 0);
         }
     }
 }

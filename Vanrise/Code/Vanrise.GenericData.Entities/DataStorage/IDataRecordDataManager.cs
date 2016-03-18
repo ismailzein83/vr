@@ -13,10 +13,10 @@ namespace Vanrise.GenericData.Entities
 
     public interface ISummaryRecordDataManager
     {
-        void InsertSummaryRecords(List<dynamic> records);
+        void InsertSummaryRecords(IEnumerable<dynamic> records);
 
-        void UpdateSummaryRecords(List<dynamic> records);
+        void UpdateSummaryRecords(IEnumerable<dynamic> records);
 
-        List<dynamic> GetExistingSummaryRecords(DateTime batchStart, DateTime batchEnd);
+        IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart);
     }
 }

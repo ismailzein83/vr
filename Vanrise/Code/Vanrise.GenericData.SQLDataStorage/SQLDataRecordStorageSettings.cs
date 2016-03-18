@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         /// <summary>
         /// this property is needed only in case the current storage (SQL table) is used to store Summary data (Statistic/Billing)
         /// </summary>
-        public SQLDataRecordStorageSummarySettings SummarySettings { get; set; }
+        //public SQLDataRecordStorageSummarySettings SummarySettings { get; set; }
     }
 
     public class SQLDataRecordStorageColumn
@@ -30,8 +30,8 @@ namespace Vanrise.GenericData.SQLDataStorage
         public string ValueExpression { get; set; }
     }
 
-    public class SQLDataRecordStorageSummarySettings
-    {
-        public string IdColumnName { get; set; }
-    }
+    //public class SQLDataRecordStorageSummarySettings
+    //{
+    //    public string IdColumnName { get; set; }
+    //}
 }

@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             var sqlRecordStorageSettings = context.RecordStorage.Settings as SQLDataRecordStorageSettings;
             var existingRecordStorageSettings = context.ExistingRecordSettings as SQLDataRecordStorageSettings;
 
-            SQLRecordStorageDataManager dataManager = new SQLRecordStorageDataManager(sqlDataStoreSettings, sqlRecordStorageSettings);
+            SQLRecordStorageDataManager dataManager = new SQLRecordStorageDataManager(sqlDataStoreSettings, sqlRecordStorageSettings, context.RecordStorage);
 
             if (existingRecordStorageSettings == null)
                 dataManager.CreateSQLRecordStorageTable();
@@ -35,8 +35,6 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             var sqlDataRecordStorageSettings = context.DataRecordStorage.Settings as SQLDataRecordStorageSettings;
             if (sqlDataRecordStorageSettings == null)
-                throw new NullReferenceException("sqlDataRecordStorageSettings");
-            if (sqlDataRecordStorageSettings.SummarySettings == null)
                 return null;
             return new SQLRecordStorageDataManager(context.DataStore.Settings as SQLDataStoreSettings, 
                 context.DataRecordStorage.Settings as SQLDataRecordStorageSettings, 

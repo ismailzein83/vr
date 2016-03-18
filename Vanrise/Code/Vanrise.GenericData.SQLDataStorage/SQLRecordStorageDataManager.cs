@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -10,23 +11,18 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.SQLDataStorage
 {
-    internal class SQLRecordStorageDataManager : BaseSQLDataManager, IDataRecordDataManager, ISummaryRecordDataManager
+    public class SQLRecordStorageDataManager : BaseSQLDataManager, IDataRecordDataManager, ISummaryRecordDataManager
     {
         SQLDataStoreSettings _dataStoreSettings;
         SQLDataRecordStorageSettings _dataRecordStorageSettings;
         DataRecordStorage _dataRecordStorage;
         SummaryTransformationDefinition _summaryTransformationDefinition;
-
-        internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings)
+        
+        internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage)
             : base(dataStoreSettings.ConnectionString, false)
         {
             this._dataStoreSettings = dataStoreSettings;
             this._dataRecordStorageSettings = dataRecordStorageSettings;
-        }
-
-        internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage)
-            : this(dataStoreSettings, dataRecordStorageSettings)
-        {
             this._dataRecordStorage = dataRecordStorage;
         }
 
@@ -46,43 +42,52 @@ namespace Vanrise.GenericData.SQLDataStorage
             return base.InitializeStreamForBulkInsert();
         }
 
-        IBulkInsertWriter _bulkInsertWriter;
+        IDynamicManager _dynamicManager;
+        IDynamicManager DynamicManager
+        {
+            get
+            {
+                if (_dynamicManager == null)
+                {
+                    if (_dataRecordStorage == null)
+                        throw new NullReferenceException("_dataRecordStorage");
+                    DynamicTypeGenerator dynamicTypeGenerator = new DynamicTypeGenerator();
+                    _dynamicManager = dynamicTypeGenerator.GetDynamicManager(_dataRecordStorage, _dataRecordStorageSettings);
+                    if (_dynamicManager == null)
+                        throw new NullReferenceException("_dynamicManager");
+                }
+                return _dynamicManager;
+            }
+        }
 
         public void WriteRecordToStream(object record, object dbApplyStream)
         {
-            BuildBulkInsertWriter();
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            _bulkInsertWriter.WriteRecordToStream(record, streamForBulkInsert);
-        }
-
-        private void BuildBulkInsertWriter()
-        {
-            if (_bulkInsertWriter == null)
-            {
-                if (_dataRecordStorage == null)
-                    throw new NullReferenceException("_dataRecordStorage");
-                DynamicTypeGenerator dynamicTypeGenerator = new DynamicTypeGenerator();
-                _bulkInsertWriter = dynamicTypeGenerator.GetBulkInsertWriter(_dataRecordStorage.DataRecordStorageId, _dataRecordStorageSettings);
-            }
+            this.DynamicManager.WriteRecordToStream(record, streamForBulkInsert);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
-            string tableName = this._dataRecordStorageSettings.TableName;
-            if (!String.IsNullOrEmpty(this._dataRecordStorageSettings.TableSchema))
-                tableName = String.Format("{0}.{1}", this._dataRecordStorageSettings.TableSchema, this._dataRecordStorageSettings.TableName);
-            BuildBulkInsertWriter();
+            string tableName = GetTableName();
             return new StreamBulkInsertInfo
             {
                 TableName = tableName,
                 Stream = streamForBulkInsert,
-                ColumnNames = _bulkInsertWriter.ColumnNames,
+                ColumnNames = this.DynamicManager.ColumnNames,
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^',
             };
+        }
+
+        private string GetTableName()
+        {
+            string tableName = this._dataRecordStorageSettings.TableName;
+            if (!String.IsNullOrEmpty(this._dataRecordStorageSettings.TableSchema))
+                tableName = String.Format("{0}.{1}", this._dataRecordStorageSettings.TableSchema, this._dataRecordStorageSettings.TableName);
+            return tableName;
         }
 
         public void CreateSQLRecordStorageTable()
@@ -180,7 +185,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         #endregion
 
-        public void InsertSummaryRecords(List<dynamic> records)
+        public void InsertSummaryRecords(IEnumerable<dynamic> records)
         {
             var dbApplyStream = this.InitialiazeStreamForDBApply();
             foreach(var record in records)
@@ -191,55 +196,67 @@ namespace Vanrise.GenericData.SQLDataStorage
             this.ApplyStreamToDB(readyStream);
         }
 
-        public void UpdateSummaryRecords(List<dynamic> records)
+        public void UpdateSummaryRecords(IEnumerable<dynamic> records)
         {
-            throw new NotImplementedException();
+            StringBuilder queryBuilder = new StringBuilder(@"UPDATE existingRecord
+                                SET #COLUMNSUPDATE#
+                                FROM #TABLE# existingRecord JOIN @UpdatedRecords updatedRecord ON existingRecord.#IDCOLUMN# = updatedRecord.#IDCOLUMN#");
+            var idColumnMapping = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == _summaryTransformationDefinition.SummaryIdFieldName);
+            if (idColumnMapping == null)
+                throw new NullReferenceException(String.Format("idColumnMapping '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
+            if (idColumnMapping.ColumnName == null)
+                throw new NullReferenceException(String.Format("idColumnMapping.ColumnName '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
+
+            StringBuilder columnsUpdateBuilder = new StringBuilder();
+            foreach(var columnsMapping in _dataRecordStorageSettings.Columns)
+            {
+                if (columnsUpdateBuilder.Length > 0)
+                    columnsUpdateBuilder.Append(", ");
+                columnsUpdateBuilder.AppendLine(String.Format("{0} = updatedRecord.{0}", columnsMapping.ColumnName));
+            }
+
+            queryBuilder.Replace("#TABLE#", GetTableName());
+            queryBuilder.Replace("#IDCOLUMN#", idColumnMapping.ColumnName);
+            queryBuilder.Replace("#COLUMNSUPDATE#", columnsUpdateBuilder.ToString());
+
+            DataTable dt = this.DynamicManager.ConvertDataRecordsToTable(records);
+            ExecuteNonQueryText(queryBuilder.ToString(),
+                (cmd) =>
+                {
+                    SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
+                    prm.TypeName = String.Format("{0}Type", GetTableName());
+                    prm.Value = dt;
+                    cmd.Parameters.Add(prm);
+                });
         }
 
-        public List<dynamic> GetExistingSummaryRecords(DateTime batchStart, DateTime batchEnd)
+        public IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart)
         {
             var recortTypeManager = new DataRecordTypeManager();
             var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
             if (recordRuntimeType == null)
                 throw new NullReferenceException(String.Format("recordRuntimeType '{0}'", _dataRecordStorage.DataRecordTypeId));
-            StringBuilder queryBuilder = new StringBuilder(@"SELECT #COLUMNS# FROM #TABLE# WHERE #BATCHSTARTCOLUMN# >= @BatchStart AND #BATCHENDCOLUMN# < @BatchEnd");
-            StringBuilder columnsBuilder = new StringBuilder();
-            string batchStartColumnName = null;
-            string batchEndColumnName = null;
-            foreach(var columnSetting in _dataRecordStorageSettings.Columns)
-            {
-                if (columnsBuilder.Length > 0)
-                    columnsBuilder.Append(", ");
-                columnsBuilder.Append(columnSetting.ColumnName);
-                if (columnSetting.ValueExpression == _summaryTransformationDefinition.BatchStartFieldName)
-                    batchStartColumnName = columnSetting.ColumnName;
-                else if (columnSetting.ValueExpression == _summaryTransformationDefinition.BatchEndFieldName)
-                    batchEndColumnName = columnSetting.ColumnName;
-            }
-            if (batchStartColumnName == null)
-                throw new NullReferenceException(String.Format("batchStartColumnName '{0}'", _summaryTransformationDefinition.BatchStartFieldName));
-            if (batchEndColumnName == null)
-                throw new NullReferenceException(String.Format("batchEndColumnName '{0}'", _summaryTransformationDefinition.BatchEndFieldName));
-
-            queryBuilder.Replace("#COLUMNS#", columnsBuilder.ToString());
-            queryBuilder.Replace("#TABLE#", _dataRecordStorageSettings.TableName);
-
-            queryBuilder.Replace("#BATCHSTARTCOLUMN#", batchStartColumnName);
-            queryBuilder.Replace("#BATCHENDCOLUMN#", batchEndColumnName);
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT #COLUMNS# FROM #TABLE# WHERE #BATCHSTARTCOLUMN# = @BatchStart");
+           
+            var batchStartColumnMapping = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == _summaryTransformationDefinition.SummaryBatchStartFieldName);
+            if(batchStartColumnMapping == null)
+                throw new NullReferenceException(String.Format("batchStartColumnMapping '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
+            if (batchStartColumnMapping.ColumnName == null)
+                throw new NullReferenceException(String.Format("batchStartColumnMapping.ColumnName '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
+            
+            queryBuilder.Replace("#COLUMNS#", this.DynamicManager.ColumnNamesCommaDelimited);
+            queryBuilder.Replace("#TABLE#", GetTableName());
+            queryBuilder.Replace("#BATCHSTARTCOLUMN#", batchStartColumnMapping.ColumnName);
             return GetItemsText(queryBuilder.ToString(),
                 (reader) =>
                 {
                     dynamic item = Activator.CreateInstance(recordRuntimeType) as dynamic;
-                    foreach (var columnSetting in _dataRecordStorageSettings.Columns)
-                    {
-                        item[columnSetting.ValueExpression] = reader[columnSetting.ColumnName];
-                    }
+                    this.DynamicManager.FillDataRecordFromReader(item, reader);
                     return item;
                 },
                 (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart));
-                    cmd.Parameters.Add(new SqlParameter("@BatchEnd", batchEnd));
                 });
         }
     }
