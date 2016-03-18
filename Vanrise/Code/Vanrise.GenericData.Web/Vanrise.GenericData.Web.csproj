@@ -335,6 +335,9 @@
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\Templates\SummaryTransformationDefinitionGrid.html" />
+    <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />
@@ -350,6 +353,7 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\SummaryTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordStorageService.js" />
     <Content Include="VR_GenericData\Services\DataStoreService.js" />
@@ -365,6 +369,7 @@
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionCriteriaFieldService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericRuleService.js" />
+    <Content Include="VR_GenericData\Services\SummaryTransformationDefinitionService.js" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageManagementController.js" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditor.html" />
     <Content Include="VR_GenericData\Views\DataRecordStorage\DataRecordStorageEditorController.js" />
