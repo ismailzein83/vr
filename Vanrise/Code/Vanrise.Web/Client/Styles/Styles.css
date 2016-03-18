@@ -1798,6 +1798,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid{
 .vr-control-label {
     font-weight:bold;
     font-size:smaller;
+    white-space: nowrap;
 }
 
 .permmesion-background{
