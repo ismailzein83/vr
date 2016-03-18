@@ -289,7 +289,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             foreach (var existingZone in existingZones)
             {
-                DateTime? maxCodeEED = null;
+                DateTime? maxCodeEED = DateTime.MinValue;
                 bool hasCodes = false;
                 if (existingZone.ExistingCodes != null)
                 {

@@ -86,7 +86,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ImportedCodes = inputArgument.ImportedCodes,
                 ExistingCodes = inputArgument.ExistingCodes,
                 ExistingZones = existingZones,
-                DeletedCodesDate = inputArgument.DeletedCodesDate + splContext.CodeCloseDateOffset
+                DeletedCodesDate = inputArgument.DeletedCodesDate.Add(splContext.CodeCloseDateOffset)
             };
 
             PriceListCodeManager plCodeManager = new PriceListCodeManager();
