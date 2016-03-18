@@ -64,6 +64,7 @@
     <Compile Include="IGenericRuleDefinitionDataManager.cs" />
     <Compile Include="IDataStoreConfigDataManager.cs" />
     <Compile Include="IGenericRuleTypeConfigDataManager.cs" />
+    <Compile Include="ISummaryTransformationDefinitionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
