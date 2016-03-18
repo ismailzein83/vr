@@ -16,7 +16,7 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'GenericData','Generic Data','Generic Data',1,null,4,0)
+(301,'Generic Data','Generic Data','Generic Data',1,null,4,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -41,7 +41,7 @@ as (select * from (values
 (3002,'Generic Rule Definitions','Generic Rule Definition','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement',301,'VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions',null,null,null,0,2),
 (3003,'Data Transformation Definitions','Data Transformation Definition','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement',301,'VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions',null,null,null,0,3),
 (3004,'Data Stores','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement',301,'VR_GenericData/DataStore/GetFilteredDataStores',null,null,null,0,4),
-(3005,'Data Record Storages','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement',301,null,null,null,null,0,5),
+(3005,'Data Record Storages','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement',301,'VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages',null,null,null,0,5),
 (3006,'Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement',301,'VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions',null,null,null,0,6)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
@@ -58,6 +58,24 @@ set identity_insert [sec].[View] off;
 
 --[sec].[BusinessEntityModule]-------------301 to 400---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntityModule] on;
+;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(301,'Generic Data',2,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[ParentId],[BreakInheritance]))
+merge	[sec].[BusinessEntityModule] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
+when not matched by target then
+	insert([Id],[Name],[ParentId],[BreakInheritance])
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
+set identity_insert [sec].[BusinessEntityModule] off;
 
 --[sec].[BusinessEntity]-------------------601 to 900--------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
@@ -66,13 +84,13 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(601,'VR_GenericData_BusinessEntityDefinition','Business Entity Definitions',2,0,'["View","Add","Edit"]'),
-(602,'VR_GenericData_GenericRuleDefinition','Generic Rule Definition',2,0,'["View","Add","Edit"]'),
-(603,'VR_GenericData_DataTransformationDefinition','Data Transformation Definition',2,0,'["View","Add","Edit","Compile"]'),
-(604,'VR_GenericData_ExtensibleBEItem','Extensible BE Item',2,0,'["Add","Edit"]'),
-(605,'VR_GenericData_DataRecordType','Data Record Type',2,0,'["View","Add","Edit"]'),
-(606,'VR_GenericData_DataStore','Data Store',2,0,'["View","Add","Edit"]'),
-(607,'VR_GenericData_DataRecordStorage','Data Record Storage',2,0,'["View","Add","Edit"]')
+(601,'VR_GenericData_BusinessEntityDefinition','Business Entity Definitions',301,0,'["View","Add","Edit"]'),
+(602,'VR_GenericData_GenericRuleDefinition','Generic Rule Definition',301,0,'["View","Add","Edit"]'),
+(603,'VR_GenericData_DataTransformationDefinition','Data Transformation Definition',301,0,'["View","Add","Edit","Compile"]'),
+(604,'VR_GenericData_ExtensibleBEItem','Extensible BE Item',301,0,'["Add","Edit"]'),
+(605,'VR_GenericData_DataRecordType','Data Record Type',301,0,'["View","Add","Edit"]'),
+(606,'VR_GenericData_DataStore','Data Store',301,0,'["View","Add","Edit"]'),
+(607,'VR_GenericData_DataRecordStorage','Data Record Storage',301,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t

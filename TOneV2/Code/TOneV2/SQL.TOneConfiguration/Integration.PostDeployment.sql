@@ -60,7 +60,7 @@ set identity_insert [sec].[BusinessEntityModule] on;
 ;with cte_data([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(201,'Integration Module','Integration Module',1,0,'')
+(201,'Integration','Integration Module',1,0,'')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntityModule] as t

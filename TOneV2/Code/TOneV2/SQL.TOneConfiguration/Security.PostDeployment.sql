@@ -81,22 +81,23 @@ when not matched by target then
 ------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
+;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Root','Root',null,0,null),
-(2,'Administration Module','Administration Module',1,0,null)
+(1,'Root',null,0),
+(2,'Administration',1,0),
+(3,'Security',2,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions]))
+)c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
 when not matched by target then
-	insert([Id],[Name],[Title],[ParentId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[Title],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions]);
+	insert([Id],[Name],[ParentId],[BreakInheritance])
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
 
 --[sec].[BusinessEntity]------------------1 to 300----------------------------------------------------------
@@ -106,10 +107,10 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'VR_Sec_Users','Users',2,0,'["View", "Add", "Edit", "Reset Password"]'),
-(2,'VR_Sec_Group','Groups',2,0,'["View", "Add", "Edit"]'),
-(3,'VR_Sec_View','Ranking Page',2,0,'["Edit"]'),
-(4,'VR_Sec_Permission','Permission',2,0,'["View", "Edit", "Delete", "AllowInheritance"]')
+(1,'VR_Sec_Users','Users',3,0,'["View", "Add", "Edit", "Reset Password"]'),
+(2,'VR_Sec_Group','Groups',3,0,'["View", "Add", "Edit"]'),
+(3,'VR_Sec_View','Ranking Page',3,0,'["Edit"]'),
+(4,'VR_Sec_Permission','Permission',3,0,'["View", "Edit", "Delete", "AllowInheritance"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
