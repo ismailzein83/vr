@@ -6,10 +6,10 @@
 
     function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService, UtilsService, WhS_SupPL_SupplierPriceListService) {
         var carrierAccountDirectiveAPI;
-        var carrierAccountReadyPromiseDeferred;
+        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var currencyDirectiveAPI;
-        var currencyReadyPromiseDeferred;
+        var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
 
@@ -30,7 +30,7 @@
 
             $scope.upload = function () {
                 var input = {
-                    SupplierId: $scope.selectedSupplier.CarrierAccountId,
+                    SupplierId: carrierAccountDirectiveAPI.getSelectedIds(),
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     FileId: $scope.zoneList.fileId,
                     PriceListDate: $scope.priceListDate
@@ -44,12 +44,12 @@
 
             $scope.onCurrencyDirectiveReady = function (api) {
                 currencyDirectiveAPI = api;
+                currencyReadyPromiseDeferred.resolve();
             }
 
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSuppliers = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, undefined, setLoader, carrierAccountReadyPromiseDeferred);
+                carrierAccountReadyPromiseDeferred.resolve();
             }
 
             $scope.downloadTemplate = function () {
@@ -62,29 +62,64 @@
                 WhS_SupPL_SupplierPriceListService.previewSupplierPriceList(228);
             }       
 
+
             $scope.carrierAccountSelectItem = function (dataItem) {
 
                 var selectedCarrierAccountId = dataItem.CarrierAccountId;
 
                 if (selectedCarrierAccountId != undefined) {
-                    WhS_BE_CarrierAccountAPIService.GetCarrierAccount(selectedCarrierAccountId).then(function (response) {
+                    $scope.isLoadingCurrencySelector = true;
+                    WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrency(selectedCarrierAccountId).then(function (currencyId) {
 
-                        var setLoader = function (value) { $scope.isLoadingCurrencies = value };
-
-                        var payload = {
-                            selectedIds: response.CarrierAccountSettings != undefined ? response.CarrierAccountSettings.CurrencyId : undefined
-                        }
-
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencyDirectiveAPI, payload, setLoader, currencyReadyPromiseDeferred);
-                    })
+                       currencyDirectiveAPI.selectedCurrency(currencyId);
+                       $scope.isLoadingCurrencySelector = false;
+                   })
                 }
-
             }
         }
 
         function load() {
-     
+            $scope.isLoadingFilter = true;
+            loadAllControls();
         }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountSelector, loadCurrencySelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+               .finally(function () {
+                   $scope.isLoadingFilter = false;
+               });
+        }
+
+
+        function loadCarrierAccountSelector() {
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred)
+
+
+            })
+
+            return loadCarrierAccountPromiseDeferred.promise;
+
+        }
+
+
+
+        function loadCurrencySelector() {
+            var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            currencyReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, undefined, loadCurrencySelectorPromiseDeferred)
+
+            })
+            return loadCurrencySelectorPromiseDeferred.promise;
+
+        }
+
     }
 
     appControllers.controller('WhS_SupPL_SupplierPriceListController', SupplierPriceListController);

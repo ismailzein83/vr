@@ -33,7 +33,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has one or more same Code",(target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has one or more same code",(target as ImportedZone).ZoneName);
         }
 
     }

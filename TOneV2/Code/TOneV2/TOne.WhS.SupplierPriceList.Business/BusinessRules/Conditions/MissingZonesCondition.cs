@@ -22,15 +22,12 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedCode code = target as ImportedCode;
 
-            if (code == null)
-                return false;
-
             return !(string.IsNullOrEmpty(code.ZoneName));
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} has a Missing Zone",(target as ImportedCode).Code);
+            return string.Format("Code {0} has a missing zone",(target as ImportedCode).Code);
         }
 
     }

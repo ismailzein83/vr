@@ -38,7 +38,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             BusinessRule multipleCountriesInSameZoneRule = new BusinessRule()
             {
                 Condition = new MultipleCountryCondition(),
-                Action = new ExcludeItemAction()
+                Action = new StopExecutionAction()
             };
 
             BusinessRule missingZones = new BusinessRule()

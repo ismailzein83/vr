@@ -30,14 +30,13 @@ namespace TOne.WhS.SupplierPriceList.Business
                     return false;
             }
 
-
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
             CountryManager manager = new CountryManager();
-            return string.Format("Country {0} has one or more same Code on Different Zones", manager.GetCountryName((target as ImportedCountry).CountryId));
+            return string.Format("Country {0} has same code in a different zones", manager.GetCountryName((target as ImportedCountry).CountryId));
         }
 
     }

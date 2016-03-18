@@ -20,9 +20,6 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedCode code = target as ImportedCode;
 
-            if (code == null)
-                return false;
-
             return code.CodeGroup != null;
         }
 

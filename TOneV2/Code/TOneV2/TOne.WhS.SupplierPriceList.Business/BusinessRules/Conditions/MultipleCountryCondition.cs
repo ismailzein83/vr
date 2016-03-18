@@ -22,9 +22,6 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             ImportedZone zone = target as ImportedZone;
 
-            if (zone == null)
-                return false;
-
             bool result = true;
 
             if (zone.ImportedCodes != null)

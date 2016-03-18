@@ -65,13 +65,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             while (count < worksheet.Cells.Rows.Count)
             {
-                //if (string.IsNullOrWhiteSpace(worksheet.Cells[count, 0].StringValue) || string.IsNullOrWhiteSpace(worksheet.Cells[count, 1].StringValue) ||
-                //    string.IsNullOrWhiteSpace(worksheet.Cells[count, 2].StringValue) || string.IsNullOrWhiteSpace(worksheet.Cells[count, 3].StringValue))
-                //{
-                //    context.WriteTrackingMessage(LogEntryType.Warning, "Process has skipped Row {0} due to missing data", count);
-                //    count++;
-                //    continue;
-                //}
+                if (string.IsNullOrWhiteSpace(worksheet.Cells[count, 0].StringValue) && string.IsNullOrWhiteSpace(worksheet.Cells[count, 1].StringValue) &&
+                    string.IsNullOrWhiteSpace(worksheet.Cells[count, 2].StringValue) && string.IsNullOrWhiteSpace(worksheet.Cells[count, 3].StringValue) && string.IsNullOrWhiteSpace(worksheet.Cells[count, 4].StringValue))
+                {
+                    count++;
+                    continue;
+                }
 
 
                DateTime? bEDDateFromExcel = worksheet.Cells[count, 3].Value != null ? Convert.ToDateTime(worksheet.Cells[count, 3].StringValue) : DateTime.MinValue;
@@ -86,8 +85,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (minimumDate == DateTime.MinValue || bEDDateFromExcel < minimumDate)
                     minimumDate = (DateTime)bEDDateFromExcel;
                 
-                string zoneName = worksheet.Cells[count, 0].StringValue;
-                string[] codes = worksheet.Cells[count, 1].StringValue.Split(',');
+                string zoneName = worksheet.Cells[count, 0].StringValue.Trim();
+                string[] codes = worksheet.Cells[count, 1].StringValue.Trim().Split(',');
 
                 foreach (var codeValue in codes)
                 {

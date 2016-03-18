@@ -21,16 +21,15 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IRuleTarget target)
         {
             ImportedZone zone = target as ImportedZone;
+            if (zone.ImportedRates != null)
+                return !(zone.ImportedRates.Count() == 0);
 
-            if (zone.ImportedRates.Count() == 0)
-                return false;
-           
-            return true;
+            return false;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a Missing Rate",(target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has a missing rate",(target as ImportedZone).ZoneName);
         }
 
     }

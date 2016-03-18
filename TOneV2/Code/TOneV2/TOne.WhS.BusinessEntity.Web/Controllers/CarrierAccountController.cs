@@ -29,7 +29,19 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCarrierAccount(carrierAccountId);
         }
+
         
+
+        [HttpGet]
+        [Route("GetCarrierAccountCurrency")]
+        public int GetCarrierAccountCurrency(int carrierAccountId)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            var result= manager.GetCarrierAccount(carrierAccountId);
+            return result.CarrierAccountSettings.CurrencyId;
+        }
+
+
         [HttpGet]
         [Route("GetCarrierAccountInfo")]
         public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(string serializedFilter)

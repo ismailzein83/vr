@@ -22,6 +22,16 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public void SetExcluded()
         {
             this.IsExcluded = true;
+
+            foreach (ImportedCode code in this.ImportedCodes)
+            {
+                code.SetExcluded();
+            }
+
+            foreach (ImportedRate rate in ImportedRates)
+            {
+                rate.SetExcluded();
+            }
         }
 
         public object Key

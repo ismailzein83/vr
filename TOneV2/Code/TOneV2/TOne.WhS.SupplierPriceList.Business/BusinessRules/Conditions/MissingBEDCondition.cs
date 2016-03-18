@@ -29,21 +29,11 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
 
             return true;
-
-
-            //DateTime maximumImportedBED = (from importedCode in zone.ImportedCodes
-            //                               select importedCode.BED).Max();
-
-
-            //if (maximumImportedBED == DateTime.MinValue)
-            //    return false;
-
-            //return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a Missing BED",(target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has a missing BED",(target as ImportedZone).ZoneName);
         }
 
     }
