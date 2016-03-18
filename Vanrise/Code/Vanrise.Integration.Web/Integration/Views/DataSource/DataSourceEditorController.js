@@ -44,6 +44,15 @@ function newDataSourceEditorController($scope, VR_Integration_DataSourceAPIServi
             }
         };
 
+        $scope.hasSaveDataSourcePermession = function () {
+            if (isEditMode) {
+                return VR_Integration_DataSourceAPIService.HasUpdateDataSource();
+            }
+            else {
+                return VR_Integration_DataSourceAPIService.HasAddDataSource();
+            }
+        };
+
         $scope.scopeModel.close = function () {
             $scope.modalContext.closeModal()
         };

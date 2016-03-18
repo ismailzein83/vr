@@ -24,6 +24,10 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
             gridApi.loadGrid(getGridQuery());
         };
         $scope.AddNewDataSource = addNewDataSource;
+
+        $scope.hasAddDataSource = function () {
+            return  VR_Integration_DataSourceAPIService.HasAddDataSource();
+        }
     }
 
     function load() {

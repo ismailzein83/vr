@@ -71,11 +71,13 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             $scope.gridMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editDataSource
+                    clicked: editDataSource,
+                    haspermission:hasEditDataSourcePermission
                 },
                 {
                     name: "Delete",
-                    clicked: deleteDataSource
+                    clicked: deleteDataSource,
+                    haspermission: hasDeleteDataSourcePermission
                 }
             ];
         }
@@ -88,12 +90,20 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             VR_Integration_DataSourceService.editDataSource(dataSourceObj.DataSourceId, onDataSourceUpdated);
         }
 
+        function hasEditDataSourcePermission() {
+            return VR_Integration_DataSourceAPIService.HasUpdateDataSource();
+        }
+
         function deleteDataSource(dataSourceObj) {
             var onDataSourceDeleted = function (dataSource) {
                 gridAPI.itemDeleted(dataSource);
             }
 
             VR_Integration_DataSourceService.deleteDataSource($scope, dataSourceObj, onDataSourceDeleted);
+        }
+
+        function hasDeleteDataSourcePermission() {
+            return VR_Integration_DataSourceAPIService.HasDeleteDataSource();
         }
     }
 
