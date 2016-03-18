@@ -42,6 +42,8 @@ BusinessProcess.PostDeployment
 Queueing.PostDeployment
 [sec].[Module] 701 to 800
 [sec].[View] 7001 to 8000
+[sec].[BusinessEntityModule] 701 to 800
+[sec].[BusinessEntity] 1801 to 2100
 -------------------------------------------------
 
 Products
