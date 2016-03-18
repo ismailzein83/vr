@@ -7,7 +7,7 @@ using Vanrise.Entities.SummaryTransformation;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericSummaryItem : ISummaryItem
+    public class SummaryTransformationItem : ISummaryItem
     {
         public long SummaryItemId { get; set; }
 
@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.Entities
         public dynamic DataRecord { get; set; }
     }
 
-    //public class GenericSummaryBatch : ISummaryBatch<GenericSummaryItem>
+    //public class SummaryTransformationBatch : ISummaryBatch<GenericSummaryItem>
     //{
     //    public IEnumerable<GenericSummaryItem> Items { get; set; }
 
