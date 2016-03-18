@@ -143,6 +143,7 @@
     <Compile Include="Controllers\DataStoreController.cs" />
     <Compile Include="Controllers\DataStoreConfigController.cs" />
     <Compile Include="Controllers\GenericRuleTypeConfigController.cs" />
+    <Compile Include="Controllers\SummaryTransformationDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
