@@ -9,7 +9,7 @@
         //#region Global Variables
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
-        var menuItems = [];
+        var entityItems = [];
         var gridAPI;
         //#endregion
 
@@ -30,9 +30,9 @@
                     clicked: function () {
                             var onBusinessEntityModuleAdded = function (moduleObj) {
                                 var node = mapBusinessEntityModuleNode(moduleObj);
-                                onAddedModule(menuItems, node);
+                                onAddedModule(entityItems, node);
                                 treeAPI.createNode(node);
-                                treeAPI.refreshTree(menuItems);
+                                treeAPI.refreshTree(entityItems);
                             };
 
                             return VR_Sec_BusinessEntityModuleService.addBusinessEntityModule(onBusinessEntityModuleAdded, $scope.selectedMenuItem.EntityId);
@@ -87,7 +87,7 @@
                 var onBusinessEntityModuleUpdated = function (moduleObj) {
                     var node = mapBusinessEntityModuleNode(moduleObj);
                     treeAPI.createNode(node);
-                    onEditModule(menuItems, moduleObj, node);
+                    onEditModule(entityItems, moduleObj, node);
                 };
 
                 VR_Sec_BusinessEntityModuleService.updateBusinessEntityModule($scope.selectedMenuItem.EntityId, onBusinessEntityModuleUpdated);
@@ -95,12 +95,12 @@
 
             $scope.ranking = function () {
                 var onRankingSuccess = function (moduleObj) {
-                    menuItems.length = 0;
+                    entityItems.length = 0;
 
                     for (var i = 0; i < moduleObj.length; i++) {
-                        menuItems.push(moduleObj[i]);
+                        entityItems.push(moduleObj[i]);
                     }
-                    treeAPI.refreshTree(menuItems);
+                    treeAPI.refreshTree(entityItems);
                 };
 
                 VR_Sec_BusinessEntityDefinitionService.openBusinessEntityRankingEditor(onRankingSuccess);
@@ -125,9 +125,9 @@
         function loadTree() {
             var treeLoadDeferred = UtilsService.createPromiseDeferred();
 
-            loadMenuItems().then(function () {
+            loadEntityModules().then(function () {
                 treeReadyDeferred.promise.then(function () {
-                    treeAPI.refreshTree(menuItems);
+                    treeAPI.refreshTree(entityItems);
                     treeLoadDeferred.resolve();
                 });
             }).catch(function (error) {
@@ -136,12 +136,12 @@
 
             return treeLoadDeferred.promise;
 
-            function loadMenuItems() {
+            function loadEntityModules() {
                 return VR_Sec_BusinessEntityNodeAPIService.GetEntityModules().then(function (response) {
                     if (response) {
                         for (var i = 0; i < response.length; i++) {
                             response[i].isOpened = true;
-                            menuItems.push(response[i]);
+                            entityItems.push(response[i]);
                         }
                     }
                 });
@@ -157,36 +157,36 @@
             return node;
         }
 
-        function onEditModule(menuItems, changedObject, newNode) {
+        function onEditModule(entityItems, changedObject, newNode) {
 
-            if (menuItems != undefined) {
-                for (var i = 0; i < menuItems.length ; i++) {
-                    var menuItem = menuItems[i];
+            if (entityItems != undefined) {
+                for (var i = 0; i < entityItems.length ; i++) {
+                    var menuItem = entityItems[i];
                     if (menuItem.EntityId != changedObject.ModuleId)///module
                     {
                         onEditModule(menuItem.Children, changedObject, newNode);
                     } else if (menuItem.EntityId == changedObject.ModuleId)//View
                     {
-                        menuItems[i] = newNode;
+                        entityItems[i] = newNode;
                     }
                 }
             }
 
         }
 
-        function onAddedModule(menuItems, newNode) {
+        function onAddedModule(entityItems, newNode) {
 
-            if (menuItems != undefined) {
-                for (var i = 0; i < menuItems.length ; i++) {
-                    var menuItem = menuItems[i];
+            if (entityItems != undefined) {
+                for (var i = 0; i < entityItems.length ; i++) {
+                    var menuItem = entityItems[i];
                     if (menuItem.EntityId != $scope.selectedMenuItem.EntityId)///module
                     {
                         onAddedModule(menuItem.Children, newNode);
                     } else if (menuItem.EntityId == $scope.selectedMenuItem.EntityId || $scope.selectedMenuItem.isRoot)//View
                     {
-                        if (menuItems[i].Children == undefined)
-                            menuItems[i].Children = [];
-                        menuItems[i].Children.push(newNode);
+                        if (entityItems[i].Children == undefined)
+                            entityItems[i].Children = [];
+                        entityItems[i].Children.push(newNode);
                     }
                 }
             }
