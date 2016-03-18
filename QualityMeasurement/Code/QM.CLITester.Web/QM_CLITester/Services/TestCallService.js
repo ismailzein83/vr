@@ -68,6 +68,9 @@
                 case Qm_CliTester_CallTestResultEnum.NotAnswered.value:
                     return LabelColorsEnum.Warning.color;
                     break;
+                case Qm_CliTester_CallTestResultEnum.Fas.value:
+                    return LabelColorsEnum.Processed.color;
+                    break;
                 default:
                     return undefined;
             }

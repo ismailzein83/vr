@@ -64,8 +64,8 @@ namespace QM.BusinessEntity.Business
             }
 
             Func<Zone, bool> filterExpression = (prod) =>
-                (((prod.BeginEffectiveDate <= DateTime.Now)))
-                && ((!prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > DateTime.Now)));
+                ((prod.BeginEffectiveDate <= DateTime.Now)
+                && (!prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > DateTime.Now)) &&(!prod.Settings.IsOffline));
 
             return zones.MapRecords(ZoneInfoMapper, filterExpression);
         }
@@ -127,8 +127,11 @@ namespace QM.BusinessEntity.Business
 
         public Zone GetZonebySourceId(string sourceZoneId)
         {
-            IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
-            return dataManager.GetZoneBySourceId(sourceZoneId);
+            Dictionary<long, Zone> zones = GetCachedZones();
+
+            Func<Zone, bool> filterExpression = (x) =>
+                (sourceZoneId == null || sourceZoneId == x.SourceId);
+            return zones.FindRecord(filterExpression);
         }
 
         #region Private Members
@@ -183,7 +186,7 @@ namespace QM.BusinessEntity.Business
             int countryId = zone.CountryId;
             var country = manager.GetCountry(countryId);
             zoneDetail.CountryName = (country != null) ? country.Name : "";
-
+            zoneDetail.IsOfflineDescription = zone.Settings.IsOffline ? "Offline" : "Online";
 
             return zoneDetail;
         }

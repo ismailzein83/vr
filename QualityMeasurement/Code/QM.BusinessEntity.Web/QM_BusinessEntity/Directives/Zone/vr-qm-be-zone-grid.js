@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrQmBeZoneGrid", ["UtilsService", "VRNotificationService", "QM_BE_ZoneAPIService",
-function (UtilsService, VRNotificationService, QM_BE_ZoneAPIService) {
+app.directive("vrQmBeZoneGrid", ["UtilsService", "VRNotificationService", "QM_BE_ZoneAPIService", "Qm_BE_ZoneService",
+function (UtilsService, VRNotificationService, QM_BE_ZoneAPIService, Qm_BE_ZoneService) {
 
     var directiveDefinitionObject = {
 
@@ -63,6 +63,9 @@ function (UtilsService, VRNotificationService, QM_BE_ZoneAPIService) {
             };
         }
 
+        $scope.getIsOfflineColor = function (dataItem) {
+            return Qm_BE_ZoneService.getIsOfflineColor(dataItem.Entity.Settings.IsOffline);
+        };
     }
 
     return directiveDefinitionObject;

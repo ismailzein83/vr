@@ -2,11 +2,12 @@
 
     'use strict';
 
-    ZoneService.$inject = ['VRCommon_CountryService'];
+    ZoneService.$inject = ['LabelColorsEnum', 'VRCommon_CountryService'];
 
-    function ZoneService(VRCommon_CountryService) {
+    function ZoneService(LabelColorsEnum, VRCommon_CountryService) {
         return {
-            registerDrillDownToCountry: registerDrillDownToCountry
+            registerDrillDownToCountry: registerDrillDownToCountry,
+            getIsOfflineColor: getIsOfflineColor
         };
 
         function registerDrillDownToCountry() {
@@ -25,7 +26,19 @@
 
             VRCommon_CountryService.addDrillDownDefinition(drillDownDefinition);
         }
+
+        function getIsOfflineColor(value) {
+            switch (value) {
+                case false:
+                    return LabelColorsEnum.Success.color;
+                case true:
+                    return LabelColorsEnum.Error.color;
+                default:
+                    return undefined;
+            }
+        }
     }
+
     appControllers.service('Qm_BE_ZoneService', ZoneService);
 
 })(appControllers);

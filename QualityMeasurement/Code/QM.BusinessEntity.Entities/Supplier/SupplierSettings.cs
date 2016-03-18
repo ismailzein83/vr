@@ -32,4 +32,16 @@ namespace QM.BusinessEntity.Entities
 
         public string[] SampleValues { get; set; }
     }
+
+    public abstract class ExtendedSupplierSettingBehavior
+    {
+        public abstract void ApplyExtendedSettings(IApplyExtendedSupplierSettingsContext context);
+    }
+
+    public interface IApplyExtendedSupplierSettingsContext
+    {
+        Zone Zone { get; }
+
+        List<string> ZoneCodes { get; }
+    }
 }

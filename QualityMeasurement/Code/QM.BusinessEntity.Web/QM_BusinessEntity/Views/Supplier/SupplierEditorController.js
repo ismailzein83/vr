@@ -86,12 +86,15 @@
             }
 
             var j = 0;
-            angular.forEach(promises, function (promise) {
-                promise.then(function () {
-                    $scope.directiveTabs[j].directiveAPI.load(supplierEntity.Settings.ExtendedSettings[j]);
-                    j++;
+            if (supplierEntity != undefined && supplierEntity.Settings != undefined) {
+                angular.forEach(promises, function(promise) {
+                    promise.then(function() {
+                        $scope.directiveTabs[j].directiveAPI.load(supplierEntity.Settings.ExtendedSettings[j]);
+                        j++;
+                    });
                 });
-            })
+            }
+
 
             $scope.isLoading = false;
         }

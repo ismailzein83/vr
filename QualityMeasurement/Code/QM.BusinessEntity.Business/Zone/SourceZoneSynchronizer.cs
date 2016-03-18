@@ -56,7 +56,6 @@ namespace QM.BusinessEntity.Business
 
         protected override void AddItems(List<Zone> itemsToAdd)
         {
-            ZoneManager zoneManager = new ZoneManager();
             foreach (var z in itemsToAdd)
             {
                 zoneManager.AddZoneFromeSource(z, GetZoneCodes(z));
@@ -65,7 +64,6 @@ namespace QM.BusinessEntity.Business
 
         protected override void UpdateItems(List<Zone> itemsToUpdate)
         {
-             ZoneManager zoneManager = new ZoneManager();
              foreach (var z in itemsToUpdate)
             {
                 zoneManager.UpdateZoneFromeSource(z, GetZoneCodes(z));
@@ -117,7 +115,6 @@ namespace QM.BusinessEntity.Business
 
         protected override Dictionary<string, long> GetExistingItemIds(IEnumerable<string> sourceItemIds)
         {
-            ZoneManager zonemanager = new ZoneManager();
             return zoneManager.GetExistingItemIds(sourceItemIds);
         }
     }

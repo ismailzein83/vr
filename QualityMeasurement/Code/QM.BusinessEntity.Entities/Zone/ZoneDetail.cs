@@ -7,5 +7,7 @@ namespace QM.BusinessEntity.Entities
 
         public string CountryName { get; set; }
 
+        public string IsOfflineDescription { get; set; }
+
     }
 }

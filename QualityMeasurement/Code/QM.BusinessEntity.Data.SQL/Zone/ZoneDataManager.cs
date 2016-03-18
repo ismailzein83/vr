@@ -35,26 +35,35 @@ namespace QM.BusinessEntity.Data.SQL
                 Name = reader["Name"] as string,
                 SourceId = reader["SourceZoneID"] as string,
                 CountryId = (int)reader["CountryID"],
-                BeginEffectiveDate = (DateTime)reader["BED"],
-                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED")
+                BeginEffectiveDate = (reader["BED"] as string) == null ? default(DateTime) : (DateTime)reader["BED"],
+                EndEffectiveDate = GetReaderValue<DateTime?>(reader, "EED"),
+                Settings = Vanrise.Common.Serializer.Deserialize<ZoneSettings>(reader["Settings"] as string),
+                IsFromTestingConnectorZone = GetReaderValue<bool>(reader, "IsFromTestingConnectorZone")
             };
             return Zone;
         }
 
         public List<Zone> GetZones()
         {
-            return GetItemsSP("[QM_BE].[sp_Zone_GetAll]", ZoneMapper);
+                return GetItemsSP("[QM_BE].[sp_Zone_GetAll]", ZoneMapper);
         }
 
         public void InsertZoneFromSource(Zone zone)
         {
-            ExecuteNonQuerySP("[QM_BE].[sp_Zone_InsertFromSource]", zone.ZoneId, zone.Name, zone.SourceId , zone.CountryId , ToDBNullIfDefault(zone.BeginEffectiveDate));
+            object settings = null;
+            if (zone.Settings != null)
+                settings = Vanrise.Common.Serializer.Serialize(zone.Settings);
+            
+            ExecuteNonQuerySP("[QM_BE].[sp_Zone_InsertFromSource]", zone.ZoneId, zone.Name, zone.SourceId, zone.CountryId, ToDBNullIfDefault(zone.BeginEffectiveDate), settings, zone.IsFromTestingConnectorZone);
         }
 
         public void UpdateZoneFromSource(Zone zone)
         {
+            object settings = null;
+            if (zone.Settings != null)
+                settings = Vanrise.Common.Serializer.Serialize(zone.Settings);
 
-            ExecuteNonQuerySP("[QM_BE].[sp_Zone_UpdateFromSource]", zone.ZoneId, zone.Name);
+            ExecuteNonQuerySP("[QM_BE].[sp_Zone_UpdateFromSource]", zone.ZoneId, zone.Name, zone.SourceId, zone.CountryId, ToDBNullIfDefault(zone.BeginEffectiveDate), settings, zone.IsFromTestingConnectorZone);
         }
 
         public bool AreZonesUpdated(ref object updateHandle)

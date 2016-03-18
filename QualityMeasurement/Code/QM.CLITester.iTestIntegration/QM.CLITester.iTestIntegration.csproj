@@ -69,6 +69,8 @@
     <Compile Include="CLITesterConnector.cs" />
     <Compile Include="CountryITestReader.cs" />
     <Compile Include="InitiateTestInformation.cs" />
+    <Compile Include="ITestExtendedSupplierSetting.cs" />
+    <Compile Include="ITestExtendedSupplierSettingBehavior.cs" />
     <Compile Include="ITestExtendedZoneSetting.cs" />
     <Compile Include="ITestZone.cs" />
     <Compile Include="ProfileExtensionSettings.cs" />

@@ -53,8 +53,11 @@ namespace QM.CLITester.Entities
         [Description("Failed")]
         Failed = 3,
 
-        [Description("Not Answered")]
-        NotAnswered = 4
+        [Description("Call Failure")]
+        NotAnswered = 4,
+
+        [Description("FAS")]
+        Fas = 5
     }
 
     public interface IGetTestProgressContext
