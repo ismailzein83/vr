@@ -92,10 +92,10 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(10001,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',1001,'QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,2),
-(10002,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',1001,'QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,0,3),
-(10003,'Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',2,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,4),
-(10004,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',1001,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,5),
+(10001,'Profile','Profile','#/view/QM_CLITester/Views/Profile/ProfileManagement',1001,'QM_CLITester/Profile/GetFilteredProfiles',null,null,null,0,10),
+(10002,'Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test',1001,'QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,0,11),
+(10004,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',1001,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,12),
+(10003,'Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',1001,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,12),
 (10005,'Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement',101,'QM_BE/Zone/GetFilteredZones',null,null,null,0,20),
 (10006,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',101,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,21),
 (10007,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1003,null,null,null,null,0,1),
