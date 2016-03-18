@@ -150,10 +150,13 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
             function defineMenuActions() {
                 $scope.gridMenuActions = [{
                     name: "Edit",
-                    clicked: editExecutionFlow
+                    clicked: editExecutionFlow,
+                    haspermission: hasEditExecutionFlowPermission
                 }];
             }
-
+            function hasEditExecutionFlowPermission() {
+                return VR_Queueing_ExecutionFlowAPIService.HasUpdateExecutionFlow();
+            }
             function editExecutionFlow(executionFlowObj) {
                 var onExecutionFlowUpdated = function (executionFlowObj) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(executionFlowObj);

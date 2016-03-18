@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    ExecutionFlowController.$inject = ['$scope', 'VR_Queueing_ExecutionFlowService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    ExecutionFlowController.$inject = ['$scope', 'VR_Queueing_ExecutionFlowService', 'VR_Queueing_ExecutionFlowAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function ExecutionFlowController($scope, VR_Queueing_ExecutionFlowService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function ExecutionFlowController($scope, VR_Queueing_ExecutionFlowService, VR_Queueing_ExecutionFlowAPIService , UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var gridApi;
         
@@ -42,6 +42,9 @@
                 };
                 VR_Queueing_ExecutionFlowService.addExecutionFlow(onExecutionFlowAdded);
             };
+            $scope.hasAddExecutionFlow = function () {
+                return VR_Queueing_ExecutionFlowAPIService.HasAddExecutionFlow();
+            }
         }
 
         function load() {

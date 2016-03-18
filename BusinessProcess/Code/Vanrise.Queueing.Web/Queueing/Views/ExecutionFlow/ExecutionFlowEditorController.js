@@ -43,7 +43,14 @@
                     return insertExecutionFlow();
                 }
             };
-
+            $scope.hasSaveExecutionFlowPermission = function () {
+                if (isEditMode) {
+                    return VR_Queueing_ExecutionFlowAPIService.HasUpdateExecutionFlow();
+                }
+                else {
+                    return VR_Queueing_ExecutionFlowAPIService.HasAddExecutionFlow();
+                }
+            };
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
