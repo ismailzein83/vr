@@ -43,7 +43,7 @@
                 }
             };
 
-            $scope.haseSaveExecutionFlowDefinitionPermession = function () {
+            $scope.hasSaveExecutionFlowDefinitionPermession = function () {
                 if (isEditMode) {
                     return VR_Queueing_ExecutionFlowDefinitionAPIService.HasUpdateExecutionFlowDefinition();
                 }
