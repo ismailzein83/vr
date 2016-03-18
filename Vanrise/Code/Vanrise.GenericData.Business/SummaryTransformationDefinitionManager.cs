@@ -7,7 +7,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
-    public class GenericSummaryTransformationDefinitionManager
+    public class SummaryTransformationDefinitionManager
     {
         public SummaryTransformationDefinition GetSummaryTransformationDefinition(int summaryTransformationDefinitionId)
         {

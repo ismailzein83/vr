@@ -201,7 +201,7 @@ namespace Vanrise.GenericData.Business
     {
         public static IGenericSummaryTransformer GetSummaryTransformer(int summaryTransformationDefinitionId, out SummaryTransformationDefinition summaryTransformationDefinition)
         {
-            var transformationDefManager = new GenericSummaryTransformationDefinitionManager();
+            var transformationDefManager = new SummaryTransformationDefinitionManager();
             summaryTransformationDefinition = transformationDefManager.GetSummaryTransformationDefinition(summaryTransformationDefinitionId);
             if (summaryTransformationDefinition == null)
                 throw new NullReferenceException(String.Format("summaryTransformationDefinition {0}", summaryTransformationDefinitionId));
