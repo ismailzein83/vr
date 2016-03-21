@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Data
 {
-    public class ISummaryTransformationDefinitionDataManager
+    public interface ISummaryTransformationDefinitionDataManager : IDataManager
     {
+
+        List<SummaryTransformationDefinition> GetSummaryTransformationDefinitions();
+
+        bool AreSummaryTransformationDefinitionsUpdated(ref object updateHandle);
+
+        bool UpdateSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition);
+
+        bool AddSummaryTransformationDefinition(SummaryTransformationDefinition summaryTransformationDefinition, out int summaryTransformationDefinitionId);
+
     }
 }
+
