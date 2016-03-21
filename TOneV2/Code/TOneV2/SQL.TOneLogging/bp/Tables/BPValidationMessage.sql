@@ -1,4 +1,4 @@
-﻿CREATE TABLE [bp].[ValidationMessage] (
+﻿CREATE TABLE [bp].[BPValidationMessage] (
     [ID]                BIGINT         IDENTITY (1, 1) NOT NULL,
     [ProcessInstanceID] BIGINT         NOT NULL,
     [ParentProcessID]   BIGINT         NULL,
@@ -8,6 +8,4 @@
     [Message]           NVARCHAR (MAX) NULL,
     CONSTRAINT [PK_ValidationMessage] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
-
-
 

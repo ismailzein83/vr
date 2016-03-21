@@ -14,10 +14,10 @@ namespace TestRuntime.Tasks
         {
             var runtimeServices = new List<RuntimeService>();
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(bpService);
+            runtimeServices.Add(bpService);
 
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(schedulerService);
+            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(schedulerService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
