@@ -1,0 +1,31 @@
+﻿<div ng-hide="filterSectionCollapsed">
+    <vr-row removeline>
+        <vr-columns width="large">
+            <vr-select label="Severity" ismultipleselection hideselectedvaluessection="true" datatextfield="description" datavaluefield="value"
+                       datasource="::actionSeverity" selectedvalues="selectedActionSeverity"></vr-select>
+        </vr-columns>
+    </vr-row>
+</div>
+
+<vr-row removeline>
+    <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+        <div transclude-to="buttons">
+            <vr-button type="Search" data-onclick="searchClicked"></vr-button>
+        </div>
+    </vr-actionbar>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="bpValidationMessages" dataretrievalfunction="dataRetrievalFunction"
+                     on-ready="onGridReady"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     idfield="Entity.ValidationMessageId">
+            <vr-datagridcolumn headertext="'ID'" field="'Entity.ValidationMessageId'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Target Key'" field="'Entity.TargetKey'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Target Type'" field="'Entity.TargetType'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="5" getcolor="getSeverityColor"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

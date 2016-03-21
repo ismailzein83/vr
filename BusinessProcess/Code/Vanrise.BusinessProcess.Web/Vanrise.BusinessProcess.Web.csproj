@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BPValidationMessageController.cs" />
     <Compile Include="Controllers\BPTaskTypeController.cs" />
     <Compile Include="Controllers\BPTaskController.cs" />
     <Compile Include="Controllers\BPInstanceTrackingController.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BusinessProcess\Constants\BPActionSeverityEnum.js" />
     <Content Include="BusinessProcess\Constants\BPTaskStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\BPInstanceStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
@@ -188,16 +190,22 @@
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceTrackingHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPValidationMessage\bp-validation-message-history-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPValidationMessage\bp-validation-message-monitor-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPValidationMessage\Templates\BPValidationMessageHistoryGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPValidationMessage\Templates\BPValidationMessageMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-monitor-grid.js" />
     <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\BPValidationMessageAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskTypeAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskAPIService.js" />
     <Content Include="BusinessProcess\Services\BPInstanceService.js" />
     <Content Include="BusinessProcess\Services\BPDefinitionService.js" />
     <Content Include="BusinessProcess\Services\BPSchedulerTaskService.js" />
+    <Content Include="BusinessProcess\Services\BPValidationMessageService.js" />
     <Content Include="BusinessProcess\Services\BPTaskService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessService.js" />

@@ -2,10 +2,15 @@
 {
     public class BPBusinessRuleAction
     {
-        public int BusinessRuleActionId { get; set; }
-               
-        public string Description { get; set; }
+        public int BPBusinessRuleActionId { get; set; }
 
+        public int BPBusinessRuleDefinitionId { get; set; }
+
+        public BPBusinessRuleActionSettings Settings { get; set; }
+    }
+
+    public class BPBusinessRuleActionSettings
+    {
         public BusinessRuleAction Action { get; set; }
     }
 }

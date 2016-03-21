@@ -1,0 +1,13 @@
+﻿<div vr-loader="isLoading">
+    <vr-datagrid datasource="bpValidationMessages" loadmoredata="loadMoreData"
+                 on-ready="onGridReady"
+                 pagingtype="'PagingOnScroll'"
+                 menuactions="gridMenuActions"
+                 idfield="Entity.ValidationMessageId">
+        <vr-datagridcolumn headertext="'ID'" field="'Entity.ValidationMessageId'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Target Key'" field="'Entity.TargetKey'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Target Type'" field="'Entity.TargetType'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="5" getcolor="getSeverityColor" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+    </vr-datagrid>
+</div>

@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BPDataManagerFactory.cs" />
+    <Compile Include="IBPBusinessRuleActionDataManager.cs" />
+    <Compile Include="IBPBusinessRuleActionTypeDataManager.cs" />
     <Compile Include="IBPDataManager.cs" />
     <Compile Include="IBPEventDataManager.cs" />
     <Compile Include="IBPInstanceDataManager.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="IBPTaskTypeDataManager.cs" />
     <Compile Include="IBPTaskDataManager.cs" />
     <Compile Include="IBPTrackingDataManager.cs" />
+    <Compile Include="IBPBusinessRuleDefinitionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IBPValidationMessageDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

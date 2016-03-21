@@ -13,6 +13,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
     {
         readonly string[] _columns = { "ProcessInstanceID", "ParentProcessID", "TrackingMessage", "Severity", "EventTime" };
 
+        private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
         public BPTrackingDataManager()
             : base(GetConnectionStringName("BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString"))
         {
@@ -23,6 +24,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         static BPTrackingDataManager()
         {
             CreateSchemaTable();
+            _mapper.Add("SeverityDescription", "Severity");
         }
 
         static DataTable s_trackingMessagesSchemaTable;
@@ -46,11 +48,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
             WriteTrackingMessagesToDB(new List<BPTrackingMessage> { trackingMessage });
         }
 
-        public void InsertValidationMessages(IEnumerable<ValidationMessage> messages)
+        public void InsertValidationMessages(IEnumerable<BPValidationMessage> messages)
         {
             object dbApplyStream = InitialiazeStreamForDBApply();
 
-            foreach (ValidationMessage msg in messages)
+            foreach (BPValidationMessage msg in messages)
             {
                 WriteRecordToStream(msg, dbApplyStream);
             }
@@ -78,7 +80,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
-        public BigResult<BPTrackingMessage> GetFilteredTrackings(DataRetrievalInput<BPTrackingQuery> input)
+        public BigResult<BPTrackingMessage> GetFilteredTrackings(DataRetrievalInput<TrackingQuery> input)
         {
             int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?)(input.ToRow ?? 0) - (input.FromRow ?? 0) + 1 : null;
 
@@ -95,19 +97,17 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public BigResult<BPTrackingMessageDetail> GetFilteredBPInstanceTracking(DataRetrievalInput<BPTrackingQuery> input)
         {
-            int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?)(input.ToRow ?? 0) - (input.FromRow ?? 0) + 1 : null;
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
 
-            return new BigResult<BPTrackingMessageDetail>()
+            return RetrieveData(input, (tempTableName) =>
             {
-                Data = GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingDetailMapper, input.Query.ProcessInstanceId, input.Query.FromTrackingId,
-                input.Query.Message,
-                input.Query.Severities == null
-                    ? null
-                    : string.Join(",", input.Query.Severities.Select(n => ((int)n).ToString()).ToArray()),
-                top)
-            };
+                ExecuteNonQuerySP("bp.sp_BPTrackings_CreateTempForFiltered", tempTableName, input.Query.ProcessInstanceId, input.Query.Message,
+                    input.Query.Severities == null ? null : string.Join(",", input.Query.Severities.Select(n => (int)n).ToArray()));
+
+            }, BPTrackingDetailMapper, _mapper);
         }
-        public List<BPTrackingMessage> GetTrackingsFrom(BPTrackingQuery input)
+        public List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input)
         {
             return GetItemsSP("bp.sp_BPTrackings_GetFromInstanceId", BPTrackingMapper, input.ProcessInstanceId, input.FromTrackingId);
         }
@@ -182,7 +182,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return base.InitializeStreamForBulkInsert();
         }
 
-        private void WriteRecordToStream(ValidationMessage record, object dbApplyStream)
+        private void WriteRecordToStream(BPValidationMessage record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",

@@ -135,14 +135,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
 
         [HttpPost]
-        public Object GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<BPTrackingQuery> input)
+        public Object GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input)
         {
             BPClient manager = new BPClient();
             return GetWebResponse(input, manager.GetFilteredTrackings(input));
         }
 
         [HttpPost]
-        public GetTrackingsFromOutput GetTrackingsFrom(BPTrackingQuery input)
+        public GetTrackingsFromOutput GetTrackingsFrom(TrackingQuery input)
         {
             BPClient manager = new BPClient();
 

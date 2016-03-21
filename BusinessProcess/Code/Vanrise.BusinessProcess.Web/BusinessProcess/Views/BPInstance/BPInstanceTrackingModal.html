@@ -26,8 +26,6 @@
             </vr-row>
 
             <vr-tabs>
-                <vr-tab header="'Not Used'" ng-if="false">
-                </vr-tab>
                 <vr-tab header="'Live Progress'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
@@ -54,6 +52,22 @@
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <businessprocess-bp-task-monitor-grid on-ready="onTaskMonitorGridReady"></businessprocess-bp-task-monitor-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
+                <vr-tab header="'Rules Progress'">
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <businessprocess-bp-validation-message-monitor-grid on-ready="onValidationMessageMonitorGridReady"></businessprocess-bp-validation-message-monitor-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
+                <vr-tab header="'Rules Search'">
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <businessprocess-bp-validation-message-history on-ready="onValidationMessageHistoryGridReady"></businessprocess-bp-validation-message-history>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

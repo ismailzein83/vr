@@ -64,6 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPBusinessRuleActionDataManager.cs" />
+    <Compile Include="BPBusinessRuleActionTypeDataManager.cs" />
     <Compile Include="BPDataManager.cs" />
     <Compile Include="BPTaskTypeDataManager.cs" />
     <Compile Include="BPTaskDataManager.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="BPInstanceDataManager.cs" />
     <Compile Include="BPDefinitionDataManager.cs" />
     <Compile Include="BPTrackingDataManager.cs" />
+    <Compile Include="BPBusinessRuleDefinitionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BPValidationMessageDataManager.cs" />
   </ItemGroup>

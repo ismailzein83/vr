@@ -14,6 +14,8 @@
         var instanceTrackingHistoryGridAPI;
         var instanceTrackingMonitorGridAPI;
         var taskTrackingMonitorGridAPI;
+        var validationMessageMonitorGridAPI;
+        var validationMessageHistoryGridAPI;
 
         var bpInstance;
         var job;
@@ -46,12 +48,25 @@
                 taskTrackingMonitorGridAPI.loadGrid(filter);
             }
 
+            $scope.onValidationMessageMonitorGridReady = function (api) {
+                validationMessageMonitorGridAPI = api;
+                getFilterObject();
+                validationMessageMonitorGridAPI.loadGrid(filter);
+            }
+
+            $scope.onValidationMessageHistoryGridReady = function (api) {
+                validationMessageHistoryGridAPI = api;
+                getFilterObject();
+                validationMessageHistoryGridAPI.loadGrid(filter);
+            }
+
             $scope.modalContext.onModalHide = function () {
                 instanceTrackingMonitorGridAPI.clearTimer();
                 if ($scope.process.HasChildProcesses) {
                     instanceMonitorGridAPI.clearTimer();
                 }
                 taskTrackingMonitorGridAPI.clearTimer();
+                validationMessageMonitorGridAPI.clearTimer();
                 if (job) {
                     VRTimerService.unregisterJob(job);
                 }

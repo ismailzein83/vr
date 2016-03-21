@@ -74,6 +74,7 @@
     <Compile Include="ParallelForEach.cs" />
     <Compile Include="SaveDefinitionObjectState.cs" />
     <Compile Include="SplitListIntoGroups.cs" />
+    <Compile Include="ExecuteRules.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="WriteTrackingMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class ValidationMessage
+    public class BPValidationMessage
     {
+        public long ValidationMessageId { get; set; }
         public long ProcessInstanceId { get; set; }
 
         public long? ParentProcessId { get; set; }

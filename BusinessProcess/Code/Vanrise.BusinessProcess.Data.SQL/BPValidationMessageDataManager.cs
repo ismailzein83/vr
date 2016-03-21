@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
 {
     public class BPValidationMessageDataManager : BaseSQLDataManager, IBPValidationMessageDataManager
     {
+        private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
+        static BPValidationMessageDataManager()
+        {
+            _mapper.Add("ValidationMessageId", "ID");
+            _mapper.Add("SeverityDescription", "Severity");
+        }
+
         readonly string[] _columns = { "ProcessInstanceID", "ParentProcessID", "TargetKey", "TargetType", "Severity", "Message" };
 
         public BPValidationMessageDataManager()
@@ -17,11 +25,43 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
         }
 
-        public void Insert(IEnumerable<Entities.ValidationMessage> messages)
+        public List<BPValidationMessage> GetBeforeId(BPValidationMessageBeforeIdInput input)
+        {
+            return GetItemsSP("[bp].[sp_BPValidationMessage_GetBeforeID]", BPValidationMessageMapper, input.LessThanID, input.NbOfRows, input.BPInstanceID);
+        }
+
+        public List<BPValidationMessage> GetUpdated(BPValidationMessageUpdateInput input)
+        {
+            List<BPValidationMessage> bpValidationMessages = new List<BPValidationMessage>();
+
+            ExecuteReaderSP("[bp].[sp_BPValidationMessage_GetUpdated]", (reader) =>
+            {
+                while (reader.Read())
+                    bpValidationMessages.Add(BPValidationMessageMapper(reader));
+            },
+               input.NbOfRows, ToDBNullIfDefault(input.GreaterThanID), input.BPInstanceID);
+
+            return bpValidationMessages;
+        }
+
+        public Vanrise.Entities.BigResult<BPValidationMessageDetail> GetFilteredBPValidationMessage(Vanrise.Entities.DataRetrievalInput<BPValidationMessageQuery> input)
+        {
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
+
+            return RetrieveData(input, (tempTableName) =>
+            {
+                ExecuteNonQuerySP("bp.sp_BPValidationMessage_CreateTempForFiltered", tempTableName, input.Query.ProcessInstanceId,
+                    input.Query.Severities == null ? null : string.Join(",", input.Query.Severities.Select(n => (int)n).ToArray()));
+
+            }, BPValidationMessageDetailMapper, _mapper);
+        }
+
+        public void Insert(IEnumerable<Entities.BPValidationMessage> messages)
         {
             object dbApplyStream = InitialiazeStreamForDBApply();
 
-            foreach (ValidationMessage msg in messages)
+            foreach (BPValidationMessage msg in messages)
             {
                 WriteRecordToStream(msg, dbApplyStream);
             }
@@ -35,7 +75,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return base.InitializeStreamForBulkInsert();
         }
 
-        private void WriteRecordToStream(ValidationMessage record, object dbApplyStream)
+        private void WriteRecordToStream(BPValidationMessage record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}",
@@ -54,7 +94,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return new StreamBulkInsertInfo
             {
                 ColumnNames = _columns,
-                TableName = "bp.ValidationMessage",
+                TableName = "bp.BPValidationMessage",
                 Stream = streamForBulkInsert,
                 TabLock = false,
                 KeepIdentity = false,
@@ -65,6 +105,32 @@ namespace Vanrise.BusinessProcess.Data.SQL
         private void ApplyForDB(object preparedObject)
         {
             InsertBulkToTable(preparedObject as BaseBulkInsertInfo);
+        }
+
+        private BPValidationMessage BPValidationMessageMapper(IDataReader reader)
+        {
+            BPValidationMessage bpValidationMessage = new BPValidationMessage()
+            {
+                ValidationMessageId = (long)reader["ID"],
+                ProcessInstanceId = (long)reader["ProcessInstanceID"],
+                ParentProcessId = GetReaderValue<long?>(reader, "ParentProcessId"),
+                TargetKey = GetReaderValue<object>(reader, "TargetKey"),
+                TargetType = reader["TargetType"] as string,
+                Severity = (ActionSeverity)((int)reader["Severity"]),
+                Message = reader["Message"] as string
+            };
+
+            return bpValidationMessage;
+        }
+
+        private BPValidationMessageDetail BPValidationMessageDetailMapper(IDataReader reader)
+        {
+            BPValidationMessageDetail bpValidationMessageDetail = new BPValidationMessageDetail()
+            {
+                Entity = BPValidationMessageMapper(reader)
+            };
+
+            return bpValidationMessageDetail;
         }
     }
 }

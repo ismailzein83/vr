@@ -25,13 +25,13 @@ namespace Vanrise.BusinessProcess.WFActivities
             IEnumerable<IRuleTarget> importedDataToValidate = this.ImportedDataToValidate.Get(context);
             IEnumerable<BusinessRule> rules = this.BusinessRules.Get(context);
             List<BPViolatedRule> violatedBusinessRulesByTarget = new List<BPViolatedRule>(); ;
-            this.ExecuteValidation(rules, importedDataToValidate, ref violatedBusinessRulesByTarget, ref stopExecutionFlag);
+            this.ExecuteValidation(rules, importedDataToValidate, violatedBusinessRulesByTarget, ref stopExecutionFlag);
             this.AppendValidationMessages(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, context.GetSharedInstanceData().InstanceInfo.ParentProcessID, violatedBusinessRulesByTarget);
             if (stopExecutionFlag)
                 throw new InvalidWorkflowException("One or more business rules were not satisfied and led to stop the execution of the worklfow");
         }
 
-        private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets, ref List<BPViolatedRule> violatedBusinessRulesByTarget, ref bool stopExecutionFlag)
+        private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets, List<BPViolatedRule> violatedBusinessRulesByTarget, ref bool stopExecutionFlag)
         {
 
             foreach (BusinessRule rule in rules)
@@ -61,10 +61,10 @@ namespace Vanrise.BusinessProcess.WFActivities
 
         private void AppendValidationMessages(long processIntanceId, long? parentProcessId, List<BPViolatedRule> violatedBusinessRulesByTarget)
         {
-            List<ValidationMessage> messages = new List<ValidationMessage>();
+            List<BPValidationMessage> messages = new List<BPValidationMessage>();
             foreach (BPViolatedRule violatedRule in violatedBusinessRulesByTarget)
             {
-                ValidationMessage msg = new ValidationMessage()
+                BPValidationMessage msg = new BPValidationMessage()
                 {
                     ProcessInstanceId = processIntanceId,
                     ParentProcessId = parentProcessId,
@@ -77,7 +77,7 @@ namespace Vanrise.BusinessProcess.WFActivities
                 messages.Add(msg);
             }
 
-            ValidationMessageManager manager = new ValidationMessageManager();
+            BPValidationMessageManager manager = new BPValidationMessageManager();
             manager.InsertIntoTrackingTable(messages);
             manager.Insert(messages);
 
