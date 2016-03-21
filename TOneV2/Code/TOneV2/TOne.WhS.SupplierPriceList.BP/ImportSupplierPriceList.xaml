@@ -15,6 +15,7 @@
  xmlns:twsba1="clr-namespace:TOne.WhS.SupplierPriceList.BP.Activities;assembly=TOne.WhS.SupplierPriceList.BP.Activities"
  xmlns:twse="clr-namespace:TOne.WhS.SupplierPriceList.Entities;assembly=TOne.WhS.SupplierPriceList.Entities"
  xmlns:twses="clr-namespace:TOne.WhS.SupplierPriceList.Entities.SPL;assembly=TOne.WhS.SupplierPriceList.Entities"
+ xmlns:twsm="clr-namespace:TOne.WhS.SupplierPriceList.MainExtensions;assembly=TOne.WhS.SupplierPriceList.MainExtensions"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
@@ -37,6 +38,7 @@
       <x:String>TOne.WhS.SupplierPriceList.Entities.SPL</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Queueing</x:String>
+      <x:String>TOne.WhS.SupplierPriceList.MainExtensions</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -63,6 +65,8 @@
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.MainExtensions</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
     </sco:Collection>
@@ -142,6 +146,7 @@
       </Variable>
       <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedCountriesToValidate" />
       <Variable x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)" Name="ImportedCountriesDataValidationRules" />
+      <Variable x:TypeArguments="twsm:PreviewInformation" Name="PreviewExecutionInformation" />
     </Sequence.Variables>
     <twsba1:SetImportSPLContext sap2010:WorkflowViewState.IdRef="SetImportSPLContext_1" />
     <twsba1:GetDataFromPriceList sap2010:WorkflowViewState.IdRef="GetDataFromPriceList_1">
@@ -729,6 +734,23 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
+    <vbw:AssignTask x:TypeArguments="twsm:PreviewInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_1" TaskTitle="Approving imported pricelist">
+      <vbw:AssignTask.AssignedTo>
+        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.AssignedTo>
+      <vbw:AssignTask.TaskData>
+        <InArgument x:TypeArguments="vbe:BPTaskData">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new TOne.WhS.SupplierPriceList.MainExtensions.PreviewData()</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskData>
+      <vbw:AssignTask.TaskExecutionInformation>
+        <OutArgument x:TypeArguments="twsm:PreviewInformation">
+          <mca:CSharpReference x:TypeArguments="twsm:PreviewInformation">PreviewExecutionInformation</mca:CSharpReference>
+        </OutArgument>
+      </vbw:AssignTask.TaskExecutionInformation>
+    </vbw:AssignTask>
     <twsba1:SyncImportedDataWithDB sap2010:WorkflowViewState.IdRef="SyncImportedDataWithDB_3">
       <twsba1:SyncImportedDataWithDB.CurrencyId>
         <InArgument x:TypeArguments="x:Int32">
@@ -752,7 +774,7 @@
       </twsba1:SyncImportedDataWithDB.SupplierId>
     </twsba1:SyncImportedDataWithDB>
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Finished synchronizing with existing entities." />
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -820,16 +842,17 @@
       <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,1125" />
       <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="2662,1171" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="2662,22" />
+      <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_3" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2413">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2475">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2493" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2555" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
