@@ -88,6 +88,11 @@
     <Folder Include="queue\" />
     <Folder Include="queue\Tables\" />
     <Folder Include="queue\Stored Procedures\" />
+    <Folder Include="bp\" />
+    <Folder Include="bp\Tables\" />
+    <Folder Include="Analytic\" />
+    <Folder Include="Analytic\Tables\" />
+    <Folder Include="bp\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -269,6 +274,22 @@
     <Build Include="genericdata\Stored Procedures\sp_BusinessEntityDefinition_Insert.sql" />
     <Build Include="sec\Stored Procedures\sp_Module_Update.sql" />
     <Build Include="sec\Stored Procedures\sp_Module_Insert.sql" />
+    <Build Include="bp\Tables\BPDefinition.sql" />
+    <Build Include="bp\Tables\BPBusinessRuleDefinition.sql" />
+    <Build Include="bp\Tables\BPBusinessRuleAction.sql" />
+    <Build Include="bp\Tables\BPBusinessRuleActionType.sql" />
+    <Build Include="Analytic\Tables\SchemaConfiguration.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_UpdateParent.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntityModule_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntity_UpdateModule.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntity_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_BusinessEntity_Insert.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPBusinessRuleActionType_GetAll.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPBusinessRuleAction_GetAll.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPBusinessRuleDefinition_GetAll.sql" />
+    <Build Include="Security\bp.sql" />
+    <Build Include="Security\Analytic.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

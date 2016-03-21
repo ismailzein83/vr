@@ -6,7 +6,7 @@
 	@Id int out
 AS
 BEGIN
-IF NOT EXISTS(select null from sec.[Module] where Name = @Name)
+IF NOT EXISTS(select null from sec.[Module] where Name = @Name and ParentId = @ParentId)
 	BEGIN
 		Insert into sec.[Module] ([Name],ParentId,AllowDynamic)
 		values(@Name,@ParentId, @AllowDynamic)

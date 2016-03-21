@@ -5,7 +5,7 @@
 	@AllowDynamic bit
 AS
 BEGIN
-	IF NOT EXISTS(SELECT 1 FROM sec.[Module] WHERE ID != @ID AND Name = @Name)
+	IF NOT EXISTS(SELECT 1 FROM sec.[Module] WHERE ID != @ID AND Name = @Name and ParentId = @ParentId)
 	begin
 		UPDATE sec.[Module]
 		SET Name = @Name,
