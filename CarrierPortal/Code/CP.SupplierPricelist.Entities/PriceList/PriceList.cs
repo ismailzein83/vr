@@ -20,5 +20,6 @@ namespace CP.SupplierPricelist.Entities
         public long AlertFileId { get; set; }
         public int CustomerId { get; set; }
         public string CarrierAccountId { get; set; }
+        public string CarrierAccountName { get; set; }
     }
 }
