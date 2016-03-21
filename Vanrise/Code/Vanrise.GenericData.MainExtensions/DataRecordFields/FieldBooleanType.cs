@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (value == null)
                 return null;
 
-            IEnumerable<bool> selectedBooleanValues = ConvertFieldValueToList<bool>(value);
+            IEnumerable<bool> selectedBooleanValues = FieldTypeHelper.ConvertFieldValueToList<bool>(value);
 
             if (selectedBooleanValues == null)
                 return value.ToString();
@@ -36,7 +36,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, object filterValue)
         {
-            IEnumerable<bool> boolValues = ConvertFieldValueToList<bool>(fieldValue);
+            IEnumerable<bool> boolValues = FieldTypeHelper.ConvertFieldValueToList<bool>(fieldValue);
             return (boolValues != null) ? boolValues.Contains(Convert.ToBoolean(filterValue)) : Convert.ToBoolean(fieldValue).CompareTo(Convert.ToBoolean(filterValue)) == 0;
         }
     }

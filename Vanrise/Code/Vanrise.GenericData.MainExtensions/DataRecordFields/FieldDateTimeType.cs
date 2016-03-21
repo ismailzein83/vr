@@ -41,7 +41,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         string GetTimeDescription(object fieldValue)
         {
-            IEnumerable<Time> timeValues = ConvertFieldValueToList<Time>(fieldValue);
+            IEnumerable<Time> timeValues = FieldTypeHelper.ConvertFieldValueToList<Time>(fieldValue);
 
             if (timeValues == null)
             {
@@ -59,7 +59,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         string GetDateTimeDescription(object fieldValue)
         {
-            IEnumerable<DateTime> dateTimeValues = ConvertFieldValueToList<DateTime>(fieldValue);
+            IEnumerable<DateTime> dateTimeValues = FieldTypeHelper.ConvertFieldValueToList<DateTime>(fieldValue);
 
             if (dateTimeValues == null)
                 return Convert.ToDateTime(fieldValue).ToString();
@@ -74,13 +74,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         
         bool DoDateTimesMatch(object fieldValue, object filterValue)
         {
-            IEnumerable<DateTime> dateTimeValues = ConvertFieldValueToList<DateTime>(fieldValue);
+            IEnumerable<DateTime> dateTimeValues = FieldTypeHelper.ConvertFieldValueToList<DateTime>(fieldValue);
             return (dateTimeValues != null) ? dateTimeValues.Contains(Convert.ToDateTime(filterValue)) : Convert.ToDateTime(fieldValue).CompareTo(Convert.ToDateTime(filterValue)) == 0;
         }
 
         bool DoTimesMatch(object fieldValue, object filterValue)
         {
-            IEnumerable<Time> timeValues = ConvertFieldValueToList<Time>(fieldValue);
+            IEnumerable<Time> timeValues = FieldTypeHelper.ConvertFieldValueToList<Time>(fieldValue);
             var filterValueAsTime = filterValue as Time;
             if (timeValues != null) {
                 foreach (Time timeValue in timeValues)

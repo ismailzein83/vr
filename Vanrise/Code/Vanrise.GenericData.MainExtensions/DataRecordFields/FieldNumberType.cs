@@ -29,7 +29,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (value == null)
                 return null;
 
-            IEnumerable<object> numberValues = ConvertFieldValueToList<object>(value);
+            IEnumerable<object> numberValues = FieldTypeHelper.ConvertFieldValueToList<object>(value);
 
             if (numberValues == null)
                 return value.ToString();
@@ -47,7 +47,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 FieldNumberDataTypeInfoAttribute infoAttribute = Utilities.GetEnumAttribute<FieldNumberDataType, FieldNumberDataTypeInfoAttribute>(DataType);
                 Type dataType = infoAttribute.RuntimeType;
 
-                IEnumerable<object> fieldValues = ConvertFieldValueToList<object>(fieldValue);
+                IEnumerable<object> fieldValues = FieldTypeHelper.ConvertFieldValueToList<object>(fieldValue);
                 object convertedFilterValue = Convert.ChangeType(filterValue, dataType);
 
                 if (fieldValues == null)

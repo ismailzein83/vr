@@ -37,7 +37,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (value == null)
                 return null;
 
-            IEnumerable<object> selectedEntityIds = ConvertFieldValueToList<object>(value);
+            IEnumerable<object> selectedEntityIds = FieldTypeHelper.ConvertFieldValueToList<object>(value);
             var entityIds = new List<object>();
 
             if (selectedEntityIds != null)

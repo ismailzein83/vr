@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (value == null)
                 return null;
 
-            IEnumerable<string> textValues = ConvertFieldValueToList<string>(value);
+            IEnumerable<string> textValues = FieldTypeHelper.ConvertFieldValueToList<string>(value);
 
             if (textValues == null)
                 return value.ToString();

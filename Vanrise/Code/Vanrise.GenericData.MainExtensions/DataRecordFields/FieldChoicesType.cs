@@ -30,7 +30,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (Choices == null)
                 throw new NullReferenceException("Choices");
 
-            IEnumerable<long> selectedChoiceValues = ConvertFieldValueToList<long>(value);
+            IEnumerable<long> selectedChoiceValues = FieldTypeHelper.ConvertFieldValueToList<long>(value);
             
             if (selectedChoiceValues == null)
                 return GetChoiceText(Convert.ToInt32(value));
