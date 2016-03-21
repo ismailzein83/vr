@@ -27,7 +27,8 @@ namespace CP.SupplierPricelist.Data.SQL
                 , priceList.EffectiveOnDate
                 , priceList.CustomerId
                 , priceList.CarrierAccountId
-                , resultIdtoBeExcluded);
+                , resultIdtoBeExcluded
+                , priceList.CarrierAccountName);
             priceListId = (int)id;
             return (recordEffected > 0);
         }
@@ -69,7 +70,8 @@ namespace CP.SupplierPricelist.Data.SQL
                 AlertMessage = reader["AlertMessage"] as string,
                 CustomerId = (int)reader["CustomerID"],
                 AlertFileId = GetReaderValue<long>(reader, "AlertFileID"),
-                CarrierAccountId = reader["CarrierAccountID"] as string
+                CarrierAccountId = reader["CarrierAccountID"] as string,
+                CarrierAccountName = GetReaderValue<string>(reader, "CarrierAccountName")
             };
             string uploadedInformationSerialized = reader["UploadInformation"] as string;
             if (uploadedInformationSerialized != null)

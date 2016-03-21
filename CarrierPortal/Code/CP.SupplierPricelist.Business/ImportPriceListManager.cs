@@ -23,6 +23,8 @@ namespace CP.SupplierPricelist.Business
                 ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
             int priceListId;
             inputPriceList.UserId = SecurityContext.Current.GetLoggedInUserId();
+            var customerSuppliers = new CustomerManager().GetCachedSupplierAccounts(inputPriceList.CustomerId);
+            inputPriceList.CarrierAccountName = customerSuppliers.ContainsKey(inputPriceList.CarrierAccountId) ? customerSuppliers[inputPriceList.CarrierAccountId].SupplierName : "";
             bool insertActionSucc = dataManager.Insert(inputPriceList, (int)PriceListResult.NotCompleted, out priceListId);
             inputPriceList.PriceListId = priceListId;
             if (insertActionSucc)
@@ -80,8 +82,6 @@ namespace CP.SupplierPricelist.Business
             Customer customer = customerManager.GetCustomer(priceList.CustomerId);
             priceListDetail.CustomerName = customer != null ? customer.Name : "";
 
-            var customerSuppliers = new CustomerManager().GetCachedSupplierAccounts(priceList.CustomerId);
-            priceListDetail.CarrierAccountName = customerSuppliers.ContainsKey(priceList.CarrierAccountId) ? customerSuppliers[priceList.CarrierAccountId].SupplierName : "";
             return priceListDetail;
         }
         public List<PriceList> GetPriceLists(List<PriceListStatus> listPriceListStatuses)
