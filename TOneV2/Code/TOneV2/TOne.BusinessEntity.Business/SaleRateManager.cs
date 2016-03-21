@@ -18,6 +18,13 @@ namespace TOne.BusinessEntity.Business
             _cacheManager = cacheManager;
         }
 
+        public SaleRateManager()
+        { }
+        public Rate GetSaleRateById(long rateId)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetRateById(rateId);
+        }
         public Rate GetSaleRates(string customerId, int zoneId, DateTime when)
         {
             CustomerRateByZone customerRateByZone = _cacheManager.GetOrCreateObject(String.Format("GetEffectiveSaleRates_{0}_{1:ddMMMyy}", customerId, when.Date),

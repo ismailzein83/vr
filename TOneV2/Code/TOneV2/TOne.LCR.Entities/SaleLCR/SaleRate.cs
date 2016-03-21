@@ -7,7 +7,7 @@ using TOne.BusinessEntity.Entities;
 
 namespace TOne.LCR.Entities
 {
-  public  class SaleRate
+    public class SaleRate
     {
         public int ZoneId { get; set; }
         public string CodeGroup { get; set; }
@@ -16,6 +16,8 @@ namespace TOne.LCR.Entities
         public int PriceListId { get; set; }
         public Currency Currency { get; set; }
         public decimal Rate { get; set; }
+        public DateTime? BED { get; set; }
+        public DateTime? EED { get; set; }
         public List<string> EffectiveCodes { get; set; }
         public List<SupplierZoneRate> SupplierZoneRates { get; set; }
     }

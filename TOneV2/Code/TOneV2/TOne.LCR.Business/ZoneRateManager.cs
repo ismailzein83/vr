@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace TOne.LCR.Business
         SaleZoneMarketPriceManager _saleZoneMarketPriceManager;
         CurrencyManager _currencyManager;
         ZoneManager _zoneManager;
+        SaleRateManager _rateManager;
         FlaggedServiceManager _flaggedServiceManager;
         readonly IZoneRateDataManager _dataManager;
 
@@ -29,6 +31,7 @@ namespace TOne.LCR.Business
             _codeManager = new CodeManager();
             _currencyManager = new CurrencyManager();
             _zoneManager = new ZoneManager();
+            _rateManager = new SaleRateManager();
             _saleZoneMarketPriceManager = new SaleZoneMarketPriceManager();
             _flaggedServiceManager = new FlaggedServiceManager();
         }
@@ -51,6 +54,7 @@ namespace TOne.LCR.Business
                     customerPriceList = _priceListManager.GetPriceListById(customerSaleZone.Value.PriceListId);
                     salePriceLists.Add(customerSaleZone.Value.PriceListId, customerPriceList);
                 }
+                Rate rate = _rateManager.GetSaleRateById(customerSaleZone.Value.RateId);
                 Currency customerCurrency = customerPriceList != null ? currencies[customerPriceList.CurrencyId] : mainCurrency;
                 Zone saleZone = _zoneManager.GetZone(customerSaleZone.Key);
                 SaleRate saleRate = new SaleRate()
@@ -62,7 +66,9 @@ namespace TOne.LCR.Business
                     OurServicesFlag = _flaggedServiceManager.GetServiceFlag(customerSaleZone.Value.ServiceFlag),
                     ZoneId = customerSaleZone.Value.ZoneId,
                     ZoneName = customerSaleZone.Value.ZoneName,
-                    CodeGroup = saleZone != null ? saleZone.CodeGroupId : "999999"
+                    CodeGroup = saleZone != null ? saleZone.CodeGroupId : "999999",
+                    BED = rate.BeginEffectiveDate,
+                    EED = rate.EndEffectiveDate
                 };
 
                 List<SupplierLCR> marketPriceSupplierLcr = GetMarketPriceSuppliersLCR(customerSaleZone.Value, saleMarketPrices, customerCurrency, mainCurrency, currencies);

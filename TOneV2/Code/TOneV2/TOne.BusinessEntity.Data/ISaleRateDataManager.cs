@@ -10,5 +10,7 @@ namespace TOne.BusinessEntity.Data
     public interface ISaleRateDataManager:IDataManager
     {
          List<Rate> GetSaleRates(string customerId, DateTime when);
+
+         Rate GetRateById(long rateId);
     }
 }

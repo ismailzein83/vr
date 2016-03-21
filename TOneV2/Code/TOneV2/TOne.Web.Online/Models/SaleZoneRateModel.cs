@@ -15,6 +15,8 @@ namespace TOne.Web.Online.Models
         public string ServiceColor { get; set; }
         public string CurrencyId { get; set; }
         public decimal SaleRate { get; set; }
+        public DateTime? BED { get; set; }
+        public DateTime? EED { get; set; }
         public List<SupplierZoneRateModel> SupplierRates { get; set; }
     }
 }

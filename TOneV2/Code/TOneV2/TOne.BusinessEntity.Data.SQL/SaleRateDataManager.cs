@@ -15,6 +15,11 @@ namespace TOne.BusinessEntity.Data.SQL
         {
             return GetItemsSP("BEntity.sp_Rate_GetSaleByCustomer", RateMapper, customerID, when);
         }
+
+        public Rate GetRateById(long rateId)
+        {
+            return GetItemSP("[BEntity].[sp_Rate_GetById]", RateMapper, rateId);
+        }
         private Rate RateMapper(IDataReader reader)
         {
             return new Rate

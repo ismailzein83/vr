@@ -196,7 +196,8 @@ namespace TOne.LCR.Data.SQL
                 ServiceFlag = GetReaderValue<short>(reader, "OurServiceFlag"),
                 ZoneName = reader["OurZoneName"] as string,
                 SuppliersLcr = new List<SupplierLCR>(),
-                PriceListId = (int)reader["OurPriceListId"]
+                PriceListId = (int)reader["OurPriceListId"],
+                RateId = (Int64)reader["RateId"]
             };
         }
         SupplierLCR SupplierLCRMapper(IDataReader reader)
