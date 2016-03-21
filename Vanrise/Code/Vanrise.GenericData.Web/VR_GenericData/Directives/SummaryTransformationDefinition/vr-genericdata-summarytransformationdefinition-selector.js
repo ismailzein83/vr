@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_SummaryTransformationDefinitionAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_SummaryTransformationDefinitionAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrGenericdataSummarytransformationdefinitionSelector', ['VR_GenericData_SummaryTransformationDefinitionAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_SummaryTransformationDefinitionAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
