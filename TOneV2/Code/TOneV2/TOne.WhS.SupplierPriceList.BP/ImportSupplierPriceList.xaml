@@ -734,23 +734,6 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <vbw:AssignTask x:TypeArguments="twsm:PreviewInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_1" TaskTitle="Approving imported pricelist">
-      <vbw:AssignTask.AssignedTo>
-        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
-        </InArgument>
-      </vbw:AssignTask.AssignedTo>
-      <vbw:AssignTask.TaskData>
-        <InArgument x:TypeArguments="vbe:BPTaskData">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new TOne.WhS.SupplierPriceList.MainExtensions.PreviewData()</mca:CSharpValue>
-        </InArgument>
-      </vbw:AssignTask.TaskData>
-      <vbw:AssignTask.TaskExecutionInformation>
-        <OutArgument x:TypeArguments="twsm:PreviewInformation">
-          <mca:CSharpReference x:TypeArguments="twsm:PreviewInformation">PreviewExecutionInformation</mca:CSharpReference>
-        </OutArgument>
-      </vbw:AssignTask.TaskExecutionInformation>
-    </vbw:AssignTask>
     <twsba1:SyncImportedDataWithDB sap2010:WorkflowViewState.IdRef="SyncImportedDataWithDB_3">
       <twsba1:SyncImportedDataWithDB.CurrencyId>
         <InArgument x:TypeArguments="x:Int32">
@@ -774,7 +757,7 @@
       </twsba1:SyncImportedDataWithDB.SupplierId>
     </twsba1:SyncImportedDataWithDB>
     <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Finished synchronizing with existing entities." />
-    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWynAUoDigYOAgEBYwtjcAMBxgJoC2jIAQMBogJtC23IAQMB/gFyC3LIAQMB2gF3C3fQAQMBtgF8C3zQAQMBkgGBAQuBAdABAgFuhgELhgHLAQIBSosBC4sBywECASaQAQuQAcsBAgEClwEFlwFbAwHRIZgBBbcBIwMB+B+4AQXIASMDAYsfyQEFzwEtAwHmHtABBdsBGAMBnR7cAQXnARQDAdQd6AEF8wEnAwGLHfQBBf8BGAMBwhyAAgWGAjYDAZ0chwIFkgIUAwHUG5MCBZkCIAMBrhuaAgWgAiQDAYkboQIF1QIQAwHBGNYCBeECIAMB+BfiAgXZBRADAZEF2gUF4AUgAwHrBOEFBfEFFgMB/QPyBQWHBiUDAewCiAYFiAanAQMB6gKbAQubAVgDAa0htAELtAFeAwGJIaABC6ABagMB5SCvAQuvAXkDAcEgpQELpQFUAwGdIKoBC6oBeQMB+R/FAQvFAXkDAdQfwAELwAFxAwGwH7sBC7sBcQMBjB/MAQvMAYUBAwHnHtMBC9MBqwEDAcIe2AEL2AF/AwGeHuQBC+QBdwMB+R3fAQvfAX0DAdUd6wEL6wGAAQMBsB3wAQvwAXEDAYwd9wEL9wGgAQMB5xz8AQv8AYQBAwHDHIMCC4MCjgEDAZ4cjwILjwJ8AwH5G4oCC4oChgEDAdUblgILlgKDAQMBsBuTAmCTAnwDAa8bnQILnQJbAwGKG6ICB7ICIQMBnBqzAgfDAiEDAa8ZxAIH1AIhAwHCGN4CC94CgwEDAZ0Y2QIL2QKTAgMB+RfmAgefBRIDAaoIoAUH2AUoAwGSBd0FC90FgwEDAe0E2gVg2gW4AQMB7ATuBQvuBXsDAccE6QUL6QWKAQMBowThBZIB4QWwAQMBogTkBQvkBZcBAwH+A/8FC/8FUwMB2QOEBguEBl8DAbUD9QUL9QVYAwGRA/oFC/oFVAMB7QKIBnSIBqQBAwHrAqUCDaUCgQEDAeUarwINrwJhAwHBGqoCDaoCWAMBnRq2Ag22AoEBAwH4GcACDcACYQMB1Bm7Ag27AlgDAbAZ0QIN0QJhAwGLGccCDccCgQEDAecYzAINzAJYAwHDGOcCCZQFEwMB0giVBQmeBRIDAasI0AUN0AWDAQMBhQiyBQ2yBXIDAeAH1QUN1QVhAwG7B8EFDcEFfAMBlgeoBQ2oBYQBAwHxBqMFDaMFhAEDAcwGywUNywWCAQMBpwbGBQ3GBYMBAwGCBq0FDa0FhAEDAd0FvAUNvAV8AwG4BbcFDbcFfAMBkwXqAg/qAnwDAdMX8QINkgUYAwHTCJwFNZwFOQMB0QiYBQ+YBXoDAawI8gIPggMtAwHgFoMDD6YDGgMB+RSnAw/VAywDAaIS1gMP9QMsAwG9EPYDD4YEMQMByg+HBA/5BBoDAe4J+gQPhQUYAwGhCYYFD5EFKgMB1Aj6AhX6AoEBAwGtF/8CFf8CkwEDAYcX9QIV9QJjAwHhFoQDEZQDLwMB7RWVAxGlAy8DAfoUuQMVuQN7AwHTFM0DFc0DeQMBrRS0AxW0A2sDAYcUqgMVqgOBAQMB4RPSAxXSA3kDAbsTvgMVvgOLAQMBlRPIAxXIA3cDAe8SrwMVrwOBAQMByRLDAxXDA4MBAwGjEtkDFdkDgQEDAfwR8gMV8gN5AwHWEd4DFd4DewMBsBHoAxXoA4MBAwGKEeMDFeMDiwEDAeQQ7QMV7QNvAwG+EPkDFfkDcQMBlxD+AxX+A3EDAfEPgwQVgwRxAwHLD4gEEZMEIwMB/Q6UBBGfBCMDAbAOoAQRqwQjAwHjDawEEbcEIwMBlg24BBHDBCMDAckMxAQRzwQjAwH8C9AEEeAELwMBiQvhBBHsBC8DAbwK7QQR+AQvAwHvCYIFFYIFcAMByAn9BBX9BHQDAaIJjgUVjgWNAQMB+wiJBRWJBbICAwHVCIwDF4wDhQEDAboWhwMXhwODAQMBlBaRAxeRA40BAwHuFZgDF5gDgwEDAccVnQMXnQOFAQMBoRWiAxeiA40BAwH7FJAEF5AEhgEDAaQPiwQXiwRzAwH+DpwEF5wEhgEDAdcOlwQXlwRzAwGxDqgEF6gEhgEDAYoOowQXowRzAwHkDbQEF7QEjgEDAb0NrwQXrwR7AwGXDcAEF8AEjgEDAfAMuwQXuwR7AwHKDMwEF8wEjgEDAaMMxwQXxwR7AwH9C9gEF9gEcwMB1gvTBBfTBI0BAwGwC90EF90EjQEDAYoL6QQX6QSNAQMB4wrkBBfkBH0DAb0K9QQX9QSMAQMBlgrwBBfwBH0DAfAJ</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWyiAUoD+QUOAgEBYwtjcAMBxgJoC2jIAQMBogJtC23IAQMB/gFyC3LIAQMB2gF3C3fQAQMBtgF8C3zQAQMBkgGBAQuBAdABAgFuhgELhgHLAQIBSosBC4sBywECASaQAQuQAcsBAgEClwEFlwFbAwHjIJgBBbcBIwMBih+4AQXIASMDAZ0eyQEFzwEtAwH4HdABBdsBGAMBrx3cAQXnARQDAeYc6AEF8wEnAwGdHPQBBf8BGAMB1BuAAgWGAjYDAa8bhwIFkgIUAwHmGpMCBZkCIAMBwBqaAgWgAiQDAZsaoQIF1QIQAwHTF9YCBeECIAMBihfiAgXZBRADAaME2gUF4AUgAwH9A+EFBfYFJQMB7AL3BQX3BacBAwHqApsBC5sBWAMBvyC0AQu0AV4DAZsgoAELoAFqAwH3H68BC68BeQMB0x+lAQulAVQDAa8fqgELqgF5AwGLH8UBC8UBeQMB5h7AAQvAAXEDAcIeuwELuwFxAwGeHswBC8wBhQEDAfkd0wEL0wGrAQMB1B3YAQvYAX8DAbAd5AEL5AF3AwGLHd8BC98BfQMB5xzrAQvrAYABAwHCHPABC/ABcQMBnhz3AQv3AaABAwH5G/wBC/wBhAEDAdUbgwILgwKOAQMBsBuPAguPAnwDAYsbigILigKGAQMB5xqWAguWAoMBAwHCGpMCYJMCfAMBwRqdAgudAlsDAZwaogIHsgIhAwGuGbMCB8MCIQMBwRjEAgfUAiEDAdQX3gIL3gKDAQMBrxfZAgvZApMCAwGLF+YCB58FEgMBvAegBQfYBSgDAaQE3QUL3QWDAQMB/wPaBWDaBbgBAwH+A+4FC+4FUwMB2QPzBQvzBV8DAbUD5AUL5AVYAwGRA+kFC+kFVAMB7QL3BXT3BaQBAwHrAqUCDaUCgQEDAfcZrwINrwJhAwHTGaoCDaoCWAMBrxm2Ag22AoEBAwGKGcACDcACYQMB5hi7Ag27AlgDAcIY0QIN0QJhAwGdGMcCDccCgQEDAfkXzAINzAJYAwHVF+cCCZQFEwMB5AeVBQmeBRIDAb0H0AUN0AWDAQMBlweyBQ2yBXIDAfIG1QUN1QVhAwHNBsEFDcEFfAMBqAaoBQ2oBYQBAwGDBqMFDaMFhAEDAd4FywUNywWCAQMBuQXGBQ3GBYMBAwGUBa0FDa0FhAEDAe8EvAUNvAV8AwHKBLcFDbcFfAMBpQTqAg/qAnwDAeUW8QINkgUYAwHlB5wFNZwFOQMB4weYBQ+YBXoDAb4H8gIPggMtAwHyFYMDD6YDGgMBixSnAw/VAywDAbQR1gMP9QMsAwHPD/YDD4YEMQMB3A6HBA/5BBoDAYAJ+gQPhQUYAwGzCIYFD5EFKgMB5gf6AhX6AoEBAwG/Fv8CFf8CkwEDAZkW9QIV9QJjAwHzFYQDEZQDLwMB/xSVAxGlAy8DAYwUuQMVuQN7AwHlE80DFc0DeQMBvxO0AxW0A2sDAZkTqgMVqgOBAQMB8xLSAxXSA3kDAc0SvgMVvgOLAQMBpxLIAxXIA3cDAYESrwMVrwOBAQMB2xHDAxXDA4MBAwG1EdkDFdkDgQEDAY4R8gMV8gN5AwHoEN4DFd4DewMBwhDoAxXoA4MBAwGcEOMDFeMDiwEDAfYP7QMV7QNvAwHQD/kDFfkDcQMBqQ/+AxX+A3EDAYMPgwQVgwRxAwHdDogEEZMEIwMBjw6UBBGfBCMDAcINoAQRqwQjAwH1DKwEEbcEIwMBqAy4BBHDBCMDAdsLxAQRzwQjAwGOC9AEEeAELwMBmwrhBBHsBC8DAc4J7QQR+AQvAwGBCYIFFYIFcAMB2gj9BBX9BHQDAbQIjgUVjgWNAQMBjQiJBRWJBbICAwHnB4wDF4wDhQEDAcwVhwMXhwODAQMBphWRAxeRA40BAwGAFZgDF5gDgwEDAdkUnQMXnQOFAQMBsxSiAxeiA40BAwGNFJAEF5AEhgEDAbYOiwQXiwRzAwGQDpwEF5wEhgEDAekNlwQXlwRzAwHDDagEF6gEhgEDAZwNowQXowRzAwH2DLQEF7QEjgEDAc8MrwQXrwR7AwGpDMAEF8AEjgEDAYIMuwQXuwR7AwHcC8wEF8wEjgEDAbULxwQXxwR7AwGPC9gEF9gEcwMB6ArTBBfTBI0BAwHCCt0EF90EjQEDAZwK6QQX6QSNAQMB9QnkBBfkBH0DAc8J9QQX9QSMAQMBqAnwBBfwBH0DAYIJ</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -842,17 +825,16 @@
       <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,1125" />
       <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="2662,1171" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_3" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2475">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2413">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2555" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2493" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
