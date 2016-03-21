@@ -58,7 +58,7 @@ namespace TOne.BusinessEntity.Data.SQL
             StringBuilder queryBuilder = new StringBuilder(@"                  
                                                     SELECT ca.CarrierAccountID, cp.Name, ca.NameSuffix  FROM CarrierAccount ca
                                                     INNER JOIN CarrierProfile cp on ca.ProfileID = cp.ProfileID
-                                                    WHERE ca.IsDeleted = 'N' AND ca.ActivationStatus = 2 #AddAccountTypeValues# #FILTER#
+                                                    WHERE ca.IsDeleted = 'N' AND ca.ActivationStatus = 2 AND  ca.CarrierAccountID!='BLK'  #AddAccountTypeValues# #FILTER#
                                                     ORDER BY Name ASC
                                                 ");
 
