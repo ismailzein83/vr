@@ -2,40 +2,38 @@
 (
 	@TempTableName varchar(200),	
 	@Code varchar(20),
+	@SupplierID INT,
 	@ZonesIDs varchar(max),
 	@EffectiveOn DateTime
 )
-	AS
-	BEGIN
-		SET NOCOUNT ON
-		
-		IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
-	    BEGIN
-
-		DECLARE @ZonesIDsTable TABLE (ZoneID int)
+AS
+BEGIN
+	SET NOCOUNT ON
+	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
+    BEGIN
+		DECLARE @ZonesIDsTable TABLE (ZoneID INT)
 		INSERT INTO @ZonesIDsTable (ZoneID)
-		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
+		SELECT CONVERT(INT, ParsedString) FROM [TOneWhS_BE].[ParseStringList](@ZonesIDs)
 
-			 SELECT     rate.[ID]
-			          , rate.[Code]
-                      , rate.[ZoneID]
-					  , rate.[CodeGroupID]
-                      , rate.[BED]
-                      , rate.[EED]
-             into #Result
-             FROM [TOneWhS_BE].[SupplierCode] rate 
-
-			 WHERE (@Code IS NULL OR rate.Code like '%'+@Code+'%')
-			and (@ZonesIDs  is null or rate.ZoneID in (select ZoneID from @ZonesIDsTable))
-			 AND   (@EffectiveOn is null or (rate.BED < = @EffectiveOn   and (rate.EED is null or rate.EED  > @EffectiveOn) ));
-           
-			
-						
-			declare @sql varchar(1000)
-			set @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';
-			exec(@sql)
-			
-		END
+		SELECT code.[ID],
+			code.[Code],
+			code.[ZoneID],
+			code.[CodeGroupID],
+			code.[BED],
+			code.[EED]
 		
-		SET NOCOUNT OFF
+		INTO #Result
+		
+		FROM [TOneWhS_BE].[SupplierCode] code INNER JOIN TOneWhS_BE.SupplierZone zone ON code.ZoneID = zone.ID
+
+		WHERE zone.SupplierID = @SupplierID
+		AND (@Code IS NULL OR code.Code LIKE '%' + @Code + '%')
+		AND (@ZonesIDs IS NULL OR code.ZoneID in (SELECT ZoneID FROM @ZonesIDsTable))
+		AND (@EffectiveOn IS NULL OR (code.BED < = @EffectiveOn AND (code.EED IS NULL OR code.EED > @EffectiveOn)));
+			
+		DECLARE @sql VARCHAR(1000)
+		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #Result';
+		EXEC(@sql)
 	END
+	SET NOCOUNT OFF
+END
