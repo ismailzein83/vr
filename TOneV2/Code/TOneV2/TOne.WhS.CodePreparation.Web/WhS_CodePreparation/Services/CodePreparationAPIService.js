@@ -5,11 +5,6 @@
 
     function codePreparationAPIService(BaseAPIService, UtilsService, WhS_CP_ModuleConfig, VRModalService) {
 
-        function ApplyCodePreparationForEntities(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "ApplyCodePreparationForEntities"), input);
-        }
-
-
         function GetZoneItems(sellingNumberPlanId, countryId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "GetZoneItems"), {
                 sellingNumberPlanId: sellingNumberPlanId,
@@ -83,7 +78,6 @@
             VRModalService.showModal('/Client/Modules/WhS_CodePreparation/Views/CodePreparationApplyStateEditor.html', parameters, settings);
         }
         return ({
-            ApplyCodePreparationForEntities: ApplyCodePreparationForEntities,
             DownloadImportCodePreparationTemplate: DownloadImportCodePreparationTemplate,
             GetChanges: GetChanges,
             SaveChanges: SaveChanges,

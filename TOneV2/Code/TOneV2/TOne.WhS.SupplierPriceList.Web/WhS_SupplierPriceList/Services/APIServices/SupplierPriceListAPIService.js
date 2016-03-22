@@ -5,9 +5,6 @@
 
     function supplierZoneAPIService(BaseAPIService, UtilsService, WhS_SupPL_ModuleConfig) {
 
-        function UploadSupplierPriceList(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, "SupplierPriceList", "UploadSupplierPriceList"), input);
-        }
         function DownloadSupplierPriceListTemplate() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, "SupplierPriceList", "DownloadSupplierPriceListTemplate"), {}, {
                 returnAllResponseParameters: true,
@@ -16,7 +13,6 @@
         }
 
         return ({
-            UploadSupplierPriceList: UploadSupplierPriceList,
             DownloadSupplierPriceListTemplate: DownloadSupplierPriceListTemplate
         });
     }

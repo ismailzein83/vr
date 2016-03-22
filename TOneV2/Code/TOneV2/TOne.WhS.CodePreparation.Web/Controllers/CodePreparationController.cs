@@ -1,38 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Http;
-using TOne.WhS.CodePreparation.BP.Arguments;
 using TOne.WhS.CodePreparation.Business;
-using Vanrise.BusinessProcess.Entities;
 using Vanrise.Web.Base;
 using TOne.WhS.CodePreparation.Entities.CP;
-using Vanrise.BusinessProcess.Business;
 
 namespace TOne.WhS.CodePreparation.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "CodePreparation")]
     public class CodePreparationController : BaseAPIController
     {
-        [HttpPost]
-        [Route("ApplyCodePreparationForEntities")]
-        public CreateProcessOutput ApplyCodePreparationForEntities(CodePreparationUserInput input)
-        {
-            CodePreparationManager manager = new CodePreparationManager();
-            BPInstanceManager bpClient = new BPInstanceManager();
-            return bpClient.CreateNewProcess(new CreateProcessInput
-             {
-                 InputArguments = new CodePreparationInput
-                 {
-                     EffectiveDate = input.EffectiveDate,
-                     FileId = input.FileId,
-                     SellingNumberPlanId = input.SellingNumberPlanId,
-                     IsFromExcel = input.IsFromExcel
-                 }
-
-             });
-        }
-
-
         [HttpGet]
         [Route("DownloadImportCodePreparationTemplate")]
         public object DownloadImportCodePreparationTemplate()
@@ -114,16 +90,5 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         }
 
 
-    }
-
-    public class CodePreparationUserInput
-    {
-        public int SellingNumberPlanId { get; set; }
-
-        public int FileId { get; set; }
-
-        public DateTime? EffectiveDate { get; set; }
-
-        public bool IsFromExcel { get; set; }
     }
 }

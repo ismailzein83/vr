@@ -6,9 +6,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
-using TOne.WhS.SupplierPriceList.BP.Arguments;
-using Vanrise.BusinessProcess.Business;
-using Vanrise.BusinessProcess.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.SupplierPriceList.Web.Controllers
@@ -16,27 +13,6 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "SupplierPriceList")]
     public class WhS_SupplierPriceListController : BaseAPIController
     {
-        [HttpPost]
-        [Route("UploadSupplierPriceList")]
-        public CreateProcessOutput UploadSupplierPriceList(SupplierPriceListUserInput input)
-        {
-            BPInstanceManager bpClient = new BPInstanceManager();
-
-            return bpClient.CreateNewProcess(new CreateProcessInput
-            {
-                InputArguments = new SupplierPriceListProcessInput
-                {
-                    EffectiveDate = input.EffectiveDate,
-                    FileId = input.FileId,
-                    SupplierAccountId = input.SupplierId,
-                    CurrencyId = input.CurrencyId,
-                    DeletedCodesDate = input.PriceListDate,
-                    UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId()
-                }
-
-            });
-        }
-
         [HttpGet]
         [Route("DownloadSupplierPriceListTemplate")]
         public HttpResponseMessage DownloadSupplierPriceListTemplate()
@@ -58,18 +34,5 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
             };
             return response;
         }
-    }
-
-    public class SupplierPriceListUserInput
-    {
-        public int SupplierId { get; set; }
-
-        public int CurrencyId { get; set; }
-
-        public int FileId { get; set; }
-
-        public DateTime? EffectiveDate { get; set; }
-
-        public DateTime PriceListDate { get; set; }
     }
 }

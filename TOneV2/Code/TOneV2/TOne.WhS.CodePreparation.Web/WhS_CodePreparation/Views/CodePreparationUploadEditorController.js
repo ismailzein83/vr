@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePrepartionUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService'];
+    CodePrepartionUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BusinessProcess_BPInstanceAPIService'];
 
-    function CodePrepartionUploadEditorController($scope, VRUIUtilsService, UtilsService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
+    function CodePrepartionUploadEditorController($scope, VRUIUtilsService, UtilsService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BusinessProcess_BPInstanceAPIService) {
         var fileID;
         var parameters;
 
@@ -21,18 +21,22 @@
             };
             $scope.isUploadingComplete = false;
             $scope.upload = function () {
-                var input = {
+                var inputArguments = {
+                    $type: "TOne.WhS.CodePreparation.BP.Arguments.CodePreparationInput, TOne.WhS.CodePreparation.BP.Arguments",
                     SellingNumberPlanId: parameters.SellingNumberPlanId,
                     FileId: $scope.zoneList.fileId,
                     EffectiveDate: $scope.effectiveDate,
                     IsFromExcel: true
                 };
-                return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities(input).then(function (response) {
+                var input = {
+                    InputArguments: inputArguments
+                };
+
+                return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         $scope.modalContext.closeModal();
                         return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
                     }
-
                 });
             }
 

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'WhS_BE_CarrierAccountAPIService', 'BusinessProcess_BPInstanceService', 'VRUIUtilsService', 'UtilsService', 'WhS_SupPL_SupplierPriceListService'];
+    SupplierPriceListController.$inject = ['$scope', 'WhS_SupPL_SupplierPriceListAPIService', 'WhS_BP_CreateProcessResultEnum', 'WhS_BE_CarrierAccountAPIService', 'BusinessProcess_BPInstanceService', 'VRUIUtilsService', 'UtilsService', 'WhS_SupPL_SupplierPriceListService', 'BusinessProcess_BPInstanceAPIService'];
 
-    function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService, UtilsService, WhS_SupPL_SupplierPriceListService) {
+    function SupplierPriceListController($scope, WhS_SupPL_SupplierPriceListAPIService, WhS_BP_CreateProcessResultEnum, WhS_BE_CarrierAccountAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService, UtilsService, WhS_SupPL_SupplierPriceListService, BusinessProcess_BPInstanceAPIService) {
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -29,14 +29,18 @@
             $scope.priceListDate = new Date();
 
             $scope.upload = function () {
-                var input = {
-                    SupplierId: carrierAccountDirectiveAPI.getSelectedIds(),
+                var inputArguments = {
+                    $type: "TOne.WhS.SupplierPriceList.BP.Arguments.SupplierPriceListProcessInput, TOne.WhS.SupplierPriceList.BP.Arguments",
+                    SupplierAccountId: carrierAccountDirectiveAPI.getSelectedIds(),
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     FileId: $scope.zoneList.fileId,
-                    PriceListDate: $scope.priceListDate
+                    DeletedCodesDate: $scope.priceListDate
+                };
+                var input = {
+                    InputArguments: inputArguments
                 };
 
-                return WhS_SupPL_SupplierPriceListAPIService.UploadSupplierPriceList(input).then(function (response) {
+                return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
                         return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
                 });

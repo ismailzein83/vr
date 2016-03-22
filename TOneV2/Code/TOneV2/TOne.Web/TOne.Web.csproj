@@ -648,6 +648,10 @@
       <Project>{c9c6697c-9bab-48a3-8c35-a854ecf652db}</Project>
       <Name>TOne.WhS.CDRProcessing.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.BP.Arguments\TOne.WhS.CodePreparation.BP.Arguments.csproj">
+      <Project>{ac6889a0-853c-4ff2-b2e4-a5b358065ec3}</Project>
+      <Name>TOne.WhS.CodePreparation.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.Data.SQL\TOne.WhS.CodePreparation.Data.SQL.csproj">
       <Project>{2d04aa1a-1a4d-4983-9841-b27a3932dff2}</Project>
       <Name>TOne.WhS.CodePreparation.Data.SQL</Name>
@@ -691,6 +695,10 @@
     <ProjectReference Include="..\TOne.WhS.Sales.Web\TOne.WhS.Sales.Web.csproj">
       <Project>{4828ee84-66e3-48c8-a055-53d981f8daaa}</Project>
       <Name>TOne.WhS.Sales.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Arguments\TOne.WhS.SupplierPriceList.BP.Arguments.csproj">
+      <Project>{05b7b8cf-6d2a-4bef-ae8b-af5fc3940baa}</Project>
+      <Name>TOne.WhS.SupplierPriceList.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Data.SQL\TOne.WhS.SupplierPriceList.Data.SQL.csproj">
       <Project>{7b2361d9-b37e-482e-8eba-9d88ac7d6829}</Project>

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePreparationApplyStateEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService'];
+    CodePreparationApplyStateEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'BusinessProcess_BPInstanceAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService'];
 
-    function CodePreparationApplyStateEditorController($scope, VRUIUtilsService, UtilsService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
+    function CodePreparationApplyStateEditorController($scope, VRUIUtilsService, UtilsService, BusinessProcess_BPInstanceAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
         var parameters;
 
         loadParameters();
@@ -20,12 +20,19 @@
                 $scope.modalContext.closeModal();
             };
             $scope.applyState = function () {
-                var input = {
+
+                var inputArguments = {
+                    $type: "TOne.WhS.CodePreparation.BP.Arguments.CodePreparationInput, TOne.WhS.CodePreparation.BP.Arguments",
                     SellingNumberPlanId: parameters.SellingNumberPlanId,
                     EffectiveDate: $scope.effectiveDate,
                     IsFromExcel: false
                 };
-                return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities(input).then(function (response) {
+                var input = {
+                    InputArguments: inputArguments
+                };
+
+
+                return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
                         $scope.modalContext.closeModal();
                         return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
