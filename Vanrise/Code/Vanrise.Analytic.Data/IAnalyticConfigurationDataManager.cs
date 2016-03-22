@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Data
 {
     public interface IAnalyticConfigurationDataManager : IDataManager
     {
-        List<AnalyticConfiguration<MeasureConfiguration>> GetMeasures();
-        List<AnalyticConfiguration<DimensionConfiguration>> GetDimensions();
+        Dictionary<string, AnalyticConfiguration<MeasureConfiguration>> GetMeasures();
+        Dictionary<string, AnalyticConfiguration<DimensionConfiguration>> GetDimensions();
     }
 }

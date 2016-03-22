@@ -11,14 +11,32 @@ namespace Vanrise.Analytic.Data.SQL
 {
     public class AnalyticConfigurationDataManager : BaseSQLDataManager, IAnalyticConfigurationDataManager
     {
-        public List<AnalyticConfiguration<MeasureConfiguration>> GetMeasures()
+        public Dictionary<string, AnalyticConfiguration<MeasureConfiguration>> GetMeasures()
         {
-            return GetItemsSP("Analytic.[SP_SchemaConfiguration_GetByType]", SchemaConfigurationMapper<MeasureConfiguration>, ConfigurationType.Measure);
+            Dictionary<string, AnalyticConfiguration<MeasureConfiguration>> measures = new Dictionary<string, AnalyticConfiguration<MeasureConfiguration>>();
+            ExecuteReaderSP("Analytic.[SP_SchemaConfiguration_GetByType]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    AnalyticConfiguration<MeasureConfiguration> measure = SchemaConfigurationMapper<MeasureConfiguration>(reader);
+                    measures.Add(measure.Name, measure);
+                }
+            }, ConfigurationType.Measure);
+            return measures;
         }
 
-        public List<AnalyticConfiguration<DimensionConfiguration>> GetDimensions()
+        public Dictionary<string, AnalyticConfiguration<DimensionConfiguration>> GetDimensions()
         {
-            return GetItemsSP("Analytic.[SP_SchemaConfiguration_GetByType]", SchemaConfigurationMapper<DimensionConfiguration>, ConfigurationType.Dimension);
+            Dictionary<string, AnalyticConfiguration<DimensionConfiguration>> dimensions = new Dictionary<string, AnalyticConfiguration<DimensionConfiguration>>();
+            ExecuteReaderSP("Analytic.[SP_SchemaConfiguration_GetByType]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    AnalyticConfiguration<DimensionConfiguration> dimension = SchemaConfigurationMapper<DimensionConfiguration>(reader);
+                    dimensions.Add(dimension.Name, dimension);
+                }
+            }, ConfigurationType.Dimension);
+            return dimensions;
         }
 
         private AnalyticConfiguration<T> SchemaConfigurationMapper<T>(IDataReader reader)

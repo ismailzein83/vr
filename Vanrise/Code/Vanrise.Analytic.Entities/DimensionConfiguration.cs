@@ -13,4 +13,11 @@ namespace Vanrise.Analytic.Entities
         public string GroupByStatement { get; set; }
         public string JoinStatement { get; set; }
     }
+
+    public class DimensionFilter
+    {
+        public string Dimension { get; set; }
+
+        public List<Object> FilterValues { get; set; }
+    }
 }
