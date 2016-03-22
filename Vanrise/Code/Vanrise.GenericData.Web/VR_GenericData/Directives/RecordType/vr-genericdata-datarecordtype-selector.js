@@ -45,7 +45,11 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
     function getTemplate(attrs) {
         var label;
         if (attrs.hidelabel == undefined)
-            label = 'label="Type"';
+            if (attrs.label == undefined)
+                label = 'label="Type"';
+            else
+                label = 'label="' + attrs.label+'"';
+
         var disabled = "";
         if (attrs.isdisabled)
             disabled = "vr-disabled='true'"
@@ -71,7 +75,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
     function recordTypeCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
-         
+
             defineAPI();
         }
 
@@ -85,7 +89,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             api.load = function (payload) {
 
                 var selectedIds;
-                if (payload != undefined) { 
+                if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                 }
 
