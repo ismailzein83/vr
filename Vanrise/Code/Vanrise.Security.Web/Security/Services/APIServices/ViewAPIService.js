@@ -58,7 +58,7 @@
         }
 
         function HasUpdateViewPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateViewsRank']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Sec_ModuleConfig.moduleName, controllerName, ['UpdateView']));
         }
     }
 

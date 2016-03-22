@@ -2,9 +2,9 @@
 
     'use strict';
 
-    BusinessEntityDefinitionManagementController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VR_Sec_MenuAPIService', 'VR_Sec_BusinessEntityDefinitionService', 'VR_Sec_BusinessEntityModuleService', 'VR_Sec_MenuService', 'VR_Sec_BusinessEntityNodeAPIService','VR_Sec_BusinessEntityModuleAPIService'];
+    BusinessEntityDefinitionManagementController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VR_Sec_MenuAPIService', 'VR_Sec_BusinessEntityDefinitionService', 'VR_Sec_BusinessEntityModuleService', 'VR_Sec_MenuService', 'VR_Sec_BusinessEntityNodeAPIService', 'VR_Sec_BusinessEntityModuleAPIService', 'VR_Sec_BusinessEntityAPIService'];
 
-    function BusinessEntityDefinitionManagementController($scope, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService, VR_Sec_MenuAPIService, VR_Sec_BusinessEntityDefinitionService, VR_Sec_BusinessEntityModuleService, VR_Sec_MenuService, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_BusinessEntityModuleAPIService) {
+    function BusinessEntityDefinitionManagementController($scope, VRUIUtilsService, UtilsService, VRModalService, VRNotificationService, VR_Sec_MenuAPIService, VR_Sec_BusinessEntityDefinitionService, VR_Sec_BusinessEntityModuleService, VR_Sec_MenuService, VR_Sec_BusinessEntityNodeAPIService, VR_Sec_BusinessEntityModuleAPIService, VR_Sec_BusinessEntityAPIService) {
 
         //#region Global Variables
         var treeAPI;
@@ -24,7 +24,8 @@
         //#region Functions
 
         function defineScope() {
-
+            $scope.addEntity = false;
+            $scope.addModule = false;
             $scope.addActions = [{
                 name: "Add Module",
                     clicked: function () {
@@ -39,7 +40,7 @@
                     },
                     haspermission: function () {
                         return VR_Sec_BusinessEntityModuleAPIService.HasAddBusinessEntityModulePermission();
-
+                       
                     }
 
                 },
@@ -50,7 +51,11 @@
                         gridAPI.onBusinessEntityAdded(entityObj);
                     };
                     return VR_Sec_BusinessEntityDefinitionService.addBusinessEntityDefinition(onBusinessEntityDefinitionAdded, $scope.selectedMenuItem.EntityId);
+                },
+                haspermission: function () {
+                    return VR_Sec_BusinessEntityAPIService.HasAddBusinessEntityPermission();                  
                 }
+
             }];
             $scope.hasRankingPermission = function () {
                 return VR_Sec_BusinessEntityNodeAPIService.HasUpdateEntityNodesRankPermission();

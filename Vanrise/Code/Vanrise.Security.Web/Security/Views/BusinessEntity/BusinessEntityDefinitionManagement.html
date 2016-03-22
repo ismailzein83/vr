@@ -4,10 +4,11 @@
             <div transclude-to="buttons">
                 <vr-button type="Ranking" validationcontext="SearchGroup" data-onclick="ranking" haspermission="hasRankingPermission"></vr-button>
                 <vr-button type="Edit" ng-show="selectedMenuItem !=undefined" validationcontext="SearchGroup" data-onclick="editBusinessEntityModule" haspermission="hasUpdateModulePermission"></vr-button>
-                <vr-button type="Add" ng-show="selectedMenuItem !=undefined" menuactions="addActions" ></vr-button>
+                <vr-button type="Add" ng-show="selectedMenuItem !=undefined" menuactions="addActions"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
+   
     <vr-row removeline>
         <vr-columns width="1/4row">
             <vr-treeview on-ready="onModulesTreeReady"
