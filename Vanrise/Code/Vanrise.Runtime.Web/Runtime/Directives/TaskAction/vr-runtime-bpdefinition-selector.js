@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcessAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (BusinessProcessAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -93,7 +93,7 @@ app.directive('vrRuntimeBpdefinitionSelector', ['BusinessProcessAPIService', 'Ut
         }
 
         function getBPDefenitionsInfo(attrs, ctrl, selectedIds) {
-            return BusinessProcessAPIService.GetDefinitions().then(function (response) {
+            return BusinessProcess_BPDefinitionAPIService.GetBPDefinitions().then(function (response) {
                 ctrl.datasource.length = 0;
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);

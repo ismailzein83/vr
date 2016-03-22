@@ -1,6 +1,6 @@
-﻿WFActionTemplateController.$inject = ['$scope', 'BusinessProcessAPIService', 'UtilsService'];
+﻿WFActionTemplateController.$inject = ['$scope', 'BusinessProcess_BPDefinitionAPIService', 'UtilsService'];
 
-function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsService) {
+function WFActionTemplateController($scope, BusinessProcess_BPDefinitionAPIService, UtilsService) {
 
     defineScope();
     load();
@@ -67,7 +67,7 @@ function WFActionTemplateController($scope, BusinessProcessAPIService, UtilsServ
 
     function loadDefinitions()
     {
-        return BusinessProcessAPIService.GetDefinitions().then(function (response) {
+        return BusinessProcess_BPDefinitionAPIService.GetBPDefinitions().then(function (response) {
             angular.forEach(response, function (item) {
                 $scope.bpDefinitions.push(item);
             });

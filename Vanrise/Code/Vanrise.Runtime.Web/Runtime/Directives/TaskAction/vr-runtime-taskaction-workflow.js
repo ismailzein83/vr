@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrRuntimeTaskactionWorkflow", ['UtilsService', 'VRUIUtilsService', 'BusinessProcessAPIService',
-function (UtilsService, VRUIUtilsService, BusinessProcessAPIService) {
+app.directive("vrRuntimeTaskactionWorkflow", ['UtilsService', 'VRUIUtilsService',
+function (UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
