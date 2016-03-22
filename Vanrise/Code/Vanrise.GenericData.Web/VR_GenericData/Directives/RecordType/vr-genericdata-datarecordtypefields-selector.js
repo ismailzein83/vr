@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_DataRecordTypeAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_DataRecordTypeAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -22,10 +22,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             ctrl.datasource = [];
 
-
-
-            ctrl.datasource = [];
-            var ctor = new recordTypeCtor(ctrl, $scope, $attrs);
+            var ctor = new recordTypeFieldsCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -46,9 +43,9 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
         var label;
         if (attrs.hidelabel == undefined)
             if (attrs.label == undefined)
-                label = 'label="Type"';
+                label = 'label="Field"';
             else
-                label = 'label="' + attrs.label+'"';
+                label = 'label="' + attrs.label + '"';
 
         var disabled = "";
         if (attrs.isdisabled)
@@ -67,15 +64,14 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"'
-               + 'entityname="Type" ' + label + '></vr-select>';
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="Name"'
+               + 'entityname="Field" ' + label + '></vr-select>';
 
     }
 
-    function recordTypeCtor(ctrl, $scope, $attrs) {
+    function recordTypeFieldsCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
-
             defineAPI();
         }
 
@@ -83,23 +79,25 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             var api = {};
 
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('DataRecordTypeId', $attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('Name', $attrs, ctrl);
             }
 
             api.load = function (payload) {
-
                 var selectedIds;
+                var dataRecordTypeId;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    dataRecordTypeId = payload.dataRecordTypeId;
                 }
 
-                return VR_GenericData_DataRecordTypeAPIService.GetDataRecordTypeInfo().then(function (response) {
-                    angular.forEach(response, function (item) {
-                        ctrl.datasource.push(item);
+                return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
+                    if (response.Fields != undefined)
+                        angular.forEach(response.Fields, function (item) {
+                            ctrl.datasource.push(item);
 
-                    });
+                        });
                     if (selectedIds != undefined)
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'DataRecordTypeId', $attrs, ctrl);
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
 
                 });
             }
