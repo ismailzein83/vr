@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
@@ -51,7 +51,7 @@ namespace TestRuntime.Tasks
 
         private static void RunCompleteProductRouteBuild()
         {
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpClient = new BPInstanceManager();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput

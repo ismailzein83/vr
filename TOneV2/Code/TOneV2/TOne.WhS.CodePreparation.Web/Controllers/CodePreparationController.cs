@@ -1,20 +1,12 @@
-﻿using Aspose.Cells;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Http;
 using TOne.WhS.CodePreparation.BP.Arguments;
 using TOne.WhS.CodePreparation.Business;
-using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Web.Base;
 using TOne.WhS.CodePreparation.Entities.CP;
-using TOne.WhS.CodePreparation.Entities;
+using Vanrise.BusinessProcess.Business;
 
 namespace TOne.WhS.CodePreparation.Web.Controllers
 {
@@ -26,7 +18,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         public CreateProcessOutput ApplyCodePreparationForEntities(CodePreparationUserInput input)
         {
             CodePreparationManager manager = new CodePreparationManager();
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpClient = new BPInstanceManager();
             return bpClient.CreateNewProcess(new CreateProcessInput
              {
                  InputArguments = new CodePreparationInput

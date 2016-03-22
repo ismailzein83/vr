@@ -10,7 +10,8 @@ using TOne.CDR.QueueActivators;
 using TOne.Entities;
 using TOne.LCR.Entities;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
+//using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
@@ -316,7 +317,7 @@ namespace TestRuntime
             {
                 InputArguments = inputArguments
             };
-            BPClient processManager = new BPClient();
+            BPInstanceManager processManager = new BPInstanceManager();
             processManager.CreateNewProcess(input);
         }
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
+//using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;

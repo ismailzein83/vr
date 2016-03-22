@@ -10,7 +10,6 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
 using TOne.WhS.SupplierPriceList.BP.Arguments;
-using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Web.Base;
 using TOne.WhS.SupplierPriceList.Entities;

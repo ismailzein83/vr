@@ -8,7 +8,6 @@ using TOne.WhS.CDRProcessing.Entities;
 using TOne.WhS.CDRProcessing.QueueActivators;
 using TOne.WhS.CodePreparation.BP.Arguments;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;

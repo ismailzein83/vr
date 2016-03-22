@@ -8,7 +8,6 @@ using System.Timers;
 using System.Configuration;
 using System.Collections.Concurrent;
 using TOne.LCR.Entities;
-using Vanrise.BusinessProcess.Client;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 
 namespace TestRuntime
@@ -63,7 +63,7 @@ namespace TestRuntime
             {
                 InputArguments = inputArguments
             };
-            BPClient processManager = new BPClient();
+            BPInstanceManager processManager = new BPInstanceManager();
             processManager.CreateNewProcess(input);
         }
 
@@ -75,7 +75,7 @@ namespace TestRuntime
             {
                 InputArguments = inputArguments
             };
-            BPClient processManager = new BPClient();
+            BPInstanceManager processManager = new BPInstanceManager();
             processManager.CreateNewProcess(input);
 
         }
@@ -87,7 +87,7 @@ namespace TestRuntime
             {
                 InputArguments = inputArguments
             };
-            BPClient processManager = new BPClient();
+            BPInstanceManager processManager = new BPInstanceManager();
             processManager.CreateNewProcess(input);
 
             TOne.CDRProcess.Arguments.CDRGenerationProcessInput CDRProcessInputArguments = new TOne.CDRProcess.Arguments.CDRGenerationProcessInput { SwitchID = SwitchID };
@@ -95,7 +95,7 @@ namespace TestRuntime
             {
                 InputArguments = CDRProcessInputArguments
             };
-            BPClient processManager1 = new BPClient();
+            BPInstanceManager processManager1 = new BPInstanceManager();
             processManager1.CreateNewProcess(inputCDRProcess);
         }
 

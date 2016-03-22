@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePreparationController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcessService', 'VRUIUtilsService', 'UtilsService'];
+    CodePreparationController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'VRUIUtilsService', 'UtilsService'];
 
-    function CodePreparationController($scope, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcessService, VRUIUtilsService, UtilsService) {
+    function CodePreparationController($scope, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, VRUIUtilsService, UtilsService) {
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred;
 
@@ -30,7 +30,7 @@
             $scope.upload = function () {
                 return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationForEntities($scope.selectedSellingNumberPlan.SellingNumberPlanId, $scope.zoneList.fileId, $scope.effectiveDate, true).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
-                        return BusinessProcessService.openProcessTracking(response.ProcessInstanceId);
+                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
                 });
             }
             $scope.downloadTemplate = function () {

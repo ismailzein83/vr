@@ -9,7 +9,8 @@ using TOne.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
+//using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
@@ -47,7 +48,7 @@ namespace TestRuntime
 
         private static void RunCompleteProductRouteBuild()
         {
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpClient = new BPInstanceManager();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new TOne.WhS.Routing.BP.Arguments.RPRoutingProcessInput
@@ -65,7 +66,7 @@ namespace TestRuntime
 
         private static void RunCompleteRouteBuild()
         {
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpClient = new BPInstanceManager();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new TOne.WhS.Routing.BP.Arguments.RoutingProcessInput
@@ -82,7 +83,7 @@ namespace TestRuntime
 
         private static void RunPartialRouteBuild()
         {
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpClient = new BPInstanceManager();
             bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new TOne.LCRProcess.Arguments.DifferentialRoutingProcessInput()

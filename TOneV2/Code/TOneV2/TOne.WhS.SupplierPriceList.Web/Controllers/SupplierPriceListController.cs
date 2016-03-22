@@ -1,16 +1,13 @@
 ﻿using Aspose.Cells;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
-using System.Web.Hosting;
 using System.Web.Http;
 using TOne.WhS.SupplierPriceList.BP.Arguments;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Web.Base;
 
@@ -23,7 +20,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         [Route("UploadSupplierPriceList")]
         public CreateProcessOutput UploadSupplierPriceList(SupplierPriceListUserInput input)
         {
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpClient = new BPInstanceManager();
 
             return bpClient.CreateNewProcess(new CreateProcessInput
             {
