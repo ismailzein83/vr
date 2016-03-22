@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 using Vanrise.Runtime.Entities;
@@ -21,11 +18,11 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
             if (evaluatedExpressions != null)
                 wfTaskActionArgument.ProcessInputArguments.MapExpressionValues(evaluatedExpressions);
 
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpInstanceManager = new BPInstanceManager();
             BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments;
             inputArguments.UserId = task.OwnerId;
 
-            bpClient.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
+            bpInstanceManager.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = inputArguments
             });

@@ -88,10 +88,6 @@
       <Project>{ce8a7fee-d6c7-43c6-851f-beba44b03b13}</Project>
       <Name>Vanrise.BusinessProcess.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Vanrise.BusinessProcess.Client\Vanrise.BusinessProcess.Client.csproj">
-      <Project>{f5064a23-6e52-43da-affa-71425942ebf8}</Project>
-      <Name>Vanrise.BusinessProcess.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>

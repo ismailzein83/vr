@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
-using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
-
+﻿using System.Activities;
+using Vanrise.BusinessProcess.Business;
 namespace Vanrise.BusinessProcess.WFActivities
 {
 
@@ -22,8 +16,8 @@ namespace Vanrise.BusinessProcess.WFActivities
         protected override void Execute(CodeActivityContext context)
         {
             BPSharedInstanceData sharedInstanceData = context.GetSharedInstanceData();
-            BPClient client = new BPClient();
-            client.TriggerProcessEvent(new Entities.TriggerProcessEventInput
+            BPEventManager bpEventManager = new BPEventManager();
+            bpEventManager.TriggerProcessEvent(new Entities.TriggerProcessEventInput
             {
                 ProcessInstanceId = sharedInstanceData.InstanceInfo.ParentProcessID.Value,
                 BookmarkName = this.BookmarkName.Get(context),

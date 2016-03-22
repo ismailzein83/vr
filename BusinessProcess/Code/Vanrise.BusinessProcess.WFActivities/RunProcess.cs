@@ -5,7 +5,7 @@ using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -36,8 +36,8 @@ namespace Vanrise.BusinessProcess.WFActivities
                 InputArguments = this.Input.Get(context),
                 ParentProcessID = sharedData.InstanceInfo.ProcessInstanceID
             };
-            BPClient client = new BPClient();
-            var output = client.CreateNewProcess(input);
+            BPInstanceManager manager = new BPInstanceManager();
+            var output = manager.CreateNewProcess(input);
             this.ProcessInstanceId.Set(context, output.ProcessInstanceId);
 
             if (this.WaitProcessCompleted.Get(context))

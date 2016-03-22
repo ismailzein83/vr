@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -49,6 +51,41 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.GetBPInstance(bpInstanceId);
         }
+
+        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
+        {
+            if (createProcessInput == null)
+                throw new ArgumentNullException("createProcessInput");
+            if (createProcessInput.InputArguments == null)
+                throw new ArgumentNullException("createProcessInput.InputArguments");
+            
+            BPDefinitionManager bpDefinitionManager = new BPDefinitionManager();
+            BPDefinition processDefinition = bpDefinitionManager.GetDefinition(createProcessInput.InputArguments.ProcessName);
+            if (processDefinition == null)
+                throw new Exception(String.Format("No Process Definition found match with input argument '{0}'", createProcessInput.InputArguments.GetType()));
+
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            string processTitle = createProcessInput.InputArguments.GetTitle();
+
+            long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, processDefinition.BPDefinitionID, createProcessInput.InputArguments, BPInstanceStatus.New);
+            IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
+            dataManagerTracking.Insert(new BPTrackingMessage
+            {
+                ProcessInstanceId = processInstanceId,
+                ParentProcessId = createProcessInput.ParentProcessID,
+                TrackingMessage = String.Format("Process Created: {0}", processTitle),
+                Severity = LogEntryType.Information,
+                EventTime = DateTime.Now
+            });
+            CreateProcessOutput output = new CreateProcessOutput
+            {
+                ProcessInstanceId = processInstanceId,
+                Result = CreateProcessResult.Succeeded
+            };
+            return output;
+        }
+
+
         #endregion
 
         #region mapper

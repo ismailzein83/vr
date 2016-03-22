@@ -1,6 +1,6 @@
-﻿NewInstanceEditorController.$inject = ['$scope', 'BusinessProcessAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+﻿NewInstanceEditorController.$inject = ['$scope', 'BusinessProcess_BPInstanceAPIService','BusinessProcess_BPDefinitionAPIService', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-function NewInstanceEditorController($scope, BusinessProcessAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+function NewInstanceEditorController($scope, BusinessProcess_BPInstanceAPIService,BusinessProcess_BPDefinitionAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
     var bpDefinitionDirectiveApi;
 
     var bpDefinitionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -29,7 +29,7 @@ function NewInstanceEditorController($scope, BusinessProcessAPIService, $routePa
                 if (angular.isArray(createProcessInputs))
                 {
                     angular.forEach(createProcessInputs, function (itm) {
-                        BusinessProcessAPIService.CreateNewProcess(itm).then().catch(function (error) {
+                        BusinessProcess_BPInstanceAPIService.CreateNewProcess(itm).then().catch(function (error) {
                             VRNotificationService.notifyException(error);
                         });
                     });
@@ -40,7 +40,7 @@ function NewInstanceEditorController($scope, BusinessProcessAPIService, $routePa
                     $scope.modalContext.closeModal();
                 }
                 else {
-                    BusinessProcessAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
+                    BusinessProcess_BPInstanceAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
                         if (VRNotificationService.notifyOnItemAdded("Bussiness Instance", response)) {
                             if ($scope.onProcessInputCreated != undefined)
                                 $scope.onProcessInputCreated(response.ProcessInstanceId);
@@ -97,7 +97,7 @@ function NewInstanceEditorController($scope, BusinessProcessAPIService, $routePa
 
     function getBPDefinition() {
 
-        return BusinessProcessAPIService.GetDefinition($scope.BPDefinitionID)
+        return BusinessProcess_BPDefinitionAPIService.GetBPDefintion($scope.BPDefinitionID)
            .then(function (response) {
                $scope.bpDefinitionObj = response;
            }).catch(function(error) {

@@ -103,6 +103,15 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return GetItemSP("[bp].[sp_BPInstance_GetByID]", BPInstanceMapper, bpInstanceId);
         }
+
+        public long InsertInstance(string processTitle, long? parentId, int definitionId, object inputArguments, BPInstanceStatus executionStatus)
+        {
+            object processInstanceId;
+            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, inputArguments != null ? Serializer.Serialize(inputArguments) : null, (int)executionStatus) > 0)
+                return (long)processInstanceId;
+            else
+                return 0;
+        }
         #endregion
 
         #region mapper

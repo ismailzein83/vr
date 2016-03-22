@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Business;
-using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.BusinessProcess.Extensions;
-using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
-using Vanrise.BusinessProcess.Web.ModelMappers;
-using Vanrise.BusinessProcess.Web.Models;
-using Vanrise.Common;
-using Vanrise.Runtime.Business;
-using Vanrise.Runtime.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
@@ -42,6 +32,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             BPDefinitionManager manager = new BPDefinitionManager();
             return manager.GetBPDefinition(bpDefinitionId);
+        }
+
+        [HttpGet]
+        [Route("GetDefinitions")]
+        public IEnumerable<BPDefinition> GetDefinitions()
+        {
+            BPDefinitionManager manager = new BPDefinitionManager();
+            return manager.GetBPDefinitions();
         }
     }
 }

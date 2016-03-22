@@ -36,9 +36,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             ExecuteNonQuerySP("bp.sp_BPEvent_Delete", eventId);
         }
 
-        public void InsertEvent(long processInstanceId, string bookmarkName, object eventData)
+        public int InsertEvent(long processInstanceId, string bookmarkName, object eventData)
         {
-            ExecuteNonQuerySP("bp.sp_BPEvent_Insert", processInstanceId, bookmarkName, eventData != null ? Serializer.Serialize(eventData) : null);
+            return ExecuteNonQuerySP("bp.sp_BPEvent_Insert", processInstanceId, bookmarkName, eventData != null ? Serializer.Serialize(eventData) : null);
         }
 
         #region Private Methods

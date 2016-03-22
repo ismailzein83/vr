@@ -14,6 +14,6 @@ namespace Vanrise.BusinessProcess.Data
 
         void DeleteEvent(long eventId);
 
-        void InsertEvent(long processInstanceId, string bookmarkName, Object eventData);
+        int InsertEvent(long processInstanceId, string bookmarkName, Object eventData);
     }
 }

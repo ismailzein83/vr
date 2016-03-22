@@ -142,10 +142,6 @@
       <Project>{ce8a7fee-d6c7-43c6-851f-beba44b03b13}</Project>
       <Name>Vanrise.BusinessProcess.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Vanrise.BusinessProcess.Client\Vanrise.BusinessProcess.Client.csproj">
-      <Project>{f5064a23-6e52-43da-affa-71425942ebf8}</Project>
-      <Name>Vanrise.BusinessProcess.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
@@ -163,7 +159,6 @@
     <Compile Include="Controllers\BPInstanceTrackingController.cs" />
     <Compile Include="Controllers\BPInstanceController.cs" />
     <Compile Include="Controllers\BPDefinitionController.cs" />
-    <Compile Include="Controllers\BusinessProcessController.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
     <Compile Include="Models\SchedulerTaskModel.cs" />
     <Compile Include="Models\BPInstanceModel.cs" />
@@ -207,14 +202,8 @@
     <Content Include="BusinessProcess\Services\BPSchedulerTaskService.js" />
     <Content Include="BusinessProcess\Services\BPValidationMessageService.js" />
     <Content Include="BusinessProcess\Services\BPTaskService.js" />
-    <Content Include="BusinessProcess\Services\BusinessProcessAPIService.js" />
-    <Content Include="BusinessProcess\Services\BusinessProcessService.js" />
-    <Content Include="BusinessProcess\Views\BPDefinitionManagement.html" />
-    <Content Include="BusinessProcess\Views\BPDefinitionManagementController.js" />
     <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagement.html" />
     <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagementController.js" />
-    <Content Include="BusinessProcess\Views\BPHistory.html" />
-    <Content Include="BusinessProcess\Views\BPHistoryController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistory.html" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistoryController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceTrackingModal.html" />
@@ -223,10 +212,6 @@
     <Content Include="BusinessProcess\Views\BPTask\BPTaskMonitorController.js" />
     <Content Include="BusinessProcess\Views\BPTask\BPTaskTestEditor.html" />
     <Content Include="BusinessProcess\Views\BPTask\BPTaskTestEditorController.js" />
-    <Content Include="BusinessProcess\Views\BPTrackingModal.html" />
-    <Content Include="BusinessProcess\Views\BPTrackingModalController.js" />
-    <Content Include="BusinessProcess\Views\InstanceEditor.html" />
-    <Content Include="BusinessProcess\Views\InstanceEditorController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceMonitor.html" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceMonitorController.js" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditor.html" />

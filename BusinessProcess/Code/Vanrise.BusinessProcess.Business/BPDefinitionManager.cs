@@ -49,6 +49,10 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetCachedBPDefinitions().GetRecord(definitionId);
         }
+        public BPDefinition GetDefinition(string processName)
+        {
+            return GetBPDefinitions().FirstOrDefault(itm => itm.Name == processName);
+        }
 
         #endregion
 

@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Business;
-using Vanrise.BusinessProcess.Client;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.BusinessProcess.Extensions;
-using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 using Vanrise.BusinessProcess.Web.ModelMappers;
 using Vanrise.BusinessProcess.Web.Models;
-using Vanrise.Common;
-using Vanrise.Runtime.Business;
-using Vanrise.Runtime.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
+    [Vanrise.Web.Base.JSONWithType]
     [RoutePrefix(Constants.ROUTE_PREFIX + "BPInstance")]
     public class BPInstanceController : BaseAPIController
     {
@@ -48,8 +41,17 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         [Route("GetBPInstance")]
         public BPInstanceModel GetBPInstance(int id)
         {
-           BPInstanceManager manager = new BPInstanceManager();
-           return BPMappers.MapInstance(manager.GetBPInstance(id));
+            BPInstanceManager manager = new BPInstanceManager();
+            return BPMappers.MapInstance(manager.GetBPInstance(id));
+        }
+
+        [HttpPost]
+        [Route("CreateNewProcess")]
+        public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
+        {
+            BPInstanceManager manager = new BPInstanceManager();
+            createProcessInput.InputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            return manager.CreateNewProcess(createProcessInput);
         }
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="BPBusinessRuleActionManager.cs" />
     <Compile Include="BPBusinessRuleActionTypeManager.cs" />
     <Compile Include="BPBusinessRuleManager.cs" />
+    <Compile Include="BPEventManager.cs" />
     <Compile Include="BPTaskTypeManager.cs" />
     <Compile Include="BPTaskManager.cs" />
     <Compile Include="BPInstanceTrackingManager.cs" />

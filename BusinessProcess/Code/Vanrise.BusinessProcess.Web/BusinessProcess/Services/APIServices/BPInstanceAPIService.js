@@ -23,11 +23,16 @@
             });
         }
 
+        function CreateNewProcess(createProcessInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "CreateNewProcess"), createProcessInput);
+        }
+
         return ({
             GetUpdated: GetUpdated,
             GetBeforeId: GetBeforeId,
             GetFilteredBPInstances: GetFilteredBPInstances,
-            GetBPInstance: GetBPInstance
+            GetBPInstance: GetBPInstance,
+            CreateNewProcess: CreateNewProcess
         });
     }
 
