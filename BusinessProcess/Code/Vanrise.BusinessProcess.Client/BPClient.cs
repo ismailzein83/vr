@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
@@ -50,9 +51,11 @@ namespace Vanrise.BusinessProcess.Client
 
         public BPDefinition GetDefinition(string processName)
         {
-            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
-            List<BPDefinition> definitions = dataManager.GetDefinitions();
-            return definitions.FirstOrDefault(itm => itm.Name == processName);
+            //IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            //List<BPDefinition> definitions = dataManager.GetDefinitions();
+            //return definitions.FirstOrDefault(itm => itm.Name == processName);
+            BPDefinitionManager manager = new BPDefinitionManager();
+            return manager.GetBPDefinitions().FirstOrDefault(itm => itm.Name == processName);
         }
 
         public TriggerProcessEventOutput TriggerProcessEvent(TriggerProcessEventInput triggerProcessEventInput)
