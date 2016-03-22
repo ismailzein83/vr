@@ -4,7 +4,7 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/4row">
                             <vr-textbox label="Name" value="scopeModal.name" isrequired></vr-textbox>
                         </vr-columns>
                     </vr-row>
@@ -12,12 +12,12 @@
 
 
                     <vr-row>
-                        <vr-columns width="1/3row">
-                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onDataRecordTypeSelectorReady"
-                                                                    selectedvalues="scopeModal.selectedDataRecordType"
-                                                                    onselectionchanged="scopeModal.onRecordTypeSelectionChanged"
+                        <vr-columns width="1/4row">
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onRawDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModal.selectedRawDataRecordType"
+                                                                    onselectionchanged="scopeModal.onRawRecordTypeSelectionChanged"
                                                                     isrequired="true"
-                                                                    label=" Record Type"
+                                                                    label="Raw Record Type"
                                                                     hideremoveicon>
                             </vr-genericdata-datarecordtype-selector>
 
@@ -25,16 +25,68 @@
                         </vr-columns>
 
 
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/4row">
 
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onDataRecordTypeFieldsSelectorReady"
-                                                                          selectedvalues="scopeModal.selectedDataRecordTypeFields"
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onRawDataRecordTypeFieldsSelectorReady"
+                                                                          selectedvalues="scopeModal.selectedRawDataRecordTypeFields"
                                                                           isrequired="true"
                                                                           label=" Time Field"
                                                                           hideremoveicon>
                             </vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
                     </vr-row>
+
+
+                   
+
+                    <vr-row>
+                        <vr-columns width="1/4row">
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onSummaryDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModal.selectedSummaryDataRecordType"
+                                                                    onselectionchanged="scopeModal.onSummaryRecordTypeSelectionChanged"
+                                                                    isrequired="true"
+                                                                    label="Summary Record Type"
+                                                                    hideremoveicon>
+                            </vr-genericdata-datarecordtype-selector>
+
+
+                        </vr-columns>
+
+
+                        <vr-columns width="1/4row">
+
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onSummaryDataRecordTypeFieldsIDSelectorReady"
+                                                                          selectedvalues="scopeModal.selectedSummaryDataRecordTypeFieldsID"
+                                                                          isrequired="true"
+                                                                          label=" ID Field"
+                                                                          hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+
+
+                        <vr-columns width="1/4row">
+
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onSummaryDataRecordTypeFieldsBatchSelectorReady"
+                                                                          selectedvalues="scopeModal.selectedSummaryDataRecordTypeFieldsBatch"
+                                                                          isrequired="true"
+                                                                          label=" Batch Start Field"
+                                                                          hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                        <vr-columns width="1/4row">
+                            <vr-genericdata-datarecordstorage-selector on-ready="scopeModal.onDataRecordStorageSelectorReady"
+                                                                       selectedvalues="scopeModal.selectedDataRecordStorage"
+                                                                       isrequired="true"
+                                                                       hideremoveicon>
+                            </vr-genericdata-datarecordstorage-selector>
+                        </vr-columns>
+                    </vr-row>
+
+
+
+                   
+
+
 
 
                 </vr-tab>
