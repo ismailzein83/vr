@@ -57,7 +57,7 @@
             $scope.onValidationMessageHistoryGridReady = function (api) {
                 validationMessageHistoryGridAPI = api;
                 getFilterObject();
-                validationMessageHistoryGridAPI.loadGrid(filter);
+                validationMessageHistoryGridAPI.load(filter);
             }
 
             $scope.modalContext.onModalHide = function () {

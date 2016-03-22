@@ -46,7 +46,7 @@ function (BusinessProcess_BPValidationMessageAPIService, VRNotificationService, 
 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
+                    directiveAPI.load = function (query) {
                         bpInstanceId = query.BPInstanceID;
                         getFilterObject();
                         return gridAPI.retrieveData(filter);
