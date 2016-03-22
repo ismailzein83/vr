@@ -17,18 +17,16 @@ namespace TOne.WhS.SupplierPriceList.Business
       
         public Vanrise.Entities.IDataRetrievalResult<CodePreviewDetail> GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
-            //ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
-            //BigResult<CodePreview> codesPreview = dataManager.GetCodePreviewFilteredFromTemp(input);
-            //BigResult<CodePreviewDetail> codePreviewDetailResult = new BigResult<CodePreviewDetail>()
-            //{
-            //    ResultKey = codesPreview.ResultKey,
-            //    TotalCount = codesPreview.TotalCount,
-            //    Data = codesPreview.Data.MapRecords(CodePreviewDetailMapper)
-            //};
+            ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
+            BigResult<CodePreview> codesPreview = dataManager.GetCodePreviewFilteredFromTemp(input);
+            BigResult<CodePreviewDetail> codePreviewDetailResult = new BigResult<CodePreviewDetail>()
+            {
+                ResultKey = codesPreview.ResultKey,
+                TotalCount = codesPreview.TotalCount,
+                Data = codesPreview.Data.MapRecords(CodePreviewDetailMapper)
+            };
 
-            //return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, codePreviewDetailResult);
-
-            return null;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, codePreviewDetailResult);
         }
 
         private CodePreviewDetail CodePreviewDetailMapper(CodePreview codePreview){

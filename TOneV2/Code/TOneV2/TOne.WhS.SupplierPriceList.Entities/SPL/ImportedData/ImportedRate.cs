@@ -89,7 +89,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         [Description("Increase")]
         Increase = 2,
 
-        [Description("Increase")]
+        [Description("Decrease")]
         Decrease = 3
     }
 }

@@ -17,18 +17,17 @@ namespace TOne.WhS.SupplierPriceList.Business
       
         public Vanrise.Entities.IDataRetrievalResult<RatePreviewDetail> GetFilteredRatePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
-            //ISupplierRatePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierRatePreviewDataManager>();
+            ISupplierRatePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierRatePreviewDataManager>();
 
-            //BigResult<RatePreview> ratesPreview = dataManager.GetRatePreviewFilteredFromTemp(input);
-            //BigResult<RatePreviewDetail> ratePreviewDetailResult = new BigResult<RatePreviewDetail>()
-            //{
-            //    ResultKey = ratesPreview.ResultKey,
-            //    TotalCount = ratesPreview.TotalCount,
-            //    Data = ratesPreview.Data.MapRecords(RatePreviewDetailMapper)
-            //};
+            BigResult<RatePreview> ratesPreview = dataManager.GetRatePreviewFilteredFromTemp(input);
+            BigResult<RatePreviewDetail> ratePreviewDetailResult = new BigResult<RatePreviewDetail>()
+            {
+                ResultKey = ratesPreview.ResultKey,
+                TotalCount = ratesPreview.TotalCount,
+                Data = ratesPreview.Data.MapRecords(RatePreviewDetailMapper)
+            };
 
-            //return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, ratePreviewDetailResult);
-            return null;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, ratePreviewDetailResult);
         }
         private RatePreviewDetail RatePreviewDetailMapper(RatePreview ratePreview)
         {

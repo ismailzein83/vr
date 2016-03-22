@@ -13,9 +13,9 @@
  xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
  xmlns:twsba="clr-namespace:TOne.WhS.SupplierPriceList.BP.Arguments;assembly=TOne.WhS.SupplierPriceList.BP.Arguments"
  xmlns:twsba1="clr-namespace:TOne.WhS.SupplierPriceList.BP.Activities;assembly=TOne.WhS.SupplierPriceList.BP.Activities"
+ xmlns:twsbat="clr-namespace:TOne.WhS.SupplierPriceList.BP.Arguments.Tasks;assembly=TOne.WhS.SupplierPriceList.BP.Arguments"
  xmlns:twse="clr-namespace:TOne.WhS.SupplierPriceList.Entities;assembly=TOne.WhS.SupplierPriceList.Entities"
  xmlns:twses="clr-namespace:TOne.WhS.SupplierPriceList.Entities.SPL;assembly=TOne.WhS.SupplierPriceList.Entities"
- xmlns:twsm="clr-namespace:TOne.WhS.SupplierPriceList.MainExtensions;assembly=TOne.WhS.SupplierPriceList.MainExtensions"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
@@ -38,7 +38,7 @@
       <x:String>TOne.WhS.SupplierPriceList.Entities.SPL</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
       <x:String>Vanrise.Queueing</x:String>
-      <x:String>TOne.WhS.SupplierPriceList.MainExtensions</x:String>
+      <x:String>TOne.WhS.SupplierPriceList.BP.Arguments.Tasks</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -56,6 +56,7 @@
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
@@ -65,8 +66,6 @@
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.Entities</AssemblyReference>
-      <AssemblyReference>TOne.WhS.SupplierPriceList.MainExtensions</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
     </sco:Collection>
@@ -146,7 +145,11 @@
       </Variable>
       <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedCountriesToValidate" />
       <Variable x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)" Name="ImportedCountriesDataValidationRules" />
-      <Variable x:TypeArguments="twsm:PreviewInformation" Name="ContinueExecution" />
+      <Variable x:TypeArguments="twsbat:PreviewTaskExecutionInformation" Name="ContinueExecution">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="twsbat:PreviewTaskExecutionInformation">new TOne.WhS.SupplierPriceList.BP.Arguments.Tasks.PreviewTaskExecutionInformation()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <twsba1:SetImportSPLContext sap2010:WorkflowViewState.IdRef="SetImportSPLContext_1" />
     <twsba1:GetDataFromPriceList sap2010:WorkflowViewState.IdRef="GetDataFromPriceList_1">
@@ -354,7 +357,6 @@
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_10">
       <Parallel.Variables>
         <Variable x:TypeArguments="x:Int32" Name="ProcessingCountryCompleted" />
-        <Variable x:TypeArguments="twsm:PreviewInformation" Name="ContinueExecution" />
       </Parallel.Variables>
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
         <ForEach x:TypeArguments="twses:ImportedCountry" DisplayName="ForEach&lt;ImportedCountry&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_4">
@@ -735,30 +737,67 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <twsba1:SyncImportedDataWithDB sap2010:WorkflowViewState.IdRef="SyncImportedDataWithDB_3">
-      <twsba1:SyncImportedDataWithDB.CurrencyId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+    <vbw:AssignTask x:TypeArguments="twsbat:PreviewTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_2" TaskTitle="Approve pricelist changes">
+      <vbw:AssignTask.AssignedTo>
+        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
         </InArgument>
-      </twsba1:SyncImportedDataWithDB.CurrencyId>
-      <twsba1:SyncImportedDataWithDB.FileId>
-        <InArgument x:TypeArguments="x:Int64">
-          <mca:CSharpValue x:TypeArguments="x:Int64">Input.FileId</mca:CSharpValue>
+      </vbw:AssignTask.AssignedTo>
+      <vbw:AssignTask.TaskData>
+        <InArgument x:TypeArguments="vbe:BPTaskData">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new TOne.WhS.SupplierPriceList.BP.Arguments.Tasks.PreviewTaskData()</mca:CSharpValue>
         </InArgument>
-      </twsba1:SyncImportedDataWithDB.FileId>
-      <twsba1:SyncImportedDataWithDB.PriceListId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">PriceListId</mca:CSharpValue>
+      </vbw:AssignTask.TaskData>
+      <vbw:AssignTask.TaskExecutionInformation>
+        <OutArgument x:TypeArguments="twsbat:PreviewTaskExecutionInformation">
+          <mca:CSharpReference x:TypeArguments="twsbat:PreviewTaskExecutionInformation">ContinueExecution</mca:CSharpReference>
+        </OutArgument>
+      </vbw:AssignTask.TaskExecutionInformation>
+    </vbw:AssignTask>
+    <If sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">ContinueExecution.ContinueExecution</mca:CSharpValue>
         </InArgument>
-      </twsba1:SyncImportedDataWithDB.PriceListId>
-      <twsba1:SyncImportedDataWithDB.SupplierId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
-        </InArgument>
-      </twsba1:SyncImportedDataWithDB.SupplierId>
-    </twsba1:SyncImportedDataWithDB>
-    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Finished synchronizing with existing entities." />
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+      </If.Condition>
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
+          <twsba1:SyncImportedDataWithDB sap2010:WorkflowViewState.IdRef="SyncImportedDataWithDB_3">
+            <twsba1:SyncImportedDataWithDB.CurrencyId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SyncImportedDataWithDB.CurrencyId>
+            <twsba1:SyncImportedDataWithDB.FileId>
+              <InArgument x:TypeArguments="x:Int64">
+                <mca:CSharpValue x:TypeArguments="x:Int64">Input.FileId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SyncImportedDataWithDB.FileId>
+            <twsba1:SyncImportedDataWithDB.PriceListId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">PriceListId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SyncImportedDataWithDB.PriceListId>
+            <twsba1:SyncImportedDataWithDB.SupplierId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SyncImportedDataWithDB.SupplierId>
+          </twsba1:SyncImportedDataWithDB>
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Finished synchronizing with existing entities." />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_7" Message="You cancelled importing pricelist">
+          <vbw:WriteTrackingMessage.Severity>
+            <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Severity>
+        </vbw:WriteTrackingMessage>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -826,16 +865,26 @@
       <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,1124" />
       <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="2662,1170" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="SyncImportedDataWithDB_3" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2412">
+      <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="2662,22" />
+      <sap2010:ViewStateData Id="SyncImportedDataWithDB_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2492" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="2662,358" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2748">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2828" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

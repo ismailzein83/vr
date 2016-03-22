@@ -97,10 +97,6 @@
       <Project>{0940dc86-5421-4324-87cd-3f3ad458f4f6}</Project>
       <Name>TOne.WhS.SupplierPriceList.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.MainExtensions\TOne.WhS.SupplierPriceList.MainExtensions.csproj">
-      <Project>{d53cd509-802a-45ce-94a8-0089509b236b}</Project>
-      <Name>TOne.WhS.SupplierPriceList.MainExtensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="ImportSupplierPriceList.xaml">

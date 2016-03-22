@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Entities;
 
-namespace TOne.WhS.SupplierPriceList.Entities
+namespace TOne.WhS.SupplierPriceList.BP.Arguments.Tasks
 {
-    public class SPLPreviewQuery
+    public class PreviewTaskData : BPTaskData
     {
-        public int ProcessInstanceId { get; set; }
     }
 }
