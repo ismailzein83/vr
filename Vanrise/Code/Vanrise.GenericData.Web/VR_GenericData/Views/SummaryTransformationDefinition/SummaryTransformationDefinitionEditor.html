@@ -26,8 +26,13 @@
 
 
                         <vr-columns width="1/3row">
-                            <vr-select datatextfield="Name" datavaluefield="Name" label="Time Field" isrequired="true"
-                                       entityname="Title field" selectedvalues="scopeModal.selectedTitleFieldPath" datasource="scopeModal.fields" hideselectedvaluessection></vr-select>
+
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onDataRecordTypeFieldsSelectorReady"
+                                                                          selectedvalues="scopeModal.selectedDataRecordTypeFields"
+                                                                          isrequired="true"
+                                                                          label=" Time Field"
+                                                                          hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
                     </vr-row>
 

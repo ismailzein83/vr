@@ -334,7 +334,8 @@
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-grid.js" />
-    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector - Copy.js" />
+    <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypefields-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\Templates\SummaryTransformationDefinitionGrid.html" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-grid.js" />

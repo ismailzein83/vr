@@ -12,8 +12,10 @@
         var summaryTransformationDefinitionId;
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        var filterFieldsDirectiveAPI;
-        var filterFieldsDesignReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var dataRecordTypeFieldsSelectorAPI;
+        var dataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
 
         loadParameters();
         defineScope();
@@ -36,16 +38,17 @@
                 dataRecordTypeSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModal.selectedDataRecordTypeFields;
+            $scope.scopeModal.onDataRecordTypeFieldsSelectorReady = function (api) {
+                dataRecordTypeFieldsSelectorAPI = api;
+                dataRecordTypeFieldsSelectorReadyDeferred.resolve();
+            };
+
+
             $scope.scopeModal.onRecordTypeSelectionChanged = function () {
-
                 var selectedDataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
-
                 if (selectedDataRecordTypeId != undefined) {
-                    getDataRecordType(selectedDataRecordTypeId).then(function () {
-                        var payloadFilter = { recordTypeFields: recordTypeEntity.Fields };
-                        var setLoaderFilter = function (value) { $scope.isLoading = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterFieldsDirectiveAPI, payloadFilter, setLoaderFilter, filterFieldsDesignReadyPromiseDeferred);
-                    });
+                    loadDataRecordTypeFieldsSelector(selectedDataRecordTypeId);
                 }
             }
 
@@ -72,12 +75,6 @@
             };
         }
 
-        function getDataRecordType(dataRecordTypeId) {
-            return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
-                recordTypeEntity = response;
-                $scope.scopeModal.fields = response.Fields;
-            });
-        }
 
         function load() {
             $scope.scopeModal.isLoading = true;
@@ -101,7 +98,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeSelector, loadDataRecordTypeFieldsSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -129,6 +126,31 @@
         }
 
 
+        function loadDataRecordTypeFieldsSelector(selectedDataRecordTypeId) {
+            var payload;
+            var dataRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            dataRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
+                if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.DataRecordTypeId != undefined) {
+                    payload = {
+                        dataRecordTypeId: summaryTransformationDefinitionEntity.DataRecordTypeId
+                    };
+                }
+                else if (selectedDataRecordTypeId != undefined) {
+                    payload = {
+                        dataRecordTypeId: selectedDataRecordTypeId
+                    };
+                }
+
+                if (payload != undefined)
+                    VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, payload, dataRecordTypeFieldsSelectorLoadDeferred);
+                else
+                    dataRecordTypeFieldsSelectorLoadDeferred.resolve();
+            });
+            return dataRecordTypeFieldsSelectorLoadDeferred.promise;
+        }
+
+
+
         function getSummaryTransformationDefinition() {
             return VR_GenericData_SummaryTransformationDefinitionAPIService.GetSummaryTransformationDefinition(summaryTransformationDefinitionId).then(function (summaryTransformationDefinition) {
                 summaryTransformationDefinitionEntity = summaryTransformationDefinition;
@@ -136,8 +158,6 @@
         }
 
         function buildSummaryTransformationDefinitionObjFromScope() {
-
-
             var summaryTransformationDefinition = {
                 Name: $scope.scopeModal.name,
                 SummaryTransformationDefinitionId: summaryTransformationDefinitionId,
