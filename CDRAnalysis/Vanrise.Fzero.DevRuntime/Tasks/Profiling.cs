@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Runtime;
 
@@ -22,7 +22,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
 
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpClient = new BPInstanceManager();
             var input = new CreateProcessInput
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.NumberProfilingProcessInput

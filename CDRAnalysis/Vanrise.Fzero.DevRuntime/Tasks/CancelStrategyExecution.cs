@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Client;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Runtime;
 
@@ -24,7 +24,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
 
             long strategyExecutionId = 1;
 
-            BPClient bpClient = new BPClient();
+            BPInstanceManager bpClient = new BPInstanceManager();
             var input = new CreateProcessInput
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.CancelStrategyExecutionProcessInput
