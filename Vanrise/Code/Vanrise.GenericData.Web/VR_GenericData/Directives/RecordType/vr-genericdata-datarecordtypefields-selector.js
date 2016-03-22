@@ -91,14 +91,16 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                 }
 
                 return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
+                    ctrl.datasource.length = 0;
+                    if (ctrl.selectedvalues != undefined)
+                        ctrl.selectedvalues.length = 0;
+
                     if (response.Fields != undefined)
                         angular.forEach(response.Fields, function (item) {
                             ctrl.datasource.push(item);
-
                         });
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
-
                 });
             }
 
