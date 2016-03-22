@@ -1,4 +1,4 @@
-﻿create PROCEDURE [CP_SupPriceList].sp_PriceList_GetBeforeID
+﻿CREATE PROCEDURE [CP_SupPriceList].[sp_PriceList_GetBeforeID]
 	@LessThanID BIGINT,
 	@NbOfRows INT,
 	@UserId INT
@@ -23,6 +23,7 @@ BEGIN
       ,[AlertFileID]
       ,[CreatedTime]
       ,[timestamp]
+	,[CarrierAccountName]
   FROM [CP_SupPriceList].[PriceList]
 	WHERE ID < @LessThanID AND  UserID = @UserId
 	ORDER BY ID DESC

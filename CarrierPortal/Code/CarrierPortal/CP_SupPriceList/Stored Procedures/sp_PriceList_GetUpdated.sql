@@ -26,6 +26,8 @@ BEGIN
 		  ,[AlertFileID]
 		  ,[CreatedTime]
 		  ,[timestamp]
+		  ,[CarrierAccountName]
+		  
 		INTO #temp_table
 		FROM [CP_SupPriceList].[PriceList] 
 		WHERE 
@@ -56,6 +58,7 @@ BEGIN
 		  ,[AlertFileID]
 		  ,[CreatedTime]
 		  ,[timestamp]
+		  ,[CarrierAccountName]
 		INTO #temp2_table
 		FROM [CP_SupPriceList].[PriceList] 
 		WHERE 

@@ -26,6 +26,7 @@ BEGIN
       ,CustomerID
       ,AlertFileID
       ,CarrierAccountID
+	,[CarrierAccountName]
   FROM [CP_SupPriceList].[PriceList]
   WHERE (@PriceListStatusIDs  is null or [CP_SupPriceList].[PriceList].[Status] in (select PriceListStatusID from @PriceListStatusIDsTable))
   and (@CustomerId  is null or	@CustomerId= CustomerID)

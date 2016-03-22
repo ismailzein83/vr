@@ -12,6 +12,7 @@ CREATE PROCEDURE [CP_SupPriceList].[sp_PriceList_Insert]
 @CustomerID int,
 @CarrierAccountID nvarchar(500),
 @resultIdToBeExcluded int,
+@CarrierAccountName nvarchar(500),
 @priceLisID int out
 
 AS
@@ -27,9 +28,10 @@ set @priceLisID = 0
            ,[CreatedTime]
            ,[EffectiveOnDate]
            ,[CustomerID]
-           ,[CarrierAccountID])
+           ,[CarrierAccountID]
+           ,[CarrierAccountName])
      VALUES
-           (@UserID,@FileID,@PriceListType,@status,GETDATE(),@EffectiveOn,@CustomerID,@CarrierAccountID)
+           (@UserID,@FileID,@PriceListType,@status,GETDATE(),@EffectiveOn,@CustomerID,@CarrierAccountID,@CarrierAccountName)
      set @priceLisID = SCOPE_IDENTITY()
      end
 END
