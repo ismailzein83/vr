@@ -11,7 +11,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         var actionsMenuTemplate = ''
           + '<ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenuActions" ng-style="{\'position\': \'absolute\', \'top\': \'18px\'} " >'
        + ' <li role="presentation">'
-       + '     <div ng-repeat="action in ctrl.menuActions" class="mark-select " style="padding-left: 2px; ">'
+       + '     <div ng-repeat="action in ctrl.menuActions"  ng-hide="action.disable" class="mark-select " style="padding-left: 2px; ">'
          + '       <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action)"><span style="font-size:11px">{{action.name}}</span>'
          + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="action.isSubmitting" /></div>'
         + '    </div>'
@@ -236,6 +236,18 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Export',
                     class: "glyphicon glyphicon-download"
                 }
+            case "Continue":
+                return {
+                    text: "Continue",
+                    class: "glyphicon  glyphicon-play"
+                }
+            case "Stop":
+                return {
+                    text: "Stop",
+                    class: "glyphicon  glyphicon-stop"
+                }
+
+
         } 
     }
 }]);

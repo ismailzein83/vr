@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
+app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonDirService, UtilsService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -66,8 +66,29 @@ app.directive('vrButton', ['ButtonDirService', function (ButtonDirService) {
                     isDisabled = false;
                 return isDisabled;
             };
+            var menu;
+            if ($attrs.menuactions != undefined ) {
+                menu = $scope.$parent.$eval($attrs.menuactions);
+              
+                    function checkMenuActionPermission() {
+                        for (var i = 0; i < menu.length; i++) {
+                            invokeHasPermission(menu[i]);
+                        }
+                    }
 
-            ctrl.menuActions = $attrs.menuactions != undefined ? $scope.$parent.$eval($attrs.menuactions) : undefined;
+                    function invokeHasPermission(menuAction) {
+                        if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
+                        menuAction.disable = true;
+                        UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {                           
+                            if (isAllowed) { menuAction.disable = false; }
+                        });
+                    }
+                    checkMenuActionPermission();
+               
+            }
+            ctrl.menuActions = menu;
+
+            
             
             ctrl.hideTemplate = false;
             if (ctrl.haspermission != undefined && typeof (ctrl.haspermission) == 'function') {
