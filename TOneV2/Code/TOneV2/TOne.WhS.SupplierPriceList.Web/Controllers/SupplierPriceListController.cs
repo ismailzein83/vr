@@ -24,6 +24,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         public CreateProcessOutput UploadSupplierPriceList(SupplierPriceListUserInput input)
         {
             BPClient bpClient = new BPClient();
+
             return bpClient.CreateNewProcess(new CreateProcessInput
             {
                 InputArguments = new SupplierPriceListProcessInput
@@ -32,7 +33,8 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
                     FileId = input.FileId,
                     SupplierAccountId = input.SupplierId,
                     CurrencyId = input.CurrencyId,
-                    DeletedCodesDate = input.PriceListDate
+                    DeletedCodesDate = input.PriceListDate,
+                    UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId()
                 }
 
             });
