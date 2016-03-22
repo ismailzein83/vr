@@ -68,15 +68,15 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
             };
             var menu;
             if ($attrs.menuactions != undefined ) {
-                menu = $scope.$parent.$eval($attrs.menuactions);
+                    menu = $scope.$parent.$eval($attrs.menuactions);
               
-                    function checkMenuActionPermission() {
+                    var  checkMenuActionPermission =  function () {
                         for (var i = 0; i < menu.length; i++) {
                             invokeHasPermission(menu[i]);
                         }
                     }
 
-                    function invokeHasPermission(menuAction) {
+                    var invokeHasPermission =  function(menuAction) {
                         if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
                         menuAction.disable = true;
                         UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {                           
