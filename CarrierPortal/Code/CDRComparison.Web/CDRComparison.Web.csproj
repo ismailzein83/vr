@@ -115,7 +115,6 @@
   <ItemGroup>
     <Folder Include="CDRComparison\Directives\" />
     <Folder Include="CDRComparison\Services\APIServices\" />
-    <Folder Include="CDRComparison\Views\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +123,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CDRComparison\Constant\ModuleConfig.js" />
+    <Content Include="CDRComparison\Views\CDRComparison.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
