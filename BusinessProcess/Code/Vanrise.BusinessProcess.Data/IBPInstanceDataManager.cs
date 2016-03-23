@@ -24,6 +24,6 @@ namespace Vanrise.BusinessProcess.Data
 
         BPInstance GetBPInstance(int bpInstanceId);
 
-        long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus);       
+        long InsertInstance(string processTitle, long? parentId, int definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId);       
     }
 }

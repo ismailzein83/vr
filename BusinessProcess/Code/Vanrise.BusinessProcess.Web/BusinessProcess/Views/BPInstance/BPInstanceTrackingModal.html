@@ -33,13 +33,13 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Log Search'">
+                <!--<vr-tab header="'Log Search'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <businessprocess-bp-instance-tracking-history on-ready="onInstanceTrackingHistoryGridReady"></businessprocess-bp-instance-tracking-history>
                         </vr-columns>
                     </vr-row>
-                </vr-tab>
+                </vr-tab>-->
                 <vr-tab header="'Child Processes'" ng-if="process.HasChildProcesses">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
@@ -56,7 +56,7 @@
                     </vr-row>
                 </vr-tab>
 
-                <vr-tab header="'Rules Progress'">
+                <vr-tab header="'Rules Violated'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <businessprocess-bp-validation-message-monitor-grid on-ready="onValidationMessageMonitorGridReady"></businessprocess-bp-validation-message-monitor-grid>
@@ -64,13 +64,13 @@
                     </vr-row>
                 </vr-tab>
 
-                <vr-tab header="'Rules Search'">
+                <!--<vr-tab header="'Rules Search'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <businessprocess-bp-validation-message-history on-ready="onValidationMessageHistoryGridReady"></businessprocess-bp-validation-message-history>
                         </vr-columns>
                     </vr-row>
-                </vr-tab>
+                </vr-tab>-->
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

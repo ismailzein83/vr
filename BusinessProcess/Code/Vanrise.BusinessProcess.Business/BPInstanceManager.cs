@@ -58,7 +58,9 @@ namespace Vanrise.BusinessProcess.Business
                 throw new ArgumentNullException("createProcessInput");
             if (createProcessInput.InputArguments == null)
                 throw new ArgumentNullException("createProcessInput.InputArguments");
-            
+            if (createProcessInput.InputArguments.UserId <= 0)
+                throw new ArgumentException("createProcessInput.InputArguments.UserId");
+
             BPDefinitionManager bpDefinitionManager = new BPDefinitionManager();
             BPDefinition processDefinition = bpDefinitionManager.GetDefinition(createProcessInput.InputArguments.ProcessName);
             if (processDefinition == null)
@@ -67,7 +69,7 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             string processTitle = createProcessInput.InputArguments.GetTitle();
 
-            long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, processDefinition.BPDefinitionID, createProcessInput.InputArguments, BPInstanceStatus.New);
+            long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, processDefinition.BPDefinitionID, createProcessInput.InputArguments, BPInstanceStatus.New, createProcessInput.InputArguments.UserId);
             IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             dataManagerTracking.Insert(new BPTrackingMessage
             {
@@ -93,7 +95,7 @@ namespace Vanrise.BusinessProcess.Business
         {
             if (bpInstance == null)
                 return null;
-            return new BPInstanceDetail() 
+            return new BPInstanceDetail()
             {
                 Entity = bpInstance
             };
