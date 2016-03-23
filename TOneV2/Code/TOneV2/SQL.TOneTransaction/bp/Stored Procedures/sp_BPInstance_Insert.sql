@@ -9,6 +9,7 @@ CREATE PROCEDURE [bp].[sp_BPInstance_Insert]
 	@DefinitionID int,
 	@InputArguments nvarchar(max),
 	@ExecutionStatus int,
+	@InitiatorUserId int,
 	@ID bigint out
 	
 AS
@@ -19,13 +20,15 @@ BEGIN
            ,[DefinitionID]
            ,[InputArgument]
            ,[ExecutionStatus]
-           ,[StatusUpdatedTime])
+           ,[StatusUpdatedTime]
+           ,[InitiatorUserId])
      VALUES
            (@Title
            ,@ParentID
            ,@DefinitionID
            ,@InputArguments
            ,@ExecutionStatus
-           ,GETDATE())
+           ,GETDATE()
+           ,@InitiatorUserId)
      SET @ID = @@identity
 END
