@@ -1,0 +1,214 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.Entities.SummaryTransformation;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Transformation.Entities;
+
+namespace Vanrise.GenericData.Business
+{
+    public class GenericSummaryTransformationManager<T> : Vanrise.Common.Business.SummaryTransformation.SummaryTransformationManager<dynamic, GenericSummaryItem, T>
+        where T : class, ISummaryBatch<GenericSummaryItem>
+    {
+        public int SummaryTransformationDefinitionId { get; set; }
+        
+        #region Private Properties
+
+        IDataTransformer _dataTransformer;
+        IDataTransformer DataTransformer
+        {
+            get
+            {
+                if (_dataTransformer == null)
+                {
+                    _dataTransformer = Transformation.Entities.BusinessManagerFactory.GetManager<IDataTransformer>();
+                    if (_dataTransformer == null)
+                        throw new NullReferenceException("_dataTransformer");
+                }
+                return _dataTransformer;
+            }
+        }
+
+        SummaryTransformationDefinition _summaryTransformationDefinition;
+        public SummaryTransformationDefinition SummaryTransformationDefinition
+        {
+            get
+            {
+                if (_summaryTransformationDefinition == null)
+                    LoadSummaryTransformerAndDefinition();
+                return _summaryTransformationDefinition;
+            }
+        }
+
+        IGenericSummaryTransformer _genericSummaryTransformer;
+        IGenericSummaryTransformer GenericSummaryTransformer
+        {
+            get
+            {
+                if (_genericSummaryTransformer == null)
+                    LoadSummaryTransformerAndDefinition();
+                return _genericSummaryTransformer;
+            }
+        }
+
+        void LoadSummaryTransformerAndDefinition()
+        {
+            _genericSummaryTransformer = DynamicTypeGenerator.GetSummaryTransformer(this.SummaryTransformationDefinitionId, out _summaryTransformationDefinition);
+            if (_genericSummaryTransformer == null)
+                throw new NullReferenceException(String.Format("_genericSummaryTransformer {0}", this.SummaryTransformationDefinitionId));
+            if (_summaryTransformationDefinition == null)
+                throw new NullReferenceException(String.Format("_summaryTransformationDefinition {0}", this.SummaryTransformationDefinitionId));
+        }
+
+        ISummaryRecordDataManager _summaryRecordDataManager;
+        ISummaryRecordDataManager SummaryRecordDataManager
+        {
+            get
+            {
+                if(_summaryRecordDataManager == null)
+                {
+                    GetSummaryRecordStorageDataManagerContext context = new GetSummaryRecordStorageDataManagerContext(this.SummaryTransformationDefinition);
+                    _summaryRecordDataManager = context.DataStore.Settings.GetSummaryDataRecordDataManager(context);
+                    if (_summaryRecordDataManager == null)
+                        throw new NullReferenceException("_summaryRecordDataManager");
+                }
+                return _summaryRecordDataManager;
+            }
+        }
+
+        #endregion
+
+        #region Override
+
+        public override string UniqueTypeName
+        {
+            get
+            {
+                return String.Format("GenericSummaryTransformationManager_SummaryTransformationDefinitionId_{0}", this.SummaryTransformationDefinitionId);
+            }
+        }
+
+        #endregion
+
+        protected override IEnumerable<GenericSummaryItem> GetItemsFromDB(DateTime batchStart)
+        {
+            IEnumerable<dynamic> dataRecords = this.SummaryRecordDataManager.GetExistingSummaryRecords(batchStart);
+            return GetSummaryItemsFromDataRecords(dataRecords);
+        }
+
+        protected override void GetRawItemBatchTimeRange(dynamic rawItem, out DateTime batchStart)
+        {
+            var batchRangeRetrieval = this.SummaryTransformationDefinition.BatchRangeRetrieval;
+            if (batchRangeRetrieval == null)
+                throw new NullReferenceException("batchRangeRetrieval");
+            batchRangeRetrieval.GetRawItemBatchTimeRange(rawItem, this.GenericSummaryTransformer.GetRawItemTime(rawItem), out batchStart);
+        }
+
+        protected override string GetSummaryItemKey(GenericSummaryItem summaryItem)
+        {
+            return this.GenericSummaryTransformer.GetItemKeyFromSummaryItem(summaryItem.DataRecord);
+        }
+
+        protected override string GetSummaryItemKey(dynamic rawItem)
+        {
+            return this.GenericSummaryTransformer.GetItemKeyFromRawItem(rawItem);
+        }
+
+        protected override void InsertItemsToDB(List<GenericSummaryItem> itemsToAdd)
+        {
+            var dataRecords = GetDataRecordsFromSummaryItems(itemsToAdd);
+            this.SummaryRecordDataManager.InsertSummaryRecords(dataRecords);
+        }
+
+        protected override void SetSummaryItemGroupingFields(GenericSummaryItem summaryItem, dynamic rawItem)
+        {
+            this.GenericSummaryTransformer.SetGroupingFields(summaryItem.DataRecord, rawItem);
+        }
+
+        protected override void UpdateItemsInDB(List<GenericSummaryItem> itemsToUpdate)
+        {
+            var dataRecords = GetDataRecordsFromSummaryItems(itemsToUpdate);
+            this.SummaryRecordDataManager.UpdateSummaryRecords(dataRecords);
+        }
+
+        protected override void UpdateSummaryItemFromRawItem(GenericSummaryItem summaryItem, dynamic rawItem)
+        {
+            var summaryFromRawSettings = this.SummaryTransformationDefinition.SummaryFromRawSettings;
+            if (summaryFromRawSettings == null)
+                throw new NullReferenceException("summaryFromRawSettings");
+            this.DataTransformer.ExecuteDataTransformation(summaryFromRawSettings.TransformationDefinitionId,
+                (context) =>
+                {
+                    context.SetRecordValue(summaryFromRawSettings.RawRecordName, rawItem);
+                    context.SetRecordValue(summaryFromRawSettings.SymmaryRecordName, summaryItem.DataRecord);
+                });
+        }
+
+        protected override void UpdateSummaryItemFromSummaryItem(GenericSummaryItem existingItem, GenericSummaryItem newItem)
+        {
+            var existingFromNewSummarySettings = this.SummaryTransformationDefinition.UpdateExistingSummaryFromNewSettings;
+            if (existingFromNewSummarySettings == null)
+                throw new NullReferenceException("existingFromNewSummarySettings");
+            this.DataTransformer.ExecuteDataTransformation(existingFromNewSummarySettings.TransformationDefinitionId,
+                (context) =>
+                {
+                    context.SetRecordValue(existingFromNewSummarySettings.ExistingRecordName, existingItem.DataRecord);
+                    context.SetRecordValue(existingFromNewSummarySettings.NewRecordName, newItem.DataRecord);
+                });
+        }
+
+        public List<dynamic> GetDataRecordsFromSummaryItems(IEnumerable<GenericSummaryItem> summaryItems)
+        {
+            if (summaryItems != null)
+            {
+                List<dynamic> dataRecords = new List<dynamic>();
+                foreach (var itm in summaryItems)
+                {
+                    this.GenericSummaryTransformer.SetSummaryItemFieldsToDataRecord(itm);
+                    dataRecords.Add(itm.DataRecord);
+                }
+                return dataRecords;
+            }
+            else
+                return null;
+        }
+
+        public List<GenericSummaryItem> GetSummaryItemsFromDataRecords(IEnumerable<dynamic> dataRecords)
+        {
+            if (dataRecords != null)
+            {
+                List<GenericSummaryItem> genericSummaryItems = new List<GenericSummaryItem>();
+                foreach (var dr in dataRecords)
+                {
+                    var summaryItem = new GenericSummaryItem
+                    {
+                        DataRecord = dr
+                    };
+                    this.GenericSummaryTransformer.SetDataRecordFieldsToSummaryItem(summaryItem);
+                    genericSummaryItems.Add(summaryItem);
+                }
+                return genericSummaryItems;
+            }
+            else
+                return null;
+        }
+    }
+
+    
+    
+
+    public class SummaryBatchTimeInterval : SummaryTransformationBatchRangeRetrieval
+    {
+        public string RawTimeFieldName { get; set; }
+
+        public int IntervalInMinutes { get; set; }
+
+        public override void GetRawItemBatchTimeRange(dynamic rawItem, DateTime rawItemTime, out DateTime batchStart)
+        {
+            batchStart = new DateTime(rawItemTime.Year, rawItemTime.Month, rawItemTime.Day, rawItemTime.Hour, ((int)(rawItemTime.Minute / this.IntervalInMinutes)) * this.IntervalInMinutes, 0);
+        }
+    }
+}

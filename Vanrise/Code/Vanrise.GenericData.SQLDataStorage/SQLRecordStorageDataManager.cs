@@ -114,18 +114,41 @@ namespace Vanrise.GenericData.SQLDataStorage
                 query.Append(String.Format(" IF NOT EXISTS (SELECT schema_name FROM information_schema.schemata WHERE schema_name = '{0}') BEGIN EXEC sp_executesql N'CREATE SCHEMA {0}' END;", schema));
 
             string tableName = (schema != null) ? String.Format("{0}.{1}", schema, name) : name;
-            query.Append(String.Format("CREATE TABLE {0}", tableName));
-            
+            query.AppendLine(String.Format("CREATE TABLE {0}", tableName));
+
+            query.AppendLine(BuildColumnDefinitionsScript());
+
+            query.AppendLine(BuildDropAndCreateTableTypeScript());
+            return query.ToString();
+        }
+
+        private string BuildColumnDefinitionsScript()
+        {
             List<string> columnDefinitions = new List<string>();
-            
+
             foreach (var column in _dataRecordStorageSettings.Columns)
             {
                 columnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
             }
 
-            query.Append(String.Format(" ({0});", string.Join(",", columnDefinitions)));
-            
-            return query.ToString();
+            return String.Format(" ({0});", string.Join(",", columnDefinitions));
+        }
+
+        string BuildDropAndCreateTableTypeScript()
+        {
+            string schemaName= !String.IsNullOrEmpty(_dataRecordStorageSettings.TableSchema) ? _dataRecordStorageSettings.TableSchema : "dbo";
+            string tableName = _dataRecordStorageSettings.TableName;
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat(@"IF  EXISTS (SELECT * FROM sys.types st JOIN sys.schemas ss ON st.schema_id = ss.schema_id WHERE st.name = N'{1}Type'
+                                     AND ss.name = N'{0}')
+                                    DROP TYPE [{0}].[{1}Type]
+                                    
+                                    "
+                , schemaName, tableName );
+            builder.AppendLine();
+            builder.AppendFormat(@"CREATE TYPE [{0}].[{1}Type] AS TABLE ", schemaName, tableName);
+            builder.AppendLine(BuildColumnDefinitionsScript());
+            return builder.ToString();
         }
 
         string GetRecordStorageAlterTableQuery(SQLDataRecordStorageSettings existingDataRecordSettings)
@@ -159,6 +182,8 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 builder.Append(String.Format("ALTER TABLE {0}.{1} ALTER COLUMN {2};", newSchema, newName, columnDefinition));
             }
+
+            builder.AppendLine(BuildDropAndCreateTableTypeScript());
 
             return builder.ToString();
         }

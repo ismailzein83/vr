@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -32,13 +33,22 @@ namespace Vanrise.Common.Business
 
         public int GetTypeId(Type t)
         {
-            string type = t.AssemblyQualifiedName;
+            return GetTypeId(t.AssemblyQualifiedName);
+        }
+
+        public int GetTypeId(IVanriseType vanriseType)
+        {
+            return GetTypeId(vanriseType.UniqueTypeName);
+        }
+
+        private int GetTypeId(string typeUniqueName)
+        {            
             int ruleTypeId;
-            if (!s_typesIds.TryGetValue(type, out ruleTypeId))
+            if (!s_typesIds.TryGetValue(typeUniqueName, out ruleTypeId))
             {
                 ITypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<ITypeDataManager>();
-                ruleTypeId = dataManager.GetTypeId(type);
-                s_typesIds.TryAdd(type, ruleTypeId);
+                ruleTypeId = dataManager.GetTypeId(typeUniqueName);
+                s_typesIds.TryAdd(typeUniqueName, ruleTypeId);
             }
 
             return ruleTypeId;

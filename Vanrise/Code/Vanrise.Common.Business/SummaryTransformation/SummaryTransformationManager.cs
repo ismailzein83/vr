@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
+using Vanrise.Entities;
 using Vanrise.Entities.SummaryTransformation;
 using Vanrise.Runtime;
 
 namespace Vanrise.Common.Business.SummaryTransformation
 {
 
-    public abstract class SummaryTransformationManager<T, Q, R> : ISummaryTransformationManager
+    public abstract class SummaryTransformationManager<T, Q, R> : IVanriseType
         where Q : class, ISummaryItem
         where R : class, ISummaryBatch<Q>
     {
@@ -146,13 +147,13 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         private int GetTypeId()
         {
-            return TypeManager.Instance.GetTypeId(this.GetType());
+            return TypeManager.Instance.GetTypeId(this);
         }
 
         private void GenerateSummaryItemsIds(IEnumerable<Q> summaryItems)
         {
             long startingId;
-            IDManager.Instance.ReserveIDRange(this.GetType(), summaryItems.Count(), out startingId);
+            IDManager.Instance.ReserveIDRange(this, summaryItems.Count(), out startingId);
             long currentId = startingId;
             foreach (var summaryItem in summaryItems)
             {
@@ -228,9 +229,9 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         #endregion
 
-        void ISummaryTransformationManager.UpdateNewBatches(DateTime batchStart, IEnumerable<object> newBatches)
+        public virtual string UniqueTypeName
         {
-            this.UpdateNewBatches(batchStart, newBatches.Select(itm => itm as R));
+            get { return this.GetType().AssemblyQualifiedName; }
         }
     }
 }
