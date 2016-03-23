@@ -214,7 +214,7 @@
     <PostDeploy Include="TOne.PostDeployment.sql" />
     <None Include="CDRAnalysis.PostDeployment.sql" />
     <None Include="Common.PostDeployment.sql" />
-    <None Include="QualityMeasurement.PostDeployment.sql" />
+    <None Include="ClearVoice.PostDeployment.sql" />
     <None Include="CarrierPortal.PostDeployment.sql" />
     <None Include="Integration.PostDeployment.sql" />
     <None Include="BusinessProcess.PostDeployment.sql" />
