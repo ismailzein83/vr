@@ -13,7 +13,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SupplierZonePreviewManager
     {
-        
+
         public Vanrise.Entities.IDataRetrievalResult<ZonePreviewDetail> GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             ISupplierZonePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierZonePreviewDataManager>();
@@ -27,23 +27,17 @@ namespace TOne.WhS.SupplierPriceList.Business
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, zonePreviewDetailResult);
-           
+
         }
 
         private ZonePreviewDetail ZonePreviewDetailMapper(ZonePreview zonePreview)
         {
             ZonePreviewDetail zonePreviewDetail = new ZonePreviewDetail();
-
             zonePreviewDetail.Entity = zonePreview;
-            var changeTypeAttribute = Utilities.GetEnumAttribute<ZoneChangeType, DescriptionAttribute>(zonePreview.ChangeType);
-
-            if (changeTypeAttribute != null)
-                zonePreviewDetail.ChangeTypeDecription = changeTypeAttribute.Description;
-            else
-                zonePreviewDetail.ChangeTypeDecription = zonePreview.ChangeType.ToString();
+            zonePreviewDetail.ChangeTypeDecription = Utilities.GetEnumAttribute<ZoneChangeType, DescriptionAttribute>(zonePreview.ChangeType).Description;
             return zonePreviewDetail;
         }
-        
+
 
     }
 }

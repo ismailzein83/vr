@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SupplierRatePreviewManager
     {
-      
+
         public Vanrise.Entities.IDataRetrievalResult<RatePreviewDetail> GetFilteredRatePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             ISupplierRatePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierRatePreviewDataManager>();
@@ -32,14 +32,8 @@ namespace TOne.WhS.SupplierPriceList.Business
         private RatePreviewDetail RatePreviewDetailMapper(RatePreview ratePreview)
         {
             RatePreviewDetail ratePreviewDetail = new RatePreviewDetail();
-
             ratePreviewDetail.Entity = ratePreview;
-            var changeTypeAttribute = Utilities.GetEnumAttribute<RateChangeType, DescriptionAttribute>(ratePreview.ChangeType);
-
-            if (changeTypeAttribute != null)
-                ratePreviewDetail.ChangeTypeDecription = changeTypeAttribute.Description;
-            else
-                ratePreviewDetail.ChangeTypeDecription = ratePreview.ChangeType.ToString();
+            ratePreviewDetail.ChangeTypeDecription = Utilities.GetEnumAttribute<RateChangeType, DescriptionAttribute>(ratePreview.ChangeType).Description;
             return ratePreviewDetail;
         }
     }

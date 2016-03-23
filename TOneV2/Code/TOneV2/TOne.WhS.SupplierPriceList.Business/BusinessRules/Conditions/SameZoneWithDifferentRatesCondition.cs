@@ -31,7 +31,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has different rate", (target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has different rates", (target as ImportedZone).ZoneName);
         }
 
     }

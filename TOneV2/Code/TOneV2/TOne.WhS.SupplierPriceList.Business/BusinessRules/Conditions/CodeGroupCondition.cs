@@ -25,7 +25,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} has no code group assigned", (target as ImportedCode).Code);
+            return string.Format("Code {0} does not belong to the code group of {1} zone", (target as ImportedCode).Code , (target as ImportedCode).ZoneName);
         }
     }
 }

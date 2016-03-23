@@ -9,6 +9,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments.Tasks
 {
     public class PreviewTaskExecutionInformation : BPTaskExecutionInformation
     {
-        public bool ContinueExecution { get; set; }
+        public bool Decision { get; set; }
     }
 }

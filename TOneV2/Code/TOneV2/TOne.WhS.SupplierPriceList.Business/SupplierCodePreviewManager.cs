@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SupplierCodePreviewManager
     {
-      
+
         public Vanrise.Entities.IDataRetrievalResult<CodePreviewDetail> GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             ISupplierCodePreviewDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierCodePreviewDataManager>();
@@ -29,16 +29,11 @@ namespace TOne.WhS.SupplierPriceList.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, codePreviewDetailResult);
         }
 
-        private CodePreviewDetail CodePreviewDetailMapper(CodePreview codePreview){
+        private CodePreviewDetail CodePreviewDetailMapper(CodePreview codePreview)
+        {
             CodePreviewDetail codePreviewDetail = new CodePreviewDetail();
-
             codePreviewDetail.Entity = codePreview;
-            var changeTypeAttribute = Utilities.GetEnumAttribute<CodeChangeType, DescriptionAttribute>(codePreview.ChangeType);
-
-            if (changeTypeAttribute!= null)
-                codePreviewDetail.ChangeTypeDecription = changeTypeAttribute.Description;
-            else
-                codePreviewDetail.ChangeTypeDecription = codePreview.ChangeType.ToString();
+            codePreviewDetail.ChangeTypeDecription = Utilities.GetEnumAttribute<CodeChangeType, DescriptionAttribute>(codePreview.ChangeType).Description;
             return codePreviewDetail;
         }
     }

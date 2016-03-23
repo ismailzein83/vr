@@ -36,7 +36,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override string GetMessage(IRuleTarget target)
         {
             CountryManager manager = new CountryManager();
-            return string.Format("Country {0} has same code in a different zones", manager.GetCountryName((target as ImportedCountry).CountryId));
+            return string.Format("Country {0} has same code in different zones", manager.GetCountryName((target as ImportedCountry).CountryId));
         }
 
     }

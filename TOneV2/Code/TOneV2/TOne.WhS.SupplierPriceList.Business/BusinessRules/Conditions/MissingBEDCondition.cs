@@ -33,7 +33,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a missing BED",(target as ImportedZone).ZoneName);
+            return string.Format("Zone {0} has a missing begin effective date",(target as ImportedZone).ZoneName);
         }
 
     }

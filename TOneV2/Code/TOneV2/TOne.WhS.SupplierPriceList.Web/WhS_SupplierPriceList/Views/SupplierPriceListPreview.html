@@ -1,39 +1,50 @@
 ﻿<div vr-modalcontent ng-controller="WhS_SupPL_SupplierPriceListPreviewController" vr-loader="isLoading" width="'70%'">
     <vr-modalbody>
-        <vr-form name="formSellNewZones" vr-loader="isLoading">
+        <vr-form name="formSellNewZones" vr-loader="scopeModal.isLoading">
             <vr-tabs>
-                <vr-tab header="'Supplier Zone Changes'">
+                <vr-tab header="'Zone'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-spl-zonepreview-grid on-ready="onZonePreviewDirectiveReady"></vr-spl-zonepreview-grid>
+                            <vr-spl-zonepreview-grid on-ready="scopeModal.onZonePreviewDirectiveReady"></vr-spl-zonepreview-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Supplier Code Changes'">
+                <vr-tab header="'Code'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-spl-codepreview-grid on-ready="onCodePreviewDirectiveReady"></vr-spl-codepreview-grid>
-                        </vr-columns>
-
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Supplier Rate Changes'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-spl-ratepreview-grid on-ready="onRatePreviewDirectiveReady"></vr-spl-ratepreview-grid>
+                            <vr-spl-codepreview-grid on-ready="scopeModal.onCodePreviewDirectiveReady"></vr-spl-codepreview-grid>
                         </vr-columns>
 
                     </vr-row>
                 </vr-tab>
+                <vr-tab header="'Rate'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-spl-ratepreview-grid on-ready="scopeModal.onRatePreviewDirectiveReady"></vr-spl-ratepreview-grid>
+                        </vr-columns>
+
+                    </vr-row>
+                </vr-tab>
+
+                <vr-tab header="'Rules Search'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <businessprocess-bp-validation-message-history on-ready="scopeModal.onValidationMessageHistoryGridReady"></businessprocess-bp-validation-message-history>
+                        </vr-columns>
+
+                    </vr-row>
+
+                </vr-tab>
+
             </vr-tabs>
-           
+
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Continue" data-onclick="startTask" formname="formSellNewZones"></vr-button>
-                <vr-button type="Stop" data-onclick="cancelTask"></vr-button>
+                <vr-button type="Continue" data-onclick="scopeModal.continueTask" formname="formSellNewZones"></vr-button>
+                <vr-button type="Stop" data-onclick="scopeModal.stopTask"></vr-button>
             </div>
         </vr-actionbar>
     </div>

@@ -8,6 +8,10 @@
         var bpTaskId;
         var processInstanceId;
 
+        var validationMessageHistoryGridAPI;
+        var validationMessageHistoryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         var zonePreviewDirectiveAPI;
         var zonePreviewReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -32,31 +36,35 @@
 
         function defineScope() {
 
-            $scope.onZonePreviewDirectiveReady = function (api) {
+            $scope.scopeModal = {};
+
+            $scope.scopeModal.onZonePreviewDirectiveReady = function (api) {
                 zonePreviewDirectiveAPI = api;
                 zonePreviewReadyPromiseDeferred.resolve();
             }
 
-            $scope.onCodePreviewDirectiveReady = function (api) {
+            $scope.scopeModal.onCodePreviewDirectiveReady = function (api) {
                 codePreviewDirectiveAPI = api;
                 codePreviewReadyPromiseDeferred.resolve();
             }
 
-            $scope.onRatePreviewDirectiveReady = function (api) {
+            $scope.scopeModal.onRatePreviewDirectiveReady = function (api) {
                 ratePreviewDirectiveAPI = api;
                 ratePreviewReadyPromiseDeferred.resolve();
             }
 
-            $scope.close = function () {
-                $scope.modalContext.closeModal()
-            };
-
-            $scope.startTask = function () {
-                executeTask(true);
+            $scope.scopeModal.continueTask = function () {
+               return executeTask(true);
             }
 
-            $scope.cancelTask = function () {
-                executeTask(false);
+            $scope.scopeModal.stopTask = function () {
+              return executeTask(false);
+            }
+
+
+            $scope.scopeModal.onValidationMessageHistoryGridReady = function (api) {
+                validationMessageHistoryGridAPI = api;
+                validationMessageHistoryReadyPromiseDeferred.resolve();
             }
 
                
@@ -65,18 +73,16 @@
         function executeTask(taskAction) {
             var executionInformation = {
                 $type: "TOne.WhS.SupplierPriceList.BP.Arguments.Tasks.PreviewTaskExecutionInformation, TOne.WhS.SupplierPriceList.BP.Arguments",
-                ContinueExecution: taskAction
+                Decision: taskAction
             };
 
             var input = {
                 $type: "Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities",
                 TaskId: bpTaskId,
-                Notes: $scope.notes,
-                Decision: 'Dummy Decision',
                 ExecutionInformation: executionInformation
             };
 
-            BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
+           return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
                 $scope.modalContext.closeModal();
             }).catch(function (error) {
                 VRNotificationService.notifyException(error);
@@ -85,7 +91,7 @@
 
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModal.isLoading = true;
             BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
                 processInstanceId = response.ProcessInstanceId;
                 loadAllControls();
@@ -94,12 +100,12 @@
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([loadZonePreview, loadCodePreview, loadRatePreview])
+            return UtilsService.waitMultipleAsyncOperations([loadZonePreview, loadCodePreview, loadRatePreview, loadValidationMessageHistory])
                           .catch(function (error) {
-                              VRNotificationService.notifyExceptionWithClose(error, $scope);
+                              VRNotificationService.notifyException(error);
                           })
                           .finally(function () {
-                              $scope.isLoading = false;
+                              $scope.scopeModal.isLoading = false;
                           });
 
         }
@@ -140,6 +146,19 @@
             return loadRatePreviewPromiseDeferred.promise;
         }
 
+        function loadValidationMessageHistory() {
+            var loadValidationMessageHistoryPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            validationMessageHistoryReadyPromiseDeferred.promise.then(function () {
+                var payload ={
+                    BPInstanceID: processInstanceId,
+                };
+
+                VRUIUtilsService.callDirectiveLoad(validationMessageHistoryGridAPI, payload, loadValidationMessageHistoryPromiseDeferred)
+            })
+
+            return loadValidationMessageHistoryPromiseDeferred.promise;
+        }
 
     }
 

@@ -90,7 +90,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         [Description("New")]
         New = 1,
 
-        [Description(" Deleted")]
+        [Description("Deleted")]
         Deleted = 2,
 
         [Description("Moved")]
