@@ -306,6 +306,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
-    <None Include="QualityMeasurement.PostDeployment.sql" />
+    <None Include="ClearVoice.PostDeployment.sql" />
   </ItemGroup>
 </Project>
