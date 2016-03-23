@@ -16,7 +16,7 @@
         var cityDirectiveAPI;
         var cityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var isCountrySelectedProgramatically;
+        var countrySelectedPromiseDeferred;
 
         loadParameters();
         defineScope();
@@ -85,25 +85,17 @@
             };
 
 
-            $scope.onCountrySelectItem= function (dataItem) {
-
-                if (!isCountrySelectedProgramatically)
-                {
-                    var selectedCountryId = dataItem.CountryId;
-                    if (selectedCountryId != undefined)
-                    {
-                        $scope.isLoadingCities = true;
-                        var payload = {
-                            countryId: selectedCountryId
-                        };
-
-                        cityDirectiveAPI.load(payload).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.isLoadingCities = false;
-                        });
-                    }
+            $scope.onCountrySelectionChanged= function () {
+                var selectedCountryId = countryDirectiveApi.getSelectedIds();
+                if (selectedCountryId != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingCities = value };
+                    var payload = {
+                        countryId: selectedCountryId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, cityDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
                 }
+                else if (cityDirectiveAPI != undefined)
+                    cityDirectiveAPI.clearDataSource();
             }
 
 
@@ -145,13 +137,12 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountries, loadStaticSection, loadContacts])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.isLoading = false;
-                  isCountrySelectedProgramatically = false;
               });
         }
 
@@ -160,39 +151,41 @@
         }
 
 
-        function loadCountries() {
+        function loadCountryCitySection() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var promises = [];
             promises.push(loadCountryPromiseDeferred.promise);
 
+            var payload;
+
+            if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined) {
+                payload = {};
+                payload.selectedIds = carrierProfileEntity.Settings.CountryId;
+                countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+            }
+
             countryReadyPromiseDeferred.promise.then(function () {
-                var payload;
-
-                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined)
-                {
-                    payload = {};
-                    payload.selectedIds = carrierProfileEntity.Settings.CountryId;
-                    isCountrySelectedProgramatically = true;
-                }
-
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
             });
+
+
 
             if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined)
             {
                 var loadCitiesPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadCitiesPromiseDeferred.promise);
-
-                cityReadyPromiseDeferred.promise.then(function () {
+               
+                UtilsService.waitMultiplePromises([cityReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
                     var citiesPayload = {
                         countryId: carrierProfileEntity.Settings.CountryId,
                         selectedIds: carrierProfileEntity.Settings.CityId
                     }
 
                     VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);
-                });
+                    countrySelectedPromiseDeferred = undefined;
+                });                
             }
 
             return UtilsService.waitMultiplePromises(promises);
