@@ -98,7 +98,6 @@
     <Build Include="bp\Tables\BPInstance.sql" />
     <Build Include="bp\Tables\BPEvent.sql" />
     <Build Include="bp\Tables\LKUP_ExecutionStatus.sql" />
-    <Build Include="bp\Tables\BPDefinition.sql" />
     <Build Include="bp\Views\vw_BPInstance.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_UpdateHeartBeat.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_DeleteOld.sql" />
