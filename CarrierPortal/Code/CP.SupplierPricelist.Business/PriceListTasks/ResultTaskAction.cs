@@ -43,11 +43,15 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                     priceListProgressOutput.PriceListStatus = PriceListStatus.ResultFailedWithRetry;
                     priceListProgressOutput.PriceListResult = PriceListResult.NotCompleted;
                 }
+                bool flag = false;
                 switch (priceListProgressOutput.PriceListStatus)
                 {
                     case PriceListStatus.ResultFailedWithRetry:
                         if (pricelist.ResultMaxRetryCount < resultTaskActionArgument.MaximumRetryCount)
+                        {
+                            flag = true;
                             pricelist.ResultMaxRetryCount = pricelist.ResultMaxRetryCount + 1;
+                        }
                         else
                         {
                             priceListProgressOutput.PriceListStatus = PriceListStatus.ResultFailedWithNoRetry;
@@ -55,7 +59,7 @@ namespace CP.SupplierPricelist.Business.PriceListTasks
                         }
                         break;
                 }
-                if (pricelist.Status != priceListProgressOutput.PriceListStatus ||
+                if (flag || pricelist.Status != priceListProgressOutput.PriceListStatus ||
                     pricelist.Result != priceListProgressOutput.PriceListResult)
                 {
                     if (priceListProgressOutput.AlertFile != null)
