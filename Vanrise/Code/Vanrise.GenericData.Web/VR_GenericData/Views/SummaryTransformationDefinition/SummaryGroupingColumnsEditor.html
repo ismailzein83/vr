@@ -1,0 +1,39 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_SummaryGroupingColumnsEditorController" vr-loader="scopeModal.isLoading" width="'50%'">
+    <vr-modalbody maxheight="'500px'">
+        <vr-form validationcontext="columnGroupEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onRawDataRecordTypeFieldsSelectorReady"
+                                                                          selectedvalues="scopeModal.selectedRawDataRecordTypeFields"
+                                                                          isrequired="true"
+                                                                          label=" Raw Field"
+                                                                          hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                   
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onSummaryDataRecordTypeFieldsSelectorReady"
+                                                                          selectedvalues="scopeModal.selectedSummaryDataRecordTypeFields"
+                                                                          isrequired="true"
+                                                                          label=" Summary Field"
+                                                                          hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                    </vr-row>
+
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="columnGroupEditorGroup" data-onclick="scopeModal.SaveColumnGroup"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

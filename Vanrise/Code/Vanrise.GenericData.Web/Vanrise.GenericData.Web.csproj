@@ -337,7 +337,9 @@
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtype-selector - Copy.js" />
     <Content Include="VR_GenericData\Directives\RecordType\vr-genericdata-datarecordtypefields-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\Templates\SummaryGroupingColumnsManagement.html" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\Templates\SummaryTransformationDefinitionGrid.html" />
+    <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarygroupingcolumns-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityAPIService.js" />
@@ -357,6 +359,7 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\SummaryTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
+    <Content Include="VR_GenericData\Services\KeyFieldMappingService.js" />
     <Content Include="VR_GenericData\Services\DataRecordStorageService.js" />
     <Content Include="VR_GenericData\Services\DataStoreService.js" />
     <Content Include="VR_GenericData\Services\DataTransformationDefinitionService.js" />
@@ -424,6 +427,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />
+    <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditorController.js" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryTransformationDefinitionEditor.html" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryTransformationDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryTransformationDefinitionManagement.html" />
