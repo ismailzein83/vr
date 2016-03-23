@@ -29,14 +29,12 @@ namespace QM.CLITester.iTestIntegration
 
 
             ServiceActions serviceActions = new ServiceActions();
-            string itestSupplierId = null;
-            if(context.Supplier.Settings != null && context.Supplier.Settings.ExtendedSettings != null)
-            {
-                SupplierExtensionSettings supplierITestSettings = context.Supplier.Settings.ExtendedSettings.Where(itm => itm is SupplierExtensionSettings).FirstOrDefault() as SupplierExtensionSettings;
-                if (supplierITestSettings != null)
-                    itestSupplierId = supplierITestSettings.ITestSupplierId;
-            }
-            if (itestSupplierId == null)
+            ITestExtendedSupplierSetting itestSupplierSettings = null;
+            if (context.Supplier.Settings != null && context.Supplier.Settings.ExtendedSettings != null
+                && context.Supplier.Settings.ExtendedSettings.ContainsKey(ITestExtendedSupplierSettingBehavior.EXTENDEDSUPPLIERSETTING_KEYNAME))
+                itestSupplierSettings = context.Supplier.Settings.ExtendedSettings[ITestExtendedSupplierSettingBehavior.EXTENDEDSUPPLIERSETTING_KEYNAME] as ITestExtendedSupplierSetting;
+
+            if (itestSupplierSettings == null)
                 return new InitiateTestOutput
                 {
                     Result = InitiateTestResult.FailedWithNoRetry,
@@ -69,7 +67,7 @@ namespace QM.CLITester.iTestIntegration
                     FailureMessage = "Missing Breakout Configuration!"
                 };
 
-            return ResponseInitiateTest(serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}", itestProfileId, itestSupplierId, itestZoneSettings.ITestCountryId, itestZoneSettings.ITestZoneId)));
+            return ResponseInitiateTest(serviceActions.PostRequest("2012", String.Format("&profid={0}&vendid={1}&ndbccgid={2}&ndbcgid={3}", itestProfileId,itestSupplierSettings.ITestSupplierId, itestZoneSettings.ITestCountryId, itestZoneSettings.ITestZoneId)));
         }
 
         public override GetTestProgressOutput GetTestProgress(IGetTestProgressContext context)

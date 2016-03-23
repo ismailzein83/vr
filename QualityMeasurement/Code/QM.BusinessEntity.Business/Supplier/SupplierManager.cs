@@ -21,7 +21,7 @@ namespace QM.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSuppliers.ToBigResult(input, filterExpression, SupplierDetailMapper));
         }
-
+        const string EXCELFIELD_PREFIX = "Prefix";
         public Supplier GetSupplier(int supplierId)
         {
             var suppliers = GetCachedSuppliers();
@@ -57,13 +57,7 @@ namespace QM.BusinessEntity.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
-            if (supplier.Settings != null && supplier.Settings.ExtendedSettings != null)
-            {
-                foreach (var extendedSetting in supplier.Settings.ExtendedSettings)
-                {
-                    extendedSetting.Apply(supplier);
-                }
-            }
+            UpdateSettings(supplier, false);
 
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
             bool insertActionSucc = dataManager.Insert(supplier);
@@ -81,13 +75,7 @@ namespace QM.BusinessEntity.Business
 
         public Vanrise.Entities.UpdateOperationOutput<SupplierDetail> UpdateSupplier(Supplier supplier)
         {
-            if (supplier.Settings != null && supplier.Settings.ExtendedSettings != null)
-            {
-                foreach (var extendedSetting in supplier.Settings.ExtendedSettings)
-                {
-                    extendedSetting.Apply(supplier);
-                }
-            }
+            UpdateSettings(supplier, true);
 
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
 
@@ -110,15 +98,52 @@ namespace QM.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public void AddSupplierFromeSource(Supplier supplier)
+        private void UpdateSettings(Supplier supplier, bool isUpdate)
+        {
+            if (supplier.Settings == null)
+                supplier.Settings = new SupplierSettings();
+            if (supplier.Settings.ExtendedSettings == null)
+            {
+                if (isUpdate)
+                {
+                    var existingSupplier = GetSupplier(supplier.SupplierId);
+                    if (existingSupplier == null)
+                        throw new NullReferenceException(String.Format("existingSupplier {0}", supplier.SupplierId));
+                    if (existingSupplier.Settings == null)
+                        throw new NullReferenceException(String.Format("existingSupplier.Settings {0}",
+                            supplier.SupplierId));
+                    supplier.Settings.ExtendedSettings = existingSupplier.Settings.ExtendedSettings;
+                }
+                else
+                    supplier.Settings.ExtendedSettings = new Dictionary<string, object>();
+            }
+            IEnumerable<Type> extendedSettingsBehaviorsImplementations =
+                Utilities.GetAllImplementations<ExtendedSupplierSettingBehavior>();
+            if (extendedSettingsBehaviorsImplementations != null)
+            {
+                foreach (var extendedSettingsBehaviorType in extendedSettingsBehaviorsImplementations)
+                {
+                    var extendedSettingsBehavior =
+                        Activator.CreateInstance(extendedSettingsBehaviorType) as ExtendedSupplierSettingBehavior;
+                    extendedSettingsBehavior.ApplyExtendedSettings(new ApplyExtendedSupplierSettingsContext
+                    {
+                        Supplier = supplier
+                    });
+                }
+            }
+        }
+
+        public void AddSupplierFromSource(Supplier supplier)
         {
             long startingId;
             ReserveIDRange(1, out startingId);
             supplier.SupplierId = (int)startingId;
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+            UpdateSettings(supplier, false);
+
             dataManager.InsertSupplierFromeSource(supplier);
         }
-        public void UpdateSupplierFromeSource(Supplier supplier)
+        public void UpdateSupplierFromSource(Supplier supplier)
         {
 
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
@@ -158,8 +183,7 @@ namespace QM.BusinessEntity.Business
 
 
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
-            IEnumerable<Type> implementations = Utilities.GetAllImplementations<ExtendedSupplierSetting>();
-
+            
             List<string> extendedFields = new List<string>();
             for (int i = 1; i < supplierDataTable.Columns.Count; i++)
                 extendedFields.Add(supplierDataTable.Rows[0][i].ToString());
@@ -174,8 +198,22 @@ namespace QM.BusinessEntity.Business
                     ReserveIDRange(1, out startingId);
                     supplier.SupplierId = (int)startingId;
                     supplier.Name = supplierDataTable.Rows[i][0].ToString();
-                    ApplySettings(supplierDataTable, ref insertedCount, ref notInsertedCount, ref updatedCount, dataManager, implementations, extendedFields, i, ref supplier);
 
+                    Dictionary<string, object> excelFields = new Dictionary<string, object>();
+                    for (int j = 1; j < supplierDataTable.Columns.Count; j++)
+                    {
+                        excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
+                    }
+                    object prefix;
+
+                    if (supplier.Settings == null)
+                        supplier.Settings = new SupplierSettings();
+
+                    if (excelFields.TryGetValue(EXCELFIELD_PREFIX, out prefix))
+                        supplier.Settings.Prefix = prefix as string;
+
+                    UpdateSettings(supplier, false);
+                    
                     bool insertActionSucc = dataManager.Insert(supplier);
                     if (insertActionSucc)
                         insertedCount++;
@@ -188,8 +226,21 @@ namespace QM.BusinessEntity.Business
                 {
                     if (AllowUpdateIfExisting)
                     {
-                        ApplySettings(supplierDataTable, ref insertedCount, ref notInsertedCount, ref updatedCount, dataManager, implementations, extendedFields, i, ref supplier);
+                        Dictionary<string, object> excelFields = new Dictionary<string, object>();
+                        for (int j = 1; j < supplierDataTable.Columns.Count; j++)
+                        {
+                            excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
+                        }
+                        object prefix;
 
+                        if (supplier.Settings == null)
+                            supplier.Settings = new SupplierSettings();
+
+                        if (excelFields.TryGetValue(EXCELFIELD_PREFIX, out prefix))
+                            supplier.Settings.Prefix = prefix as string;
+
+                        UpdateSettings(supplier, true);
+                        
                         bool updateActionSucc = dataManager.Update(supplier);
                         if (updateActionSucc)
                             updatedCount++;
@@ -207,38 +258,7 @@ namespace QM.BusinessEntity.Business
             return message;
         }
 
-        private static void ApplySettings(DataTable supplierDataTable, ref int insertedCount, ref int notInsertedCount, ref int updatedCount, ISupplierDataManager dataManager, IEnumerable<Type> implementations, List<string> extendedFields, int i, ref Supplier supplier)
-        {
-            if (supplier.Settings == null)
-                supplier.Settings = new SupplierSettings();
-            if (supplier.Settings.ExtendedSettings == null)
-                supplier.Settings.ExtendedSettings = new List<ExtendedSupplierSetting>();
-            Dictionary<string, object> excelFields = new Dictionary<string, object>();
-            for (int j = 1; j < supplierDataTable.Columns.Count; j++)
-            {
-                excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
-            }
-
-            foreach (Type type in implementations)
-            {
-                ExtendedSupplierSetting baseClass =
-                    supplier.Settings.ExtendedSettings.FindRecord(itm => itm.GetType() == type);
-                if (baseClass == null)
-                {
-                    baseClass = Activator.CreateInstance(type) as ExtendedSupplierSetting;
-                    if (baseClass == null)
-                        throw new Exception(String.Format("{0} is not of type ExtendedSupplierSetting", baseClass));
-                    supplier.Settings.ExtendedSettings.Add(baseClass);
-                }
-
-                baseClass.ApplyExcelFields(supplier, excelFields);
-            }
-
-            foreach (var extendedSetting in supplier.Settings.ExtendedSettings)
-            {
-                extendedSetting.Apply(supplier);
-            }
-        }
+   
 
 
         #region Private Members

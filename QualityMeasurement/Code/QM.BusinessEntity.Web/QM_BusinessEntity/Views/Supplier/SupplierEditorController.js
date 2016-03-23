@@ -31,7 +31,6 @@
 
             $scope.scopeModal = {};
 
-            setDirectiveTabs();
             $scope.SaveSupplier = function () {
                 if (isEditMode) {
                     return updateSupplier();
@@ -60,7 +59,7 @@
             if (isEditMode) {
                 $scope.title = "Edit Supplier";
                 getSupplier().then(function () {
-                    loadAllControls()
+                    loadAllControls();
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
@@ -75,27 +74,11 @@
 
 
         function loadAllControls() {
-            if (supplierEntity != undefined)
+            if (supplierEntity != undefined) {
                 $scope.scopeModal.name = supplierEntity.Name;
-
-            var promises = [];
-
-            for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
-                var promise = $scope.directiveTabs[i].readypromisedeferred.promise;
-                promises.push(promise);
+                $scope.scopeModal.prefix = supplierEntity.Settings.Prefix;
             }
-
-            var j = 0;
-            if (supplierEntity != undefined && supplierEntity.Settings != undefined) {
-                angular.forEach(promises, function(promise) {
-                    promise.then(function() {
-                        $scope.directiveTabs[j].directiveAPI.load(supplierEntity.Settings.ExtendedSettings[j]);
-                        j++;
-                    });
-                });
-            }
-
-
+                
             $scope.isLoading = false;
         }
 
@@ -112,15 +95,8 @@
                 SupplierId: (supplierId != null) ? supplierId : 0,
                 Name: $scope.scopeModal.name
             };
-
-
-            var extendedSetting = [];
-            for (var i = 0 ; i < $scope.directiveTabs.length ; i++) {
-                if ($scope.directiveTabs[i].directiveAPI != undefined)
-                    extendedSetting[extendedSetting.length] = $scope.directiveTabs[i].directiveAPI.getData();
-            }
             supplier.Settings = {
-                ExtendedSettings: extendedSetting
+                Prefix: $scope.scopeModal.prefix
             }
             return supplier;
         }
@@ -152,21 +128,6 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-        }
-
-        function setDirectiveTabs() {
-            $scope.directiveTabs = [];
-            var cliTab = {
-                title: "CLI Tester",
-                directive: "vr-qm-clitester-suppliersettings",
-                readypromisedeferred: UtilsService.createPromiseDeferred(),
-                loadDirective: function (api) {
-                    cliTab.supplierSettingAPI = api;
-                    cliTab.readypromisedeferred.resolve();
-                },
-                dontLoad: false
-            };
-            $scope.directiveTabs.push(cliTab);
         }
     }
 

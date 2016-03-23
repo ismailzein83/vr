@@ -8,29 +8,8 @@ namespace QM.BusinessEntity.Entities
 {
     public class SupplierSettings
     {
-        public List<ExtendedSupplierSetting> ExtendedSettings { get; set; }
-    }
-
-    public abstract class ExtendedSupplierSetting
-    {
-        public abstract void Apply(Supplier supplier);
-
-        public virtual ExcelColumnInfo[] GetExcelColumnNames()
-        {
-            return null;
-        }
-
-        public virtual void ApplyExcelFields(Supplier supplier, Dictionary<string, object> excelFields)
-        {
-
-        }
-    }
-
-    public class ExcelColumnInfo
-    {
-        public string ColumnName { get; set; }
-
-        public string[] SampleValues { get; set; }
+        public string Prefix { get; set; }
+        public Dictionary<string, Object> ExtendedSettings { get; set; }
     }
 
     public abstract class ExtendedSupplierSettingBehavior
@@ -40,8 +19,6 @@ namespace QM.BusinessEntity.Entities
 
     public interface IApplyExtendedSupplierSettingsContext
     {
-        Zone Zone { get; }
-
-        List<string> ZoneCodes { get; }
+        Supplier Supplier { get; }
     }
 }

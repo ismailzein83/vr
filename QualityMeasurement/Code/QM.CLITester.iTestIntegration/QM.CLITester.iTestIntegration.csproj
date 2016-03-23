@@ -80,7 +80,6 @@
     <Compile Include="TestProgress.cs" />
     <Compile Include="ITestExtendedZoneSettingBehavior.cs" />
     <Compile Include="ZoneITestReader.cs" />
-    <Compile Include="SupplierExtensionSettings.cs" />
     <Compile Include="ITestZoneManager.cs" />
   </ItemGroup>
   <ItemGroup>

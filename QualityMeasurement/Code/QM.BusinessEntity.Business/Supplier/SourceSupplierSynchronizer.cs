@@ -9,12 +9,17 @@ using Vanrise.Entities.EntitySynchronization;
 
 namespace QM.BusinessEntity.Business
 {
-    public class SourceSupplierSynchronizer : SourceItemSynchronizer<SourceSupplier, Supplier, ISourceItemReader<SourceSupplier>>
+    public class SourceSupplierSynchronizer : SourceItemSynchronizer<SourceSupplier, Supplier, SourceSupplierReader>
     {
-        public SourceSupplierSynchronizer(ISourceItemReader<SourceSupplier> sourceItemReader)
+        public SourceSupplierSynchronizer(SourceSupplierReader sourceItemReader)
             : base(sourceItemReader)
         {
 
+        }
+
+        public override void Synchronize()
+        {
+            base.Synchronize();
         }
 
         protected override void AddItems(List<Supplier> itemsToAdd)
@@ -22,7 +27,7 @@ namespace QM.BusinessEntity.Business
             SupplierManager supplierManager = new SupplierManager();
             foreach (var s in itemsToAdd)
             {
-                supplierManager.AddSupplierFromeSource(s);
+                supplierManager.AddSupplierFromSource(s);
             }
         }
 
@@ -31,7 +36,7 @@ namespace QM.BusinessEntity.Business
             SupplierManager supplierManager = new SupplierManager();
             foreach (var s in itemsToUpdate)
             {
-                supplierManager.UpdateSupplierFromeSource(s);
+                supplierManager.UpdateSupplierFromSource(s);
             }
         }
 

@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Supplier\ApplyExtendedSupplierSettingsContext.cs" />
     <Compile Include="Supplier\SourceSupplierSynchronizer.cs" />
     <Compile Include="Zone\ApplyExtendedZoneSettingsContext.cs" />
     <Compile Include="Zone\SourceZoneSynchronizer.cs" />
