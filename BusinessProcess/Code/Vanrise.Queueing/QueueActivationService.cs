@@ -96,32 +96,40 @@ namespace Vanrise.Queueing
             try
             {
                 var queue = PersistentQueueFactory.Default.GetQueue(queueInstance.Name);
-                if (queueInstance.Settings.SummaryBatchManager != null)
-                    return TryDequeueFromSummaryBatchQueue(queue, queueInstance);
+                if (queue.QueueSettings.Activator == null)
+                    return false;
+                ISummaryBatchQueueActivator summaryBatchQueueActivator = queue.QueueSettings.Activator as ISummaryBatchQueueActivator;
+                if(summaryBatchQueueActivator != null)                    
+                    return TryDequeueFromSummaryBatchQueue(queue, summaryBatchQueueActivator);
                 else
                 {
-                    if (queueInstance.ExecutionFlowId != null)
-                    {
+                   
                         if (queue.TryDequeueObject((itemToProcess) =>
                         {
                             QueueActivatorExecutionContext context = new QueueActivatorExecutionContext(itemToProcess, queueInstance);
                             queueInstance.Settings.Activator.ProcessItem(context);
-                            if (context.OutputItems != null && context.OutputItems.Count > 0)
-                            {
-                                QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
-                                var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
-                                foreach (var outputItem in context.OutputItems)
+                           
+                                if (context.OutputItems != null && context.OutputItems.Count > 0)
                                 {
-                                    outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
-                                    var outputQueue = queuesByStages[outputItem.StageName].Queue;
-                                    outputQueue.EnqueueObject(outputItem.Item);
-                                }
+                                    if (queueInstance.ExecutionFlowId != null)
+                                    {
+                                        QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
+                                        var queuesByStages = executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
+                                        foreach (var outputItem in context.OutputItems)
+                                        {
+                                            outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
+                                            var outputQueue = queuesByStages[outputItem.StageName].Queue;
+                                            outputQueue.EnqueueObject(outputItem.Item);
+                                        }
+                                    }
+                                    else
+                                        throw new NullReferenceException(String.Format("queueInstance.ExecutionFlowId. Queue Instance ID {0}", queueInstance.QueueInstanceId));
                             }
                         }))
                         {
                             return true;
                         }
-                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -131,12 +139,12 @@ namespace Vanrise.Queueing
             return false;
         }
 
-        private bool TryDequeueFromSummaryBatchQueue(IPersistentQueue batchPersistentQueue, QueueInstance queueInstance)
+        private bool TryDequeueFromSummaryBatchQueue(IPersistentQueue batchPersistentQueue, ISummaryBatchQueueActivator summaryBatchQueueActivator)
         {
             var batchStarts = batchPersistentQueue.GetAvailableBatchStarts();
             foreach (var batchStart in batchStarts)
             {
-                if (queueInstance.Settings.SummaryBatchManager.TryLock(batchStart))
+                if (summaryBatchQueueActivator.TryLock(batchStart))
                 {
                     bool batchesUpdated;
                     bool anyItemUpdated = false;
@@ -146,7 +154,7 @@ namespace Vanrise.Queueing
                         {
                             batchesUpdated = batchPersistentQueue.TryDequeueSummaryBatches(batchStart, (newBatches) =>
                             {
-                                queueInstance.Settings.SummaryBatchManager.UpdateNewBatches(batchStart, newBatches);
+                                summaryBatchQueueActivator.UpdateNewBatches(batchStart, newBatches);
                             });
                             if (batchesUpdated)
                                 anyItemUpdated = true;
@@ -155,7 +163,7 @@ namespace Vanrise.Queueing
                     }
                     finally
                     {
-                        queueInstance.Settings.SummaryBatchManager.Unlock(batchStart);
+                        summaryBatchQueueActivator.Unlock(batchStart);
                     }
                     return anyItemUpdated;
                 }

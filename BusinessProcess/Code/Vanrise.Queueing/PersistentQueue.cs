@@ -71,14 +71,7 @@ namespace Vanrise.Queueing
 
         long EnqueuePrivate(T item)
         {
-            DateTime? batchStart = null;
-            if (_queueSettings.SummaryBatchManager != null)
-            {
-                ISummaryBatch summaryBatch = item as ISummaryBatch;
-                if (summaryBatch == null)
-                    throw new Exception(String.Format("Queue Item is not of type ISummaryBatch. Item Type: '{0}'", item.GetType()));
-                batchStart = summaryBatch.BatchStart;
-            }
+            DateTime? batchStart = item.BatchStart != DateTime.MinValue ? item.BatchStart : default(DateTime?);            
             string itemDescription = item.GenerateDescription();
             byte[] serialized = item.Serialize();
             byte[] compressed = Vanrise.Common.Compressor.Compress(serialized);
