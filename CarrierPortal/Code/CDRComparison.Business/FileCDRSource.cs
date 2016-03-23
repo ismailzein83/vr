@@ -11,27 +11,23 @@ namespace CDRComparison.Business
 {
     public class FileCDRSource : CDRSource
     {
-        public List<long> FileIds { get; set; }
+        public long FileId { get; set; }
 
         public CDRFileReader FileReader { get; set; }
 
         public override void ReadCDRs(IReadCDRsFromSourceContext context)
         {
-            if (this.FileIds == null)
-                throw new NullReferenceException("FileIds");
             if (this.FileReader == null)
                 throw new NullReferenceException("FileReader");
             Action<IEnumerable<CDR>> onCDRsReceived = (cdrs) => context.OnCDRsReceived(cdrs);
             VRFileManager fileManager = new VRFileManager();
-            foreach(var fileId in this.FileIds)
+
+            var file = fileManager.GetFile(this.FileId);
+            if (file == null)
+                throw new Exception(String.Format("FileId {0}", this.FileId));
+            using (var readFromFileContext = new ReadCDRsFromFileContext(file, onCDRsReceived))
             {
-                var file = fileManager.GetFile(fileId);
-                if (file == null)
-                    throw new Exception(String.Format("file {0}", fileId));
-                using (var readFromFileContext = new ReadCDRsFromFileContext(file, onCDRsReceived))
-                {
-                    this.FileReader.ReadCDRs(readFromFileContext);
-                }
+                this.FileReader.ReadCDRs(readFromFileContext);
             }
         }
     }

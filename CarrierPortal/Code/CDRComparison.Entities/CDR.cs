@@ -12,7 +12,7 @@ namespace CDRComparison.Entities
 
         public string CGPN { get; set; }
 
-        public string Time { get; set; }
+        public DateTime Time { get; set; }
 
         public Decimal DurationInSec { get; set; }
 

@@ -12,8 +12,6 @@ namespace CDRComparison.Entities
 
         public CDRNormalizationSettings NormalizationSettings { get; set; }
 
-        public string DateTimeFormat { get; set; }
-
         public TimeSpan TimeZoneOffset { get; set; }
     }
 }
