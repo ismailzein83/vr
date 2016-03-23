@@ -14,7 +14,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
             isdisabled: "=",
             selectedvalues: "=",
             showaddbutton: '@',
-            hidelabel: '@'
+            hidelabel: '@',
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

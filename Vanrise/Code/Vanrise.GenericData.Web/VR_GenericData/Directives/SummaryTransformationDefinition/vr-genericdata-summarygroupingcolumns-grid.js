@@ -41,8 +41,14 @@ app.directive("vrGenericdataSummarygroupingcolumnsGrid", ["UtilsService", "VRNot
                 }
 
                 ctrl.addColumnGrouping = function () {
-                    var onDataItemAdded = function (item) {
-                        ctrl.datasource.push(item);
+                    var onDataItemAdded = function (itemAdded) {
+                        var alreadyExists = false;
+                        angular.forEach(ctrl.datasource, function (item) {
+                            if (item.RawFieldName == itemAdded.RawFieldName && item.SummaryFieldName == itemAdded.SummaryFieldName)
+                                alreadyExists = true;
+                        });
+                        if (!alreadyExists)
+                            ctrl.datasource.push(itemAdded);
                     }
 
                     VR_GenericData_KeyFieldMappingService.addItem(rawDataRecordTypeId, summaryDataRecordTypeId, onDataItemAdded, ctrl.datasource);
@@ -54,6 +60,16 @@ app.directive("vrGenericdataSummarygroupingcolumnsGrid", ["UtilsService", "VRNot
 
             function defineAPI() {
                 var api = {};
+
+                api.setRecordTypeIds = function (selectedRawDataRecordTypeId, selectedSummaryDataRecordTypeId) {
+                    rawDataRecordTypeId = selectedRawDataRecordTypeId;
+                    summaryDataRecordTypeId = selectedSummaryDataRecordTypeId
+                    ctrl.datasource.length = 0;
+                    if (rawDataRecordTypeId == undefined || summaryDataRecordTypeId == undefined)
+                        ctrl.enableAdd = false;
+                    else
+                        ctrl.enableAdd = true;
+                }
 
                 api.getData = function () {
                     var keyFieldMappings;
@@ -86,6 +102,11 @@ app.directive("vrGenericdataSummarygroupingcolumnsGrid", ["UtilsService", "VRNot
                                 ctrl.datasource.push(dataItem);
                             }
                         }
+
+                        if (payload.rawDataRecordTypeId == undefined || payload.summaryDataRecordTypeId == undefined)
+                            ctrl.enableAdd = false;
+                        else
+                            ctrl.enableAdd = true;
                     }
                 }
 
@@ -110,14 +131,17 @@ app.directive("vrGenericdataSummarygroupingcolumnsGrid", ["UtilsService", "VRNot
             }
 
             function editColumnGrouping(dataItem) {
-                console.log('dataItem')
-                console.log(dataItem)
                 var onDataItemUpdated = function (updatedDataItem) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.RawFieldName, 'RawFieldName');
-                    ctrl.datasource[index] = updatedDataItem;
+                    var alreadyExists = false;
+                    angular.forEach(ctrl.datasource, function (item) {
+                        if (item.RawFieldName == updatedDataItem.RawFieldName && item.SummaryFieldName == updatedDataItem.SummaryFieldName)
+                            alreadyExists = true;
+                    });
+                    if (!alreadyExists) {
+                        var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.RawFieldName, 'RawFieldName');
+                        ctrl.datasource[index] = updatedDataItem;
+                    }
                 }
-                console.log('dataItem')
-                console.log(dataItem)
                 VR_GenericData_KeyFieldMappingService.editItem(rawDataRecordTypeId, summaryDataRecordTypeId, dataItem, onDataItemUpdated, ctrl.datasource);
             }
 

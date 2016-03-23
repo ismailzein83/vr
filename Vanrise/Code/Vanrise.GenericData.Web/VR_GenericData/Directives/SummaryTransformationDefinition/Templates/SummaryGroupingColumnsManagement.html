@@ -1,4 +1,4 @@
-﻿<vr-button type="Add" data-onclick="ctrl.addColumnGrouping" standalone></vr-button>
+﻿<vr-button type="Add" data-onclick="ctrl.addColumnGrouping" standalone vr-disabled="!ctrl.enableAdd"></vr-button>
 
 <vr-validator validate="ctrl.isValid()">
     <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions"
