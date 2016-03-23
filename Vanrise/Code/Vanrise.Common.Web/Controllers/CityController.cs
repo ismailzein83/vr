@@ -7,7 +7,6 @@ using Vanrise.Entities;
 using Vanrise.Web.Base;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-using System.Threading;
 
 namespace Vanrise.Common.Web.Controllers
 {
