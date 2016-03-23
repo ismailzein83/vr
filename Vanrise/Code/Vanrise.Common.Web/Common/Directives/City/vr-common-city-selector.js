@@ -205,6 +205,10 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
                     return VRUIUtilsService.getIdSelectedIds('CityId', attrs, ctrl);
                 }
 
+                api.clearDataSource = function () {
+                    selectorAPI.clearDataSource();
+                }
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
 
