@@ -1,1 +1,16 @@
-﻿
+﻿<vr-row>
+    <vr-columns colnum="{{sourceCtrl.normalColNum}}">
+        <vr-select on-ready="scopeModel.onSelectorReady"
+                    datasource="scopeModel.templateConfigs"
+                    selectedvalues="scopeModel.selectedTemplateConfig"
+                    datavaluefield="ConfigId"
+                    datatextfield="Name"
+                    label="CDR Source Type"
+                    isrequired="sourceCtrl.isrequired"
+                    hideremoveicon>
+        </vr-select>
+    </vr-columns>
+</vr-row>
+<span ng-if="scopeModel.selectedTemplateConfig != undefined" vr-loader="scopeModel.isLoadingDirective" >
+    <vr-directivewrapper directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{sourceCtrl.normalColNum}}" isrequired="sourceCtrl.isrequired"></vr-directivewrapper>
+</span>

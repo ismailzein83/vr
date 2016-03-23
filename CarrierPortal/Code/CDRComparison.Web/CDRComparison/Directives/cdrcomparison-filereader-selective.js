@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CDRSourceSelectiveDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'UtilsService', 'VRUIUtilsService'];
+    FileReaderSelectiveDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function CDRSourceSelectiveDirective(CDRComparison_CDRComparisonAPIService, UtilsService, VRUIUtilsService) {
+    function FileReaderSelectiveDirective(CDRComparison_CDRComparisonAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -14,15 +14,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var cdrSourceSelective = new CDRSourceSelective($scope, ctrl, $attrs);
-                cdrSourceSelective.initializeController();
+                var fileReaderSelective = new FileReaderSelective($scope, ctrl, $attrs);
+                fileReaderSelective.initializeController();
             },
-            controllerAs: "sourceCtrl",
+            controllerAs: "fileReaderCtrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/CDRComparison/Directives/Templates/CDRSourceSelectiveTemplate.html"
+            templateUrl: "/Client/Modules/CDRComparison/Directives/Templates/FileReaderSelectiveTemplate.html"
         };
 
-        function CDRSourceSelective($scope, ctrl, $attrs) {
+        function FileReaderSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -62,13 +62,13 @@
                         directivePayload = payload;
                     }
 
-                    var getCDRSourceTemplateConfigsPromise = getCDRSourceTemplateConfigs();
-                    promises.push(getCDRSourceTemplateConfigsPromise);
+                    var getFileReaderTemplateConfigsPromise = getFileReaderTemplateConfigs();
+                    promises.push(getFileReaderTemplateConfigsPromise);
 
                     var loadDirectiveDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadDirectiveDeferred.promise);
 
-                    getCDRSourceTemplateConfigsPromise.then(function () {
+                    getFileReaderTemplateConfigsPromise.then(function () {
                         if (configId != undefined) {
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, configId, 'ConfigId');
@@ -85,8 +85,8 @@
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                    function getCDRSourceTemplateConfigs() {
-                        return CDRComparison_CDRComparisonAPIService.GetCDRSourceTemplateConfigs().then(function (response) {
+                    function getFileReaderTemplateConfigs() {
+                        return CDRComparison_CDRComparisonAPIService.GetFileReaderTemplateConfigs().then(function (response) {
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
@@ -113,6 +113,6 @@
         }
     }
 
-    app.directive('cdrcomparisonCdrsourceSelective', CDRSourceSelectiveDirective);
+    app.directive('cdrcomparisonFilereaderSelective', FileReaderSelectiveDirective);
 
 })(app);
