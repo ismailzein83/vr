@@ -113,7 +113,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CDRComparison\Directives\" />
     <Folder Include="CDRComparison\Services\APIServices\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
@@ -123,6 +122,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CDRComparison\Constant\ModuleConfig.js" />
+    <Content Include="CDRComparison\Directives\cdrcomparison-cdrsource-selective.js" />
+    <Content Include="CDRComparison\Directives\Templates\CDRSourceSelectiveTemplate.html" />
     <Content Include="CDRComparison\Views\CDRComparison.html" />
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />
   </ItemGroup>
