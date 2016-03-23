@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SupplierPricelistFilter
+    public class SupplierPricelistQuery
     {
-        public int SupplierId { get; set; }
+        public int? SupplierId { get; set; }
     }
 }

@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="supplierPriceLists"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.PriceListId">
+
+    
+    <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'CreatedDate'" field="'Entity.CreateDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'Currency'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

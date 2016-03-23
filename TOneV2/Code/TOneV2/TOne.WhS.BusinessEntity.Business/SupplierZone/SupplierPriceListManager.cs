@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierPriceListManager
     {
-      
+
         #region Public Methods
         public SupplierPriceList GetPriceList(int priceListId)
         {
@@ -19,18 +21,24 @@ namespace TOne.WhS.BusinessEntity.Business
             return priceList;
         }
 
-        public IEnumerable<SupplierPriceList> GetFilteredSupplierPriceLists(SupplierPricelistFilter filter)
+        public Vanrise.Entities.IDataRetrievalResult<SupplierPriceListDetail> GetFilteredSupplierPriceLists(Vanrise.Entities.DataRetrievalInput<SupplierPricelistQuery> input)
         {
-            List<SupplierPriceList> priceLists = GetCachedPriceLists();
+            List<SupplierPriceList> allPriceLists = GetCachedPriceLists();
             Func<SupplierPriceList, bool> filterExpression = (item) =>
-                (item.SupplierId == filter.SupplierId);
+                (input.Query.SupplierId == null || item.SupplierId == input.Query.SupplierId);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPriceLists.ToBigResult(input, filterExpression, SupplierPriceListDetailMapper));
+        }
+        public IEnumerable<SupplierPriceList> GetAllSupplierPriceLists()
+        {
+            var allPriceLists = GetCachedPriceLists();
+            if (allPriceLists == null)
+                return null;
 
-            return priceLists.FindAllRecords(filterExpression);
+            return allPriceLists;
         }
 
-
         #endregion
-        
+
         #region Private Members
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -59,7 +67,20 @@ namespace TOne.WhS.BusinessEntity.Business
                    return dataManager.GetPriceLists();
                });
         }
-      
+
+        private SupplierPriceListDetail SupplierPriceListDetailMapper(SupplierPriceList priceList)
+        {
+            SupplierPriceListDetail supplierPriceListDetail = new SupplierPriceListDetail();
+            supplierPriceListDetail.Entity = priceList;
+            CurrencyManager currencyManager = new CurrencyManager();
+            Currency currency = currencyManager.GetCurrency(priceList.CurrencyId);
+            supplierPriceListDetail.Currency = currency != null ? currency.Name : null;
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            supplierPriceListDetail.SupplierName = carrierAccountManager.GetCarrierAccountName(priceList.SupplierId);
+
+            return supplierPriceListDetail;
+        }
+
         #endregion
 
     }

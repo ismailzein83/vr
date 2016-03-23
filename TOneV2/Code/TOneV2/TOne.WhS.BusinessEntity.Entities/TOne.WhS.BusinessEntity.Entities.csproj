@@ -204,7 +204,8 @@
     <Compile Include="SupplierRate\SupplierRateQuery.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneCriteria.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneTarget.cs" />
-    <Compile Include="SupplierZone\SupplierPricelistFilter.cs" />
+    <Compile Include="SupplierZone\SupplierPriceListDetail.cs" />
+    <Compile Include="SupplierZone\SupplierPricelistQuery.cs" />
     <Compile Include="SupplierZone\SupplierZoneDetails.cs" />
     <Compile Include="SupplierZone\SupplierZoneQuery.cs" />
     <Compile Include="SupplierCode\SupplierCode.cs" />

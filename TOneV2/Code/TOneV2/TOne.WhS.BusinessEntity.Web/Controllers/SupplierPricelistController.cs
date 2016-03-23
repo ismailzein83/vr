@@ -14,11 +14,17 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     {
         [HttpPost]
         [Route("GetFilteredSupplierPricelist")]
-        public IEnumerable<SupplierPriceList> GetFilteredSupplierPricelist(SupplierPricelistFilter input)
+        public object GetFilteredSupplierPricelist(Vanrise.Entities.DataRetrievalInput<SupplierPricelistQuery> input)
         {
-            SupplierPriceListManager
-                manager = new SupplierPriceListManager();
-            return manager.GetFilteredSupplierPriceLists(input);
+            SupplierPriceListManager manager = new SupplierPriceListManager();
+            return GetWebResponse(input, manager.GetFilteredSupplierPriceLists(input));//manager.GetFilteredSupplierPriceLists(input);
+        }
+        [HttpGet]
+        [Route("GetAllSupplierPricelist")]
+        public IEnumerable<SupplierPriceList> GetAllSupplierPricelist()
+        {
+            SupplierPriceListManager manager = new SupplierPriceListManager();
+            return manager.GetAllSupplierPriceLists();
         }
     }
 }

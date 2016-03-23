@@ -34,7 +34,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return base.IsDataUpdated("TOneWhS_BE.SupplierPriceList", ref updateHandle);
         }
 
-    
+
         #endregion
 
         #region Private Methods
@@ -50,12 +50,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SupplierId = (int)reader["SupplierID"],
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
-                FileId = (long)reader["FileID"]
+                FileId = (long)reader["FileID"],
+                CreateDate = GetReaderValue<DateTime?>(reader, "CreatedDate")
             };
             return supplierPriceList;
         }
 
         #endregion
-  
+
     }
 }

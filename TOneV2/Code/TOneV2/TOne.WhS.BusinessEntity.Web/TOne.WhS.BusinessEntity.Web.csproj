@@ -140,9 +140,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\Directives\SupplierPricelist\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\SalePricelistController.cs" />
@@ -275,6 +273,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SupplierGroup\vr-whs-be-suppliergroup-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierCode\Templates\SupplierCodeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierCode\vr-whs-be-suppliercode-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierPricelist\Templates\SupplierPricelistGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SupplierPricelist\vr-whs-be-supplierpricelist-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierRate\Templates\SupplierRateGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierRate\vr-whs-be-supplierrate-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SupplierZone\Templates\SupplierZoneGridTemplate.html" />
@@ -287,6 +287,7 @@
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneServiceConfig\vr-whs-be-zone-service-config-selector.js" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierPriceListAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SalePricelistAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleRateAPIService.js" />
