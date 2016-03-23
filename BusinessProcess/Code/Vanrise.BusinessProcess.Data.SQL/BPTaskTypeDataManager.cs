@@ -10,7 +10,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
     public class BPTaskTypeDataManager : BaseSQLDataManager, IBPTaskTypeDataManager
     {
         public BPTaskTypeDataManager()
-            : base(GetConnectionStringName("BusinessProcessDBConnStringKey", "BusinessProcessDBConnString"))
+            : base(GetConnectionStringName("BusinessProcessConfigDBConnStringKey", "BusinessProcessDBConnString"))
         {
 
         }
