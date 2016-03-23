@@ -10,7 +10,7 @@ namespace Vanrise.BusinessProcess.Entities
 
     public abstract class BusinessRuleAction
     {
-        public int BPBusinessRuleActionConfigId { get; set; }
+        public int BPBusinessRuleActionTypeId { get; set; }
 
         public abstract void Execute(IBusinessRuleActionExecutionContext context);
 
