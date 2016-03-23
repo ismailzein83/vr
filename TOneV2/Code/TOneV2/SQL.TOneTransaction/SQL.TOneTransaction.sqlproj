@@ -117,7 +117,6 @@
     <Build Include="bp\Stored Procedures\sp_BPEvent_Delete.sql" />
     <Build Include="bp\Stored Procedures\sp_BPEvent_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_Insert.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPDefinition_GetAll.sql" />
     <Build Include="Security\runtime.sql" />
     <Build Include="Security\queue.sql" />
     <Build Include="Security\bp.sql" />
@@ -125,10 +124,8 @@
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetByID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_UnLock.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_TryLockAndUpdateWorkflowInstanceID.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetByCriteria.sql" />
     <Build Include="bp\User Defined Types\IDIntType.sql" />
     <Build Include="bp\User Defined Types\IDBigIntType.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetByCriterias.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
     <Build Include="runtime\Tables\ScheduleTask.sql" />
     <Build Include="runtime\Tables\SchedulerTaskTriggerType.sql" />
@@ -137,7 +134,6 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskActionType_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Insert.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPDefinition_Get.sql" />
     <Build Include="integration\Tables\DataSource.sql" />
     <Build Include="integration\Tables\AdapterType.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_GetByTaskId.sql" />
@@ -153,20 +149,16 @@
     <Build Include="queue\Stored Procedures\sp_QueueItemTypes_GetAll.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_CreateTempForFiltered.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlow_GetAll.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetRecent.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlowDefinition_GetAll_1.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlow_Insert.sql" />
     <Build Include="runtime\User Defined Types\IDIntType.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_Delete.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_Delete.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPDefinition_CreateTempForFiltered.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_UpdateAdapterState.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSource_CreateTemp.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTask_UpdateInfo.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueInstance_GetAll.sql" />
-    <Build Include="bp\Tables\BPTaskType.sql" />
     <Build Include="bp\Tables\BPTask.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetStatusesByIDs.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlow_Update.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlowDefinition_Update.sql" />
     <Build Include="queue\Stored Procedures\sp_ExecutionFlowDefinition_Insert.sql" />
@@ -203,7 +195,6 @@
     <Build Include="bp\Stored Procedures\sp_BPTask_GetUpdated.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_GetByID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_GetBeforeId.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPTaskType_GetAll.sql" />
     <Build Include="summarytransformation\Tables\SummaryBatchLock.sql" />
     <Build Include="summarytransformation\Functions\ParseStringList.sql" />
     <Build Include="summarytransformation\Stored Procedures\sp_SummaryBatchLock_TryLock.sql" />
