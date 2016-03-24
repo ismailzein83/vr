@@ -7,7 +7,7 @@ using Vanrise.Common;
 
 namespace Vanrise.Logging.SQL
 {
-    internal class LogEntry
+    public class LogEntry
     {
         public string AssemblyName { get; set; }
 

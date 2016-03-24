@@ -20,6 +20,15 @@ namespace Vanrise.Common
     public class Logger: ExceptionLogger
     {
         List<LogHandler> _handlers;
+        public List<LogHandler> LogHandlers
+        {
+            get
+            {
+                return _handlers;
+            }
+        }
+
+
         List<ExceptionLogger> _exceptionLoggers;
         LogEntryType _maxLogLevel;
         public Logger(LoggingConfiguration.LoggingConfig config)

@@ -27,6 +27,16 @@ namespace Vanrise.Logging.SQL
              }
          }
 
+        public SQLDataManager DataManager
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(_connectionStringKey))
+                    throw new Exception("Connection String is not provided for the SQLLogger. ConnectionStringKey should be set in the parameters section");
+                return new SQLDataManager(_connectionStringKey);
+            }
+        }
+
         public SQLLogger()
         {
             _machineName = Environment.MachineName;
@@ -57,11 +67,8 @@ namespace Vanrise.Logging.SQL
                         logEntries.Add(logEntry);
                     }
                     if (logEntries.Count >= 0)
-                    {
-                        if (String.IsNullOrEmpty(_connectionStringKey))
-                            throw new Exception("Connection String is not provided for the SQLLogger. ConnectionStringKey should be set in the parameters section");
-                        SQLDataManager dataManager = new SQLDataManager(_connectionStringKey);
-                        dataManager.WriteEntries(_machineName, _applicationName, logEntries);
+                    {                        
+                        this.DataManager.WriteEntries(_machineName, _applicationName, logEntries);
                     }
                 }
             }

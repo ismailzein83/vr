@@ -59,6 +59,7 @@
     <Compile Include="GenericDataRecord\DataRecordFieldManager.cs" />
     <Compile Include="GenericDataRecord\DataRecordTypeManager.cs" />
     <Compile Include="IDManager.cs" />
+    <Compile Include="LoggingManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateTypeManager.cs" />
     <Compile Include="StatisticManagement\StatisticBatchManager.cs" />
@@ -80,9 +81,21 @@
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.SQL\Vanrise.Data.SQL.csproj">
+      <Project>{4ab70e59-2c65-4167-8d5f-897702cf161b}</Project>
+      <Name>Vanrise.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Logging.SQL\Vanrise.Logging.SQL.csproj">
+      <Project>{b89988cc-cb1f-440f-9c0d-779d926d9d1a}</Project>
+      <Name>Vanrise.Logging.SQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj">
       <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>

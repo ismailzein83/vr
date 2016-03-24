@@ -8,7 +8,7 @@ using Vanrise.Data.SQL;
 
 namespace Vanrise.Logging.SQL
 {
-    internal class SQLDataManager : BaseSQLDataManager
+    public class SQLDataManager : BaseSQLDataManager
     {
         public SQLDataManager(string connectionStringKey)
             : base(connectionStringKey)
