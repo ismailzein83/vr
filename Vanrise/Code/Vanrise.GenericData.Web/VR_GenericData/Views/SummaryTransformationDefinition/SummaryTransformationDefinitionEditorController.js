@@ -2,9 +2,9 @@
 
     "use strict";
 
-    SummaryTransformationDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_SummaryTransformationDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService'];
+    SummaryTransformationDefinitionEditorController.$inject = ['$scope', 'VR_GenericData_SummaryTransformationDefinitionAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_KeyFieldMappingService'];
 
-    function SummaryTransformationDefinitionEditorController($scope, VR_GenericData_SummaryTransformationDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService) {
+    function SummaryTransformationDefinitionEditorController($scope, VR_GenericData_SummaryTransformationDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_KeyFieldMappingService) {
 
         var isEditMode;
         var summaryTransformationDefinitionEntity;
@@ -27,15 +27,12 @@
         var dataSummaryRecordTypeFieldsBatchSelectorAPI;
         var dataSummaryRecordTypeFieldsBatchSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var summaryGroupingColumnsAPI;
-        var summaryGroupingColumnsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var isRawRecordTypeSelectedProgramatically = false;
         var isSummaryRecordTypeSelectedProgramatically = false;
 
         loadParameters();
         defineScope();
-
+        defineMenuActionsColumnsGrouping();
         load();
 
         function loadParameters() {
@@ -48,10 +45,29 @@
 
         function defineScope() {
             $scope.scopeModal = {}
-            $scope.scopeModal.onSummaryGroupingColumnsDirectiveReady = function (api) {
-                summaryGroupingColumnsAPI = api;
-                summaryGroupingColumnsReadyPromiseDeferred.resolve();
+
+            $scope.scopeModal.datasourceColumnGrouping = [];
+
+            $scope.scopeModal.isValidColumnGrouping = function () {
+                if ($scope.scopeModal.datasourceColumnGrouping != undefined && $scope.scopeModal.datasourceColumnGrouping.length > 0)
+                    return null;
+                return "You Should Select at least one column grouping ";
             }
+
+            $scope.scopeModal.addColumnGrouping = function () {
+                var onDataItemAdded = function (itemAdded) {
+                    var alreadyExists = false;
+                    angular.forEach($scope.scopeModal.datasourceColumnGrouping, function (item) {
+                        if (item.RawFieldName == itemAdded.RawFieldName && item.SummaryFieldName == itemAdded.SummaryFieldName)
+                            alreadyExists = true;
+                    });
+                    if (!alreadyExists)
+                        $scope.scopeModal.datasourceColumnGrouping.push(itemAdded);
+                }
+
+                VR_GenericData_KeyFieldMappingService.addItem(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds(), onDataItemAdded, $scope.scopeModal.datasourceColumnGrouping);
+            };
+
             $scope.scopeModal.selectedRawDataRecordType;
             $scope.scopeModal.onRawDataRecordTypeSelectorReady = function (api) {
                 dataRawRecordTypeSelectorAPI = api;
@@ -66,7 +82,7 @@
                 if (!isRawRecordTypeSelectedProgramatically) {
                     var selectedRawDataRecordTypeId = dataRawRecordTypeSelectorAPI.getSelectedIds();
                     if (selectedRawDataRecordTypeId != undefined) {
-                        setRecordTypeIdsforSummaryColumnsGrouping();
+                        enableColumnGrouping();
                         $scope.scopeModal.isLoadingisRawRecordTypeFields = true;
                         var payload = {
                             dataRecordTypeId: selectedRawDataRecordTypeId
@@ -105,7 +121,7 @@
                 if (!isSummaryRecordTypeSelectedProgramatically) {
                     var selectedSummaryDataRecordTypeId = dataSummaryRecordTypeSelectorAPI.getSelectedIds();
                     if (selectedSummaryDataRecordTypeId != undefined) {
-                        setRecordTypeIdsforSummaryColumnsGrouping();
+                        enableColumnGrouping();
                         $scope.scopeModal.isLoadingSummaryRecordTypeFieldsID = true;
                         $scope.scopeModal.isLoadingSummaryRecordTypeFieldsBatch = true;
                         $scope.scopeModal.isLoadingRecordStorage = true;
@@ -176,6 +192,46 @@
             };
         }
 
+        function defineMenuActionsColumnsGrouping() {
+            var defaultMenuActions = [
+            {
+                name: "Edit",
+                clicked: editColumnGrouping,
+            },
+            {
+                name: "Delete",
+                clicked: deleteColumnGrouping,
+            }];
+
+            $scope.gridMenuActionsColumnGrouping = function (dataItem) {
+                return defaultMenuActions;
+            }
+        }
+
+        function editColumnGrouping(dataItem) {
+            var onDataItemUpdated = function (updatedDataItem) {
+                var alreadyExists = false;
+                angular.forEach($scope.scopeModal.datasourceColumnGrouping, function (item) {
+                    if (item.RawFieldName == updatedDataItem.RawFieldName && item.SummaryFieldName == updatedDataItem.SummaryFieldName)
+                        alreadyExists = true;
+                });
+                if (!alreadyExists) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModal.datasourceColumnGrouping, dataItem.RawFieldName, 'RawFieldName');
+                    $scope.scopeModal.datasourceColumnGrouping[index] = updatedDataItem;
+                }
+            }
+            VR_GenericData_KeyFieldMappingService.editItem(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds(), dataItem, onDataItemUpdated, $scope.scopeModal.datasourceColumnGrouping);
+        }
+
+        function deleteColumnGrouping(dataItem) {
+            var onDataItemDeleted = function (deletedDataItem) {
+                var index = UtilsService.getItemIndexByVal($scope.scopeModal.datasourceColumnGrouping, dataItem.RawFieldName, 'RawFieldName');
+                $scope.scopeModal.datasourceColumnGrouping.splice(index, 1);
+            };
+
+            VR_GenericData_KeyFieldMappingService.deleteItem($scope, dataItem, onDataItemDeleted);
+        }
+
         function load() {
             $scope.scopeModal.isLoading = true;
 
@@ -183,6 +239,7 @@
                 getSummaryTransformationDefinition().then(function () {
                     loadAllControls()
                         .finally(function () {
+                            enableColumnGrouping();
                             summaryTransformationDefinitionEntity = undefined;
                         });
                 }).catch(function () {
@@ -198,7 +255,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeandRelated])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeandRelated, loadColumnsGroup])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -211,14 +268,12 @@
 
         function loadDataRecordTypeandRelated() {
             var promises = [];
-            var promisesRawandSummaryRecordType = [];
 
 
 
             // Load Raw Data Record Type
             var dataRawRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(dataRawRecordTypeSelectorLoadDeferred.promise);
-            promisesRawandSummaryRecordType.push(dataRawRecordTypeSelectorLoadDeferred.promise)
 
             dataRawRecordTypeSelectorReadyDeferred.promise.then(function () {
                 var payload;
@@ -254,14 +309,9 @@
 
 
 
-
-
-
-
             // Load Summary Data Record Type
             var dataSummaryRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(dataSummaryRecordTypeSelectorLoadDeferred.promise);
-            promisesRawandSummaryRecordType.push(dataSummaryRecordTypeSelectorLoadDeferred.promise)
 
             dataSummaryRecordTypeSelectorReadyDeferred.promise.then(function () {
                 var payload;
@@ -333,41 +383,34 @@
             // End Load Summary Data Record Type
 
 
-
-            // Load Raw & Summary Data Record Type
-
-            if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryItemRecordTypeId != undefined && summaryTransformationDefinitionEntity.RawItemRecordTypeId != undefined) {
-
-                var loadSummaryGroupingColumnsPromiseDeferred = UtilsService.createPromiseDeferred();
-                promises.push(loadSummaryGroupingColumnsPromiseDeferred.promise);
-
-                UtilsService.waitMultiplePromises(promisesRawandSummaryRecordType).then(function () {
-                    summaryGroupingColumnsReadyPromiseDeferred.promise
-                        .then(function () {
-                            var directivePayload;
-                            if (summaryTransformationDefinitionEntity != undefined)
-                                directivePayload = {
-                                    rawDataRecordTypeId: summaryTransformationDefinitionEntity.RawItemRecordTypeId,
-                                    summaryDataRecordTypeId: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId,
-                                    KeyFieldMappings: summaryTransformationDefinitionEntity.KeyFieldMappings
-                                }
-                            VRUIUtilsService.callDirectiveLoad(summaryGroupingColumnsAPI, directivePayload, loadSummaryGroupingColumnsPromiseDeferred);
-                        });
-
-                    return loadSummaryGroupingColumnsPromiseDeferred.promise;
-                })
-            }
-            // End Load Raw & Summary Data Record Type
-
-
-
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        function setRecordTypeIdsforSummaryColumnsGrouping() {
-            summaryGroupingColumnsAPI.setRecordTypeIds(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds())
+        function loadColumnsGroup() {
+
+            if (summaryTransformationDefinitionEntity != undefined) {
+                console.log(summaryTransformationDefinitionEntity.KeyFieldMappings)
+                for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
+                    var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
+                    $scope.scopeModal.datasourceColumnGrouping.push(
+                        {
+                            RawFieldName: dataItem.RawFieldName,
+                            SummaryFieldName: dataItem.SummaryFieldName
+                        }
+                );
+                }
+
+                console.log($scope.scopeModal.datasourceColumnGrouping)
+            }
         }
 
+        function enableColumnGrouping() {
+            $scope.scopeModal.datasourceColumnGrouping.length = 0;
+            if (dataRawRecordTypeSelectorAPI.getSelectedIds() == undefined || dataSummaryRecordTypeSelectorAPI.getSelectedIds() == undefined)
+                $scope.scopeModal.enableColumnGrouping = false;
+            else
+                $scope.scopeModal.enableColumnGrouping = true;
+        }
 
         function getSummaryTransformationDefinition() {
             return VR_GenericData_SummaryTransformationDefinitionAPIService.GetSummaryTransformationDefinition(summaryTransformationDefinitionId).then(function (summaryTransformationDefinition) {
@@ -377,6 +420,20 @@
 
         function buildSummaryTransformationDefinitionObjFromScope() {
 
+            var keyFieldMappings = [];
+
+            for (var i = 0; i < $scope.scopeModal.datasourceColumnGrouping.length; i++) {
+                var dataItem = $scope.scopeModal.datasourceColumnGrouping[i];
+
+                keyFieldMappings.push(
+                    {
+                        RawFieldName: dataItem.RawFieldName,
+                        SummaryFieldName: dataItem.SummaryFieldName
+                    }
+            );
+            }
+
+
             var item = {
                 Name: $scope.scopeModal.name,
                 SummaryTransformationDefinitionId: summaryTransformationDefinitionId,
@@ -385,7 +442,7 @@
                 RawTimeFieldName: dataRawRecordTypeFieldsSelectorAPI.getSelectedIds(),
                 SummaryIdFieldName: dataSummaryRecordTypeFieldsIDSelectorAPI.getSelectedIds(),
                 SummaryBatchStartFieldName: dataSummaryRecordTypeFieldsBatchSelectorAPI.getSelectedIds(),
-                KeyFieldMappings: summaryGroupingColumnsAPI.getData(),
+                KeyFieldMappings: keyFieldMappings,
                 BatchRangeRetrieval: {},
                 SummaryFromSettings: [],
                 UpdateExistingSummaryFromNewSettings: {},

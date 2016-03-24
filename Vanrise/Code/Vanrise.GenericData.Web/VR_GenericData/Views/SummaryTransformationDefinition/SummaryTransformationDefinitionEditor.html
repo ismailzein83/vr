@@ -86,8 +86,17 @@
                 </vr-tab>
                 <vr-tab header="'Grouping Columns'">
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-genericdata-summarygroupingcolumns-grid on-ready="scopeModal.onSummaryGroupingColumnsDirectiveReady"></vr-genericdata-summarygroupingcolumns-grid>
+                        <vr-columns width="fullrow" vr-disabled="!scopeModal.enableColumnGrouping">
+                            {{summaryTransformationDefinitionEntity.KeyFieldMappings}}
+                            <vr-button type="Add" data-onclick="scopeModal.addColumnGrouping" standalone></vr-button>
+
+                            <vr-validator validate="scopeModal.isValidColumnGrouping()">
+                                <vr-datagrid datasource="scopeModal.datasourceColumnGrouping" norowhighlightonclick="true" menuactions="gridMenuActionsColumnGrouping"
+                                             enabledraggablerow="true" idegridmenu>
+                                    <vr-datagridcolumn headertext="'Raw Item'" field="'RawFieldName'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Summary Item'" field="'SummaryFieldName'" disablesorting></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-validator>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
