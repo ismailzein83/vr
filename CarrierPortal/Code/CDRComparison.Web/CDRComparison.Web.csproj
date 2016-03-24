@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CDRComparisonController.cs" />
+    <Compile Include="Controllers\CDRSourceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -127,10 +128,13 @@
     <Content Include="CDRComparison\Directives\cdrcomparison-cdrsource-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filereader-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filescdrsource.js" />
+    <Content Include="CDRComparison\Directives\cdrcomparison-flatfilereader.js" />
     <Content Include="CDRComparison\Directives\Templates\CDRSourceSelectiveTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\FileReaderSelectiveTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\FileCDRSourceTemplate.html" />
+    <Content Include="CDRComparison\Directives\Templates\FlatFileReaderTemplate.html" />
     <Content Include="CDRComparison\Services\APIServices\CDRComparisonAPIService.js" />
+    <Content Include="CDRComparison\Services\APIServices\CDRSourceAPIService.js" />
     <Content Include="CDRComparison\Views\CDRComparison.html" />
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />
   </ItemGroup>

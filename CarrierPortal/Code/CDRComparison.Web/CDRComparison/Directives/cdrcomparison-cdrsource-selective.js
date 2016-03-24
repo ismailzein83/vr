@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CDRSourceSelectiveDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'UtilsService', 'VRUIUtilsService'];
+    CDRSourceSelectiveDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'CDRComparison_CDRSourceAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function CDRSourceSelectiveDirective(CDRComparison_CDRComparisonAPIService, UtilsService, VRUIUtilsService) {
+    function CDRSourceSelectiveDirective(CDRComparison_CDRComparisonAPIService, CDRComparison_CDRSourceAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -62,6 +62,8 @@
                         directivePayload = payload;
                     }
 
+                    extendDirectivePayload();
+
                     var getCDRSourceTemplateConfigsPromise = getCDRSourceTemplateConfigs();
                     promises.push(getCDRSourceTemplateConfigsPromise);
 
@@ -97,17 +99,27 @@
                     }
                 };
 
-                api.getData = function () {
-                    var data;
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined) {
-                        data = directiveAPI.getData();
-                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ConfigId;
-                    }
-                    return data;
-                };
+                api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
+                }
+
+                function extendDirectivePayload() {
+                    if (directivePayload == undefined) { directivePayload = {}; }
+                    directivePayload.cdrSourceContext = {};
+                    directivePayload.cdrSourceContext.readSample = function () {
+                        return CDRComparison_CDRSourceAPIService.ReadSample(getData());
+                    };
+                }
+
+                function getData() {
+                    var data;
+                    if ($scope.scopeModel.selectedTemplateConfig != undefined) {
+                        data = directiveAPI.getData();
+                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.TemplateConfigID;
+                    }
+                    return data;
                 }
             }
         }

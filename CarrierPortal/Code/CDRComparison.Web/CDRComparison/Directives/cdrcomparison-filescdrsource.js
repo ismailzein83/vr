@@ -26,6 +26,7 @@
             this.initializeController = initializeController;
 
             var fileReaderSelectiveAPI;
+            var cdrSourceContext;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -43,6 +44,7 @@
                     var fileReader;
 
                     if (payload != undefined) {
+                        cdrSourceContext = payload.cdrSourceContext;
                         fileReader = payload.FileReader;
                     }
 
@@ -53,13 +55,18 @@
 
                     function loadFileReaderSelective() {
                         var fileReaderSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                        VRUIUtilsService.callDirectiveLoad(fileReaderSelectiveAPI, undefined, fileReaderSelectiveLoadDeferred);
+
+                        var payload = (fileReader != undefined) ? fileReader : {};
+                        payload.cdrSourceContext = cdrSourceContext;
+
+                        VRUIUtilsService.callDirectiveLoad(fileReaderSelectiveAPI, payload, fileReaderSelectiveLoadDeferred);
                         return fileReaderSelectiveLoadDeferred.promise;
                     }
                 };
 
                 api.getData = function () {
                     return {
+                        $type: 'CDRComparison.Business.FileCDRSource, CDRComparison.Business',
                         FileId: $scope.file.fileId,
                         FileReader: fileReaderSelectiveAPI.getData()
                     };

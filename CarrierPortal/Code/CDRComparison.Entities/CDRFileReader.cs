@@ -11,5 +11,7 @@ namespace CDRComparison.Entities
         public int ConfigId { get; set; }
 
         public abstract void ReadCDRs(IReadCDRsFromFileContext context);
+
+        public abstract CDRSample ReadSample(IReadSampleFromFileContext context);
     }
 }

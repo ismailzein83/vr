@@ -54,6 +54,30 @@ namespace CDRComparison.MainExtensions.CDRFileReaders
             context.OnCDRsReceived(cdrs);
         }
 
+        public override CDRSample ReadSample(IReadSampleFromFileContext context)
+        {
+            var sample = new FlatFileCDRSample();
+            var rows = new List<FlatFileDataRow>();
+
+            string line;
+            int counter = 0;
+            while (context.TryReadLine(out line) && counter < 10)
+            {
+                string[] data = line.Split(this.Delimiter);
+
+                if (counter == 0)
+                    sample.ColumnCount = data.Length;
+                else if (data.Length != sample.ColumnCount)
+                    throw new Exception("Some rows have more columns than others");
+
+                rows.Add(new FlatFileDataRow() { Data = data });
+                counter++;
+            }
+
+            sample.Rows = rows;
+            return sample;
+        }
+
         #endregion
 
         #region Private Methods

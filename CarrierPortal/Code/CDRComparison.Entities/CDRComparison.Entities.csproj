@@ -47,11 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDR.cs" />
+    <Compile Include="CDRSample.cs" />
     <Compile Include="CDRFileReader.cs" />
     <Compile Include="CDRNormalizationSettings.cs" />
+    <Compile Include="FlatFileCDRSample.cs" />
     <Compile Include="CDRSourceProfile.cs" />
     <Compile Include="CDRSourceProfileSettings.cs" />
     <Compile Include="CDRSource.cs" />
+    <Compile Include="IReadFromFileContext.cs" />
+    <Compile Include="IReadSampleFromFileContext.cs" />
+    <Compile Include="IReadSampleFromSourceContext.cs" />
     <Compile Include="IReadCDRsFromFileContext.cs" />
     <Compile Include="IReadCDRsFromSourceContext.cs" />
     <Compile Include="NormalizationRule.cs" />

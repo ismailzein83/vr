@@ -101,7 +101,7 @@
                     var data;
                     if ($scope.scopeModel.selectedTemplateConfig != undefined) {
                         data = directiveAPI.getData();
-                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ConfigId;
+                        data.ConfigId = $scope.scopeModel.selectedTemplateConfig.TemplateConfigID;
                     }
                     return data;
                 };

@@ -30,5 +30,21 @@ namespace CDRComparison.Business
                 this.FileReader.ReadCDRs(readFromFileContext);
             }
         }
+
+        public override CDRSample ReadSample(IReadSampleFromSourceContext context)
+        {
+            VRFileManager fileManager = new VRFileManager();
+
+            var file = fileManager.GetFile(this.FileId);
+            if (file == null)
+                throw new Exception(String.Format("File '{0}' was not found", this.FileId));
+
+            CDRSample cdrSample;
+            using (var readSampleFromFileContext = new ReadSampleFromFileContext(file))
+            {
+                cdrSample = this.FileReader.ReadSample(readSampleFromFileContext);
+            }
+            return cdrSample;
+        }
     }
 }

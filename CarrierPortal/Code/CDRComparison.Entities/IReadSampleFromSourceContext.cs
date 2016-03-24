@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace CDRComparison.Entities
 {
-    public interface IReadCDRsFromFileContext : IReadFromFileContext
+    public interface IReadSampleFromSourceContext
     {
-        void OnCDRsReceived(IEnumerable<CDR> cdrs);
     }
 }
