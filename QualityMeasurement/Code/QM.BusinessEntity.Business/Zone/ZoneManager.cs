@@ -101,9 +101,7 @@ namespace QM.BusinessEntity.Business
         private void UpdateSettings(Zone zone, List<string> zoneCodes, bool isUpdate)
         {
             if(zone.Settings == null)
-                zone.Settings = new ZoneSettings();
-            if (zone.Settings.ExtendedSettings == null)
-                zone.Settings.ExtendedSettings = new Dictionary<string, object>();
+                zone.Settings = new ZoneSettings();            
 
             if (isUpdate)
             {
@@ -113,6 +111,11 @@ namespace QM.BusinessEntity.Business
                 if (existingZone.Settings == null)
                     throw new NullReferenceException(String.Format("existingZone.Settings {0}", zone.ZoneId));
                 zone.Settings.ExtendedSettings = existingZone.Settings.ExtendedSettings;
+            }
+            else
+            {
+                if (zone.Settings.ExtendedSettings == null)
+                    zone.Settings.ExtendedSettings = new Dictionary<string, object>();
             }
 
             IEnumerable<Type> extendedSettingsBehaviorsImplementations = Utilities.GetAllImplementations<ExtendedZoneSettingBehavior>();

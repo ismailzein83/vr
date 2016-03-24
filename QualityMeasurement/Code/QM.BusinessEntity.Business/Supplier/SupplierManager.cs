@@ -99,8 +99,7 @@ namespace QM.BusinessEntity.Business
         {
             if (supplier.Settings == null)
                 supplier.Settings = new SupplierSettings();
-            if (supplier.Settings.ExtendedSettings == null)
-                supplier.Settings.ExtendedSettings = new Dictionary<string, object>();
+            
             
             if (isUpdate)
             {
@@ -110,6 +109,11 @@ namespace QM.BusinessEntity.Business
                 if (existingSupplier.Settings == null)
                     throw new NullReferenceException(String.Format("existingSupplier.Settings {0}", supplier.SupplierId));
                 supplier.Settings.ExtendedSettings = existingSupplier.Settings.ExtendedSettings;
+            }
+            else
+            {
+                if (supplier.Settings.ExtendedSettings == null)
+                    supplier.Settings.ExtendedSettings = new Dictionary<string, object>();
             }
 
             IEnumerable<Type> extendedSettingsBehaviorsImplementations =
