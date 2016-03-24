@@ -49,7 +49,7 @@ namespace QM.BusinessEntity.Business
         {
             Vanrise.Entities.InsertOperationOutput<SupplierDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SupplierDetail>();
 
-            CreateNewSupplier(ref supplier);
+            AssignSupplierId(supplier);
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -134,7 +134,7 @@ namespace QM.BusinessEntity.Business
 
         public void AddSupplierFromSource(Supplier supplier)
         {
-            CreateNewSupplier(ref supplier);
+            AssignSupplierId(supplier);
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
             UpdateSettings(supplier, false);
 
@@ -156,8 +156,9 @@ namespace QM.BusinessEntity.Business
 
         public Supplier GetSupplierbySourceId(string sourceSupplierId)
         {
-            ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
-            return dataManager.GetSupplierBySourceId(sourceSupplierId);
+            var allSuppliers = GetCachedSuppliers();            
+            Func<Supplier, bool> filterExpression = (sup) => (sup.SourceId ==  sourceSupplierId);
+            return allSuppliers.FindRecord(filterExpression);
         }
 
         
@@ -190,7 +191,7 @@ namespace QM.BusinessEntity.Business
                 if (supplier == null)
                 {
                     supplier = new Supplier();
-                    CreateNewSupplier(ref supplier);
+                    AssignSupplierId(supplier);
                     supplier.Name = supplierName;
 
                     if (supplier.Settings == null)
@@ -250,7 +251,7 @@ namespace QM.BusinessEntity.Business
             return GetCachedSuppliers().FindRecord(it => it.Name.ToLower().Equals(supplierName));
         }
 
-        private static void CreateNewSupplier(ref Supplier supplier)
+        private static void AssignSupplierId(Supplier supplier)
         {
             long startingId;
             ReserveIDRange(1, out startingId);
