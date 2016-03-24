@@ -160,8 +160,6 @@
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListService.js" />
     <Content Include="WhS_SupplierPriceList\Template\Supplier Price List Sample.xlsx" />
-    <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreviewTaskEditor.html" />
-    <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreviewTaskEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
