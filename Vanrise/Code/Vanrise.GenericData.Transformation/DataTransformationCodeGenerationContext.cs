@@ -28,7 +28,7 @@ namespace Vanrise.GenericData.Transformation
 
         string IDataTransformationCodeGenerationContext.GenerateUniqueMemberName(string memberName)
         {
-            return String.Format("{0}_{1}", memberName, Guid.NewGuid().ToString().Replace("-", ""));
+            return String.Format("{0}_{1}", memberName, Guid.NewGuid().ToString("N"));
         }
 
         void IDataTransformationCodeGenerationContext.AddGlobalMember(string memberDeclarationCode)

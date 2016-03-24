@@ -48,8 +48,10 @@
     <Compile Include="AnalyticRecord.cs" />
     <Compile Include="DimensionConfiguration.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="IMeasureValueExecutor.cs" />
     <Compile Include="MeasureConfiguration.cs" />
     <Compile Include="MeasureExpression.cs" />
+    <Compile Include="IMeasureValueEvaluatorContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaConfiguration.cs" />
   </ItemGroup>

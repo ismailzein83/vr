@@ -14,7 +14,7 @@ namespace Vanrise.Common
         public static bool TryCompileClass(string classDefinition, out CSharpCompilationOutput output)
         {
             output = new CSharpCompilationOutput();
-            string assemblyName = String.Format("RuntimeAssembly_{0}", Guid.NewGuid().ToString().Replace("-",""));
+            string assemblyName = String.Format("RuntimeAssembly_{0}", Guid.NewGuid().ToString("N"));
 
             Dictionary<string, string> providerOptions = new Dictionary<string, string>();
             providerOptions["CompilerVersion"] = "v4.0";
@@ -76,7 +76,7 @@ namespace Vanrise.Common
 
         public static string GenerateUniqueNamespace(string originalNamespace)
         {
-            return String.Format("{0}.Gen_{1}", originalNamespace, Guid.NewGuid().ToString().Replace("-", ""));
+            return String.Format("{0}.Gen_{1}", originalNamespace, Guid.NewGuid().ToString("N"));
         }
     }
 

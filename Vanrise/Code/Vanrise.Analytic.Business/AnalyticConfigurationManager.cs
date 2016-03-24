@@ -42,5 +42,17 @@ namespace Vanrise.Analytic.Business
             }
             return result;
         }
+
+        public IEnumerable<DimensionConfiguration> GetDimensions()
+        {
+            IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
+            return dataManager.GetDimensions().Values.Select(s => s.Configuration);
+        }
+
+        public IEnumerable<MeasureConfiguration> GetMeasures()
+        {
+            IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
+            return dataManager.GetMeasures().Values.Select(s => s.Configuration);
+        }
     }
 }
