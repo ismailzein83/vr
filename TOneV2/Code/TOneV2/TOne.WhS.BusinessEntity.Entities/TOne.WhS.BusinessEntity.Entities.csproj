@@ -204,12 +204,12 @@
     <Compile Include="SupplierRate\SupplierRateQuery.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneCriteria.cs" />
     <Compile Include="SupplierZone\IRuleSupplierZoneTarget.cs" />
-    <Compile Include="SupplierZone\SupplierPriceListDetail.cs" />
-    <Compile Include="SupplierZone\SupplierPricelistQuery.cs" />
+    <Compile Include="SupplierPriceList\SupplierPriceListDetail.cs" />
+    <Compile Include="SupplierPriceList\SupplierPricelistQuery.cs" />
     <Compile Include="SupplierZone\SupplierZoneDetails.cs" />
     <Compile Include="SupplierZone\SupplierZoneQuery.cs" />
     <Compile Include="SupplierCode\SupplierCode.cs" />
-    <Compile Include="SupplierZone\SupplierPriceList.cs" />
+    <Compile Include="SupplierPriceList\SupplierPriceList.cs" />
     <Compile Include="SupplierRate\SupplierRate.cs" />
     <Compile Include="SupplierZone\SupplierZone.cs" />
     <Compile Include="SupplierZone\SupplierZoneInfo.cs" />

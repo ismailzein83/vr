@@ -16,16 +16,18 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Public Methods
         public SupplierPriceList GetPriceList(int priceListId)
         {
-            List<SupplierPriceList> priceLists = GetCachedPriceLists();
-            var priceList = priceLists.FindRecord(x => x.PriceListId == priceListId);
+            Dictionary<int, SupplierPriceList> priceLists = GetCachedPriceLists();
+            var priceList = priceLists.GetRecord(priceListId);
             return priceList;
         }
 
         public Vanrise.Entities.IDataRetrievalResult<SupplierPriceListDetail> GetFilteredSupplierPriceLists(Vanrise.Entities.DataRetrievalInput<SupplierPricelistQuery> input)
         {
-            List<SupplierPriceList> allPriceLists = GetCachedPriceLists();
+            Dictionary<int, SupplierPriceList> allPriceLists = GetCachedPriceLists();
             Func<SupplierPriceList, bool> filterExpression = (item) =>
-                (input.Query.SupplierId == null || item.SupplierId == input.Query.SupplierId);
+                (input.Query.SupplierId == null || item.SupplierId == input.Query.SupplierId)
+                && (!input.Query.FromDate.HasValue || item.CreateTime >= input.Query.FromDate)
+                && (!input.Query.ToDate.HasValue || item.CreateTime <= input.Query.ToDate);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPriceLists.ToBigResult(input, filterExpression, SupplierPriceListDetailMapper));
         }
 
@@ -50,13 +52,22 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.ArGetPriceListsUpdated(ref _updateHandle);
             }
         }
-        List<SupplierPriceList> GetCachedPriceLists()
+        Dictionary<int, SupplierPriceList> GetCachedPriceLists()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetPriceLists"),
                () =>
                {
                    ISupplierPriceListDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
-                   return dataManager.GetPriceLists();
+                   IEnumerable<SupplierPriceList> allSupplierPriceLists = dataManager.GetPriceLists();
+                   Dictionary<int, SupplierPriceList> allSupplierPriceListsDic = new Dictionary<int, SupplierPriceList>();
+                   if (allSupplierPriceLists != null)
+                   {
+                       foreach (var supplierPriceList in allSupplierPriceLists)
+                       {
+                           allSupplierPriceListsDic.Add(supplierPriceList.PriceListId, supplierPriceList);
+                       }
+                   }
+                   return allSupplierPriceListsDic;
                });
         }
 

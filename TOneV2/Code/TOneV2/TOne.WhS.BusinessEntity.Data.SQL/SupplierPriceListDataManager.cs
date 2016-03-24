@@ -51,7 +51,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
                 FileId = (long)reader["FileID"],
-                CreateDate = GetReaderValue<DateTime?>(reader, "CreatedDate")
+                CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime")
             };
             return supplierPriceList;
         }

@@ -14,6 +14,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int CurrencyId { get; set; }
         public long FileId { get; set; }
-        public DateTime? CreateDate { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }

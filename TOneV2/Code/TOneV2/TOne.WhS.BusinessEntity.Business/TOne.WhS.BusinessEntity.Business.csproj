@@ -132,7 +132,7 @@
     <Compile Include="SupplierRate\ISupplierRateReader.cs" />
     <Compile Include="SupplierCode\SupplierCodeCacheManager.cs" />
     <Compile Include="SupplierCode\SupplierCodeManager.cs" />
-    <Compile Include="SupplierZone\SupplierPriceListManager.cs" />
+    <Compile Include="SupplierPriceList\SupplierPriceListManager.cs" />
     <Compile Include="SupplierRate\SupplierRateCacheManager.cs" />
     <Compile Include="SupplierRate\SupplierRateManager.cs" />
     <Compile Include="SupplierRate\SupplierRateReadAllNoCache.cs" />

@@ -50,14 +50,16 @@
 
             supplierReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = {};
+                    var directivePayload;
                     VRUIUtilsService.callDirectiveLoad(supplierDirectiveApi, directivePayload, supplierLoadPromiseDeferred);
                 });
             return supplierLoadPromiseDeferred.promise;
         }
         function setFilterObject() {
             filter = {
-                SupplierId: supplierDirectiveApi.getSelectedIds()
+                SupplierId: supplierDirectiveApi.getSelectedIds(),
+                FromDate: $scope.fromDate,
+                ToDate: $scope.toDate
             };
         }
     }
