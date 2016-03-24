@@ -21,7 +21,6 @@ namespace QM.BusinessEntity.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSuppliers.ToBigResult(input, filterExpression, SupplierDetailMapper));
         }
-        const string EXCELFIELD_PREFIX = "Prefix";
         public Supplier GetSupplier(int supplierId)
         {
             var suppliers = GetCachedSuppliers();
@@ -50,9 +49,7 @@ namespace QM.BusinessEntity.Business
         {
             Vanrise.Entities.InsertOperationOutput<SupplierDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SupplierDetail>();
 
-            long startingId;
-            ReserveIDRange(1, out startingId);
-            supplier.SupplierId = (int)startingId;
+            CreateNewSupplier(ref supplier);
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
@@ -103,20 +100,18 @@ namespace QM.BusinessEntity.Business
             if (supplier.Settings == null)
                 supplier.Settings = new SupplierSettings();
             if (supplier.Settings.ExtendedSettings == null)
+                supplier.Settings.ExtendedSettings = new Dictionary<string, object>();
+            
+            if (isUpdate)
             {
-                if (isUpdate)
-                {
-                    var existingSupplier = GetSupplier(supplier.SupplierId);
-                    if (existingSupplier == null)
-                        throw new NullReferenceException(String.Format("existingSupplier {0}", supplier.SupplierId));
-                    if (existingSupplier.Settings == null)
-                        throw new NullReferenceException(String.Format("existingSupplier.Settings {0}",
-                            supplier.SupplierId));
-                    supplier.Settings.ExtendedSettings = existingSupplier.Settings.ExtendedSettings;
-                }
-                else
-                    supplier.Settings.ExtendedSettings = new Dictionary<string, object>();
+                var existingSupplier = GetSupplier(supplier.SupplierId);
+                if (existingSupplier == null)
+                    throw new NullReferenceException(String.Format("existingSupplier {0}", supplier.SupplierId));
+                if (existingSupplier.Settings == null)
+                    throw new NullReferenceException(String.Format("existingSupplier.Settings {0}", supplier.SupplierId));
+                supplier.Settings.ExtendedSettings = existingSupplier.Settings.ExtendedSettings;
             }
+
             IEnumerable<Type> extendedSettingsBehaviorsImplementations =
                 Utilities.GetAllImplementations<ExtendedSupplierSettingBehavior>();
             if (extendedSettingsBehaviorsImplementations != null)
@@ -135,9 +130,7 @@ namespace QM.BusinessEntity.Business
 
         public void AddSupplierFromSource(Supplier supplier)
         {
-            long startingId;
-            ReserveIDRange(1, out startingId);
-            supplier.SupplierId = (int)startingId;
+            CreateNewSupplier(ref supplier);
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
             UpdateSettings(supplier, false);
 
@@ -145,8 +138,9 @@ namespace QM.BusinessEntity.Business
         }
         public void UpdateSupplierFromSource(Supplier supplier)
         {
-
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
+            UpdateSettings(supplier, true);
+
             dataManager.UpdateSupplierFromeSource(supplier);
         }
         public List<Vanrise.Entities.TemplateConfig> GetSupplierSourceTemplates()
@@ -181,36 +175,23 @@ namespace QM.BusinessEntity.Business
             if (wbk.Worksheets[0].Cells.MaxDataRow > -1 && wbk.Worksheets[0].Cells.MaxDataColumn > -1)
                 supplierDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
 
-
             ISupplierDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierDataManager>();
-            
-            List<string> extendedFields = new List<string>();
-            for (int i = 1; i < supplierDataTable.Columns.Count; i++)
-                extendedFields.Add(supplierDataTable.Rows[0][i].ToString());
-
+           
             for (int i = 1; i < supplierDataTable.Rows.Count; i++)
             {
-                Supplier supplier = GetCachedSuppliers().FindRecord(it => it.Name.ToLower().Equals(supplierDataTable.Rows[i][0].ToString().ToLower()));
+                string supplierName = supplierDataTable.Rows[i][0].ToString().ToLower();
+                string prefix = supplierDataTable.Rows[i][1].ToString();
+
+                Supplier supplier = GetSupplierByName(supplierName);
                 if (supplier == null)
                 {
                     supplier = new Supplier();
-                    long startingId;
-                    ReserveIDRange(1, out startingId);
-                    supplier.SupplierId = (int)startingId;
-                    supplier.Name = supplierDataTable.Rows[i][0].ToString();
-
-                    Dictionary<string, object> excelFields = new Dictionary<string, object>();
-                    for (int j = 1; j < supplierDataTable.Columns.Count; j++)
-                    {
-                        excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
-                    }
-                    object prefix;
+                    CreateNewSupplier(ref supplier);
+                    supplier.Name = supplierName;
 
                     if (supplier.Settings == null)
                         supplier.Settings = new SupplierSettings();
-
-                    if (excelFields.TryGetValue(EXCELFIELD_PREFIX, out prefix))
-                        supplier.Settings.Prefix = prefix as string;
+                    supplier.Settings.Prefix = prefix;
 
                     UpdateSettings(supplier, false);
                     
@@ -219,25 +200,14 @@ namespace QM.BusinessEntity.Business
                         insertedCount++;
                     else
                         notInsertedCount++;
-
-
                 }
                 else
                 {
                     if (AllowUpdateIfExisting)
                     {
-                        Dictionary<string, object> excelFields = new Dictionary<string, object>();
-                        for (int j = 1; j < supplierDataTable.Columns.Count; j++)
-                        {
-                            excelFields.Add(extendedFields[j - 1], supplierDataTable.Rows[i][j].ToString());
-                        }
-                        object prefix;
-
                         if (supplier.Settings == null)
                             supplier.Settings = new SupplierSettings();
-
-                        if (excelFields.TryGetValue(EXCELFIELD_PREFIX, out prefix))
-                            supplier.Settings.Prefix = prefix as string;
+                        supplier.Settings.Prefix = prefix;
 
                         UpdateSettings(supplier, true);
                         
@@ -246,7 +216,6 @@ namespace QM.BusinessEntity.Business
                             updatedCount++;
                         else
                             notInsertedCount++;
-
                     }
                     else
                         notInsertedCount++;
@@ -257,9 +226,6 @@ namespace QM.BusinessEntity.Business
 
             return message;
         }
-
-   
-
 
         #region Private Members
 
@@ -272,6 +238,19 @@ namespace QM.BusinessEntity.Business
                    IEnumerable<Supplier> suppliers = dataManager.GetSuppliers();
                    return suppliers.ToDictionary(cn => cn.SupplierId, cn => cn);
                });
+        }
+
+
+        public Supplier GetSupplierByName(string supplierName)
+        {
+            return GetCachedSuppliers().FindRecord(it => it.Name.ToLower().Equals(supplierName));
+        }
+
+        private static void CreateNewSupplier(ref Supplier supplier)
+        {
+            long startingId;
+            ReserveIDRange(1, out startingId);
+            supplier.SupplierId = (int)startingId;
         }
 
         private SupplierInfo SupplierInfoMapper(Supplier supplier)

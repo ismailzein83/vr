@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,15 +25,24 @@ namespace QM.CLITester.iTestIntegration
             if (context.Supplier.Settings.ExtendedSettings == null)
                 throw new NullReferenceException(String.Format("context.Supplier.Settings.ExtendedSettings {0}", context.Supplier.SupplierId));
             
-            string matchITestSupplierId = null;
-            if (context.Supplier.Settings.ExtendedSettings.Count == 0)
+            string matchITestSupplierId;
+
+            object extendedSettings;
+            if (!context.Supplier.Settings.ExtendedSettings.TryGetValue(EXTENDEDSUPPLIERSETTING_KEYNAME, out extendedSettings))
             {
                 matchITestSupplierId = CreateSupplier();
-                if(matchITestSupplierId == null)
+                if (matchITestSupplierId == null)
                     throw new Exception("Could not create Supplier at ITest");
             }
-            UpdateSupplier(context.Supplier);
-            if (context.Supplier.Settings.ExtendedSettings.Count == 0)
+            else
+            {
+                var itestExtendedSettings = context.Supplier.Settings.ExtendedSettings.GetOrCreateItem(EXTENDEDSUPPLIERSETTING_KEYNAME, () => new ITestExtendedSupplierSetting()) as ITestExtendedSupplierSetting;
+                matchITestSupplierId = itestExtendedSettings.ITestSupplierId;
+            }
+            
+            UpdateSupplier(context.Supplier, matchITestSupplierId);
+            
+            if (!context.Supplier.Settings.ExtendedSettings.TryGetValue(EXTENDEDSUPPLIERSETTING_KEYNAME, out extendedSettings))
             {
                 var itestExtendedSettings = context.Supplier.Settings.ExtendedSettings.GetOrCreateItem(EXTENDEDSUPPLIERSETTING_KEYNAME, () => new ITestExtendedSupplierSetting()) as ITestExtendedSupplierSetting;
                 itestExtendedSettings.ITestSupplierId = matchITestSupplierId;
@@ -60,9 +70,9 @@ namespace QM.CLITester.iTestIntegration
             return null;
         }
 
-        private void UpdateSupplier(Supplier supplier)
+        private void UpdateSupplier(Supplier supplier, string supplierITestId)
         {
-            string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&sid={0}&name={1}&type=std&codec=alaw&prefix={2}", supplier.SupplierId, supplier.Name, supplier.Settings.Prefix));
+            string createSupplierResponse = _serviceActions.PostRequest("5020", String.Format("&sid={0}&name={1}&type=std&codec=alaw&prefix={2}", supplierITestId, supplier.Name, supplier.Settings.Prefix));
             CheckSupplierResponse(createSupplierResponse);
         }
 

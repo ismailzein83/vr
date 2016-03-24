@@ -58,7 +58,7 @@ namespace QM.BusinessEntity.Business
         {
             foreach (var z in itemsToAdd)
             {
-                zoneManager.AddZoneFromeSource(z, GetZoneCodes(z));
+                zoneManager.AddZoneFromSource(z, GetZoneCodes(z));
             }
         }
 
@@ -66,7 +66,7 @@ namespace QM.BusinessEntity.Business
         {
              foreach (var z in itemsToUpdate)
             {
-                zoneManager.UpdateZoneFromeSource(z, GetZoneCodes(z));
+                zoneManager.UpdateZoneFromSource(z, GetZoneCodes(z));
             }
         }
 

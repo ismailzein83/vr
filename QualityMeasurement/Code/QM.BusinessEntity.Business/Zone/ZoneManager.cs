@@ -82,28 +82,39 @@ namespace QM.BusinessEntity.Business
 
 
 
-        public void AddZoneFromeSource(Zone zone, List<string> zoneCodes)
+        public void AddZoneFromSource(Zone zone, List<string> zoneCodes)
         {            
-            UpdateSettings(zone, zoneCodes);
+            UpdateSettings(zone, zoneCodes, false);
             IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
             dataManager.InsertZoneFromSource(zone);
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
-        public void UpdateZoneFromeSource(Zone zone, List<string> zoneCodes)
+        public void UpdateZoneFromSource(Zone zone, List<string> zoneCodes)
         {
-            UpdateSettings(zone, zoneCodes);
+            UpdateSettings(zone, zoneCodes, true);
             IZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneDataManager>();
             dataManager.UpdateZoneFromSource(zone);
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
-        private void UpdateSettings(Zone zone, List<string> zoneCodes)
+        private void UpdateSettings(Zone zone, List<string> zoneCodes, bool isUpdate)
         {
             if(zone.Settings == null)
                 zone.Settings = new ZoneSettings();
             if (zone.Settings.ExtendedSettings == null)
                 zone.Settings.ExtendedSettings = new Dictionary<string, object>();
+
+            if (isUpdate)
+            {
+                var existingZone = GetZone(zone.ZoneId);
+                if (existingZone == null)
+                    throw new NullReferenceException(String.Format("existingZone {0}", zone.ZoneId));
+                if (existingZone.Settings == null)
+                    throw new NullReferenceException(String.Format("existingZone.Settings {0}", zone.ZoneId));
+                zone.Settings.ExtendedSettings = existingZone.Settings.ExtendedSettings;
+            }
+
             IEnumerable<Type> extendedSettingsBehaviorsImplementations = Utilities.GetAllImplementations<ExtendedZoneSettingBehavior>();
             if (extendedSettingsBehaviorsImplementations != null)
             {
