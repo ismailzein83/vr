@@ -19,12 +19,5 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SupplierPriceListManager manager = new SupplierPriceListManager();
             return GetWebResponse(input, manager.GetFilteredSupplierPriceLists(input));//manager.GetFilteredSupplierPriceLists(input);
         }
-        [HttpGet]
-        [Route("GetAllSupplierPricelist")]
-        public IEnumerable<SupplierPriceList> GetAllSupplierPricelist()
-        {
-            SupplierPriceListManager manager = new SupplierPriceListManager();
-            return manager.GetAllSupplierPriceLists();
-        }
     }
 }

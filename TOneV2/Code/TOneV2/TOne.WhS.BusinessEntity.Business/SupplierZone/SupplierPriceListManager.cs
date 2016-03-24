@@ -28,14 +28,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 (input.Query.SupplierId == null || item.SupplierId == input.Query.SupplierId);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPriceLists.ToBigResult(input, filterExpression, SupplierPriceListDetailMapper));
         }
-        public IEnumerable<SupplierPriceList> GetAllSupplierPriceLists()
-        {
-            var allPriceLists = GetCachedPriceLists();
-            if (allPriceLists == null)
-                return null;
-
-            return allPriceLists;
-        }
 
         #endregion
 
