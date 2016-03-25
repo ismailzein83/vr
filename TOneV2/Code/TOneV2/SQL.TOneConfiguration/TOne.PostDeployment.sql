@@ -81,43 +81,44 @@ when not matched by target then
 	insert([ID],[Name],[DisplayName],[Type],[Configuration],[Rank])
 	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank]);
 set identity_insert [BI].[SchemaConfiguration] off;
+
 --[sec].[Module]---------------------------701 to 800---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
-;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(701,'Carriers','Carriers',null,101,null,2,10),
-(702,'Account Manager','Account Manager','Account Manager',null,'/images/menu-icons/Account.png',20,0),
-(703,'Management','Management','Management',null,'/images/menu-icons/Management.png',30,0),
-(704,'Sale Area','Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',40,0),
-(705,'Sale Entities','Entities',null,704,null,1,0),
-(706,'Sale Rules','Rules',null,704,null,1,0),
-(707,'Purchase Area','Purchase Area','Purchase Area',null,'/images/menu-icons/Purchase Area.png',50,0),
-(708,'Purchase Entities','Entities',null,707,null,1,0),
-(709,'Purchase Rules','Rules',null,707,null,1,0),
-(710,'Routing',null,null,null,null,10,0),
-(711,'Routing Rules','Rules',null,710,null,1,0),
-(712,'CDR Process','CDR Process','CDR Process',null,null,60,0),
-(713,'CDR Process Rules','Rules',null,712,null,1,0),
-(714,'Traffic Analysis','Traffic Analysis','NOC',null,'/images/menu-icons/NOC.png',70,1),
-(715,'Billing','Billing','Billing',null,'/images/menu-icons/billing.png',80,0),
-(716,'Prepaid-Postpaid','Prepaid-Postpaid','Prepaid-Postpaid',null,'/images/menu-icons/post paid - pre paid.png',90,0),
-(717,'Plugins','Plugins','Plugins',null,'/images/menu-icons/plug.png',100,0),
-(718,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,110,0),
-(719,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',120,1)
+(701,'Carriers',null,101,null,2,10),
+(702,'Account Manager','Account Manager',null,'/images/menu-icons/Account.png',20,0),
+(703,'Management','Management',null,'/images/menu-icons/Management.png',30,0),
+(704,'Sale Area','Sale Area',null,'/images/menu-icons/Sale Area.png',40,0),
+(705,'Sale Entities',null,704,null,1,0),
+(706,'Sale Rules',null,704,null,1,0),
+(707,'Purchase Area',null,null,'/images/menu-icons/Purchase Area.png',50,0),
+(708,'Purchase Entities',null,707,null,1,0),
+(709,'Purchase Rules',null,707,null,1,0),
+(710,'Routing',null,null,null,10,0),
+(711,'Routing Rules',null,710,null,1,0),
+(712,'CDR Process',null,null,null,60,0),
+(713,'CDR Process Rules',null,712,null,1,0),
+(714,'Traffic Analysis',null,null,'/images/menu-icons/NOC.png',70,1),
+(715,'Billing',null,null,'/images/menu-icons/billing.png',80,0),
+(716,'Prepaid-Postpaid',null,null,'/images/menu-icons/post paid - pre paid.png',90,0),
+(717,'Plugins',null,null,'/images/menu-icons/plug.png',100,0),
+(718,'Dynamic Management',null,1,null,110,0),
+(719,'Business Intelligence',null,null,'/images/menu-icons/busines intel.png',120,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
+)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
 when not matched by target then
-	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
+	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
 --[sec].[View]-----------------------------7001 to 8000-------------------------------------------------------
@@ -183,26 +184,26 @@ set identity_insert [sec].[View] off;
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
+;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(2,'Routing Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(3,'Business Intelligence Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(4,'Sales Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(5,'Business Entity Module',1,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(7,'Billing Module',3,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(8,'Trafic Module',3,0,'["View","Add","Edit", "Delete", "Full Control"]')
+(2,'Routing Module',1,0),
+(3,'Business Intelligence Module',1,0),
+(4,'Sales Module',1,0),
+(5,'Business Entity Module',1,0),
+(7,'Billing Module',3,0),
+(8,'Trafic Module',3,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions]))
+)c([Id],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
 when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance],[PermissionOptions])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance],s.[PermissionOptions]);
+	insert([Id],[Name],[ParentId],[BreakInheritance])
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
 set identity_insert [sec].[BusinessEntityModule] off;
 
 
@@ -213,17 +214,7 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(13,'Integration','Integration',2,0,'["View"]'),
-(14,'Business Process','Business Process',2,0,'["View"]'),
-(15,'Strategy','Strategy',4,0,'["View","Add","Edit", "Full Control"]'),
-(16,'Network Infrastructure','Network Infrastructure',2,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(17,'Normalization Rule','Normalization Rule',2,0,'["View","Add","Edit", "Delete", "Full Control"]'),
-(18,'Case Management','Case Management',4,0,'["View","Edit"]'),
-(19,'Number Prefixes','Number Prefixes',2,0,'["View","Edit"]'),
-(20,'Strategy Execution','Strategy Execution',4,0,'["View"]'),
-(21,'Related Numbers','Related Numbers',4,0,'["View"]'),
-(22,'CDR','CDR',4,0,'["View"]'),
-(24,'VR_Runtime_SchedulerTask','Schedule Services',3,0,'["View", "Add", "Edit", "ViewMyTask"]')
+(22,'CDR','CDR',4,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
