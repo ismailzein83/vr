@@ -71,7 +71,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                 showClose: true
             });
           //  setTimeout(function () {
-                //if (divDatePicker.parents('.modal-body').length > 0) {
+                if (divDatePicker.parents('.modal-body').length > 0) {
                     divDatePicker
                      .on('dp.show', function (e) {
                          var self = $(this);
@@ -82,13 +82,27 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                          $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left - $(window).scrollLeft() });
 
                      });
-                   
-                    $(divDatePicker.parents('div')).scroll(function () {
-                        fixDateTimePickerPosition();
-                    })
-               // }
+                }
 
-           // }, 1)
+                if (divDatePicker.parents('.vr-datagrid').length > 0) {
+                    divDatePicker.on('dp.show', function (e) {
+                        var self = $(this);
+                        var selfHeight = $(this).height();
+                        var selfOffset = $(self).offset();
+                        var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
+                        var containercell = $(self.parent().closest('.vr-datagrid-celltext')).offset();
+                        $(dropDown).removeClass("pull-right");
+                        $(dropDown).css({ position: 'fixed', top: 'auto', left: 'auto', marginTop: selfHeight, marginRight: -17 });
+
+                  });
+                }
+
+            $(divDatePicker.parents('div')).scroll(function () {
+                fixDateTimePickerPosition();
+            })
+            $(window).scroll(function () {
+                fixDateTimePickerPosition();
+            })
 
             $scope.$on('start-drag', function (event, args) {
                 fixDateTimePickerPosition();
