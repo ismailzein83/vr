@@ -9,13 +9,14 @@
             GetDataTransformationDefinition: GetDataTransformationDefinition,
             GetFilteredDataTransformationDefinitions: GetFilteredDataTransformationDefinitions,
             AddDataTransformationDefinition: AddDataTransformationDefinition,
-            HasAddDataTransformationDefinition:HasAddDataTransformationDefinition,
+            HasAddDataTransformationDefinition: HasAddDataTransformationDefinition,
             UpdateDataTransformationDefinition: UpdateDataTransformationDefinition,
             HasUpdateDataTransformationDefinition: HasUpdateDataTransformationDefinition,
             GetDataTransformationDefinitions: GetDataTransformationDefinitions,
             GetDataTransformationDefinitionRecords: GetDataTransformationDefinitionRecords,
+            GetDataTransformationRecordsInfo:GetDataTransformationRecordsInfo,
             TryCompileSteps: TryCompileSteps,
-            HasTryCompileSteps:HasTryCompileSteps,
+            HasTryCompileSteps: HasTryCompileSteps,
             ExportCompilationResult: ExportCompilationResult
         });
         function GetFilteredDataTransformationDefinitions(input) {
@@ -49,6 +50,15 @@
                 dataTransformationDefinitionId: dataTransformationDefinitionId
             });
         }
+
+        function GetDataTransformationRecordsInfo(dataTransformationDefinitionId, filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataTransformationDefinition", "GetDataTransformationRecordsInfo"),
+                {
+                    dataTransformationDefinitionId: dataTransformationDefinitionId,
+                    filter: filter
+                });
+        }
+
         function TryCompileSteps(dataTransformationDefinition) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'TryCompileSteps'), dataTransformationDefinition);
         }
@@ -57,7 +67,7 @@
         }
 
         function ExportCompilationResult(dataTransformationDefinition) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'ExportCompilationResult'),dataTransformationDefinition, {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataTransformationDefinition', 'ExportCompilationResult'), dataTransformationDefinition, {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });

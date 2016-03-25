@@ -12,7 +12,7 @@
 
 
                     <vr-row>
-                        <vr-columns width="1/4row" >
+                        <vr-columns width="1/4row">
                             <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onRawDataRecordTypeSelectorReady"
                                                                     selectedvalues="scopeModal.selectedRawDataRecordType"
                                                                     onselectionchanged="scopeModal.onRawRecordTypeSelectionChanged"
@@ -91,7 +91,7 @@
 
                             <vr-validator validate="scopeModal.isValidColumnGrouping()">
                                 <vr-datagrid datasource="scopeModal.datasourceColumnGrouping" norowhighlightonclick="true" menuactions="gridMenuActionsColumnGrouping"
-                                             enabledraggablerow="true" idegridmenu>
+                                             enabledraggablerow="true" idegridmenu hidegridmenu>
                                     <vr-datagridcolumn headertext="'Raw Item'" field="'RawFieldName'" disablesorting></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Summary Item'" field="'SummaryFieldName'" disablesorting></vr-datagridcolumn>
                                 </vr-datagrid>
@@ -105,15 +105,18 @@
                         <vr-columns width="1/3row">
                             <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModal.onDataTransformationDefinitionInsertReady"
                                                                                   selectedvalues="scopeModal.selectedDataTransformationDefinitionInsert"
+                                                                                  onselectionchanged="scopeModal.onDataTransformationDefinitionInsertSelectionChanged"
+                                                                                  isrequired="true"
                                                                                   hideremoveicon>
 
                             </vr-genericdata-datatransformationdefinition-selector>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/3row">
+                        <vr-columns width="1/3row" vr-loader="scopeModal.isloadingdatatransformationdefinitioninsertraw">
                             <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionRecordRawInsertReady"
                                                                                         selectedvalues="scopeModal.selectedDataTransformationDefinitionRecordRawInsert"
+                                                                                        isrequired="true"
                                                                                         customlabel="Raw Record"
                                                                                         hideremoveicon>
 
@@ -122,6 +125,7 @@
                         <vr-columns width="1/3row">
                             <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionRecordSummaryInsertReady"
                                                                                         selectedvalues="scopeModal.selectedDataTransformationDefinitionRecordSummaryInsert"
+                                                                                        isrequired="true"
                                                                                         customlabel="Summary Record"
                                                                                         hideremoveicon>
 
@@ -135,6 +139,8 @@
                         <vr-columns width="1/3row">
                             <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModal.onDataTransformationDefinitionUpdateReady"
                                                                                   selectedvalues="scopeModal.selectedDataTransformationDefinitionUpdate"
+                                                                                  onselectionchanged="scopeModal.onDataTransformationDefinitionUpdateSelectionChanged"
+                                                                                  isrequired="true"
                                                                                   hideremoveicon>
 
                             </vr-genericdata-datatransformationdefinition-selector>
@@ -144,6 +150,7 @@
                         <vr-columns width="1/3row">
                             <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionRecordRawUpdateReady"
                                                                                         selectedvalues="scopeModal.selectedDataTransformationDefinitionRecordExistingSummaryUpdate"
+                                                                                        isrequired="true"
                                                                                         customlabel="Existing Record"
                                                                                         hideremoveicon>
 
@@ -152,6 +159,7 @@
                         <vr-columns width="1/3row">
                             <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionRecordSummaryUpdateReady"
                                                                                         selectedvalues="scopeModal.selectedDataTransformationDefinitionRecordNewSummaryUpdate"
+                                                                                        isrequired="true"
                                                                                         customlabel="New Record"
                                                                                         hideremoveicon>
 

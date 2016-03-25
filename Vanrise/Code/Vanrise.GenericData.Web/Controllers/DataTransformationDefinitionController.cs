@@ -29,6 +29,16 @@ namespace Vanrise.GenericData.Web.Controllers
             return dataRecordTypeManager.GetDataTransformationDefinitionRecords(dataTransformationDefinitionId);
         }
 
+
+        [HttpGet]
+        [Route("GetDataTransformationRecordsInfo")]
+        public IEnumerable<DataTransformationRecordType> GetDataTransformationRecordsInfo(int dataTransformationDefinitionId, string filter = null)
+        {
+            DataTransformationRecordTypeInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<DataTransformationRecordTypeInfoFilter>(filter) : null;
+            DataTransformationDefinitionManager dataRecordTypeManager = new DataTransformationDefinitionManager();
+            return dataRecordTypeManager.GetDataTransformationDefinitionRecords(dataTransformationDefinitionId, serializedFilter);
+        }
+
         [HttpPost]
         [Route("GetFilteredDataTransformationDefinitions")]
         public object GetFilteredDataTransformationDefinitions(Vanrise.Entities.DataRetrievalInput<DataTransformationDefinitionQuery> input)

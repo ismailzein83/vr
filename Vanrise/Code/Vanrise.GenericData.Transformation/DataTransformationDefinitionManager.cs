@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Transformation
 {
     public class DataTransformationDefinitionManager
     {
-    
+
         #region Public Methods
 
 
@@ -29,7 +29,7 @@ namespace Vanrise.GenericData.Transformation
         {
             var allItems = GetCachedDataTransformationDefinitions();
 
-            Func<DataTransformationDefinition, bool> filterExpression = (itemObject) => 
+            Func<DataTransformationDefinition, bool> filterExpression = (itemObject) =>
                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataTransformationDefinitionDetailMapper));
@@ -148,6 +148,21 @@ namespace Vanrise.GenericData.Transformation
             DataTransformationCodeGenerationContext codeGenerationContext = new DataTransformationCodeGenerationContext(dataTransformationDefinition);
             return codeGenerationContext.TryBuildRuntimeType(out runtimeType, out errorMessages);
         }
+
+        public IEnumerable<DataTransformationRecordType> GetDataTransformationDefinitionRecords(int dataTransformationDefinitionId, DataTransformationRecordTypeInfoFilter filter)
+        {
+            var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
+            if (dataTransformationDefinition != null)
+            {
+                Func<DataTransformationRecordType, bool> filterExpression = (x) => (filter.DataRecordTypeIds == null || filter.DataRecordTypeIds.Count() == 0 || filter.DataRecordTypeIds.Contains(x.DataRecordTypeId.Value));
+
+                return dataTransformationDefinition.RecordTypes.FindAllRecords(filterExpression);
+            }
+            else
+                return null;
+        }
+
+
 
         #endregion
 

@@ -13,6 +13,7 @@
 
         var dataTransformationDefinitionInsertSelectorAPI;
         var dataTransformationDefinitionInsertSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var dataTransformationDefinitionInsertSelectedPromiseDeferred;
 
         var dataTransformationDefinitionRecordRawInsertSelectorAPI;
         var dataTransformationDefinitionRecordRawInsertSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -22,6 +23,7 @@
 
         var dataTransformationDefinitionUpdateSelectorAPI;
         var dataTransformationDefinitionUpdateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var dataTransformationDefinitionUpdateSelectedPromiseDeferred;
 
         var dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI;
         var dataTransformationDefinitionRecordExistingSummaryUpdateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -98,6 +100,37 @@
                 dataTransformationDefinitionRecordRawInsertSelectorAPI = api;
                 dataTransformationDefinitionRecordRawInsertSelectorReadyDeferred.resolve();
             };
+            $scope.scopeModal.onDataTransformationDefinitionInsertSelectionChanged = function () {
+                var selectedRawDataRecordTypeId = dataRawRecordTypeSelectorAPI.getSelectedIds();
+                var selectedSummaryDataRecordTypeId = dataSummaryRecordTypeSelectorAPI.getSelectedIds();
+
+                var selectedDataTransformationDefinitionInsertId = dataTransformationDefinitionInsertSelectorAPI.getSelectedIds();
+                if (selectedDataTransformationDefinitionInsertId != undefined) {
+                    var setLoaderDataTransformationDefinitionInsertRaw = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertRaw = value };
+                    var payloadfornDataTransformationDefinitionInsertRaw = {
+                        dataTransformationDefinitionId: selectedDataTransformationDefinitionInsertId,
+                        filter: { DataRecordTypeIds: [selectedRawDataRecordTypeId] }
+                    };
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordRawInsertSelectorAPI, payloadfornDataTransformationDefinitionInsertRaw, setLoaderDataTransformationDefinitionInsertRaw, dataTransformationDefinitionInsertSelectedPromiseDeferred);
+
+                    var setLoaderDataTransformationDefinitionInsertSummary = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertSummary = value };
+                    var payloadfornDataTransformationDefinitionInsertSummary = {
+                        dataTransformationDefinitionId: selectedDataTransformationDefinitionInsertId,
+                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId] }
+                    };
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordSummaryInsertSelectorAPI, payloadfornDataTransformationDefinitionInsertSummary, setLoaderDataTransformationDefinitionInsertSummary, dataTransformationDefinitionInsertSelectedPromiseDeferred);
+
+                }
+                else {
+                    if (dataTransformationDefinitionRecordRawInsertSelectorAPI != undefined)
+                        dataTransformationDefinitionRecordRawInsertSelectorAPI.clearDataSource();
+
+                    if (dataTransformationDefinitionRecordSummaryInsertSelectorAPI != undefined)
+                        dataTransformationDefinitionRecordSummaryInsertSelectorAPI.clearDataSource();
+                }
+            }
 
             $scope.scopeModal.selectedDataTransformationDefinitionRecordSummaryInsert;
             $scope.scopeModal.onDataTransformationDefinitionRecordSummaryInsertReady = function (api) {
@@ -110,6 +143,36 @@
                 dataTransformationDefinitionUpdateSelectorAPI = api;
                 dataTransformationDefinitionUpdateSelectorReadyDeferred.resolve();
             };
+            $scope.scopeModal.onDataTransformationDefinitionUpdateSelectionChanged = function () {
+                var selectedSummaryDataRecordTypeId = dataSummaryRecordTypeSelectorAPI.getSelectedIds();
+
+                var selectedDataTransformationDefinitionUpdateId = dataTransformationDefinitionUpdateSelectorAPI.getSelectedIds();
+                if (selectedDataTransformationDefinitionUpdateId != undefined) {
+                    var setLoaderDataTransformationDefinitionUpdateExisting = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateExisting = value };
+                    var payloadforDataTransformationDefinitionUpdateExisting = {
+                        dataTransformationDefinitionId: selectedDataTransformationDefinitionUpdateId,
+                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId] }
+                    };
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI, payloadforDataTransformationDefinitionUpdateExisting, setLoaderDataTransformationDefinitionUpdateExisting, dataTransformationDefinitionUpdateSelectedPromiseDeferred);
+
+                    var setLoaderDataTransformationDefinitionUpdateNew = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateSummary = value };
+                    var payloadfornDataTransformationDefinitionUpdateNew = {
+                        dataTransformationDefinitionId: selectedDataTransformationDefinitionUpdateId,
+                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId] }
+                    };
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI, payloadfornDataTransformationDefinitionUpdateNew, setLoaderDataTransformationDefinitionUpdateNew, dataTransformationDefinitionUpdateSelectedPromiseDeferred);
+
+                }
+                else {
+                    if (dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI != undefined)
+                        dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI.clearDataSource();
+
+                    if (dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI != undefined)
+                        dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI.clearDataSource();
+                }
+            }
 
             $scope.scopeModal.selectedDataTransformationDefinitionRecordExistingSummaryUpdate;
             $scope.scopeModal.onDataTransformationDefinitionRecordRawUpdateReady = function (api) {
@@ -128,6 +191,7 @@
                 dataRawRecordTypeSelectorAPI = api;
                 dataRawRecordTypeSelectorReadyDeferred.resolve();
             };
+
             $scope.scopeModal.selectedRawDataRecordTypeFields;
             $scope.scopeModal.onRawDataRecordTypeFieldsSelectorReady = function (api) {
                 dataRawRecordTypeFieldsSelectorAPI = api;
@@ -142,9 +206,12 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRawRecordTypeFieldsSelectorAPI, payload, setLoader, dataRawRecordTypeSelectedPromiseDeferred);
                 }
-                else if (dataRawRecordTypeFieldsSelectorAPI != undefined)
-                    dataRawRecordTypeFieldsSelectorAPI.clearDataSource();
+                else {
+                    if (dataRawRecordTypeFieldsSelectorAPI != undefined)
+                        dataRawRecordTypeFieldsSelectorAPI.clearDataSource();
+                }
 
+                $scope.scopeModal.selectedDataTransformationDefinitionInsert = undefined;
                 enableColumnGrouping();
             }
 
@@ -203,6 +270,8 @@
 
                 }
 
+                $scope.scopeModal.selectedDataTransformationDefinitionUpdate = undefined;
+                $scope.scopeModal.selectedDataTransformationDefinitionInsert = undefined;
                 enableColumnGrouping();
             }
 
@@ -297,7 +366,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeandRelated, loadDataTransformationDefinitionInsertSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeandRelated])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -309,7 +378,6 @@
         function loadDataRecordTypeandRelated() {
             var promises = [];
             var promisesRecordTypeSelected = [];
-
 
             // Load Raw Data Record Type
 
@@ -325,7 +393,8 @@
                     selectedIds: summaryTransformationDefinitionEntity.RawItemRecordTypeId
                 };
             }
-
+            console.log('payload')
+            console.log(payload)
             dataRawRecordTypeSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(dataRawRecordTypeSelectorAPI, payload, dataRawRecordTypeSelectorLoadDeferred);
             });
@@ -434,43 +503,113 @@
             // End load Columns Group
 
 
-
-            return UtilsService.waitMultiplePromises(promises);
-        }
-
-        function loadDataTransformationDefinitionInsertSelector() {
+            // load Data Transformation Definition Insert Selector
 
             var dataTransformationDefinitionInsertSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            dataTransformationDefinitionInsertSelectorReadyDeferred.promise.then(function () {
-                var payload;
-                if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryFromSettings != undefined) {
-                    isTransformationDefinitionInsertSelectedProgramatically = true;
-                    payload = {
-                        selectedIds: summaryTransformationDefinitionEntity.SummaryFromSettings.TransformationDefinitionId
-                    };
-                }
+            promises.push(dataTransformationDefinitionInsertSelectorLoadDeferred.promise);
 
+            var payload;
+            if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryFromRawSettings != undefined) {
+                dataTransformationDefinitionInsertSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                payload = {
+                    selectedIds: summaryTransformationDefinitionEntity.SummaryFromRawSettings.TransformationDefinitionId
+                };
+            }
+
+            dataTransformationDefinitionInsertSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionInsertSelectorAPI, payload, dataTransformationDefinitionInsertSelectorLoadDeferred);
             });
 
-            //if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.RawItemRecordTypeId != undefined) {
+            if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryFromRawSettings != undefined && summaryTransformationDefinitionEntity.SummaryFromRawSettings.TransformationDefinitionId != undefined) {
 
-            //    var dataRawRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            //    promises.push(dataRawRecordTypeFieldsSelectorLoadDeferred.promise);
-            //    dataRawRecordTypeSelectorLoadDeferred.promise.then(function () {
+                var dataTransformationDefinitionRecordRawInsertSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(dataTransformationDefinitionRecordRawInsertSelectorLoadDeferred.promise);
+                UtilsService.waitMultiplePromises([dataTransformationDefinitionInsertSelectedPromiseDeferred.promise, dataTransformationDefinitionRecordRawInsertSelectorReadyDeferred.promise]).then(function () {
+                    var payload;
+                    payload = {
+                        dataTransformationDefinitionId: summaryTransformationDefinitionEntity.SummaryFromRawSettings.TransformationDefinitionId,
+                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.RawItemRecordTypeId] },
+                        selectedIds: summaryTransformationDefinitionEntity.SummaryFromRawSettings.RawRecordName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordRawInsertSelectorAPI, payload, dataTransformationDefinitionRecordRawInsertSelectorLoadDeferred);
+                    dataTransformationDefinitionInsertSelectedPromiseDeferred = undefined;
+                });
 
-            //        dataRawRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
-            //            var payloadRawDataRecordTypeFields;
-            //            if (summaryTransformationDefinitionEntity != undefined) {
-            //                payloadRawDataRecordTypeFields = {
-            //                    dataRecordTypeId: summaryTransformationDefinitionEntity.RawItemRecordTypeId,
-            //                    selectedIds: summaryTransformationDefinitionEntity.RawTimeFieldName
-            //                };
-            //            }
-            //            VRUIUtilsService.callDirectiveLoad(dataRawRecordTypeFieldsSelectorAPI, payloadRawDataRecordTypeFields, dataRawRecordTypeFieldsSelectorLoadDeferred);
-            //        });
-            //    });
-            //}
+
+                var dataTransformationDefinitionRecordSummaryInsertSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(dataTransformationDefinitionRecordSummaryInsertSelectorLoadDeferred.promise);
+                UtilsService.waitMultiplePromises([dataTransformationDefinitionInsertSelectedPromiseDeferred.promise, dataTransformationDefinitionRecordSummaryInsertSelectorReadyDeferred.promise]).then(function () {
+                    var payload;
+                    payload = {
+                        dataTransformationDefinitionId: summaryTransformationDefinitionEntity.SummaryFromRawSettings.TransformationDefinitionId,
+                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId] },
+                        selectedIds: summaryTransformationDefinitionEntity.SummaryFromRawSettings.SymmaryRecordName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordSummaryInsertSelectorAPI, payload, dataTransformationDefinitionRecordSummaryInsertSelectorLoadDeferred);
+                    dataTransformationDefinitionInsertSelectedPromiseDeferred = undefined;
+                });
+
+            }
+
+            // End load Data Transformation Definition Insert Selector
+
+
+
+            // load Data Transformation Definition Update Selector
+
+            var dataTransformationDefinitionUpdateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            promises.push(dataTransformationDefinitionUpdateSelectorLoadDeferred.promise);
+
+            var payload;
+            if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings != undefined) {
+                dataTransformationDefinitionUpdateSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                payload = {
+                    selectedIds: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.TransformationDefinitionId
+                };
+            }
+
+            dataTransformationDefinitionUpdateSelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionUpdateSelectorAPI, payload, dataTransformationDefinitionUpdateSelectorLoadDeferred);
+            });
+
+            if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings != undefined && summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.TransformationDefinitionId != undefined) {
+
+                var dataTransformationDefinitionRecordExistingUpdateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(dataTransformationDefinitionRecordExistingUpdateSelectorLoadDeferred.promise);
+                UtilsService.waitMultiplePromises([dataTransformationDefinitionUpdateSelectedPromiseDeferred.promise, dataTransformationDefinitionRecordExistingSummaryUpdateSelectorReadyDeferred.promise]).then(function () {
+                    var payload;
+                    payload = {
+                        dataTransformationDefinitionId: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.TransformationDefinitionId,
+                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId] },
+                        selectedIds: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.ExistingRecordName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI, payload, dataTransformationDefinitionRecordExistingUpdateSelectorLoadDeferred);
+                    dataTransformationDefinitionUpdateSelectedPromiseDeferred = undefined;
+                });
+
+
+                var dataTransformationDefinitionRecordNewUpdateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(dataTransformationDefinitionRecordNewUpdateSelectorLoadDeferred.promise);
+                UtilsService.waitMultiplePromises([dataTransformationDefinitionUpdateSelectedPromiseDeferred.promise, dataTransformationDefinitionRecordNewSummaryUpdateSelectorReadyDeferred.promise]).then(function () {
+                    var payload;
+                    payload = {
+                        dataTransformationDefinitionId: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.TransformationDefinitionId,
+                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId] },
+                        selectedIds: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.NewRecordName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI, payload, dataTransformationDefinitionRecordNewUpdateSelectorLoadDeferred);
+                    dataTransformationDefinitionUpdateSelectedPromiseDeferred = undefined;
+                });
+
+            }
+
+            // End load Data Transformation Definition Insert Selector
+
+
+
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function enableColumnGrouping() {
@@ -513,8 +652,16 @@
                 SummaryBatchStartFieldName: dataSummaryRecordTypeFieldsBatchSelectorAPI.getSelectedIds(),
                 KeyFieldMappings: keyFieldMappings,
                 BatchRangeRetrieval: {},
-                SummaryFromSettings: [],
-                UpdateExistingSummaryFromNewSettings: {},
+                SummaryFromRawSettings: {
+                    TransformationDefinitionId: dataTransformationDefinitionInsertSelectorAPI.getSelectedIds(),
+                    RawRecordName: dataTransformationDefinitionRecordRawInsertSelectorAPI.getSelectedIds(),
+                    SymmaryRecordName: dataTransformationDefinitionRecordSummaryInsertSelectorAPI.getSelectedIds()
+                },
+                UpdateExistingSummaryFromNewSettings: {
+                    TransformationDefinitionId: dataTransformationDefinitionUpdateSelectorAPI.getSelectedIds(),
+                    NewRecordName: dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI.getSelectedIds(),
+                    ExistingRecordName: dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI.getSelectedIds()
+                },
                 DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds()
             }
 
