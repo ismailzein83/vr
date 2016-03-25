@@ -19,5 +19,7 @@ BEGIN
       ,[CountryID]
 	  ,[BED]
 	  ,[EED]
+	  ,[Settings]
+	  ,[IsFromTestingConnectorZone]
       from QM_BE.Zone
 END
