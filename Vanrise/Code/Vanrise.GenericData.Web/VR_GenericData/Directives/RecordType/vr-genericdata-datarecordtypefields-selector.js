@@ -84,8 +84,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
 
             api.clearDataSource = function () {
                 ctrl.datasource.length = 0;
-                if (ctrl.selectedvalues != undefined)
-                    ctrl.selectedvalues.length = 0;
+                ctrl.selectedvalues = undefined;
             }
 
 
