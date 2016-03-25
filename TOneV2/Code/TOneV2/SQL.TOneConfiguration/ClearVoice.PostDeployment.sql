@@ -66,23 +66,23 @@ set identity_insert [BI].[SchemaConfiguration] off;
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
-;with cte_data([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1001,'Quality Measurement','Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0),
-(1002,'Dynamic Management','Dynamic Management','Dynamic Management',1,null,13,0),
-(1003,'Business Intelligence','Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',120,1)
+(1001,'Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0),
+(1002,'Dynamic Management','Dynamic Management',1,null,13,0),
+(1003,'Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',120,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
+)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
 using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
+	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
 when not matched by target then
-	insert([Id],[Name],[Title],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
+	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
+	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
 --[sec].[View]-----------------------------10001 to 11000------------------------------------------------------
@@ -148,7 +148,7 @@ set identity_insert [common].[TemplateConfig] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (30001,'TOne V1 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev1',null,null),
-(30001,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
+(30002,'TOne V2 Suppliers','QM_BE_SourceSupplierReader','qm-be-sourcesupplierreader-tonev2',null,null),
 (30003,'Connector Profiles','QM_CLITester_SourceProfileReader','qm-clitester-sourceprofilereader-itest',null,null),
 (30004,'TOne V2 Zones','QM_BE_SourceZoneReader','qm-be-sourcezonereader-tonev2',null,null),
 (30005,'Initiate Test - Connector','QM_CLITester_ConnectorInitiateTest','qm-clitester-testconnector-initiatetest-itest',null,null),
