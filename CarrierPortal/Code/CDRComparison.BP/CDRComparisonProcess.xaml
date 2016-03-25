@@ -1,10 +1,14 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="CDRComparison.BP.CDRComparisonProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:cba="clr-namespace:CDRComparison.BP.Arguments;assembly=CDRComparison.BP.Arguments"
+ xmlns:cba1="clr-namespace:CDRComparison.BP.Activities;assembly=CDRComparison.BP.Activities"
+ xmlns:ce="clr-namespace:CDRComparison.Entities;assembly=CDRComparison.Entities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -24,18 +28,53 @@
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>CDRComparison.BP.Activities</AssemblyReference>
       <AssemblyReference>CDRComparison.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>CDRComparison.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <cba1:StoreCDRs sap2010:WorkflowViewState.IdRef="StoreCDRs_1" IsPartnerCDRs="False">
+      <cba1:StoreCDRs.CDRSource>
+        <InArgument x:TypeArguments="ce:CDRSource">
+          <mca:CSharpValue x:TypeArguments="ce:CDRSource">Input.SystemCDRSource</mca:CSharpValue>
+        </InArgument>
+      </cba1:StoreCDRs.CDRSource>
+    </cba1:StoreCDRs>
+    <cba1:StoreCDRs sap2010:WorkflowViewState.IdRef="StoreCDRs_2" IsPartnerCDRs="True">
+      <cba1:StoreCDRs.CDRSource>
+        <InArgument x:TypeArguments="ce:CDRSource">
+          <mca:CSharpValue x:TypeArguments="ce:CDRSource">Input.PartnerCDRSource</mca:CSharpValue>
+        </InArgument>
+      </cba1:StoreCDRs.CDRSource>
+    </cba1:StoreCDRs>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbAcxA0EOAgEBMgU4FgIBBjkFPxYCAQIyUTJYAgEJNQs1YgIBBzlROVcCAQU8CzxjAgED</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="440,440" />
+      <sap2010:ViewStateData Id="StoreCDRs_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="StoreCDRs_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="262,288" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -63,6 +63,10 @@
       <Project>{688bd430-7ff4-434f-b812-5e78142d011f}</Project>
       <Name>CDRComparison.BP.Arguments</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.Entities\CDRComparison.Entities.csproj">
+      <Project>{dea85456-05cd-4ded-984e-bcdffffd7d22}</Project>
+      <Name>CDRComparison.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="CDRComparisonProcess.xaml">
