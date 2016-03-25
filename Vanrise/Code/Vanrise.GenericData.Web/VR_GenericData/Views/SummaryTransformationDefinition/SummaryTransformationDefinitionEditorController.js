@@ -366,18 +366,23 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeandRelated])
+            return loadDataRecordTypeandRelated().then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadSummaryInsertSection, loadSummaryUpdateSection, loadColumnGroup])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
                    $scope.scopeModal.isLoading = false;
                });
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
+            });
         }
 
         function loadDataRecordTypeandRelated() {
             var promises = [];
-            var promisesRecordTypeSelected = [];
 
             // Load Raw Data Record Type
 
@@ -387,14 +392,12 @@
             var payload;
             if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.RawItemRecordTypeId != undefined) {
                 dataRawRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                promisesRecordTypeSelected.push(dataRawRecordTypeSelectedPromiseDeferred.promise);
 
                 payload = {
                     selectedIds: summaryTransformationDefinitionEntity.RawItemRecordTypeId
                 };
             }
-            console.log('payload')
-            console.log(payload)
+
             dataRawRecordTypeSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(dataRawRecordTypeSelectorAPI, payload, dataRawRecordTypeSelectorLoadDeferred);
             });
@@ -424,7 +427,6 @@
             var payload;
             if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryItemRecordTypeId != undefined) {
                 dataSummaryRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                promisesRecordTypeSelected.push(dataSummaryRecordTypeSelectedPromiseDeferred.promise);
 
                 payload = {
                     selectedIds: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId
@@ -485,25 +487,30 @@
             // End Load Summary Data Record Type
 
 
-            // load Columns Group 
+
+
+            return UtilsService.waitMultiplePromises(promises);
+        }
+
+        function loadColumnGroup() {
             if (summaryTransformationDefinitionEntity != undefined) {
-                UtilsService.waitMultiplePromises(promisesRecordTypeSelected).then(function () {
-                    for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
-                        var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
-                        $scope.scopeModal.datasourceColumnGrouping.push(
-                            {
-                                RawFieldName: dataItem.RawFieldName,
-                                SummaryFieldName: dataItem.SummaryFieldName
-                            }
-                    );
-                    }
-                    $scope.scopeModal.enableColumnGrouping = true;
-                })
+                for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
+                    var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
+                    $scope.scopeModal.datasourceColumnGrouping.push(
+                        {
+                            RawFieldName: dataItem.RawFieldName,
+                            SummaryFieldName: dataItem.SummaryFieldName
+                        }
+                );
+                }
+                $scope.scopeModal.enableColumnGrouping = true;
             }
-            // End load Columns Group
+        }
 
-
+        function loadSummaryInsertSection() {
             // load Data Transformation Definition Insert Selector
+
+            var promises = [];
 
             var dataTransformationDefinitionInsertSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(dataTransformationDefinitionInsertSelectorLoadDeferred.promise);
@@ -554,9 +561,13 @@
 
             // End load Data Transformation Definition Insert Selector
 
+            return UtilsService.waitMultiplePromises(promises);
+        }
 
-
+        function loadSummaryUpdateSection() {
             // load Data Transformation Definition Update Selector
+
+            var promises = [];
 
             var dataTransformationDefinitionUpdateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(dataTransformationDefinitionUpdateSelectorLoadDeferred.promise);
@@ -606,8 +617,6 @@
             }
 
             // End load Data Transformation Definition Insert Selector
-
-
 
             return UtilsService.waitMultiplePromises(promises);
         }
