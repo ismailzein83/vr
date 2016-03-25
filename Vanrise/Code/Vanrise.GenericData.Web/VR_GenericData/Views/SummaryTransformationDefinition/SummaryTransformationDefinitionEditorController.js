@@ -9,8 +9,29 @@
         var isEditMode;
         var summaryTransformationDefinitionEntity;
         var summaryTransformationDefinitionId;
+
+
+        var dataTransformationDefinitionInsertSelectorAPI;
+        var dataTransformationDefinitionInsertSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataTransformationDefinitionRecordRawInsertSelectorAPI;
+        var dataTransformationDefinitionRecordRawInsertSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataTransformationDefinitionRecordSummaryInsertSelectorAPI;
+        var dataTransformationDefinitionRecordSummaryInsertSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataTransformationDefinitionUpdateSelectorAPI;
+        var dataTransformationDefinitionUpdateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI;
+        var dataTransformationDefinitionRecordExistingSummaryUpdateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI;
+        var dataTransformationDefinitionRecordNewSummaryUpdateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var dataRawRecordTypeSelectorAPI;
         var dataRawRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var dataRawRecordTypeSelectedPromiseDeferred;
 
         var dataRecordStorageSelectorAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -20,15 +41,13 @@
 
         var dataSummaryRecordTypeSelectorAPI;
         var dataSummaryRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var dataSummaryRecordTypeSelectedPromiseDeferred;
 
         var dataSummaryRecordTypeFieldsIDSelectorAPI;
         var dataSummaryRecordTypeFieldsIDSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var dataSummaryRecordTypeFieldsBatchSelectorAPI;
         var dataSummaryRecordTypeFieldsBatchSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var isRawRecordTypeSelectedProgramatically = false;
-        var isSummaryRecordTypeSelectedProgramatically = false;
 
         loadParameters();
         defineScope();
@@ -45,7 +64,7 @@
 
         function defineScope() {
             $scope.scopeModal = {}
-
+            $scope.scopeModal.enableColumnGrouping = true;
             $scope.scopeModal.datasourceColumnGrouping = [];
 
             $scope.scopeModal.isValidColumnGrouping = function () {
@@ -68,6 +87,42 @@
                 VR_GenericData_KeyFieldMappingService.addItem(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds(), onDataItemAdded, $scope.scopeModal.datasourceColumnGrouping);
             };
 
+            $scope.scopeModal.selectedDataTransformationDefinitionInsert;
+            $scope.scopeModal.onDataTransformationDefinitionInsertReady = function (api) {
+                dataTransformationDefinitionInsertSelectorAPI = api;
+                dataTransformationDefinitionInsertSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModal.selectedDataTransformationDefinitionRecordRawInsert;
+            $scope.scopeModal.onDataTransformationDefinitionRecordRawInsertReady = function (api) {
+                dataTransformationDefinitionRecordRawInsertSelectorAPI = api;
+                dataTransformationDefinitionRecordRawInsertSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModal.selectedDataTransformationDefinitionRecordSummaryInsert;
+            $scope.scopeModal.onDataTransformationDefinitionRecordSummaryInsertReady = function (api) {
+                dataTransformationDefinitionRecordSummaryInsertSelectorAPI = api;
+                dataTransformationDefinitionRecordSummaryInsertSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModal.selectedDataTransformationDefinitionUpdate;
+            $scope.scopeModal.onDataTransformationDefinitionUpdateReady = function (api) {
+                dataTransformationDefinitionUpdateSelectorAPI = api;
+                dataTransformationDefinitionUpdateSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModal.selectedDataTransformationDefinitionRecordExistingSummaryUpdate;
+            $scope.scopeModal.onDataTransformationDefinitionRecordRawUpdateReady = function (api) {
+                dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI = api;
+                dataTransformationDefinitionRecordExistingSummaryUpdateSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModal.selectedDataTransformationDefinitionRecordNewSummaryUpdate;
+            $scope.scopeModal.onDataTransformationDefinitionRecordSummaryUpdateReady = function (api) {
+                dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI = api;
+                dataTransformationDefinitionRecordNewSummaryUpdateSelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModal.selectedRawDataRecordType;
             $scope.scopeModal.onRawDataRecordTypeSelectorReady = function (api) {
                 dataRawRecordTypeSelectorAPI = api;
@@ -79,22 +134,18 @@
                 dataRawRecordTypeFieldsSelectorReadyDeferred.resolve();
             };
             $scope.scopeModal.onRawRecordTypeSelectionChanged = function () {
-                if (!isRawRecordTypeSelectedProgramatically) {
-                    var selectedRawDataRecordTypeId = dataRawRecordTypeSelectorAPI.getSelectedIds();
-                    if (selectedRawDataRecordTypeId != undefined) {
-                        enableColumnGrouping();
-                        $scope.scopeModal.isLoadingisRawRecordTypeFields = true;
-                        var payload = {
-                            dataRecordTypeId: selectedRawDataRecordTypeId
-                        };
-
-                        dataRawRecordTypeFieldsSelectorAPI.load(payload).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.scopeModal.isLoadingisRawRecordTypeFields = false;
-                        });
-                    }
+                var selectedRawDataRecordTypeId = dataRawRecordTypeSelectorAPI.getSelectedIds();
+                if (selectedRawDataRecordTypeId != undefined) {
+                    var setLoader = function (value) { $scope.scopeModal.isLoadingisRawRecordTypeFields = value };
+                    var payload = {
+                        dataRecordTypeId: selectedRawDataRecordTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRawRecordTypeFieldsSelectorAPI, payload, setLoader, dataRawRecordTypeSelectedPromiseDeferred);
                 }
+                else if (dataRawRecordTypeFieldsSelectorAPI != undefined)
+                    dataRawRecordTypeFieldsSelectorAPI.clearDataSource();
+
+                enableColumnGrouping();
             }
 
             $scope.scopeModal.selectedDataRecordStorage;
@@ -115,51 +166,44 @@
                 dataSummaryRecordTypeFieldsIDSelectorReadyDeferred.resolve();
             };
 
-
             $scope.scopeModal.onSummaryRecordTypeSelectionChanged = function () {
 
-                if (!isSummaryRecordTypeSelectedProgramatically) {
-                    var selectedSummaryDataRecordTypeId = dataSummaryRecordTypeSelectorAPI.getSelectedIds();
-                    if (selectedSummaryDataRecordTypeId != undefined) {
-                        enableColumnGrouping();
-                        $scope.scopeModal.isLoadingSummaryRecordTypeFieldsID = true;
-                        $scope.scopeModal.isLoadingSummaryRecordTypeFieldsBatch = true;
-                        $scope.scopeModal.isLoadingRecordStorage = true;
+                var selectedSummaryDataRecordTypeId = dataSummaryRecordTypeSelectorAPI.getSelectedIds();
+                if (selectedSummaryDataRecordTypeId != undefined) {
+                    var setLoaderFieldsID = function (value) { $scope.scopeModal.isLoadingSummaryRecordTypeFieldsID = value };
+                    var payloadforRecordFieldsID = {
+                        dataRecordTypeId: selectedSummaryDataRecordTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataSummaryRecordTypeFieldsIDSelectorAPI, payloadforRecordFieldsID, setLoaderFieldsID, dataSummaryRecordTypeSelectedPromiseDeferred);
 
-                        var payloadforRecordFieldsID = {
-                            dataRecordTypeId: selectedSummaryDataRecordTypeId
-                        };
-
-                        dataSummaryRecordTypeFieldsIDSelectorAPI.load(payloadforRecordFieldsID).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.scopeModal.isLoadingSummaryRecordTypeFieldsID = false;
-                        });
-
-                        var payloadforRecordFieldsBatch = {
-                            dataRecordTypeId: selectedSummaryDataRecordTypeId
-                        };
-
-                        dataSummaryRecordTypeFieldsBatchSelectorAPI.load(payloadforRecordFieldsBatch).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.scopeModal.isLoadingSummaryRecordTypeFieldsBatch = false;
-                        });
+                    var setLoaderFieldsBatch = function (value) { $scope.scopeModal.isLoadingSummaryRecordTypeFieldsBatch = value };
+                    var payloadforRecordFieldsBatch = {
+                        dataRecordTypeId: selectedSummaryDataRecordTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataSummaryRecordTypeFieldsBatchSelectorAPI, payloadforRecordFieldsBatch, setLoaderFieldsBatch, dataSummaryRecordTypeSelectedPromiseDeferred);
 
 
-                        var payloadforRecordStorage = {
-                            DataRecordTypeId: selectedSummaryDataRecordTypeId
-                        };
-
-                        dataRecordStorageSelectorAPI.load(payloadforRecordStorage).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
-                            $scope.scopeModal.isLoadingRecordStorage = false;
-                        });
+                    var setLoaderRecordStorage = function (value) { $scope.scopeModal.isLoadingRecordStorage = value };
+                    var payloadforRecordStorage = {
+                        DataRecordTypeId: selectedSummaryDataRecordTypeId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordStorageSelectorAPI, payloadforRecordStorage, setLoaderRecordStorage, dataSummaryRecordTypeSelectedPromiseDeferred);
 
 
-                    }
                 }
+                else {
+                    if (dataSummaryRecordTypeFieldsIDSelectorAPI != undefined)
+                        dataSummaryRecordTypeFieldsIDSelectorAPI.clearDataSource();
+
+                    if (dataSummaryRecordTypeFieldsBatchSelectorAPI != undefined)
+                        dataSummaryRecordTypeFieldsBatchSelectorAPI.clearDataSource();
+
+                    if (dataRecordStorageSelectorAPI != undefined)
+                        dataRecordStorageSelectorAPI.clearDataSource();
+
+                }
+
+                enableColumnGrouping();
             }
 
             $scope.scopeModal.selectedSummaryDataRecordTypeFieldsBatch;
@@ -167,7 +211,6 @@
                 dataSummaryRecordTypeFieldsBatchSelectorAPI = api;
                 dataSummaryRecordTypeFieldsBatchSelectorReadyDeferred.resolve();
             };
-
 
             $scope.hasSaveSummaryTransformationDefinition = function () {
                 if (isEditMode) {
@@ -239,7 +282,6 @@
                 getSummaryTransformationDefinition().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            enableColumnGrouping();
                             summaryTransformationDefinitionEntity = undefined;
                         });
                 }).catch(function () {
@@ -255,35 +297,36 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeandRelated, loadColumnsGroup])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadDataRecordTypeandRelated, loadDataTransformationDefinitionInsertSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
                .finally(function () {
                    $scope.scopeModal.isLoading = false;
-                   isRawRecordTypeSelectedProgramatically = false;
-                   isSummaryRecordTypeSelectedProgramatically = false;
                });
         }
 
         function loadDataRecordTypeandRelated() {
             var promises = [];
-
+            var promisesRecordTypeSelected = [];
 
 
             // Load Raw Data Record Type
+
             var dataRawRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(dataRawRecordTypeSelectorLoadDeferred.promise);
 
-            dataRawRecordTypeSelectorReadyDeferred.promise.then(function () {
-                var payload;
-                if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.RawItemRecordTypeId != undefined) {
-                    isRawRecordTypeSelectedProgramatically = true;
-                    payload = {
-                        selectedIds: summaryTransformationDefinitionEntity.RawItemRecordTypeId
-                    };
-                }
+            var payload;
+            if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.RawItemRecordTypeId != undefined) {
+                dataRawRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                promisesRecordTypeSelected.push(dataRawRecordTypeSelectedPromiseDeferred.promise);
 
+                payload = {
+                    selectedIds: summaryTransformationDefinitionEntity.RawItemRecordTypeId
+                };
+            }
+
+            dataRawRecordTypeSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(dataRawRecordTypeSelectorAPI, payload, dataRawRecordTypeSelectorLoadDeferred);
             });
 
@@ -291,18 +334,14 @@
 
                 var dataRawRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 promises.push(dataRawRecordTypeFieldsSelectorLoadDeferred.promise);
-                dataRawRecordTypeSelectorLoadDeferred.promise.then(function () {
-
-                    dataRawRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
-                        var payloadRawDataRecordTypeFields;
-                        if (summaryTransformationDefinitionEntity != undefined) {
-                            payloadRawDataRecordTypeFields = {
-                                dataRecordTypeId: summaryTransformationDefinitionEntity.RawItemRecordTypeId,
-                                selectedIds: summaryTransformationDefinitionEntity.RawTimeFieldName
-                            };
-                        }
-                        VRUIUtilsService.callDirectiveLoad(dataRawRecordTypeFieldsSelectorAPI, payloadRawDataRecordTypeFields, dataRawRecordTypeFieldsSelectorLoadDeferred);
-                    });
+                UtilsService.waitMultiplePromises([dataRawRecordTypeSelectedPromiseDeferred.promise, dataRawRecordTypeFieldsSelectorReadyDeferred.promise]).then(function () {
+                    var payloadRawDataRecordTypeFields;
+                    payloadRawDataRecordTypeFields = {
+                        dataRecordTypeId: summaryTransformationDefinitionEntity.RawItemRecordTypeId,
+                        selectedIds: summaryTransformationDefinitionEntity.RawTimeFieldName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataRawRecordTypeFieldsSelectorAPI, payloadRawDataRecordTypeFields, dataRawRecordTypeFieldsSelectorLoadDeferred);
+                    dataRawRecordTypeSelectedPromiseDeferred = undefined;
                 });
             }
             // End Load Raw Data Record Type
@@ -313,15 +352,17 @@
             var dataSummaryRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(dataSummaryRecordTypeSelectorLoadDeferred.promise);
 
-            dataSummaryRecordTypeSelectorReadyDeferred.promise.then(function () {
-                var payload;
-                if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryItemRecordTypeId != undefined) {
-                    isSummaryRecordTypeSelectedProgramatically = true;
-                    payload = {
-                        selectedIds: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId
-                    };
-                }
+            var payload;
+            if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryItemRecordTypeId != undefined) {
+                dataSummaryRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                promisesRecordTypeSelected.push(dataSummaryRecordTypeSelectedPromiseDeferred.promise);
 
+                payload = {
+                    selectedIds: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId
+                };
+            }
+
+            dataSummaryRecordTypeSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(dataSummaryRecordTypeSelectorAPI, payload, dataSummaryRecordTypeSelectorLoadDeferred);
             });
 
@@ -330,36 +371,28 @@
 
                 var dataSummaryRecordTypeFieldsIDSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 promises.push(dataSummaryRecordTypeFieldsIDSelectorLoadDeferred.promise);
-                dataSummaryRecordTypeSelectorLoadDeferred.promise.then(function () {
-
-                    dataSummaryRecordTypeFieldsIDSelectorReadyDeferred.promise.then(function () {
-                        var payloadSummaryDataRecordTypeFieldsID;
-                        if (summaryTransformationDefinitionEntity != undefined) {
-                            payloadSummaryDataRecordTypeFieldsID = {
-                                dataRecordTypeId: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId,
-                                selectedIds: summaryTransformationDefinitionEntity.SummaryIdFieldName
-                            };
-                        }
-                        VRUIUtilsService.callDirectiveLoad(dataSummaryRecordTypeFieldsIDSelectorAPI, payloadSummaryDataRecordTypeFieldsID, dataSummaryRecordTypeFieldsIDSelectorLoadDeferred);
-                    });
+                UtilsService.waitMultiplePromises([dataSummaryRecordTypeSelectedPromiseDeferred.promise, dataSummaryRecordTypeFieldsIDSelectorReadyDeferred.promise]).then(function () {
+                    var payloadSummaryDataRecordTypeFieldsID;
+                    payloadSummaryDataRecordTypeFieldsID = {
+                        dataRecordTypeId: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId,
+                        selectedIds: summaryTransformationDefinitionEntity.SummaryIdFieldName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataSummaryRecordTypeFieldsIDSelectorAPI, payloadSummaryDataRecordTypeFieldsID, dataSummaryRecordTypeFieldsIDSelectorLoadDeferred);
+                    dataSummaryRecordTypeSelectedPromiseDeferred = undefined;
                 });
+
 
                 var dataSummaryRecordTypeFieldsBatchSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 promises.push(dataSummaryRecordTypeFieldsBatchSelectorLoadDeferred.promise);
-                dataSummaryRecordTypeSelectorLoadDeferred.promise.then(function () {
-
-                    dataSummaryRecordTypeFieldsBatchSelectorReadyDeferred.promise.then(function () {
-                        var payloadSummaryDataRecordTypeFieldsBatch;
-                        if (summaryTransformationDefinitionEntity != undefined) {
-                            payloadSummaryDataRecordTypeFieldsBatch = {
-                                dataRecordTypeId: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId,
-                                selectedIds: summaryTransformationDefinitionEntity.SummaryBatchStartFieldName
-                            };
-                        }
-                        VRUIUtilsService.callDirectiveLoad(dataSummaryRecordTypeFieldsBatchSelectorAPI, payloadSummaryDataRecordTypeFieldsBatch, dataSummaryRecordTypeFieldsBatchSelectorLoadDeferred);
-                    });
+                UtilsService.waitMultiplePromises([dataSummaryRecordTypeSelectedPromiseDeferred.promise, dataSummaryRecordTypeFieldsBatchSelectorReadyDeferred.promise]).then(function () {
+                    var payloadSummaryDataRecordTypeFieldsBatch;
+                    payloadSummaryDataRecordTypeFieldsBatch = {
+                        dataRecordTypeId: summaryTransformationDefinitionEntity.SummaryItemRecordTypeId,
+                        selectedIds: summaryTransformationDefinitionEntity.SummaryIdFieldName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(dataSummaryRecordTypeFieldsBatchSelectorAPI, payloadSummaryDataRecordTypeFieldsBatch, dataSummaryRecordTypeFieldsBatchSelectorLoadDeferred);
+                    dataSummaryRecordTypeSelectedPromiseDeferred = undefined;
                 });
-
 
 
                 var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -383,25 +416,61 @@
             // End Load Summary Data Record Type
 
 
+            // load Columns Group 
+            if (summaryTransformationDefinitionEntity != undefined) {
+                UtilsService.waitMultiplePromises(promisesRecordTypeSelected).then(function () {
+                    for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
+                        var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
+                        $scope.scopeModal.datasourceColumnGrouping.push(
+                            {
+                                RawFieldName: dataItem.RawFieldName,
+                                SummaryFieldName: dataItem.SummaryFieldName
+                            }
+                    );
+                    }
+                    $scope.scopeModal.enableColumnGrouping = true;
+                })
+            }
+            // End load Columns Group
+
+
+
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        function loadColumnsGroup() {
+        function loadDataTransformationDefinitionInsertSelector() {
 
-            if (summaryTransformationDefinitionEntity != undefined) {
-                console.log(summaryTransformationDefinitionEntity.KeyFieldMappings)
-                for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
-                    var dataItem = summaryTransformationDefinitionEntity.KeyFieldMappings[i];
-                    $scope.scopeModal.datasourceColumnGrouping.push(
-                        {
-                            RawFieldName: dataItem.RawFieldName,
-                            SummaryFieldName: dataItem.SummaryFieldName
-                        }
-                );
+            var dataTransformationDefinitionInsertSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            dataTransformationDefinitionInsertSelectorReadyDeferred.promise.then(function () {
+                var payload;
+                if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.SummaryFromSettings != undefined) {
+                    isTransformationDefinitionInsertSelectedProgramatically = true;
+                    payload = {
+                        selectedIds: summaryTransformationDefinitionEntity.SummaryFromSettings.TransformationDefinitionId
+                    };
                 }
 
-                console.log($scope.scopeModal.datasourceColumnGrouping)
-            }
+                VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionInsertSelectorAPI, payload, dataTransformationDefinitionInsertSelectorLoadDeferred);
+            });
+
+            //if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.RawItemRecordTypeId != undefined) {
+
+            //    var dataRawRecordTypeFieldsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            //    promises.push(dataRawRecordTypeFieldsSelectorLoadDeferred.promise);
+            //    dataRawRecordTypeSelectorLoadDeferred.promise.then(function () {
+
+            //        dataRawRecordTypeFieldsSelectorReadyDeferred.promise.then(function () {
+            //            var payloadRawDataRecordTypeFields;
+            //            if (summaryTransformationDefinitionEntity != undefined) {
+            //                payloadRawDataRecordTypeFields = {
+            //                    dataRecordTypeId: summaryTransformationDefinitionEntity.RawItemRecordTypeId,
+            //                    selectedIds: summaryTransformationDefinitionEntity.RawTimeFieldName
+            //                };
+            //            }
+            //            VRUIUtilsService.callDirectiveLoad(dataRawRecordTypeFieldsSelectorAPI, payloadRawDataRecordTypeFields, dataRawRecordTypeFieldsSelectorLoadDeferred);
+            //        });
+            //    });
+            //}
         }
 
         function enableColumnGrouping() {
@@ -470,7 +539,7 @@
             return VR_GenericData_SummaryTransformationDefinitionAPIService.AddSummaryTransformationDefinition(summaryTransformationDefinitionObject)
             .then(function (response) {
                 $scope.scopeModal.isLoading = false;
-                if (VRNotificationService.notifyOnItemAdded("Summary Transformation Definition", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Summary Transformation Definition", response, "Name")) {
                     if ($scope.onSummaryTransformationDefinitionAdded != undefined)
                         $scope.onSummaryTransformationDefinitionAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -486,7 +555,7 @@
             VR_GenericData_SummaryTransformationDefinitionAPIService.UpdateSummaryTransformationDefinition(summaryTransformationDefinitionObject)
             .then(function (response) {
                 $scope.scopeModal.isLoading = false;
-                if (VRNotificationService.notifyOnItemUpdated("Summary Transformation Definition", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Summary Transformation Definition", response, "Name")) {
                     if ($scope.onSummaryTransformationDefinitionUpdated != undefined)
                         $scope.onSummaryTransformationDefinitionUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

@@ -62,6 +62,10 @@
             function getDirectiveAPI() {
                 var api = {};
 
+                api.clearDataSource = function () {
+                    selectorAPI.clearDataSource();
+                }
+
                 api.load = function (payload) {
                     var selectedIds;
                     var filter = {};

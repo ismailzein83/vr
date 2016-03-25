@@ -12,7 +12,7 @@
 
 
                     <vr-row>
-                        <vr-columns width="1/4row">
+                        <vr-columns width="1/4row" >
                             <vr-genericdata-datarecordtype-selector on-ready="scopeModal.onRawDataRecordTypeSelectorReady"
                                                                     selectedvalues="scopeModal.selectedRawDataRecordType"
                                                                     onselectionchanged="scopeModal.onRawRecordTypeSelectionChanged"
@@ -53,7 +53,7 @@
                         </vr-columns>
 
 
-                        <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingisSummaryRecordTypeFieldsID">
+                        <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingSummaryRecordTypeFieldsID">
 
                             <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onSummaryDataRecordTypeFieldsIDSelectorReady"
                                                                           selectedvalues="scopeModal.selectedSummaryDataRecordTypeFieldsID"
@@ -64,7 +64,7 @@
                         </vr-columns>
 
 
-                        <vr-columns width="1/4row">
+                        <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingSummaryRecordTypeFieldsBatch">
 
                             <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onSummaryDataRecordTypeFieldsBatchSelectorReady"
                                                                           selectedvalues="scopeModal.selectedSummaryDataRecordTypeFieldsBatch"
@@ -73,7 +73,7 @@
                                                                           hideremoveicon>
                             </vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
-                        <vr-columns width="1/4row">
+                        <vr-columns width="1/4row" vr-loader="scopeModal.isLoadingRecordStorage">
                             <vr-genericdata-datarecordstorage-selector on-ready="scopeModal.onDataRecordStorageSelectorReady"
                                                                        selectedvalues="scopeModal.selectedDataRecordStorage"
                                                                        isrequired="true"
@@ -87,7 +87,6 @@
                 <vr-tab header="'Grouping Columns'">
                     <vr-row>
                         <vr-columns width="fullrow" vr-disabled="!scopeModal.enableColumnGrouping">
-                            {{summaryTransformationDefinitionEntity.KeyFieldMappings}}
                             <vr-button type="Add" data-onclick="scopeModal.addColumnGrouping" standalone></vr-button>
 
                             <vr-validator validate="scopeModal.isValidColumnGrouping()">
@@ -100,6 +99,67 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+
+                <vr-tab header="'Raw to Summary Transformation'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModal.onDataTransformationDefinitionInsertReady"
+                                                                                  selectedvalues="scopeModal.selectedDataTransformationDefinitionInsert"
+                                                                                  hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinition-selector>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionRecordRawInsertReady"
+                                                                                        selectedvalues="scopeModal.selectedDataTransformationDefinitionRecordRawInsert"
+                                                                                        customlabel="Raw Record"
+                                                                                        hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinitionrecord-selector>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionRecordSummaryInsertReady"
+                                                                                        selectedvalues="scopeModal.selectedDataTransformationDefinitionRecordSummaryInsert"
+                                                                                        customlabel="Summary Record"
+                                                                                        hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinitionrecord-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
+                <vr-tab header="'Existing Summary to Summary Transformation'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModal.onDataTransformationDefinitionUpdateReady"
+                                                                                  selectedvalues="scopeModal.selectedDataTransformationDefinitionUpdate"
+                                                                                  hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinition-selector>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionRecordRawUpdateReady"
+                                                                                        selectedvalues="scopeModal.selectedDataTransformationDefinitionRecordExistingSummaryUpdate"
+                                                                                        customlabel="Existing Record"
+                                                                                        hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinitionrecord-selector>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-datatransformationdefinitionrecord-selector on-ready="scopeModal.onDataTransformationDefinitionRecordSummaryUpdateReady"
+                                                                                        selectedvalues="scopeModal.selectedDataTransformationDefinitionRecordNewSummaryUpdate"
+                                                                                        customlabel="New Record"
+                                                                                        hideremoveicon>
+
+                            </vr-genericdata-datatransformationdefinitionrecord-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
