@@ -63,6 +63,8 @@ CarrierPortal.PostDeployment
 [sec].[Module] 801 to 900
 [sec].[View] 8001 to 9000
 [common].[TemplateConfig] 10001 to 20000
+[bp].[BPDefinition] 2001 to 3000
+[bp].[BPTaskType] 20001 to 30000
 -------------------------------------------------
 CDRAnalysis.PostDeployment
 [sec].[BusinessEntityModule] 901 to 1000
