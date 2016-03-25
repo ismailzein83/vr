@@ -3,7 +3,12 @@
         <vr-row>
             <vr-columns width="1/2row">
                 <vr-section title="System CDRs">
-                    <cdrcomparison-cdrsource-selective on-ready="onCDRSourceSelectiveReady" normal-col-num="4" isrequired="true"></cdrcomparison-cdrsource-selective>
+                    <cdrcomparison-cdrsource-selective on-ready="onSystemSelectiveReady" normal-col-num="4" isrequired="true"></cdrcomparison-cdrsource-selective>
+                </vr-section>
+            </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-section title="Partner CDRs">
+                    <cdrcomparison-cdrsource-selective on-ready="onPartnerSelectiveReady" normal-col-num="4" isrequired="true"></cdrcomparison-cdrsource-selective>
                 </vr-section>
             </vr-columns>
         </vr-row>

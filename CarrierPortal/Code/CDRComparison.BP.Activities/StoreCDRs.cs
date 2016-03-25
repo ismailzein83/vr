@@ -18,11 +18,14 @@ namespace CDRComparison.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            var cdrSource = this.CDRSource.Get(context);
-            List<CDR> cdrs = null;
+            bool isPartnerCDRs = this.IsPartnerCDRs.Get(context);
+            context.WriteTrackingMessage(Vanrise.Common.LogEntryType.Information, "Started reading {0} CDRs", (isPartnerCDRs) ? "partner" : "system");
 
-            context.WriteTrackingMessage(Vanrise.Common.LogEntryType.Information, "{0} CDRs read", cdrs.Count);
-            
+            CDRSource cdrSource = this.CDRSource.Get(context);
+            var cdrs = new List<CDR>();
+            context.WriteTrackingMessage(Vanrise.Common.LogEntryType.Information, "Read {0} CDRs from source", cdrs.Count);
+
+            context.WriteTrackingMessage(Vanrise.Common.LogEntryType.Information, "Done", cdrs.Count);
         }
     }
 }

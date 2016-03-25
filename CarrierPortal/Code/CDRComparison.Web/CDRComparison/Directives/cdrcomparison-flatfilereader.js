@@ -30,52 +30,27 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.sampleGridColumns = [];
+                $scope.scopeModel.gridColumns = [];
                 $scope.scopeModel.sampleData = [];
-                $scope.scopeModel.mappingData = [{}];
-
-                $scope.scopeModel.fields = [
-                    { value: 3, description: 'CGPN' },
-                    { value: 4, description: 'CDPN' },
-                    { value: 1, description: 'Time' },
-                    { value: 2, description: 'DurationInSec' }
-                ];
-
-                
+                $scope.scopeModel.headerGridSource = [];
 
                 $scope.scopeModel.readSample = function () {
-                    $scope.scopeModel.isLoadingSampleGrid = true;
-
-                    cdrSourceContext.readSample().then(function (response) {
-                        if (response != null) {
-                            defineSampleGridColumns(response.ColumnCount);
-                            for (var j = 0; j < response.Rows.length; j++) {
-                                $scope.scopeModel.sampleData.push(response.Rows[j]);
-                            }
-                            defineFieldMappings(response.ColumnCount);
-                        }
-                    }).finally(function () {
-                        $scope.scopeModel.isLoadingSampleGrid = false;
-                    });
-
-                    function defineSampleGridColumns(columnCount) {
-                        for (var i = 0; i < columnCount; i++) {
-                            $scope.scopeModel.sampleGridColumns.push({
-                                id: i + 1,
-                                name: 'Column ' + (i + 1)
-                            });
-                        }
-                    }
-
-                    function defineFieldMappings(columnCount) {
-
-                        function getFieldArray() {
-                            return 
-                        }
-                    }
+                    return readSample();
                 };
 
                 $scope.scopeModel.validateFieldMappings = function () {
+                    if ($scope.scopeModel.headerGridSource.length == 0)
+                        return null;
+                    var cells = $scope.scopeModel.headerGridSource[0].cells;
+                    var fieldNames = [];
+                    for (var i = 0; i < cells.length; i++) {
+                        if (cells[i].selectedField != undefined) {
+                            if (UtilsService.contains(fieldNames, cells[i].selectedField.description))
+                                return 'Each column should be mapped to a unique field';
+                            else
+                                fieldNames.push(cells[i].selectedField.description);
+                        }
+                    }
                     return null;
                 };
 
@@ -88,7 +63,6 @@
                 api.load = function (payload) {
                     var promises = [];
                     var flatFileId;
-                    var sampleCDRs;
 
                     if (payload != undefined) {
                         cdrSourceContext = payload.cdrSourceContext;
@@ -98,22 +72,11 @@
                     }
 
                     if (flatFileId != undefined) {
-                        var getSampleCDRsPromise = getSampleCDRs();
-                        promises.push(getSampleCDRsPromise);
+                        var readSamplePromise = readSample();
+                        promises.push(readSamplePromise);
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
-
-                    function getSampleCDRs() {
-                        return requestSampleCDRsFromServer(flatFileId).then(function (response) {
-                            if (response != null) {
-                                sampleCDRs = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    sampleCDRs.push(response[i]);
-                                }
-                            }
-                        });
-                    }
                 };
 
                 api.getData = function () {
@@ -125,19 +88,74 @@
                     };
 
                     function buildFieldMappings() {
-                        var returnValue = [];
-                        for (var i = 0; i < $scope.scopeModel.mappingData.length; i++) {
-                            returnValue.push({
-                                FieldIndex: i + 1//,
-                             //   FieldName: $scope.scopeModel.mappingData[i].selectedField.description
-                            });
+                        var fieldMappings;
+                        var dataItem = ($scope.scopeModel.headerGridSource.length > 0) ? $scope.scopeModel.headerGridSource[0] : undefined;
+
+                        if (dataItem != undefined && dataItem.cells != undefined) {
+                            fieldMappings = [];
+                            for (var i = 0; i < dataItem.cells.length; i++) {
+                                fieldMappings.push({
+                                    FieldIndex: i + 1,
+                                    FieldName: (dataItem.cells[i].selectedField != undefined) ? dataItem.cells[i].selectedField.description : undefined
+                                });
+                            }
                         }
-                        return returnValue;
+
+                        return fieldMappings;
                     }
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
+                }
+            }
+
+            function readSample() {
+                $scope.scopeModel.gridColumns.length = 0;
+                $scope.scopeModel.headerGridSource.length = 0;
+                $scope.scopeModel.sampleData.length = 0;
+
+                $scope.scopeModel.isLoadingSampleGrid = true;
+
+                return cdrSourceContext.readSample().then(function (response) {
+                    if (response != null) {
+                        defineGridColumns(response.ColumnCount);
+                        for (var j = 0; j < response.Rows.length; j++) {
+                            $scope.scopeModel.sampleData.push(response.Rows[j]);
+                        }
+                        defineHeaderGridDataItem(response.ColumnCount);
+                    }
+                }).finally(function () {
+                    $scope.scopeModel.isLoadingSampleGrid = false;
+                });
+
+                function defineGridColumns(columnCount) {
+                    for (var i = 0; i < columnCount; i++) {
+                        $scope.scopeModel.gridColumns.push({
+                            id: i + 1,
+                            name: 'Column ' + (i + 1)
+                        });
+                    }
+                }
+
+                function defineHeaderGridDataItem(columnCount) {
+                    var dataItem = {};
+                    dataItem.cells = [];
+                    for (var i = 0; i < columnCount; i++) {
+                        var cell = {};
+                        cell.fields = getFields();
+                        dataItem.cells.push(cell);
+                    }
+                    $scope.scopeModel.headerGridSource.push(dataItem);
+
+                    function getFields() {
+                        return [
+                            { value: 3, description: 'CGPN' },
+                            { value: 4, description: 'CDPN' },
+                            { value: 1, description: 'Time' },
+                            { value: 2, description: 'DurationInSec' }
+                        ];
+                    }
                 }
             }
         }

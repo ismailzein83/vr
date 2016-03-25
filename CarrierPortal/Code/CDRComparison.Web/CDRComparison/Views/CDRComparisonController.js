@@ -2,46 +2,80 @@
 
     'use strict';
 
-    CDRComparisonController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    CDRComparisonController.$inject = ['$scope', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function CDRComparisonController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function CDRComparisonController($scope, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
 
-        var systemDirectiveAPI;
-        var systemDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var systemSelectiveAPI;
+        var systemSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var partnerSelectiveAPI;
+        var partnerSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
 
         function defineScope() {
-            $scope.onCDRSourceSelectiveReady = function (api) {
-                systemDirectiveAPI = api;
-                systemDirectiveReadyDeferred.resolve();
+            $scope.onSystemSelectiveReady = function (api) {
+                systemSelectiveAPI = api;
+                systemSelectiveReadyDeferred.resolve();
+            };
+
+            $scope.onPartnerSelectiveReady = function (api) {
+                partnerSelectiveAPI = api;
+                partnerSelectiveReadyDeferred.resolve();
             };
 
             $scope.start = function () {
+                var inputArguments = {
+                    $type: "CDRComparison.BP.Arguments.CDRComparsionProcessInput, CDRComparison.BP.Arguments",
+                    SystemCDRSource: systemSelectiveAPI.getData(),
+                    PartnerCDRSource: partnerSelectiveAPI.getData()
+                };
 
+                var input = {
+                    InputArguments: inputArguments
+                };
+
+                console.log(input);
+
+                return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
+                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
+                });
             };
         }
 
         function load() {
             $scope.isLoading = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadSystemDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadSystemSelective, loadPartnerSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
             });
         }
 
-        function loadSystemDirective() {
-            var systemDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadSystemSelective() {
+            var systemSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            systemDirectiveReadyDeferred.promise.then(function () {
-                var systemDirectivePayload;
-                VRUIUtilsService.callDirectiveLoad(systemDirectiveAPI, systemDirectivePayload, systemDirectiveLoadDeferred);
+            systemSelectiveReadyDeferred.promise.then(function () {
+                var systemSelectivePayload;
+                VRUIUtilsService.callDirectiveLoad(systemSelectiveAPI, systemSelectivePayload, systemSelectiveLoadDeferred);
             });
 
-            return systemDirectiveLoadDeferred.promise;
+            return systemSelectiveLoadDeferred.promise;
+        }
+
+        function loadPartnerSelective() {
+            var partnerSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            partnerSelectiveReadyDeferred.promise.then(function () {
+                var partnerSelectivePayload;
+                VRUIUtilsService.callDirectiveLoad(partnerSelectiveAPI, partnerSelectivePayload, partnerSelectiveLoadDeferred);
+            });
+
+            return partnerSelectiveLoadDeferred.promise;
         }
     }
 
