@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierPricelistController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    supplierPricelistController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','VRValidationService'];
 
-    function supplierPricelistController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function supplierPricelistController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService) {
 
         var supplierDirectiveApi;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -14,6 +14,11 @@
         load();
 
         function defineScope() {
+            var date = new Date();
+            $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+            $scope.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            }
             $scope.searchClicked = function () {
 
                 if (gridAPI != undefined) {
@@ -28,8 +33,11 @@
             }
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                setFilterObject();
                 api.loadGrid(filter);
             }
+
+          
         }
 
         function load() {

@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, SupplierPriceList> allPriceLists = GetCachedPriceLists();
             Func<SupplierPriceList, bool> filterExpression = (item) =>
                 (input.Query.SupplierId == null || item.SupplierId == input.Query.SupplierId)
-                && (!input.Query.FromDate.HasValue || item.CreateTime >= input.Query.FromDate)
+                && (input.Query.FromDate == null || item.CreateTime >= input.Query.FromDate)
                 && (!input.Query.ToDate.HasValue || item.CreateTime <= input.Query.ToDate);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPriceLists.ToBigResult(input, filterExpression, SupplierPriceListDetailMapper));
         }
