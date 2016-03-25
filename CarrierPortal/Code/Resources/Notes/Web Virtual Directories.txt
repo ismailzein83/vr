@@ -8,3 +8,4 @@ Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 CP_SupplierPricelist	C:\TFS\CarrierPortal\Code\CP.SupplierPricelist.Web\CP_SupplierPricelist
 Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 CDRComparison			C:\TFS\CarrierPortal\Code\CDRComparison.Web\CDRComparison
+BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess

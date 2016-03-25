@@ -137,6 +137,10 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Client">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
     </Reference>
@@ -157,6 +161,9 @@
     </Reference>
     <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.MainExtensions">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.MainExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.BusinessProcess.Web">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Web.dll</HintPath>
@@ -247,6 +254,10 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.BP.Arguments\CDRComparison.BP.Arguments.csproj">
+      <Project>{688bd430-7ff4-434f-b812-5e78142d011f}</Project>
+      <Name>CDRComparison.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CDRComparison.Business\CDRComparison.Business.csproj">
       <Project>{91b3930c-4d87-44c5-9de0-583b64d4476c}</Project>
       <Name>CDRComparison.Business</Name>
@@ -286,6 +297,10 @@
     <ProjectReference Include="..\CP.SupplierPricelist.Entities\CP.SupplierPricelist.Entities.csproj">
       <Project>{168d3bea-bde1-47e2-8a35-ed3ed9e65547}</Project>
       <Name>CP.SupplierPricelist.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CP.SupplierPricelist.MainExtensions\CP.SupplierPricelist.MainExtensions.csproj">
+      <Project>{4b86f69c-c6fd-4599-8fa6-690da0a5665f}</Project>
+      <Name>CP.SupplierPricelist.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\CP.SupplierPriceList.TOneV1Integration\CP.SupplierPriceList.TOneV1Integration.csproj">
       <Project>{031e385d-9222-4e25-9c0e-3ecb12675667}</Project>

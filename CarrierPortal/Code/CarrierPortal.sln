@@ -55,9 +55,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDRComparison.Data.SQL", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDRComparison.Web", "CDRComparison.Web\CDRComparison.Web.csproj", "{102B263C-31EF-4797-A789-8FCF425EDBE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDRComparison.BP.Activities", "CDRComparison.BP.Activities\CDRComparison.BP.Activities.csproj", "{C2E92276-33F9-4B0C-AA94-C1F19C9D1492}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDRComparison.BP", "CDRComparison.BP\CDRComparison.BP.csproj", "{E8B20474-F87F-4151-A19E-8232AE5C3B71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDRComparison.BP.Arguments", "CDRComparison.BP.Arguments\CDRComparison.BP.Arguments.csproj", "{688BD430-7FF4-434F-B812-5E78142D011F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 20
+		SccNumberOfProjects = 23
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -137,6 +143,18 @@ Global
 		SccProjectTopLevelParentUniqueName19 = CarrierPortal.sln
 		SccProjectName19 = CDRComparison.Web
 		SccLocalPath19 = CDRComparison.Web
+		SccProjectUniqueName20 = CDRComparison.BP.Activities\\CDRComparison.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName20 = CarrierPortal.sln
+		SccProjectName20 = CDRComparison.BP.Activities
+		SccLocalPath20 = CDRComparison.BP.Activities
+		SccProjectUniqueName21 = CDRComparison.BP\\CDRComparison.BP.csproj
+		SccProjectTopLevelParentUniqueName21 = CarrierPortal.sln
+		SccProjectName21 = CDRComparison.BP
+		SccLocalPath21 = CDRComparison.BP
+		SccProjectUniqueName22 = CDRComparison.BP.Arguments\\CDRComparison.BP.Arguments.csproj
+		SccProjectTopLevelParentUniqueName22 = CarrierPortal.sln
+		SccProjectName22 = CDRComparison.BP.Arguments
+		SccLocalPath22 = CDRComparison.BP.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -221,6 +239,18 @@ Global
 		{102B263C-31EF-4797-A789-8FCF425EDBE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{102B263C-31EF-4797-A789-8FCF425EDBE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{102B263C-31EF-4797-A789-8FCF425EDBE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2E92276-33F9-4B0C-AA94-C1F19C9D1492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2E92276-33F9-4B0C-AA94-C1F19C9D1492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2E92276-33F9-4B0C-AA94-C1F19C9D1492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2E92276-33F9-4B0C-AA94-C1F19C9D1492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8B20474-F87F-4151-A19E-8232AE5C3B71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8B20474-F87F-4151-A19E-8232AE5C3B71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8B20474-F87F-4151-A19E-8232AE5C3B71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8B20474-F87F-4151-A19E-8232AE5C3B71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{688BD430-7FF4-434F-B812-5E78142D011F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{688BD430-7FF4-434F-B812-5E78142D011F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{688BD430-7FF4-434F-B812-5E78142D011F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{688BD430-7FF4-434F-B812-5E78142D011F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,5 +277,8 @@ Global
 		{272EFC65-74F5-4EA9-9BFA-83066F7D0FB2} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
 		{24298543-E71D-42EE-B4BC-65CE3CE86EEA} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
 		{102B263C-31EF-4797-A789-8FCF425EDBE8} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
+		{C2E92276-33F9-4B0C-AA94-C1F19C9D1492} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
+		{E8B20474-F87F-4151-A19E-8232AE5C3B71} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
+		{688BD430-7FF4-434F-B812-5E78142D011F} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
 	EndGlobalSection
 EndGlobal
