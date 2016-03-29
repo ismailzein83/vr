@@ -40,7 +40,8 @@ as (select * from (values
 (6001,'Management','Management','#/view/BusinessProcess/Views/BPDefinition/BPDefinitionManagement',601,'BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitions',null,null,null,0,1),
 (6002,'Monitor','Monitor','#/view/BusinessProcess/Views/BPInstance/BPInstanceMonitor',601,'BusinessProcess_BP/BPInstance/GetUpdated',null,null,null,0,2),
 (6003,'Log','Log History','#/view/BusinessProcess/Views/BPInstance/BPInstanceHistory',601,'BusinessProcess_BP/BPInstance/GetFilteredBPInstances',null,null,null,0,3),
-(6004,'My Tasks','Tasks','#/view/BusinessProcess/Views/BPTask/BPTaskMonitor',601,'BusinessProcess_BP/BPTask/GetMyUpdatedTasks',null,null,null,0,4)
+(6004,'My Tasks','Tasks','#/view/BusinessProcess/Views/BPTask/BPTaskMonitor',601,'BusinessProcess_BP/BPTask/GetMyUpdatedTasks',null,null,null,0,4),
+(6005,'Business Rules','Business Rules','#/view/BusinessProcess/Views/BPBusinessRule/BPBusinessRuleSetManagement',601,null,null,null,null,0,5)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -56,9 +57,85 @@ set identity_insert [sec].[View] off;
 
 --[sec].[BusinessEntityModule]-------------601 to 700---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntityModule] on;
+;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(601,'Business Process',2,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[ParentId],[BreakInheritance]))
+merge	[sec].[BusinessEntityModule] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
+when not matched by target then
+	insert([Id],[Name],[ParentId],[BreakInheritance])
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
+set identity_insert [sec].[BusinessEntityModule] off;
 
 --[sec].[BusinessEntity]-------------------1501 to 1800---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntity] on;
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1501,'BusinessProcess_BP_BPDefinition','Management',601,0,'["View"]'),
+(1502,'BusinessProcess_BP_BPTask','BPTask',601,0,'["View"]'),
+(1503,'BusinessProcess_BP_BPInstance','BPInstance',601,0,'["Log","Monitor"]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
+merge	[sec].[BusinessEntity] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+when not matched by target then
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set identity_insert [sec].[BusinessEntity] off;
 
 --[sec].[SystemAction]----------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([Name],[RequiredPermissions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitions','BusinessProcess_BP_BPDefinition: View'),
+('BusinessProcess_BP/BPDefinition/GetBPDefinitionsInfo',null),
+('BusinessProcess_BP/BPDefinition/GetBPDefintion',null),
+('BusinessProcess_BP/BPDefinition/GetDefinitions',null),
+('BusinessProcess_BP/BPInstance/GetUpdated','BusinessProcess_BP_BPInstance: Monitor'),
+('BusinessProcess_BP/BPInstance/GetBeforeId',null),
+('BusinessProcess_BP/BPInstance/GetFilteredBPInstances','BusinessProcess_BP_BPInstance: Log'),
+('BusinessProcess_BP/BPInstance/GetBPInstance',null),
+('BusinessProcess_BP/BPInstance/CreateNewProcess',null),
+('BusinessProcess_BP/BPInstanceTracking/GetFilteredBPInstanceTracking',null),
+('BusinessProcess_BP/BPInstanceTracking/GetUpdated',null),
+('BusinessProcess_BP/BPInstanceTracking/GetBeforeId',null),
+('BusinessProcess_BP/BPTask/GetProcessTaskUpdated',null),
+('BusinessProcess_BP/BPTask/GetProcessTaskBeforeId',null),
+('BusinessProcess_BP/BPTask/GetMyUpdatedTasks','BusinessProcess_BP_BPTask: View'),
+('BusinessProcess_BP/BPTask/GetMyTasksBeforeId',null),
+('BusinessProcess_BP/BPTask/ExecuteTask',null),
+('BusinessProcess_BP/BPTask/GetTask',null),
+('BusinessProcess_BP/BPTaskType/GetBPTaskTypeByTaskId',null),
+('BusinessProcess_BP/BPValidationMessage/GetUpdated',null),
+('BusinessProcess_BP/BPValidationMessage/GetBeforeId',null),
+('BusinessProcess_BP/BPValidationMessage/GetFilteredBPValidationMessage',null),
+('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Name],[RequiredPermissions]))
+merge	[sec].[SystemAction] as t
+using	cte_data as s
+on		1=1 and t.[Name] = s.[Name]
+when matched then
+	update set
+	[RequiredPermissions] = s.[RequiredPermissions]
+when not matched by target then
+	insert([Name],[RequiredPermissions])
+	values(s.[Name],s.[RequiredPermissions]);

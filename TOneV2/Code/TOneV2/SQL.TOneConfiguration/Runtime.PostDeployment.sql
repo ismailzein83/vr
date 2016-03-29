@@ -62,14 +62,14 @@ when not matched by target then
 --[sec].[BusinessEntityModule]-------------501 to 600---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 
---[sec].[BusinessEntity]-------------------1501 to 1800-------------------------------------------------------
+--[sec].[BusinessEntity]-------------------1201 to 1500-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1501,'VR_Runtime_SchedulerTask','Scheduler Task',2,0,'["View", "Add", "Edit", "ViewMyTask"]')
+(1201,'VR_Runtime_SchedulerTask','Scheduler Task',2,0,'["View", "Add", "Edit", "ViewMyTask"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
