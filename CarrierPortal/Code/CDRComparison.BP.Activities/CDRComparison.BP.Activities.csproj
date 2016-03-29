@@ -74,6 +74,10 @@
     <Compile Include="StoreCDRs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CDRComparison.Data\CDRComparison.Data.csproj">
+      <Project>{272efc65-74f5-4ea9-9bfa-83066f7d0fb2}</Project>
+      <Name>CDRComparison.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CDRComparison.Entities\CDRComparison.Entities.csproj">
       <Project>{dea85456-05cd-4ded-984e-bcdffffd7d22}</Project>
       <Name>CDRComparison.Entities</Name>
