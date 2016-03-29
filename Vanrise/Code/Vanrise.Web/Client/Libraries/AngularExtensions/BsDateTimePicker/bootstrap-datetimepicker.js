@@ -9970,7 +9970,7 @@
                             ),
                     contTemplate = $('<tbody>')
                         .append($('<tr>')
-                            .append($('<td>').attr('colspan', (options.calendarWeeks ? '8' : '7')))
+                            .append($('<td style="white-space: initial;" >').attr('colspan', (options.calendarWeeks ? '8' : '7')))
                             );
 
                 return [
