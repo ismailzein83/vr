@@ -99,10 +99,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Databases\IDs ranges\Transaction.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\bp.BPDefinition.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\bp.BPTaskType.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\common.TemplateConfig.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\sec.BusinessEntity.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\sec.BusinessEntityModule.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\sec.Module.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\sec.View.txt" />
+    <Content Include="Databases\IDs ranges\Transaction\runtime.SchedulerTaskActionType.txt" />
+    <Content Include="Databases\IDs ranges\Transaction\Transaction.txt" />
     <Content Include="Databases\PersistenceDB\SqlWorkflowInstanceStoreLogic.sql" />
     <Content Include="Databases\PersistenceDB\SqlWorkflowInstanceStoreSchema.sql" />
-    <Content Include="Databases\IDs ranges\Configuration.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\Configuration.txt" />
     <Content Include="Databases\TrackingDB\Data.sql" />
     <Content Include="Databases\TrackingDB\Schema.sql" />
     <Content Include="Databases\TransactionDB\Data.sql" />
