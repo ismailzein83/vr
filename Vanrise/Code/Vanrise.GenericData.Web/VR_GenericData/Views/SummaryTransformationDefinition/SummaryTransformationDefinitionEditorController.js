@@ -377,37 +377,32 @@
 
             if (isEditMode) {
                 getSummaryTransformationDefinition().then(function () {
-                    loadAllControls()
-                        .finally(function () {
+                    loadDataRecordTypeandRelated().then(function () {
+                        loadAllControls().finally(function () {
                             summaryTransformationDefinitionEntity = undefined;
                         });
+                    });
+
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModal.isLoading = false;
                 });
             }
             else {
-                loadAllControls();
+                loadDataRecordTypeandRelated().then(function () {
+                    loadAllControls();
+                });
             }
-
-
         }
 
         function loadAllControls() {
-            loadBatchStartIdentificationSelector();
-            return loadDataRecordTypeandRelated().then(function () {
-                return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadSummaryInsertSection, loadSummaryUpdateSection, loadColumnGroup, loadBatchStartIdentificationSelector])
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
-               .finally(function () {
-                   $scope.scopeModal.isLoading = false;
-               });
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.scopeModal.isLoading = false;
-            });
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadSummaryInsertSection, loadSummaryUpdateSection, loadColumnGroup, loadBatchStartIdentificationSelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.scopeModal.isLoading = false;
+              });
         }
 
         function loadDataRecordTypeandRelated() {
@@ -675,9 +670,10 @@
         }
 
         function getSummaryTransformationDefinition() {
-            return VR_GenericData_SummaryTransformationDefinitionAPIService.GetSummaryTransformationDefinition(summaryTransformationDefinitionId).then(function (summaryTransformationDefinition) {
-                summaryTransformationDefinitionEntity = summaryTransformationDefinition;
-            });
+            return VR_GenericData_SummaryTransformationDefinitionAPIService.GetSummaryTransformationDefinition(summaryTransformationDefinitionId)
+                .then(function (summaryTransformationDefinition) {
+                    summaryTransformationDefinitionEntity = summaryTransformationDefinition;
+                });
         }
 
         function buildSummaryTransformationDefinitionObjFromScope() {
