@@ -47,6 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDR.cs" />
+    <Compile Include="CDRBatch.cs" />
+    <Compile Include="DisputeCDR\DisputeCDR.cs" />
+    <Compile Include="MissingCDR\MissingCDR.cs" />
+    <Compile Include="PartialMatchCDR\PartialMatchCDR.cs" />
     <Compile Include="CDRSample.cs" />
     <Compile Include="CDRFileReader.cs" />
     <Compile Include="CDRNormalizationSettings.cs" />
