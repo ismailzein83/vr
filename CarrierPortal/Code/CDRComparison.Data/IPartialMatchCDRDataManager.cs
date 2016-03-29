@@ -10,5 +10,6 @@ namespace CDRComparison.Data
 {
     public interface IPartialMatchCDRDataManager : IDataManager, IBulkApplyDataManager<PartialMatchCDR>
     {
+        void ApplyPartialMatchCDRsToDB(object preparedNumberProfiles);
     }
 }

@@ -10,5 +10,6 @@ namespace CDRComparison.Data
 {
     public interface IMissingCDRDataManager : IDataManager, IBulkApplyDataManager<MissingCDR>
     {
+        void ApplyMissingCDRsToDB(object preparedNumberProfiles);
     }
 }

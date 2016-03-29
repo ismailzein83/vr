@@ -50,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRDataManager.cs" />
+    <Compile Include="DisputeCDRDataManager.cs" />
+    <Compile Include="MissingCDRDataManager.cs" />
+    <Compile Include="PartialMatchCDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
