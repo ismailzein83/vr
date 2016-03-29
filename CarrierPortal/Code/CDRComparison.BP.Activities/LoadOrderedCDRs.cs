@@ -64,10 +64,6 @@ namespace CDRComparison.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs");
 
         }
-        private static void BuildandEnqueueBatch(LoadOrderedCDRsInput inputArgument, AsyncActivityHandle handle, ref List<CDR> cdrs)
-        {
-            inputArgument.OutputQueue.Enqueue(new CDRBatch() { CDRs = cdrs});
-        }
         protected override LoadOrderedCDRsInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new LoadOrderedCDRsInput

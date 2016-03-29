@@ -53,6 +53,9 @@
     <Compile Include="CDRComparisonDataManagerFactory.cs" />
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IDisputeCDRDataManager.cs" />
+    <Compile Include="IMissingCDRDataManager.cs" />
+    <Compile Include="IPartialMatchCDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

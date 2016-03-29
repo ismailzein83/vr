@@ -15,6 +15,7 @@ namespace CDRComparison.Entities
         public DateTime Time { get; set; }
 
         public Decimal DurationInSec { get; set; }
+        public bool IsPartnerCDR { get; set; }
 
         public Dictionary<string, object> ExtraFields { get; set; }
     }
