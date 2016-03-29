@@ -12,30 +12,30 @@ using Vanrise.Queueing;
 namespace CDRComparison.BP.Activities
 {
     #region Argument Classes
-    public class PrepareDisputeCDRsInput
+    public class PreparePartialMatchCDRsInput
     {
-        public BaseQueue<DisputeCDRBatch> InputQueue { get; set; }
+        public BaseQueue<PartialMatchCDRBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     #endregion
-    public class PrepareDisputeCDRs : DependentAsyncActivity<PrepareDisputeCDRsInput>
+    public class PreparePartialMatchCDRsForDBApply : DependentAsyncActivity<PreparePartialMatchCDRsInput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<DisputeCDRBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<PartialMatchCDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
-        protected override void DoWork(PrepareDisputeCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(PreparePartialMatchCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IDisputeCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IDisputeCDRDataManager>();
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, disputeCDRBatch => disputeCDRBatch.DisputeCDRs);
+            IPartialMatchCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, partialMatchCDRBatch => partialMatchCDRBatch.PartialMatchCDRs);
         }
 
-        protected override PrepareDisputeCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override PreparePartialMatchCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new PrepareDisputeCDRsInput
+            return new PreparePartialMatchCDRsInput
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)

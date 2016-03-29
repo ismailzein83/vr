@@ -12,30 +12,30 @@ using Vanrise.Queueing;
 namespace CDRComparison.BP.Activities
 {
     #region Argument Classes
-    public class PrepareMissingCDRsInput
+    public class PrepareDisputeCDRsInput
     {
-        public BaseQueue<MissingCDRBatch> InputQueue { get; set; }
+        public BaseQueue<DisputeCDRBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     #endregion
-    public sealed class PrepareMissingCDRs : DependentAsyncActivity<PrepareMissingCDRsInput>
+    public class PrepareDisputeCDRsForDBApply : DependentAsyncActivity<PrepareDisputeCDRsInput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<MissingCDRBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<DisputeCDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
-        protected override void DoWork(PrepareMissingCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(PrepareDisputeCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IMissingCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IMissingCDRDataManager>();
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, missingCDRBatch => missingCDRBatch.MissingCDRs);
+            IDisputeCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IDisputeCDRDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, disputeCDRBatch => disputeCDRBatch.DisputeCDRs);
         }
 
-        protected override PrepareMissingCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override PrepareDisputeCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new PrepareMissingCDRsInput
+            return new PrepareDisputeCDRsInput
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)

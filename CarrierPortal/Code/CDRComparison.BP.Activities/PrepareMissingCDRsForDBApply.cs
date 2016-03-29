@@ -12,30 +12,30 @@ using Vanrise.Queueing;
 namespace CDRComparison.BP.Activities
 {
     #region Argument Classes
-    public class PreparePartialMatchCDRsInput
+    public class PrepareMissingCDRsInput
     {
-        public BaseQueue<PartialMatchCDRBatch> InputQueue { get; set; }
+        public BaseQueue<MissingCDRBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
     #endregion
-    public class PreparePartialMatchCDRs : DependentAsyncActivity<PreparePartialMatchCDRsInput>
+    public sealed class PrepareMissingCDRsForDBApply : DependentAsyncActivity<PrepareMissingCDRsInput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<PartialMatchCDRBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<MissingCDRBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
-        protected override void DoWork(PreparePartialMatchCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(PrepareMissingCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            IPartialMatchCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, partialMatchCDRBatch => partialMatchCDRBatch.PartialMatchCDRs);
+            IMissingCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IMissingCDRDataManager>();
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, missingCDRBatch => missingCDRBatch.MissingCDRs);
         }
 
-        protected override PreparePartialMatchCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override PrepareMissingCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new PreparePartialMatchCDRsInput
+            return new PrepareMissingCDRsInput
             {
                 InputQueue = this.InputQueue.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
