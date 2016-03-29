@@ -10,6 +10,12 @@ namespace CDRComparison.Data.SQL
 {
     public class CDRDataManager : BaseSQLDataManager, ICDRDataManager
     {
+        public CDRDataManager()
+            : base("CDRComparisonDBConnStringKey")
+        {
+
+        }
+
         static string[] s_Columns = new string[]
         {
             "ID",
@@ -22,7 +28,7 @@ namespace CDRComparison.Data.SQL
 
         public void LoadCDRs(Action<CDR> onBatchReady)
         {
-            ExecuteReaderSP("FraudAnalysis.sp_StrategyExecutionItem_GetByNULLCaseID", (reader) =>
+            ExecuteReaderSP("dbo.sp_CDR_GetAll", (reader) =>
             {
                 while (reader.Read())
                 {
@@ -36,6 +42,8 @@ namespace CDRComparison.Data.SQL
                 }
             });
         }
+
+        #region Bulk Insert Methods
 
         public object InitialiazeStreamForDBApply()
         {
@@ -51,8 +59,8 @@ namespace CDRComparison.Data.SQL
                 record.CDPN,
                 record.CGPN,
                 record.Time,
-                record.DurationInSec
-                //record.IsPartnerCDR
+                record.DurationInSec,
+                record.IsPartnerCDR
             );
         }
 
@@ -70,5 +78,12 @@ namespace CDRComparison.Data.SQL
                 FieldSeparator = '^'
             };
         }
+
+        public void ApplyCDRsToDB(object preparedCDRs)
+        {
+            InsertBulkToTable(preparedCDRs as BaseBulkInsertInfo);
+        }
+        
+        #endregion
     }
 }

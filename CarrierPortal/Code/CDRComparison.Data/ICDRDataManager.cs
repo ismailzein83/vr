@@ -11,5 +11,7 @@ namespace CDRComparison.Data
     public interface ICDRDataManager : IDataManager, IBulkApplyDataManager<CDR>
     {
         void LoadCDRs(Action<CDR> onBatchReady);
+
+        void ApplyCDRsToDB(object preparedCDRs);
     }
 }

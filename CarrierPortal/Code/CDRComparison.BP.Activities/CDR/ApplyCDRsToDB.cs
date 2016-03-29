@@ -1,12 +1,57 @@
-﻿using System;
+﻿using CDRComparison.Data;
+using System;
+using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess;
+using Vanrise.Queueing;
 
 namespace CDRComparison.BP.Activities
 {
-    public class ApplyCDRsToDB
+    #region Argument Classes
+
+    public class ApplyCDRsToDBInput
     {
+        public BaseQueue<Object> InputQueue { get; set; }
+    }
+    
+    #endregion
+
+    public sealed class ApplyCDRsToDB : DependentAsyncActivity<ApplyCDRsToDBInput>
+    {
+        #region Arguments
+
+        [RequiredArgument]
+        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
+        
+        #endregion
+
+        protected override void DoWork(ApplyCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        {
+            ICDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
+
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItems = false;
+                do
+                {
+                    hasItems = inputArgument.InputQueue.TryDequeue(
+                        (preparedCDRs) =>
+                        {
+                            dataManager.ApplyCDRsToDB(preparedCDRs);
+                        });
+                } while (!ShouldStop(handle) && hasItems);
+            });
+        }
+
+        protected override ApplyCDRsToDBInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ApplyCDRsToDBInput()
+            {
+                InputQueue = this.InputQueue.Get(context)
+            };
+        }
     }
 }
