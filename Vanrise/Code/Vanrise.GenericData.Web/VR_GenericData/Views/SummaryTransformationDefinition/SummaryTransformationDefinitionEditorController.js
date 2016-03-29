@@ -51,6 +51,9 @@
         var dataSummaryRecordTypeFieldsBatchSelectorAPI;
         var dataSummaryRecordTypeFieldsBatchSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var batchTimeIntervalSelectorAPI;
+        var batchTimeIntervalSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         defineMenuActionsColumnsGrouping();
@@ -67,6 +70,8 @@
         function defineScope() {
             $scope.scopeModal = {}
             $scope.scopeModal.enableColumnGrouping = true;
+            $scope.scopeModal.enableTransformationforInsert = true;
+            $scope.scopeModal.enableTransformationforUpdate = true;
             $scope.scopeModal.datasourceColumnGrouping = [];
 
             $scope.scopeModal.isValidColumnGrouping = function () {
@@ -89,6 +94,11 @@
                 VR_GenericData_KeyFieldMappingService.addItem(dataRawRecordTypeSelectorAPI.getSelectedIds(), dataSummaryRecordTypeSelectorAPI.getSelectedIds(), onDataItemAdded, $scope.scopeModal.datasourceColumnGrouping);
             };
 
+            $scope.scopeModal.onBatchTimeIntervalSelectorReady = function (api) {
+                batchTimeIntervalSelectorAPI = api;
+                batchTimeIntervalSelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModal.selectedDataTransformationDefinitionInsert;
             $scope.scopeModal.onDataTransformationDefinitionInsertReady = function (api) {
                 dataTransformationDefinitionInsertSelectorAPI = api;
@@ -109,7 +119,7 @@
                     var setLoaderDataTransformationDefinitionInsertRaw = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertRaw = value };
                     var payloadfornDataTransformationDefinitionInsertRaw = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionInsertId,
-                        filter: { DataRecordTypeIds: [selectedRawDataRecordTypeId] }
+                        filter: { DataRecordTypeIds: [selectedRawDataRecordTypeId], IsArray: false }
                     };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordRawInsertSelectorAPI, payloadfornDataTransformationDefinitionInsertRaw, setLoaderDataTransformationDefinitionInsertRaw, dataTransformationDefinitionInsertSelectedPromiseDeferred);
@@ -117,7 +127,7 @@
                     var setLoaderDataTransformationDefinitionInsertSummary = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertSummary = value };
                     var payloadfornDataTransformationDefinitionInsertSummary = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionInsertId,
-                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId] }
+                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId], IsArray: false }
                     };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordSummaryInsertSelectorAPI, payloadfornDataTransformationDefinitionInsertSummary, setLoaderDataTransformationDefinitionInsertSummary, dataTransformationDefinitionInsertSelectedPromiseDeferred);
@@ -151,15 +161,15 @@
                     var setLoaderDataTransformationDefinitionUpdateExisting = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateExisting = value };
                     var payloadforDataTransformationDefinitionUpdateExisting = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionUpdateId,
-                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId] }
+                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId], IsArray: false }
                     };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI, payloadforDataTransformationDefinitionUpdateExisting, setLoaderDataTransformationDefinitionUpdateExisting, dataTransformationDefinitionUpdateSelectedPromiseDeferred);
 
-                    var setLoaderDataTransformationDefinitionUpdateNew = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateSummary = value };
+                    var setLoaderDataTransformationDefinitionUpdateNew = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateNew = value };
                     var payloadfornDataTransformationDefinitionUpdateNew = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionUpdateId,
-                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId] }
+                        filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId], IsArray: false }
                     };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI, payloadfornDataTransformationDefinitionUpdateNew, setLoaderDataTransformationDefinitionUpdateNew, dataTransformationDefinitionUpdateSelectedPromiseDeferred);
@@ -212,6 +222,10 @@
                 }
 
                 $scope.scopeModal.selectedDataTransformationDefinitionInsert = undefined;
+                if (dataRawRecordTypeSelectorAPI.getSelectedIds() == undefined || dataSummaryRecordTypeSelectorAPI.getSelectedIds() == undefined)
+                    $scope.scopeModal.enableTransformationforInsert = false;
+                else $scope.scopeModal.enableTransformationforInsert = true;
+
                 enableColumnGrouping();
             }
 
@@ -270,8 +284,22 @@
 
                 }
 
+
+
                 $scope.scopeModal.selectedDataTransformationDefinitionUpdate = undefined;
                 $scope.scopeModal.selectedDataTransformationDefinitionInsert = undefined;
+                if (dataRawRecordTypeSelectorAPI.getSelectedIds() == undefined || dataSummaryRecordTypeSelectorAPI.getSelectedIds() == undefined)
+                    $scope.scopeModal.enableTransformationforInsert = false;
+                else
+                    $scope.scopeModal.enableTransformationforInsert = true;
+
+
+                if (dataSummaryRecordTypeSelectorAPI.getSelectedIds() == undefined)
+                    $scope.scopeModal.enableTransformationforUpdate = false;
+                else
+                    $scope.scopeModal.enableTransformationforUpdate = true;
+
+
                 enableColumnGrouping();
             }
 
@@ -366,8 +394,9 @@
         }
 
         function loadAllControls() {
+            loadBatchStartIdentificationSelector();
             return loadDataRecordTypeandRelated().then(function () {
-                return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadSummaryInsertSection, loadSummaryUpdateSection, loadColumnGroup])
+                return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, setTitle, loadSummaryInsertSection, loadSummaryUpdateSection, loadColumnGroup, loadBatchStartIdentificationSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -492,6 +521,22 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
+        function loadBatchStartIdentificationSelector() {
+            var batchStartIdentificationSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            var payload;
+            if (summaryTransformationDefinitionEntity != undefined && summaryTransformationDefinitionEntity.BatchRangeRetrieval != undefined) {
+                payload = {
+                    Settings: summaryTransformationDefinitionEntity.BatchRangeRetrieval,
+                };
+            }
+            dataTransformationDefinitionInsertSelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(batchTimeIntervalSelectorAPI, payload, batchStartIdentificationSelectorLoadDeferred);
+            });
+
+            return batchStartIdentificationSelectorLoadDeferred.promise;
+        }
+
         function loadColumnGroup() {
             if (summaryTransformationDefinitionEntity != undefined) {
                 for (var i = 0; i < summaryTransformationDefinitionEntity.KeyFieldMappings.length; i++) {
@@ -536,7 +581,7 @@
                     var payload;
                     payload = {
                         dataTransformationDefinitionId: summaryTransformationDefinitionEntity.SummaryFromRawSettings.TransformationDefinitionId,
-                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.RawItemRecordTypeId] },
+                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.RawItemRecordTypeId], IsArray: false },
                         selectedIds: summaryTransformationDefinitionEntity.SummaryFromRawSettings.RawRecordName
                     };
                     VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordRawInsertSelectorAPI, payload, dataTransformationDefinitionRecordRawInsertSelectorLoadDeferred);
@@ -550,7 +595,7 @@
                     var payload;
                     payload = {
                         dataTransformationDefinitionId: summaryTransformationDefinitionEntity.SummaryFromRawSettings.TransformationDefinitionId,
-                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId] },
+                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId], IsArray: false },
                         selectedIds: summaryTransformationDefinitionEntity.SummaryFromRawSettings.SymmaryRecordName
                     };
                     VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordSummaryInsertSelectorAPI, payload, dataTransformationDefinitionRecordSummaryInsertSelectorLoadDeferred);
@@ -593,7 +638,7 @@
                     var payload;
                     payload = {
                         dataTransformationDefinitionId: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.TransformationDefinitionId,
-                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId] },
+                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId], IsArray: false },
                         selectedIds: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.ExistingRecordName
                     };
                     VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI, payload, dataTransformationDefinitionRecordExistingUpdateSelectorLoadDeferred);
@@ -607,7 +652,7 @@
                     var payload;
                     payload = {
                         dataTransformationDefinitionId: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.TransformationDefinitionId,
-                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId] },
+                        filter: { DataRecordTypeIds: [summaryTransformationDefinitionEntity.SummaryItemRecordTypeId], IsArray: false },
                         selectedIds: summaryTransformationDefinitionEntity.UpdateExistingSummaryFromNewSettings.NewRecordName
                     };
                     VRUIUtilsService.callDirectiveLoad(dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI, payload, dataTransformationDefinitionRecordNewUpdateSelectorLoadDeferred);
@@ -660,7 +705,6 @@
                 SummaryIdFieldName: dataSummaryRecordTypeFieldsIDSelectorAPI.getSelectedIds(),
                 SummaryBatchStartFieldName: dataSummaryRecordTypeFieldsBatchSelectorAPI.getSelectedIds(),
                 KeyFieldMappings: keyFieldMappings,
-                BatchRangeRetrieval: {},
                 SummaryFromRawSettings: {
                     TransformationDefinitionId: dataTransformationDefinitionInsertSelectorAPI.getSelectedIds(),
                     RawRecordName: dataTransformationDefinitionRecordRawInsertSelectorAPI.getSelectedIds(),
@@ -671,9 +715,9 @@
                     NewRecordName: dataTransformationDefinitionRecordNewSummaryUpdateSelectorAPI.getSelectedIds(),
                     ExistingRecordName: dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI.getSelectedIds()
                 },
-                DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds()
+                DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds(),
+                BatchRangeRetrieval: batchTimeIntervalSelectorAPI.getData()
             }
-
             return item;
         }
 

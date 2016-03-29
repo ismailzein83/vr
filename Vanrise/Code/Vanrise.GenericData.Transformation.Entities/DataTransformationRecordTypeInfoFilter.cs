@@ -9,5 +9,6 @@ namespace Vanrise.GenericData.Transformation.Entities
     public class DataTransformationRecordTypeInfoFilter
     {
         public List<int> DataRecordTypeIds { get; set; }
+        public bool? IsArray { get; set; }
     }
 }

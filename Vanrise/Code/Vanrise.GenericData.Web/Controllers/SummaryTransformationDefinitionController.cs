@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
@@ -52,5 +53,14 @@ namespace Vanrise.GenericData.Web.Controllers
             SummaryTransformationDefinitionManager manager = new SummaryTransformationDefinitionManager();
             return manager.GetSummaryTransformationDefinitionInfo(filter);
         }
+
+        [HttpGet]
+        [Route("GetSummaryBatchIntervalSourceTemplates")]
+        public List<TemplateConfig> GetSummaryBatchIntervalSourceTemplates()
+        {
+            SummaryTransformationDefinitionManager manager = new SummaryTransformationDefinitionManager();
+            return manager.GetSummaryBatchIntervalSourceTemplates();
+        }
+
     }
 }

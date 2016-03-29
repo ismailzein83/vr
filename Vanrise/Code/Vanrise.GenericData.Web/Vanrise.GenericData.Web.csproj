@@ -182,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_GenericData\Constants\DateTimeDataTypeEnum.js" />
+    <Content Include="VR_GenericData\Constants\IntervalTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldNumberDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\MappingRuleStructureBehaviorTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
@@ -265,6 +266,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\Templates\TariffRuleStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\vr-genericdata-datatransformation-tariffrulestep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Tariff\vr-genericdata-datatransformation-tariffrulestep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\Templates\TimeIntervalSelector.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\Templates\SummaryBatchStartIdentificationSelector.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-timeinterval-selector.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\SummaryBatchTimeIntervalRange\vr-genericdata-summarytransformation-summarybatchstartidentification-selector.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorTransformBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\vr-genericdata-queueactivator-storebatch.js" />

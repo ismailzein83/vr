@@ -14,7 +14,8 @@
             HasAddSummaryTransformationDefinition: HasAddSummaryTransformationDefinition,
             UpdateSummaryTransformationDefinition: UpdateSummaryTransformationDefinition,
             HasUpdateSummaryTransformationDefinition: HasUpdateSummaryTransformationDefinition,
-            GetSummaryTransformationDefinitionInfo: GetSummaryTransformationDefinitionInfo
+            GetSummaryTransformationDefinitionInfo: GetSummaryTransformationDefinitionInfo,
+            GetSummaryBatchIntervalSourceTemplates: GetSummaryBatchIntervalSourceTemplates
         });
         function GetSummaryTransformationDefinitionInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetSummaryTransformationDefinitionInfo"), { filter: filter });
@@ -37,6 +38,10 @@
         }
         function HasUpdateSummaryTransformationDefinition() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, controllerName, ['UpdateSummaryTransformationDefinition']));
+        }
+
+        function GetSummaryBatchIntervalSourceTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetSummaryBatchIntervalSourceTemplates"));
         }
 
     }

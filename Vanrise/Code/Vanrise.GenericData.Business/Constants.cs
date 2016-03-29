@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Business
         public const string DataRecordFieldConfigType = "VRGeneric_DataRecordFieldType";
 
         public const string GenericRuleDefinitionSettingsTemplateConfigType = "VR_GenericData_GenericRuleDefinitionSettings";
+
+        public const string SummaryBatchIntervalSettingsTemplateConfigType = "VR_GenericData_SummaryBatchIntervalSettings";
     }
 }

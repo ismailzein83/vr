@@ -27,44 +27,6 @@ namespace Vanrise.GenericData.Business
         }
         public SummaryTransformationDefinition GetSummaryTransformationDefinition(int summaryTransformationDefinitionId)
         {
-            //var definition = new SummaryTransformationDefinition
-            //{
-            //    SummaryTransformationDefinitionId = 1,
-            //    Name = "Traffic Summary Transformation",
-            //    RawItemRecordTypeId = 10,
-            //    SummaryItemRecordTypeId = 18,
-            //    DataRecordStorageId = 9,
-            //    BatchRangeRetrieval = new SummaryBatchTimeInterval
-            //    {
-            //        RawTimeFieldName = "AttemptTime",
-            //        IntervalInMinutes = 10
-            //    },
-            //    SummaryIdFieldName = "ID",
-            //    SummaryBatchStartFieldName = "BatchStart",
-            //    KeyFieldMappings = new List<SummaryTransformationKeyFieldMapping>
-            //        {
-            //            new SummaryTransformationKeyFieldMapping
-            //            { 
-            //                RawFieldName= "OperatorAccount", 
-            //                SummaryFieldName = "OperatorID"
-            //            }
-            //        },
-            //    SummaryFromRawSettings = new UpdateSummaryFromRawSettings
-            //    {
-            //        TransformationDefinitionId = 3,
-            //        RawRecordName = "cdr",
-            //        SymmaryRecordName = "trafficSummary"
-            //    },
-            //    UpdateExistingSummaryFromNewSettings = new UpdateExistingSummaryFromNewSettings
-            //    {
-            //        TransformationDefinitionId = 4,
-            //        ExistingRecordName = "existingItem",
-            //        NewRecordName = "newItem"
-            //    }
-            //};
-            //return definition;
-
-
             var summaryTransformationDefinitions = GetCachedSummaryTransformationDefinitions();
             return summaryTransformationDefinitions.GetRecord(summaryTransformationDefinitionId);
         }
@@ -131,7 +93,11 @@ namespace Vanrise.GenericData.Business
 
             return updateOperationOutput;
         }
-        
+        public List<Vanrise.Entities.TemplateConfig> GetSummaryBatchIntervalSourceTemplates()
+        {
+            TemplateConfigManager manager = new TemplateConfigManager();
+            return manager.GetTemplateConfigurations(Constants.SummaryBatchIntervalSettingsTemplateConfigType);
+        }
         #endregion
 
         #region Private Methods
@@ -179,6 +145,6 @@ namespace Vanrise.GenericData.Business
             return summaryTransformationDefinitionInfo;
         }
         #endregion
-       
+
     }
 }
