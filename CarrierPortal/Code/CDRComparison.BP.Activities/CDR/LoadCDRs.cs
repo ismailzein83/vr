@@ -43,7 +43,20 @@ namespace CDRComparison.BP.Activities
         {
             Action<IEnumerable<CDR>> onCDRsReceived = (cdrs) =>
             {
-                var cdrBatch = new CDRBatch() { CDRs = cdrs.ToList() };
+                var list = new List<CDR>();
+                foreach (CDR cdr in cdrs)
+                {
+                    var item = new CDR()
+                    {
+                        CDPN = cdr.CDPN,
+                        CGPN = cdr.CGPN,
+                        Time = cdr.Time,
+                        DurationInSec = cdr.DurationInSec,
+                        IsPartnerCDR = inputArgument.IsPartnerCDRs
+                    };
+                    list.Add(item);
+                }
+                var cdrBatch = new CDRBatch() { CDRs = list };
                 inputArgument.OutputQueue.Enqueue(cdrBatch);
             };
 
