@@ -10,7 +10,15 @@ namespace CDRComparison.Data.SQL
 {
     public class CDRDataManager : BaseSQLDataManager, ICDRDataManager
     {
-
+        static string[] s_Columns = new string[]
+        {
+            "ID",
+            "CDPN",
+            "CGPN",
+            "Time",
+            "DurationInSec",
+            "IsPartnerCDR"
+        };
 
         public void LoadCDRs(Action<CDR> onBatchReady)
         {
@@ -27,6 +35,40 @@ namespace CDRComparison.Data.SQL
                     });
                 }
             });
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(CDR record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord
+            (
+                "0^{0}^{1}^{2}^{3}^{4}",
+                record.CDPN,
+                record.CGPN,
+                record.Time,
+                record.DurationInSec
+                //record.IsPartnerCDR
+            );
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.Close();
+            return new StreamBulkInsertInfo
+            {
+                TableName = "[dbo].[CDR]",
+                Stream = streamForBulkInsert,
+                ColumnNames = s_Columns,
+                TabLock = false,
+                KeepIdentity = false,
+                FieldSeparator = '^'
+            };
         }
     }
 }
