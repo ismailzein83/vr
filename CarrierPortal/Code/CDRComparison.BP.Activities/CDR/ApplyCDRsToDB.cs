@@ -24,7 +24,7 @@ namespace CDRComparison.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InArgument<BaseQueue<Object>> InputQueue { get; set; }
+        public InOutArgument<BaseQueue<Object>> InputQueue { get; set; }
         
         #endregion
 

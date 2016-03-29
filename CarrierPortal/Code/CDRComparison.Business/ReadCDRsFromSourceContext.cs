@@ -13,6 +13,8 @@ namespace CDRComparison.Business
 
         public ReadCDRsFromSourceContext(Action<IEnumerable<CDR>> onCDRsReceived)
         {
+            if (onCDRsReceived == null)
+                throw new ArgumentNullException("onCDRsReceived");
             this._onCDRsReceived = onCDRsReceived;
         }
 

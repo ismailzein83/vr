@@ -35,7 +35,7 @@ namespace CDRComparison.BP.Activities
         public InArgument<bool> IsPartnerCDRs { get; set; }
 
         [RequiredArgument]
-        public OutArgument<BaseQueue<CDRBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<CDRBatch>> OutputQueue { get; set; }
         
         #endregion
 
