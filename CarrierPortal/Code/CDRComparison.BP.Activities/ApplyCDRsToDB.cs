@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CDRComparison.BP.Activities
 {
-    public class ApplyCDRs
+    public class ApplyCDRsToDB
     {
     }
 }

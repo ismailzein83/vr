@@ -65,13 +65,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyCDRs.cs" />
+    <Compile Include="ApplyCDRsToDB.cs" />
     <Compile Include="ApplyDisputeCDRs.cs" />
     <Compile Include="ApplyMissingCDRs.cs" />
     <Compile Include="ApplyPartialMatchCDRs.cs" />
+    <Compile Include="LoadCDRs.cs" />
     <Compile Include="LoadOrderedCDRs.cs" />
     <Compile Include="PrepareDisputeCDRs.cs" />
-    <Compile Include="PrepareCDRs.cs" />
+    <Compile Include="PrepareCDRsForDBApply.cs" />
     <Compile Include="PrepareMissingCDRs.cs" />
     <Compile Include="PreparePartialMatchCDRs.cs" />
     <Compile Include="ProcessCDRs.cs" />
