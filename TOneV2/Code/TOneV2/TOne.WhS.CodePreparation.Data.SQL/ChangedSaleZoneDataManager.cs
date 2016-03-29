@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
-using TOne.WhS.CodePreparation.Entities.CP.Processing;
+using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.CodePreparation.Data.SQL

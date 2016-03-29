@@ -95,12 +95,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="CodePreparationProcess.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </XamlAppDef>
-  </ItemGroup>
-  <ItemGroup>
     <XamlAppDef Include="CodePreparation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -85,33 +85,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyDataForDB.cs" />
-    <Compile Include="CP\ApplyChangedCodesToDB.cs" />
-    <Compile Include="CP\ApplyChangedZonesToDB.cs" />
-    <Compile Include="CP\ApplyNewCodesToDB.cs" />
-    <Compile Include="CP\ApplyNewZonesToDB.cs" />
-    <Compile Include="CP\GetDataFromSource.cs" />
-    <Compile Include="CP\GetDataFromView.cs" />
-    <Compile Include="CP\GetExistingCodes.cs" />
-    <Compile Include="CP\GetExistingZones.cs" />
-    <Compile Include="CP\GetImportedDataValidationRules.cs" />
-    <Compile Include="CP\PrepareExistingCodes.cs" />
-    <Compile Include="CP\PrepareExistingZones.cs" />
-    <Compile Include="CP\ProcessCountryCodes.cs" />
-    <Compile Include="CP\ReserveIdForCodePreparation.cs" />
-    <Compile Include="CP\ReserveIdsForNewEntities.cs" />
-    <Compile Include="CP\StructureDataByCountries.cs" />
-    <Compile Include="CP\StructureDataByZones.cs" />
-    <Compile Include="CP\SyncImportedDataWithDB.cs" />
-    <Compile Include="GenerateSaleCodes.cs" />
-    <Compile Include="GenerateSaleZones.cs" />
-    <Compile Include="CP\PrepareChangedCodesForApply.cs" />
-    <Compile Include="CP\PrepareChangedZonesForApply.cs" />
-    <Compile Include="CP\PrepareNewCodesForApply.cs" />
-    <Compile Include="CP\PrepareNewZonesForApply.cs" />
+    <Compile Include="ApplyChangedCodesToDB.cs" />
+    <Compile Include="ApplyChangedZonesToDB.cs" />
+    <Compile Include="ApplyNewCodesToDB.cs" />
+    <Compile Include="ApplyNewZonesToDB.cs" />
+    <Compile Include="GetDataFromSource.cs" />
+    <Compile Include="GetDataFromView.cs" />
+    <Compile Include="GetExistingCodes.cs" />
+    <Compile Include="GetExistingZones.cs" />
+    <Compile Include="GetImportedDataValidationRules.cs" />
+    <Compile Include="PrepareExistingCodes.cs" />
+    <Compile Include="PrepareExistingZones.cs" />
+    <Compile Include="ProcessCountryCodes.cs" />
+    <Compile Include="ReserveIdForCodePreparation.cs" />
+    <Compile Include="ReserveIdsForNewEntities.cs" />
+    <Compile Include="StructureDataByCountries.cs" />
+    <Compile Include="StructureDataByZones.cs" />
+    <Compile Include="SyncImportedDataWithDB.cs" />
+    <Compile Include="PrepareChangedCodesForApply.cs" />
+    <Compile Include="PrepareChangedZonesForApply.cs" />
+    <Compile Include="PrepareNewCodesForApply.cs" />
+    <Compile Include="PrepareNewZonesForApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadDataFromExcel.cs" />
-    <Compile Include="CP\UpdateCodePreparationStateStatus.cs" />
+    <Compile Include="UpdateCodePreparationStateStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
@@ -135,6 +131,7 @@
       <Name>TOne.WhS.CodePreparation.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

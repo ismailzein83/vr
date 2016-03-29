@@ -50,38 +50,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code.cs" />
-    <Compile Include="CodePreparationImport.cs" />
-    <Compile Include="CP\SaleCode\CloseCodesOutput.cs" />
-    <Compile Include="CP\SaleCode\CloseCodesInput.cs" />
-    <Compile Include="CP\CountryToProcess.cs" />
-    <Compile Include="CP\ExistingCode.cs" />
-    <Compile Include="CP\IProcessCountryCodesContext.cs" />
-    <Compile Include="CP\SaleCode\MoveCodeOutput.cs" />
-    <Compile Include="CP\Changes.cs" />
-    <Compile Include="CP\ChangesDetail.cs" />
-    <Compile Include="CP\SaleCode\CodeItem.cs" />
-    <Compile Include="CP\SaleCode\DeletedCode.cs" />
-    <Compile Include="CP\SaleCode\GetCodeItemInput.cs" />
-    <Compile Include="CP\SaleCode\MoveCodeInput.cs" />
-    <Compile Include="CP\SaleCode\NewCode.cs" />
-    <Compile Include="CP\SaleCode\NewCodeInput.cs" />
-    <Compile Include="CP\SaleCode\NewCodeOutput.cs" />
-    <Compile Include="CP\SaleZone\NewZone.cs" />
-    <Compile Include="CP\SaleZone\NewZoneInput.cs" />
-    <Compile Include="CP\SaleZone\NewZoneOutput.cs" />
-    <Compile Include="CP\SaleZone\ZoneItem.cs" />
-    <Compile Include="CP\ZoneToProcess.cs" />
+    <Compile Include="SaleCode\CloseCodesOutput.cs" />
+    <Compile Include="SaleCode\CloseCodesInput.cs" />
+    <Compile Include="CountryToProcess.cs" />
+    <Compile Include="ExistingCode.cs" />
+    <Compile Include="IProcessCountryCodesContext.cs" />
+    <Compile Include="SaleCode\MoveCodeOutput.cs" />
+    <Compile Include="Changes.cs" />
+    <Compile Include="ChangesDetail.cs" />
+    <Compile Include="SaleCode\CodeItem.cs" />
+    <Compile Include="SaleCode\DeletedCode.cs" />
+    <Compile Include="SaleCode\GetCodeItemInput.cs" />
+    <Compile Include="SaleCode\MoveCodeInput.cs" />
+    <Compile Include="SaleCode\NewCode.cs" />
+    <Compile Include="SaleCode\NewCodeInput.cs" />
+    <Compile Include="SaleCode\NewCodeOutput.cs" />
+    <Compile Include="SaleZone\NewZone.cs" />
+    <Compile Include="SaleZone\NewZoneInput.cs" />
+    <Compile Include="SaleZone\NewZoneOutput.cs" />
+    <Compile Include="SaleZone\ZoneItem.cs" />
+    <Compile Include="ZoneToProcess.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaveChangesInput.cs" />
-    <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CP\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

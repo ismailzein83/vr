@@ -14,7 +14,7 @@
  xmlns:twcba="clr-namespace:TOne.WhS.CodePreparation.BP.Arguments;assembly=TOne.WhS.CodePreparation.BP.Arguments"
  xmlns:twcba1="clr-namespace:TOne.WhS.CodePreparation.BP.Activities;assembly=TOne.WhS.CodePreparation.BP.Activities"
  xmlns:twce="clr-namespace:TOne.WhS.CodePreparation.Entities;assembly=TOne.WhS.CodePreparation.Entities"
- xmlns:twcecp="clr-namespace:TOne.WhS.CodePreparation.Entities.CP.Processing;assembly=TOne.WhS.CodePreparation.Entities"
+ xmlns:twcecp="clr-namespace:TOne.WhS.CodePreparation.Entities.Processing;assembly=TOne.WhS.CodePreparation.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
@@ -78,22 +78,22 @@
       <Variable x:TypeArguments="scg:IEnumerable(twcecp:ZoneToProcess)" Name="ZonesToProcess" />
       <Variable x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:AddedZone))" Name="NewZonesQueue">
         <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:AddedZone))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.CodePreparation.Entities.CP.Processing.AddedZone&gt;&gt;()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:AddedZone))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.CodePreparation.Entities.Processing.AddedZone&gt;&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:AddedCode))" Name="NewCodesQueue">
         <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:AddedCode))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.CodePreparation.Entities.CP.Processing.AddedCode&gt;&gt;()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:AddedCode))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.CodePreparation.Entities.Processing.AddedCode&gt;&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:ChangedZone))" Name="ChangedZonesQueue">
         <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:ChangedZone))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.CodePreparation.Entities.CP.Processing.ChangedZone&gt;&gt;()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:ChangedZone))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.CodePreparation.Entities.Processing.ChangedZone&gt;&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:ChangedCode))" Name="ChangedCodesQueue">
         <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:ChangedCode))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.CodePreparation.Entities.CP.Processing.ChangedCode&gt;&gt;()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcecp:ChangedCode))">new MemoryQueue&lt;IEnumerable&lt;TOne.WhS.CodePreparation.Entities.Processing.ChangedCode&gt;&gt;()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="CountriesProcessingStatus">

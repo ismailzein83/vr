@@ -2,7 +2,7 @@
 using System.Web.Http;
 using TOne.WhS.CodePreparation.Business;
 using Vanrise.Web.Base;
-using TOne.WhS.CodePreparation.Entities.CP;
+using TOne.WhS.CodePreparation.Entities;
 
 namespace TOne.WhS.CodePreparation.Web.Controllers
 {

@@ -12,7 +12,6 @@ using TOne.WhS.CodePreparation.Data;
 using TOne.WhS.CodePreparation.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
-using TOne.WhS.CodePreparation.Entities.CP;
 using Vanrise.Common.Business;
 using System.ComponentModel;
 using System.Web;
@@ -22,11 +21,6 @@ namespace TOne.WhS.CodePreparation.Business
     public class CodePreparationManager
     {
 
-        public void InsertCodePreparationObject(Dictionary<string, Zone> saleZones, int sellingNumberPlanId)
-        {
-            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            dataManager.InsertCodePreparationObject(saleZones, sellingNumberPlanId);
-        }
         public Changes GetChanges(int sellingNumberPlanId)
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
@@ -36,57 +30,8 @@ namespace TOne.WhS.CodePreparation.Business
             return changes;
         }
 
-        public Dictionary<string, Zone> GetSaleZonesWithCodes(int sellingNumberPlanId, DateTime effectiveDate)
-        {
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            Dictionary<string, Zone> saleZoneDictionary = new Dictionary<string, Zone>();
-            IEnumerable<SaleZone> salezones = saleZoneManager.GetSaleZones(sellingNumberPlanId, effectiveDate);
-
-            if (salezones != null && salezones.Count() > 0)
-            {
-                SaleCodeManager manager = new SaleCodeManager();
-                foreach (SaleZone saleZone in salezones)
-                {
-                    Zone saleZoneOut;
-                    if (!saleZoneDictionary.TryGetValue(saleZone.Name, out saleZoneOut))
-                    {
-                        saleZoneOut = new Zone();
-                        List<SaleCode> saleCodes = manager.GetSaleCodesByZoneID(saleZone.SaleZoneId, effectiveDate);
-                        List<Code> codes = null;
-                        if (saleCodes != null)
-                        {
-                            codes = new List<Code>();
-                            foreach (var code in saleCodes)
-                            {
-                                codes.Add(new Code
-                                {
-                                    SaleCodeId = code.SaleCodeId,
-                                    CodeValue = code.Code,
-                                    ZoneId = code.ZoneId,
-                                    BeginEffectiveDate = code.BED,
-                                    CodeGroupId = code.CodeGroupId,
-                                    EndEffectiveDate = code.EED,
-                                });
-                            }
-                        }
-                        if (saleZoneOut.Codes == null)
-                            saleZoneOut.Codes = new List<Code>();
-                        saleZoneOut.Name = saleZone.Name;
-                        saleZoneOut.SaleZoneId = saleZone.SaleZoneId;
-                        saleZoneOut.SellingNumberPlanId = saleZone.SellingNumberPlanId;
-                        saleZoneOut.BeginEffectiveDate = saleZone.BED;
-                        saleZoneOut.EndEffectiveDate = saleZone.EED;
-                        saleZoneOut.Codes = codes;
-                        saleZoneDictionary.Add(saleZone.Name, saleZoneOut);
-                    }
-
-                }
-            }
-
-            return saleZoneDictionary;
-        }
-
         #region Private Functions
+
         #region Zone
 
         public NewZoneOutput SaveNewZone(NewZoneInput input)
@@ -197,49 +142,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         #region Code
 
-        List<CodeItem> MapCodeItemsFromSaleCodes(IEnumerable<SaleCode> saleCodes)
-        {
-            List<CodeItem> codeItems = new List<CodeItem>();
-            CodeItemStatus codeItemStatus = CodeItemStatus.ExistingNotChanged;
-            string statusDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatus).Description;
-            foreach (var saleCode in saleCodes)
-            {
-                CodeItem codeItem = new CodeItem()
-                {
-                    BED = saleCode.BED,
-                    Code = saleCode.Code,
-                    EED = saleCode.EED,
-                    Status = codeItemStatus,
-                    StatusDescription = statusDescription == null ? codeItemStatus.ToString() : statusDescription,
-                    CodeId = saleCode.SaleCodeId,
-                };
-                codeItems.Add(codeItem);
-            }
-            return codeItems;
-        }
-        List<CodeItem> MapCodeItemsFromChanges(IEnumerable<NewCode> newCodes)
-        {
-            List<CodeItem> codeItems = new List<CodeItem>();
-            CodeItemStatus codeItemStatus = CodeItemStatus.New;
-            string statusDescription = null;
-            foreach (var newCode in newCodes)
-            {
-                codeItemStatus = newCode.OldZoneName == null ? CodeItemStatus.New : CodeItemStatus.ExistingMoved;
-                statusDescription = Utilities.GetEnumAttribute<CodeItemStatus, DescriptionAttribute>(codeItemStatus).Description;
-                CodeItem codeItem = new CodeItem()
-                {
-                    BED = null,
-                    Code = newCode.Code,
-                    EED = null,
-                    Status = codeItemStatus,
-                    StatusDescription = statusDescription == null ? codeItemStatus.ToString() : statusDescription,
-                    OtherCodeZoneName = newCode.OldZoneName
-
-                };
-                codeItems.Add(codeItem);
-            }
-            return codeItems;
-        }
+       
         List<CodeItem> MergeCodeItems(IEnumerable<SaleCode> saleCodes, IEnumerable<NewCode> newCodes, IEnumerable<DeletedCode> deletedCodes, int? zoneId=null,string zoneName=null)
         {
             SaleZoneManager saleZoneManager = new SaleZoneManager();
@@ -471,42 +374,6 @@ namespace TOne.WhS.CodePreparation.Business
             return output;
         }
 
-        List<SaleCode> GetSaleCodesByZoneName(int sellingNumberPlan, string zoneName)
-        {
-            SaleCodeManager saleCodemanager = new SaleCodeManager();
-            return saleCodemanager.GetSaleCodesByZoneName(sellingNumberPlan, zoneName, DateTime.Now);
-        }
-
-        List<CodeItem> GetCodeItems(List<SaleCode> saleCodes, List<NewCode> newCodes)
-        {
-            List<CodeItem> codeItems = new List<CodeItem>();
-            foreach (var saleCode in saleCodes)
-            {
-                CodeItem codeItem = new CodeItem()
-                {
-                    BED = saleCode.BED,
-                    Code = saleCode.Code,
-                    EED = saleCode.EED,
-                    Status = CodeItemStatus.ExistingNotChanged,
-                    CodeId = saleCode.SaleCodeId
-                };
-                codeItems.Add(codeItem);
-            }
-            foreach (var newCode in newCodes)
-            {
-                CodeItem codeItem = new CodeItem()
-                {
-                    BED = null,
-                    Code = newCode.Code,
-                    EED = null,
-                    Status = CodeItemStatus.New
-
-                };
-                codeItems.Add(codeItem);
-            }
-            return codeItems;
-        }
-
         #endregion
 
         #endregion
@@ -544,6 +411,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             return output;
         }
+
         public byte[] DownloadImportCodePreparationTemplate()
         {
             string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportCodePreparationTemplatePath"]);

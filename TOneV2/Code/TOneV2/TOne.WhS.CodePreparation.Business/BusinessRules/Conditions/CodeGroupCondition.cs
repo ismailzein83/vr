@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.CodePreparation.Entities.CP.Processing;
+using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.CodePreparation.Business
