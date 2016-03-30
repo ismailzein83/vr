@@ -1,13 +1,14 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPIService", "BusinessProcess_GridMaxSize", "BusinessProcess_BPTaskService","VRTimerService",
+app.directive("businessprocessBpTaskMonitorGrid", ["BusinessProcess_BPTaskAPIService", "BusinessProcess_GridMaxSize", "BusinessProcess_BPTaskService", "VRTimerService",
 function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, BusinessProcess_BPTaskService, VRTimerService) {
 
     var directiveDefinitionObject = {
 
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            enableAutoOpenTask: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -79,6 +80,7 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                 }
 
                 function manipulateDataUpdated(response) {
+                    var autoTask;
                     var itemAddedOrUpdatedInThisCall = false;
                     if (response != undefined) {
                         for (var i = 0; i < response.ListBPTaskDetails.length; i++) {
@@ -102,6 +104,9 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                             if (!findBPTask) {
                                 itemAddedOrUpdatedInThisCall = true;
                                 $scope.bpTasks.push(bpTask);
+                                if (autoTask == undefined && bpTask.AutoOpenTask && bpTask.IsAssignedToCurrentUser) {
+                                    autoTask = bpTask;
+                                }
                             }
                         }
 
@@ -121,6 +126,9 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
 
                     }
                     input.LastUpdateHandle = response.MaxTimeStamp;
+
+                    if (ctrl.enableAutoOpenTask && autoTask != undefined)
+                        BusinessProcess_BPTaskService.openTask(autoTask.Entity.BPTaskId);
                 };
 
 

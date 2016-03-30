@@ -2,13 +2,6 @@
     <vr-modalbody>
         <vr-form name="formBPTrackingModal">
 
-            <!--<vr-row removeline>
-                <vr-columns width="fullrow">
-                    <h4><strong>{{process.Title}}</strong></h4>
-                    <small> {{process.CreatedTime | date:'yyyy-MM-dd hh:mm:ss' }}  {{process.Status}}</small>
-                </vr-columns>
-            </vr-row>-->
-
             <vr-row>
                 <vr-columns colnum="1"><vr-label>Process Title:</vr-label></vr-columns>
                 <vr-columns colnum="11"><vr-label isvalue>{{process.Title}}</vr-label></vr-columns>
@@ -51,7 +44,7 @@
                 <vr-tab header="'Tasks'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
-                            <businessprocess-bp-task-monitor-grid on-ready="onTaskMonitorGridReady"></businessprocess-bp-task-monitor-grid>
+                            <businessprocess-bp-task-monitor-grid on-ready="onTaskMonitorGridReady" enable-auto-open-task="true"></businessprocess-bp-task-monitor-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

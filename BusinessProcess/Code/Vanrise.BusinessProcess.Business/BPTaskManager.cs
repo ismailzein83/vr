@@ -46,7 +46,7 @@ namespace Vanrise.BusinessProcess.Business
         {
             IBPTaskDataManager taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
             taskDataManager.UpdateTaskExecution(executeBPTaskInput, BPTaskStatus.Completed);
-            
+
             task = taskDataManager.GetTask(executeBPTaskInput.TaskId);
         }
 
@@ -88,13 +88,17 @@ namespace Vanrise.BusinessProcess.Business
         #endregion
 
         #region mapper
-        private BPTaskDetail BPTaskDetailMapper(BPTask bpTask)
+        private BPTaskDetail BPTaskDetailMapper(BPTask bpTask, int loggedInUser)
         {
             if (bpTask == null)
                 return null;
+            BPTaskTypeManager bpTaskTypeManager = new BPTaskTypeManager();
+
             return new BPTaskDetail()
             {
-                Entity = bpTask
+                Entity = bpTask,
+                AutoOpenTask = bpTaskTypeManager.GetBPTaskTypeByTaskId(bpTask.BPTaskId).Settings.AutoOpenTask,
+                IsAssignedToCurrentUser = bpTask.AssignedUsers != null && bpTask.AssignedUsers.Contains(loggedInUser)
             };
         }
         #endregion
@@ -103,12 +107,13 @@ namespace Vanrise.BusinessProcess.Business
         private List<BPTaskDetail> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId)
         {
             IBPTaskDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
+            int loggedInUser = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
 
             List<BPTask> bpTasks = dataManager.GetBeforeId(lessThanID, nbOfRows, processInstanceId, userId);
             List<BPTaskDetail> bpTaskDetails = new List<BPTaskDetail>();
             foreach (BPTask bpTask in bpTasks)
             {
-                bpTaskDetails.Add(BPTaskDetailMapper(bpTask));
+                bpTaskDetails.Add(BPTaskDetailMapper(bpTask, loggedInUser));
             }
             return bpTaskDetails;
         }
@@ -116,6 +121,7 @@ namespace Vanrise.BusinessProcess.Business
         private BPTaskUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int? processInstanceId, int? userId)
         {
             BPTaskUpdateOutput bpTaskUpdateOutput = new BPTaskUpdateOutput();
+            int loggedInUser = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
 
             IBPTaskDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
 
@@ -123,7 +129,7 @@ namespace Vanrise.BusinessProcess.Business
             List<BPTaskDetail> bpTaskDetails = new List<BPTaskDetail>();
             foreach (BPTask bpTask in bpTasks)
             {
-                bpTaskDetails.Add(BPTaskDetailMapper(bpTask));
+                bpTaskDetails.Add(BPTaskDetailMapper(bpTask, loggedInUser));
             }
 
             bpTaskUpdateOutput.ListBPTaskDetails = bpTaskDetails;
