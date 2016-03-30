@@ -143,6 +143,8 @@
     <Content Include="CDRComparison\Services\APIServices\CDRSourceAPIService.js" />
     <Content Include="CDRComparison\Views\CDRComparison.html" />
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />
+    <Content Include="CDRComparison\Views\CDRComparisonTaskEditor.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonTaskEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
