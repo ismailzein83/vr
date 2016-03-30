@@ -69,9 +69,14 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
 
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [
-             { name: "Edit", clicked: editBPBusinessRuleSet }
-            ];
+            $scope.gridMenuActions = [{
+                name: "Edit", clicked: editBPBusinessRuleSet,
+                haspermission: hasEditBusinessRuleSet
+            }];
+        }
+
+        function hasEditBusinessRuleSet() {
+            return BusinessProcess_BPBusinessRuleSetAPIService.HasEditBusinessRuleSet();
         }
 
         function editBPBusinessRuleSet(bpBusinessRuleSetObj) {

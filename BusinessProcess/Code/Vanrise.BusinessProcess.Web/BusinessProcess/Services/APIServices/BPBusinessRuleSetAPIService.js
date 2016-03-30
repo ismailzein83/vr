@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    BusinessProcess_BPBusinessRuleSetAPIService.$inject = ['BaseAPIService', 'UtilsService', 'BusinessProcess_BP_ModuleConfig'];
+    BusinessProcess_BPBusinessRuleSetAPIService.$inject = ['BaseAPIService', 'UtilsService', 'BusinessProcess_BP_ModuleConfig','SecurityService'];
 
-    function BusinessProcess_BPBusinessRuleSetAPIService(BaseAPIService, UtilsService, BusinessProcess_BP_ModuleConfig) {
+    function BusinessProcess_BPBusinessRuleSetAPIService(BaseAPIService, UtilsService, BusinessProcess_BP_ModuleConfig, SecurityService) {
 
         function GetFilteredBPBusinessRuleSets(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPBusinessRuleSet", "GetFilteredBPBusinessRuleSets"), input);
@@ -29,14 +29,22 @@
             });
         }
 
-        
+        function HasAddBusinessRuleSet() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, "BPBusinessRuleSet", ['AddBusinessRuleSet']));
+        }
+
+        function HasEditBusinessRuleSet() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, "BPBusinessRuleSet", ['UpdateBusinessRuleSet']));
+        }
 
         return ({
             GetFilteredBPBusinessRuleSets: GetFilteredBPBusinessRuleSets,
             AddBusinessRuleSet: AddBusinessRuleSet,
             UpdateBusinessRuleSet: UpdateBusinessRuleSet,
             GetBusinessRuleSetsInfo: GetBusinessRuleSetsInfo,
-            GetBusinessRuleSetsByID: GetBusinessRuleSetsByID
+            GetBusinessRuleSetsByID: GetBusinessRuleSetsByID,
+            HasAddBusinessRuleSet: HasAddBusinessRuleSet,
+            HasEditBusinessRuleSet: HasEditBusinessRuleSet
         });
     }
 

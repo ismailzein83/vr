@@ -89,6 +89,15 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
             }
         };
 
+        $scope.hasSaveBusinessRuleSetPermission = function () {
+            if (isEditMode) {
+                return BusinessProcess_BPBusinessRuleSetAPIService.HasEditBusinessRuleSet();
+            }
+            else {
+                return BusinessProcess_BPBusinessRuleSetAPIService.HasAddBusinessRuleSet();
+            }
+        };
+
         $scope.onBPDefinitionSelectionchanged = function () {
 
             if (bpBusinessRuleSetDirectiveApi != undefined && bpBusinessRuleSetDetailDirectiveApi != undefined) {

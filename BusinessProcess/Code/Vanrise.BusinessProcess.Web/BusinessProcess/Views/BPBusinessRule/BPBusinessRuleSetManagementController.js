@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_BP_BusinessRuleSetManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPBusinessRuleSetService'];
+    BusinessProcess_BP_BusinessRuleSetManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPBusinessRuleSetService', 'BusinessProcess_BPBusinessRuleSetAPIService'];
 
-    function BusinessProcess_BP_BusinessRuleSetManagementController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPBusinessRuleSetService) {
+    function BusinessProcess_BP_BusinessRuleSetManagementController($scope, UtilsService, VRUIUtilsService, BusinessProcess_BPBusinessRuleSetService, BusinessProcess_BPBusinessRuleSetAPIService) {
         var gridAPI;
         var filter = {};
 
@@ -37,6 +37,10 @@
                 };
 
                 BusinessProcess_BPBusinessRuleSetService.addBusinessRuleSet(onBusinessRuleSetAdded);
+            }
+
+            $scope.hasAddBusinessRuleSet = function () {
+                return BusinessProcess_BPBusinessRuleSetAPIService.HasAddBusinessRuleSet();
             }
         }
 
