@@ -1,6 +1,7 @@
 ﻿using CDRComparison.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace CDRComparison.Data.SQL
 {
     public class PartialMatchCDRDataManager : BaseSQLDataManager, IPartialMatchCDRDataManager
     {
+        #region Constructors / Fields
+
         public PartialMatchCDRDataManager()
             : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
         {
@@ -17,7 +20,7 @@ namespace CDRComparison.Data.SQL
         }
 
         static string[] s_Columns = new string[] {
-              "SystemCDPN"
+            "SystemCDPN"
             ,"PartnerCDPN"
             ,"SystemCGPN"
             ,"PartnerCGPN"
@@ -27,6 +30,9 @@ namespace CDRComparison.Data.SQL
             ,"PartnerDurationInSec"
         };
 
+        #endregion
+
+        #region Public Methods
 
         public void ApplyPartialMatchCDRsToDB(object preparedNumberProfiles)
         {
@@ -41,7 +47,7 @@ namespace CDRComparison.Data.SQL
             {
                 TableName = "[dbo].[PartialMatchCDR]",
                 Stream = streamForBulkInsert,
-                ColumnNames=s_Columns,
+                ColumnNames = s_Columns,
                 TabLock = true,
                 KeepIdentity = true,
                 FieldSeparator = '^'
@@ -67,5 +73,37 @@ namespace CDRComparison.Data.SQL
                                     record.PartnerDurationInSec
                                     );
         }
+
+        public IEnumerable<PartialMatchCDR> GetPartialMatchCDRs()
+        {
+            return GetItemsSP("dbo.sp_PartialMatchCDR_GetAll", PartialMatchCDRMapper);
+        }
+
+        public int GetPartialMatchCDRsCount()
+        {
+            object count = ExecuteScalarSP("dbo.sp_PartialMatchCDR_GetCount");
+            return (int)count;
+        }
+
+        #endregion
+
+        #region Mappers
+
+        PartialMatchCDR PartialMatchCDRMapper(IDataReader reader)
+        {
+            return new PartialMatchCDR()
+            {
+                SystemCDPN = GetReaderValue<string>(reader, "SystemCDPN"),
+                PartnerCDPN = GetReaderValue<string>(reader, "PartnerCDPN"),
+                SystemCGPN = GetReaderValue<string>(reader, "SystemCGPN"),
+                PartnerCGPN = GetReaderValue<string>(reader, "PartnerCGPN"),
+                SystemTime = GetReaderValue<DateTime>(reader, "SystemTime"),
+                PartnerTime = GetReaderValue<DateTime>(reader, "PartnerTime"),
+                SystemDurationInSec = GetReaderValue<decimal>(reader, "SystemDurationInSec"),
+                PartnerDurationInSec = GetReaderValue<decimal>(reader, "PartnerDurationInSec")
+            };
+        }
+        
+        #endregion
     }
 }

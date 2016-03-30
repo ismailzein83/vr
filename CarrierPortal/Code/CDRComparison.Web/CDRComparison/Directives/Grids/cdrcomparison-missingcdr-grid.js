@@ -32,21 +32,6 @@
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
-
-                    function getDirectiveAPI() {
-
-                        var directiveAPI = {};
-
-                        directiveAPI.loadGrid = function (query) {
-                            
-                        }
-
-                        directiveAPI.onUserAdded = function (userObject) {
-                            gridAPI.itemAdded(userObject);
-                        }
-
-                        return directiveAPI;
-                    }
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
