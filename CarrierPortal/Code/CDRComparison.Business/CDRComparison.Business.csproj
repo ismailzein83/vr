@@ -55,13 +55,16 @@
     <Compile Include="CDRComparisonManager.cs" />
     <Compile Include="CDRSourceManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DisputeCDRManager.cs" />
     <Compile Include="FileCDRSource.cs" />
+    <Compile Include="MissingCDRManager.cs" />
+    <Compile Include="PartialMatchCDRManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadCDRsFromSourceContext.cs" />
-    <Compile Include="ReadSampleFromFileContext.cs" />
-    <Compile Include="ReadCDRsFromFileContext.cs" />
-    <Compile Include="ReadFromFileContext.cs" />
-    <Compile Include="ReadSampleFromSourceContext.cs" />
+    <Compile Include="Context\ReadCDRsFromSourceContext.cs" />
+    <Compile Include="Context\ReadSampleFromFileContext.cs" />
+    <Compile Include="Context\ReadCDRsFromFileContext.cs" />
+    <Compile Include="Context\ReadFromFileContext.cs" />
+    <Compile Include="Context\ReadSampleFromSourceContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CDRComparison.Data\CDRComparison.Data.csproj">

@@ -121,6 +121,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CDRComparisonController.cs" />
     <Compile Include="Controllers\CDRSourceController.cs" />
+    <Compile Include="Controllers\DisputeCDRController.cs" />
+    <Compile Include="Controllers\MissingCDRController.cs" />
+    <Compile Include="Controllers\PartialMatchCDRController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -141,7 +144,9 @@
     <Content Include="CDRComparison\Directives\Templates\FlatFileReaderTemplate.html" />
     <Content Include="CDRComparison\Services\APIServices\CDRComparisonAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\CDRSourceAPIService.js" />
+    <Content Include="CDRComparison\Services\APIServices\DisputeCDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\MissingCDRAPIService.js" />
+    <Content Include="CDRComparison\Services\APIServices\PartialMatchCDRAPIService.js" />
     <Content Include="CDRComparison\Views\CDRComparison.html" />
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />
     <Content Include="CDRComparison\Views\CDRComparisonTaskEditor.html" />
