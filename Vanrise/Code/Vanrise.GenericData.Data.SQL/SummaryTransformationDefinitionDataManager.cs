@@ -40,7 +40,6 @@ namespace Vanrise.GenericData.Data.SQL
         {
             object summaryTransformationDefinitionID;
             string serializedObj = null;
-            summaryTransformationDefinition.CreatedTime = DateTime.Now;
             serializedObj = Vanrise.Common.Serializer.Serialize(summaryTransformationDefinition);
             int recordesEffected = ExecuteNonQuerySP("genericdata.sp_SummaryTransformationDefinition_Insert", out summaryTransformationDefinitionID, summaryTransformationDefinition.Name, serializedObj);
             summaryTransformationDefinitionId = (recordesEffected > 0) ? (int)summaryTransformationDefinitionID : -1;
