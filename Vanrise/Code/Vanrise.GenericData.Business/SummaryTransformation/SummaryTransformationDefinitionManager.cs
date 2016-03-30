@@ -35,7 +35,10 @@ namespace Vanrise.GenericData.Business
             var summaryTransformationDefinitions = GetCachedSummaryTransformationDefinitions();
             if (filter != null)
             {
-                Func<SummaryTransformationDefinition, bool> filterExpression = (x) => (filter.SummaryTransformationDefinitionIds.Contains(x.SummaryTransformationDefinitionId));
+                Func<SummaryTransformationDefinition, bool> filterExpression = (x) =>
+                     (!filter.RawItemRecordTypeId.HasValue || (filter.RawItemRecordTypeId.HasValue && filter.RawItemRecordTypeId.Value == x.RawItemRecordTypeId))
+                    && (!filter.SummaryItemRecordTypeId.HasValue || (filter.SummaryItemRecordTypeId.HasValue && filter.SummaryItemRecordTypeId.Value == x.SummaryItemRecordTypeId))
+                    ;
                 return summaryTransformationDefinitions.FindAllRecords(filterExpression).MapRecords(SummaryTransformationDefinitionInfoMapper);
             }
             else
