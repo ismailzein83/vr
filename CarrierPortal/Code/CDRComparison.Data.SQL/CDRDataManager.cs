@@ -11,7 +11,7 @@ namespace CDRComparison.Data.SQL
     public class CDRDataManager : BaseSQLDataManager, ICDRDataManager
     {
         public CDRDataManager()
-            : base("CDRComparisonDBConnStringKey")
+            : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
         {
 
         }
@@ -83,7 +83,7 @@ namespace CDRComparison.Data.SQL
         {
             InsertBulkToTable(preparedCDRs as BaseBulkInsertInfo);
         }
-        
+
         #endregion
     }
 }
