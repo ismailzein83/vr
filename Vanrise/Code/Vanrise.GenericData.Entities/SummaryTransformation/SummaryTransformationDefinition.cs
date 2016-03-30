@@ -31,8 +31,6 @@ namespace Vanrise.GenericData.Entities
         public UpdateExistingSummaryFromNewSettings UpdateExistingSummaryFromNewSettings { get; set; }
 
         public int DataRecordStorageId { get; set; }
-
-        public DateTime CreatedTime { get; set; }
     }
 
     public abstract class SummaryTransformationBatchRangeRetrieval
