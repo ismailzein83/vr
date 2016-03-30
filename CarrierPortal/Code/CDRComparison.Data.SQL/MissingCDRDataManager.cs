@@ -85,7 +85,14 @@ namespace CDRComparison.Data.SQL
 
         MissingCDR MissingCDRMapper(IDataReader reader)
         {
-            return new MissingCDR() { };
+            return new MissingCDR()
+            {
+                CDPN = GetReaderValue<string>(reader, "CDPN"),
+                CGPN = GetReaderValue<string>(reader, "CGPN"),
+                Time = GetReaderValue<DateTime>(reader, "Time"),
+                DurationInSec = GetReaderValue<decimal>(reader, "DurationInSec"),
+                IsPartnerCDR = GetReaderValue<bool>(reader, "IsPartnerCDR")
+            };
         }
         
         #endregion
