@@ -45,7 +45,7 @@ app.directive('vrGenericdataSummarytransformationdefinitionSelector', ['VR_Gener
     function getTemplate(attrs) {
         var label;
         if (attrs.hidelabel == undefined)
-            label = 'label="Type"';
+            label = 'label="Summary Transformation Definition"';
         var disabled = "";
         if (attrs.isdisabled)
             disabled = "vr-disabled='true'"
@@ -64,7 +64,7 @@ app.directive('vrGenericdataSummarytransformationdefinitionSelector', ['VR_Gener
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
         return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="SummaryTransformationDefinitionId"'
-               + 'entityname="Type" ' + label + '></vr-select>';
+               + 'entityname="Summary Transformation Definition" ' + label + '></vr-select>';
 
     }
 
@@ -83,13 +83,15 @@ app.directive('vrGenericdataSummarytransformationdefinitionSelector', ['VR_Gener
             }
 
             api.load = function (payload) {
-
+                var filter;
                 var selectedIds;
+
                 if (payload != undefined) {
+                    filter = payload.filter;
                     selectedIds = payload.selectedIds;
                 }
-
-                return VR_GenericData_SummaryTransformationDefinitionAPIService.GetSummaryTransformationDefinitionInfo().then(function (response) {
+                var serializedFilter = UtilsService.serializetoJson(filter);
+                return VR_GenericData_SummaryTransformationDefinitionAPIService.GetSummaryTransformationDefinitionInfo(serializedFilter).then(function (response) {
                     angular.forEach(response, function (item) {
                         ctrl.datasource.push(item);
 
