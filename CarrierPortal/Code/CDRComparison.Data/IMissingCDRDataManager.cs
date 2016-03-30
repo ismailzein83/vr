@@ -13,5 +13,7 @@ namespace CDRComparison.Data
         void ApplyMissingCDRsToDB(object preparedNumberProfiles);
 
         IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs);
+
+        int GetMissingCDRsCount();
     }
 }

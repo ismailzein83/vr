@@ -72,7 +72,13 @@ namespace CDRComparison.Data.SQL
         {
             return GetItemsSP("dbo.sp_MissingCDR_GetAll", MissingCDRMapper, isPartnerCDRs);
         }
-        
+
+        public int GetMissingCDRsCount()
+        {
+            object count = ExecuteScalarSP("dbo.sp_MissingCDR_GetCount");
+            return (int)count;
+        }
+
         #endregion
 
         #region Mappers
