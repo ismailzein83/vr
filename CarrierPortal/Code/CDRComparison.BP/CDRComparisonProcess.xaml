@@ -68,6 +68,18 @@
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PrepareCDRsForDBApplyStatus" />
       </Parallel.Variables>
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+          <Assign.To>
+            <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">new AsyncActivityStatus()</mca:CSharpValue>
+            </InArgument>
+          </Assign.Value>
+        </Assign>
         <cba1:LoadCDRs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadCDRs_3" IsPartnerCDRs="False">
           <cba1:LoadCDRs.CDRSource>
             <InArgument x:TypeArguments="ce:CDRSource">
@@ -80,7 +92,7 @@
             </InOutArgument>
           </cba1:LoadCDRs.OutputQueue>
         </cba1:LoadCDRs>
-        <cba1:LoadCDRs sap2010:WorkflowViewState.IdRef="LoadCDRs_4" IsPartnerCDRs="True">
+        <cba1:LoadCDRs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadCDRs_4" IsPartnerCDRs="True">
           <cba1:LoadCDRs.CDRSource>
             <InArgument x:TypeArguments="ce:CDRSource">
               <mca:CSharpValue x:TypeArguments="ce:CDRSource">Input.PartnerCDRSource</mca:CSharpValue>
@@ -91,12 +103,17 @@
               <mca:CSharpReference x:TypeArguments="vq:BaseQueue(ce:CDRBatch)">OutputCDRBatch</mca:CSharpReference>
             </InOutArgument>
           </cba1:LoadCDRs.OutputQueue>
-          <cba1:LoadCDRs.Status>
-            <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
-              <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsStatus</mca:CSharpReference>
-            </OutArgument>
-          </cba1:LoadCDRs.Status>
         </cba1:LoadCDRs>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">loadCDRsStatus.IsComplete</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+          </Assign.Value>
+        </Assign>
       </Sequence>
       <cba1:PrepareCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareCDRsForDBApply_2">
         <cba1:PrepareCDRsForDBApply.InputQueue>
@@ -157,7 +174,7 @@
           </OutArgument>
         </cba1:LoadOrderedCDRs.Status>
       </cba1:LoadOrderedCDRs>
-      <cba1:ProcessCDRs Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCDRs_1">
+      <cba1:ProcessCDRs sap2010:WorkflowViewState.IdRef="ProcessCDRs_1">
         <cba1:ProcessCDRs.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(ce:CDRBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(ce:CDRBatch)">OutputQueueOrderedCDRs</mca:CSharpReference>
@@ -183,6 +200,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">LoadOrderedCDRsStatus</mca:CSharpValue>
           </InArgument>
         </cba1:ProcessCDRs.PreviousActivityStatus>
+        <cba1:ProcessCDRs.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ProcessCDRsStatus</mca:CSharpReference>
+          </OutArgument>
+        </cba1:ProcessCDRs.Status>
       </cba1:ProcessCDRs>
       <cba1:PrepareMissingCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareMissingCDRsForDBApply_1">
         <cba1:PrepareMissingCDRsForDBApply.InputQueue>
@@ -287,22 +309,24 @@
         </cba1:ApplyDisputeCDRsToDB.PreviousActivityStatus>
       </cba1:ApplyDisputeCDRsToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbDY5A6MCDgIBAUEFhwEQAwGbA4gBBaECEAIBAkYHZBIDAdQDZQd6JAMBrwN7B4YBHAMBnAOUAQefAR4DAfoCoAEHugEaAwGpArsBB9ABKwMB6AHRAQfcASMDAccB3QEH8gEwAwGGAfMBB/4BKAIBZf8BB5QCKwIBJJUCB6ACIwIBA0cJUhkDAfIDUwljGQMB1QNyDXJnAwHLA2gNaHIDAcIDdw13fAMBuQNtDW18AwGwA4MBDYMBdAMBpgN+DX58AwGdA5wBDZwBdgMBiwOXAQ2XAXoDAfsCqAENqAGAAQMB6gK3AQ23AW4DAdoCowENowF6AwHKArIBDbIBigEDAboCrQENrQGAAQMBqgLIAQ3IAWoDAZkCvgENvgF4AwGJAs0BDc0BeQMB+QHDAQ3DAYMBAwHpAdkBDdkBcQMB2AHUAQ3UAXsDAcgB6gEN6gFqAwG3AeABDeABggEDAacB7wEN7wF+AwGXAeUBDeUBiAEDAYcB+wEN+wF2AgF29gEN9gGAAQIBZowCDYwCagIBVYICDYICeAIBRZECDZECeQIBNYcCDYcCgwECASWdAg2dAnECARSYAg2YAnsCAQRHZUdsAwGFBE8PT3QDAfwDSg9KZgMB8wNTU1NZAwHxA2APYHEDAegDWw9bdAMB3wNWD1ZnAwHWAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbDw5A7kCDgIBAUEFmAEQAwGrA5kBBbcCEAIBAkYHdRIDAeQDdgeLASQDAb8DjAEHlwEcAwGsA6UBB7ABHgMBigOxAQfQARoDAakC0QEH5gErAwHoAecBB/IBIwMBxwHzAQeIAjADAYYBiQIHlAIoAgFllQIHqgIrAgEkqwIHtgIjAgEDRwlSEgMBmARTCV4ZAwGEBF8JahkDAfADawl0EgMB5QODAQ2DAWcDAdsDeQ15cgMB0gOIAQ2IAXwDAckDfg1+fAMBwAOUAQ2UAXQDAbYDjwENjwF8AwGtA60BDa0BdgMBmwOoAQ2oAXoDAYsDuQENuQGAAQMB+gLIAQ3IAW4DAeoCtAENtAF6AwHaAsMBDcMBigEDAcoCzQENzQFyAwG6Ar4BDb4BgAEDAaoC3gEN3gFqAwGZAtQBDdQBeAMBiQLjAQ3jAXkDAfkB2QEN2QGDAQMB6QHvAQ3vAXEDAdgB6gEN6gF7AwHIAYACDYACagMBtwH2AQ32AYIBAwGnAYUCDYUCfgMBlwH7AQ37AYgBAwGHAZECDZECdgIBdowCDYwCgAECAWaiAg2iAmoCAVWYAg2YAngCAUWnAg2nAnkCATWdAg2dAoMBAgElswINswJxAgEUrgINrgJ7AgEETw9PdAMBogRKD0pxAwGZBFNlU2wDAZcEWw9bdAMBjgRWD1ZmAwGFBF9lX2sDAYMEZw9ndAMB+gNiD2JnAwHxA3I1cjkDAe8Dbg9ubwMB5gM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="LoadCDRs_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="LoadCDRs_4" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="LoadCDRs_3" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="LoadCDRs_4" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="264,412">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="PrepareCDRsForDBApply_2" sap:VirtualizedContainerService.HintSize="200,208" />
-      <sap2010:ViewStateData Id="ApplyCDRsToDB_2" sap:VirtualizedContainerService.HintSize="200,208" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1994,254" />
+      <sap2010:ViewStateData Id="PrepareCDRsForDBApply_2" sap:VirtualizedContainerService.HintSize="200,412" />
+      <sap2010:ViewStateData Id="ApplyCDRsToDB_2" sap:VirtualizedContainerService.HintSize="200,412" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1994,458" />
       <sap2010:ViewStateData Id="LoadOrderedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareMissingCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -312,14 +336,14 @@
       <sap2010:ViewStateData Id="PrepareDisputeCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyDisputeCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1994,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,504">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,708">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,584" />
+      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,788" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

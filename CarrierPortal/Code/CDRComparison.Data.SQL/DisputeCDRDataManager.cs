@@ -11,7 +11,7 @@ namespace CDRComparison.Data.SQL
     public class DisputeCDRDataManager : BaseSQLDataManager, IDisputeCDRDataManager
     {
         public DisputeCDRDataManager()
-            : base("CDRComparisonDBConnStringKey")
+            : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
         {
 
         }
@@ -42,8 +42,8 @@ namespace CDRComparison.Data.SQL
                 TableName = "[dbo].[DisputeCDR]",
                 Stream = streamForBulkInsert,
                 ColumnNames=s_Columns,
-                TabLock = false,
-                KeepIdentity = false,
+                TabLock = true,
+                KeepIdentity = true,
                 FieldSeparator = '^'
             };
         }

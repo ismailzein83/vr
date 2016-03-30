@@ -11,7 +11,7 @@ namespace CDRComparison.Data.SQL
     public class MissingCDRDataManager : BaseSQLDataManager, IMissingCDRDataManager
     {
         public MissingCDRDataManager()
-            : base("CDRComparisonDBConnStringKey")
+            : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
         {
 
         }
@@ -39,8 +39,8 @@ namespace CDRComparison.Data.SQL
                 TableName = "[dbo].[MissingCDR]",
                 Stream = streamForBulkInsert,
                 ColumnNames=s_Columns,
-                TabLock = false,
-                KeepIdentity = false,
+                TabLock = true,
+                KeepIdentity = true,
                 FieldSeparator = '^'
             };
         }
@@ -53,11 +53,12 @@ namespace CDRComparison.Data.SQL
         public void WriteRecordToStream(MissingCDR record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
                                     record.CDPN,
                                     record.CGPN,
+                                    record.Time,
                                     record.DurationInSec,
-                                   record.IsPartnerCDR
+                                   record.IsPartnerCDR ? "1" : "0"
                                     );
         }
     }

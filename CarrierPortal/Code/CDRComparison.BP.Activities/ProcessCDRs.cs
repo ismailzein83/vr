@@ -83,6 +83,11 @@ namespace CDRComparison.BP.Activities
                 while (!ShouldStop(handle) && hasItem);
             });
 
+            if(batch.CDRs.Count() >0)
+            {
+                ProcessCDRBach(inputArgument, batch);
+            }
+
         }
         private void ProcessCDRBach(ProcessCDRsInput inputArgument, CDRBatch cdrBatch)
         {

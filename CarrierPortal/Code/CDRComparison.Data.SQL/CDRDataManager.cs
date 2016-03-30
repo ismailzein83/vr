@@ -18,12 +18,12 @@ namespace CDRComparison.Data.SQL
 
         static string[] s_Columns = new string[]
         {
-            "ID",
             "CDPN",
             "CGPN",
-            "Time",
-            "DurationInSec",
-            "IsPartnerCDR"
+             "IsPartnerCDR",
+            "AttemptTime",
+            "Duration",
+           
         };
 
         public void LoadCDRs(Action<CDR> onBatchReady)
@@ -38,6 +38,7 @@ namespace CDRComparison.Data.SQL
                         CGPN = (reader["CGPN"] as string),
                         DurationInSec = (GetReaderValue<Decimal>(reader, "Duration")),
                         Time = (GetReaderValue<DateTime>(reader, "AttemptTime")),
+                        IsPartnerCDR = (GetReaderValue<Boolean>(reader, "IsPartnerCDR")),
                     });
                 }
             });
@@ -55,12 +56,13 @@ namespace CDRComparison.Data.SQL
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord
             (
-                "0^{0}^{1}^{2}^{3}^{4}",
+                "{0}^{1}^{2}^{3}^{4}",
                 record.CDPN,
                 record.CGPN,
+                record.IsPartnerCDR ? "1" : "0",
                 record.Time,
-                record.DurationInSec,
-                record.IsPartnerCDR
+                record.DurationInSec
+               
             );
         }
 
@@ -73,8 +75,8 @@ namespace CDRComparison.Data.SQL
                 TableName = "[dbo].[CDR]",
                 Stream = streamForBulkInsert,
                 ColumnNames = s_Columns,
-                TabLock = false,
-                KeepIdentity = false,
+                TabLock = true,
+                KeepIdentity = true,
                 FieldSeparator = '^'
             };
         }
