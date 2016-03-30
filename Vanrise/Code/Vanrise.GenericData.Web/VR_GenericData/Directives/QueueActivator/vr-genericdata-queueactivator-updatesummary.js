@@ -60,7 +60,7 @@
                         var dataSummaryTransformationDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         var selectorPayload = {};
                         var filter = {}
-                        filter.RawItemRecordTypeId = payload.DataRecordTypeId;
+                        filter.SummaryItemRecordTypeId = payload.DataRecordTypeId;
                         selectorPayload.filter = filter;
 
                         if (selectedId != undefined)
