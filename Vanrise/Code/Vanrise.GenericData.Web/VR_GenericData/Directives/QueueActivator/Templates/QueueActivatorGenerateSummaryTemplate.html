@@ -1,0 +1,24 @@
+﻿<div vr-loader="ctrl.isLoadingGenerateSummaryActivatorSection">
+    <vr-columns width="1/3row">
+        <vr-genericdata-summarytransformationdefinition-selector on-ready="ctrl.onSummaryTransformationDefinitionSelectorReady"
+                                                                 onselectionchanged="ctrl.onSelectionChangedSummaryTransformationDefinition"
+                                                                 isrequired="true"
+                                                                 hideremoveicon>
+
+        </vr-genericdata-summarytransformationdefinition-selector>
+    </vr-columns>
+
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModal.nextStages"
+                   selectedvalues="scopeModal.selectedNextStage"
+                   datatextfield="stageName"
+                   datavaluefield="stageName"
+                   label="Next Stage"
+                   isrequired="true"
+                   hideremoveicon>
+
+        </vr-select>
+    </vr-columns>
+
+</div>
+
