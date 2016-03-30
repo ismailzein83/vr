@@ -94,9 +94,9 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1001,'Countries','Countries','#/view/Common/Views/Country/CountryManagement',102,'VRCommon/Country/GetFilteredCountries',null,null,null,0,5),
 (1002,'Cities','Cities','#/view/Common/Views/City/CityManagement',102,'VRCommon/City/GetFilteredCities',null,null,null,0,10),
-(1003,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',102,null,null,null,null,0,5),
-(1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,null,null,null,null,0,6),
-(1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,null,null,null,null,0,15)
+(1003,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',102,null,null,null,null,0,15),
+(1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,null,null,null,null,0,20),
+(1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,null,null,null,null,0,25)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
