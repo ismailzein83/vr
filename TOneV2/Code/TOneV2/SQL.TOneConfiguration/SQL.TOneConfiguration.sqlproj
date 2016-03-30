@@ -302,6 +302,7 @@
     <Build Include="genericdata\Stored Procedures\sp_SummaryTransformationDefinition_GetAll.sql" />
     <Build Include="bp\Stored Procedures\sp_BPBusinessRuleSet_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPBusinessRuleSet_GetAll.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPBusinessRuleSet_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

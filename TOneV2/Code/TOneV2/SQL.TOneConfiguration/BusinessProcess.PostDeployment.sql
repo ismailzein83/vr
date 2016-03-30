@@ -41,7 +41,7 @@ as (select * from (values
 (6002,'Monitor','Monitor','#/view/BusinessProcess/Views/BPInstance/BPInstanceMonitor',601,'BusinessProcess_BP/BPInstance/GetUpdated',null,null,null,0,2),
 (6003,'Log','Log History','#/view/BusinessProcess/Views/BPInstance/BPInstanceHistory',601,'BusinessProcess_BP/BPInstance/GetFilteredBPInstances',null,null,null,0,3),
 (6004,'My Tasks','Tasks','#/view/BusinessProcess/Views/BPTask/BPTaskMonitor',601,'BusinessProcess_BP/BPTask/GetMyUpdatedTasks',null,null,null,0,4),
-(6005,'Business Rules','Business Rules','#/view/BusinessProcess/Views/BPBusinessRule/BPBusinessRuleSetManagement',601,null,null,null,null,0,5)
+(6005,'Business Rules','Business Rules','#/view/BusinessProcess/Views/BPBusinessRule/BPBusinessRuleSetManagement',601,'BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null,null,null,0,5)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -85,7 +85,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1501,'BusinessProcess_BP_BPDefinition','Management',601,0,'["View"]'),
 (1502,'BusinessProcess_BP_BPTask','BPTask',601,0,'["View"]'),
-(1503,'BusinessProcess_BP_BPInstance','BPInstance',601,0,'["Log","Monitor"]')
+(1503,'BusinessProcess_BP_BPInstance','BPInstance',601,0,'["Log","Monitor"]'),
+(1504,'BusinessProcess_BP_BusinessRuleSet','Business Rule Set',601,0,'["View", "Add", "Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -127,7 +128,10 @@ as (select * from (values
 ('BusinessProcess_BP/BPValidationMessage/GetUpdated',null),
 ('BusinessProcess_BP/BPValidationMessage/GetBeforeId',null),
 ('BusinessProcess_BP/BPValidationMessage/GetFilteredBPValidationMessage',null),
-('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View')
+('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View'),
+('BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets','BusinessProcess_BP_BusinessRuleSet: View'),
+('BusinessProcess_BP/BPBusinessRuleSet/UpdateBusinessRuleSet','BusinessProcess_BP_BusinessRuleSet: Edit'),
+('BusinessProcess_BP/BPBusinessRuleSet/AddBusinessRuleSet','BusinessProcess_BP_BusinessRuleSet: Add')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
