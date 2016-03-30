@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.CodePreparation.Entities
 {
-    public enum CodeItemStatus
+    public enum CodeItemDraftStatus
     {
         [Description("Existing Not Changed")]
         ExistingNotChanged = 0,
@@ -21,6 +21,16 @@ namespace TOne.WhS.CodePreparation.Entities
         NewMoved = 4
     }
 
+
+    public enum CodeItemStatus
+    {
+        [Description("Pending Open")]
+        PendingOpen = 0,
+
+        [Description("Pending Closed")]
+        PendingClosed = 1
+    }
+
     public class CodeItem
     {
         public long? CodeId { get; set; }
@@ -32,9 +42,11 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public DateTime? EED { get; set; }
 
-        public CodeItemStatus Status { get; set; }
+        public CodeItemDraftStatus DraftStatus { get; set; }
 
-        public string StatusDescription { get; set; }
+        public CodeItemStatus? Status { get; set; }
+
+        public string DraftStatusDescription { get; set; }
 
         /// <summary>
         /// in case the Code is moved, this property stores the Zone Name of the other code. the other code is the existing code if this is the new one and vice versa

@@ -19,15 +19,21 @@ app.directive('vrIcon', [function ($compile) {
         restrict: 'E',
         scope: {
             icontype: '=',
-            text:'='
+            text: '=',
+            iconurl: '=',
+            tooltip: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             ctrl.icon = "";
             ctrl.class = "";
-            var value = ctrl.icontype;
-            ctrl.icon = option[value] != undefined ? option[value] : { value: "Client/Images/true.png", isimage: true };
-          
+            if (ctrl.icontype != undefined) {
+                var value = ctrl.icontype;
+                ctrl.icon = option[value] != undefined ? option[value] : { value: "Client/Images/true.png", isimage: true };
+            }
+            else if (ctrl.iconurl != undefined) {
+                ctrl.icon = { value: ctrl.iconurl, isimage: true };
+            }
 
 
         },
@@ -50,8 +56,12 @@ app.directive('vrIcon', [function ($compile) {
             text = ctrl.text;
 
         var template = ''
-        if (ctrl.icon.isimage)
-            template += '<div style="text-align: left;"><img style="width:12px;height:12px" title="' + ctrl.icontype + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
+        if (ctrl.icon.isimage) {
+            if (ctrl.icontype != undefined)
+                template += '<div style="text-align: left;"><img style="width:15px;height:15px" title="' + ctrl.icontype + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
+            else if (ctrl.tooltip != undefined)
+                template += '<div style="text-align: left;"><img style="width:15px;height:15px" title="' + ctrl.tooltip + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>'
+        }
         else
             template += '<div style="text-align: left;"><span class="glyphicon ' + ctrl.icon.value + '"  /></div>'
 

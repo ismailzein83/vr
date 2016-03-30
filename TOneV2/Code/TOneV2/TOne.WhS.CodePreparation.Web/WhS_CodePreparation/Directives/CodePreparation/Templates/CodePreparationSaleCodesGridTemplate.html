@@ -1,17 +1,24 @@
-﻿ <vr-datagrid datasource="salecodes"
-                 on-ready="onGridReady"
-                 dataretrievalfunction="dataRetrievalFunction"
-                 pagingtype="'PagingOnScroll'"
-                 menuactions="gridMenuActions"
-                 defaultsortbyfieldname="'Code'">
-        <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting>
-            <vr-check value="dataItem.IsSelected" ng-show="dataItem.Status == 0" onvaluechanged="viewScope.onCodeChecked(dataItem)"></vr-check>
-        </vr-datagridcolumn>
+﻿<vr-datagrid datasource="salecodes"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             defaultsortbyfieldname="'Code'">
+    <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting>
+        <vr-check value="dataItem.IsSelected" ng-show="dataItem.DraftStatus == 0" onvaluechanged="viewScope.onCodeChecked(dataItem)"></vr-check>
+    </vr-datagridcolumn>
 
-        <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Begin Effective Date'" field="'BED'" type="'Date'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'End Effective Date'" field="'EED'" type="'Date'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'"></vr-datagridcolumn>
-     <vr-datagridcolumn headertext="'Moved To Zone'" field="'MovedTo'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-     <vr-datagridcolumn headertext="'Moved From Zone'" field="'MovedFrom'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
- </vr-datagrid>
+    <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Begin Effective Date'" field="'BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'End Effective Date'" field="'EED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Draft Status'" field="'DraftStatusDescription'" ng-show="ShowDraftStatus" type="'Text'">
+        <span ng-show="dataItem.ShowDraftStatusIcon">
+            <vr-icon iconurl="dataItem.DraftStatusIconUrl" tooltip="dataItem.DraftStatusIconTooltip"></vr-icon>
+        </span>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'">
+        <span ng-show="dataItem.ShowStatus">
+            <vr-icon iconurl="dataItem.StatusIconUrl" tooltip="dataItem.StatusIconTooltip"></vr-icon>
+        </span>
+    </vr-datagridcolumn>
+</vr-datagrid>

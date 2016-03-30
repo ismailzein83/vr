@@ -48,7 +48,7 @@
 
         }
         function load() {
-            $scope.title = UtilsService.buildTitleForUploadEditor("Code Prepartion Sheet")
+            $scope.title = UtilsService.buildTitleForUploadEditor("Numbering Plan Sheet")
         }
     };
 

@@ -158,10 +158,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_CodePreparation\Constant\CodeItemStatusEnum.js" />
+    <Content Include="WhS_CodePreparation\Constant\CodeItemDraftStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\ModuleConfig.js" />
     <Content Include="WhS_CodePreparation\Constant\NewCPOutputResultEnum.js" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\Templates\CodePreparationSaleCodesGridTemplate.html" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\vr-whs-codepreparation-codesgrid.js" />
+    <Content Include="WhS_CodePreparation\Images\Closed.png" />
+    <Content Include="WhS_CodePreparation\Images\MovedFrom.png" />
+    <Content Include="WhS_CodePreparation\Images\MovedTo.png" />
+    <Content Include="WhS_CodePreparation\Images\New.png" />
+    <Content Include="WhS_CodePreparation\Images\PendingClosed.png" />
+    <Content Include="WhS_CodePreparation\Images\PendingOpen.png" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationAPIService.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationController.js" />

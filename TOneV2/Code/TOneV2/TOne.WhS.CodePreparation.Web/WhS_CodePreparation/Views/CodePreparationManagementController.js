@@ -64,6 +64,7 @@
             $scope.countriesTreeValueChanged = function () {
 
                 if ($scope.currentNode != undefined) {
+                    $scope.selectedCodes.length = 0;
                     if ($scope.currentNode.type == 'Zone') {
                         checkState();
                         codesGridAPI.clearUpdatedItems();
@@ -390,7 +391,8 @@
                 ZoneId: $scope.currentNode.nodeId,
                 ZoneName: $scope.currentNode.nodeName,
                 ZoneItemStatus: $scope.currentNode.status,
-                CountryId: $scope.currentNode.countryId
+                CountryId: $scope.currentNode.countryId,
+                ShowDraftStatus: $scope.hasState
             };
         }
 

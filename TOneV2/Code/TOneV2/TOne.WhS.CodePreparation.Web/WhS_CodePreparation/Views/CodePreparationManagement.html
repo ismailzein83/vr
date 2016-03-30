@@ -26,7 +26,7 @@
                 <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="SearchGroup" data-onclick="newZoneClicked"></vr-button>
                 <vr-button type="Add" text="New Code" ng-show="currentNode != undefined && currentNode.type == 'Zone'" formname="formFilter" validationcontext="SearchGroup" data-onclick="newCodeClicked"></vr-button>
                 <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="SearchGroup" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
-                <vr-button type="Close" formname="formFilter" validationcontext="SearchGroup" data-onclick="closeCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
+                <vr-button type="End" formname="formFilter" validationcontext="SearchGroup" data-onclick="closeCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
