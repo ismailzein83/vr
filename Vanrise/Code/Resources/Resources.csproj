@@ -99,6 +99,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Databases\IDs ranges\Configuration\bp.BPBusinessRuleActionType.txt" />
+    <Content Include="Databases\IDs ranges\Configuration\bp.BPBusinessRuleDefinition.txt" />
     <Content Include="Databases\IDs ranges\Configuration\bp.BPDefinition.txt" />
     <Content Include="Databases\IDs ranges\Configuration\bp.BPTaskType.txt" />
     <Content Include="Databases\IDs ranges\Configuration\common.TemplateConfig.txt" />
