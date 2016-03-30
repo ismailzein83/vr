@@ -1,12 +1,22 @@
-﻿using System;
+﻿using CDRComparison.Data;
+using CDRComparison.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace CDRComparison.Business
 {
-    class MissingCDRManager
+    public class MissingCDRManager
     {
+        public IDataRetrievalResult<MissingCDR> GetFilteredMissingCDRs(DataRetrievalInput<MissingCDRQuery> input)
+        {
+            IMissingCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IMissingCDRDataManager>();
+            IEnumerable<MissingCDR> missingCDRs = dataManager.GetMissingCDRs(input.Query.IsPartnerCDRs);
+            return DataRetrievalManager.Instance.ProcessResult(input, missingCDRs.ToBigResult(input, null));
+        }
     }
 }

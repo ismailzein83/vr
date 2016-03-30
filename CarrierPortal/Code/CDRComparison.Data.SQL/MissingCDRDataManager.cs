@@ -1,6 +1,7 @@
 ﻿using CDRComparison.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace CDRComparison.Data.SQL
 {
     public class MissingCDRDataManager : BaseSQLDataManager, IMissingCDRDataManager
     {
+        #region Constructors / Fields
+
         public MissingCDRDataManager()
             : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
         {
@@ -23,7 +26,10 @@ namespace CDRComparison.Data.SQL
             ,"DurationInSec"
             ,"IsPartnerCDR"
         };
+        
+        #endregion
 
+        #region Public Methods
 
         public void ApplyMissingCDRsToDB(object preparedNumberProfiles)
         {
@@ -38,7 +44,7 @@ namespace CDRComparison.Data.SQL
             {
                 TableName = "[dbo].[MissingCDR]",
                 Stream = streamForBulkInsert,
-                ColumnNames=s_Columns,
+                ColumnNames = s_Columns,
                 TabLock = true,
                 KeepIdentity = true,
                 FieldSeparator = '^'
@@ -61,5 +67,21 @@ namespace CDRComparison.Data.SQL
                                    record.IsPartnerCDR ? "1" : "0"
                                     );
         }
+
+        public IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs)
+        {
+            return GetItemsSP("dbo.sp_MissingCDR_GetAll", MissingCDRMapper, isPartnerCDRs);
+        }
+        
+        #endregion
+
+        #region Mappers
+
+        MissingCDR MissingCDRMapper(IDataReader reader)
+        {
+            return new MissingCDR() { };
+        }
+        
+        #endregion
     }
 }
