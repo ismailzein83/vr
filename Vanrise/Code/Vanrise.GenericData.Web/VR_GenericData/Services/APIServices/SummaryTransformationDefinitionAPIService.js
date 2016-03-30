@@ -17,8 +17,8 @@
             GetSummaryTransformationDefinitionInfo: GetSummaryTransformationDefinitionInfo,
             GetSummaryBatchIntervalSourceTemplates: GetSummaryBatchIntervalSourceTemplates
         });
-        function GetSummaryTransformationDefinitionInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetSummaryTransformationDefinitionInfo"), { filter: filter });
+        function GetSummaryTransformationDefinitionInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetSummaryTransformationDefinitionInfo"), { serializedFilter: serializedFilter });
         }
         function GetFilteredSummaryTransformationDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetFilteredSummaryTransformationDefinitions'), input);
