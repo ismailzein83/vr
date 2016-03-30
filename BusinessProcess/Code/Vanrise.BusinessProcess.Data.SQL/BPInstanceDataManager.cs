@@ -128,7 +128,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 RetryCount = GetReaderValue<int>(reader, "RetryCount"),
                 LastMessage = reader["LastMessage"] as string,
                 CreatedTime = (DateTime)reader["CreatedTime"],
-                StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime")
+                StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime"),
+                InitiatorUserId = GetReaderValue<int>(reader, "InitiatorUserId")
             };
 
             string inputArg = reader["InputArgument"] as string;
@@ -138,9 +139,10 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return instance;
         }
 
-        private BPInstanceDetail BPInstanceDetailMapper(IDataReader reader) 
+        private BPInstanceDetail BPInstanceDetailMapper(IDataReader reader)
         {
-            return new BPInstanceDetail() {
+            return new BPInstanceDetail()
+            {
                 Entity = BPInstanceMapper(reader)
             };
         }
