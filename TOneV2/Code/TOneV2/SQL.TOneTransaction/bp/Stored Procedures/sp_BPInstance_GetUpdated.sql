@@ -23,6 +23,7 @@ IF (@TimestampAfter IS NULL)
       ,[RetryCount]
       ,[CreatedTime]
       ,[StatusUpdatedTime]
+      ,[InitiatorUserId]
 	  ,[timestamp]
             INTO #temp_table
             FROM [BP].[BPInstance] 
@@ -49,6 +50,7 @@ IF (@TimestampAfter IS NULL)
       ,[RetryCount]
       ,[CreatedTime]
       ,[StatusUpdatedTime]
+      ,[InitiatorUserId]
 	  ,[timestamp]
             INTO #temp2_table
             FROM [BP].[BPInstance] 

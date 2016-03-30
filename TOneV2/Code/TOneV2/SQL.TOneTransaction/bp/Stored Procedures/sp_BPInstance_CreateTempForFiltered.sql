@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [bp].[sp_BPInstance_CreateTempForFiltered]
+﻿CREATE PROCEDURE [bp].[sp_BPInstance_CreateTempForFiltered]
 	@TempTableName varchar(200),
 	@ArrDefinitionID nvarchar(max),
 	@ArrStatus nvarchar(max),
@@ -26,6 +25,7 @@ BEGIN
 				  ,[RetryCount]
 				  ,[CreatedTime]
 				  ,[StatusUpdatedTime]
+				  ,[InitiatorUserId]
 			INTO #RESULT
 			FROM bp.[BPInstance] as bps WITH(NOLOCK)
 			WHERE (@ArrStatus is NULL or bps.ExecutionStatus in (SELECT ParsedString FROM ParseStringList(@ArrStatus) ) ) and 

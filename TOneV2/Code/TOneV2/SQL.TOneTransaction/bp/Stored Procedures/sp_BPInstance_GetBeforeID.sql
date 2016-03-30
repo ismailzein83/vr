@@ -21,6 +21,7 @@ BEGIN
       ,[RetryCount]
       ,[CreatedTime]
       ,[StatusUpdatedTime]
+      ,[InitiatorUserId]
 	  ,[timestamp]
 	FROM [BP].[BPInstance] 
 	WHERE ID < @LessThanID AND  (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable)) 

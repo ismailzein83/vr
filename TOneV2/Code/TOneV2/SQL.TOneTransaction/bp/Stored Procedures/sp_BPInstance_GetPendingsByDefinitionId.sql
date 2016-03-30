@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [bp].[sp_BPInstance_GetPendingsByDefinitionId]
+﻿CREATE PROCEDURE [bp].[sp_BPInstance_GetPendingsByDefinitionId]
 	@DefinitionID int,
 	@Statuses varchar(max),
 	@NbOrRows int,
@@ -28,7 +27,8 @@ BEGIN
       ,[LastMessage]
       ,[RetryCount]
       ,[CreatedTime]
-      ,[StatusUpdatedTime]
+      ,[StatusUpdatedTime]      
+      ,[InitiatorUserId]
 	FROM bp.[BPInstance] bp WITH(NOLOCK)
 	JOIN @StatusesTable statuses ON bp.ExecutionStatus = statuses.[Status]
 	WHERE

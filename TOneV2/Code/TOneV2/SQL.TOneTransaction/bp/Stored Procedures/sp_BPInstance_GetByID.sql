@@ -18,6 +18,7 @@ BEGIN
       ,[RetryCount]
       ,[CreatedTime]
       ,[StatusUpdatedTime]
+      ,[InitiatorUserId]
 	FROM bp.[BPInstance] WITH(NOLOCK)
 	WHERE
 	ID = @ID_Local
