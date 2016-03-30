@@ -52,6 +52,7 @@
     <Compile Include="DisputeCDR\DisputeCDRBatch.cs" />
     <Compile Include="MissingCDR\MissingCDR.cs" />
     <Compile Include="MissingCDR\MissingCDRBatch.cs" />
+    <Compile Include="MissingCDR\MissingCDRQuery.cs" />
     <Compile Include="PartialMatchCDR\PartialMatchCDR.cs" />
     <Compile Include="CDRSample.cs" />
     <Compile Include="CDRFileReader.cs" />
