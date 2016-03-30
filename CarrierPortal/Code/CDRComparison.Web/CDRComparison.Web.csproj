@@ -141,6 +141,7 @@
     <Content Include="CDRComparison\Directives\Templates\FlatFileReaderTemplate.html" />
     <Content Include="CDRComparison\Services\APIServices\CDRComparisonAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\CDRSourceAPIService.js" />
+    <Content Include="CDRComparison\Services\APIServices\MissingCDRAPIService.js" />
     <Content Include="CDRComparison\Views\CDRComparison.html" />
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />
     <Content Include="CDRComparison\Views\CDRComparisonTaskEditor.html" />
