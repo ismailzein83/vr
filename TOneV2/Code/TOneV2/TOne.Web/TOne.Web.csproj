@@ -143,6 +143,9 @@
     <Reference Include="Vanrise.BI.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Business">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
     </Reference>

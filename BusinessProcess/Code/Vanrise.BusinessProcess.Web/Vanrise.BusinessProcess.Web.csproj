@@ -153,6 +153,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BPBusinessRuleDefinitionController.cs" />
+    <Compile Include="Controllers\BPBusinessRuleSetController.cs" />
     <Compile Include="Controllers\BPValidationMessageController.cs" />
     <Compile Include="Controllers\BPTaskTypeController.cs" />
     <Compile Include="Controllers\BPTaskController.cs" />
@@ -173,6 +175,14 @@
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
     <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\Templates\EmptyTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-stop-execution-action.js" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-exclude-item-action.js" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\bp-business-rule-set-detail.js" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\bp-business-rule-set-management-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\bp-business-rule-set-selector.js" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\Templates\BPBusinessRuleSetDetailTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\Templates\BPBusinessRuleSetGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-management-grid.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-selector.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPDefinitionGridTemplate.html" />
@@ -191,17 +201,24 @@
     <Content Include="BusinessProcess\Directives\BPValidationMessage\Templates\BPValidationMessageMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-monitor-grid.js" />
     <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskMonitorGridTemplate.html" />
+    <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleDefintionAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleSetAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPValidationMessageAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskTypeAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskAPIService.js" />
+    <Content Include="BusinessProcess\Services\BPBusinessRuleSetService.js" />
     <Content Include="BusinessProcess\Services\BPInstanceService.js" />
     <Content Include="BusinessProcess\Services\BPDefinitionService.js" />
     <Content Include="BusinessProcess\Services\BPSchedulerTaskService.js" />
     <Content Include="BusinessProcess\Services\BPValidationMessageService.js" />
     <Content Include="BusinessProcess\Services\BPTaskService.js" />
+    <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetManagement.html" />
+    <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetManagementController.js" />
+    <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetEditor.html" />
+    <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetEditorController.js" />
     <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagement.html" />
     <Content Include="BusinessProcess\Views\BPDefinition\BPDefinitionManagementController.js" />
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceHistory.html" />

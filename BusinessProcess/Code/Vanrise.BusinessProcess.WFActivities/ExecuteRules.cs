@@ -21,7 +21,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             List<BPViolatedRule> violatedBusinessRulesByTarget = new List<BPViolatedRule>(); ;
             bool stopExecutionFlag;
             
-            BPBusinessRuleManager bpBusinessRuleManager = new BPBusinessRuleManager();
+            BPBusinessRuleDefinitionManager bpBusinessRuleManager = new BPBusinessRuleDefinitionManager();
             List<BPBusinessRuleDefinition> bpBusinessRules = bpBusinessRuleManager.GetBPBusinessRuleDefinitions(businessRulesKey, context.GetSharedInstanceData().InstanceInfo.DefinitionID);
 
             IEnumerable<BusinessRule> rules = BuildBusinessRules(bpBusinessRules);
@@ -42,7 +42,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             foreach (BPBusinessRuleDefinition bpBusinessRule in bpBusinessRules)
             {
                 BPBusinessRuleAction action = bpRuleActionManager.GetBusinessRuleAction(bpBusinessRule.BPBusinessRuleDefinitionId);
-                BusinessRule rule = new BusinessRule() { Condition = bpBusinessRule.Settings.Condition, Action = action.Settings.Action };
+                BusinessRule rule = new BusinessRule() { Condition = bpBusinessRule.Settings.Condition, Action = action.Details.Settings.Action };
                 rules.Add(rule);
             }
             return rules;

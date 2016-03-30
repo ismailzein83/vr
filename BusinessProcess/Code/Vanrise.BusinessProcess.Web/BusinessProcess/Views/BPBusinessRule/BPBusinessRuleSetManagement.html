@@ -1,0 +1,27 @@
+﻿<vr-panel ng-controller="BusinessProcess_BP_BusinessRuleSetManagementController">
+
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <businessprocess-bp-definition-selector ismultipleselection selectedvalues="bpDefitions" on-ready="onBPDefinitionDirectiveReady"></businessprocess-bp-definition-selector>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addBusinessRuleSet"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <businessprocess-bp-business-rule-set-management-grid on-ready="onGridReady"></businessprocess-bp-business-rule-set-management-grid>
+            </vr-columns>
+        </vr-row>
+
+    </vr-form>
+
+</vr-panel>

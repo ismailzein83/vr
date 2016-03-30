@@ -57,9 +57,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPBusinessRuleSetManager.cs" />
     <Compile Include="BPBusinessRuleActionManager.cs" />
     <Compile Include="BPBusinessRuleActionTypeManager.cs" />
-    <Compile Include="BPBusinessRuleManager.cs" />
+    <Compile Include="BPBusinessRuleDefinitionManager.cs" />
     <Compile Include="BPEventManager.cs" />
     <Compile Include="BPTaskTypeManager.cs" />
     <Compile Include="BPTaskManager.cs" />

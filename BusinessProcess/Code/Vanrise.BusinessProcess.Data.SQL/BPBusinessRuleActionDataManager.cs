@@ -32,15 +32,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
             BPBusinessRuleAction BPBusinessRuleAction = new BPBusinessRuleAction()
             {
                 BPBusinessRuleActionId = (int)reader["ID"],
-                BPBusinessRuleDefinitionId = (int)reader["BusinessRuleDefinitionId"],
-                Settings = Serializer.Deserialize<BPBusinessRuleActionSettings>(reader["Settings"] as string)
+                Details = new BPBusinessRuleActionDetails()
+                {
+                    BPBusinessRuleDefinitionId = (int)reader["BusinessRuleDefinitionId"],
+                    Settings = Serializer.Deserialize<BPBusinessRuleActionSettings>(reader["Settings"] as string)
+                }
             };
             return BPBusinessRuleAction;
         }
         #endregion
-
-
-
-
     }
 }

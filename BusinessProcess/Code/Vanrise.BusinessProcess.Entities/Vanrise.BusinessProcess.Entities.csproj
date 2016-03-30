@@ -74,7 +74,12 @@
     <Compile Include="BPTrackingMessageDetail.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleAction.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleActionConfig.cs" />
+    <Compile Include="BusinessRules\BPBusinessRuleDefinitionDetail.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleDefinition.cs" />
+    <Compile Include="BusinessRules\BPBusinessRuleSet.cs" />
+    <Compile Include="BusinessRules\BPBusinessRuleSetDetail.cs" />
+    <Compile Include="BusinessRules\BPBusinessRuleSetInfoFilter.cs" />
+    <Compile Include="BusinessRules\BPBusinessRuleSetQuery.cs" />
     <Compile Include="BusinessRules\BPValidationMessageQuery.cs" />
     <Compile Include="BusinessRules\BPViolatedRule.cs" />
     <Compile Include="BusinessRules\BPValitaionMessageUpdateOutput.cs" />

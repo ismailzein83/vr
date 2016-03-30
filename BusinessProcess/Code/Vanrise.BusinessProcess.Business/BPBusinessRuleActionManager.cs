@@ -24,7 +24,7 @@ namespace Vanrise.BusinessProcess.Business
             {
                 IBPBusinessRuleActionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleActionDataManager>();
                 var data = dataManager.GetBPBusinessRuleActions();
-                return data.ToDictionary(cn => cn.BPBusinessRuleDefinitionId, cn => cn);
+                return data.ToDictionary(cn => cn.Details.BPBusinessRuleDefinitionId, cn => cn);
             });
         }
 

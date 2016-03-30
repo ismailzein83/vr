@@ -4,6 +4,11 @@
     {
         public int BPBusinessRuleActionId { get; set; }
 
+        public BPBusinessRuleActionDetails Details { get; set; }
+    }
+
+    public class BPBusinessRuleActionDetails
+    {
         public int BPBusinessRuleDefinitionId { get; set; }
 
         public BPBusinessRuleActionSettings Settings { get; set; }

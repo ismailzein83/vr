@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService) {
+app.directive('businessprocessBpBusinessRuleSetSelector', ['BusinessProcess_BPBusinessRuleSetAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (BusinessProcess_BPBusinessRuleSetAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -24,7 +24,7 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var ctor = new bpDefinitionCtor(ctrl, $scope, $attrs);
+                var ctor = new businessRuleSetCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
 
             },
@@ -38,32 +38,32 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
                 }
             },
             template: function (element, attrs) {
-                return getBPDefinitionTemplate(attrs);
+                return getTemplate(attrs);
             }
 
         };
 
 
-        function getBPDefinitionTemplate(attrs) {
+        function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Business Process";
+            var label = "Business Rule Set";
             if (attrs.ismultipleselection != undefined) {
-                label = "Business Processes";
+                label = "Business Rule Sets";
                 multipleselection = "ismultipleselection";
             }
 
 
             var addCliked = '';
 
-            // vr-disabled="ctrl.isdisabled"  is removed temporary
-            return '<div vr-disabled="ctrl.isdisabled">'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="BPDefinitionID" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="BPDefinition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+            //vr-disabled="ctrl.isdisabled" is removed temporary
+            return '<div>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="BPBusinessRuleSetId" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="BPBusinessRuleSet" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 
-        function bpDefinitionCtor(ctrl, $scope, attrs) {
+        function businessRuleSetCtor(ctrl, $scope, attrs) {
 
             function initializeController() {
                 defineAPI();
@@ -75,24 +75,20 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
                 api.load = function (payload) {
 
                     var selectedIds;
-                    var serializedFilter = {};
+                    var serializedFilter;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        
                         if (payload.filter != undefined) {
                             serializedFilter = UtilsService.serializetoJson(payload.filter);
                         }
                     }
-                    return getBPDefinitionsInfo(attrs, ctrl, selectedIds, serializedFilter);
+                    return getBPBusinessRuleSetsInfo(attrs, ctrl, selectedIds, serializedFilter);
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('BPDefinitionID', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('BPBusinessRuleSetId', attrs, ctrl);
                 }
-
-                api.setSelectedValues = function (selectedIds) {
-                    VRUIUtilsService.setSelectedValues(selectedIds, 'BPDefinitionID', attrs, ctrl);
-                }
-                
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
@@ -100,15 +96,15 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
             this.initializeController = initializeController;
         }
 
-        function getBPDefinitionsInfo(attrs, ctrl, selectedIds, serializedFilter) {
-            return BusinessProcess_BPDefinitionAPIService.GetBPDefinitionsInfo(serializedFilter).then(function (response) {
+        function getBPBusinessRuleSetsInfo(attrs, ctrl, selectedIds, serializedFilter) {
+            return BusinessProcess_BPBusinessRuleSetAPIService.GetBusinessRuleSetsInfo(serializedFilter).then(function (response) {
                 ctrl.datasource.length = 0;
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);
                 });
 
                 if (selectedIds != undefined) {
-                    VRUIUtilsService.setSelectedValues(selectedIds, 'BPDefinitionID', attrs, ctrl);
+                    VRUIUtilsService.setSelectedValues(selectedIds, 'BPBusinessRuleSetId', attrs, ctrl);
                 }
             });
         }

@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPBusinessRuleSetDataManager.cs" />
     <Compile Include="BPBusinessRuleActionDataManager.cs" />
     <Compile Include="BPBusinessRuleActionTypeDataManager.cs" />
     <Compile Include="BPDataManager.cs" />

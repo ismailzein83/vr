@@ -3,10 +3,11 @@ using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using Vanrise.Common;
+using System;
 
 namespace Vanrise.BusinessProcess.Business
 {
-    public class BPBusinessRuleManager
+    public class BPBusinessRuleDefinitionManager
     {
         #region public methods
         public List<BPBusinessRuleDefinition> GetBPBusinessRuleDefinitions(string key, int bpDefinitionId)
@@ -16,6 +17,31 @@ namespace Vanrise.BusinessProcess.Business
                 return null;
 
             return result.FindAll(itm => itm.BPDefintionId == bpDefinitionId && itm.Name == key);
+        }
+
+        public List<BPBusinessRuleDefinitionDetail> GetBusinessRuleDefintionsByBPDefinitionID(int bpDefinitionId)
+        {
+            List<BPBusinessRuleDefinition> result = GetCachedBPBusinessRules();
+            if (result == null || result.Count == 0)
+                return null;
+
+            var matchedResult = result.FindAll(itm => itm.BPDefintionId == bpDefinitionId);
+            if (matchedResult == null || matchedResult.Count == 0)
+                return null;
+
+            List<BPBusinessRuleDefinitionDetail> bpBusinessRuleDefinitionDetails = matchedResult.Select(item => new BPBusinessRuleDefinitionDetail() { Entity = item }).ToList();
+            BPBusinessRuleActionTypeManager bpBusinessRuleActionTypeManager = new BPBusinessRuleActionTypeManager();
+            
+            foreach (BPBusinessRuleDefinitionDetail bpBusinessRuleDefinitionDetail in bpBusinessRuleDefinitionDetails)
+            {
+                bpBusinessRuleDefinitionDetail.ActionTypes = new List<BPBusinessRuleActionType>();
+                foreach (int actionTypeId in bpBusinessRuleDefinitionDetail.Entity.Settings.ActionTypes)
+                {
+                    bpBusinessRuleDefinitionDetail.ActionTypes.Add(bpBusinessRuleActionTypeManager.GetBusinessRuleActionType(actionTypeId));
+                }
+            }
+
+            return bpBusinessRuleDefinitionDetails;
         }
         #endregion
 
