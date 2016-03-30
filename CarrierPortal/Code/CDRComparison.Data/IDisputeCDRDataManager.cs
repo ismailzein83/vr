@@ -11,5 +11,9 @@ namespace CDRComparison.Data
     public interface IDisputeCDRDataManager : IDataManager, IBulkApplyDataManager<DisputeCDR>
     {
         void ApplyDisputeCDRsToDB(object preparedNumberProfiles);
+
+        IEnumerable<DisputeCDR> GetDisputeCDRs();
+
+        int GetDisputeCDRsCount();
     }
 }

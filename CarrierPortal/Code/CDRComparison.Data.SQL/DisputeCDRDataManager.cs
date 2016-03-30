@@ -1,6 +1,7 @@
 ﻿using CDRComparison.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace CDRComparison.Data.SQL
 {
     public class DisputeCDRDataManager : BaseSQLDataManager, IDisputeCDRDataManager
     {
+        #region Constructors / Fields
+
         public DisputeCDRDataManager()
             : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
         {
@@ -27,6 +30,9 @@ namespace CDRComparison.Data.SQL
             ,"PartnerDurationInSec"
         };
 
+        #endregion
+
+        #region Public Methods
 
         public void ApplyDisputeCDRsToDB(object preparedNumberProfiles)
         {
@@ -41,7 +47,7 @@ namespace CDRComparison.Data.SQL
             {
                 TableName = "[dbo].[DisputeCDR]",
                 Stream = streamForBulkInsert,
-                ColumnNames=s_Columns,
+                ColumnNames = s_Columns,
                 TabLock = true,
                 KeepIdentity = true,
                 FieldSeparator = '^'
@@ -67,5 +73,37 @@ namespace CDRComparison.Data.SQL
                                     record.PartnerDurationInSec
                                     );
         }
+
+        public IEnumerable<DisputeCDR> GetDisputeCDRs()
+        {
+            return GetItemsSP("dbo.sp_DisputeCDR_GetAll", DisputeCDRMapper);
+        }
+
+        public int GetDisputeCDRsCount()
+        {
+            object count = ExecuteScalarSP("dbo.sp_DisputeCDR_GetCount");
+            return (int)count;
+        }
+
+        #endregion
+
+        #region Mappers
+
+        DisputeCDR DisputeCDRMapper(IDataReader reader)
+        {
+            return new DisputeCDR()
+            {
+                SystemCDPN = GetReaderValue<string>(reader, "SystemCDPN"),
+                PartnerCDPN = GetReaderValue<string>(reader, "PartnerCDPN"),
+                SystemCGPN = GetReaderValue<string>(reader, "SystemCGPN"),
+                PartnerCGPN = GetReaderValue<string>(reader, "PartnerCGPN"),
+                SystemTime = GetReaderValue<DateTime>(reader, "SystemTime"),
+                PartnerTime = GetReaderValue<DateTime>(reader, "PartnerTime"),
+                SystemDurationInSec = GetReaderValue<decimal>(reader, "SystemDurationInSec"),
+                PartnerDurationInSec = GetReaderValue<decimal>(reader, "PartnerDurationInSec")
+            };
+        }
+        
+        #endregion
     }
 }
