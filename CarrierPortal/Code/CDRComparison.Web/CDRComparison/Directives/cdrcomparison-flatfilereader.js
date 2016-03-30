@@ -95,7 +95,7 @@
                             fieldMappings = [];
                             for (var i = 0; i < dataItem.cells.length; i++) {
                                 fieldMappings.push({
-                                    FieldIndex: i + 1,
+                                    FieldIndex: i,
                                     FieldName: (dataItem.cells[i].selectedField != undefined) ? dataItem.cells[i].selectedField.description : undefined
                                 });
                             }
