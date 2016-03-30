@@ -9,7 +9,8 @@
 
         return {
             GetCDRSourceTemplateConfigs: GetCDRSourceTemplateConfigs,
-            GetFileReaderTemplateConfigs: GetFileReaderTemplateConfigs
+            GetFileReaderTemplateConfigs: GetFileReaderTemplateConfigs,
+            GetCDRComparisonSummary: GetCDRComparisonSummary
         };
 
         function GetCDRSourceTemplateConfigs() {
@@ -18,6 +19,10 @@
 
         function GetFileReaderTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetFileReaderTemplateConfigs'));
+        }
+        function GetCDRComparisonSummary()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetCDRComparisonSummary'));
         }
     }
 

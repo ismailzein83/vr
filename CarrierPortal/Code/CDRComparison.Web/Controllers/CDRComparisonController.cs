@@ -29,5 +29,12 @@ namespace CDRComparison.Web.Controllers
         {
             return _manager.GetFileReaderTemplateConfigs();
         }
+
+        [HttpGet]
+        [Route("GetCDRComparisonSummary")]
+        public CDRComparisonSummary GetCDRComparisonSummary()
+        {
+            return _manager.GetCDRComparisonSummary();
+        }
     }
 }

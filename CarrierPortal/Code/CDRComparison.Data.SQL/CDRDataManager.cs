@@ -44,6 +44,13 @@ namespace CDRComparison.Data.SQL
             });
         }
 
+        public int GetAllCDRsCount()
+        {
+            object count = ExecuteScalarSP("dbo.sp_CDR_GetCount");
+            return (int)count;
+        }
+
+
         #region Bulk Insert Methods
 
         public object InitialiazeStreamForDBApply()

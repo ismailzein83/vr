@@ -1,1 +1,51 @@
-﻿
+﻿<div vr-modalcontent ng-controller="CDRComparison_CDRComparisonTaskEditorController" width="'70%'">
+    <vr-modalbody>
+        <vr-form name="formCDRComparison" vr-loader="scopeModal.isLoading">
+            <vr-tabs>
+                <vr-tab header="'Summary'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-label>All CDRs Count: {{scopeModal.allCDRsCount}}</vr-label><br>
+                            <vr-label>Missing CDRs Count: {{scopeModal.missingCDRsCount}}</vr-label><br>
+                            <vr-label>Partial Match CDRs Count: {{scopeModal.partialMatchCDRsCount}}</vr-label><br>
+                            <vr-label>Dispute CDRs Count: {{scopeModal.disputeCDRsCount}}</vr-label>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Missing CDR'" tabobject="scopeModal.missingTabObject">
+                    <vr-row>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingMissingCDRDirective">
+                            <cdrcomparison-missingcdr-grid on-ready="scopeModal.onMissingCDRDirectiveReady" ng-if="scopeModal.missingTabObject.isSelected"></cdrcomparison-missingcdr-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Partial Match CDR'" tabobject="scopeModal.partialTabObject">
+                    <vr-row>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingPartialMatchCDRDirective">
+                            <cdrcomparison-partialmatchcdr-grid on-ready="scopeModal.onPartialMatchCDRDirectiveReady" ng-if="scopeModal.partialTabObject.isSelected"></cdrcomparison-partialmatchcdr-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
+                <vr-tab header="'Dispute CDR'" tabobject="scopeModal.disputeTabObject">
+                    <vr-row>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingDisputeCDRDirective">
+                            <cdrcomparison-disputecdr-grid on-ready="scopeModal.onDisputeCDRGridReady" ng-if="scopeModal.disputeTabObject.isSelected"></cdrcomparison-disputecdr-grid>
+                        </vr-columns>
+                    </vr-row>
+
+                </vr-tab>
+
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Continue" data-onclick="scopeModal.continueTask" formname="formCDRComparison"></vr-button>
+                <vr-button type="Stop" data-onclick="scopeModal.stopTask"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

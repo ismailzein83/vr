@@ -13,5 +13,7 @@ namespace CDRComparison.Data
         void LoadCDRs(Action<CDR> onBatchReady);
 
         void ApplyCDRsToDB(object preparedCDRs);
+
+        int GetAllCDRsCount();
     }
 }

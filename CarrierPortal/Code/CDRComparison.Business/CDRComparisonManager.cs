@@ -22,5 +22,17 @@ namespace CDRComparison.Business
             var templateConfigManager = new TemplateConfigManager();
             return templateConfigManager.GetTemplateConfigurations(Constants.FileReaderConfigType);
         }
+
+        public CDRComparisonSummary GetCDRComparisonSummary()
+        {
+            CDRComparisonSummary summary = new CDRComparisonSummary();
+            CDRManager cdrManager = new Business.CDRManager();
+            MissingCDRManager missingCDRManager = new MissingCDRManager();
+            PartialMatchCDRManager partialMatchCDRManager = new PartialMatchCDRManager();
+            summary.MissingCDRsCount = missingCDRManager.GetMissingCDRsCount();
+            summary.PartialMatchCDRsCount = partialMatchCDRManager.GetPartialMatchCDRsCount();
+            summary.AllCDRsCount = cdrManager.GetAllCDRsCount();
+            return summary;
+        }
     }
 }
