@@ -8,6 +8,8 @@ namespace Vanrise.GenericData.Entities
 {
     public class SummaryTransformationDefinitionInfoFilter
     {
-        public List<int> SummaryTransformationDefinitionIds { get; set; }
+        public int? RawItemRecordTypeId { get; set; }
+
+        public int? SummaryItemRecordTypeId { get; set; }
     }
 }
