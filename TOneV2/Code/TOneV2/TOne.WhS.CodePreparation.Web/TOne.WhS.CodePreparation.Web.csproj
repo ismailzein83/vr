@@ -169,6 +169,7 @@
     <Content Include="WhS_CodePreparation\Images\New.png" />
     <Content Include="WhS_CodePreparation\Images\PendingClosed.png" />
     <Content Include="WhS_CodePreparation\Images\PendingOpen.png" />
+    <Content Include="WhS_CodePreparation\Images\PendingOpened.png" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationAPIService.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationController.js" />

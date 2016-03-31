@@ -78,10 +78,11 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             foreach (DeletedCode code in changes.DeletedCodes)
             {
+                CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
                     codesToClose.Add(new CodeToClose
                            {
                                Code = code.Code,
-                               
+                               CodeGroup = codeGroup,
                                CloseEffectiveDate = minimumDate,
                                ZoneName = code.ZoneName,
                            });

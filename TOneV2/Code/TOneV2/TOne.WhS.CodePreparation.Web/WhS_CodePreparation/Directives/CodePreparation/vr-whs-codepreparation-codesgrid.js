@@ -100,12 +100,12 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                         break;
 
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingMoved.value:
-                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/MovedTo.png";
-                        dataItem.DraftStatusIconTooltip = "Moved To " + dataItem.OtherCodeZoneName;
+                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/MovedFrom.png";
+                        dataItem.DraftStatusIconTooltip = "Moved to " + dataItem.OtherCodeZoneName;
                         break;
                     case WhS_CP_CodeItemDraftStatusEnum.NewMoved.value:
-                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/MovedFrom.png";
-                        dataItem.DraftStatusIconTooltip = "Moved From " + dataItem.OtherCodeZoneName;
+                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/MovedTo.png";
+                        dataItem.DraftStatusIconTooltip = "Moved from " + dataItem.OtherCodeZoneName;
                         break
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/Closed.png";
@@ -119,9 +119,9 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
              
                 dataItem.ShowStatus = dataItem.Status != null ? true : false;
 
-                if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingOpen.value) {
-                    dataItem.StatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/PendingOpen.png";
-                    dataItem.StatusIconTooltip = "Pending Open";
+                if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingOpened.value) {
+                    dataItem.StatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/PendingOpened.png";
+                    dataItem.StatusIconTooltip = "Pending Opened";
                 }
                 else if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingClosed.value) {
                     dataItem.StatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/PendingClosed.png";

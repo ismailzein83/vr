@@ -256,7 +256,7 @@ namespace TOne.WhS.CodePreparation.Business
         CodeItemStatus? GetCodeItemStatus(DateTime BED)
         {
             if (BED > DateTime.Now)
-                return CodeItemStatus.PendingOpen;
+                return CodeItemStatus.PendingOpened;
             return null;
         }
 
@@ -281,24 +281,26 @@ namespace TOne.WhS.CodePreparation.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeItems.ToBigResult(input, null));
         }
 
-        NewCodeOutput ValidateNewCode(List<CodeItem> allCodeItems, List<NewCode> newCodes, List<NewCode> newAddedCodes, int countryId)
+        NewCodeOutput ValidateNewCode(List<CodeItem> allCodeItems, List<NewCode> newCodes, List<NewCode> newAddedCodes, int countryId, int sellingNumberPlanId)
         {
             NewCodeOutput codeOutput = new NewCodeOutput();
             codeOutput.Result = CodePreparationOutputResult.Failed;
             CodeGroupManager codeGroupManager = new CodeGroupManager();
             CountryManager countryManager = new CountryManager();
             Country country = countryManager.GetCountry(countryId);
-
+            SaleCodeManager codeManager = new SaleCodeManager();
+            allCodeItems = MapCodeItemsFromSaleCodes(codeManager.GetSaleCodesEffectiveAfter(sellingNumberPlanId, country.CountryId, DateTime.Now));
             foreach (NewCode newCode in newAddedCodes)
             {
                 CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(newCode.Code);
                 CodeItem codeItem = new CodeItem { DraftStatus = CodeItemDraftStatus.New, Code = newCode.Code, BED = null, EED = null };
+
                 if (codeGroup == null || codeGroup.CountryId != countryId)
                 {
                     codeItem.Message = string.Format("Code should be added under Country {0}.", country.Name);
                     codeOutput.CodeItems.Add(codeItem);
                 }
-                else if (!allCodeItems.Any(item => item.Code == newCode.Code))
+                else if (!allCodeItems.Any(item => item.Code == newCode.Code) && newCodes.Where(code => code.Code == newCode.Code).Count() == 0)
                 {
                     newCodes.Add(newCode);
                     codeOutput.CodeItems.Add(codeItem);
@@ -325,12 +327,14 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             Changes existingChanges = dataManager.GetChanges(input.SellingNumberPlanId, CodePreparationStatus.Draft);
+
+
             List<CodeItem> allCodeItems = new List<CodeItem>();
             if (existingChanges == null)
                 existingChanges = new Changes();
 
             bool insertActionSucc = false;
-            NewCodeOutput insertOperationOutput = ValidateNewCode(allCodeItems, existingChanges.NewCodes, input.NewCodes, input.CountryId);
+            NewCodeOutput insertOperationOutput = ValidateNewCode(allCodeItems, existingChanges.NewCodes, input.NewCodes, input.CountryId,input.SellingNumberPlanId);
             allCodeItems.AddRange(MergeCodeItems(new List<SaleCode>(), existingChanges.NewCodes.FindAllRecords(c => input.NewCodes.Any(x => x.Code == c.Code)), new List<DeletedCode>()));
             if (insertOperationOutput.Result == CodePreparationOutputResult.Failed)
                 insertActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
@@ -382,6 +386,23 @@ namespace TOne.WhS.CodePreparation.Business
             }
 
             return output;
+        }
+
+        List<CodeItem> MapCodeItemsFromSaleCodes(IEnumerable<SaleCode> saleCodees)
+        {
+            List<CodeItem> codeItems = new List<CodeItem>();
+            foreach (var saleCode in saleCodees)
+            {
+                CodeItem codeItem = new CodeItem()
+                {
+                   CodeId=saleCode.SaleCodeId,
+                   Code=saleCode.Code,
+                   BED=saleCode.BED,
+                   EED=saleCode.EED
+                };
+                codeItems.Add(codeItem);
+            }
+            return codeItems;
         }
 
         #endregion

@@ -165,7 +165,7 @@
         function loadSellingNumberPlans() {
             var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                
+
                 VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSNPPromiseDeferred);
             });
 
@@ -178,15 +178,8 @@
                 for (var i = 0; i < addedZones.length; i++) {
                     var node = mapZoneToNode(addedZones[i]);
                     treeAPI.createNode(node);
-                    for (var i = 0; i < $scope.nodes.length; i++) {
-                        if ($scope.nodes[i].nodeId == $scope.currentNode.nodeId) {
-                            $scope.nodes[i].effectiveZones.push(node);
-                        }
-
-                    }
+                    $scope.currentNode.effectiveZones.push(node);
                 }
-
-
             }
         }
 
