@@ -12,10 +12,17 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Missing CDR'" tabobject="scopeModal.missingTabObject">
+                <vr-tab header="'System Missing CDR'" tabobject="scopeModal.systemmissingTabObject">
                     <vr-row>
-                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingMissingCDRDirective">
-                            <cdrcomparison-missingcdr-grid on-ready="scopeModal.onMissingCDRDirectiveReady" ng-if="scopeModal.missingTabObject.isSelected"></cdrcomparison-missingcdr-grid>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingSystemMissingCDRDirective">
+                            <cdrcomparison-missingcdr-grid on-ready="scopeModal.onSystemMissingCDRDirectiveReady" ng-if="scopeModal.systemmissingTabObject.isSelected"></cdrcomparison-missingcdr-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Partner Missing CDR'" tabobject="scopeModal.partnerMissingTabObject">
+                    <vr-row>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingPartnerMissingCDRDirective">
+                            <cdrcomparison-missingcdr-grid on-ready="scopeModal.onPartnerMissingCDRDirectiveReady" ng-if="scopeModal.partnerMissingTabObject.isSelected"></cdrcomparison-missingcdr-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

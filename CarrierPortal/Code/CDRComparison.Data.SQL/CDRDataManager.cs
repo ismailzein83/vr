@@ -28,7 +28,7 @@ namespace CDRComparison.Data.SQL
 
         public void LoadCDRs(Action<CDR> onBatchReady)
         {
-            ExecuteReaderSP("dbo.sp_CDR_GetAll", (reader) =>
+            ExecuteReaderText(GetLoadCDRsQuery(), (reader) =>
             {
                 while (reader.Read())
                 {
@@ -41,12 +41,24 @@ namespace CDRComparison.Data.SQL
                         IsPartnerCDR = (GetReaderValue<Boolean>(reader, "IsPartnerCDR")),
                     });
                 }
-            });
+            },null);
         }
-
+        private string GetLoadCDRsQuery()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append(@"SELECT [ID],
+		                                 [CDPN],
+		                                 [CGPN],
+		                                 [IsPartnerCDR],
+		                                 [AttemptTime],
+		                                 [Duration]
+	                               FROM  [CDRComparison_Dev].[dbo].[CDR]
+	                               ORDER BY [CDPN]");
+            return query.ToString();
+        }
         public int GetAllCDRsCount()
         {
-            object count = ExecuteScalarSP("dbo.sp_CDR_GetCount");
+            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.CDR",null);
             return (int)count;
         }
 

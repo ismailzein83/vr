@@ -76,12 +76,26 @@ namespace CDRComparison.Data.SQL
 
         public IEnumerable<DisputeCDR> GetDisputeCDRs()
         {
-            return GetItemsSP("dbo.sp_DisputeCDR_GetAll", DisputeCDRMapper);
+            return GetItemsText(GetDisputeCDRsQuery(), DisputeCDRMapper, null);
         }
-
+        private string GetDisputeCDRsQuery()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append(@"SELECT TOP 1000 [ID]
+	                        ,[SystemCDPN]
+	                        ,[PartnerCDPN]
+	                        ,[SystemCGPN]
+	                        ,[PartnerCGPN]
+	                        ,[SystemTime]
+	                        ,[PartnerTime]
+	                        ,[SystemDurationInSec]
+	                        ,[PartnerDurationInSec]
+                        FROM [CDRComparison_Dev].[dbo].[DisputeCDR]");
+            return query.ToString();
+        }
         public int GetDisputeCDRsCount()
         {
-            object count = ExecuteScalarSP("dbo.sp_DisputeCDR_GetCount");
+            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.DisputeCDR", null);
             return (int)count;
         }
 

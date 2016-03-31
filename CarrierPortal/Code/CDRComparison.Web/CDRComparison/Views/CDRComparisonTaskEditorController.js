@@ -8,7 +8,8 @@
         var bpTaskId;
         var processInstanceId;
 
-        var missingCDRGridAPI;
+        var systemMissingCDRGridAPI;
+        var partnerMissingCDRGridAPI;
         var partialMatchCDRGridAPI;
         var disputeCDRGridAPI;
 
@@ -28,22 +29,32 @@
         function defineScope() {
 
             $scope.scopeModal = {
-                missingTabObject: {},
+                systemmissingTabObject: {},
+                partnerMissingTabObject:{},
                 partialTabObject: {},
                 disputeTabObject: {}
                 };
 
-            $scope.scopeModal.onMissingCDRDirectiveReady = function (api) {
-                missingCDRGridAPI = api;
+            $scope.scopeModal.onSystemMissingCDRDirectiveReady = function (api) {
+                systemMissingCDRGridAPI = api;
+                var payload = {
+                    IsPartnerCDRs: false
+                };
+                var setLoader = function (value) {
+                    $scope.scopeModal.isLoadingSystemMissingCDRDirective = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, systemMissingCDRGridAPI, payload, setLoader);
+            }
+            $scope.scopeModal.onPartnerMissingCDRDirectiveReady = function (api) {
+                partnerMissingCDRGridAPI = api;
                 var payload = {
                     IsPartnerCDRs: true
                 };
                 var setLoader = function (value) {
-                    $scope.scopeModal.isLoadingMissingCDRDirective = value;
+                    $scope.scopeModal.isLoadingPartnerMissingCDRDirective = value;
                 };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, missingCDRGridAPI, payload, setLoader);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerMissingCDRGridAPI, payload, setLoader);
             }
-
             $scope.scopeModal.onPartialMatchCDRDirectiveReady = function (api) {
                 var payload = {};
                 partialMatchCDRGridAPI = api;
@@ -56,6 +67,7 @@
 
             $scope.scopeModal.onDisputeCDRGridReady = function (api) {
                 disputeCDRGridAPI = api;
+                var payload = {};
                 var setLoader = function (value) {
                     $scope.scopeModal.isLoadingDisputeCDRDirective = value;
                 };

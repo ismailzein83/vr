@@ -29,9 +29,11 @@ namespace CDRComparison.Business
             CDRManager cdrManager = new Business.CDRManager();
             MissingCDRManager missingCDRManager = new MissingCDRManager();
             PartialMatchCDRManager partialMatchCDRManager = new PartialMatchCDRManager();
+            DisputeCDRManager disputeCDRManager = new Business.DisputeCDRManager();
             summary.MissingCDRsCount = missingCDRManager.GetMissingCDRsCount();
             summary.PartialMatchCDRsCount = partialMatchCDRManager.GetPartialMatchCDRsCount();
             summary.AllCDRsCount = cdrManager.GetAllCDRsCount();
+            summary.DisputeCDRsCount = disputeCDRManager.GetDisputeCDRsCount();
             return summary;
         }
     }

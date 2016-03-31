@@ -76,12 +76,26 @@ namespace CDRComparison.Data.SQL
 
         public IEnumerable<PartialMatchCDR> GetPartialMatchCDRs()
         {
-            return GetItemsSP("dbo.sp_PartialMatchCDR_GetAll", PartialMatchCDRMapper);
+            return GetItemsText(GetPartialMatchCDRsQuery(), PartialMatchCDRMapper, null);
         }
-
+        private string GetPartialMatchCDRsQuery()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append(@"SELECT TOP 1000 [ID]
+                              ,[SystemCDPN]
+                              ,[PartnerCDPN]
+                              ,[SystemCGPN]
+                              ,[PartnerCGPN]
+                              ,[SystemTime]
+                              ,[PartnerTime]
+                              ,[SystemDurationInSec]
+                              ,[PartnerDurationInSec]
+                          FROM [CDRComparison_Dev].[dbo].[PartialMatchCDR]");
+            return query.ToString();
+        }
         public int GetPartialMatchCDRsCount()
         {
-            object count = ExecuteScalarSP("dbo.sp_PartialMatchCDR_GetCount");
+            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.PartialMatchCDR", null);
             return (int)count;
         }
 

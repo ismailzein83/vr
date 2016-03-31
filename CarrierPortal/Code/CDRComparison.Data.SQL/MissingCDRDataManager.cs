@@ -70,12 +70,25 @@ namespace CDRComparison.Data.SQL
 
         public IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs)
         {
-            return GetItemsSP("dbo.sp_MissingCDR_GetAll", MissingCDRMapper, isPartnerCDRs);
+            return GetItemsText(GetMissingCDRsQuery(isPartnerCDRs), MissingCDRMapper,null);
         }
-
+        private string GetMissingCDRsQuery(bool isPartnerCDRs)
+        {
+            StringBuilder query = new StringBuilder();
+                    query.Append(@"SELECT ID,
+		                                  CDPN,
+		                                  CGPN,
+		                                  [Time],
+		                                  DurationInSec,
+		                                  IsPartnerCDR
+	                                      FROM dbo.MissingCDR
+	                                      WHERE IsPartnerCDR = #ISPARTNERCDRS#");
+            query.Replace("#ISPARTNERCDRS#",(isPartnerCDRs? "1" : "0"));
+            return query.ToString();
+        }
         public int GetMissingCDRsCount()
         {
-            object count = ExecuteScalarSP("dbo.sp_MissingCDR_GetCount");
+            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.MissingCDR", null);
             return (int)count;
         }
 
