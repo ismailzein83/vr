@@ -85,7 +85,7 @@
 
         function executeTask(taskAction) {
             var executionInformation = {
-                $type: "CDRComparison.BP.Arguments.Tasks.CDRComparisonTaskExecutionInformation, CDRComparison.BP.Arguments.Tasks",
+                $type: "CDRComparison.BP.Arguments.CDRComparisonTaskExecutionInformation, CDRComparison.BP.Arguments",
                 Decision: taskAction
             };
 

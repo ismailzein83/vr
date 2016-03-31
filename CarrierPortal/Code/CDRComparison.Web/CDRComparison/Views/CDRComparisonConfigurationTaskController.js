@@ -29,7 +29,7 @@
                 description:"Sec"
             }, {
                 value: 1,
-                description: "Min"
+                description: "Ms"
             }];
             $scope.scopeModal.onDisputeCDRGridReady = function (api) {
                 disputeCDRGridAPI = api;
@@ -50,11 +50,19 @@
         }
 
         function executeTask(taskAction) {
+            var durationMarginInMilliseconds = $scope.scopeModal.durationMargin;
+            if ($scope.scopeModal.selectedDuration.value = 0)
+                durationMarginInMilliseconds = $scope.scopeModal.durationMargin * 1000;
+
+            var timeMarginInMilliSeconds = $scope.scopeModal.timeMargin;
+            if ($scope.scopeModal.selectedTimeDuration.value = 0)
+                timeMarginInMilliSeconds = $scope.scopeModal.timeMargin * 1000;
             var executionInformation = {
-                $type: "CDRComparison.BP.Arguments.Tasks.ConfigurationTaskExecutionInformation, CDRComparison.BP.Arguments.Tasks",
+                $type: "CDRComparison.BP.Arguments.ConfigurationTaskExecutionInformation, CDRComparison.BP.Arguments",
                 Decision: taskAction,
-                TimeOffset:$scope.scopeModal.timeOffset,
-                DurationMargin:$scope.scopeModal.durationMargin,
+                DurationMarginInMilliSeconds: durationMarginInMilliseconds,
+                TimeMarginInMilliSeconds: timeMarginInMilliSeconds,
+                
             };
 
             var input = {

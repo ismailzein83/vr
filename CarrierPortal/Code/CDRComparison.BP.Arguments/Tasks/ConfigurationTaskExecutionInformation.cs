@@ -10,8 +10,8 @@ namespace CDRComparison.BP.Arguments
     public class ConfigurationTaskExecutionInformation : BPTaskExecutionInformation
     {
         public TimeSpan TimeOffset { get; set; }
-        public decimal DurationMargin { get; set; }
-        public int TimeMargin { get; set; }
+        public long DurationMarginInMilliSeconds { get; set; }
+        public long TimeMarginInMilliSeconds { get; set; }
         public bool Decision { get; set; }
     }
 }

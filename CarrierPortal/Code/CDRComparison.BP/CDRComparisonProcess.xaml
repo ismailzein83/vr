@@ -202,6 +202,11 @@
         </cba1:LoadOrderedCDRs.Status>
       </cba1:LoadOrderedCDRs>
       <cba1:ProcessCDRs sap2010:WorkflowViewState.IdRef="ProcessCDRs_1">
+        <cba1:ProcessCDRs.DurationMarginInMilliSeconds>
+          <InOutArgument x:TypeArguments="x:Int64">
+            <mca:CSharpReference x:TypeArguments="x:Int64">ContinueExecution.DurationMarginInMilliSeconds</mca:CSharpReference>
+          </InOutArgument>
+        </cba1:ProcessCDRs.DurationMarginInMilliSeconds>
         <cba1:ProcessCDRs.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(ce:CDRBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(ce:CDRBatch)">OutputQueueOrderedCDRs</mca:CSharpReference>
@@ -232,10 +237,15 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ProcessCDRsStatus</mca:CSharpReference>
           </OutArgument>
         </cba1:ProcessCDRs.Status>
+        <cba1:ProcessCDRs.TimeMarginInMilliSeconds>
+          <InOutArgument x:TypeArguments="x:Int64">
+            <mca:CSharpReference x:TypeArguments="x:Int64">ContinueExecution.TimeMarginInMilliSeconds</mca:CSharpReference>
+          </InOutArgument>
+        </cba1:ProcessCDRs.TimeMarginInMilliSeconds>
         <cba1:ProcessCDRs.TimeOffset>
-          <InArgument x:TypeArguments="x:TimeSpan">
-            <mca:CSharpValue x:TypeArguments="x:TimeSpan">ContinueExecution.TimeOffset</mca:CSharpValue>
-          </InArgument>
+          <InOutArgument x:TypeArguments="x:TimeSpan">
+            <mca:CSharpReference x:TypeArguments="x:TimeSpan">ContinueExecution.TimeOffset</mca:CSharpReference>
+          </InOutArgument>
         </cba1:ProcessCDRs.TimeOffset>
       </cba1:ProcessCDRs>
       <cba1:PrepareMissingCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareMissingCDRsForDBApply_1">
@@ -358,7 +368,7 @@
         </OutArgument>
       </vbw:AssignTask.TaskExecutionInformation>
     </vbw:AssignTask>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbEg9A+oCDgIBAUYLRpUBAgECSwWiARADAbQEowEFswEWAwGXBLQBBdcCEAIBKNgCBegCFgIBC1AHfxIDAfkEgAEHlQEkAwHMBJYBB6EBHAMBtQSwAQuwAYMBAwGrBKsBC6sBagMBogSjAaQBowHCAQMBoQSmAQumAZcBAwGYBMABB8sBHgMB8gPMAQfwARoDAfMC8QEHhgIrAwGqAocCB5ICIwMBhQKTAgeoAjADAbwBqQIHtAIoAwGXAbUCB8oCKwIBTssCB9YCIwIBKeUCC+UCgQECAR/gAgvgAmoCARbYAqQB2AK7AQIBFdsCC9sClwECAQxRCVwSAwG3BV0JaBkDAZ8FaQl0GQMBhwV1CX4SAwH6BI0BDY0BZwMB7gSDAQ2DAXIDAeMEkgENkgF8AwHYBIgBDYgBfAMBzQSeAQ2eAXQDAcEEmQENmQF8AwG2BMgBDcgBdgMBhQTDAQ3DAXoDAfMD1AEN1AGAAQMB4APjAQ3jAW4DAc4DzwENzwF6AwG8A94BDd4BigEDAaoD7QEN7QFpAwGYA+gBDegBcgMBhgPZAQ3ZAYABAwH0Av4BDf4BagMB4QL0AQ30AXgDAc8CgwINgwJ5AwG9AvkBDfkBgwEDAasCjwINjwJxAwGYAooCDYoCewMBhgKgAg2gAmoDAfMBlgINlgKCAQMB4QGlAg2lAn4DAc8BmwINmwKIAQMBvQGxAg2xAnYDAaoBrAINrAKAAQMBmAHCAg3CAmoDAYUBuAINuAJ4AgFzxwINxwJ5AgFhvQINvQKDAQIBT9MCDdMCcQIBPM4CDc4CewIBKlkPWXQDAcMFVA9UcQMBuAVdZV1sAwG2BWUPZXQDAasFYA9gZgMBoAVpZWlrAwGeBXEPcXQDAZMFbA9sZwMBiAV8NXw5AwGGBXgPeG8DAfsE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbEo9A/QCDgIBAUYLRpUBAgECSwWiARADAdgEowEFswEWAwG7BLQBBeECEAIBKOICBfICFgIBC1AHfxIDAZ0FgAEHlQEkAwHwBJYBB6EBHAMB2QSwAQuwAYMBAwHPBKsBC6sBagMBxgSjAaQBowHCAQMBxQSmAQumAZcBAwG8BMABB8sBHgMBlgTMAQf6ARoDAfMC+wEHkAIrAwGqApECB5wCIwMBhQKdAgeyAjADAbwBswIHvgIoAwGXAb8CB9QCKwIBTtUCB+ACIwIBKe8CC+8CgQECAR/qAgvqAmoCARbiAqQB4gK7AQIBFeUCC+UClwECAQxRCVwSAwHbBV0JaBkDAcMFaQl0GQMBqwV1CX4SAwGeBY0BDY0BZwMBkgWDAQ2DAXIDAYcFkgENkgF8AwH8BIgBDYgBfAMB8QSeAQ2eAXQDAeUEmQENmQF8AwHaBMgBDcgBdgMBqQTDAQ3DAXoDAZcE2QEN2QGAAQMBhAToAQ3oAW4DAfID1AEN1AF6AwHgA/IBDfIBfAMBzgPjAQ3jAYoBAwG8A/cBDfcBcQMBqgPtAQ3tAXIDAZgD3gEN3gGAAQMBhgPPAQ3PAYABAwH0AogCDYgCagMB4QL+AQ3+AXgDAc8CjQINjQJ5AwG9AoMCDYMCgwEDAasCmQINmQJxAwGYApQCDZQCewMBhgKqAg2qAmoDAfMBoAINoAKCAQMB4QGvAg2vAn4DAc8BpQINpQKIAQMBvQG7Ag27AnYDAaoBtgINtgKAAQMBmAHMAg3MAmoDAYUBwgINwgJ4AgFz0QIN0QJ5AgFhxwINxwKDAQIBT90CDd0CcQIBPNgCDdgCewIBKlkPWXQDAecFVA9UcQMB3AVdZV1sAwHaBWUPZXQDAc8FYA9gZgMBxAVpZWlrAwHCBXEPcXQDAbcFbA9sZwMBrAV8NXw5AwGqBXgPeG8DAZ8F</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

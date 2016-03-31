@@ -15,6 +15,8 @@ namespace CDRComparison.BP.Activities
     public class ProcessCDRsInput
     {
         public TimeSpan TimeOffset { get; set; }
+        public long TimeMarginInMilliSeconds { get; set; }
+        public long DurationMarginInMilliSeconds { get; set; }
         public BaseQueue<CDRBatch> InputQueue { get; set; }
         public BaseQueue<MissingCDRBatch> OutputQueueMissingCDR { get; set; }
         public BaseQueue<PartialMatchCDRBatch> OutputQueuePartialMatchCDR { get; set; }
@@ -27,7 +29,11 @@ namespace CDRComparison.BP.Activities
     {
         #region Arguments
         [RequiredArgument]
-        public InArgument<TimeSpan> TimeOffset { get; set; }
+        public InOutArgument<TimeSpan> TimeOffset { get; set; }
+        [RequiredArgument]
+        public InOutArgument<long> TimeMarginInMilliSeconds { get; set; }
+        [RequiredArgument]
+        public InOutArgument<long> DurationMarginInMilliSeconds { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
        
@@ -95,20 +101,13 @@ namespace CDRComparison.BP.Activities
         private void ProcessCDRBach(ProcessCDRsInput inputArgument, CDRBatch cdrBatch)
         {
 
-            foreach(var cdr in cdrBatch.CDRs)
-            {
-                if (cdr.IsPartnerCDR)
-                    cdr.Time = cdr.Time + inputArgument.TimeOffset;
-            }
             if(cdrBatch !=null)
             {
+                SetTimeOffsetConfiguration(inputArgument.TimeOffset,cdrBatch);
                 var systemCDRs = cdrBatch.CDRs.Where(x => !x.IsPartnerCDR);
                 var partnerCDRs = cdrBatch.CDRs.Where(x => x.IsPartnerCDR);
-                if ( systemCDRs == null || systemCDRs.Count() == 0 && (partnerCDRs != null && partnerCDRs.Count() > 0 ))
-                {
-                    inputArgument.OutputQueueMissingCDR.Enqueue(MapToMissingCDRBatch(cdrBatch));
-                }
-                else if ( partnerCDRs == null || partnerCDRs.Count() == 0 && ( systemCDRs != null && systemCDRs.Count() > 0))
+                
+                if (systemCDRs == null || systemCDRs.Count() == 0 || partnerCDRs == null || partnerCDRs.Count() == 0)
                 {
                     inputArgument.OutputQueueMissingCDR.Enqueue(MapToMissingCDRBatch(cdrBatch));
                 }
@@ -116,10 +115,28 @@ namespace CDRComparison.BP.Activities
                 {
                     inputArgument.OutputQueuePartialMatchCDR.Enqueue(MapToPartialMatchCDRBatch(systemCDRs, partnerCDRs));
                 }
-                else if (systemCDRs.Sum(x => x.DurationInSec) != partnerCDRs.Sum(x => x.DurationInSec))
+                else
                 {
-                    inputArgument.OutputQueueDisputeCDR.Enqueue(MapToDisputeCDRBatch(systemCDRs, partnerCDRs));
+                    foreach (var cdr in partnerCDRs)
+                    {
+                        var systemCDR = systemCDRs.FirstOrDefault(x => x.CDPN == cdr.CDPN && x.CGPN == cdr.CGPN);
+                        decimal duration = cdr.DurationInSec - systemCDR.DurationInSec;
+                        TimeSpan timeDifference = cdr.Time - systemCDR.Time;
+                        if (Math.Abs(duration) > inputArgument.DurationMarginInMilliSeconds || Math.Abs(timeDifference.TotalMilliseconds) > inputArgument.TimeMarginInMilliSeconds)
+                        {
+                            inputArgument.OutputQueueDisputeCDR.Enqueue(MapToDisputeCDRBatch(systemCDRs, partnerCDRs));
+                            break;
+                        }
+                    }
                 }
+               
+            }
+        }
+        private void  SetTimeOffsetConfiguration(TimeSpan timeOffset,CDRBatch cdrBatch)
+        {
+            foreach (var cdr in cdrBatch.CDRs)
+            {
+                cdr.Time = cdr.Time + timeOffset;
             }
         }
         private MissingCDRBatch MapToMissingCDRBatch(CDRBatch cdrBatch)
@@ -159,6 +176,26 @@ namespace CDRComparison.BP.Activities
                     PartnerTime = partnerCDR != null ? partnerCDR.Time : default(DateTime),
                 });
             }
+            foreach (var cdr in partnerCDRs)
+            {
+                var systemCDR = systemCDRs.FirstOrDefault(x => x.CDPN == cdr.CDPN && x.CGPN == cdr.CGPN && x.Time == cdr.Time);
+                if (systemCDR == null)
+                {
+                    partialMatchCDR.Add(new PartialMatchCDR
+                    {
+                        SystemCDPN = null,
+                        SystemCGPN = null,
+                        SystemDurationInSec = default(decimal),
+                        SystemTime = default(DateTime),
+                        PartnerDurationInSec = cdr.DurationInSec,
+                        PartnerCDPN = cdr.CDPN,
+                        PartnerCGPN = cdr.CGPN,
+                        PartnerTime =cdr.Time,
+                    });
+                }
+                
+            }
+
             return new PartialMatchCDRBatch
             {
                 PartialMatchCDRs = partialMatchCDR
@@ -170,16 +207,18 @@ namespace CDRComparison.BP.Activities
             foreach (var cdr in systemCDRs)
             {
                 var partnerCDR = partnerCDRs.FirstOrDefault(x => x.CDPN == cdr.CDPN && x.CGPN == cdr.CGPN && x.Time == cdr.Time);
+                if (partnerCDR == null)
+                    throw new NullReferenceException("MapToDisputeCDRBatch");
                 disputeCDR.Add(new DisputeCDR
                 {
                     SystemCDPN = cdr.CDPN,
                     SystemCGPN = cdr.CGPN,
                     SystemDurationInSec = cdr.DurationInSec,
                     SystemTime = cdr.Time,
-                    PartnerDurationInSec = partnerCDR != null ? partnerCDR.DurationInSec : default(decimal),
-                    PartnerCDPN = partnerCDR != null ? partnerCDR.CDPN : null,
-                    PartnerCGPN = partnerCDR != null ? partnerCDR.CGPN : null,
-                    PartnerTime = partnerCDR != null ? partnerCDR.Time : default(DateTime),
+                    PartnerDurationInSec =partnerCDR.DurationInSec,
+                    PartnerCDPN =  partnerCDR.CDPN,
+                    PartnerCGPN = partnerCDR.CGPN ,
+                    PartnerTime = partnerCDR.Time,
                 });
             }
             return new DisputeCDRBatch
@@ -196,6 +235,8 @@ namespace CDRComparison.BP.Activities
                 OutputQueuePartialMatchCDR = this.OutputQueuePartialMatchCDR.Get(context),
                 OutputQueueDisputeCDR = this.OutputQueueDisputeCDR.Get(context),
                 TimeOffset = this.TimeOffset.Get(context),
+                DurationMarginInMilliSeconds = this.DurationMarginInMilliSeconds.Get(context),
+                TimeMarginInMilliSeconds = this.TimeMarginInMilliSeconds.Get(context),
             };
         }
 

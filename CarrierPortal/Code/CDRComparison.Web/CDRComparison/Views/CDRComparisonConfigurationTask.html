@@ -5,7 +5,7 @@
                 <vr-tab header="'Configuration'">
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-textbox type="Number" value="scopeModal.durationMargin" label="Duration Margin"></vr-textbox>
+                            <vr-textbox type="number" value="scopeModal.durationMargin" label="Duration Margin" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/3row">
                             <vr-select datasource="scopeModal.durations" label="Duration" hideremoveicon datatextfield="description" datavaluefield="value" selectedvalues="scopeModal.selectedDuration" hidefilterbox></vr-select>
@@ -16,7 +16,10 @@
                             <vr-datetimepicker type="time" label="Time Offset" value="scopeModal.timeOffset" isrequired></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-textbox value="timeMargin" label="Time Margin"></vr-textbox>
+                            <vr-textbox type="number" value="scopeModal.timeMargin" label="Time Margin"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-select datasource="scopeModal.durations" label="Time Duration" hideremoveicon datatextfield="description" datavaluefield="value" selectedvalues="scopeModal.selectedTimeDuration" hidefilterbox></vr-select>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -28,7 +31,6 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Continue" data-onclick="scopeModal.continueTask" formname="formCDRComparison"></vr-button>
-                <vr-button type="Stop" data-onclick="scopeModal.stopTask"></vr-button>
             </div>
         </vr-actionbar>
     </div>
