@@ -201,13 +201,6 @@
         </OutArgument>
       </twsba1:StructureDataByZones.ImportedZones>
     </twsba1:StructureDataByZones>
-    <twsba1:GetImportedDataValidationRules sap2010:WorkflowViewState.IdRef="GetImportedDataValidationRules_1">
-      <twsba1:GetImportedDataValidationRules.ImportedDataValidationRules>
-        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpReference>
-        </OutArgument>
-      </twsba1:GetImportedDataValidationRules.ImportedDataValidationRules>
-    </twsba1:GetImportedDataValidationRules>
     <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_1">
       <vbw:CombineLists.InputLists>
         <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
@@ -220,18 +213,14 @@
         </OutArgument>
       </vbw:CombineLists.OutputList>
     </vbw:CombineLists>
-    <vbw:Validate sap2010:WorkflowViewState.IdRef="Validate_1">
-      <vbw:Validate.BusinessRules>
-        <InArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpValue>
-        </InArgument>
-      </vbw:Validate.BusinessRules>
-      <vbw:Validate.ImportedDataToValidate>
+    <vbw:ExecuteRules BusinessRulesKey="ValidateCodesZones">
+      <vbw:ExecuteRules.ImportedDataToValidate>
         <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
         </InArgument>
-      </vbw:Validate.ImportedDataToValidate>
-    </vbw:Validate>
+      </vbw:ExecuteRules.ImportedDataToValidate>
+      <sap2010:WorkflowViewState.IdRef>ExecuteRules_1</sap2010:WorkflowViewState.IdRef>
+    </vbw:ExecuteRules>
     <twsba1:StructureDataByCountries sap2010:WorkflowViewState.IdRef="StructureDataByCountries_3">
       <twsba1:StructureDataByCountries.ImportedCountries>
         <OutArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCountry)">
@@ -256,25 +245,14 @@
         </OutArgument>
       </vbw:CombineLists.OutputList>
     </vbw:CombineLists>
-    <twsba1:GetImportedCountriesDataValidationRules sap2010:WorkflowViewState.IdRef="GetImportedCountriesDataValidationRules_1">
-      <twsba1:GetImportedCountriesDataValidationRules.ImportedCountriesDataValidationRules>
-        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedCountriesDataValidationRules</mca:CSharpReference>
-        </OutArgument>
-      </twsba1:GetImportedCountriesDataValidationRules.ImportedCountriesDataValidationRules>
-    </twsba1:GetImportedCountriesDataValidationRules>
-    <vbw:Validate sap2010:WorkflowViewState.IdRef="Validate_2">
-      <vbw:Validate.BusinessRules>
-        <InArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedCountriesDataValidationRules</mca:CSharpValue>
-        </InArgument>
-      </vbw:Validate.BusinessRules>
-      <vbw:Validate.ImportedDataToValidate>
+    <vbw:ExecuteRules BusinessRulesKey="ValidateCountries">
+      <vbw:ExecuteRules.ImportedDataToValidate>
         <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedCountriesToValidate</mca:CSharpValue>
         </InArgument>
-      </vbw:Validate.ImportedDataToValidate>
-    </vbw:Validate>
+      </vbw:ExecuteRules.ImportedDataToValidate>
+      <sap2010:WorkflowViewState.IdRef>ExecuteRules_2</sap2010:WorkflowViewState.IdRef>
+    </vbw:ExecuteRules>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Imported data is validated">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
@@ -797,20 +775,18 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="GetDataFromPriceList_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="GetImportedDataValidationRules_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="Validate_1" sap:VirtualizedContainerService.HintSize="2662,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="StructureDataByCountries_3" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="GetImportedCountriesDataValidationRules_1" sap:VirtualizedContainerService.HintSize="2662,22" />
-      <sap2010:ViewStateData Id="Validate_2" sap:VirtualizedContainerService.HintSize="2662,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_2" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="2662,22" />
       <sap2010:ViewStateData Id="GetExistingZones_3" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -877,14 +853,20 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="2662,358" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2748">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2684,2624">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2828" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="2724,2704">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
