@@ -65,11 +65,12 @@
       <Variable x:TypeArguments="vq:BaseQueue(ce:MissingCDRBatch)" Name="OutputQueueMissingCDR" />
       <Variable x:TypeArguments="vq:BaseQueue(ce:CDRBatch)" Name="OutputCDRBatch" />
       <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedCDRsForDBApplyQueue" />
-      <Variable x:TypeArguments="cba:CDRComparisonTaskExecutionInformation" Name="ContinueExecution">
+      <Variable x:TypeArguments="cba:CDRComparisonTaskExecutionInformation" Name="FinishExecution">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="cba:CDRComparisonTaskExecutionInformation">new CDRComparisonTaskExecutionInformation()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
+      <Variable x:TypeArguments="cba:ConfigurationTaskExecutionInformation" Name="ContinueExecution" />
     </Sequence.Variables>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
@@ -159,6 +160,23 @@
         </cba1:ApplyCDRsToDB.PreviousActivityStatus>
       </cba1:ApplyCDRsToDB>
     </Parallel>
+    <vbw:AssignTask x:TypeArguments="cba:ConfigurationTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_2" TaskTitle="CDR Comparison Configuration">
+      <vbw:AssignTask.AssignedTo>
+        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.AssignedTo>
+      <vbw:AssignTask.TaskData>
+        <InArgument x:TypeArguments="vbe:BPTaskData">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new ConfigurationTaskData()</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskData>
+      <vbw:AssignTask.TaskExecutionInformation>
+        <OutArgument x:TypeArguments="cba:ConfigurationTaskExecutionInformation">
+          <mca:CSharpReference x:TypeArguments="cba:ConfigurationTaskExecutionInformation">ContinueExecution</mca:CSharpReference>
+        </OutArgument>
+      </vbw:AssignTask.TaskExecutionInformation>
+    </vbw:AssignTask>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(ce:CDRBatch)" Name="OutputQueueOrderedCDRs" />
@@ -214,6 +232,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ProcessCDRsStatus</mca:CSharpReference>
           </OutArgument>
         </cba1:ProcessCDRs.Status>
+        <cba1:ProcessCDRs.TimeOffset>
+          <InArgument x:TypeArguments="x:TimeSpan">
+            <mca:CSharpValue x:TypeArguments="x:TimeSpan">ContinueExecution.TimeOffset</mca:CSharpValue>
+          </InArgument>
+        </cba1:ProcessCDRs.TimeOffset>
       </cba1:ProcessCDRs>
       <cba1:PrepareMissingCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareMissingCDRsForDBApply_1">
         <cba1:PrepareMissingCDRsForDBApply.InputQueue>
@@ -318,7 +341,7 @@
         </cba1:ApplyDisputeCDRsToDB.PreviousActivityStatus>
       </cba1:ApplyDisputeCDRsToDB>
     </Parallel>
-    <vbw:AssignTask x:TypeArguments="cba:CDRComparisonTaskExecutionInformation" ExecutedTask="{x:Null}" TaskTitle="CDR Comparison Result">
+    <vbw:AssignTask x:TypeArguments="cba:CDRComparisonTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_1" TaskTitle="CDR Comparison Result">
       <vbw:AssignTask.AssignedTo>
         <InArgument x:TypeArguments="vbe:BPTaskAssignee">
           <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
@@ -331,12 +354,11 @@
       </vbw:AssignTask.TaskData>
       <vbw:AssignTask.TaskExecutionInformation>
         <OutArgument x:TypeArguments="cba:CDRComparisonTaskExecutionInformation">
-          <mca:CSharpReference x:TypeArguments="cba:CDRComparisonTaskExecutionInformation">ContinueExecution</mca:CSharpReference>
+          <mca:CSharpReference x:TypeArguments="cba:CDRComparisonTaskExecutionInformation">FinishExecution</mca:CSharpReference>
         </OutArgument>
       </vbw:AssignTask.TaskExecutionInformation>
-      <sap2010:WorkflowViewState.IdRef>AssignTask`1_1</sap2010:WorkflowViewState.IdRef>
     </vbw:AssignTask>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbEI9A9QCDgIBAUYLRpUBAgECSgWhARADAecDogEFwAIQAgEkwQIF0gIWAgEKTwd+EgMBpgR/B5QBJAMB/QOVAQegARwDAegDrgEHuQEeAwHEA7oBB9kBGgMB3QLaAQfvASsDAZgC8AEH+wEjAwH1AfwBB5ECMAMBsAGSAgedAigDAY0BngIHswIrAgFItAIHvwIjAgElzgILzgKDAQIBHMkCC8kCagIBFMECc8ECigECARPEAgvEApcBAgELUAlbEgMB3wRcCWcZAwHJBGgJcxkDAbMEdAl9EgMBpwSMAQ2MAWcDAZwEggENggFyAwGSBJEBDZEBfAMBiASHAQ2HAXwDAf4DnQENnQF0AwHzA5gBDZgBfAMB6QO2AQ22AXYDAdYDsQENsQF6AwHFA8IBDcIBgAEDAbMD0QEN0QFuAwGiA70BDb0BegMBkQPMAQ3MAYoBAwGAA9YBDdYBcgMB7wLHAQ3HAYABAwHeAucBDecBagMBzALdAQ3dAXgDAbsC7AEN7AF5AwGqAuIBDeIBgwEDAZkC+AEN+AFxAwGHAvMBDfMBewMB9gGJAg2JAmoDAeQB/wEN/wGCAQMB0wGOAg2OAn4DAcIBhAINhAKIAQMBsQGaAg2aAnYDAZ8BlQINlQKAAQMBjgGrAg2rAmoCAXyhAg2hAngCAWuwAg2wAnkCAVqmAg2mAoMBAgFJvAINvAJxAgE3twINtwJ7AgEmWA9YdAMB6gRTD1NxAwHgBFxlXGwDAd4EZA9kdAMB1ARfD19mAwHKBGhlaGsDAcgEcA9wdAMBvgRrD2tnAwG0BHs1ezkDAbIEdw93bwMBqAQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbEg9A+oCDgIBAUYLRpUBAgECSwWiARADAbQEowEFswEWAwGXBLQBBdcCEAIBKNgCBegCFgIBC1AHfxIDAfkEgAEHlQEkAwHMBJYBB6EBHAMBtQSwAQuwAYMBAwGrBKsBC6sBagMBogSjAaQBowHCAQMBoQSmAQumAZcBAwGYBMABB8sBHgMB8gPMAQfwARoDAfMC8QEHhgIrAwGqAocCB5ICIwMBhQKTAgeoAjADAbwBqQIHtAIoAwGXAbUCB8oCKwIBTssCB9YCIwIBKeUCC+UCgQECAR/gAgvgAmoCARbYAqQB2AK7AQIBFdsCC9sClwECAQxRCVwSAwG3BV0JaBkDAZ8FaQl0GQMBhwV1CX4SAwH6BI0BDY0BZwMB7gSDAQ2DAXIDAeMEkgENkgF8AwHYBIgBDYgBfAMBzQSeAQ2eAXQDAcEEmQENmQF8AwG2BMgBDcgBdgMBhQTDAQ3DAXoDAfMD1AEN1AGAAQMB4APjAQ3jAW4DAc4DzwENzwF6AwG8A94BDd4BigEDAaoD7QEN7QFpAwGYA+gBDegBcgMBhgPZAQ3ZAYABAwH0Av4BDf4BagMB4QL0AQ30AXgDAc8CgwINgwJ5AwG9AvkBDfkBgwEDAasCjwINjwJxAwGYAooCDYoCewMBhgKgAg2gAmoDAfMBlgINlgKCAQMB4QGlAg2lAn4DAc8BmwINmwKIAQMBvQGxAg2xAnYDAaoBrAINrAKAAQMBmAHCAg3CAmoDAYUBuAINuAJ4AgFzxwINxwJ5AgFhvQINvQKDAQIBT9MCDdMCcQIBPM4CDc4CewIBKlkPWXQDAcMFVA9UcQMBuAVdZV1sAwG2BWUPZXQDAasFYA9gZgMBoAVpZWlrAwGeBXEPcXQDAZMFbA9sZwMBiAV8NXw5AwGGBXgPeG8DAfsE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -354,6 +376,7 @@
       <sap2010:ViewStateData Id="PrepareCDRsForDBApply_2" sap:VirtualizedContainerService.HintSize="200,412" />
       <sap2010:ViewStateData Id="ApplyCDRsToDB_2" sap:VirtualizedContainerService.HintSize="200,412" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1994,458" />
+      <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="1994,22" />
       <sap2010:ViewStateData Id="LoadOrderedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareMissingCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -364,14 +387,14 @@
       <sap2010:ViewStateData Id="ApplyDisputeCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1994,86" />
       <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="1994,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,770">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,832">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,850" />
+      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,912" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

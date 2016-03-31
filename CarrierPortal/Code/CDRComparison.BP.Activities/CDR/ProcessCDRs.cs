@@ -14,6 +14,7 @@ namespace CDRComparison.BP.Activities
     #region Arguments Classes
     public class ProcessCDRsInput
     {
+        public TimeSpan TimeOffset { get; set; }
         public BaseQueue<CDRBatch> InputQueue { get; set; }
         public BaseQueue<MissingCDRBatch> OutputQueueMissingCDR { get; set; }
         public BaseQueue<PartialMatchCDRBatch> OutputQueuePartialMatchCDR { get; set; }
@@ -25,6 +26,8 @@ namespace CDRComparison.BP.Activities
     public class ProcessCDRs : DependentAsyncActivity<ProcessCDRsInput>
     {
         #region Arguments
+        [RequiredArgument]
+        public InArgument<TimeSpan> TimeOffset { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
        
@@ -91,6 +94,12 @@ namespace CDRComparison.BP.Activities
         }
         private void ProcessCDRBach(ProcessCDRsInput inputArgument, CDRBatch cdrBatch)
         {
+
+            foreach(var cdr in cdrBatch.CDRs)
+            {
+                if (cdr.IsPartnerCDR)
+                    cdr.Time = cdr.Time + inputArgument.TimeOffset;
+            }
             if(cdrBatch !=null)
             {
                 var systemCDRs = cdrBatch.CDRs.Where(x => !x.IsPartnerCDR);
@@ -186,6 +195,7 @@ namespace CDRComparison.BP.Activities
                 OutputQueueMissingCDR = this.OutputQueueMissingCDR.Get(context),
                 OutputQueuePartialMatchCDR = this.OutputQueuePartialMatchCDR.Get(context),
                 OutputQueueDisputeCDR = this.OutputQueueDisputeCDR.Get(context),
+                TimeOffset = this.TimeOffset.Get(context),
             };
         }
 

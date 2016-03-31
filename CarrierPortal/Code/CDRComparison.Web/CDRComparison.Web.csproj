@@ -148,9 +148,11 @@
     <Content Include="CDRComparison\Services\APIServices\MissingCDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\PartialMatchCDRAPIService.js" />
     <Content Include="CDRComparison\Views\CDRComparison.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonConfigurationTask.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonConfigurationTaskController.js" />
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />
-    <Content Include="CDRComparison\Views\CDRComparisonTaskEditor.html" />
-    <Content Include="CDRComparison\Views\CDRComparisonTaskEditorController.js" />
+    <Content Include="CDRComparison\Views\CDRComparisonPreviewTask.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonPreviewTaskController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
