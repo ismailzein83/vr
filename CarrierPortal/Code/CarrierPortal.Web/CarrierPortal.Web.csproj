@@ -202,6 +202,34 @@
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Normalization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Pricing">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Pricing.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
