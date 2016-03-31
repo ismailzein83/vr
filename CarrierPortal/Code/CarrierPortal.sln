@@ -61,11 +61,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDRComparison.BP", "CDRComp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDRComparison.BP.Arguments", "CDRComparison.BP.Arguments\CDRComparison.BP.Arguments.csproj", "{688BD430-7FF4-434F-B812-5E78142D011F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExcelConversion", "ExcelConversion", "{5A96727A-8860-4594-9B18-A4ED9B75C04F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConversion.Entities", "ExcelConversion.Entities\ExcelConversion.Entities.csproj", "{A5C3F943-2F4D-42C0-8BB9-C6E0A8E201DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConversion.Business", "ExcelConversion.Business\ExcelConversion.Business.csproj", "{A7B263FA-4DBC-49D1-88F7-2F5AAB06DBFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConversion.MainExtensions", "ExcelConversion.MainExtensions\ExcelConversion.MainExtensions.csproj", "{F22372B8-CA9C-41DD-99F7-7C5F3E97649F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConversion.Web", "ExcelConversion.Web\ExcelConversion.Web.csproj", "{3ECACE14-5598-4464-A846-6399AF6C9465}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 23
+		SccNumberOfProjects = 27
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = CarrierPortal.sln
@@ -155,6 +165,22 @@ Global
 		SccProjectTopLevelParentUniqueName22 = CarrierPortal.sln
 		SccProjectName22 = CDRComparison.BP.Arguments
 		SccLocalPath22 = CDRComparison.BP.Arguments
+		SccProjectUniqueName23 = ExcelConversion.Entities\\ExcelConversion.Entities.csproj
+		SccProjectTopLevelParentUniqueName23 = CarrierPortal.sln
+		SccProjectName23 = ExcelConversion.Entities
+		SccLocalPath23 = ExcelConversion.Entities
+		SccProjectUniqueName24 = ExcelConversion.Business\\ExcelConversion.Business.csproj
+		SccProjectTopLevelParentUniqueName24 = CarrierPortal.sln
+		SccProjectName24 = ExcelConversion.Business
+		SccLocalPath24 = ExcelConversion.Business
+		SccProjectUniqueName25 = ExcelConversion.MainExtensions\\ExcelConversion.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName25 = CarrierPortal.sln
+		SccProjectName25 = ExcelConversion.MainExtensions
+		SccLocalPath25 = ExcelConversion.MainExtensions
+		SccProjectUniqueName26 = ExcelConversion.Web\\ExcelConversion.Web.csproj
+		SccProjectTopLevelParentUniqueName26 = CarrierPortal.sln
+		SccProjectName26 = ExcelConversion.Web
+		SccLocalPath26 = ExcelConversion.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -251,6 +277,22 @@ Global
 		{688BD430-7FF4-434F-B812-5E78142D011F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{688BD430-7FF4-434F-B812-5E78142D011F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{688BD430-7FF4-434F-B812-5E78142D011F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5C3F943-2F4D-42C0-8BB9-C6E0A8E201DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5C3F943-2F4D-42C0-8BB9-C6E0A8E201DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5C3F943-2F4D-42C0-8BB9-C6E0A8E201DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5C3F943-2F4D-42C0-8BB9-C6E0A8E201DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7B263FA-4DBC-49D1-88F7-2F5AAB06DBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7B263FA-4DBC-49D1-88F7-2F5AAB06DBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7B263FA-4DBC-49D1-88F7-2F5AAB06DBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7B263FA-4DBC-49D1-88F7-2F5AAB06DBFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F22372B8-CA9C-41DD-99F7-7C5F3E97649F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F22372B8-CA9C-41DD-99F7-7C5F3E97649F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F22372B8-CA9C-41DD-99F7-7C5F3E97649F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F22372B8-CA9C-41DD-99F7-7C5F3E97649F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ECACE14-5598-4464-A846-6399AF6C9465}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ECACE14-5598-4464-A846-6399AF6C9465}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ECACE14-5598-4464-A846-6399AF6C9465}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ECACE14-5598-4464-A846-6399AF6C9465}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -259,6 +301,7 @@ Global
 		{CB556A40-1CAB-4915-88E5-F5E04BA4F4EE} = {9AA83DCF-FB38-45AA-9944-B92CA1B13B94}
 		{73B89280-7691-435A-98E3-F5F84801BE36} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
 		{C5AF549B-C5DA-49A6-8807-17C9BDB14AE6} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
+		{5A96727A-8860-4594-9B18-A4ED9B75C04F} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
 		{FEF565A8-7254-4428-8BD4-A72B6F761496} = {1B9F0944-5170-4C05-8834-D247C7CA18C1}
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {EE2A4347-9EB6-462A-BB25-36D47EFD502A}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {EE2A4347-9EB6-462A-BB25-36D47EFD502A}
@@ -280,5 +323,9 @@ Global
 		{C2E92276-33F9-4B0C-AA94-C1F19C9D1492} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
 		{E8B20474-F87F-4151-A19E-8232AE5C3B71} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
 		{688BD430-7FF4-434F-B812-5E78142D011F} = {C5AF549B-C5DA-49A6-8807-17C9BDB14AE6}
+		{A5C3F943-2F4D-42C0-8BB9-C6E0A8E201DE} = {5A96727A-8860-4594-9B18-A4ED9B75C04F}
+		{A7B263FA-4DBC-49D1-88F7-2F5AAB06DBFB} = {5A96727A-8860-4594-9B18-A4ED9B75C04F}
+		{F22372B8-CA9C-41DD-99F7-7C5F3E97649F} = {5A96727A-8860-4594-9B18-A4ED9B75C04F}
+		{3ECACE14-5598-4464-A846-6399AF6C9465} = {5A96727A-8860-4594-9B18-A4ED9B75C04F}
 	EndGlobalSection
 EndGlobal

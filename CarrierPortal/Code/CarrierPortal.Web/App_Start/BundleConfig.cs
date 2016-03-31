@@ -16,7 +16,8 @@ namespace CarrierPortal.Web
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/CP_SupplierPricelist", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/CDRComparison", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/BusinessProcess", "*.js", true));
+                "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/ExcelConversion", "*.js", true));
         }
     }
 }

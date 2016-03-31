@@ -9,3 +9,4 @@ CP_SupplierPricelist	C:\TFS\CarrierPortal\Code\CP.SupplierPricelist.Web\CP_Suppl
 Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 CDRComparison			C:\TFS\CarrierPortal\Code\CDRComparison.Web\CDRComparison
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+ExcelConversion			C:\TFS\CarrierPortal\Code\ExcelConversion.Web\ExcelConversion

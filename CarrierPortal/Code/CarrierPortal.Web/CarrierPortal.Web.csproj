@@ -310,6 +310,22 @@
       <Project>{862acf40-050c-423f-bae1-66cdd06e5eb0}</Project>
       <Name>CP.SupplierPricelist.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ExcelConversion.Business\ExcelConversion.Business.csproj">
+      <Project>{a7b263fa-4dbc-49d1-88f7-2f5aab06dbfb}</Project>
+      <Name>ExcelConversion.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExcelConversion.Entities\ExcelConversion.Entities.csproj">
+      <Project>{a5c3f943-2f4d-42c0-8bb9-c6e0a8e201de}</Project>
+      <Name>ExcelConversion.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExcelConversion.MainExtensions\ExcelConversion.MainExtensions.csproj">
+      <Project>{f22372b8-ca9c-41dd-99f7-7c5f3e97649f}</Project>
+      <Name>ExcelConversion.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExcelConversion.Web\ExcelConversion.Web.csproj">
+      <Project>{3ecace14-5598-4464-a846-6399af6c9465}</Project>
+      <Name>ExcelConversion.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
