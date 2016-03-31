@@ -132,6 +132,7 @@
     <Content Include="CDRComparison\Directives\cdrcomparison-filereader-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filescdrsource.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-flatfilereader.js" />
+    <Content Include="CDRComparison\Directives\cdrcomparison-normalizationrule.js" />
     <Content Include="CDRComparison\Directives\Grids\cdrcomparison-disputecdr-grid.js" />
     <Content Include="CDRComparison\Directives\Grids\cdrcomparison-missingcdr-grid.js" />
     <Content Include="CDRComparison\Directives\Grids\cdrcomparison-partialmatchcdr-grid.js" />
@@ -142,6 +143,7 @@
     <Content Include="CDRComparison\Directives\Templates\FileReaderSelectiveTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\FileCDRSourceTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\FlatFileReaderTemplate.html" />
+    <Content Include="CDRComparison\Directives\Templates\NormalizationRuleTemplate.html" />
     <Content Include="CDRComparison\Services\APIServices\CDRComparisonAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\CDRSourceAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\DisputeCDRAPIService.js" />
