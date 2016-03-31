@@ -8,15 +8,13 @@ namespace CDRComparison.Entities
 {
     public class CDR
     {
+        public string OriginalCDPN { get; set; }
+        public string OriginalCGPN { get; set; }
         public string CDPN { get; set; }
-
         public string CGPN { get; set; }
-
         public DateTime Time { get; set; }
-
         public Decimal DurationInSec { get; set; }
         public bool IsPartnerCDR { get; set; }
-
         public Dictionary<string, object> ExtraFields { get; set; }
     }
 }

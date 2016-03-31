@@ -150,8 +150,8 @@
 
                     function getFields() {
                         return [
-                            { value: 3, description: 'CGPN' },
                             { value: 4, description: 'CDPN' },
+                            { value: 3, description: 'CGPN' },
                             { value: 1, description: 'Time' },
                             { value: 2, description: 'DurationInSec' }
                         ];

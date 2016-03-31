@@ -19,17 +19,33 @@ namespace CDRComparison.Data.SQL
 
         }
 
-        static string[] s_Columns = new string[] {
-            "CDPN"
-            ,"CGPN"
-            ,"Time"
-            ,"DurationInSec"
-            ,"IsPartnerCDR"
+        static string[] s_Columns = new string[]
+        {
+            "OriginalCDPN",
+            "OriginalCGPN",
+            "CDPN",
+            "CGPN",
+            "Time",
+            "DurationInSec",
+            "IsPartnerCDR"
         };
         
         #endregion
 
         #region Public Methods
+
+        public IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs)
+        {
+            return GetItemsText(GetMissingCDRsQuery(isPartnerCDRs), MissingCDRMapper, null);
+        }
+
+        public int GetMissingCDRsCount()
+        {
+            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.MissingCDR", null);
+            return (int)count;
+        }
+
+        #region Bulk Insert Methods
 
         public void ApplyMissingCDRsToDB(object preparedNumberProfiles)
         {
@@ -59,47 +75,51 @@ namespace CDRComparison.Data.SQL
         public void WriteRecordToStream(MissingCDR record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}",
-                                    record.CDPN,
-                                    record.CGPN,
-                                    record.Time,
-                                    record.DurationInSec,
-                                   record.IsPartnerCDR ? "1" : "0"
-                                    );
+            streamForBulkInsert.WriteRecord
+            (
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+                record.OriginalCDPN,
+                record.OriginalCGPN,
+                record.CDPN,
+                record.CGPN,
+                record.Time,
+                record.DurationInSec,
+                record.IsPartnerCDR ? "1" : "0"
+            );
         }
-
-        public IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs)
-        {
-            return GetItemsText(GetMissingCDRsQuery(isPartnerCDRs), MissingCDRMapper,null);
-        }
-        private string GetMissingCDRsQuery(bool isPartnerCDRs)
-        {
-            StringBuilder query = new StringBuilder();
-                    query.Append(@"SELECT ID,
-		                                  CDPN,
-		                                  CGPN,
-		                                  [Time],
-		                                  DurationInSec,
-		                                  IsPartnerCDR
-	                                      FROM dbo.MissingCDR
-	                                      WHERE IsPartnerCDR = #ISPARTNERCDRS#");
-            query.Replace("#ISPARTNERCDRS#",(isPartnerCDRs? "1" : "0"));
-            return query.ToString();
-        }
-        public int GetMissingCDRsCount()
-        {
-            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.MissingCDR", null);
-            return (int)count;
-        }
+        
+        #endregion
 
         #endregion
 
-        #region Mappers
+        #region Private Methods
+
+        private string GetMissingCDRsQuery(bool isPartnerCDRs)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"SELECT [ID],
+                    [OriginalCDPN],
+                    [OriginalCGPN],
+		            [CDPN],
+		            [CGPN],
+		            [Time],
+		            [DurationInSec],
+		            [IsPartnerCDR]
+	            FROM dbo.MissingCDR
+	            WHERE IsPartnerCDR = #ISPARTNERCDRS#"
+            );
+            query.Replace("#ISPARTNERCDRS#", (isPartnerCDRs ? "1" : "0"));
+            return query.ToString();
+        }
 
         MissingCDR MissingCDRMapper(IDataReader reader)
         {
             return new MissingCDR()
             {
+                OriginalCDPN = GetReaderValue<string>(reader, "OriginalCDPN"),
+                OriginalCGPN = GetReaderValue<string>(reader, "OriginalCGPN"),
                 CDPN = GetReaderValue<string>(reader, "CDPN"),
                 CGPN = GetReaderValue<string>(reader, "CGPN"),
                 Time = GetReaderValue<DateTime>(reader, "Time"),

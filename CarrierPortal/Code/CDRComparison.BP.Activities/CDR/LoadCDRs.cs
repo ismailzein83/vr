@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Queueing;
+using Vanrise.Rules.Normalization;
 
 namespace CDRComparison.BP.Activities
 {
@@ -21,7 +23,7 @@ namespace CDRComparison.BP.Activities
 
         public BaseQueue<CDRBatch> OutputQueue { get; set; }
     }
-    
+
     #endregion
 
     public sealed class LoadCDRs : BaseAsyncActivity<LoadCDRsInput>
@@ -36,11 +38,20 @@ namespace CDRComparison.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> OutputQueue { get; set; }
+
+        #endregion
+
+        #region Fields
+
+        NormalizeNumberSettings _cdpnNormalizationSettings;
+        NormalizeNumberSettings _cgpnNormalizationSettings;
         
         #endregion
 
         protected override void DoWork(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
+            SetNumberNormalizationSettings(inputArgument.CDRSource.NormalizationRules);
+
             Action<IEnumerable<CDR>> onCDRsReceived = (cdrs) =>
             {
                 var list = new List<CDR>();
@@ -48,12 +59,24 @@ namespace CDRComparison.BP.Activities
                 {
                     var item = new CDR()
                     {
-                        CDPN = cdr.CDPN,
-                        CGPN = cdr.CGPN,
+                        OriginalCDPN = cdr.CDPN,
+                        OriginalCGPN = cdr.CGPN,
                         Time = cdr.Time,
                         DurationInSec = cdr.DurationInSec,
                         IsPartnerCDR = inputArgument.IsPartnerCDRs
                     };
+
+                    var cdpnNormalizationContext = new NormalizeRuleContext() { Value = cdr.CDPN };
+                    _cdpnNormalizationSettings.ApplyNormalizationRule(cdpnNormalizationContext);
+                    item.CDPN = cdpnNormalizationContext.NormalizedValue;
+
+                    if (_cgpnNormalizationSettings != null)
+                    {
+                        var cgpnNormalizationContext = new NormalizeRuleContext() { Value = cdr.CGPN };
+                        _cgpnNormalizationSettings.ApplyNormalizationRule(cgpnNormalizationContext);
+                        item.CGPN = cgpnNormalizationContext.NormalizedValue;
+                    }
+                    
                     list.Add(item);
                 }
                 var cdrBatch = new CDRBatch() { CDRs = list };
@@ -80,5 +103,27 @@ namespace CDRComparison.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context)
             };
         }
+
+        #region Private Methods
+
+        void SetNumberNormalizationSettings(IEnumerable<NormalizationRule> normalizationRules)
+        {
+            if (normalizationRules == null)
+                throw new ArgumentNullException("normalizationRules");
+            
+            NormalizationRule cdpnNormalizationRule = normalizationRules.FindRecord(itm => itm.FieldToNormalize == "CDPN");
+            
+            if (cdpnNormalizationRule == null)
+                throw new NullReferenceException("cdpnNormalizationRule");
+            if (cdpnNormalizationRule.NormalizationSettings == null)
+                throw new NullReferenceException("cdpnNormalizationRule.NormalizationSettings");
+
+            NormalizationRule cgpnNormalizationRule = normalizationRules.FindRecord(itm => itm.FieldToNormalize == "CGPN");
+
+            _cdpnNormalizationSettings = cdpnNormalizationRule.NormalizationSettings;
+            _cgpnNormalizationSettings = (cgpnNormalizationRule != null) ? cgpnNormalizationRule.NormalizationSettings : null;
+        }
+        
+        #endregion
     }
 }

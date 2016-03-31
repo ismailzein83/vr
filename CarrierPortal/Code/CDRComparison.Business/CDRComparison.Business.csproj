@@ -53,12 +53,17 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Normalization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRComparisonManager.cs" />
     <Compile Include="CDRManager.cs" />
     <Compile Include="CDRSourceManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Context\NormalizeRuleContext.cs" />
     <Compile Include="DisputeCDRManager.cs" />
     <Compile Include="FileCDRSource.cs" />
     <Compile Include="MissingCDRManager.cs" />

@@ -8,6 +8,10 @@ namespace CDRComparison.Entities
 {
     public class PartialMatchCDR
     {
+        public string OriginalSystemCDPN { get; set; }
+        public string OriginalPartnerCDPN { get; set; }
+        public string OriginalSystemCGPN { get; set; }
+        public string OriginalPartnerCGPN { get; set; }
         public string SystemCDPN { get; set; }
         public string PartnerCDPN { get; set; }
         public string SystemCGPN { get; set; }

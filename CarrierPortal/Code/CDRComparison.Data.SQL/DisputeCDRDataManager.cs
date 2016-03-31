@@ -19,20 +19,38 @@ namespace CDRComparison.Data.SQL
 
         }
 
-        static string[] s_Columns = new string[] {
-            "SystemCDPN"
-            ,"PartnerCDPN"
-            ,"SystemCGPN"
-            ,"PartnerCGPN"
-            ,"SystemTime"
-            ,"PartnerTime"
-            ,"SystemDurationInSec"
-            ,"PartnerDurationInSec"
+        static string[] s_Columns = new string[]
+        {
+            "OriginalSystemCDPN",
+            "OriginalPartnerCDPN",
+            "OriginalSystemCGPN",
+            "OriginalPartnerCGPN",
+            "SystemCDPN",
+            "PartnerCDPN",
+            "SystemCGPN",
+            "PartnerCGPN",
+            "SystemTime",
+            "PartnerTime",
+            "SystemDurationInSec",
+            "PartnerDurationInSec"
         };
 
         #endregion
 
         #region Public Methods
+
+        public IEnumerable<DisputeCDR> GetDisputeCDRs()
+        {
+            return GetItemsText(GetDisputeCDRsQuery(), DisputeCDRMapper, null);
+        }
+
+        public int GetDisputeCDRsCount()
+        {
+            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.DisputeCDR", null);
+            return (int)count;
+        }
+
+        #region Bulk Insert Methods
 
         public void ApplyDisputeCDRsToDB(object preparedNumberProfiles)
         {
@@ -62,51 +80,61 @@ namespace CDRComparison.Data.SQL
         public void WriteRecordToStream(DisputeCDR record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
-                                    record.SystemCDPN,
-                                    record.PartnerCDPN,
-                                    record.SystemCGPN,
-                                    record.PartnerCGPN,
-                                    record.SystemTime,
-                                    record.PartnerTime,
-                                    record.SystemDurationInSec,
-                                    record.PartnerDurationInSec
-                                    );
+            streamForBulkInsert.WriteRecord
+            (
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}",
+                record.OriginalSystemCDPN,
+                record.OriginalPartnerCDPN,
+                record.OriginalSystemCGPN,
+                record.OriginalPartnerCGPN,
+                record.SystemCDPN,
+                record.PartnerCDPN,
+                record.SystemCGPN,
+                record.PartnerCGPN,
+                record.SystemTime,
+                record.PartnerTime,
+                record.SystemDurationInSec,
+                record.PartnerDurationInSec
+            );
         }
-
-        public IEnumerable<DisputeCDR> GetDisputeCDRs()
-        {
-            return GetItemsText(GetDisputeCDRsQuery(), DisputeCDRMapper, null);
-        }
-        private string GetDisputeCDRsQuery()
-        {
-            StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT TOP 1000 [ID]
-	                        ,[SystemCDPN]
-	                        ,[PartnerCDPN]
-	                        ,[SystemCGPN]
-	                        ,[PartnerCGPN]
-	                        ,[SystemTime]
-	                        ,[PartnerTime]
-	                        ,[SystemDurationInSec]
-	                        ,[PartnerDurationInSec]
-                        FROM [CDRComparison_Dev].[dbo].[DisputeCDR]");
-            return query.ToString();
-        }
-        public int GetDisputeCDRsCount()
-        {
-            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.DisputeCDR", null);
-            return (int)count;
-        }
+        
+        #endregion
 
         #endregion
 
-        #region Mappers
+        #region Private Methods
+
+        private string GetDisputeCDRsQuery()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"SELECT TOP 1000 [ID]
+                    [OriginalSystemCDPN],
+                    [OriginalPartnerCDPN],
+                    [OriginalSystemCGPN],
+                    [OriginalPartnerCGPN],
+	                [SystemCDPN],
+	                [PartnerCDPN],
+	                [SystemCGPN],
+	                [PartnerCGPN],
+	                [SystemTime],
+	                [PartnerTime],
+	                [SystemDurationInSec],
+	                [PartnerDurationInSec]
+                FROM [CDRComparison_Dev].[dbo].[DisputeCDR]"
+            );
+            return query.ToString();
+        }
 
         DisputeCDR DisputeCDRMapper(IDataReader reader)
         {
             return new DisputeCDR()
             {
+                OriginalSystemCDPN = GetReaderValue<string>(reader, "OriginalSystemCDPN"),
+                OriginalPartnerCDPN = GetReaderValue<string>(reader, "OriginalPartnerCDPN"),
+                OriginalSystemCGPN = GetReaderValue<string>(reader, "OriginalSystemCGPN"),
+                OriginalPartnerCGPN = GetReaderValue<string>(reader, "OriginalPartnerCGPN"),
                 SystemCDPN = GetReaderValue<string>(reader, "SystemCDPN"),
                 PartnerCDPN = GetReaderValue<string>(reader, "PartnerCDPN"),
                 SystemCGPN = GetReaderValue<string>(reader, "SystemCGPN"),

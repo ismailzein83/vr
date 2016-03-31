@@ -10,6 +10,8 @@ namespace CDRComparison.Data.SQL
 {
     public class CDRDataManager : BaseSQLDataManager, ICDRDataManager
     {
+        #region Constructors / Fields
+
         public CDRDataManager()
             : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
         {
@@ -18,13 +20,18 @@ namespace CDRComparison.Data.SQL
 
         static string[] s_Columns = new string[]
         {
+            "OriginalCDPN",
+            "OriginalCGPN",
             "CDPN",
             "CGPN",
-             "IsPartnerCDR",
+            "IsPartnerCDR",
             "AttemptTime",
-            "Duration",
-           
+            "Duration"
         };
+        
+        #endregion
+
+        #region Public Methods
 
         public void LoadCDRs(Action<CDR> onBatchReady)
         {
@@ -34,34 +41,23 @@ namespace CDRComparison.Data.SQL
                 {
                     onBatchReady(new CDR()
                     {
-                        CDPN = (reader["CDPN"] as string),
-                        CGPN = (reader["CGPN"] as string),
+                        OriginalCDPN = GetReaderValue<string>(reader, "OriginalCDPN"),
+                        OriginalCGPN = GetReaderValue<string>(reader, "OriginalCGPN"),
+                        CDPN = GetReaderValue<string>(reader, "CDPN"),
+                        CGPN = GetReaderValue<string>(reader, "CGPN"),
                         DurationInSec = (GetReaderValue<Decimal>(reader, "Duration")),
                         Time = (GetReaderValue<DateTime>(reader, "AttemptTime")),
-                        IsPartnerCDR = (GetReaderValue<Boolean>(reader, "IsPartnerCDR")),
+                        IsPartnerCDR = (GetReaderValue<Boolean>(reader, "IsPartnerCDR"))
                     });
                 }
-            },null);
-        }
-        private string GetLoadCDRsQuery()
-        {
-            StringBuilder query = new StringBuilder();
-            query.Append(@"SELECT [ID],
-		                                 [CDPN],
-		                                 [CGPN],
-		                                 [IsPartnerCDR],
-		                                 [AttemptTime],
-		                                 [Duration]
-	                               FROM  [CDRComparison_Dev].[dbo].[CDR]
-	                               ORDER BY [CDPN]");
-            return query.ToString();
-        }
-        public int GetAllCDRsCount()
-        {
-            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.CDR",null);
-            return (int)count;
+            }, null);
         }
 
+        public int GetAllCDRsCount()
+        {
+            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.CDR", null);
+            return (int)count;
+        }
 
         #region Bulk Insert Methods
 
@@ -75,13 +71,15 @@ namespace CDRComparison.Data.SQL
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord
             (
-                "{0}^{1}^{2}^{3}^{4}",
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+                record.OriginalCDPN,
+                record.OriginalCGPN,
                 record.CDPN,
                 record.CGPN,
                 record.IsPartnerCDR ? "1" : "0",
                 record.Time,
                 record.DurationInSec
-               
+
             );
         }
 
@@ -103,6 +101,31 @@ namespace CDRComparison.Data.SQL
         public void ApplyCDRsToDB(object preparedCDRs)
         {
             InsertBulkToTable(preparedCDRs as BaseBulkInsertInfo);
+        }
+
+        #endregion
+        
+        #endregion
+
+        #region Private Methods
+
+        private string GetLoadCDRsQuery()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"SELECT [ID],
+                    [OriginalCDPN],
+                    [OriginalCGPN],
+		            [CDPN],
+		            [CGPN],
+		            [IsPartnerCDR],
+		            [AttemptTime],
+		            [Duration]
+	            FROM  [CDRComparison_Dev].[dbo].[CDR]
+	            ORDER BY [CDPN]"
+            );
+            return query.ToString();
         }
 
         #endregion

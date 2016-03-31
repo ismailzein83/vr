@@ -10,6 +10,8 @@ namespace CDRComparison.Entities
     {
         public int ConfigId { get; set; }
 
+        public List<NormalizationRule> NormalizationRules { get; set; }
+
         public abstract void ReadCDRs(IReadCDRsFromSourceContext context);
 
         public abstract CDRSample ReadSample(IReadSampleFromSourceContext context);
