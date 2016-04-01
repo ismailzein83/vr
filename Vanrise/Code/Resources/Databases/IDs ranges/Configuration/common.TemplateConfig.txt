@@ -4,3 +4,4 @@ CDRAnalysis		20001 to 30000
 ClearVoice		30001 to 40000
 InterConnect	40001 to 50000
 Common			50001 to 60000
+Generic			60001 to 70000
