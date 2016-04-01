@@ -42,7 +42,8 @@ as (select * from (values
 (3003,'Data Transformation Definitions','Data Transformation Definition','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement',301,'VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions',null,null,null,0,3),
 (3004,'Data Stores','Data Store','#/view/VR_GenericData/Views/DataStore/DataStoreManagement',301,'VR_GenericData/DataStore/GetFilteredDataStores',null,null,null,0,4),
 (3005,'Data Record Storages','Data Record Storage','#/view/VR_GenericData/Views/DataRecordStorage/DataRecordStorageManagement',301,'VR_GenericData/DataRecordStorage/GetFilteredDataRecordStorages',null,null,null,0,5),
-(3006,'Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement',301,'VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions',null,null,null,0,6)
+(3006,'Business Entity Definitions','Business Entity Definitions','#/view/VR_GenericData/Views/GenericBusinessEntity/Definition/GenericBEDefinitionManagement',301,'VR_GenericData/BusinessEntityDefinition/GetFilteredBusinessEntityDefinitions',null,null,null,0,6),
+(3007,'Summary Transformation Definition','Summary Transformation Definition','#/view/VR_GenericData/Views/SummaryTransformationDefinition/SummaryTransformationDefinitionManagement',301,'VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions',null,null,null,0,8)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -90,7 +91,8 @@ as (select * from (values
 (604,'VR_GenericData_ExtensibleBEItem','Extensible BE Item',301,0,'["Add","Edit"]'),
 (605,'VR_GenericData_DataRecordType','Data Record Type',301,0,'["View","Add","Edit"]'),
 (606,'VR_GenericData_DataStore','Data Store',301,0,'["View","Add","Edit"]'),
-(607,'VR_GenericData_DataRecordStorage','Data Record Storage',301,0,'["View","Add","Edit"]')
+(607,'VR_GenericData_DataRecordStorage','Data Record Storage',301,0,'["View","Add","Edit"]'),
+(608,'VR_GenericData_SummaryTransformationDefinition','Summary Transformation Definition',301,0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -173,7 +175,13 @@ as (select * from (values
 ('VR_GenericData/GenericUIRuntime/GetExtensibleBEItemRuntime',null),
 ('VR_GenericData/GenericUIRuntime/GetGenericManagementRuntime',null),
 ('VR_GenericData/GenericUIRuntime/GetGenericEditorRuntime',null),
-('VR_GenericData/GenericUIRuntime/GetDataRecordTypesInfo',null)
+('VR_GenericData/GenericUIRuntime/GetDataRecordTypesInfo',null),
+('VR_GenericData/SummaryTransformationDefinition/GetSummaryTransformationDefinition',null),
+('VR_GenericData/SummaryTransformationDefinition/GetFilteredSummaryTransformationDefinitions','VR_GenericData_SummaryTransformationDefinition: View'),
+('VR_GenericData/SummaryTransformationDefinition/AddSummaryTransformationDefinition','VR_GenericData_SummaryTransformationDefinition: Add'),
+('VR_GenericData/SummaryTransformationDefinition/UpdateSummaryTransformationDefinition','VR_GenericData_SummaryTransformationDefinition: Edit'),
+('VR_GenericData/SummaryTransformationDefinition/GetSummaryTransformationDefinitionInfo',null),
+('VR_GenericData/SummaryTransformationDefinition/GetSummaryBatchIntervalSourceTemplates',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -313,3 +321,49 @@ when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
 set identity_insert [genericdata].[DataRecordFieldTypeConfig] off;
+
+--[common].[TemplateConfig]-----------------60001 to 70000------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[TemplateConfig] on;
+;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(60001,'Time Interval','VR_GenericData_SummaryBatchIntervalSettings','vr-genericdata-summarytransformation-timeinterval-selector',null,null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
+merge	[common].[TemplateConfig] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
+	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
+set identity_insert [common].[TemplateConfig] off;
+
+--[queue].[QueueActivatorConfig]----------------1 to 500--------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [queue].[QueueActivatorConfig] on;
+;with cte_data([ID],[Name],[Details])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'Store Batch Queue Activator','{ "QueueActivatorConfigId": "2" , "Name": "Store Batch Queue Activator" ,"Title" : "Store Batch Queue Activator", "Editor" :"vr-genericdata-queueactivator-storebatch"}'),
+(2,'Transform Batch Queue Activator','{ "QueueActivatorConfigId": "2" , "Name": "Transform  Batch Queue Activator" ,"Title" : "Transform  Batch Queue Activator", "Editor" :"vr-genericdata-queueactivator-transformbatch"}'),
+(3,'Custom Activator','{ "QueueActivatorConfigId": "7" , "Name": "Custom Activator" ,"Title" : "Custom Activator", "Editor" :"vr-queueing-queueactivator-customactivator"}'),
+(4,'Update Summary Queue Activator','{ "QueueActivatorConfigId": "3" , "Name": "Update Summary Queue Activator" ,"Title" : "Update Summary Queue Activator", "Editor" :"vr-genericdata-queueactivator-updatesummary"}'),
+(5,'Generate Summary Queue Activator','{ "QueueActivatorConfigId": "4" , "Name": "Generate Summary Queue Activator" ,"Title" : "Generate Summary Queue Activator", "Editor" :"vr-genericdata-queueactivator-generatesummary"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Details]))
+merge	[queue].[QueueActivatorConfig] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Details] = s.[Details]
+when not matched by target then
+	insert([ID],[Name],[Details])
+	values(s.[ID],s.[Name],s.[Details]);
+set identity_insert [queue].[QueueActivatorConfig] off;

@@ -151,7 +151,7 @@ as (select * from (values
 (12021,'Supplier Zones','Supplier Zones','#/view/WhS_BusinessEntity/Views/SupplierZone/SupplierZoneManagement',1208,null,null,null,null,0,3),
 (12022,'Supplier Codes','Supplier Codes','#/view/WhS_BusinessEntity/Views/SupplierCode/SupplierCodeManagement',1208,null,null,null,null,0,4),
 (12023,'Supplier Rates','Supplier Rates','#/view/WhS_BusinessEntity/Views/SupplierRate/SupplierRateManagement',1208,null,null,null,null,0,5),
-(12024,'Supplier Price Lists','Supplier Price Lists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',1208,null,null,null,null,0,2),
+(12024,'Supplier Price Lists','Supplier Price Lists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist',1208,'GetFilteredSupplierPricelist',null,null,null,0,6),
 (12025,'Purchase Pricing Rules','Purchase Pricing Rules','#/view/WhS_BusinessEntity/Views/PricingRule/PurchasePricingRuleManagement',1209,null,null,null,null,0,10),
 (12026,'Routing Products','Routing Products','#/view/WhS_BusinessEntity/Views/RoutingProduct/RoutingProductManagement',1210,null,null,null,null,0,4),
 (12027,'Product Routes','Product Routes','#/view/WhS_Routing/Views/RPRoute/RPRouteManagement',1210,null,null,null,null,0,5),
@@ -320,7 +320,8 @@ as (select * from (values
 ('WhS_Routing/RouteRule/AddRule',null),
 ('WhS_BE/CarrierAccount/GetFilteredCarrierAccounts','Carrier:View'),
 ('WhS_BE/CarrierAccount/UpdateCarrierAccount','Carrier:Edit'),
-('WhS_BE/CarrierAccount/AddCarrierAccount','Carrier:Add')
+('WhS_BE/CarrierAccount/AddCarrierAccount','Carrier:Add'),
+('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
