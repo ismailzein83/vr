@@ -7,11 +7,8 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace CDRComparison.BP.Arguments
 {
-    public class ConfigurationTaskExecutionInformation : BPTaskExecutionInformation
+    public class ComparisonResultTaskExecutionInformation : BPTaskExecutionInformation
     {
-        public TimeSpan TimeOffset { get; set; }
-        public long DurationMarginInMilliSeconds { get; set; }
-        public long TimeMarginInMilliSeconds { get; set; }
         public bool Decision { get; set; }
     }
 }

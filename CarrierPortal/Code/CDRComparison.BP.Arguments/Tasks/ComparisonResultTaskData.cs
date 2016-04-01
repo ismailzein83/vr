@@ -7,7 +7,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace CDRComparison.BP.Arguments
 {
-    public class ConfigurationTaskData : BPTaskData
+    public class ComparisonResultTaskData : BPTaskData
     {
     }
 }

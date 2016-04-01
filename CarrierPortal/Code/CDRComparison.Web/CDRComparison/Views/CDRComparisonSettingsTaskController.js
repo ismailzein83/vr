@@ -59,7 +59,7 @@
             
             var timeOffset = "00:" + $scope.scopeModal.timeOffset.Hour + ":" + $scope.scopeModal.timeOffset.Minute;
             var executionInformation = {
-                $type: "CDRComparison.BP.Arguments.ConfigurationTaskExecutionInformation, CDRComparison.BP.Arguments",
+                $type: "CDRComparison.BP.Arguments.SettingTaskExecutionInformation, CDRComparison.BP.Arguments",
                 Decision: taskAction,
                 DurationMarginInMilliSeconds: durationMarginInMilliseconds,
                 TimeMarginInMilliSeconds: timeMarginInMilliSeconds,
