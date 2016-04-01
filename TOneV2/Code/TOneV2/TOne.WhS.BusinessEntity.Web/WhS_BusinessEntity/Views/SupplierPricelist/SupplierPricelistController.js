@@ -65,7 +65,7 @@
         }
         function setFilterObject() {
             filter = {
-                SupplierId: supplierDirectiveApi.getSelectedIds(),
+                SupplierIds: supplierDirectiveApi.getSelectedIds(),
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate
             };
