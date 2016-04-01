@@ -149,13 +149,18 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
             };
 
             api.getData = function () {
-                return {
-                    Actions: (ctrl.datasource.length > 0) ? getActions() : null
-                };
-            }
+                var data;
+                if (ctrl.datasource.length > 0) {
+                    data = {
+                        Actions: getActions()
+                    };
+                }
+                return data;
+            };
 
-            if (ctrl.onReady != null)
+            if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                 ctrl.onReady(api);
+            }
 
             function getActions() {
                 var actions = [];

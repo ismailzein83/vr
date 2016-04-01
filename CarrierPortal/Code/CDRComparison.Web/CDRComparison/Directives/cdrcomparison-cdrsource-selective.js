@@ -163,9 +163,24 @@
                     if ($scope.scopeModel.selectedTemplateConfig != undefined) {
                         data = directiveAPI.getData();
                         data.ConfigId = $scope.scopeModel.selectedTemplateConfig.TemplateConfigID;
-                        data.NormalizationRules = [cdpnNormalizationRuleDirectiveAPI.getData(), cgpnNormalizationRuleDirectiveAPI.getData()];
+                        data.NormalizationRules = getNormalizationRules();
                     }
                     return data;
+
+                    function getNormalizationRules() {
+                        var normalizationRules = [];
+
+                        var cdpnNormalizationRule = cdpnNormalizationRuleDirectiveAPI.getData();
+                        var cgpnNormalizationRule = cgpnNormalizationRuleDirectiveAPI.getData();
+
+                        normalizationRules.push(cdpnNormalizationRule);
+
+                        if (cgpnNormalizationRule != undefined) {
+                            normalizationRules.push(cgpnNormalizationRule);
+                        }
+
+                        return normalizationRules;
+                    }
                 }
             }
         }

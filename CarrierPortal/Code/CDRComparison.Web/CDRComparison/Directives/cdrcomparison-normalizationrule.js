@@ -65,11 +65,12 @@
                 };
 
                 api.getData = function () {
-                    return {
+                    var data = {
                         FieldToNormalize: $scope.scopeModel.fieldToNormalize,
                         CriteriaFields: null,
                         NormalizationSettings: settingsDirectiveAPI.getData()
                     };
+                    return (data.NormalizationSettings != undefined) ? data : undefined;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
