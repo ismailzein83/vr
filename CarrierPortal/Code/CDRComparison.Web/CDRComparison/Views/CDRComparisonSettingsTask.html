@@ -1,0 +1,42 @@
+﻿<div vr-modalcontent ng-controller="CDRComparison_CDRComparisonSettingsTaskController" width="'70%'">
+    <vr-modalbody>
+        <vr-form name="formCDRComparison" vr-loader="scopeModal.isLoading">
+            <vr-tabs>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox type="number" value="scopeModal.durationMargin" label="Duration Margin" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row" withemptyline>
+                            <vr-select datasource="scopeModal.durations" hideremoveicon datatextfield="description" isrequired datavaluefield="value" selectedvalues="scopeModal.selectedDuration" hidefilterbox></vr-select>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox type="number" value="scopeModal.timeMargin" label="Time Margin" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row" withemptyline>
+                            <vr-select datasource="scopeModal.durations" isrequired hideremoveicon datatextfield="description" datavaluefield="value" selectedvalues="scopeModal.selectedTimeDuration" hidefilterbox></vr-select>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModal.timeOffset" label="Time Offset" isrequired customvalidate="scopeModal.validateTimeOffset(scopeModal.timeOffset)"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row" withemptyline>
+                            <vr-button type="Edit" data-onclick="scopeModal.openHelper" standalone></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Continue" data-onclick="scopeModal.continueTask" formname="formCDRComparison"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

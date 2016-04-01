@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CDRComparisonController.cs" />
+    <Compile Include="Controllers\CDRController.cs" />
     <Compile Include="Controllers\CDRSourceController.cs" />
     <Compile Include="Controllers\DisputeCDRController.cs" />
     <Compile Include="Controllers\MissingCDRController.cs" />
@@ -128,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CDRComparison\Constant\ModuleConfig.js" />
+    <Content Include="CDRComparison\Constant\TimeDurationEnum.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-cdrsource-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filereader-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filescdrsource.js" />
@@ -144,17 +146,21 @@
     <Content Include="CDRComparison\Directives\Templates\FileCDRSourceTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\FlatFileReaderTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\NormalizationRuleTemplate.html" />
+    <Content Include="CDRComparison\Services\APIServices\CDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\CDRComparisonAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\CDRSourceAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\DisputeCDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\MissingCDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\PartialMatchCDRAPIService.js" />
+    <Content Include="CDRComparison\Services\CDRComparisonService.js" />
     <Content Include="CDRComparison\Views\CDRComparison.html" />
-    <Content Include="CDRComparison\Views\CDRComparisonConfigurationTask.html" />
-    <Content Include="CDRComparison\Views\CDRComparisonConfigurationTaskController.js" />
+    <Content Include="CDRComparison\Views\CDRComparisonSettingsTask.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonSettingsTaskController.js" />
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />
-    <Content Include="CDRComparison\Views\CDRComparisonPreviewTask.html" />
-    <Content Include="CDRComparison\Views\CDRComparisonPreviewTaskController.js" />
+    <Content Include="CDRComparison\Views\CDRComparisonResultTask.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonResultTaskController.js" />
+    <Content Include="CDRComparison\Views\TimeOffsetHelper.html" />
+    <Content Include="CDRComparison\Views\TimeOffsetHelperController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

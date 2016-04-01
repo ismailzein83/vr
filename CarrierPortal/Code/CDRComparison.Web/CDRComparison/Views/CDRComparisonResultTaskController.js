@@ -2,9 +2,9 @@
 
     "use strict";
 
-    CDRComparisonPreviewTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService'];
+    CDRComparisonResultTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService'];
 
-    function CDRComparisonPreviewTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService) {
+    function CDRComparisonResultTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService) {
         var bpTaskId;
         var processInstanceId;
 
@@ -138,5 +138,5 @@
 
     }
 
-    appControllers.controller('CDRComparison_CDRComparisonPreviewTaskController', CDRComparisonPreviewTaskController);
+    appControllers.controller('CDRComparison_CDRComparisonResultTaskController', CDRComparisonResultTaskController);
 })(appControllers);

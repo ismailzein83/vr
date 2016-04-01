@@ -1,6 +1,7 @@
 ﻿using CDRComparison.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ namespace CDRComparison.Data.SQL
                 }
             }, null);
         }
-
+ 
         public int GetAllCDRsCount()
         {
             object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.CDR", null);
@@ -127,7 +128,51 @@ namespace CDRComparison.Data.SQL
             );
             return query.ToString();
         }
+        private string GetCDRsQuery(bool isPartnerCDRs,string CDPN)
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"SELECT [ID],
+                    [OriginalCDPN],
+                    [OriginalCGPN],
+		            [CDPN],
+		            [CGPN],
+		            [IsPartnerCDR],
+		            [AttemptTime],
+		            [Duration]
+	            FROM  [CDRComparison_Dev].[dbo].[CDR]  WHERE IsPartnerCDR = #ISPARTNERCDRS# #ADDITIONALQUERY#
+	            ORDER BY [CDPN]"
+            );
+            string cdpnQuery = "";
+            if(CDPN !=null)
+            {
+                cdpnQuery = string.Format("and [CDPN]= '{0}'",CDPN);
+            }
+            query.Replace("#ISPARTNERCDRS#", (isPartnerCDRs ? "1" : "0"));
+            query.Replace("#ADDITIONALQUERY#", cdpnQuery);
+            return query.ToString();
+        }
 
         #endregion
+
+
+        public IEnumerable<CDR> GetCDRs(bool isPartnerCDRs,string CDPN)
+        {
+            return GetItemsText(GetCDRsQuery(isPartnerCDRs, CDPN), CDRMapper, null);
+        }
+        CDR CDRMapper(IDataReader reader)
+        {
+            return new CDR()
+            {
+                OriginalCDPN = reader["OriginalCDPN"] as string,
+                OriginalCGPN = reader["OriginalCGPN"] as string,
+                CDPN = reader["CDPN"] as string,
+                CGPN = reader["CGPN"] as string,
+                Time = GetReaderValue<DateTime>(reader, "AttemptTime"),
+                DurationInSec = GetReaderValue<decimal>(reader, "Duration"),
+                IsPartnerCDR = GetReaderValue<bool>(reader, "IsPartnerCDR")
+            };
+        }
     }
 }

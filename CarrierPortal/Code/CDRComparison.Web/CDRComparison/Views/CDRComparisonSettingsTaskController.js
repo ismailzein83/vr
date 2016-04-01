@@ -2,9 +2,9 @@
 
     "use strict";
 
-    CDRComparisonConfigurationTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService'];
+    CDRComparisonSettingsTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService', 'CDRComparison_TimeDurationEnum', 'CDRComparison_CDRComparisonService'];
 
-    function CDRComparisonConfigurationTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService) {
+    function CDRComparisonSettingsTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService, CDRComparison_TimeDurationEnum, CDRComparison_CDRComparisonService) {
         var bpTaskId;
         var processInstanceId;
 
@@ -24,28 +24,25 @@
         function defineScope() {
 
             $scope.scopeModal = {};
-            $scope.scopeModal.durations = [{
-                value: 0,
-                description:"Sec"
-            }, {
-                value: 1,
-                description: "Ms"
-            }];
-            $scope.scopeModal.onDisputeCDRGridReady = function (api) {
-                disputeCDRGridAPI = api;
-                var payload = {};
-                var setLoader = function (value) {
-                    $scope.scopeModal.isLoadingDisputeCDRDirective = value;
+            $scope.scopeModal.durations = UtilsService.getArrayEnum(CDRComparison_TimeDurationEnum);
+            $scope.scopeModal.selectedDuration = CDRComparison_TimeDurationEnum.Seconds;
+            $scope.scopeModal.selectedTimeDuration = CDRComparison_TimeDurationEnum.Seconds;
+
+            $scope.scopeModal.timeOffset = '00:00:00';
+            $scope.scopeModal.openHelper = function()
+            {
+                var onTimeOffsetSelected = function (timeOffset) {
+                    $scope.scopeModal.timeOffset = timeOffset;
                 };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, disputeCDRGridAPI, payload, setLoader);
+                CDRComparison_CDRComparisonService.openTimeOffsetHelper(onTimeOffsetSelected);
+            }
+
+            $scope.scopeModal.validateTimeOffset = function (value) {
+               return UtilsService.validateTimeOffset(value);
             }
 
             $scope.scopeModal.continueTask = function () {
                 return executeTask(true);
-            }
-
-            $scope.scopeModal.stopTask = function () {
-                return executeTask(false);
             }
         }
 
@@ -57,12 +54,16 @@
             var timeMarginInMilliSeconds = $scope.scopeModal.timeMargin;
             if ($scope.scopeModal.selectedTimeDuration.value = 0)
                 timeMarginInMilliSeconds = $scope.scopeModal.timeMargin * 1000;
+
+
+            
+            var timeOffset = "00:" + $scope.scopeModal.timeOffset.Hour + ":" + $scope.scopeModal.timeOffset.Minute;
             var executionInformation = {
                 $type: "CDRComparison.BP.Arguments.ConfigurationTaskExecutionInformation, CDRComparison.BP.Arguments",
                 Decision: taskAction,
                 DurationMarginInMilliSeconds: durationMarginInMilliseconds,
                 TimeMarginInMilliSeconds: timeMarginInMilliSeconds,
-                
+                TimeOffset:timeOffset
             };
 
             var input = {
@@ -104,5 +105,5 @@
 
     }
 
-    appControllers.controller('CDRComparison_CDRComparisonConfigurationTaskController', CDRComparisonConfigurationTaskController);
+    appControllers.controller('CDRComparison_CDRComparisonSettingsTaskController', CDRComparisonSettingsTaskController);
 })(appControllers);

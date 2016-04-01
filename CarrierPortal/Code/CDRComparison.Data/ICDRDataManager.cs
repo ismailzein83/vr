@@ -13,7 +13,7 @@ namespace CDRComparison.Data
         void LoadCDRs(Action<CDR> onBatchReady);
 
         void ApplyCDRsToDB(object preparedCDRs);
-
+        IEnumerable<CDR> GetCDRs(bool isPartnerCDRs, string CDPN);
         int GetAllCDRsCount();
     }
 }
