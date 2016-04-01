@@ -131,14 +131,14 @@ namespace CDRComparison.Data.SQL
         {
             return new DisputeCDR()
             {
-                OriginalSystemCDPN = GetReaderValue<string>(reader, "OriginalSystemCDPN"),
-                OriginalPartnerCDPN = GetReaderValue<string>(reader, "OriginalPartnerCDPN"),
-                OriginalSystemCGPN = GetReaderValue<string>(reader, "OriginalSystemCGPN"),
-                OriginalPartnerCGPN = GetReaderValue<string>(reader, "OriginalPartnerCGPN"),
-                SystemCDPN = GetReaderValue<string>(reader, "SystemCDPN"),
-                PartnerCDPN = GetReaderValue<string>(reader, "PartnerCDPN"),
-                SystemCGPN = GetReaderValue<string>(reader, "SystemCGPN"),
-                PartnerCGPN = GetReaderValue<string>(reader, "PartnerCGPN"),
+                OriginalSystemCDPN = reader["OriginalSystemCDPN"] as string,
+                OriginalPartnerCDPN = reader["OriginalPartnerCDPN"] as string,
+                OriginalSystemCGPN = reader["OriginalSystemCGPN"] as string,
+                OriginalPartnerCGPN = reader["OriginalPartnerCGPN"] as string,
+                SystemCDPN = reader["SystemCDPN"] as string,
+                PartnerCDPN = reader["PartnerCDPN"] as string,
+                SystemCGPN = reader["SystemCGPN"] as string,
+                PartnerCGPN = reader["PartnerCGPN"] as string,
                 SystemTime = GetReaderValue<DateTime>(reader, "SystemTime"),
                 PartnerTime = GetReaderValue<DateTime>(reader, "PartnerTime"),
                 SystemDurationInSec = GetReaderValue<decimal>(reader, "SystemDurationInSec"),

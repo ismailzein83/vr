@@ -118,10 +118,10 @@ namespace CDRComparison.Data.SQL
         {
             return new MissingCDR()
             {
-                OriginalCDPN = GetReaderValue<string>(reader, "OriginalCDPN"),
-                OriginalCGPN = GetReaderValue<string>(reader, "OriginalCGPN"),
-                CDPN = GetReaderValue<string>(reader, "CDPN"),
-                CGPN = GetReaderValue<string>(reader, "CGPN"),
+                OriginalCDPN = reader["OriginalCDPN"] as string,
+                OriginalCGPN = reader["OriginalCGPN"] as string,
+                CDPN = reader["CDPN"] as string,
+                CGPN = reader["CGPN"] as string,
                 Time = GetReaderValue<DateTime>(reader, "Time"),
                 DurationInSec = GetReaderValue<decimal>(reader, "DurationInSec"),
                 IsPartnerCDR = GetReaderValue<bool>(reader, "IsPartnerCDR")
