@@ -8,6 +8,8 @@ namespace ExcelConversion.Entities
 {
     public class ExcelWorksheet
     {
+        public string Name { get; set; }
+
         public int NumberOfColumns { get; set; }
 
         public List<ExcelRow> Rows { get; set; }

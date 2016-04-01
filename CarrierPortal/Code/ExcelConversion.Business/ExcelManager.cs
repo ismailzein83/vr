@@ -29,6 +29,7 @@ namespace ExcelConversion.Business
             {
                 ExcelWorksheet eSheet = new ExcelWorksheet() { Rows = new List<ExcelRow>() };
                 ewb.Sheets.Add(eSheet);
+                eSheet.Name = sheet.Name;
                 int nbOfSheetColumns = 0;
                 foreach(Row row in sheet.Cells.Rows)
                 {
