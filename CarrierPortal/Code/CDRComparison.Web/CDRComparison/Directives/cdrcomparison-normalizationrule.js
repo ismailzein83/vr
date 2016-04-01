@@ -55,7 +55,11 @@
 
                     function loadSettingsDirective() {
                         var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                        VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settings, settingsDirectiveLoadDeferred);
+                        var payload = {
+                            settings: settings,
+                            isNotRequired: (ctrl.isrequired == undefined || ctrl.isrequired == false)
+                        };
+                        VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, payload, settingsDirectiveLoadDeferred);
                         return settingsDirectiveLoadDeferred.promise;
                     }
                 };

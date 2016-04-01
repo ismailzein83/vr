@@ -31,6 +31,8 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
 
         this.initializeController = initializeController;
 
+        var isNotRequired = false;
+
         function initializeController() {
             ctrl.templates = [];
             ctrl.selectedActionTemplate = undefined;
@@ -41,10 +43,11 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                 ctrl.disableAddButton = (ctrl.selectedActionTemplate == undefined);
             };
             ctrl.isValid = function () {
-                
-                if (ctrl.datasource.length> 0)
+                if (isNotRequired === true)
                     return null;
-                return "You Should at least one filter type ";
+                if (ctrl.datasource.length > 0)
+                    return null;
+                return "You must add at least one action";
             }
             ctrl.addFilter = function () {
                 var dataItem = {
@@ -82,6 +85,7 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                 if (payload != undefined)
                 {
                     settings = payload.settings;
+                    if (payload.isNotRequired != undefined) { isNotRequired = payload.isNotRequired; }
                 }
 
                 var promises = [];
