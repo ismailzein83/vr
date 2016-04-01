@@ -77,10 +77,6 @@
             $scope.scopeModal.continueTask = function () {
                 return executeTask(true);
             }
-
-            $scope.scopeModal.stopTask = function () {
-                return executeTask(false);
-            }
         }
 
         function executeTask(taskAction) {
