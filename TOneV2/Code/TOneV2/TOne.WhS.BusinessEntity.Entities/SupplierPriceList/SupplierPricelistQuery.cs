@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SupplierPricelistQuery
     {
-        public int? SupplierId { get; set; }
+        public List<int?> SupplierIds { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime? ToDate { get; set; }
     }
