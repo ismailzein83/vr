@@ -173,13 +173,15 @@
                         var cdpnNormalizationRule = cdpnNormalizationRuleDirectiveAPI.getData();
                         var cgpnNormalizationRule = cgpnNormalizationRuleDirectiveAPI.getData();
 
-                        normalizationRules.push(cdpnNormalizationRule);
+                        if (cdpnNormalizationRule != undefined) {
+                            normalizationRules.push(cdpnNormalizationRule);
+                        }
 
                         if (cgpnNormalizationRule != undefined) {
                             normalizationRules.push(cgpnNormalizationRule);
                         }
 
-                        return normalizationRules;
+                        return (normalizationRules.length > 0) ? normalizationRules : undefined;
                     }
                 }
             }

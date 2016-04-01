@@ -66,17 +66,7 @@ namespace CDRComparison.BP.Activities
                         IsPartnerCDR = inputArgument.IsPartnerCDRs
                     };
 
-                    var cdpnNormalizationContext = new NormalizeRuleContext() { Value = cdr.CDPN };
-                    _cdpnNormalizationSettings.ApplyNormalizationRule(cdpnNormalizationContext);
-                    item.CDPN = cdpnNormalizationContext.NormalizedValue;
-
-                    if (_cgpnNormalizationSettings != null)
-                    {
-                        var cgpnNormalizationContext = new NormalizeRuleContext() { Value = cdr.CGPN };
-                        _cgpnNormalizationSettings.ApplyNormalizationRule(cgpnNormalizationContext);
-                        item.CGPN = cgpnNormalizationContext.NormalizedValue;
-                    }
-                    
+                    NormalizeNumbers(item);
                     list.Add(item);
                 }
                 var cdrBatch = new CDRBatch() { CDRs = list };
@@ -109,19 +99,34 @@ namespace CDRComparison.BP.Activities
         void SetNumberNormalizationSettings(IEnumerable<NormalizationRule> normalizationRules)
         {
             if (normalizationRules == null)
-                throw new ArgumentNullException("normalizationRules");
+                return;
             
             NormalizationRule cdpnNormalizationRule = normalizationRules.FindRecord(itm => itm.FieldToNormalize == "CDPN");
-            
-            if (cdpnNormalizationRule == null)
-                throw new NullReferenceException("cdpnNormalizationRule");
-            if (cdpnNormalizationRule.NormalizationSettings == null)
-                throw new NullReferenceException("cdpnNormalizationRule.NormalizationSettings");
-
             NormalizationRule cgpnNormalizationRule = normalizationRules.FindRecord(itm => itm.FieldToNormalize == "CGPN");
 
-            _cdpnNormalizationSettings = cdpnNormalizationRule.NormalizationSettings;
+            _cdpnNormalizationSettings = (cdpnNormalizationRule != null) ? cdpnNormalizationRule.NormalizationSettings : null;
             _cgpnNormalizationSettings = (cgpnNormalizationRule != null) ? cgpnNormalizationRule.NormalizationSettings : null;
+        }
+
+        void NormalizeNumbers(CDR cdr)
+        {
+            if (_cdpnNormalizationSettings != null)
+            {
+                var cdpnNormalizationContext = new NormalizeRuleContext() { Value = cdr.OriginalCDPN };
+                _cdpnNormalizationSettings.ApplyNormalizationRule(cdpnNormalizationContext);
+                cdr.CDPN = cdpnNormalizationContext.NormalizedValue;
+            }
+            else
+                cdr.CDPN = cdr.OriginalCDPN;
+
+            if (_cgpnNormalizationSettings != null)
+            {
+                var cgpnNormalizationContext = new NormalizeRuleContext() { Value = cdr.OriginalCGPN };
+                _cgpnNormalizationSettings.ApplyNormalizationRule(cgpnNormalizationContext);
+                cdr.CGPN = cgpnNormalizationContext.NormalizedValue;
+            }
+            else
+                cdr.CGPN = cdr.OriginalCGPN;
         }
         
         #endregion
