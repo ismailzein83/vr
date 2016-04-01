@@ -32,6 +32,9 @@ namespace CarrierPortal.DevRuntime.Tasks
 
         private void TestExcelConversion()
         {
+            ExcelManager manager = new ExcelManager();
+            var workfbook = manager.ReadExcelFile(288);
+            
             ExcelConversionSettings settings = new ExcelConversion.Entities.ExcelConversionSettings
             {
                 FieldMappings = new List<FieldMapping>(),

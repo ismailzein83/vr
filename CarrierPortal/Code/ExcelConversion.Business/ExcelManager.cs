@@ -23,37 +23,33 @@ namespace ExcelConversion.Business
                 throw new NullReferenceException(String.Format("file.Content '{0}'", fileId));
             MemoryStream stream = new MemoryStream(file.Content);
             Workbook workbook = new Workbook(stream);
-            ExcelWorkbook ewb = new ExcelWorkbook();
-            DataSet data = new DataSet();
-            foreach (Worksheet wks in workbook.Worksheets)
-            {
-               
-                if (wks.Cells.MaxDataRow > -1 && wks.Cells.MaxDataColumn > -1)
-                    data.Tables.Add(wks.Cells.ExportDataTableAsString(0, 0, wks.Cells.MaxDataRow + 1, wks.Cells.MaxDataColumn + 1));
 
-            }
-            foreach(DataTable dt in data.Tables)
+            ExcelWorkbook ewb = new ExcelWorkbook() { Sheets = new List<ExcelWorksheet>() };
+            foreach(var sheet in workbook.Worksheets)
             {
-                ExcelWorksheet ews = new ExcelWorksheet();
-                foreach(DataRow row in dt.Rows)
+                ExcelWorksheet eSheet = new ExcelWorksheet() { Rows = new List<ExcelRow>() };
+                ewb.Sheets.Add(eSheet);
+                int nbOfSheetColumns = 0;
+                foreach(Row row in sheet.Cells.Rows)
                 {
-                    ExcelRow er = new ExcelRow();
-                    foreach (DataColumn col in dt.Columns)
+                    ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
+                    eSheet.Rows.Add(eRow);
+                    int nbOfRowColumns = row.LastCell.Column + 1;
+                    if (nbOfRowColumns > nbOfSheetColumns)
+                        nbOfSheetColumns = nbOfRowColumns;
+                    for (int colIndex = 0; colIndex < nbOfRowColumns; colIndex++)
                     {
-                        ExcelCell c = new ExcelCell(){
-                            Value = row[col.ColumnName]
-                        };
-                        er.Cells.Add(c);
+                        var cell = row.GetCellOrNull(colIndex);
+                        ExcelCell eCell = new ExcelCell();
+                        if (cell != null)
+                            eCell.Value = cell.Value;
+                        eRow.Cells.Add(eCell);
                     }
-                    ews.Rows.Add(er);
-                    ews.NumberOfColumns = dt.Columns.Count;
-
                 }
-                ewb.Sheets.Add(ews);
+                eSheet.NumberOfColumns = nbOfSheetColumns;
             }
 
             return ewb;
-           // throw new NotImplementedException();
         }
     }
 }
