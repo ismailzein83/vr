@@ -55,6 +55,10 @@
     <Compile Include="ConversionSettings\FieldMapping.cs" />
     <Compile Include="ConversionSettings\IGetConcatenatedPartTextContext.cs" />
     <Compile Include="ConversionSettings\IGetFieldValueContext.cs" />
+    <Compile Include="Excel\ExcelCell.cs" />
+    <Compile Include="Excel\ExcelRow.cs" />
+    <Compile Include="Excel\ExcelWorkbook.cs" />
+    <Compile Include="Excel\ExcelWorksheet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConversionSettings\ListMapping.cs" />
   </ItemGroup>

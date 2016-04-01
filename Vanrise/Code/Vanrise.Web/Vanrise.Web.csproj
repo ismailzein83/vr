@@ -1100,6 +1100,8 @@
     <Content Include="Client\Libraries\Charts\HichChart\themes\skies.js" />
     <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
     <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Client\Libraries\HandsonTable\handsontable.full.css" />
+    <Content Include="Client\Libraries\HandsonTable\handsontable.full.js" />
     <Content Include="Client\Libraries\Helpers\DateFormat.js" />
     <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\css\jquery.fileupload-ui.css" />
     <Content Include="Client\Libraries\AngularExtensions\jQueryFileUpload\css\jquery.fileupload.css" />

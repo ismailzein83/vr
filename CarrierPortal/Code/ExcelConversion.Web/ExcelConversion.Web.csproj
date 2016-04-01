@@ -103,6 +103,12 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Web.Base">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -113,17 +119,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="ExcelConversion\Directives\" />
     <Folder Include="ExcelConversion\Services\APIServices\" />
-    <Folder Include="ExcelConversion\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ExcelController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExcelConversion\Constant\ModuleConfig.js" />
+    <Content Include="ExcelConversion\Views\Test.html" />
+    <Content Include="ExcelConversion\Views\TestController.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExcelConversion.Business\ExcelConversion.Business.csproj">
+      <Project>{a7b263fa-4dbc-49d1-88f7-2f5aab06dbfb}</Project>
+      <Name>ExcelConversion.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExcelConversion.Entities\ExcelConversion.Entities.csproj">
+      <Project>{a5c3f943-2f4d-42c0-8bb9-c6e0a8e201de}</Project>
+      <Name>ExcelConversion.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

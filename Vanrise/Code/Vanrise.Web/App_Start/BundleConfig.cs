@@ -86,6 +86,12 @@ namespace Vanrise.Web
             bundles.Add(new StyleBundle("~/Content/AngularExtensions").IncludeDirectory(
                 "~/Client/Libraries/AngularExtensions", "*.css", true));
 
+            bundles.Add(new ScriptBundle("~/bundles/HandsonTable").IncludeDirectory(
+             "~/Client/Libraries/HandsonTable", "*.js", true));
+
+            bundles.Add(new StyleBundle("~/Content/HandsonTable").IncludeDirectory(
+                "~/Client/Libraries/HandsonTable", "*.css", true));
+
             //Helpers
             bundles.Add(new ScriptBundle("~/bundles/helpers").IncludeDirectory(
                "~/Client/Libraries/Helpers", "*.js", true));
