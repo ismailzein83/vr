@@ -25,7 +25,6 @@ app.directive('vrExcelWb', ['ExcelConversion_ExcelAPIService', function (excelAP
                     ctrl.previewExcel();
                 }
                 else {
-
                     ctrl.datasource.length = 0;
                 }
             });
@@ -59,9 +58,9 @@ app.directive('vrExcelWb', ['ExcelConversion_ExcelAPIService', function (excelAP
     function ExcelWoorkBook(ctrl, $scope, attrs) {
 
         var excelWBAPI;
-        var wbsApis = [];
+        var wbsAPIs = [];
         $scope.onReadyWoorkSheet = function (api) {
-            wbsApis[wbsApis.length] = api;
+            wbsAPIs[wbsAPIs.length] = api;
 
         }
         function initializeController() {          
@@ -70,7 +69,10 @@ app.directive('vrExcelWb', ['ExcelConversion_ExcelAPIService', function (excelAP
         function defineAPI() {
             var api = {};
             api.clearAtIndex = function (i) {
-                wbsApis[i].clear();
+                wbsAPIs[i].clear();
+            }
+            api.getAPIsArray = function () {
+                return wbsAPIs;
             }
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

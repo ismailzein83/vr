@@ -11,8 +11,8 @@
                 $scope.onReadyWoorkBook = function (api) {
                     WoorkBookApi = api;
                 }
-                $scope.ClearFirst =  function () {
-                    WoorkBookApi.clearAtIndex(0);
+                $scope.ConsoleAPIs = function () {
+                   console.log( WoorkBookApi.getAPIsArray());
                 }
             }
 
