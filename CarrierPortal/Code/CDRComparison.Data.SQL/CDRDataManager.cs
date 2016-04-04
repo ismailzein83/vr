@@ -27,7 +27,16 @@ namespace CDRComparison.Data.SQL
         #endregion
 
         #region Public Methods
-
+        public void DeleteCDRTable()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"DROP TABLE #TEMPTABLE#"
+            );
+            query.Replace("#TEMPTABLE#", this.TableName);
+            ExecuteNonQueryText(query.ToString(), null);
+        }
         public void LoadCDRs(Action<CDR> onBatchReady)
         {
             ExecuteReaderText(GetLoadCDRsQuery(), (reader) =>
@@ -67,7 +76,7 @@ namespace CDRComparison.Data.SQL
         }
         public int GetAllCDRsCount()
         {
-            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.CDR", null);
+            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}",this.TableName), null);
             return (int)count;
         }
         protected override string TableNamePrefix

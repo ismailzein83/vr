@@ -13,7 +13,7 @@ namespace CDRComparison.Data
         void ApplyDisputeCDRsToDB(object preparedNumberProfiles);
         void CreateDisputeCDRTempTable();
         IEnumerable<DisputeCDR> GetDisputeCDRs();
-
+        void DeleteDisputeCDRTable();
         int GetDisputeCDRsCount();
     }
 }

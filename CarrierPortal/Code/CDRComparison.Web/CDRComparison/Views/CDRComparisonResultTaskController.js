@@ -108,7 +108,6 @@
         function load() {
             $scope.scopeModal.isLoading = true;
             BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
-                console.log(response);
                 processInstanceId = response.ProcessInstanceId;
                 if (response && response.TaskData)
                     tableKey = response.TaskData.TableKey;
@@ -118,7 +117,7 @@
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([loadSummaryData])
+            return UtilsService.waitMultipleAsyncOperations([loadSummaryData, setTitle])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
                           })
@@ -140,7 +139,9 @@
                 
             });
         }
-
+        function setTitle() {
+            $scope.title = "CDR Comparison Result";
+        }
     }
 
     appControllers.controller('CDRComparison_CDRComparisonResultTaskController', CDRComparisonResultTaskController);

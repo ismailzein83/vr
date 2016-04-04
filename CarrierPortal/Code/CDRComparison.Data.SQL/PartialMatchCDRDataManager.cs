@@ -33,6 +33,17 @@ namespace CDRComparison.Data.SQL
 
         #region Public Methods
 
+        public void DeletePartialMatchTable()
+        {
+             StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"DROP TABLE #TEMPTABLE#"
+            );
+            query.Replace("#TEMPTABLE#", this.TableName);
+            ExecuteNonQueryText(query.ToString(), null);
+        }
+
         public IEnumerable<PartialMatchCDR> GetPartialMatchCDRs()
         {
             return GetItemsText(GetPartialMatchCDRsQuery(), PartialMatchCDRMapper, null);

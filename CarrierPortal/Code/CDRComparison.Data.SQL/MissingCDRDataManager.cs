@@ -27,7 +27,16 @@ namespace CDRComparison.Data.SQL
         #endregion
 
         #region Public Methods
-
+        public void DeleteMissingCDRTable()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"DROP TABLE #TEMPTABLE#"
+            );
+            query.Replace("#TEMPTABLE#", this.TableName);
+            ExecuteNonQueryText(query.ToString(), null);
+        }
         public IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs)
         {
             return GetItemsText(GetMissingCDRsQuery(isPartnerCDRs), MissingCDRMapper, null);

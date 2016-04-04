@@ -7,7 +7,7 @@
     function CDRComparisonSettingsTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService, CDRComparison_TimeDurationEnum, CDRComparison_CDRComparisonService) {
         var bpTaskId;
         var processInstanceId;
-
+        var tableKey;
         loadParameters();
 
         defineScope();
@@ -34,7 +34,7 @@
                 var onTimeOffsetSelected = function (timeOffset) {
                     $scope.scopeModal.timeOffset = timeOffset;
                 };
-                CDRComparison_CDRComparisonService.openTimeOffsetHelper(onTimeOffsetSelected);
+                CDRComparison_CDRComparisonService.openTimeOffsetHelper(onTimeOffsetSelected, tableKey);
             }
 
             $scope.scopeModal.validateTimeOffset = function (value) {
@@ -84,13 +84,15 @@
             $scope.scopeModal.isLoading = true;
             BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
                 processInstanceId = response.ProcessInstanceId;
+                if (response && response.TaskData)
+                    tableKey = response.TaskData.TableKey;
                 loadAllControls();
             })
         }
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([loadSummaryData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
                           })
@@ -99,8 +101,8 @@
                           });
 
         }
-
-        function loadSummaryData() {
+        function setTitle() {
+            $scope.title = "CDR Comparison Settings";
         }
 
     }

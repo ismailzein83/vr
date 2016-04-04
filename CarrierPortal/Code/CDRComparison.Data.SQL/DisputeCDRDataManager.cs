@@ -32,6 +32,16 @@ namespace CDRComparison.Data.SQL
         #endregion
 
         #region Public Methods
+        public void DeleteDisputeCDRTable()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"DROP TABLE #TEMPTABLE#"
+            );
+            query.Replace("#TEMPTABLE#", this.TableName);
+            ExecuteNonQueryText(query.ToString(), null);
+        }
         public void CreateDisputeCDRTempTable()
         {
             StringBuilder query = new StringBuilder();

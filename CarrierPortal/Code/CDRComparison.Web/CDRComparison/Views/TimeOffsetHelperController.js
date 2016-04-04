@@ -2,12 +2,10 @@
 
     "use strict";
 
-    TimeOffsetHelperController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService','CDRComparison_CDRAPIService'];
+    TimeOffsetHelperController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','CDRComparison_CDRAPIService'];
 
-    function TimeOffsetHelperController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService, CDRComparison_CDRAPIService) {
-        var bpTaskId;
-        var processInstanceId;
-
+    function TimeOffsetHelperController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRAPIService) {
+        var tableKey;
         var systemCDRGridAPI;
         var partnerCDRGridAPI;
         var selectedSystemCDR;
@@ -21,7 +19,7 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters !== undefined && parameters !== null) {
-                bpTaskId = parameters.TaskId;
+                tableKey = parameters.tableKey;
             }
         }
 
@@ -33,10 +31,15 @@
             $scope.partnerCDRs = [];
             $scope.onSystemGridReady = function (api) {
                 systemCDRGridAPI = api;
-                var query = {
-                    IsPartnerCDRs: false
-                };
-                systemCDRGridAPI.retrieveData(query);
+                if (!$scope.scopeModal.isLoading)
+                {
+                    var query = {
+                        IsPartnerCDRs: false,
+                        TableKey: tableKey
+                    };
+                    systemCDRGridAPI.retrieveData(query);
+                }
+
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -54,6 +57,7 @@
                     var query = {
                         IsPartnerCDRs: true,
                         CDPN: selectedSystemCDR != undefined ? selectedSystemCDR.CDPN : undefined,
+                        TableKey: tableKey
                     };
                     partnerCDRGridAPI.retrieveData(query);
                 }
@@ -68,6 +72,7 @@
                     var query = {
                         IsPartnerCDRs: true,
                         CDPN: dataItem.CDPN,
+                        TableKey: tableKey
                     };
                     partnerCDRGridAPI.retrieveData(query);
                 }
@@ -107,7 +112,7 @@
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSystemGrid])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
                           })
@@ -116,7 +121,16 @@
                           });
 
         }
-
+        function loadSystemGrid()
+        {
+            if (systemCDRGridAPI !=undefined) {
+                var query = {
+                    IsPartnerCDRs: false,
+                    TableKey: tableKey
+                };
+                systemCDRGridAPI.retrieveData(query);
+            }
+        }
         function setTitle()
         {
             $scope.title = "Time Offset Helper";
@@ -128,24 +142,11 @@
             {
                 var systemDate = new Date(selectedSystemCDR.Time);
                 var partnerDate = new Date(selectedPartnerCDR.Time);
-                var timeOffset = getTimeOffset(systemDate, partnerDate);
+
+                var timeOffset = UtilsService.getTimeOffset(systemDate, partnerDate);
                 $scope.onTimeOffsetSelected(timeOffset);
                 $scope.modalContext.closeModal();
             }
-        }
-
-        function getTimeOffset(firstDate,SecondDate)
-        {
-            var hours = firstDate.getHours() - SecondDate.getHours();
-            if (hours == 0 || hours < 10)
-                hours = '0' + hours;
-            var seconds = firstDate.getSeconds() - SecondDate.getSeconds();
-            if (seconds == 0 || seconds < 10)
-                seconds = '0' + seconds;
-            var milliseconds = firstDate.getMilliseconds() - SecondDate.getMilliseconds();
-            if (milliseconds == 0 || milliseconds < 10)
-                milliseconds = '0' + milliseconds;
-            return hours + ":" + seconds + ":" + milliseconds;
         }
     }
 

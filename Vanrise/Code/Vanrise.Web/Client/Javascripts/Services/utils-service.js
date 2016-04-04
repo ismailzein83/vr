@@ -641,7 +641,42 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     function areDateTimesEqual(first, second) {
         return (serializetoJson(first) == serializetoJson(second));
     }
+    function getTimeOffset(date1,date2)
+    {
+        var one_day = 1000 * 60 * 60 * 24;
 
+        // Convert both dates to milliseconds
+        var date1_ms = date1.getTime();
+        var date2_ms = date2.getTime();
+
+        // Calculate the difference in milliseconds
+        var difference_ms = date2_ms - date1_ms;
+        //take out milliseconds
+        difference_ms = difference_ms / 1000;
+        var seconds = Math.floor(difference_ms % 60);
+        difference_ms = difference_ms / 60;
+        var minutes = Math.floor(difference_ms % 60);
+        difference_ms = difference_ms / 60;
+        var hours = Math.floor(difference_ms % 24);
+        var days = Math.floor(difference_ms / 24);
+
+        var result = "";
+        if (hours < 10)
+            result += "0" + hours;
+        else
+            result += hours;
+        if (minutes < 10)
+            result += ":0" + minutes;
+        else
+            result += ":" + minutes;
+
+        if (seconds < 10)
+            result += ":0" + seconds;
+        else
+            result += ":" + seconds;
+
+        return result;
+    }
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -682,7 +717,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         mergeObject: mergeObject,
         getSystemActionNames: getSystemActionNames,
         areDateTimesEqual: areDateTimesEqual,
-        validateTimeOffset: validateTimeOffset
+        validateTimeOffset: validateTimeOffset,
+        getTimeOffset: getTimeOffset
     });
 
 }]);

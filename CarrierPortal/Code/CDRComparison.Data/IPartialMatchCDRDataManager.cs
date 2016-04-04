@@ -13,7 +13,7 @@ namespace CDRComparison.Data
         void ApplyPartialMatchCDRsToDB(object preparedNumberProfiles);
         void CreatePartialMatchCDRTempTable();
         IEnumerable<PartialMatchCDR> GetPartialMatchCDRs();
-
+        void DeletePartialMatchTable();
         int GetPartialMatchCDRsCount();
     }
 }

@@ -186,7 +186,7 @@
       </vbw:AssignTask.AssignedTo>
       <vbw:AssignTask.TaskData>
         <InArgument x:TypeArguments="vbe:BPTaskData">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new SettingTaskData()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new SettingTaskData() { TableKey = TableKey}</mca:CSharpValue>
         </InArgument>
       </vbw:AssignTask.TaskData>
       <vbw:AssignTask.TaskExecutionInformation>
@@ -421,7 +421,14 @@
         </OutArgument>
       </vbw:AssignTask.TaskExecutionInformation>
     </vbw:AssignTask>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbFU9A6kDDgIBAUYLRpsBAgECTAVSHAMBwAdTBbQBEAMBgQa1AQXFARYDAeEFxgEFlgMQAgEslwMFpwMWAgEMTwtPWQMBwQdYB4cBEgMB5AaIAQeiASQDAacGowEHswEcAwGCBsIBC8IBfQMB9wW9AQu9AWQDAe0FtQGeAbUBtwEDAewFuAELuAGXAQMB4gXSAQfiAR4DAacF4wEHkQIaAwH7A5ICB6wCKwMBmwOtAge9AiMDAeECvgIH2AIwAwGBAtkCB+kCKAMBxwHqAgeEAysCAWeFAweVAyMCAS2kAwukA4QBAgEinwMLnwODAQIBGJcDpwGXA74BAgEXmgMLmgOXAQIBDVkJZBIDAacHZQlwGQMBjQdxCXwZAwHzBn0JhgESAwHlBpUBDZUBZwMB2AaLAQ2LAXIDAcwGmgENmgF8AwHABpABDZABfAMBtAafAQ2fAVMDAagGqwENqwF0AwGbBqYBDaYBfAMBjwawAQ2wAVMDAYMG2gEN2gF2AwHOBdUBDdUBegMBuwXfAQ3fAVMDAagF8AEN8AGAAQMBlAX/AQ3/AW4DAYEF6wEN6wF6AwHuBIkCDYkCfAMB2wT6AQ36AYoBAwHIBI4CDY4CcQMBtQSEAg2EAnIDAaIE9QEN9QGAAQMBjwTmAQ3mAYABAwH8A58CDZ8CagMB6AOVAg2VAngDAdUDpAINpAJ5AwHCA5oCDZoCgwEDAa8DqQINqQJTAwGcA7UCDbUCcQMBiAOwAg2wAnsDAfUCugINugJTAwHiAssCDcsCagMBzgLBAg3BAoIBAwG7AtACDdACfgMBqALGAg3GAogBAwGVAtUCDdUCUwMBggLhAg3hAnYDAe4B3AIN3AKAAQMB2wHmAg3mAlMDAcgB9wIN9wJqAwG0Ae0CDe0CeAMBoQH8Ag38AnkDAY4B8gIN8gKDAQIBe4EDDYEDUwIBaI0DDY0DcQIBVIgDDYgDewIBQZIDDZIDUwIBLmEPYXQDAbQHXA9ccQMBqAdlZWVsAwGmB20PbXQDAZoHaA9oZgMBjgdxZXFrAwGMB3kPeXQDAYAHdA90ZwMB9AaEATWEATkDAfIGgAEPgAFvAwHmBg==</sads:DebugSymbol.Symbol>
+    <cba1:DeleteCDRTables sap2010:WorkflowViewState.IdRef="DeleteCDRTables_1">
+      <cba1:DeleteCDRTables.TableKey>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+        </InArgument>
+      </cba1:DeleteCDRTables.TableKey>
+    </cba1:DeleteCDRTables>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbFc9A7ADDgIBAUYLRpsBAgECTAVSHAMBywdTBbQBEAMBjAa1AQXFARYDAewFxgEFlgMQAgE3lwMFpwMWAgEXqAMFrgMcAgEMTwtPWQMBzAdYB4cBEgMB7waIAQeiASQDAbIGowEHswEcAwGNBsIBC8IBfQMBgga9AQu9AXsDAfgFtQGeAbUBtwEDAfcFuAELuAGXAQMB7QXSAQfiAR4DAbIF4wEHkQIaAwGGBJICB6wCKwMBpgOtAge9AiMDAewCvgIH2AIwAwGMAtkCB+kCKAMB0gHqAgeEAysCAXKFAweVAyMCATikAwukA4QBAgEtnwMLnwODAQIBI5cDpwGXA74BAgEimgMLmgOXAQIBGKsDC6sDUQIBDVkJZBIDAbIHZQlwGQMBmAdxCXwZAwH+Bn0JhgESAwHwBpUBDZUBZwMB4waLAQ2LAXIDAdcGmgENmgF8AwHLBpABDZABfAMBvwafAQ2fAVMDAbMGqwENqwF0AwGmBqYBDaYBfAMBmgawAQ2wAVMDAY4G2gEN2gF2AwHZBdUBDdUBegMBxgXfAQ3fAVMDAbMF8AEN8AGAAQMBnwX/AQ3/AW4DAYwF6wEN6wF6AwH5BIkCDYkCfAMB5gT6AQ36AYoBAwHTBI4CDY4CcQMBwASEAg2EAnIDAa0E9QEN9QGAAQMBmgTmAQ3mAYABAwGHBJ8CDZ8CagMB8wOVAg2VAngDAeADpAINpAJ5AwHNA5oCDZoCgwEDAboDqQINqQJTAwGnA7UCDbUCcQMBkwOwAg2wAnsDAYADugINugJTAwHtAssCDcsCagMB2QLBAg3BAoIBAwHGAtACDdACfgMBswLGAg3GAogBAwGgAtUCDdUCUwMBjQLhAg3hAnYDAfkB3AIN3AKAAQMB5gHmAg3mAlMDAdMB9wIN9wJqAwG/Ae0CDe0CeAMBrAH8Ag38AnkDAZkB8gIN8gKDAQMBhgGBAw2BA1MCAXONAw2NA3ECAV+IAw2IA3sCAUySAw2SA1MCATlhD2F0AwG/B1wPXHEDAbMHZWVlbAMBsQdtD210AwGlB2gPaGYDAZkHcWVxawMBlwd5D3l0AwGLB3QPdGcDAf8GhAE1hAE5AwH9BoABD4ABbwMB8QY=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -451,14 +458,15 @@
       <sap2010:ViewStateData Id="ApplyDisputeCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1994,86" />
       <sap2010:ViewStateData Id="AssignTask`1_4" sap:VirtualizedContainerService.HintSize="1994,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,894">
+      <sap2010:ViewStateData Id="DeleteCDRTables_1" sap:VirtualizedContainerService.HintSize="1994,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,956">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,974" />
+      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,1036" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

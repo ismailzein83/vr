@@ -14,7 +14,7 @@ namespace CDRComparison.Data
         void ApplyMissingCDRsToDB(object preparedNumberProfiles);
         void CreateMissingCDRTempTable();
         IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs);
-
+        void DeleteMissingCDRTable();
         int GetMissingCDRsCount();
     }
 }

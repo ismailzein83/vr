@@ -9,5 +9,6 @@ namespace CDRComparison.BP.Arguments
 {
     public class SettingTaskData : BPTaskData
     {
+        public string TableKey { get; set; }
     }
 }
