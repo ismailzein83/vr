@@ -8,12 +8,13 @@
                             <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                         <span>
-                            <vr-whs-be-carrierprofile-selector normal-col-num="6" isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady" isdisabled="scopeModal.disableCarrierProfile"></vr-whs-be-carrierprofile-selector>
+                            <vr-whs-be-carrierprofile-selector normal-col-num="6" isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady" isdisabled="scopeModal.disableCarrierProfile">
+                            </vr-whs-be-carrierprofile-selector>
                         </span>
-                        <vr-columns width="1/2row">
-                            <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Activation Status" datasource="scopeModal.activationStatus"
-                                       selectedvalues="scopeModal.selectedActivationStatus" />
-                        </vr-columns>
+                        <span>
+                            <vr-whs-be-activationstatus-selector normal-col-num="6" hideremoveicon="true" isrequired on-ready="scopeModal.onActivationStatusDirectiveReady">
+                            </vr-whs-be-activationstatus-selector>
+                        </span>
                         <vr-columns width="1/2row">
                             <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Carrier Type" datasource="scopeModal.carrierAccountTypes"
                                        selectedvalues="scopeModal.selectedCarrierAccountType" onselectionchanged="scopeModal.onCarrierTypeSelectionChanged" vr-disabled="scopeModal.isEditMode" />

@@ -2,7 +2,7 @@
 
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService','WhS_BE_CarrierAccountActivationStatusEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum'];
 
     function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
         var carrierProfileDirectiveAPI;
@@ -11,8 +11,11 @@
         var currencySelectorAPI;
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var activationStatusSelectorAPI;
+        var activationStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var sellingNumberPlanDirectiveAPI;
-            
+
         var isEditMode;
         $scope.scopeModal = {};
 
@@ -53,6 +56,10 @@
 
             }
 
+            $scope.scopeModal.onActivationStatusDirectiveReady = function (api) {
+                activationStatusSelectorAPI = api;
+                activationStatusSelectorReadyPromiseDeferred.resolve();
+            }
 
             $scope.scopeModal.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
@@ -60,8 +67,7 @@
             }
 
             $scope.scopeModal.onCarrierTypeSelectionChanged = function () {
-                if ($scope.scopeModal.selectedCarrierAccountType != undefined)
-                {
+                if ($scope.scopeModal.selectedCarrierAccountType != undefined) {
                     if ($scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Customer.value || $scope.scopeModal.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
                         if (sellingNumberPlanDirectiveAPI != undefined) {
                             $scope.scopeModal.showSellingNumberPlan = true;
@@ -75,7 +81,7 @@
                     else
                         $scope.scopeModal.showSellingNumberPlan = false;
                 }
-          
+
             }
 
             $scope.scopeModal.close = function () {
@@ -126,7 +132,7 @@
             carrierProfileReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds:( carrierAccountEntity != undefined ? carrierAccountEntity.CarrierProfileId : (carrierProfileId != undefined?carrierProfileId:undefined))
+                        selectedIds: (carrierAccountEntity != undefined ? carrierAccountEntity.CarrierProfileId : (carrierProfileId != undefined ? carrierProfileId : undefined))
                     }
                     VRUIUtilsService.callDirectiveLoad(carrierProfileDirectiveAPI, directivePayload, loadCarrierProfilePromiseDeferred);
                 });
@@ -140,7 +146,7 @@
             currencySelectorReadyPromiseDeferred.promise.then(function () {
 
                 var payload = {
-                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.CurrencyId :  undefined)
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.CurrencyId : undefined)
                 };
 
                 VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, payload, loadCurrencySelectorPromiseDeferred);
@@ -168,7 +174,7 @@
                 SupplierSettings: {},
                 CustomerSettings: {},
                 CarrierAccountSettings: {
-                    ActivationStatus: $scope.scopeModal.selectedActivationStatus.value,
+                    ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds()
                 }
             };
@@ -181,10 +187,6 @@
                 for (var i = 0; i < $scope.scopeModal.carrierAccountTypes.length; i++)
                     if (carrierAccountEntity.AccountType == $scope.scopeModal.carrierAccountTypes[i].value)
                         $scope.scopeModal.selectedCarrierAccountType = $scope.scopeModal.carrierAccountTypes[i];
-              
-                for (var i = 0; i < $scope.scopeModal.activationStatus.length; i++)
-                    if (carrierAccountEntity.CarrierAccountSettings != null && carrierAccountEntity.CarrierAccountSettings.ActivationStatus == $scope.scopeModal.activationStatus[i].value)
-                        $scope.scopeModal.selectedActivationStatus = $scope.scopeModal.activationStatus[i];
             }
         }
 
@@ -193,7 +195,15 @@
         }
 
         function loadCarrierActivationStatusType() {
-            $scope.scopeModal.activationStatus = UtilsService.getArrayEnum(WhS_BE_CarrierAccountActivationStatusEnum);
+            var loadActivationStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            activationStatusSelectorReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.ActivationStatus : WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
+                };
+
+                VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, payload, loadActivationStatusSelectorPromiseDeferred);
+            })
+            return loadActivationStatusSelectorPromiseDeferred.promise;
         }
 
         function insertCarrierAccount() {
@@ -231,8 +241,8 @@
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
-                $scope.scopeModal.isLoading = false;
-            });
+                    $scope.scopeModal.isLoading = false;
+                });
         }
     }
 
