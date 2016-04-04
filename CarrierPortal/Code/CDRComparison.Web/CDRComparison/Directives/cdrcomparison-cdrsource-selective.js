@@ -53,7 +53,7 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
 
                 $scope.scopeModel.cdpnNormalizationRuleDirectiveReady = function (api) {
@@ -101,6 +101,9 @@
                     }
                     else {
                         extendDirectivePayload();
+
+                        var loadNormalizationRulesPromise = loadNormalizationRules();
+                        promises.push(loadNormalizationRulesPromise);
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -144,27 +147,21 @@
                         function loadCDPNNormalizationRule() {
                             var cdpnNormalizationRuleLoadDeferred = UtilsService.createPromiseDeferred();
 
-                            if (cdrSource != undefined && cdrSource.NormalizationRules != null) {
-                                var payload = UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CDPN', 'FieldToNormalize');
-                                VRUIUtilsService.callDirectiveLoad(cdpnNormalizationRuleDirectiveAPI, payload, cdpnNormalizationRuleLoadDeferred);
-                            }
-                            else {
-                                cdpnNormalizationRuleLoadDeferred.resolve();
-                            }
+                            var payload = (cdrSource != undefined && cdrSource.NormalizationRules != null) ?
+                                UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CDPN', 'FieldToNormalize') :
+                                { FieldToNormalize: 'CDPN' };
 
+                            VRUIUtilsService.callDirectiveLoad(cdpnNormalizationRuleDirectiveAPI, payload, cdpnNormalizationRuleLoadDeferred);
                             return cdpnNormalizationRuleLoadDeferred.promise;
                         }
                         function loadCGPNNormalizationRule() {
                             var cgpnNormalizationRuleLoadDeferred = UtilsService.createPromiseDeferred();
 
-                            if (cdrSource != undefined && cdrSource.NormalizationRules != null) {
-                                var payload = UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CGPN', 'FieldToNormalize');
-                                VRUIUtilsService.callDirectiveLoad(cgpnNormalizationRuleDirectiveAPI, payload, cgpnNormalizationRuleLoadDeferred);
-                            }
-                            else {
-                                cgpnNormalizationRuleLoadDeferred.resolve();
-                            }
+                            var payload = (cdrSource != undefined && cdrSource.NormalizationRules != null) ?
+                                UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CGPN', 'FieldToNormalize') :
+                                { FieldToNormalize: 'CGPN' };
 
+                            VRUIUtilsService.callDirectiveLoad(cgpnNormalizationRuleDirectiveAPI, payload, cgpnNormalizationRuleLoadDeferred);
                             return cgpnNormalizationRuleLoadDeferred.promise;
                         }
                     }
