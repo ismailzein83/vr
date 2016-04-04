@@ -81,6 +81,8 @@
 
             $scope.onSelectedRow = function (dataItem)
             {
+                if (selectedPartnerCDR !=undefined)
+                  selectedPartnerCDR.IsSelected = false;
                 selectedPartnerCDR = dataItem;
             }
 

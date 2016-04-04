@@ -20,7 +20,7 @@
                                  dataretrievalfunction="dataRetrievalFunction"
                                  pagingtype="'PagingOnScroll'"
                                  defaultsortbyfieldname="'CDPN'">
-                        <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting>
+                        <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting isfielddynamic="true">
                             <vr-check value="dataItem.IsSelected" onvaluechanged="viewScope.onSelectedRow(dataItem)"></vr-check>
                         </vr-datagridcolumn>
 
