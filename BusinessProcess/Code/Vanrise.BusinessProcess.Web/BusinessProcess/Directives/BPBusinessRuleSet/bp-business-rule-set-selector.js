@@ -47,7 +47,7 @@ app.directive('businessprocessBpBusinessRuleSetSelector', ['BusinessProcess_BPBu
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Business Rule Set";
+            var label = "Parent Rule Set";
             if (attrs.ismultipleselection != undefined) {
                 label = "Business Rule Sets";
                 multipleselection = "ismultipleselection";
@@ -59,7 +59,7 @@ app.directive('businessprocessBpBusinessRuleSetSelector', ['BusinessProcess_BPBu
             //vr-disabled="ctrl.isdisabled" is removed temporary
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="BPBusinessRuleSetId" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="BPBusinessRuleSet" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Business Rule Set" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>'
         }
 

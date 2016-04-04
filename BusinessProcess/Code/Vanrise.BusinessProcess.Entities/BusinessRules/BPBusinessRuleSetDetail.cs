@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Vanrise.BusinessProcess.Entities
+﻿namespace Vanrise.BusinessProcess.Entities
 {
     public class BPBusinessRuleSetDetail
     {
         public BPBusinessRuleSet Entity { get; set; }
+        
+        public string BPDefinition { get; set; }
+
+        public string BPBusinessRuleSetParent { get; set; }
     }
 }

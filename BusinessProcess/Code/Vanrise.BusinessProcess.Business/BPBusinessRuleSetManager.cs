@@ -142,9 +142,18 @@ namespace Vanrise.BusinessProcess.Business
 
         private BPBusinessRuleSetDetail BPBusinessRuleSetDetailMapper(BPBusinessRuleSet bpBusinessRuleSet)
         {
+            BPDefinitionManager bpDefinitionManager = new BPDefinitionManager();
+            BPDefinition bpDefinition = bpDefinitionManager.GetBPDefinition(bpBusinessRuleSet.BPDefinitionId);
+
+            BPBusinessRuleSet parentBusinessRuleSet = null;
+            if (bpBusinessRuleSet.ParentId.HasValue)
+                parentBusinessRuleSet = GetBusinessRuleSetsByID(bpBusinessRuleSet.ParentId.Value);
+
             return new BPBusinessRuleSetDetail()
             {
-                Entity = bpBusinessRuleSet
+                Entity = bpBusinessRuleSet,
+                BPDefinition = bpDefinition.Title,
+                BPBusinessRuleSetParent = parentBusinessRuleSet != null ? parentBusinessRuleSet.Name : null,
             };
         }
         #endregion
