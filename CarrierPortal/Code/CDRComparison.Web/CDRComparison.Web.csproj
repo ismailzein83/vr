@@ -121,6 +121,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CDRComparisonController.cs" />
     <Compile Include="Controllers\CDRController.cs" />
+    <Compile Include="Controllers\CDRSourceConfigController.cs" />
     <Compile Include="Controllers\CDRSourceController.cs" />
     <Compile Include="Controllers\DisputeCDRController.cs" />
     <Compile Include="Controllers\MissingCDRController.cs" />
@@ -131,6 +132,7 @@
     <Content Include="CDRComparison\Constant\ModuleConfig.js" />
     <Content Include="CDRComparison\Constant\TimeDurationEnum.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-cdrsource-selective.js" />
+    <Content Include="CDRComparison\Directives\cdrcomparison-cdrsourceconfig-selector.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filereader-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filescdrsource.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-flatfilereader.js" />
@@ -149,6 +151,7 @@
     <Content Include="CDRComparison\Services\APIServices\CDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\CDRComparisonAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\CDRSourceAPIService.js" />
+    <Content Include="CDRComparison\Services\APIServices\CDRSourceConfigAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\DisputeCDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\MissingCDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\PartialMatchCDRAPIService.js" />
@@ -159,6 +162,8 @@
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />
     <Content Include="CDRComparison\Views\CDRComparisonResultTask.html" />
     <Content Include="CDRComparison\Views\CDRComparisonResultTaskController.js" />
+    <Content Include="CDRComparison\Views\SaveCDRComparisonConfig.html" />
+    <Content Include="CDRComparison\Views\SaveCDRComparisonConfigController.js" />
     <Content Include="CDRComparison\Views\TimeOffsetHelper.html" />
     <Content Include="CDRComparison\Views\TimeOffsetHelperController.js" />
   </ItemGroup>

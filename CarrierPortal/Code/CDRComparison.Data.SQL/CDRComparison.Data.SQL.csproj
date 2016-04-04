@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BaseCDRDataManager.cs" />
     <Compile Include="CDRDataManager.cs" />
+    <Compile Include="CDRSourceConfigDataManager.cs" />
     <Compile Include="DisputeCDRDataManager.cs" />
     <Compile Include="MissingCDRDataManager.cs" />
     <Compile Include="PartialMatchCDRDataManager.cs" />

@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="CDRComparisonManager.cs" />
     <Compile Include="CDRManager.cs" />
+    <Compile Include="CDRSourceConfigManager.cs" />
     <Compile Include="CDRSourceManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Context\NormalizeRuleContext.cs" />
