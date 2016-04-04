@@ -7,25 +7,31 @@ app.directive('vrExcelWb', ['ExcelConversion_ExcelAPIService', function (excelAP
         restrict: 'E',
         scope: {
             fileid: '=',
-            onReady:'='
+            onReady: '=',
+            sheetindex:"="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            ctrl.datasource = [];
-            var sheetsArray = [];
+            
+           
+            ctrl.scopeModel = {};
+            ctrl.scopeModel.datasource = [];
             ctrl.previewExcel = function () {
+                ctrl.scopeModel.length = 0;
+                ctrl.tabsApi.removeAllTabs();
+                ctrl.scopeModel.tabObjects.length = 0;
                 excelAPIService.ReadExcelFile(ctrl.fileid).then(function (response) {
-                    ctrl.datasource = response;
+                    ctrl.scopeModel.datasource = response;
                   
                 });
             }
-          
-            $scope.$watch('ctrl.fileid', function () {
+           
+            $scope.$watch('ctrl.fileid', function () {                
                 if (ctrl.fileid != null && ctrl.fileid != undefined && ctrl.fileid != 0) {
                     ctrl.previewExcel();
                 }
                 else {
-                    ctrl.datasource.length = 0;
+                    ctrl.scopeModel.datasource.length = 0;
                 }
             });
 
@@ -49,8 +55,8 @@ app.directive('vrExcelWb', ['ExcelConversion_ExcelAPIService', function (excelAP
     };
 
     function getWorkBookTemplate(attrs) {        
-        return '<vr-tabs>'
-               + '<vr-tab ng-repeat="dataItem in ctrl.datasource.Sheets"  header="dataItem.Name" >'
+        return '<vr-tabs on-ready="onReadyTabs" >'
+               + '<vr-tab  ng-repeat="dataItem in ctrl.scopeModel.datasource.Sheets"  header="dataItem.Name" tabobject="ctrl.scopeModel.tabObjects[$index]" >'
                + '<vr-excel-ws data="dataItem" on-ready="onReadyWoorkSheet" ></vr-excel-ws>'
                + '</vr-tab>'
                + '</vr-tabs>';
@@ -58,21 +64,53 @@ app.directive('vrExcelWb', ['ExcelConversion_ExcelAPIService', function (excelAP
     function ExcelWoorkBook(ctrl, $scope, attrs) {
 
         var excelWBAPI;
-        var wbsAPIs = [];
-        $scope.onReadyWoorkSheet = function (api) {
-            wbsAPIs[wbsAPIs.length] = api;
 
-        }
-        function initializeController() {          
+        ctrl.scopeModel.tabObjects = [];
+        
+        function initializeController() {
+            $scope.onReadyTabs = function (api) {
+                ctrl.tabsApi = api;
                 defineAPI();
+            }
+                
         }
         function defineAPI() {
+
+            $scope.onReadyWoorkSheet = function (api) {
+                var index = ctrl.scopeModel.tabObjects.length - 1;
+                var selectedIndex = ctrl.sheetindex != undefined ? ctrl.sheetindex : 0;
+                if (index == selectedIndex)
+                    ctrl.scopeModel.tabObjects[index].isSelected = true;
+
+                ctrl.scopeModel.tabObjects[index].api = api;
+
+            }
+           
             var api = {};
             api.clearAtIndex = function (i) {
-                wbsAPIs[i].clear();
+                ctrl.scopeModel.tabObjects[i].api.clear();
+            }
+            api.getSelectedSheetApi = function () {
+                for (var index in ctrl.scopeModel.tabObjects) {
+                    if (ctrl.scopeModel.tabObjects[index].isSelected == true) {
+                        return ctrl.scopeModel.tabObjects[index].api;
+                    }
+                }
+                return null;
+            }
+            api.getSelectedSheet = function () {
+                for (var index in ctrl.scopeModel.tabObjects) {
+                    if (ctrl.scopeModel.tabObjects[index].isSelected == true) {
+                        return index ;
+                    }
+                }
+            }
+            api.setSelectedSheet = function (index) {
+                ctrl.sheetindex = index;
+                ctrl.scopeModel.tabObjects[index].isSelected = true;
             }
             api.getAPIsArray = function () {
-                return wbsAPIs;
+                return ctrl.tabObjects;
             }
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

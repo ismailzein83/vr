@@ -6,6 +6,7 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
+            onReady:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -26,6 +27,12 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
                 var index = ctrl.tabs.indexOf(tab);
                 ctrl.tabs.splice(index, 1);
             }
+            var api = {};
+            api.removeAllTabs = function () {
+                ctrl.tabs.length = 0;
+            }
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
         },
         controllerAs: 'ctrl',
         bindToController: true,

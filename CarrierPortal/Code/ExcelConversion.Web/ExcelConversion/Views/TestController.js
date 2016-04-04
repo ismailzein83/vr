@@ -11,9 +11,21 @@
                 $scope.onReadyWoorkBook = function (api) {
                     WoorkBookApi = api;
                 }
-                $scope.ConsoleAPIs = function () {
-                   console.log( WoorkBookApi.getAPIsArray());
+                $scope.selectCell = function () {
+                    var a = parseInt($scope.row);
+                    var b = parseInt($scope.col);
+                    if (WoorkBookApi != undefined && WoorkBookApi.getSelectedSheetApi()!=undefined)
+                      WoorkBookApi.getSelectedSheetApi().selectCell(a, b, a, b);
+                    
                 }
+               
+                $scope.updateRange = function (e) {
+                    var range = WoorkBookApi.getSelectedSheetApi().getSelected();
+                    $scope.row = range[0];
+                    $scope.col = range[1];
+                    $scope.sheetindex = 0; // range[1];
+                }
+               
             }
 
           
