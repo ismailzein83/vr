@@ -8,22 +8,42 @@
             defineScope();
             load()
             function defineScope() {
+                $scope.cell = {
+                    row: 0,
+                    col:0,
+                    sheet:0
+                }
                 $scope.onReadyWoorkBook = function (api) {
                     WoorkBookApi = api;
                 }
                 $scope.selectCell = function () {
-                    var a = parseInt($scope.row);
-                    var b = parseInt($scope.col);
-                    if (WoorkBookApi != undefined && WoorkBookApi.getSelectedSheetApi()!=undefined)
-                      WoorkBookApi.getSelectedSheetApi().selectCell(a, b, a, b);
+                    var a = parseInt($scope.cell.row);
+                    var b = parseInt($scope.cell.col);
+                    var s = $scope.cell.sheet;
+
+                    if (WoorkBookApi.getSelectedSheet() != s) {
+                        WoorkBookApi.selectCellAtSheet(a,b,s);
+                    }
+                    else {
+                        WoorkBookApi.getSelectedSheetApi().selectCell(a, b, a, b);
+                    }
+                    
+
+                  
                     
                 }
                
-                $scope.updateRange = function (e) {
+                $scope.updateRange = function (r,c,s) {
                     var range = WoorkBookApi.getSelectedSheetApi().getSelected();
                     $scope.row = range[0];
                     $scope.col = range[1];
-                    $scope.sheetindex = 0; // range[1];
+                    $scope.sheetindex = WoorkBookApi.getSelectedSheet(); // range[1];
+
+                    $scope.cell = {
+                        row: range[0],
+                        col: range[1],
+                        sheet: WoorkBookApi.getSelectedSheet()
+                    }
                 }
                
             }

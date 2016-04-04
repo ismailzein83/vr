@@ -109,9 +109,18 @@ app.directive('vrExcelWb', ['ExcelConversion_ExcelAPIService', function (excelAP
                 ctrl.sheetindex = index;
                 ctrl.scopeModel.tabObjects[index].isSelected = true;
             }
+            api.selectCellAtSheet = function (a,b,s) {
+                ctrl.sheetindex = s;
+                ctrl.scopeModel.tabObjects[s].isSelected = true;
+               setTimeout(function () {
+                    ctrl.scopeModel.tabObjects[s].api.selectCell(a, b, a, b);
+                })
+               
+            }
             api.getAPIsArray = function () {
                 return ctrl.tabObjects;
             }
+            
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
