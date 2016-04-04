@@ -118,7 +118,7 @@ namespace Vanrise.Integration.Business
                         importedBatchEntry.RecordsCount = totalRecordsCount;
 
                         long importedBatchId = logger.LogImportedBatchEntry(importedBatchEntry);
-                        logger.LogEntry(Common.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
+                        logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
                     };
 
                     AdapterImportDataContext adapterContext = new AdapterImportDataContext(dataSource, onDataReceivedAction);

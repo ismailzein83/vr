@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.Logging.SQL
 {

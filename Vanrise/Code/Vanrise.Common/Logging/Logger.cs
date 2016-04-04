@@ -6,16 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Common
 {
-    public enum LogEntryType
-    {
-        Error = 1,
-        Warning = 2,
-        Information = 4,
-        Verbose = 8
-    }
+    
 
     public class Logger: ExceptionLogger
     {

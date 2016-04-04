@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Data.SQL
@@ -26,7 +27,7 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public void InsertEntry(Common.LogEntryType entryType, string message, int dataSourceId, long? importedBatchId, string logTimeSpan)
+        public void InsertEntry(Vanrise.Entities.LogEntryType entryType, string message, int dataSourceId, long? importedBatchId, string logTimeSpan)
         {
             ExecuteNonQuerySP("integration.sp_DataSourceLog_Insert", dataSourceId, entryType, message, importedBatchId, logTimeSpan);
         }
