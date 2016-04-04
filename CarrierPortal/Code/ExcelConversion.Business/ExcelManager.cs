@@ -42,9 +42,13 @@ namespace ExcelConversion.Business
                     {
                         var cell = row.GetCellOrNull(colIndex);
                         ExcelCell eCell = new ExcelCell();
-                        if (cell != null)
+                        if (cell != null && cell.Value!=null)
+                        {
                             eCell.Value = cell.Value;
-                        eRow.Cells.Add(eCell);
+                            eRow.Cells.Add(eCell);
+
+                        }
+                           
                     }
                 }
                 eSheet.NumberOfColumns = nbOfSheetColumns;

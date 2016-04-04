@@ -120,7 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ExcelConversion\Directives\" />
-    <Folder Include="ExcelConversion\Services\APIServices\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -129,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExcelConversion\Constant\ModuleConfig.js" />
+    <Content Include="ExcelConversion\Services\APIServices\ExcelAPIService.js" />
     <Content Include="ExcelConversion\Views\Test.html" />
     <Content Include="ExcelConversion\Views\TestController.js" />
   </ItemGroup>
