@@ -15,9 +15,9 @@
         var activationStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var sellingNumberPlanDirectiveAPI;
-
-        var isEditMode;
         $scope.scopeModal = {};
+        $scope.scopeModal.isEditMode ;
+
 
         var carrierAccountId;
         var carrierProfileId;
@@ -33,13 +33,12 @@
                 carrierAccountId = parameters.CarrierAccountId;
                 carrierProfileId = parameters.CarrierProfileId
             }
-            isEditMode = (carrierAccountId != undefined);
-            $scope.scopeModal.disableCarrierProfile = ((carrierProfileId != undefined));
+            $scope.scopeModal.isEditMode = (carrierAccountId != undefined);
         }
 
         function defineScope() {
             $scope.scopeModal.SaveCarrierAccount = function () {
-                if (isEditMode) {
+                if ($scope.scopeModal.isEditMode) {
                     return updateCarrierAccount();
                 } else {
                     return insertCarrierAccount();
@@ -93,7 +92,7 @@
 
             $scope.scopeModal.isLoading = true;
 
-            if (isEditMode) {
+            if ($scope.scopeModal.isEditMode) {
                 getCarrierAccount()
                     .then(function () {
                         loadAllControls()
@@ -122,7 +121,7 @@
         }
 
         function setTitle() {
-            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierAccountEntity ? carrierAccountEntity.NameSuffix : null, 'Carrier Account') : UtilsService.buildTitleForAddEditor('Carrier Account');
+            $scope.title = $scope.scopeModal.isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierAccountEntity ? carrierAccountEntity.NameSuffix : null, 'Carrier Account') : UtilsService.buildTitleForAddEditor('Carrier Account');
         }
 
         function loadCarrierProfileDirective() {
@@ -188,9 +187,6 @@
                 for (var i = 0; i < $scope.scopeModal.carrierAccountTypes.length; i++)
                     if (carrierAccountEntity.AccountType == $scope.scopeModal.carrierAccountTypes[i].value)
                         $scope.scopeModal.selectedCarrierAccountType = $scope.scopeModal.carrierAccountTypes[i];
-
-                console.log(carrierAccountEntity)
-
 
                 $scope.scopeModal.mask = (carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.Mask : undefined);
             }
