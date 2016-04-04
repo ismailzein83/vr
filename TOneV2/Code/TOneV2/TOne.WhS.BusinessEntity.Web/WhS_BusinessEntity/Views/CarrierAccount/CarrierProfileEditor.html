@@ -3,27 +3,27 @@
         <vr-form name="formCarrierProfileEditor">
             <vr-tabs>
                 <vr-tab header="'General Info'">
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.name" label="Profile Name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.company" label="Company" isrequired></vr-textbox>
                         </vr-columns>
-                        
+
                     </vr-row>
 
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-common-country-selector selectedvalues="country" onselectionchanged="onCountrySelectionChanged" on-ready="onCountryDirectiveReady" isrequired showaddbutton></vr-common-country-selector>
                         </vr-columns>
                         <span vr-loader="isLoadingCities">
                             <vr-common-city-selector showaddbutton normal-col-num="6" on-ready="onCityyDirectiveReady"></vr-common-city-selector>
                         </span>
-                        
+
                     </vr-row>
 
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.registrationNumber" label="Registration Number"></vr-textbox>
                         </vr-columns>
@@ -32,7 +32,7 @@
                         </vr-columns>
                     </vr-row>
 
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.website" label="Website"></vr-textbox>
                         </vr-columns>
@@ -41,39 +41,39 @@
                         </vr-columns>
                     </vr-row>
 
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.town" label="Town"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
                         <vr-columns width="1/4row">
-                            <vr-textbox value="scopeModal.faxvalue" type="number" onvaluechanged="scopeModal.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns withemptyline width="1/4row">
-                            <vr-button type="Add" data-onclick="addFaxOption" vr-disabled="scopeModal.disabledfax" standalone></vr-button>
-                        </vr-columns>
-
-                        <vr-columns width="1/4row">
                             <vr-textbox label="Phone" type="number" decimalprecision="0" onvaluechanged="scopeModal.onPhoneValueChange" value="scopeModal.phoneNumberValue"></vr-textbox>
                         </vr-columns>
                         <vr-columns withemptyline width="1/4row">
                             <vr-button type="Add" data-onclick="addPhoneNumberOption" vr-disabled="scopeModal.disabledphone" standalone></vr-button>
                         </vr-columns>
+
+                        <vr-columns width="1/4row">
+                            <vr-textbox value="scopeModal.faxvalue" type="number" onvaluechanged="scopeModal.onFaxValueChange" decimalprecision="0" label="Fax"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns withemptyline width="1/4row">
+                            <vr-button type="Add" data-onclick="addFaxOption" vr-disabled="scopeModal.disabledfax" standalone></vr-button>
+                        </vr-columns>
                     </vr-row>
                     <vr-row removeline>
-                        <vr-columns width="1/2row">
-                            <vr-datalist maxitemsperrow="2" datasource="scopeModal.faxes" autoremoveitem="true">
-                                {{dataItem.fax}}
-                            </vr-datalist>
-                        </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-datalist maxitemsperrow="2" datasource="scopeModal.phoneNumbers" autoremoveitem="true">
                                 {{dataItem.phoneNumber}}
                             </vr-datalist>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-datalist maxitemsperrow="2" datasource="scopeModal.faxes" autoremoveitem="true">
+                                {{dataItem.fax}}
+                            </vr-datalist>
+                        </vr-columns>
                     </vr-row>
-                    <vr-row>
+                    <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-fileupload extension="images" value="scopeModal.companyLogo" label="Company Logo"> </vr-fileupload>
                         </vr-columns>
@@ -87,7 +87,7 @@
                     <vr-row>
                         <vr-columns width="1/2row" ng-repeat="c in scopeModal.contacts">
                             <vr-label>{{c.label}}</vr-label>
-                            <vr-textbox  value="c.description" type="c.inputetype"></vr-textbox>
+                            <vr-textbox value="c.description" type="c.inputetype"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
