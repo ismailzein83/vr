@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Fzero.CDRImport.Entities;
 using Vanrise.Queueing;
 

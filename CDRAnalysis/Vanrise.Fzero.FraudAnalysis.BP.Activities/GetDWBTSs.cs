@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
