@@ -28,12 +28,7 @@
 
         function defineScope() {
 
-            $scope.scopeModal = {
-                systemmissingTabObject: {},
-                partnerMissingTabObject:{},
-                partialTabObject: {},
-                disputeTabObject: {}
-                };
+            $scope.scopeModal = {    };
 
             $scope.scopeModal.onSystemMissingCDRDirectiveReady = function (api) {
                 systemMissingCDRGridAPI = api;
