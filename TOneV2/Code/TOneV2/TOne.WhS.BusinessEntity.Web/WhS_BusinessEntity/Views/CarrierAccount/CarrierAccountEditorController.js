@@ -175,7 +175,8 @@
                 CustomerSettings: {},
                 CarrierAccountSettings: {
                     ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
-                    CurrencyId: currencySelectorAPI.getSelectedIds()
+                    CurrencyId: currencySelectorAPI.getSelectedIds(),
+                    Mask: $scope.scopeModal.mask
                 }
             };
             return obj;
@@ -187,6 +188,11 @@
                 for (var i = 0; i < $scope.scopeModal.carrierAccountTypes.length; i++)
                     if (carrierAccountEntity.AccountType == $scope.scopeModal.carrierAccountTypes[i].value)
                         $scope.scopeModal.selectedCarrierAccountType = $scope.scopeModal.carrierAccountTypes[i];
+
+                console.log(carrierAccountEntity)
+
+
+                $scope.scopeModal.mask = (carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.Mask : undefined);
             }
         }
 

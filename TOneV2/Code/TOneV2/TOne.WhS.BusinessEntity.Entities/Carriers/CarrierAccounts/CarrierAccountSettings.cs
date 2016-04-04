@@ -13,5 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int CurrencyId { get; set; }
 
+        public string Mask { get; set; }
+
     }
 }
