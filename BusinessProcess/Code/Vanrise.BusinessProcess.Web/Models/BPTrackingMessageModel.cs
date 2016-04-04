@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Web.Models
 {

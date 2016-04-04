@@ -39,7 +39,7 @@ namespace Vanrise.BusinessProcess
                     ProcessInstanceId = _bpInstance.ProcessInstanceID,
                     TrackingMessage = trackingMessage,
                     EventTime = record.EventTime.ToLocalTime(),
-                    Severity = Common.LogEntryType.Verbose
+                    Severity = Vanrise.Entities.LogEntryType.Verbose
                 });
             }
         }

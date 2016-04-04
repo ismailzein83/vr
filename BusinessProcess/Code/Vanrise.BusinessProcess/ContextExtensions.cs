@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess
 {

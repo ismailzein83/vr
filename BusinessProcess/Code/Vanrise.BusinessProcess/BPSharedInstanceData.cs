@@ -6,6 +6,7 @@ using System.Activities.Persistence;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess
 {

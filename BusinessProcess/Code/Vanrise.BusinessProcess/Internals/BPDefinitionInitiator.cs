@@ -13,6 +13,7 @@ using Vanrise.BusinessProcess.Data;
 using Vanrise.Common;
 using Vanrise.Runtime;
 using Vanrise.BusinessProcess.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess
 {

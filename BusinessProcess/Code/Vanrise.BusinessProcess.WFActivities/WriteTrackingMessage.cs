@@ -5,6 +5,7 @@ using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
