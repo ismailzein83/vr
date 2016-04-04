@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrierprofileSelector', ['WhS_BE_CarrierProfileAPIService', 'UtilsService', '$compile','VRUIUtilsService',
+app.directive('vrWhsBeCarrierprofileSelector', ['WhS_BE_CarrierProfileAPIService', 'UtilsService', '$compile', 'VRUIUtilsService',
 function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
             onselectionchanged: '=',
             isrequired: "@",
             selectedvalues: '=',
-            normalColNum:'@'
+            normalColNum: '@'
 
         },
         controller: function ($scope, $element, $attrs) {
@@ -50,10 +50,15 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
+
         var disabled = "";
-        return '<div  vr-loader="isLoadingDirective">'
-            + '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
-        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select></vr-columns>'
+        if (attrs.isdisabled != undefined)
+            disabled = "vr-disabled=true"
+
+
+        return '<div  vr-loader="isLoadingDirective" ' + disabled + '  >'
+            + '<vr-columns colnum="{{ctrl.normalColNum}}"   > <vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
+        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" ></vr-select></vr-columns>'
            + '</div>'
     }
 
@@ -76,15 +81,15 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
                     selectedIds = payload.selectedIds;
                 }
 
-                    return WhS_BE_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
-                        angular.forEach(response, function (item) {
-                            ctrl.datasource.push(item);
-
-                        });
-                        if (selectedIds!=undefined)
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierProfileId', $attrs, ctrl);
+                return WhS_BE_CarrierProfileAPIService.GetCarrierProfilesInfo().then(function (response) {
+                    angular.forEach(response, function (item) {
+                        ctrl.datasource.push(item);
 
                     });
+                    if (selectedIds != undefined)
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierProfileId', $attrs, ctrl);
+
+                });
 
             }
 
