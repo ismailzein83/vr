@@ -118,9 +118,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ExcelConversion\Directives\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\ExcelController.cs" />
@@ -128,6 +126,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExcelConversion\Constant\ModuleConfig.js" />
+    <Content Include="ExcelConversion\Directives\FieldMapping\excelconversion-fieldmapping-selective.js" />
+    <Content Include="ExcelConversion\Directives\FieldMapping\Templates\FieldMappingSelectiveTemplate.html" />
     <Content Include="ExcelConversion\Services\APIServices\ExcelAPIService.js" />
     <Content Include="ExcelConversion\Views\Test.html" />
     <Content Include="ExcelConversion\Views\TestController.js" />

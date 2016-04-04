@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace ExcelConversion.Business
 {
@@ -55,6 +56,12 @@ namespace ExcelConversion.Business
             }
 
             return ewb;
+        }
+
+        public IEnumerable<TemplateConfig> GetFieldMappingTemplateConfigs()
+        {
+            var templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.FieldMappingConfigType);
         }
     }
 }

@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="ExcelConvertor.cs" />
     <Compile Include="ExcelManager.cs" />
     <Compile Include="GetConcatenatedPartTextContext.cs" />

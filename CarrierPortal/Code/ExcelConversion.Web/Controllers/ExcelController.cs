@@ -2,6 +2,7 @@
 using ExcelConversion.Entities;
 using System.Collections.Generic;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace ExcelConversion.Web.Controllers
@@ -18,6 +19,12 @@ namespace ExcelConversion.Web.Controllers
             ExcelManager manager = new ExcelManager();
             return manager.ReadExcelFile(fileId);
         }
-
+        [HttpGet]
+        [Route("GetFieldMappingTemplateConfigs")]
+        public IEnumerable<TemplateConfig> GetFieldMappingTemplateConfigs()
+        {
+            ExcelManager manager = new ExcelManager();
+            return manager.GetFieldMappingTemplateConfigs();
+        }
     }
 }
