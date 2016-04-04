@@ -20,9 +20,9 @@
         function GetFileReaderTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetFileReaderTemplateConfigs'));
         }
-        function GetCDRComparisonSummary()
+        function GetCDRComparisonSummary(tableKey)
         {
-            return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetCDRComparisonSummary'));
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetCDRComparisonSummary'), { tableKey: tableKey });
         }
     }
 

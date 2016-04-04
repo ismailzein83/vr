@@ -17,6 +17,7 @@ namespace CDRComparison.BP.Activities
         public BaseQueue<PartialMatchCDRBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
+        public string TableKey { get; set; }
     }
 
     #endregion
@@ -27,9 +28,12 @@ namespace CDRComparison.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
+        [RequiredArgument]
+        public InArgument<string> TableKey { get; set; }
         protected override void DoWork(PreparePartialMatchCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IPartialMatchCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
+            dataManager.TableNameKey = inputArgument.TableKey;
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, partialMatchCDRBatch => partialMatchCDRBatch.PartialMatchCDRs);
         }
 
@@ -38,7 +42,8 @@ namespace CDRComparison.BP.Activities
             return new PreparePartialMatchCDRsInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                TableKey = this.TableKey.Get(context)
             };
         }
 

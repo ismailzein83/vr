@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseCDRDataManager.cs" />
     <Compile Include="CDRDataManager.cs" />
     <Compile Include="DisputeCDRDataManager.cs" />
     <Compile Include="MissingCDRDataManager.cs" />

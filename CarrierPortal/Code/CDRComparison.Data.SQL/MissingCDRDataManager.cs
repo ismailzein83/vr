@@ -9,15 +9,9 @@ using Vanrise.Data.SQL;
 
 namespace CDRComparison.Data.SQL
 {
-    public class MissingCDRDataManager : BaseSQLDataManager, IMissingCDRDataManager
+    public class MissingCDRDataManager :BaseCDRDataManager , IMissingCDRDataManager 
     {
         #region Constructors / Fields
-
-        public MissingCDRDataManager()
-            : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
-        {
-
-        }
 
         static string[] s_Columns = new string[]
         {
@@ -41,8 +35,25 @@ namespace CDRComparison.Data.SQL
 
         public int GetMissingCDRsCount()
         {
-            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.MissingCDR", null);
+            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}",this.TableName), null);
             return (int)count;
+        }
+        public void CreateMissingCDRTempTable()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                    @"Create Table #TEMPTABLE# ([ID] [int] IDENTITY(1,1) NOT NULL,
+                    [OriginalCDPN] [varchar](100) NULL,
+                    [OriginalCGPN] [varchar](100) NULL,
+                    [CDPN] [varchar](100) NULL,
+                    [CGPN] [varchar](100) NULL,
+                    [Time] [datetime] NULL,
+                    [DurationInSec] [decimal](18, 0) NULL,
+                    [IsPartnerCDR] [bit] NULL) "
+            );
+            query.Replace("#TEMPTABLE#", this.TableName);
+            ExecuteNonQueryText(query.ToString(), null);
         }
 
         #region Bulk Insert Methods
@@ -58,7 +69,7 @@ namespace CDRComparison.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "[dbo].[MissingCDR]",
+                TableName = this.TableName,
                 Stream = streamForBulkInsert,
                 ColumnNames = s_Columns,
                 TabLock = true,
@@ -107,10 +118,11 @@ namespace CDRComparison.Data.SQL
 		            [Time],
 		            [DurationInSec],
 		            [IsPartnerCDR]
-	            FROM dbo.MissingCDR
+	            FROM #TEMPTABLE#
 	            WHERE IsPartnerCDR = #ISPARTNERCDRS#"
             );
             query.Replace("#ISPARTNERCDRS#", (isPartnerCDRs ? "1" : "0"));
+            query.Replace("#TEMPTABLE#", this.TableName);
             return query.ToString();
         }
 
@@ -129,5 +141,13 @@ namespace CDRComparison.Data.SQL
         }
         
         #endregion
+
+        protected override string TableNamePrefix
+        {
+            get
+            {
+                return "MissingCDR";
+            }
+        }
     }
 }

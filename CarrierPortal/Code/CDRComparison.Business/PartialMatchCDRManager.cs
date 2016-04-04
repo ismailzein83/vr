@@ -14,16 +14,18 @@ namespace CDRComparison.Business
     {
         #region Public Methods
 
-        public IDataRetrievalResult<PartialMatchCDR> GetFilteredPartialMatchCDRs(DataRetrievalInput<object> input)
+        public IDataRetrievalResult<PartialMatchCDR> GetFilteredPartialMatchCDRs(DataRetrievalInput<PartialMatchCDRQuery> input)
         {
             IPartialMatchCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
+            dataManager.TableNameKey = input.Query.TableKey;
             IEnumerable<PartialMatchCDR> partialMatchCDRs = dataManager.GetPartialMatchCDRs();
             return DataRetrievalManager.Instance.ProcessResult(input, partialMatchCDRs.ToBigResult(input, null));
         }
 
-        public int GetPartialMatchCDRsCount()
+        public int GetPartialMatchCDRsCount(string tableKey)
         {
             IPartialMatchCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
+            dataManager.TableNameKey = tableKey;
             return dataManager.GetPartialMatchCDRsCount();
         }
 

@@ -71,7 +71,15 @@
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="cba:SettingTaskExecutionInformation" Name="ContinueExecution" />
+      <Variable x:TypeArguments="x:String" Name="TableKey" />
     </Sequence.Variables>
+    <cba1:CreateCDRTables sap2010:WorkflowViewState.IdRef="CreateCDRTables_1">
+      <cba1:CreateCDRTables.TableKey>
+        <OutArgument x:TypeArguments="x:String">
+          <mca:CSharpReference x:TypeArguments="x:String">TableKey</mca:CSharpReference>
+        </OutArgument>
+      </cba1:CreateCDRTables.TableKey>
+    </cba1:CreateCDRTables>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsStatus" />
@@ -146,6 +154,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PrepareCDRsForDBApplyStatus</mca:CSharpReference>
           </OutArgument>
         </cba1:PrepareCDRsForDBApply.Status>
+        <cba1:PrepareCDRsForDBApply.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:PrepareCDRsForDBApply.TableKey>
       </cba1:PrepareCDRsForDBApply>
       <cba1:ApplyCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyCDRsToDB_2">
         <cba1:ApplyCDRsToDB.InputQueue>
@@ -158,6 +171,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PrepareCDRsForDBApplyStatus</mca:CSharpValue>
           </InArgument>
         </cba1:ApplyCDRsToDB.PreviousActivityStatus>
+        <cba1:ApplyCDRsToDB.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:ApplyCDRsToDB.TableKey>
       </cba1:ApplyCDRsToDB>
     </Parallel>
     <vbw:AssignTask x:TypeArguments="cba:SettingTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_3" TaskTitle="CDR Comparison Settings">
@@ -200,6 +218,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">LoadOrderedCDRsStatus</mca:CSharpReference>
           </OutArgument>
         </cba1:LoadOrderedCDRs.Status>
+        <cba1:LoadOrderedCDRs.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:LoadOrderedCDRs.TableKey>
       </cba1:LoadOrderedCDRs>
       <cba1:ProcessCDRs sap2010:WorkflowViewState.IdRef="ProcessCDRs_1">
         <cba1:ProcessCDRs.DurationMarginInMilliSeconds>
@@ -269,6 +292,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PrepareMissingCDRsStatus</mca:CSharpReference>
           </OutArgument>
         </cba1:PrepareMissingCDRsForDBApply.Status>
+        <cba1:PrepareMissingCDRsForDBApply.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:PrepareMissingCDRsForDBApply.TableKey>
       </cba1:PrepareMissingCDRsForDBApply>
       <cba1:ApplyMissingCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyMissingCDRsToDB_1">
         <cba1:ApplyMissingCDRsToDB.InputQueue>
@@ -281,6 +309,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PrepareMissingCDRsStatus</mca:CSharpValue>
           </InArgument>
         </cba1:ApplyMissingCDRsToDB.PreviousActivityStatus>
+        <cba1:ApplyMissingCDRsToDB.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:ApplyMissingCDRsToDB.TableKey>
       </cba1:ApplyMissingCDRsToDB>
       <cba1:PreparePartialMatchCDRsForDBApply sap2010:WorkflowViewState.IdRef="PreparePartialMatchCDRsForDBApply_1">
         <cba1:PreparePartialMatchCDRsForDBApply.InputQueue>
@@ -303,6 +336,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PreparePartialMatchCDRsStatus</mca:CSharpReference>
           </OutArgument>
         </cba1:PreparePartialMatchCDRsForDBApply.Status>
+        <cba1:PreparePartialMatchCDRsForDBApply.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:PreparePartialMatchCDRsForDBApply.TableKey>
       </cba1:PreparePartialMatchCDRsForDBApply>
       <cba1:ApplyPartialMatchCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyPartialMatchCDRsToDB_1">
         <cba1:ApplyPartialMatchCDRsToDB.InputQueue>
@@ -315,6 +353,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PreparePartialMatchCDRsStatus</mca:CSharpValue>
           </InArgument>
         </cba1:ApplyPartialMatchCDRsToDB.PreviousActivityStatus>
+        <cba1:ApplyPartialMatchCDRsToDB.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:ApplyPartialMatchCDRsToDB.TableKey>
       </cba1:ApplyPartialMatchCDRsToDB>
       <cba1:PrepareDisputeCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareDisputeCDRsForDBApply_1">
         <cba1:PrepareDisputeCDRsForDBApply.InputQueue>
@@ -337,6 +380,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PrepareDisputeCDRsStatus</mca:CSharpReference>
           </OutArgument>
         </cba1:PrepareDisputeCDRsForDBApply.Status>
+        <cba1:PrepareDisputeCDRsForDBApply.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:PrepareDisputeCDRsForDBApply.TableKey>
       </cba1:PrepareDisputeCDRsForDBApply>
       <cba1:ApplyDisputeCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDisputeCDRsToDB_1">
         <cba1:ApplyDisputeCDRsToDB.InputQueue>
@@ -349,6 +397,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PrepareDisputeCDRsStatus</mca:CSharpValue>
           </InArgument>
         </cba1:ApplyDisputeCDRsToDB.PreviousActivityStatus>
+        <cba1:ApplyDisputeCDRsToDB.TableKey>
+          <InArgument x:TypeArguments="x:String">
+            <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+          </InArgument>
+        </cba1:ApplyDisputeCDRsToDB.TableKey>
       </cba1:ApplyDisputeCDRsToDB>
     </Parallel>
     <vbw:AssignTask x:TypeArguments="cba:ComparisonResultTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_4" TaskTitle="CDR Comparison Result">
@@ -359,7 +412,7 @@
       </vbw:AssignTask.AssignedTo>
       <vbw:AssignTask.TaskData>
         <InArgument x:TypeArguments="vbe:BPTaskData">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new ComparisonResultTaskData()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new ComparisonResultTaskData() { TableKey =TableKey}</mca:CSharpValue>
         </InArgument>
       </vbw:AssignTask.TaskData>
       <vbw:AssignTask.TaskExecutionInformation>
@@ -368,10 +421,11 @@
         </OutArgument>
       </vbw:AssignTask.TaskExecutionInformation>
     </vbw:AssignTask>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbEo9A/QCDgIBAUYLRpsBAgECSwWiARADAdgEowEFswEWAwG7BLQBBeECEAIBKOICBfICFgIBC1AHfxIDAZ0FgAEHlQEkAwHwBJYBB6EBHAMB2QSwAQuwAX0DAc8EqwELqwFkAwHGBKMBngGjAbcBAwHFBKYBC6YBlwEDAbwEwAEHywEeAwGWBMwBB/oBGgMB8wL7AQeQAisDAaoCkQIHnAIjAwGFAp0CB7ICMAMBvAGzAge+AigDAZcBvwIH1AIrAgFO1QIH4AIjAgEp7wIL7wKEAQIBH+oCC+oCbQIBFuICpwHiAr4BAgEV5QIL5QKXAQIBDFEJXBIDAdsFXQloGQMBwwVpCXQZAwGrBXUJfhIDAZ4FjQENjQFnAwGSBYMBDYMBcgMBhwWSAQ2SAXwDAfwEiAENiAF8AwHxBJ4BDZ4BdAMB5QSZAQ2ZAXwDAdoEyAENyAF2AwGpBMMBDcMBegMBlwTZAQ3ZAYABAwGEBOgBDegBbgMB8gPUAQ3UAXoDAeAD8gEN8gF8AwHOA+MBDeMBigEDAbwD9wEN9wFxAwGqA+0BDe0BcgMBmAPeAQ3eAYABAwGGA88BDc8BgAEDAfQCiAINiAJqAwHhAv4BDf4BeAMBzwKNAg2NAnkDAb0CgwINgwKDAQMBqwKZAg2ZAnEDAZgClAINlAJ7AwGGAqoCDaoCagMB8wGgAg2gAoIBAwHhAa8CDa8CfgMBzwGlAg2lAogBAwG9AbsCDbsCdgMBqgG2Ag22AoABAwGYAcwCDcwCagMBhQHCAg3CAngCAXPRAg3RAnkCAWHHAg3HAoMBAgFP3QIN3QJxAgE82AIN2AJ7AgEqWQ9ZdAMB5wVUD1RxAwHcBV1lXWwDAdoFZQ9ldAMBzwVgD2BmAwHEBWllaWsDAcIFcQ9xdAMBtwVsD2xnAwGsBXw1fDkDAaoFeA94bwMBnwU=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbFU9A6kDDgIBAUYLRpsBAgECTAVSHAMBwAdTBbQBEAMBgQa1AQXFARYDAeEFxgEFlgMQAgEslwMFpwMWAgEMTwtPWQMBwQdYB4cBEgMB5AaIAQeiASQDAacGowEHswEcAwGCBsIBC8IBfQMB9wW9AQu9AWQDAe0FtQGeAbUBtwEDAewFuAELuAGXAQMB4gXSAQfiAR4DAacF4wEHkQIaAwH7A5ICB6wCKwMBmwOtAge9AiMDAeECvgIH2AIwAwGBAtkCB+kCKAMBxwHqAgeEAysCAWeFAweVAyMCAS2kAwukA4QBAgEinwMLnwODAQIBGJcDpwGXA74BAgEXmgMLmgOXAQIBDVkJZBIDAacHZQlwGQMBjQdxCXwZAwHzBn0JhgESAwHlBpUBDZUBZwMB2AaLAQ2LAXIDAcwGmgENmgF8AwHABpABDZABfAMBtAafAQ2fAVMDAagGqwENqwF0AwGbBqYBDaYBfAMBjwawAQ2wAVMDAYMG2gEN2gF2AwHOBdUBDdUBegMBuwXfAQ3fAVMDAagF8AEN8AGAAQMBlAX/AQ3/AW4DAYEF6wEN6wF6AwHuBIkCDYkCfAMB2wT6AQ36AYoBAwHIBI4CDY4CcQMBtQSEAg2EAnIDAaIE9QEN9QGAAQMBjwTmAQ3mAYABAwH8A58CDZ8CagMB6AOVAg2VAngDAdUDpAINpAJ5AwHCA5oCDZoCgwEDAa8DqQINqQJTAwGcA7UCDbUCcQMBiAOwAg2wAnsDAfUCugINugJTAwHiAssCDcsCagMBzgLBAg3BAoIBAwG7AtACDdACfgMBqALGAg3GAogBAwGVAtUCDdUCUwMBggLhAg3hAnYDAe4B3AIN3AKAAQMB2wHmAg3mAlMDAcgB9wIN9wJqAwG0Ae0CDe0CeAMBoQH8Ag38AnkDAY4B8gIN8gKDAQIBe4EDDYEDUwIBaI0DDY0DcQIBVIgDDYgDewIBQZIDDZIDUwIBLmEPYXQDAbQHXA9ccQMBqAdlZWVsAwGmB20PbXQDAZoHaA9oZgMBjgdxZXFrAwGMB3kPeXQDAYAHdA90ZwMB9AaEATWEATkDAfIGgAEPgAFvAwHmBg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="CreateCDRTables_1" sap:VirtualizedContainerService.HintSize="1994,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="LoadCDRs_3" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="LoadCDRs_4" sap:VirtualizedContainerService.HintSize="242,22" />
@@ -397,14 +451,14 @@
       <sap2010:ViewStateData Id="ApplyDisputeCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1994,86" />
       <sap2010:ViewStateData Id="AssignTask`1_4" sap:VirtualizedContainerService.HintSize="1994,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,832">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,894">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,912" />
+      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,974" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -11,14 +11,16 @@ namespace CDRComparison.Business
 {
     public class CDRManager
     {
-        public int GetAllCDRsCount()
+        public int GetAllCDRsCount(string tableKey)
         {
             ICDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
+            dataManager.TableNameKey = tableKey;
             return dataManager.GetAllCDRsCount();
         }
         public IDataRetrievalResult<CDR> GetFilteredCDRs(DataRetrievalInput<CDRQuery> input)
         {
             ICDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
+            dataManager.TableNameKey = input.Query.TableKey;
             IEnumerable<CDR> cdrs = dataManager.GetCDRs(input.Query.IsPartnerCDRs,input.Query.CDPN);
             return DataRetrievalManager.Instance.ProcessResult(input, cdrs.ToBigResult(input, null));
         }

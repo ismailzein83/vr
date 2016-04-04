@@ -52,6 +52,7 @@
     <Compile Include="CDR\CDRQuery.cs" />
     <Compile Include="DisputeCDR\DisputeCDR.cs" />
     <Compile Include="DisputeCDR\DisputeCDRBatch.cs" />
+    <Compile Include="DisputeCDR\DisputeCDRQuery.cs" />
     <Compile Include="MissingCDR\MissingCDR.cs" />
     <Compile Include="MissingCDR\MissingCDRBatch.cs" />
     <Compile Include="MissingCDR\MissingCDRQuery.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="IReadCDRsFromSourceContext.cs" />
     <Compile Include="NormalizationRule.cs" />
     <Compile Include="PartialMatchCDR\PartialMatchCDRBatch.cs" />
+    <Compile Include="PartialMatchCDR\PartialMatchCDRQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleCriteriaField.cs" />
   </ItemGroup>

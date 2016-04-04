@@ -14,16 +14,18 @@ namespace CDRComparison.Business
     {
         #region Public Methods
 
-        public IDataRetrievalResult<DisputeCDR> GetFilteredDisputeCDRs(DataRetrievalInput<object> input)
+        public IDataRetrievalResult<DisputeCDR> GetFilteredDisputeCDRs(DataRetrievalInput<DisputeCDRQuery> input)
         {
             IDisputeCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IDisputeCDRDataManager>();
+            dataManager.TableNameKey = input.Query.TableKey;
             IEnumerable<DisputeCDR> disputeCDRs = dataManager.GetDisputeCDRs();
             return DataRetrievalManager.Instance.ProcessResult(input, disputeCDRs.ToBigResult(input, null));
         }
 
-        public int GetDisputeCDRsCount()
+        public int GetDisputeCDRsCount(string tableKey)
         {
             IDisputeCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IDisputeCDRDataManager>();
+            dataManager.TableNameKey = tableKey;
             return dataManager.GetDisputeCDRsCount();
         }
 

@@ -8,10 +8,10 @@ using Vanrise.Data;
 
 namespace CDRComparison.Data
 {
-    public interface IDisputeCDRDataManager : IDataManager, IBulkApplyDataManager<DisputeCDR>
+    public interface IDisputeCDRDataManager : IDataManager, IBaseCDRDataManager, IBulkApplyDataManager<DisputeCDR>
     {
         void ApplyDisputeCDRsToDB(object preparedNumberProfiles);
-
+        void CreateDisputeCDRTempTable();
         IEnumerable<DisputeCDR> GetDisputeCDRs();
 
         int GetDisputeCDRsCount();

@@ -32,9 +32,9 @@ namespace CDRComparison.Web.Controllers
 
         [HttpGet]
         [Route("GetCDRComparisonSummary")]
-        public CDRComparisonSummary GetCDRComparisonSummary()
+        public CDRComparisonSummary GetCDRComparisonSummary(string tableKey)
         {
-            return _manager.GetCDRComparisonSummary();
+            return _manager.GetCDRComparisonSummary(tableKey);
         }
     }
 }

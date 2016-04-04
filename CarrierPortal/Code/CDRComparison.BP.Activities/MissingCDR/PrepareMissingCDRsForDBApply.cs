@@ -17,6 +17,7 @@ namespace CDRComparison.BP.Activities
         public BaseQueue<MissingCDRBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
+        public string TableKey { get; set; }
     }
 
     #endregion
@@ -27,9 +28,13 @@ namespace CDRComparison.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
+     
+        [RequiredArgument]
+        public InArgument<string> TableKey { get; set; }
         protected override void DoWork(PrepareMissingCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IMissingCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IMissingCDRDataManager>();
+            dataManager.TableNameKey = inputArgument.TableKey;
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, missingCDRBatch => missingCDRBatch.MissingCDRs);
         }
 
@@ -38,7 +43,8 @@ namespace CDRComparison.BP.Activities
             return new PrepareMissingCDRsInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                TableKey = this.TableKey.Get(context)
             };
         }
 

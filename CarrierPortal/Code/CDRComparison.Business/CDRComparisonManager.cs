@@ -23,17 +23,17 @@ namespace CDRComparison.Business
             return templateConfigManager.GetTemplateConfigurations(Constants.FileReaderConfigType);
         }
 
-        public CDRComparisonSummary GetCDRComparisonSummary()
+        public CDRComparisonSummary GetCDRComparisonSummary(string tableKey)
         {
             CDRComparisonSummary summary = new CDRComparisonSummary();
             CDRManager cdrManager = new Business.CDRManager();
             MissingCDRManager missingCDRManager = new MissingCDRManager();
             PartialMatchCDRManager partialMatchCDRManager = new PartialMatchCDRManager();
             DisputeCDRManager disputeCDRManager = new Business.DisputeCDRManager();
-            summary.MissingCDRsCount = missingCDRManager.GetMissingCDRsCount();
-            summary.PartialMatchCDRsCount = partialMatchCDRManager.GetPartialMatchCDRsCount();
-            summary.AllCDRsCount = cdrManager.GetAllCDRsCount();
-            summary.DisputeCDRsCount = disputeCDRManager.GetDisputeCDRsCount();
+            summary.MissingCDRsCount = missingCDRManager.GetMissingCDRsCount(tableKey);
+            summary.PartialMatchCDRsCount = partialMatchCDRManager.GetPartialMatchCDRsCount(tableKey);
+            summary.AllCDRsCount = cdrManager.GetAllCDRsCount(tableKey);
+            summary.DisputeCDRsCount = disputeCDRManager.GetDisputeCDRsCount(tableKey);
             return summary;
         }
     }

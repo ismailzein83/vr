@@ -8,10 +8,10 @@ using Vanrise.Data;
 
 namespace CDRComparison.Data
 {
-    public interface ICDRDataManager : IDataManager, IBulkApplyDataManager<CDR>
+    public interface ICDRDataManager : IDataManager, IBaseCDRDataManager, IBulkApplyDataManager<CDR>
     {
         void LoadCDRs(Action<CDR> onBatchReady);
-
+        void CreateCDRTempTable();
         void ApplyCDRsToDB(object preparedCDRs);
         IEnumerable<CDR> GetCDRs(bool isPartnerCDRs, string CDPN);
         int GetAllCDRsCount();

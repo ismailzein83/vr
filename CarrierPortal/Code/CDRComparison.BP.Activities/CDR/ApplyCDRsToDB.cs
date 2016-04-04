@@ -15,6 +15,7 @@ namespace CDRComparison.BP.Activities
     public class ApplyCDRsToDBInput
     {
         public BaseQueue<Object> InputQueue { get; set; }
+        public string TableKey { get; set; }
     }
     
     #endregion
@@ -25,13 +26,14 @@ namespace CDRComparison.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> InputQueue { get; set; }
-        
+        [RequiredArgument]
+        public InArgument<string> TableKey { get; set; }
         #endregion
 
         protected override void DoWork(ApplyCDRsToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
-
+            dataManager.TableNameKey = inputArgument.TableKey;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItems = false;
@@ -50,7 +52,8 @@ namespace CDRComparison.BP.Activities
         {
             return new ApplyCDRsToDBInput()
             {
-                InputQueue = this.InputQueue.Get(context)
+                InputQueue = this.InputQueue.Get(context),
+                TableKey = this.TableKey.Get(context)
             };
         }
     }

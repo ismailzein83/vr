@@ -1,4 +1,5 @@
 ﻿using CDRComparison.Business;
+using CDRComparison.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace CDRComparison.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredPartialMatchCDRs")]
-        public object GetFilteredPartialMatchCDRs(Vanrise.Entities.DataRetrievalInput<object> input)
+        public object GetFilteredPartialMatchCDRs(Vanrise.Entities.DataRetrievalInput<PartialMatchCDRQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredPartialMatchCDRs(input));
         }

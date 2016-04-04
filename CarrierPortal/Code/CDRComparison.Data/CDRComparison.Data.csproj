@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRComparisonDataManagerFactory.cs" />
+    <Compile Include="IBaseCDRDataManager.cs" />
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IDisputeCDRDataManager.cs" />

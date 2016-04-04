@@ -9,5 +9,6 @@ namespace CDRComparison.Entities
     public class MissingCDRQuery
     {
         public bool IsPartnerCDRs { get; set; }
+        public string TableKey { get; set; }
     }
 }

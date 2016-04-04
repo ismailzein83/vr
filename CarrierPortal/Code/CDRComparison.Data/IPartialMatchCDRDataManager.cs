@@ -8,10 +8,10 @@ using Vanrise.Data;
 
 namespace CDRComparison.Data
 {
-    public interface IPartialMatchCDRDataManager : IDataManager, IBulkApplyDataManager<PartialMatchCDR>
+    public interface IPartialMatchCDRDataManager : IDataManager, IBaseCDRDataManager, IBulkApplyDataManager<PartialMatchCDR>
     {
         void ApplyPartialMatchCDRsToDB(object preparedNumberProfiles);
-
+        void CreatePartialMatchCDRTempTable();
         IEnumerable<PartialMatchCDR> GetPartialMatchCDRs();
 
         int GetPartialMatchCDRsCount();

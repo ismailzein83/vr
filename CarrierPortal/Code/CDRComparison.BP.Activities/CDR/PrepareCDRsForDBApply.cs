@@ -18,6 +18,7 @@ namespace CDRComparison.BP.Activities
         public BaseQueue<CDRBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
+        public string TableKey { get; set; }
     }
 
     #endregion
@@ -31,12 +32,15 @@ namespace CDRComparison.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
+        [RequiredArgument]
+        public InArgument<string> TableKey { get; set; }
         
         #endregion
 
         protected override void DoWork(PrepareCDRsForDBApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
+            dataManager.TableNameKey = inputArgument.TableKey;
             PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, cdrBatch => cdrBatch.CDRs);
         }
 
@@ -52,7 +56,8 @@ namespace CDRComparison.BP.Activities
             return new PrepareCDRsForDBApplyInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                TableKey = this.TableKey.Get(context)
             };
         }
     }

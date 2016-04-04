@@ -16,6 +16,7 @@ namespace CDRComparison.BP.Activities
     public class LoadOrderedCDRsInput
     {
         public BaseQueue<CDRBatch> OutputQueue { get; set; }
+        public string TableKey { get; set; }
     }
 
     #endregion
@@ -24,7 +25,8 @@ namespace CDRComparison.BP.Activities
         #region Arguments
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> OutputQueue { get; set; }
-
+        [RequiredArgument]
+        public InArgument<string> TableKey { get; set; }
         #endregion
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
@@ -40,6 +42,7 @@ namespace CDRComparison.BP.Activities
             long batchSize = 10000;
             List<CDR> CDRs = new List<CDR>();
             ICDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
+            dataManager.TableNameKey = inputArgument.TableKey;
             long batch = 0;
             long totalBatches = 0;
             dataManager.LoadCDRs((cdr) =>
@@ -69,6 +72,7 @@ namespace CDRComparison.BP.Activities
             return new LoadOrderedCDRsInput
             {
                 OutputQueue = this.OutputQueue.Get(context),
+                TableKey = this.TableKey.Get(context)
             };
         }
     }

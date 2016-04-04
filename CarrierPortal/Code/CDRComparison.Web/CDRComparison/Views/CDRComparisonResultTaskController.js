@@ -7,7 +7,7 @@
     function CDRComparisonResultTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService) {
         var bpTaskId;
         var processInstanceId;
-
+        var tableKey;
         var systemMissingCDRGridAPI;
         var partnerMissingCDRGridAPI;
         var partialMatchCDRGridAPI;
@@ -38,7 +38,8 @@
             $scope.scopeModal.onSystemMissingCDRDirectiveReady = function (api) {
                 systemMissingCDRGridAPI = api;
                 var payload = {
-                    IsPartnerCDRs: false
+                    IsPartnerCDRs: false,
+                    TableKey: tableKey
                 };
                 var setLoader = function (value) {
                     $scope.scopeModal.isLoadingSystemMissingCDRDirective = value;
@@ -48,7 +49,8 @@
             $scope.scopeModal.onPartnerMissingCDRDirectiveReady = function (api) {
                 partnerMissingCDRGridAPI = api;
                 var payload = {
-                    IsPartnerCDRs: true
+                    IsPartnerCDRs: true,
+                    TableKey: tableKey
                 };
                 var setLoader = function (value) {
                     $scope.scopeModal.isLoadingPartnerMissingCDRDirective = value;
@@ -56,7 +58,9 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerMissingCDRGridAPI, payload, setLoader);
             }
             $scope.scopeModal.onPartialMatchCDRDirectiveReady = function (api) {
-                var payload = {};
+                var payload = {
+                    TableKey: tableKey
+                };
                 partialMatchCDRGridAPI = api;
                 var setLoader = function (value) {
                     $scope.scopeModal.isLoadingPartialMatchCDRDirective = value;
@@ -67,7 +71,9 @@
 
             $scope.scopeModal.onDisputeCDRGridReady = function (api) {
                 disputeCDRGridAPI = api;
-                var payload = {};
+                var payload = {
+                    TableKey: tableKey
+                };
                 var setLoader = function (value) {
                     $scope.scopeModal.isLoadingDisputeCDRDirective = value;
                 };
@@ -102,7 +108,10 @@
         function load() {
             $scope.scopeModal.isLoading = true;
             BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
+                console.log(response);
                 processInstanceId = response.ProcessInstanceId;
+                if (response && response.TaskData)
+                    tableKey = response.TaskData.TableKey;
                 loadAllControls();
             })
         }
@@ -120,7 +129,7 @@
         }
 
         function loadSummaryData() {
-            return CDRComparison_CDRComparisonAPIService.GetCDRComparisonSummary().then(function (response) {
+            return CDRComparison_CDRComparisonAPIService.GetCDRComparisonSummary(tableKey).then(function (response) {
                 if (response)
                 {
                     $scope.scopeModal.allCDRsCount = response.AllCDRsCount;

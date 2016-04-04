@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace CDRComparison.Entities
 {
-    public class CDRQuery
+    public class PartialMatchCDRQuery
     {
-        public bool IsPartnerCDRs { get; set; }
-        public string CDPN { get; set; }
-         public string TableKey { get; set; }
+        public string TableKey { get; set; }
     }
 }

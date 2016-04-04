@@ -9,15 +9,9 @@ using Vanrise.Data.SQL;
 
 namespace CDRComparison.Data.SQL
 {
-    public class PartialMatchCDRDataManager : BaseSQLDataManager, IPartialMatchCDRDataManager
+    public class PartialMatchCDRDataManager : BaseCDRDataManager, IPartialMatchCDRDataManager
     {
         #region Constructors / Fields
-
-        public PartialMatchCDRDataManager()
-            : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
-        {
-
-        }
 
         static string[] s_Columns = new string[]
         {
@@ -43,10 +37,40 @@ namespace CDRComparison.Data.SQL
         {
             return GetItemsText(GetPartialMatchCDRsQuery(), PartialMatchCDRMapper, null);
         }
-
+        public void CreatePartialMatchCDRTempTable()
+        {
+          
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                    @"Create Table #TEMPTABLE# ([ID] [int] IDENTITY(1,1) NOT NULL,
+                    [OriginalSystemCDPN] [varchar](100) NULL,
+                    [OriginalPartnerCDPN] [varchar](100) NULL,
+                    [OriginalSystemCGPN] [varchar](100) NULL,
+                    [OriginalPartnerCGPN] [varchar](100) NULL,
+                    [SystemCDPN] [varchar](100) NULL,
+                    [PartnerCDPN] [varchar](100) NULL,
+                    [SystemCGPN] [varchar](100) NULL,
+                    [PartnerCGPN] [varchar](100) NULL,
+                    [SystemTime] [datetime] NULL,
+                    [PartnerTime] [datetime] NULL,
+                    [SystemDurationInSec] [decimal](18, 0) NULL,
+                    [PartnerDurationInSec] [decimal](18, 0) NULL) 
+                    "
+            );
+            query.Replace("#TEMPTABLE#", this.TableName);
+            ExecuteNonQueryText(query.ToString(), null);
+        }
+        protected override string TableNamePrefix
+        {
+            get
+            {
+                return "PartialMatchCDR";
+            }
+        }
         public int GetPartialMatchCDRsCount()
         {
-            object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.PartialMatchCDR", null);
+            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}",this.TableName), null);
             return (int)count;
         }
 
@@ -63,7 +87,7 @@ namespace CDRComparison.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "[dbo].[PartialMatchCDR]",
+                TableName = this.TableName,
                 Stream = streamForBulkInsert,
                 ColumnNames = s_Columns,
                 TabLock = true,
@@ -122,8 +146,9 @@ namespace CDRComparison.Data.SQL
                     [PartnerTime],
                     [SystemDurationInSec],
                     [PartnerDurationInSec]
-                FROM [CDRComparison_Dev].[dbo].[PartialMatchCDR]"
+                FROM #TEMPTABLE#"
             );
+            query.Replace("#TEMPTABLE#", this.TableName);
             return query.ToString();
         }
 

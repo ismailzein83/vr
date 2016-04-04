@@ -8,10 +8,11 @@ using Vanrise.Data;
 
 namespace CDRComparison.Data
 {
-    public interface IMissingCDRDataManager : IDataManager, IBulkApplyDataManager<MissingCDR>
+    public interface IMissingCDRDataManager : IDataManager,IBaseCDRDataManager, IBulkApplyDataManager<MissingCDR>
     {
+       
         void ApplyMissingCDRsToDB(object preparedNumberProfiles);
-
+        void CreateMissingCDRTempTable();
         IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs);
 
         int GetMissingCDRsCount();

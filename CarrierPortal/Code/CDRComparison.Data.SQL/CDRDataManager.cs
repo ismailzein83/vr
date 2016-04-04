@@ -9,15 +9,9 @@ using Vanrise.Data.SQL;
 
 namespace CDRComparison.Data.SQL
 {
-    public class CDRDataManager : BaseSQLDataManager, ICDRDataManager
+    public class CDRDataManager : BaseCDRDataManager , ICDRDataManager
     {
         #region Constructors / Fields
-
-        public CDRDataManager()
-            : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
-        {
-
-        }
 
         static string[] s_Columns = new string[]
         {
@@ -42,10 +36,10 @@ namespace CDRComparison.Data.SQL
                 {
                     onBatchReady(new CDR()
                     {
-                        OriginalCDPN = GetReaderValue<string>(reader, "OriginalCDPN"),
-                        OriginalCGPN = GetReaderValue<string>(reader, "OriginalCGPN"),
-                        CDPN = GetReaderValue<string>(reader, "CDPN"),
-                        CGPN = GetReaderValue<string>(reader, "CGPN"),
+                        OriginalCDPN = reader["OriginalCDPN"] as string,
+                        OriginalCGPN = reader["OriginalCGPN"] as string,
+                        CDPN = reader["CDPN"] as string,
+                        CGPN = reader["CGPN"] as string,
                         DurationInSec = (GetReaderValue<Decimal>(reader, "Duration")),
                         Time = (GetReaderValue<DateTime>(reader, "AttemptTime")),
                         IsPartnerCDR = (GetReaderValue<Boolean>(reader, "IsPartnerCDR"))
@@ -54,10 +48,34 @@ namespace CDRComparison.Data.SQL
             }, null);
         }
  
+        public void CreateCDRTempTable()
+        {
+            StringBuilder query = new StringBuilder();
+            query.Append
+            (
+                @"Create Table #TEMPTABLE# ([ID] [int] IDENTITY(1,1) NOT NULL,
+	                                       [OriginalCDPN] [varchar](100) NULL,
+	                                       [OriginalCGPN] [varchar](100) NULL,
+	                                       [CDPN] [varchar](100) NULL,
+	                                       [CGPN] [varchar](100) NULL,
+	                                       [IsPartnerCDR] [bit] NULL,
+	                                       [AttemptTime] [datetime] NULL,
+	                                       [Duration] [decimal](18, 3) NULL) "
+            );
+            query.Replace("#TEMPTABLE#", this.TableName);
+            ExecuteNonQueryText(query.ToString(), null);
+        }
         public int GetAllCDRsCount()
         {
             object count = ExecuteScalarText("SELECT COUNT(*) FROM dbo.CDR", null);
             return (int)count;
+        }
+        protected override string TableNamePrefix
+        {
+            get
+            {
+                return "CDR";
+            }
         }
 
         #region Bulk Insert Methods
@@ -90,7 +108,7 @@ namespace CDRComparison.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "[dbo].[CDR]",
+                TableName = this.TableName,
                 Stream = streamForBulkInsert,
                 ColumnNames = s_Columns,
                 TabLock = true,
@@ -123,9 +141,10 @@ namespace CDRComparison.Data.SQL
 		            [IsPartnerCDR],
 		            [AttemptTime],
 		            [Duration]
-	            FROM  [CDRComparison_Dev].[dbo].[CDR]
+	            FROM  #TEMPTABLE#
 	            ORDER BY [CDPN]"
             );
+            query.Replace("#TEMPTABLE#", this.TableName);
             return query.ToString();
         }
         private string GetCDRsQuery(bool isPartnerCDRs,string CDPN)
@@ -141,7 +160,7 @@ namespace CDRComparison.Data.SQL
 		            [IsPartnerCDR],
 		            [AttemptTime],
 		            [Duration]
-	            FROM  [CDRComparison_Dev].[dbo].[CDR]  WHERE IsPartnerCDR = #ISPARTNERCDRS# #ADDITIONALQUERY#
+	            FROM  #TEMPTABLE#  WHERE IsPartnerCDR = #ISPARTNERCDRS# #ADDITIONALQUERY#
 	            ORDER BY [CDPN]"
             );
             string cdpnQuery = "";
@@ -151,6 +170,7 @@ namespace CDRComparison.Data.SQL
             }
             query.Replace("#ISPARTNERCDRS#", (isPartnerCDRs ? "1" : "0"));
             query.Replace("#ADDITIONALQUERY#", cdpnQuery);
+            query.Replace("#TEMPTABLE#", this.TableName);
             return query.ToString();
         }
 

@@ -1,4 +1,5 @@
 ﻿using CDRComparison.Business;
+using CDRComparison.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace CDRComparison.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredDisputeCDRs")]
-        public object GetFilteredDisputeCDRs(Vanrise.Entities.DataRetrievalInput<object> input)
+        public object GetFilteredDisputeCDRs(Vanrise.Entities.DataRetrievalInput<DisputeCDRQuery> input)
         {
             return GetWebResponse(input, _manager.GetFilteredDisputeCDRs(input));
         }
