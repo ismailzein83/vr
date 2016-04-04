@@ -11,7 +11,8 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 selectedvalues: '=',
                 isrequired: "=",
                 onselectitem: "=",
-                ondeselectitem: "="
+                ondeselectitem: "=",
+                isdisabled: "="
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -52,8 +53,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 multipleselection = "ismultipleselection";
             }
 
-
-            return '<div>'
+            return '<div vr-disabled="ctrl.isdisabled" >'
                + '<vr-select ' + multipleselection + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" '
                + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Selling Number Plan" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</div>'
