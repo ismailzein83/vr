@@ -27,6 +27,7 @@
 
             var gridAPI;
             var cdrSourceContext;
+            var fieldMappings;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -69,6 +70,7 @@
                         $scope.scopeModel.delimiter = payload.Delimiter;
                         $scope.scopeModel.dateTimeFormat = payload.DateTimeFormat;
                         flatFileId = payload.fileId;
+                        fieldMappings = payload.FieldMappings;
                     }
 
                     if (flatFileId != undefined) {
@@ -144,17 +146,26 @@
                     for (var i = 0; i < columnCount; i++) {
                         var cell = {};
                         cell.fields = getFields();
+                        cell.selectedField = getSelectedField(cell.fields, i);
                         dataItem.cells.push(cell);
                     }
                     $scope.scopeModel.headerGridSource.push(dataItem);
 
                     function getFields() {
                         return [
-                            { value: 4, description: 'CDPN' },
-                            { value: 3, description: 'CGPN' },
-                            { value: 1, description: 'Time' },
-                            { value: 2, description: 'DurationInSec' }
+                            { value: 1, description: 'CDPN' },
+                            { value: 2, description: 'CGPN' },
+                            { value: 3, description: 'Time' },
+                            { value: 4, description: 'DurationInSec' }
                         ];
+                    }
+                    function getSelectedField(cellFields, cellIndex) {
+                        var selectedField;
+                        if (fieldMappings != undefined) {
+                            var fieldMapping = fieldMappings[cellIndex];
+                            selectedField = UtilsService.getItemByVal(cellFields, fieldMapping.FieldName, 'description');
+                        }
+                        return selectedField;
                     }
                 }
             }

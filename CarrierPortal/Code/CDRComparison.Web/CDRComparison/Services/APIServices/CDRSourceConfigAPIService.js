@@ -8,11 +8,25 @@
         var controllerName = 'CDRSourceConfig';
 
         return {
-            GetCDRSourceConfigs: GetCDRSourceConfigs
+            GetCDRSourceConfigs: GetCDRSourceConfigs,
+            GetCDRSourceConfig: GetCDRSourceConfig,
+            AddCDRSourceConfig: AddCDRSourceConfig
         };
 
-        function GetCDRSourceConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetCDRSourceConfigs'));
+        function GetCDRSourceConfigs(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetCDRSourceConfigs'), {
+                filter: filter
+            });
+        }
+
+        function GetCDRSourceConfig(cdrSourceConfigId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetCDRSourceConfig'), {
+                cdrSourceConfigId: cdrSourceConfigId
+            });
+        }
+
+        function AddCDRSourceConfig(cdrSourceConfig) {
+            return BaseAPIService.post(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'AddCDRSourceConfig'), cdrSourceConfig);
         }
     }
 

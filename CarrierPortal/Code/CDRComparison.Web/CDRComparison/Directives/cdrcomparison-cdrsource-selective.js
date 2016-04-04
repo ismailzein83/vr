@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CDRSourceSelectiveDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'CDRComparison_CDRSourceAPIService', 'UtilsService', 'VRUIUtilsService'];
+    CDRSourceSelectiveDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'CDRComparison_CDRSourceAPIService', 'CDRComparison_CDRSourceConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function CDRSourceSelectiveDirective(CDRComparison_CDRComparisonAPIService, CDRComparison_CDRSourceAPIService, UtilsService, VRUIUtilsService) {
+    function CDRSourceSelectiveDirective(CDRComparison_CDRComparisonAPIService, CDRComparison_CDRSourceAPIService, CDRComparison_CDRSourceConfigAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -76,43 +76,32 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var configId;
-                    var normalizationSettings;
+
+                    var cdrSourceConfigId;
+                    var cdrSource;
 
                     if (payload != undefined) {
-                        configId = payload.ConfigId;
-                        directivePayload = payload;
-                        normalizationSettings = payload.NormalizationSettings;
+                        cdrSourceConfigId = payload.cdrSourceConfigId;
                     }
-
-                    extendDirectivePayload();
 
                     var getCDRSourceTemplateConfigsPromise = getCDRSourceTemplateConfigs();
                     promises.push(getCDRSourceTemplateConfigsPromise);
 
-                    var loadDirectiveDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(loadDirectiveDeferred.promise);
+                    if (cdrSourceConfigId != undefined) {
+                        var loadSelfDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadSelfDeferred.promise);
 
-                    var loadCDPNNormalizationRulePromise = loadCDPNNormalizationRule();
-                    promises.push(loadCDPNNormalizationRulePromise);
-
-                    var loadCGPNNormalizationRulePromise = loadCGPNNormalizationRule();
-                    promises.push(loadCGPNNormalizationRulePromise);
-
-                    getCDRSourceTemplateConfigsPromise.then(function () {
-                        if (configId != undefined) {
-                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, configId, 'ConfigId');
-
-                            directiveReadyDeferred.promise.then(function () {
-                                directiveReadyDeferred = undefined;
-                                VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, loadDirectiveDeferred);
+                        getCDRSourceConfig().then(function () {
+                            UtilsService.waitMultipleAsyncOperations([loadDirective, loadNormalizationRules]).then(function () {
+                                loadSelfDeferred.resolve();
+                            }).catch(function (error) {
+                                loadSelfDeferred.reject();
                             });
-                        }
-                        else {
-                            loadDirectiveDeferred.resolve();
-                        }
-                    });
+                        });
+                    }
+                    else {
+                        extendDirectivePayload();
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -126,21 +115,58 @@
                             }
                         });
                     }
-                    function loadCDPNNormalizationRule() {
-                        var cdpnNormalizationRuleLoadDeferred = UtilsService.createPromiseDeferred();
-                        var payload = {
-                            FieldToNormalize: 'CDPN'
-                        };
-                        VRUIUtilsService.callDirectiveLoad(cdpnNormalizationRuleDirectiveAPI, payload, cdpnNormalizationRuleLoadDeferred);
-                        return cdpnNormalizationRuleLoadDeferred.promise;
+                    function getCDRSourceConfig() {
+                        return CDRComparison_CDRSourceConfigAPIService.GetCDRSourceConfig(cdrSourceConfigId).then(function (cdrSourceConfig) {
+                            cdrSource = cdrSourceConfig.CDRSource;
+                        });
                     }
-                    function loadCGPNNormalizationRule() {
-                        var cgpnNormalizationRuleLoadDeferred = UtilsService.createPromiseDeferred();
-                        var payload = {
-                            FieldToNormalize: 'CGPN'
-                        };
-                        VRUIUtilsService.callDirectiveLoad(cgpnNormalizationRuleDirectiveAPI, payload, cgpnNormalizationRuleLoadDeferred);
-                        return cgpnNormalizationRuleLoadDeferred.promise;
+                    function loadDirective() {
+                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        getCDRSourceTemplateConfigsPromise.then(function () {
+                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, cdrSource.ConfigId, 'TemplateConfigID');
+
+                            directiveReadyDeferred.promise.then(function () {
+                                directiveReadyDeferred = undefined;
+                                directivePayload = cdrSource;
+                                extendDirectivePayload();
+                                VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                            });
+                        });
+
+                        return directiveLoadDeferred.promise;
+                    }
+                    function loadNormalizationRules() {
+
+                        return UtilsService.waitMultipleAsyncOperations([loadCDPNNormalizationRule, loadCGPNNormalizationRule]);
+
+                        function loadCDPNNormalizationRule() {
+                            var cdpnNormalizationRuleLoadDeferred = UtilsService.createPromiseDeferred();
+
+                            if (cdrSource != undefined && cdrSource.NormalizationRules != null) {
+                                var payload = UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CDPN', 'FieldToNormalize');
+                                VRUIUtilsService.callDirectiveLoad(cdpnNormalizationRuleDirectiveAPI, payload, cdpnNormalizationRuleLoadDeferred);
+                            }
+                            else {
+                                cdpnNormalizationRuleLoadDeferred.resolve();
+                            }
+
+                            return cdpnNormalizationRuleLoadDeferred.promise;
+                        }
+                        function loadCGPNNormalizationRule() {
+                            var cgpnNormalizationRuleLoadDeferred = UtilsService.createPromiseDeferred();
+
+                            if (cdrSource != undefined && cdrSource.NormalizationRules != null) {
+                                var payload = UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CGPN', 'FieldToNormalize');
+                                VRUIUtilsService.callDirectiveLoad(cgpnNormalizationRuleDirectiveAPI, payload, cgpnNormalizationRuleLoadDeferred);
+                            }
+                            else {
+                                cgpnNormalizationRuleLoadDeferred.resolve();
+                            }
+
+                            return cgpnNormalizationRuleLoadDeferred.promise;
+                        }
                     }
                 };
 

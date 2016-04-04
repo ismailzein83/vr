@@ -69,9 +69,10 @@
                     promises.push(loadDirectiveDeferred.promise);
 
                     getFileReaderTemplateConfigsPromise.then(function () {
+
                         if (configId != undefined) {
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, configId, 'ConfigId');
+                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, configId, 'TemplateConfigID');
 
                             directiveReadyDeferred.promise.then(function () {
                                 directiveReadyDeferred = undefined;

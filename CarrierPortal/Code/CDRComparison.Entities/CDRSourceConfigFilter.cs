@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace CDRComparison.Entities
 {
-    public class CDRSourceConfig
+    public class CDRSourceConfigFilter
     {
-        public int CDRSourceConfigId { get; set; }
-        public string Name { get; set; }
-        public CDRSource CDRSource { get; set; }
         public bool IsPartnerCDRSource { get; set; }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="CDRBatch.cs" />
     <Compile Include="CDRComparisonSummary.cs" />
     <Compile Include="CDRSourceConfig.cs" />
+    <Compile Include="CDRSourceConfigFilter.cs" />
     <Compile Include="CDR\CDRQuery.cs" />
     <Compile Include="DisputeCDR\DisputeCDR.cs" />
     <Compile Include="DisputeCDR\DisputeCDRBatch.cs" />

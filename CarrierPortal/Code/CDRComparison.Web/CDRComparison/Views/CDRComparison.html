@@ -3,6 +3,14 @@
         <vr-row>
             <vr-columns width="1/2row">
                 <vr-section title="System CDRs">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <cdrcomparison-cdrsourceconfig-selector on-ready="onSystemSourceConfigSelectorReady" onselectitem="onSystemSourceConfigSelected"></cdrcomparison-cdrsourceconfig-selector>
+                        </vr-columns>
+                        <vr-columns width="normal" withemptyline>
+                            <vr-button type="Save" data-onclick="saveSystemSourceConfig" standalone="true"></vr-button>
+                        </vr-columns>
+                    </vr-row>
                     <cdrcomparison-cdrsource-selective on-ready="onSystemSelectiveReady" normal-col-num="4" isrequired="true"></cdrcomparison-cdrsource-selective>
                 </vr-section>
             </vr-columns>
