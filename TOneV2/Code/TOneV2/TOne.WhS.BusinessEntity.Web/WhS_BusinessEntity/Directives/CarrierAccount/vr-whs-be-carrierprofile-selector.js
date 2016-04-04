@@ -51,10 +51,10 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
         if (attrs.isrequired != undefined)
             required = "isrequired";
 
-        return '<div  vr-loader="isLoadingDirective" vr-disabled="ctrl.isdisabled" >'
-            + '<vr-columns colnum="{{ctrl.normalColNum}}"   > <vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
+        return '<span  vr-loader="isLoadingDirective" vr-disabled="ctrl.isdisabled"  >'
+            + '<vr-columns colnum="{{ctrl.normalColNum}}"    > <vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
         + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" ></vr-select></vr-columns>'
-           + '</div>'
+           + '</span>'
     }
 
     function carrierProfileCtor(ctrl, $scope, $attrs) {
