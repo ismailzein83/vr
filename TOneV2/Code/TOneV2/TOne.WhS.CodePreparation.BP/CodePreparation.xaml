@@ -18,7 +18,7 @@
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
- xmlns:vc="clr-namespace:Vanrise.Common;assembly=Vanrise.Common"
+ xmlns:vc="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -185,7 +185,7 @@
       </vbw:WriteTrackingMessage.Message>
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
@@ -245,7 +245,7 @@
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="Imported data is validated.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
@@ -264,7 +264,7 @@
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Ready to start processing imported data">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
@@ -501,7 +501,7 @@
                 </vbw:WriteTrackingMessage.Message>
                 <vbw:WriteTrackingMessage.Severity>
                   <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-                    <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
+                    <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
                   </InArgument>
                 </vbw:WriteTrackingMessage.Severity>
               </vbw:WriteTrackingMessage>
@@ -555,7 +555,7 @@
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Finished processing imported data. Ready to start synchronization with existing entities.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
@@ -569,7 +569,7 @@
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6" Message="Finished synchronizing with existing entities.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(vc:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Common.LogEntryType.Information</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="s:Nullable(vc:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>

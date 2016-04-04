@@ -14,6 +14,7 @@ using Vanrise.BusinessProcess;
 using TOne.CDR.Business;
 using Vanrise.Common;
 using TOne.BusinessEntity.Business;
+using Vanrise.Entities;
 
 namespace TOne.CDRProcess.Activities
 {

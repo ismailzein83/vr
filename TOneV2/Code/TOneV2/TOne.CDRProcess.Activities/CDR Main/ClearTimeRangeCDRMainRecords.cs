@@ -39,7 +39,7 @@ namespace TOne.CDRProcess.Activities
             DateTime to = inputArgument.TimeRange.To;
             cdrMainManager.DeleteCDRMain(from, to, inputArgument.CustomersIds, inputArgument.SupplierIds);
             TimeSpan spent = DateTime.Now.Subtract(startClearing);
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Clear TimeRange CDRMain({0:HH:mm}-{1:HH:mm}) done and takes:{2}", from, to, spent);
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Clear TimeRange CDRMain({0:HH:mm}-{1:HH:mm}) done and takes:{2}", from, to, spent);
         }
 
         protected override ClearTimeRangeCDRMainRecordsInput GetInputArgument(AsyncCodeActivityContext context)

@@ -10,6 +10,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 using TOne.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.LCRProcess.Activities
 {

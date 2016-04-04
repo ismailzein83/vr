@@ -11,6 +11,7 @@ using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
 using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
     public class GetDataFromView : CodeActivity

@@ -37,7 +37,7 @@ namespace TOne.CDRProcess.Activities
             DateTime to = inputArgument.TimeRange.To;
             cdrInvalidManager.DeleteCDRInvalid(from, to, inputArgument.CustomersIds, inputArgument.SupplierIds);
             TimeSpan spent = DateTime.Now.Subtract(startClearing);
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Clear TimeRange CDRInvalid({0:HH:mm}-{1:HH:mm}) done and takes:{2}", from, to, spent);
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Clear TimeRange CDRInvalid({0:HH:mm}-{1:HH:mm}) done and takes:{2}", from, to, spent);
         }
 
         protected override ClearTimeRangeCDRInvalidRecordsInput GetInputArgument(AsyncCodeActivityContext context)

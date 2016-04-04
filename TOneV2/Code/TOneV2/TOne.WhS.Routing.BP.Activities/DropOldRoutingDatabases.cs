@@ -9,6 +9,7 @@ using System.Configuration;
 using TOne.Business;
 using Vanrise.Common;
 using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
