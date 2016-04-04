@@ -12,6 +12,9 @@
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred;
 
+        var activationStatusSelectorAPI;
+        var activationStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -19,11 +22,16 @@
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());
             };
-            
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var filter = {};
                 api.loadGrid(filter);
+            }
+
+            $scope.onActivationStatusDirectiveReady = function (api) {
+                activationStatusSelectorAPI = api;
+                activationStatusSelectorReadyPromiseDeferred.resolve();
             }
 
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
@@ -37,21 +45,20 @@
 
             $scope.onCarrierTypeSelectionChanged = function () {
                 if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Customer) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)) {
-                       if (sellingNumberPlanDirectiveAPI != undefined) {
-                            $scope.showSellingNumberPlan = true;
-                            var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader);
-                        }
+                    if (sellingNumberPlanDirectiveAPI != undefined) {
+                        $scope.showSellingNumberPlan = true;
+                        var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader);
                     }
-                else
-                {
+                }
+                else {
                     $scope.showSellingNumberPlan = false;
                     $scope.selectedSellingNumberPlans.length = 0;
                 }
-                        
+
             }
 
-            $scope.selectedCarrierAccountTypes=[];
+            $scope.selectedCarrierAccountTypes = [];
             $scope.selectedSellingNumberPlans = [];
             $scope.AddNewCarrierAccount = AddNewCarrierAccount;
 
@@ -64,8 +71,8 @@
                     AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountTypes, "value"),
                     CarrierProfilesIds: carrierProfileDirectiveAPI.getSelectedIds(),
                     Name: $scope.name,
-                    SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds()
-
+                    SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                    ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds()
                 };
                 return data;
             }
@@ -76,7 +83,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles])
+            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles, loadCarrierActivationStatusType])
                 .catch(function (error) {
                     $scope.isLoading = false;
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -101,6 +108,14 @@
                 });
 
             return loadCarrierProfilePromiseDeferred.promise;
+        }
+
+        function loadCarrierActivationStatusType() {
+            var loadActivationStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            activationStatusSelectorReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, undefined, loadActivationStatusSelectorPromiseDeferred);
+            })
+            return loadActivationStatusSelectorPromiseDeferred.promise;
         }
 
         function AddNewCarrierAccount() {

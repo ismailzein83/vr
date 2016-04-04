@@ -21,9 +21,9 @@ namespace TOne.WhS.BusinessEntity.Business
             _carrierProfileManager = new CarrierProfileManager();
             _sellingNumberPlanManager = new SellingNumberPlanManager();
         }
-        
+
         #endregion
-        
+
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
@@ -36,9 +36,12 @@ namespace TOne.WhS.BusinessEntity.Business
                   &&
                  (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId))
                    &&
+                 (input.Query.ActivationStatusIds == null || input.Query.ActivationStatusIds.Contains((int)item.CarrierAccountSettings.ActivationStatus))
+                   &&
                  (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType))
                   &&
                  (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId));
+
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
         }
@@ -53,7 +56,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
-            if(carrierAccountsIds.Count() > 0 )
+            if (carrierAccountsIds.Count() > 0)
             {
                 StringBuilder stringBuilder = new StringBuilder();
                 foreach (int carrierAccount in carrierAccountsIds)
@@ -274,7 +277,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle);
             }
-        }  
+        }
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             var carrierAccounts = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
@@ -308,13 +311,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 return true;
             };
             return carrierAccounts.FindAllRecords(filterExpression);
-        }   
+        }
         private static string GetCarrierAccountName(string profileName, string nameSuffix)
         {
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
         #endregion
-  
+
         #region  Mappers
         private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)
         {
