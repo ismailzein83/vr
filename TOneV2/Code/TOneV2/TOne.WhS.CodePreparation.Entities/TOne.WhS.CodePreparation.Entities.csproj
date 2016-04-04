@@ -65,9 +65,13 @@
     <Compile Include="SaleCode\NewCode.cs" />
     <Compile Include="SaleCode\NewCodeInput.cs" />
     <Compile Include="SaleCode\NewCodeOutput.cs" />
+    <Compile Include="SaleZone\ClosedZonesInput.cs" />
+    <Compile Include="SaleZone\CloseZonesOutput.cs" />
+    <Compile Include="SaleZone\DeletedZone.cs" />
     <Compile Include="SaleZone\NewZone.cs" />
     <Compile Include="SaleZone\NewZoneInput.cs" />
     <Compile Include="SaleZone\NewZoneOutput.cs" />
+    <Compile Include="SaleZone\RenamedZone.cs" />
     <Compile Include="SaleZone\ZoneItem.cs" />
     <Compile Include="ZoneToProcess.cs" />
     <Compile Include="Enums.cs" />

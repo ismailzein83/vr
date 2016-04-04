@@ -11,7 +11,7 @@ namespace TOne.WhS.CodePreparation.Entities
         public int SellingNumberPlanId { get; set; }
         public int CountryId { get; set; }
         public int? ZoneId { get; set; }
-        public ZoneItemStatus Status { get; set; }
+        public ZoneItemDraftStatus Status { get; set; }
         public List<NewCode> NewCodes { get; set; }
         public DeletedCode DeletedCode { get; set; }
     }

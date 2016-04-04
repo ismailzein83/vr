@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.CodePreparation.Entities
 {
-    public class GetCodeItemInput
+    public class DeletedZone
     {
-        public int SellingNumberPlanId { get; set; }
-        public int? ZoneId { get; set; }
-        public string ZoneName { get; set; }
         public int CountryId { get; set; }
-        public ZoneItemDraftStatus Status { get; set; }
+        public int ZoneId { get; set; }
     }
 }

@@ -1,12 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TOne.WhS.CodePreparation.Entities
 {
-    public enum ZoneItemStatus { ExistingNotChanged = 0, New = 1, ExistingClosed = 2 }
+    public enum ZoneItemDraftStatus {
+        [Description("Existing Not Changed")]
+        ExistingNotChanged = 0, 
+        [Description("New")]
+        New = 1, 
+        [Description("Existing Closed")]
+        ExistingClosed = 2,
+        [Description("Renamed")]
+        Renamed=3
+    }
+
+    public enum ZoneItemStatus
+    {
+        [Description("Pending Closed")]
+        PendingClosed=0
+    }
 
     public class ZoneItem
     {
@@ -18,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public DateTime? EED { get; set; }
 
-        public ZoneItemStatus Status { get; set; }
+        public ZoneItemDraftStatus Status { get; set; }
 
         public string Message { get; set; }
 

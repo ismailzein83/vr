@@ -50,6 +50,9 @@
                 sellingNumberPlanId: sellingNumberPlanId
             });
         }
+        function CloseZone(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "CloseZone"), input);
+        }
 
         function UploadCodePreparationSheet(sellingNumberPlanId, onCodePreparationUpdated) {
             var settings = {
@@ -90,7 +93,8 @@
             CheckCodePreparationState: CheckCodePreparationState,
             CancelCodePreparationState: CancelCodePreparationState,
             UploadCodePreparationSheet: UploadCodePreparationSheet,
-            ApplyCodePreparationState: ApplyCodePreparationState
+            ApplyCodePreparationState: ApplyCodePreparationState,
+            CloseZone: CloseZone
         });
     }
 

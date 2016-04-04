@@ -59,6 +59,15 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             return manager.CloseCodes(input);
         }
 
+
+        [HttpPost]
+        [Route("CloseZone")]
+        public CloseZoneOutput CloseZone(ClosedZoneInput input)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+           return manager.CloseZone(input);
+        }
+
         [HttpGet]
         [Route("GetZoneItems")]
         public List<ZoneItem> GetZoneItems(int sellingNumberPlanId, int countryId)

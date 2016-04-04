@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePreparationManagementController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService'];
+    CodePreparationManagementController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService', 'WhS_CP_NewCPOutputResultEnum'];
 
-    function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService) {
+    function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService, WhS_CP_NewCPOutputResultEnum) {
 
         //#region Global Variables
 
@@ -130,8 +130,11 @@
                 moveCodes();
             }
 
-            $scope.closeCodesClicked = function () {
-                closeCodes();
+            $scope.closeClicked = function () {
+                if ($scope.selectedCodes.length > 0)
+                    closeCodes();
+                else
+                    closeZone();
             }
 
             $scope.cancelState = function () {
@@ -147,6 +150,8 @@
                 });
 
             }
+
+
         }
 
         function loadParameters() {
@@ -301,6 +306,34 @@
             };
 
             VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/CloseCodeDialog.html", parameters, settings);
+        }
+
+
+        function closeZone() {
+            return VRNotificationService.showConfirmation("Are you sure you want to close " + $scope.currentNode.nodeName + " zone").then(function (result) {
+                if (result) {
+                    var zoneInput = {
+                        SellingNumberPlanId: filter.sellingNumberPlanId,
+                        CountryId: $scope.currentNode.countryId,
+                        ZoneId: $scope.currentNode.nodeId
+                    };
+                    return WhS_CodePrep_CodePrepAPIService.CloseZone(zoneInput)
+                     .then(function (response) {
+                         if (response.Result == WhS_CP_NewCPOutputResultEnum.Existing.value) {
+                             VRNotificationService.showWarning(response.Message);
+                         }
+                         else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
+                             VRNotificationService.showSuccess(response.Message);
+                         }
+                         else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
+                             VRNotificationService.showError(response.Message);
+                         }
+                     }).catch(function (error) {
+                         VRNotificationService.notifyException(error, $scope);
+                     });
+
+                }
+            });
         }
 
         function GetCurrentCountryNodeZones() {
