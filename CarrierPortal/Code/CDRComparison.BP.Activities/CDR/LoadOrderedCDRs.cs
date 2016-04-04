@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Queueing;
 
 namespace CDRComparison.BP.Activities
