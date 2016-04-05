@@ -116,7 +116,7 @@ namespace CDRComparison.BP.Activities
                 var partnerCDRs = cdrBatch.CDRs.Where(x => x.IsPartnerCDR).ToList();
                     foreach (var cdr in systemCDRs)
                     {
-                        var partnerCDR = partnerCDRs.FindAllRecords(x => x.CGPN == cdr.CGPN && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) < inputArgument.TimeMarginInMilliSeconds);
+                        var partnerCDR = partnerCDRs.FindAllRecords(x => x.CGPN == cdr.CGPN && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) <= inputArgument.TimeMarginInMilliSeconds);
                         if (partnerCDR == null || partnerCDR.Count() == 0)
                         {
                             missingCDRBatch.MissingCDRs.Add(new MissingCDR
@@ -134,7 +134,7 @@ namespace CDRComparison.BP.Activities
                         {
                             var partner = partnerCDR.OrderByDescending(x => Math.Abs((x.Time - cdr.Time).TotalMilliseconds)).First();
                             partnerCDRs.Remove(partner);
-                            if (Math.Abs(partner.DurationInSec - cdr.DurationInSec) < inputArgument.DurationMarginInMilliSeconds)
+                            if (Math.Abs(partner.DurationInSec - cdr.DurationInSec) <= inputArgument.DurationMarginInMilliSeconds)
                             {
                                 disputeCDRBatch.DisputeCDRs.Add(new DisputeCDR
                                 {

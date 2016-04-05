@@ -30,11 +30,12 @@
             var fieldMappings;
 
             function initializeController() {
+
                 $scope.scopeModel = {};
                 $scope.scopeModel.gridColumns = [];
                 $scope.scopeModel.sampleData = [];
                 $scope.scopeModel.headerGridSource = [];
-
+                $scope.scopeModel.firstRowHeader = false;
                 $scope.scopeModel.readSample = function () {
                     return readSample();
                 };
@@ -74,6 +75,7 @@
                         cdrSourceContext = payload.cdrSourceContext;
                         $scope.scopeModel.delimiter = payload.Delimiter;
                         $scope.scopeModel.dateTimeFormat = payload.DateTimeFormat;
+                        $scope.scopeModel.firstRowHeader = payload.FirstRowHeader;
                         flatFileId = payload.fileId;
                         fieldMappings = payload.FieldMappings;
                     }
@@ -91,7 +93,8 @@
                         $type: 'CDRComparison.MainExtensions.CDRFileReaders.FlatFileReader, CDRComparison.MainExtensions',
                         Delimiter: $scope.scopeModel.delimiter,
                         FieldMappings: buildFieldMappings(),
-                        DateTimeFormat: $scope.scopeModel.dateTimeFormat
+                        DateTimeFormat: $scope.scopeModel.dateTimeFormat,
+                        FirstRowHeader: $scope.scopeModel.firstRowHeader
                     };
 
                     function buildFieldMappings() {
@@ -172,7 +175,8 @@
                     function getSelectedField(cellFields, cellIndex) {
                         var selectedField;
                         if (fieldMappings != undefined) {
-                            var fieldMapping = fieldMappings[cellIndex];
+                            
+                            var fieldMapping = UtilsService.getItemByVal(fieldMappings, cellIndex, 'FieldIndex');
                             if (fieldMapping !=undefined)
                             selectedField = UtilsService.getItemByVal(cellFields, fieldMapping.FieldName, 'description');
                         }

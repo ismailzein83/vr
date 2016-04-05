@@ -7,6 +7,11 @@
     </vr-columns>
 </vr-row>
 <vr-row>
+    <vr-columns colnum="{{flatFileCtrl.normalColNum}}">
+        <vr-switch value="scopeModel.firstRowHeader" label="First Row Header"></vr-switch>
+    </vr-columns>
+</vr-row>
+<vr-row>
     <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingSampleGrid">
         <vr-section title="Field Mapping">
             <vr-row removeline>
@@ -48,6 +53,28 @@
 </vr-row>
 <vr-row>
     <vr-columns colnum="{{flatFileCtrl.normalColNum}}">
-        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="flatFileCtrl.isrequired" hint=""></vr-textbox>
+        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="flatFileCtrl.isrequired"
+                    hint="yyyy: 2008 year
+                    <br>  yyy : 008  year
+                    <br>  yy  : 08   year
+                    <br>  MMMM: March month
+                    <br>  MMM : Mar   month
+                    <br>  MM : 03  month
+                    <br>  M : 3  month
+                    <br>  dddd: Sunday day
+                    <br>  ddd : Sun day
+                    <br>  dd : 09 day
+                    <br>  d: 9 day
+                    <br>  HH: 16 hour
+                    <br>  H : 16 hour
+                    <br>  hh  : 04  hour
+                    <br>  h : 4 hour
+                    <br>  mm: 05 minute
+                    <br>  m: 5 minute
+                    <br>  ss: 07 second
+                    <br>  s: 7 second
+                    <br>  tt: PM A.M. or P.M.
+                    <br>  t: P A.M. or P.M.
+                    "></vr-textbox>
     </vr-columns>
 </vr-row>

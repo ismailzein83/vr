@@ -19,6 +19,8 @@ namespace CDRComparison.MainExtensions.CDRFileReaders
 
         public string DateTimeFormat { get; set; }
 
+        public bool FirstRowHeader { get; set; }
+
         #endregion
 
         #region Override
@@ -31,6 +33,8 @@ namespace CDRComparison.MainExtensions.CDRFileReaders
             List<CDR> cdrs = new List<CDR>();
 
             string line;
+            if (this.FirstRowHeader)
+                context.TryReadLine(out line);
             while (context.TryReadLine(out line))
             {
                 string[] fields = line.Split(this.Delimiter);
