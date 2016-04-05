@@ -12,12 +12,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments
         public int SupplierAccountId { get; set; }
 
         public long FileId { get; set; }
-        
-        public int CurrencyId { get; set; }
-        
-        public DateTime? EffectiveDate { get; set; }
 
-        public DateTime DeletedCodesDate { get; set; }
+        public int CurrencyId { get; set; }
+
+        public DateTime PriceListDate { get; set; }
+
 
         public override string GetTitle()
         {
