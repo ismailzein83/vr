@@ -11,31 +11,37 @@
         <vr-section title="Field Mapping">
             <vr-row removeline>
                 <vr-columns width="fullrow">
-                    <vr-validator validate="scopeModel.validateFieldMappings()">
-                        <vr-datagrid datasource="scopeModel.headerGridSource"
-                                     hidegridmenu="true"
-                                     norowhighlightonclick="'true'">
-                            <vr-datagridcolumn ng-repeat="column in scopeModel.gridColumns" headertext="column.name" tag="column" disablesorting>
-                                <div ng-init="columnIndex = viewScope.scopeModel.gridColumns.indexOf(colDef.tag)" style="padding: 3px 5px 3px 0px;">
-                                    <vr-select datasource="dataItem.cells[columnIndex].fields"
-                                               selectedvalues="dataItem.cells[columnIndex].selectedField"
-                                               datavaluefield="value"
-                                               datatextfield="description"
-                                               isrequired="viewScope.flatFileCtrl.isrequired"
-                                               hideremoveicon="viewScope.flatFileCtrl.isrequired">
-                                    </vr-select>
-                                </div>
-                            </vr-datagridcolumn>
-                        </vr-datagrid>
-                    </vr-validator>
+                    <div style="overflow-x:auto;">
+                        <div ng-style="{'width': scopeModel.gridColumns.length * 100 + 'px'}">
+                            <vr-validator validate="scopeModel.validateFieldMappings()">
+                                <vr-datagrid datasource="scopeModel.headerGridSource"
+                                             hidegridmenu="true"
+                                             norowhighlightonclick="'true'">
+                                    <vr-datagridcolumn ng-repeat="column in scopeModel.gridColumns" headertext="column.name" tag="column" disablesorting>
+                                        <div ng-init="columnIndex = viewScope.scopeModel.gridColumns.indexOf(colDef.tag)" style="padding: 3px 5px 3px 0px;">
+                                            <vr-select datasource="dataItem.cells[columnIndex].fields"
+                                                       selectedvalues="dataItem.cells[columnIndex].selectedField"
+                                                       datavaluefield="value"
+                                                       datatextfield="description"
+                                                       isrequired="viewScope.flatFileCtrl.isrequired"
+                                                       hideremoveicon="viewScope.flatFileCtrl.isrequired">
+                                            </vr-select>
+                                        </div>
+                                    </vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-validator>
+                            <vr-datagrid datasource="scopeModel.sampleData"
+                                         hideheader="true"
+                                         hidegridmenu="true"
+                                         norowhighlightonclick="'true'">
+                                <vr-datagridcolumn ng-repeat="column in scopeModel.gridColumns" field="'Data[' + $index + ']'" disablesorting></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </div>
+                    </div>
+
                 </vr-columns>
                 <vr-columns width="fullrow">
-                    <vr-datagrid datasource="scopeModel.sampleData"
-                                 hideheader="true"
-                                 hidegridmenu="true"
-                                 norowhighlightonclick="'true'">
-                        <vr-datagridcolumn ng-repeat="column in scopeModel.gridColumns" field="'Data[' + $index + ']'" disablesorting></vr-datagridcolumn>
-                    </vr-datagrid>
+
                 </vr-columns>
             </vr-row>
         </vr-section>
