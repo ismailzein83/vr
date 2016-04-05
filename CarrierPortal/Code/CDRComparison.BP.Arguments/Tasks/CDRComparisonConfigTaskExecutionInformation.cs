@@ -9,6 +9,8 @@ namespace CDRComparison.BP.Arguments
 {
     public class CDRComparisonConfigTaskExecutionInformation : BPTaskExecutionInformation
     {
+        public bool SaveSystemCDRSourceConfig { get; set; }
+        public bool SavePartnerCDRSourceConfig { get; set; }
         public string SystemCDRSourceConfigName { get; set; }
         public string PartnerCDRSourceConfigName { get; set; }
     }

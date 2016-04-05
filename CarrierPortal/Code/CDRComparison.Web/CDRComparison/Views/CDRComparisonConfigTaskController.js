@@ -28,6 +28,9 @@
 
             $scope.scopeModel = {};
 
+            $scope.scopeModel.saveSystemConfig = true;
+            $scope.scopeModel.savePartnerConfig = true;
+
             $scope.scopeModel.isSystemConfigNameDisabled = false;
             $scope.scopeModel.isPartnerConfigNameDisabled = false;
 
@@ -107,9 +110,13 @@
 
             var executionInformation = {
                 $type: 'CDRComparison.BP.Arguments.CDRComparisonConfigTaskExecutionInformation, CDRComparison.BP.Arguments',
-                SystemCDRSourceConfigName: $scope.scopeModel.systemConfigName,
-                PartnerCDRSourceConfigName: $scope.scopeModel.partnerConfigName
+                SaveSystemCDRSourceConfig: $scope.scopeModel.saveSystemConfig,
+                SavePartnerCDRSourceConfig: $scope.scopeModel.savePartnerConfig,
+                SystemCDRSourceConfigName: ($scope.scopeModel.saveSystemConfig) ? $scope.scopeModel.systemConfigName : null,
+                PartnerCDRSourceConfigName: ($scope.scopeModel.savePartnerConfig) ? $scope.scopeModel.partnerConfigName : null
             };
+
+            console.log(executionInformation);
 
             var input = {
                 $type: 'Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities',

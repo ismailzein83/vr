@@ -12,7 +12,12 @@ namespace CDRComparison.BP.Activities
     public class SaveCDRSourceConfigs : CodeActivity
     {
         #region Arguments
-        
+
+        [RequiredArgument]
+        public InArgument<bool> SaveSystemCDRSourceConfig { get; set; }
+        [RequiredArgument]
+        public InArgument<bool> SavePartnerCDRSourceConfig { get; set; }
+
         public InArgument<int?> SystemCDRSourceConfigId { get; set; }
         public InArgument<int?> PartnerCDRSourceConfigId { get; set; }
 
@@ -32,6 +37,9 @@ namespace CDRComparison.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            bool saveSystemConfig = this.SaveSystemCDRSourceConfig.Get(context);
+            bool savePartnerConfig = this.SavePartnerCDRSourceConfig.Get(context);
+
             int? systemConfigId = this.SystemCDRSourceConfigId.Get(context);
             int? partnerConfigId = this.PartnerCDRSourceConfigId.Get(context);
 
@@ -43,8 +51,11 @@ namespace CDRComparison.BP.Activities
 
             SettingsTaskExecutionInfo settingsTaskExecutionInformation = this.SettingsTaskExecutionInfo.Get(context);
 
-            SaveCDRSourceConfig(systemConfigId, systemConfigName, systemCDRSource, settingsTaskExecutionInformation, false);
-            SaveCDRSourceConfig(partnerConfigId, partnerConfigName, partnerCDRSource, settingsTaskExecutionInformation, true);
+            if (saveSystemConfig)
+                SaveCDRSourceConfig(systemConfigId, systemConfigName, systemCDRSource, settingsTaskExecutionInformation, false);
+            
+            if (savePartnerConfig)
+                SaveCDRSourceConfig(partnerConfigId, partnerConfigName, partnerCDRSource, settingsTaskExecutionInformation, true);
         }
 
         #region Private Methods
