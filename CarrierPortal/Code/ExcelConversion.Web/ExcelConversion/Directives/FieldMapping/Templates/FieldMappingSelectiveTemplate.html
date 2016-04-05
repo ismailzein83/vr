@@ -1,16 +1,16 @@
 ﻿<vr-row>
     <vr-columns colnum="{{fieldmappingCtrl.normalColNum}}">
-        <vr-select on-ready="scopeModel.onSelectorReady"
-                   datasource="scopeModel.templateConfigs"
-                   selectedvalues="scopeModel.selectedTemplateConfig"
+        <vr-select on-ready="onSelectorReady"
+                   datasource="templateConfigs"
+                   selectedvalues="selectedTemplateConfig"
                    datavaluefield="TemplateConfigID"
                    datatextfield="Name"
-                   label="CDR Source Type"
+                   label="Field Mappings"
                    isrequired="fieldmappingCtrl.isrequired"
                    hideremoveicon>
         </vr-select>
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-directivewrapper directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired"></vr-directivewrapper>
+    <vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired"></vr-directivewrapper>
 </vr-row>

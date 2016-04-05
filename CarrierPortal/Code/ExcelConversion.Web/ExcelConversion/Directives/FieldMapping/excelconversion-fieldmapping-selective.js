@@ -24,7 +24,7 @@
 
         function FieldmappingSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var context;
             var selectorAPI;
 
             var directiveAPI;
@@ -43,6 +43,9 @@
 
                 $scope.onDirectiveReady = function (api) {
                     directiveAPI = api;
+                    directivePayload = {
+                        context: getContext()
+                    }
                     var setLoader = function (value) {
                         $scope.isLoadingDirective = value;
                     };
@@ -56,14 +59,10 @@
 
                 api.load = function (payload) {
                     var promises = [];
-
-                    var cdrSourceConfigId;
-                    var cdrSource;
-
-                    if (payload != undefined) {
-                        cdrSourceConfigId = payload.cdrSourceConfigId;
+                    if (payload != undefined)
+                    {
+                        context = payload.context;
                     }
-
                     var getFieldMappingTemplateConfigsPromise = getFieldMappingTemplateConfigs();
                     promises.push(getFieldMappingTemplateConfigsPromise);
 
@@ -74,7 +73,7 @@
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
-                                    $scope.scopeModel.templateConfigs.push(response[i]);
+                                    $scope.templateConfigs.push(response[i]);
                                 }
                             }
                         });
@@ -98,7 +97,15 @@
                     return data;
                 }
             }
-
+            function getContext()
+            {
+                
+                if(context !=undefined)
+                {
+                    var currentContext = UtilsService.cloneObject(context);
+                    return currentContext;
+                }
+            }
             function getFieldMappingConfig() {
                 return CDRComparison_CDRSourceConfigAPIService.GetCDRSourceConfig(cdrSourceConfigId).then(function (cdrSourceConfig) {
                     cdrSource = cdrSourceConfig.CDRSource;

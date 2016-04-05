@@ -251,7 +251,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "End",
                     class: "glyphicon  glyphicon-remove-circle"
                 };
-
+            case 'Ok':
+                return {
+                    text: 'Ok',
+                    class: 'glyphicon glyphicon-ok-circle'
+                };
 
         }
     }
