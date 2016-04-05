@@ -16,7 +16,7 @@
                                      hidegridmenu="true"
                                      norowhighlightonclick="'true'">
                             <vr-datagridcolumn ng-repeat="column in scopeModel.gridColumns" headertext="column.name" tag="column" disablesorting>
-                                <div ng-init="columnIndex = viewScope.scopeModel.gridColumns.indexOf(colDef.tag)" style="padding: 3px 5px 0px 0px;">
+                                <div ng-init="columnIndex = viewScope.scopeModel.gridColumns.indexOf(colDef.tag)" style="padding: 3px 5px 3px 0px;">
                                     <vr-select datasource="dataItem.cells[columnIndex].fields"
                                                selectedvalues="dataItem.cells[columnIndex].selectedField"
                                                datavaluefield="value"

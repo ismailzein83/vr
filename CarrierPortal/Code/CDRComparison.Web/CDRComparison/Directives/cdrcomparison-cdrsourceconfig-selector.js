@@ -97,16 +97,16 @@
 
             var multipleselection = "";
 
-            var label = "Source Configuration";
+            var label = "Existing Configuration";
             if (attrs.ismultipleselection != undefined) {
-                label = "Source Configurations";
+                label = "Existing Configurations";
                 multipleselection = "ismultipleselection";
             }
 
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
-            return '<div><vr-select on-ready="ctrl.onSelectorReady" label="' + label + '" entityName="Source Configuration" datasource="ctrl.datasource" datavaluefield="CDRSourceConfigId" datatextfield="Name" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + multipleselection + ' isrequired="ctrl.isrequired" vr-disabled="ctrl.isdisabled" haspermission="ctrl.haspermission"></vr-select></div>';
+            return '<div><vr-select on-ready="ctrl.onSelectorReady" label="' + label + '" entityName="Existing Configuration" datasource="ctrl.datasource" datavaluefield="CDRSourceConfigId" datatextfield="Name" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + multipleselection + ' isrequired="ctrl.isrequired" vr-disabled="ctrl.isdisabled" haspermission="ctrl.haspermission"></vr-select></div>';
         }
     }
 
