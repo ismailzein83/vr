@@ -21,9 +21,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<long> FileId { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime?> EffectiveDate { get; set; }
-        
-        [RequiredArgument]
         public InArgument<int> CurrencyId { get; set; }
 
         [RequiredArgument]
@@ -47,15 +44,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             LoadOptions loadOptions = new LoadOptions();
 
-           // loadOptions.LoadDataOnly = true;
+            // loadOptions.LoadDataOnly = true;
 
             loadOptions.ConvertNumericData = false;
 
             Workbook objExcel = new Workbook(memStreamRate, loadOptions);
             Worksheet worksheet = objExcel.Worksheets[0];
-            
+
             int count = 1;
-            DateTime? effectiveDate = EffectiveDate.Get(context);
 
             DateTime minimumDate = DateTime.MinValue;
 
@@ -73,18 +69,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
 
 
-               DateTime? bEDDateFromExcel = worksheet.Cells[count, 3].Value != null ? Convert.ToDateTime(worksheet.Cells[count, 3].StringValue) : DateTime.MinValue;
+                DateTime? bEDDateFromExcel = worksheet.Cells[count, 3].Value != null ? Convert.ToDateTime(worksheet.Cells[count, 3].StringValue) : DateTime.MinValue;
 
                 DateTime? eEDDateFromExcel = null;
                 if (worksheet.Cells[count, 4].Value != null)
                     eEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 4].StringValue);
 
-                if (bEDDateFromExcel == null && effectiveDate != null)
-                    bEDDateFromExcel = effectiveDate;
-                
                 if (minimumDate == DateTime.MinValue || bEDDateFromExcel < minimumDate)
                     minimumDate = (DateTime)bEDDateFromExcel;
-                
+
                 string zoneName = worksheet.Cells[count, 0].StringValue.Trim();
                 string[] codes = worksheet.Cells[count, 1].StringValue.Trim().Split(',');
 
@@ -96,14 +89,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         Code = codeValue.Trim(),
                         CodeGroup = codeGroup,
                         ZoneName = zoneName,
-                        BED =bEDDateFromExcel.Value,
+                        BED = bEDDateFromExcel.Value,
                         EED = eEDDateFromExcel
                     });
                 }
 
                 List<ImportedRate> zoneRates;
 
-                if(!dicImportedRates.TryGetValue(zoneName, out zoneRates))
+                if (!dicImportedRates.TryGetValue(zoneName, out zoneRates))
                 {
                     zoneRates = new List<ImportedRate>();
                     dicImportedRates.Add(zoneName, zoneRates);
@@ -128,10 +121,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                 count++;
             }
-            
+
             TimeSpan spent = DateTime.Now.Subtract(startReading);
             context.WriteTrackingMessage(LogEntryType.Information, "Finished reading {0} records from the excel file. It took: {1}.", worksheet.Cells.Rows.Count, spent);
-            
+
             ImportedCodes.Set(context, importedCodesList);
             ImportedRates.Set(context, dicImportedRates.SelectMany(itm => itm.Value).ToList());
             MinimumDate.Set(context, minimumDate);
