@@ -8,7 +8,7 @@
                         <vr-datagrid on-ready="onSystemGridReady"
                                      datasource="systemCDRs"
                                      dataretrievalfunction="dataRetrievalFunction"
-                                     pagingtype="'PagingOnScroll'">
+                                     pagingtype="'PagingOnScroll'" hidegridmenu="true">
 
                             <vr-datagridcolumn headertext="'CDPN'" field="'CDPN'" type="'Text'" onclicked="onClickedCDPN" isclickable="true"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'" type="'Text'"></vr-datagridcolumn>
@@ -25,7 +25,7 @@
                                      datasource="partnerCDRs"
                                      dataretrievalfunction="dataRetrievalFunction"
                                      pagingtype="'PagingOnScroll'"
-                                     defaultsortbyfieldname="'CDPN'">
+                                     defaultsortbyfieldname="'CDPN'" hidegridmenu="true">
                             <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting isfielddynamic="true">
                                 <vr-check value="dataItem.IsSelected" onvaluechanged="viewScope.onSelectedRow(dataItem)"></vr-check>
                             </vr-datagridcolumn>

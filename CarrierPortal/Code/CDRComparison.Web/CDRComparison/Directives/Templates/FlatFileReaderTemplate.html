@@ -10,7 +10,7 @@
     <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingSampleGrid">
         <vr-section title="Field Mapping">
             <vr-row removeline>
-                <vr-columns width="fullrow">
+                <vr-columns width="fullrow"> 
                     <div style="overflow-x:auto;">
                         <div ng-style="{'width': scopeModel.gridColumns.length * 100 + 'px'}">
                             <vr-validator validate="scopeModel.validateFieldMappings()">
@@ -23,8 +23,7 @@
                                                        selectedvalues="dataItem.cells[columnIndex].selectedField"
                                                        datavaluefield="value"
                                                        datatextfield="description"
-                                                       isrequired="viewScope.flatFileCtrl.isrequired"
-                                                       hideremoveicon="viewScope.flatFileCtrl.isrequired">
+                                                      >
                                             </vr-select>
                                         </div>
                                     </vr-datagridcolumn>
@@ -49,6 +48,6 @@
 </vr-row>
 <vr-row>
     <vr-columns colnum="{{flatFileCtrl.normalColNum}}">
-        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="flatFileCtrl.isrequired"></vr-textbox>
+        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="flatFileCtrl.isrequired" hint=""></vr-textbox>
     </vr-columns>
 </vr-row>

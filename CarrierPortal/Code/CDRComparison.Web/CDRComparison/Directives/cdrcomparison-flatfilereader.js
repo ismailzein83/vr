@@ -44,14 +44,19 @@
                         return null;
                     var cells = $scope.scopeModel.headerGridSource[0].cells;
                     var fieldNames = [];
+                    var filledCols = 0;
                     for (var i = 0; i < cells.length; i++) {
                         if (cells[i].selectedField != undefined) {
+                            filledCols++;
+
                             if (UtilsService.contains(fieldNames, cells[i].selectedField.description))
                                 return 'Each column should be mapped to a unique field';
                             else
                                 fieldNames.push(cells[i].selectedField.description);
                         }
                     }
+                    if (filledCols < cells[0].fields.length)
+                        return 'All columns should be mapped.';
                     return null;
                 };
 
@@ -96,10 +101,14 @@
                         if (dataItem != undefined && dataItem.cells != undefined) {
                             fieldMappings = [];
                             for (var i = 0; i < dataItem.cells.length; i++) {
-                                fieldMappings.push({
-                                    FieldIndex: i,
-                                    FieldName: (dataItem.cells[i].selectedField != undefined) ? dataItem.cells[i].selectedField.description : undefined
-                                });
+                                if (dataItem.cells[i].selectedField != undefined)
+                                {
+                                    fieldMappings.push({
+                                        FieldIndex: i,
+                                        FieldName: (dataItem.cells[i].selectedField != undefined) ? dataItem.cells[i].selectedField.description : undefined
+                                    });
+                                }
+                               
                             }
                         }
 
@@ -146,6 +155,7 @@
                     for (var i = 0; i < columnCount; i++) {
                         var cell = {};
                         cell.fields = getFields();
+                    
                         cell.selectedField = getSelectedField(cell.fields, i);
                         dataItem.cells.push(cell);
                     }
@@ -163,6 +173,7 @@
                         var selectedField;
                         if (fieldMappings != undefined) {
                             var fieldMapping = fieldMappings[cellIndex];
+                            if (fieldMapping !=undefined)
                             selectedField = UtilsService.getItemByVal(cellFields, fieldMapping.FieldName, 'description');
                         }
                         return selectedField;
