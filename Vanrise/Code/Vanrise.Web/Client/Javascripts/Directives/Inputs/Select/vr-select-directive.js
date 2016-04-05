@@ -356,7 +356,7 @@
                             var selfOffset = $(self).offset();
                             var dropDown = self.parent().find('ul');
                             if (!$(dropDown).hasClass(" menu-to-top"))
-                                $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: 'auto' });
+                                $(dropDown).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left - $(window).scrollLeft() });
                         });
 
                         $('div[name=' + $attrs.id + ']').parents('div').scroll(function () {
