@@ -256,6 +256,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Ok',
                     class: 'glyphicon glyphicon-ok-circle'
                 };
+            case 'Rename':
+                return {
+                    text: 'Rename',
+                    class: 'glyphicon glyphicon-pencil'
+                };
 
         }
     }

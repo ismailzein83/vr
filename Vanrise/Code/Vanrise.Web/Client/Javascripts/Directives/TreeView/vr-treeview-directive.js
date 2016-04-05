@@ -54,6 +54,9 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                     treeItem.state.selected = true;
                 if (sourceItem.isDisabled)
                     treeItem.state.disabled = true;
+                if (sourceItem.icon != null)
+                    treeItem.icon = sourceItem.icon;
+
                 if (sourceItem[ctrl.datachildrenfield] != undefined && sourceItem[ctrl.datachildrenfield].length > 0)
                     fillTreeFromDataSource(treeItem.children, sourceItem[ctrl.datachildrenfield]);
                 else if (sourceItem[ctrl.hasremotechildrenfield] == true) {
