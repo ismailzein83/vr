@@ -68,6 +68,16 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
            return manager.CloseZone(input);
         }
 
+        
+        [HttpPost]
+        [Route("RenameZone")]
+        public RenamedZoneOutput RenameZone(RenamedZoneInput input)
+        {
+            CodePreparationManager manager = new CodePreparationManager();
+            return manager.RenameZone(input);
+        }
+        
+
         [HttpGet]
         [Route("GetZoneItems")]
         public List<ZoneItem> GetZoneItems(int sellingNumberPlanId, int countryId)

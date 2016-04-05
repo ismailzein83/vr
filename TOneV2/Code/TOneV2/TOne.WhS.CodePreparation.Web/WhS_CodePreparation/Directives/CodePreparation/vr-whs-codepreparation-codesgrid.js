@@ -43,6 +43,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
 
                         $scope.ZoneName = query.ZoneName;
                         $scope.ShowDraftStatus = query.ShowDraftStatus;
+                        $scope.ShowSelectCode = query.ShowSelectCode;
                         return gridAPI.retrieveData(query);
                     }
 
@@ -93,6 +94,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
             };
             function mapDataNeeded(dataItem) {
                 dataItem.ShowDraftStatusIcon = true;
+                dataItem.ShowSelectCode = $scope.ShowSelectCode;
 
                 switch (dataItem.DraftStatus) {
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingNotChanged.value:
@@ -101,31 +103,31 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
 
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingMoved.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/MovedFrom.png";
-                        dataItem.DraftStatusIconTooltip = "Moved to " + dataItem.OtherCodeZoneName;
+                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.NewMoved.label + " " + dataItem.OtherCodeZoneName;
                         break;
                     case WhS_CP_CodeItemDraftStatusEnum.NewMoved.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/MovedTo.png";
-                        dataItem.DraftStatusIconTooltip = "Moved from " + dataItem.OtherCodeZoneName;
+                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.ExistingMoved.label + " " + dataItem.OtherCodeZoneName;
                         break
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/Closed.png";
-                        dataItem.DraftStatusIconTooltip = "Closed";
+                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.label;
                         break;
                     case WhS_CP_CodeItemDraftStatusEnum.New.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/New.png";
-                        dataItem.DraftStatusIconTooltip = "New";
+                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.New.label;
                 }
 
              
                 dataItem.ShowStatus = dataItem.Status != null ? true : false;
 
-                if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingOpened.value) {
+                if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingEffective.value) {
                     dataItem.StatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/PendingOpened.png";
-                    dataItem.StatusIconTooltip = "Pending Opened";
+                    dataItem.StatusIconTooltip = WhS_CP_CodeItemStatusEnum.PendingEffective.label;
                 }
                 else if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingClosed.value) {
                     dataItem.StatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/PendingClosed.png";
-                    dataItem.StatusIconTooltip = "Pending Closed";
+                    dataItem.StatusIconTooltip = WhS_CP_CodeItemStatusEnum.PendingClosed.label;
                 }
 
             }

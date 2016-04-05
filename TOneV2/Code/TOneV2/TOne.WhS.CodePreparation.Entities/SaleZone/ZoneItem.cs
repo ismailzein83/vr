@@ -21,7 +21,9 @@ namespace TOne.WhS.CodePreparation.Entities
     public enum ZoneItemStatus
     {
         [Description("Pending Closed")]
-        PendingClosed=0
+        PendingClosed=0,
+         [Description("Pending Effective")]
+        PendingEffective=1
     }
 
     public class ZoneItem
@@ -33,9 +35,11 @@ namespace TOne.WhS.CodePreparation.Entities
         public DateTime? BED { get; set; }
 
         public DateTime? EED { get; set; }
-
-        public ZoneItemDraftStatus Status { get; set; }
-
+        
+        public ZoneItemDraftStatus DraftStatus { get; set; }
+        
+        public ZoneItemStatus? Status { get; set; }
+        
         public string Message { get; set; }
 
         public int CountryId { get; set; }

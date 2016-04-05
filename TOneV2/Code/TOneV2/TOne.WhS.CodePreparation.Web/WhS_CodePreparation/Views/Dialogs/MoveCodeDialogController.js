@@ -48,7 +48,7 @@
 
             $scope.isGettingData = true;
             loadAllControls();
-            $scope.title = UtilsService.buildTitleForAddEditor("Move Code for " + currentZoneName);
+            $scope.title = "Move Code from " + currentZoneName;
         }
         function loadAllControls() {
             $scope.isLoading = false;

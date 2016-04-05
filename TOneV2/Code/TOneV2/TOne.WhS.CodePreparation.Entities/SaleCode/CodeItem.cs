@@ -24,8 +24,8 @@ namespace TOne.WhS.CodePreparation.Entities
 
     public enum CodeItemStatus
     {
-        [Description("Pending Opened")]
-        PendingOpened = 0,
+        [Description("Pending Effective")]
+        PendingEffective = 0,
 
         [Description("Pending Closed")]
         PendingClosed = 1

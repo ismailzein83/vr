@@ -23,10 +23,11 @@
                 <vr-button type="Apply" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="applyCodePreparationState"></vr-button>
                 <vr-button type="CancelChanges" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="cancelState"></vr-button>
                 <vr-button type="Upload" ng-show="hasState==false" validationcontext="SearchGroup" data-onclick="uploadCodePreparation"></vr-button>
-                <vr-button type="Add" text="New Zone" ng-show="currentNode != undefined && currentNode.type == 'Country'" formname="formFilter" validationcontext="SearchGroup" data-onclick="newZoneClicked"></vr-button>
-                <vr-button type="Add" text="New Code" ng-show="currentNode != undefined && currentNode.type == 'Zone'" formname="formFilter" validationcontext="SearchGroup" data-onclick="newCodeClicked"></vr-button>
-                <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="SearchGroup" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0"></vr-button>
-                <vr-button type="End" formname="formFilter" validationcontext="SearchGroup" data-onclick="closeClicked" ng-show="currentNode != undefined && currentNode.type == 'Zone'"></vr-button>
+                <vr-button type="Add" text="New Zone" ng-show="showAddNewZone" formname="formFilter" validationcontext="SearchGroup" data-onclick="newZoneClicked"></vr-button>
+                <vr-button type="Add" text="New Code" ng-show="showAddNewCode" formname="formFilter" validationcontext="SearchGroup" data-onclick="newCodeClicked"></vr-button>
+                <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="SearchGroup" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0 "></vr-button>
+                <vr-button type="Rename" formname="formFilter" validationcontext="SearchGroup" data-onclick="renameZoneClicked" ng-show="currentNode != undefined && currentNode.type =='Zone'"></vr-button>
+                 <vr-button type="End" formname="formFilter" validationcontext="SearchGroup" data-onclick="endClicked" ng-show="showEnd"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

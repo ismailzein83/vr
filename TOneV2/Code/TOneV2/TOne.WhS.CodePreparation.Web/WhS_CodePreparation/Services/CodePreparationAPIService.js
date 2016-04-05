@@ -53,6 +53,11 @@
         function CloseZone(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "CloseZone"), input);
         }
+        function RenameZone(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, "CodePreparation", "RenameZone"), input);
+        }
+
+        
 
         function UploadCodePreparationSheet(sellingNumberPlanId, onCodePreparationUpdated) {
             var settings = {
@@ -94,7 +99,8 @@
             CancelCodePreparationState: CancelCodePreparationState,
             UploadCodePreparationSheet: UploadCodePreparationSheet,
             ApplyCodePreparationState: ApplyCodePreparationState,
-            CloseZone: CloseZone
+            CloseZone: CloseZone,
+            RenameZone: RenameZone
         });
     }
 

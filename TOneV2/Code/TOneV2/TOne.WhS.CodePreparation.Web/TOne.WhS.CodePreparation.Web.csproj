@@ -157,6 +157,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_CodePreparation\Constant\ZoneItemStatusEnum.js" />
+    <Content Include="WhS_CodePreparation\Constant\ZoneItemDraftStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\CodeItemStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\CodeItemDraftStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\ModuleConfig.js" />
@@ -167,9 +169,13 @@
     <Content Include="WhS_CodePreparation\Images\MovedFrom.png" />
     <Content Include="WhS_CodePreparation\Images\MovedTo.png" />
     <Content Include="WhS_CodePreparation\Images\New.png" />
+    <Content Include="WhS_CodePreparation\Images\NewZone.png" />
     <Content Include="WhS_CodePreparation\Images\PendingClosed.png" />
+    <Content Include="WhS_CodePreparation\Images\PendingClosedZone.png" />
+    <Content Include="WhS_CodePreparation\Images\PendingEffectiveZone.png" />
     <Content Include="WhS_CodePreparation\Images\PendingOpen.png" />
     <Content Include="WhS_CodePreparation\Images\PendingOpened.png" />
+    <Content Include="WhS_CodePreparation\Images\ClosedZone.png" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationAPIService.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationController.js" />
@@ -179,6 +185,8 @@
     <Content Include="WhS_CodePreparation\Views\CodePreparationUploadEditor.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationApplyStateEditorController.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationUploadEditorController.js" />
+    <Content Include="WhS_CodePreparation\Views\Dialogs\RenameZoneDialogController.js" />
+    <Content Include="WhS_CodePreparation\Views\Dialogs\RenameZoneDialog.html" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\CloseCodeDialog.html" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\MoveCodeDialog.html" />
     <Content Include="WhS_CodePreparation\Views\Dialogs\CloseCodeDialogController.js" />

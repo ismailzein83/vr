@@ -88,7 +88,7 @@ namespace TOne.WhS.BusinessEntity.Business
             IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
 
             if (saleZonesBySellingNumberPlan != null)
-                saleZonesBySellingNumberPlan = saleZonesBySellingNumberPlan.FindAllRecords(z => z.BED <= DateTime.Now && (!z.EED.HasValue || (z.EED > DateTime.Now)) && countryId == z.CountryId);
+                saleZonesBySellingNumberPlan = saleZonesBySellingNumberPlan.FindAllRecords(z => (!z.EED.HasValue || (z.EED > DateTime.Now)) && countryId == z.CountryId);
 
             return saleZonesBySellingNumberPlan;
         }

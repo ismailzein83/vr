@@ -69,6 +69,8 @@
     <Compile Include="SaleZone\CloseZonesOutput.cs" />
     <Compile Include="SaleZone\DeletedZone.cs" />
     <Compile Include="SaleZone\NewZone.cs" />
+    <Compile Include="SaleZone\RenamedZoneOutput.cs" />
+    <Compile Include="SaleZone\RenamedZoneInput.cs" />
     <Compile Include="SaleZone\NewZoneInput.cs" />
     <Compile Include="SaleZone\NewZoneOutput.cs" />
     <Compile Include="SaleZone\RenamedZone.cs" />

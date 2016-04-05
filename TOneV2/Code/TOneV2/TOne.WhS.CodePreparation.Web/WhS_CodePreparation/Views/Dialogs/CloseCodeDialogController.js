@@ -43,7 +43,7 @@
 
             $scope.isGettingData = true;
             loadAllControls();
-            $scope.title = UtilsService.buildTitleForAddEditor("Close Codes for " + currentZoneName);
+            $scope.title = "Close Codes for " + currentZoneName;
         }
         function loadAllControls() {
             $scope.isLoading = false;
