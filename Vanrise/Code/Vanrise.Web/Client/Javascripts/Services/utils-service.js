@@ -648,10 +648,14 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         // Convert both dates to milliseconds
         var date1_ms = date1.getTime();
         var date2_ms = date2.getTime();
-
+        var sign = "";
         // Calculate the difference in milliseconds
         var difference_ms = date2_ms - date1_ms;
+        if (difference_ms < 0)
+            sign="-";
         //take out milliseconds
+        if (difference_ms < 0)
+            difference_ms = - difference_ms;
         difference_ms = difference_ms / 1000;
         var seconds = Math.floor(difference_ms % 60);
         difference_ms = difference_ms / 60;
@@ -659,8 +663,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         difference_ms = difference_ms / 60;
         var hours = Math.floor(difference_ms % 24);
         var days = Math.floor(difference_ms / 24);
-
-        var result = "";
+ 
+        var result = sign;
         if (hours < 10)
             result += "0" + hours;
         else
