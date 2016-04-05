@@ -87,6 +87,9 @@
     <Compile Include="CustomAttributes\IsAnonymousAttribute.cs" />
     <Compile Include="IVanriseType.cs" />
     <Compile Include="LogEntryType.cs" />
+    <Compile Include="Logger\LogEntryDetail.cs" />
+    <Compile Include="Logger\LogEntryQuery.cs" />
+    <Compile Include="Logger\LogEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRetrievalInput.cs" />
     <Compile Include="RateType\RateType.cs" />

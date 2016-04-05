@@ -122,6 +122,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyExchangeRateController.cs" />
@@ -144,12 +145,18 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Logging.SQL\Vanrise.Logging.SQL.csproj">
+      <Project>{b89988cc-cb1f-440f-9c0d-779d926d9d1a}</Project>
+      <Name>Vanrise.Logging.SQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\LogEntryTypeEnum.js" />
+    <Content Include="Common\Constant\LogAttributeEnum.js" />
     <Content Include="Common\Constant\HourEnum.js" />
     <Content Include="Common\Constant\ModuleConfig.js" />
     <Content Include="Common\Directives\City\Templates\CityGridTemplate.html" />
@@ -176,6 +183,10 @@
     <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordtype-grid.js" />
     <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordfield-grid.js" />
     <Content Include="Common\Directives\Hour\vr-common-hour-selector.js" />
+    <Content Include="Common\Directives\Logger\Templates\LoggerGridTemplate.html" />
+    <Content Include="Common\Directives\Logger\vr-common-log-entry-grid.js" />
+    <Content Include="Common\Directives\Logger\vr-common-log-entry-type-selector.js" />
+    <Content Include="Common\Directives\Logger\vr-common-log-attribute-selector.js" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveBooleanDirectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveChoicesDirectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveDateTimeDirectiveTemplate.html" />
@@ -191,6 +202,8 @@
     <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
+    <Content Include="Common\Services\APIServices\LogEntryAPIService.js" />
+    <Content Include="Common\Services\APIServices\LogAttributeAPIService.js" />
     <Content Include="Common\Services\APIServices\CountryAPIService.js" />
     <Content Include="Common\Services\APIServices\CurrencyExchangeRateAPIService.js" />
     <Content Include="Common\Services\APIServices\CurrencyAPIService.js" />
@@ -229,6 +242,8 @@
     <Content Include="Common\Views\GenericDataRecord\DataRecordFieldManagementController.js" />
     <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagement.html" />
     <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagementController.js" />
+    <Content Include="Common\Views\Logger\LoggerManagement.html" />
+    <Content Include="Common\Views\Logger\LoggerManagementController.js" />
     <Content Include="Common\Views\RateType\RateTypeEditor.html" />
     <Content Include="Common\Views\RateType\RateTypeEditorController.js" />
     <Content Include="Common\Views\RateType\RateTypeManagement.html" />

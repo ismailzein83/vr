@@ -1,0 +1,17 @@
+﻿<vr-datagrid datasource="loggers"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.LogEntryId">
+
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.LogEntryId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Machine Name'" field="'MachineName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Application Name'" field="'ApplicationName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Assembly Name'" field="'AssemblyName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type Name'" field="'TypeName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Method Name'" field="'MethodName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Entry Type'" field="'EntryTypeName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Event Time'" field="'Entity.EventTime'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>
