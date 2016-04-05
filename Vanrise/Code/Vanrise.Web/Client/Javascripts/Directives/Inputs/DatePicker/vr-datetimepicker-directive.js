@@ -327,18 +327,18 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             var icontemplate = "";
             if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour') {
                 n++ ;
-                icontemplate += ' <span   class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" style="line-height: 1.3;"></i></span>';
+                icontemplate += ' <span   class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>';
 
             }
             if (attrs.type == 'time' || attrs.type == 'dateTime' || attrs.type == 'dateHour'){
                 n++;
-                icontemplate += ' <span   class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" style="line-height: 1.3;"></i></span>';
+                icontemplate += ' <span   class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
 
             }
             else if (attrs.type == undefined) {
                 n = 2;
-                icontemplate = ' <span  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" style="line-height: 1.3;"></i></span>'
-                             + ' <span  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" style="line-height: 1.3;"></i></span>';
+                icontemplate = ' <span  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>'
+                             + ' <span  class="input-group-addon vr-small-addon " ng-click="ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
 
             }
                 
@@ -346,14 +346,13 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
             var dateTemplate =
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"   >'
                   + '<vr-validator validate="ctrl.validate()">'
-                  + '<div id="divDatePicker" ng-model="ctrl.value" class="input-group form-control" ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: 28px;padding: 0px;display:block;position: relative;">'
-                            + '<input class=" vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 26px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
-                            + '<div ng-show="showtd==true" class="hand-cursor" style="max-width:' + 20 * n + 'px;position: absolute;z-index: 11;min-width: 20px;right: 0px;top:0px" >' + icontemplate + '</div>'
+                  + '<div id="divDatePicker" ng-model="ctrl.value" class="input-group form-control" ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: 26px;padding: 0px;display:block;">'
+                            + '<input class=" vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 24px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                            + '<div  class="hand-cursor" style="max-width:' + 20 * n + 'px;position: absolute;z-index: 11;min-width: 20px;right: 0px;top:0px" >' + icontemplate + '</div>'
                       + '</div>'
                   + '</vr-validator>'
-                      + '<span  ng-if="ctrl.hint!=undefined"  ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
-
-                    + '</div>';
+                      +'<span ng-show="showtd==true" ng-if="ctrl.hint!=undefined"  ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+                + '</div>';
 
             //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
 
