@@ -11,6 +11,14 @@ namespace CDRComparison.Entities
         public int CDRSourceConfigId { get; set; }
         public string Name { get; set; }
         public CDRSource CDRSource { get; set; }
+        public SettingsTaskExecutionInfo SettingsTaskExecutionInfo { get; set; }
         public bool IsPartnerCDRSource { get; set; }
+    }
+
+    public class SettingsTaskExecutionInfo
+    {
+        public long DurationMarginInMilliSeconds { get; set; }
+        public long TimeMarginInMilliSeconds { get; set; }
+        public TimeSpan TimeOffset { get; set; }
     }
 }

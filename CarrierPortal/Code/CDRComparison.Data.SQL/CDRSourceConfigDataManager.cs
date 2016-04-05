@@ -37,7 +37,7 @@ namespace CDRComparison.Data.SQL
         {
             object cdrSourceConfigId;
 
-            int affectedRows = ExecuteNonQuerySP("dbo.sp_CDRSourceConfig_Insert", out cdrSourceConfigId, cdrSourceConfig.Name, Vanrise.Common.Serializer.Serialize(cdrSourceConfig.CDRSource), cdrSourceConfig.IsPartnerCDRSource);
+            int affectedRows = ExecuteNonQuerySP("dbo.sp_CDRSourceConfig_Insert", out cdrSourceConfigId, cdrSourceConfig.Name, Vanrise.Common.Serializer.Serialize(cdrSourceConfig.CDRSource), Vanrise.Common.Serializer.Serialize(cdrSourceConfig.SettingsTaskExecutionInfo), cdrSourceConfig.IsPartnerCDRSource);
             insertedObjectId = (affectedRows > 0) ? (int)cdrSourceConfigId : -1;
 
             return (affectedRows > 0);
@@ -45,7 +45,7 @@ namespace CDRComparison.Data.SQL
 
         public bool UpdateCDRSourceConfig(CDRSourceConfig cdrSourceConfig)
         {
-            int affectedRows = ExecuteNonQuerySP("dbo.sp_CDRSourceConfig_Update", cdrSourceConfig.CDRSourceConfigId, cdrSourceConfig.Name, Vanrise.Common.Serializer.Serialize(cdrSourceConfig.CDRSource), cdrSourceConfig.IsPartnerCDRSource);
+            int affectedRows = ExecuteNonQuerySP("dbo.sp_CDRSourceConfig_Update", cdrSourceConfig.CDRSourceConfigId, cdrSourceConfig.Name, Vanrise.Common.Serializer.Serialize(cdrSourceConfig.CDRSource), Vanrise.Common.Serializer.Serialize(cdrSourceConfig.SettingsTaskExecutionInfo), cdrSourceConfig.IsPartnerCDRSource);
             return (affectedRows > 0);
         }
 
@@ -60,6 +60,7 @@ namespace CDRComparison.Data.SQL
                 CDRSourceConfigId = (int)reader["CDRSourceConfigId"],
                 Name = reader["Name"] as string,
                 CDRSource = Vanrise.Common.Serializer.Deserialize(reader["CDRSource"] as string) as CDRSource,
+                SettingsTaskExecutionInfo = Vanrise.Common.Serializer.Deserialize(reader["SettingsTaskExecutionInfo"] as string) as SettingsTaskExecutionInfo,
                 IsPartnerCDRSource = (bool)reader["IsPartnerCDRSource"]
             };
         }

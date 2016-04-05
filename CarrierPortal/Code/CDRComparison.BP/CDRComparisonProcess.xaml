@@ -188,7 +188,7 @@
       </vbw:AssignTask.AssignedTo>
       <vbw:AssignTask.TaskData>
         <InArgument x:TypeArguments="vbe:BPTaskData">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new SettingTaskData() { TableKey = TableKey}</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new SettingTaskData() { TableKey = TableKey, PartnerCDRSourceConfigId = Input.PartnerCDRSourceConfigId }</mca:CSharpValue>
         </InArgument>
       </vbw:AssignTask.TaskData>
       <vbw:AssignTask.TaskExecutionInformation>
@@ -463,6 +463,11 @@
           <mca:CSharpValue x:TypeArguments="x:String">SaveConfig.PartnerCDRSourceConfigName</mca:CSharpValue>
         </InArgument>
       </cba1:SaveCDRSourceConfigs.PartnerCDRSourceConfigName>
+      <cba1:SaveCDRSourceConfigs.SettingsTaskExecutionInfo>
+        <InArgument x:TypeArguments="ce:SettingsTaskExecutionInfo">
+          <mca:CSharpValue x:TypeArguments="ce:SettingsTaskExecutionInfo">new Entities.SettingsTaskExecutionInfo() { DurationMarginInMilliSeconds = ContinueExecution.DurationMarginInMilliSeconds, TimeMarginInMilliSeconds = ContinueExecution.TimeMarginInMilliSeconds, TimeOffset = ContinueExecution.TimeOffset }</mca:CSharpValue>
+        </InArgument>
+      </cba1:SaveCDRSourceConfigs.SettingsTaskExecutionInfo>
       <cba1:SaveCDRSourceConfigs.SystemCDRSource>
         <InArgument x:TypeArguments="ce:CDRSource">
           <mca:CSharpValue x:TypeArguments="ce:CDRSource">Input.SystemCDRSource</mca:CSharpValue>
@@ -479,7 +484,7 @@
         </InArgument>
       </cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigName>
     </cba1:SaveCDRSourceConfigs>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbGM+A+MDDgIBAUcLR5sBAgECTgVUHAMB7AhVBbYBEAMBnge3AQXHARYDAfsGyAEFmAMQAwGiAZkDBakDFgIBf6oDBbADHAIBc7EDBcEDFgIBUMIDBeEDIQIBDVELUVkDAe0IWgeJARIDAYkIigEHpAEkAwHHB6UBB7UBHAMBnwfEAQvEAX0DAZMHvwELvwF7AwGIB7cBngG3AbcBAwGHB7oBC7oBlwEDAfwG1AEH5AEeAwG+BuUBB5MCGgMBiQWUAgeuAisDAaQErwIHvwIjAwHnA8ACB9oCMAMBggPbAgfrAigDAcUC7AIHhgMrAwHgAYcDB5cDIwMBowGmAwumA4QBAwGXAaEDC6EDgwEDAYwBmQOnAZkDvgEDAYsBnAMLnAOXAQMBgAGtAwutA1ECAXS+Awu+A4IBAgFouQMLuQPnAQIBXbEDqgGxA8gBAgFctAMLtAOXAQIBUd4DC94DbQIBRdkDC9kDcQIBOs8DC88DbgIBL9QDC9QDYgIBJMoDC8oDcgIBGcUDC8UDYwIBDlsJZhIDAdEIZwlyGQMBtQhzCX4ZAwGZCH8JiAESAwGKCJcBDZcBZwMB/AeNAQ2NAXIDAe8HnAENnAF8AwHiB5IBDZIBfAMB1QehAQ2hAVMDAcgHrQENrQF0AwG6B6gBDagBfAMBrQeyAQ2yAVMDAaAH3AEN3AF2AwHnBtcBDdcBegMB0wbhAQ3hAVMDAb8G8gEN8gGAAQMBqgaBAg2BAm4DAZYG7QEN7QF6AwGCBosCDYsCfAMB7gX8AQ38AYoBAwHaBZACDZACcQMBxgWGAg2GAnIDAbIF9wEN9wGAAQMBngXoAQ3oAYABAwGKBaECDaECagMB9QSXAg2XAngDAeEEpgINpgJ5AwHNBJwCDZwCgwEDAbkEqwINqwJTAwGlBLcCDbcCcQMBkASyAg2yAnsDAfwDvAINvAJTAwHoA80CDc0CagMB0wPDAg3DAoIBAwG/A9ICDdICfgMBqwPIAg3IAogBAwGXA9cCDdcCUwMBgwPjAg3jAnYDAe4C3gIN3gKAAQMB2gLoAg3oAlMDAcYC+QIN+QJqAwGxAu8CDe8CeAMBnQL+Ag3+AnkDAYkC9AIN9AKDAQMB9QGDAw2DA1MDAeEBjwMNjwNxAwHMAYoDDYoDewMBuAGUAw2UA1MDAaQBYw9jdAMB3wheD15xAwHSCGdlZ2wDAdAIbw9vdAMBwwhqD2pmAwG2CHNlc2sDAbQIew97dAMBpwh2D3ZnAwGaCIYBNYYBOQMBmAiCAQ+CAW8DAYsI</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbGQ+A+gDDgIBAUcLR5sBAgECTgVUHAMB9whVBbYBEAMBqQe3AQXHARYDAYYHyAEFmAMQAwGtAZkDBakDFgMBigGqAwWwAxwCAX6xAwXBAxYCAVvCAwXmAyECAQ1RC1FZAwH4CFoHiQESAwGUCIoBB6QBJAMB0gelAQe1ARwDAaoHxAELxAF9AwGeB78BC78BtwEDAZMHtwGeAbcBtwEDAZIHugELugGXAQMBhwfUAQfkAR4DAckG5QEHkwIaAwGUBZQCB64CKwMBrwSvAge/AiMDAfIDwAIH2gIwAwGNA9sCB+sCKAMB0ALsAgeGAysDAesBhwMHlwMjAwGuAaYDC6YDhAEDAaIBoQMLoQODAQMBlwGZA6cBmQO+AQMBlgGcAwucA5cBAwGLAa0DC60DUQIBf74DC74DggECAXO5Awu5A+cBAgFosQOqAbEDyAECAWe0Awu0A5cBAgFc4wML4wNtAgFQ3gML3gNxAgFF1AML1APJAgIBOs8DC88DbgIBL9kDC9kDYgIBJMoDC8oDcgIBGcUDC8UDYwIBDlsJZhIDAdwIZwlyGQMBwAhzCX4ZAwGkCH8JiAESAwGVCJcBDZcBZwMBhwiNAQ2NAXIDAfoHnAENnAF8AwHtB5IBDZIBfAMB4AehAQ2hAVMDAdMHrQENrQF0AwHFB6gBDagBfAMBuAeyAQ2yAVMDAasH3AEN3AF2AwHyBtcBDdcBegMB3gbhAQ3hAVMDAcoG8gEN8gGAAQMBtQaBAg2BAm4DAaEG7QEN7QF6AwGNBosCDYsCfAMB+QX8AQ38AYoBAwHlBZACDZACcQMB0QWGAg2GAnIDAb0F9wEN9wGAAQMBqQXoAQ3oAYABAwGVBaECDaECagMBgAWXAg2XAngDAewEpgINpgJ5AwHYBJwCDZwCgwEDAcQEqwINqwJTAwGwBLcCDbcCcQMBmwSyAg2yAnsDAYcEvAINvAJTAwHzA80CDc0CagMB3gPDAg3DAoIBAwHKA9ICDdICfgMBtgPIAg3IAogBAwGiA9cCDdcCUwMBjgPjAg3jAnYDAfkC3gIN3gKAAQMB5QLoAg3oAlMDAdEC+QIN+QJqAwG8Au8CDe8CeAMBqAL+Ag3+AnkDAZQC9AIN9AKDAQMBgAKDAw2DA1MDAewBjwMNjwNxAwHXAYoDDYoDewMBwwGUAw2UA1MDAa8BYw9jdAMB6gheD15xAwHdCGdlZ2wDAdsIbw9vdAMBzghqD2pmAwHBCHNlc2sDAb8Iew97dAMBsgh2D3ZnAwGlCIYBNYYBOQMBowiCAQ+CAW8DAZYI</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

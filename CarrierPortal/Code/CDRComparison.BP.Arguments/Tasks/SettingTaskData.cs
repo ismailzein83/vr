@@ -10,5 +10,6 @@ namespace CDRComparison.BP.Arguments
     public class SettingTaskData : BPTaskData
     {
         public string TableKey { get; set; }
+        public int? PartnerCDRSourceConfigId { get; set; }
     }
 }

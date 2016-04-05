@@ -26,6 +26,8 @@ namespace CDRComparison.BP.Activities
         [RequiredArgument]
         public InArgument<CDRSource> PartnerCDRSource { get; set; }
 
+        public InArgument<SettingsTaskExecutionInfo> SettingsTaskExecutionInfo { get; set; }
+
         #endregion
 
         protected override void Execute(CodeActivityContext context)
@@ -38,14 +40,16 @@ namespace CDRComparison.BP.Activities
 
             CDRSource systemCDRSource = this.SystemCDRSource.Get(context);
             CDRSource partnerCDRSource = this.PartnerCDRSource.Get(context);
-            
-            SaveCDRSourceConfig(systemConfigId, systemConfigName, systemCDRSource, false);
-            SaveCDRSourceConfig(partnerConfigId, partnerConfigName, partnerCDRSource, true);
+
+            SettingsTaskExecutionInfo settingsTaskExecutionInformation = this.SettingsTaskExecutionInfo.Get(context);
+
+            SaveCDRSourceConfig(systemConfigId, systemConfigName, systemCDRSource, settingsTaskExecutionInformation, false);
+            SaveCDRSourceConfig(partnerConfigId, partnerConfigName, partnerCDRSource, settingsTaskExecutionInformation, true);
         }
 
         #region Private Methods
 
-        void SaveCDRSourceConfig(int? cdrSourceConfigId, string cdrSourceConfigName, CDRSource cdrSource, bool isPartnerCDRSource)
+        void SaveCDRSourceConfig(int? cdrSourceConfigId, string cdrSourceConfigName, CDRSource cdrSource, SettingsTaskExecutionInfo settingsTaskExecutionInfo, bool isPartnerCDRSource)
         {
             ICDRSourceConfigDataManager cdrSourceConfigDataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRSourceConfigDataManager>();
 
@@ -55,6 +59,11 @@ namespace CDRComparison.BP.Activities
                 CDRSource = cdrSource,
                 IsPartnerCDRSource = isPartnerCDRSource
             };
+
+            if (isPartnerCDRSource)
+            {
+                cdrSourceConfig.SettingsTaskExecutionInfo = settingsTaskExecutionInfo;
+            }
 
             if (cdrSourceConfigId != null)
             {

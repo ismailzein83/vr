@@ -2,16 +2,18 @@
 
     "use strict";
 
-    CDRComparisonSettingsTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService', 'CDRComparison_TimeDurationEnum', 'CDRComparison_CDRComparisonService'];
+    CDRComparisonSettingsTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService', 'CDRComparison_TimeDurationEnum', 'CDRComparison_CDRComparisonService', 'CDRComparison_CDRSourceConfigAPIService'];
 
-    function CDRComparisonSettingsTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService, CDRComparison_TimeDurationEnum, CDRComparison_CDRComparisonService) {
+    function CDRComparisonSettingsTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService, CDRComparison_TimeDurationEnum, CDRComparison_CDRComparisonService, CDRComparison_CDRSourceConfigAPIService) {
+
         var bpTaskId;
         var processInstanceId;
+
         var tableKey;
+        var partnerCDRSourceConfigId;
+
         loadParameters();
-
         defineScope();
-
         load();
 
         function loadParameters() {
@@ -46,6 +48,57 @@
             }
         }
 
+        function load() {
+            $scope.scopeModal.isLoading = true;
+            BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
+                processInstanceId = response.ProcessInstanceId;
+                if (response && response.TaskData) {
+                    tableKey = response.TaskData.TableKey;
+                    partnerCDRSourceConfigId = response.TaskData.PartnerCDRSourceConfigId;
+                }
+                loadAllControls();
+            })
+        }
+
+        function loadAllControls() {
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadConfigSettings])
+                          .catch(function (error) {
+                              VRNotificationService.notifyException(error);
+                          })
+                          .finally(function () {
+                              $scope.scopeModal.isLoading = false;
+                          });
+
+        }
+
+        function setTitle() {
+            $scope.title = "CDR Comparison Settings";
+        }
+
+        function loadConfigSettings() {
+            var configSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+
+            if (partnerCDRSourceConfigId != undefined) {
+                CDRComparison_CDRSourceConfigAPIService.GetCDRSourceConfig(partnerCDRSourceConfigId).then(function (response) {
+
+                    if (response != null && response.SettingsTaskExecutionInfo != null) {
+                        $scope.scopeModal.durationMargin = response.SettingsTaskExecutionInfo.DurationMarginInMilliSeconds;
+                        $scope.scopeModal.timeMargin = response.SettingsTaskExecutionInfo.TimeMarginInMilliSeconds;
+                        $scope.scopeModal.timeOffset = response.SettingsTaskExecutionInfo.TimeOffset;
+                    }
+                    configSettingsLoadDeferred.resolve();
+                }).catch(function (error) {
+                    configSettingsLoadDeferred.reject(error);
+                });
+            }
+            else {
+                configSettingsLoadDeferred.resolve();
+            }
+
+            return configSettingsLoadDeferred.promise;
+        }
+
         function executeTask(taskAction) {
             var durationMarginInMilliseconds = $scope.scopeModal.durationMargin;
             if ($scope.scopeModal.selectedDuration.value = 0)
@@ -55,15 +108,14 @@
             if ($scope.scopeModal.selectedTimeDuration.value = 0)
                 timeMarginInMilliSeconds = $scope.scopeModal.timeMargin * 1000;
 
+            var timeOffset = $scope.scopeModal.timeOffset;
 
-            
-            var timeOffset = "00:" + $scope.scopeModal.timeOffset.Hour + ":" + $scope.scopeModal.timeOffset.Minute;
             var executionInformation = {
                 $type: "CDRComparison.BP.Arguments.SettingTaskExecutionInformation, CDRComparison.BP.Arguments",
                 Decision: taskAction,
                 DurationMarginInMilliSeconds: durationMarginInMilliseconds,
                 TimeMarginInMilliSeconds: timeMarginInMilliSeconds,
-                TimeOffset:timeOffset
+                TimeOffset: timeOffset
             };
 
             var input = {
@@ -78,34 +130,8 @@
                 VRNotificationService.notifyException(error);
             });
         }
-
-
-        function load() {
-            $scope.scopeModal.isLoading = true;
-            BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
-                processInstanceId = response.ProcessInstanceId;
-                if (response && response.TaskData)
-                    tableKey = response.TaskData.TableKey;
-                loadAllControls();
-            })
-        }
-
-        function loadAllControls() {
-
-            return UtilsService.waitMultipleAsyncOperations([setTitle])
-                          .catch(function (error) {
-                              VRNotificationService.notifyException(error);
-                          })
-                          .finally(function () {
-                              $scope.scopeModal.isLoading = false;
-                          });
-
-        }
-        function setTitle() {
-            $scope.title = "CDR Comparison Settings";
-        }
-
     }
 
     appControllers.controller('CDRComparison_CDRComparisonSettingsTaskController', CDRComparisonSettingsTaskController);
+
 })(appControllers);
