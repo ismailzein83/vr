@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "VR_GenericData_DataTransformationDefinitionService", "VR_GenericData_DataRecordTypeAPIService","VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataTransformationDefinitionService, VR_GenericData_DataRecordTypeAPIService, VRUIUtilsService) {
+app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
