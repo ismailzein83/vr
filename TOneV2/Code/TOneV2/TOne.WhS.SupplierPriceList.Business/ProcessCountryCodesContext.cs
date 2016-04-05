@@ -16,6 +16,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
         public DateTime DeletedCodesDate { get; set; }
+        public DateTime PriceListDate { get; set; }
 
         public ZonesByName NewAndExistingZones { get; set; }
 
