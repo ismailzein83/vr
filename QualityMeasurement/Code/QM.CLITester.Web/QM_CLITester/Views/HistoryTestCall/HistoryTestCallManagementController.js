@@ -97,22 +97,18 @@
                 zoneReadyPromiseDeferred.resolve();
             }
 
-            $scope.onCountrySelectionChanged = function (items, datasource) {
-                if (items.length == 1) {
-                    var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
-
-                    var payload = {
+            $scope.onCountrySelectionChanged = function () {
+                var countries = countryDirectiveAPI.getSelectedIds();
+                var setLoader = function (value) { $scope.isLoadingZoneSelector = value };
+                var payload;
+                if (countries != undefined && countries.length > 0)
+                    payload = {
                         filter: {
-                            CountryId: items[0].CountryId
+                            CountryId: countries
                         }
                     }
 
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
-                }
-                else {
-                    $scope.selectedZones.length = 0;
-
-                }
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
             }
 
         }

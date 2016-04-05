@@ -8,7 +8,7 @@
     </vr-columns>
 
     <vr-columns width="1/4row">
-        <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountry" isrequired="true" onselectitem="onCountrySelectItem"></vr-common-country-selector>
+        <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="selectedCountry" isrequired="true" onselectionchanged="onCountrySelectionChanged" ismultipleselection></vr-common-country-selector>
     </vr-columns>
 
     <vr-columns width="1/4row" vr-loader="isLoadingZoneSelector" ng-show="selectedCountry!=undefined">

@@ -1,9 +1,8 @@
-﻿
+﻿using System.Collections.Generic;
 namespace QM.BusinessEntity.Entities
 {
     public class ZoneInfoFilter
     {
-        public int? CountryId { get; set; }
-
+        public List<int> CountryId { get; set; }
     }
 }

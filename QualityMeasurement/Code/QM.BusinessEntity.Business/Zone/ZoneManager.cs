@@ -52,22 +52,20 @@ namespace QM.BusinessEntity.Business
         {
             IEnumerable<Zone> zones = null;
 
-            if (filter != null)
-            {
-                zones = this.GetZonesByCountry(filter.CountryId);
-            }
-            else
+            if (filter != null && filter.CountryId!= null)
             {
                 var cachedZones = GetCachedZones();
                 if (cachedZones != null)
                     zones = cachedZones.Values;
+
+                Func<Zone, bool> filterExpression = (prod) =>
+                    ((prod.BeginEffectiveDate <= DateTime.Now)
+                    && (!prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > DateTime.Now)) && (!prod.Settings.IsOffline)
+                    && (filter.CountryId.Count == 0 || filter.CountryId.Contains(prod.CountryId)));
+
+                return zones.MapRecords(ZoneInfoMapper, filterExpression);
             }
-
-            Func<Zone, bool> filterExpression = (prod) =>
-                ((prod.BeginEffectiveDate <= DateTime.Now)
-                && (!prod.EndEffectiveDate.HasValue || (prod.EndEffectiveDate > DateTime.Now)) &&(!prod.Settings.IsOffline));
-
-            return zones.MapRecords(ZoneInfoMapper, filterExpression);
+            return null;
         }
 
 

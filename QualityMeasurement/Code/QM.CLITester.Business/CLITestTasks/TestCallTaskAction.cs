@@ -38,7 +38,7 @@ namespace QM.CLITester.Business
 
             AddTestCallInput testCallInput = new AddTestCallInput()
             {
-                CountryID = testCallTaskActionArgument.CountryID,
+                CountryIds = testCallTaskActionArgument.CountryIds,
                 ProfileID = testCallTaskActionArgument.ProfileID,
                 SuppliersIds = testCallTaskActionArgument.SuppliersIds,
                 SuppliersSourceIds = testCallTaskActionArgument.SuppliersSourceIds,

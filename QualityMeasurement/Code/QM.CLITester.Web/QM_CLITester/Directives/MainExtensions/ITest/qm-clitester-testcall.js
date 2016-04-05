@@ -51,6 +51,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
 
             $scope.selectedSupplier = [];
             $scope.selectedZone = [];
+            $scope.selectedCountry = [];
 
             $scope.onProfileDirectiveReady = function (api) {
                 profileDirectiveAPI = api;
@@ -72,16 +73,20 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                 countryReadyPromiseDeferred.resolve();
             }
 
-            $scope.onCountrySelectItem = function (selectedItem) {
-                if (selectedItem != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingZoneSelector = value };
-                    var payload = {
+            $scope.onCountrySelectionChanged = function () {
+                var countries = countryDirectiveAPI.getSelectedIds();
+              
+                var setLoader = function (value) { $scope.isLoadingZoneSelector = value };
+                var payload;
+                if (countries != undefined && countries.length > 0)
+                    payload = {
                         filter: {
-                            CountryId: selectedItem.CountryId
+                            CountryId: countries
                         }
                     }
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
-                }
+
+               VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader);
+
             }
 
             $scope.onSourceTypeDirectiveReady = function (api) {
@@ -129,7 +134,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                     $type: "QM.CLITester.Business.TestCallTaskActionArgument, QM.CLITester.Business",
                     SuppliersIds: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
                     SuppliersSourceIds: "",
-                    CountryID: $scope.selectedCountry.CountryId,
+                    CountryIds: countryDirectiveAPI.getSelectedIds(),
                     ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedZone, "ZoneId"),//$scope.selectedZone.ZoneId,
                     ZoneSourceId: "",
                     ProfileID: $scope.selectedProfile.ProfileId,
@@ -173,7 +178,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                         var directivePayload;
                         if (payload != undefined && payload.data != undefined)
                             directivePayload = {
-                                selectedIds: payload.data.CountryID
+                                selectedIds: payload.data.CountryIds
                             }
                         VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, directivePayload, countryLoadPromiseDeferred);
                     });
@@ -188,7 +193,7 @@ app.directive("qmClitesterTestcall", ['UtilsService', 'VRUIUtilsService', 'VRNot
                         var directivePayload;
                             directivePayload = {
                                 filter: {
-                                    CountryId: payload.data.CountryID
+                                    CountryId: payload.data.CountryIds
                                 }
                             }
                             if (payload.data != undefined)

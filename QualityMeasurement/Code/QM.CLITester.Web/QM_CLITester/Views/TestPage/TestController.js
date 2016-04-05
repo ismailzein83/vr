@@ -68,7 +68,7 @@
                     var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
                     var payload = {
                         filter: {
-                            CountryId: selectedItem.CountryId
+                            CountryId: [selectedItem.CountryId]
                         }
                     }
 
@@ -130,7 +130,7 @@
             var obj = {
                 SuppliersIds: UtilsService.getPropValuesFromArray($scope.selectedSupplier, "SupplierId"),
                 SuppliersSourceIds:"",
-                CountryID: $scope.selectedCountry.CountryId,
+                CountryIds: [$scope.selectedCountry.CountryId],
                 ZoneIds: UtilsService.getPropValuesFromArray($scope.selectedZone, "ZoneId"),
                 ZoneSourceId:"",
                 ProfileID: $scope.selectedProfile.ProfileId,

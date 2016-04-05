@@ -40,9 +40,9 @@ namespace QM.CLITester.Business
             
             Zone zone = new Zone();
             List<long?> zoneIds = new List<long?>();
-            int countryId = 0;
-            if(testCallInput.CountryID != null)
-                countryId = testCallInput.CountryID.Value;
+            List<int?> countryIds = new List<int?>();
+            if(testCallInput.CountryIds != null)
+                countryIds = testCallInput.CountryIds;
 
             if (testCallInput.ZoneIds == null)
             {
@@ -50,7 +50,7 @@ namespace QM.CLITester.Business
                 if (zone != null)
                 {
                     zoneIds.Add(zone.ZoneId);
-                    countryId = zone.CountryId;   
+                    countryIds.Add(zone.CountryId);   
                 }
             }
             else
@@ -75,7 +75,8 @@ namespace QM.CLITester.Business
 
             foreach (int supplierId in listSuppliersIds)
                 foreach (long zoneId in zoneIds)
-                    dataManager.Insert(supplierId, countryId, zoneId, (int)CallTestStatus.New, (int)CallTestResult.NotCompleted, 0, 0,
+                    foreach (var countryId in countryIds)    
+                        dataManager.Insert(supplierId, countryId.Value, zoneId, (int)CallTestStatus.New, (int)CallTestResult.NotCompleted, 0, 0,
                                         testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId);
 
             testCallOutput.BatchNumber = batchNumber;
