@@ -19,7 +19,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
 
-        public DateTime DeletedCodesDate { get; set; }
+        public DateTime PriceListDate { get; set; }
 
     }
 
@@ -49,7 +49,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime> DeletedCodesDate { get; set; }
+        public InArgument<DateTime> PriceListDate { get; set; }
 
         [RequiredArgument]
         public OutArgument<ZonesByName> NewAndExistingZones { get; set; }
@@ -86,7 +86,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 ImportedCodes = inputArgument.ImportedCodes,
                 ExistingCodes = inputArgument.ExistingCodes,
                 ExistingZones = existingZones,
-                DeletedCodesDate = inputArgument.DeletedCodesDate.Add(splContext.CodeCloseDateOffset)
+                DeletedCodesDate = inputArgument.PriceListDate.Add(splContext.CodeCloseDateOffset),
+                PriceListDate = inputArgument.PriceListDate
             };
 
             PriceListCodeManager plCodeManager = new PriceListCodeManager();
@@ -106,7 +107,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             return new ProcessCountryCodesInput()
             {
-                DeletedCodesDate = this.DeletedCodesDate.Get(context),
+                PriceListDate = this.PriceListDate.Get(context),
                 ExistingCodes = this.ExistingCodes.Get(context),
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
                 ImportedCodes = this.ImportedCodes.Get(context)
