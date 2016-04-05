@@ -127,7 +127,8 @@
                 if (response)
                 {
                     $scope.scopeModal.allCDRsCount = response.AllCDRsCount;
-                    $scope.scopeModal.missingCDRsCount = response.MissingCDRsCount;
+                    $scope.scopeModal.systemMissingCDRsCount = response.SystemMissingCDRsCount;
+                    $scope.scopeModal.partnerMissingCDRsCount = response.PartnerMissingCDRsCount;
                     $scope.scopeModal.partialMatchCDRsCount = response.PartialMatchCDRsCount;
                     $scope.scopeModal.disputeCDRsCount = response.DisputeCDRsCount;
                 }

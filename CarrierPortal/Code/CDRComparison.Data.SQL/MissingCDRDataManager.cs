@@ -42,9 +42,9 @@ namespace CDRComparison.Data.SQL
             return GetItemsText(GetMissingCDRsQuery(isPartnerCDRs), MissingCDRMapper, null);
         }
 
-        public int GetMissingCDRsCount()
+        public int GetMissingCDRsCount(bool isPartnerCDRs)
         {
-            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}",this.TableName), null);
+            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0} WHERE IsPartnerCDR ={1}", this.TableName, isPartnerCDRs?"1":"0"), null);
             return (int)count;
         }
         public void CreateMissingCDRTempTable()

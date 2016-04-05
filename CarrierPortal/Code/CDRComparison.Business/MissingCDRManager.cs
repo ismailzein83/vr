@@ -22,11 +22,11 @@ namespace CDRComparison.Business
             return DataRetrievalManager.Instance.ProcessResult(input, missingCDRs.ToBigResult(input, null));
         }
 
-        public int GetMissingCDRsCount(string tableKey)
+        public int GetMissingCDRsCount(string tableKey,bool isPartnerCDRs)
         {
             IMissingCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IMissingCDRDataManager>();
             dataManager.TableNameKey = tableKey;
-            return dataManager.GetMissingCDRsCount();
+            return dataManager.GetMissingCDRsCount(isPartnerCDRs);
         }
 
         #endregion

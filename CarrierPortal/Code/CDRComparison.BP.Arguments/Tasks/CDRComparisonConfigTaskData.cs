@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 
-namespace CDRComparison.BP.Arguments.Tasks
+namespace CDRComparison.BP.Arguments
 {
     public class CDRComparisonConfigTaskData : BPTaskData
     {

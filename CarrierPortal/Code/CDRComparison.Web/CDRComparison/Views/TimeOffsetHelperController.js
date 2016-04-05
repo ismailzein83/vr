@@ -135,7 +135,7 @@
         }
         function setTitle()
         {
-            $scope.title = "Time Offset Helper";
+            $scope.title = "Time Offset Selection";
         }
 
         function save()

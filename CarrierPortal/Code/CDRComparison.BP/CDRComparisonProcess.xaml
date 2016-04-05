@@ -5,6 +5,7 @@
  xmlns:ce="clr-namespace:CDRComparison.Entities;assembly=CDRComparison.Entities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -72,6 +73,7 @@
       </Variable>
       <Variable x:TypeArguments="cba:SettingTaskExecutionInformation" Name="ContinueExecution" />
       <Variable x:TypeArguments="x:String" Name="TableKey" />
+      <Variable x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation" Name="SaveConfig" />
     </Sequence.Variables>
     <cba1:CreateCDRTables sap2010:WorkflowViewState.IdRef="CreateCDRTables_1">
       <cba1:CreateCDRTables.TableKey>
@@ -428,7 +430,56 @@
         </InArgument>
       </cba1:DeleteCDRTables.TableKey>
     </cba1:DeleteCDRTables>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbFc9A7ADDgIBAUYLRpsBAgECTAVSHAMBywdTBbQBEAMBjAa1AQXFARYDAewFxgEFlgMQAgE3lwMFpwMWAgEXqAMFrgMcAgEMTwtPWQMBzAdYB4cBEgMB7waIAQeiASQDAbIGowEHswEcAwGNBsIBC8IBfQMBgga9AQu9AXsDAfgFtQGeAbUBtwEDAfcFuAELuAGXAQMB7QXSAQfiAR4DAbIF4wEHkQIaAwGGBJICB6wCKwMBpgOtAge9AiMDAewCvgIH2AIwAwGMAtkCB+kCKAMB0gHqAgeEAysCAXKFAweVAyMCATikAwukA4QBAgEtnwMLnwODAQIBI5cDpwGXA74BAgEimgMLmgOXAQIBGKsDC6sDUQIBDVkJZBIDAbIHZQlwGQMBmAdxCXwZAwH+Bn0JhgESAwHwBpUBDZUBZwMB4waLAQ2LAXIDAdcGmgENmgF8AwHLBpABDZABfAMBvwafAQ2fAVMDAbMGqwENqwF0AwGmBqYBDaYBfAMBmgawAQ2wAVMDAY4G2gEN2gF2AwHZBdUBDdUBegMBxgXfAQ3fAVMDAbMF8AEN8AGAAQMBnwX/AQ3/AW4DAYwF6wEN6wF6AwH5BIkCDYkCfAMB5gT6AQ36AYoBAwHTBI4CDY4CcQMBwASEAg2EAnIDAa0E9QEN9QGAAQMBmgTmAQ3mAYABAwGHBJ8CDZ8CagMB8wOVAg2VAngDAeADpAINpAJ5AwHNA5oCDZoCgwEDAboDqQINqQJTAwGnA7UCDbUCcQMBkwOwAg2wAnsDAYADugINugJTAwHtAssCDcsCagMB2QLBAg3BAoIBAwHGAtACDdACfgMBswLGAg3GAogBAwGgAtUCDdUCUwMBjQLhAg3hAnYDAfkB3AIN3AKAAQMB5gHmAg3mAlMDAdMB9wIN9wJqAwG/Ae0CDe0CeAMBrAH8Ag38AnkDAZkB8gIN8gKDAQMBhgGBAw2BA1MCAXONAw2NA3ECAV+IAw2IA3sCAUySAw2SA1MCATlhD2F0AwG/B1wPXHEDAbMHZWVlbAMBsQdtD210AwGlB2gPaGYDAZkHcWVxawMBlwd5D3l0AwGLB3QPdGcDAf8GhAE1hAE5AwH9BoABD4ABbwMB8QY=</sads:DebugSymbol.Symbol>
+    <vbw:AssignTask x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_5" TaskTitle="CDR Comparison Configuration">
+      <vbw:AssignTask.AssignedTo>
+        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.AssignedTo>
+      <vbw:AssignTask.TaskData>
+        <InArgument x:TypeArguments="vbe:BPTaskData">
+          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new CDRComparisonConfigTaskData() { PartnerCDRSourceConfigId = Input.PartnerCDRSourceConfigId , SystemCDRSourceConfigId = Input.SystemCDRSourceConfigId}</mca:CSharpValue>
+        </InArgument>
+      </vbw:AssignTask.TaskData>
+      <vbw:AssignTask.TaskExecutionInformation>
+        <OutArgument x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation">
+          <mca:CSharpReference x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation">SaveConfig</mca:CSharpReference>
+        </OutArgument>
+      </vbw:AssignTask.TaskExecutionInformation>
+    </vbw:AssignTask>
+    <cba1:SaveCDRSourceConfigs sap2010:WorkflowViewState.IdRef="SaveCDRSourceConfigs_1">
+      <cba1:SaveCDRSourceConfigs.PartnerCDRSource>
+        <InArgument x:TypeArguments="ce:CDRSource">
+          <mca:CSharpValue x:TypeArguments="ce:CDRSource">Input.PartnerCDRSource</mca:CSharpValue>
+        </InArgument>
+      </cba1:SaveCDRSourceConfigs.PartnerCDRSource>
+      <cba1:SaveCDRSourceConfigs.PartnerCDRSourceConfigId>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.PartnerCDRSourceConfigId</mca:CSharpValue>
+        </InArgument>
+      </cba1:SaveCDRSourceConfigs.PartnerCDRSourceConfigId>
+      <cba1:SaveCDRSourceConfigs.PartnerCDRSourceConfigName>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">SaveConfig.PartnerCDRSourceConfigName</mca:CSharpValue>
+        </InArgument>
+      </cba1:SaveCDRSourceConfigs.PartnerCDRSourceConfigName>
+      <cba1:SaveCDRSourceConfigs.SystemCDRSource>
+        <InArgument x:TypeArguments="ce:CDRSource">
+          <mca:CSharpValue x:TypeArguments="ce:CDRSource">Input.SystemCDRSource</mca:CSharpValue>
+        </InArgument>
+      </cba1:SaveCDRSourceConfigs.SystemCDRSource>
+      <cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigId>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.SystemCDRSourceConfigId</mca:CSharpValue>
+        </InArgument>
+      </cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigId>
+      <cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigName>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">SaveConfig.SystemCDRSourceConfigName</mca:CSharpValue>
+        </InArgument>
+      </cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigName>
+    </cba1:SaveCDRSourceConfigs>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbGM+A+MDDgIBAUcLR5sBAgECTgVUHAMB7AhVBbYBEAMBnge3AQXHARYDAfsGyAEFmAMQAwGiAZkDBakDFgIBf6oDBbADHAIBc7EDBcEDFgIBUMIDBeEDIQIBDVELUVkDAe0IWgeJARIDAYkIigEHpAEkAwHHB6UBB7UBHAMBnwfEAQvEAX0DAZMHvwELvwF7AwGIB7cBngG3AbcBAwGHB7oBC7oBlwEDAfwG1AEH5AEeAwG+BuUBB5MCGgMBiQWUAgeuAisDAaQErwIHvwIjAwHnA8ACB9oCMAMBggPbAgfrAigDAcUC7AIHhgMrAwHgAYcDB5cDIwMBowGmAwumA4QBAwGXAaEDC6EDgwEDAYwBmQOnAZkDvgEDAYsBnAMLnAOXAQMBgAGtAwutA1ECAXS+Awu+A4IBAgFouQMLuQPnAQIBXbEDqgGxA8gBAgFctAMLtAOXAQIBUd4DC94DbQIBRdkDC9kDcQIBOs8DC88DbgIBL9QDC9QDYgIBJMoDC8oDcgIBGcUDC8UDYwIBDlsJZhIDAdEIZwlyGQMBtQhzCX4ZAwGZCH8JiAESAwGKCJcBDZcBZwMB/AeNAQ2NAXIDAe8HnAENnAF8AwHiB5IBDZIBfAMB1QehAQ2hAVMDAcgHrQENrQF0AwG6B6gBDagBfAMBrQeyAQ2yAVMDAaAH3AEN3AF2AwHnBtcBDdcBegMB0wbhAQ3hAVMDAb8G8gEN8gGAAQMBqgaBAg2BAm4DAZYG7QEN7QF6AwGCBosCDYsCfAMB7gX8AQ38AYoBAwHaBZACDZACcQMBxgWGAg2GAnIDAbIF9wEN9wGAAQMBngXoAQ3oAYABAwGKBaECDaECagMB9QSXAg2XAngDAeEEpgINpgJ5AwHNBJwCDZwCgwEDAbkEqwINqwJTAwGlBLcCDbcCcQMBkASyAg2yAnsDAfwDvAINvAJTAwHoA80CDc0CagMB0wPDAg3DAoIBAwG/A9ICDdICfgMBqwPIAg3IAogBAwGXA9cCDdcCUwMBgwPjAg3jAnYDAe4C3gIN3gKAAQMB2gLoAg3oAlMDAcYC+QIN+QJqAwGxAu8CDe8CeAMBnQL+Ag3+AnkDAYkC9AIN9AKDAQMB9QGDAw2DA1MDAeEBjwMNjwNxAwHMAYoDDYoDewMBuAGUAw2UA1MDAaQBYw9jdAMB3wheD15xAwHSCGdlZ2wDAdAIbw9vdAMBwwhqD2pmAwG2CHNlc2sDAbQIew97dAMBpwh2D3ZnAwGaCIYBNYYBOQMBmAiCAQ+CAW8DAYsI</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -459,14 +510,16 @@
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1994,86" />
       <sap2010:ViewStateData Id="AssignTask`1_4" sap:VirtualizedContainerService.HintSize="1994,22" />
       <sap2010:ViewStateData Id="DeleteCDRTables_1" sap:VirtualizedContainerService.HintSize="1994,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,956">
+      <sap2010:ViewStateData Id="AssignTask`1_5" sap:VirtualizedContainerService.HintSize="1994,22" />
+      <sap2010:ViewStateData Id="SaveCDRSourceConfigs_1" sap:VirtualizedContainerService.HintSize="1994,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2016,1080">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,1036" />
+      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2056,1160" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

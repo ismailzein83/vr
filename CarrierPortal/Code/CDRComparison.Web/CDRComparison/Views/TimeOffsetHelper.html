@@ -3,32 +3,40 @@
         <vr-form name="formTimeOffsetHelper" vr-loader="scopeModal.isLoading">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-datagrid on-ready="onSystemGridReady"
-                                 datasource="systemCDRs"
-                                 dataretrievalfunction="dataRetrievalFunction"
-                                 pagingtype="'PagingOnScroll'">
+                    <vr-section title="Source CDRs">
+                        <vr-label>Select CDR to get its match.</vr-label>
+                        <vr-datagrid on-ready="onSystemGridReady"
+                                     datasource="systemCDRs"
+                                     dataretrievalfunction="dataRetrievalFunction"
+                                     pagingtype="'PagingOnScroll'">
 
-                        <vr-datagridcolumn headertext="'CDPN'" field="'CDPN'" type="'Text'" onclicked="onClickedCDPN" isclickable="true"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'" type="'Text'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Time'" field="'Time'" type="'Datetime'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Duration (Sec)'" field="'DurationInSec'" type="'Number'"></vr-datagridcolumn>
-                    </vr-datagrid>
+                            <vr-datagridcolumn headertext="'CDPN'" field="'CDPN'" type="'Text'" onclicked="onClickedCDPN" isclickable="true"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Time'" field="'Time'" type="'Datetime'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Duration (Sec)'" field="'DurationInSec'" type="'Number'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
+                   
                 </vr-columns>
                 <vr-columns width="1/2row" ng-show="showPartnerGrid">
-                    <vr-datagrid on-ready="onPartnerGridReady"
-                                 datasource="partnerCDRs"
-                                 dataretrievalfunction="dataRetrievalFunction"
-                                 pagingtype="'PagingOnScroll'"
-                                 defaultsortbyfieldname="'CDPN'">
-                        <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting isfielddynamic="true">
-                            <vr-check value="dataItem.IsSelected" onvaluechanged="viewScope.onSelectedRow(dataItem)"></vr-check>
-                        </vr-datagridcolumn>
+                    <vr-section title="Partner CDRs">
+                        <vr-label>Select Match CDR.</vr-label>
+                        <vr-datagrid on-ready="onPartnerGridReady"
+                                     datasource="partnerCDRs"
+                                     dataretrievalfunction="dataRetrievalFunction"
+                                     pagingtype="'PagingOnScroll'"
+                                     defaultsortbyfieldname="'CDPN'">
+                            <vr-datagridcolumn headertext="'Selected'" widthfactor="3" disablesorting isfielddynamic="true">
+                                <vr-check value="dataItem.IsSelected" onvaluechanged="viewScope.onSelectedRow(dataItem)"></vr-check>
+                            </vr-datagridcolumn>
 
-                        <vr-datagridcolumn headertext="'CDPN'" field="'CDPN'" type="'Text'" widthfactor="3"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'" type="'Text'" widthfactor="3"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Time'" field="'Time'" type="'Datetime'" widthfactor="3"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Duration (Sec)'" field="'DurationInSec'" type="'Number'" widthfactor="3"></vr-datagridcolumn>
-                    </vr-datagrid>
+                            <vr-datagridcolumn headertext="'CDPN'" field="'CDPN'" type="'Text'" widthfactor="3"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'" type="'Text'" widthfactor="3"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Time'" field="'Time'" type="'Datetime'" widthfactor="3"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Duration (Sec)'" field="'DurationInSec'" type="'Number'" widthfactor="3"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
+                       
                 </vr-columns>
             </vr-row>
         </vr-form>
@@ -36,7 +44,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="scopeModal.save" formname="formTimeOffsetHelper"></vr-button>
+                <vr-button type="Ok" data-onclick="scopeModal.save" formname="formTimeOffsetHelper"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

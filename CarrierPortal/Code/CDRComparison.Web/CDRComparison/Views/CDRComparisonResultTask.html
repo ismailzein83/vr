@@ -5,10 +5,19 @@
                 <vr-tab header="'Summary'">
                     <vr-row>
                         <vr-columns width="fullrow" dontload="true">
-                            <vr-label>All CDRs Count: {{scopeModal.allCDRsCount}}</vr-label><br>
-                            <vr-label>Missing CDRs Count: {{scopeModal.missingCDRsCount}}</vr-label><br>
-                            <vr-label>Partial Match CDRs Count: {{scopeModal.partialMatchCDRsCount}}</vr-label><br>
-                            <vr-label>Dispute CDRs Count: {{scopeModal.disputeCDRsCount}}</vr-label>
+                            <vr-label>Total CDRs: {{scopeModal.allCDRsCount}}</vr-label><br>
+                        </vr-columns>
+                        <vr-columns width="1/2row" dontload="true">
+                            <vr-label>System Missing CDRs: {{scopeModal.systemMissingCDRsCount}}</vr-label><br>
+                        </vr-columns>
+                        <vr-columns width="1/2row" dontload="true">
+                            <vr-label>Partner Missing CDRs: {{scopeModal.partnerMissingCDRsCount}}</vr-label><br>
+                        </vr-columns>
+                        <vr-columns width="1/2row" dontload="true">
+                            <vr-label>Partial Match CDRs: {{scopeModal.partialMatchCDRsCount}}</vr-label><br>
+                        </vr-columns>
+                        <vr-columns width="1/2row" dontload="true">
+                            <vr-label>Match CDRs: {{scopeModal.disputeCDRsCount}}</vr-label>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
