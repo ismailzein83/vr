@@ -60,13 +60,13 @@ namespace CDRComparison.BP.Activities
             {
                 cdrSourceConfig.CDRSourceConfigId = (int)cdrSourceConfigId;
                 if (!cdrSourceConfigDataManager.UpdateCDRSourceConfig(cdrSourceConfig))
-                    throw new Exception("Update failed");
+                    throw new Exception("Update failed: Another CDR source configuration with the same name already exists");
             }
             else
             {
                 int insertedId;
                 if (!cdrSourceConfigDataManager.InsertCDRSourceConfig(cdrSourceConfig, out insertedId))
-                    throw new Exception("Insert failed");
+                    throw new Exception("Insert failed: Another CDR source configuration with the same name already exists");
             }
         }
         

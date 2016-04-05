@@ -42,8 +42,8 @@
             BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
                 bpInstanceId = response.bpInstanceId;
                 if (response != null && response.TaskData != null) {
-                    systemConfigId = response.SystemCDRSourceConfigId;
-                    partnerConfigId = response.PartnerCDRSourceConfigId;
+                    systemConfigId = response.TaskData.SystemCDRSourceConfigId;
+                    partnerConfigId = response.TaskData.PartnerCDRSourceConfigId;
                 }
                 loadAllControls();
             })
@@ -70,6 +70,7 @@
                         $scope.scopeModel.systemConfigName = response.Name;
                         $scope.scopeModel.isSystemConfigNameDisabled = true;
                     }
+                    systemConfigNameGetDeferred.resolve();
                 }).catch(function (error) {
                     systemConfigNameGetDeferred.reject(error);
                 });
@@ -90,6 +91,7 @@
                         $scope.scopeModel.partnerConfigName = response.Name;
                         $scope.scopeModel.isPartnerConfigNameDisabled = true;
                     }
+                    partnerConfigNameGetDeferred.resolve();
                 }).catch(function (error) {
                     partnerConfigNameGetDeferred.reject(error);
                 });
