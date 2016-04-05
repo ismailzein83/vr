@@ -27,24 +27,24 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
 
         public void ProcessCountryCodes(IProcessCountryCodesContext context)
-        {            
-           ZonesByName newAndExistingZones = new ZonesByName();
-           context.NewAndExistingZones = newAndExistingZones;
-           ProcessCountryCodes(context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate);
-           context.NewCodes = context.ImportedCodes.SelectMany(itm => itm.NewCodes);
-           context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is NewZone)).Select(itm => itm as NewZone);
-           context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
-           context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
+        {
+            ZonesByName newAndExistingZones = new ZonesByName();
+            context.NewAndExistingZones = newAndExistingZones;
+            ProcessCountryCodes(context.ImportedCodes, context.ExistingCodes, newAndExistingZones, context.ExistingZones, context.DeletedCodesDate, context.PriceListDate);
+            context.NewCodes = context.ImportedCodes.SelectMany(itm => itm.NewCodes);
+            context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is NewZone)).Select(itm => itm as NewZone);
+            context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
+            context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
         }
 
-        private ExistingZonesByName StructureExistingZonesByName(IEnumerable <ExistingZone> existingZones)
+        private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
             ExistingZonesByName existingZonesByName = new ExistingZonesByName();
             List<ExistingZone> existingZonesList = null;
 
             foreach (ExistingZone item in existingZones)
             {
-                if(!existingZonesByName.TryGetValue(item.Name, out existingZonesList))
+                if (!existingZonesByName.TryGetValue(item.Name, out existingZonesList))
                 {
                     existingZonesList = new List<ExistingZone>();
                     existingZonesByName.Add(item.Name, existingZonesList);
@@ -53,7 +53,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 existingZonesList.Add(item);
             }
 
-            return existingZonesByName;            
+            return existingZonesByName;
         }
 
         private ExistingCodesByCodeValue StructureExistingCodesByCodeValue(IEnumerable<ExistingCode> existingCodes)
@@ -72,10 +72,10 @@ namespace TOne.WhS.SupplierPriceList.Business
                 existingCodesList.Add(item);
             }
 
-            return existingCodesByCodeValue;  
+            return existingCodesByCodeValue;
         }
 
-        private void ProcessCountryCodes(IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, DateTime codeCloseDate)
+        private void ProcessCountryCodes(IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones, DateTime codeCloseDate, DateTime priceListDate)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
@@ -89,7 +89,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     bool shouldNotAddCode;
                     string recentCodeZoneName;
                     CloseExistingOverlapedCodes(importedCode, matchExistingCodes, out shouldNotAddCode, out recentCodeZoneName);
-                    if(!shouldNotAddCode)
+                    if (!shouldNotAddCode)
                     {
                         if (recentCodeZoneName != null && importedCode.ZoneName != recentCodeZoneName)
                         {
@@ -109,7 +109,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     importedCode.ChangeType = CodeChangeType.New;
                     AddImportedCode(importedCode, newAndExistingZones, existingZonesByName);
                 }
-                if(importedCode.BED < DateTime.Now)
+                if (importedCode.BED < priceListDate)
                 {
                     switch (importedCode.ChangeType)
                     {
@@ -165,7 +165,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         private bool AddImportedCode(ImportedCode importedCode, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
         {
             List<IZone> zones;
-            if(!newAndExistingZones.TryGetValue(importedCode.ZoneName, out zones))
+            if (!newAndExistingZones.TryGetValue(importedCode.ZoneName, out zones))
             {
                 zones = new List<IZone>();
                 List<ExistingZone> matchExistingZones;
@@ -179,7 +179,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 codeGroup = this.GetMatchCodeGroupUsedForTesting(importedCode.Code);
             else
                 codeGroup = codeGroupManager.GetMatchCodeGroup(importedCode.Code);
-            
+
             if (codeGroup == null)
             {
                 AddValidationError(importedCode, CodeValidationType.NoCodeGroup);
@@ -199,7 +199,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                         if (!shouldAddMoreCodes)
                             break;
                     }
-                    if(zone.CountryId != codeGroup.CountryId)
+                    if (zone.CountryId != codeGroup.CountryId)
                     {
                         AddValidationError(importedCode, CodeValidationType.CodeGroupWrongCountry);
                         return false;
@@ -209,7 +209,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                         break;
                 }
             }
-            if(shouldAddMoreCodes)
+            if (shouldAddMoreCodes)
             {
                 NewZone newZone = AddNewZone(addedZones, importedCode.ZoneName, codeGroup.CountryId, currentCodeBED, importedCode.EED);
                 AddNewCode(importedCode, codeGroup.CodeGroupId, ref currentCodeBED, newZone, out shouldAddMoreCodes);
@@ -252,7 +252,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 BED = currentCodeBED,
                 EED = importedCode.EED
             };
-            if(newCode.EED.VRGreaterThan(zone.EED))//this means that zone has EED value
+            if (newCode.EED.VRGreaterThan(zone.EED))//this means that zone has EED value
             {
                 newCode.EED = zone.EED;
                 currentCodeBED = newCode.EED.Value;
