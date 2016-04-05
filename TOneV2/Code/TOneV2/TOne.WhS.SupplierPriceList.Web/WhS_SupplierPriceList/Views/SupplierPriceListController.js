@@ -34,7 +34,7 @@
                     SupplierAccountId: carrierAccountDirectiveAPI.getSelectedIds(),
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     FileId: $scope.zoneList.fileId,
-                    DeletedCodesDate: $scope.priceListDate
+                    PriceListDate: $scope.priceListDate
                 };
                 var input = {
                     InputArguments: inputArguments
@@ -64,7 +64,7 @@
 
             $scope.previewSupplierPriceList = function () {
                 WhS_SupPL_SupplierPriceListService.previewSupplierPriceList(228);
-            }       
+            }
 
 
             $scope.carrierAccountSelectItem = function (dataItem) {
@@ -75,9 +75,9 @@
                     $scope.isLoadingCurrencySelector = true;
                     WhS_BE_CarrierAccountAPIService.GetCarrierAccountCurrency(selectedCarrierAccountId).then(function (currencyId) {
 
-                       currencyDirectiveAPI.selectedCurrency(currencyId);
-                       $scope.isLoadingCurrencySelector = false;
-                   })
+                        currencyDirectiveAPI.selectedCurrency(currencyId);
+                        $scope.isLoadingCurrencySelector = false;
+                    })
                 }
             }
         }
