@@ -6,11 +6,14 @@
 
     function CDRComparisonController($scope, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, CDRComparison_CDRSourceConfigAPIService, WhS_BP_CreateProcessResultEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
 
-        var systemSourceConfigSelectorAPI;
-        var systemSourceConfigSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var systemConfigSelectorAPI;
+        var systemConfigSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var systemSelectiveAPI;
         var systemSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var partnerConfigSelectorAPI;
+        var partnerConfigSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var partnerSelectiveAPI;
         var partnerSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -20,9 +23,30 @@
 
         function defineScope() {
 
-            $scope.onSystemSourceConfigSelectorReady = function (api) {
-                systemSourceConfigSelectorAPI = api;
-                systemSourceConfigSelectorReadyDeferred.resolve();
+            $scope.onSystemConfigSelectorReady = function (api) {
+                systemConfigSelectorAPI = api;
+                systemConfigSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onPartnerConfigSelectorReady = function (api) {
+                partnerConfigSelectorAPI = api;
+                partnerConfigSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onSystemConfigSelected = function (selectedConfig) {
+                var loadSystemConfigFunction = function () {
+                    var systemSelectivePayload = { cdrSourceConfigId: selectedConfig.CDRSourceConfigId };
+                    return systemSelectiveAPI.load(systemSelectivePayload);
+                };
+                loadConfig(loadSystemConfigFunction);
+            };
+
+            $scope.onPartnerConfigSelected = function (selectedConfig) {
+                var loadPartnerConfigFunction = function () {
+                    var partnerSelectivePayload = { cdrSourceConfigId: selectedConfig.CDRSourceConfigId };
+                    return partnerSelectiveAPI.load(partnerSelectivePayload);
+                };
+                loadConfig(loadPartnerConfigFunction);
             };
 
             $scope.onSystemSelectiveReady = function (api) {
@@ -35,31 +59,19 @@
                 partnerSelectiveReadyDeferred.resolve();
             };
 
-            $scope.onSystemSourceConfigSelected = function (selectedConfig) {
-                $scope.isLoading = true;
-                var systemSelectivePayload = {
-                    cdrSourceConfigId: selectedConfig.CDRSourceConfigId
-                };
-                systemSelectiveAPI.load(systemSelectivePayload).finally(function () {
-                    $scope.isLoading = false;
-                });
-            };
-
-            $scope.saveSystemSourceConfig = function () {
-                var systemSourceConfig = {
-                    Name: 'System Source Config 1',
-                    CDRSource: systemSelectiveAPI.getData(),
-                    IsPartnerCDRSource: false
-                };
-                return CDRComparison_CDRSourceConfigAPIService.AddCDRSourceConfig(systemSourceConfig);
-            };
-
             $scope.start = function () {
+
                 var inputArguments = {
                     $type: "CDRComparison.BP.Arguments.CDRComparsionProcessInput, CDRComparison.BP.Arguments",
                     SystemCDRSource: systemSelectiveAPI.getData(),
-                    PartnerCDRSource: partnerSelectiveAPI.getData()
+                    PartnerCDRSource: partnerSelectiveAPI.getData(),
+                    SystemCDRSourceConfigId: systemConfigSelectorAPI.getSelectedIds(),
+                    PartnerCDRSourceConfigId: partnerConfigSelectorAPI.getSelectedIds()
                 };
+
+                if (selectedSystemConfigId != undefind) {
+
+                }
 
                 var input = {
                     InputArguments: inputArguments
@@ -77,24 +89,37 @@
         function load() {
             $scope.isLoading = true;
 
-            return UtilsService.waitMultipleAsyncOperations([loadSystemSourceConfigSelector, loadSystemSelective, loadPartnerSelective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadSystemConfigSelector, loadPartnerConfigSelector, loadSystemSelective, loadPartnerSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
             });
         }
 
-        function loadSystemSourceConfigSelector() {
-            var systemSourceConfigSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        function loadSystemConfigSelector() {
+            var systemConfigSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            systemSourceConfigSelectorReadyDeferred.promise.then(function () {
-                var systemSourceConfigPayload = {
+            systemConfigSelectorReadyDeferred.promise.then(function () {
+                var payload = {
                     filter: { IsPartnerCDRSource: false }
                 };
-                VRUIUtilsService.callDirectiveLoad(systemSourceConfigSelectorAPI, systemSourceConfigPayload, systemSourceConfigSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(systemConfigSelectorAPI, payload, systemConfigSelectorLoadDeferred);
             });
 
-            return systemSourceConfigSelectorLoadDeferred.promise;
+            return systemConfigSelectorLoadDeferred.promise;
+        }
+
+        function loadPartnerConfigSelector() {
+            var partnerConfigSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            partnerConfigSelectorReadyDeferred.promise.then(function () {
+                var payload = {
+                    filter: { IsPartnerCDRSource: true }
+                };
+                VRUIUtilsService.callDirectiveLoad(partnerConfigSelectorAPI, payload, partnerConfigSelectorLoadDeferred);
+            });
+
+            return partnerConfigSelectorLoadDeferred.promise;
         }
 
         function loadSystemSelective() {
@@ -117,6 +142,16 @@
             });
 
             return partnerSelectiveLoadDeferred.promise;
+        }
+
+        function loadConfig(loadConfigFunction) {
+            $scope.isLoading = true;
+
+            loadConfigFunction().catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
         }
     }
 

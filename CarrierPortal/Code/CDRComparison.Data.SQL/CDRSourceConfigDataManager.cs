@@ -43,6 +43,12 @@ namespace CDRComparison.Data.SQL
             return (affectedRows > 0);
         }
 
+        public bool UpdateCDRSourceConfig(CDRSourceConfig cdrSourceConfig)
+        {
+            int affectedRows = ExecuteNonQuerySP("dbo.sp_CDRSourceConfig_Update", cdrSourceConfig.CDRSourceConfigId, cdrSourceConfig.Name, Vanrise.Common.Serializer.Serialize(cdrSourceConfig.CDRSource), cdrSourceConfig.IsPartnerCDRSource);
+            return (affectedRows > 0);
+        }
+
         #endregion
 
         #region Mappers

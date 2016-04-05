@@ -161,6 +161,8 @@
     <Content Include="CDRComparison\Services\APIServices\PartialMatchCDRAPIService.js" />
     <Content Include="CDRComparison\Services\CDRComparisonService.js" />
     <Content Include="CDRComparison\Views\CDRComparison.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonConfigTask.html" />
+    <Content Include="CDRComparison\Views\CDRComparisonConfigTaskController.js" />
     <Content Include="CDRComparison\Views\CDRComparisonSettingsTask.html" />
     <Content Include="CDRComparison\Views\CDRComparisonSettingsTaskController.js" />
     <Content Include="CDRComparison\Views\CDRComparisonController.js" />

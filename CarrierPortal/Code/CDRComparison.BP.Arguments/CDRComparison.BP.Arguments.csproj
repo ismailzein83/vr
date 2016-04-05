@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="CDRComparsionProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\CDRComparisonConfigTaskData.cs" />
+    <Compile Include="Tasks\CDRComparisonConfigTaskExecutionInformation.cs" />
     <Compile Include="Tasks\ComparisonResultTaskData.cs" />
     <Compile Include="Tasks\ComparisonResultTaskExecutionInformation.cs" />
     <Compile Include="Tasks\SettingTaskData.cs" />

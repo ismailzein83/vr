@@ -12,5 +12,6 @@ namespace CDRComparison.Data
         IEnumerable<CDRSourceConfig> GetCDRSourceConfigs();
         bool AreCDRSourceConfigsUpdated(ref object updateHandle);
         bool InsertCDRSourceConfig(CDRSourceConfig cdrSourceConfig, out int insertedObjectId);
+        bool UpdateCDRSourceConfig(CDRSourceConfig cdrSourceConfig);
     }
 }

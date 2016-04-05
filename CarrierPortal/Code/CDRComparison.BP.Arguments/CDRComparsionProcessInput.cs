@@ -10,8 +10,12 @@ namespace CDRComparison.BP.Arguments
     public class CDRComparsionProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public CDRSource SystemCDRSource { get; set; }
-
+        
         public CDRSource PartnerCDRSource { get; set; }
+
+        public int? SystemCDRSourceConfigId { get; set; }
+
+        public int? PartnerCDRSourceConfigId { get; set; }
 
         public override string GetTitle()
         {
