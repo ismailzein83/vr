@@ -69,15 +69,9 @@
                     PartnerCDRSourceConfigId: partnerConfigSelectorAPI.getSelectedIds()
                 };
 
-                if (selectedSystemConfigId != undefind) {
-
-                }
-
                 var input = {
                     InputArguments: inputArguments
                 };
-
-                console.log(input);
 
                 return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                     if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
