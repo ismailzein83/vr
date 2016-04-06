@@ -22,8 +22,7 @@ namespace TOne.WhS.BusinessEntity.Business
                  (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
                  (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(prod.SellingNumberPlanId))
-                  &&
-                 (input.Query.RoutingProductsIds == null || input.Query.RoutingProductsIds.Contains(prod.DefaultRoutingProductId));
+                 ;
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSellingProducts.ToBigResult(input, filterExpression, SellingProductDetailMapper));
         }
@@ -177,15 +176,8 @@ namespace TOne.WhS.BusinessEntity.Business
             sellingProductDetail.Entity = sellingProduct;
 
             SellingNumberPlanManager sellingNumberPlanManager = new SellingNumberPlanManager();
-            RoutingProductManager routingProductManager = new RoutingProductManager();
             SellingNumberPlan sellingNumberPlan = sellingNumberPlanManager.GetSellingNumberPlan(sellingProduct.SellingNumberPlanId);
 
-            if (sellingProduct.DefaultRoutingProductId.HasValue)
-            {
-                RoutingProduct routingProduct = routingProductManager.GetRoutingProduct(sellingProduct.DefaultRoutingProductId.Value);
-                if (routingProduct != null)
-                    sellingProductDetail.DefaultRoutingProductName = routingProduct.Name;
-            }
             if (sellingNumberPlan != null)
             {
                 sellingProductDetail.SellingNumberPlanName = sellingNumberPlan.Name;

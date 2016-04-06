@@ -11,6 +11,5 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public SellingProduct Entity { get; set; }
         public string SellingNumberPlanName { get; set; }
-        public string DefaultRoutingProductName { get; set; }
     }
 }

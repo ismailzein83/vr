@@ -51,7 +51,7 @@
                 getSellingProduct().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            routeRuleEntity = undefined;
+                            sellingProductEntity = undefined;
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);

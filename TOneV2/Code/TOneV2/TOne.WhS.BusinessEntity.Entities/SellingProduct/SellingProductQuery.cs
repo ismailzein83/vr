@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -10,7 +6,5 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public string Name { get; set; }
         public List<int> SellingNumberPlanIds { get; set; }
-
-        public List<int?> RoutingProductsIds { get; set; }
     }
 }

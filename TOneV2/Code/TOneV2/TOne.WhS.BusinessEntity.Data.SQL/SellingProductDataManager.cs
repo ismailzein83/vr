@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
 
@@ -26,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             object sellingProductId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Insert", out sellingProductId, sellingProduct.Name, sellingProduct.DefaultRoutingProductId, sellingProduct.SellingNumberPlanId,
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Insert", out sellingProductId, sellingProduct.Name,  sellingProduct.SellingNumberPlanId,
                 Vanrise.Common.Serializer.Serialize(sellingProduct.Settings));
 
             insertedId = (int)sellingProductId;
@@ -34,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(SellingProduct sellingProduct)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name, sellingProduct.DefaultRoutingProductId, sellingProduct.SellingNumberPlanId,
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name,  sellingProduct.SellingNumberPlanId,
                 Vanrise.Common.Serializer.Serialize(sellingProduct.Settings));
             return (recordsEffected > 0);
         }
@@ -63,7 +59,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SellingProductId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                DefaultRoutingProductId = GetReaderValue<int?>(reader, "DefaultRoutingProductID"),
                 SellingNumberPlanId = (int)reader["SellingNumberPlanID"],
                 Settings = ((reader["Settings"] as string) != null) ? Vanrise.Common.Serializer.Deserialize<SellingProductSettings>(reader["Settings"] as string) : null,
             };

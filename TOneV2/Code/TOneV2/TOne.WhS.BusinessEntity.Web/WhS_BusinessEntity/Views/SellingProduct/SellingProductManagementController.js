@@ -8,9 +8,7 @@
         var gridReady;
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var routingProductDirectiveAPI;
-        var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+       
         defineScope();
         load();
 
@@ -29,10 +27,7 @@
                 sellingNumberPlanReadyPromiseDeferred.resolve();
               
             }
-            $scope.onRoutingProductDirectiveReady = function (api) {
-                routingProductDirectiveAPI = api;
-                routingProductReadyPromiseDeferred.resolve();
-            }
+           
             $scope.AddNewSellingProduct = AddNewSellingProduct;
         }
 
@@ -41,7 +36,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans, loadRoutingProducts])
+            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
@@ -62,24 +57,12 @@
                 });
             return sellingNumberPlanLoadPromiseDeferred.promise;
         }
-        function loadRoutingProducts() {
-            var routingProductLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            routingProductReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload;
-
-                    VRUIUtilsService.callDirectiveLoad(routingProductDirectiveAPI, directivePayload, routingProductLoadPromiseDeferred);
-                });
-            return routingProductLoadPromiseDeferred.promise;
-        }
 
         function getFilterObject() {
 
             var data = {
                 name: $scope.name,
-                SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                RoutingProductsIds: routingProductDirectiveAPI.getSelectedIds(),
+                SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds()
             };
             return data;
         }
