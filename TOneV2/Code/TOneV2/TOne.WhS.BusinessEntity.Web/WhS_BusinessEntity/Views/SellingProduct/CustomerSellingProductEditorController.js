@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerSellingProductEditorController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService'];
+    customerSellingProductEditorController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService'];
 
-    function customerSellingProductEditorController($scope, WhS_BE_CustomerSellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function customerSellingProductEditorController($scope, WhS_BE_CustomerSellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService) {
 
         var sellingProductDirectiveAPI;
         var sellingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -20,14 +20,14 @@
         loadParameters();
         load();
 
-        function loadParameters(){
+        function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 customerSellingProductId = parameters.CustomerSellingProductId;
-               sellingProductId = parameters.SellingProductId;
+                sellingProductId = parameters.SellingProductId;
                 $scope.carrierAccountId = parameters.CarrierAccountId;
             }
-            isEditMode = (customerSellingProductId!=undefined)
+            isEditMode = (customerSellingProductId != undefined)
             $scope.disableSellingProduct = (sellingProductId != undefined);
             $scope.disableCarrierAccount = ($scope.carrierAccountId != undefined || isEditMode);
 
@@ -42,7 +42,6 @@
                     return insertCustomerSellingProduct();
                 }
             };
-
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -62,13 +61,17 @@
                     }
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountDirectiveAPI, payload, setLoader);
                 }
-              
+
             }
-
             $scope.beginEffectiveDate = new Date();
-           
+            $scope.validateEffectiveDate = function () {
+                var today = new Date();
+                today.setHours(0, 0, 0, 0)
+                var yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+                return VRValidationService.validateTimeRange(yesterday, $scope.beginEffectiveDate);
+            }
         }
-
         function load() {
             $scope.isLoading = true;
             if (isEditMode) {
@@ -83,11 +86,11 @@
                 });
             }
             else {
-   
+
                 loadAllControls();
             }
-           
-                 
+
+
         }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, isAssignableCustomerToSellingProduct, loadFilterBySection, loadSellingProducts, loadCarrierAccounts])
@@ -107,45 +110,42 @@
             if (customerSellingProductEntity != undefined) {
                 $scope.beginEffectiveDate = customerSellingProductEntity.BED
             }
-           
+
         }
         function getCustomerSellingProduct() {
             return WhS_BE_CustomerSellingProductAPIService.GetCustomerSellingProduct(customerSellingProductId).then(function (customerSellingProduct) {
                 customerSellingProductEntity = customerSellingProduct;
             });
         }
-
         function loadSellingProducts() {
             var sellingProductLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             sellingProductReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = { selectedIds: sellingProductId != undefined ? sellingProductId : customerSellingProductEntity != undefined ? customerSellingProductEntity.SellingProductId : undefined, filter:{AssignableToSellingProductId: $scope.carrierAccountId }}
+                    var directivePayload = { selectedIds: sellingProductId != undefined ? sellingProductId : customerSellingProductEntity != undefined ? customerSellingProductEntity.SellingProductId : undefined, filter: { AssignableToSellingProductId: $scope.carrierAccountId } }
 
                     VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, directivePayload, sellingProductLoadPromiseDeferred);
                 });
             return sellingProductLoadPromiseDeferred.promise;
         }
-
         function loadCarrierAccounts() {
             var carrierAccountLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             carrierAccountReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                      
+
                         selectedIds: $scope.carrierAccountId != undefined ? [$scope.carrierAccountId] : customerSellingProductEntity != undefined ? [customerSellingProductEntity.CustomerId] : undefined
                     }
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, carrierAccountLoadPromiseDeferred);
                 });
             return carrierAccountLoadPromiseDeferred.promise;
         }
-
         function insertCustomerSellingProduct() {
             var customerSellingProductObject = buildSellingProductObjFromScope();
             return WhS_BE_CustomerSellingProductAPIService.AddCustomerSellingProduct(customerSellingProductObject)
             .then(function (response) {
-               
+
                 if (VRNotificationService.notifyOnItemAdded("Customer Selling Product", response)) {
                     {
                         if ($scope.onCustomerSellingProductAdded != undefined)
@@ -153,7 +153,7 @@
                         $scope.modalContext.closeModal();
                     }
                 }
-               
+
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
@@ -170,7 +170,7 @@
                     BED: $scope.beginEffectiveDate,
                 };
             } else {
-               
+
                 obj = [];
                 for (var i = 0; i < selectedCustomers.length; i++) {
                     obj.push({
@@ -180,26 +180,24 @@
                     });
                 }
             }
-           
+
             return obj;
         }
-
-        function isAssignableCustomerToSellingProduct() {  
-            if ($scope.carrierAccountId != undefined)
-            {
+        function isAssignableCustomerToSellingProduct() {
+            if ($scope.carrierAccountId != undefined) {
                 return WhS_BE_CustomerSellingProductAPIService.IsAssignableCustomerToSellingProduct($scope.carrierAccountId).then(function (response) {
                     if (response == true) {
                         VRNotificationService.showError("This Customer Is Assigned to Selling Product");
                         $scope.modalContext.closeModal();
                     }
-                       
+
                 });
             }
-          
+
         }
         function updateCustomerSellingProduct() {
             var customerSellingProductObject = buildSellingProductObjFromScope();
-            customerSellingProductObject.CustomerSellingProductId=customerSellingProductId;
+            customerSellingProductObject.CustomerSellingProductId = customerSellingProductId;
             WhS_BE_CustomerSellingProductAPIService.UpdateCustomerSellingProduct(customerSellingProductObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Customer Selling Product", response)) {
@@ -212,6 +210,6 @@
             });
         }
     }
-    
+
     appControllers.controller('WhS_BE_CustomerSellingProductEditorController', customerSellingProductEditorController);
 })(appControllers);
