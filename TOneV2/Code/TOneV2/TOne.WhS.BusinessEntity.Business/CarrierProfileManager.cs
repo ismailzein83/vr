@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Business
                   (input.Query.Company == null || prod.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
                  &&
 
-                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || input.Query.CountriesIds.Contains(prod.Settings.CountryId))
+                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || (prod.Settings.CountryId.HasValue && input.Query.CountriesIds.Contains(prod.Settings.CountryId.Value)))
                  &&
                  (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId));
 
@@ -142,7 +142,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-        
+
         #region  Mappers
         private CarrierProfileInfo CarrierProfileInfoMapper(CarrierProfile carrierProfile)
         {
@@ -158,8 +158,8 @@ namespace TOne.WhS.BusinessEntity.Business
             carrierProfileDetail.Entity = carrierProfile;
 
             CountryManager countryManager = new CountryManager();
-            if (carrierProfile.Settings != null)
-                carrierProfileDetail.CountryName = countryManager.GetCountryName(carrierProfile.Settings.CountryId);
+            if (carrierProfile.Settings != null && carrierProfile.Settings.CountryId.HasValue)
+                carrierProfileDetail.CountryName = countryManager.GetCountryName(carrierProfile.Settings.CountryId.Value);
 
             return carrierProfileDetail;
         }

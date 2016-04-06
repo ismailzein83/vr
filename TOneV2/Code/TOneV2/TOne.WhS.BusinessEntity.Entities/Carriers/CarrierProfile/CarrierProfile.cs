@@ -12,15 +12,15 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string Name { get; set; }
 
-        public CarrierProfileSettings Settings { get; set;  }
+        public CarrierProfileSettings Settings { get; set; }
     }
     public class CarrierProfileSettings
     {
         public string Company { get; set; }
 
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
 
-        public int CityId { get; set; }
+        public int? CityId { get; set; }
 
         public string RegistrationNumber { get; set; }
 
@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<string> Faxes { get; set; }
 
-        public string  Website { get; set; }
+        public string Website { get; set; }
 
         public string Address { get; set; }
 
