@@ -26,7 +26,8 @@ as (select * from (values
 ('VRCommon/City/GetCitiesInfo',null),
 ('VRCommon/City/GetCity',null),
 ('VRCommon/City/AddCity','VRCommon_Country: Add City'),
-('VRCommon/City/UpdateCity',null)
+('VRCommon/City/UpdateCity',null),
+('VRCommon/LogAttribute/GetFilteredLoggers','VRCommon_LogAttribute: View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -49,7 +50,8 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'VRCommon_Country','Country',2,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]')
+(301,'VRCommon_Country','Country',2,0,'["View", "Add", "Edit", "Download Template", "Upload", "Add City"]'),
+(302,'VRCommon_LogAttribute','Logs',2,0,'["View"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -96,7 +98,8 @@ as (select * from (values
 (1002,'Cities','Cities','#/view/Common/Views/City/CityManagement',102,'VRCommon/City/GetFilteredCities',null,null,null,0,10),
 (1003,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',102,null,null,null,null,0,15),
 (1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,null,null,null,null,0,20),
-(1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,null,null,null,null,0,25)
+(1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,null,null,null,null,0,25),
+(1006,'System Logs','System Logs','#/view/Common/Views/logger/LoggerManagement',1,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,10)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
