@@ -21,8 +21,7 @@ namespace CDRComparison.Business
         {
             ICDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
             dataManager.TableNameKey = input.Query.TableKey;
-            IEnumerable<CDR> cdrs = dataManager.GetCDRs(input.Query.IsPartnerCDRs,input.Query.CDPN);
-            return DataRetrievalManager.Instance.ProcessResult(input, cdrs.ToBigResult(input, null));
+            return DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredCDRs(input));
         }
     }
 }

@@ -14,7 +14,7 @@ namespace CDRComparison.Data
         void CreateCDRTempTable();
         void ApplyCDRsToDB(object preparedCDRs);
         void DeleteCDRTable();
-        IEnumerable<CDR> GetCDRs(bool isPartnerCDRs, string CDPN);
+        Vanrise.Entities.BigResult<CDR> GetFilteredCDRs(Vanrise.Entities.DataRetrievalInput<CDRQuery> input);
         int GetAllCDRsCount();
     }
 }

@@ -12,7 +12,7 @@ namespace CDRComparison.Data
     {
         void ApplyDisputeCDRsToDB(object preparedNumberProfiles);
         void CreateDisputeCDRTempTable();
-        IEnumerable<DisputeCDR> GetDisputeCDRs();
+        Vanrise.Entities.BigResult<DisputeCDR> GetFilteredDisputeCDRs(Vanrise.Entities.DataRetrievalInput<DisputeCDRQuery> input);
         void DeleteDisputeCDRTable();
         int GetDisputeCDRsCount();
     }

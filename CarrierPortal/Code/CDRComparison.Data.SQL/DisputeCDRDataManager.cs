@@ -64,10 +64,15 @@ namespace CDRComparison.Data.SQL
             query.Replace("#TEMPTABLE#",this.TableName);
             ExecuteNonQueryText(query.ToString(), null);
         }
-        public IEnumerable<DisputeCDR> GetDisputeCDRs()
+        public Vanrise.Entities.BigResult<DisputeCDR> GetFilteredDisputeCDRs(Vanrise.Entities.DataRetrievalInput<DisputeCDRQuery> input)
         {
-            return GetItemsText(GetDisputeCDRsQuery(), DisputeCDRMapper, null);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                CreateTempTableIfNotExists(input, tempTableName);
+            };
+            return RetrieveData(input, createTempTableAction, DisputeCDRMapper);
         }
+
         public int GetDisputeCDRsCount()
         {
             object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}",this.TableName), null);
@@ -135,28 +140,30 @@ namespace CDRComparison.Data.SQL
 
         #region Private Methods
 
-        private string GetDisputeCDRsQuery()
+        private void CreateTempTableIfNotExists(Vanrise.Entities.DataRetrievalInput<DisputeCDRQuery> input, string tempTableName)
         {
-            StringBuilder query = new StringBuilder();
-            query.Append
-            (
-                @"SELECT [ID]
-                    [OriginalSystemCDPN],
-                    [OriginalPartnerCDPN],
-                    [OriginalSystemCGPN],
-                    [OriginalPartnerCGPN],
-	                [SystemCDPN],
-	                [PartnerCDPN],
-	                [SystemCGPN],
-	                [PartnerCGPN],
-	                [SystemTime],
-	                [PartnerTime],
-	                [SystemDurationInSec],
-	                [PartnerDurationInSec]
-                FROM #TEMPTABLE# WITH(NOLOCK)"
-            );
-            query.Replace("#TEMPTABLE#", this.TableName);
-            return query.ToString();
+            StringBuilder createTempTableQueryBuilder = new StringBuilder(@"
+                                                                IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
+                                                              BEGIN 
+                                                               SELECT [ID]
+                                                                    [OriginalSystemCDPN],
+                                                                    [OriginalPartnerCDPN],
+                                                                    [OriginalSystemCGPN],
+                                                                    [OriginalPartnerCGPN],
+	                                                                [SystemCDPN],
+	                                                                [PartnerCDPN],
+	                                                                [SystemCGPN],
+	                                                                [PartnerCGPN],
+	                                                                [SystemTime],
+	                                                                [PartnerTime],
+	                                                                [SystemDurationInSec],
+	                                                                [PartnerDurationInSec]
+                                                                INTO #TEMPTABLE#
+	                                                            FROM #TABLENAME#                
+                                                            END");
+            createTempTableQueryBuilder.Replace("#TEMPTABLE#", tempTableName);
+            createTempTableQueryBuilder.Replace("#TABLENAME#", this.TableName);
+            ExecuteNonQueryText(createTempTableQueryBuilder.ToString(), null);
         }
 
         DisputeCDR DisputeCDRMapper(IDataReader reader)

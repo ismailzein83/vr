@@ -18,8 +18,7 @@ namespace CDRComparison.Business
         {
             IDisputeCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IDisputeCDRDataManager>();
             dataManager.TableNameKey = input.Query.TableKey;
-            IEnumerable<DisputeCDR> disputeCDRs = dataManager.GetDisputeCDRs();
-            return DataRetrievalManager.Instance.ProcessResult(input, disputeCDRs.ToBigResult(input, null));
+            return DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredDisputeCDRs(input));
         }
 
         public int GetDisputeCDRsCount(string tableKey)

@@ -79,6 +79,14 @@ namespace CDRComparison.Data.SQL
             object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}",this.TableName), null);
             return (int)count;
         }
+        public Vanrise.Entities.BigResult<CDR> GetFilteredCDRs(Vanrise.Entities.DataRetrievalInput<CDRQuery> input)
+        {
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                CreateTempTableIfNotExists(input, tempTableName);
+            };
+            return RetrieveData(input, createTempTableAction, CDRMapper);
+        }
         protected override string TableNamePrefix
         {
             get
@@ -156,39 +164,33 @@ namespace CDRComparison.Data.SQL
             query.Replace("#TEMPTABLE#", this.TableName);
             return query.ToString();
         }
-        private string GetCDRsQuery(bool isPartnerCDRs,string CDPN)
+        private void CreateTempTableIfNotExists(Vanrise.Entities.DataRetrievalInput<CDRQuery> input, string tempTableName)
         {
-            StringBuilder query = new StringBuilder();
-            query.Append
-            (
-                @"SELECT [ID],
-                    [OriginalCDPN],
-                    [OriginalCGPN],
-		            [CDPN],
-		            [CGPN],
-		            [IsPartnerCDR],
-		            [AttemptTime],
-		            [Duration]
-	            FROM  #TEMPTABLE#  WHERE IsPartnerCDR = #ISPARTNERCDRS# #ADDITIONALQUERY#
-	            ORDER BY [CDPN]"
-            );
+            StringBuilder createTempTableQueryBuilder = new StringBuilder(@"
+                                                                IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
+                                                              BEGIN 
+                                                              SELECT [ID],
+                                                                    [OriginalCDPN],
+                                                                    [OriginalCGPN],
+		                                                            [CDPN],
+		                                                            [CGPN],
+		                                                            [IsPartnerCDR],
+		                                                            [AttemptTime],
+		                                                            [Duration]
+                                                                INTO #TEMPTABLE#
+	                                                            FROM #TABLENAME#   
+                                                                WHERE IsPartnerCDR = #ISPARTNERCDRS# #ADDITIONALQUERY#             
+                                                            END");
             string cdpnQuery = "";
-            if(CDPN !=null)
+            if (input.Query.CDPN != null)
             {
-                cdpnQuery = string.Format("and [CDPN]= '{0}'",CDPN);
+                cdpnQuery = string.Format("and [CDPN]= '{0}'", input.Query.CDPN);
             }
-            query.Replace("#ISPARTNERCDRS#", (isPartnerCDRs ? "1" : "0"));
-            query.Replace("#ADDITIONALQUERY#", cdpnQuery);
-            query.Replace("#TEMPTABLE#", this.TableName);
-            return query.ToString();
-        }
-
-        #endregion
-
-
-        public IEnumerable<CDR> GetCDRs(bool isPartnerCDRs,string CDPN)
-        {
-            return GetItemsText(GetCDRsQuery(isPartnerCDRs, CDPN), CDRMapper, null);
+            createTempTableQueryBuilder.Replace("#TEMPTABLE#", tempTableName);
+            createTempTableQueryBuilder.Replace("#ISPARTNERCDRS#", (input.Query.IsPartnerCDRs ? "1" : "0"));
+            createTempTableQueryBuilder.Replace("#ADDITIONALQUERY#",cdpnQuery );
+            createTempTableQueryBuilder.Replace("#TABLENAME#", this.TableName);
+            ExecuteNonQueryText(createTempTableQueryBuilder.ToString(), null);
         }
         CDR CDRMapper(IDataReader reader)
         {
@@ -203,5 +205,7 @@ namespace CDRComparison.Data.SQL
                 IsPartnerCDR = GetReaderValue<bool>(reader, "IsPartnerCDR")
             };
         }
+        #endregion
+      
     }
 }

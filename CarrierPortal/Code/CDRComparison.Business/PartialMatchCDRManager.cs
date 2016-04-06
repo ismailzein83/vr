@@ -18,8 +18,7 @@ namespace CDRComparison.Business
         {
             IPartialMatchCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IPartialMatchCDRDataManager>();
             dataManager.TableNameKey = input.Query.TableKey;
-            IEnumerable<PartialMatchCDR> partialMatchCDRs = dataManager.GetPartialMatchCDRs();
-            return DataRetrievalManager.Instance.ProcessResult(input, partialMatchCDRs.ToBigResult(input, null));
+            return DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredPartialMatchCDRs(input));
         }
 
         public int GetPartialMatchCDRsCount(string tableKey)

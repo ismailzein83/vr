@@ -44,10 +44,15 @@ namespace CDRComparison.Data.SQL
             ExecuteNonQueryText(query.ToString(), null);
         }
 
-        public IEnumerable<PartialMatchCDR> GetPartialMatchCDRs()
+        public Vanrise.Entities.BigResult<PartialMatchCDR> GetFilteredPartialMatchCDRs(Vanrise.Entities.DataRetrievalInput<PartialMatchCDRQuery> input)
         {
-            return GetItemsText(GetPartialMatchCDRsQuery(), PartialMatchCDRMapper, null);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                CreateTempTableIfNotExists(input, tempTableName);
+            };
+            return RetrieveData(input, createTempTableAction, PartialMatchCDRMapper);
         }
+  
         public void CreatePartialMatchCDRTempTable()
         {
           
@@ -139,30 +144,32 @@ namespace CDRComparison.Data.SQL
 
         #region Private Methods
 
-        private string GetPartialMatchCDRsQuery()
-        {
-            StringBuilder query = new StringBuilder();
-            query.Append
-            (
-                @"SELECT TOP 1000 [ID]
-                    [OriginalSystemCDPN],
-                    [OriginalPartnerCDPN],
-                    [OriginalSystemCGPN],
-                    [OriginalPartnerCGPN],
-                    [SystemCDPN],
-                    [PartnerCDPN],
-                    [SystemCGPN],
-                    [PartnerCGPN],
-                    [SystemTime],
-                    [PartnerTime],
-                    [SystemDurationInSec],
-                    [PartnerDurationInSec]
-                FROM #TEMPTABLE#"
-            );
-            query.Replace("#TEMPTABLE#", this.TableName);
-            return query.ToString();
-        }
 
+        private void CreateTempTableIfNotExists(Vanrise.Entities.DataRetrievalInput<PartialMatchCDRQuery> input, string tempTableName)
+        {
+            StringBuilder createTempTableQueryBuilder = new StringBuilder(@"
+                                                                IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
+                                                              BEGIN 
+                                                              SELECT [ID]
+                                                                    [OriginalSystemCDPN],
+                                                                    [OriginalPartnerCDPN],
+                                                                    [OriginalSystemCGPN],
+                                                                    [OriginalPartnerCGPN],
+                                                                    [SystemCDPN],
+                                                                    [PartnerCDPN],
+                                                                    [SystemCGPN],
+                                                                    [PartnerCGPN],
+                                                                    [SystemTime],
+                                                                    [PartnerTime],
+                                                                    [SystemDurationInSec],
+                                                                    [PartnerDurationInSec]
+                                                                INTO #TEMPTABLE#
+	                                                            FROM #TABLENAME#                
+                                                            END");
+            createTempTableQueryBuilder.Replace("#TEMPTABLE#", tempTableName);
+            createTempTableQueryBuilder.Replace("#TABLENAME#", this.TableName);
+            ExecuteNonQueryText(createTempTableQueryBuilder.ToString(), null);
+        }
         PartialMatchCDR PartialMatchCDRMapper(IDataReader reader)
         {
             return new PartialMatchCDR()
