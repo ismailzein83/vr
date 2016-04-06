@@ -2,9 +2,9 @@
 
     "use strict";
 
-    codeGroupEditorController.$inject = ['$scope', 'WhS_BE_CodeGroupAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService','VRUIUtilsService'];
+    codeGroupEditorController.$inject = ['$scope', 'WhS_BE_CodeGroupAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function codeGroupEditorController($scope, WhS_BE_CodeGroupAPIService, VRNotificationService, VRNavigationService, UtilsService,VRUIUtilsService) {
+    function codeGroupEditorController($scope, WhS_BE_CodeGroupAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var codeGroupId;
         var codeGroupEntity;
@@ -12,21 +12,19 @@
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var editMode;
-        var disableCountry;
 
         defineScope();
 
         loadParameters();
-       
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 codeGroupId = parameters.CodeGroupId;
                 countryId = parameters.CountryId;
-                disableCountry = parameters.disableCountry
             }
             editMode = (codeGroupId != undefined);
-            $scope.disableCountry = ((countryId != undefined) && !editMode) || disableCountry == true;
+            $scope.disableCountry = (countryId != undefined);
             load();
         }
 
@@ -37,19 +35,19 @@
                 countryReadyPromiseDeferred.resolve();
             }
             $scope.saveCodeGroup = function () {
-                    if (editMode) {
-                        return updateCodeGroup();
-                    }
-                    else {
-                        return insertCodeGroup();
-                    }
+                if (editMode) {
+                    return updateCodeGroup();
+                }
+                else {
+                    return insertCodeGroup();
+                }
             };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
 
-            
+
 
         }
 
@@ -68,7 +66,7 @@
             else {
                 loadAllControls();
             }
-           
+
         }
 
         function getCodeGroup() {
@@ -95,7 +93,7 @@
             var countryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             countryReadyPromiseDeferred.promise.then(function () {
                 var directivePayload = {
-                    selectedIds: codeGroupEntity != undefined ? codeGroupEntity.CountryId :(countryId != undefined) ?countryId: undefined
+                    selectedIds: codeGroupEntity != undefined ? codeGroupEntity.CountryId : (countryId != undefined) ? countryId : undefined
                 }
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
             });
@@ -133,7 +131,7 @@
             $scope.isGettingData = true;
             return WhS_BE_CodeGroupAPIService.AddCodeGroup(codeGroupObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Code Group", response,"Code")) {
+                if (VRNotificationService.notifyOnItemAdded("Code Group", response, "Code")) {
                     if ($scope.onCodeGroupAdded != undefined)
                         $scope.onCodeGroupAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
