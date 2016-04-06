@@ -32,6 +32,7 @@
             $scope.scopeModal.selectedTimeMarginTimeUnit = CDRComparison_TimeUnitEnum.Milliseconds;
             $scope.scopeModal.selectedDurationMarginTimeUnit = CDRComparison_TimeUnitEnum.Milliseconds;
             $scope.scopeModal.timeOffset = '00:00:00';
+            $scope.scopeModal.compareCGPN = false;
             $scope.scopeModal.openHelper = function()
             {
                 var onTimeOffsetSelected = function (timeOffset) {
@@ -84,6 +85,7 @@
                         $scope.scopeModal.timeMargin = response.SettingsTaskExecutionInfo.TimeMargin;
                         $scope.scopeModal.selectedTimeMarginTimeUnit = UtilsService.getEnum(CDRComparison_TimeUnitEnum, 'value', response.SettingsTaskExecutionInfo.TimeMarginTimeUnit);
                         $scope.scopeModal.timeOffset = response.SettingsTaskExecutionInfo.TimeOffset;
+                        $scope.scopeModal.compareCGPN = response.SettingsTaskExecutionInfo.CompareCGPN; 
                     }
                     configSettingsLoadDeferred.resolve();
                 }).catch(function (error) {
@@ -108,7 +110,8 @@
                 DurationMarginTimeUnit: $scope.scopeModal.selectedDurationMarginTimeUnit.value,
                 TimeMargin: $scope.scopeModal.timeMargin,
                 TimeMarginTimeUnit: $scope.scopeModal.selectedTimeMarginTimeUnit.value,
-                TimeOffset: timeOffset
+                TimeOffset: timeOffset,
+                CompareCGPN: $scope.scopeModal.compareCGPN 
             };
 
             var input = {

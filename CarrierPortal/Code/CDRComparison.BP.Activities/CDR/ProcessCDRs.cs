@@ -22,6 +22,7 @@ namespace CDRComparison.BP.Activities
         public BaseQueue<MissingCDRBatch> OutputQueueMissingCDR { get; set; }
         public BaseQueue<PartialMatchCDRBatch> OutputQueuePartialMatchCDR { get; set; }
         public BaseQueue<DisputeCDRBatch> OutputQueueDisputeCDR { get; set; }
+        public bool CompareCGPN { get; set; }
     }
 
     #endregion
@@ -38,6 +39,8 @@ namespace CDRComparison.BP.Activities
         public InArgument<long> TimeMarginInMilliseconds { get; set; }
         [RequiredArgument]
         public InArgument<TimeSpan> TimeOffset { get; set; }
+        [RequiredArgument]
+        public InArgument<bool> CompareCGPN { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<MissingCDRBatch>> OutputQueueMissingCDR { get; set; }
         [RequiredArgument]
@@ -115,6 +118,8 @@ namespace CDRComparison.BP.Activities
                 OutputQueueMissingCDR = this.OutputQueueMissingCDR.Get(context),
                 OutputQueuePartialMatchCDR = this.OutputQueuePartialMatchCDR.Get(context),
                 OutputQueueDisputeCDR = this.OutputQueueDisputeCDR.Get(context),
+                CompareCGPN = this.CompareCGPN.Get(context),
+                
             };
         }
 
@@ -136,7 +141,7 @@ namespace CDRComparison.BP.Activities
                 var partnerCDRs = cdrBatch.CDRs.Where(x => x.IsPartnerCDR).ToList();
                 foreach (var cdr in systemCDRs)
                 {
-                    var partnerCDR = partnerCDRs.FindAllRecords(x => x.CGPN == cdr.CGPN && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) <= inputArgument.TimeMarginInMilliseconds);
+                    var partnerCDR = partnerCDRs.FindAllRecords(x => (inputArgument.CompareCGPN ? x.CGPN == cdr.CGPN:true) && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) <= inputArgument.TimeMarginInMilliseconds);
                     if (partnerCDR == null || partnerCDR.Count() == 0)
                     {
                         missingCDRBatch.MissingCDRs.Add(new MissingCDR

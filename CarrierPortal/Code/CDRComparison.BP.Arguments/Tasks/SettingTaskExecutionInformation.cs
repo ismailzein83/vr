@@ -16,5 +16,6 @@ namespace CDRComparison.BP.Arguments
         public long TimeMargin { get; set; }
         public TimeUnitEnum TimeMarginTimeUnit { get; set; }
         public TimeSpan TimeOffset { get; set; }
+        public bool CompareCGPN  { get; set; }
     }
 }
