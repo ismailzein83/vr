@@ -21,8 +21,9 @@
                                                        hideremoveicon isrequired="isRequiredSellingProductSelector">
                     </vr-whs-be-sellingproduct-selector>
                 </vr-columns>
-                <vr-columns width="normal" ng-show="showCarrierAccountSelector">
+                <span ng-show="showCarrierAccountSelector">
                     <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
+                                                       normal-col-num="2"
                                                        ismultipleselection
                                                        selectedvalues="selectedCustomer"
                                                        onselectionchanged="onCarrierAccountChanged"
@@ -30,7 +31,7 @@
                                                        hideremoveicon isrequired="isRequiredCarrierAccountSelector">
 
                     </vr-whs-be-carrieraccount-selector>
-                </vr-columns>
+                </span>
             </vr-row>
         </div>
         <vr-row removeline>
