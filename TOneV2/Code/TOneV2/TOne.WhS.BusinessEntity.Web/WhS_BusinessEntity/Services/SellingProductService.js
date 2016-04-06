@@ -7,8 +7,7 @@
     function SellingProductService(WhS_BE_SellingProductAPIService, VRModalService, VRNotificationService) {
         return ({
             addSellingProduct: addSellingProduct,
-            editSellingProduct: editSellingProduct,
-            deleteSellingProduct: deleteSellingProduct
+            editSellingProduct: editSellingProduct
         });
 
         function addSellingProduct(onSellingProductAdded) {
@@ -34,21 +33,6 @@
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/SellingProductEditor.html', parameters, modalSettings);
         }
 
-        function deleteSellingProduct($scope, sellingProductObj, onSellingProductDeleted) {
-            VRNotificationService.showConfirmation()
-                .then(function (response) {
-                    if (response) {
-                        return WhS_BE_SellingProductAPIService.DeleteSellingProduct(sellingProductObj.SellingProductId)
-                            .then(function (deletionResponse) {
-                                VRNotificationService.notifyOnItemDeleted("Selling Product", deletionResponse);
-                                onSellingProductDeleted(sellingProductObj);
-                            })
-                            .catch(function (error) {
-                                VRNotificationService.notifyException(error, $scope);
-                            });
-                    }
-                });
-        }
     }
 
     appControllers.service('WhS_BE_SellingProductService', SellingProductService);

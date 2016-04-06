@@ -13,8 +13,6 @@ namespace TOne.WhS.BusinessEntity.Data
         bool Insert(SellingProduct sellingProduct, out int insertedId);
 
         bool Update(SellingProduct sellingProduct);
-
-        bool Delete(int sellingProductId);
         bool AreSellingProductsUpdated(ref object updateHandle);
     }
 }

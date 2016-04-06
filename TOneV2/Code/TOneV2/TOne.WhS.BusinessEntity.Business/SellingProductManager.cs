@@ -124,23 +124,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-        public TOne.Entities.DeleteOperationOutput<object> DeleteSellingProduct(int sellingProductId)
-        {
-            ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
-
-            TOne.Entities.DeleteOperationOutput<object> deleteOperationOutput = new TOne.Entities.DeleteOperationOutput<object>();
-            deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
-
-            bool deleteActionSucc = dataManager.Delete(sellingProductId);
-
-            if (deleteActionSucc)
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
-            }
-
-            return deleteOperationOutput;
-        }
 
         #endregion
 

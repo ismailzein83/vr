@@ -20,10 +20,6 @@
         function UpdateSellingProduct(sellingProductObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SellingProduct","UpdateSellingProduct"), sellingProductObject);
         }
-        function DeleteSellingProduct(sellingProductId) {
-            
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SellingProduct","DeleteSellingProduct"), { sellingProductId: sellingProductId });
-        }
         function GetSellingProductsInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "SellingProduct", "GetSellingProductsInfo"), {
                 serializedFilter: serializedFilter
@@ -34,7 +30,6 @@
             GetFilteredSellingProducts: GetFilteredSellingProducts,
             AddSellingProduct: AddSellingProduct,
             UpdateSellingProduct: UpdateSellingProduct,
-            DeleteSellingProduct: DeleteSellingProduct,
             GetSellingProduct: GetSellingProduct,
             GetSellingProductsInfo: GetSellingProductsInfo
         });

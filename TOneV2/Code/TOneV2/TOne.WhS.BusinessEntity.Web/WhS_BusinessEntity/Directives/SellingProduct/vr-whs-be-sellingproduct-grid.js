@@ -93,10 +93,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                 clicked: editSellingProduct,
             },
            {
-               name: "Delete",
-               clicked: deleteSellingProduct,
-           },
-           {
                name: "Assign Customer",
                clicked:assignCustomer
            }
@@ -126,13 +122,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                 }
             };
             WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded, dataItem.Entity);
-        }
-        function deleteSellingProduct(sellingProductObj) {
-            var onSellingProductDeleted = function (gridObject) {
-                gridAPI.itemDeleted(gridObject);
-            };
-
-            WhS_BE_SellingProductService.deleteSellingProduct($scope, sellingProductObj.Entity, onSellingProductDeleted);
         }
     }
 

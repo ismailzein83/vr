@@ -52,13 +52,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
              SellingProductManager manager = new SellingProductManager();
              return manager.UpdateSellingProduct(sellingProduct);
          }
-
-         [HttpGet]
-         [Route("DeleteSellingProduct")]
-         public TOne.Entities.DeleteOperationOutput<object> DeleteSellingProduct(int sellingProductId)
-         {
-             SellingProductManager manager = new SellingProductManager();
-             return manager.DeleteSellingProduct(sellingProductId);
-         } 
+        
     }
 }

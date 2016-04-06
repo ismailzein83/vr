@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             object sellingProductId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Insert", out sellingProductId, sellingProduct.Name,  sellingProduct.SellingNumberPlanId,
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Insert", out sellingProductId, sellingProduct.Name, sellingProduct.SellingNumberPlanId,
                 Vanrise.Common.Serializer.Serialize(sellingProduct.Settings));
 
             insertedId = (int)sellingProductId;
@@ -30,14 +30,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(SellingProduct sellingProduct)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name,  sellingProduct.SellingNumberPlanId,
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name, sellingProduct.SellingNumberPlanId,
                 Vanrise.Common.Serializer.Serialize(sellingProduct.Settings));
             return (recordsEffected > 0);
-        }
-        public bool Delete(int sellingProductId)
-        {
-            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Delete", sellingProductId);
-            return (recordesEffected > 0);
         }
         public bool AreSellingProductsUpdated(ref object updateHandle)
         {
@@ -65,6 +60,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return sellingProductDetail;
         }
         #endregion
-       
+
     }
 }
