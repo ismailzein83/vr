@@ -13,6 +13,8 @@ app.directive('vrExcelWs', function () {
                  rowHeaders: true,
                  colHeaders: true,
                  outsideClickDeselects: false,
+                 colWidths:100,
+                 mergeCells: scope.data.MergedCells,
                  height: 320
             })
             var data = [];
@@ -26,6 +28,7 @@ app.directive('vrExcelWs', function () {
                 }
 
             }
+            console.log(data)
 
             
 

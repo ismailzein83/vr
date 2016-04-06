@@ -1,6 +1,7 @@
 ﻿using Aspose.Cells;
 using ExcelConversion.Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -28,7 +29,29 @@ namespace ExcelConversion.Business
             ExcelWorkbook ewb = new ExcelWorkbook() { Sheets = new List<ExcelWorksheet>() };
             foreach(var sheet in workbook.Worksheets)
             {
-                ExcelWorksheet eSheet = new ExcelWorksheet() { Rows = new List<ExcelRow>() };
+                
+
+                ExcelWorksheet eSheet = new ExcelWorksheet() { 
+                    Rows = new List<ExcelRow>() ,
+                    MergedCells = new List<MergedCell>()
+                };
+                ArrayList mcells = sheet.Cells.MergedCells;
+
+
+
+                for (int i = 0; i < mcells.Count; i++)
+                {
+
+                    CellArea area = (CellArea)mcells[i];
+                    MergedCell mc = new MergedCell();
+                    mc.col = area.StartColumn ;
+                    mc.row = area.StartRow ;
+                    mc.rowspan = (area.EndRow - area.StartRow) +1;
+                    mc.colspan = (area.EndColumn - area.StartColumn)+1 ;
+                    eSheet.MergedCells.Add(mc);
+
+                }
+
                 ewb.Sheets.Add(eSheet);
                 eSheet.Name = sheet.Name;
                 int nbOfSheetColumns = 0;
@@ -43,7 +66,7 @@ namespace ExcelConversion.Business
                     {
                         var cell = row.GetCellOrNull(colIndex);
                         ExcelCell eCell = new ExcelCell();
-                        if (cell != null && cell.Value!=null)
+                        if (cell != null )
                         {
                             eCell.Value = cell.Value;
                             eRow.Cells.Add(eCell);
