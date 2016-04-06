@@ -1,0 +1,73 @@
+﻿<vr-row>
+    <vr-columns colnum="{{excelFileCtrl.normalColNum}}">
+        <div style="float: left; margin-top: 3px;">
+            <vr-label>Read Sample</vr-label>
+        </div>
+        <div style="float: left;">
+            <vr-button type="Download" standalone="true" data-onclick="scopeModel.readSample"></vr-button>
+        </div>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingSampleGrid">
+        <vr-section title="Field Mapping">
+            <div style="overflow-x:auto;">
+                <div ng-style="{'width': scopeModel.gridColumns.length * 100 + 'px'}">
+                    <vr-validator validate="scopeModel.validateFieldMappings()">
+                        <vr-datagrid datasource="scopeModel.headerGridSource"
+                                     hidegridmenu="true"
+                                     norowhighlightonclick="'true'">
+                            <vr-datagridcolumn ng-repeat="column in scopeModel.gridColumns" headertext="column.name" tag="column" disablesorting>
+                                <div ng-init="columnIndex = viewScope.scopeModel.gridColumns.indexOf(colDef.tag)" style="padding: 3px 5px 3px 0px;">
+                                    <vr-select datasource="dataItem.cells[columnIndex].fields"
+                                               selectedvalues="dataItem.cells[columnIndex].selectedField"
+                                               datavaluefield="value"
+                                               datatextfield="description">
+                                    </vr-select>
+                                </div>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                    <vr-datagrid datasource="scopeModel.sampleData"
+                                 hideheader="true"
+                                 hidegridmenu="true"
+                                 norowhighlightonclick="'true'">
+                        <vr-datagridcolumn ng-repeat="column in scopeModel.gridColumns" field="'Data[' + $index + ']'" disablesorting></vr-datagridcolumn>
+                    </vr-datagrid>
+                </div>
+            </div>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns colnum="{{excelFileCtrl.normalColNum}}">
+        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="excelFileCtrl.isrequired"
+                    hint="yyyy: 2008 year
+                    <br>  yyy : 008 year
+                    <br>  yy  : 08 year
+                    <br>  MMMM: March month
+                    <br>  MMM : Mar month
+                    <br>  MM : 03 month
+                    <br>  M : 3 month
+                    <br>  dddd: Sunday day
+                    <br>  ddd : Sun day
+                    <br>  dd : 09 day
+                    <br>  d: 9 day
+                    <br>  HH: 16 hour
+                    <br>  H : 16 hour
+                    <br>  hh  : 04 hour
+                    <br>  h : 4 hour
+                    <br>  mm: 05 minute
+                    <br>  m: 5 minute
+                    <br>  ss: 07 second
+                    <br>  s: 7 second
+                    <br>  tt: PM A.M. or P.M.
+                    <br>  t: P A.M. or P.M.
+                    "></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns colnum="{{excelFileCtrl.normalColNum}}">
+        <vr-switch value="scopeModel.firstRowHeader" label="First Row Header"></vr-switch>
+    </vr-columns>
+</vr-row>

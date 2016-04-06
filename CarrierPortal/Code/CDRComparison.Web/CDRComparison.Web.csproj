@@ -137,6 +137,7 @@
     <Content Include="CDRComparison\Constant\TimeUnitEnum.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-cdrsource-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-cdrsourceconfig-selector.js" />
+    <Content Include="CDRComparison\Directives\cdrcomparison-excelfilereader.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filereader-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-filescdrsource.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-flatfilereader.js" />
@@ -148,6 +149,7 @@
     <Content Include="CDRComparison\Directives\Grids\Templates\MissingCDRGridTemplate.html" />
     <Content Include="CDRComparison\Directives\Grids\Templates\PartialMatchCDRGridTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\CDRSourceSelectiveTemplate.html" />
+    <Content Include="CDRComparison\Directives\Templates\ExcelFileReaderTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\FileReaderSelectiveTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\FileCDRSourceTemplate.html" />
     <Content Include="CDRComparison\Directives\Templates\FlatFileReaderTemplate.html" />
