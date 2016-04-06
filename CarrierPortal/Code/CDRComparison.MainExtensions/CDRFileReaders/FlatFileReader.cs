@@ -35,6 +35,7 @@ namespace CDRComparison.MainExtensions.CDRFileReaders
             string line;
             if (this.FirstRowHeader)
                 context.TryReadLine(out line);
+
             while (context.TryReadLine(out line))
             {
                 string[] fields = line.Split(this.Delimiter);
@@ -54,8 +55,14 @@ namespace CDRComparison.MainExtensions.CDRFileReaders
                         cdr.ExtraFields.Add(fldMapping.FieldName, fldValue);
                 }
                 cdrs.Add(cdr);
+                if(cdrs.Count == 100000)
+                {
+                    context.OnCDRsReceived(cdrs);
+                    cdrs = new List<CDR>();
+                }
             }
-            context.OnCDRsReceived(cdrs);
+            if (cdrs.Count > 0)
+                context.OnCDRsReceived(cdrs);
         }
 
         public override CDRSample ReadSample(IReadSampleFromFileContext context)

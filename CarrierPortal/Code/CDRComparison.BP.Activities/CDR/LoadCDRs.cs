@@ -50,7 +50,9 @@ namespace CDRComparison.BP.Activities
 
         protected override void DoWork(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Reading CDRs from {0} Source", !inputArgument.IsPartnerCDRs ? "System" : "Partner");
             SetNumberNormalizationSettings(inputArgument.CDRSource.NormalizationRules);
+            long totalCount = 0;
 
             Action<IEnumerable<CDR>> onCDRsReceived = (cdrs) =>
             {
@@ -70,11 +72,14 @@ namespace CDRComparison.BP.Activities
                     list.Add(item);
                 }
                 var cdrBatch = new CDRBatch() { CDRs = list };
+                totalCount += cdrs.Count();
+                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} CDRs loaded from {1} Source", totalCount, !inputArgument.IsPartnerCDRs ? "System" : "Partner");
                 inputArgument.OutputQueue.Enqueue(cdrBatch);
             };
 
             var context = new ReadCDRsFromSourceContext(onCDRsReceived);
             inputArgument.CDRSource.ReadCDRs(context);
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finished Loading CDRs from {0} Source", !inputArgument.IsPartnerCDRs ? "System" : "Partner");
         }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)

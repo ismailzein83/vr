@@ -18,8 +18,7 @@ namespace CDRComparison.Business
         {
             IMissingCDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<IMissingCDRDataManager>();
             dataManager.TableNameKey = input.Query.TableKey;
-            IEnumerable<MissingCDR> missingCDRs = dataManager.GetMissingCDRs(input.Query.IsPartnerCDRs);
-            return DataRetrievalManager.Instance.ProcessResult(input, missingCDRs.ToBigResult(input, null));
+            return DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredMissingCDRs(input));
         }
 
         public int GetMissingCDRsCount(string tableKey,bool isPartnerCDRs)

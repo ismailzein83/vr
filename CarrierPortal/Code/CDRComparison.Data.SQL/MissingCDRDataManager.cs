@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,9 +38,39 @@ namespace CDRComparison.Data.SQL
             query.Replace("#TEMPTABLE#", this.TableName);
             ExecuteNonQueryText(query.ToString(), null);
         }
-        public IEnumerable<MissingCDR> GetMissingCDRs(bool isPartnerCDRs)
+
+        public Vanrise.Entities.BigResult<MissingCDR> GetFilteredMissingCDRs(Vanrise.Entities.DataRetrievalInput<MissingCDRQuery> input)
         {
-            return GetItemsText(GetMissingCDRsQuery(isPartnerCDRs), MissingCDRMapper, null);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                CreateTempTableIfNotExists(input, tempTableName);
+            };
+            return RetrieveData(input, createTempTableAction, MissingCDRMapper);
+        }
+
+        private void CreateTempTableIfNotExists(Vanrise.Entities.DataRetrievalInput<MissingCDRQuery> input, string tempTableName)
+        {
+            StringBuilder createTempTableQueryBuilder = new StringBuilder(@"
+                                                                IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
+                                                              BEGIN 
+                                                                SELECT [ID],
+                                                                    [OriginalCDPN],
+                                                                    [OriginalCGPN],
+		                                                            [CDPN],
+		                                                            [CGPN],
+		                                                            [Time],
+		                                                            [DurationInSec],
+		                                                            [IsPartnerCDR]
+                                                                INTO #TEMPTABLE#
+	                                                            FROM #TABLENAME#                
+	                                                            WHERE IsPartnerCDR = @IsPartnerCDRs
+                                                            END");
+            createTempTableQueryBuilder.Replace("#TEMPTABLE#", tempTableName);
+            createTempTableQueryBuilder.Replace("#TABLENAME#", this.TableName);
+            ExecuteNonQueryText(createTempTableQueryBuilder.ToString(), (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@IsPartnerCDRs", input.Query.IsPartnerCDRs));
+            });
         }
 
         public int GetMissingCDRsCount(bool isPartnerCDRs)

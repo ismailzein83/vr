@@ -140,7 +140,7 @@ namespace CDRComparison.Data.SQL
             StringBuilder query = new StringBuilder();
             query.Append
             (
-                @"SELECT TOP 1000 [ID]
+                @"SELECT [ID]
                     [OriginalSystemCDPN],
                     [OriginalPartnerCDPN],
                     [OriginalSystemCGPN],
@@ -153,7 +153,7 @@ namespace CDRComparison.Data.SQL
 	                [PartnerTime],
 	                [SystemDurationInSec],
 	                [PartnerDurationInSec]
-                FROM #TEMPTABLE#"
+                FROM #TEMPTABLE# WITH(NOLOCK)"
             );
             query.Replace("#TEMPTABLE#", this.TableName);
             return query.ToString();

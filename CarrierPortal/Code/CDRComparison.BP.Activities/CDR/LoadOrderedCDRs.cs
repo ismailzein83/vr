@@ -38,9 +38,8 @@ namespace CDRComparison.BP.Activities
             base.OnBeforeExecute(context, handle);
         }
         protected override void DoWork(LoadOrderedCDRsInput inputArgument, AsyncActivityHandle handle)
-        {
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Started Loading CDRs");
-            long batchSize = 10000;
+        {            
+            long batchSize = 100000;
             List<CDR> CDRs = new List<CDR>();
             ICDRDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRDataManager>();
             dataManager.TableNameKey = inputArgument.TableKey;
@@ -64,9 +63,6 @@ namespace CDRComparison.BP.Activities
                 inputArgument.OutputQueue.Enqueue(new CDRBatch() { CDRs = CDRs });
                 CDRs = new List<CDR>();
             }
-
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Finished Loading CDRs");
-
         }
         protected override LoadOrderedCDRsInput GetInputArgument(AsyncCodeActivityContext context)
         {

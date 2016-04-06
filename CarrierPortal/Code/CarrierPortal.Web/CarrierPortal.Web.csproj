@@ -50,6 +50,9 @@
     <Reference Include="Aspose.Cells">
       <HintPath>..\..\..\Vanrise\Code\Vanrise.Common\bin\Debug\Aspose.Cells.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
