@@ -36,7 +36,7 @@
                 $scope.scopeModel.gridColumns = [];
                 $scope.scopeModel.sampleData = [];
                 $scope.scopeModel.headerGridSource = [];
-                $scope.scopeModel.firstRowIndex = 0;
+                $scope.scopeModel.firstRowHeader = false;
                 $scope.scopeModel.readSample = function () {
                     return readSample();
                 };
@@ -77,7 +77,9 @@
                         $scope.scopeModel.delimiter = payload.Delimiter;
                         if (payload.DateTimeFormat != undefined)
                             $scope.scopeModel.dateTimeFormat = payload.DateTimeFormat;
-                        $scope.scopeModel.firstRowIndex = payload.FirstRowIndex;
+                        if (payload.FirstRowIndex !=undefined)
+                        $scope.scopeModel.firstRowHeader = payload.FirstRowIndex != 0
+                      
                         flatFileId = payload.fileId;
                         fieldMappings = payload.FieldMappings;
                     }
@@ -96,7 +98,7 @@
                         Delimiter: $scope.scopeModel.delimiter,
                         FieldMappings: buildFieldMappings(),
                         DateTimeFormat: $scope.scopeModel.dateTimeFormat,
-                        FirstRowIndex: $scope.scopeModel.firstRowIndex
+                        FirstRowIndex:$scope.scopeModel.firstRowHeader? 1:0 
                     };
 
                     function buildFieldMappings() {

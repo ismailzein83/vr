@@ -26,8 +26,11 @@
         function defineScope() {
 
             $scope.scopeModal = {};
+            $scope.scopeModal.timeMargin = 0;
+            $scope.scopeModal.durationMargin = 0;
             $scope.scopeModal.durations = UtilsService.getArrayEnum(CDRComparison_TimeUnitEnum);
-
+            $scope.scopeModal.selectedTimeMarginTimeUnit = CDRComparison_TimeUnitEnum.Milliseconds;
+            $scope.scopeModal.selectedDurationMarginTimeUnit = CDRComparison_TimeUnitEnum.Milliseconds;
             $scope.scopeModal.timeOffset = '00:00:00';
             $scope.scopeModal.openHelper = function()
             {
