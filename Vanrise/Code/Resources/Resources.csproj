@@ -119,6 +119,7 @@
     <Content Include="Databases\TransactionDB\Data.sql" />
     <Content Include="Databases\TransactionDB\Schema.sql" />
     <Content Include="DLLs\Aspose.Cells.dll" />
+    <Content Include="DLLs\ICSharpCode.SharpZipLib.dll" />
     <Content Include="DLLs\Microsoft.AnalysisServices.AdomdClient.dll" />
     <Content Include="DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
     <Content Include="DLLs\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
