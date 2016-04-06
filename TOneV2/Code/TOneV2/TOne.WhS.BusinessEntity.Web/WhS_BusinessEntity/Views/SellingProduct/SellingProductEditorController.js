@@ -25,6 +25,7 @@
 
         function defineScope() {
             $scope.scopeModal = {}
+            $scope.scopeModal.isEditMode = isEditMode;
             $scope.scopeModal.saveSellingProduct = function () {
                 if (isEditMode) {
                     return updateSellingProduct();
