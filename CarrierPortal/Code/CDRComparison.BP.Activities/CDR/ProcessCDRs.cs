@@ -60,7 +60,7 @@ namespace CDRComparison.BP.Activities
             string currentCDPN = null;
             CDRBatch batch = new CDRBatch();
             batch.CDRs = new List<CDR>();
-
+            long totalCount = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -85,8 +85,8 @@ namespace CDRComparison.BP.Activities
                                     batch.CDRs.Add(cdr);
                                 }
                             }
-
-
+                            totalCount += cdrs.Count;
+                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} CDRs processed", totalCount);
                         });
                 }
                 while (!ShouldStop(handle) && hasItem);
@@ -97,13 +97,12 @@ namespace CDRComparison.BP.Activities
                 ProcessCDRBach(inputArgument, batch);
             }
 
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finished Processing CDRs.", totalCount);
         }
         private void ProcessCDRBach(ProcessCDRsInput inputArgument, CDRBatch cdrBatch)
         {
-
             if (cdrBatch != null)
             {
-
                 SetTimeOffsetConfiguration(inputArgument.TimeOffset, cdrBatch);
 
                 MissingCDRBatch missingCDRBatch = new Entities.MissingCDRBatch();
@@ -114,88 +113,89 @@ namespace CDRComparison.BP.Activities
                 disputeCDRBatch.DisputeCDRs = new List<DisputeCDR>();
                 var systemCDRs = cdrBatch.CDRs.Where(x => !x.IsPartnerCDR);
                 var partnerCDRs = cdrBatch.CDRs.Where(x => x.IsPartnerCDR).ToList();
-                    foreach (var cdr in systemCDRs)
+                foreach (var cdr in systemCDRs)
+                {
+                    var partnerCDR = partnerCDRs.FindAllRecords(x => x.CGPN == cdr.CGPN && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) <= inputArgument.TimeMarginInMilliSeconds);
+                    if (partnerCDR == null || partnerCDR.Count() == 0)
                     {
-                        var partnerCDR = partnerCDRs.FindAllRecords(x => x.CGPN == cdr.CGPN && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) <= inputArgument.TimeMarginInMilliSeconds);
-                        if (partnerCDR == null || partnerCDR.Count() == 0)
+                        missingCDRBatch.MissingCDRs.Add(new MissingCDR
                         {
-                            missingCDRBatch.MissingCDRs.Add(new MissingCDR
+                            CDPN = cdr.CDPN,
+                            Time = cdr.Time,
+                            DurationInSec = cdr.DurationInSec,
+                            CGPN = cdr.CGPN,
+                            OriginalCDPN = cdr.OriginalCDPN,
+                            IsPartnerCDR = cdr.IsPartnerCDR,
+                            OriginalCGPN = cdr.OriginalCGPN,
+                        });
+                    }
+                    else
+                    {
+                        var partner = partnerCDR.OrderBy(x => Math.Abs((x.Time - cdr.Time).TotalMilliseconds)).ThenBy(x => Math.Abs(x.DurationInSec - cdr.DurationInSec)).First();
+                        partnerCDRs.Remove(partner);
+                        if (Math.Abs(partner.DurationInSec - cdr.DurationInSec) <= inputArgument.DurationMarginInMilliSeconds)
+                        {
+                            disputeCDRBatch.DisputeCDRs.Add(new DisputeCDR
                             {
-                                CDPN = cdr.CDPN,
-                                Time = cdr.Time,
-                                DurationInSec = cdr.DurationInSec,
-                                CGPN = cdr.CGPN,
-                                OriginalCDPN = cdr.OriginalCDPN,
-                                IsPartnerCDR = cdr.IsPartnerCDR,
-                                OriginalCGPN = cdr.OriginalCGPN,
+                                SystemCDPN = cdr.CDPN,
+                                SystemTime = cdr.Time,
+                                SystemDurationInSec = cdr.DurationInSec,
+                                SystemCGPN = cdr.CGPN,
+                                PartnerTime = partner.Time,
+                                OriginalPartnerCDPN = partner.OriginalCDPN,
+                                OriginalSystemCDPN = cdr.OriginalCDPN,
+                                PartnerCDPN = partner.CDPN,
+                                PartnerDurationInSec = partner.DurationInSec,
+                                OriginalPartnerCGPN = partner.OriginalCGPN,
+                                OriginalSystemCGPN = cdr.OriginalCGPN,
+                                PartnerCGPN = partner.CGPN
                             });
                         }
                         else
                         {
-                            var partner = partnerCDR.OrderBy(x => Math.Abs((x.Time - cdr.Time).TotalMilliseconds)).First();
-                            partnerCDRs.Remove(partner);
-                            if (Math.Abs(partner.DurationInSec - cdr.DurationInSec) <= inputArgument.DurationMarginInMilliSeconds)
+                            partialMatchCDRBatch.PartialMatchCDRs.Add(new PartialMatchCDR
                             {
-                                disputeCDRBatch.DisputeCDRs.Add(new DisputeCDR
-                                {
-                                    SystemCDPN = cdr.CDPN,
-                                    SystemTime = cdr.Time,
-                                    SystemDurationInSec = cdr.DurationInSec,
-                                    SystemCGPN = cdr.CGPN,
-                                    PartnerTime = partner.Time,
-                                    OriginalPartnerCDPN = partner.OriginalCDPN,
-                                    OriginalSystemCDPN = cdr.OriginalCDPN,
-                                    PartnerCDPN = partner.CDPN,
-                                    PartnerDurationInSec = partner.DurationInSec,
-                                    OriginalPartnerCGPN = partner.OriginalCGPN,
-                                    OriginalSystemCGPN = cdr.OriginalCGPN,
-                                    PartnerCGPN = partner.CGPN
-                                });
-                            }
-                            else
-                            {
-                                partialMatchCDRBatch.PartialMatchCDRs.Add(new PartialMatchCDR
-                                {
-                                    SystemCDPN = cdr.CDPN,
-                                    SystemTime = cdr.Time,
-                                    SystemDurationInSec = cdr.DurationInSec,
-                                    SystemCGPN = cdr.CGPN,
-                                    PartnerTime = partner.Time,
-                                    OriginalPartnerCDPN = partner.OriginalCDPN,
-                                    OriginalSystemCDPN = cdr.OriginalCDPN,
-                                    PartnerCDPN = partner.CDPN,
-                                    PartnerDurationInSec = partner.DurationInSec,
-                                    OriginalPartnerCGPN = partner.OriginalCGPN,
-                                    OriginalSystemCGPN = cdr.OriginalCGPN,
-                                    PartnerCGPN = partner.CGPN
-
-                                });
-                            }
-                        }
-                    }
-                    if(partnerCDRs.Count() >0)
-                    {
-                        foreach (var partner in partnerCDRs)
-                        {
-                            missingCDRBatch.MissingCDRs.Add(new MissingCDR
-                            {
-                                Time = partner.Time,
-                                OriginalCDPN = partner.OriginalCDPN,
-                                CDPN = partner.CDPN,
-                                DurationInSec = partner.DurationInSec,
-                                OriginalCGPN = partner.OriginalCGPN,
-                                CGPN = partner.CGPN,
-                                IsPartnerCDR = partner.IsPartnerCDR
+                                SystemCDPN = cdr.CDPN,
+                                SystemTime = cdr.Time,
+                                SystemDurationInSec = cdr.DurationInSec,
+                                SystemCGPN = cdr.CGPN,
+                                PartnerTime = partner.Time,
+                                OriginalPartnerCDPN = partner.OriginalCDPN,
+                                OriginalSystemCDPN = cdr.OriginalCDPN,
+                                PartnerCDPN = partner.CDPN,
+                                PartnerDurationInSec = partner.DurationInSec,
+                                OriginalPartnerCGPN = partner.OriginalCGPN,
+                                OriginalSystemCGPN = cdr.OriginalCGPN,
+                                PartnerCGPN = partner.CGPN
 
                             });
                         }
                     }
+                }
+                if (partnerCDRs.Count() > 0)
+                {
+                    foreach (var partner in partnerCDRs)
+                    {
+                        missingCDRBatch.MissingCDRs.Add(new MissingCDR
+                        {
+                            Time = partner.Time,
+                            OriginalCDPN = partner.OriginalCDPN,
+                            CDPN = partner.CDPN,
+                            DurationInSec = partner.DurationInSec,
+                            OriginalCGPN = partner.OriginalCGPN,
+                            CGPN = partner.CGPN,
+                            IsPartnerCDR = partner.IsPartnerCDR
+
+                        });
+                    }
+                }
 
                 inputArgument.OutputQueueDisputeCDR.Enqueue(disputeCDRBatch);
                 inputArgument.OutputQueuePartialMatchCDR.Enqueue(partialMatchCDRBatch);
                 inputArgument.OutputQueueMissingCDR.Enqueue(missingCDRBatch);
             }
         }
+
         private void SetTimeOffsetConfiguration(TimeSpan timeOffset, CDRBatch cdrBatch)
         {
             foreach (var cdr in cdrBatch.CDRs)
