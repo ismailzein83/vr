@@ -16,8 +16,6 @@ namespace CarrierPortal.DevRuntime.Tasks
     {
         public void Execute()
         {
-            TestExcelConversion();
-            Console.ReadKey();
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
             var runtimeServices = new List<RuntimeService>();
