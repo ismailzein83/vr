@@ -2,7 +2,7 @@
 
     "use strict";
 
-    sellingProductEditorController.$inject = ['$scope', 'WhS_BE_SellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService','VRUIUtilsService'];
+    sellingProductEditorController.$inject = ['$scope', 'WhS_BE_SellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
     function sellingProductEditorController($scope, WhS_BE_SellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
@@ -94,8 +94,8 @@
 
             sellingNumberPlanReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload ={
-                        selectedIds:sellingProductEntity!=undefined?sellingProductEntity.SellingNumberPlanId:undefined
+                    var directivePayload = {
+                        selectedIds: sellingProductEntity != undefined ? sellingProductEntity.SellingNumberPlanId : undefined
                     }
 
                     VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, directivePayload, sellingNumberPlanLoadPromiseDeferred);
@@ -107,7 +107,7 @@
             var sellingProductObject = buildSellingProductObjFromScope();
             return WhS_BE_SellingProductAPIService.AddSellingProduct(sellingProductObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Selling Product", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Selling product", response, "name")) {
                     if ($scope.onSellingProductAdded != undefined)
                         $scope.onSellingProductAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -122,7 +122,7 @@
             var sellingProductObject = buildSellingProductObjFromScope();
             WhS_BE_SellingProductAPIService.UpdateSellingProduct(sellingProductObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Selling Product", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Selling product", response, "name")) {
                     if ($scope.onSellingProductUpdated != undefined)
                         $scope.onSellingProductUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

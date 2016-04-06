@@ -90,11 +90,15 @@ namespace TOne.WhS.BusinessEntity.Business
             if (insertActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                sellingProduct.SellingProductId = sellingProductId;
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 sellingProduct.SellingProductId = sellingProductId;
                 insertOperationOutput.InsertedObject = SellingProductDetailMapper(sellingProduct);
             }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
 
             return insertOperationOutput;
         }
@@ -113,6 +117,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = SellingProductDetailMapper(sellingProduct);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
 
             return updateOperationOutput;
@@ -158,9 +166,9 @@ namespace TOne.WhS.BusinessEntity.Business
                    return sellingProducts.ToDictionary(kvp => kvp.SellingProductId, kvp => kvp);
                });
         }
-         
+
         #endregion
-     
+
         #region  Mappers
         private SellingProductDetail SellingProductDetailMapper(SellingProduct sellingProduct)
         {
@@ -192,6 +200,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 Name = sellingProduct.Name,
             };
         }
-        #endregion      
+        #endregion
     }
 }
