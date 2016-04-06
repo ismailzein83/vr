@@ -369,7 +369,18 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
         return false;
     }
-
+    function getFilteredArrayFromArray(array,value,propName)
+    {
+        var filteredArray;
+        if (array.length > 0) {
+            filteredArray = [];
+            angular.forEach(array, function (val) {
+                if (val[propName] == value)
+                    filteredArray.push(val);
+            });
+        }
+        return filteredArray;
+    }
     function getPropValuesFromArray(array, propName) {
         var propValues;
         if (array.length > 0) {
@@ -722,7 +733,8 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         getSystemActionNames: getSystemActionNames,
         areDateTimesEqual: areDateTimesEqual,
         validateTimeOffset: validateTimeOffset,
-        getTimeOffset: getTimeOffset
+        getTimeOffset: getTimeOffset,
+        getFilteredArrayFromArray: getFilteredArrayFromArray
     });
 
 }]);

@@ -287,6 +287,9 @@
     <Content Include="Client\Javascripts\Directives\Tabs\vr-tab-directive.js" />
     <Content Include="Client\Javascripts\Directives\Tabs\vr-tabs-directive.js" />
     <Content Include="Client\Javascripts\Directives\Tabs\vr-tabs-header-directive.js" />
+    <Content Include="Client\Javascripts\Directives\TimeFormat\Templates\TimeFormatEditor.html" />
+    <Content Include="Client\Javascripts\Directives\TimeFormat\TimeFormateEditorController.js" />
+    <Content Include="Client\Javascripts\Directives\TimeFormat\vr-timeformat-directive.js" />
     <Content Include="Client\Javascripts\Directives\TimeRange\vr-timedimension-selector.js" />
     <Content Include="Client\Javascripts\Directives\TimeRange\vr-period-selector.js" />
     <Content Include="Client\Javascripts\Directives\TimeRange\vr-timerange-directive.js" />
