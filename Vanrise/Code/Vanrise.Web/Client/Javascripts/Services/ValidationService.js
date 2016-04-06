@@ -54,8 +54,7 @@
                 else
                     return null;
             }
-            else if (fromDate instanceof Object && toDate instanceof Object)
-            {
+            else if (fromDate instanceof Object && toDate instanceof Object) {
                 if (fromDate.Hour > toDate.Hour || (fromDate.Hour == toDate.Hour && fromDate.Minute > toDate.Minute))
                     return "Start should be before end";
                 else
@@ -71,13 +70,45 @@
                 else
                     return null;
             }
-             
 
+
+        }
+
+        function validateTimeEqualorGreaterthanToday(currentDate) {
+            var errorMessage = "Date cannot be in the past";
+            var today = new Date();
+            today.setHours(0, 0, 0, 0)
+
+            if (currentDate instanceof Date) {
+                if (currentDate == undefined)
+                    return null;
+                var from = new Date(currentDate);
+                if (from.getTime() < today.getTime())
+                    return errorMessage;
+                else
+                    return null;
+            }
+            else if (currentDate instanceof Object) {
+                if (currentDate.Hour < today.Hour || (currentDate.Hour == today.Hour && currentDate.Minute < today.Minute))
+                    return errorMessage;
+                else
+                    return null;
+            }
+            else if (typeof currentDate == 'string') {
+                if (currentDate == undefined)
+                    return null;
+                var from = new Date(currentDate);
+                if (from.getTime() < today.getTime())
+                    return errorMessage;
+                else
+                    return null;
+            }
         }
 
         return ({
             validate: validate,
-            validateTimeRange: validateTimeRange
+            validateTimeRange: validateTimeRange,
+            validateTimeEqualorGreaterthanToday: validateTimeEqualorGreaterthanToday
         });
     }
 
