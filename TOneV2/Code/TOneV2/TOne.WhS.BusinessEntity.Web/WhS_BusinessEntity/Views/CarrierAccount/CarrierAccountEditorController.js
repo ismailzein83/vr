@@ -34,6 +34,7 @@
                 carrierProfileId = parameters.CarrierProfileId
             }
             $scope.scopeModal.isEditMode = (carrierAccountId != undefined);
+            $scope.scopeModal.carrierProfileSelected = (carrierProfileId != undefined);
         }
 
         function defineScope() {

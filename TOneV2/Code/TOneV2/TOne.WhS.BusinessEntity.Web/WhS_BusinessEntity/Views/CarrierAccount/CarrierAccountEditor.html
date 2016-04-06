@@ -7,7 +7,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <span vr-disabled="scopeModal.isEditMode">
+                        <span vr-disabled="scopeModal.carrierProfileSelected || scopeModal.isEditMode">
                             <vr-whs-be-carrierprofile-selector normal-col-num="6" isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady">
                             </vr-whs-be-carrierprofile-selector>
                         </span>
