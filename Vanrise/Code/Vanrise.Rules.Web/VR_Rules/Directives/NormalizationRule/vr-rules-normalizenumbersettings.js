@@ -32,7 +32,7 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
         this.initializeController = initializeController;
 
         var isNotRequired = false;
-
+        var templatesSelectorAPI;
         function initializeController() {
             ctrl.templates = [];
             ctrl.selectedActionTemplate = undefined;
@@ -70,7 +70,11 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                 var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
                 ctrl.datasource.splice(index, 1);
             };
-            defineAPI();
+            ctrl.templatesSelectorReady = function (api) {
+                templatesSelectorAPI = api;
+                defineAPI();
+            }
+            
         }
 
         // private members
@@ -103,8 +107,9 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                         filterItems.push(filterItem);
                     }
                 }
-
+                ctrl.templates.length = 0;
                 var loadTemplatesPromise = VR_Rules_NormalizationRuleAPIService.GetNormalizeNumberActionSettingsTemplates().then(function (response) {
+                    templatesSelectorAPI.clearDataSource();
                     angular.forEach(response, function (item) {
                         ctrl.templates.push(item);
                     });

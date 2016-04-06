@@ -2,6 +2,7 @@
     <vr-row>
         <vr-columns width="1/3row">
             <vr-select label="Action Type"
+                       on-ready="ctrl.templatesSelectorReady"
                        datasource="ctrl.templates"
                        selectedvalues="ctrl.selectedActionTemplate"
                        onselectionchanged="ctrl.onActionTemplateChanged"
