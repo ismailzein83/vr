@@ -13,7 +13,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     {
 
         #region ctor/Local Variables
-        public CarrierAccountDataManager(): base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        public CarrierAccountDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
         }
         #endregion
@@ -29,10 +30,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             insertedId = (int)carrierAccountId;
             return (recordsEffected > 0);
         }
-        public bool Update(CarrierAccount carrierAccount)
+        public bool Update(CarrierAccountToEdit carrierAccountToEdit)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierAccount.CarrierProfileId, carrierAccount.AccountType, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
-                 Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccountToEdit.CarrierAccountId, carrierAccountToEdit.NameSuffix, Vanrise.Common.Serializer.Serialize(carrierAccountToEdit.CustomerSettings),
+                 Vanrise.Common.Serializer.Serialize(carrierAccountToEdit.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccountToEdit.CarrierAccountSettings));
             return (recordsEffected > 0);
         }
         public List<CarrierAccount> GetCarrierAccounts()
@@ -46,7 +47,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Private Methods
-      
+
         internal static DataTable BuildRoutingCustomerInfoTable(IEnumerable<RoutingCustomerInfo> customerInfos)
         {
             DataTable dtCustomerInfos = GetRoutingCustomerInfoTable();
