@@ -66,7 +66,7 @@
 
         function fillScopeFromSellingNumberPlanObj(sellingNumberPlan) {
             $scope.name = sellingNumberPlan.Name;
-            $scope.title = UtilsService.buildTitleForUpdateEditor(sellingNumberPlan.Name, "SellingNumberPlan");
+            $scope.title = UtilsService.buildTitleForUpdateEditor(sellingNumberPlan.Name, "Selling Number Plan");
         }
         function insertsellingNumberPlan() {
             var sellingNumberPlanObject = buildSellingNumberPlanObjFromScope();
