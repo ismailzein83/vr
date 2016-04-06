@@ -65,11 +65,7 @@
             }
             $scope.beginEffectiveDate = new Date();
             $scope.validateEffectiveDate = function () {
-                var today = new Date();
-                today.setHours(0, 0, 0, 0)
-                var yesterday = new Date(today);
-                yesterday.setDate(today.getDate() - 1);
-                return VRValidationService.validateTimeRange(yesterday, $scope.beginEffectiveDate);
+                return VRValidationService.validateTimeEqualorGreaterthanToday($scope.beginEffectiveDate);
             }
         }
         function load() {
