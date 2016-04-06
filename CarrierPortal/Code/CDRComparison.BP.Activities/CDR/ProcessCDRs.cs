@@ -132,7 +132,7 @@ namespace CDRComparison.BP.Activities
                         }
                         else
                         {
-                            var partner = partnerCDR.OrderByDescending(x => Math.Abs((x.Time - cdr.Time).TotalMilliseconds)).First();
+                            var partner = partnerCDR.OrderBy(x => Math.Abs((x.Time - cdr.Time).TotalMilliseconds)).First();
                             partnerCDRs.Remove(partner);
                             if (Math.Abs(partner.DurationInSec - cdr.DurationInSec) <= inputArgument.DurationMarginInMilliSeconds)
                             {

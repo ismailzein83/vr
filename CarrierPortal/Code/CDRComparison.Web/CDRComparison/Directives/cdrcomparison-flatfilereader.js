@@ -32,6 +32,7 @@
             function initializeController() {
 
                 $scope.scopeModel = {};
+                $scope.scopeModel.dateTimeFormat = 'yyyy-MM-dd HH:mm:ss.fff';
                 $scope.scopeModel.gridColumns = [];
                 $scope.scopeModel.sampleData = [];
                 $scope.scopeModel.headerGridSource = [];
@@ -74,7 +75,8 @@
                     if (payload != undefined) {
                         cdrSourceContext = payload.cdrSourceContext;
                         $scope.scopeModel.delimiter = payload.Delimiter;
-                        $scope.scopeModel.dateTimeFormat = payload.DateTimeFormat;
+                        if (payload.DateTimeFormat != undefined)
+                            $scope.scopeModel.dateTimeFormat = payload.DateTimeFormat;
                         $scope.scopeModel.firstRowHeader = payload.FirstRowHeader;
                         flatFileId = payload.fileId;
                         fieldMappings = payload.FieldMappings;
