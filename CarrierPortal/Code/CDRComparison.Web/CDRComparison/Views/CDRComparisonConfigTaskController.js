@@ -116,8 +116,6 @@
                 PartnerCDRSourceConfigName: ($scope.scopeModel.savePartnerConfig) ? $scope.scopeModel.partnerConfigName : null
             };
 
-            console.log(executionInformation);
-
             var input = {
                 $type: 'Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities',
                 TaskId: bpTaskId,
