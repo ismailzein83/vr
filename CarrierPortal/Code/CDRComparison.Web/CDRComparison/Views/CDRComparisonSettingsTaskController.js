@@ -2,9 +2,9 @@
 
     "use strict";
 
-    CDRComparisonSettingsTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService', 'CDRComparison_TimeDurationEnum', 'CDRComparison_CDRComparisonService', 'CDRComparison_CDRSourceConfigAPIService'];
+    CDRComparisonSettingsTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService', 'CDRComparison_TimeUnitEnum', 'CDRComparison_CDRComparisonService', 'CDRComparison_CDRSourceConfigAPIService'];
 
-    function CDRComparisonSettingsTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService, CDRComparison_TimeDurationEnum, CDRComparison_CDRComparisonService, CDRComparison_CDRSourceConfigAPIService) {
+    function CDRComparisonSettingsTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService, CDRComparison_TimeUnitEnum, CDRComparison_CDRComparisonService, CDRComparison_CDRSourceConfigAPIService) {
 
         var bpTaskId;
         var processInstanceId;
@@ -26,9 +26,7 @@
         function defineScope() {
 
             $scope.scopeModal = {};
-            $scope.scopeModal.durations = UtilsService.getArrayEnum(CDRComparison_TimeDurationEnum);
-            $scope.scopeModal.selectedDuration = CDRComparison_TimeDurationEnum.Seconds;
-            $scope.scopeModal.selectedTimeDuration = CDRComparison_TimeDurationEnum.Seconds;
+            $scope.scopeModal.durations = UtilsService.getArrayEnum(CDRComparison_TimeUnitEnum);
 
             $scope.scopeModal.timeOffset = '00:00:00';
             $scope.scopeModal.openHelper = function()
@@ -61,30 +59,27 @@
         }
 
         function loadAllControls() {
-
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadConfigSettings])
-                          .catch(function (error) {
-                              VRNotificationService.notifyException(error);
-                          })
-                          .finally(function () {
-                              $scope.scopeModal.isLoading = false;
-                          });
-
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSettingsConfig]).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModal.isLoading = false;
+            });
         }
 
         function setTitle() {
             $scope.title = "CDR Comparison Settings";
         }
 
-        function loadConfigSettings() {
+        function loadSettingsConfig() {
             var configSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 
             if (partnerCDRSourceConfigId != undefined) {
                 CDRComparison_CDRSourceConfigAPIService.GetCDRSourceConfig(partnerCDRSourceConfigId).then(function (response) {
-
                     if (response != null && response.SettingsTaskExecutionInfo != null) {
-                        $scope.scopeModal.durationMargin = response.SettingsTaskExecutionInfo.DurationMarginInMilliSeconds;
-                        $scope.scopeModal.timeMargin = response.SettingsTaskExecutionInfo.TimeMarginInMilliSeconds;
+                        $scope.scopeModal.durationMargin = response.SettingsTaskExecutionInfo.DurationMargin;
+                        $scope.scopeModal.selectedDurationMarginTimeUnit = UtilsService.getEnum(CDRComparison_TimeUnitEnum, 'value', response.SettingsTaskExecutionInfo.DurationMarginTimeUnit);
+                        $scope.scopeModal.timeMargin = response.SettingsTaskExecutionInfo.TimeMargin;
+                        $scope.scopeModal.selectedTimeMarginTimeUnit = UtilsService.getEnum(CDRComparison_TimeUnitEnum, 'value', response.SettingsTaskExecutionInfo.TimeMarginTimeUnit);
                         $scope.scopeModal.timeOffset = response.SettingsTaskExecutionInfo.TimeOffset;
                     }
                     configSettingsLoadDeferred.resolve();
@@ -100,21 +95,16 @@
         }
 
         function executeTask(taskAction) {
-            var durationMarginInMilliseconds = $scope.scopeModal.durationMargin;
-            if ($scope.scopeModal.selectedDuration.value = 0)
-                durationMarginInMilliseconds = $scope.scopeModal.durationMargin * 1000;
-
-            var timeMarginInMilliSeconds = $scope.scopeModal.timeMargin;
-            if ($scope.scopeModal.selectedTimeDuration.value = 0)
-                timeMarginInMilliSeconds = $scope.scopeModal.timeMargin * 1000;
 
             var timeOffset = $scope.scopeModal.timeOffset;
 
             var executionInformation = {
                 $type: "CDRComparison.BP.Arguments.SettingTaskExecutionInformation, CDRComparison.BP.Arguments",
                 Decision: taskAction,
-                DurationMarginInMilliSeconds: durationMarginInMilliseconds,
-                TimeMarginInMilliSeconds: timeMarginInMilliSeconds,
+                DurationMargin: $scope.scopeModal.durationMargin,
+                DurationMarginTimeUnit: $scope.scopeModal.selectedDurationMarginTimeUnit.value,
+                TimeMargin: $scope.scopeModal.timeMargin,
+                TimeMarginTimeUnit: $scope.scopeModal.selectedTimeMarginTimeUnit.value,
                 TimeOffset: timeOffset
             };
 

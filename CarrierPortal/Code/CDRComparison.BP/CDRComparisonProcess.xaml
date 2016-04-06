@@ -227,11 +227,13 @@
         </cba1:LoadOrderedCDRs.TableKey>
       </cba1:LoadOrderedCDRs>
       <cba1:ProcessCDRs sap2010:WorkflowViewState.IdRef="ProcessCDRs_1">
-        <cba1:ProcessCDRs.DurationMarginInMilliSeconds>
-          <InOutArgument x:TypeArguments="x:Int64">
-            <mca:CSharpReference x:TypeArguments="x:Int64">ContinueExecution.DurationMarginInMilliSeconds</mca:CSharpReference>
-          </InOutArgument>
-        </cba1:ProcessCDRs.DurationMarginInMilliSeconds>
+        <cba1:ProcessCDRs.DurationMarginInMilliseconds>
+          <InArgument x:TypeArguments="x:Int64">
+            <mca:CSharpValue x:TypeArguments="x:Int64" xml:space="preserve">ContinueExecution.DurationMarginTimeUnit == Entities.TimeUnitEnum.Seconds ?
+                ContinueExecution.DurationMargin * 1000 :
+                ContinueExecution.DurationMargin</mca:CSharpValue>
+          </InArgument>
+        </cba1:ProcessCDRs.DurationMarginInMilliseconds>
         <cba1:ProcessCDRs.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(ce:CDRBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(ce:CDRBatch)">OutputQueueOrderedCDRs</mca:CSharpReference>
@@ -262,15 +264,17 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ProcessCDRsStatus</mca:CSharpReference>
           </OutArgument>
         </cba1:ProcessCDRs.Status>
-        <cba1:ProcessCDRs.TimeMarginInMilliSeconds>
-          <InOutArgument x:TypeArguments="x:Int64">
-            <mca:CSharpReference x:TypeArguments="x:Int64">ContinueExecution.TimeMarginInMilliSeconds</mca:CSharpReference>
-          </InOutArgument>
-        </cba1:ProcessCDRs.TimeMarginInMilliSeconds>
+        <cba1:ProcessCDRs.TimeMarginInMilliseconds>
+          <InArgument x:TypeArguments="x:Int64">
+            <mca:CSharpValue x:TypeArguments="x:Int64" xml:space="preserve">ContinueExecution.TimeMarginTimeUnit == Entities.TimeUnitEnum.Seconds ?
+                ContinueExecution.TimeMargin * 1000 :
+                ContinueExecution.TimeMargin</mca:CSharpValue>
+          </InArgument>
+        </cba1:ProcessCDRs.TimeMarginInMilliseconds>
         <cba1:ProcessCDRs.TimeOffset>
-          <InOutArgument x:TypeArguments="x:TimeSpan">
-            <mca:CSharpReference x:TypeArguments="x:TimeSpan">ContinueExecution.TimeOffset</mca:CSharpReference>
-          </InOutArgument>
+          <InArgument x:TypeArguments="x:TimeSpan">
+            <mca:CSharpValue x:TypeArguments="x:TimeSpan">ContinueExecution.TimeOffset</mca:CSharpValue>
+          </InArgument>
         </cba1:ProcessCDRs.TimeOffset>
       </cba1:ProcessCDRs>
       <cba1:PrepareMissingCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareMissingCDRsForDBApply_1">
@@ -475,7 +479,14 @@
       </cba1:SaveCDRSourceConfigs.SaveSystemCDRSourceConfig>
       <cba1:SaveCDRSourceConfigs.SettingsTaskExecutionInfo>
         <InArgument x:TypeArguments="ce:SettingsTaskExecutionInfo">
-          <mca:CSharpValue x:TypeArguments="ce:SettingsTaskExecutionInfo">new Entities.SettingsTaskExecutionInfo() { DurationMarginInMilliSeconds = ContinueExecution.DurationMarginInMilliSeconds, TimeMarginInMilliSeconds = ContinueExecution.TimeMarginInMilliSeconds, TimeOffset = ContinueExecution.TimeOffset }</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="ce:SettingsTaskExecutionInfo" xml:space="preserve">new Entities.SettingsTaskExecutionInfo()
+{
+    DurationMargin = ContinueExecution.DurationMargin,
+    DurationMarginTimeUnit = ContinueExecution.DurationMarginTimeUnit,
+    TimeMargin = ContinueExecution.TimeMargin,
+    TimeMarginTimeUnit = ContinueExecution.TimeMarginTimeUnit,
+    TimeOffset = ContinueExecution.TimeOffset
+}</mca:CSharpValue>
         </InArgument>
       </cba1:SaveCDRSourceConfigs.SettingsTaskExecutionInfo>
       <cba1:SaveCDRSourceConfigs.SystemCDRSource>
@@ -494,7 +505,7 @@
         </InArgument>
       </cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigName>
     </cba1:SaveCDRSourceConfigs>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbGY+A/IDDgIBAUcLR5sBAgECTgVUHAMBjQlVBbYBEAMBvwe3AQXHARYDAZwHyAEFmAMQAwHDAZkDBakDFgMBoAGqAwWwAxwDAZQBsQMFwQMWAgFxwgMF8AMhAgENUQtRWQMBjglaB4kBEgMBqgiKAQekASQDAegHpQEHtQEcAwHAB8QBC8QBfQMBtAe/AQu/AbcBAwGpB7cBngG3AbcBAwGoB7oBC7oBlwEDAZ0H1AEH5AEeAwHfBuUBB5MCGgMBqgWUAgeuAisDAcUErwIHvwIjAwGIBMACB9oCMAMBowPbAgfrAigDAeYC7AIHhgMrAwGBAocDB5cDIwMBxAGmAwumA4QBAwG4AaEDC6EDgwEDAa0BmQOnAZkDvgEDAawBnAMLnAOXAQMBoQGtAwutA1EDAZUBvgMLvgOCAQMBiQG5Awu5A+cBAgF+sQOqAbEDyAECAX20Awu0A5cBAgFy7QML7QNtAgFm6AML6ANxAgFb3gML3gPJAgIBUM8DC88DbgIBReMDC+MDYgIBOsoDC8oDcgIBL9QDC9QDbwIBJMUDC8UDYwIBGdkDC9kDbgIBDlsJZhIDAfIIZwlyGQMB1ghzCX4ZAwG6CH8JiAESAwGrCJcBDZcBZwMBnQiNAQ2NAXIDAZAInAENnAF8AwGDCJIBDZIBfAMB9gehAQ2hAVMDAekHrQENrQF0AwHbB6gBDagBfAMBzgeyAQ2yAVMDAcEH3AEN3AF2AwGIB9cBDdcBegMB9AbhAQ3hAVMDAeAG8gEN8gGAAQMBywaBAg2BAm4DAbcG7QEN7QF6AwGjBosCDYsCfAMBjwb8AQ38AYoBAwH7BZACDZACcQMB5wWGAg2GAnIDAdMF9wEN9wGAAQMBvwXoAQ3oAYABAwGrBaECDaECagMBlgWXAg2XAngDAYIFpgINpgJ5AwHuBJwCDZwCgwEDAdoEqwINqwJTAwHGBLcCDbcCcQMBsQSyAg2yAnsDAZ0EvAINvAJTAwGJBM0CDc0CagMB9APDAg3DAoIBAwHgA9ICDdICfgMBzAPIAg3IAogBAwG4A9cCDdcCUwMBpAPjAg3jAnYDAY8D3gIN3gKAAQMB+wLoAg3oAlMDAecC+QIN+QJqAwHSAu8CDe8CeAMBvgL+Ag3+AnkDAaoC9AIN9AKDAQMBlgKDAw2DA1MDAYICjwMNjwNxAwHtAYoDDYoDewMB2QGUAw2UA1MDAcUBYw9jdAMBgAleD15xAwHzCGdlZ2wDAfEIbw9vdAMB5AhqD2pmAwHXCHNlc2sDAdUIew97dAMByAh2D3ZnAwG7CIYBNYYBOQMBuQiCAQ+CAW8DAawI</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbGY+A/0DDgIBAUcLR5sBAgECTgVUHAMBjQlVBbYBEAMBvwe3AQXHARYDAZwHyAEFnAMQAwHDAZ0DBa0DFgMBoAGuAwW0AxwDAZQBtQMFxQMWAgFxxgMF+wMhAgENUQtRWQMBjglaB4kBEgMBqgiKAQekASQDAegHpQEHtQEcAwHAB8QBC8QBfQMBtAe/AQu/AbcBAwGpB7cBngG3AbcBAwGoB7oBC7oBlwEDAZ0H1AEH5AEeAwHfBuUBB5cCGgMBqgWYAgeyAisDAcUEswIHwwIjAwGIBMQCB94CMAMBowPfAgfvAigDAeYC8AIHigMrAwGBAosDB5sDIwMBxAGqAwuqA4QBAwG4AaUDC6UDgwEDAa0BnQOnAZ0DvgEDAawBoAMLoAOXAQMBoQGxAwuxA1EDAZUBwgMLwgOCAQMBiQG9Awu9A+cBAgF+tQOqAbUDyAECAX24Awu4A5cBAgFy+AML+ANtAgFm8wML8wNxAgFb4gML6QMUAgFQ0wML0wNuAgFF7gML7gNiAgE6zgMLzgNyAgEv2AML2ANvAgEkyQMLyQNjAgEZ3QML3QNuAgEOWwlmEgMB8ghnCXIZAwHWCHMJfhkDAboIfwmIARIDAasIlwENlwFnAwGdCI0BDY0BcgMBkAicAQ2cAXwDAYMIkgENkgF8AwH2B6EBDaEBUwMB6QetAQ2tAXQDAdsHqAENqAF8AwHOB7IBDbIBUwMBwQfcAQ3cAXYDAYgH1wEN1wF6AwH0BuEBDeEBUwMB4Ab0AQ30AYABAwHLBoMCDYMCbgMBtwbvAQ3vAXoDAaMG6AEN6gFDAwGPBv4BDf4BigEDAfsFlAINlAJpAwHnBYgCDYgCcgMB0wX5AQ35AYABAwG/BY0CDY8CPwMBqwWlAg2lAmoDAZYFmwINmwJ4AwGCBaoCDaoCeQMB7gSgAg2gAoMBAwHaBK8CDa8CUwMBxgS7Ag27AnEDAbEEtgINtgJ7AwGdBMACDcACUwMBiQTRAg3RAmoDAfQDxwINxwKCAQMB4APWAg3WAn4DAcwDzAINzAKIAQMBuAPbAg3bAlMDAaQD5wIN5wJ2AwGPA+ICDeICgAEDAfsC7AIN7AJTAwHnAv0CDf0CagMB0gLzAg3zAngDAb4CggMNggN5AwGqAvgCDfgCgwEDAZYChwMNhwNTAwGCApMDDZMDcQMB7QGOAw2OA3sDAdkBmAMNmANTAwHFAWMPY3QDAYAJXg9ecQMB8whnZWdsAwHxCG8Pb3QDAeQIag9qZgMB1whzZXNrAwHVCHsPe3QDAcgIdg92ZwMBuwiGATWGATkDAbkIggEPggFvAwGsCA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -12,38 +12,41 @@ using Vanrise.Queueing;
 namespace CDRComparison.BP.Activities
 {
     #region Arguments Classes
+
     public class ProcessCDRsInput
     {
-        public TimeSpan TimeOffset { get; set; }
-        public long TimeMarginInMilliSeconds { get; set; }
-        public long DurationMarginInMilliSeconds { get; set; }
         public BaseQueue<CDRBatch> InputQueue { get; set; }
+        public long DurationMarginInMilliseconds { get; set; }
+        public long TimeMarginInMilliseconds { get; set; }
+        public TimeSpan TimeOffset { get; set; }
         public BaseQueue<MissingCDRBatch> OutputQueueMissingCDR { get; set; }
         public BaseQueue<PartialMatchCDRBatch> OutputQueuePartialMatchCDR { get; set; }
         public BaseQueue<DisputeCDRBatch> OutputQueueDisputeCDR { get; set; }
-
     }
 
     #endregion
+
     public class ProcessCDRs : DependentAsyncActivity<ProcessCDRsInput>
     {
         #region Arguments
-        [RequiredArgument]
-        public InOutArgument<TimeSpan> TimeOffset { get; set; }
-        [RequiredArgument]
-        public InOutArgument<long> TimeMarginInMilliSeconds { get; set; }
-        [RequiredArgument]
-        public InOutArgument<long> DurationMarginInMilliSeconds { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
-
+        [RequiredArgument]
+        public InArgument<long> DurationMarginInMilliseconds { get; set; }
+        [RequiredArgument]
+        public InArgument<long> TimeMarginInMilliseconds { get; set; }
+        [RequiredArgument]
+        public InArgument<TimeSpan> TimeOffset { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<MissingCDRBatch>> OutputQueueMissingCDR { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<PartialMatchCDRBatch>> OutputQueuePartialMatchCDR { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<DisputeCDRBatch>> OutputQueueDisputeCDR { get; set; }
+
         #endregion
+
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueueMissingCDR.Get(context) == null)
@@ -55,6 +58,7 @@ namespace CDRComparison.BP.Activities
 
             base.OnBeforeExecute(context, handle);
         }
+
         protected override void DoWork(ProcessCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             string currentCDPN = null;
@@ -99,7 +103,24 @@ namespace CDRComparison.BP.Activities
 
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finished Processing CDRs.", totalCount);
         }
-        private void ProcessCDRBach(ProcessCDRsInput inputArgument, CDRBatch cdrBatch)
+
+        protected override ProcessCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
+        {
+            return new ProcessCDRsInput
+            {
+                InputQueue = this.InputQueue.Get(context),
+                DurationMarginInMilliseconds = this.DurationMarginInMilliseconds.Get(context),
+                TimeMarginInMilliseconds = this.TimeMarginInMilliseconds.Get(context),
+                TimeOffset = this.TimeOffset.Get(context),
+                OutputQueueMissingCDR = this.OutputQueueMissingCDR.Get(context),
+                OutputQueuePartialMatchCDR = this.OutputQueuePartialMatchCDR.Get(context),
+                OutputQueueDisputeCDR = this.OutputQueueDisputeCDR.Get(context),
+            };
+        }
+
+        #region Private Methods
+
+        void ProcessCDRBach(ProcessCDRsInput inputArgument, CDRBatch cdrBatch)
         {
             if (cdrBatch != null)
             {
@@ -115,7 +136,7 @@ namespace CDRComparison.BP.Activities
                 var partnerCDRs = cdrBatch.CDRs.Where(x => x.IsPartnerCDR).ToList();
                 foreach (var cdr in systemCDRs)
                 {
-                    var partnerCDR = partnerCDRs.FindAllRecords(x => x.CGPN == cdr.CGPN && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) <= inputArgument.TimeMarginInMilliSeconds);
+                    var partnerCDR = partnerCDRs.FindAllRecords(x => x.CGPN == cdr.CGPN && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) <= inputArgument.TimeMarginInMilliseconds);
                     if (partnerCDR == null || partnerCDR.Count() == 0)
                     {
                         missingCDRBatch.MissingCDRs.Add(new MissingCDR
@@ -133,7 +154,7 @@ namespace CDRComparison.BP.Activities
                     {
                         var partner = partnerCDR.OrderBy(x => Math.Abs((x.Time - cdr.Time).TotalMilliseconds)).ThenBy(x => Math.Abs(x.DurationInSec - cdr.DurationInSec)).First();
                         partnerCDRs.Remove(partner);
-                        if (Math.Abs(partner.DurationInSec - cdr.DurationInSec) <= inputArgument.DurationMarginInMilliSeconds)
+                        if (Math.Abs(partner.DurationInSec - cdr.DurationInSec) <= inputArgument.DurationMarginInMilliseconds)
                         {
                             disputeCDRBatch.DisputeCDRs.Add(new DisputeCDR
                             {
@@ -196,50 +217,17 @@ namespace CDRComparison.BP.Activities
             }
         }
 
-        private void SetTimeOffsetConfiguration(TimeSpan timeOffset, CDRBatch cdrBatch)
+        void SetTimeOffsetConfiguration(TimeSpan timeOffset, CDRBatch cdrBatch)
         {
             foreach (var cdr in cdrBatch.CDRs)
             {
-                if(cdr.IsPartnerCDR)
+                if (cdr.IsPartnerCDR)
                 {
                     cdr.Time = cdr.Time + timeOffset;
                 }
             }
         }
-        private MissingCDRBatch MapToMissingCDRBatch(CDRBatch cdrBatch)
-        {
-            List<MissingCDR> missingCDRs = new List<MissingCDR>();
-            foreach (var cdr in cdrBatch.CDRs)
-            {
-                missingCDRs.Add(new MissingCDR
-                {
-                    OriginalCDPN = cdr.OriginalCDPN,
-                    OriginalCGPN = cdr.OriginalCGPN,
-                    CDPN = cdr.CDPN,
-                    CGPN = cdr.CGPN,
-                    IsPartnerCDR = cdr.IsPartnerCDR,
-                    DurationInSec = cdr.DurationInSec,
-                    Time = cdr.Time
-                });
-            }
-            return new MissingCDRBatch
-            {
-                MissingCDRs = missingCDRs
-            };
-        }
 
-        protected override ProcessCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
-        {
-            return new ProcessCDRsInput
-            {
-                InputQueue = this.InputQueue.Get(context),
-                OutputQueueMissingCDR = this.OutputQueueMissingCDR.Get(context),
-                OutputQueuePartialMatchCDR = this.OutputQueuePartialMatchCDR.Get(context),
-                OutputQueueDisputeCDR = this.OutputQueueDisputeCDR.Get(context),
-                TimeOffset = this.TimeOffset.Get(context),
-                DurationMarginInMilliSeconds = this.DurationMarginInMilliSeconds.Get(context),
-                TimeMarginInMilliSeconds = this.TimeMarginInMilliSeconds.Get(context),
-            };
-        }
+        #endregion
     }
 }

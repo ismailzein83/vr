@@ -49,13 +49,13 @@ namespace CDRComparison.BP.Activities
             CDRSource systemCDRSource = this.SystemCDRSource.Get(context);
             CDRSource partnerCDRSource = this.PartnerCDRSource.Get(context);
 
-            SettingsTaskExecutionInfo settingsTaskExecutionInformation = this.SettingsTaskExecutionInfo.Get(context);
+            SettingsTaskExecutionInfo settingsTaskExecutionInfo = this.SettingsTaskExecutionInfo.Get(context);
 
             if (saveSystemConfig)
-                SaveCDRSourceConfig(systemConfigId, systemConfigName, systemCDRSource, settingsTaskExecutionInformation, false);
+                SaveCDRSourceConfig(systemConfigId, systemConfigName, systemCDRSource, settingsTaskExecutionInfo, false);
             
             if (savePartnerConfig)
-                SaveCDRSourceConfig(partnerConfigId, partnerConfigName, partnerCDRSource, settingsTaskExecutionInformation, true);
+                SaveCDRSourceConfig(partnerConfigId, partnerConfigName, partnerCDRSource, settingsTaskExecutionInfo, true);
         }
 
         #region Private Methods
