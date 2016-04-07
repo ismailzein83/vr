@@ -8,6 +8,7 @@ app.directive('vrTimeformat', ['UtilsService', '$compile', 'VRModalService', fun
             hidelabel: '@',
             isrequired: '=',
             value: '=',
+            normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -53,16 +54,13 @@ app.directive('vrTimeformat', ['UtilsService', '$compile', 'VRModalService', fun
         var withemptyline = 'withemptyline';
         if (attrs.hidelabel != undefined)
             withemptyline = '';
-        var template =
-            '<vr-row removeline>'
-             + '<vr-columns width="3/4row">'
-             + '<vr-label ng-if="ctrl.hidelabel ==undefined">{{ctrl.label}}</vr-label>'
-             + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>'
-             + '</vr-columns>'
-             + '<vr-columns width="1/4row" ' + withemptyline + ' > '
-             + '   <vr-button type="Help" data-onclick="openTimeFormatBuilder" standalone></vr-button>'
-             + '</vr-columns>'
-            + '</vr-row>';
+        var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                         + '<vr-label ng-if="ctrl.hidelabel ==undefined">{{ctrl.label}}</vr-label>'
+                         + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>'
+                     + '</vr-columns>'
+                     + '<vr-columns width="normal" ' + withemptyline + '>'
+                        + '<vr-button type="Help" data-onclick="openTimeFormatBuilder" standalone></vr-button>'
+                     + '</vr-columns>';
         return template;
 
     }
