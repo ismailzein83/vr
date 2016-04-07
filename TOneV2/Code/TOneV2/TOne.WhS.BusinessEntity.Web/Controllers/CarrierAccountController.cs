@@ -79,10 +79,10 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("UpdateCarrierAccount")]
-        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit)
+        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
-            return manager.UpdateCarrierAccount(carrierAccountToEdit);
+            return manager.UpdateCarrierAccount(carrierAccount);
         }
         [HttpGet]
         [Route("GetSuppliersWithZonesGroupsTemplates")]

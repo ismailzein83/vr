@@ -144,11 +144,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccountToEdit carrierAccountToEdit)
+        public TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> UpdateCarrierAccount(CarrierAccount carrierAccount)
         {
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
 
-            bool updateActionSucc = dataManager.Update(carrierAccountToEdit);
+            bool updateActionSucc = dataManager.Update(CarrierAccountToEditMapper(carrierAccount));
             TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierAccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -157,7 +157,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(GetCarrierAccount(carrierAccountToEdit.CarrierAccountId));
+                CarrierAccountDetail carrierAccountDetail = CarrierAccountDetailMapper(carrierAccount);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = carrierAccountDetail;
             }
@@ -319,6 +319,18 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Mappers
+
+        private CarrierAccountToEdit CarrierAccountToEditMapper(CarrierAccount carrierAccount)
+        {
+            CarrierAccountToEdit carrierAccountToEdit = new CarrierAccountToEdit();
+            carrierAccountToEdit.NameSuffix = carrierAccount.NameSuffix;
+            carrierAccountToEdit.CarrierAccountId = carrierAccount.CarrierAccountId;
+            carrierAccountToEdit.CarrierAccountSettings = carrierAccount.CarrierAccountSettings;
+            carrierAccountToEdit.CustomerSettings = carrierAccount.CustomerSettings;
+            carrierAccountToEdit.SupplierSettings = carrierAccount.SupplierSettings;
+            return carrierAccountToEdit;
+        }
+
         private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)
         {
             return new CarrierAccountInfo()

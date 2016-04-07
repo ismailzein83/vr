@@ -47,10 +47,10 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
          [HttpPost]
          [Route("UpdateSellingProduct")]
-         public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProductToEdit)
+         public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProduct sellingProduct)
          {
              SellingProductManager manager = new SellingProductManager();
-             return manager.UpdateSellingProduct(sellingProductToEdit);
+             return manager.UpdateSellingProduct(sellingProduct);
          }
         
     }

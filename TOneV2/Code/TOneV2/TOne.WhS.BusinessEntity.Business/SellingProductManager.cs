@@ -101,11 +101,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
-        public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProductToEdit)
+        public TOne.Entities.UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProduct sellingProduct)
         {
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
 
-            bool updateActionSucc = dataManager.Update(sellingProductToEdit);
+            bool updateActionSucc = dataManager.Update(SellingProductToEditMapper(sellingProduct));
             TOne.Entities.UpdateOperationOutput<SellingProductDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<SellingProductDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -115,7 +115,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(GetSellingProduct(sellingProductToEdit.SellingProductId));
+                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(sellingProduct);
             }
             else
             {
@@ -152,6 +152,14 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Mappers
+        private SellingProductToEdit SellingProductToEditMapper(SellingProduct sellingProduct)
+        {
+            SellingProductToEdit sellingProductToEdit = new SellingProductToEdit();
+            sellingProductToEdit.Name = sellingProduct.Name;
+            sellingProductToEdit.SellingProductId = sellingProduct.SellingProductId;
+            sellingProductToEdit.Settings = sellingProduct.Settings;
+            return sellingProductToEdit;
+        }
         private SellingProductDetail SellingProductDetailMapper(SellingProduct sellingProduct)
         {
             SellingProductDetail sellingProductDetail = new SellingProductDetail();
