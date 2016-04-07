@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Data
         List<SellingProduct> GetSellingProducts();
         bool Insert(SellingProduct sellingProduct, out int insertedId);
 
-        bool Update(SellingProductToEdit sellingProductToEdit);
+        bool Update(SellingProduct sellingProduct);
         bool AreSellingProductsUpdated(ref object updateHandle);
     }
 }

@@ -28,9 +28,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             insertedId = (int)sellingProductId;
             return (recordsEffected > 0);
         }
-        public bool Update(SellingProductToEdit sellingProductToEdit)
+        public bool Update(SellingProduct sellingProduct)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProductToEdit.SellingProductId, sellingProductToEdit.Name, Vanrise.Common.Serializer.Serialize(sellingProductToEdit.Settings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name, Vanrise.Common.Serializer.Serialize(sellingProduct.Settings));
             return (recordsEffected > 0);
         }
         public bool AreSellingProductsUpdated(ref object updateHandle)

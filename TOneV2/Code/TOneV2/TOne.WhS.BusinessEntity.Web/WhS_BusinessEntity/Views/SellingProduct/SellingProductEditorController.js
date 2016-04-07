@@ -137,7 +137,7 @@
             var sellingProduct = {
                 SellingProductId: (sellingProductId != null) ? sellingProductId : 0,
                 Name: $scope.scopeModal.name,
-                SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                SellingNumberPlanId: (isEditMode ? undefined : sellingNumberPlanDirectiveAPI.getSelectedIds())
             };
             return sellingProduct;
         }

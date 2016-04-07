@@ -148,7 +148,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
 
-            bool updateActionSucc = dataManager.Update(CarrierAccountToEditMapper(carrierAccount));
+            bool updateActionSucc = dataManager.Update(carrierAccount);
             TOne.Entities.UpdateOperationOutput<CarrierAccountDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<CarrierAccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -319,17 +319,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Mappers
-
-        private CarrierAccountToEdit CarrierAccountToEditMapper(CarrierAccount carrierAccount)
-        {
-            CarrierAccountToEdit carrierAccountToEdit = new CarrierAccountToEdit();
-            carrierAccountToEdit.NameSuffix = carrierAccount.NameSuffix;
-            carrierAccountToEdit.CarrierAccountId = carrierAccount.CarrierAccountId;
-            carrierAccountToEdit.CarrierAccountSettings = carrierAccount.CarrierAccountSettings;
-            carrierAccountToEdit.CustomerSettings = carrierAccount.CustomerSettings;
-            carrierAccountToEdit.SupplierSettings = carrierAccount.SupplierSettings;
-            return carrierAccountToEdit;
-        }
 
         private CarrierAccountInfo CarrierAccountInfoMapper(CarrierAccount carrierAccount)
         {

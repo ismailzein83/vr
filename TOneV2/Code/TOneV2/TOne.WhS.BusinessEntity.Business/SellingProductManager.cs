@@ -105,7 +105,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
 
-            bool updateActionSucc = dataManager.Update(SellingProductToEditMapper(sellingProduct));
+            bool updateActionSucc = dataManager.Update(sellingProduct);
             TOne.Entities.UpdateOperationOutput<SellingProductDetail> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<SellingProductDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -152,14 +152,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Mappers
-        private SellingProductToEdit SellingProductToEditMapper(SellingProduct sellingProduct)
-        {
-            SellingProductToEdit sellingProductToEdit = new SellingProductToEdit();
-            sellingProductToEdit.Name = sellingProduct.Name;
-            sellingProductToEdit.SellingProductId = sellingProduct.SellingProductId;
-            sellingProductToEdit.Settings = sellingProduct.Settings;
-            return sellingProductToEdit;
-        }
         private SellingProductDetail SellingProductDetailMapper(SellingProduct sellingProduct)
         {
             SellingProductDetail sellingProductDetail = new SellingProductDetail();
