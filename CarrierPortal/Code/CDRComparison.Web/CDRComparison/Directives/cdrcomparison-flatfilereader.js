@@ -113,15 +113,15 @@
                     };
 
                     function buildFieldMappings() {
-                        var fieldMappings;
+                        var returnValue;
                         var dataItem = ($scope.scopeModel.headerGridSource.length > 0) ? $scope.scopeModel.headerGridSource[0] : undefined;
 
                         if (dataItem != undefined && dataItem.cells != undefined) {
-                            fieldMappings = [];
+                            returnValue = [];
                             for (var i = 0; i < dataItem.cells.length; i++) {
                                 if (dataItem.cells[i].selectedField != undefined)
                                 {
-                                    fieldMappings.push({
+                                    returnValue.push({
                                         FieldIndex: i,
                                         FieldName: (dataItem.cells[i].selectedField != undefined) ? dataItem.cells[i].selectedField.description : undefined
                                     });
@@ -129,8 +129,11 @@
                                
                             }
                         }
+                        else {
+                            returnValue = fieldMappings; // Set the field mappings to the config's field mappings if exists
+                        }
 
-                        return fieldMappings;
+                        return returnValue;
                     }
                 };
 
