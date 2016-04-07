@@ -29,8 +29,14 @@
             var cdrSourceContext;
             var fieldMappings;
 
-            function initializeController() {
+            var cdrFields = [
+                { value: 1, description: 'CDPN' },
+                { value: 2, description: 'CGPN' },
+                { value: 3, description: 'Time' },
+                { value: 4, description: 'DurationInSec' }
+            ];
 
+            function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.dateTimeFormat = 'yyyy-MM-dd HH:mm:ss.fff';
@@ -38,6 +44,28 @@
                 $scope.scopeModel.sampleData = [];
                 $scope.scopeModel.headerGridSource = [];
                 $scope.scopeModel.firstRowHeader = false;
+
+                $scope.scopeModel.availableCDRFields = [];
+                for (var i = 0; i < cdrFields.length; i++) {
+                    $scope.scopeModel.availableCDRFields.push(cdrFields[i]);
+                }
+
+                $scope.scopeModel.onFieldSelectionChanged = function (selectedField) {
+                    if (selectedField != undefined) {
+                        var index = UtilsService.getItemIndexByVal($scope.scopeModel.availableCDRFields, selectedField.value, 'value');
+                        $scope.scopeModel.availableCDRFields.splice(index, 1);
+                    }
+
+                    // Add deselected fields to available fields
+
+                    $scope.scopeModel.availableCDRFields.length = 0;
+                    var selectedFieldValues = getSelectedFieldValues();
+
+                    for (var i = 0; i < cdrFields.length; i++) {
+                        if (!UtilsService.contains(selectedFieldValues, cdrFields[i].value))
+                            $scope.scopeModel.availableCDRFields.push(cdrFields[i]);
+                    }
+                };
 
                 $scope.scopeModel.readSample = function () {
                     return readSample();
@@ -68,7 +96,7 @@
                                 fieldNames.push(cells[i].selectedField.description);
                         }
                     }
-                    if (filledCols < cells[0].fields.length)
+                    if (filledCols < cdrFields.length)
                         return 'All columns should be mapped.';
                     return null;
                 };
@@ -172,32 +200,35 @@
                     dataItem.cells = [];
                     for (var i = 0; i < columnCount; i++) {
                         var cell = {};
-                        cell.fields = getFields();
-
-                        cell.selectedField = getSelectedField(cell.fields, i);
+                        cell.selectedField = getSelectedField(i);
                         dataItem.cells.push(cell);
                     }
                     $scope.scopeModel.headerGridSource.push(dataItem);
 
-                    function getFields() {
-                        return [
-                            { value: 1, description: 'CDPN' },
-                            { value: 2, description: 'CGPN' },
-                            { value: 3, description: 'Time' },
-                            { value: 4, description: 'DurationInSec' }
-                        ];
-                    }
-                    function getSelectedField(cellFields, cellIndex) {
+                    function getSelectedField(cellIndex) {
                         var selectedField;
                         if (fieldMappings != undefined) {
 
                             var fieldMapping = UtilsService.getItemByVal(fieldMappings, cellIndex, 'FieldIndex');
                             if (fieldMapping != undefined)
-                                selectedField = UtilsService.getItemByVal(cellFields, fieldMapping.FieldName, 'description');
+                                selectedField = UtilsService.getItemByVal($scope.scopeModel.availableCDRFields, fieldMapping.FieldName, 'description');
                         }
                         return selectedField;
                     }
                 }
+            }
+
+            function getSelectedFieldValues() {
+                var values;
+                if ($scope.scopeModel.headerGridSource.length > 0) {
+                    values = [];
+                    var cells = $scope.scopeModel.headerGridSource[0].cells;
+                    for (var i = 0; i < cells.length; i++) {
+                        if (cells[i].selectedField != undefined)
+                            values.push(cells[i].selectedField.value);
+                    }
+                }
+                return values;
             }
         }
     }

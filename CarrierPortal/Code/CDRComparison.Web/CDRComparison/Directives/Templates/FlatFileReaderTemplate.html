@@ -19,8 +19,9 @@
                                          norowhighlightonclick="'true'">
                                 <vr-datagridcolumn ng-repeat="column in scopeModel.gridColumns" headertext="column.name" tag="column" disablesorting>
                                     <div ng-init="columnIndex = viewScope.scopeModel.gridColumns.indexOf(colDef.tag)" style="padding: 3px 5px 3px 0px;">
-                                        <vr-select datasource="dataItem.cells[columnIndex].fields"
+                                        <vr-select datasource="viewScope.scopeModel.availableCDRFields"
                                                    selectedvalues="dataItem.cells[columnIndex].selectedField"
+                                                   onselectionchanged="viewScope.scopeModel.onFieldSelectionChanged"
                                                    datavaluefield="value"
                                                    datatextfield="description">
                                         </vr-select>
