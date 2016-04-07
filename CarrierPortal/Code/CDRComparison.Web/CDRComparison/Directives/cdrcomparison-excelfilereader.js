@@ -43,9 +43,18 @@
                     return readSample();
                 };
 
-                $scope.scopeModel.validateFieldMappings = function () {
-                    if ($scope.scopeModel.headerGridSource.length == 0)
+                $scope.scopeModel.validateSection = function () {
+                    if ($scope.scopeModel.headerGridSource.length > 0)
                         return null;
+                    if (fieldMappings != null)
+                        return null;
+                    return 'Fields are not mapped';
+                };
+
+                $scope.scopeModel.validateFieldMappings = function () {
+                    if ($scope.scopeModel.headerGridSource.length == 0) {
+                        return null;
+                    }
                     var cells = $scope.scopeModel.headerGridSource[0].cells;
                     var fieldNames = [];
                     var filledCols = 0;
