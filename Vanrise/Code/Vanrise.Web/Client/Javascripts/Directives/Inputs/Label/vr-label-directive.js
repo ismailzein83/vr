@@ -21,7 +21,11 @@
                 var hintSection = ""
                 if (tAttrs.hint != undefined)
                     hintSection = '<vr-hint value="' + tAttrs.hint + '"></vr-hint>';
-                var newElement = '<label class="control-label vr-control-label ' + color +' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:normal;' : '') + '" >'
+
+                var hasbackgroundcolorSection = "";
+                if (tAttrs.hasbackgroundcolor != undefined)
+                    hasbackgroundcolorSection = ' color:white';
+                var newElement = '<label class="control-label vr-control-label ' + color + ' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:normal;' : '') + hasbackgroundcolorSection + ' " >'
                     + tElement.context.innerHTML + '</label>' + hintSection;
                 tElement.html(newElement);
             }
