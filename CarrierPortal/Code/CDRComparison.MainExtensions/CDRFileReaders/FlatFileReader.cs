@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CDRComparison.MainExtensions.CDRFileReaders
+namespace CDRComparison.MainExtensions
 {
     public class FlatFileReader : CDRFileReader
     {

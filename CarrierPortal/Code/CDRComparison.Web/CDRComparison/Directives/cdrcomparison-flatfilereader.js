@@ -133,7 +133,7 @@
 
                 api.getData = function () {
                     return {
-                        $type: 'CDRComparison.MainExtensions.CDRFileReaders.FlatFileReader, CDRComparison.MainExtensions',
+                        $type: 'CDRComparison.MainExtensions.FlatFileReader, CDRComparison.MainExtensions',
                         Delimiter: $scope.scopeModel.delimiter,
                         FieldMappings: buildFieldMappings(),
                         DateTimeFormat: $scope.scopeModel.dateTimeFormat,
