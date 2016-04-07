@@ -89,7 +89,7 @@ namespace CDRComparison.Data.SQL
                     [CDPN] [varchar](100) NULL,
                     [CGPN] [varchar](100) NULL,
                     [Time] [datetime] NULL,
-                    [DurationInSec] [decimal](18, 0) NULL,
+                    [DurationInSec] [decimal](20, 10) NULL,
                     [IsPartnerCDR] [bit] NULL) "
             );
             query.Replace("#TEMPTABLE#", this.TableName);

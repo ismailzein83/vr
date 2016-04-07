@@ -14,13 +14,7 @@ namespace CarrierPortal.DevRuntime
         {
             if (ConfigurationManager.AppSettings["IsRuntimeService"] == "true")
             {
-                SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-
-                var runtimeServices = new List<RuntimeService>();
-                
-                runtimeServices.Add(schedulerService);
-
-                RuntimeHost host = new RuntimeHost(runtimeServices);
+                RuntimeHost host = new RuntimeHost(args);
                 host.Start();
                 Console.ReadKey();
             }

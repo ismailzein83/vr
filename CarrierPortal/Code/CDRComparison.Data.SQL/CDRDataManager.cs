@@ -69,7 +69,11 @@ namespace CDRComparison.Data.SQL
 	                                       [CGPN] [varchar](100) NULL,
 	                                       [IsPartnerCDR] [bit] NULL,
 	                                       [AttemptTime] [datetime] NULL,
-	                                       [Duration] [decimal](18, 3) NULL) "
+	                                       [Duration] [decimal](20, 10) NULL);
+                    CREATE CLUSTERED INDEX [IX_#TEMPTABLE#_CDPN] ON [#TEMPTABLE#] 
+                    (
+	                    [CDPN] ASC
+                    )"
             );
             query.Replace("#TEMPTABLE#", this.TableName);
             ExecuteNonQueryText(query.ToString(), null);

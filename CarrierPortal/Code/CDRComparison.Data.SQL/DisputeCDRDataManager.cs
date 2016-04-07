@@ -58,8 +58,8 @@ namespace CDRComparison.Data.SQL
 	                                       [PartnerCGPN] [varchar](100) NULL,
 	                                       [SystemTime] [datetime] NULL,
 	                                       [PartnerTime] [datetime] NULL,
-	                                       [SystemDurationInSec] [decimal](18, 0) NULL,
-	                                       [PartnerDurationInSec] [decimal](18, 0) NULL) "
+	                                       [SystemDurationInSec] [decimal](20, 10) NULL,
+	                                       [PartnerDurationInSec] [decimal](20, 10) NULL) "
             );
             query.Replace("#TEMPTABLE#",this.TableName);
             ExecuteNonQueryText(query.ToString(), null);

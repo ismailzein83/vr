@@ -50,7 +50,7 @@ namespace CDRComparison.BP.Activities
 
         protected override void DoWork(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Start Reading CDRs from {0} Source", !inputArgument.IsPartnerCDRs ? "System" : "Partner");
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading CDRs from {0} Source...", !inputArgument.IsPartnerCDRs ? "System" : "Partner");
             SetNumberNormalizationSettings(inputArgument.CDRSource.NormalizationRules);
             long totalCount = 0;
 
