@@ -72,7 +72,7 @@ namespace Vanrise.BusinessProcess
         {
             _definition = _definitionManager.GetBPDefinition(_definitionId);
             int nbOfThreads = _definition.Configuration != null && _definition.Configuration.MaxConcurrentWorkflows.HasValue ? _definition.Configuration.MaxConcurrentWorkflows.Value : s_maxConcurrentWorkflowsPerDefinition;
-            if (_runningInstances.Where(itm => itm.Value.BPInstance.Status == BPInstanceStatus.Running).Count() >= nbOfThreads)
+            if (_runningInstances.Where(itm => itm.Value.BPInstance.Status == BPInstanceStatus.Running && !itm.Value.IsIdle).Count() >= nbOfThreads)
                 return;
             int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
             IEnumerable<int> runningRuntimeProcessesIds = _runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
@@ -160,7 +160,10 @@ namespace Vanrise.BusinessProcess
             };
             wfApp.Idle = (e) =>
                 {
-                    runningInstance.IsIdle = true;
+                    if (e.Bookmarks != null && e.Bookmarks.Count > 0)
+                    {
+                        runningInstance.IsIdle = true;
+                    }
                 };
 
             //wfApp.InstanceStore = s_InstanceStore;
@@ -217,6 +220,7 @@ namespace Vanrise.BusinessProcess
             BPRunningInstance runningInstance;
             if (_runningInstances.TryGetValue(processInstanceId, out runningInstance))
             {
+                runningInstance.IsIdle = false;
                 runningInstance.WFApplication.ResumeBookmark(bookmarkName, eventData);
                 BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
                 {
