@@ -41,33 +41,9 @@
 </vr-row>
 <vr-row>
     <vr-columns colnum="{{excelFileCtrl.normalColNum}}">
-        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="excelFileCtrl.isrequired"
-                    hint="yyyy: 2008 year
-                    <br>  yyy : 008 year
-                    <br>  yy  : 08 year
-                    <br>  MMMM: March month
-                    <br>  MMM : Mar month
-                    <br>  MM : 03 month
-                    <br>  M : 3 month
-                    <br>  dddd: Sunday day
-                    <br>  ddd : Sun day
-                    <br>  dd : 09 day
-                    <br>  d: 9 day
-                    <br>  HH: 16 hour
-                    <br>  H : 16 hour
-                    <br>  hh  : 04 hour
-                    <br>  h : 4 hour
-                    <br>  mm: 05 minute
-                    <br>  m: 5 minute
-                    <br>  ss: 07 second
-                    <br>  s: 7 second
-                    <br>  tt: PM A.M. or P.M.
-                    <br>  t: P A.M. or P.M.
-                    "></vr-textbox>
+        <vr-switch value="scopeModel.firstRowHeader" label="First Row Header"></vr-switch>
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-columns colnum="{{excelFileCtrl.normalColNum}}">
-        <vr-switch value="scopeModel.firstRowHeader" label="First Row Header"></vr-switch>
-    </vr-columns>
+    <vr-timeformat label="Date Time Format" value="scopeModel.dateTimeFormat" normal-col-num="{{excelFileCtrl.normalColNum}}" isrequired="excelFileCtrl.isrequired"></vr-timeformat>
 </vr-row>
