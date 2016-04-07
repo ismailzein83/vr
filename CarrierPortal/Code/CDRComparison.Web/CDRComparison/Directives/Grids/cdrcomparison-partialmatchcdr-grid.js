@@ -36,9 +36,13 @@
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return CDRComparison_PartialMatchCDRAPIService.GetFilteredPartialMatchCDRs(dataRetrievalInput).then(function (response) {
-                        for (var i = 0; i < response.Data.length ; i++) {
-                            response.Data[i].DifferenceDurationInSec = response.Data[i].PartnerDurationInSec - response.Data[i].SystemDurationInSec;
+                        if (response && response.Data)
+                        {
+                            for (var i = 0; i < response.Data.length ; i++) {
+                                response.Data[i].DifferenceDurationInSec = response.Data[i].PartnerDurationInSec - response.Data[i].SystemDurationInSec;
+                            }
                         }
+                        
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
