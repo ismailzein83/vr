@@ -128,6 +128,21 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BI.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Business.dll</HintPath>
     </Reference>
