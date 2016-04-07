@@ -37,6 +37,8 @@
                 $scope.scopeModel.sampleData = [];
                 $scope.scopeModel.headerGridSource = [];
                 $scope.scopeModel.firstRowHeader = false;
+                $scope.scopeModel.cdrFields = getFields();
+
                 $scope.scopeModel.readSample = function () {
                     return readSample();
                 };
@@ -58,11 +60,20 @@
                         }
                     }
                     if (filledCols < cells[0].fields.length)
-                        return 'All columns should be mapped.';
+                        return 'missing fields mapping';
                     return null;
                 };
 
                 defineAPI();
+            }
+
+            function getFields() {
+                return [
+                    { value: 1, description: 'CDPN' },
+                    { value: 2, description: 'CGPN' },
+                    { value: 3, description: 'Time' },
+                    { value: 4, description: 'DurationInSec' }
+                ];
             }
 
             function defineAPI() {
@@ -168,14 +179,7 @@
                     }
                     $scope.scopeModel.headerGridSource.push(dataItem);
 
-                    function getFields() {
-                        return [
-                            { value: 1, description: 'CDPN' },
-                            { value: 2, description: 'CGPN' },
-                            { value: 3, description: 'Time' },
-                            { value: 4, description: 'DurationInSec' }
-                        ];
-                    }
+                    
                     function getSelectedField(cellFields, cellIndex) {
                         var selectedField;
                         if (fieldMappings != undefined) {
