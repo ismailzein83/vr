@@ -104,7 +104,7 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                             if (!findBPTask) {
                                 itemAddedOrUpdatedInThisCall = true;
                                 $scope.bpTasks.push(bpTask);
-                                if (!myTaskSelected && autoTask == undefined && bpTask.AutoOpenTask && bpTask.IsAssignedToCurrentUser) {
+                                if (!myTaskSelected && autoTask == undefined && bpTask.AutoOpenTask && bpTask.IsAssignedToCurrentUser && bpTask.Entity.Status == 0) {
                                     autoTask = bpTask;
                                 }
                             }
