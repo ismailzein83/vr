@@ -23,7 +23,7 @@
                 BPInstanceID: processInstanceId
             }, {
                 onScopeReady: function (modalScope) {
-                    modalScope.title = "Tracking";
+                    modalScope.title = "Business Process Progress: ";
                 }
             });
         };

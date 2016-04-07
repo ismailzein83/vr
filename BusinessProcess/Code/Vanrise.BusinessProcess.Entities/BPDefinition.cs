@@ -27,5 +27,6 @@ namespace Vanrise.BusinessProcess.Entities
         public string ScheduledExecEditor { get; set; }
         public bool IsPersistable { get; set; }
         public bool HasChildProcesses { get; set; }
+        public bool HasBusinessRules { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
     "use strict";
 
-    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService','VRTimerService'];
+    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService', 'VRTimerService'];
 
     function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRTimerService) {
 
@@ -62,21 +62,27 @@
 
             $scope.modalContext.onModalHide = function () {
                 instanceTrackingMonitorGridAPI.clearTimer();
+
                 if ($scope.process.HasChildProcesses) {
                     instanceMonitorGridAPI.clearTimer();
                 }
+
                 taskTrackingMonitorGridAPI.clearTimer();
-                validationMessageMonitorGridAPI.clearTimer();
+
+                if ($scope.process.HasBusinessRules) {
+                    validationMessageMonitorGridAPI.clearTimer();
+                }
+
                 if (job) {
                     VRTimerService.unregisterJob(job);
                 }
             };
-
             $scope.getStatusColor = function () {
                 if (bpInstance) {
-                    return BusinessProcess_BPInstanceService.getStatusColor(bpInstance.Status);
+                    return 'control-label vr-control-label ' + BusinessProcess_BPInstanceService.getStatusColor(bpInstance.Status);
                 }
-            };
+                return "";
+            }
         }
 
         function getFilterObject() {
@@ -96,8 +102,10 @@
                     CreatedTime: response.CreatedTime,
                     StatusUpdatedTime: response.StatusUpdatedTime,
                     Status: response.StatusDescription,
-                    HasChildProcesses: false
+                    HasChildProcesses: false,
+                    HasBusinessRules: false
                 };
+                $scope.title += $scope.process.Title;
                 getDefinition();
             });
         }
@@ -105,6 +113,7 @@
         function getDefinition() {
             return BusinessProcess_BPDefinitionAPIService.GetBPDefintion(bpDefinitionID).then(function (response) {
                 $scope.process.HasChildProcesses = response.Configuration.HasChildProcesses;
+                $scope.process.HasBusinessRules = response.Configuration.HasBusinessRules;
             });
         }
 
@@ -135,8 +144,8 @@
                 $scope.process.StatusUpdatedTime = response.StatusUpdatedTime;
                 bpInstance = response;
             },
-             function (excpetion) {
-                 console.log(excpetion);
+             function (exception) {
+                 console.log(exception);
                  $scope.isLoading = false;
              });
         }
