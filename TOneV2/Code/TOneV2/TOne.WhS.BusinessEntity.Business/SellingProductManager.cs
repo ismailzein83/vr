@@ -48,8 +48,9 @@ namespace TOne.WhS.BusinessEntity.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
             var cachedSellingProducts = GetCachedSellingProducts();
-            return cachedSellingProducts.Values.FindAllRecords(x => x.SellingNumberPlanId == carrierAccount.SellingNumberPlanId);
-
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            var effectiveCustomerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(carrierAccountId, DateTime.Now, false);
+            return cachedSellingProducts.Values.FindAllRecords(x => (x.SellingNumberPlanId == carrierAccount.SellingNumberPlanId && effectiveCustomerSellingProduct == null) || (x.SellingNumberPlanId == carrierAccount.SellingNumberPlanId && effectiveCustomerSellingProduct != null && x.SellingProductId != effectiveCustomerSellingProduct.SellingProductId));
         }
         public IEnumerable<SellingProductInfo> GetAllSellingProduct()
         {

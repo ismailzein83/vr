@@ -1,7 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="WhS_BE_CustomerSellingProductEditorController" vr-loader="isLoading">
     <vr-modalbody width="'50%'">
         <vr-form name="formSellingProductEditor">
-            <div>
+            <div ng-hide="showErrorMessage">
                 <vr-row>
                     <vr-columns width="1/2row" vr-loader="isLoadingSellingProduct">
                         <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" onselectionchanged="onSelectionChanged" selectedvalues="selectedSellingProduct" isdisabled="disableSellingProduct" isrequired="true"></vr-whs-be-sellingproduct-selector>
@@ -14,12 +14,17 @@
                     </vr-columns>
                 </vr-row>
             </div>
+
+            <div ng-show="showErrorMessage">
+                This Customer has already an assigned selling product.
+            </div>
+
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formSellingProductEditor" data-onclick="SaveSellingProduct"></vr-button>
+                <vr-button type="Save" formname="formSellingProductEditor" data-onclick="SaveSellingProduct" ng-hide="showErrorMessage"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

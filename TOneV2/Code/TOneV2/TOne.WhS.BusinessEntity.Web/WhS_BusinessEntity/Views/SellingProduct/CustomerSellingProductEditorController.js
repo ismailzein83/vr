@@ -33,6 +33,7 @@
 
         }
         function defineScope() {
+            $scope.showErrorMessage = false;
             $scope.selectedSellingProduct;
             $scope.SaveSellingProduct = function () {
                 if (isEditMode) {
@@ -89,13 +90,15 @@
 
         }
         function loadAllControls() {
+
             return UtilsService.waitMultipleAsyncOperations([setTitle, isCustomerAssignedToSellingProduct, loadFilterBySection, loadSellingProducts, loadCarrierAccounts])
-                .catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
-               .finally(function () {
-                   $scope.isLoading = false;
-               });
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+           .finally(function () {
+               $scope.isLoading = false;
+           });
+
         }
         function setTitle() {
             // Note that the CustomerSellingProduct entity has no Name property
@@ -118,7 +121,10 @@
 
             sellingProductReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = { selectedIds: sellingProductId != undefined ? sellingProductId : customerSellingProductEntity != undefined ? customerSellingProductEntity.SellingProductId : undefined, filter: { AssignableToSellingProductId: $scope.carrierAccountId } }
+                    var directivePayload = {
+                        selectedIds: sellingProductId != undefined ? sellingProductId : customerSellingProductEntity != undefined ? customerSellingProductEntity.SellingProductId : undefined,
+                        filter: { AssignableToSellingProductId: $scope.carrierAccountId }
+                    }
 
                     VRUIUtilsService.callDirectiveLoad(sellingProductDirectiveAPI, directivePayload, sellingProductLoadPromiseDeferred);
                 });
@@ -130,8 +136,8 @@
             carrierAccountReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-
-                        selectedIds: $scope.carrierAccountId != undefined ? [$scope.carrierAccountId] : customerSellingProductEntity != undefined ? [customerSellingProductEntity.CustomerId] : undefined
+                        selectedIds: $scope.carrierAccountId != undefined ? [$scope.carrierAccountId] : customerSellingProductEntity != undefined ? [customerSellingProductEntity.CustomerId] : undefined,
+                        filter: { AssignableToSellingProductId: sellingProductId }
                     }
                     VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, directivePayload, carrierAccountLoadPromiseDeferred);
                 });
@@ -182,14 +188,16 @@
         function isCustomerAssignedToSellingProduct() {
             if ($scope.carrierAccountId != undefined) {
                 return WhS_BE_CustomerSellingProductAPIService.IsCustomerAssignedToSellingProduct($scope.carrierAccountId).then(function (response) {
-                    if (response == true) {
-                        VRNotificationService.showError("This Customer Is Assigned to Selling Product");
-                        $scope.modalContext.closeModal();
+                    if (response) {
+                        $scope.showErrorMessage = true;
+                        $scope.isLoading = false;
+                    }
+                    else {
+                        $scope.showErrorMessage = false;
                     }
 
                 });
             }
-
         }
         function updateCustomerSellingProduct() {
             var customerSellingProductObject = buildSellingProductObjFromScope();

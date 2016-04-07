@@ -10,14 +10,14 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CustomerSellingProductManager
     {
-       
+
         #region ctor/Local Variables
         SellingProductManager _sellingProductManager;
         CarrierAccountManager _carrierAccountManager;
         public CustomerSellingProductManager()
         {
-             _sellingProductManager = new SellingProductManager();
-             _carrierAccountManager = new CarrierAccountManager();
+            _sellingProductManager = new SellingProductManager();
+            _carrierAccountManager = new CarrierAccountManager();
         }
         #endregion
 
@@ -75,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 var effectiveCustomerSellingProduct = GetEffectiveSellingProduct(obj.CustomerId, DateTime.Now, false);
 
-                if (effectiveCustomerSellingProduct != null && (obj.BED <= effectiveCustomerSellingProduct.BED || obj.SellingProductId == effectiveCustomerSellingProduct.SellingProductId))
+                if (effectiveCustomerSellingProduct != null && (obj.BED <= effectiveCustomerSellingProduct.BED || (obj.SellingProductId == effectiveCustomerSellingProduct.SellingProductId)))
                 {
                     return insertOperationOutput;
                 }
@@ -167,7 +167,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
-        Dictionary<int,CustomerSellingProduct> GetCachedCustomerSellingProducts()
+        Dictionary<int, CustomerSellingProduct> GetCachedCustomerSellingProducts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedOrderedCustomerSellingProducts",
                () =>
@@ -177,7 +177,7 @@ namespace TOne.WhS.BusinessEntity.Business
                    return customerSellingProducts.ToDictionary(kvp => kvp.CustomerSellingProductId, kvp => kvp);
                });
         }
-     
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICustomerSellingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
@@ -190,7 +190,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-       
+
         #region  Mappers
         private CustomerSellingProductDetail CustomerSellingProductDetailMapper(CustomerSellingProduct customerSellingProduct)
         {
@@ -205,7 +205,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return customerSellingProductDetail;
         }
         #endregion
-   
+
     }
 
 
