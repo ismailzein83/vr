@@ -17,10 +17,11 @@ namespace CDRComparison.Entities
 
     public class SettingsTaskExecutionInfo
     {
-        public long DurationMargin { get; set; }
+        public decimal DurationMargin { get; set; }
         public TimeUnitEnum DurationMarginTimeUnit { get; set; }
-        public long TimeMargin { get; set; }
+        public decimal TimeMargin { get; set; }
         public TimeUnitEnum TimeMarginTimeUnit { get; set; }
         public TimeSpan TimeOffset { get; set; }
+        public bool CompareCGPN { get; set; }
     }
 }

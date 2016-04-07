@@ -233,8 +233,8 @@
           </InArgument>
         </cba1:ProcessCDRs.CompareCGPN>
         <cba1:ProcessCDRs.DurationMarginInMilliseconds>
-          <InArgument x:TypeArguments="x:Int64">
-            <mca:CSharpValue x:TypeArguments="x:Int64" xml:space="preserve">ContinueExecution.DurationMarginTimeUnit == Entities.TimeUnitEnum.Seconds ?
+          <InArgument x:TypeArguments="x:Decimal">
+            <mca:CSharpValue x:TypeArguments="x:Decimal" xml:space="preserve">ContinueExecution.DurationMarginTimeUnit == Entities.TimeUnitEnum.Seconds ?
                 ContinueExecution.DurationMargin * 1000 :
                 ContinueExecution.DurationMargin</mca:CSharpValue>
           </InArgument>
@@ -270,8 +270,8 @@
           </OutArgument>
         </cba1:ProcessCDRs.Status>
         <cba1:ProcessCDRs.TimeMarginInMilliseconds>
-          <InArgument x:TypeArguments="x:Int64">
-            <mca:CSharpValue x:TypeArguments="x:Int64" xml:space="preserve">ContinueExecution.TimeMarginTimeUnit == Entities.TimeUnitEnum.Seconds ?
+          <InArgument x:TypeArguments="x:Decimal">
+            <mca:CSharpValue x:TypeArguments="x:Decimal" xml:space="preserve">ContinueExecution.TimeMarginTimeUnit == Entities.TimeUnitEnum.Seconds ?
                 ContinueExecution.TimeMargin * 1000 :
                 ContinueExecution.TimeMargin</mca:CSharpValue>
           </InArgument>
@@ -490,7 +490,8 @@
     DurationMarginTimeUnit = ContinueExecution.DurationMarginTimeUnit,
     TimeMargin = ContinueExecution.TimeMargin,
     TimeMarginTimeUnit = ContinueExecution.TimeMarginTimeUnit,
-    TimeOffset = ContinueExecution.TimeOffset
+    TimeOffset = ContinueExecution.TimeOffset,
+    CompareCGPN = ContinueExecution.CompareCGPN
 }</mca:CSharpValue>
         </InArgument>
       </cba1:SaveCDRSourceConfigs.SettingsTaskExecutionInfo>
@@ -510,7 +511,7 @@
         </InArgument>
       </cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigName>
     </cba1:SaveCDRSourceConfigs>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbGc+A4IEDgIBAUcLR5sBAgECTgVUHAMBoQlVBbYBEAMB0we3AQXHARYDAbAHyAEFoQMQAwHDAaIDBbIDFgMBoAGzAwW5AxwDAZQBugMFygMWAgFxywMFgAQhAgENUQtRWQMBoglaB4kBEgMBvgiKAQekASQDAfwHpQEHtQEcAwHUB8QBC8QBfQMByAe/AQu/AbcBAwG9B7cBngG3AbcBAwG8B7oBC7oBlwEDAbEH1AEH5AEeAwHzBuUBB5wCGgMBqgWdAge3AisDAcUEuAIHyAIjAwGIBMkCB+MCMAMBowPkAgf0AigDAeYC9QIHjwMrAwGBApADB6ADIwMBxAGvAwuvA4QBAwG4AaoDC6oDgwEDAa0BogOnAaIDvgEDAawBpQMLpQOXAQMBoQG2Awu2A1EDAZUBxwMLxwOCAQMBiQHCAwvCA+cBAgF+ugOqAboDyAECAX29Awu9A5cBAgFy/QML/QNtAgFm+AML+ANxAgFb5wML7gMUAgFQ2AML2ANuAgFF8wML8wNiAgE60wML0wNyAgEv3QML3QNvAgEkzgMLzgNjAgEZ4gML4gNuAgEOWwlmEgMBhglnCXIZAwHqCHMJfhkDAc4IfwmIARIDAb8IlwENlwFnAwGxCI0BDY0BcgMBpAicAQ2cAXwDAZcIkgENkgF8AwGKCKEBDaEBUwMB/QetAQ2tAXQDAe8HqAENqAF8AwHiB7IBDbIBUwMB1QfcAQ3cAXYDAZwH1wEN1wF6AwGIB+EBDeEBUwMB9Ab5AQ35AYABAwHfBogCDYgCbgMBywb0AQ30AXoDAbcG7QEN7wFDAwGjBoMCDYMCigEDAY8GmQINmQJpAwH7BY0CDY0CcgMB5wX+AQ3+AYABAwHTBZICDZQCPwMBvwXoAQ3oAWkDAasFqgINqgJqAwGWBaACDaACeAMBggWvAg2vAnkDAe4EpQINpQKDAQMB2gS0Ag20AlMDAcYEwAINwAJxAwGxBLsCDbsCewMBnQTFAg3FAlMDAYkE1gIN1gJqAwH0A8wCDcwCggEDAeAD2wIN2wJ+AwHMA9ECDdECiAEDAbgD4AIN4AJTAwGkA+wCDewCdgMBjwPnAg3nAoABAwH7AvECDfECUwMB5wKCAw2CA2oDAdIC+AIN+AJ4AwG+AocDDYcDeQMBqgL9Ag39AoMBAwGWAowDDYwDUwMBggKYAw2YA3EDAe0BkwMNkwN7AwHZAZ0DDZ0DUwMBxQFjD2N0AwGUCV4PXnEDAYcJZ2VnbAMBhQlvD290AwH4CGoPamYDAesIc2VzawMB6Qh7D3t0AwHcCHYPdmcDAc8IhgE1hgE5AwHNCIIBD4IBbwMBwAg=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcQ2FycmllclBvcnRhbFxDb2RlXENEUkNvbXBhcmlzb24uQlBcQ0RSQ29tcGFyaXNvblByb2Nlc3MueGFtbGc+A4MEDgIBAUcLR5sBAgECTgVUHAMBoQlVBbYBEAMB0we3AQXHARYDAbAHyAEFoQMQAwHDAaIDBbIDFgMBoAGzAwW5AxwDAZQBugMFygMWAgFxywMFgQQhAgENUQtRWQMBoglaB4kBEgMBvgiKAQekASQDAfwHpQEHtQEcAwHUB8QBC8QBfQMByAe/AQu/AbcBAwG9B7cBngG3AbcBAwG8B7oBC7oBlwEDAbEH1AEH5AEeAwHzBuUBB5wCGgMBqgWdAge3AisDAcUEuAIHyAIjAwGIBMkCB+MCMAMBowPkAgf0AigDAeYC9QIHjwMrAwGBApADB6ADIwMBxAGvAwuvA4QBAwG4AaoDC6oDgwEDAa0BogOnAaIDvgEDAawBpQMLpQOXAQMBoQG2Awu2A1EDAZUBxwMLxwOCAQMBiQHCAwvCA+cBAgF+ugOqAboDyAECAX29Awu9A5cBAgFy/gML/gNtAgFm+QML+QNxAgFb5wML7wMUAgFQ2AML2ANuAgFF9AML9ANiAgE60wML0wNyAgEv3QML3QNvAgEkzgMLzgNjAgEZ4gML4gNuAgEOWwlmEgMBhglnCXIZAwHqCHMJfhkDAc4IfwmIARIDAb8IlwENlwFnAwGxCI0BDY0BcgMBpAicAQ2cAXwDAZcIkgENkgF8AwGKCKEBDaEBUwMB/QetAQ2tAXQDAe8HqAENqAF8AwHiB7IBDbIBUwMB1QfcAQ3cAXYDAZwH1wEN1wF6AwGIB+EBDeEBUwMB9Ab5AQ35AYABAwHfBogCDYgCbgMBywb0AQ30AXoDAbcG7QEN7wFDAwGjBoMCDYMCigEDAY8GmQINmQJpAwH7BY0CDY0CcgMB5wX+AQ3+AYABAwHTBZICDZQCPwMBvwXoAQ3oAWkDAasFqgINqgJqAwGWBaACDaACeAMBggWvAg2vAnkDAe4EpQINpQKDAQMB2gS0Ag20AlMDAcYEwAINwAJxAwGxBLsCDbsCewMBnQTFAg3FAlMDAYkE1gIN1gJqAwH0A8wCDcwCggEDAeAD2wIN2wJ+AwHMA9ECDdECiAEDAbgD4AIN4AJTAwGkA+wCDewCdgMBjwPnAg3nAoABAwH7AvECDfECUwMB5wKCAw2CA2oDAdIC+AIN+AJ4AwG+AocDDYcDeQMBqgL9Ag39AoMBAwGWAowDDYwDUwMBggKYAw2YA3EDAe0BkwMNkwN7AwHZAZ0DDZ0DUwMBxQFjD2N0AwGUCV4PXnEDAYcJZ2VnbAMBhQlvD290AwH4CGoPamYDAesIc2VzawMB6Qh7D3t0AwHcCHYPdmcDAc8IhgE1hgE5AwHNCIIBD4IBbwMBwAg=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

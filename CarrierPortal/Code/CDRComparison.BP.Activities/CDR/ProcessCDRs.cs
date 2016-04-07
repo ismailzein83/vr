@@ -16,8 +16,8 @@ namespace CDRComparison.BP.Activities
     public class ProcessCDRsInput
     {
         public BaseQueue<CDRBatch> InputQueue { get; set; }
-        public long DurationMarginInMilliseconds { get; set; }
-        public long TimeMarginInMilliseconds { get; set; }
+        public decimal DurationMarginInMilliseconds { get; set; }
+        public decimal TimeMarginInMilliseconds { get; set; }
         public TimeSpan TimeOffset { get; set; }
         public BaseQueue<MissingCDRBatch> OutputQueueMissingCDR { get; set; }
         public BaseQueue<PartialMatchCDRBatch> OutputQueuePartialMatchCDR { get; set; }
@@ -34,9 +34,9 @@ namespace CDRComparison.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRBatch>> InputQueue { get; set; }
         [RequiredArgument]
-        public InArgument<long> DurationMarginInMilliseconds { get; set; }
+        public InArgument<decimal> DurationMarginInMilliseconds { get; set; }
         [RequiredArgument]
-        public InArgument<long> TimeMarginInMilliseconds { get; set; }
+        public InArgument<decimal> TimeMarginInMilliseconds { get; set; }
         [RequiredArgument]
         public InArgument<TimeSpan> TimeOffset { get; set; }
         [RequiredArgument]
@@ -141,7 +141,7 @@ namespace CDRComparison.BP.Activities
                 var partnerCDRs = cdrBatch.CDRs.Where(x => x.IsPartnerCDR).ToList();
                 foreach (var cdr in systemCDRs)
                 {
-                    var partnerCDR = partnerCDRs.FindAllRecords(x => (inputArgument.CompareCGPN ? x.CGPN == cdr.CGPN:true) && Math.Abs((cdr.Time - x.Time).TotalMilliseconds) <= inputArgument.TimeMarginInMilliseconds);
+                    var partnerCDR = partnerCDRs.FindAllRecords(x => (inputArgument.CompareCGPN ? x.CGPN == cdr.CGPN:true) && Convert.ToDecimal(Math.Abs((cdr.Time - x.Time).TotalMilliseconds)) <= inputArgument.TimeMarginInMilliseconds);
                     if (partnerCDR == null || partnerCDR.Count() == 0)
                     {
                         missingCDRBatch.MissingCDRs.Add(new MissingCDR
