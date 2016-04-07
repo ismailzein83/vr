@@ -60,7 +60,7 @@ app.directive('vrTimeformat', ['UtilsService', '$compile', 'VRModalService', fun
              + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>'
              + '</vr-columns>'
              + '<vr-columns width="1/4row" ' + withemptyline + ' > '
-             + '   <vr-button type="Edit" data-onclick="openTimeFormatBuilder" standalone></vr-button>'
+             + '   <vr-button type="Help" data-onclick="openTimeFormatBuilder" standalone></vr-button>'
              + '</vr-columns>'
             + '</vr-row>';
         return template;

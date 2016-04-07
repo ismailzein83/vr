@@ -261,7 +261,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Rename',
                     class: 'glyphicon glyphicon-pencil'
                 };
-
-        }
+            case 'Help':
+                return {
+                    text: 'Help',
+                    class: 'glyphicon glyphicon-question-sign'
+                };
+        } 
     }
 }]);
