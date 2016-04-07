@@ -147,7 +147,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return customerSellingProducts.Values.FindAllRecords(x => x.BED > DateTime.Now);
         }
-        public bool IsAssignableCustomerToSellingProduct(int customerId)
+        public bool IsCustomerAssignedToSellingProduct(int customerId)
         {
             var customerSellingProducts = GetCachedCustomerSellingProducts();
             return customerSellingProducts.Values.Any(x => x.BED > DateTime.Now && x.CustomerId == customerId);

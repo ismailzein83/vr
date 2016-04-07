@@ -36,10 +36,10 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.UpdateCustomerSellingProduct(customerSellingProduct);
         }
          [HttpGet]
-         public bool IsAssignableCustomerToSellingProduct(int customerId)
+        public bool IsCustomerAssignedToSellingProduct(int customerId)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
-            return manager.IsAssignableCustomerToSellingProduct(customerId);
+            return manager.IsCustomerAssignedToSellingProduct(customerId);
         }
     }
 }

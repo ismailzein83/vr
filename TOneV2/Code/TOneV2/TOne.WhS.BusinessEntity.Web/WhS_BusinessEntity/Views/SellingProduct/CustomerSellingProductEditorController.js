@@ -89,7 +89,7 @@
 
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, isAssignableCustomerToSellingProduct, loadFilterBySection, loadSellingProducts, loadCarrierAccounts])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, isCustomerAssignedToSellingProduct, loadFilterBySection, loadSellingProducts, loadCarrierAccounts])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -179,9 +179,9 @@
 
             return obj;
         }
-        function isAssignableCustomerToSellingProduct() {
+        function isCustomerAssignedToSellingProduct() {
             if ($scope.carrierAccountId != undefined) {
-                return WhS_BE_CustomerSellingProductAPIService.IsAssignableCustomerToSellingProduct($scope.carrierAccountId).then(function (response) {
+                return WhS_BE_CustomerSellingProductAPIService.IsCustomerAssignedToSellingProduct($scope.carrierAccountId).then(function (response) {
                     if (response == true) {
                         VRNotificationService.showError("This Customer Is Assigned to Selling Product");
                         $scope.modalContext.closeModal();
