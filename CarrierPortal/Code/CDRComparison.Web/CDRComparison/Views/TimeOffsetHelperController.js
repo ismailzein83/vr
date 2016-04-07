@@ -145,7 +145,7 @@
                 var systemDate = new Date(selectedSystemCDR.Time);
                 var partnerDate = new Date(selectedPartnerCDR.Time);
 
-                var timeOffset = UtilsService.getTimeOffset(systemDate, partnerDate);
+                var timeOffset = UtilsService.getTimeOffset(partnerDate, systemDate);
                 $scope.onTimeOffsetSelected(timeOffset);
                 $scope.modalContext.closeModal();
             }
