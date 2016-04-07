@@ -1,18 +1,18 @@
-﻿<div vr-modalcontent ng-controller="VR_TimeFormatEditorController" vr-loader="isLoading" width="'40%'">
+﻿<div vr-modalcontent ng-controller="VR_TimeFormatEditorController" vr-loader="isLoading" width="'30%'">
     <vr-modalbody>
         <vr-form validationcontext="timeformatEditorGroup">
             <vr-row>
-                <vr-columns colnum="3">
+                <vr-columns width="1/3row">
                     <vr-select datatextfield="description" datavaluefield="value"
-                               label="Time Type" datasource="timeFormatTemplates" selectedvalues="selectedTimeFormatTemplate" onselectionchanged="onTimeSelectionChanged">
+                               label="Time Part" datasource="timeFormatTemplates" selectedvalues="selectedTimeFormatTemplate" onselectionchanged="onTimeSelectionChanged">
                     </vr-select>
                 </vr-columns>
-                <vr-columns colnum="3" ng-show="selectedTimeFormatTemplate">
+                <vr-columns width="1/3row" ng-show="selectedTimeFormatTemplate" withemptyline>
                     <vr-select datatextfield="description" datavaluefield="value"
-                               label="Expression Type" datasource="filteredExpressionTemplates" selectedvalues="selectedExpression">
+                               entityname="Option" datasource="filteredExpressionTemplates" selectedvalues="selectedExpression">
                     </vr-select>
                 </vr-columns>
-                <vr-columns colnum="3" ng-show="selectedExpression"  withemptyline>
+                <vr-columns width="1/3row" ng-show="selectedExpression" withemptyline>
                     <vr-button type="Add" data-onclick="addExpression" standalone vr-disabled="isbuttonDisabled()"></vr-button>
 
                 </vr-columns>

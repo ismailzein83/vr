@@ -50,8 +50,13 @@
             },
             {
                 value: 6,
-                description: "Fraction"
-            }];
+                description: "Seconds Fraction"
+            },
+             {
+                 value: 7,
+                 description: 'A.M. or P.M.'
+             }
+            ];
 
             $scope.expressionTemplates = [{
                 value: 0,
@@ -89,16 +94,6 @@
                 timeValue: 1,
                 description: "M (ex: 3)",
                 expression: "M"
-            }, {
-                value: 7,
-                timeValue: 2,
-                description: "dddd (ex: Sunday)",
-                expression: "dddd"
-            }, {
-                value: 8,
-                timeValue: 2,
-                description: "ddd (ex: Sun)",
-                expression: "ddd"
             }, {
                 value: 9,
                 timeValue: 2,
@@ -169,6 +164,18 @@
                 timeValue: 6,
                 description: "f (ex: 1)",
                 expression: "f"
+            }
+            , {
+                value: 23,
+                timeValue: 7,
+                description: "tt (ex: PM)",
+                expression: "tt"
+            }
+            , {
+                value: 24,
+                timeValue: 7,
+                description: "t (ex: P)",
+                expression: "t"
             }]
 
             $scope.onTimeSelectionChanged = function()
@@ -187,9 +194,8 @@
 
 
             $scope.addExpression = function () {
-
                 if ($scope.timeFormatValue != undefined)
-                    $scope.timeFormatValue += $scope.selectedExpression.expression;
+                    $scope.timeFormatValue = $scope.timeFormatValue.concat($scope.selectedExpression.expression);
                 else
                     $scope.timeFormatValue = $scope.selectedExpression.expression;
             }
