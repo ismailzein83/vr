@@ -30,12 +30,5 @@ namespace CDRComparison.Web.Controllers
         {
             return _manager.GetCDRSourceConfig(cdrSourceConfigId);
         }
-
-        [HttpPost]
-        [Route("AddCDRSourceConfig")]
-        public InsertOperationOutput<CDRSourceConfig> AddCDRSourceConfig(CDRSourceConfig cdrSourceConfig)
-        {
-            return _manager.AddCDRSourceConfig(cdrSourceConfig);
-        }
     }
 }

@@ -4,8 +4,12 @@ using System;
 using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Business;
+using Vanrise.BusinessProcess.Entities;
 
 namespace CDRComparison.BP.Activities
 {
@@ -50,17 +54,19 @@ namespace CDRComparison.BP.Activities
             CDRSource partnerCDRSource = this.PartnerCDRSource.Get(context);
 
             SettingsTaskExecutionInfo settingsTaskExecutionInfo = this.SettingsTaskExecutionInfo.Get(context);
-
+            
+            BPSharedInstanceData sharedData = context.GetSharedInstanceData();
+            
             if (saveSystemConfig)
-                SaveCDRSourceConfig(systemConfigId, systemConfigName, systemCDRSource, settingsTaskExecutionInfo, false);
+                SaveCDRSourceConfig(systemConfigId, systemConfigName, systemCDRSource, settingsTaskExecutionInfo, false, sharedData.InstanceInfo.InitiatorUserId);
             
             if (savePartnerConfig)
-                SaveCDRSourceConfig(partnerConfigId, partnerConfigName, partnerCDRSource, settingsTaskExecutionInfo, true);
+                SaveCDRSourceConfig(partnerConfigId, partnerConfigName, partnerCDRSource, settingsTaskExecutionInfo, true, sharedData.InstanceInfo.InitiatorUserId);
         }
 
         #region Private Methods
 
-        void SaveCDRSourceConfig(int? cdrSourceConfigId, string cdrSourceConfigName, CDRSource cdrSource, SettingsTaskExecutionInfo settingsTaskExecutionInfo, bool isPartnerCDRSource)
+        void SaveCDRSourceConfig(int? cdrSourceConfigId, string cdrSourceConfigName, CDRSource cdrSource, SettingsTaskExecutionInfo settingsTaskExecutionInfo, bool isPartnerCDRSource, int userId)
         {
             ICDRSourceConfigDataManager cdrSourceConfigDataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRSourceConfigDataManager>();
 
@@ -68,7 +74,8 @@ namespace CDRComparison.BP.Activities
             {
                 Name = cdrSourceConfigName,
                 CDRSource = cdrSource,
-                IsPartnerCDRSource = isPartnerCDRSource
+                IsPartnerCDRSource = isPartnerCDRSource,
+                UserId = userId
             };
 
             if (isPartnerCDRSource)

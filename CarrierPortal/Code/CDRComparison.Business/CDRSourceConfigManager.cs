@@ -8,11 +8,18 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace CDRComparison.Business
 {
     public class CDRSourceConfigManager
     {
+        #region Fields
+
+        int _loggedInUserId = new SecurityContext().GetLoggedInUserId();
+
+        #endregion
+
         #region Public Methods
 
         public IEnumerable<CDRSourceConfig> GetCDRSourceConfigs(CDRSourceConfigFilter filter)
@@ -20,40 +27,14 @@ namespace CDRComparison.Business
             if (filter == null)
                 throw new ArgumentNullException("filter");
             Dictionary<int, CDRSourceConfig> cachedCDRSourceConfigs = GetCachedCDRSourceConfigs();
-            return cachedCDRSourceConfigs.FindAllRecords(itm => itm.IsPartnerCDRSource == filter.IsPartnerCDRSource);
+            return cachedCDRSourceConfigs.FindAllRecords(itm => itm.IsPartnerCDRSource == filter.IsPartnerCDRSource && itm.UserId == _loggedInUserId);
         }
 
         public CDRSourceConfig GetCDRSourceConfig(int cdrSourceConfigId)
         {
             Dictionary<int, CDRSourceConfig> cachedCDRSourceConfigs = GetCachedCDRSourceConfigs();
-            return cachedCDRSourceConfigs.GetRecord(cdrSourceConfigId);
-        }
-
-        public Vanrise.Entities.InsertOperationOutput<CDRSourceConfig> AddCDRSourceConfig(CDRSourceConfig cdrSourceConfig)
-        {
-            InsertOperationOutput<CDRSourceConfig> output = new Vanrise.Entities.InsertOperationOutput<CDRSourceConfig>();
-
-            output.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            output.InsertedObject = null;
-
-            int cdrSourceConfigId = -1;
-
-            ICDRSourceConfigDataManager dataManager = CDRComparisonDataManagerFactory.GetDataManager<ICDRSourceConfigDataManager>();
-            bool inserted = dataManager.InsertCDRSourceConfig(cdrSourceConfig, out cdrSourceConfigId);
-
-            if (inserted)
-            {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                output.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                cdrSourceConfig.CDRSourceConfigId = cdrSourceConfigId;
-                output.InsertedObject = cdrSourceConfig;
-            }
-            else
-            {
-                output.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-            }
-
-            return output;
+            CDRSourceConfig cdrSourceConfig = cachedCDRSourceConfigs.GetRecord(cdrSourceConfigId);
+            return (cdrSourceConfig != null && cdrSourceConfig.UserId == _loggedInUserId) ? cdrSourceConfig : null;
         }
 
         #endregion

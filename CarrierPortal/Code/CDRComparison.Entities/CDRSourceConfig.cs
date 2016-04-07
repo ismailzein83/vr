@@ -13,6 +13,7 @@ namespace CDRComparison.Entities
         public CDRSource CDRSource { get; set; }
         public SettingsTaskExecutionInfo SettingsTaskExecutionInfo { get; set; }
         public bool IsPartnerCDRSource { get; set; }
+        public int UserId { get; set; }
     }
 
     public class SettingsTaskExecutionInfo

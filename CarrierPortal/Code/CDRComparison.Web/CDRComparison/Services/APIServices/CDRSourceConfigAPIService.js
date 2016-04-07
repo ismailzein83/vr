@@ -9,8 +9,7 @@
 
         return {
             GetCDRSourceConfigs: GetCDRSourceConfigs,
-            GetCDRSourceConfig: GetCDRSourceConfig,
-            AddCDRSourceConfig: AddCDRSourceConfig
+            GetCDRSourceConfig: GetCDRSourceConfig
         };
 
         function GetCDRSourceConfigs(filter) {
@@ -23,10 +22,6 @@
             return BaseAPIService.get(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'GetCDRSourceConfig'), {
                 cdrSourceConfigId: cdrSourceConfigId
             });
-        }
-
-        function AddCDRSourceConfig(cdrSourceConfig) {
-            return BaseAPIService.post(UtilsService.getServiceURL(CDRComparison_ModuleConfig.moduleName, controllerName, 'AddCDRSourceConfig'), cdrSourceConfig);
         }
     }
 
