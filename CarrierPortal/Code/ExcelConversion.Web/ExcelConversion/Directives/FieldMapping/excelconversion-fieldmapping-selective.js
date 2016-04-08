@@ -12,7 +12,8 @@
                 normalColNum: '@',
                 isrequired: '=',
                 label: '@',
-                customvalidate:'='
+                customvalidate: '=',
+                type:"="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -49,7 +50,7 @@
       +  '</vr-select>'
          + '</vr-columns>'
         +' <vr-columns colnum="{{fieldmappingCtrl.normalColNum}}" ' + withemptyline + '>'
-          + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate"></vr-directivewrapper>'
+          + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>'
         '</vr-columns >'
        + '</vr-row>';
         return template;
@@ -126,8 +127,10 @@
                     if ($scope.selectedTemplateConfig != undefined && directiveAPI !=undefined) {
 
                         data = directiveAPI.getData();
-                        if(data !=undefined)
-                             data.ConfigId = $scope.selectedTemplateConfig.TemplateConfigID;
+                        if (data != undefined)
+                        {
+                            data.ConfigId = $scope.selectedTemplateConfig.TemplateConfigID;
+                        }
                     }
                     return data;
                 }

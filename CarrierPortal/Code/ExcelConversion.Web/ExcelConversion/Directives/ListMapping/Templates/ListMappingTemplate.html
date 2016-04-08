@@ -1,9 +1,9 @@
 ﻿<vr-row>
     <vr-columns colnum="{{listMappingCtrl.normalColNum}}">
-        <vr-cellviewer on-select="listMappingCtrl.selectFirstRowIndex" on-update="listMappingCtrl.updateFirstRowIndexRange" value="listMappingCtrl.firstRowIndex" label="First Row Index"> </vr-cellviewer>
+        <vr-cellviewer on-select="listMappingCtrl.selectFirstRowIndex" on-update="listMappingCtrl.updateFirstRowIndexRange" isrequired="true" value="listMappingCtrl.firstRowIndex" label="First Row" type="'row'"> </vr-cellviewer>
     </vr-columns>
     <vr-columns colnum="{{listMappingCtrl.normalColNum}}">
-        <vr-cellviewer on-select="listMappingCtrl.selectLastRowIndex" on-update="listMappingCtrl.updateLastRowIndexRange" value="listMappingCtrl.lastRowIndex" label="Last Row Index"> </vr-cellviewer>
+        <vr-cellviewer on-select="listMappingCtrl.selectLastRowIndex" on-update="listMappingCtrl.updateLastRowIndexRange" value="listMappingCtrl.lastRowIndex" label="Last Row" type="'row'"> </vr-cellviewer>
     </vr-columns>
 </vr-row>   
 <vr-row >
@@ -12,7 +12,7 @@
                      on-ready="onGridReady" hidegridmenu>
             <vr-datagridcolumn headertext="'Field Name'" field="'FieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
-                <excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" customvalidate="dataItem.validate()"> </excelconversion-fieldmapping-selective>
+                <excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" isrequired="dataItem.isRequired" customvalidate="dataItem.validate()" type="dataItem.type"> </excelconversion-fieldmapping-selective>
             </vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>

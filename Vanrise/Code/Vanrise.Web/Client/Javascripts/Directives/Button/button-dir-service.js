@@ -266,6 +266,18 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Help',
                     class: 'glyphicon glyphicon-question-sign'
                 };
+            case 'Next':
+                return {
+                    text: 'Next',
+                    class: 'glyphicon glyphicon-chevron-right'
+                };
+            case 'Back':
+                return {
+                    text: 'Back',
+                    class: 'glyphicon glyphicon-chevron-left'
+                };
+
+               
         } 
     }
 }]);

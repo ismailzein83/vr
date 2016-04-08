@@ -80,7 +80,7 @@ namespace ExcelConversion.Business
                         var convertedRecord = new ConvertedExcelRecord { Fields = new ConvertedExcelFieldsByName() };
                         lst.Records.Add(convertedRecord);
 
-                        foreach (var fldMapping in conversionSettings.FieldMappings)
+                        foreach (var fldMapping in listMapping.FieldMappings)
                         {
                             ConvertedExcelField fld = new ConvertedExcelField
                             {

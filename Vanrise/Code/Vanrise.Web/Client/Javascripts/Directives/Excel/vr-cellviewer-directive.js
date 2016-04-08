@@ -13,7 +13,8 @@
                 hint: '@',
                 onSelect: "=",
                 onUpdate:"=",
-                placeholder: '@'
+                placeholder: '@',
+                type:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -56,12 +57,16 @@
 
                         }
 
-                        $scope.updateRange = function (r,c,s) {
-                            ctrl.value = {
-                                row: r,
-                                col: c,
-                                sheet:s
+                        $scope.updateRange = function (r, c, s) {
+                            if (r != undefined || c != undefined || s != undefined)
+                            {
+                                ctrl.value = {
+                                    row: r,
+                                    col: c,
+                                    sheet: s
+                                }
                             }
+                           
                             if (ctrl.onUpdate != null)
                                 ctrl.onUpdate(r, c, s);
 
@@ -116,14 +121,19 @@
                 var labelTemplate = '';
                 if (attrs.label != undefined)
                     labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
+
                 var rows = 3
                 if (attrs.rows != undefined)
                     rows = attrs.rows;
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" ng-style="ctrl.getInputeStyle()">'
                         + '<vr-validator validate="ctrl.validate()">'
                         + '<div    id="mainInput" ng-model="ctrl.value" style="border-radius: 4px; padding: 0px; width: 100%; border: 0px;">'
-                        + ' <span class="glyphicon glyphicon-circle-arrow-right" style="font-size: 21px;top: 3px;" ng-click="updateRange()"></span>'
-                        + '<a ng-show="ctrl.value !=null && ctrl.value !=undefined " class="hand-cursor" style="display: inline-block; width: calc(100% - 45px); position: relative; top: -2px;" ng-click="selectCell()">Row{{ctrl.value.row}};Col{{ctrl.value.col}}</a>'
+                        + ' <span class="glyphicon glyphicon-circle-arrow-right" style="font-size: 21px;top: 3px;cursor: pointer; cursor: hand;" ng-click="updateRange()" ng-show="ctrl.value == undefined"></span>'
+                        + '<a ng-show="ctrl.value !=null && ctrl.value !=undefined " class="hand-cursor" style="display: inline-block; width: calc(100% - 45px); position: relative; top: -2px;" ng-click="selectCell()">'
+                        + '<span ng-show="ctrl.type == \'cell\'">Row{{ctrl.value.row}};Col{{ctrl.value.col}}</span>'
+                        + '<span ng-show="ctrl.type == \'row\'">Row{{ctrl.value.row}}</span>'
+
+                        +  '</a>'
                         + '<span ng-show="ctrl.value !=null" class="glyphicon glyphicon-remove hand-cursor" style="top: 0px;" aria-hidden="true" ng-click="ctrl.remove()"></span>'
                         + '</div>'
                         + '</vr-validator>'

@@ -11,7 +11,8 @@
                 onReady: "=",
                 normalColNum: '@',
                 isrequired: '=',
-                customvalidate:'='
+                customvalidate: '=',
+                type:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -74,6 +75,7 @@
                     if ($scope.cellObject != undefined)
                     {
                         data = {
+                            $type: "ExcelConversion.MainExtensions.FieldMappings.CellFieldMapping, ExcelConversion.MainExtensions",
                             SheetIndex: $scope.cellObject.sheet,
                             RowIndex: $scope.cellObject.row,
                             CellIndex: $scope.cellObject.col

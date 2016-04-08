@@ -55,6 +55,7 @@
     <Compile Include="ConversionSettings\FieldMapping.cs" />
     <Compile Include="ConversionSettings\IGetConcatenatedPartTextContext.cs" />
     <Compile Include="ConversionSettings\IGetFieldValueContext.cs" />
+    <Compile Include="ExcelToConvert.cs" />
     <Compile Include="Excel\ExcelCell.cs" />
     <Compile Include="Excel\ExcelRow.cs" />
     <Compile Include="Excel\ExcelWorkbook.cs" />
@@ -62,6 +63,8 @@
     <Compile Include="Excel\MergedCell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConversionSettings\ListMapping.cs" />
+    <Compile Include="Templates\ExcelTemplate.cs" />
+    <Compile Include="Templates\ExcelTemplateRecord.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

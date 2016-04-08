@@ -125,8 +125,14 @@
                         for(var i=0;i<ctrl.fieldMappings.length;i++)
                         {
                             var fieldMapping = ctrl.fieldMappings[i];
-                            if(fieldMapping.fieldMappingAPI !=undefined)
-                                fieldMappings.push(fieldMapping.fieldMappingAPI .getData());
+                            if (fieldMapping.fieldMappingAPI != undefined)
+                            {
+                                var fieldMappingData = fieldMapping.fieldMappingAPI.getData();
+                                fieldMappingData.FieldName = fieldMapping.FieldName;
+                                fieldMappingData.FieldType = 0;
+                                fieldMappings.push(fieldMappingData);
+                            }
+                               
                         }
                        
                     }
@@ -137,6 +143,7 @@
                         LastRowIndex:ctrl.lastRowIndex.row,
                         FieldMappings: fieldMappings,
                     };
+                    console.log(data);
                     return data;
                 }
             }

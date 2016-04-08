@@ -4,10 +4,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
@@ -85,6 +90,147 @@ namespace ExcelConversion.Business
         {
             var templateConfigManager = new TemplateConfigManager();
             return templateConfigManager.GetTemplateConfigurations(Constants.FieldMappingConfigType);
+        }
+
+        public byte[] ConvertAndDownload(ExcelToConvert excelToConvert)
+        {
+            ExcelConvertor excelConvertor = new ExcelConvertor();
+            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(excelToConvert.FileId, excelToConvert.ExcelConversionSettings);
+            ExcelTemplate excelTemplate = new Entities.ExcelTemplate();
+            excelTemplate.Records = new List<ExcelTemplateRecord>();
+            Dictionary<string, decimal> rateByZone = new Dictionary<string, decimal>();
+            ConvertedExcelList RateConvertedExcelList;
+            if (convertedExcel.Lists.TryGetValue("RateList", out RateConvertedExcelList))
+            {
+                foreach (var obj in RateConvertedExcelList.Records)
+                {
+                    ConvertedExcelField zoneField;
+                    ConvertedExcelField rateField;
+                    if (obj.Fields.TryGetValue("Zone", out zoneField) && obj.Fields.TryGetValue("Rate", out rateField))
+                    {
+                        rateByZone.Add(zoneField.FieldValue.ToString(),Convert.ToDecimal(rateField.FieldValue));
+                    };
+                }
+
+            }
+
+            ConvertedExcelList CodeConvertedExcelList;
+            if (convertedExcel.Lists.TryGetValue("CodeList",out CodeConvertedExcelList))
+            {
+                foreach (var obj in CodeConvertedExcelList.Records)
+                {
+                    ExcelTemplateRecord excelTemplateRecord = new Entities.ExcelTemplateRecord();
+                    ConvertedExcelField zoneField;
+
+                    if (obj.Fields.TryGetValue("Zone", out zoneField))
+                    {
+                        excelTemplateRecord.Zone = zoneField.FieldValue.ToString();
+                    };
+                    ConvertedExcelField codeField;
+                    if (obj.Fields.TryGetValue("Code", out codeField))
+                    {
+                        excelTemplateRecord.Code = codeField.FieldValue.ToString();
+                    };
+                    ConvertedExcelField bEDField;
+                    if (obj.Fields.TryGetValue("BED", out bEDField))
+                    {
+                        excelTemplateRecord.BED = (DateTime)bEDField.FieldValue;
+                    };
+                    decimal rate;
+                    if (rateByZone.TryGetValue(excelTemplateRecord.Zone,out rate))
+                    {
+                        excelTemplateRecord.Rate = rate;
+                    }
+                    excelTemplate.Records.Add(excelTemplateRecord);
+                }
+                   
+            }
+
+   
+            //BinaryFormatter formatter = new BinaryFormatter();
+            //MemoryStream memStream = new MemoryStream();
+            //formatter.Serialize(memStream, excelTemplate.Records);
+
+
+            Workbook wbk = new Workbook();
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
+            wbk.Worksheets.Clear();
+            Worksheet RateWorkSheet = wbk.Worksheets.Add("Result");
+            int rowIndex = 0;
+            int colIndex = 0;
+
+            PropertyInfo[] properties = typeof(ExcelTemplateRecord).GetProperties();
+            PropertyInfo entityProperty = null;
+            PropertyInfo[] entityProperties = null;
+
+            //filling header
+            foreach (var prop in properties)
+            {
+                RateWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+                RateWorkSheet.Cells[rowIndex, colIndex].PutValue(prop.Name);
+                Cell cell = RateWorkSheet.Cells.GetCell(rowIndex, colIndex);
+                Style style = cell.GetStyle();
+                style.Font.Name = "Times New Roman";
+                style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                style.Font.Size = 14;
+                style.Font.IsBold = true;
+                cell.SetStyle(style);
+                colIndex++;
+            }
+            if (entityProperties != null)
+            {
+                foreach (var prop in entityProperties)
+                {
+                    RateWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue(prop.Name);
+                    Cell cell = RateWorkSheet.Cells.GetCell(rowIndex, colIndex);
+                    Style style = cell.GetStyle();
+                    style.Font.Name = "Times New Roman";
+                    style.Font.Color = Color.FromArgb(255, 0, 0); ;
+                    style.Font.Size = 14;
+                    style.Font.IsBold = true;
+                    cell.SetStyle(style);
+                    colIndex++;
+                }
+            }
+            rowIndex++;
+            colIndex = 0;
+
+            //filling result
+            foreach (var item in excelTemplate.Records)
+            {
+                colIndex = 0;
+                foreach (var prop in properties)
+                {
+                    if (prop == entityProperty)
+                        continue;
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue(prop.GetValue(item));
+                    colIndex++;
+                }
+                if (entityProperty != null)
+                {
+                    object entityPropertyValue = entityProperty.GetValue(item);
+                    if (entityPropertyValue != null)
+                    {
+                        foreach (var prop in entityProperties)
+                        {
+                            RateWorkSheet.Cells[rowIndex, colIndex].PutValue(prop.GetValue(entityPropertyValue));
+                            colIndex++;
+                        }
+                    }
+                }
+
+                rowIndex++;
+            }
+
+
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = wbk.SaveToStream();
+
+            return memoryStream.ToArray();
+
+        //   return memStream.ToArray();
         }
     }
 }
