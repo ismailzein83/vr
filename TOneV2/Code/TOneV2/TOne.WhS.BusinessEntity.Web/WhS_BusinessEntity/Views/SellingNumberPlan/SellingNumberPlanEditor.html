@@ -7,13 +7,13 @@
                         <vr-textbox value="name" label="Name" isrequired></vr-textbox>
                     </vr-columns>
                 </vr-row>
-                </div>
+            </div>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" validationcontext="sellingNumberPlanGroup" data-onclick="saveSellingNumberPlan"></vr-button>
+                <vr-button type="Save" validationcontext="sellingNumberPlanGroup" data-onclick="saveSellingNumberPlan" haspermission="hasSaveSellingNumberPlanPermission"></vr-button>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>
         </vr-actionbar>

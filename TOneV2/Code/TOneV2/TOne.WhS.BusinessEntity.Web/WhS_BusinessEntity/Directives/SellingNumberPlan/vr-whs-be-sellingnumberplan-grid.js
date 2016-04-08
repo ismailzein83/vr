@@ -62,7 +62,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIServic
             };
             defineMenuActions();
         }
-        
+
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return WhS_BE_SellingNumberPlanAPIService.GetFilteredSellingNumberPlans(dataRetrievalInput)
                 .then(function (response) {
@@ -77,13 +77,18 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIServic
                     VRNotificationService.notifyException(error, $scope);
                 });
         };
-       
+
         function defineMenuActions() {
 
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editSellingNumberPlan
+                clicked: editSellingNumberPlan,
+                haspermission: hasUpdateSellingNumberPlanPermission
             }];
+        }
+
+        function hasUpdateSellingNumberPlanPermission() {
+            return WhS_BE_SellingNumberPlanAPIService.HasUpdateSellingNumberPlanPermission();
         }
 
         function editSellingNumberPlan(sellingNumberPlanObj) {
@@ -96,8 +101,8 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingNumberPlanAPIServic
         }
     }
 
-   
-    
+
+
     return directiveDefinitionObject;
 
 }]);

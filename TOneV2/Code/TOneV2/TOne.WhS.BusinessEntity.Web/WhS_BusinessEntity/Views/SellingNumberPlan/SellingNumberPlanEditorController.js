@@ -19,6 +19,14 @@
             editMode = (sellingNumberPlanId != undefined);
         }
         function defineScope() {
+
+            $scope.hasSaveSellingNumberPlanPermission = function () {
+                if (editMode)
+                    return WhS_BE_SellingNumberPlanAPIService.HasUpdateSellingNumberPlanPermission();
+                else
+                    return WhS_BE_SellingNumberPlanAPIService.HasAddSellingNumberPlanPermission();
+            }
+
             $scope.saveSellingNumberPlan = function () {
                 if (editMode) {
                     return updatesellingNumberPlan();
@@ -76,7 +84,7 @@
 
                     if ($scope.onSellingNumberPlanAdded != undefined)
                         $scope.onSellingNumberPlanAdded(response.InsertedObject);
-                   
+
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
