@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FileCDRSourceDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'UtilsService', 'VRUIUtilsService'];
+    FileCDRSourceDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'VRCommon_FileService', 'UtilsService', 'VRUIUtilsService'];
 
-    function FileCDRSourceDirective(CDRComparison_CDRComparisonAPIService, UtilsService, VRUIUtilsService) {
+    function FileCDRSourceDirective(CDRComparison_CDRComparisonAPIService, VRCommon_FileService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -30,6 +30,16 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.viewRecentFiles = function () {
+                    var onRecentFileSelected = function (fileId) {
+                        $scope.scopeModel.file = {
+                            fileId: fileId
+                        };
+                    };
+                    VRCommon_FileService.viewRecentFiles('CDRComparison_FileCDRSourceType', onRecentFileSelected);
+                };
+
                 $scope.scopeModel.onFileReaderSelectiveReady = function (api) {
                     fileReaderSelectiveAPI = api;
                     defineAPI();
@@ -67,7 +77,7 @@
                 api.getData = function () {
                     return {
                         $type: 'CDRComparison.Business.FileCDRSource, CDRComparison.Business',
-                        FileId: $scope.file.fileId,
+                        FileId: $scope.scopeModel.file.fileId,
                         FileReader: fileReaderSelectiveAPI.getData()
                     };
                 };
