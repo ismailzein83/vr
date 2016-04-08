@@ -221,13 +221,6 @@
                 $scope.modalContext.closeModal()
             };
 
-            $scope.validateTimeFormat = function () {
-               
-               
-                if ($scope.timeFormatValue == timeFormatValue)
-                    return 'No changed.';
-                return null;
-            }
             $scope.isFormatValueRequired = function()
             {
                 if ($scope.selectedTimeFormatTemplate.value == TimeFormateTemplatesEnum.Custom.value && $scope.timeFormatValue == undefined)
