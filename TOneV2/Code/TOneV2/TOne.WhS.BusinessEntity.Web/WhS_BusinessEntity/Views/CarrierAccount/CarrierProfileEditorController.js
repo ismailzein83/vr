@@ -35,6 +35,13 @@
 
         function defineScope() {
 
+            $scope.hasSaveCarrierProfilePermission = function () {
+                if ($scope.scopeModal.isEditMode)
+                    return WhS_BE_CarrierProfileAPIService.HasUpdateCarrierProfilePermission();
+                else
+                    return WhS_BE_CarrierProfileAPIService.HasAddCarrierProfilePermission();
+            }
+
             $scope.scopeModal = {
                 contacts: [],
                 faxes: [],

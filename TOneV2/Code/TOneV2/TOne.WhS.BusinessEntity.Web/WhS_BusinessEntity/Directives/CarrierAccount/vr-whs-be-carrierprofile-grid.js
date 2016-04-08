@@ -1,7 +1,8 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_CarrierAccountService", "WhS_BE_CarrierProfileService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService) {
+app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_CarrierAccountService",
+    "WhS_BE_CarrierProfileService", "VRUIUtilsService", "WhS_BE_CarrierAccountAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService, WhS_BE_CarrierAccountAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -92,13 +93,24 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editCarrierProfile,
+                haspermission: hasUpdateCarrierProfilePermission
             },
                 {
                     name: "New Carrier Account",
-                    clicked: addCarrierAccount
+                    clicked: addCarrierAccount,
+                    haspermission: hasAddCarrierAccountPermission
                 }
             ];
         }
+
+        function hasAddCarrierAccountPermission() {
+            return WhS_BE_CarrierAccountAPIService.HasAddCarrierAccountPermission();
+        }
+
+        function hasUpdateCarrierProfilePermission() {
+            return WhS_BE_CarrierProfileAPIService.HasUpdateCarrierProfilePermission();
+        }
+
 
         function editCarrierProfile(carrierProfileObj) {
             var onCarrierProfileUpdated = function (carrierProfile) {

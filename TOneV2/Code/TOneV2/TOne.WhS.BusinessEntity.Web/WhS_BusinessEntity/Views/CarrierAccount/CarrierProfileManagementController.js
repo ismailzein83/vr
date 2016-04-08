@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierProfileManagementController.$inject = ['$scope',  'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CarrierProfileService'];
+    carrierProfileManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CarrierProfileService', 'WhS_BE_CarrierProfileAPIService'];
 
-    function carrierProfileManagementController($scope,  UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_CarrierProfileService) {
+    function carrierProfileManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_CarrierProfileService, WhS_BE_CarrierProfileAPIService) {
         var gridAPI;
         var carrierProfileDirectiveAPI;
         var countryDirectiveApi;
@@ -13,6 +13,9 @@
         load();
 
         function defineScope() {
+            $scope.hadAddCarrierProfilePermission = function () {
+                return WhS_BE_CarrierProfileAPIService.HasAddCarrierProfilePermission();
+            };
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
@@ -43,7 +46,7 @@
 
         function load() {
             $scope.isLoadingFilters = true;
-             loadAllControls();
+            loadAllControls();
         }
 
         function loadAllControls() {
