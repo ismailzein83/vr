@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Common.Business
 {
@@ -16,8 +17,10 @@ namespace Vanrise.Common.Business
         {
             _datamanager =  CommonDataManagerFactory.GetDataManager<IVRFileDataManager>();
         }
+
         public long AddFile(VRFile file)
         {
+            file.UserId = SecurityContext.Current.GetLoggedInUserId();
             return _datamanager.AddFile(file);
         }
 
@@ -30,6 +33,7 @@ namespace Vanrise.Common.Business
         {
             return _datamanager.UpdateFileUsed(fileId, false);
         }
+
         public VRFile GetFile(long fileId)
         {
             return _datamanager.GetFile(fileId);

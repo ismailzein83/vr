@@ -9,18 +9,16 @@ namespace Vanrise.Entities
     public class VRFileInfo
     {
         public long FileId { get; set; }
-
         public string Name { get; set; }
-
         public string Extension { get; set; }
-
-        public DateTime CreatedTime { get; set; }
         public bool IsUsed { get; set; }
+        public string ModuleType { get; set; }
+        public int UserId { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 
     public class VRFile : VRFileInfo
     {
         public byte[] Content { get; set; }
-
     }
 }

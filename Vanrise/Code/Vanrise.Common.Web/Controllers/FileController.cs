@@ -22,24 +22,25 @@ namespace Vanrise.Common.Web
         [HttpPost]
         public FileUploadResult UploadFile()
         {
-
             HttpResponseMessage result = null;
-
             var httpRequest = HttpContext.Current.Request;
 
             if (httpRequest.Files.Count > 0 )
             {
-
                 HttpPostedFile postedFile = httpRequest.Files[0];
                 string[] nameastab = postedFile.FileName.Split('.');
+                
                 VRFile file = new VRFile()
                 {
                     Content = ReadToEnd(postedFile.InputStream) ,
                     Name = postedFile.FileName ,
                     Extension = nameastab[nameastab.Length -1],
+                    ModuleType = httpRequest.Headers["Module-Type"],
                     CreatedTime = DateTime.Now 
-
                 };
+
+                // VRFileManager sets the UserId property via SecurityContext
+
                 VRFileManager manager = new VRFileManager();
                 long id = manager.AddFile(file);
 
@@ -49,15 +50,10 @@ namespace Vanrise.Common.Web
                 {
                     FileId = id
                 };
-
             }
-
             else
             {
-
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-
-
             }
         }
 

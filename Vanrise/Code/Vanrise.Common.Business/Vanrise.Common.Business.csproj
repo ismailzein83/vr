@@ -46,6 +46,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CityManager.cs" />

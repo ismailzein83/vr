@@ -8,7 +8,8 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
         scope: {
             onReady: '=',
             value: '=',
-            hint:'@',
+            hint: '@',
+            moduletype: '@'
         },
         controller: function ($scope, $element, $attrs,$timeout) {
             var ctrl = this;
@@ -48,6 +49,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 url: base + '/api/VRCommon/File/UploadFile',
                 beforeSend: function (xhr, data) {
                     xhr.setRequestHeader('Auth-Token', SecurityService.getUserToken());
+                    xhr.setRequestHeader('Module-Type', $attrs.moduletype);
                 },
                 formData: function (form) { return form },
                 replaceFileInput: true,
