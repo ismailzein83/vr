@@ -80,14 +80,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
                 defineMenuActions();
             }
 
-            //function deleteCustomerSellingProduct(gridObject) {
-            //    var onCustomerSellingProductDeleted = function (gridObject) {
-            //        gridAPI.itemUpdated(gridObject);
-            //    }
-
-            //    WhS_BE_MainService.deleteCustomerSellingProduct($scope,gridObject, onCustomerSellingProductDeleted);
-            //}
-
             function defineMenuActions() {
                 var defaultMenuActions = [
                             {
