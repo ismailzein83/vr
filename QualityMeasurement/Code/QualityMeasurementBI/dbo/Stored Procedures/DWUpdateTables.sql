@@ -5,14 +5,14 @@
 -- =============================================
 CREATE PROCEDURE [dbo].[DWUpdateTables]
 	-- Add the parameters for the stored procedure here
-      @fromdate datetime,
-      @todate datetime
+      @fromdate datetime = null,
+      @todate datetime = null
 AS
 BEGIN
 /*SET DESTINATION DATABASES
 Please make sure that database name match client databases
 
-Replace [QualityMeasurement_Dev] with [ClearVoice main Database name]
+Replace [QualityMeasurement] with [ClearVoice main Database name]
 Replace [QualityMeasurementConfiguration] with [ClearVoice configuration Database name]
 Replace [QualityMeasurementTransactionDB] with [ClearVoice Transaction Database name]
 */
@@ -34,7 +34,7 @@ RAISERROR ( 'Updating Dim_Suppliers Table...', 10, 0 ) WITH NOWAIT
 MERGE Dim_Suppliers AS target
 USING( 
 	SELECT [ID],[Name],SUBSTRING(Settings, 94, CHARINDEX('"', SUBSTRING(Settings, 94, LEN(Settings))) - 1)
-	FROM	[QualityMeasurement_Dev].[QM_BE].[Supplier]
+	FROM	[QualityMeasurement].[QM_BE].[Supplier]
 	) AS Source([ID] ,[Name] ,[Prefix])
 	ON ISNULL(target.[Pk_SupplierId],0)= ISNULL(source.[ID],0)	
 	WHEN NOT MATCHED THEN
@@ -73,7 +73,7 @@ RAISERROR ( 'Updating Dim_Zones Table...', 10, 0 ) WITH NOWAIT
 --------------------------------------------------
 MERGE Dim_Zones AS targetZone
 	USING(
-	SELECT [ID] ,[Name] FROM [QualityMeasurement_Dev].[QM_BE].[Zone]
+	SELECT [ID] ,[Name] FROM [QualityMeasurement].[QM_BE].[Zone]
 	)
 	AS SourceZone([ID] ,[Name])
 	ON ISNULL(targetZone.[Pk_ZoneId],0)= ISNULL(SourceZone.[ID],0)
@@ -155,7 +155,7 @@ CREATE TABLE #FactTestCalls([ID] INT,[UserID] INT,[SupplierID] INT,[CountryID] I
 
 INSERT INTO #FactTestCalls 
 SELECT	[ID],[UserID],[SupplierID],[CountryID],[ZoneID],[CallTestStatus],[CallTestResult],[ScheduleID],[CreationDate]
-FROM	[QualityMeasurement_Dev].[QM_CLITester].[TestCall] WITH(NOLOCK)
+FROM	[QualityMeasurement].[QM_CLITester].[TestCall] WITH(NOLOCK)
 WHERE	(CreationDate >= @fromdate AND CreationDate < DATEADD(DAY,1,@createdate))
    
 IF NOT EXISTS(
@@ -164,7 +164,7 @@ IF NOT EXISTS(
 	WHERE	DateInstance IN (SELECT CreationDate FROM #FactTestCalls)
 			)
 		INSERT	INTO Dim_Time WITH(tablock)
-		SELECT	CreationDate,DATEPART(yyyy,FactTCall.CreationDate),DATEPART(mm,FactTCall.CreationDate),DATEPART(ww,FactTCall.CreationDate),DATEPART(dd,FactTCall.CreationDate),DATEPART(hh,FactTCall.CreationDate),DATENAME(month,FactTCall.CreationDate),DATENAME(dw,FactTCall.CreationDate)
+		SELECT	DISTINCT DATEADD(hour, DATEDIFF(hour, 0, CreationDate), 0),DATEPART(yyyy,FactTCall.CreationDate),DATEPART(mm,FactTCall.CreationDate),DATEPART(ww,FactTCall.CreationDate),DATEPART(dd,FactTCall.CreationDate),DATEPART(hh,FactTCall.CreationDate),DATENAME(month,FactTCall.CreationDate),DATENAME(dw,FactTCall.CreationDate)
 		FROM	#FactTestCalls FactTCall WITH(NOLOCK)
 
 INSERT	INTO Fact_TestCalls WITH(tablock)
