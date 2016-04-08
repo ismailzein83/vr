@@ -83,6 +83,7 @@
     <Compile Include="Base Classes\DependentAsyncActivity.cs" />
     <Compile Include="BusinessProcessService.cs" />
     <Compile Include="BusinessRuleActions\BusinessRuleActionExecutionContext.cs" />
+    <Compile Include="BusinessRuleActions\WarningItemAction.cs" />
     <Compile Include="BusinessRuleActions\ExcludeItemAction.cs" />
     <Compile Include="Internals\ActivityEventsTracking.cs" />
     <Compile Include="Internals\ConsoleTracking.cs" />
