@@ -65,8 +65,13 @@ function (UtilsService, VRNotificationService, VRCommon_RateTypeAPIService, VRCo
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editRateType
+                clicked: editRateType,
+                haspermission: hasUpdateRateTypePermission
             }];
+        }
+
+        function hasUpdateRateTypePermission() {
+            return VRCommon_RateTypeAPIService.HasUpdateRateTypePermission();
         }
 
         function editRateType(rateType) {

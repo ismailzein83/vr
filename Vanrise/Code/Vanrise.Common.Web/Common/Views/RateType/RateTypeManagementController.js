@@ -2,15 +2,20 @@
 
     "use strict";
 
-    rateTypeManagementController.$inject = ['$scope', 'VRCommon_RateTypeService'];
+    rateTypeManagementController.$inject = ['$scope', 'VRCommon_RateTypeService', 'VRCommon_RateTypeAPIService'];
 
-    function rateTypeManagementController($scope, VRCommon_RateTypeService) {
+    function rateTypeManagementController($scope, VRCommon_RateTypeService, VRCommon_RateTypeAPIService) {
         var gridAPI;
         defineScope();
         load();
         var filter = {};
 
         function defineScope() {
+
+            $scope.hasAddRateTypePermission = function () {
+                return VRCommon_RateTypeAPIService.HasAddRateTypePermission();
+            };
+
             $scope.searchClicked = function () {
                 setFilterObject()
                 return gridAPI.loadGrid(filter);

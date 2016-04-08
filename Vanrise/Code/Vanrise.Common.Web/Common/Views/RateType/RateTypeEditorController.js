@@ -24,6 +24,13 @@
         }
 
         function defineScope() {
+            $scope.hasSaveRateTypePermission = function () {
+                if (isEditMode)
+                    return VRCommon_RateTypeAPIService.HasUpdateRateTypePermission();
+                else
+                    return VRCommon_RateTypeAPIService.HasAddRateTypePermission();
+            }
+
             $scope.saveRateType = function () {
                 if (isEditMode) {
                     return updateRateType();
