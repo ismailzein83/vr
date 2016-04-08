@@ -334,8 +334,6 @@
     <Content Include="WhS_BusinessEntity\Views\AccountManager\CarrierAssignmentEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\OrgChartAssignmentEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\AccountManager\OrgChartAssignmentEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\Testing.html" />
-    <Content Include="WhS_BusinessEntity\Views\TestingController.js" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountManagement.html" />
