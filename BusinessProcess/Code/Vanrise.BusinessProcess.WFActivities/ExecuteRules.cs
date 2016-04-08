@@ -25,7 +25,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             List<BPBusinessRuleDefinition> bpBusinessRules = bpBusinessRuleManager.GetBPBusinessRuleDefinitions(businessRulesKey, context.GetSharedInstanceData().InstanceInfo.DefinitionID);
 
             IEnumerable<BusinessRule> rules = BuildBusinessRules(bpBusinessRules);
-            ExecuteValidation(rules, importedDataToValidate, violatedBusinessRulesByTarget, out stopExecutionFlag);
+            ExecuteValidation(rules, importedDataToValidate, context, violatedBusinessRulesByTarget, out stopExecutionFlag);
             AppendValidationMessages(context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID, context.GetSharedInstanceData().InstanceInfo.ParentProcessID, violatedBusinessRulesByTarget);
 
             if (stopExecutionFlag)
@@ -48,7 +48,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             return rules;
         }
 
-        private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets, List<BPViolatedRule> violatedBusinessRulesByTarget, out bool stopExecutionFlag)
+        private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets, ActivityContext activityContext, List<BPViolatedRule> violatedBusinessRulesByTarget, out bool stopExecutionFlag)
         {
             stopExecutionFlag = false;
             foreach (BusinessRule rule in rules)
@@ -58,7 +58,8 @@ namespace Vanrise.BusinessProcess.WFActivities
                     if (!rule.Condition.ShouldValidate(target))
                         continue;
 
-                    if (rule.Condition.Validate(target))
+                    IBusinessRuleConditionValidateContext validationContext = new BusinessRuleConditionValidateContext(activityContext) { Target = target };
+                    if (rule.Condition.Validate(validationContext))
                         continue;
 
                     BusinessRuleActionExecutionContext actionContext = new BusinessRuleActionExecutionContext() { Target = target };

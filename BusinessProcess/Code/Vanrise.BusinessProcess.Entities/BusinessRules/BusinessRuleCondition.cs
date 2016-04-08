@@ -10,7 +10,7 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public abstract bool ShouldValidate(IRuleTarget target);
 
-        public abstract bool Validate(IRuleTarget target);
+        public abstract bool Validate(IBusinessRuleConditionValidateContext context);
 
         public abstract string GetMessage(IRuleTarget target);
     }

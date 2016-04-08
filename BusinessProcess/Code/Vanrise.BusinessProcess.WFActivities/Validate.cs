@@ -34,29 +34,29 @@ namespace Vanrise.BusinessProcess.WFActivities
         private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets, List<BPViolatedRule> violatedBusinessRulesByTarget, ref bool stopExecutionFlag)
         {
 
-            foreach (BusinessRule rule in rules)
-            {
-                foreach (IRuleTarget target in targets)
-                {
-                    if (rule.Condition.ShouldValidate(target))
-                    {
-                        bool valid = rule.Condition.Validate(target);
+            //foreach (BusinessRule rule in rules)
+            //{
+            //    foreach (IRuleTarget target in targets)
+            //    {
+            //        if (rule.Condition.ShouldValidate(target))
+            //        {
+            //            bool valid = rule.Condition.Validate(target);
 
-                        if (!valid)
-                        {
-                            BusinessRuleActionExecutionContext actionContext = new BusinessRuleActionExecutionContext() { Target = target };
-                            rule.Action.Execute(actionContext);
-                            violatedBusinessRulesByTarget.Add(new BPViolatedRule() { Target = target, Rule = rule });
-                            if (actionContext.StopExecution)
-                            {
-                                stopExecutionFlag = true;
-                                return;
-                            }
+            //            if (!valid)
+            //            {
+            //                BusinessRuleActionExecutionContext actionContext = new BusinessRuleActionExecutionContext() { Target = target };
+            //                rule.Action.Execute(actionContext);
+            //                violatedBusinessRulesByTarget.Add(new BPViolatedRule() { Target = target, Rule = rule });
+            //                if (actionContext.StopExecution)
+            //                {
+            //                    stopExecutionFlag = true;
+            //                    return;
+            //                }
 
-                        }
-                    }
-                }
-            }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private void AppendValidationMessages(long processIntanceId, long? parentProcessId, List<BPViolatedRule> violatedBusinessRulesByTarget)

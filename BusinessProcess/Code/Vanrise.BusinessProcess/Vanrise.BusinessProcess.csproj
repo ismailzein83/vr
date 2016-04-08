@@ -85,6 +85,7 @@
     <Compile Include="BusinessRuleActions\BusinessRuleActionExecutionContext.cs" />
     <Compile Include="BusinessRuleActions\WarningItemAction.cs" />
     <Compile Include="BusinessRuleActions\ExcludeItemAction.cs" />
+    <Compile Include="BusinessRuleConditionValidateContext.cs" />
     <Compile Include="Internals\ActivityEventsTracking.cs" />
     <Compile Include="Internals\ConsoleTracking.cs" />
     <Compile Include="ContextExtensions.cs" />
