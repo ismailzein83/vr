@@ -24,6 +24,16 @@
         }
 
         function defineScope() {
+
+            $scope.hasSaveSellingProductPermission = function () {
+                if (isEditMode) {
+                    return WhS_BE_SellingProductAPIService.HasUpdateSellingProductPermission();
+                }
+                else {
+                    return WhS_BE_SellingProductAPIService.HasAddSellingProductPermission();
+                }
+            }
+
             $scope.scopeModal = {}
             $scope.scopeModal.isEditMode = isEditMode;
             $scope.scopeModal.saveSellingProduct = function () {

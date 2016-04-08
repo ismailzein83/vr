@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService","WhS_BE_SellingProductService" ,"WhS_BE_CustomerSellingProductService","VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, WhS_BE_SellingProductService, WhS_BE_CustomerSellingProductService, VRUIUtilsService) {
+app.directive("vrWhsBeSellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SellingProductAPIService", "WhS_BE_SellingProductService", "WhS_BE_CustomerSellingProductService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, WhS_BE_SellingProductService, WhS_BE_CustomerSellingProductService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -84,19 +84,29 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-           
+
         }
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editSellingProduct,
+                haspermission: hasUpdateSellingProductPermission
             },
            {
                name: "Assign Customer",
-               clicked:assignCustomer
+               clicked: assignCustomer,
+               haspermission: hasAddCustomerSellingProductPermission
            }
             ];
+        }
+
+        function hasAddCustomerSellingProductPermission() {
+            return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
+        }
+
+        function hasUpdateSellingProductPermission() {
+            return WhS_BE_SellingProductAPIService.HasUpdateSellingProductPermission();
         }
 
         function editSellingProduct(sellingProductObj) {
@@ -113,10 +123,9 @@ function (UtilsService, VRNotificationService, WhS_BE_SellingProductAPIService, 
             }
 
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
-                if (dataItem.custormerSellingProductGridAPI != undefined)
-                {
+                if (dataItem.custormerSellingProductGridAPI != undefined) {
                     for (var i = 0; i < customerSellingProductObj.length; i++) {
-                            dataItem.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
+                        dataItem.custormerSellingProductGridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
 
                     }
                 }

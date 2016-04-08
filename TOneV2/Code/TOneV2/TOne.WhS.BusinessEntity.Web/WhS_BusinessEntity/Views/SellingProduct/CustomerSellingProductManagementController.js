@@ -4,7 +4,7 @@
 
     customerSellingProductManagementController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CustomerSellingProductService'];
 
-    function customerSellingProductManagementController($scope, WhS_BE_CustomerSellingProductAPIService,  UtilsService, VRModalService, VRNotificationService, VRUIUtilsService, WhS_BE_CustomerSellingProductService) {
+    function customerSellingProductManagementController($scope, WhS_BE_CustomerSellingProductAPIService, UtilsService, VRModalService, VRNotificationService, VRUIUtilsService, WhS_BE_CustomerSellingProductService) {
         var gridAPI;
 
         var sellingProductsDirectiveAPI;
@@ -16,9 +16,13 @@
         defineScope();
 
         function defineScope() {
+            $scope.hasAddCustomerSellingProductPermission = function () {
+                return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
+            }
+
             $scope.searchClicked = function () {
                 if (!$scope.isGettingData && gridAPI != undefined)
-               return  gridAPI.loadGrid(getFilterObject());
+                    return gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.AddNewCustomerSellingProduct = AddNewCustomerSellingProduct;
@@ -43,12 +47,12 @@
 
         function load() {
         }
-       
+
 
         function getFilterObject() {
             var data = {
                 CustomersIds: carrierAccountDirectiveAPI.getSelectedIds(),
-                SellingProductsIds: sellingProductsDirectiveAPI.getSelectedIds(), 
+                SellingProductsIds: sellingProductsDirectiveAPI.getSelectedIds(),
                 EffectiveDate: $scope.effectiveDate
             };
             return data;
@@ -58,11 +62,11 @@
             var onCustomerSellingProductAdded = function (customerSellingProductObj) {
 
                 for (var i = 0; i < customerSellingProductObj.length; i++) {
-                        gridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
+                    gridAPI.onCustomerSellingProductAdded(customerSellingProductObj[i]);
 
                 }
-              
-                
+
+
             };
 
             WhS_BE_CustomerSellingProductService.addCustomerSellingProduct(onCustomerSellingProductAdded);

@@ -1,33 +1,50 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    customerSellingProductAPIService.$inject = ['BaseAPIService'];
+    customerSellingProductAPIService.$inject = ['BaseAPIService', 'WhS_BE_ModuleConfig', 'SecurityService', 'UtilsService'];
 
-    function customerSellingProductAPIService(BaseAPIService) {
+    function customerSellingProductAPIService(BaseAPIService, WhS_BE_ModuleConfig, SecurityService, UtilsService) {
+
+        var controllerName = "CustomerSellingProduct";
+
 
         function GetFilteredCustomerSellingProducts(input) {
-            return BaseAPIService.post("/api/CustomerSellingProduct/GetFilteredCustomerSellingProducts", input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredCustomerSellingProducts"), input);
         }
 
         function GetCustomerSellingProduct(customerSellingProductId) {
-            return BaseAPIService.get("/api/CustomerSellingProduct/GetCustomerSellingProduct", {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomerSellingProduct"), {
                 customerSellingProductId: customerSellingProductId
             });
         }
 
         function AddCustomerSellingProduct(customerSellingProductObject) {
-            return BaseAPIService.post("/api/CustomerSellingProduct/AddCustomerSellingProduct", customerSellingProductObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "AddCustomerSellingProduct"), customerSellingProductObject);
         }
 
         function DeleteCustomerSellingProduct(customerSellingProductId) {
-            return BaseAPIService.get("/api/CustomerSellingProduct/DeleteCustomerSellingProduct", { customerSellingProductId: customerSellingProductId });
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "DeleteCustomerSellingProduct"),
+                { customerSellingProductId: customerSellingProductId });
         }
+
         function UpdateCustomerSellingProduct(customerSellingProductObject) {
-            return BaseAPIService.post("/api/CustomerSellingProduct/UpdateCustomerSellingProduct", customerSellingProductObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateCustomerSellingProduct"), customerSellingProductObject);
         }
+
+
         function IsCustomerAssignedToSellingProduct(customerId) {
-            return BaseAPIService.get("/api/CustomerSellingProduct/IsCustomerAssignedToSellingProduct", { customerId: customerId });
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "IsCustomerAssignedToSellingProduct"),
+                { customerId: customerId });
         }
+
+        function HasUpdateCustomerSellingProductPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateCustomerSellingProduct']));
+        }
+
+        function HasAddCustomerSellingProductPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddCustomerSellingProduct']));
+        }
+
 
         return ({
             GetFilteredCustomerSellingProducts: GetFilteredCustomerSellingProducts,
@@ -35,7 +52,9 @@
             DeleteCustomerSellingProduct: DeleteCustomerSellingProduct,
             GetCustomerSellingProduct: GetCustomerSellingProduct,
             UpdateCustomerSellingProduct: UpdateCustomerSellingProduct,
-            IsCustomerAssignedToSellingProduct: IsCustomerAssignedToSellingProduct
+            IsCustomerAssignedToSellingProduct: IsCustomerAssignedToSellingProduct,
+            HasUpdateCustomerSellingProductPermission: HasUpdateCustomerSellingProductPermission,
+            HasAddCustomerSellingProductPermission: HasAddCustomerSellingProductPermission
         });
     }
 

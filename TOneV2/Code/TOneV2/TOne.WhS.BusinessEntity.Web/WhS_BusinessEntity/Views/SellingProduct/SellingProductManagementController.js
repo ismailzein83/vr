@@ -2,20 +2,23 @@
 
     "use strict";
 
-    sellingProductManagementController.$inject = ['$scope', 'WhS_BE_SellingProductService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    sellingProductManagementController.$inject = ['$scope', 'WhS_BE_SellingProductService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SellingProductAPIService'];
 
-    function sellingProductManagementController($scope, WhS_BE_SellingProductService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function sellingProductManagementController($scope, WhS_BE_SellingProductService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SellingProductAPIService) {
         var gridReady;
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-       
+
         defineScope();
         load();
 
         function defineScope() {
+            $scope.hasAddSellingProductPermission = function () {
+                return WhS_BE_SellingProductAPIService.HasAddSellingProductPermission();
+            }
             $scope.searchClicked = function () {
                 if (gridReady != undefined)
-                 return gridReady.loadGrid(getFilterObject());
+                    return gridReady.loadGrid(getFilterObject());
             };
             $scope.onGridReady = function (api) {
                 gridReady = api;
@@ -25,9 +28,9 @@
             $scope.onSellingNumberPlanDirectiveReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
-              
+
             }
-           
+
             $scope.AddNewSellingProduct = AddNewSellingProduct;
         }
 
