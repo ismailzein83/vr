@@ -127,7 +127,6 @@
   <ItemGroup>
     <Content Include="ExcelConversion\Constant\ModuleConfig.js" />
     <Content Include="ExcelConversion\Directives\FieldMapping\excelconversion-fieldmapping-selective.js" />
-    <Content Include="ExcelConversion\Directives\FieldMapping\Templates\FieldMappingSelectiveTemplate.html" />
     <Content Include="ExcelConversion\Directives\ListMapping\excelconversion-listmapping.js" />
     <Content Include="ExcelConversion\Directives\ListMapping\Templates\ListMappingTemplate.html" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\excelconversion-fieldmapping-cellfieldmapping.js" />

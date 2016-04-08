@@ -2,24 +2,31 @@
     <vr-modalbody>
         <vr-form validationcontext="timeformatEditorGroup">
             <vr-row>
-                <vr-columns width="1/3row">
+                <vr-columns width="1/2row">
                     <vr-select datatextfield="description" datavaluefield="value"
-                               label="Time Part" datasource="timeFormatTemplates" selectedvalues="selectedTimeFormatTemplate" onselectionchanged="onTimeSelectionChanged">
+                               label="Time Format Templates" datasource="timeFormatTemplates" selectedvalues="selectedTimeFormatTemplate" onselectionchanged="onTimeFormatSelectionChanged">
                     </vr-select>
                 </vr-columns>
-                <vr-columns width="1/3row" ng-show="selectedTimeFormatTemplate" withemptyline>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/4row" ng-show="showTimeParts">
+                    <vr-select datatextfield="description" datavaluefield="value"
+                               label="Time Part" datasource="timeFormatparts" selectedvalues="selectedTimeFormatParts" onselectionchanged="onTimeSelectionChanged">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="1/4row" ng-show="selectedTimeFormatParts && showTimeParts" withemptyline>
                     <vr-select datatextfield="description" datavaluefield="value"
                                entityname="Option" datasource="filteredExpressionTemplates" selectedvalues="selectedExpression">
                     </vr-select>
                 </vr-columns>
-                <vr-columns width="1/3row" ng-show="selectedExpression" withemptyline>
+                <vr-columns width="1/4row" ng-show="selectedExpression && showTimeParts" withemptyline>
                     <vr-button type="Add" data-onclick="addExpression" standalone vr-disabled="isbuttonDisabled()"></vr-button>
 
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-textarea value="timeFormatValue" label="Time Format" isrequired="true" customvalidate="validateTimeFormat()"></vr-textarea>
+                <vr-columns width="fullrow" ng-show="showTimeParts">
+                    <vr-textarea value="timeFormatValue" label="Time Format" isrequired="isFormatValueRequired()" customvalidate="validateTimeFormat()"></vr-textarea>
                 </vr-columns>
             </vr-row>
         </vr-form>

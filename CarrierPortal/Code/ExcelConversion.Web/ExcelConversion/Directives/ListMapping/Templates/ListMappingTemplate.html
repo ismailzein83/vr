@@ -1,20 +1,20 @@
 ﻿<vr-row>
-    <vr-columns colnum="2">
-        <vr-textbox label="List Name" value="listName"></vr-textbox>
+    <vr-columns colnum="{{listMappingCtrl.normalColNum}}">
+        <vr-cellviewer on-select="listMappingCtrl.selectFirstRowIndex" on-update="listMappingCtrl.updateFirstRowIndexRange" value="listMappingCtrl.firstRowIndex" label="First Row Index"> </vr-cellviewer>
     </vr-columns>
-    <vr-columns colnum="2">
-        <vr-textbox label="Sheet Index" value="sheetIndex"></vr-textbox>
+    <vr-columns colnum="{{listMappingCtrl.normalColNum}}">
+        <vr-cellviewer on-select="listMappingCtrl.selectLastRowIndex" on-update="listMappingCtrl.updateLastRowIndexRange" value="listMappingCtrl.lastRowIndex" label="Last Row Index"> </vr-cellviewer>
     </vr-columns>
-    <vr-columns colnum="2">
-        <vr-textbox label="First Row Index" value="firstRowIndex"></vr-textbox>
+</vr-row>   
+<vr-row >
+    <vr-columns colnum="fullrow">
+        <vr-datagrid datasource="listMappingCtrl.fieldMappings" norowhighlightonclick="true"
+                     on-ready="onGridReady" hidegridmenu>
+            <vr-datagridcolumn headertext="'Field Name'" field="'FieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
+                <excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" customvalidate="dataItem.validate()"> </excelconversion-fieldmapping-selective>
+            </vr-datagridcolumn>
+        </vr-datagrid>
     </vr-columns>
-    <vr-columns colnum="2">
-        <vr-textbox label="First Row Index" value="firstRowIndex"></vr-textbox>
-    </vr-columns>
-    <vr-columns colnum="2">
-        <vr-textbox label="Last Row Index" value="lastRowIndex"></vr-textbox>
-    </vr-columns>
-    <vr-columns colnum="2">
-        <vr-textbox label="Last Row Index" value="lastRowIndex"></vr-textbox>
-    </vr-columns>
-</vr-row> 
+</vr-row>   
+

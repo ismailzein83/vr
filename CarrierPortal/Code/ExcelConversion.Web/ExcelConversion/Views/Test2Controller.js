@@ -28,14 +28,34 @@
                 $scope.onFieldMappingReady = function(api)
                 {
                     var payload = {
-                        context: buildContext()
+                        context: buildContext(),
+                      
                     };
                     var setLoader = function (value) {
                         $scope.isLoadingDirective = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, payload, setLoader);
                 }
-
+                $scope.onCodeListMappingReady = function (api) {
+                    var payload = {
+                        context: buildContext(),
+                        fieldMappings: [{ FieldName: "Code" }, { FieldName: "Zone" }, { FieldName: "BED" }, { FieldName: "EED" }]
+                    };
+                    var setLoader = function (value) {
+                        $scope.isLoadingDirective = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, payload, setLoader);
+                }
+                $scope.onRateListMappingReady = function (api) {
+                    var payload = {
+                        context: buildContext(),
+                        fieldMappings: [{ FieldName: "Rate" }, { FieldName: "Zone" }, { FieldName: "BED" }, { FieldName: "EED" }]
+                    };
+                    var setLoader = function (value) {
+                        $scope.isLoadingDirective = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, payload, setLoader);
+                }
             }
 
 
@@ -46,7 +66,8 @@
             {
                 var context = {
                     getSelectedCell: getSelectedCell,
-                    setSelectedCell: setSelectedCell
+                    setSelectedCell: setSelectedCell,
+                    getSelectedSheet: getSelectedSheet
                 }
                 return context;
             }
@@ -58,7 +79,13 @@
             }
             function getSelectedCell()
             {
+                if (WoorkBookApi != undefined && WoorkBookApi.getSelectedSheetApi() != undefined)
                return WoorkBookApi.getSelectedSheetApi().getSelected();
+            }
+            function getSelectedSheet()
+            {
+                if (WoorkBookApi !=undefined)
+                return WoorkBookApi.getSelectedSheet();
             }
         }
 

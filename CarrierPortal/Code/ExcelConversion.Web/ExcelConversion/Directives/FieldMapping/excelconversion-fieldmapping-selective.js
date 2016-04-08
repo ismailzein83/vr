@@ -10,7 +10,9 @@
             scope: {
                 onReady: "=",
                 normalColNum: '@',
-                isrequired: '='
+                isrequired: '=',
+                label: '@',
+                customvalidate:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -19,9 +21,40 @@
             },
             controllerAs: "fieldmappingCtrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/ExcelConversion/Directives/FieldMapping/Templates/FieldMappingSelectiveTemplate.html"
+            template: function (element, attrs) {
+                return getTamplate(attrs);
+            }
         };
+    function getTamplate(attrs) {
+        var withemptyline = 'withemptyline';
+        var label = "label='Field Mappings'";
+        if (attrs.hidelabel != undefined)
+        {
+            label = "";
+            withemptyline = '';
+        }
+           
 
+        var template =
+            '<vr-row>'
+          +  '<vr-columns colnum="{{fieldmappingCtrl.normalColNum}}">'
+          +  ' <vr-select on-ready="onSelectorReady"'
+          +  ' datasource="templateConfigs"'
+          +  ' selectedvalues="selectedTemplateConfig"'
+           +  'datavaluefield="TemplateConfigID"'
+          +  ' datatextfield="Name"'
+          + label
+           + ' isrequired="fieldmappingCtrl.isrequired"'
+          +  'hideremoveicon>'
+      +  '</vr-select>'
+         + '</vr-columns>'
+        +' <vr-columns colnum="{{fieldmappingCtrl.normalColNum}}" ' + withemptyline + '>'
+          + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate"></vr-directivewrapper>'
+        '</vr-columns >'
+       + '</vr-row>';
+        return template;
+
+    }
         function FieldmappingSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var context;
@@ -90,9 +123,11 @@
 
                 function getData() {
                     var data;
-                    if ($scope.selectedTemplateConfig != undefined) {
+                    if ($scope.selectedTemplateConfig != undefined && directiveAPI !=undefined) {
+
                         data = directiveAPI.getData();
-                        data.ConfigId = $scope.selectedTemplateConfig.TemplateConfigID;
+                        if(data !=undefined)
+                             data.ConfigId = $scope.selectedTemplateConfig.TemplateConfigID;
                     }
                     return data;
                 }

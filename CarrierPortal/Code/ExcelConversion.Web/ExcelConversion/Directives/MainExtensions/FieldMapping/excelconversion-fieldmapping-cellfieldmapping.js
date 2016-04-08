@@ -10,7 +10,8 @@
             scope: {
                 onReady: "=",
                 normalColNum: '@',
-                isrequired: '='
+                isrequired: '=',
+                customvalidate:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -28,20 +29,25 @@
             function initializeController() {
                 ctrl.updateRange = function ()
                 {
-                
                     if (context != undefined) {
                         var range = context.getSelectedCell();
-                        $scope.row = range[0];
-                        $scope.col = range[1];
-                        $scope.sheetindex = 0; // range[1];
+                        if (range != undefined)
+                        {
+                            $scope.cellObject = {
+                                row: range[0],
+                                col: range[1],
+                                sheet: context.getSelectedSheet(),
+                            }
+                        }
+                        
                     }
 
                 }
                 ctrl.selectCell = function ()
                 {
-                    if(context !=undefined)
+                    if (context != undefined && $scope.cellObject!=undefined)
                     {
-                        context.setSelectedCell($scope.row, $scope.col);
+                        context.setSelectedCell($scope.cellObject.row, $scope.cellObject.col);
                     }
                 }
                 defineAPI();
@@ -51,10 +57,9 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     if (payload != undefined) {
                         context = payload.context;
-                    }
+                    } 
 
                 };
 
@@ -65,7 +70,16 @@
                 }
 
                 function getData() {
-                    var data;
+                    var data
+                    if ($scope.cellObject != undefined)
+                    {
+                        data = {
+                            SheetIndex: $scope.cellObject.sheet,
+                            RowIndex: $scope.cellObject.row,
+                            CellIndex: $scope.cellObject.col
+                        };
+                    }
+                        
                     return data;
                 }
             }
