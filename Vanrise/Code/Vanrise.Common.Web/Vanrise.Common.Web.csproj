@@ -202,7 +202,7 @@
     <Content Include="Common\Directives\RateType\vr-common-ratetype-selector.js" />
     <Content Include="Common\ModuleInitialization.js" />
     <Content Include="Common\Services\APIServices\CityAPIService.js" />
-    <Content Include="Common\Services\APIServices\VRFileAPIService.js" />
+    <Content Include="Common\Services\APIServices\FileAPIService.js" />
     <Content Include="Common\Services\APIServices\LogEntryAPIService.js" />
     <Content Include="Common\Services\APIServices\LogAttributeAPIService.js" />
     <Content Include="Common\Services\APIServices\CountryAPIService.js" />
@@ -216,7 +216,7 @@
     <Content Include="Common\Services\CurrencyService.js" />
     <Content Include="Common\Services\CountryService.js" />
     <Content Include="Common\Services\DataRecordFieldService.js" />
-    <Content Include="Common\Services\VRFileService.js" />
+    <Content Include="Common\Services\FileService.js" />
     <Content Include="Common\Services\RateTypeService.js" />
     <Content Include="Common\Views\City\CityEditor.html" />
     <Content Include="Common\Views\City\CityEditorController.js" />
@@ -238,6 +238,8 @@
     <Content Include="Common\Views\Currency\CurrencyManagement.html" />
     <Content Include="Common\Views\Error.html" />
     <Content Include="Common\Views\ErrorController.js" />
+    <Content Include="Common\Views\File\RecentFile.html" />
+    <Content Include="Common\Views\File\RecentFileController.js" />
     <Content Include="Common\Views\GenericDataRecord\DataRecordFieldEditor.html" />
     <Content Include="Common\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
     <Content Include="Common\Views\GenericDataRecord\DataRecordFieldManagement.html" />

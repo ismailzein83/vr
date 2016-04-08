@@ -9,9 +9,10 @@ namespace Vanrise.Common.Data
 {
     public interface IVRFileDataManager : IDataManager
     {
-       long AddFile(VRFile file);
-       VRFileInfo GetFileInfo(long fileId);
-       VRFile GetFile(long fileId);
-       bool UpdateFileUsed(long fileId, bool isUsed);
+        long AddFile(VRFile file);
+        VRFileInfo GetFileInfo(long fileId);
+        VRFile GetFile(long fileId);
+        bool UpdateFileUsed(long fileId, bool isUsed);
+        Vanrise.Entities.BigResult<VRFileInfo> GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input);
     }
 }

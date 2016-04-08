@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_RecentFileController">
+    <vr-modalbody>
+        <vr-form name="recentFilesForm" vr-loader="scopeModel.isLoading">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-validator validate="scopeModel.validateGrid()">
+                        <vr-datagrid on-ready="scopeModel.onGridReady"
+                                     datasource="scopeModel.recentFiles"
+                                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                                     defaultsortbyfieldname="'FileId'"
+                                     pagingtype="'PagingOnScroll'">
+                            <vr-datagridcolumn headertext="'Select'" widthfactor="3" disablesorting>
+                                <vr-check value="dataItem.isSelected"></vr-check>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Extension'" field="'Extension'" type="'Text'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Ok" data-onclick="scopeModel.select" formname="recentFilesForm"></vr-button>
+                <vr-button type="Cancel" data-onclick="scopeModel.cancel"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

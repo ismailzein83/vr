@@ -12,12 +12,20 @@ namespace Vanrise.Common.Data.SQL
     {
         #region Constructors / Fields
 
+        static Dictionary<string, string> _mappers;
+
+        static VRFileDataManager()
+        {
+            _mappers = new Dictionary<string, string>();
+            _mappers.Add("FileId", "ID");
+        }
+
         public VRFileDataManager()
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
 
         }
-        
+
         #endregion
 
         #region Public Methods
@@ -45,26 +53,44 @@ namespace Vanrise.Common.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("[common].[sp_File_GetFileById]", fileId, isUsed);
             return (recordesEffected > 0);
         }
-        
-        #endregion
 
-        #region Mappers
-
-        private VRFileInfo FileInfoMapper(IDataReader reader)
+        public Vanrise.Entities.BigResult<VRFileInfo> GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input)
         {
-            return new VRFileInfo
+            Action<string> createTempTableAction = (tempTableName) =>
             {
-                FileId = GetReaderValue<long>(reader, "ID"),
-                Name = reader["Name"] as string,
-                Extension = reader["Extension"] as string,
-                IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
-                ModuleType = reader["ModuleType"] as string,
-                UserId = (int)reader["UserID"],
-                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreateTempTableIfNotExists(input, tempTableName);
             };
+            return RetrieveData(input, createTempTableAction, FileInfoMapper, _mappers);
         }
 
-        private VRFile FileMapper(IDataReader reader)
+        #endregion
+
+        #region Private Methods
+
+        void CreateTempTableIfNotExists(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input, string tempTableName)
+        {
+            StringBuilder tempTableQueryBuilder = new StringBuilder
+            (
+                @"IF NOT OBJECT_ID ('#TEMPTABLENAME#', N'U') IS NOT NULL
+                BEGIN 
+                    SELECT [ID],
+                        [Name],
+                        [Extension],
+                        [IsUsed],
+                        [ModuleType],
+                        [UserId],
+                        [CreatedTime]
+                    INTO #TEMPTABLENAME#
+                    FROM [common].[File]
+                    #WHERECLAUSE#
+                END"
+            );
+            tempTableQueryBuilder.Replace("#TEMPTABLENAME#", tempTableName);
+            tempTableQueryBuilder.Replace("#WHERECLAUSE#", (input.Query.ModuleType != null) ? String.Format("WHERE [ModuleType] = '{0}'", input.Query.ModuleType) : null);
+            ExecuteNonQueryText(tempTableQueryBuilder.ToString(), null);
+        }
+
+        VRFile FileMapper(IDataReader reader)
         {
             return new VRFile
             {
@@ -72,6 +98,20 @@ namespace Vanrise.Common.Data.SQL
                 Name = reader["Name"] as string,
                 Extension = reader["Extension"] as string,
                 Content = GetReaderValue<byte[]>(reader, "Content"),
+                IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
+                ModuleType = reader["ModuleType"] as string,
+                UserId = (int)reader["UserID"],
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+            };
+        }
+
+        VRFileInfo FileInfoMapper(IDataReader reader)
+        {
+            return new VRFileInfo
+            {
+                FileId = GetReaderValue<long>(reader, "ID"),
+                Name = reader["Name"] as string,
+                Extension = reader["Extension"] as string,
                 IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
                 ModuleType = reader["ModuleType"] as string,
                 UserId = (int)reader["UserID"],

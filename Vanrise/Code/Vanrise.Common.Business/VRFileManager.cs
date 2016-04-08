@@ -11,12 +11,18 @@ namespace Vanrise.Common.Business
 {
     public class VRFileManager
     {
+        #region Constructors / Fields
+
         private readonly IVRFileDataManager _datamanager;
 
         public VRFileManager()
         {
-            _datamanager =  CommonDataManagerFactory.GetDataManager<IVRFileDataManager>();
+            _datamanager = CommonDataManagerFactory.GetDataManager<IVRFileDataManager>();
         }
+
+        #endregion
+
+        #region Public Methods
 
         public long AddFile(VRFile file)
         {
@@ -26,7 +32,7 @@ namespace Vanrise.Common.Business
 
         public bool SetFileUsed(long fileId)
         {
-            return _datamanager.UpdateFileUsed(fileId , true);
+            return _datamanager.UpdateFileUsed(fileId, true);
         }
 
         public bool SetFileUnUsed(long fileId)
@@ -41,7 +47,14 @@ namespace Vanrise.Common.Business
 
         public VRFileInfo GetFileInfo(long fileId)
         {
-            return  _datamanager.GetFileInfo(fileId);
+            return _datamanager.GetFileInfo(fileId);
         }
+
+        public IDataRetrievalResult<VRFileInfo> GetFilteredRecentFiles(DataRetrievalInput<VRFileQuery> input)
+        {
+            return DataRetrievalManager.Instance.ProcessResult(input, _datamanager.GetFilteredRecentFiles(input));
+        }
+
+        #endregion
     }
 }

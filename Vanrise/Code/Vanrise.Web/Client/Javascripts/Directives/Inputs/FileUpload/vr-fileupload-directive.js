@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService) {
+app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', 'VRCommon_FileService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService, VRCommon_FileService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -49,7 +49,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 url: base + '/api/VRCommon/File/UploadFile',
                 beforeSend: function (xhr, data) {
                     xhr.setRequestHeader('Auth-Token', SecurityService.getUserToken());
-                    xhr.setRequestHeader('Module-Type', $attrs.moduletype);
+                    xhr.setRequestHeader('Module-Type', ctrl.moduletype);
                 },
                 formData: function (form) { return form },
                 replaceFileInput: true,
@@ -101,11 +101,12 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 }
             });
             $scope.$watch('ctrl.value', function () {
-                if(isInternalSetValue){
+
+                if (isInternalSetValue) {
                     isInternalSetValue = false;
                     return;
                 }
-                if(ctrl.value!=null){
+                if (ctrl.value != null) {
                     BaseAPIService.get("/api/VRCommon/File/GetFileInfo",
                         {
                             fileId: ctrl.value.fileId
@@ -157,6 +158,15 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 17, left: selfOffset.left - 30 });
                 }, 1)
             }
+
+            ctrl.viewRecentFiles = function () {
+                var onRecentFileSelected = function (fileId) {
+                    ctrl.value = {
+                        fileId: fileId
+                    };
+                };
+                VRCommon_FileService.viewRecentFiles(ctrl.moduletype, onRecentFileSelected);
+            };
         },
         controllerAs: 'ctrl',
         compile: function (element, attrs) {
@@ -229,8 +239,9 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                           + '</vr-validator>'
                       + '<span  ng-if="ctrl.hint!=undefined" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;" html="true" ng-mouseenter="ctrl.adjustTooltipPosition($event)" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
 
-                    + '</div>';
+                      + '<span><vr-button type="Help" data-onclick="ctrl.viewRecentFiles" standalone></vr-button></span>'
 
+            + '</div>';
 
             var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
 

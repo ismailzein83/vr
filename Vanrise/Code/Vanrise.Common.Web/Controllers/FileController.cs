@@ -15,6 +15,7 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.Common.Web
 {
+    [JSONWithType]
     [RoutePrefix(Constants.ROUTE_PREFIX + "File")]
     public class VRCommon_FileController : BaseAPIController
     {
@@ -116,6 +117,15 @@ namespace Vanrise.Common.Web
             return manager.GetFileInfo(fileId);
 
         }
+
+        [HttpPost]
+        [Route("GetFilteredRecentFiles")]
+        public object GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input)
+        {
+            VRFileManager manager = new VRFileManager();
+            return GetWebResponse(input, manager.GetFilteredRecentFiles(input));
+        }
+
         private static byte[] ReadToEnd(System.IO.Stream stream)
         {
             long originalPosition = 0;
