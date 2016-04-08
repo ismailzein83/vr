@@ -1,0 +1,88 @@
+﻿<Project xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0">
+  <ProductVersion>10.50.1617.0</ProductVersion>
+  <SchemaVersion>9.0.2.10</SchemaVersion>
+  <State>$base64$PFNvdXJjZUNvbnRyb2xJbmZvIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOmRkbDI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDAzL2VuZ2luZS8yIiB4bWxuczpkZGwyXzI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDAzL2VuZ2luZS8yLzIiIHhtbG5zOmRkbDEwMF8xMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDA4L2VuZ2luZS8xMDAvMTAwIiB4bWxuczpkZGwyMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEwL2VuZ2luZS8yMDAiIHhtbG5zOmRkbDIwMF8yMDA9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vYW5hbHlzaXNzZXJ2aWNlcy8yMDEwL2VuZ2luZS8yMDAvMjAwIiB4bWxuczpkd2Q9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vRGF0YVdhcmVob3VzZS9EZXNpZ25lci8xLjAiPg0KICA8RW5hYmxlZD50cnVlPC9FbmFibGVkPg0KICA8UHJvamVjdE5hbWU+U0FLPC9Qcm9qZWN0TmFtZT4NCiAgPEF1eFBhdGg+U0FLPC9BdXhQYXRoPg0KICA8TG9jYWxQYXRoPlNBSzwvTG9jYWxQYXRoPg0KICA8UHJvdmlkZXI+U0FLPC9Qcm92aWRlcj4NCjwvU291cmNlQ29udHJvbEluZm8+</State>
+  <Database>
+    <Name>QualityMeasurementBI.database</Name>
+    <FullPath>QualityMeasurementBI.database</FullPath>
+  </Database>
+  <Cubes>
+    <ProjectItem>
+      <Name>Quality Measurement BI.cube</Name>
+      <FullPath>Quality Measurement BI.cube</FullPath>
+      <Dependencies>
+        <ProjectItem>
+          <Name>Quality Measurement BI.partitions</Name>
+          <FullPath>Quality Measurement BI.partitions</FullPath>
+        </ProjectItem>
+      </Dependencies>
+    </ProjectItem>
+  </Cubes>
+  <Dimensions>
+    <ProjectItem>
+      <Name>Dim Users.dim</Name>
+      <FullPath>Dim Users.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Countries.dim</Name>
+      <FullPath>Dim Countries.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Zones.dim</Name>
+      <FullPath>Dim Zones.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Call Test Status.dim</Name>
+      <FullPath>Dim Call Test Status.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Schedules.dim</Name>
+      <FullPath>Dim Schedules.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Call Test Result.dim</Name>
+      <FullPath>Dim Call Test Result.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Suppliers.dim</Name>
+      <FullPath>Dim Suppliers.dim</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Dim Time.dim</Name>
+      <FullPath>Dim Time.dim</FullPath>
+    </ProjectItem>
+  </Dimensions>
+  <DataSources>
+    <ProjectItem>
+      <Name>Quality Measurement BI.ds</Name>
+      <FullPath>Quality Measurement BI.ds</FullPath>
+    </ProjectItem>
+  </DataSources>
+  <DataSourceViews>
+    <ProjectItem>
+      <Name>Quality Measurement BI.dsv</Name>
+      <FullPath>Quality Measurement BI.dsv</FullPath>
+    </ProjectItem>
+  </DataSourceViews>
+  <Configurations>
+    <Configuration>
+      <Name>Development</Name>
+      <Options>
+        <ConnectionMappings>
+          <ConfigurationSetting>
+            <Id>Quality Measurement BI</Id>
+            <Name>Quality Measurement BI</Name>
+            <Value xsi:type="xsd:string">Provider=SQLNCLI10.1;Data Source=192.168.110.185;Integrated Security=SSPI;Initial Catalog=QualityMeasurementBI</Value>
+          </ConfigurationSetting>
+        </ConnectionMappings>
+        <ConnectionSecurityMappings>
+          <ConfigurationSetting>
+            <Id>Quality Measurement BI</Id>
+            <Name>Quality Measurement BI</Name>
+            <Value xsi:type="xsd:int">0</Value>
+          </ConfigurationSetting>
+        </ConnectionSecurityMappings>
+      </Options>
+    </Configuration>
+  </Configurations>
+</Project>

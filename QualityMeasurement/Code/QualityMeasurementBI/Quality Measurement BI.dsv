@@ -1,0 +1,264 @@
+﻿<DataSourceView xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0" dwd:design-time-name="96f27fab-c4c7-4863-8e7d-6690ae044abb" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ID>Quality Measurement BI</ID>
+  <Name>Quality Measurement BI</Name>
+  <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
+  <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
+  <Annotations>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:CurrentLayout</Name>
+      <Value>_ALL_TABLES_</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:SchemaRestriction</Name>
+      <Value></Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:RetrieveRelationships</Name>
+      <Value>true</Value>
+    </Annotation>
+    <Annotation>
+      <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:Layouts</Name>
+      <Value>
+        <Layouts xmlns="">
+          <Diagram>
+            <Name>_ALL_TABLES_</Name>
+            <DiagramLayout />
+            <ShowRelationshipNames>False</ShowRelationshipNames>
+            <UseDiagramDefaultLayout>True</UseDiagramDefaultLayout>
+            <DiagramViewPortLeft>0</DiagramViewPortLeft>
+            <DiagramViewPortTop>0</DiagramViewPortTop>
+            <DiagramBoundingLeft>0</DiagramBoundingLeft>
+            <DiagramBoundingTop>0</DiagramBoundingTop>
+            <DiagramZoom>100</DiagramZoom>
+          </Diagram>
+        </Layouts>
+      </Value>
+    </Annotation>
+  </Annotations>
+  <DataSourceID>Quality Measurement BI</DataSourceID>
+  <Schema>
+    <xs:schema id="Quality_x0020_Measurement_x0020_BI" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+      <xs:element name="Quality_x0020_Measurement_x0020_BI" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:design-time-name="2e03a1f7-2385-4584-bb2c-7726e2143c1f">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="dbo_Fact_TestCalls" msprop:FriendlyName="Fact_TestCalls" msprop:DbSchemaName="dbo" msprop:DbTableName="Fact_TestCalls" msprop:design-time-name="1622e17a-b322-4d5e-9b0d-c77da870870c" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="MS_TestCallId" msprop:FriendlyName="MS_TestCallId" msprop:DbColumnName="MS_TestCallId" msprop:design-time-name="7f960756-e759-4225-a46b-e9e85e8b0b78" type="xs:int" minOccurs="0" />
+                  <xs:element name="FK_User" msprop:FriendlyName="FK_User" msprop:DbColumnName="FK_User" msprop:design-time-name="5eb30649-642d-41c4-8995-475c30c4c5a0" type="xs:int" minOccurs="0" />
+                  <xs:element name="FK_Supplier" msprop:FriendlyName="FK_Supplier" msprop:DbColumnName="FK_Supplier" msprop:design-time-name="e2d2b44b-a48f-41f8-ba4d-9de53ad24a34" type="xs:int" minOccurs="0" />
+                  <xs:element name="FK_Country" msprop:FriendlyName="FK_Country" msprop:DbColumnName="FK_Country" msprop:design-time-name="3b809378-db02-4807-af76-f361bfedabfe" type="xs:int" minOccurs="0" />
+                  <xs:element name="FK_Zone" msprop:FriendlyName="FK_Zone" msprop:DbColumnName="FK_Zone" msprop:design-time-name="74a766c0-d9e3-410d-845b-e14d78a42740" type="xs:int" minOccurs="0" />
+                  <xs:element name="FK_CallTestStatus" msprop:FriendlyName="FK_CallTestStatus" msprop:DbColumnName="FK_CallTestStatus" msprop:design-time-name="2b5ec4b3-c8ec-47d8-8db9-06cb8a15609f" type="xs:int" minOccurs="0" />
+                  <xs:element name="FK_CallTestResult" msprop:FriendlyName="FK_CallTestResult" msprop:DbColumnName="FK_CallTestResult" msprop:design-time-name="be979603-43fe-4a02-a451-ac0b78bb66e4" type="xs:int" minOccurs="0" />
+                  <xs:element name="FK_Schedule" msprop:FriendlyName="FK_Schedule" msprop:DbColumnName="FK_Schedule" msprop:design-time-name="17c7340d-f256-4f1d-a32c-6cdea3cda675" type="xs:int" minOccurs="0" />
+                  <xs:element name="FK_CreationDate" msprop:FriendlyName="FK_CreationDate" msprop:DbColumnName="FK_CreationDate" msprop:design-time-name="b18ad897-2638-4abe-ad06-d54ded775bb4" type="xs:dateTime" minOccurs="0" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Dim_Zones" msprop:FriendlyName="Dim_Zones" msprop:DbSchemaName="dbo" msprop:DbTableName="Dim_Zones" msprop:design-time-name="a5ddbe11-9316-4293-b4d6-902342885e26" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Pk_ZoneId" msprop:FriendlyName="Pk_ZoneId" msprop:DbColumnName="Pk_ZoneId" msprop:design-time-name="3e905003-57d7-4b4c-82b0-eaf41fc1a19c" type="xs:int" />
+                  <xs:element name="Name" msprop:FriendlyName="Name" msprop:DbColumnName="Name" msprop:design-time-name="5cf6bcd1-f94a-4b9e-a172-be4b23d540cf" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="255" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Dim_Schedules" msprop:FriendlyName="Dim_Schedules" msprop:DbSchemaName="dbo" msprop:DbTableName="Dim_Schedules" msprop:design-time-name="407bb39b-3125-4de0-b2cd-7399312e4cce" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Pk_ScheduleId" msprop:FriendlyName="Pk_ScheduleId" msprop:DbColumnName="Pk_ScheduleId" msprop:design-time-name="a86bb6fc-be7b-473c-ada8-dea0b668c05a" type="xs:int" />
+                  <xs:element name="Name" msprop:FriendlyName="Name" msprop:DbColumnName="Name" msprop:design-time-name="a67f5d0f-3a49-4e66-a075-c22dcf6bcbad" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="255" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Dim_Suppliers" msprop:FriendlyName="Dim_Suppliers" msprop:DbSchemaName="dbo" msprop:DbTableName="Dim_Suppliers" msprop:design-time-name="03b7d2ef-3835-4012-8888-3c6204216ec7" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Pk_SupplierId" msprop:FriendlyName="Pk_SupplierId" msprop:DbColumnName="Pk_SupplierId" msprop:design-time-name="eea5d031-e303-46c5-968a-b3707386f552" type="xs:int" />
+                  <xs:element name="Name" msprop:FriendlyName="Name" msprop:DbColumnName="Name" msprop:design-time-name="2986c267-6596-4d89-9cd0-881b6d01c38f" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="255" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="Prefix" msprop:FriendlyName="Prefix" msprop:DbColumnName="Prefix" msprop:design-time-name="9974638c-0d35-4734-a0bd-eb0e4a651d2d" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="255" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Dim_Time" msprop:FriendlyName="Dim_Time" msprop:DbSchemaName="dbo" msprop:DbTableName="Dim_Time" msprop:design-time-name="aded4773-fe43-4604-a226-64467267a404" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="DateInstance" msprop:FriendlyName="DateInstance" msprop:DbColumnName="DateInstance" msprop:design-time-name="e2632f06-5284-4e53-90cd-ae49ce376a91" type="xs:dateTime" />
+                  <xs:element name="Year" msprop:FriendlyName="Year" msprop:DbColumnName="Year" msprop:design-time-name="0e8498a3-d8cf-4e89-9f13-7b0c46e02f89" type="xs:int" minOccurs="0" />
+                  <xs:element name="Month" msprop:FriendlyName="Month" msprop:DbColumnName="Month" msprop:design-time-name="041e7bae-d148-4054-9aa8-05a3feff5cf6" type="xs:int" minOccurs="0" />
+                  <xs:element name="Week" msprop:FriendlyName="Week" msprop:DbColumnName="Week" msprop:design-time-name="aa5c8fd3-ee0f-414f-b1fd-1222126481de" type="xs:int" minOccurs="0" />
+                  <xs:element name="Day" msprop:FriendlyName="Day" msprop:DbColumnName="Day" msprop:design-time-name="1c64aead-f54d-499c-8119-dc495c6ada28" type="xs:int" minOccurs="0" />
+                  <xs:element name="Hour" msprop:FriendlyName="Hour" msprop:DbColumnName="Hour" msprop:design-time-name="bcd96855-8ecb-4756-b30f-b3f4a582f54e" type="xs:int" minOccurs="0" />
+                  <xs:element name="MonthName" msprop:FriendlyName="MonthName" msprop:DbColumnName="MonthName" msprop:design-time-name="f894b2d2-cefb-40c9-b0ae-82bddf97f8b8" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="50" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="DayName" msprop:FriendlyName="DayName" msprop:DbColumnName="DayName" msprop:design-time-name="a2967e50-e41c-4c14-a97f-e3e8a0499634" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="50" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Dim_CallTestResult" msprop:FriendlyName="Dim_CallTestResult" msprop:DbSchemaName="dbo" msprop:DbTableName="Dim_CallTestResult" msprop:design-time-name="d68772d3-266c-4158-9b8d-4ccb2a6888b2" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="pk_CallTestResultId" msprop:FriendlyName="pk_CallTestResultId" msprop:DbColumnName="pk_CallTestResultId" msprop:design-time-name="b2833c43-d536-4568-9090-dd7bdf7cc190" type="xs:int" />
+                  <xs:element name="CallTestResult" msprop:FriendlyName="CallTestResult" msprop:DbColumnName="CallTestResult" msprop:design-time-name="88339df0-9f7f-4ffe-8306-64a8ccc7756f" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="255" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Dim_Users" msprop:FriendlyName="Dim_Users" msprop:DbSchemaName="dbo" msprop:DbTableName="Dim_Users" msprop:design-time-name="e334d3c4-dbdd-4d7e-a560-bef38e3abb84" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Pk_UserId" msprop:FriendlyName="Pk_UserId" msprop:DbColumnName="Pk_UserId" msprop:design-time-name="5552349d-a5a6-46e3-b2e0-d6f9ef2f5a49" type="xs:int" />
+                  <xs:element name="Name" msprop:FriendlyName="Name" msprop:DbColumnName="Name" msprop:design-time-name="bd3b832c-a660-44d8-948d-64a33f9c15fc" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="255" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Dim_CallTestStatus" msprop:FriendlyName="Dim_CallTestStatus" msprop:DbSchemaName="dbo" msprop:DbTableName="Dim_CallTestStatus" msprop:design-time-name="863713d8-379f-44f0-ae46-4c130d71e114" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="pk_CallTestStatusId" msprop:FriendlyName="pk_CallTestStatusId" msprop:DbColumnName="pk_CallTestStatusId" msprop:design-time-name="3d91daa3-106d-44a6-aff1-28cec50ff905" type="xs:int" />
+                  <xs:element name="CallTestStatus" msprop:FriendlyName="CallTestStatus" msprop:DbColumnName="CallTestStatus" msprop:design-time-name="0749833a-f26c-46ee-85d3-8e990e6e25da" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="255" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="dbo_Dim_Countries" msprop:FriendlyName="Dim_Countries" msprop:DbSchemaName="dbo" msprop:DbTableName="Dim_Countries" msprop:design-time-name="d4fc005d-4986-48a2-bff9-d1d49a0e07d9" msprop:TableType="Table">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Pk_CountryId" msprop:FriendlyName="Pk_CountryId" msprop:DbColumnName="Pk_CountryId" msprop:design-time-name="abc48542-34e8-4774-a382-23ebff086860" type="xs:int" />
+                  <xs:element name="Name" msprop:FriendlyName="Name" msprop:DbColumnName="Name" msprop:design-time-name="b70f1041-f078-483d-a298-008a0911b9ed" minOccurs="0">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:maxLength value="255" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+        <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Dim_Zones" />
+          <xs:field xpath="Pk_ZoneId" />
+        </xs:unique>
+        <xs:unique name="dbo_Dim_Schedules_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Dim_Schedules" />
+          <xs:field xpath="Pk_ScheduleId" />
+        </xs:unique>
+        <xs:unique name="dbo_Dim_Suppliers_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Dim_Suppliers" />
+          <xs:field xpath="Pk_SupplierId" />
+        </xs:unique>
+        <xs:unique name="dbo_Dim_Time_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Dim_Time" />
+          <xs:field xpath="DateInstance" />
+        </xs:unique>
+        <xs:unique name="dbo_Dim_CallTestResult_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Dim_CallTestResult" />
+          <xs:field xpath="pk_CallTestResultId" />
+        </xs:unique>
+        <xs:unique name="dbo_Dim_Users_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Dim_Users" />
+          <xs:field xpath="Pk_UserId" />
+        </xs:unique>
+        <xs:unique name="dbo_Dim_CallTestStatus_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Dim_CallTestStatus" />
+          <xs:field xpath="pk_CallTestStatusId" />
+        </xs:unique>
+        <xs:unique name="dbo_Dim_Countries_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+          <xs:selector xpath=".//dbo_Dim_Countries" />
+          <xs:field xpath="Pk_CountryId" />
+        </xs:unique>
+        <xs:keyref name="FK_Fact_TestCalls_Dim_Time" refer="dbo_Dim_Time_Constraint1">
+          <xs:selector xpath=".//dbo_Fact_TestCalls" />
+          <xs:field xpath="FK_CreationDate" />
+        </xs:keyref>
+        <xs:keyref name="FK_Fact_TestCalls_Dim_Suppliers" refer="dbo_Dim_Suppliers_Constraint1">
+          <xs:selector xpath=".//dbo_Fact_TestCalls" />
+          <xs:field xpath="FK_Supplier" />
+        </xs:keyref>
+        <xs:keyref name="FK_Fact_TestCalls_Dim_CallTestResult" refer="dbo_Dim_CallTestResult_Constraint1">
+          <xs:selector xpath=".//dbo_Fact_TestCalls" />
+          <xs:field xpath="FK_CallTestResult" />
+        </xs:keyref>
+        <xs:keyref name="FK_Fact_TestCalls_Dim_Schedules" refer="dbo_Dim_Schedules_Constraint1">
+          <xs:selector xpath=".//dbo_Fact_TestCalls" />
+          <xs:field xpath="FK_Schedule" />
+        </xs:keyref>
+        <xs:keyref name="FK_Fact_TestCalls_Dim_CallTestStatus" refer="dbo_Dim_CallTestStatus_Constraint1">
+          <xs:selector xpath=".//dbo_Fact_TestCalls" />
+          <xs:field xpath="FK_CallTestStatus" />
+        </xs:keyref>
+        <xs:keyref name="FK_Fact_TestCalls_Dim_Zones" refer="Constraint1">
+          <xs:selector xpath=".//dbo_Fact_TestCalls" />
+          <xs:field xpath="FK_Zone" />
+        </xs:keyref>
+        <xs:keyref name="FK_Fact_TestCalls_Dim_Countries" refer="dbo_Dim_Countries_Constraint1">
+          <xs:selector xpath=".//dbo_Fact_TestCalls" />
+          <xs:field xpath="FK_Country" />
+        </xs:keyref>
+        <xs:keyref name="FK_Fact_TestCalls_Dim_Users" refer="dbo_Dim_Users_Constraint1">
+          <xs:selector xpath=".//dbo_Fact_TestCalls" />
+          <xs:field xpath="FK_User" />
+        </xs:keyref>
+      </xs:element>
+    </xs:schema>
+    <diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" />
+  </Schema>
+</DataSourceView>
