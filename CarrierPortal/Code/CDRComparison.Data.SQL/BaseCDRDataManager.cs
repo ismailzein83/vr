@@ -10,7 +10,7 @@ namespace CDRComparison.Data.SQL
     public abstract class BaseCDRDataManager : BaseSQLDataManager,IBaseCDRDataManager
     {
         public BaseCDRDataManager()
-            : base(GetConnectionStringName("CDRComparisonDBConnStringKey", "CDRComparisonDBConnString"))
+            : base(GetConnectionStringName("CDRComparisonOutputDBConnStringKey", "CDRComparisonOutputnDBConnString"))
         {
 
         }
