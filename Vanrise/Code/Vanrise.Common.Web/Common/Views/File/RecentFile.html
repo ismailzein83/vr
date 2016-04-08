@@ -8,12 +8,14 @@
                                      datasource="scopeModel.recentFiles"
                                      dataretrievalfunction="scopeModel.dataRetrievalFunction"
                                      defaultsortbyfieldname="'FileId'"
+                                     defaultsortdirection="'DESC'"
                                      pagingtype="'PagingOnScroll'">
-                            <vr-datagridcolumn headertext="'Select'" widthfactor="3" disablesorting>
+                            <vr-datagridcolumn widthfactor="3" disablesorting>
                                 <vr-check value="dataItem.isSelected"></vr-check>
                             </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Extension'" field="'Extension'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Uploaded On'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
                         </vr-datagrid>
                     </vr-validator>
                 </vr-columns>

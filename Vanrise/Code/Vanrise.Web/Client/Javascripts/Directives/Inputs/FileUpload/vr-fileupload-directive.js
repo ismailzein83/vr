@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', 'VRCommon_FileService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService, VRCommon_FileService) {
+app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -158,15 +158,6 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 17, left: selfOffset.left - 30 });
                 }, 1)
             }
-
-            ctrl.viewRecentFiles = function () {
-                var onRecentFileSelected = function (fileId) {
-                    ctrl.value = {
-                        fileId: fileId
-                    };
-                };
-                VRCommon_FileService.viewRecentFiles(ctrl.moduletype, onRecentFileSelected);
-            };
         },
         controllerAs: 'ctrl',
         compile: function (element, attrs) {
@@ -238,9 +229,6 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                       + '</div>'
                           + '</vr-validator>'
                       + '<span  ng-if="ctrl.hint!=undefined" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;" html="true" ng-mouseenter="ctrl.adjustTooltipPosition($event)" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
-
-                      + '<span><vr-button type="Help" data-onclick="ctrl.viewRecentFiles" standalone></vr-button></span>'
-
             + '</div>';
 
             var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);

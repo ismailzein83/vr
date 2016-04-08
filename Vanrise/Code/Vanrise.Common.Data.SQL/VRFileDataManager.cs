@@ -83,6 +83,7 @@ namespace Vanrise.Common.Data.SQL
                     INTO #TEMPTABLENAME#
                     FROM [common].[File]
                     #WHERECLAUSE#
+                    ORDER BY [CreatedTime] DESC
                 END"
             );
             tempTableQueryBuilder.Replace("#TEMPTABLENAME#", tempTableName);
