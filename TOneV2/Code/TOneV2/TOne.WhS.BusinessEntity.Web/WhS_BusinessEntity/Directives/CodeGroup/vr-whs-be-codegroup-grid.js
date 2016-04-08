@@ -37,14 +37,14 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
             $scope.codegroups = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
                 function getDirectiveAPI() {
-                   
+
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                       
+
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onCodeGroupAdded = function (codeGroupObject) {
@@ -65,13 +65,18 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
             defineMenuActions();
         }
 
-        
+
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-               clicked: editCodeGroupe
+                clicked: editCodeGroupe,
+                haspermission: hasUpdateCodeGroupPermission
             }];
+        }
+
+        function hasUpdateCodeGroupPermission() {
+            return WhS_BE_CodeGroupAPIService.HasUpdateCodeGroupPermission();
         }
 
         function editCodeGroupe(codeGroupObj) {
@@ -81,7 +86,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
 
             WhS_BE_CodeGroupService.editCodeGroup(codeGroupObj.Entity.CodeGroupId, onCodeGroupUpdated, disabCountry);
         }
-        
+
     }
 
     return directiveDefinitionObject;

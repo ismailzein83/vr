@@ -23,12 +23,12 @@
                         <vr-row removeline>
                             <vr-columns width="fullrow" ng-show="isUploadingComplete">
                                 <vr-label>Download Result</vr-label>
-                                <vr-button type="Download" data-onclick="downloadLog" standalone></vr-button>
+                                <vr-button type="Download" data-onclick="downloadLog" standalone haspermission="hasDownloadCodeGroupLogPermission"></vr-button>
                             </vr-columns>
                         </vr-row>
                     </vr-columns>
                 </vr-row>
-               
+
             </div>
         </vr-form>
     </vr-modalbody>
@@ -36,8 +36,8 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
 
             <div transclude-to="buttons">
-                <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
-                <vr-button type="Upload" validationcontext="uploadCodeGroup" data-onclick="upload"></vr-button>
+                <vr-button type="Download" data-onclick="downloadTemplate" haspermission="hasDownloadCodeGroupListTemplatePermission"></vr-button>
+                <vr-button type="Upload" validationcontext="uploadCodeGroup" data-onclick="upload" haspermission="hasUploadCodeGroupListPermission" ></vr-button>
             </div>
         </vr-actionbar>
     </div>

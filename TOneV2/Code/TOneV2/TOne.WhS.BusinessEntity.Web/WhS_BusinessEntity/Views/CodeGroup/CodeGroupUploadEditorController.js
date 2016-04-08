@@ -1,4 +1,4 @@
-﻿codeGroupUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService','WhS_BE_CodeGroupAPIService','VRNotificationService'];
+﻿codeGroupUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'WhS_BE_CodeGroupAPIService', 'VRNotificationService'];
 
 function codeGroupUploadEditorController($scope, VRUIUtilsService, UtilsService, WhS_BE_CodeGroupAPIService, VRNotificationService) {
     loadParameters();
@@ -8,6 +8,18 @@ function codeGroupUploadEditorController($scope, VRUIUtilsService, UtilsService,
     function loadParameters() {
     }
     function defineScope() {
+        $scope.hasDownloadCodeGroupListTemplatePermission = function () {
+            return WhS_BE_CodeGroupAPIService.HasDownloadCodeGroupListTemplatePermission();
+        }
+
+        $scope.hasDownloadCodeGroupLogPermission = function () {
+            return WhS_BE_CodeGroupAPIService.HasDownloadCodeGroupLogPermission();
+        }
+
+        $scope.hasUploadCodeGroupListPermission = function () {
+            return WhS_BE_CodeGroupAPIService.HasUploadCodeGroupListPermission();
+        }
+
         $scope.isUploadingComplete = false;
         $scope.upload = function () {
             return WhS_BE_CodeGroupAPIService.UploadCodeGroupList($scope.codeGroupList.fileId).then(function (response) {
@@ -24,8 +36,7 @@ function codeGroupUploadEditorController($scope, VRUIUtilsService, UtilsService,
             });
         }
         $scope.downloadLog = function () {
-            if (fileID != undefined)
-            {
+            if (fileID != undefined) {
                 return WhS_BE_CodeGroupAPIService.DownloadCodeGroupLog(fileID).then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);
                 });

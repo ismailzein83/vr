@@ -2,9 +2,9 @@
 
     "use strict";
 
-    codeGroupManagementController.$inject = ['$scope', 'WhS_BE_CodeGroupService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    codeGroupManagementController.$inject = ['$scope', 'WhS_BE_CodeGroupService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CodeGroupAPIService'];
 
-    function codeGroupManagementController($scope, WhS_BE_CodeGroupService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function codeGroupManagementController($scope, WhS_BE_CodeGroupService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_CodeGroupAPIService) {
         var gridAPI;
         var filter = {};
         var countryDirectiveApi;
@@ -13,13 +13,22 @@
         load();
 
         function defineScope() {
+
+            $scope.hasAddCodeGroupPermission = function () {
+                return WhS_BE_CodeGroupAPIService.HasAddCodeGroupPermission();
+            }
+
+            $scope.hasUploadCodeGroupListPermission = function () {
+                return WhS_BE_CodeGroupAPIService.HasUploadCodeGroupListPermission();
+            }
+
             $scope.searchClicked = function () {
 
                 if (!$scope.isGettingData && gridAPI != undefined) {
                     setFilterObject();
                     return gridAPI.loadGrid(filter);
                 }
-                    
+
             };
             $scope.uploadCodeGroup = function () {
                 var onCodeGroupUploaded = function () {
@@ -31,7 +40,7 @@
                 countryReadyPromiseDeferred.resolve();
             }
             $scope.onGridReady = function (api) {
-                gridAPI = api;            
+                gridAPI = api;
                 api.loadGrid(filter);
             }
 
@@ -40,7 +49,7 @@
 
         function load() {
             $scope.isGettingData = true;
-            loadAllControls();           
+            loadAllControls();
 
         }
         function loadAllControls() {

@@ -30,6 +30,13 @@
 
         function defineScope() {
 
+            $scope.hasSaveCodeGroupPermission = function () {
+                if (editMode)
+                    return WhS_BE_CodeGroupAPIService.HasUpdateCodeGroupPermission();
+                else
+                    return WhS_BE_CodeGroupAPIService.HasAddCodeGroupPermission();
+            }
+
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
