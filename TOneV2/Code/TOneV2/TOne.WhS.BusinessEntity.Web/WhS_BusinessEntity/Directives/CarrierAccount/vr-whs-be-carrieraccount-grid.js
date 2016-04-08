@@ -1,7 +1,9 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_BE_CarrierAccountTypeEnum", "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductService, WhS_BE_CarrierAccountService, VRUIUtilsService) {
+app.directive("vrWhsBeCarrieraccountGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierAccountAPIService", "WhS_BE_CarrierAccountTypeEnum",
+    "WhS_BE_CustomerSellingProductService", "WhS_BE_CarrierAccountService", "VRUIUtilsService", "WhS_BE_CustomerSellingProductAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum, WhS_BE_CustomerSellingProductService,
+    WhS_BE_CarrierAccountService, VRUIUtilsService, WhS_BE_CustomerSellingProductAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -30,7 +32,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
         this.initializeController = initializeController;
         var gridDrillDownTabsObj;
         function initializeController() {
-           
+
             $scope.hideProfileColumn = false;
 
             $scope.isExpandable = function (dataItem) {
@@ -111,7 +113,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
             }, {
                 name: "Assign Selling Product",
                 clicked: assignNew,
-                haspermission: hasUpdateCarrierAccountPermission
+                haspermission: hasAddCustomerSellingProductPermission
             }];
             var defaultMenuActions = [{
                 name: "Edit",
@@ -126,6 +128,10 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService, 
                     return defaultMenuActions;
                 }
             };
+
+            function hasAddCustomerSellingProductPermission() {
+                return WhS_BE_CustomerSellingProductAPIService.HasAddCustomerSellingProductPermission();
+            }
 
             function hasUpdateCarrierAccountPermission() {
                 return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission();
