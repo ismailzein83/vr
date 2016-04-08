@@ -17,8 +17,13 @@ namespace TOne.WhS.CodePreparation.Business
             return (target as ZoneToProcess != null);
         }
 
-        public override bool Validate(IRuleTarget target)
+        public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            if (context.Target == null)
+                throw new ArgumentNullException("Target");
+
+            IRuleTarget target = context.Target;
+
             ZoneToProcess zone = target as ZoneToProcess;
 
             if (zone == null)

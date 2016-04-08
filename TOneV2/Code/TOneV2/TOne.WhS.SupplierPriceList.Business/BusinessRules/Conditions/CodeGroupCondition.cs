@@ -16,10 +16,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             return (target as ImportedCode != null);
         }
 
-        public override bool Validate(IRuleTarget target)
+        public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCode code = target as ImportedCode;
+            if (context.Target == null)
+                throw new ArgumentNullException("Target");
 
+            ImportedCode code = context.Target as ImportedCode;
             return code.CodeGroup != null;
         }
 

@@ -19,10 +19,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             return (target as ImportedCountry != null);
         }
 
-        public override bool Validate(IRuleTarget target)
+        public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCountry country = target as ImportedCountry;
+            if (context.Target == null)
+                throw new ArgumentNullException("Target");
 
+            ImportedCountry country = context.Target as ImportedCountry;
 
             foreach (var importedCode in country.ImportedCodes)
             {

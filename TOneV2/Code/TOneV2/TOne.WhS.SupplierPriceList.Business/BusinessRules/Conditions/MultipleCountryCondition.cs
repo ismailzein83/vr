@@ -18,9 +18,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             return (target as ImportedZone != null);
         }
 
-        public override bool Validate(IRuleTarget target)
+        public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedZone zone = target as ImportedZone;
+            if (context.Target == null)
+                throw new ArgumentNullException("Target");
+
+            ImportedZone zone = context.Target as ImportedZone;
 
             bool result = true;
 

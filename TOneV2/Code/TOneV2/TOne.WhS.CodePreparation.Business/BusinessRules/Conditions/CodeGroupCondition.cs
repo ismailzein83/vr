@@ -21,8 +21,13 @@ namespace TOne.WhS.CodePreparation.Business
 
         }
 
-        public override bool Validate(IRuleTarget target)
+        public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            if (context.Target == null)
+                throw new ArgumentNullException("Target");
+
+            IRuleTarget target = context.Target;
+
             var returnedResult = false;
             if (target as CodeToAdd != null)
             {
