@@ -101,8 +101,6 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
         }
 
         function hasUpdateCustomerSellingProductPermission() {
-            console.log('WhS_BE_CustomerSellingProductAPIService.HasUpdateCustomerSellingProductPermission()')
-            console.log(WhS_BE_CustomerSellingProductAPIService.HasUpdateCustomerSellingProductPermission())
             return WhS_BE_CustomerSellingProductAPIService.HasUpdateCustomerSellingProductPermission();
         }
 
