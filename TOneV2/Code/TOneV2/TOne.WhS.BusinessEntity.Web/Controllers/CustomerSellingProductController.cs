@@ -1,45 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
-    public class CustomerSellingProductController:BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "CustomerSellingProduct")]
+    public class CustomerSellingProductController : BaseAPIController
     {
         [HttpPost]
+        [Route("GetFilteredCustomerSellingProducts")]
         public object GetFilteredCustomerSellingProducts(Vanrise.Entities.DataRetrievalInput<CustomerSellingProductQuery> input)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return GetWebResponse(input, manager.GetFilteredCustomerSellingProducts(input));
         }
+
         [HttpGet]
+        [Route("GetCustomerSellingProduct")]
         public CustomerSellingProduct GetCustomerSellingProduct(int customerSellingProductId)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.GetCustomerSellingProduct(customerSellingProductId);
         }
+
         [HttpPost]
-        public TOne.Entities.InsertOperationOutput<List<CustomerSellingProductDetail>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
+        [Route("AddCustomerSellingProduct")]
+        public InsertOperationOutput<List<CustomerSellingProductDetail>> AddCustomerSellingProduct(List<CustomerSellingProduct> customerSellingProducts)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.AddCustomerSellingProduct(customerSellingProducts);
         }
+
         [HttpPost]
-        public TOne.Entities.UpdateOperationOutput<CustomerSellingProductDetail> UpdateCustomerSellingProduct(CustomerSellingProduct customerSellingProduct)
+        [Route("UpdateCustomerSellingProduct")]
+        public UpdateOperationOutput<CustomerSellingProductDetail> UpdateCustomerSellingProduct(CustomerSellingProduct customerSellingProduct)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.UpdateCustomerSellingProduct(customerSellingProduct);
         }
-         [HttpGet]
+
+        [HttpGet]
+        [Route("IsCustomerAssignedToSellingProduct")]
         public bool IsCustomerAssignedToSellingProduct(int customerId)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
             return manager.IsCustomerAssignedToSellingProduct(customerId);
         }
+
     }
 }
