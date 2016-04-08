@@ -4,7 +4,7 @@
             <vr-row>
                 <vr-columns width="1/2row">
                     <vr-select datatextfield="description" datavaluefield="value"
-                               label="Time Format Templates" datasource="timeFormatTemplates" selectedvalues="selectedTimeFormatTemplate" onselectionchanged="onTimeFormatSelectionChanged">
+                               label="Time Format Template" datasource="timeFormatTemplates" selectedvalues="selectedTimeFormatTemplate" onselectionchanged="onTimeFormatSelectionChanged">
                     </vr-select>
                 </vr-columns>
             </vr-row>
@@ -26,7 +26,7 @@
             </vr-row>
             <vr-row>
                 <vr-columns width="fullrow" ng-show="showTimeParts">
-                    <vr-textarea value="timeFormatValue" label="Time Format" isrequired="isFormatValueRequired()" ></vr-textarea>
+                    <vr-textarea value="timeFormatValue"  isrequired="isFormatValueRequired()" ></vr-textarea>
                 </vr-columns>
             </vr-row>
         </vr-form>
