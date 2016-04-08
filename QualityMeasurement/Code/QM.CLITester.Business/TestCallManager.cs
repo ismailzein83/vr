@@ -36,26 +36,27 @@ namespace QM.CLITester.Business
             
             ZoneManager zoneManager = new ZoneManager();
             SupplierManager supplierManager = new SupplierManager();
-            
+
             
             Zone zone = new Zone();
-            List<long?> zoneIds = new List<long?>();
-            List<int?> countryIds = new List<int?>();
-            if(testCallInput.CountryIds != null)
-                countryIds = testCallInput.CountryIds;
+            List<Zone> zones = new List<Zone>();
 
             if (testCallInput.ZoneIds == null)
             {
                 zone = zoneManager.GetZonebySourceId(testCallInput.ZoneSourceId);
                 if (zone != null)
                 {
-                    zoneIds.Add(zone.ZoneId);
-                    countryIds.Add(zone.CountryId);   
+                    zones.Add(zone);  
+
                 }
             }
             else
             {
-                zoneIds = testCallInput.ZoneIds;
+                foreach (long? zoneId in testCallInput.ZoneIds)
+                {
+                    Zone z = zoneManager.GetZone(zoneId.Value);
+                    zones.Add(z);
+                }
             }
 
             List<int?> listSuppliersIds = new List<int?>();
@@ -74,10 +75,9 @@ namespace QM.CLITester.Business
             }
 
             foreach (int supplierId in listSuppliersIds)
-                foreach (long zoneId in zoneIds)
-                    foreach (var countryId in countryIds)    
-                        dataManager.Insert(supplierId, countryId.Value, zoneId, (int)CallTestStatus.New, (int)CallTestResult.NotCompleted, 0, 0,
-                                        testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId);
+                foreach (Zone z in zones)
+                    dataManager.Insert(supplierId, z.CountryId, z.ZoneId, (int)CallTestStatus.New, (int)CallTestResult.NotCompleted, 0, 0,
+                            testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId);
 
             testCallOutput.BatchNumber = batchNumber;
             return testCallOutput;
