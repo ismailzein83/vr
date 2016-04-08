@@ -77,4 +77,7 @@
     <Build Include="dbo\Tables\Dim_CallTestResult.sql" />
     <Build Include="dbo\Stored Procedures\DWUpdateTables.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="ClearVoiceBI.PostDeployment.sql" />
+  </ItemGroup>
 </Project>
