@@ -69,8 +69,17 @@
                         var payload = (fileReader != undefined) ? fileReader : {};
                         payload.cdrSourceContext = cdrSourceContext;
 
+                        setFileCDRSourceContext(payload);
+
                         VRUIUtilsService.callDirectiveLoad(fileReaderSelectiveAPI, payload, fileReaderSelectiveLoadDeferred);
                         return fileReaderSelectiveLoadDeferred.promise;
+                    }
+
+                    function setFileCDRSourceContext(payloadObject) {
+                        payloadObject.fileCDRSourceContext = {};
+                        payloadObject.fileCDRSourceContext.disableReadSampleButton = function () {
+                            return ($scope.scopeModel.file == null || $scope.scopeModel.file.fileId == null);
+                        };
                     }
                 };
 

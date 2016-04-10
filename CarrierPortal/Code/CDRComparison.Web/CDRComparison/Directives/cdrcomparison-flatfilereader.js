@@ -27,6 +27,7 @@
 
             var gridAPI;
             var cdrSourceContext;
+            var fileCDRSourceContext;
             var fieldMappings;
 
             var cdrFields = [
@@ -65,6 +66,10 @@
                         if (!UtilsService.contains(selectedFieldValues, cdrFields[i].value))
                             $scope.scopeModel.availableCDRFields.push(cdrFields[i]);
                     }
+                };
+
+                $scope.scopeModel.disableReadSampleButton = function () {
+                    return (fileCDRSourceContext != undefined) ? fileCDRSourceContext.disableReadSampleButton() : true;
                 };
 
                 $scope.scopeModel.readSample = function () {
@@ -113,6 +118,8 @@
 
                     if (payload != undefined) {
                         cdrSourceContext = payload.cdrSourceContext;
+                        fileCDRSourceContext = payload.fileCDRSourceContext;
+
                         $scope.scopeModel.delimiter = payload.Delimiter;
                         if (payload.DateTimeFormat != undefined)
                             $scope.scopeModel.dateTimeFormat = payload.DateTimeFormat;
