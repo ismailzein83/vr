@@ -24,6 +24,7 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.recentFiles = [];
+            $scope.scopeModel.selectedFile;
 
             $scope.scopeModel.onGridReady = function (api) {
                 var query = { ModuleName: moduleName };
@@ -32,22 +33,31 @@
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_FileAPIService.GetFilteredRecentFiles(dataRetrievalInput).then(function (response) {
+
+                    if (response != null && response.Data != null) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            response.Data[i].onValueChanged = function (file) {
+                                if (file.isSelected) {
+                                    $scope.scopeModel.selectedFile = file;
+                                    // Deselect other files
+                                    for (var i = 0; i < $scope.scopeModel.recentFiles.length; i++) {
+                                        var item = $scope.scopeModel.recentFiles[i];
+                                        if (item.FileId != file.FileId) {
+                                            item.isSelected = false;
+                                        }
+                                    }
+                                }
+                                else {
+                                    $scope.scopeModel.selectedFile = undefined;
+                                }
+                            };
+                        }
+                    }
+
                     onResponseReady(response);
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
-            };
-
-            $scope.scopeModel.validateGrid = function () {
-                var fileCount = 0;
-                for (var i = 0; i < $scope.scopeModel.recentFiles.length; i++) {
-                    var file = $scope.scopeModel.recentFiles[i];
-                    if (file.isSelected)
-                        fileCount++;
-                }
-                if (fileCount != 1)
-                    return 'Select one file';
-                return null;
             };
 
             $scope.scopeModel.select = function () {
