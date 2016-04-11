@@ -9,21 +9,21 @@
                 <span vr-loader="isLoadingSaleZonesSelector">
                     <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady" />
                 </span>
-              
-                    <vr-whs-be-carrieraccount-selector normal-col-num="2" ismultipleselection getcustomers on-ready="onCarrierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+
+                <vr-whs-be-carrieraccount-selector normal-col-num="2" ismultipleselection getcustomers on-ready="onCarrierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="AddNewSellingRule"></vr-button>
+                    <vr-button type="Add" data-onclick="AddNewSellingRule" haspermission="hasAddRulePermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-whs-sales-sellingrules-grid on-ready="onGridReady"></vr-whs-sales-sellingrules-grid>
+                <whs-sales-sellingrules-grid on-ready="onGridReady"></whs-sales-sellingrules-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

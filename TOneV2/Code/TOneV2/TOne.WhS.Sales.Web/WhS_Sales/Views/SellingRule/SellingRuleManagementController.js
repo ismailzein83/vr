@@ -2,9 +2,9 @@
 
     "use strict";
 
-    sellingRuleManagementController.$inject = ['$scope', 'WhS_Sales_SellingRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    sellingRuleManagementController.$inject = ["$scope", "WhS_Sales_SellingRuleService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_Sales_SellingRuleAPIService"];
 
-    function sellingRuleManagementController($scope, WhS_Sales_SellingRuleService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function sellingRuleManagementController($scope, WhS_Sales_SellingRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Sales_SellingRuleAPIService) {
         var gridAPI;
 
         var carrierAccountDirectiveAPI;
@@ -19,6 +19,10 @@
         load();
 
         function defineScope() {
+
+            $scope.hasAddRulePermission = function () {
+                return WhS_Sales_SellingRuleAPIService.HasAddRulePermission();
+            }
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -106,5 +110,5 @@
         }
     }
 
-    appControllers.controller('WhS_Sales_SellingRuleManagementController', sellingRuleManagementController);
+    appControllers.controller("WhS_Sales_SellingRuleManagementController", sellingRuleManagementController);
 })(appControllers);

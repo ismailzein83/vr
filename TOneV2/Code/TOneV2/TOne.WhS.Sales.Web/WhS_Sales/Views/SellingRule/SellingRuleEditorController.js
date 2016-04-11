@@ -2,7 +2,7 @@
 
     "use strict";
 
-    sellingRuleEditorController.$inject = ['$scope', 'WhS_Sales_SellingRuleAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    sellingRuleEditorController.$inject = ["$scope", "WhS_Sales_SellingRuleAPIService", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService"];
 
     function sellingRuleEditorController($scope, WhS_Sales_SellingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
@@ -40,6 +40,14 @@
         }
 
         function defineScope() {
+
+            $scope.hasSaveRulePermission = function () {
+                if (isEditMode)
+                    return WhS_Sales_SellingRuleAPIService.HasUpdateRulePermission();
+                else
+                    return WhS_Sales_SellingRuleAPIService.HasAddRulePermission();
+            }
+
             $scope.scopeModel = {}
             $scope.scopeModel.saleZoneGroupTemplates = [];
             $scope.scopeModel.customerGroupTemplates = [];
@@ -60,7 +68,6 @@
             }
 
             $scope.scopeModel.onSellingRuleSettingsDirectiveReady = function (api) {
-                console.log(api);
                 sellingRuleSettingsAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSellingRuleSettings = value };
 
@@ -135,7 +142,7 @@
         function loadFilterBySection() {
 
             $scope.scopeModel.sellingRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Sales_SellingRuleCriteriaTypeEnum);
-            $scope.scopeModel.selectedSellingRuleCriteriaType = UtilsService.getEnum(WhS_Sales_SellingRuleCriteriaTypeEnum, 'value', WhS_Sales_SellingRuleCriteriaTypeEnum.SaleZone.value);
+            $scope.scopeModel.selectedSellingRuleCriteriaType = UtilsService.getEnum(WhS_Sales_SellingRuleCriteriaTypeEnum, "value", WhS_Sales_SellingRuleCriteriaTypeEnum.SaleZone.value);
         }
 
         function loadSaleZoneGroupSection() {
@@ -209,7 +216,7 @@
             });
 
             promises.push(loadSellingRuleSettingsTemplatesPromise);
-            
+
             if (sellingRuleSettingsPayload != undefined) {
                 sellingRuleSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 var sellingRuleSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -242,7 +249,7 @@
                     SaleZoneGroupSettings: saleZoneGroupSettingsAPI.getData(),
                     CustomerGroupSettings: customerGroupSettingsAPI.getData()
                 },
-                Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, sellingRuleSettingsAPI, 'selectedSellingRuleSettingsTemplate'),
+                Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, sellingRuleSettingsAPI, "selectedSellingRuleSettingsTemplate"),
                 BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,
                 EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };
@@ -281,5 +288,5 @@
 
 
     }
-    appControllers.controller('WhS_Sales_SellingRuleEditorController', sellingRuleEditorController);
+    appControllers.controller("WhS_Sales_SellingRuleEditorController", sellingRuleEditorController);
 })(appControllers);

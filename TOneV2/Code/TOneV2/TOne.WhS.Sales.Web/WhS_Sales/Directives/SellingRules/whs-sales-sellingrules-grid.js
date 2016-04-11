@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive('vrWhsSalesSellingrulesGrid', ['VRNotificationService', 'WhS_Sales_SellingRuleAPIService', 'WhS_Sales_SellingRuleService',
+app.directive('whsSalesSellingrulesGrid', ['VRNotificationService', 'WhS_Sales_SellingRuleAPIService', 'WhS_Sales_SellingRuleService',
 function (VRNotificationService, WhS_Sales_SellingRuleAPIService, WhS_Sales_SellingRuleService) {
 
     var directiveDefinitionObject = {
@@ -76,12 +76,24 @@ function (VRNotificationService, WhS_Sales_SellingRuleAPIService, WhS_Sales_Sell
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editSellingRule,
+                haspermission: hasUpdateRulePermission
             },
             {
                 name: "Delete",
                 clicked: deleteSellingRule,
+                haspermission: hasDeleteRulePermission
             }
             ];
+        }
+
+        function hasUpdateRulePermission() {
+            console.log('hasUpdateRulePermission')
+            return WhS_Sales_SellingRuleAPIService.HasUpdateRulePermission();
+        }
+
+        function hasDeleteRulePermission() {
+            console.log('hasDeleteRulePermission')
+            return WhS_Sales_SellingRuleAPIService.HasDeleteRulePermission();
         }
 
         function editSellingRule(sellingRule) {
