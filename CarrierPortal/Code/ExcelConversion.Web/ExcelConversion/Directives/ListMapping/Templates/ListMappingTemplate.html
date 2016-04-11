@@ -10,7 +10,7 @@
     <vr-columns colnum="fullrow">
         <vr-datagrid datasource="listMappingCtrl.fieldMappings" norowhighlightonclick="true"
                      on-ready="onGridReady" hidegridmenu>
-            <vr-datagridcolumn headertext="'Field Name'" field="'FieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Field Name'" field="'FieldTitle'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
                 <excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" isrequired="dataItem.isRequired" customvalidate="dataItem.validate()" type="dataItem.type"> </excelconversion-fieldmapping-selective>
             </vr-datagridcolumn>

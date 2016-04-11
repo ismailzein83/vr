@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 
 namespace ExcelConversion.Business
 {
@@ -18,55 +19,45 @@ namespace ExcelConversion.Business
             ExcelConvertor excelConvertor = new ExcelConvertor();
             ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(priceListConversion.InputPriceListSettings.FileId, priceListConversion.InputPriceListSettings.ExcelConversionSettings);
             PriceListItem priceListItem = ConvertToPriceListItem(convertedExcel);
-            Workbook wbk = new Workbook();
+
+
+            var fileManager = new VRFileManager();
+            var file = fileManager.GetFile(priceListConversion.OutputPriceListSettings.FileId);
+            if (file == null)
+                throw new NullReferenceException(String.Format("file '{0}'", priceListConversion.OutputPriceListSettings.FileId));
+            if (file.Content == null)
+                throw new NullReferenceException(String.Format("file.Content '{0}'", priceListConversion.OutputPriceListSettings.FileId));
+            MemoryStream stream = new MemoryStream(file.Content);
+            Workbook workbook = new Workbook(stream);
+            var workSheet = workbook.Worksheets[priceListConversion.OutputPriceListSettings.OutputPriceListFields.SheetIndex];
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
-            wbk.Worksheets.Clear();
             int rowIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.FirstRowIndex;
             int zoneCellIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.ZoneCellIndex;
             int codeCellIndex =priceListConversion.OutputPriceListSettings.OutputPriceListFields.CodeCellIndex;
             int rateCellIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.RateCellIndex;
             int effectiveDateCellIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.EffectiveDateCellIndex;
-            Worksheet RateWorkSheet = wbk.Worksheets.Add("Result");
 
-            SetCellProperties(RateWorkSheet,  rowIndex,  zoneCellIndex, "Zone");
-            SetCellProperties(RateWorkSheet,  rowIndex,  codeCellIndex, "Code");
-            SetCellProperties(RateWorkSheet,  rowIndex,  rateCellIndex, "Rate");
-            SetCellProperties(RateWorkSheet, rowIndex, effectiveDateCellIndex, "BED");
-          
-            
-            rowIndex++;
+
             foreach (var item in priceListItem.Records)
             {
-                RateWorkSheet.Cells[rowIndex, zoneCellIndex].PutValue(item.Zone);
+                workSheet.Cells[rowIndex, zoneCellIndex].PutValue(item.Zone);
 
-                RateWorkSheet.Cells[rowIndex, codeCellIndex].PutValue(item.Code);
+                workSheet.Cells[rowIndex, codeCellIndex].PutValue(item.Code);
 
-                RateWorkSheet.Cells[rowIndex, rateCellIndex].PutValue(item.Rate);
+                workSheet.Cells[rowIndex, rateCellIndex].PutValue(item.Rate);
 
-                RateWorkSheet.Cells[rowIndex, effectiveDateCellIndex].PutValue(item.BED);
+                workSheet.Cells[rowIndex, effectiveDateCellIndex].PutValue(item.EffectiveDate);
                 rowIndex++;
             }
  
 
             MemoryStream memoryStream = new MemoryStream();
-            memoryStream = wbk.SaveToStream();
+            memoryStream = workbook.SaveToStream();
 
             return memoryStream.ToArray();
         }
-        private void SetCellProperties(Worksheet workSheet, int rowIndex, int colIndex, string propName)
-        {
-            workSheet.Cells.SetColumnWidth(colIndex, 20);
-            workSheet.Cells[rowIndex, colIndex].PutValue(propName);
-            Cell cell = workSheet.Cells.GetCell(rowIndex, colIndex);
-            Style style = cell.GetStyle();
-            style.Font.Name = "Times New Roman";
-            style.Font.Color = Color.FromArgb(255, 0, 0); ;
-            style.Font.Size = 14;
-            style.Font.IsBold = true;
-            cell.SetStyle(style);
-            colIndex++;
-        }
+       
         private PriceListItem ConvertToPriceListItem(ConvertedExcel convertedExcel)
         {
             PriceListItem priceListItem = new Entities.PriceListItem();
@@ -81,7 +72,23 @@ namespace ExcelConversion.Business
                     ConvertedExcelField rateField;
                     if (obj.Fields.TryGetValue("Zone", out zoneField) && obj.Fields.TryGetValue("Rate", out rateField))
                     {
-                        rateByZone.Add(zoneField.FieldValue.ToString(), Convert.ToDecimal(rateField.FieldValue));
+                        decimal rate ;
+                        if (!rateByZone.TryGetValue(zoneField.FieldValue.ToString(), out rate))
+                        {
+                             rateByZone.Add(zoneField.FieldValue.ToString(), Convert.ToDecimal(rateField.FieldValue));
+                        }else
+                        {
+                            if( rate == Convert.ToDecimal(rateField.FieldValue))
+                            {
+                                continue;
+
+                            }
+                            else
+                            {
+                                throw new Exception(string.Format("Same zone {0} of different rate exists.", zoneField.FieldValue));
+                            }
+                        }
+                       
                     };
                 }
 
@@ -105,9 +112,9 @@ namespace ExcelConversion.Business
                         priceListRecord.Code = codeField.FieldValue.ToString();
                     };
                     ConvertedExcelField bEDField;
-                    if (obj.Fields.TryGetValue("BED", out bEDField))
+                    if (obj.Fields.TryGetValue("EffectiveDate", out bEDField))
                     {
-                        priceListRecord.BED = (DateTime)bEDField.FieldValue;
+                        priceListRecord.EffectiveDate = (DateTime)bEDField.FieldValue;
                     };
                     decimal rate;
                     if (rateByZone.TryGetValue(priceListRecord.Zone, out rate))
@@ -164,9 +171,9 @@ namespace ExcelConversion.Business
                         priceListRecord.Code = codeField.FieldValue.ToString();
                     };
                     ConvertedExcelField bEDField;
-                    if (obj.Fields.TryGetValue("BED", out bEDField))
+                    if (obj.Fields.TryGetValue("EffectiveDate", out bEDField))
                     {
-                        priceListRecord.BED = (DateTime)bEDField.FieldValue;
+                        priceListRecord.EffectiveDate = (DateTime)bEDField.FieldValue;
                     };
                     decimal rate;
                     if (rateByZone.TryGetValue(priceListRecord.Zone, out rate))

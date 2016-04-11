@@ -48,7 +48,7 @@
                 {
                     if (context != undefined && $scope.cellObject!=undefined)
                     {
-                        context.setSelectedCell($scope.cellObject.row, $scope.cellObject.col);
+                        context.setSelectedCell($scope.cellObject.row, $scope.cellObject.col, $scope.cellObject.sheet);
                     }
                 }
                 defineAPI();

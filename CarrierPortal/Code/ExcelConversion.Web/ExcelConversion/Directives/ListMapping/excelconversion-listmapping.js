@@ -36,6 +36,7 @@
                             ctrl.lastRowIndex = {
                                 row: range[0],
                                 col: range[1],
+                                sheet: context.getSelectedSheet()
                             }
                         }
                         
@@ -44,7 +45,7 @@
                 }
                 ctrl.selectLastRowIndex = function () {
                     if (context != undefined) {
-                        context.setSelectedCell(ctrl.lastRowIndex.row, ctrl.lastRowIndex.col);
+                        context.setSelectedCell(ctrl.lastRowIndex.row, ctrl.lastRowIndex.col, ctrl.lastRowIndex.sheet);
                     }
                 }
                 ctrl.updateFirstRowIndexRange = function () {
@@ -63,7 +64,7 @@
                 }
                 ctrl.selectFirstRowIndex = function () {
                     if (context != undefined) {
-                        context.setSelectedCell(ctrl.firstRowIndex.row, ctrl.firstRowIndex.col);
+                        context.setSelectedCell(ctrl.firstRowIndex.row, ctrl.firstRowIndex.col, ctrl.firstRowIndex.sheet);
                     }
                 }
 
@@ -128,9 +129,13 @@
                             if (fieldMapping.fieldMappingAPI != undefined)
                             {
                                 var fieldMappingData = fieldMapping.fieldMappingAPI.getData();
-                                fieldMappingData.FieldName = fieldMapping.FieldName;
-                                fieldMappingData.FieldType = 0;
-                                fieldMappings.push(fieldMappingData);
+                                if (fieldMappingData != undefined)
+                                {
+                                    fieldMappingData.FieldName = fieldMapping.FieldName;
+                                    fieldMappingData.FieldType = 0;
+                                    fieldMappings.push(fieldMappingData);
+                                }
+                               
                             }
                                
                         }
@@ -138,9 +143,9 @@
                     }
                     var data = {
                         ListName:listName,
-                        SheetIndex: ctrl.firstRowIndex.sheet,
-                        FirstRowIndex: ctrl.firstRowIndex.row,
-                        LastRowIndex:ctrl.lastRowIndex.row,
+                        SheetIndex: ctrl.firstRowIndex!= undefined? ctrl.firstRowIndex.sheet:undefined,
+                        FirstRowIndex: ctrl.firstRowIndex != undefined? ctrl.firstRowIndex.row:undefined,
+                        LastRowIndex:ctrl.lastRowIndex !=undefined? ctrl.lastRowIndex.row:undefined,
                         FieldMappings: fieldMappings,
                     };
                     return data;

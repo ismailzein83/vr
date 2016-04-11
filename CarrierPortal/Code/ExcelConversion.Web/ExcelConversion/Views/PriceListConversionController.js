@@ -165,7 +165,7 @@
                 rateListMappingReadyPromiseDeferred.promise.then(function () {
                     var payload = {
                         context: buildContext(),
-                        fieldMappings: [{ FieldName: "Rate", isRequired: true, type: "cell" }, { FieldName: "Zone", isRequired: true, type: "cell" }, { FieldName: "BED", isRequired: true, type: "cell" }, { FieldName: "EED", type: "cell" }],
+                        fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell" }],
                         listName: "RateList"
                     };
                     VRUIUtilsService.callDirectiveLoad(rateListAPI, payload, loadRateListMappingPromiseDeferred);
@@ -179,7 +179,7 @@
                 codeListMappingReadyPromiseDeferred.promise.then(function () {
                     var payload = {
                         context: buildContext(),
-                        fieldMappings: [{ FieldName: "Code", isRequired: true, type: "cell" }, { FieldName: "Zone", isRequired: true, type: "cell" }, { FieldName: "BED", isRequired: true, type: "cell" }, { FieldName: "EED", type: "cell" }],
+                        fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell" }],
                         listName: "CodeList"
                     };
                     VRUIUtilsService.callDirectiveLoad(codeListAPI, payload, loadCodeListMappingPromiseDeferred);
@@ -191,14 +191,14 @@
             function buildContext() {
                 var context = {
                     getSelectedCell: getSelectedCell,
-                    setSelectedCell: setSelectedCell,
+                    setSelectedCell: selectCellAtSheet,
                     getSelectedSheet: getSelectedSheet
                 }
-                function setSelectedCell(row, col) {
+                function selectCellAtSheet(row, col, s) {
                     var a = parseInt(row);
                     var b = parseInt(col);
                     if (inputWorkBookApi != undefined && inputWorkBookApi.getSelectedSheetApi() != undefined)
-                        inputWorkBookApi.getSelectedSheetApi().selectCell(a, b, a, b);
+                        inputWorkBookApi.selectCellAtSheet(a, b, s);
                 }
                 function getSelectedCell() {
                     if (inputWorkBookApi != undefined && inputWorkBookApi.getSelectedSheetApi() != undefined)
@@ -214,14 +214,14 @@
             function buildOutputContext() {
                 var context = {
                     getSelectedCell: getSelectedCell,
-                    setSelectedCell: setSelectedCell,
+                    setSelectedCell: selectCellAtSheet,
                     getSelectedSheet: getSelectedSheet
                 }
-                function setSelectedCell(row, col) {
+                function selectCellAtSheet(row, col,s) {
                     var a = parseInt(row);
                     var b = parseInt(col);
                     if (outPutWorkBookAPI != undefined && outPutWorkBookAPI.getSelectedSheetApi() != undefined)
-                        outPutWorkBookAPI.getSelectedSheetApi().selectCell(a, b, a, b);
+                        outPutWorkBookAPI.selectCellAtSheet(a, b, s);
                 }
                 function getSelectedCell() {
                     if (outPutWorkBookAPI != undefined && outPutWorkBookAPI.getSelectedSheetApi() != undefined)

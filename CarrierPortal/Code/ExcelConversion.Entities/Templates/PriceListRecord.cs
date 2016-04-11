@@ -11,6 +11,6 @@ namespace ExcelConversion.Entities
         public string Zone { get; set; }
         public string Code { get; set; }
         public decimal Rate { get; set; }
-        public DateTime BED { get; set; }
+        public DateTime EffectiveDate { get; set; }
     }
 }
