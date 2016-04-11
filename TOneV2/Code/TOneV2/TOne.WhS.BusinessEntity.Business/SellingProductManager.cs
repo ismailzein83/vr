@@ -116,7 +116,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(sellingProduct);
+                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(GetSellingProduct(sellingProduct.SellingProductId));
             }
             else
             {
