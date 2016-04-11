@@ -20,7 +20,7 @@ namespace CDRComparison.Business
             if (this.FileReader == null)
                 throw new NullReferenceException("FileReader");
             Action<IEnumerable<CDR>> onCDRsReceived = (cdrs) => context.OnCDRsReceived(cdrs);
-            VRFileManager fileManager = new VRFileManager();
+            VRFileManager fileManager = new VRFileManager("CDRComparison_FileCDRSource");
 
             var file = fileManager.GetFile(this.FileId);
             if (file == null)
@@ -33,7 +33,7 @@ namespace CDRComparison.Business
 
         public override CDRSample ReadSample(IReadSampleFromSourceContext context)
         {
-            VRFileManager fileManager = new VRFileManager();
+            VRFileManager fileManager = new VRFileManager("CDRComparison_FileCDRSource");
 
             var file = fileManager.GetFile(this.FileId);
             if (file == null)

@@ -37,7 +37,7 @@
                             fileId: fileId
                         };
                     };
-                    VRCommon_FileService.viewRecentFiles('CDRComparison_FileCDRSourceType', onRecentFileSelected);
+                    VRCommon_FileService.viewRecentFiles('CDRComparison_FileCDRSource', onRecentFileSelected);
                 };
 
                 $scope.scopeModel.onFileReaderSelectiveReady = function (api) {
