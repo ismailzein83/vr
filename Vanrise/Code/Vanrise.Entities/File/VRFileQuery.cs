@@ -8,6 +8,6 @@ namespace Vanrise.Entities
 {
     public class VRFileQuery
     {
-        public string ModuleType { get; set; }
+        public string ModuleName { get; set; }
     }
 }

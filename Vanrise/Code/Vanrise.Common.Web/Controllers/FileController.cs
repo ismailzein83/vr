@@ -31,18 +31,20 @@ namespace Vanrise.Common.Web
                 HttpPostedFile postedFile = httpRequest.Files[0];
                 string[] nameastab = postedFile.FileName.Split('.');
                 
+                string moduleName = httpRequest.Headers["Module-Name"];
+
                 VRFile file = new VRFile()
                 {
                     Content = ReadToEnd(postedFile.InputStream) ,
                     Name = postedFile.FileName ,
                     Extension = nameastab[nameastab.Length -1],
-                    ModuleType = httpRequest.Headers["Module-Type"],
+                    ModuleName = moduleName,
                     CreatedTime = DateTime.Now 
                 };
 
                 // VRFileManager sets the UserId property via SecurityContext
 
-                VRFileManager manager = new VRFileManager();
+                VRFileManager manager = new VRFileManager(moduleName);
                 long id = manager.AddFile(file);
 
                 
@@ -60,9 +62,9 @@ namespace Vanrise.Common.Web
 
         [Route("DownloadFile")]
         [HttpGet]
-        public HttpResponseMessage DownloadFile(long fileId) {
+        public HttpResponseMessage DownloadFile(long fileId, string moduleName = null) {
 
-            VRFileManager manager = new VRFileManager();
+            VRFileManager manager = new VRFileManager(moduleName);
             VRFile file = manager.GetFile(fileId);
             byte[] bytes = file.Content;
               
@@ -110,19 +112,17 @@ namespace Vanrise.Common.Web
 
         [Route("GetFileInfo")]
         [HttpGet]
-        public VRFileInfo GetFileInfo(long fileId)
+        public VRFileInfo GetFileInfo(long fileId, string moduleName = null)
         {
-
-            VRFileManager manager = new VRFileManager();
+            VRFileManager manager = new VRFileManager(moduleName);
             return manager.GetFileInfo(fileId);
-
         }
 
         [HttpPost]
         [Route("GetFilteredRecentFiles")]
         public object GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input)
         {
-            VRFileManager manager = new VRFileManager();
+            VRFileManager manager = new VRFileManager(input.Query.ModuleName);
             return GetWebResponse(input, manager.GetFilteredRecentFiles(input));
         }
 

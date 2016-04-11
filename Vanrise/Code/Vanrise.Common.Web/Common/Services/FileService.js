@@ -10,10 +10,10 @@
             viewRecentFiles: viewRecentFiles
         };
 
-        function viewRecentFiles(moduleType, onRecentFileSelected) {
+        function viewRecentFiles(moduleName, onRecentFileSelected) {
 
             var parameters = {
-                moduleType: moduleType
+                moduleName: moduleName
             };
 
             var settings = {};

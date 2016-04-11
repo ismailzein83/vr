@@ -35,7 +35,7 @@ namespace Vanrise.Common.Data.SQL
         {
             object fileId;
             long badresult = -1;
-            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleType, file.UserId, file.CreatedTime);
+            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.CreatedTime);
             return (id > 0) ? (long)fileId : badresult;
         }
 
@@ -78,7 +78,7 @@ namespace Vanrise.Common.Data.SQL
                         [Name],
                         [Extension],
                         [IsUsed],
-                        [ModuleType],
+                        [ModuleName],
                         [UserId],
                         [CreatedTime]
                     INTO #TEMPTABLENAME#
@@ -88,7 +88,7 @@ namespace Vanrise.Common.Data.SQL
                 END"
             );
             tempTableQueryBuilder.Replace("#TEMPTABLENAME#", tempTableName);
-            tempTableQueryBuilder.Replace("#WHERECLAUSE#", (input.Query.ModuleType != null) ? String.Format("WHERE [ModuleType] = '{0}'", input.Query.ModuleType) : null);
+            tempTableQueryBuilder.Replace("#WHERECLAUSE#", (input.Query.ModuleName != null) ? String.Format("WHERE [ModuleName] = '{0}'", input.Query.ModuleName) : null);
             ExecuteNonQueryText(tempTableQueryBuilder.ToString(), null);
         }
 
@@ -101,7 +101,7 @@ namespace Vanrise.Common.Data.SQL
                 Extension = reader["Extension"] as string,
                 Content = GetReaderValue<byte[]>(reader, "Content"),
                 IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
-                ModuleType = reader["ModuleType"] as string,
+                ModuleName = reader["ModuleName"] as string,
                 UserId = (int)reader["UserID"],
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
             };
@@ -115,7 +115,7 @@ namespace Vanrise.Common.Data.SQL
                 Name = reader["Name"] as string,
                 Extension = reader["Extension"] as string,
                 IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
-                ModuleType = reader["ModuleType"] as string,
+                ModuleName = reader["ModuleName"] as string,
                 UserId = (int)reader["UserID"],
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
             };

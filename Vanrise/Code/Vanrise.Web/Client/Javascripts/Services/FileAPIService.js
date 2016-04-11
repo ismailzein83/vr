@@ -6,9 +6,10 @@ var serviceObj = function (BaseAPIService) {
     });
     
    
-    function DownloadFile(fileId) {
+    function DownloadFile(fileId, moduleName) {
         return BaseAPIService.get('/api/VRCommon/File/DownloadFile', {
-            fileId: fileId
+            fileId: fileId,
+            moduleName: moduleName
         },{
             returnAllResponseParameters: true,
             responseTypeAsBufferArray: true

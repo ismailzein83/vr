@@ -9,7 +9,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             onReady: '=',
             value: '=',
             hint: '@',
-            moduletype: '@'
+            modulename: '@'
         },
         controller: function ($scope, $element, $attrs,$timeout) {
             var ctrl = this;
@@ -49,7 +49,10 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 url: base + '/api/VRCommon/File/UploadFile',
                 beforeSend: function (xhr, data) {
                     xhr.setRequestHeader('Auth-Token', SecurityService.getUserToken());
-                    xhr.setRequestHeader('Module-Type', ctrl.moduletype);
+                    var moduleName = getModuleName();
+                    if (moduleName != null) {
+                        xhr.setRequestHeader('Module-Name', moduleName);
+                    }
                 },
                 formData: function (form) { return form },
                 replaceFileInput: true,
@@ -107,31 +110,27 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     return;
                 }
                 if (ctrl.value != null) {
-                    BaseAPIService.get("/api/VRCommon/File/GetFileInfo",
-                        {
-                            fileId: ctrl.value.fileId
-                        }
-                       ).then(function (response) {
-                           if (response != null)
-                               ctrl.file = {
-                                   name: response.Name,
-                                   type: response.Extension,
-                                   fileId: response.FileId,
-                                   lastModifiedDate: response.lastModifiedDate
-                               };
-                           else
-                               ctrl.file = {
-                                  
-                               };
-
-                       });
+                    BaseAPIService.get("/api/VRCommon/File/GetFileInfo", {
+                        fileId: ctrl.value.fileId,
+                        moduleName: getModuleName()
+                    }).then(function (response) {
+                        if (response != null)
+                            ctrl.file = {
+                                name: response.Name,
+                                type: response.Extension,
+                                fileId: response.FileId,
+                                lastModifiedDate: response.lastModifiedDate
+                            };
+                        else
+                            ctrl.file = {};
+                    });
 
                 }
                
             });
             ctrl.downloadFile = function(){
                 var id = ctrl.value.fileId;
-                FileAPIService.DownloadFile(id)
+                FileAPIService.DownloadFile(id, getModuleName())
                    .then(function (response) {
                       UtilsService.downloadFile(response.data, response.headers);
                    });
@@ -157,6 +156,10 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     var innerTooltip = self.parent().find('.tooltip-inner')[0];
                     $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 17, left: selfOffset.left - 30 });
                 }, 1)
+            }
+
+            function getModuleName() {
+                return (ctrl.modulename == undefined || ctrl.modulename == null) ? null : ctrl.modulename;
             }
         },
         controllerAs: 'ctrl',

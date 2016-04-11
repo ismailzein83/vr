@@ -6,7 +6,7 @@
 
     function RecentFileController($scope, VRCommon_FileAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
-        var moduleType;
+        var moduleName;
 
         loadParameters();
         defineScope();
@@ -16,7 +16,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                moduleType = parameters.moduleType;
+                moduleName = parameters.moduleName;
             }
         }
 
@@ -26,7 +26,7 @@
             $scope.scopeModel.recentFiles = [];
 
             $scope.scopeModel.onGridReady = function (api) {
-                var query = { ModuleType: moduleType };
+                var query = { ModuleName: moduleName };
                 api.retrieveData(query);
             };
 
