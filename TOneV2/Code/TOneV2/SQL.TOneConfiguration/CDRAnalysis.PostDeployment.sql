@@ -9,30 +9,6 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---sec.WidgetDefinition------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert sec.[WidgetDefinition] on;
-;with cte_data([ID],[Name],[DirectiveName],[Setting])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Report                                            ','vr-bi-datagrid                                    ','{"DirectiveTemplateURL":"/Client/Modules/BI/Directives/Templates/vr-bi-datagrid-directive-template.html","Sections":[1]}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                '),
-(2,'Chart                                             ','vr-bi-chart                                       ','{"DirectiveTemplateURL":"/Client/Modules/BI/Directives/Templates/vr-bi-chart-directive-template.html","Sections":[1]}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   '),
-(3,'Summary                                           ','vr-bi-summary                                     ','{"DirectiveTemplateURL":"/Client/Modules/BI/Directives/Templates/vr-bi-summary-directive-template.html","Sections":[0]}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[DirectiveName],[Setting]))
-merge	[sec].[WidgetDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[DirectiveName] = s.[DirectiveName],[Setting] = s.[Setting]
-when not matched by target then
-	insert([ID],[Name],[DirectiveName],[Setting])
-	values(s.[ID],s.[Name],s.[DirectiveName],s.[Setting])
-when not matched by source then
-	delete;
-set identity_insert [sec].[WidgetDefinition] off;
 --[BI].[SchemaConfiguration]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -85,9 +61,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (901,'Fraud Analysis',null,null,'/images/menu-icons/other.png',11,0),
 (902,'Reports',null,null,'/images/menu-icons/busines intel.png',14,0),
-(903,'Network Infrastructure',null,1,null,30,0),
-(904,'Dynamic Management',null,1,null,45,0),
-(905,'Business Intelligence',null,null,'/images/menu-icons/busines intel.png',16,1)
+(903,'Network Infrastructure',null,1,null,30,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -117,9 +91,7 @@ as (select * from (values
 (9007,'Detected Lines Details','Detected Lines Details','#/view/FraudAnalysis/Views/Reports/LinesDetected',902,null,null,null,null,0,3),
 (9008,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchManagement',903,'PSTN_BE/Switch/GetFilteredSwitches',null,null,null,0,1),
 (9009,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkManagement',903,'PSTN_BE/Trunk/GetFilteredTrunks',null,null,null,0,2),
-(9010,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement',903,'PSTN_BE/SwitchBrand/GetFilteredBrands',null,null,null,0,3),
-(9011,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',904,'Root/Administration Module/Dynamic Pages:View',null,null,null,0,1),
-(9012,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',904,'Root/Administration Module/Dynamic Pages:View',null,null,null,0,2)
+(9010,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement',903,'PSTN_BE/SwitchBrand/GetFilteredBrands',null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -222,10 +194,9 @@ when matched then
 	[Type] = s.[Type]
 when not matched by target then
 	insert([ID],[Type])
-	values(s.[ID],s.[Type])
-when not matched by source then
-	delete;
+	values(s.[ID],s.[Type]);
 set identity_insert [rules].[RuleType] off;
+
 --[sec].[SystemAction]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;

@@ -9,30 +9,8 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---sec.WidgetDefinition--------
-set nocount on;
-set identity_insert [sec].[WidgetDefinition] on;
-;with cte_data([ID],[Name],[DirectiveName],[Setting])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Report                                            ','vr-bi-datagrid                                    ','{"DirectiveTemplateURL":"vr-bi-datagrid-template","Sections":[1]}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                '),
-(2,'Chart                                             ','vr-bi-chart                                       ','{"DirectiveTemplateURL":"vr-bi-chart-template","Sections":[1]}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   '),
-(3,'Summary                                           ','vr-bi-summary                                     ','{"DirectiveTemplateURL":"vr-bi-summary-template","Sections":[0]}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[DirectiveName],[Setting]))
-merge	[sec].[WidgetDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[DirectiveName] = s.[DirectiveName],[Setting] = s.[Setting]
-when not matched by target then
-	insert([ID],[Name],[DirectiveName],[Setting])
-	values(s.[ID],s.[Name],s.[DirectiveName],s.[Setting])
-when not matched by source then
-	delete;
-set identity_insert [sec].[WidgetDefinition] off; 
---BI.SchemaConfiguration----
+--[BI].[SchemaConfiguration]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [BI].[SchemaConfiguration] on;
 ;with cte_data([ID],[Name],[DisplayName],[Type],[Configuration],[Rank])
@@ -82,7 +60,7 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[DisplayName],s.[Type],s.[Configuration],s.[Rank]);
 set identity_insert [BI].[SchemaConfiguration] off;
 
---[sec].[Module]---------------------------1201 to 1300---------------------------------------------------------
+--[sec].[Module]---------------------------1301 to 1400---------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
 set identity_insert [sec].[Module] on;
@@ -105,9 +83,7 @@ as (select * from (values
 (1214,'Traffic Analysis',null,null,'/images/menu-icons/NOC.png',70,1),
 (1215,'Billing',null,null,'/images/menu-icons/billing.png',80,0),
 (1216,'Prepaid-Postpaid',null,null,'/images/menu-icons/post paid - pre paid.png',90,0),
-(1217,'Plugins',null,null,'/images/menu-icons/plug.png',100,0),
-(1218,'Dynamic Management',null,1,null,110,0),
-(1219,'Business Intelligence',null,null,'/images/menu-icons/busines intel.png',120,1)
+(1217,'Plugins',null,null,'/images/menu-icons/plug.png',100,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -164,9 +140,7 @@ as (select * from (values
 (12034,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',1214,null,null,null,null,0,2),
 (12035,'Hourly Report','Hourly Report','#/view/WhS_Analytics/Views/HourlyReport',1214,null,null,null,null,0,3),
 (12036,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',1214,null,null,null,null,0,4),
-(12037,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5),
-(12038,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1218,null,null,null,null,0,2),
-(12039,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',1218,null,null,null,null,0,3)
+(12037,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -222,27 +196,6 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
-
---[sec].[Permission]---
-set nocount on;
-;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(0,'1',1,'17','[{"Name":"View","Value":1}, {"Name":"Edit","Value":1}, {"Name":"Delete","Value":1}, {"Name":"Add","Value":1}, {"Name":"Validate","Value":1}]')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
-merge	[sec].[Permission] as t
-using	cte_data as s
-on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
-when matched then
-	update set
-	[PermissionFlags] = s.[PermissionFlags]
-when not matched by target then
-	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags])
-when not matched by source then
-	delete;
-
 
 --[common].[TemplateConfig]----------1 to 10000---------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------

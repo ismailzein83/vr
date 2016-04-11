@@ -9,31 +9,6 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[sec].[WidgetDefinition]--------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [sec].[WidgetDefinition] on;
-;with cte_data([ID],[Name],[DirectiveName],[Setting])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Report','vr-bi-datagrid','{"DirectiveTemplateURL":"vr-bi-datagrid-template","Sections":[1]}'),
-(2,'Chart','vr-bi-chart','{"DirectiveTemplateURL":"vr-bi-chart-template","Sections":[1]}'),
-(3,'Summary','vr-bi-summary','{"DirectiveTemplateURL":"vr-bi-summary-template","Sections":[0]} ')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[DirectiveName],[Setting]))
-merge	[sec].[WidgetDefinition] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[DirectiveName] = s.[DirectiveName],[Setting] = s.[Setting]
-when not matched by target then
-	insert([ID],[Name],[DirectiveName],[Setting])
-	values(s.[ID],s.[Name],s.[DirectiveName],s.[Setting])
-when not matched by source then
-	delete;
-set identity_insert [sec].[WidgetDefinition] off;
-
 --[BI].[SchemaConfiguration]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -71,8 +46,7 @@ set identity_insert [sec].[Module] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1001,'Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',12,0),
-(1002,'Dynamic Management','Dynamic Management',1,null,13,0),
-(1003,'Business Intelligence','BI',null,'/images/menu-icons/busines intel.png',120,1)
+(1002,'Dynamic Management','Dynamic Management',1,null,13,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -98,9 +72,7 @@ as (select * from (values
 (10004,'History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement',1001,'QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,0,12),
 (10003,'Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}',1001,'VR_Runtime/SchedulerTask/GetFilteredMyTasks',null,null,null,0,12),
 (10005,'Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement',101,'QM_BE/Zone/GetFilteredZones',null,null,null,0,20),
-(10006,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',101,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,21),
-(10007,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1002,null,null,null,null,0,1),
-(10008,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',1002,null,null,null,null,0,2)
+(10006,'Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement',101,'QM_BE/Supplier/GetFilteredSuppliers',null,null,null,0,21)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
