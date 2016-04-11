@@ -24,6 +24,14 @@
         }
 
         function defineScope() {
+
+            $scope.hasSaveZoneServiceConfigPermission = function () {
+                if (isEditMode)
+                    return WhS_BE_ZoneServiceConfigAPIService.HasUpdateZoneServiceConfigPermission();
+                else
+                    return WhS_BE_ZoneServiceConfigAPIService.HasAddZoneServiceConfigPermission();
+            }
+
             $scope.saveZoneServiceConfig = function () {
                 if (isEditMode) {
                     return updateZoneServiceConfig();

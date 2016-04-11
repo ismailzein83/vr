@@ -83,9 +83,14 @@ function (UtilsService, VRNotificationService, WhS_BE_ZoneServiceConfigAPIServic
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editZoneServiceConfig
+                clicked: editZoneServiceConfig,
+                haspermission: hasUpdateZoneServiceConfigPermission
             }
             ];
+        }
+
+        function hasUpdateZoneServiceConfigPermission() {
+            return WhS_BE_ZoneServiceConfigAPIService.HasUpdateZoneServiceConfigPermission();
         }
 
         function editZoneServiceConfig(zoneServiceConfigObj) {

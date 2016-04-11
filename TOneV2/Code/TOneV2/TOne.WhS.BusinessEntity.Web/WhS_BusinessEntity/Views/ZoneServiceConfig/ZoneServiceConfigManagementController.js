@@ -2,15 +2,20 @@
 
     "use strict";
 
-    zoneServiceConfigManagementController.$inject = ['$scope', 'WhS_BE_ZoneServiceConfigService'];
+    zoneServiceConfigManagementController.$inject = ["$scope", "WhS_BE_ZoneServiceConfigService", "WhS_BE_ZoneServiceConfigAPIService"];
 
-    function zoneServiceConfigManagementController($scope, WhS_BE_ZoneServiceConfigService) {
+    function zoneServiceConfigManagementController($scope, WhS_BE_ZoneServiceConfigService, WhS_BE_ZoneServiceConfigAPIService) {
         var gridAPI;
         defineScope();
         load();
         var filter = {};
 
         function defineScope() {
+
+            $scope.hasAddZoneServiceConfigPermission = function () {
+                return WhS_BE_ZoneServiceConfigAPIService.HasAddZoneServiceConfigPermission();
+            }
+
             $scope.searchClicked = function () {
                 setFilterObject()
                 return gridAPI.loadGrid(filter);
@@ -50,5 +55,5 @@
 
     }
 
-    appControllers.controller('WhS_BE_ZoneServiceConfigManagementController', zoneServiceConfigManagementController);
+    appControllers.controller("WhS_BE_ZoneServiceConfigManagementController", zoneServiceConfigManagementController);
 })(appControllers);

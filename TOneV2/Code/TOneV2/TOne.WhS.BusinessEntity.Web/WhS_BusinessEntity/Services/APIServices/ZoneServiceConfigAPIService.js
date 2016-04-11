@@ -1,37 +1,55 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    zoneServiceConfigAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
+    zoneServiceConfigAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig", "SecurityService"];
 
-    function zoneServiceConfigAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
+    function zoneServiceConfigAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
+
+        var controllerName = "ZoneServiceConfig";
 
         function GetFilteredZoneServiceConfigs(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "ZoneServiceConfig", "GetFilteredZoneServiceConfigs"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredZoneServiceConfigs"), input);
         }
+
         function GetAllZoneServiceConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "ZoneServiceConfig", "GetAllZoneServiceConfigs"));
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetAllZoneServiceConfigs"));
         }
+
         function GetZoneServiceConfig(serviceFlag) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "ZoneServiceConfig", "GetZoneServiceConfig"), {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetZoneServiceConfig"), {
                 serviceFlag: serviceFlag
             });
+        }
 
-        }
         function UpdateZoneServiceConfig(zoneServiceConfigObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "ZoneServiceConfig", "UpdateZoneServiceConfig"), zoneServiceConfigObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateZoneServiceConfig"), zoneServiceConfigObject);
         }
+
         function AddZoneServiceConfig(zoneServiceConfigObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "ZoneServiceConfig", "AddZoneServiceConfig"), zoneServiceConfigObject);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "AddZoneServiceConfig"), zoneServiceConfigObject);
         }
+
+        function HasUpdateZoneServiceConfigPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateZoneServiceConfig']));
+        }
+
+        function HasAddZoneServiceConfigPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddZoneServiceConfig']));
+        }
+
+
         return ({
             GetFilteredZoneServiceConfigs: GetFilteredZoneServiceConfigs,
             GetAllZoneServiceConfigs: GetAllZoneServiceConfigs,
             GetZoneServiceConfig: GetZoneServiceConfig,
             UpdateZoneServiceConfig: UpdateZoneServiceConfig,
-            AddZoneServiceConfig: AddZoneServiceConfig
+            AddZoneServiceConfig: AddZoneServiceConfig,
+            HasUpdateZoneServiceConfigPermission: HasUpdateZoneServiceConfigPermission,
+            HasAddZoneServiceConfigPermission: HasAddZoneServiceConfigPermission
         });
+
     }
 
-    appControllers.service('WhS_BE_ZoneServiceConfigAPIService', zoneServiceConfigAPIService);
+    appControllers.service("WhS_BE_ZoneServiceConfigAPIService", zoneServiceConfigAPIService);
 
 })(appControllers);
