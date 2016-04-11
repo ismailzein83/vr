@@ -139,7 +139,7 @@ namespace ExcelConversion.Business
                 eSheet.Name = sheet.Name;
                 int nbOfSheetColumns = 0;
 
-                for (int j = Query.From ; j < Query.To; j++)
+                for (int j = Query.From ; j <= Query.To; j++)
                 {
                     Row row = (Row)sheet.Cells.Rows[j];
 

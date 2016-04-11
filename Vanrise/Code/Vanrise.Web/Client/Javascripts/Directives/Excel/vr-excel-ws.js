@@ -1,11 +1,13 @@
 ﻿'use strict';
-app.directive('vrExcelWs', function () {
+app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelConversion_ExcelAPIService) {
    
     return {
         restrict: 'E',
         scope: {
             data: '=',
-            onReady: '='
+            onReady: '=',
+            fileid: "=",
+            index: "="
         },
         replace: true,
         template: "<div></div>",
@@ -21,7 +23,8 @@ app.directive('vrExcelWs', function () {
             })
             var data = [];
             var api = $(elem).handsontable('getInstance');
-            
+            scope.$parent[loderkey] = false;
+
             for (var i = 0; i < scope.data.Rows.length ; i++) {
                 var row = scope.data.Rows[i];
                 data[i] = row.Cells;
@@ -30,7 +33,37 @@ app.directive('vrExcelWs', function () {
                 }
 
             }
-            var page = 0;
+
+            var pagesize = 100;
+            function getPageSize() {
+                return 100;
+            }
+            var loderkey = "isloadingdatatab" + scope.index;
+            function getPageInfo(startFromBeginning) {
+                var currentdatalength = api.getData().length + 1;
+                var fromRow = startFromBeginning ? 1 : currentdatalength;
+
+                return {
+                    fromRow: fromRow,
+                    toRow: fromRow + getPageSize() - 1
+                };
+            }
+            function fetchDataPageFromServer() {
+                scope.$parent[loderkey] = true;
+                var info = getPageInfo(false);
+                var query = {
+                    FileId: scope.fileid,
+                    From: info.fromRow,
+                    To: info.toRow,
+                    SheetIndex:scope.index
+                }
+                return ExcelConversion_ExcelAPIService.ReadExcelFilePage(query).then(function (response) {
+                    return response;
+
+                }).finally(function () {
+                    scope.$parent[loderkey] = false;
+                });
+            }
 
             function getData() {
                 var alldata = data;
@@ -44,21 +77,32 @@ app.directive('vrExcelWs', function () {
             var lastScrollTop;
             var gridBodyElement = $(elem.find(".wtHider"));
             $(elem).find('.wtHolder').on('scroll', function () {
+                if (scope.$parent[loderkey])
+                    return;
                 var scrollTop = $(this).scrollTop();
                 var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(this).height());
                 if (scrollTop > lastScrollTop) {
-                    if (scrollPercentage > 80) {
-                        page++;
-                        var sliced = getData();
-                        if (sliced.length > 0) {
-                           
-                            var dataold = api.getData();
-                            for (var i = 0; i < sliced.length; i++) {
-                                dataold[dataold.length] = sliced[i];
+                    if (scrollPercentage > 80 ) {
+                        fetchDataPageFromServer().then(function (response) {
+                            var newdata = [];                           
+                            for (var i = 0; i < response.Rows.length ; i++) {
+                                var row = response.Rows[i];
+                                newdata[i] = row.Cells;
+                                for (var j = 0; j < row.Cells.length; j++) {
+                                    newdata[i][j] = row.Cells[j].Value;
+                                }
+
                             }
-                            api.loadData(dataold);
-                          
-                        }
+                            if (newdata.length > 0) {
+                                var mergeddata = api.getData();
+                                for (var i = 0; i < newdata.length; i++) {
+                                    mergeddata[mergeddata.length] = newdata[i];
+                                }                               
+                                api.loadData(mergeddata);                                
+                            }
+
+                        })
+                       
                         
                     }
                         
@@ -68,9 +112,7 @@ app.directive('vrExcelWs', function () {
             });
 
             if (data.length > 0) {
-               //ar alldata = data//.slice(page * 100, (page + 1) * 100)
-                var sliced = getData();
-                api.loadData(sliced);
+                api.loadData(data);
             }
                 
 
@@ -79,4 +121,4 @@ app.directive('vrExcelWs', function () {
             }
         }
     }
-})
+}])
