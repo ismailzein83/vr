@@ -1,15 +1,20 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    salePricelistAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
-
+    salePricelistAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig"];
     function salePricelistAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
-        this.GetFilteredSalePricelists = function (input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, "salePricelist", "GetFilteredSalePriceLists"), input);
+
+        var controllerName = "SalePricelist";
+
+        function GetFilteredSalePriceLists(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredSalePriceLists"), input);
         }
 
+        return ({
+            GetFilteredSalePriceLists: GetFilteredSalePriceLists
+        });
     }
 
-    appControllers.service('VR_BE_SalePricelistAPIService', salePricelistAPIService);
+    appControllers.service("WhS_BE_SalePricelistAPIService", salePricelistAPIService);
 
 })(appControllers);

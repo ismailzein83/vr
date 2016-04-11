@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "VR_BE_SalePricelistAPIService",
-function (UtilsService, VRNotificationService, VR_BE_SalePricelistAPIService) {
+app.directive("vrWhsBeSalepricelistGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService",
+function (UtilsService, VRNotificationService, WhS_BE_SalePricelistAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -51,7 +51,7 @@ function (UtilsService, VRNotificationService, VR_BE_SalePricelistAPIService) {
 
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return VR_BE_SalePricelistAPIService.GetFilteredSalePricelists(dataRetrievalInput)
+                return WhS_BE_SalePricelistAPIService.GetFilteredSalePriceLists(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
