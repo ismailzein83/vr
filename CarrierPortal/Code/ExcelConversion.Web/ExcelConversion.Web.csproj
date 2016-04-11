@@ -128,9 +128,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExcelConversion\Constant\ModuleConfig.js" />
+    <Content Include="ExcelConversion\Directives\ConcatenatedPart\excelconversion-concatenatedpart-selective.js" />
     <Content Include="ExcelConversion\Directives\FieldMapping\excelconversion-fieldmapping-selective.js" />
     <Content Include="ExcelConversion\Directives\ListMapping\excelconversion-listmapping.js" />
     <Content Include="ExcelConversion\Directives\ListMapping\Templates\ListMappingTemplate.html" />
+    <Content Include="ExcelConversion\Directives\MainExtensions\ConcatenatedParts\excelconversion-concatenatedpart-cellfield.js" />
+    <Content Include="ExcelConversion\Directives\MainExtensions\ConcatenatedParts\excelconversion-concatenatedpart-constant.js" />
+    <Content Include="ExcelConversion\Directives\MainExtensions\ConcatenatedParts\Templates\CellFieldConcatenatedPartTemplate.html" />
+    <Content Include="ExcelConversion\Directives\MainExtensions\ConcatenatedParts\Templates\ConstantConcatenatedPartTemplate.html" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\excelconversion-fieldmapping-cellfieldmapping.js" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\Templates\CellFieldMappingTemplate.html" />
     <Content Include="ExcelConversion\Services\APIServices\ExcelAPIService.js" />
@@ -152,6 +157,7 @@
       <Name>ExcelConversion.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
