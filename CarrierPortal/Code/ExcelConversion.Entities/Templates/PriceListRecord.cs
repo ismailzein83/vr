@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExcelConversion.Entities
 {
-    public class ExcelTemplateRecord
+    public class PriceListRecord
     {
         public string Zone { get; set; }
         public string Code { get; set; }

@@ -33,13 +33,6 @@ namespace ExcelConversion.Web.Controllers
             ExcelManager manager = new ExcelManager();
             return manager.GetFieldMappingTemplateConfigs();
         }
-        [HttpPost]
-        [Route("ConvertAndDownload")]
-        public object ConvertAndDownload(ExcelToConvert excelToConvert)
-        {
-            ExcelManager manager = new ExcelManager();
-            byte[] bytes =  manager.ConvertAndDownload(excelToConvert);
-            return GetExcelResponse(bytes, "ConvertedExcel.xls");
-        }
+
     }
 }
