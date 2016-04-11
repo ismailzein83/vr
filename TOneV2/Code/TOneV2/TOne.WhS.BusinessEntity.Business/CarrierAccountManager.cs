@@ -27,20 +27,23 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<CarrierAccountDetail> GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            var allCarrierProfiles = carrierProfileManager.GetCarrierProfilesInfo();
+
             var allCarrierAccounts = GetCachedCarrierAccounts();
 
             Func<CarrierAccount, bool> filterExpression = (item) =>
-                 (input.Query.Name == null || item.NameSuffix.ToLower().Contains(input.Query.Name.ToLower()))
-                 &&
-                 (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
-                  &&
-                 (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId))
-                   &&
-                 (input.Query.ActivationStatusIds == null || input.Query.ActivationStatusIds.Contains((int)item.CarrierAccountSettings.ActivationStatus))
-                   &&
-                 (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType))
-                  &&
-                 (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId));
+                (input.Query.Name == null || (allCarrierProfiles.Where(y => y.CarrierProfileId == item.CarrierProfileId).Select(y => y.Name).First().ToLower() + " (" + item.NameSuffix.ToLower() + ")").Contains(input.Query.Name.ToLower()))
+                &&
+                (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
+                &&
+                (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId))
+                &&
+                (input.Query.ActivationStatusIds == null || input.Query.ActivationStatusIds.Contains((int)item.CarrierAccountSettings.ActivationStatus))
+                &&
+                (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType))
+                &&
+                (input.Query.SellingNumberPlanIds == null || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId));
 
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCarrierAccounts.ToBigResult(input, filterExpression, CarrierAccountDetailMapper));
