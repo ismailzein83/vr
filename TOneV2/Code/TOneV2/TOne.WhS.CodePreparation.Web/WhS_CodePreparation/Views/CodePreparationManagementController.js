@@ -17,6 +17,7 @@
         var countries = [];
         var filter;
         var codesFilter;
+        var incrementalNodeId = 0;
 
         //#endregion
 
@@ -79,19 +80,19 @@
                             $scope.showAddNewCode = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value ? true : false;
                          
                         if ($scope.currentNode.status != null)
-                            $scope.showEnd = $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value ? true : false;
+                            $scope.showEnd = false;
                         else if ($scope.hasState)
                             $scope.showEnd = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.New.value ? true : false;
                         else
                             $scope.showEnd = true;
 
+                       
+                        $scope.showRenameZone = $scope.currentNode.status != null ? false : $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value ? true : false;
                         // codesGridAPI.clearUpdatedItems();
                         return codesGridAPI.loadGrid(codesFilter);
                     }
+                    clear(false);
                     $scope.showAddNewZone = true;
-                    $scope.showAddNewCode = false;
-                    $scope.showEnd = false;
-                    $scope.showGrid = false;
                 }
 
             }
@@ -112,25 +113,25 @@
                 return effectiveZonesPromiseDeffered.promise;
             }
 
-            $scope.onSellingNumberPlanSelectorChanged = function (selectedPlan) {
-
-                if (selectedPlan != undefined && !$scope.isLoading) {
+            $scope.onSellingNumberPlanSelectorChanged = function () {
+                var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                if (selectedSellingNumberPlanId != undefined) {
                     countries.length = 0;
-                    $scope.showGrid = false;
-                    $scope.showAddNewCode = false;
-                    $scope.showAddNewZone = false;
-                    $scope.showEnd = false;
+                    clear(false);
                     filter = getFilter();
-                    $scope.isLoading = true;
-
+                    $scope.isLoadingCountries = true;
                     UtilsService.waitMultipleAsyncOperations([getCountries, checkState]).then(function () {
                         buildCountriesTree();
-                        $scope.currentNode = undefined;
-                        $scope.isLoading = false;
+                        //$scope.currentNode = undefined;
                     }).catch(function (error) {
-                        $scope.isLoading = false;
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoadingCountries = false;
                     });
+                }
+                else {
+                    clear(false);
+                    $scope.selectedCodes.length = 0;
                 }
             }
 
@@ -162,8 +163,10 @@
                         countries.length = 0;
                         return WhS_CodePrep_CodePrepAPIService.CancelCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
                             $scope.hasState = !response;
-                            treeAPI.refreshTree($scope.nodes);
-                            $scope.currentNode = undefined;
+                            //treeAPI.refreshTree($scope.nodes);
+                            //$scope.currentNode = undefined;
+
+                            $scope.onSellingNumberPlanSelectorChanged();
                         });
                     }
                 });
@@ -188,6 +191,14 @@
             });
         }
 
+        function clear(action) {
+            $scope.showGrid = action;
+            $scope.showAddNewCode = action;
+            $scope.showAddNewZone = action;
+            $scope.showRenameZone = action;
+            $scope.showEnd = action;
+        }
+
         function loadSellingNumberPlans() {
             var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
@@ -204,14 +215,54 @@
                 for (var i = 0; i < addedZones.length; i++) {
                     var node = mapZoneToNode(addedZones[i]);
                     treeAPI.createNode(node);
-                    $scope.currentNode.effectiveZones.push(node);
+                    var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.nodeId, 'nodeId');
+                    var countryNode = $scope.nodes[countryIndex];
+                    countryNode.effectiveZones.push(node);
                 }
             }
         }
 
-        function onZoneRenamed(renamedZone) {
-            console.log(renamedZone);
+        function onZoneClosed(closedZone) {
+            $scope.hasState = true;
+
+            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
+            var countryNode = $scope.nodes[countryIndex];
+
+            var zoneIndex = UtilsService.getItemIndexByVal(countryNode.effectiveZones, $scope.currentNode.nodeName, 'nodeName');
+            var zoneNode = countryNode.effectiveZones[zoneIndex];
+
+            zoneNode.DraftStatus = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
+
+            var node = mapClosedZoneToNode(closedZone);
+            treeAPI.createNode(node);
+
+            setCodesFilterObject();
+            return codesGridAPI.loadGrid(codesFilter);
         }
+
+        function onZoneRenamed(renamedZone) {
+            $scope.hasState = true;
+
+            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
+            var countryNode = $scope.nodes[countryIndex];
+
+            var zoneIndex = UtilsService.getItemIndexByVal(countryNode.effectiveZones, $scope.currentNode.nodeName, 'nodeName');
+            var zoneNode = countryNode.effectiveZones[zoneIndex];
+
+            zoneNode.nodeName = renamedZone.NewZoneName;
+            zoneNode.renamedZone = renamedZone.OldZoneName;
+
+            var node = mapRenamedZoneToNode(renamedZone);
+            treeAPI.createNode(node);
+
+            $scope.currentNode.nodeName = renamedZone.NewZoneName;
+            $scope.currentNode.renamedZone = renamedZone.OldZoneName;
+
+            setCodesFilterObject();
+
+            return codesGridAPI.loadGrid(codesFilter);
+        }
+
 
         function onCodeAdded(addedCodes) {
             if (addedCodes != undefined) {
@@ -284,7 +335,7 @@
 
             var parameters = {
                 ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
+                ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone: $scope.currentNode.nodeName,
                 SellingNumberPlanId: filter.sellingNumberPlanId,
                 CountryId: $scope.currentNode.countryId,
                 ZoneStatus: $scope.currentNode.status
@@ -302,7 +353,8 @@
             var codes = codesGridAPI.getSelectedCodes();
             var parameters = {
                 ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
+                ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                currentZoneName : $scope.currentNode.nodeName,
                 SellingNumberPlanId: filter.sellingNumberPlanId,
                 CountryId: $scope.currentNode.countryId,
                 ZoneDataSource: GetCurrentCountryNodeZones(),
@@ -321,7 +373,7 @@
             var codes = codesGridAPI.getSelectedCodes();
             var parameters = {
                 ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
+                ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
                 SellingNumberPlanId: filter.sellingNumberPlanId,
                 Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
             };
@@ -357,7 +409,7 @@
                         SellingNumberPlanId: filter.sellingNumberPlanId,
                         CountryId: $scope.currentNode.countryId,
                         ZoneId: $scope.currentNode.nodeId != null ? $scope.currentNode.nodeId : null,
-                        ZoneName: $scope.currentNode.nodeName
+                        ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
                     };
                     return WhS_CodePrep_CodePrepAPIService.CloseZone(zoneInput)
                      .then(function (response) {
@@ -365,6 +417,7 @@
                              VRNotificationService.showWarning(response.Message);
                          }
                          else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
+                             onZoneClosed(response.ClosedZone);
                              VRNotificationService.showSuccess(response.Message);
                          }
                          else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
@@ -374,8 +427,7 @@
                          VRNotificationService.notifyException(error, $scope);
                      //});
                     }).finally(function () {
-                        treeAPI.refreshTree($scope.nodes);
-                        $scope.currentNode = undefined;
+
                     });
 
                 }
@@ -385,7 +437,7 @@
         function GetCurrentCountryNodeZones() {
             var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
             var countryNode = $scope.nodes[countryIndex];
-            return getZoneInfos(countryNode.effectiveZones);
+            return countryNode.effectiveZones;
         }
 
         function getZoneInfos(zoneNodes) {
@@ -451,6 +503,10 @@
                         case WhS_CP_ZoneItemDraftStatusEnum.New.value:
                             icon = WhS_CP_ZoneItemDraftStatusEnum.New.icon;
                             break;
+                        case WhS_CP_ZoneItemDraftStatusEnum.Renamed.value:
+                            icon = WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon;
+                            break;
+
                     }
             }
 
@@ -471,6 +527,7 @@
             return {
                 nodeId: zoneInfo.ZoneId,
                 nodeName: zoneInfo.Name,
+                renamedZone: zoneInfo.RenamedZone,
                 hasRemoteChildren: false,
                 effectiveZones: [],
                 type: 'Zone',
@@ -481,6 +538,38 @@
             };
         }
 
+
+
+        function mapRenamedZoneToNode(renamedZone) {
+
+            return {
+                nodeId: renamedZone.ZoneId != null ? renamedZone.ZoneId : "generatedId_" + incrementalNodeId++,
+                nodeName: renamedZone.NewZoneName,
+                renamedZone: renamedZone.OldZoneName,
+                hasRemoteChildren: false,
+                effectiveZones: [],
+                type: 'Zone',
+                DraftStatus: renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value,
+                countryId: renamedZone.CountryId,
+                icon: renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon
+            };
+        }
+
+
+        function mapClosedZoneToNode(closedZone) {
+            return {
+                nodeId: closedZone.ZoneId,
+                nodeName: $scope.currentNode.nodeName,
+                hasRemoteChildren: false,
+                effectiveZones: [],
+                type: 'Zone',
+                DraftStatus: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value,
+                countryId: closedZone.CountryId,
+                icon: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon
+            };
+
+        }
+
         //#endregion
 
         //#region Filters
@@ -488,7 +577,8 @@
             codesFilter = {
                 SellingNumberPlanId: filter.sellingNumberPlanId,
                 ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
+                ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                RenamedZone:  $scope.currentNode.renamedZone,
                 ZoneItemStatus: $scope.currentNode.status,
                 CountryId: $scope.currentNode.countryId,
                 ShowDraftStatus: $scope.hasState,

@@ -9,7 +9,7 @@ namespace TOne.WhS.CodePreparation.Entities
     public class CloseZoneOutput
     {
         public string Message { get; set; }
-        public string NewZone { get; set; }
+        public DeletedZone ClosedZone { get; set; }
 
         public CodePreparationOutputResult Result { get; set; }
     }

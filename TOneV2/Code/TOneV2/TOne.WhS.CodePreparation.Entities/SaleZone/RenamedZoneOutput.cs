@@ -8,12 +8,9 @@ namespace TOne.WhS.CodePreparation.Entities
 {
     public class RenamedZoneOutput
     {
-        public RenamedZoneOutput()
-        {
-            Zones = new List<string>();
-        }
+
         public string Message { get; set; }
-        public List<string> Zones { get; set; }
+        public RenamedZone Zones { get; set; }
         public CodePreparationOutputResult Result { get; set; }
     }
 }
