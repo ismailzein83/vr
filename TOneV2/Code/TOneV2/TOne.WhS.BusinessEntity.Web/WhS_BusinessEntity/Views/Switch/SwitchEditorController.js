@@ -2,7 +2,7 @@
 
     "use strict";
 
-    switchEditorController.$inject = ['$scope', 'WhS_BE_SwitchAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    switchEditorController.$inject = ["$scope", "WhS_BE_SwitchAPIService", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService"];
 
     function switchEditorController($scope, WhS_BE_SwitchAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
@@ -27,6 +27,13 @@
         }
 
         function defineScope() {
+
+            $scope.hasSaveSwitchPermission = function () {
+                if (isEditMode)
+                    return WhS_BE_SwitchAPIService.HasUpdateSwitchPermission();
+                else
+                    return WhS_BE_SwitchAPIService.HasAddSwitchPermission();
+            }
 
             $scope.SaveSwitch = function () {
                 if (isEditMode) {
@@ -104,7 +111,7 @@
             var switchObject = buildSwitchObjFromScope();
             WhS_BE_SwitchAPIService.UpdateSwitch(switchObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Switch", response,"Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                     if ($scope.onSwitchUpdated != undefined)
                         $scope.onSwitchUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
@@ -117,5 +124,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_SwitchEditorController', switchEditorController);
+    appControllers.controller("WhS_BE_SwitchEditorController", switchEditorController);
 })(appControllers);

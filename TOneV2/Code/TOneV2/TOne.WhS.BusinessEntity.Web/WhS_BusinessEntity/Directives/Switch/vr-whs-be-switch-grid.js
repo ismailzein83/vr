@@ -76,12 +76,22 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editSwitch,
+                haspermission: hasUpdateSwitchPermission
             },
             {
                 name: "Delete",
                 clicked: deleteSwitch,
+                haspermission: hasDeleteSwitchPermission
             }
             ];
+        }
+
+        function hasUpdateSwitchPermission() {
+            return WhS_BE_SwitchAPIService.HasUpdateSwitchPermission();
+        }
+
+        function hasDeleteSwitchPermission() {
+            return WhS_BE_SwitchAPIService.HasDeleteSwitchPermission();
         }
 
         function editSwitch(whsSwitch) {

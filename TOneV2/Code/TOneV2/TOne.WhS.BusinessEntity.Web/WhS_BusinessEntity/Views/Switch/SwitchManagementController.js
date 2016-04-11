@@ -2,15 +2,18 @@
 
     "use strict";
 
-    switchManagementController.$inject = ['$scope', 'WhS_BE_SwitchService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    switchManagementController.$inject = ["$scope", "WhS_BE_SwitchService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_BE_SwitchAPIService"];
 
-    function switchManagementController($scope, WhS_BE_SwitchService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function switchManagementController($scope, WhS_BE_SwitchService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService) {
         var gridAPI;
 
         defineScope();
         load();
 
         function defineScope() {
+            $scope.hasAddSwitchPermission = function () {
+                return WhS_BE_SwitchAPIService.HasAddSwitchPermission();
+            }
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -44,5 +47,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_SwitchManagementController', switchManagementController);
+    appControllers.controller("WhS_BE_SwitchManagementController", switchManagementController);
 })(appControllers);
