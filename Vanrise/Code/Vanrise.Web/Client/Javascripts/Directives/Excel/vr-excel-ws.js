@@ -23,7 +23,7 @@ app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelCon
             })
             var data = [];
             var api = $(elem).handsontable('getInstance');
-            scope.$parent[loderkey] = false;
+            scope.$parent[loaderkey] = false;
 
             for (var i = 0; i < scope.data.Rows.length ; i++) {
                 var row = scope.data.Rows[i];
@@ -35,10 +35,11 @@ app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelCon
             }
 
             var pagesize = 100;
+            var lastpage = scope.data.Rows.length < 100;
             function getPageSize() {
                 return 100;
             }
-            var loderkey = "isloadingdatatab" + scope.index;
+            var loaderkey = "isloadingdatatab" + scope.index;
             function getPageInfo(startFromBeginning) {
                 var currentdatalength = api.getData().length + 1;
                 var fromRow = startFromBeginning ? 1 : currentdatalength;
@@ -49,7 +50,7 @@ app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelCon
                 };
             }
             function fetchDataPageFromServer() {
-                scope.$parent[loderkey] = true;
+                scope.$parent[loaderkey] = true;
                 var info = getPageInfo(false);
                 var query = {
                     FileId: scope.fileid,
@@ -61,7 +62,7 @@ app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelCon
                     return response;
 
                 }).finally(function () {
-                    scope.$parent[loderkey] = false;
+                    scope.$parent[loaderkey] = false;
                 });
             }
 
@@ -77,14 +78,15 @@ app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelCon
             var lastScrollTop;
             var gridBodyElement = $(elem.find(".wtHider"));
             $(elem).find('.wtHolder').on('scroll', function () {
-                if (scope.$parent[loderkey])
+                if (scope.$parent[loaderkey] || lastpage)
                     return;
                 var scrollTop = $(this).scrollTop();
                 var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(this).height());
                 if (scrollTop > lastScrollTop) {
                     if (scrollPercentage > 80 ) {
                         fetchDataPageFromServer().then(function (response) {
-                            var newdata = [];                           
+                            var newdata = [];
+                            lastpage = response.Rows.length < 100;
                             for (var i = 0; i < response.Rows.length ; i++) {
                                 var row = response.Rows[i];
                                 newdata[i] = row.Cells;
@@ -95,15 +97,15 @@ app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelCon
                             }
                             if (newdata.length > 0) {
                                 var mergeddata = api.getData();
+                                var index = mergeddata.length;
                                 for (var i = 0; i < newdata.length; i++) {
-                                    mergeddata[mergeddata.length] = newdata[i];
-                                }                               
-                                api.loadData(mergeddata);                                
+                                    index++;
+                                    mergeddata[index] = newdata[i];
+                                }
+                                api.loadData(mergeddata);
                             }
 
-                        })
-                       
-                        
+                        });
                     }
                         
 
@@ -111,7 +113,7 @@ app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelCon
                 lastScrollTop = scrollTop;
             });
 
-            if (data.length > 0) {
+            if (data.length > 0) {                
                 api.loadData(data);
             }
                 
