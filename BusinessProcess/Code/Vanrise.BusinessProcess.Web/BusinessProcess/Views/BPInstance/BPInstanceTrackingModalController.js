@@ -2,14 +2,16 @@
 
     "use strict";
 
-    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService', 'VRTimerService'];
+    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService', 'VRTimerService', 'UtilsService'];
 
-    function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRTimerService) {
+    function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRTimerService, UtilsService) {
 
         var bpInstanceID;
         var bpDefinitionID;
 
         var filter;
+        var instanceTrackingFilter;
+
         var instanceMonitorGridAPI;
         var instanceTrackingHistoryGridAPI;
         var instanceTrackingMonitorGridAPI;
@@ -38,8 +40,8 @@
 
             $scope.onInstanceTrackingMonitorGridReady = function (api) {
                 instanceTrackingMonitorGridAPI = api;
-                getFilterObject();
-                instanceTrackingMonitorGridAPI.loadGrid(filter);
+                getInstanceTrackingFilter();
+                instanceTrackingMonitorGridAPI.loadGrid(instanceTrackingFilter);
             }
 
             $scope.onTaskMonitorGridReady = function (api) {
@@ -91,6 +93,20 @@
             };
         }
 
+        function getInstanceTrackingFilter() {
+            var data = UtilsService.getLogEntryType();
+            var severities = [];
+            for (var x = 0; x < data.length; x++) {
+                if (data[x].description != 'Verbose') {
+                    severities.push(data[x]);
+                }
+            }
+
+            instanceTrackingFilter = {
+                BPInstanceID: bpInstanceID,
+                Severities: severities
+            };
+        }
 
         function getInstance() {
             return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {

@@ -61,6 +61,7 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         input.BPInstanceID = query.BPInstanceID;
+                        $scope.selectedTrackingSeverity = query.Severities;
                         onInit();
                     }
 
@@ -73,7 +74,6 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
                 }
 
                 $scope.searchClicked = function () {
-                    input.Severities = UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "value");
                     onInit();
                 };
 
@@ -83,6 +83,7 @@ function (BusinessProcess_BPInstanceTrackingAPIService, UtilsService, BusinessPr
                     input.GreaterThanID = undefined;
                     input.NbOfRows = undefined;
                     $scope.bpInstanceTracking.length = 0;
+                    input.Severities = UtilsService.getPropValuesFromArray($scope.selectedTrackingSeverity, "value");
                     job = createTimer();
                 }
 
