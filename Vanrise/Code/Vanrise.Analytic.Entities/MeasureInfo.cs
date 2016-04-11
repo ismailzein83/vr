@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class AnalyticRecord
+    public class MeasureInfo
     {
-        public DimensionValue[] DimensionValues { get; set; }
-        public MeasureValues MeasureValues { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

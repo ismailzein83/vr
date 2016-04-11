@@ -1,0 +1,14 @@
+﻿
+<div ng-show="analyticrecordsctrl.showGrid">
+    <vr-datagrid datasource="analyticrecordsctrl.datasource" defaultsortbyfieldname="analyticrecordsctrl.sortField" pagingtype="'Pager'" dataretrievalfunction="analyticrecordsctrl.dataRetrievalFunction" on-ready="analyticrecordsctrl.gridReady">
+        <vr-datagridcolumn ng-repeat="dimension in analyticrecordsctrl.dimensionFields" ng-show="analyticrecordsctrl.dimensionFields.length > 0" headertext="dimension.description" type="dimension.type"
+                           numberprecision="dimension.numberPrecision" field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
+
+        <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.selectedMeasures" ng-show="analyticrecordsctrl.selectedMeasures.length > 0" headertext="measure.description" type="measure.type" numberprecision="measure.numberPrecision"
+                           field="'MeasureValues.' + measure.name + ''" tag="measure" summaryfield="'MeasureValues.' + measure.name + ''" getcolor="analyticrecordsctrl.getColor"></vr-datagridcolumn>
+
+        <vr-datagridexpandablerow>
+            <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+        </vr-datagridexpandablerow>
+    </vr-datagrid>
+</div>

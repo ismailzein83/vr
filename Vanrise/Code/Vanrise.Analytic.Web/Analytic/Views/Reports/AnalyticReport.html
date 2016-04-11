@@ -1,1 +1,21 @@
-﻿
+﻿<vr-panel ng-controller="VR_Analytic_AnalyticReportController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
+            <vr-analytic-gridfilter on-ready="onFilterDirectivectiveReady"></vr-analytic-gridfilter>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <div>
+            <vr-row>
+                <vr-columns colnum="12">
+                    <vr-analytic-datagrid-analyticrecords withsummary on-ready="onGridReady"></vr-analytic-datagrid-analyticrecords>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-form>
+</vr-panel>

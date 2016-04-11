@@ -4,18 +4,23 @@
     AnalyticConfigurationAPIService.$inject = ['BaseAPIService', 'VR_Analytic_ModuleConfig', 'UtilsService', 'SecurityService'];
 
     function AnalyticConfigurationAPIService(BaseAPIService, VR_Analytic_ModuleConfig, UtilsService, SecurityService) {
-        var controllerName = 'Analytic';
+        var controllerName = 'AnalyticConfiguration';
 
-        function GetDimensions() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensions"));
+        function GetDimensionsInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensionsInfo"));
         }
-        function GetMeasures() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasures"));
+        function GetMeasuresInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasuresInfo"));
+        }
+
+        function GetAnalyticRecords(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticRecords"), input);
         }
 
         return ({
-            GetDimensions: GetDimensions,
-            GetMeasures: GetMeasures
+            GetDimensionsInfo: GetDimensionsInfo,
+            GetMeasuresInfo: GetMeasuresInfo,
+            GetAnalyticRecords: GetAnalyticRecords
         });
     }
 

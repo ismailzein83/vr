@@ -14,11 +14,11 @@ namespace Vanrise.Analytic.Entities
 
         public string Currency { get; set; }
 
-        public IEnumerable<string> DimensionFields { get; set; }
+        public List<string> DimensionFields { get; set; }
 
-        public IEnumerable<string> MeasureFields { get; set; }
+        public List<string> MeasureFields { get; set; }
 
         public List<DimensionFilter> Filters { get; set; }
-
+        public int? TopRecords { get; set; }
     }
 }

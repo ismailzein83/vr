@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common;
+using Vanrise.Caching;
 
 namespace Vanrise.Analytic.Business
 {
@@ -14,45 +16,64 @@ namespace Vanrise.Analytic.Business
         {
 
         }
-
-        public Dictionary<string, DimensionConfiguration> GetDimensions(IEnumerable<string> filteredDimensions)
+        
+        public IEnumerable<AnalyticConfiguration<DimensionConfiguration>> GetDimensions()
         {
-            IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
-            var dimensions = dataManager.GetDimensions();
-            Dictionary<string, DimensionConfiguration> result = new Dictionary<string, DimensionConfiguration>();
-            foreach (string itm in filteredDimensions)
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAnalyticDimensions",
+                   () =>
+                   {
+                       IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
+                       return dataManager.GetDimensions();
+                   });
+        }
+        public IEnumerable<AnalyticConfiguration<MeasureConfiguration>> GetMeasures()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAnalyticMeasures",
+                   () =>
+                   {
+                       IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
+                       return dataManager.GetMeasures();
+                   });
+        }
+        public IEnumerable<MeasureInfo> GetMeasuresInfo()
+        {
+            return GetMeasures().MapRecords(MeasureInfoMapper);
+
+        }
+        public IEnumerable<DimensionInfo<DimensionConfiguration>> GetDimensionsInfo()
+        {
+            return GetDimensions().MapRecords(DimensionInfoMapper);
+
+        }
+        MeasureInfo MeasureInfoMapper(AnalyticConfiguration<MeasureConfiguration> measure)
+        {
+            return new MeasureInfo
             {
-                var dimension = dimensions[itm];
-                if (!result.ContainsKey(itm))
-                    result.Add(itm, dimension.Configuration);
-            }
-            return result;
+                Id = measure.Id,
+                Name = measure.Name
+            };
         }
-
-        public Dictionary<string, MeasureConfiguration> GetMeasures(IEnumerable<string> filteredMeasures)
+        DimensionInfo<DimensionConfiguration> DimensionInfoMapper(AnalyticConfiguration<DimensionConfiguration> dimension)
         {
-            IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
-            var measures = dataManager.GetMeasures();
-            Dictionary<string, MeasureConfiguration> result = new Dictionary<string, MeasureConfiguration>();
-            foreach (string itm in filteredMeasures)
+            return new DimensionInfo<DimensionConfiguration>
             {
-                var measure = measures[itm];
-                if (!result.ContainsKey(itm))
-                    result.Add(itm, measure.Configuration);
+                Id = dimension.Id,
+                Configuration = dimension.Configuration,
+                Name = dimension.Name
+            };
+        }
+
+        #region Private Classes
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IAnalyticConfigurationDataManager _dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreAnalyticConfigurationUpdated(ref _updateHandle);
             }
-            return result;
         }
-
-        public IEnumerable<DimensionConfiguration> GetDimensions()
-        {
-            IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
-            return dataManager.GetDimensions().Values.Select(s => s.Configuration);
-        }
-
-        public IEnumerable<MeasureConfiguration> GetMeasures()
-        {
-            IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
-            return dataManager.GetMeasures().Values.Select(s => s.Configuration);
-        }
+        #endregion
     }
 }
