@@ -57,6 +57,7 @@
     <Compile Include="ConversionSettings\IGetFieldValueContext.cs" />
     <Compile Include="ExcelToConvert.cs" />
     <Compile Include="Excel\ExcelCell.cs" />
+    <Compile Include="Excel\ExcelPageQuery.cs" />
     <Compile Include="Excel\ExcelRow.cs" />
     <Compile Include="Excel\ExcelWorkbook.cs" />
     <Compile Include="Excel\ExcelWorksheet.cs" />
