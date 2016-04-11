@@ -13,7 +13,7 @@ BEGIN
 Please make sure that database name match client databases
 
 Replace [QualityMeasurement] with [ClearVoice main Database name]
-Replace [QualityMeasurementConfiguration] with [ClearVoice configuration Database name]
+Replace [QualityMeasurementConfigurationOnline] with [ClearVoice configuration Database name]
 Replace [QualityMeasurementTransactionDB] with [ClearVoice Transaction Database name]
 */
 
@@ -53,7 +53,7 @@ RAISERROR ( 'Updating Dim_Countries Table...', 10, 0 ) WITH NOWAIT
 --------------------------------------------------
 MERGE Dim_Countries AS targetCountry
 	USING(
-	SELECT [ID] ,[Name] FROM [QualityMeasurementConfiguration].[common].[Country]
+	SELECT [ID] ,[Name] FROM [QualityMeasurementConfigurationOnline].[common].[Country]
 	)
 	AS SourceCountry([ID] ,[Name])
 	ON ISNULL(targetCountry.[Pk_CountryId],0)= ISNULL(SourceCountry.[ID],0)
@@ -114,7 +114,7 @@ RAISERROR ( 'Updating Dim_Users Table...', 10, 0 ) WITH NOWAIT
 --------------------------------------------------
 MERGE Dim_Users AS targetUser
 	USING(
-	SELECT [ID] ,[Name] FROM [QualityMeasurementConfiguration].[sec].[User]
+	SELECT [ID] ,[Name] FROM [QualityMeasurementConfigurationOnline].[sec].[User]
 	)
 	AS SourceUser([ID] ,[Name])
 	ON ISNULL(targetUser.[Pk_UserId],0)= ISNULL(SourceUser.[ID],0)
@@ -161,14 +161,14 @@ WHERE	(CreationDate >= @fromdate AND CreationDate < DATEADD(DAY,1,@createdate))
 IF NOT EXISTS(
 	SELECT	DateInstance,DATEPART(yyyy,DateInstance),DATEPART(mm,DateInstance),DATEPART(ww,DateInstance),DATEPART(dd,DateInstance),DATEPART(hh,DateInstance),DATENAME(month,DateInstance),DATENAME(dw,DateInstance)
 	FROM	Dim_Time
-	WHERE	DateInstance IN (SELECT CreationDate FROM #FactTestCalls)
+	WHERE	DateInstance IN (SELECT DATEADD(hour, DATEDIFF(hour, 0, CreationDate), 0) FROM #FactTestCalls)
 			)
 		INSERT	INTO Dim_Time WITH(tablock)
 		SELECT	DISTINCT DATEADD(hour, DATEDIFF(hour, 0, CreationDate), 0),DATEPART(yyyy,FactTCall.CreationDate),DATEPART(mm,FactTCall.CreationDate),DATEPART(ww,FactTCall.CreationDate),DATEPART(dd,FactTCall.CreationDate),DATEPART(hh,FactTCall.CreationDate),DATENAME(month,FactTCall.CreationDate),DATENAME(dw,FactTCall.CreationDate)
 		FROM	#FactTestCalls FactTCall WITH(NOLOCK)
 
 INSERT	INTO Fact_TestCalls WITH(tablock)
-SELECT	FactTCall2.[ID],FactTCall2.[UserID],FactTCall2.[SupplierID],FactTCall2.[CountryID],FactTCall2.[ZoneID],FactTCall2.[CallTestStatus],FactTCall2.[CallTestResult],FactTCall2.[ScheduleID],FactTCall2.[CreationDate]
+SELECT	FactTCall2.[ID],FactTCall2.[UserID],FactTCall2.[SupplierID],FactTCall2.[CountryID],FactTCall2.[ZoneID],FactTCall2.[CallTestStatus],FactTCall2.[CallTestResult],FactTCall2.[ScheduleID],DATEADD(hour, DATEDIFF(hour, 0, FactTCall2.[CreationDate]), 0)
 FROM	#FactTestCalls FactTCall2 WITH(NOLOCK) 
 	   
 DROP TABLE #FactTestCalls
