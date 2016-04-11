@@ -24,6 +24,11 @@
         }
 
         function defineScope() {
+
+            $scope.hasAssignCarriersPermission = function () {
+                return WhS_BE_AccountManagerAPIService.HasAssignCarriersPermission();
+            }
+
             $scope.carriers = [];
             $scope.selectedCarriers = [];
 

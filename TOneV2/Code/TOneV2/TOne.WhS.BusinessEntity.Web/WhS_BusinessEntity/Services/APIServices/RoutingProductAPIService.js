@@ -2,9 +2,57 @@
 
     "use strict";
 
-    routingProductAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_BE_ModuleConfig'];
+    routingProductAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig", "SecurityService"];
 
-    function routingProductAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
+    function routingProductAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
+        var controllerName = "RoutingProduct";
+
+        function GetFilteredRoutingProducts(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFilteredRoutingProducts"), input);
+        }
+
+        function GetRoutingProductInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetRoutingProductInfo"), {
+                filter: filter
+            });
+        }
+
+        function GetRoutingProduct(routingProductId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetRoutingProduct"), {
+                routingProductId: routingProductId
+            });
+        }
+
+        function GetRoutingProductsInfoBySellingNumberPlan(sellingNumberPlan) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetRoutingProductsInfoBySellingNumberPlan"), {
+                sellingNumberPlan: sellingNumberPlan
+            });
+        }
+
+        function AddRoutingProduct(routingProductObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "AddRoutingProduct"), routingProductObject);
+        }
+
+        function UpdateRoutingProduct(routingProductObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateRoutingProduct"), routingProductObject);
+        }
+
+        function DeleteRoutingProduct(routingProductId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "DeleteRoutingProduct"), {
+                routingProductId: routingProductId
+            });
+        }
+
+
+        function HasUpdateRoutingProductPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateRoutingProduct']));
+        }
+
+        function HasAddRoutingProductPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddRoutingProduct']));
+        }
+
+
         return ({
             GetFilteredRoutingProducts: GetFilteredRoutingProducts,
             GetRoutingProductInfo: GetRoutingProductInfo,
@@ -12,46 +60,13 @@
             GetRoutingProductsInfoBySellingNumberPlan: GetRoutingProductsInfoBySellingNumberPlan,
             AddRoutingProduct: AddRoutingProduct,
             UpdateRoutingProduct: UpdateRoutingProduct,
-            DeleteRoutingProduct: DeleteRoutingProduct
+            DeleteRoutingProduct: DeleteRoutingProduct,
+            HasUpdateRoutingProductPermission: HasUpdateRoutingProductPermission,
+            HasAddRoutingProductPermission: HasAddRoutingProductPermission
         });
 
-        function GetFilteredRoutingProducts(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'RoutingProduct', 'GetFilteredRoutingProducts'), input);
-        }
-
-        function GetRoutingProductInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'RoutingProduct', 'GetRoutingProductInfo'), {
-                filter: filter
-            });
-        }
-
-        function GetRoutingProduct(routingProductId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'RoutingProduct', 'GetRoutingProduct'), {
-                routingProductId: routingProductId
-            });
-        }
-
-        function GetRoutingProductsInfoBySellingNumberPlan(sellingNumberPlan) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'RoutingProduct', 'GetRoutingProductsInfoBySellingNumberPlan'), {
-                sellingNumberPlan: sellingNumberPlan
-            });
-        }
-
-        function AddRoutingProduct(routingProductObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'RoutingProduct', 'AddRoutingProduct'), routingProductObject);
-        }
-
-        function UpdateRoutingProduct(routingProductObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'RoutingProduct', 'UpdateRoutingProduct'), routingProductObject);
-        }
-
-        function DeleteRoutingProduct(routingProductId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, 'RoutingProduct', 'DeleteRoutingProduct'), {
-                routingProductId: routingProductId
-            });
-        }
     }
 
-    appControllers.service('WhS_BE_RoutingProductAPIService', routingProductAPIService);
+    appControllers.service("WhS_BE_RoutingProductAPIService", routingProductAPIService);
 
 })(appControllers);

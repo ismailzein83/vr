@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsBeRoutingproductGrid', ['VRNotificationService', 'WhS_BE_RoutingProductAPIService', 'WhS_Routing_RouteRuleService', 'WhS_BE_RoutingProductService', "VRUIUtilsService",
-function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService, VRUIUtilsService) {
+app.directive("vrWhsBeRoutingproductGrid", ["VRNotificationService", "WhS_BE_RoutingProductAPIService", "WhS_Routing_RouteRuleService", "WhS_BE_RoutingProductService", "VRUIUtilsService", "WhS_Routing_RouteRuleAPIService",
+function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService, VRUIUtilsService, WhS_Routing_RouteRuleAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -27,7 +27,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
     function routingProductGrid($scope, ctrl, $attrs) {
         var gridAPI;
         var drillDownManager;
-        
+
         function initializeController() {
             $scope.routingProducts = [];
 
@@ -98,12 +98,22 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editRoutingProduct,
+                haspermission: hasUpdateRoutingProductPermission
             },
             {
                 name: "Add Route Rule",
                 clicked: addRouteRule,
+                haspermission: hasAddRulePermission
             }
             ];
+        }
+
+        function hasUpdateRoutingProductPermission() {
+            return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission();
+        }
+
+        function hasAddRulePermission() {
+            return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
         }
 
         function addRouteRule(dataItem) {

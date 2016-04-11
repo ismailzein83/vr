@@ -19,6 +19,15 @@
         load();
 
         function defineScope() {
+
+            $scope.hasUpdateLinkedOrgChartPermission = function () {
+                return WhS_BE_AccountManagerAPIService.HasUpdateLinkedOrgChartPermission();
+            }
+
+            $scope.hasAssignCarriersPermission = function () {
+                return WhS_BE_AccountManagerAPIService.HasAssignCarriersPermission();
+            }
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.loadGrid(getFilterObject());
@@ -208,7 +217,7 @@
                 var user = UtilsService.getItemByVal(users, members[i].Id, 'UserId');
                 var obj = {
                     nodeId: members[i].Id,
-                    nodeName: user!=undefined? user.Name:undefined,
+                    nodeName: user != undefined ? user.Name : undefined,
                     nodeChildren: mapMembersToNodes(members[i].Members),
                     isOpened: true
                 };

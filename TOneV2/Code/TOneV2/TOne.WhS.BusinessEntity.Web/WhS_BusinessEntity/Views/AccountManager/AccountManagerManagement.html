@@ -3,8 +3,8 @@
         <vr-form name="managementForm">
             <vr-actionbar>
                 <div transclude-to="buttons">
-                    <vr-button type="AssignOrgChart" formname="managementForm" data-onclick="assignOrgChart"></vr-button>
-                    <vr-button type="AssignCarriers" formname="managementForm" data-onclick="assignCarriers" ng-show="currentNode"></vr-button>
+                    <vr-button type="AssignOrgChart" formname="managementForm" data-onclick="assignOrgChart" haspermission="hasUpdateLinkedOrgChartPermission"></vr-button>
+                    <vr-button type="AssignCarriers" formname="managementForm" data-onclick="assignCarriers" ng-show="currentNode" haspermission="hasAssignCarriersPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-form>

@@ -14,7 +14,7 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Sale Zones'">
-                    <vr-row vr-loader="scopeModal.isLoadingSaleZonesSelector">                            
+                    <vr-row vr-loader="scopeModal.isLoadingSaleZonesSelector">
                         <vr-validator validate="scopeModal.validateSellingNumberPlan()">
                             <div ng-show="scopeModal.selectedSellingNumberPlan">
                                 <vr-columns width="1/2row">
@@ -31,7 +31,7 @@
                                 </vr-columns>
                             </div>
                         </vr-validator>
-                       
+
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Suppliers'">
@@ -57,7 +57,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRoutingProductEditor" data-onclick="scopeModal.SaveRoutingProduct"></vr-button>
+                <vr-button type="Save" formname="formRoutingProductEditor" data-onclick="scopeModal.SaveRoutingProduct" haspermission="hasSaveRoutingProductPermission"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>

@@ -36,6 +36,12 @@
         }
 
         function defineScope() {
+            $scope.hasSaveRoutingProductPermission = function () {
+                if (isEditMode)
+                    return WhS_BE_RoutingProductAPIService.HasUpdateRoutingProductPermission();
+                else
+                    return WhS_BE_RoutingProductAPIService.HasAddRoutingProductPermission();
+            }
             $scope.scopeModal = {}
             $scope.scopeModal.onSellingNumberPlansSelectorReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;

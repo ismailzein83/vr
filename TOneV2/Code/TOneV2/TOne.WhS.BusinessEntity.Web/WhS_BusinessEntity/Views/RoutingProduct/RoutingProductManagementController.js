@@ -2,15 +2,20 @@
 
     "use strict";
 
-    routingProductManagementController.$inject = ['$scope', 'WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRNotificationService', 'WhS_BE_RoutingProductService'];
+    routingProductManagementController.$inject = ["$scope", "WhS_BE_SellingNumberPlanAPIService", "UtilsService", "VRNotificationService", "WhS_BE_RoutingProductService", "WhS_BE_RoutingProductAPIService"];
 
-    function routingProductManagementController($scope, WhS_BE_SellingNumberPlanAPIService, UtilsService, VRNotificationService, WhS_BE_RoutingProductService) {
+    function routingProductManagementController($scope, WhS_BE_SellingNumberPlanAPIService, UtilsService, VRNotificationService, WhS_BE_RoutingProductService, WhS_BE_RoutingProductAPIService) {
         var gridAPI;
 
         defineScope();
         load();
 
         function defineScope() {
+
+            $scope.hasAddRoutingProductPermission = function () {
+                return WhS_BE_RoutingProductAPIService.HasAddRoutingProductPermission();
+            }
+
             $scope.sellingNumberPlans = [];
             $scope.selectedSellingNumberPlans = [];
 
@@ -59,5 +64,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_RoutingProductManagementController', routingProductManagementController);
+    appControllers.controller("WhS_BE_RoutingProductManagementController", routingProductManagementController);
 })(appControllers);
