@@ -109,6 +109,7 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.templateConfigs.push(response[i]);
                                 }
+                                $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                             }
                         });
                     }

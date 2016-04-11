@@ -76,26 +76,29 @@
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        var promises = [];
                         context = payload.context;
                         listName = payload.listName;
                         ctrl.fieldMappings = payload.fieldMappings;
                         for (var i = 0; i < ctrl.fieldMappings.length; i++)
                         {
-                            addAPIExtension(ctrl.fieldMappings[i])
+                            var item = ctrl.fieldMappings[i];
+                            item.readyPromiseDeferred = UtilsService.createPromiseDeferred(),
+                            item.loadPromiseDeferred = UtilsService.createPromiseDeferred()
+                            promises.push(item.loadPromiseDeferred.promise);
+                            addAPIExtension(ctrl.fieldMappings[i]);
                         }
+
                       
                     }
                     function addAPIExtension(dataItem)
                     {
+                        var payload = {
+                            context: context
+                        };
                         dataItem.onFieldMappingReady = function (api) {
                             dataItem.fieldMappingAPI = api;
-                            var payload = {
-                                context: context
-                            };
-                            var setLoader = function (value) {
-                                $scope.isLoadingDirective = value;
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, payload, setLoader);
+                            dataItem.readyPromiseDeferred.resolve();
                         }
                         dataItem.normalColNum = ctrl.normalColNum;
                         dataItem.validate = function () {
@@ -108,7 +111,13 @@
                             }
                             return null;
                         }
+                        dataItem.readyPromiseDeferred.promise
+                      .then(function () {
+                          VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
+                      });
                     }
+
+                    return UtilsService.waitMultiplePromises(promises);
 
                 };
 
