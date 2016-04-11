@@ -142,6 +142,17 @@
                     dataItem.fieldMappingAPI = api;
                     dataItem.readyPromiseDeferred.resolve();
                 }
+                dataItem.validate = function () {
+                    if (dataItem.fieldMappingAPI != undefined && $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI != undefined) {
+                        var rowIndex = $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData();
+                        var obj = dataItem.fieldMappingAPI.getData();
+                        if (obj != undefined) {
+                            if (rowIndex == undefined || obj.RowIndex != rowIndex.RowIndex)
+                                return "Error row index.";
+                        }
+                    }
+                    return null;
+                }
                 dataItem.readyPromiseDeferred.promise
                       .then(function () {
                           VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);

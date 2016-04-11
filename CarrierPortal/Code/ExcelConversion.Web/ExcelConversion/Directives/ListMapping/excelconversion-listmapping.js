@@ -143,7 +143,6 @@
                         LastRowIndex:ctrl.lastRowIndex.row,
                         FieldMappings: fieldMappings,
                     };
-                    console.log(data);
                     return data;
                 }
             }

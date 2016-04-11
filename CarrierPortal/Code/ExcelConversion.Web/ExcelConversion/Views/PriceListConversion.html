@@ -48,7 +48,7 @@
                                              on-ready="onGridReady" hidegridmenu>
                                     <vr-datagridcolumn headertext="'Field Name'" field="'fieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
-                                        <excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onFieldReady" isrequired="dataItem.isRequired" type="dataItem.type"></excelconversion-fieldmapping-cellfieldmapping>
+                                        <excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onFieldReady" isrequired="dataItem.isRequired" customvalidate="dataItem.validate()" type="dataItem.type"></excelconversion-fieldmapping-cellfieldmapping>
                                     </vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-columns>
@@ -66,7 +66,7 @@
                     <div transclude-to="buttons">
                         <vr-button type="Next" validationcontext="inPutExcelGroupValid" data-onclick="scopeModel.next" ng-show="scopeModel.showInputExcelToMap"></vr-button>
                         <vr-button type="Back" data-onclick="scopeModel.back" ng-show="scopeModel.showOutputExcelToMap"></vr-button>
-                        <vr-button type="Start" formname="formFilter" validationcontext="formFilter" ng-show="scopeModel.showOutputExcelToMap" data-onclick="scopeModel.convertAndDownload"></vr-button>
+                        <vr-button type="Start" formname="formFilter" validationcontext="formFilter" ng-show="scopeModel.showOutputExcelToMap" data-onclick="scopeModel.startConvertAndDownload"></vr-button>
                     </div>
                 </vr-actionbar>
             </vr-row>
