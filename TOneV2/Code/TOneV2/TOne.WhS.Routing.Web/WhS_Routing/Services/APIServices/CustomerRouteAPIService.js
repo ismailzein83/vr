@@ -5,6 +5,8 @@
 
     function customerRouteAPIService(BaseAPIService, UtilsService, WhS_Routing_ModuleConfig) {
 
+        var controllerName = "CustomerRoute";
+
         function GetFilteredCustomerRoutes(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "CustomerRoute", "GetFilteredCustomerRoutes"), input);
         }
