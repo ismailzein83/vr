@@ -22,6 +22,10 @@
 
         function defineScope() {
 
+            $scope.hasDownloadSupplierPriceListTemplatePermission = function () {
+                return WhS_SupPL_SupplierPriceListAPIService.HasDownloadSupplierPriceListTemplatePermission();
+            }
+
             $scope.selectedSupplier;
 
             $scope.zoneList;

@@ -4,8 +4,8 @@
             <vr-row removeline>
 
                 <vr-whs-be-carrieraccount-selector getsuppliers on-ready="onCarrierAccountDirectiveReady" normal-col-num="2" selectedvalues="selectedSupplier" onselectitem="carrierAccountSelectItem" isrequired="true"></vr-whs-be-carrieraccount-selector>
-               
-                 <vr-columns width="normal" vr-loader="isLoadingCurrencySelector">
+
+                <vr-columns width="normal" vr-loader="isLoadingCurrencySelector">
                     <vr-common-currency-selector on-ready="onCurrencyDirectiveReady" isrequired></vr-common-currency-selector>
                 </vr-columns>
 
@@ -18,10 +18,6 @@
                     <vr-fileupload extension="reports" value="zoneList" isrequired> </vr-fileupload>
 
                 </vr-columns>
-
-                <!--<vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="Effective Date" value="effectiveDate"></vr-datetimepicker>
-                </vr-columns>-->
             </vr-row>
         </div>
     </vr-form>
@@ -30,11 +26,8 @@
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
             <div transclude-to="buttons">
-                <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
+                <vr-button type="Download" data-onclick="downloadTemplate" haspermission="hasDownloadSupplierPriceListTemplatePermission"></vr-button>
                 <vr-button type="Upload" validationcontext="importSupplierPrieListGroup" data-onclick="upload"></vr-button>
-                <!--<vr-button type="Validate" data-onclick="previewSupplierPriceList"></vr-button>-->
-
-
             </div>
         </vr-actionbar>
     </vr-row>
