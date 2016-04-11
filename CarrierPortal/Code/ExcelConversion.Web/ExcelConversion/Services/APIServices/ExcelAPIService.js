@@ -8,6 +8,10 @@
                 fileId: fileId
             });
         }
+
+        function ReadExcelFilePage(page) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, controllerName, "ReadExcelFilePage"), page);
+        }
         function GetFieldMappingTemplateConfigs() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, controllerName, "GetFieldMappingTemplateConfigs"));
         }
@@ -19,6 +23,7 @@
         }
         return ({
             ReadExcelFile: ReadExcelFile,
+            ReadExcelFilePage:ReadExcelFilePage,
             GetFieldMappingTemplateConfigs: GetFieldMappingTemplateConfigs,
             ConvertAndDownload: ConvertAndDownload
         });
