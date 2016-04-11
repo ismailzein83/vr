@@ -40,8 +40,7 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
                         var query = payload;
-                        if (query.loadedFromRoutingProduct)
-                        {
+                        if (query.loadedFromRoutingProduct) {
                             $scope.hideCustomerColumn = false;
                             $scope.hideIncludedCodesColumn = false;
                             query = payload.query;
@@ -79,13 +78,24 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editRouteRule,
+                haspermission: hasUpdateRulePermission
             },
             {
                 name: "Delete",
                 clicked: deleteRouteRule,
+                haspermission: hasDeleteRulePermission
             }
             ];
         }
+
+        function hasUpdateRulePermission() {
+            return WhS_Routing_RouteRuleAPIService.HasUpdateRulePermission();
+        }
+
+        function hasDeleteRulePermission() {
+            return WhS_Routing_RouteRuleAPIService.HasDeleteRulePermission();
+        }
+
 
         function editRouteRule(routeRule) {
             var onRouteRuleUpdated = function (updatedItem) {

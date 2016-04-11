@@ -2,9 +2,9 @@
 
     "use strict";
 
-    routeRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    routeRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteRuleAPIService'];
 
-    function routeRuleManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function routeRuleManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteRuleAPIService) {
         var gridAPI;
 
         var carrierAccountDirectiveAPI;
@@ -20,6 +20,9 @@
         load();
 
         function defineScope() {
+            $scope.hasAddRulePermission = function () {
+                return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
+            }
 
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
@@ -32,10 +35,10 @@
             }
 
             $scope.onSaleZoneDirectiveReady = function (api) {
-                saleZoneDirectiveAPI = api;           
+                saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
-              //  var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
-               // VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, undefined, setLoader);
+                //  var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+                // VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, undefined, setLoader);
             }
 
             $scope.onSelectSellingNumberPlan = function (selectedItem) {
@@ -81,8 +84,7 @@
             });
         }
 
-        function loadCustomersSection()
-        {
+        function loadCustomersSection() {
             var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
             carrierAccountReadyPromiseDeferred.promise.then(function () {

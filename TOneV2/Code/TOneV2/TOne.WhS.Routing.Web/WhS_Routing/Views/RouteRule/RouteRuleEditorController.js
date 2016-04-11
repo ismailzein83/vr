@@ -45,6 +45,14 @@
         }
 
         function defineScope() {
+
+            $scope.hasSaveRulePermission = function () {
+                if (editMode)
+                    return WhS_Routing_RouteRuleAPIService.HasUpdateRulePermission();
+                else
+                    return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
+            }
+
             $scope.scopeModal = {}
             $scope.scopeModal.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                 saleZoneGroupSettingsAPI = api;

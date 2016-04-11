@@ -63,11 +63,11 @@
 
 
                                             <!--<div style="max-height:78px;overflow-y: auto;">
-                                <span class="label custom-label" style="min-width: 60px; margin: 2px;font-size:14px" ng-repeat="code in excludedCodes">
-                                    {{code}}
-                                    <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="removeExcludedCode(code)"></span>
-                                </span>
-                            </div>-->
+                                                <span class="label custom-label" style="min-width: 60px; margin: 2px;font-size:14px" ng-repeat="code in excludedCodes">
+                                                    {{code}}
+                                                    <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="removeExcludedCode(code)"></span>
+                                                </span>
+                                            </div>-->
                                         </vr-columns>
                                     </vr-row>
                                 </vr-columns>
@@ -109,7 +109,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRouteRuleEditor" data-onclick="scopeModal.SaveRouteRule"></vr-button>
+                <vr-button type="Save" formname="formRouteRuleEditor" data-onclick="scopeModal.SaveRouteRule" haspermission="hasSaveRulePermission"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>
