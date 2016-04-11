@@ -19,6 +19,13 @@ namespace ExcelConversion.Web.Controllers
             ExcelManager manager = new ExcelManager();
             return manager.ReadExcelFile(fileId);
         }
+        [HttpPost]
+        [Route("ReadExcelFilePage")]
+        public ExcelWorksheet ReadExcelFilePage(ExcelPageQuery Query)
+        {
+            ExcelManager manager = new ExcelManager();
+            return manager.ReadExcelFilePage(Query);
+        }
         [HttpGet]
         [Route("GetFieldMappingTemplateConfigs")]
         public IEnumerable<TemplateConfig> GetFieldMappingTemplateConfigs()
