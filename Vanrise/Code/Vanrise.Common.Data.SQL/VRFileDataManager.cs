@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -121,5 +122,27 @@ namespace Vanrise.Common.Data.SQL
         }
 
         #endregion
+
+        string _moduleName;
+        public string ModuleName
+        {
+            set { this._moduleName = value; }
+        }
+
+        protected override string GetConnectionString()
+        {
+            if(!String.IsNullOrWhiteSpace(this._moduleName))
+            {
+                var connectionStringKey = ConfigurationManager.AppSettings[String.Format("VRFile_{0}_DBConnStringKey", this._moduleName)];
+                if (!string.IsNullOrEmpty(connectionStringKey))
+                {
+                    var connectionString = ConfigurationManager.ConnectionStrings[connectionStringKey];
+                    if(connectionString == null)
+                        throw new NullReferenceException(String.Format("connectionString '{0}'", connectionStringKey));
+                    return connectionString.ConnectionString;
+                }
+            }
+            return base.GetConnectionString();
+        }
     }
 }

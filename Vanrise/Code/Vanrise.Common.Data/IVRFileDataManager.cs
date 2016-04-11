@@ -9,6 +9,8 @@ namespace Vanrise.Common.Data
 {
     public interface IVRFileDataManager : IDataManager
     {
+        string ModuleName { set; }
+
         long AddFile(VRFile file);
         VRFileInfo GetFileInfo(long fileId);
         VRFile GetFile(long fileId);

@@ -15,9 +15,16 @@ namespace Vanrise.Common.Business
 
         private readonly IVRFileDataManager _datamanager;
 
-        public VRFileManager()
+        public VRFileManager(string moduleName)
         {
             _datamanager = CommonDataManagerFactory.GetDataManager<IVRFileDataManager>();
+            _datamanager.ModuleName = moduleName;
+        }
+
+        public VRFileManager()
+            : this(null)
+        {
+
         }
 
         #endregion
