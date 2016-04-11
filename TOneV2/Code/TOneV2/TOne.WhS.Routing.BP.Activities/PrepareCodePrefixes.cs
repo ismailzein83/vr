@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -22,7 +24,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<string>> DistinctCodePrefixes { get; set; }
 
-        
+
         protected override void Execute(CodeActivityContext context)
         {
 
@@ -35,10 +37,15 @@ namespace TOne.WhS.Routing.BP.Activities
             SaleCodeManager saleCodeManager = new SaleCodeManager();
             IEnumerable<string> saleCodePrefixes = saleCodeManager.GetDistinctCodeByPrefixes(prefixLenght, effectiveOn, isFuture);
 
-            if(saleCodePrefixes != null)
+            long validNumberPrefix;
+
+            if (saleCodePrefixes != null)
             {
                 foreach (string item in saleCodePrefixes)
-                    prefixesHashSet.Add(item);
+                    if (long.TryParse(item, out validNumberPrefix))
+                        prefixesHashSet.Add(item);
+                    else
+                        context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Sale Code Prefix: {0}", item);
             }
 
             SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
@@ -47,7 +54,10 @@ namespace TOne.WhS.Routing.BP.Activities
             if (supplierCodePrefixes != null)
             {
                 foreach (string item in supplierCodePrefixes)
-                    prefixesHashSet.Add(item);
+                    if (long.TryParse(item, out validNumberPrefix))
+                        prefixesHashSet.Add(item);
+                    else
+                        context.WriteTrackingMessage(LogEntryType.Warning, "Invalid Supplier Code Prefix: {0}", item);
             }
 
             this.DistinctCodePrefixes.Set(context, prefixesHashSet);
