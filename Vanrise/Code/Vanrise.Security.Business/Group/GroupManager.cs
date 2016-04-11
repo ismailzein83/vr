@@ -158,12 +158,12 @@ namespace Vanrise.Security.Business
 
         class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IUserDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            IGroupDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IGroupDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreUsersUpdated(ref _updateHandle);
+                return _dataManager.AreGroupsUpdated(ref _updateHandle);
             }
         }
         
