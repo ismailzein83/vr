@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrExcelWb', ['ExcelConversion_ExcelAPIService', function (excelAPIService) {
+app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (excelAPIService) {
   
 
     var directiveDefinitionObject = {

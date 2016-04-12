@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelConversion_ExcelAPIService) {
+app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_ExcelConversion_ExcelAPIService) {
    
     return {
         restrict: 'E',
@@ -58,7 +58,7 @@ app.directive('vrExcelWs',["ExcelConversion_ExcelAPIService", function (ExcelCon
                     To: info.toRow,
                     SheetIndex:scope.index
                 }
-                return ExcelConversion_ExcelAPIService.ReadExcelFilePage(query).then(function (response) {
+                return VR_ExcelConversion_ExcelAPIService.ReadExcelFilePage(query).then(function (response) {
                     return response;
 
                 }).finally(function () {

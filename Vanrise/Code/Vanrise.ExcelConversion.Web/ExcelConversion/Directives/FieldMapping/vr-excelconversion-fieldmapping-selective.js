@@ -98,7 +98,7 @@
                     return UtilsService.waitMultiplePromises(promises);
 
                     function getFieldMappingTemplateConfigs() {
-                        return ExcelConversion_ExcelAPIService.GetFieldMappingTemplateConfigs().then(function (response) {
+                        return VR_ExcelConversion_ExcelAPIService.GetFieldMappingTemplateConfigs().then(function (response) {
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
