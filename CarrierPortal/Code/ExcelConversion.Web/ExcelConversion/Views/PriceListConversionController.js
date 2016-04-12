@@ -140,19 +140,20 @@
                 };
                 dataItem.onFieldReady = function (api) {
                     dataItem.fieldMappingAPI = api;
+                  
                     dataItem.readyPromiseDeferred.resolve();
                 }
-                dataItem.validate = function () {
-                    if (dataItem.fieldMappingAPI != undefined && $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI != undefined) {
-                        var rowIndex = $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData();
-                        var obj = dataItem.fieldMappingAPI.getData();
-                        if (obj != undefined) {
-                            if (rowIndex == undefined || obj.RowIndex != rowIndex.RowIndex)
-                                return "Error row index.";
-                        }
-                    }
-                    return null;
-                }
+                //dataItem.validate = function () {
+                //    if (dataItem.fieldMappingAPI != undefined && $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI != undefined) {
+                //        var rowIndex = $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData();
+                //        var obj = dataItem.fieldMappingAPI.getData();
+                //        if (obj != undefined) {
+                //            if (rowIndex == undefined || obj.RowIndex != rowIndex.RowIndex)
+                //                return "Error row index.";
+                //        }
+                //    }
+                //    return null;
+                //}
                 dataItem.readyPromiseDeferred.promise
                       .then(function () {
                           VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
@@ -215,7 +216,8 @@
                 var context = {
                     getSelectedCell: getSelectedCell,
                     setSelectedCell: selectCellAtSheet,
-                    getSelectedSheet: getSelectedSheet
+                    getSelectedSheet: getSelectedSheet,
+                    getFirstRowIndex: getFirstRowIndex
                 }
                 function selectCellAtSheet(row, col,s) {
                     var a = parseInt(row);
@@ -230,6 +232,17 @@
                 function getSelectedSheet() {
                     if (outPutWorkBookAPI != undefined)
                         return outPutWorkBookAPI.getSelectedSheet();
+                }
+                function getFirstRowIndex()
+                {
+                    var firstRow = $scope.scopeModel.outPutFieldMappings[0];
+                    if (firstRow.fieldMappingAPI != undefined)
+                    {
+                        var obj = firstRow.fieldMappingAPI.getData();
+                        if(obj !=undefined)
+                            return { row: obj.RowIndex }
+
+                    }
                 }
                 return context;
             }
