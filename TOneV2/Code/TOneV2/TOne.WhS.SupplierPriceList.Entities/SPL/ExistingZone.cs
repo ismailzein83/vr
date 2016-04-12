@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
-{    
+{
     public class ExistingZone : IZone
     {
         public BusinessEntity.Entities.SupplierZone ZoneEntity { get; set; }
@@ -36,7 +36,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
                 return _existingRates;
             }
         }
-        
+
         List<NewRate> _newRates = new List<NewRate>();
         public List<NewRate> NewRates
         {
@@ -72,9 +72,24 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         {
             get { return ChangedZone != null ? ChangedZone.EED : ZoneEntity.EED; }
         }
+
+        public object Key
+        {
+            get { return Name; }
+        }
+
+        public void SetExcluded()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string TargetType
+        {
+            get { return "ExistingZone"; }
+        }
     }
 
-    public class ExistingCode : Vanrise.Entities.IDateEffectiveSettings
+    public class ExistingCode : ICode
     {
         public ExistingZone ParentZone { get; set; }
 
@@ -90,6 +105,23 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public DateTime? EED
         {
             get { return ChangedCode != null ? ChangedCode.EED : CodeEntity.EED; }
+        }
+
+        public string Code { get; set; }
+
+        public object Key
+        {
+            get { return Code; }
+        }
+
+        public void SetExcluded()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string TargetType
+        {
+            get { return "ExistingCode"; }
         }
     }
 
