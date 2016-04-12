@@ -9,3 +9,5 @@ Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
 CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
+ExcelConversion			C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
+XBooster_PriceListConversion	C:\TFS\Xbooster\Code\XBooster.PriceListConversion.Web\XBooster_PriceListConversion

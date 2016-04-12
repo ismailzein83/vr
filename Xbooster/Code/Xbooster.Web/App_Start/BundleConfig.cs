@@ -16,7 +16,9 @@ namespace Xbooster.Web
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/CDRComparison", "*.js", true));
+                "~/Client/Modules/CDRComparison", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/ExcelConversion", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/XBooster_PriceListConversion", "*.js", true));
         }
     }
 }

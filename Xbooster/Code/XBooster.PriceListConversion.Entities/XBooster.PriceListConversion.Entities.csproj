@@ -41,8 +41,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.ExcelConversion.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputPriceListSettings.cs" />
+    <Compile Include="OutputPriceListFields.cs" />
+    <Compile Include="OutputPriceListSettings.cs" />
+    <Compile Include="PriceListConversion.cs" />
+    <Compile Include="PriceListItem.cs" />
+    <Compile Include="PriceListRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

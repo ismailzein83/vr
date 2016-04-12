@@ -195,6 +195,18 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
     </Reference>
@@ -387,6 +399,18 @@
     <ProjectReference Include="..\CDRComparison.Web\CDRComparison.Web.csproj">
       <Project>{102b263c-31ef-4797-a789-8fcf425edbe8}</Project>
       <Name>CDRComparison.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XBooster.PriceListConversion.Business\XBooster.PriceListConversion.Business.csproj">
+      <Project>{980e9f76-e993-4df4-b36d-0bb73623c96b}</Project>
+      <Name>XBooster.PriceListConversion.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XBooster.PriceListConversion.Entities\XBooster.PriceListConversion.Entities.csproj">
+      <Project>{b74581c1-1afc-4e69-b6a4-2df61c1f6d9c}</Project>
+      <Name>XBooster.PriceListConversion.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XBooster.PriceListConversion.Web\XBooster.PriceListConversion.Web.csproj">
+      <Project>{7ba10b0e-f348-4ac7-8d80-baf20d059af6}</Project>
+      <Name>XBooster.PriceListConversion.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
