@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public interface IZone : Vanrise.Entities.IDateEffectiveSettings
+    public interface IZone : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
     {
+        
         long ZoneId { get; }
 
         string Name { get; }
