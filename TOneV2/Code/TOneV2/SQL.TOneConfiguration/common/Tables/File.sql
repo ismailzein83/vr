@@ -4,11 +4,13 @@
     [Extension]   VARCHAR (50)    NULL,
     [Content]     VARBINARY (MAX) NOT NULL,
     [IsUsed]      BIT             CONSTRAINT [DF_File_IsUsed] DEFAULT ((0)) NULL,
-    [ModuleType]  VARCHAR (255)   NULL,
+    [ModuleName]  VARCHAR (255)   NULL,
     [UserID]      INT             NOT NULL,
     [CreatedTime] DATETIME        CONSTRAINT [DF_File_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_File] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
