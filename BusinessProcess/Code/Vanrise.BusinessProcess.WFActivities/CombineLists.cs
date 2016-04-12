@@ -26,13 +26,14 @@ namespace Vanrise.BusinessProcess.WFActivities
 
             foreach (IEnumerable list in inputLists)
             {
-                foreach (T item in list)
+                if (list != null)
                 {
-                    outputList.Add(item);
+                    foreach (T item in list)
+                    {
+                        outputList.Add(item);
+                    }
                 }
             }
-                
-
             this.OutputList.Set(context, outputList);
         }
     }
