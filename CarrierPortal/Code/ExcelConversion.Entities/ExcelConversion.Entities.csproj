@@ -63,8 +63,10 @@
     <Compile Include="Excel\ExcelWorksheet.cs" />
     <Compile Include="Excel\MergedCell.cs" />
     <Compile Include="InputPriceListSettings.cs" />
+    <Compile Include="IOutputPriceListContext.cs" />
+    <Compile Include="OutputPriceListConfiguration.cs" />
+    <Compile Include="OutputPriceListContext.cs" />
     <Compile Include="OutputPriceListFields.cs" />
-    <Compile Include="OutputPriceListSettings.cs" />
     <Compile Include="PriceListConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConversionSettings\ListMapping.cs" />

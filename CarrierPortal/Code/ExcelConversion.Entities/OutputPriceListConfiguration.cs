@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace ExcelConversion.Entities
 {
-    public class InputPriceListSettings
+    public abstract class OutputPriceListConfiguration
     {
-        public ExcelConversionSettings ExcelConversionSettings { get; set; }
+        public int ConfigId { get; set; }
+
+        public abstract byte[] Execute(IOutputPriceListContext context);
     }
 }

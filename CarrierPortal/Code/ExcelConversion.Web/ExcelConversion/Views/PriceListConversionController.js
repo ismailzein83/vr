@@ -63,7 +63,6 @@
                     }
                     var inputExcel = {
                         ExcelConversionSettings: obj,
-                        FileId: $scope.scopeModel.inPutFile.fileId
                     }
 
                     var outputFieldMappings = {
@@ -76,12 +75,14 @@
                     };
 
                     var outPutExcel = {
+                        $type: "ExcelConversion.MainExtensions.OutputPriceList.OutputPriceListSettings  , ExcelConversion.MainExtensions",
                         FileId: $scope.scopeModel.outPutFile.fileId,
                         OutputPriceListFields: outputFieldMappings
                     }
                     var priceListConversion = {
+                            InputFileId: $scope.scopeModel.inPutFile.fileId,
                             InputPriceListSettings: inputExcel,
-                            OutputPriceListSettings:outPutExcel
+                            OutputPriceListConfiguration: outPutExcel
                         }
                     return ExcelConversion_PriceListConversionAPIService.PriceListConvertAndDownload(priceListConversion).then(function (response) {
                         UtilsService.downloadFile(response.data, response.headers);

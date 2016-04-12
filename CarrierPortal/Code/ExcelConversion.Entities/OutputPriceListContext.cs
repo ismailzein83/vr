@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ExcelConversion.Entities
 {
-    public class OutputPriceListSettings
+    public class OutputPriceListContext : IOutputPriceListContext
     {
-        public int FileId { get; set; }
-        public OutputPriceListFields OutputPriceListFields { get; set; }
+        public List<PriceListRecord> Records{ get; set;}
     }
 }

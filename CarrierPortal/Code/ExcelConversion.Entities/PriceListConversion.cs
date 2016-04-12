@@ -8,7 +8,8 @@ namespace ExcelConversion.Entities
 {
     public class PriceListConversion
     {
+        public int InputFileId { get; set; }
         public InputPriceListSettings InputPriceListSettings { get; set; }
-        public OutputPriceListSettings OutputPriceListSettings { get; set; }
+        public OutputPriceListConfiguration OutputPriceListConfiguration { get; set; }
     }
 }
