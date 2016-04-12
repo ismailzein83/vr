@@ -1,0 +1,10 @@
+﻿Expand the IIS web site of Xbooster.Web project:
+ - Add the following virtual directory under the root site:
+Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+
+ - Add the following virtual directories under Client > Modules folder:
+Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules

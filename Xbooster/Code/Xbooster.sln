@@ -1,0 +1,91 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4357FC9D-C607-4C2F-B59E-DCF3B214C7E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{1B23C452-FCBF-40B5-AACC-D566EA46D488}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{AD83C111-1E42-4345-9B21-C3063C647E4E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{69EAF8AE-C9C5-4F37-8FDD-B053CC4C978B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{3A04C448-C928-48D3-A1D9-CC7A887A263C}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Xbooster", "Xbooster\Xbooster.sqlproj", "{003E7DDE-D937-4B8F-9EC6-150522220335}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{8DBAB595-6979-4062-8EDC-41852DAA3D6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web.Base", "..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj", "{C527C7B2-A481-4D1D-B25A-4A540E812153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web", "..\..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj", "{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbooster.Web", "Xbooster.Web\Xbooster.Web.csproj", "{DD35DC28-AB09-4ABC-87FF-B73E87243F11}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Xbooster\\Xbooster.sqlproj
+		SccProjectTopLevelParentUniqueName1 = Xbooster.sln
+		SccProjectName1 = Xbooster
+		SccLocalPath1 = Xbooster
+		SccProjectUniqueName2 = Resources\\Resources.csproj
+		SccProjectTopLevelParentUniqueName2 = Xbooster.sln
+		SccProjectName2 = Resources
+		SccLocalPath2 = Resources
+		SccProjectUniqueName3 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
+		SccProjectTopLevelParentUniqueName3 = Xbooster.sln
+		SccProjectName3 = ../../Vanrise/Code/Vanrise.Web.Base
+		SccLocalPath3 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base
+		SccProjectUniqueName4 = ..\\..\\Vanrise\\Code\\Vanrise.Web\\Vanrise.Web.csproj
+		SccProjectTopLevelParentUniqueName4 = Xbooster.sln
+		SccProjectName4 = ../../Vanrise/Code/Vanrise.Web
+		SccLocalPath4 = ..\\..\\Vanrise\\Code\\Vanrise.Web
+		SccProjectUniqueName5 = Xbooster.Web\\Xbooster.Web.csproj
+		SccProjectTopLevelParentUniqueName5 = Xbooster.sln
+		SccProjectName5 = Xbooster.Web
+		SccLocalPath5 = Xbooster.Web
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{003E7DDE-D937-4B8F-9EC6-150522220335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003E7DDE-D937-4B8F-9EC6-150522220335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003E7DDE-D937-4B8F-9EC6-150522220335}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{003E7DDE-D937-4B8F-9EC6-150522220335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003E7DDE-D937-4B8F-9EC6-150522220335}.Release|Any CPU.Build.0 = Release|Any CPU
+		{003E7DDE-D937-4B8F-9EC6-150522220335}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8DBAB595-6979-4062-8EDC-41852DAA3D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DBAB595-6979-4062-8EDC-41852DAA3D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DBAB595-6979-4062-8EDC-41852DAA3D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DBAB595-6979-4062-8EDC-41852DAA3D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C527C7B2-A481-4D1D-B25A-4A540E812153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD35DC28-AB09-4ABC-87FF-B73E87243F11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD35DC28-AB09-4ABC-87FF-B73E87243F11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD35DC28-AB09-4ABC-87FF-B73E87243F11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD35DC28-AB09-4ABC-87FF-B73E87243F11}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{003E7DDE-D937-4B8F-9EC6-150522220335} = {69EAF8AE-C9C5-4F37-8FDD-B053CC4C978B}
+		{8DBAB595-6979-4062-8EDC-41852DAA3D6B} = {4357FC9D-C607-4C2F-B59E-DCF3B214C7E5}
+		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {3A04C448-C928-48D3-A1D9-CC7A887A263C}
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {3A04C448-C928-48D3-A1D9-CC7A887A263C}
+		{DD35DC28-AB09-4ABC-87FF-B73E87243F11} = {3A04C448-C928-48D3-A1D9-CC7A887A263C}
+	EndGlobalSection
+EndGlobal
