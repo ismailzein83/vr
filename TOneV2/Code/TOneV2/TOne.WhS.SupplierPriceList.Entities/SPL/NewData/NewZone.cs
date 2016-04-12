@@ -35,6 +35,21 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
                 return _newRates;
             }
         }
+
+        public object Key
+        {
+            get { return Name; }
+        }
+
+        public void SetExcluded()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string TargetType
+        {
+            get { return "NewZone"; }
+        }
     }
 
     public class NewZonesByName : Dictionary<string, List<NewZone>>
