@@ -47,7 +47,7 @@
         function defineScope() {
 
             $scope.hasSaveRulePermission = function () {
-                if (editMode)
+                if (isEditMode)
                     return WhS_Routing_RouteRuleAPIService.HasUpdateRulePermission();
                 else
                     return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
