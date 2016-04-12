@@ -62,6 +62,7 @@
     <Compile Include="SPL\ChangedData\ChangedRate.cs" />
     <Compile Include="SPL\ChangedData\ChangedZone.cs" />
     <Compile Include="SPL\CodeValidation.cs" />
+    <Compile Include="SPL\ICode.cs" />
     <Compile Include="SPL\ImportedData\ImportedCode.cs" />
     <Compile Include="SPL\ImportedData\ImportedCountry.cs" />
     <Compile Include="SPL\ImportedData\ImportedRate.cs" />
