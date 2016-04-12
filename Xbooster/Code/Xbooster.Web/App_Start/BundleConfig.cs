@@ -15,7 +15,8 @@ namespace Xbooster.Web
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_Rules", "*.js", true));
+                "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/CDRComparison", "*.js", true));
         }
     }
 }

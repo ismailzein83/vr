@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E18F37A0-DA73-4684-9D35-6AF45C49A345}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XBooster.Runtime</RootNamespace>
+    <AssemblyName>XBooster.Runtime</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.2.2.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Business">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Client">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data.SQL">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.MainExtensions">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Logging.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Normalization">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ITask.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\IsmailTask.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CDRComparison.BP.Activities\CDRComparison.BP.Activities.csproj">
+      <Project>{c2e92276-33f9-4b0c-aa94-c1f19c9d1492}</Project>
+      <Name>CDRComparison.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.BP.Arguments\CDRComparison.BP.Arguments.csproj">
+      <Project>{688bd430-7ff4-434f-b812-5e78142d011f}</Project>
+      <Name>CDRComparison.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.BP\CDRComparison.BP.csproj">
+      <Project>{e8b20474-f87f-4151-a19e-8232ae5c3b71}</Project>
+      <Name>CDRComparison.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.Business\CDRComparison.Business.csproj">
+      <Project>{91b3930c-4d87-44c5-9de0-583b64d4476c}</Project>
+      <Name>CDRComparison.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.Data.SQL\CDRComparison.Data.SQL.csproj">
+      <Project>{24298543-e71d-42ee-b4bc-65ce3ce86eea}</Project>
+      <Name>CDRComparison.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.Data\CDRComparison.Data.csproj">
+      <Project>{272efc65-74f5-4ea9-9bfa-83066f7d0fb2}</Project>
+      <Name>CDRComparison.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.Entities\CDRComparison.Entities.csproj">
+      <Project>{dea85456-05cd-4ded-984e-bcdffffd7d22}</Project>
+      <Name>CDRComparison.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CDRComparison.MainExtensions\CDRComparison.MainExtensions.csproj">
+      <Project>{999eab0a-f193-46e5-84ed-ca8d12de51b3}</Project>
+      <Name>CDRComparison.MainExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
