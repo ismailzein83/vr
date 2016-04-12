@@ -15,12 +15,14 @@
         function GetFieldMappingTemplateConfigs() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, controllerName, "GetFieldMappingTemplateConfigs"));
         }
-
+        function GetConcatenatedPartTemplateConfigs() {
+            return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, controllerName, "GetConcatenatedPartTemplateConfigs"));
+        }
         return ({
             ReadExcelFile: ReadExcelFile,
             ReadExcelFilePage:ReadExcelFilePage,
             GetFieldMappingTemplateConfigs: GetFieldMappingTemplateConfigs,
-          
+            GetConcatenatedPartTemplateConfigs: GetConcatenatedPartTemplateConfigs
         });
     }
     excelAPIService.$inject = ['BaseAPIService', 'UtilsService', 'SecurityService', 'ExcelConversion_ModuleConfig'];

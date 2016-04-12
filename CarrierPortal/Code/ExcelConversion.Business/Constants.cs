@@ -9,5 +9,6 @@ namespace ExcelConversion.Business
     public static class Constants
     {
         public const string FieldMappingConfigType = "ExcelConversion_FieldMapping";
+        public const string ConcatenatedPartConfigType = "ExcelConversion_ConcatenatedPart";
     }
 }

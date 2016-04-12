@@ -11,7 +11,6 @@
                 onReady: "=",
                 normalColNum: '@',
                 isrequired: '=',
-                customvalidate: '=',
                 type:'='
             },
             controller: function ($scope, $element, $attrs) {
@@ -43,6 +42,15 @@
                         
                     }
 
+                }
+                ctrl.validate = function()
+                {
+                    if ($scope.cellObject != undefined && context!=undefined) {
+                        var row = context.getFirstRowIndex();
+                        if (row == undefined || $scope.cellObject.row != row.row)
+                             return "Error row index.";
+                    }
+                    return null;
                 }
                 ctrl.selectCell = function ()
                 {

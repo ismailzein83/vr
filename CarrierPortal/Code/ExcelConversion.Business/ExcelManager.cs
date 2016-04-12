@@ -175,7 +175,11 @@ namespace ExcelConversion.Business
             var templateConfigManager = new TemplateConfigManager();
             return templateConfigManager.GetTemplateConfigurations(Constants.FieldMappingConfigType);
         }
-
+        public IEnumerable<TemplateConfig> GetConcatenatedPartTemplateConfigs()
+        {
+            var templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.ConcatenatedPartConfigType);
+        }
        
     }
 }

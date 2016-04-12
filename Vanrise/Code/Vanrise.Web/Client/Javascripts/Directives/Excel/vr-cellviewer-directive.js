@@ -130,7 +130,7 @@
                         + '<div    id="mainInput" ng-model="ctrl.value" style="border-radius: 4px; padding: 0px; width: 100%; border: 0px;">'
                         + ' <span class="glyphicon glyphicon-circle-arrow-right" style="font-size: 21px;top: 3px;cursor: pointer; cursor: hand;" ng-click="updateRange()" ng-show="ctrl.value == undefined"></span>'
                         + '<a ng-show="ctrl.value !=null && ctrl.value !=undefined " class="hand-cursor" style="display: inline-block; width: calc(100% - 45px); position: relative; top: -2px;" ng-click="selectCell()">'
-                        + '<span ng-show="ctrl.type == \'cell\'">Row{{ctrl.value.row}};Col{{ctrl.value.col}}</span>'
+                        + '<span ng-show="ctrl.type == \'cell\' || ctrl.type == undefined">Row{{ctrl.value.row}};Col{{ctrl.value.col}}</span>'
                         + '<span ng-show="ctrl.type == \'row\'">Row{{ctrl.value.row}}</span>'
 
                         +  '</a>'

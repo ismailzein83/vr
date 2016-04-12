@@ -94,23 +94,14 @@
                     function addAPIExtension(dataItem)
                     {
                         var payload = {
-                            context: context
+                            context: getContext()
                         };
                         dataItem.onFieldMappingReady = function (api) {
                             dataItem.fieldMappingAPI = api;
                             dataItem.readyPromiseDeferred.resolve();
                         }
                         dataItem.normalColNum = ctrl.normalColNum;
-                        dataItem.validate = function () {
-                            if (dataItem.fieldMappingAPI != undefined) {
-                                var obj = dataItem.fieldMappingAPI.getData();
-                                if (obj != undefined) {
-                                    if (ctrl.firstRowIndex == undefined || obj.RowIndex != ctrl.firstRowIndex.row)
-                                        return "Error row index.";
-                                }
-                            }
-                            return null;
-                        }
+
                         dataItem.readyPromiseDeferred.promise
                       .then(function () {
                           VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
@@ -158,6 +149,19 @@
                         FieldMappings: fieldMappings,
                     };
                     return data;
+                }
+                function getContext() {
+
+                    if (context != undefined) {
+                        var currentContext = UtilsService.cloneObject(context);
+                        if (currentContext == undefined)
+                            currentContext = {};
+                        currentContext.getFirstRowIndex = function()
+                        {
+                            return ctrl.firstRowIndex;
+                        }
+                        return currentContext;
+                    }
                 }
             }
         }

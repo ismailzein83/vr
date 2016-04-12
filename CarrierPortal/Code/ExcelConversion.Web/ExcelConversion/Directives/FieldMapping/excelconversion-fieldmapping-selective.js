@@ -38,7 +38,7 @@
 
         var template =
             '<vr-row>'
-          +  '<vr-columns colnum="{{fieldmappingCtrl.normalColNum}}">'
+          +  '<vr-columns colnum="{{fieldmappingCtrl.normalColNum * 2}}">'
           +  ' <vr-select on-ready="onSelectorReady"'
           +  ' datasource="templateConfigs"'
           +  ' selectedvalues="selectedTemplateConfig"'
@@ -48,11 +48,8 @@
            + ' isrequired="fieldmappingCtrl.isrequired"'
           +  'hideremoveicon>'
       +  '</vr-select>'
-         + '</vr-columns>'
-        +' <vr-columns colnum="{{fieldmappingCtrl.normalColNum}}" ' + withemptyline + '>'
-          + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>'
-        '</vr-columns >'
-       + '</vr-row>';
+       + '</vr-row>'
+          + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>';
         return template;
 
     }
@@ -144,11 +141,6 @@
                     var currentContext = UtilsService.cloneObject(context);
                     return currentContext;
                 }
-            }
-            function getFieldMappingConfig() {
-                return CDRComparison_CDRSourceConfigAPIService.GetCDRSourceConfig(cdrSourceConfigId).then(function (cdrSourceConfig) {
-                    cdrSource = cdrSourceConfig.CDRSource;
-                });
             }
         }
     }
