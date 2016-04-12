@@ -2,9 +2,9 @@
 
     'use strict';
 
-    fieldmappingSelectiveDirective.$inject = ['ExcelConversion_ExcelAPIService', 'CDRComparison_CDRSourceAPIService', 'CDRComparison_CDRSourceConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    fieldmappingSelectiveDirective.$inject = ['ExcelConversion_ExcelAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function fieldmappingSelectiveDirective(ExcelConversion_ExcelAPIService, CDRComparison_CDRSourceAPIService, CDRComparison_CDRSourceConfigAPIService, UtilsService, VRUIUtilsService) {
+    function fieldmappingSelectiveDirective(ExcelConversion_ExcelAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    fieldmappingCellfieldmappingDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
+    fieldmappingCellfieldmappingDirective.$inject = [];
 
-    function fieldmappingCellfieldmappingDirective(UtilsService, VRUIUtilsService) {
+    function fieldmappingCellfieldmappingDirective() {
         return {
             restrict: "E",
             scope: {

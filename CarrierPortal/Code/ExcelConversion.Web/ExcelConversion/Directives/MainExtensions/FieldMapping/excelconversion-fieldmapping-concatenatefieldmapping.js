@@ -2,9 +2,9 @@
 
     'use strict';
 
-    concatenatedpartSelective.$inject = ['ExcelConversion_ExcelAPIService', 'CDRComparison_CDRSourceAPIService', 'CDRComparison_CDRSourceConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    concatenatedpartSelective.$inject = ['ExcelConversion_ExcelAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function concatenatedpartSelective(ExcelConversion_ExcelAPIService, CDRComparison_CDRSourceAPIService, CDRComparison_CDRSourceConfigAPIService, UtilsService, VRUIUtilsService) {
+    function concatenatedpartSelective(ExcelConversion_ExcelAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {

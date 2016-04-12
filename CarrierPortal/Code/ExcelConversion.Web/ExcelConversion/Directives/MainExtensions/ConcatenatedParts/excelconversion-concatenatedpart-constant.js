@@ -2,9 +2,9 @@
 
     'use strict';
 
-    concatenatedpartConstantDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
+    concatenatedpartConstantDirective.$inject = [];
 
-    function concatenatedpartConstantDirective(UtilsService, VRUIUtilsService) {
+    function concatenatedpartConstantDirective() {
         return {
             restrict: "E",
             scope: {
