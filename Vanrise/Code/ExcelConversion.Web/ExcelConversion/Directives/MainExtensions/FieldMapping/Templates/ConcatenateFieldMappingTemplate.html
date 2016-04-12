@@ -1,0 +1,23 @@
+﻿<vr-row removeline>
+    <vr-columns width="2/3row">
+        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" on-ready="onSelectorReady"
+                   label="Field Type" datasource="templateConfigs" selectedvalues="selectedTemplateConfig" onselectionchanged="concatenateFieldMappingCtrl.onActionTemplateChanged">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row" withemptyline>
+        <vr-button type="Add" data-onclick="concatenateFieldMappingCtrl.addField" standalone vr-disabled="concatenateFieldMappingCtrl.disableAddButton"></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow" vr-loader="concatenateFieldMappingCtrl.isLoadingDirective">
+        <vr-validator validate="concatenateFieldMappingCtrl.isValid()">
+            <vr-datagrid datasource="concatenateFieldMappingCtrl.datasource" norowhighlightonclick="true" hideheader="true"
+                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="concatenateFieldMappingCtrl.removeField" hidegridmenu>
+                <vr-datagridcolumn field="'name'" widthfactor="5"></vr-datagridcolumn>
+                <vr-datagridcolumn widthfactor="15">
+                    <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>

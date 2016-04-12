@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common", "Vanrise.Common\Vanrise.Common.csproj", "{1A350B7C-28EA-4824-B9A0-C60AD25F0EA9}"
 EndProject
@@ -191,9 +191,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Analytic.Business",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Analytic.Web", "Vanrise.Analytic.Web\Vanrise.Analytic.Web.csproj", "{8D7E5EBC-9416-46A1-82B2-3A7DEE0E2621}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExcelConversion", "ExcelConversion", "{FA04C431-2375-481B-B71F-1D2835D0E6B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConversion.Business", "ExcelConversion.Business\ExcelConversion.Business.csproj", "{C7945D16-A9AE-4440-B0D4-179D2CF3383E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConversion.Entities", "ExcelConversion.Entities\ExcelConversion.Entities.csproj", "{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConversion.MainExtensions", "ExcelConversion.MainExtensions\ExcelConversion.MainExtensions.csproj", "{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelConversion.Web", "ExcelConversion.Web\ExcelConversion.Web.csproj", "{B422F992-19DE-4626-840E-44B6AD7335F5}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 80
+		SccNumberOfProjects = 84
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -513,6 +523,22 @@ Global
 		SccProjectTopLevelParentUniqueName79 = Vanrise.sln
 		SccProjectName79 = Vanrise.Analytic.Web
 		SccLocalPath79 = Vanrise.Analytic.Web
+		SccProjectUniqueName80 = ExcelConversion.Business\\ExcelConversion.Business.csproj
+		SccProjectTopLevelParentUniqueName80 = Vanrise.sln
+		SccProjectName80 = ExcelConversion.Business
+		SccLocalPath80 = ExcelConversion.Business
+		SccProjectUniqueName81 = ExcelConversion.Entities\\ExcelConversion.Entities.csproj
+		SccProjectTopLevelParentUniqueName81 = Vanrise.sln
+		SccProjectName81 = ExcelConversion.Entities
+		SccLocalPath81 = ExcelConversion.Entities
+		SccProjectUniqueName82 = ExcelConversion.MainExtensions\\ExcelConversion.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName82 = Vanrise.sln
+		SccProjectName82 = ExcelConversion.MainExtensions
+		SccLocalPath82 = ExcelConversion.MainExtensions
+		SccProjectUniqueName83 = ExcelConversion.Web\\ExcelConversion.Web.csproj
+		SccProjectTopLevelParentUniqueName83 = Vanrise.sln
+		SccProjectName83 = ExcelConversion.Web
+		SccLocalPath83 = ExcelConversion.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1175,6 +1201,38 @@ Global
 		{8D7E5EBC-9416-46A1-82B2-3A7DEE0E2621}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D7E5EBC-9416-46A1-82B2-3A7DEE0E2621}.Release|x64.ActiveCfg = Release|Any CPU
 		{8D7E5EBC-9416-46A1-82B2-3A7DEE0E2621}.Release|x86.ActiveCfg = Release|Any CPU
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E}.Release|x64.ActiveCfg = Release|Any CPU
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E}.Release|x86.ActiveCfg = Release|Any CPU
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}.Release|x64.ActiveCfg = Release|Any CPU
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D}.Release|x86.ActiveCfg = Release|Any CPU
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}.Release|x64.ActiveCfg = Release|Any CPU
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40}.Release|x86.ActiveCfg = Release|Any CPU
+		{B422F992-19DE-4626-840E-44B6AD7335F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B422F992-19DE-4626-840E-44B6AD7335F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B422F992-19DE-4626-840E-44B6AD7335F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B422F992-19DE-4626-840E-44B6AD7335F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B422F992-19DE-4626-840E-44B6AD7335F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B422F992-19DE-4626-840E-44B6AD7335F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B422F992-19DE-4626-840E-44B6AD7335F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{B422F992-19DE-4626-840E-44B6AD7335F5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1263,5 +1321,9 @@ Global
 		{F3D472DD-B0CB-4264-9154-CD3819680BA3} = {8DFB44A5-B08F-439A-856A-174E03432484}
 		{374E7EF0-2080-4B79-BCD9-B5563694197C} = {8DFB44A5-B08F-439A-856A-174E03432484}
 		{8D7E5EBC-9416-46A1-82B2-3A7DEE0E2621} = {8DFB44A5-B08F-439A-856A-174E03432484}
+		{C7945D16-A9AE-4440-B0D4-179D2CF3383E} = {FA04C431-2375-481B-B71F-1D2835D0E6B6}
+		{D7F09AAE-165D-49F3-ACF8-2ECC79E7D17D} = {FA04C431-2375-481B-B71F-1D2835D0E6B6}
+		{D6FA7189-8C58-4A28-AA66-AA8147B6AB40} = {FA04C431-2375-481B-B71F-1D2835D0E6B6}
+		{B422F992-19DE-4626-840E-44B6AD7335F5} = {FA04C431-2375-481B-B71F-1D2835D0E6B6}
 	EndGlobalSection
 EndGlobal
