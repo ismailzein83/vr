@@ -50,9 +50,6 @@
     <Reference Include="Aspose.Cells">
       <HintPath>..\..\..\Vanrise\Code\Vanrise.Common\bin\Debug\Aspose.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
@@ -137,43 +134,6 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Client">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Data">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Data.SQL">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Entities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Extensions">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.MainExtensions">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.MainExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Web">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.WFActivities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
@@ -204,34 +164,6 @@
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Business">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Data">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Data.SQL">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Normalization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Pricing">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Pricing.MainExtensions">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.MainExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Rules.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -285,34 +217,6 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CDRComparison.BP.Arguments\CDRComparison.BP.Arguments.csproj">
-      <Project>{688bd430-7ff4-434f-b812-5e78142d011f}</Project>
-      <Name>CDRComparison.BP.Arguments</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CDRComparison.Business\CDRComparison.Business.csproj">
-      <Project>{91b3930c-4d87-44c5-9de0-583b64d4476c}</Project>
-      <Name>CDRComparison.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CDRComparison.Data.SQL\CDRComparison.Data.SQL.csproj">
-      <Project>{24298543-e71d-42ee-b4bc-65ce3ce86eea}</Project>
-      <Name>CDRComparison.Data.SQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CDRComparison.Data\CDRComparison.Data.csproj">
-      <Project>{272efc65-74f5-4ea9-9bfa-83066f7d0fb2}</Project>
-      <Name>CDRComparison.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CDRComparison.Entities\CDRComparison.Entities.csproj">
-      <Project>{dea85456-05cd-4ded-984e-bcdffffd7d22}</Project>
-      <Name>CDRComparison.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CDRComparison.MainExtensions\CDRComparison.MainExtensions.csproj">
-      <Project>{999eab0a-f193-46e5-84ed-ca8d12de51b3}</Project>
-      <Name>CDRComparison.MainExtensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CDRComparison.Web\CDRComparison.Web.csproj">
-      <Project>{102b263c-31ef-4797-a789-8fcf425edbe8}</Project>
-      <Name>CDRComparison.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CP.SupplierPricelist.Business\CP.SupplierPricelist.Business.csproj">
       <Project>{07c7ef2d-23b5-4eb1-be56-bc5232ca7d72}</Project>
       <Name>CP.SupplierPricelist.Business</Name>
@@ -340,22 +244,6 @@
     <ProjectReference Include="..\CP.SupplierPricelist.Web\CP.SupplierPricelist.Web.csproj">
       <Project>{862acf40-050c-423f-bae1-66cdd06e5eb0}</Project>
       <Name>CP.SupplierPricelist.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExcelConversion.Business\ExcelConversion.Business.csproj">
-      <Project>{a7b263fa-4dbc-49d1-88f7-2f5aab06dbfb}</Project>
-      <Name>ExcelConversion.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExcelConversion.Entities\ExcelConversion.Entities.csproj">
-      <Project>{a5c3f943-2f4d-42c0-8bb9-c6e0a8e201de}</Project>
-      <Name>ExcelConversion.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExcelConversion.MainExtensions\ExcelConversion.MainExtensions.csproj">
-      <Project>{f22372b8-ca9c-41dd-99f7-7c5f3e97649f}</Project>
-      <Name>ExcelConversion.MainExtensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExcelConversion.Web\ExcelConversion.Web.csproj">
-      <Project>{3ecace14-5598-4464-a846-6399af6c9465}</Project>
-      <Name>ExcelConversion.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
