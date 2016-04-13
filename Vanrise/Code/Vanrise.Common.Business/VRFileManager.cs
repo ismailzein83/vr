@@ -59,6 +59,7 @@ namespace Vanrise.Common.Business
 
         public IDataRetrievalResult<VRFileInfo> GetFilteredRecentFiles(DataRetrievalInput<VRFileQuery> input)
         {
+            input.Query.UserId = SecurityContext.Current.GetLoggedInUserId();
             return DataRetrievalManager.Instance.ProcessResult(input, _datamanager.GetFilteredRecentFiles(input));
         }
 

@@ -88,7 +88,7 @@ namespace Vanrise.Common.Data.SQL
                 END"
             );
             tempTableQueryBuilder.Replace("#TEMPTABLENAME#", tempTableName);
-            tempTableQueryBuilder.Replace("#WHERECLAUSE#", (input.Query.ModuleName != null) ? String.Format("WHERE [ModuleName] = '{0}'", input.Query.ModuleName) : null);
+            tempTableQueryBuilder.Replace("#WHERECLAUSE#", (input.Query.ModuleName != null) ? String.Format("WHERE [ModuleName] = '{0}' AND UserID = {1}", input.Query.ModuleName, input.Query.UserId) : null);
             ExecuteNonQueryText(tempTableQueryBuilder.ToString(), null);
         }
 

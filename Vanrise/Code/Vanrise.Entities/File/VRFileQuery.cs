@@ -9,5 +9,6 @@ namespace Vanrise.Entities
     public class VRFileQuery
     {
         public string ModuleName { get; set; }
+        public int UserId { get; set; }
     }
 }
