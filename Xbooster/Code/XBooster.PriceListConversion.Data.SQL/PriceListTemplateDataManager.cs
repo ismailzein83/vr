@@ -56,7 +56,7 @@ namespace XBooster.PriceListConversion.Data.SQL
                 Name = reader["Name"] as string,
                 Type = reader["Type"] as string,
                 UserId = GetReaderValue<int>(reader, "UserId"),
-                ConfigDetails = Vanrise.Common.Serializer.Deserialize(reader["Setting"] as string)
+                ConfigDetails = Vanrise.Common.Serializer.Deserialize(reader["ConfigDetails"] as string)
             };
             return instance;
         }

@@ -60,6 +60,6 @@
         }
     }
 
-    app.directive('excelconversionConcatenatedpartConstant', concatenatedpartConstantDirective);
+    app.directive('vrExcelconversionConcatenatedpartConstant', concatenatedpartConstantDirective);
 
 })(app);

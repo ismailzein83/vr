@@ -8,6 +8,6 @@ namespace XBooster.PriceListConversion.Entities
 {
     public class PriceListTemplateQuery
     {
-        public string Type { get; set; }
+        public string Name { get; set; }
     }
 }

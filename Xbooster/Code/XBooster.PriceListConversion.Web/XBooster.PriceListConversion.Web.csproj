@@ -138,8 +138,11 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="web.config" />
-    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\Templates\PriceListTemplateGrid.html" />
-    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\xbooster-pricelistconversion-pricelisttemplate-grid.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\Templates\BasicOutputPriceListConfiguration.html" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\xbooster-pricelistconversion-outputpricelistconfiguration-basic.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\Templates\OutputPriceListTemplateGrid.html" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\xbooster-pricelistconversion-outputpricelisttemplate-grid.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\xbooster-pricelistconversion-outputpricelistconfiguration-selective.js" />
     <Content Include="XBooster_PriceListConversion\Services\APIServices\PriceListTemplateAPIService.js" />
     <Content Include="XBooster_PriceListConversion\Services\PriceListTemplateService.js" />
     <Content Include="XBooster_PriceListConversion\Views\PriceListTemplateEditor.html" />

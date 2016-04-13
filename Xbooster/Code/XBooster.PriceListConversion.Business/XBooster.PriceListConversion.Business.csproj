@@ -76,6 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Context\InputPriceListExecutionContext.cs" />
     <Compile Include="Context\OutputPriceListExecutionContext.cs" />
     <Compile Include="PriceListConversionManager.cs" />

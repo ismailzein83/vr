@@ -9,6 +9,7 @@ using XBooster.PriceListConversion.Data;
 using XBooster.PriceListConversion.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Common.Business;
 namespace XBooster.PriceListConversion.Business
 {
     public class PriceListTemplateManager
@@ -21,13 +22,14 @@ namespace XBooster.PriceListConversion.Business
 
         #region Public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<PriceListTemplateDetail> GetFilteredPriceListTemplates(Vanrise.Entities.DataRetrievalInput<PriceListTemplateQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<PriceListTemplateDetail> GetFilteredInputPriceListTemplates(Vanrise.Entities.DataRetrievalInput<PriceListTemplateQuery> input)
         {
             var priceListTemplates = GetCachedPriceListTemplates();
 
-            Func<PriceListTemplate, bool> filterExpression = (prod) =>
-                 (prod.Type == input.Query.Type
-                 && prod.UserId == _loggedInUserId);
+            Func<PriceListTemplate, bool> filterExpression = (itm) =>
+                 (itm.Type == Constants.OutputPriceListTemplate
+                 && itm.UserId == _loggedInUserId
+                 && (input.Query.Name == null || itm.Name == input.Query.Name));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, priceListTemplates.ToBigResult(input, filterExpression, PriceListTemplateDetailMapper));
         }
@@ -37,7 +39,7 @@ namespace XBooster.PriceListConversion.Business
             PriceListTemplate priceListTemplate = priceListTemplates.GetRecord(priceListTemplateId);
             return (priceListTemplate != null && priceListTemplate.UserId == _loggedInUserId) ? priceListTemplate : null;
         }
-        public Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail> AddPriceListTemplate(PriceListTemplate priceListTemplate)
+        public Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail> AddInputPriceListTemplate(PriceListTemplate priceListTemplate)
         {
             InsertOperationOutput<PriceListTemplateDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail>();
 
@@ -46,6 +48,8 @@ namespace XBooster.PriceListConversion.Business
             int priceListTemplateId = -1;
 
             IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
+            priceListTemplate.UserId = _loggedInUserId;
+            priceListTemplate.Type = Constants.OutputPriceListTemplate;
             bool insertActionSucc = dataManager.InsertPriceListTemplate(priceListTemplate, out priceListTemplateId);
 
             if (insertActionSucc)
@@ -62,9 +66,11 @@ namespace XBooster.PriceListConversion.Business
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail> UpdatePriceListTemplate(PriceListTemplate priceListTemplate)
+        public Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail> UpdateInputPriceListTemplate(PriceListTemplate priceListTemplate)
         {
             IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
+            priceListTemplate.UserId = _loggedInUserId;
+            priceListTemplate.Type = Constants.OutputPriceListTemplate;
             bool updateActionSucc = dataManager.UpdatePriceListTemplate(priceListTemplate);
             UpdateOperationOutput<PriceListTemplateDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail>();
 
@@ -85,7 +91,11 @@ namespace XBooster.PriceListConversion.Business
             return updateOperationOutput;
         }
 
-
+        public IEnumerable<TemplateConfig> GetOutputPriceListConfigurationTemplateConfigs()
+        {
+            var templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.OutputPriceListConfigurationTemplateConfigs);
+        }
         #endregion
 
         #region Private Classes

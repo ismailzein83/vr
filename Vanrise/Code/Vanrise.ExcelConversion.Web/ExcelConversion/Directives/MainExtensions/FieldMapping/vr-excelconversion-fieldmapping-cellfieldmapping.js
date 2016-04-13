@@ -61,8 +61,17 @@
                 var api = {};
 
                 api.load = function (payload) {
+                  
                     if (payload != undefined) {
                         context = payload.context;
+                        if(payload.cellFieldData !=undefined)
+                        {
+                            $scope.cellObject = {
+                                row: payload.cellFieldData.rowIndex,
+                                col: payload.cellFieldData.cellIndex,
+                                sheet: payload.cellFieldData.sheetIndex,
+                            }
+                        }
                     }
 
                 };

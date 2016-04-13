@@ -14,20 +14,19 @@
         function defineScope() {
             $scope.onGridReady = function (api) {
                 priceListTemplateGridAPI = api;
-                priceListTemplateGridAPI.loadGrid({});
+                priceListTemplateGridAPI.loadGrid({ });
             };
 
             $scope.search = function () {
-                return priceListTemplateGridAPI.loadGrid(getFilterObject);
+                return priceListTemplateGridAPI.loadGrid(getFilterObject());
             };
             //$scope.hasAddDataStore = function () {
             //    return VR_GenericData_DataStoreAPIService.HasAddDataStore();
             //}
             $scope.addPriceListTemplate = function () {
-                var onPriceListTemplateAdded = function (dataStoreObj) {
-                    //DatStoreGridAPI.onDataStoreAdded(dataStoreObj);
+                var onPriceListTemplateAdded = function (priceListTemplateObj) {
+                    priceListTemplateGridAPI.onPriceListTemplateAdded(priceListTemplateObj);
                 };
-
                 XBooster_PriceListConversion_PriceListTemplateService.addPriceListTemplate(onPriceListTemplateAdded);
             };
         }
@@ -38,7 +37,7 @@
 
         function getFilterObject() {
           var  filter = {
-                Name: $scope.name,
+              Name: $scope.name,
           };
           return filter;
         }

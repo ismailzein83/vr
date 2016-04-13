@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("xboosterPricelistconversionPricelisttemplateGrid", ["UtilsService", "VRNotificationService", "XBooster_PriceListConversion_PriceListTemplateAPIService", "XBooster_PriceListConversion_PriceListTemplateService",
+app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsService", "VRNotificationService", "XBooster_PriceListConversion_PriceListTemplateAPIService", "XBooster_PriceListConversion_PriceListTemplateService",
     function (UtilsService, VRNotificationService, XBooster_PriceListConversion_PriceListTemplateAPIService, XBooster_PriceListConversion_PriceListTemplateService) {
 
         var directiveDefinitionObject = {
@@ -21,7 +21,7 @@ app.directive("xboosterPricelistconversionPricelisttemplateGrid", ["UtilsService
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/XBooster_PriceListConversion/Directives/PriceListTemplate/Templates/PriceListTemplateGrid.html"
+            templateUrl: "/Client/Modules/XBooster_PriceListConversion/Directives/PriceListTemplate/Templates/OutputPriceListTemplateGrid.html"
 
         };
 
@@ -51,7 +51,7 @@ app.directive("xboosterPricelistconversionPricelisttemplateGrid", ["UtilsService
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return XBooster_PriceListConversion_PriceListTemplateAPIService.GetFilteredPriceListTemplates(dataRetrievalInput)
+                    return XBooster_PriceListConversion_PriceListTemplateAPIService.GetFilteredInputPriceListTemplates(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
                             }
