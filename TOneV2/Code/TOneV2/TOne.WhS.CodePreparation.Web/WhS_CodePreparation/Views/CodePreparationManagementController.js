@@ -262,7 +262,7 @@
 
                 $scope.currentNode.nodeName = renamedZone.NewZoneName;
                 $scope.currentNode.renamedZone = renamedZone.OldZoneName;
-
+                treeAPI.refreshTree($scope.nodes);
                 setCodesFilterObject();
 
                 return codesGridAPI.loadGrid(codesFilter);
