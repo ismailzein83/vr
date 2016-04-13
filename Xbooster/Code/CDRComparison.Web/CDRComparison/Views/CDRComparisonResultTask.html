@@ -14,28 +14,28 @@
                             <vr-label>Partner Missing CDRs: {{scopeModal.partnerMissingCDRsCount}}</vr-label><br>
                         </vr-columns>
                         <vr-columns width="1/2row" dontload="true">
-                            <vr-label>Partial Match CDRs: {{scopeModal.partialMatchCDRsCount}}</vr-label><br>
+                            <vr-label>Partially Matching CDRs: {{scopeModal.partialMatchCDRsCount}}</vr-label><br>
                         </vr-columns>
                         <vr-columns width="1/2row" dontload="true">
-                            <vr-label>Match CDRs: {{scopeModal.disputeCDRsCount}}</vr-label>
+                            <vr-label>Matching CDRs: {{scopeModal.disputeCDRsCount}}</vr-label>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'System Missing CDRs'" dontload="true">
+                <vr-tab header="'CDRs Missing From System'" dontload="true">
                     <vr-row>
                         <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingSystemMissingCDRDirective">
                             <cdrcomparison-missingcdr-grid on-ready="scopeModal.onSystemMissingCDRDirectiveReady" ></cdrcomparison-missingcdr-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Partner Missing CDRs'"  dontload="true">
+                <vr-tab header="'CDRs Missing From Partner'"  dontload="true">
                     <vr-row>
                         <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingPartnerMissingCDRDirective">
                             <cdrcomparison-missingcdr-grid on-ready="scopeModal.onPartnerMissingCDRDirectiveReady"></cdrcomparison-missingcdr-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Partial Match CDRs'"  dontload="true">
+                <vr-tab header="'Partially Matching CDRs'"  dontload="true">
                     <vr-row>
                         <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingPartialMatchCDRDirective">
                             <cdrcomparison-partialmatchcdr-grid on-ready="scopeModal.onPartialMatchCDRDirectiveReady"></cdrcomparison-partialmatchcdr-grid>
@@ -43,7 +43,7 @@
                     </vr-row>
                 </vr-tab>
 
-                <vr-tab header="'Match CDRs'"  dontload="true">
+                <vr-tab header="'Matching CDRs'"  dontload="true">
                     <vr-row>
                         <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingDisputeCDRDirective">
                             <cdrcomparison-disputecdr-grid on-ready="scopeModal.onDisputeCDRGridReady"></cdrcomparison-disputecdr-grid>
