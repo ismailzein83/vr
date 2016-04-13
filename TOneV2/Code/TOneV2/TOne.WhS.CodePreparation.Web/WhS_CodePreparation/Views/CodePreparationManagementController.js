@@ -70,27 +70,26 @@
                         checkState();
                         codesGridAPI.clearUpdatedItems();
                         setCodesFilterObject();
-                        $scope.showAddNewCode = $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value ? true : false;
+                        $scope.showAddNewCode = $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value;
                         $scope.showGrid = true;
                         $scope.showAddNewZone = false;
-                        
-                        if ($scope.currentNode.status != null)
-                            $scope.showAddNewCode = $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value ? true : false;
-                        else if($scope.hasState)
-                            $scope.showAddNewCode = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value ? true : false;
-                         
-                        if ($scope.currentNode.status != null)
-                            $scope.showEnd = false;
-                        else if ($scope.hasState)
-                            $scope.showEnd = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.New.value ? true : false;
-                        else
-                            $scope.showEnd = true;
+                        $scope.showRenameZone = true;
+                        $scope.showEnd = true;
 
-                       
-                        $scope.showRenameZone = $scope.currentNode.status != null ? false : $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value ? true : false;
-                        // codesGridAPI.clearUpdatedItems();
+                        if ($scope.currentNode.status != null) {
+                            $scope.showAddNewCode = $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value;
+                            $scope.showEnd = false;
+                            $scope.showRenameZone = false;
+                        }
+                        else if ($scope.hasState) {
+                            $scope.showAddNewCode = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
+                            $scope.showEnd = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.New.value;
+                            $scope.showRenameZone = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
+                        }
+
                         return codesGridAPI.loadGrid(codesFilter);
                     }
+
                     clear(false);
                     $scope.showAddNewZone = true;
                 }
@@ -122,7 +121,6 @@
                     $scope.isLoadingCountries = true;
                     UtilsService.waitMultipleAsyncOperations([getCountries, checkState]).then(function () {
                         buildCountriesTree();
-                        //$scope.currentNode = undefined;
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
@@ -163,9 +161,6 @@
                         countries.length = 0;
                         return WhS_CodePrep_CodePrepAPIService.CancelCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
                             $scope.hasState = !response;
-                            //treeAPI.refreshTree($scope.nodes);
-                            //$scope.currentNode = undefined;
-
                             $scope.onSellingNumberPlanSelectorChanged();
                         });
                     }
@@ -174,328 +169,331 @@
             }
 
             $scope.renameZoneClicked = function () {
-                renameZone();
+                var parameters = {
+                    ZoneId: $scope.currentNode.nodeId,
+                    ZoneName: $scope.currentNode.nodeName,
+                    SellingNumberPlanId: filter.sellingNumberPlanId,
+                    CountryId: $scope.currentNode.countryId
+                };
+                var settings = {};
+                settings.onScopeReady = function (modalScope) {
+                    modalScope.onZoneRenamed = onZoneRenamed;
+                };
+
+                VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/RenameZoneDialog.html", parameters, settings);
+
             }
+
         }
 
-        function loadParameters() {
-        }
 
-        function load() {
-            $scope.isLoadingFilter = true;
+            function loadParameters() {
+            }
 
-            UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.isLoadingFilter = false;
-            });
-        }
+            function load() {
+                $scope.isLoadingFilter = true;
 
-        function clear(action) {
-            $scope.showGrid = action;
-            $scope.showAddNewCode = action;
-            $scope.showAddNewZone = action;
-            $scope.showRenameZone = action;
-            $scope.showEnd = action;
-        }
+                UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlans]).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isLoadingFilter = false;
+                });
+            }
 
-        function loadSellingNumberPlans() {
-            var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
-            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
+            function clear(action) {
+                $scope.showGrid = action;
+                $scope.showAddNewCode = action;
+                $scope.showAddNewZone = action;
+                $scope.showRenameZone = action;
+                $scope.showEnd = action;
+            }
 
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSNPPromiseDeferred);
-            });
+            function loadSellingNumberPlans() {
+                var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
+                sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
 
-            return loadSNPPromiseDeferred.promise;
-        }
+                    VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSNPPromiseDeferred);
+                });
 
-        function onZoneAdded(addedZones) {
-            if (addedZones != undefined) {
-                $scope.hasState = true;
-                for (var i = 0; i < addedZones.length; i++) {
-                    var node = mapZoneToNode(addedZones[i]);
-                    treeAPI.createNode(node);
+                return loadSNPPromiseDeferred.promise;
+            }
+
+            function onZoneAdded(addedZones) {
+                if (addedZones != undefined) {
+                    $scope.hasState = true;
                     var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.nodeId, 'nodeId');
                     var countryNode = $scope.nodes[countryIndex];
-                    countryNode.effectiveZones.push(node);
+                    for (var i = 0; i < addedZones.length; i++) {
+                        var node = mapZoneToNode(addedZones[i]);
+                        node.isOpened = true;
+                        treeAPI.createNode(node);
+                        countryNode.effectiveZones.push(node);
+                        treeAPI.refreshTree($scope.nodes);
+                    }
+
                 }
             }
-        }
 
-        function onZoneClosed(closedZone) {
-            $scope.hasState = true;
-
-            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
-            var countryNode = $scope.nodes[countryIndex];
-
-            var zoneIndex = UtilsService.getItemIndexByVal(countryNode.effectiveZones, $scope.currentNode.nodeName, 'nodeName');
-            var zoneNode = countryNode.effectiveZones[zoneIndex];
-
-            zoneNode.DraftStatus = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
-
-            var node = mapClosedZoneToNode(closedZone);
-            treeAPI.createNode(node);
-
-            setCodesFilterObject();
-            return codesGridAPI.loadGrid(codesFilter);
-        }
-
-        function onZoneRenamed(renamedZone) {
-            $scope.hasState = true;
-
-            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
-            var countryNode = $scope.nodes[countryIndex];
-
-            var zoneIndex = UtilsService.getItemIndexByVal(countryNode.effectiveZones, $scope.currentNode.nodeName, 'nodeName');
-            var zoneNode = countryNode.effectiveZones[zoneIndex];
-
-            zoneNode.nodeName = renamedZone.NewZoneName;
-            zoneNode.renamedZone = renamedZone.OldZoneName;
-
-            var node = mapRenamedZoneToNode(renamedZone);
-            treeAPI.createNode(node);
-
-            $scope.currentNode.nodeName = renamedZone.NewZoneName;
-            $scope.currentNode.renamedZone = renamedZone.OldZoneName;
-
-            setCodesFilterObject();
-
-            return codesGridAPI.loadGrid(codesFilter);
-        }
-
-
-        function onCodeAdded(addedCodes) {
-            if (addedCodes != undefined) {
-                $scope.showGrid = true;
+            function onZoneClosed(closedZone) {
                 $scope.hasState = true;
-                for (var i = 0; i < addedCodes.length; i++)
-                    codesGridAPI.onCodeAdded(addedCodes[i]);
+                $scope.showRenameZone = false;
 
-                if ($scope.currentNode != undefined) {
-                    if ($scope.currentNode.type == 'Zone') {
-                        setCodesFilterObject();
-                        return codesGridAPI.loadGrid(codesFilter);
+                var zoneNode = getCurrentZoneNode();
+
+                zoneNode.DraftStatus = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
+
+                var node = mapClosedZoneToNode(closedZone);
+                treeAPI.createNode(node);
+
+                setCodesFilterObject();
+                return codesGridAPI.loadGrid(codesFilter);
+            }
+
+            function onZoneRenamed(renamedZone) {
+                $scope.hasState = true;
+                
+                var zoneNode = getCurrentZoneNode();
+
+                zoneNode.nodeName = renamedZone.NewZoneName;
+                zoneNode.renamedZone = renamedZone.OldZoneName;
+
+                var node = mapRenamedZoneToNode(renamedZone);
+                treeAPI.createNode(node);
+
+                $scope.currentNode.nodeName = renamedZone.NewZoneName;
+                $scope.currentNode.renamedZone = renamedZone.OldZoneName;
+
+                setCodesFilterObject();
+
+                return codesGridAPI.loadGrid(codesFilter);
+            }
+
+
+            function onCodeAdded(addedCodes) {
+                if (addedCodes != undefined) {
+                    $scope.showGrid = true;
+                    $scope.hasState = true;
+                    for (var i = 0; i < addedCodes.length; i++)
+                        codesGridAPI.onCodeAdded(addedCodes[i]);
+
+                    if ($scope.currentNode != undefined) {
+                        if ($scope.currentNode.type == 'Zone') {
+                            setCodesFilterObject();
+                            return codesGridAPI.loadGrid(codesFilter);
+                        }
+                    }
+                }
+
+            }
+
+            function onCodesMoved(movedCodes) {
+
+                if (movedCodes != undefined) {
+                    $scope.selectedCodes.length = 0;
+                    $scope.showGrid = true;
+                    $scope.hasState = true;
+                    for (var i = 0; i < movedCodes.length; i++)
+                        codesGridAPI.onCodeClosed(movedCodes[i]);
+
+                    if ($scope.currentNode != undefined) {
+                        if ($scope.currentNode.type == 'Zone') {
+                            setCodesFilterObject();
+                            return codesGridAPI.loadGrid(codesFilter);
+                        }
+                    }
+                }
+
+            }
+
+            function onCodesClosed(closedCodes) {
+                if (closedCodes != undefined) {
+                    $scope.selectedCodes.length = 0;
+                    $scope.showGrid = true;
+                    $scope.hasState = true;
+                    for (var i = 0; i < closedCodes.length; i++)
+                        codesGridAPI.onCodeClosed(closedCodes[i]);
+
+                    if ($scope.currentNode != undefined) {
+                        if ($scope.currentNode.type == 'Zone') {
+                            setCodesFilterObject();
+                            return codesGridAPI.loadGrid(codesFilter);
+                        }
                     }
                 }
             }
 
-        }
+            function addNewZone() {
+                var parameters = {
+                    CountryId: $scope.currentNode.nodeId,
+                    CountryName: $scope.currentNode.nodeName,
+                    SellingNumberPlanId: filter.sellingNumberPlanId
+                };
+                var settings = {};
+                settings.onScopeReady = function (modalScope) {
+                    modalScope.onZoneAdded = onZoneAdded;
+                };
 
-        function onCodesMoved(movedCodes) {
-
-            if (movedCodes != undefined) {
-                $scope.selectedCodes.length = 0;
-                $scope.showGrid = true;
-                $scope.hasState = true;
-                for (var i = 0; i < movedCodes.length; i++)
-                    codesGridAPI.onCodeAdded(movedCodes[i]);
-
-                if ($scope.currentNode != undefined) {
-                    if ($scope.currentNode.type == 'Zone') {
-                        setCodesFilterObject();
-                        return codesGridAPI.loadGrid(codesFilter);
-                    }
-                }
+                VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewZoneDialog.html", parameters, settings);
             }
 
-        }
+            function addNewCode() {
 
-        function onCodesClosed(closedCodes) {
-            if (closedCodes != undefined) {
-                $scope.selectedCodes.length = 0;
-                $scope.showGrid = true;
-                $scope.hasState = true;
-                for (var i = 0; i < closedCodes.length; i++)
-                    codesGridAPI.onCodeAdded(closedCodes[i]);
+                var parameters = {
+                    ZoneId: $scope.currentNode.nodeId,
+                    ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                    SellingNumberPlanId: filter.sellingNumberPlanId,
+                    CountryId: $scope.currentNode.countryId,
+                    ZoneStatus: $scope.currentNode.status
+                };
+                var settings = {};
+                settings.onScopeReady = function (modalScope) {
+                    modalScope.onCodeAdded = onCodeAdded;
+                };
 
-                if ($scope.currentNode != undefined) {
-                    if ($scope.currentNode.type == 'Zone') {
-                        setCodesFilterObject();
-                        return codesGridAPI.loadGrid(codesFilter);
-                    }
-                }
+                VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewCodeDialog.html", parameters, settings);
             }
-        }
 
-        function addNewZone() {
-            var parameters = {
-                CountryId: $scope.currentNode.nodeId,
-                CountryName: $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onZoneAdded = onZoneAdded;
-            };
+            function moveCodes() {
 
-            VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewZoneDialog.html", parameters, settings);
-        }
+                var codes = codesGridAPI.getSelectedCodes();
+                var parameters = {
+                    ZoneId: $scope.currentNode.nodeId,
+                    ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                    currentZoneName: $scope.currentNode.nodeName,
+                    SellingNumberPlanId: filter.sellingNumberPlanId,
+                    CountryId: $scope.currentNode.countryId,
+                    ZoneDataSource: GetCurrentCountryNodeZones(),
+                    Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
+                };
+                var settings = {};
+                settings.onScopeReady = function (modalScope) {
+                    modalScope.onCodesMoved = onCodesMoved;
+                };
 
-        function addNewCode() {
+                VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/MoveCodeDialog.html", parameters, settings);
+            }
 
-            var parameters = {
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone: $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                CountryId: $scope.currentNode.countryId,
-                ZoneStatus: $scope.currentNode.status
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onCodeAdded = onCodeAdded;
-            };
+            function closeCodes() {
 
-            VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/NewCodeDialog.html", parameters, settings);
-        }
+                var codes = codesGridAPI.getSelectedCodes();
+                var parameters = {
+                    ZoneId: $scope.currentNode.nodeId,
+                    ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                    SellingNumberPlanId: filter.sellingNumberPlanId,
+                    Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
+                };
+                var settings = {};
+                settings.onScopeReady = function (modalScope) {
+                    modalScope.onCodesClosed = onCodesClosed;
+                };
 
-        function moveCodes() {
-
-            var codes = codesGridAPI.getSelectedCodes();
-            var parameters = {
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
-                currentZoneName : $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                CountryId: $scope.currentNode.countryId,
-                ZoneDataSource: GetCurrentCountryNodeZones(),
-                Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onCodesMoved = onCodesMoved;
-            };
-
-            VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/MoveCodeDialog.html", parameters, settings);
-        }
-
-        function closeCodes() {
-
-            var codes = codesGridAPI.getSelectedCodes();
-            var parameters = {
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onCodesClosed = onCodesClosed;
-            };
-
-            VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/CloseCodeDialog.html", parameters, settings);
-        }
-
-        function renameZone() {
-
-            var parameters = {
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.nodeName,
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                CountryId: $scope.currentNode.countryId
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onZoneRenamed = onZoneRenamed;
-            };
-
-            VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/RenameZoneDialog.html", parameters, settings);
-        }
+                VRModalService.showModal("/Client/Modules/WhS_CodePreparation/Views/Dialogs/CloseCodeDialog.html", parameters, settings);
+            }
 
 
-        function closeZone() {
-            return VRNotificationService.showConfirmation("Are you sure you want to close " + $scope.currentNode.nodeName + " zone").then(function (result) {
-                if (result) {
-                    var zoneInput = {
-                        SellingNumberPlanId: filter.sellingNumberPlanId,
-                        CountryId: $scope.currentNode.countryId,
-                        ZoneId: $scope.currentNode.nodeId != null ? $scope.currentNode.nodeId : null,
-                        ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
-                    };
-                    return WhS_CodePrep_CodePrepAPIService.CloseZone(zoneInput)
-                     .then(function (response) {
-                         if (response.Result == WhS_CP_NewCPOutputResultEnum.Existing.value) {
-                             VRNotificationService.showWarning(response.Message);
-                         }
-                         else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
-                             onZoneClosed(response.ClosedZone);
-                             VRNotificationService.showSuccess(response.Message);
-                         }
-                         else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
-                             VRNotificationService.showError(response.Message);
-                         }
-                     }).catch(function (error) {
-                         VRNotificationService.notifyException(error, $scope);
-                     //});
-                    }).finally(function () {
+            function closeZone() {
+                return VRNotificationService.showConfirmation("Are you sure you want to close " + $scope.currentNode.nodeName + " zone").then(function (result) {
+                    if (result) {
+                        var zoneInput = {
+                            SellingNumberPlanId: filter.sellingNumberPlanId,
+                            CountryId: $scope.currentNode.countryId,
+                            ZoneId: $scope.currentNode.nodeId,
+                            ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                        };
+                        return WhS_CodePrep_CodePrepAPIService.CloseZone(zoneInput)
+                         .then(function (response) {
+                             if (response.Result == WhS_CP_NewCPOutputResultEnum.Existing.value) {
+                                 VRNotificationService.showWarning(response.Message);
+                             }
+                             else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
+                                 onZoneClosed(response.ClosedZone);
+                                 VRNotificationService.showSuccess(response.Message);
+                             }
+                             else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
+                                 VRNotificationService.showError(response.Message);
+                             }
+                         }).catch(function (error) {
+                             VRNotificationService.notifyException(error, $scope);
+                             //});
+                         }).finally(function () {
 
-                    });
+                         });
 
-                }
-            });
-        }
-
-        function GetCurrentCountryNodeZones() {
-            var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
-            var countryNode = $scope.nodes[countryIndex];
-            return countryNode.effectiveZones;
-        }
-
-        function getZoneInfos(zoneNodes) {
-            var zoneInfos = [];
-            angular.forEach(zoneNodes, function (itm) {
-                zoneInfos.push(mapZoneInfoFromNode(itm));
-            });
-
-            return zoneInfos;
-        }
-
-        function mapZoneInfoFromNode(zoneItem) {
-            return {
-                // SaleZoneId: zoneItem.nodeId,
-                Name: zoneItem.nodeName
-            };
-        }
-
-        function getCountries() {
-            countries.length = 0;
-            return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
-                angular.forEach(response, function (itm) {
-                    countries.push(itm);
+                    }
                 });
-            });
-        }
-
-        function checkState() {
-            countries.length = 0;
-            return WhS_CodePrep_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
-                $scope.hasState = response;
-            });
-        }
-
-        function buildCountriesTree() {
-            $scope.nodes.length = 0;
-
-            for (var i = 0; i < countries.length; i++) {
-                var node = mapCountryToNode(countries[i]);
-                $scope.nodes.push(node);
             }
-            treeAPI.refreshTree($scope.nodes);
 
-        }
+            function getCurrentZoneNode() {
+                var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
+                var countryNode = $scope.nodes[countryIndex];
 
-        function mapCountryToNode(country) {
-            return {
-                nodeId: country.CountryId,
-                nodeName: country.Name,
-                effectiveZones: [],
-                hasRemoteChildren: true,
-                type: 'Country'
-            };
-        }
+                var zoneIndex = UtilsService.getItemIndexByVal(countryNode.effectiveZones, $scope.currentNode.nodeName, 'nodeName');
 
-        function mapZoneToNode(zoneInfo) {
-            var icon = null;
-            if ($scope.hasState) {
+                return countryNode.effectiveZones[zoneIndex];
+            }
+
+            function GetCurrentCountryNodeZones() {
+                var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
+                var countryNode = $scope.nodes[countryIndex];
+                return countryNode.effectiveZones;
+            }
+
+            function getZoneInfos(zoneNodes) {
+                var zoneInfos = [];
+                angular.forEach(zoneNodes, function (itm) {
+                    zoneInfos.push(mapZoneInfoFromNode(itm));
+                });
+
+                return zoneInfos;
+            }
+
+            function mapZoneInfoFromNode(zoneItem) {
+                return {
+                    // SaleZoneId: zoneItem.nodeId,
+                    Name: zoneItem.nodeName
+                };
+            }
+
+            function getCountries() {
+                countries.length = 0;
+                return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
+                    angular.forEach(response, function (itm) {
+                        countries.push(itm);
+                    });
+                });
+            }
+
+            function checkState() {
+                countries.length = 0;
+                return WhS_CodePrep_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
+                    $scope.hasState = response;
+                });
+            }
+
+            function buildCountriesTree() {
+                $scope.nodes.length = 0;
+
+                for (var i = 0; i < countries.length; i++) {
+                    var node = mapCountryToNode(countries[i]);
+                    $scope.nodes.push(node);
+                }
+                treeAPI.refreshTree($scope.nodes);
+
+            }
+
+            function mapCountryToNode(country) {
+                return {
+                    nodeId: country.CountryId,
+                    nodeName: country.Name,
+                    effectiveZones: [],
+                    hasRemoteChildren: true,
+                    type: 'Country'
+                };
+            }
+
+            function mapZoneToNode(zoneInfo) {
+                var icon = null;
+                if ($scope.hasState) {
                     switch (zoneInfo.DraftStatus) {
                         case WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value:
                             icon = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon;
@@ -506,97 +504,93 @@
                         case WhS_CP_ZoneItemDraftStatusEnum.Renamed.value:
                             icon = WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon;
                             break;
-
                     }
-            }
-
-            if (zoneInfo.Status != null) {
-                switch (zoneInfo.Status) {
-                    case WhS_CP_ZoneItemStatusEnum.PendingClosed.value:
-                        icon = WhS_CP_ZoneItemStatusEnum.PendingClosed.icon;
-                        break;
-                    case WhS_CP_ZoneItemStatusEnum.PendingEffective.value:
-                        icon = WhS_CP_ZoneItemStatusEnum.PendingEffective.icon;
-                        break;
                 }
+
+                if (zoneInfo.Status != null) {
+                    switch (zoneInfo.Status) {
+                        case WhS_CP_ZoneItemStatusEnum.PendingClosed.value:
+                            icon = WhS_CP_ZoneItemStatusEnum.PendingClosed.icon;
+                            break;
+                        case WhS_CP_ZoneItemStatusEnum.PendingEffective.value:
+                            icon = WhS_CP_ZoneItemStatusEnum.PendingEffective.icon;
+                            break;
+                    }
+                }
+
+                return {
+                    nodeId: zoneInfo.ZoneId,
+                    nodeName: zoneInfo.Name,
+                    renamedZone: zoneInfo.RenamedZone,
+                    hasRemoteChildren: false,
+                    effectiveZones: [],
+                    type: 'Zone',
+                    status: zoneInfo.Status,
+                    DraftStatus: zoneInfo.DraftStatus,
+                    countryId: zoneInfo.CountryId,
+                    icon: icon
+                };
             }
 
 
 
+            function mapRenamedZoneToNode(renamedZone) {
 
-            return {
-                nodeId: zoneInfo.ZoneId,
-                nodeName: zoneInfo.Name,
-                renamedZone: zoneInfo.RenamedZone,
-                hasRemoteChildren: false,
-                effectiveZones: [],
-                type: 'Zone',
-                status: zoneInfo.Status,
-                DraftStatus: zoneInfo.DraftStatus,
-                countryId: zoneInfo.CountryId,
-                icon: icon
-            };
-        }
-
-
-
-        function mapRenamedZoneToNode(renamedZone) {
-
-            return {
-                nodeId: renamedZone.ZoneId != null ? renamedZone.ZoneId : "generatedId_" + incrementalNodeId++,
-                nodeName: renamedZone.NewZoneName,
-                renamedZone: renamedZone.OldZoneName,
-                hasRemoteChildren: false,
-                effectiveZones: [],
-                type: 'Zone',
-                DraftStatus: renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value,
-                countryId: renamedZone.CountryId,
-                icon: renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon
-            };
-        }
+                return {
+                    nodeId: renamedZone.ZoneId != null ? renamedZone.ZoneId : "generatedId_" + incrementalNodeId++,
+                    nodeName: renamedZone.NewZoneName,
+                    renamedZone: renamedZone.OldZoneName,
+                    hasRemoteChildren: false,
+                    effectiveZones: [],
+                    type: 'Zone',
+                    DraftStatus: renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value,
+                    countryId: renamedZone.CountryId,
+                    icon: renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon
+                };
+            }
 
 
-        function mapClosedZoneToNode(closedZone) {
-            return {
-                nodeId: closedZone.ZoneId,
-                nodeName: $scope.currentNode.nodeName,
-                hasRemoteChildren: false,
-                effectiveZones: [],
-                type: 'Zone',
-                DraftStatus: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value,
-                countryId: closedZone.CountryId,
-                icon: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon
-            };
+            function mapClosedZoneToNode(closedZone) {
+                return {
+                    nodeId: closedZone.ZoneId,
+                    nodeName: $scope.currentNode.nodeName,
+                    hasRemoteChildren: false,
+                    effectiveZones: [],
+                    type: 'Zone',
+                    DraftStatus: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value,
+                    countryId: closedZone.CountryId,
+                    icon: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon
+                };
 
-        }
+            }
 
-        //#endregion
+            //#endregion
 
-        //#region Filters
-        function setCodesFilterObject() {
-            codesFilter = {
-                SellingNumberPlanId: filter.sellingNumberPlanId,
-                ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
-                RenamedZone:  $scope.currentNode.renamedZone,
-                ZoneItemStatus: $scope.currentNode.status,
-                CountryId: $scope.currentNode.countryId,
-                ShowDraftStatus: $scope.hasState,
-                ShowSelectCode: $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value ? true : false
-            };
-        }
+            //#region Filters
+            function setCodesFilterObject() {
+                codesFilter = {
+                    SellingNumberPlanId: filter.sellingNumberPlanId,
+                    ZoneId: $scope.currentNode.nodeId,
+                    ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                    RenamedZone: $scope.currentNode.renamedZone,
+                    ZoneItemStatus: $scope.currentNode.status,
+                    CountryId: $scope.currentNode.countryId,
+                    ShowDraftStatus: $scope.hasState,
+                    ShowSelectCode: $scope.currentNode.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value ? true : false
+                };
+            }
 
-        function getFilter() {
-            return {
-                sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
-            };
-        }
+            function getFilter() {
+                return {
+                    sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
+                };
+            }
 
 
-        //#endregion
+            //#endregion
 
-    };
+        };
 
-    appControllers.controller('WhS_CP_CodePreparationManagementController', CodePreparationManagementController);
+        appControllers.controller('WhS_CP_CodePreparationManagementController', CodePreparationManagementController);
 
-})(appControllers);
+    })(appControllers);

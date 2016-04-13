@@ -74,6 +74,8 @@
     <Compile Include="BusinessRules\Conditions\MultipleCountryCondition.cs" />
     <Compile Include="ChangedSaleCodeManager.cs" />
     <Compile Include="ChangedSaleZoneManager.cs" />
+    <Compile Include="CPSaleCodeManager.cs" />
+    <Compile Include="CPSaleZoneManager.cs" />
     <Compile Include="CodePreparationManager.cs" />
     <Compile Include="NewSaleCodeManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />

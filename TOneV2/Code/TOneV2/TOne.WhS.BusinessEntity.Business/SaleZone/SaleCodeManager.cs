@@ -33,10 +33,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleCodesByZoneID(zoneID, effectiveDate);
         }
 
-        public List<SaleCode> GetSaleCodesAllByZoneID(long zoneID, DateTime effectiveDate)
+        public List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetSaleCodesAllByZoneID(zoneID, effectiveDate);
+            return dataManager.GetSaleCodesEffectiveByZoneID(zoneID, effectiveDate);
         }
 
         public long ReserveIDRange(int numberOfIDs)

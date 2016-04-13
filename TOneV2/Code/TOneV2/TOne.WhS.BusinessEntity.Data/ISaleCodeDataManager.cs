@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Data
         Vanrise.Entities.BigResult<Entities.SaleCode> GetSaleCodeFilteredFromTemp(Vanrise.Entities.DataRetrievalInput<Entities.SaleCodeQuery> input);
         List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate);
 
-        List<SaleCode> GetSaleCodesAllByZoneID(long zoneID, DateTime effectiveDate);
+        List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate);
 
         List<SaleCode> GetSellingNumberPlanSaleCodes(int sellingNumberPlanId, DateTime effectiveOn);
 

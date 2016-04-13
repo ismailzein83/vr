@@ -14,6 +14,5 @@ namespace TOne.WhS.CodePreparation.Entities
         public string OldZoneName { get; set; }
         public int CountryId { get; set; }
 
-        public bool IsExcluded { get; set; }
     }
 }

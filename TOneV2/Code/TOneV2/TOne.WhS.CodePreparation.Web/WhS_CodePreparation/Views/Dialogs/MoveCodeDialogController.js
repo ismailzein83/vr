@@ -17,6 +17,7 @@
         loadParameters();
         defineScope();
         load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -27,21 +28,14 @@
                 currentZoneName = parameters.currentZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
                 zoneItems = parameters.ZoneDataSource;
-               // var saleZones = UtilsService.getPropValuesFromArray(parameters.ZoneDataSource, "nodeName");
-                $scope.saleZones = [];
-                for (var i = 0; i < zoneItems.length ; i++) {
-                    if (zoneItems[i].DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value)
-                        $scope.saleZones.push({ "Name": zoneItems[i].nodeName });
-                }
-                var index = UtilsService.getItemIndexByVal($scope.saleZones, currentZoneName, "Name");
-                if(index !=-1)
-                  $scope.saleZones.splice(index, 1);
+               
             }
-
-            
         }
+
         function defineScope() {
             $scope.selectedZone;
+            $scope.saleZones = [];
+
             $scope.saveMoveCodes = function () {
                 return moveCodes();
             };
@@ -59,8 +53,24 @@
             $scope.title = "Move Code from " + currentZoneName;
         }
         function loadAllControls() {
+            loadSaleZoneSelector();
             $scope.isLoading = false;
             $scope.isGettingData = false;
+        }
+
+
+        function loadSaleZoneSelector() {
+
+            for (var i = 0; i < zoneItems.length ; i++) {
+                if (zoneItems[i].DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value)
+                    $scope.saleZones.push({ "Name": zoneItems[i].nodeName });
+            }
+
+            var index = UtilsService.getItemIndexByVal($scope.saleZones, currentZoneName, "Name");
+
+            if (index != -1)
+                $scope.saleZones.splice(index, 1);
+
         }
 
      

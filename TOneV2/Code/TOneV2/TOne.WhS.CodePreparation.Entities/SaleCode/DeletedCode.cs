@@ -12,6 +12,5 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public string ZoneName { get; set; }
 
-        public bool IsExcluded { get; set; }
     }
 }

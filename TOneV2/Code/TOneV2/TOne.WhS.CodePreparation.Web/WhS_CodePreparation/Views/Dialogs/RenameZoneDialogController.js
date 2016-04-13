@@ -73,7 +73,7 @@
             }
             else if (response.Result == WhS_CP_CPOutputResultEnum.Inserted.value) {
                 VRNotificationService.showSuccess(response.Message);
-                $scope.onZoneRenamed(response.Zones);
+                $scope.onZoneRenamed(response.Zone);
                 $scope.modalContext.closeModal();
             }
             else if (response.Result == WhS_CP_CPOutputResultEnum.Failed.value) {

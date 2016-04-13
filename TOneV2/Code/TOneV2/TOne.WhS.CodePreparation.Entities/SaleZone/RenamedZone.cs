@@ -8,7 +8,6 @@ namespace TOne.WhS.CodePreparation.Entities
 {
     public class RenamedZone
     {
-        public int SellingNumberPlanId { get; set; }
         public int CountryId { get; set; }
         public int? ZoneId { get; set; }
 

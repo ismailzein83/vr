@@ -50,6 +50,10 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                     directiveAPI.onCodeAdded = function (codeItemObject) {
                         gridAPI.itemAdded(codeItemObject);
                     }
+
+                    directiveAPI.onCodeClosed = function (codeItemObject) {
+                        gridAPI.itemDeleted(codeItemObject);
+                    }
                     directiveAPI.clearUpdatedItems = gridAPI.clearUpdatedItems;
                     directiveAPI.getSelectedCodes = function () {
                         var selectedCodes = [];
@@ -92,9 +96,12 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
+
+
             function mapDataNeeded(dataItem) {
                 dataItem.ShowDraftStatusIcon = true;
                 dataItem.ShowSelectCode = $scope.ShowSelectCode;
+                dataItem.ShowStatus = dataItem.Status != null;
 
                 switch (dataItem.DraftStatus) {
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingNotChanged.value:
@@ -116,10 +123,13 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                     case WhS_CP_CodeItemDraftStatusEnum.New.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/New.png";
                         dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.New.label;
+                        break;
+                    case WhS_CP_CodeItemDraftStatusEnum.ClosedZoneCode.value:
+                        dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/ClosedZone.png";
+                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.ClosedZoneCode.label;
+                    
                 }
 
-             
-                dataItem.ShowStatus = dataItem.Status != null ? true : false;
 
                 if (dataItem.Status == WhS_CP_CodeItemStatusEnum.PendingEffective.value) {
                     dataItem.StatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/PendingOpened.png";
