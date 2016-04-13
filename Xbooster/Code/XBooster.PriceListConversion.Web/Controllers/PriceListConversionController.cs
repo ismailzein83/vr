@@ -15,7 +15,7 @@ namespace XBooster.PriceListConversion.Web.Controllers
     public class PriceListConversionController : BaseAPIController
     {
         [HttpPost]
-        [Route("PriceListConvertAndDownload")]
+        [Route("ConvertAndDownloadPriceList")]
         public object ConvertAndDownloadPriceList(PriceListConversionInput priceListConversion)
         {
             PriceListConversionManager manager = new PriceListConversionManager();

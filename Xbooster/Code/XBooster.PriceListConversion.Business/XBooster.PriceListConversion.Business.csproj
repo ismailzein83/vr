@@ -44,6 +44,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
@@ -58,13 +66,27 @@
     <Reference Include="Vanrise.ExcelConversion.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OutputPriceListExecutionContext.cs" />
+    <Compile Include="Context\InputPriceListExecutionContext.cs" />
+    <Compile Include="Context\OutputPriceListExecutionContext.cs" />
     <Compile Include="PriceListConversionManager.cs" />
+    <Compile Include="PriceListTemplateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\XBooster.PriceListConversion.Data\XBooster.PriceListConversion.Data.csproj">
+      <Project>{1b43e436-59d6-4ee0-a8ff-d3fd5727a6c4}</Project>
+      <Name>XBooster.PriceListConversion.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XBooster.PriceListConversion.Entities\XBooster.PriceListConversion.Entities.csproj">
       <Project>{b74581c1-1afc-4e69-b6a4-2df61c1f6d9c}</Project>
       <Name>XBooster.PriceListConversion.Entities</Name>

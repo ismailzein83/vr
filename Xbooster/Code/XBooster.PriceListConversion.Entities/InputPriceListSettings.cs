@@ -7,9 +7,10 @@ using Vanrise.ExcelConversion.Entities;
 
 namespace XBooster.PriceListConversion.Entities
 {
-    public class InputPriceListSettings
+    public abstract class InputPriceListSettings
     {
-        public int FileId { get; set; }
-        public ExcelConversionSettings ExcelConversionSettings { get; set; }
+        public int ConfigId { get; set; }
+
+        public abstract ConvertedExcel Execute(IInputPriceListExecutionContext context);
     }
 }

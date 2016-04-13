@@ -51,7 +51,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "ExcelConversion.MainExtensions.ConcatenatedParts.ConstantConcatenatedPart, ExcelConversion.MainExtensions ",
+                        $type: "Vanrise.ExcelConversion.MainExtensions.ConcatenatedParts.ConstantConcatenatedPart, Vanrise.ExcelConversion.MainExtensions ",
                         Constant: ctrl.value
                     }
                     return data;

@@ -16,8 +16,8 @@ namespace XBooster.PriceListConversion.Business
     {
         public byte[] ConvertAndDownloadPriceList(Entities.PriceListConversionInput priceListConversion)
         {
-            ExcelConvertor excelConvertor = new ExcelConvertor();
-            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(priceListConversion.InputFileId, priceListConversion.InputPriceListSettings.ExcelConversionSettings);
+            InputPriceListExecutionContext inPutContext = new InputPriceListExecutionContext();
+            ConvertedExcel convertedExcel =  priceListConversion.InputPriceListSettings.Execute(inPutContext);
             PriceList priceListItem = ConvertToPriceListItem(convertedExcel);
             OutputPriceListExecutionContext context = new OutputPriceListExecutionContext();
             context.Records = priceListItem.Records;

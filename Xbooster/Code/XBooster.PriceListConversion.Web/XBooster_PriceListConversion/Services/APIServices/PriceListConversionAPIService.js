@@ -5,16 +5,16 @@
     function PriceListConversionAPIService(baseApiService, utilsService, SecurityService, moduleConfig) {
         var controllerName = 'PriceListConversion';
        
-        function PriceListConvertAndDownload(priceListConversion) {
-            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, controllerName, "PriceListConvertAndDownload"), priceListConversion, {
+        function ConvertAndDownloadPriceList(priceListConversion) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, controllerName, "ConvertAndDownloadPriceList"), priceListConversion, {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });
         }
         return ({
-            PriceListConvertAndDownload: PriceListConvertAndDownload
+            ConvertAndDownloadPriceList: ConvertAndDownloadPriceList
         });
     }
-    appControllers.service('ExcelConversion_PriceListConversionAPIService', PriceListConversionAPIService);
+    appControllers.service('XBooster_PriceListConversion_PriceListConversionAPIService', PriceListConversionAPIService);
 
 })(appControllers);

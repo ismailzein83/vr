@@ -358,9 +358,21 @@
       <Project>{980e9f76-e993-4df4-b36d-0bb73623c96b}</Project>
       <Name>XBooster.PriceListConversion.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XBooster.PriceListConversion.Data.SQL\XBooster.PriceListConversion.Data.SQL.csproj">
+      <Project>{f9fa35e9-e1c8-4bff-8254-29e300b735c2}</Project>
+      <Name>XBooster.PriceListConversion.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XBooster.PriceListConversion.Data\XBooster.PriceListConversion.Data.csproj">
+      <Project>{1b43e436-59d6-4ee0-a8ff-d3fd5727a6c4}</Project>
+      <Name>XBooster.PriceListConversion.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XBooster.PriceListConversion.Entities\XBooster.PriceListConversion.Entities.csproj">
       <Project>{b74581c1-1afc-4e69-b6a4-2df61c1f6d9c}</Project>
       <Name>XBooster.PriceListConversion.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XBooster.PriceListConversion.MainExtensions\XBooster.PriceListConversion.MainExtensions.csproj">
+      <Project>{a3a11123-52b6-44ba-b1f1-e0c9ddc15f1c}</Project>
+      <Name>XBooster.PriceListConversion.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\XBooster.PriceListConversion.Web\XBooster.PriceListConversion.Web.csproj">
       <Project>{7ba10b0e-f348-4ac7-8d80-baf20d059af6}</Project>

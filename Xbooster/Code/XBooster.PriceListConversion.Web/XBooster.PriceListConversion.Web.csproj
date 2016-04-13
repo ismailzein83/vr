@@ -109,6 +109,23 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Web.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -121,10 +138,19 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="web.config" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\Templates\PriceListTemplateGrid.html" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\xbooster-pricelistconversion-pricelisttemplate-grid.js" />
+    <Content Include="XBooster_PriceListConversion\Services\APIServices\PriceListTemplateAPIService.js" />
+    <Content Include="XBooster_PriceListConversion\Services\PriceListTemplateService.js" />
+    <Content Include="XBooster_PriceListConversion\Views\PriceListTemplateEditor.html" />
+    <Content Include="XBooster_PriceListConversion\Views\PriceListTemplateEditorController.js" />
+    <Content Include="XBooster_PriceListConversion\Views\PriceListTemplateManagement.html" />
+    <Content Include="XBooster_PriceListConversion\Views\PriceListTemplateManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\PriceListConversionController.cs" />
+    <Compile Include="Controllers\PriceListTemplateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +165,10 @@
     <ProjectReference Include="..\XBooster.PriceListConversion.Entities\XBooster.PriceListConversion.Entities.csproj">
       <Project>{b74581c1-1afc-4e69-b6a4-2df61c1f6d9c}</Project>
       <Name>XBooster.PriceListConversion.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XBooster.PriceListConversion.MainExtensions\XBooster.PriceListConversion.MainExtensions.csproj">
+      <Project>{a3a11123-52b6-44ba-b1f1-e0c9ddc15f1c}</Project>
+      <Name>XBooster.PriceListConversion.MainExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +185,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

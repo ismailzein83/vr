@@ -12,7 +12,7 @@ namespace Vanrise.ExcelConversion.Web
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Excel")]
     [JSONWithTypeAttribute]
-    public class ExcelController
+    public class ExcelController:BaseAPIController
     {
         [HttpGet]
         [Route("ReadExcelFile")]

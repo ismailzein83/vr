@@ -1,8 +1,8 @@
 ﻿(
     function (appControllers) {
         "use strict";
-        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','ExcelConversion_PriceListConversionAPIService'];
-        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, ExcelConversion_PriceListConversionAPIService) {
+        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'XBooster_PriceListConversion_PriceListConversionAPIService'];
+        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, XBooster_PriceListConversion_PriceListConversionAPIService) {
 
             var inputWorkBookApi;
             var outPutWorkBookAPI;
@@ -34,23 +34,6 @@
                     rateListMappingReadyPromiseDeferred.resolve();
                 }
 
-                $scope.scopeModel.convertAndDownload = function () {
-                    var listMappings = [];
-                    listMappings.push(codeListAPI.getData());
-                    listMappings.push(rateListAPI.getData());
-                    var obj = {
-                        ListMappings: listMappings,
-                        FieldMappings: null,
-                        DateTimeFormat: "yyyy/MM/dd"
-                    }
-                    var excelToConvert = {
-                        ExcelConversionSettings: obj,
-                        FileId: $scope.scopeModel.inPutFile.fileId
-                    }
-                    return ExcelConversion_PriceListConversionAPIService.ConvertAndDownload(excelToConvert).then(function (response) {
-                        UtilsService.downloadFile(response.data, response.headers);
-                    });;
-                }
 
                 $scope.scopeModel.startConvertAndDownload = function () {
                     var listMappings = [];
@@ -62,28 +45,26 @@
                         DateTimeFormat: "yyyy/MM/dd"
                     }
                     var inputExcel = {
+                        $type:"XBooster.PriceListConversion.MainExtensions.InputPriceListSettings.BasicInputPriceListSettings,XBooster.PriceListConversion.MainExtensions",
                         ExcelConversionSettings: obj,
-                        FileId: $scope.scopeModel.inPutFile.fileId
+                        TemplateFileId: $scope.scopeModel.inPutFile.fileId
                     }
 
-                    var outputFieldMappings = {
-                        SheetIndex:$scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData().SheetIndex,
+                    var outPutExcel = {
+                        $type:"XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings.BasicOutputPriceListSettings,XBooster.PriceListConversion.MainExtensions",
+                        TemplateFileId: $scope.scopeModel.outPutFile.fileId,
+                        SheetIndex: $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData().SheetIndex,
                         FirstRowIndex: $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData().RowIndex,
                         CodeCellIndex: $scope.scopeModel.outPutFieldMappings[1].fieldMappingAPI.getData().CellIndex,
                         ZoneCellIndex: $scope.scopeModel.outPutFieldMappings[2].fieldMappingAPI.getData().CellIndex,
                         RateCellIndex: $scope.scopeModel.outPutFieldMappings[3].fieldMappingAPI.getData().CellIndex,
                         EffectiveDateCellIndex: $scope.scopeModel.outPutFieldMappings[4].fieldMappingAPI.getData().CellIndex,
-                    };
-
-                    var outPutExcel = {
-                        FileId: $scope.scopeModel.outPutFile.fileId,
-                        OutputPriceListFields: outputFieldMappings
                     }
                     var priceListConversion = {
                             InputPriceListSettings: inputExcel,
                             OutputPriceListSettings:outPutExcel
                         }
-                    return ExcelConversion_PriceListConversionAPIService.PriceListConvertAndDownload(priceListConversion).then(function (response) {
+                    return XBooster_PriceListConversion_PriceListConversionAPIService.ConvertAndDownloadPriceList(priceListConversion).then(function (response) {
                         UtilsService.downloadFile(response.data, response.headers);
                     });;
                 }

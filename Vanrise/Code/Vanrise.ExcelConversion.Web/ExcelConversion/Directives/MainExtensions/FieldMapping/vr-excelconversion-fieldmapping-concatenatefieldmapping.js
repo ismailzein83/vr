@@ -143,7 +143,7 @@
 
                         }
                         data = {
-                            $type: "ExcelConversion.MainExtensions.FieldMappings.ConcatenateFieldMapping, ExcelConversion.MainExtensions",
+                            $type: "Vanrise.ExcelConversion.MainExtensions.FieldMappings.ConcatenateFieldMapping, Vanrise.ExcelConversion.MainExtensions",
                             Parts: parts
                         };
                     }

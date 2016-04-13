@@ -79,7 +79,7 @@
                     var data;
                     if (directiveAPI != undefined) {
                         data = {
-                            $type: "ExcelConversion.MainExtensions.ConcatenatedParts.CellFieldConcatenatedPart, ExcelConversion.MainExtensions ",
+                            $type: "Vanrise.ExcelConversion.MainExtensions.ConcatenatedParts.CellFieldConcatenatedPart, Vanrise.ExcelConversion.MainExtensions ",
                             CellFieldMapping: directiveAPI.getData()
                         }
                         return data;
