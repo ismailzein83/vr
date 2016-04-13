@@ -63,10 +63,13 @@ namespace Vanrise.Data
         {
             if (String.IsNullOrEmpty(connectionStringName))
                 throw new ArgumentNullException("connectionStringName");
-            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName];
-            if (connectionString == null)
+            //string connectionString;
+            //if(Vanrise.Security.Entities.ContextFactory.GetContext().DoesCurrentTenantHaveConnectionString(connectionStringName, out connectionString))
+            //    return connectionString;
+            var connectionStringEntry = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connectionStringEntry == null)
                 throw new Exception(String.Format("Connection String not found. Connection String Name '{0}'", connectionStringName));
-            return connectionString.ConnectionString;
+            return connectionStringEntry.ConnectionString;
         }
 
         #region Get Reader Field

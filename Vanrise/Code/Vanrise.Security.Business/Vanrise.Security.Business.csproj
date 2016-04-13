@@ -62,6 +62,7 @@
     <Compile Include="OrgChartManager.cs" />
     <Compile Include="SecurityContext.cs" />
     <Compile Include="SystemActionManager.cs" />
+    <Compile Include="TenantManager.cs" />
     <Compile Include="UserGroupManager.cs" />
     <Compile Include="ViewManager.cs" />
     <Compile Include="MenuManager.cs" />

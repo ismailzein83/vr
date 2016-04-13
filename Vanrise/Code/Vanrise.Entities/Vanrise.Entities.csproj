@@ -112,12 +112,6 @@
     <Compile Include="UpdateOperationResult.cs" />
     <Compile Include="File\VRFile.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
-      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
-      <Name>Vanrise.Data</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

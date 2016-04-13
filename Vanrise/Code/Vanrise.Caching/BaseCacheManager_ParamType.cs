@@ -102,8 +102,7 @@ namespace Vanrise.Caching
                 }
             }
         }
-
-
+        
         public virtual IEnumerable<CachedObject> GetAllCachedObjects()
         {
             return _cacheDictionaries.Values.SelectMany(itm => itm.Values);
@@ -131,6 +130,15 @@ namespace Vanrise.Caching
             else
                 return false;
         }
+        
+        public virtual void SetCacheExpired(ParamType parameter)
+        {
+            ConcurrentDictionary<string, CachedObject> cacheDictionary = GetCacheDictionary(parameter);
+            if (cacheDictionary != null)
+                cacheDictionary.Clear();
+            _cacheExpirationTimes.AddOrUpdate(parameter, DateTime.Now, (prm, existingValue) => DateTime.Now);
+        }
+
 
         #endregion
 
@@ -198,14 +206,6 @@ namespace Vanrise.Caching
 
                 cacheDictionaryInfo.LastExpirationCheckTime = DateTime.Now;
             }
-        }
-
-        public virtual void SetCacheExpired(ParamType parameter)
-        {
-            ConcurrentDictionary<string, CachedObject> cacheDictionary = GetCacheDictionary(parameter);
-            if (cacheDictionary != null)
-                cacheDictionary.Clear();
-            _cacheExpirationTimes.AddOrUpdate(parameter, DateTime.Now, (prm, existingValue) => DateTime.Now);
         }
 
         private class CacheDictionaryInfo
