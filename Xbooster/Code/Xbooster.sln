@@ -53,9 +53,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBooster.PriceListConversio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBooster.PriceListConversion.Web", "XBooster.PriceListConversion.Web\XBooster.PriceListConversion.Web.csproj", "{7BA10B0E-F348-4AC7-8D80-BAF20D059AF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBooster.PriceListConversion.MainExtensions", "XBooster.PriceListConversion.MainExtensions\XBooster.PriceListConversion.MainExtensions.csproj", "{A3A11123-52B6-44BA-B1F1-E0C9DDC15F1C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -131,6 +133,10 @@ Global
 		SccProjectTopLevelParentUniqueName18 = Xbooster.sln
 		SccProjectName18 = XBooster.PriceListConversion.Web
 		SccLocalPath18 = XBooster.PriceListConversion.Web
+		SccProjectUniqueName19 = XBooster.PriceListConversion.MainExtensions\\XBooster.PriceListConversion.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName19 = Xbooster.sln
+		SccProjectName19 = XBooster.PriceListConversion.MainExtensions
+		SccLocalPath19 = XBooster.PriceListConversion.MainExtensions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -211,6 +217,10 @@ Global
 		{7BA10B0E-F348-4AC7-8D80-BAF20D059AF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BA10B0E-F348-4AC7-8D80-BAF20D059AF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BA10B0E-F348-4AC7-8D80-BAF20D059AF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3A11123-52B6-44BA-B1F1-E0C9DDC15F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3A11123-52B6-44BA-B1F1-E0C9DDC15F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3A11123-52B6-44BA-B1F1-E0C9DDC15F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3A11123-52B6-44BA-B1F1-E0C9DDC15F1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -236,5 +246,6 @@ Global
 		{B74581C1-1AFC-4E69-B6A4-2DF61C1F6D9C} = {0C8E241E-47F0-426F-A565-3648C3AA0AC1}
 		{980E9F76-E993-4DF4-B36D-0BB73623C96B} = {0C8E241E-47F0-426F-A565-3648C3AA0AC1}
 		{7BA10B0E-F348-4AC7-8D80-BAF20D059AF6} = {0C8E241E-47F0-426F-A565-3648C3AA0AC1}
+		{A3A11123-52B6-44BA-B1F1-E0C9DDC15F1C} = {0C8E241E-47F0-426F-A565-3648C3AA0AC1}
 	EndGlobalSection
 EndGlobal

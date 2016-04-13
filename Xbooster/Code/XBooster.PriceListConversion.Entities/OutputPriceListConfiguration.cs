@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace XBooster.PriceListConversion.Entities
 {
-    public class PriceListConversion
+    public abstract class OutputPriceListSettings
     {
-        public InputPriceListSettings InputPriceListSettings { get; set; }
-        public OutputPriceListSettings OutputPriceListSettings { get; set; }
+        public int ConfigId { get; set; }
+
+        public abstract byte[] Execute(IOutputPriceListExecutionContext context);
     }
 }

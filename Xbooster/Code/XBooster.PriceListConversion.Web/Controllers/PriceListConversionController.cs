@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Vanrise.Web.Base;
 using XBooster.PriceListConversion.Business;
+using XBooster.PriceListConversion.Entities;
 
 namespace XBooster.PriceListConversion.Web.Controllers
 {
@@ -15,10 +16,10 @@ namespace XBooster.PriceListConversion.Web.Controllers
     {
         [HttpPost]
         [Route("PriceListConvertAndDownload")]
-        public object PriceListConvertAndDownload(Entities.PriceListConversion priceListConversion)
+        public object ConvertAndDownloadPriceList(PriceListConversionInput priceListConversion)
         {
             PriceListConversionManager manager = new PriceListConversionManager();
-            byte[] bytes = manager.PriceListConvertAndDownload(priceListConversion);
+            byte[] bytes = manager.ConvertAndDownloadPriceList(priceListConversion);
             return GetExcelResponse(bytes, "ConvertedExcel.xls");
         }
     }

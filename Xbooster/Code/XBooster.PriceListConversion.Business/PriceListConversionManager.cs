@@ -14,53 +14,19 @@ namespace XBooster.PriceListConversion.Business
 {
     public class PriceListConversionManager
     {
-        public byte[] PriceListConvertAndDownload(Entities.PriceListConversion priceListConversion)
+        public byte[] ConvertAndDownloadPriceList(Entities.PriceListConversionInput priceListConversion)
         {
             ExcelConvertor excelConvertor = new ExcelConvertor();
-            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(priceListConversion.InputPriceListSettings.FileId, priceListConversion.InputPriceListSettings.ExcelConversionSettings);
-            PriceListItem priceListItem = ConvertToPriceListItem(convertedExcel);
-
-
-            var fileManager = new VRFileManager();
-            var file = fileManager.GetFile(priceListConversion.OutputPriceListSettings.FileId);
-            if (file == null)
-                throw new NullReferenceException(String.Format("file '{0}'", priceListConversion.OutputPriceListSettings.FileId));
-            if (file.Content == null)
-                throw new NullReferenceException(String.Format("file.Content '{0}'", priceListConversion.OutputPriceListSettings.FileId));
-            MemoryStream stream = new MemoryStream(file.Content);
-            Workbook workbook = new Workbook(stream);
-            var workSheet = workbook.Worksheets[priceListConversion.OutputPriceListSettings.OutputPriceListFields.SheetIndex];
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
-            int rowIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.FirstRowIndex;
-            int zoneCellIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.ZoneCellIndex;
-            int codeCellIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.CodeCellIndex;
-            int rateCellIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.RateCellIndex;
-            int effectiveDateCellIndex = priceListConversion.OutputPriceListSettings.OutputPriceListFields.EffectiveDateCellIndex;
-
-
-            foreach (var item in priceListItem.Records)
-            {
-                workSheet.Cells[rowIndex, zoneCellIndex].PutValue(item.Zone);
-
-                workSheet.Cells[rowIndex, codeCellIndex].PutValue(item.Code);
-
-                workSheet.Cells[rowIndex, rateCellIndex].PutValue(item.Rate);
-
-                workSheet.Cells[rowIndex, effectiveDateCellIndex].PutValue(item.EffectiveDate);
-                rowIndex++;
-            }
-
-
-            MemoryStream memoryStream = new MemoryStream();
-            memoryStream = workbook.SaveToStream();
-
-            return memoryStream.ToArray();
+            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(priceListConversion.InputFileId, priceListConversion.InputPriceListSettings.ExcelConversionSettings);
+            PriceList priceListItem = ConvertToPriceListItem(convertedExcel);
+            OutputPriceListExecutionContext context = new OutputPriceListExecutionContext();
+            context.Records = priceListItem.Records;
+            return priceListConversion.OutputPriceListSettings.Execute(context);
         }
 
-        private PriceListItem ConvertToPriceListItem(ConvertedExcel convertedExcel)
+        private PriceList ConvertToPriceListItem(ConvertedExcel convertedExcel)
         {
-            PriceListItem priceListItem = new Entities.PriceListItem();
+            PriceList priceListItem = new Entities.PriceList();
             priceListItem.Records = new List<PriceListRecord>();
             Dictionary<string, decimal> rateByZone = new Dictionary<string, decimal>();
             ConvertedExcelList RateConvertedExcelList;

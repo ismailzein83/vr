@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XBooster.PriceListConversion.Entities
 {
-    public class PriceListItem
+    public class PriceList
     {
         public List<PriceListRecord> Records { get; set; }
     }
