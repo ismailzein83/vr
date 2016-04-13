@@ -8,10 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public interface IMeasureValueEvaluatorContext
     {
-        Dictionary<string, MeasureConfiguration> Measures { get; }
-        string GenerateUniqueMemberName(string memberName);
-        void AddGlobalMember(string memberDeclarationCode);
-        void AddCodeToCurrentInstanceExecutionBlock(string codeLineTemplate, params object[] placeholders);
 
     }
 }

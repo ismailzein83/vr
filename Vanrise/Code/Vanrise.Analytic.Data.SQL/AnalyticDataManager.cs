@@ -90,6 +90,7 @@ namespace Vanrise.Analytic.Data.SQL
             index = 0;
             foreach (var measureFieldConfig in measureConfig)
             {
+                record.MeasureValues.Add(measureFieldConfig.Key, 0);
                 //if (measureFieldConfig.Value.GetMeasureValue != null)
                 //    record.MeasureValues[measureFieldConfig.Key] = measureFieldConfig.Value.GetMeasureValue(reader, record);
                 index++;

@@ -8,19 +8,30 @@ using Vanrise.Common;
 
 namespace Vanrise.Analytic.Business
 {
+    public interface IMeasureExpressionContext
+    {
+        Object GetMeasureValue(string measureName);
+
+        Decimal GetMeasureValueAsDecimal(string measureName);
+
+        DateTime GetMeasureValueAsDateTime(string measureName);
+
+        Object GetSQLExprValue();
+    }
+    public interface IMeasureExpression
+    {
+        Object Evaluate(IMeasureExpressionContext context);
+    }
+
+    public interface IMeasureSQLExpression
+    {
+        string GetSQLExpression();
+    }
+
     public class MeasureValueEvaluatorContext : IMeasureValueEvaluatorContext
     {
-        StringBuilder _instanceExecutionBlockBuilder;
-        StringBuilder _globalMembersBuilder;
-        Dictionary<string, MeasureConfiguration> IMeasureValueEvaluatorContext.Measures
-        {
-            get { throw new NotImplementedException(); }
-        }
-
         public bool TryBuildRuntimeType(out MeasureEvaluatorRuntimeType runtimeType, out List<string> errorMessages)
-        {
-            _globalMembersBuilder = new StringBuilder();
-            _instanceExecutionBlockBuilder = new StringBuilder();
+        {            
             string fullTypeName;
             string classDefinition = BuildClassDefinition(out fullTypeName);
 
@@ -46,17 +57,12 @@ namespace Vanrise.Analytic.Business
 
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;
-                using System.Collections.Generic;
-                using System.IO;
-                using System.Data;
 
                 namespace #NAMESPACE#
                 {
-                    public class #CLASSNAME# : #EXECUTORBASE#
-                    {                        
-                        #GLOBALMEMBERS#
-
-                        object #EXECUTORBASE#.Evaluate()
+                    public class #CLASSNAME# : Vanrise.Analytic.Business.IMeasureExpression
+                    { 
+                        public object Evaluate(Vanrise.Analytic.Business.IMeasureExpressionContext context)
                         {
                             #EXECUTIONCODE#
                         }
@@ -64,9 +70,7 @@ namespace Vanrise.Analytic.Business
                 }
                 ");
 
-            classDefinitionBuilder.Replace("#EXECUTORBASE#", typeof(IMeasureValueExecutor).FullName);
-            classDefinitionBuilder.Replace("#GLOBALMEMBERS#", _globalMembersBuilder.ToString());
-            classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
+            //classDefinitionBuilder.Replace("#EXECUTIONCODE#", _instanceExecutionBlockBuilder.ToString());
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
             string className = "MeasureValueExecutor";
@@ -75,23 +79,6 @@ namespace Vanrise.Analytic.Business
             fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
             return classDefinitionBuilder.ToString();
-        }
-        string IMeasureValueEvaluatorContext.GenerateUniqueMemberName(string memberName)
-        {
-            return String.Format("{0}_{1}", memberName, Guid.NewGuid().ToString("N"));
-        }
-        void IMeasureValueEvaluatorContext.AddGlobalMember(string memberDeclarationCode)
-        {
-            _globalMembersBuilder.AppendLine(memberDeclarationCode);
-            _globalMembersBuilder.AppendLine();
-        }
-        void IMeasureValueEvaluatorContext.AddCodeToCurrentInstanceExecutionBlock(string codeLineTemplate, params object[] placeholders)
-        {
-            if (placeholders != null && placeholders.Length > 0)
-                _instanceExecutionBlockBuilder.AppendFormat(codeLineTemplate, placeholders);
-            else
-                _instanceExecutionBlockBuilder.Append(codeLineTemplate);
-            _instanceExecutionBlockBuilder.AppendLine();
         }
     }
 }

@@ -36,6 +36,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             ctrl.fromTime;
             ctrl.toTime;
             ctrl.dimensions = [];
+            ctrl.measures = [];
             ctrl.dimensionFields = [];
             ctrl.parameters;
             ctrl.sortField = "";
@@ -106,8 +107,9 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 };
 
                 function loadGridQuery(query) {
-                    var measures = [];
-                    var dimensions = [];
+                    ctrl.measures.length = 0;
+                    ctrl.dimensions.length = 0;
+                    
                     dimensionValues.length = 0;
                     ctrl.fromTime = query.FromTime;
                     ctrl.toTime = query.ToTime;
@@ -130,25 +132,25 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     }
 
                     for (var i = 0; i < query.MeasureFields.length; i++)
-                        measures.push(query.MeasureFields[i].Name);
+                        ctrl.measures.push(query.MeasureFields[i].Name);
 
                     for (var i = 0; i < query.Dimensions.length; i++)
-                        dimensions.push(query.Dimensions[i].Name);
+                        ctrl.dimensions.push(query.Dimensions[i].Name);
 
                     isSummary = $attrs.withsummary != undefined;
                     var queryFinalized = {
                         Filters: query.Filters,
-                        DimensionFields: dimensions,
-                        MeasureFields: measures,
+                        DimensionFields: ctrl.dimensions,
+                        MeasureFields: ctrl.measures,
                         FromTime: query.FromTime,
                         ToTime: query.ToTime,
                         Currency: query.Currency,
                         WithSummary: isSummary
                     }
-                    //if (ctrl.selectedPeriods.length > 0 || ctrl.selectedDimensions.length > 0)
-                    //    ctrl.sortField = 'DimensionValues[0].Name';
-                    //else
-                    //    ctrl.sortField = 'MeasureValues.' + ctrl.selectedMeasures[0].name;
+                    if (ctrl.dimensions.length > 0)
+                        ctrl.sortField = 'DimensionValues[0].Name';
+                    else
+                        ctrl.sortField = 'MeasureValues.' + ctrl.measures[0].name;
                     return queryFinalized;
                 }
 
