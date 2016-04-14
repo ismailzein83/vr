@@ -81,7 +81,8 @@ namespace CDRComparison.MainExtensions
             for (int rowIndex = 0; rowIndex < worksheet.Cells.Rows.Count && rowIndex < 10; rowIndex++)
             {
                 var data = new List<string>();
-                for (int columnIndex = 0; columnIndex < worksheet.Cells.Columns.Count; columnIndex++)
+                var row = worksheet.Cells.Rows[rowIndex];
+                for (int columnIndex = 0; columnIndex <= row.LastCell.Column; columnIndex++)
                 {
                     Cell cell = worksheet.Cells[rowIndex, columnIndex];
                     if (cell == null)

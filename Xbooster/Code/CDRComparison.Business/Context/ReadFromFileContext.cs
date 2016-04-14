@@ -23,15 +23,15 @@ namespace CDRComparison.Business
                 {
                     if (_file.Content == null)
                         throw new NullReferenceException("_file.Content");
-                    try
-                    {
+                    //try
+                    //{
 
-                        _content = UnZip(_file.Content);
-                    }
-                    catch
-                    {
+                    //    _content = UnZip(_file.Content);
+                    //}
+                    //catch
+                    //{
                         _content = _file.Content;
-                    }
+                    //}
                 }
                 return _content;
             }
