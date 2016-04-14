@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
@@ -89,73 +86,9 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
     }
 
-    public class ExistingCode : ICode
-    {
-        public ExistingZone ParentZone { get; set; }
-
-        public BusinessEntity.Entities.SupplierCode CodeEntity { get; set; }
-
-        public ChangedCode ChangedCode { get; set; }
-
-        public DateTime BED
-        {
-            get { return CodeEntity.BED; }
-        }
-
-        public DateTime? EED
-        {
-            get { return ChangedCode != null ? ChangedCode.EED : CodeEntity.EED; }
-        }
-
-        public string Code { get; set; }
-
-        public object Key
-        {
-            get { return CodeEntity.Code; }
-        }
-
-        public void SetExcluded()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string TargetType
-        {
-            get { return "Code"; }
-        }
-    }
-
-    public class ExistingRate : Vanrise.Entities.IDateEffectiveSettings
-    {
-        public ExistingZone ParentZone { get; set; }
-
-        public BusinessEntity.Entities.SupplierRate RateEntity { get; set; }
-
-        public ChangedRate ChangedRate { get; set; }
-
-        public DateTime BED
-        {
-            get { return RateEntity.BED; }
-        }
-
-        public DateTime? EED
-        {
-            get { return ChangedRate != null ? ChangedRate.EED : RateEntity.EED; }
-        }
-    }
-
     public class ExistingZonesByName : Dictionary<string, List<ExistingZone>>
     {
 
     }
 
-    public class ExistingCodesByCodeValue : Dictionary<string, List<ExistingCode>>
-    {
-
-    }
-
-    public class ExistingRatesByZoneName : Dictionary<string, List<ExistingRate>>
-    {
-
-    }
 }
