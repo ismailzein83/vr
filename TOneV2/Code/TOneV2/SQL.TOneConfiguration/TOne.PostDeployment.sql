@@ -343,7 +343,8 @@ set identity_insert [bp].[BPBusinessRuleActionType] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Stop Execution Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":1, "Description":"Stop Execution Action", "Editor":"businessprocess-bp-business-rule-stop-execution-action"}'),
-(2,'Exclude Item Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":2, "Description":"Exclude Item Action", "Editor":"businessprocess-bp-business-rule-exclude-item-action"}')
+(2,'Exclude Item Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":2, "Description":"Exclude Item Action", "Editor":"businessprocess-bp-business-rule-exclude-item-action"}'),
+(3,'Warning Item Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":3, "Description":"Warning Item Action", "Editor":"businessprocess-bp-business-rule-warning-item-action"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Description],[Settings]))
 merge	[bp].[BPBusinessRuleActionType] as t
@@ -364,14 +365,18 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
-(2,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.ExcludeItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":2}}'),
+(2,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.ExcludeItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (4,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (5,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (6,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (8,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
-(9,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}')
+(9,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
+(10,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":3}}'),
+(11,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":3}}'),
+(12,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":3}}'),
+(13,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":3}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([BusinessRuleDefinitionId],[Settings]))
 merge	[bp].[BPBusinessRuleAction] as t
@@ -399,7 +404,11 @@ as (select * from (values
 (6,'ValidateCodesZones',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Missing BED Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.MissingBEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[1,2]}'),
 (7,'ValidateCodesZones',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Same Code In Same Zone Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.SameCodeInSameZoneCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[1,2]}'),
 (8,'ValidateCodesZones',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Same Zone With Different Rates Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.SameZoneWithDifferentRatesCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[1,2]}'),
-(9,'ValidateCountries',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Same Code With Different Zones Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.SameCodeWithDifferentZonesCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[1,2]}')
+(9,'ValidateCountries',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Same Code With Different Zones Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.SameCodeWithDifferentZonesCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[1,2]}'),
+(10,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"BED Zones Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.ZoneBEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'),
+(11,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"BED Codes Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.CodeBEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'),
+(12,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Codes Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.CodeEEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'),
+(13,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Zone Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.ZoneeEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[BPDefintionId],[Settings]))
 merge	[bp].[BPBusinessRuleDefinition] as t
