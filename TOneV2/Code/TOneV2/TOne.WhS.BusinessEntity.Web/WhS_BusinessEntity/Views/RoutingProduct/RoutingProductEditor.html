@@ -7,10 +7,11 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModal.routingProductName" label="Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModal.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModal.onSellingNumberPlanSelectionChanged"
+
+                        <span vr-disabled="isEditMode">
+                            <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="scopeModal.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModal.onSellingNumberPlanSelectionChanged"
                                                                   selectedvalues="scopeModal.selectedSellingNumberPlan" isrequired="true" />
-                        </vr-columns>
+                        </span>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Sale Zones'">

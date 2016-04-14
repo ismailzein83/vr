@@ -33,6 +33,7 @@
             }
 
             isEditMode = (routingProductId != undefined);
+            $scope.isEditMode = isEditMode;
         }
 
         function defineScope() {

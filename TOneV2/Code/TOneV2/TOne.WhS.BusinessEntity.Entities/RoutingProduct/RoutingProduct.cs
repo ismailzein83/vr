@@ -6,14 +6,21 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class RoutingProduct
+    public class BaseRoutingProduct
     {
         public int RoutingProductId { get; set; }
 
         public string Name { get; set; }
 
-        public int SellingNumberPlanId { get; set; }
-
         public RoutingProductSettings Settings { get; set; }
+    }
+    public class RoutingProduct : BaseRoutingProduct
+    {
+        public int SellingNumberPlanId { get; set; }
+    }
+
+    public class RoutingProductToEdit : BaseRoutingProduct
+    {
+
     }
 }

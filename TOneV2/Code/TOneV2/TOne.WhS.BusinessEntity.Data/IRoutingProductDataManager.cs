@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         bool Insert(RoutingProduct routingProduct, out int insertedId);
 
-        bool Update(RoutingProduct routingProduct);
+        bool Update(RoutingProductToEdit routingProduct);
 
         bool Delete(int routingProductId);
 

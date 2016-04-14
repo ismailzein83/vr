@@ -58,9 +58,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             insertedId = (int)routingProductId;
             return (recordsEffected > 0);
         }
-        public bool Update(Entities.RoutingProduct routingProduct)
+        public bool Update(Entities.RoutingProductToEdit routingProduct)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Update", routingProduct.RoutingProductId, routingProduct.Name, routingProduct.SellingNumberPlanId,
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_RoutingProduct_Update", routingProduct.RoutingProductId, routingProduct.Name,
                 Vanrise.Common.Serializer.Serialize(routingProduct.Settings));
             return (recordsEffected > 0);
         }

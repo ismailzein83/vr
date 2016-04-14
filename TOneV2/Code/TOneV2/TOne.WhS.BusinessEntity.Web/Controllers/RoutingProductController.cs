@@ -56,7 +56,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("UpdateRoutingProduct")]
-        public TOne.Entities.UpdateOperationOutput<RoutingProduct> UpdateRoutingProduct(RoutingProduct routingProduct)
+        public TOne.Entities.UpdateOperationOutput<RoutingProductToEdit> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
         {
             return _manager.UpdateRoutingProduct(routingProduct);
         }

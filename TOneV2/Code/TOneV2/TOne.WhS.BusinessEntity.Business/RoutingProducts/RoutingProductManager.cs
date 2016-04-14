@@ -106,12 +106,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return insertOperationOutput;
         }
 
-        public TOne.Entities.UpdateOperationOutput<RoutingProduct> UpdateRoutingProduct(RoutingProduct routingProduct)
+        public TOne.Entities.UpdateOperationOutput<RoutingProductToEdit> UpdateRoutingProduct(RoutingProductToEdit routingProduct)
         {
             IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
 
             bool updateActionSucc = dataManager.Update(routingProduct);
-            TOne.Entities.UpdateOperationOutput<RoutingProduct> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RoutingProduct>();
+            TOne.Entities.UpdateOperationOutput<RoutingProductToEdit> updateOperationOutput = new TOne.Entities.UpdateOperationOutput<RoutingProductToEdit>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
