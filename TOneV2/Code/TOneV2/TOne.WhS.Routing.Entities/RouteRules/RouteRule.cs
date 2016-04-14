@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Entities
 
         public RouteRuleSettings Settings { get; set; }
 
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         public override bool IsAnyCriteriaExcluded(object target)
         {

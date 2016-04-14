@@ -12,7 +12,22 @@ using Vanrise.Entities;
 namespace TOne.WhS.Routing.Business
 {
     public class RouteRuleManager : Vanrise.Rules.RuleManager<RouteRule, RouteRuleDetail>
-    {        
+    {
+        public override bool ValidateBeforeAdd(RouteRule rule)
+        {
+            Dictionary<int, RouteRule> cachedRules = base.GetAllRules();
+            Func<RouteRule, bool> filterExpression = (routeRule) => string.Compare(routeRule.Name, rule.Name, true) == 0;
+            IEnumerable<RouteRule> result = cachedRules.FindAllRecords(filterExpression);
+            return result == null || result.Count() == 0 ? true : false;
+        }
+
+        public override bool ValidateBeforeUpdate(RouteRule rule)
+        {
+            Dictionary<int, RouteRule> cachedRules = base.GetAllRules();
+            Func<RouteRule, bool> filterExpression = (routeRule) => string.Compare(routeRule.Name, rule.Name, true) == 0 && routeRule.RuleId != rule.RuleId;
+            IEnumerable<RouteRule> result = cachedRules.FindAllRecords(filterExpression);
+            return result == null || result.Count() == 0 ? true : false;
+        }
         public RouteRule GetMatchRule(RouteRuleTarget target)
         {
             var ruleTrees = GetRuleTreesByPriority();
@@ -43,7 +58,7 @@ namespace TOne.WhS.Routing.Business
                     {
                         int priority = GetRuleTypePriority(ruleType);
                         if (currentPriority == null || currentPriority.Value != priority)
-                        { 
+                        {
                             if (currentRules != null && currentRules.Count > 0)
                                 ruleTrees.Add(new Vanrise.Rules.RuleTree(currentRules, structureBehaviors));
                             currentPriority = priority;
@@ -85,7 +100,8 @@ namespace TOne.WhS.Routing.Business
             var routeRules = base.GetAllRules();
             Func<RouteRule, bool> filterExpression = (routeRule) =>
                 (input.Query.RoutingProductId == null || routeRule.Criteria.RoutingProductId == input.Query.RoutingProductId)
-                 && (input.Query.Code == null || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
+                 && (string.IsNullOrEmpty(input.Query.Name) || (!string.IsNullOrEmpty(routeRule.Name) && routeRule.Name.ToLower().Contains(input.Query.Name.ToLower())))
+                 && (string.IsNullOrEmpty(input.Query.Code) || this.CheckIfCodeCriteriaSettingsContains(routeRule, input.Query.Code))
                  && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeRule, input.Query.CustomerIds))
                  && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds));
 

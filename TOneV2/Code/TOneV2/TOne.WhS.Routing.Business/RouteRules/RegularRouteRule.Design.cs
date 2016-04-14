@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Business
     {
         public RouteOptionSettingsGroup OptionsSettingsGroup { get; set; }
 
-        public RouteOptionOrderSettings OptionOrderSettings { get; set; }
+        public List<RouteOptionOrderSettings> OptionOrderSettings { get; set; }
 
         public List<RouteOptionFilterSettings> OptionFilters { get; set; }
 

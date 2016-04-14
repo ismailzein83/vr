@@ -11,6 +11,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public int ConfigId { get; set; }
 
+        public decimal? PercentageValue { get; set; }
+
         public abstract void Execute(IRouteOptionOrderExecutionContext context);
     }
 }

@@ -66,6 +66,7 @@
 
             function getFilterObject() {
                 var query = {
+                    Name: $scope.name,
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds()

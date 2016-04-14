@@ -161,7 +161,7 @@ namespace TOne.WhS.Routing.Business
                 {
                     Options = options.VRCast<IRouteOptionOrderTarget>()
                 };
-                this.OptionOrderSettings.Execute(optionOrderContext);
+                this.OptionOrderSettings.FirstOrDefault().Execute(optionOrderContext);
                 options = optionOrderContext.Options.VRCast<T>();
             }
             return options;
