@@ -17,6 +17,19 @@ namespace Vanrise.Common
 
         ConcurrentDictionary<Type, Type> _cachedImplementedTypes = new ConcurrentDictionary<Type, Type>();
 
+        static ConcurrentDictionary<Type, Type> s_explicitImplementedTypes = new ConcurrentDictionary<Type, Type>();
+
+        public static void AddExplicitImplementation<T, Q>()
+        {
+            s_explicitImplementedTypes.AddOrUpdate(typeof(T), typeof(Q), (t, q) => q);
+        }
+
+        public static void RemoveExplicitImplementation<T>()
+        {
+            Type dummy;
+            s_explicitImplementedTypes.TryRemove(typeof(T), out dummy);
+        }
+
         public T CreateObjectFromType<T>() where T : class
         {
             Type implementationType = GetCachedType<T>();
@@ -24,9 +37,11 @@ namespace Vanrise.Common
         }
 
         private Type GetCachedType<T>()
-        {
+        {            
             Type implementationType;
             Type baseType = typeof(T);
+            if (s_explicitImplementedTypes.TryGetValue(baseType, out implementationType))
+                return implementationType;
             if (!_cachedImplementedTypes.TryGetValue(baseType, out implementationType))
             {
                 implementationType = GetImplementationType(baseType);
