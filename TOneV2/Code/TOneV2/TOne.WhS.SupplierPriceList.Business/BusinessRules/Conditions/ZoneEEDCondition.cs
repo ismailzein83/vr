@@ -5,7 +5,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    class ZoneeEDCondition : BusinessRuleCondition
+    class ZoneEEDCondition : BusinessRuleCondition
     {
         public override string GetMessage(IRuleTarget target)
         {
@@ -24,7 +24,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 throw new ArgumentNullException("Target");
             IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
             IZone zone = context.Target as IZone;
-            return (zone.EED != null && zone.EED.Value < DateTime.Now.Add(importSplContext.CodeCloseDateOffset))
+            return (zone.EED != null && zone.EED.Value < DateTime.Now.Add(importSplContext.CodeCloseDateOffset));
         }
     }
 }
