@@ -85,7 +85,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public string TargetType
         {
-            get { return "ExistingZone"; }
+            get { return "Zone"; }
         }
     }
 
@@ -121,7 +121,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public string TargetType
         {
-            get { return "ExistingCode"; }
+            get { return "Code"; }
         }
     }
 
