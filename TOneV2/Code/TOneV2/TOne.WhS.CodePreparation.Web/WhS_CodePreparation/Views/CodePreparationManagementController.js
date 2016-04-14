@@ -228,8 +228,8 @@
                         node.isOpened = true;
                         treeAPI.createNode(node);
                         countryNode.effectiveZones.push(node);
-                        treeAPI.refreshTree($scope.nodes);
                     }
+                    treeAPI.refreshTree($scope.nodes);
 
                 }
             }
@@ -256,6 +256,8 @@
 
                 zoneNode.nodeName = renamedZone.NewZoneName;
                 zoneNode.renamedZone = renamedZone.OldZoneName;
+                zoneNode.DraftStatus = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value;
+                zoneNode.icon = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon: WhS_CP_ZoneItemDraftStatusEnum.New.icon;
 
                 var node = mapRenamedZoneToNode(renamedZone);
                 treeAPI.createNode(node);
