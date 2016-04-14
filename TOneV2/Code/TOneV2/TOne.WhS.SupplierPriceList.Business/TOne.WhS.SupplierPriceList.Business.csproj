@@ -62,17 +62,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessRules\Conditions\CodeEEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\MissingCodesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\MissingRatesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\MissingBEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\SameCodeWithDifferentZonesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\SameZoneWithDifferentRatesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\SameCodeInSameZoneCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\MissingZonesCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\CodeBEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ZoneEEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ZoneBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingCodesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingRatesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCountries\SameCodeWithDifferentZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\SameZoneWithDifferentRatesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\SameCodeInSameZoneCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneEEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDCondition.cs" />
     <Compile Include="ImportPriceListManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="PriceListRateManager.cs" />
@@ -83,8 +83,8 @@
     <Compile Include="SupplierPriceListManager.cs" />
     <Compile Include="SupplierRatePreviewManager.cs" />
     <Compile Include="SupplierZonePreviewManager.cs" />
-    <Compile Include="BusinessRules\Conditions\CodeGroupCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\MultipleCountryCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\CodeGroupCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MultipleCountryCondition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
