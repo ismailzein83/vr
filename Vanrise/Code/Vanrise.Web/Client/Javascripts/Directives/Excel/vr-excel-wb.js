@@ -56,7 +56,7 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
     };
 
     function getWorkBookTemplate(attrs) {        
-        return '<vr-tabs on-ready="onReadyTabs" vr-loader="ctrl.isloadingdata" >'
+        return '<vr-tabs on-ready="onReadyTabs" vr-loader="ctrl.isloadingdata" onselectionchanged="ctrl.onSelectionTabChanged">'
                + '<vr-tab  ng-repeat="dataItem in ctrl.scopeModel.datasource.Sheets"  header="dataItem.Name" tabobject="ctrl.scopeModel.tabObjects[$index]" vr-loader="isloadingdatatab{{$index}}">'
                + '<vr-excel-ws data="dataItem" on-ready="onReadyWoorkSheet" fileid="ctrl.fileid" index="$index"   ></vr-excel-ws>'
                + '</vr-tab>'
@@ -85,6 +85,9 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
 
                 ctrl.scopeModel.tabObjects[index].api = api;
 
+            }
+            ctrl.onSelectionTabChanged = function (index) {
+                ctrl.scopeModel.tabObjects[index].api.render();
             }
            
             var api = {};
