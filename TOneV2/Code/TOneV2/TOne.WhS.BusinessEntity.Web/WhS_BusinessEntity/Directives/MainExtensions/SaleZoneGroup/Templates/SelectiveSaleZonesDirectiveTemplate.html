@@ -1,9 +1,9 @@
 ﻿<vr-row removeline>
     <vr-columns colnum="4" ng-show="showSellingNumberPlan">
-        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" />
+        <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="showSellingNumberPlan" />
     </vr-columns>
     <vr-columns colnum="4" vr-loader="isLoadingSaleZonesSelector" ng-show="selectedSellingNumberPlan!=undefined || !showSellingNumberPlan">
-        <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" />
+        <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" isrequired="true" />
     </vr-columns>
 </vr-row>
     
