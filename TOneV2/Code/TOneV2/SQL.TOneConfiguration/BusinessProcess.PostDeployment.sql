@@ -128,7 +128,6 @@ as (select * from (values
 ('BusinessProcess_BP/BPValidationMessage/GetUpdated',null),
 ('BusinessProcess_BP/BPValidationMessage/GetBeforeId',null),
 ('BusinessProcess_BP/BPValidationMessage/GetFilteredBPValidationMessage',null),
-('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View'),
 ('BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets','BusinessProcess_BP_BusinessRuleSet: View'),
 ('BusinessProcess_BP/BPBusinessRuleSet/UpdateBusinessRuleSet','BusinessProcess_BP_BusinessRuleSet: Edit'),
 ('BusinessProcess_BP/BPBusinessRuleSet/AddBusinessRuleSet','BusinessProcess_BP_BusinessRuleSet: Add')
