@@ -3,6 +3,7 @@
 function DataSourceLogManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var gridApi;
+    var searchApi;
     var dataSourceDirectiveAPI;
     var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -22,6 +23,10 @@ function DataSourceLogManagementController($scope, UtilsService, VRNotificationS
 
         $scope.gridReady = function (api) {
             gridApi = api;
+        }
+        $scope.searchReady = function (api) {
+            searchApi = api;
+            searchApi.load();
         }
 
         $scope.searchClicked = function () {

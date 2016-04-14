@@ -217,6 +217,8 @@
     <Content Include="Common\Services\CountryService.js" />
     <Content Include="Common\Services\DataRecordFieldService.js" />
     <Content Include="Common\Services\FileService.js" />
+    <Content Include="Common\Services\LogEntryService.js" />
+    <Content Include="Common\Services\MasterLogService.js" />
     <Content Include="Common\Services\RateTypeService.js" />
     <Content Include="Common\Views\City\CityEditor.html" />
     <Content Include="Common\Views\City\CityEditorController.js" />
@@ -248,6 +250,8 @@
     <Content Include="Common\Views\GenericDataRecord\DataRecordTypeManagementController.js" />
     <Content Include="Common\Views\Logger\LoggerManagement.html" />
     <Content Include="Common\Views\Logger\LoggerManagementController.js" />
+    <Content Include="Common\Views\MasterLog\MasterLogManagement.html" />
+    <Content Include="Common\Views\MasterLog\MasterLogManagementController.js" />
     <Content Include="Common\Views\RateType\RateTypeEditor.html" />
     <Content Include="Common\Views\RateType\RateTypeEditorController.js" />
     <Content Include="Common\Views\RateType\RateTypeManagement.html" />
