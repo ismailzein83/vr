@@ -218,7 +218,7 @@ namespace TOne.WhS.CodePreparation.Business
                 zoneOutput.Result = CodePreparationOutputResult.Inserted;
                 zoneOutput.Zone = zoneToRename;
             }
-            else if (!existingChanges.RenamedZones.Any(item => item.NewZoneName.ToLower() == zoneToRename.NewZoneName.ToLower()) && existingChanges.RenamedZones.Any(item => item.NewZoneName.ToLower() == zoneToRename.OldZoneName.ToLower()))
+            else if (!existingChanges.RenamedZones.Any(item => item.NewZoneName.ToLower() == zoneToRename.NewZoneName.ToLower()) && existingChanges.RenamedZones.Any(item => item.NewZoneName.ToLower() == zoneToRename.OldZoneName.ToLower()) && !allZoneItems.Any(item => item.Name.ToLower() == zoneToRename.NewZoneName.ToLower()))
             {
                 existingChanges.RenamedZones.Add(zoneToRename);
                 zoneOutput.Result = CodePreparationOutputResult.Inserted;

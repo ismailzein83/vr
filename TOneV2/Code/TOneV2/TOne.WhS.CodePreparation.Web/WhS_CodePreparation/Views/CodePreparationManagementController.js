@@ -83,7 +83,7 @@
                         }
                         else if ($scope.hasState) {
                             $scope.showAddNewCode = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
-                            $scope.showEnd = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.New.value;
+                            $scope.showEnd = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.New.value && $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.Renamed.value;
                             $scope.showRenameZone = $scope.currentNode.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
                         }
 
