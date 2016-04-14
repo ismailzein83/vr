@@ -2,7 +2,7 @@
 
     "use strict";
 
-    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService',  'UtilsService', 'VRNotificationService', 'VRNavigationService','WhS_BE_PricingRuleTypeEnum','WhS_BE_PricingTypeEnum','VRUIUtilsService','WhS_BE_PurchasePricingRuleAPIService','VRValidationService'];
+    pricingRuleEditorController.$inject = ['$scope', 'WhS_BE_SalePricingRuleAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_PricingRuleTypeEnum', 'WhS_BE_PricingTypeEnum', 'VRUIUtilsService', 'WhS_BE_PurchasePricingRuleAPIService', 'VRValidationService'];
 
     function pricingRuleEditorController($scope, WhS_BE_SalePricingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_PricingRuleTypeEnum, WhS_BE_PricingTypeEnum, VRUIUtilsService, WhS_BE_PurchasePricingRuleAPIService, VRValidationService) {
 
@@ -94,10 +94,10 @@
                 setDefaultValues();
             }
 
-           
+
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection,loadPricingRuleTypeDirective, loadCriteriaDirective])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadPricingRuleTypeDirective, loadCriteriaDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -139,7 +139,7 @@
                 }
             }
             $scope.title = UtilsService.buildTitleForAddEditor($scope.scopeModal.selectedPricingRuleType.title);
-            
+
         }
 
         function definePricingRuleTypes() {
@@ -156,12 +156,15 @@
 
 
         function buildPricingRuleObjFromScope() {
-             
+
             var settings = pricingRuleTypeDirectiveAPI.getData();
 
             settings.RuleType = $scope.scopeModal.selectedPricingRuleType.value;
-            var criteria = criteriaDirectiveAPI.getData();
-           
+            var criteria = {
+                SuppliersWithZonesGroupSettings: criteriaDirectiveAPI.getData()
+            }
+
+            var suppliersWithZonesGroupSettings =
             criteria.CriteriaType = pricingType
             var pricingRule = {
                 Settings: settings,
@@ -170,12 +173,12 @@
                 BeginEffectiveTime: $scope.scopeModal.beginEffectiveDate,
                 EndEffectiveTime: $scope.scopeModal.endEffectiveDate
             }
+
             return pricingRule;
         }
 
         function loadFilterBySection() {
-            if (pricingRuleEntity != undefined)
-            {
+            if (pricingRuleEntity != undefined) {
                 $scope.scopeModal.beginEffectiveDate = pricingRuleEntity.BeginEffectiveTime;
                 $scope.scopeModal.endEffectiveDate = pricingRuleEntity.EndEffectiveTime;
                 $scope.scopeModal.description = pricingRuleEntity.Description;
@@ -219,11 +222,11 @@
         }
 
 
-       
-        
-       
 
-      
+
+
+
+
 
 
     }

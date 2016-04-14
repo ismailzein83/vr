@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBePurchasepricingrulecriteria', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService','WhS_BE_CarrierAccountAPIService','VRUIUtilsService','VRNotificationService',
+app.directive('vrWhsBePurchasepricingrulecriteria', ['UtilsService', '$compile', 'WhS_BE_PricingRuleAPIService', 'WhS_BE_CarrierAccountAPIService', 'VRUIUtilsService', 'VRNotificationService',
 function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAccountAPIService, VRUIUtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
@@ -33,47 +33,42 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveReadyAPI, undefined, setLoader, directiveReadyPromiseDeferred);
             }
             $scope.onSelectionChanged = function () {
-                if (carrierAccountDirectiveAPI!=undefined)
+                if (carrierAccountDirectiveAPI != undefined)
                     $scope.suppliers = carrierAccountDirectiveAPI.getData();
             };
             defineAPI();
         }
         function defineAPI() {
             var api = {};
+
             api.getData = function () {
                 var obj = {};
-                if ($scope.selectedSuppliersWithZonesStettingsTemplate != undefined)
-                {
+                if ($scope.selectedSuppliersWithZonesStettingsTemplate != undefined) {
                     obj = {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups.SelectiveSuppliersWithZonesGroup,TOne.WhS.BusinessEntity.MainExtensions",
                         SuppliersWithZones: directiveReadyAPI.getData(),
                         ConfigId: $scope.selectedSuppliersWithZonesStettingsTemplate.TemplateConfigID,
                     }
-                    var suppliersWithZonesGroupSettings = {
-                        SuppliersWithZonesGroupSettings: obj
-                    }
-                    return suppliersWithZonesGroupSettings;
                 }
-               else
-                    return obj;
+                return obj;
             }
 
-            api.load = function (payload) {
 
+
+            api.load = function (payload) {
                 $scope.suppliersWithZonesStettingsTemplates = [];
-                var suppliersWithZones ;
+                var suppliersWithZones;
                 var configId;
-                if (payload != undefined && payload.SuppliersWithZonesGroupSettings!=null)
-                {
+                if (payload != undefined && payload.SuppliersWithZonesGroupSettings != null) {
                     suppliersWithZones = payload.SuppliersWithZonesGroupSettings.SuppliersWithZones;
-                    configId=payload.SuppliersWithZonesGroupSettings.ConfigId;
+                    configId = payload.SuppliersWithZonesGroupSettings.ConfigId;
                 }
                 var promises = [];
                 var loadTemplatesPromise = WhS_BE_CarrierAccountAPIService.GetSuppliersWithZonesGroupsTemplates().then(function (response) {
                     angular.forEach(response, function (item) {
                         $scope.suppliersWithZonesStettingsTemplates.push(item);
                     });
-                    
+
                     if (configId != undefined)
                         $scope.selectedSuppliersWithZonesStettingsTemplate = UtilsService.getItemByVal($scope.suppliersWithZonesStettingsTemplates, configId, "TemplateConfigID");
                 });
@@ -90,14 +85,14 @@ function (UtilsService, $compile, WhS_BE_PricingRuleAPIService, WhS_BE_CarrierAc
                     });
                 }
 
-                return  UtilsService.waitMultiplePromises(promises);
+                return UtilsService.waitMultiplePromises(promises);
             }
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
-        
+
         this.initializeController = initializeController;
     }
     return directiveDefinitionObject;
