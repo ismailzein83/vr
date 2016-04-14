@@ -6,7 +6,8 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            onReady:'='
+            onReady: '=',
+            onselectionchanged: '&'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -19,7 +20,10 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
 
             ctrl.tabSelectionChanged = function () {
                 if (ctrl.tabs[ctrl.selectedTabIndex] != undefined)
-                   ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
+                    ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
+                if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
+                    ctrl.onselectionchanged(ctrl.selectedTabIndex);
+                }
             }
 
             ctrl.removeTab = function(tab)
