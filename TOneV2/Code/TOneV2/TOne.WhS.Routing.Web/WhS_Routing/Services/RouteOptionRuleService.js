@@ -27,11 +27,11 @@
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteOptionRule/RouteOptionRuleEditor.html', parameters, settings);
         }
 
-        function editRouteOptionRule(routeOptionRuleId, onRouteOptionRuleUpdated) {
+        function editRouteOptionRule(routeRuleId, onRouteOptionRuleUpdated) {
             var modalSettings = {
             };
             var parameters = {
-                routeOptionRuleId: routeOptionRuleId
+                routeRuleId: routeRuleId
             };
 
             modalSettings.onScopeReady = function (modalScope) {
@@ -44,7 +44,7 @@
             VRNotificationService.showConfirmation()
                 .then(function (response) {
                     if (response) {
-                        return WhS_Routing_RouteOptionRuleAPIService.DeleteRule(routeRuleObj.Entity.OptionRuleId)
+                        return WhS_Routing_RouteOptionRuleAPIService.DeleteRule(routeRuleObj.Entity.RuleId)
                             .then(function (deletionResponse) {
                                 VRNotificationService.notifyOnItemDeleted("Route Option Rule", deletionResponse);
                                 onRouteOptionRuleDeleted(routeRuleObj);

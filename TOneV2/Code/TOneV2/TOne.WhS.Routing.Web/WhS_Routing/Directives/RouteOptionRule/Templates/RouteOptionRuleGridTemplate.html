@@ -3,9 +3,10 @@
              pagingtype="'PagingOnScroll'"
              on-ready="onGridReady"
              menuactions="gridMenuActions"
-             idfield="Entity.OptionRuleId">
-    <vr-datagridcolumn headertext="'Id'" field="'Entity.OptionRuleId'"></vr-datagridcolumn>
+             idfield="Entity.RuleId">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.RuleId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Included Codes'" field="'IncludedCodes'" ng-show="hideIncludedCodesColumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customers'" field="'Customers'" ng-show="hideCustomerColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Suppliers'" field="'Suppliers'" ng-show="hideSupplierColumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Sale Zones'" field="'SaleZones'"></vr-datagridcolumn>
 </vr-datagrid>

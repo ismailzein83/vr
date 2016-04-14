@@ -66,6 +66,11 @@
                             </vr-section>
                         </vr-columns>
                     </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-whs-be-purchasepricingrulecriteria on-ready="scopeModal.onSuppliersWithZonesGroupSettingsDirectiveReady"></vr-whs-be-purchasepricingrulecriteria>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
 
                 <vr-tab header="'Settings'">
@@ -101,7 +106,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRouteOptionRuleEditor" data-onclick="scopeModal.SaveRouteOptionRule" haspermission="hasSaveOptionRulePermission"></vr-button>
+                <vr-button type="Save" formname="formRouteOptionRuleEditor" data-onclick="scopeModal.SaveRouteOptionRule" haspermission="hasSaveRulePermission"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>

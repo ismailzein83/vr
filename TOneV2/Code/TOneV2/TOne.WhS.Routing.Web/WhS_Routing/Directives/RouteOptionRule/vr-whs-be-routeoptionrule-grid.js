@@ -30,6 +30,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
         function initializeController() {
             $scope.routeOptionRules = [];
             $scope.hideCustomerColumn = true;
+            $scope.hideSupplierColumn = true;
             $scope.hideIncludedCodesColumn = true;
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -42,6 +43,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                         var query = payload;
                         if (query.loadedFromRoutingProduct) {
                             $scope.hideCustomerColumn = false;
+                            $scope.hideSupplierColumn = false;
                             $scope.hideIncludedCodesColumn = false;
                             query = payload.query;
                         }
@@ -83,7 +85,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
             {
                 name: "Delete",
                 clicked: deleteRouteOptionRule,
-                //haspermission: hasDeleteRulePermission
+                haspermission: hasDeleteRulePermission
             }
             ];
         }
@@ -101,7 +103,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
             var onRouteOptionRuleUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
             };
-            WhS_Routing_RouteOptionRuleService.editRouteOptionRule(routeOptionRule.Entity.OptionRuleId, onRouteOptionRuleUpdated);
+            WhS_Routing_RouteOptionRuleService.editRouteOptionRule(routeOptionRule.Entity.RuleId, onRouteOptionRuleUpdated);
         }
 
         function deleteRouteOptionRule(routeOptionRule) {

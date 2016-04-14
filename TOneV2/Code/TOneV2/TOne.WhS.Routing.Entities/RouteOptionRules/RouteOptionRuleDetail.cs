@@ -43,5 +43,17 @@ namespace TOne.WhS.Routing.Entities
                 return string.Empty;
             }
         }
+
+        public string Suppliers
+        {
+            get
+            {
+                if (this.Entity.Criteria != null && this.Entity.Criteria.SuppliersWithZonesGroupSettings != null)
+                    return this.Entity.Criteria.SuppliersWithZonesGroupSettings.GetDescription(this.Entity.GetSuppliersWithZonesGroupContext());
+
+                return string.Empty;
+            }
+        }
+
     }
 }

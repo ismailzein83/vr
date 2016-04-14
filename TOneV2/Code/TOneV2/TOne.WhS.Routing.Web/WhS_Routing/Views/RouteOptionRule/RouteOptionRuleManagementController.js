@@ -20,7 +20,7 @@
         load();
 
         function defineScope() {
-            $scope.hasOptionRulePermission = function () {
+            $scope.hasAddRulePermission = function () {
                 return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
             }
 

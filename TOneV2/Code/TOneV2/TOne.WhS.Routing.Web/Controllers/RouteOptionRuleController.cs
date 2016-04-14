@@ -35,14 +35,6 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetCodeCriteriaGroupTemplates")]
-        public List<TemplateConfig> GetCodeCriteriaGroupTemplates()
-        {
-            CodeManager manager = new CodeManager();
-            return manager.GetCodeCriteriaGroupTemplates();
-        }
-
-        [HttpGet]
         [Route("GetRule")]
         public new RouteOptionRule GetRule(int ruleId)
         {

@@ -11,9 +11,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetFilteredRouteOptionRules"), input);
         }
 
-        function GetOptionRule(routeOptionRuleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetOptionRule"), {
-                optionRuleId: routeOptionRuleId
+        function GetRule(routeRuleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRule"), {
+                ruleId: routeRuleId
             });
         }
 
@@ -29,9 +29,6 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "DeleteRule"), { ruleId: ruleId });
         }
 
-        function GetCodeCriteriaGroupTemplates() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetCodeCriteriaGroupTemplates"));
-        }
 
         function GetRouteOptionRuleSettingsTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteOptionRuleSettingsTemplates"));
@@ -51,11 +48,10 @@
 
         return ({
             GetFilteredRouteOptionRules: GetFilteredRouteOptionRules,
-            GetOptionRule: GetOptionRule,
+            GetRule: GetRule,
             AddRule: AddRule,
             UpdateRule: UpdateRule,
             DeleteRule: DeleteRule,
-            GetCodeCriteriaGroupTemplates: GetCodeCriteriaGroupTemplates,
             GetRouteOptionRuleSettingsTemplates: GetRouteOptionRuleSettingsTemplates,
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,
