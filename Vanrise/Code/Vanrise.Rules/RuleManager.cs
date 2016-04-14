@@ -10,16 +10,20 @@ using Vanrise.Rules.Data;
 
 namespace Vanrise.Rules
 {
-    public abstract class RuleManager<T> : RuleManager<T, T> where T : BaseRule 
+    public abstract class RuleManager<T> : RuleManager<T, T> where T : BaseRule
     {
         protected override T MapToDetails(T rule)
         {
             return rule;
         }
     }
-    public abstract class RuleManager<T, Q> where T : BaseRule where Q: class
+    public abstract class RuleManager<T, Q>
+        where T : BaseRule
+        where Q : class
     {
         protected abstract Q MapToDetails(T rule);
+
+        public virtual bool ValidateBeforeAdd(T rule) { return true; }
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
@@ -27,22 +31,31 @@ namespace Vanrise.Rules
             {
                 TypeId = ruleTypeId,
                 RuleDetails = Serializer.Serialize(rule),
-                BED=rule.BeginEffectiveTime,
-                EED=rule.EndEffectiveTime
+                BED = rule.BeginEffectiveTime,
+                EED = rule.EndEffectiveTime
             };
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
             InsertOperationOutput<Q> insertOperationOutput = new InsertOperationOutput<Q>();
             int ruleId;
-            if (ruleDataManager.AddRule(ruleEntity, out ruleId))
+            if (ValidateBeforeAdd(rule))
             {
-                insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                rule.RuleId = ruleId;
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
-                insertOperationOutput.InsertedObject = MapToDetails(rule);
+                if (ruleDataManager.AddRule(ruleEntity, out ruleId))
+                {
+                    insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                    rule.RuleId = ruleId;
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
+                    insertOperationOutput.InsertedObject = MapToDetails(rule);
+                }
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
             }
             return insertOperationOutput;
         }
 
+
+        public virtual bool ValidateBeforeUpdate(T rule) { return true; }
         public Vanrise.Entities.UpdateOperationOutput<Q> UpdateRule(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
@@ -51,16 +64,23 @@ namespace Vanrise.Rules
                 RuleId = rule.RuleId,
                 TypeId = ruleTypeId,
                 RuleDetails = Serializer.Serialize(rule),
-                EED=rule.EndEffectiveTime,
-                BED=rule.BeginEffectiveTime
+                EED = rule.EndEffectiveTime,
+                BED = rule.BeginEffectiveTime
             };
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
             UpdateOperationOutput<Q> updateOperationOutput = new UpdateOperationOutput<Q>();
-            if (ruleDataManager.UpdateRule(ruleEntity))
+            if (ValidateBeforeUpdate(rule))
             {
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
-                updateOperationOutput.UpdatedObject =  MapToDetails(rule);
+                if (ruleDataManager.UpdateRule(ruleEntity))
+                {
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(ruleTypeId);
+                    updateOperationOutput.UpdatedObject = MapToDetails(rule);
+                }
+            }
+            else 
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
             return updateOperationOutput;
         }
@@ -113,7 +133,7 @@ namespace Vanrise.Rules
             return GetCachedOrCreate("GetCachedRules",
                () =>
                {
-                   
+
                    IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
                    IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(GetRuleTypeId());
                    Dictionary<int, T> rules = new Dictionary<int, T>();
@@ -143,7 +163,7 @@ namespace Vanrise.Rules
         {
             string ruleType = typeof(T).FullName;
             int ruleTypeId;
-            if(!s_ruleTypesIds.TryGetValue(ruleType, out ruleTypeId))
+            if (!s_ruleTypesIds.TryGetValue(ruleType, out ruleTypeId))
             {
                 IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
                 ruleTypeId = ruleDataManager.GetRuleTypeId(ruleType);
