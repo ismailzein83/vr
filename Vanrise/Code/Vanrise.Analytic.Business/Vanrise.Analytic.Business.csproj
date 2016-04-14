@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="AnalyticConfigurationManager.cs" />
     <Compile Include="AnalyticManager.cs" />
+    <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="DynamicTypeGenerator.cs" />
     <Compile Include="MeasureEvaluatorRuntimeType.cs" />
     <Compile Include="MeasureValueEvaluatorContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

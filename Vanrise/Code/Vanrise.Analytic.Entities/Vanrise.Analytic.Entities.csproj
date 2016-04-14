@@ -47,6 +47,16 @@
     <Compile Include="AnalyticQuery.cs" />
     <Compile Include="AnalyticRecord.cs" />
     <Compile Include="AnalyticSummaryBigResult.cs" />
+    <Compile Include="Config\AnalyticDimension.cs" />
+    <Compile Include="Config\AnalyticDimensionConfig.cs" />
+    <Compile Include="Config\AnalyticJoin.cs" />
+    <Compile Include="Config\AnalyticMeasure.cs" />
+    <Compile Include="Config\AnalyticTable.cs" />
+    <Compile Include="Config\AnalyticTableSettings.cs" />
+    <Compile Include="Config\AnalyticItemConfig.cs" />
+    <Compile Include="Config\AnalyticJoinConfig.cs" />
+    <Compile Include="Config\AnalyticMeasureConfig.cs" />
+    <Compile Include="Config\IMeasureEvaluator.cs" />
     <Compile Include="DimensionConfiguration.cs" />
     <Compile Include="DimensionInfo.cs" />
     <Compile Include="DimensionValue.cs" />
@@ -64,6 +74,10 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

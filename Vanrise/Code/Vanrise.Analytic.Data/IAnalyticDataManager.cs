@@ -10,5 +10,15 @@ namespace Vanrise.Analytic.Data
     public interface IAnalyticDataManager : IDataManager
     {
         AnalyticSummaryBigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
+
+        AnalyticSummaryBigResult<AnalyticRecord> GetFilteredAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
+
+        AnalyticTable Table { set; }
+
+        Dictionary<string, AnalyticDimension> Dimensions { set; }
+
+        Dictionary<string, AnalyticMeasure> Measures { set; }
+
+        Dictionary<string, AnalyticJoin> Joins { set; }
     }
 }
