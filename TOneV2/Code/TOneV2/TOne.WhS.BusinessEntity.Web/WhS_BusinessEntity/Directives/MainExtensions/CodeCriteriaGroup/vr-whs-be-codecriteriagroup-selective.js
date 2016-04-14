@@ -19,7 +19,21 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                         WithSubCodes: false
                     };
 
-                    $scope.codeCriteriaArray.push(codeCriteria);
+                    var codeIsValid = true;
+
+                    if ($scope.addedCode == undefined || $scope.addedCode.length == 0) {
+                        codeIsValid = false;
+                    }
+                    else {
+                        angular.forEach($scope.codeCriteriaArray, function (item) {
+                            if ($scope.addedCode === item.Code) {
+                                codeIsValid = false;
+                            }
+                        });
+                    }
+
+                    if (codeIsValid)
+                        $scope.codeCriteriaArray.push(codeCriteria);
                 };
 
 
@@ -53,8 +67,7 @@ app.directive('vrWhsBeCodecriteriagroupSelective', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         angular.forEach(payload.Codes, function (item) {
                             $scope.codeCriteriaArray.push(item);
                         });
