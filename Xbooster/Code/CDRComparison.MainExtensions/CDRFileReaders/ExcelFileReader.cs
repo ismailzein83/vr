@@ -81,7 +81,8 @@ namespace CDRComparison.MainExtensions
             for (int rowIndex = 0; rowIndex < worksheet.Cells.Rows.Count && rowIndex < 10; rowIndex++)
             {
                 var data = new List<string>();
-                var row = worksheet.Cells.Rows[rowIndex];
+                Aspose.Cells.Row row = worksheet.Cells.Rows[rowIndex];
+                
                 for (int columnIndex = 0; columnIndex <= row.LastCell.Column; columnIndex++)
                 {
                     Cell cell = worksheet.Cells[rowIndex, columnIndex];
@@ -89,12 +90,12 @@ namespace CDRComparison.MainExtensions
                         throw new NullReferenceException(String.Format("cell[{0}, {1}]", rowIndex, columnIndex));
                     data.Add(cell.StringValue);
                 }
+
+                sample.ColumnCount = row.LastCell.Column + 1;
                 rows.Add(new ExcelFileDataRow() { Data = data });
             }
-
-            sample.ColumnCount = worksheet.Cells.Columns.Count;
+            
             sample.Rows = rows;
-
             return sample;
         }
 
