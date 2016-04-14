@@ -23,15 +23,8 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (context.Target == null)
                 throw new ArgumentNullException("Target");
             IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-
             ICode code = context.Target as ICode;
-
-            if (code == null)
-                return false;
-
-            if (code.BED < DateTime.Now.Add(importSplContext.CodeCloseDateOffset))
-                return true;
-            return false;
+            return (code.BED < DateTime.Now.Add(importSplContext.CodeCloseDateOffset))
         }
     }
 }
