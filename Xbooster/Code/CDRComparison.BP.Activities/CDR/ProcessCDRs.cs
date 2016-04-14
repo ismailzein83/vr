@@ -151,7 +151,7 @@ namespace CDRComparison.BP.Activities
                             DurationInSec = cdr.DurationInSec,
                             CGPN = cdr.CGPN,
                             OriginalCDPN = cdr.OriginalCDPN,
-                            IsPartnerCDR = cdr.IsPartnerCDR,
+                            IsPartnerCDR = !cdr.IsPartnerCDR,
                             OriginalCGPN = cdr.OriginalCGPN,
                         });
                     }
@@ -210,7 +210,7 @@ namespace CDRComparison.BP.Activities
                             DurationInSec = partner.DurationInSec,
                             OriginalCGPN = partner.OriginalCGPN,
                             CGPN = partner.CGPN,
-                            IsPartnerCDR = partner.IsPartnerCDR
+                            IsPartnerCDR = !partner.IsPartnerCDR
 
                         });
                     }

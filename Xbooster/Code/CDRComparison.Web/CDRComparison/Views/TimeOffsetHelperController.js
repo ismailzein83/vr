@@ -52,7 +52,7 @@
             
             $scope.onPartnerGridReady = function (api) {
                 partnerCDRGridAPI = api;
-                if (!$scope.showPartnerGrid)
+                if ($scope.showPartnerGrid)
                 {
                     var query = {
                         IsPartnerCDRs: true,

@@ -100,8 +100,12 @@ namespace CDRComparison.MainExtensions
         {
             if (propertyType == typeof(string))
                 return fldValue;
-            else if (propertyType == typeof(DateTime))
-                return DateTime.ParseExact(fldValue, this.DateTimeFormat, CultureInfo.CurrentCulture);
+            else if (propertyType == typeof(DateTime)) {
+                DateTime dateTimeValue;
+                if (!DateTime.TryParseExact(fldValue, this.DateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTimeValue))
+                    throw new Exception(String.Format("Invalid date time format '{0}'. Could not parse date time value '{1}'", this.DateTimeFormat, fldValue));
+                return dateTimeValue;
+            }
             else if (propertyType == typeof(TimeSpan))
                 return TimeSpan.Parse(fldValue);
             else if (propertyType == typeof(Boolean))

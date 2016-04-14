@@ -41,17 +41,14 @@ namespace CDRComparison.BP.Activities
 
         #endregion
 
-        #region Fields
-
-        NormalizeNumberSettings _cdpnNormalizationSettings;
-        NormalizeNumberSettings _cgpnNormalizationSettings;
-        
-        #endregion
-
         protected override void DoWork(LoadCDRsInput inputArgument, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading CDRs from {0} Source...", !inputArgument.IsPartnerCDRs ? "System" : "Partner");
-            SetNumberNormalizationSettings(inputArgument.CDRSource.NormalizationRules);
+
+            NormalizeNumberSettings cdpnNormalizationSettings;
+            NormalizeNumberSettings cgpnNormalizationSettings;
+            SetNumberNormalizationSettings(inputArgument.CDRSource.NormalizationRules, out cdpnNormalizationSettings, out cgpnNormalizationSettings);
+            
             long totalCount = 0;
 
             Action<IEnumerable<CDR>> onCDRsReceived = (cdrs) =>
@@ -68,7 +65,7 @@ namespace CDRComparison.BP.Activities
                         IsPartnerCDR = inputArgument.IsPartnerCDRs
                     };
 
-                    NormalizeNumbers(item);
+                    NormalizeNumbers(item, cdpnNormalizationSettings, cgpnNormalizationSettings);
                     list.Add(item);
                 }
                 var cdrBatch = new CDRBatch() { CDRs = list };
@@ -101,33 +98,37 @@ namespace CDRComparison.BP.Activities
 
         #region Private Methods
 
-        void SetNumberNormalizationSettings(IEnumerable<NormalizationRule> normalizationRules)
+        void SetNumberNormalizationSettings(IEnumerable<NormalizationRule> normalizationRules, out NormalizeNumberSettings cdpnNormalizationSettings, out NormalizeNumberSettings cgpnNormalizationSettings)
         {
             if (normalizationRules == null)
+            {
+                cdpnNormalizationSettings = null;
+                cgpnNormalizationSettings = null;
                 return;
+            }
             
             NormalizationRule cdpnNormalizationRule = normalizationRules.FindRecord(itm => itm.FieldToNormalize == "CDPN");
             NormalizationRule cgpnNormalizationRule = normalizationRules.FindRecord(itm => itm.FieldToNormalize == "CGPN");
 
-            _cdpnNormalizationSettings = (cdpnNormalizationRule != null) ? cdpnNormalizationRule.NormalizationSettings : null;
-            _cgpnNormalizationSettings = (cgpnNormalizationRule != null) ? cgpnNormalizationRule.NormalizationSettings : null;
+            cdpnNormalizationSettings = (cdpnNormalizationRule != null) ? cdpnNormalizationRule.NormalizationSettings : null;
+            cgpnNormalizationSettings = (cgpnNormalizationRule != null) ? cgpnNormalizationRule.NormalizationSettings : null;
         }
 
-        void NormalizeNumbers(CDR cdr)
+        void NormalizeNumbers(CDR cdr, NormalizeNumberSettings cdpnNormalizationSettings, NormalizeNumberSettings cgpnNormalizationSettings)
         {
-            if (_cdpnNormalizationSettings != null)
+            if (cdpnNormalizationSettings != null)
             {
                 var cdpnNormalizationContext = new NormalizeRuleContext() { Value = cdr.OriginalCDPN };
-                _cdpnNormalizationSettings.ApplyNormalizationRule(cdpnNormalizationContext);
+                cdpnNormalizationSettings.ApplyNormalizationRule(cdpnNormalizationContext);
                 cdr.CDPN = cdpnNormalizationContext.NormalizedValue;
             }
             else
                 cdr.CDPN = cdr.OriginalCDPN;
 
-            if (_cgpnNormalizationSettings != null)
+            if (cgpnNormalizationSettings != null)
             {
                 var cgpnNormalizationContext = new NormalizeRuleContext() { Value = cdr.OriginalCGPN };
-                _cgpnNormalizationSettings.ApplyNormalizationRule(cgpnNormalizationContext);
+                cgpnNormalizationSettings.ApplyNormalizationRule(cgpnNormalizationContext);
                 cdr.CGPN = cgpnNormalizationContext.NormalizedValue;
             }
             else

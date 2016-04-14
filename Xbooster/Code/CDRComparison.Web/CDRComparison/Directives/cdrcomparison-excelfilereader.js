@@ -203,6 +203,8 @@
                 }
 
                 function defineHeaderGridDataItem(columnCount) {
+                    resetAvailableCDRFields();
+
                     var dataItem = {};
                     dataItem.cells = [];
                     for (var i = 0; i < columnCount; i++) {
@@ -211,6 +213,13 @@
                         dataItem.cells.push(cell);
                     }
                     $scope.scopeModel.headerGridSource.push(dataItem);
+
+                    function resetAvailableCDRFields() {
+                        $scope.scopeModel.availableCDRFields.length = 0;
+                        for (var i = 0; i < cdrFields.length; i++) {
+                            $scope.scopeModel.availableCDRFields.push(cdrFields[i]);
+                        }
+                    }
 
                     function getSelectedField(cellIndex) {
                         var selectedField;
