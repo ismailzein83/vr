@@ -276,7 +276,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Back',
                     class: 'glyphicon glyphicon-chevron-left'
                 };
-
+            case 'Convert':
+                return {
+                    text: 'Convert',
+                    class: 'glyphicon glyphicon-retweet'
+                };
                
         } 
     }

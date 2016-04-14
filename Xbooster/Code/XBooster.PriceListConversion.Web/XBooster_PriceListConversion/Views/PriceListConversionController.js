@@ -1,90 +1,86 @@
 ﻿(
     function (appControllers) {
         "use strict";
-        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'XBooster_PriceListConversion_PriceListConversionAPIService'];
-        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, XBooster_PriceListConversion_PriceListConversionAPIService) {
+        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'XBooster_PriceListConversion_PriceListConversionAPIService','VRModalService','XBooster_PriceListConversion_PriceListTemplateService','XBooster_PriceListConversion_PriceListTemplateAPIService'];
+        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, XBooster_PriceListConversion_PriceListConversionAPIService, VRModalService, XBooster_PriceListConversion_PriceListTemplateService, XBooster_PriceListConversion_PriceListTemplateAPIService) {
 
             var inputWorkBookApi;
             var outPutWorkBookAPI;
-            var rateListAPI;
-            var rateListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var inputConfigurationAPI;
+            var inputConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var codeListAPI;
-            var codeListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var inputPriceListTemplateAPI;
+            var inputPriceListTemplateReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             defineScope();
             load();
 
             function defineScope() {
 
                 $scope.scopeModel = {};
-                $scope.scopeModel.showInputExcelToMap = true;
-                $scope.scopeModel.showOutputExcelToMap = false;
 
                 $scope.scopeModel.onReadyWoorkBook = function (api) {
                     inputWorkBookApi = api;
                 }
 
-                $scope.scopeModel.onCodeListMappingReady = function (api) {
-                    codeListAPI = api;
-                    codeListMappingReadyPromiseDeferred.resolve();
+                $scope.scopeModel.onInputConfigurationSelectiveReady = function (api) {
+                    inputConfigurationAPI = api;
+                    inputConfigurationReadyPromiseDeferred.resolve();
                 }
-
-                $scope.scopeModel.onRateListMappingReady = function (api) {
-                    rateListAPI = api;
-                    rateListMappingReadyPromiseDeferred.resolve();
-                }
-
 
                 $scope.scopeModel.startConvertAndDownload = function () {
-                    var listMappings = [];
-                    listMappings.push(codeListAPI.getData());
-                    listMappings.push(rateListAPI.getData());
-                    var obj = {
-                        ListMappings: listMappings,
-                        FieldMappings: null,
-                        DateTimeFormat: "yyyy/MM/dd"
-                    }
-                    var inputExcel = {
-                        $type:"XBooster.PriceListConversion.MainExtensions.InputPriceListSettings.BasicInputPriceListSettings,XBooster.PriceListConversion.MainExtensions",
-                        ExcelConversionSettings: obj,
-                        TemplateFileId: $scope.scopeModel.inPutFile.fileId
-                    }
 
-                    var outPutExcel = {
-                        $type:"XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings.BasicOutputPriceListSettings,XBooster.PriceListConversion.MainExtensions",
-                        TemplateFileId: $scope.scopeModel.outPutFile.fileId,
-                        SheetIndex: $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData().SheetIndex,
-                        FirstRowIndex: $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData().RowIndex,
-                        CodeCellIndex: $scope.scopeModel.outPutFieldMappings[1].fieldMappingAPI.getData().CellIndex,
-                        ZoneCellIndex: $scope.scopeModel.outPutFieldMappings[2].fieldMappingAPI.getData().CellIndex,
-                        RateCellIndex: $scope.scopeModel.outPutFieldMappings[3].fieldMappingAPI.getData().CellIndex,
-                        EffectiveDateCellIndex: $scope.scopeModel.outPutFieldMappings[4].fieldMappingAPI.getData().CellIndex,
-                    }
-                    var priceListConversion = {
-                            InputPriceListSettings: inputExcel,
-                            OutputPriceListSettings:outPutExcel
+                    var onOutputPriceListTemplateChoosen = function (choosenPriceListTemplateObj) {
+                        $scope.scopeModel.isLoading = true;
+                        var priceListConversion = {
+                            InputFileId: $scope.scopeModel.inPutFile.fileId,
+                            InputPriceListSettings: buildInputConfigurationObj(),
+                            OutputPriceListTemplateId: choosenPriceListTemplateObj != undefined ? choosenPriceListTemplateObj.pricelistTemplateId : undefined
                         }
-                    return XBooster_PriceListConversion_PriceListConversionAPIService.ConvertAndDownloadPriceList(priceListConversion).then(function (response) {
-                        UtilsService.downloadFile(response.data, response.headers);
-                    });;
+                        return XBooster_PriceListConversion_PriceListConversionAPIService.ConvertAndDownloadPriceList(priceListConversion).then(function (response) {
+                            UtilsService.downloadFile(response.data, response.headers);
+                        }).finally(function () {
+                            $scope.scopeModel.isLoading = false;;
+                        });
+                    };
+                    XBooster_PriceListConversion_PriceListTemplateService.openOutputPriceListTemplates(onOutputPriceListTemplateChoosen);
                 }
 
-                $scope.scopeModel.next = function () {
-                    $scope.scopeModel.showInputExcelToMap = false;
-                    $scope.scopeModel.showOutputExcelToMap = true;
+                $scope.scopeModel.saveInputConfiguration = function ()
+                {
+                   return saveInputConfiguration();
                 }
 
-                $scope.scopeModel.back = function () {
-                    $scope.scopeModel.showInputExcelToMap = true;
-                    $scope.scopeModel.showOutputExcelToMap = false;
+                $scope.scopeModel.onInputPriceListTemplateSelectorReady = function (api) {
+                    inputPriceListTemplateAPI = api;
+                    inputPriceListTemplateReadyPromiseDeferred.resolve();
                 }
 
-                $scope.scopeModel.outPutFieldMappings = [{ fieldName: "First Row", isRequired: true, type: "row" }, { fieldName: "Code", isRequired: true, type: "cell" }, { fieldName: "Zone", isRequired: true, type: "cell" }, { fieldName: "Rate", isRequired: true, type: "cell" }, { fieldName: "Effective Date", isRequired: true, type: "cell" }]
+                $scope.scopeModel.onInputPriceListTemplateSelectionChanged = function (api) {
+                    if (inputPriceListTemplateAPI != undefined && !$scope.scopeModel.isLoading && inputConfigurationAPI !=undefined)
+                    {
+                        $scope.scopeModel.isLoading = true;
+                        getPriceListTemplate(inputPriceListTemplateAPI.getSelectedIds()).then(function (response) {
+                           
+                            if (response)
+                            {
+                                var payload = {
+                                    context: buildContext(),
+                                    configDetails: response.ConfigDetails
+                                };
+                                var setLoader = function (value) {
+                                    $scope.scopeModel.isLoadingInputPriceListTemplate = value;
+                                };
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, inputConfigurationAPI, payload, setLoader, inputConfigurationReadyPromiseDeferred);
+                            }
+                           
 
-                $scope.scopeModel.onOutPutReadyWoorkBook = function (api) {
-                    outPutWorkBookAPI = api;
+                        }).finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                        });
+                        
+                    }
+                    
                 }
-
             }
 
             function load() {
@@ -94,7 +90,7 @@
 
             function loadAllControls()
             {
-                return UtilsService.waitMultipleAsyncOperations([loadRateListMapping, loadCodeListMapping, loadOutputMappingFields])
+                return UtilsService.waitMultipleAsyncOperations([loadInputConfiguration, loadInputPriceListTemplateSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -103,71 +99,32 @@
                });
             }
 
-            function loadOutputMappingFields() {
-                var promises = [];
-                for (var i = 0; i < $scope.scopeModel.outPutFieldMappings.length; i++) {
-                    var item = $scope.scopeModel.outPutFieldMappings[i];
-                    item.readyPromiseDeferred = UtilsService.createPromiseDeferred(),
-                    item.loadPromiseDeferred = UtilsService.createPromiseDeferred()
-                    promises.push(item.loadPromiseDeferred.promise);
-                    setOutputFieldMappingAPI(item);
-                }
-                return UtilsService.waitMultiplePromises(promises);
-            }
-
-            function setOutputFieldMappingAPI(dataItem) {
-                var payload = {
-                    context: buildOutputContext(),
-                };
-                dataItem.onFieldReady = function (api) {
-                    dataItem.fieldMappingAPI = api;
-                  
-                    dataItem.readyPromiseDeferred.resolve();
-                }
-                //dataItem.validate = function () {
-                //    if (dataItem.fieldMappingAPI != undefined && $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI != undefined) {
-                //        var rowIndex = $scope.scopeModel.outPutFieldMappings[0].fieldMappingAPI.getData();
-                //        var obj = dataItem.fieldMappingAPI.getData();
-                //        if (obj != undefined) {
-                //            if (rowIndex == undefined || obj.RowIndex != rowIndex.RowIndex)
-                //                return "Error row index.";
-                //        }
-                //    }
-                //    return null;
-                //}
-                dataItem.readyPromiseDeferred.promise
-                      .then(function () {
-                          VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
-                      });
-            }
-
-            function loadRateListMapping()
+            function loadInputConfiguration()
             {
-                var loadRateListMappingPromiseDeferred = UtilsService.createPromiseDeferred();
-                rateListMappingReadyPromiseDeferred.promise.then(function () {
+                var loadInputConfigurationPromiseDeferred = UtilsService.createPromiseDeferred();
+                inputConfigurationReadyPromiseDeferred.promise.then(function () {
+                    inputConfigurationReadyPromiseDeferred = undefined;
                     var payload = {
                         context: buildContext(),
-                        fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell" }],
-                        listName: "RateList"
                     };
-                    VRUIUtilsService.callDirectiveLoad(rateListAPI, payload, loadRateListMappingPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(inputConfigurationAPI, payload, loadInputConfigurationPromiseDeferred);
                 });
 
-                return loadRateListMappingPromiseDeferred.promise;
+                return loadInputConfigurationPromiseDeferred.promise;
             }
 
-            function loadCodeListMapping() {
-                var loadCodeListMappingPromiseDeferred = UtilsService.createPromiseDeferred();
-                codeListMappingReadyPromiseDeferred.promise.then(function () {
-                    var payload = {
-                        context: buildContext(),
-                        fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell" }],
-                        listName: "CodeList"
-                    };
-                    VRUIUtilsService.callDirectiveLoad(codeListAPI, payload, loadCodeListMappingPromiseDeferred);
+            function loadInputPriceListTemplateSelector() {
+                var loadInputPriceListTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
+                inputPriceListTemplateReadyPromiseDeferred.promise.then(function () {
+                    var payload;
+                    VRUIUtilsService.callDirectiveLoad(inputPriceListTemplateAPI, payload, loadInputPriceListTemplatePromiseDeferred);
                 });
 
-                return loadCodeListMappingPromiseDeferred.promise;
+                return loadInputPriceListTemplatePromiseDeferred.promise;
+            }
+
+            function getPriceListTemplate(priceListTemplateId) {
+                return XBooster_PriceListConversion_PriceListTemplateAPIService.GetPriceListTemplate(priceListTemplateId);
             }
 
             function buildContext() {
@@ -193,41 +150,18 @@
                 return context;
             }
 
-            function buildOutputContext() {
-                var context = {
-                    getSelectedCell: getSelectedCell,
-                    setSelectedCell: selectCellAtSheet,
-                    getSelectedSheet: getSelectedSheet,
-                    getFirstRowIndex: getFirstRowIndex
-                }
-                function selectCellAtSheet(row, col,s) {
-                    var a = parseInt(row);
-                    var b = parseInt(col);
-                    if (outPutWorkBookAPI != undefined && outPutWorkBookAPI.getSelectedSheetApi() != undefined)
-                        outPutWorkBookAPI.selectCellAtSheet(a, b, s);
-                }
-                function getSelectedCell() {
-                    if (outPutWorkBookAPI != undefined && outPutWorkBookAPI.getSelectedSheetApi() != undefined)
-                        return outPutWorkBookAPI.getSelectedSheetApi().getSelected();
-                }
-                function getSelectedSheet() {
-                    if (outPutWorkBookAPI != undefined)
-                        return outPutWorkBookAPI.getSelectedSheet();
-                }
-                function getFirstRowIndex()
-                {
-                    var firstRow = $scope.scopeModel.outPutFieldMappings[0];
-                    if (firstRow.fieldMappingAPI != undefined)
-                    {
-                        var obj = firstRow.fieldMappingAPI.getData();
-                        if(obj !=undefined)
-                            return { row: obj.RowIndex }
-
-                    }
-                }
-                return context;
+            function buildInputConfigurationObj()
+            {
+                if (inputConfigurationAPI !=undefined)
+                    return inputConfigurationAPI.getData();
             }
 
+            function saveInputConfiguration()
+            {
+                var onPriceListTemplatSaved = function (priceListTemplateObj) {
+                };
+                XBooster_PriceListConversion_PriceListTemplateService.saveInputPriceListTemplate(onPriceListTemplatSaved, buildInputConfigurationObj());
+            }
         }
 
         appControllers.controller('ExcelConversion_PriceListConversionController', priceListConversionController);

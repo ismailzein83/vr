@@ -74,6 +74,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     if (payload != undefined) {
                         var promises = [];
                         context = payload.context;

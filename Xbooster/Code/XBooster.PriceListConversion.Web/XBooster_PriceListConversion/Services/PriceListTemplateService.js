@@ -5,7 +5,8 @@
     PriceListTemplateService.$inject = ['VRModalService', 'VRNotificationService'];
 
     function PriceListTemplateService(VRModalService, VRNotificationService) {
-        function editPriceListTemplate(priceListTemplateId, onPriceListTemplateUpdated) {
+
+        function editOutputPriceListTemplate(priceListTemplateId, onPriceListTemplateUpdated) {
             var settings = {
             };
 
@@ -19,7 +20,7 @@
             VRModalService.showModal("/Client/Modules/XBooster_PriceListConversion/Views/PriceListTemplateEditor.html", parameters, settings);
         }
 
-        function addPriceListTemplate(onPriceListTemplateAdded) {
+        function addOutputPriceListTemplate(onPriceListTemplateAdded) {
             var settings = {
             };
             settings.onScopeReady = function (modalScope) {
@@ -30,9 +31,38 @@
             VRModalService.showModal("/Client/Modules/XBooster_PriceListConversion/Views/PriceListTemplateEditor.html", parameters, settings);
         }
 
+        function openOutputPriceListTemplates(onOutputPriceListTemplateChoosen) {
+            var settings = {
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onOutputPriceListTemplateChoosen = onOutputPriceListTemplateChoosen;
+            };
+            var parameters = {};
+
+            VRModalService.showModal("/Client/Modules/XBooster_PriceListConversion/Views/OutputPriceListTemplateEditor.html", parameters, settings);
+        }
+
+        function saveInputPriceListTemplate(onPriceListTemplatSaved, configDetails, priceListTemplateId) {
+            var settings = {
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onPriceListTemplatSaved = onPriceListTemplatSaved;
+            };
+            var parameters = {
+                ConfigDetails:configDetails,
+                PriceListTemplateId: priceListTemplateId
+            };
+
+            VRModalService.showModal("/Client/Modules/XBooster_PriceListConversion/Views/InputPriceListTemplateEditor.html", parameters, settings);
+        }
+
+
         return ({
-            editPriceListTemplate: editPriceListTemplate,
-            addPriceListTemplate: addPriceListTemplate
+            editOutputPriceListTemplate: editOutputPriceListTemplate,
+            addOutputPriceListTemplate: addOutputPriceListTemplate,
+            openOutputPriceListTemplates: openOutputPriceListTemplates,
+            saveInputPriceListTemplate: saveInputPriceListTemplate
         })
     }
 

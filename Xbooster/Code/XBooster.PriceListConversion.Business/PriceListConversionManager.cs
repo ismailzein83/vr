@@ -17,11 +17,17 @@ namespace XBooster.PriceListConversion.Business
         public byte[] ConvertAndDownloadPriceList(Entities.PriceListConversionInput priceListConversion)
         {
             InputPriceListExecutionContext inPutContext = new InputPriceListExecutionContext();
+            inPutContext.InputFileId = priceListConversion.InputFileId;
             ConvertedExcel convertedExcel =  priceListConversion.InputPriceListSettings.Execute(inPutContext);
             PriceList priceListItem = ConvertToPriceListItem(convertedExcel);
             OutputPriceListExecutionContext context = new OutputPriceListExecutionContext();
             context.Records = priceListItem.Records;
-            return priceListConversion.OutputPriceListSettings.Execute(context);
+            PriceListTemplateManager priceListTemplateManager = new Business.PriceListTemplateManager();
+            PriceListTemplate priceListTemplate= priceListTemplateManager.GetPriceListTemplate(priceListConversion.OutputPriceListTemplateId);
+            if(priceListTemplate == null || priceListTemplate.ConfigDetails == null)
+                throw new NullReferenceException("PriceListTemplate");
+            OutputPriceListSettings outputPriceListSettings = priceListTemplate.ConfigDetails as OutputPriceListSettings;
+            return outputPriceListSettings.Execute(context);
         }
 
         private PriceList ConvertToPriceListItem(ConvertedExcel convertedExcel)

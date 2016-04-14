@@ -44,9 +44,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -109,6 +106,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -138,13 +139,22 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="web.config" />
-    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\Templates\BasicOutputPriceListConfiguration.html" />
-    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\xbooster-pricelistconversion-outputpricelistconfiguration-basic.js" />
-    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\Templates\OutputPriceListTemplateGrid.html" />
-    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\xbooster-pricelistconversion-outputpricelisttemplate-grid.js" />
-    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\xbooster-pricelistconversion-outputpricelistconfiguration-selective.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\InputPriceListConfiguration\Templates\BasicInputPriceListConfiguration.html" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\InputPriceListConfiguration\xbooster-pricelistconversion-inputpricelistconfiguration-basic.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputPriceListConfiguration\Templates\BasicOutputPriceListConfiguration.html" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputPriceListConfiguration\xbooster-pricelistconversion-outputpricelistconfiguration-basic.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\InputPriceListConfiguration\xbooster-pricelistconversion-inputpricelistconfiguration-selective.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\InputPriceListConfiguration\xbooster-pricelistconversion-inputpricelisttemplate-selector.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\OutputPriceListConfiguration\Templates\OutputPriceListTemplateGrid.html" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\OutputPriceListConfiguration\xbooster-pricelistconversion-outputpricelisttemplate-grid.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\OutputPriceListConfiguration\xbooster-pricelistconversion-outputpricelistconfiguration-selective.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\OutputPriceListConfiguration\xbooster-pricelistconversion-outputpricelisttemplate-selector.js" />
     <Content Include="XBooster_PriceListConversion\Services\APIServices\PriceListTemplateAPIService.js" />
     <Content Include="XBooster_PriceListConversion\Services\PriceListTemplateService.js" />
+    <Content Include="XBooster_PriceListConversion\Views\InputPriceListTemplateEditor.html" />
+    <Content Include="XBooster_PriceListConversion\Views\InputPriceListTemplateEditorController.js" />
+    <Content Include="XBooster_PriceListConversion\Views\OutputPriceListTemplateEditor.html" />
+    <Content Include="XBooster_PriceListConversion\Views\OutputPriceListTemplateEditorController.js" />
     <Content Include="XBooster_PriceListConversion\Views\PriceListTemplateEditor.html" />
     <Content Include="XBooster_PriceListConversion\Views\PriceListTemplateEditorController.js" />
     <Content Include="XBooster_PriceListConversion\Views\PriceListTemplateManagement.html" />

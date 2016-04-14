@@ -8,27 +8,65 @@
         function GetFilteredInputPriceListTemplates(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetFilteredInputPriceListTemplates'), input);
         }
-        function AddInputPriceListTemplate(priceListTemplateObj) {
-            return BaseAPIService.post(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'AddInputPriceListTemplate'), priceListTemplateObj);
+
+        function AddOutputPriceListTemplate(priceListTemplateObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'AddOutputPriceListTemplate'), priceListTemplateObj);
         }
+
         function UpdateInputPriceListTemplate(priceListTemplateObj) {
             return BaseAPIService.post(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'UpdateInputPriceListTemplate'), priceListTemplateObj);
         }
+
+        function AddInputPriceListTemplate(priceListTemplateObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'AddInputPriceListTemplate'), priceListTemplateObj);
+        }
+
+        function UpdateOutputPriceListTemplate(priceListTemplateObj) {
+            return BaseAPIService.post(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'UpdateOutputPriceListTemplate'), priceListTemplateObj);
+        }
+
         function GetOutputPriceListConfigurationTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetOutputPriceListConfigurationTemplateConfigs'));
         }
+
         function GetPriceListTemplate(priceListTemplateId) {
             return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetPriceListTemplate'),
                 {
                     priceListTemplateId: priceListTemplateId
                 });
         }
+
+        function GetOutputPriceListTemplates(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetOutputPriceListTemplates'),
+                {
+                    filter: filter
+                });
+        }
+
+        function GetInputPriceListTemplates(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetInputPriceListTemplates'),
+                {
+                    filter: filter
+                });
+        }
+
+        function GetInputPriceListConfigurationTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetInputPriceListConfigurationTemplateConfigs'));
+        }
+        
+
         return ({
             GetFilteredInputPriceListTemplates: GetFilteredInputPriceListTemplates,
             UpdateInputPriceListTemplate: UpdateInputPriceListTemplate,
-            AddInputPriceListTemplate: AddInputPriceListTemplate,
+            AddInputPriceListTemplate:AddInputPriceListTemplate,
+            AddOutputPriceListTemplate: AddOutputPriceListTemplate,
+            UpdateOutputPriceListTemplate:UpdateOutputPriceListTemplate,
             GetOutputPriceListConfigurationTemplateConfigs: GetOutputPriceListConfigurationTemplateConfigs,
-            GetPriceListTemplate: GetPriceListTemplate
+            GetPriceListTemplate: GetPriceListTemplate,
+            GetOutputPriceListTemplates: GetOutputPriceListTemplates,
+            GetInputPriceListConfigurationTemplateConfigs: GetInputPriceListConfigurationTemplateConfigs,
+            GetInputPriceListTemplates: GetInputPriceListTemplates
+
         });
     }
     appControllers.service('XBooster_PriceListConversion_PriceListTemplateAPIService', PriceListTemplateAPIService);

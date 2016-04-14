@@ -9,5 +9,6 @@ namespace XBooster.PriceListConversion.Business
 {
     public class InputPriceListExecutionContext : IInputPriceListExecutionContext
     {
+        public int InputFileId { get; set; }
     }
 }

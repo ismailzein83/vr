@@ -27,7 +27,7 @@
                 var onPriceListTemplateAdded = function (priceListTemplateObj) {
                     priceListTemplateGridAPI.onPriceListTemplateAdded(priceListTemplateObj);
                 };
-                XBooster_PriceListConversion_PriceListTemplateService.addPriceListTemplate(onPriceListTemplateAdded);
+                XBooster_PriceListConversion_PriceListTemplateService.addOutputPriceListTemplate(onPriceListTemplateAdded);
             };
         }
 

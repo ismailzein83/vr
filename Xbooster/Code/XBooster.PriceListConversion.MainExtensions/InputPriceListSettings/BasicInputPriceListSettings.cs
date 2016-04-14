@@ -14,7 +14,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
 {
     public class BasicInputPriceListSettings : Entities.InputPriceListSettings
     {
-        public int TemplateFileId { get; set; }
+     
 
         public ExcelConversionSettings ExcelConversionSettings { get; set; }
 
@@ -22,7 +22,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
         {
             ExcelConvertor excelConvertor = new ExcelConvertor();
 
-            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(this.TemplateFileId,this.ExcelConversionSettings);
+            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, this.ExcelConversionSettings);
             return convertedExcel;
         }
     }

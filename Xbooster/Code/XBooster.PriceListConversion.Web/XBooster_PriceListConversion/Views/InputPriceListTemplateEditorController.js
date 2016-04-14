@@ -2,16 +2,13 @@
 
     'use strict';
 
-    PriceListTemplateEditorController.$inject = ['$scope', 'XBooster_PriceListConversion_PriceListTemplateAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService','VRUIUtilsService'];
+    InputPriceListTemplateEditorController.$inject = ['$scope', 'XBooster_PriceListConversion_PriceListTemplateAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function PriceListTemplateEditorController($scope, XBooster_PriceListConversion_PriceListTemplateAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function InputPriceListTemplateEditorController($scope, XBooster_PriceListConversion_PriceListTemplateAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
         var isEditMode;
         var priceListTemplateId;
         var priceListTemplateEntity;
-
-        var outPutWorkBookAPI;
-        var outputConfigurationSelectiveAPI;
-        var outputPriceListConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var configDetails;
         loadParameters();
         defineScope();
         load();
@@ -20,7 +17,11 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null)
+            {
+                configDetails = parameters.ConfigDetails
                 priceListTemplateId = parameters.PriceListTemplateId;
+
+            }
 
             isEditMode = (priceListTemplateId != undefined);
         }
@@ -39,10 +40,6 @@
                 $scope.modalContext.closeModal();
             };
 
-            $scope.scopeModel.onOutputConfigurationSelectiveReady = function (api) {
-                outputConfigurationSelectiveAPI = api;
-                outputPriceListConfigurationReadyPromiseDeferred.resolve();
-            };
         }
         //$scope.hasSaveUserPermission = function () {
         //    if (isEditMode) {
@@ -78,25 +75,13 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadOutputPriceListConfigurationSelective])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.scopeModel.isLoading = false;
               });
-        }
-
-        function loadOutputPriceListConfigurationSelective() {
-            var loadOutputPriceListConfigurationPromiseDeferred = UtilsService.createPromiseDeferred();
-            outputPriceListConfigurationReadyPromiseDeferred.promise.then(function () {
-                var payload = {
-                    configDetails: priceListTemplateEntity != undefined ? priceListTemplateEntity.ConfigDetails : undefined,
-                };
-                VRUIUtilsService.callDirectiveLoad(outputConfigurationSelectiveAPI, payload, loadOutputPriceListConfigurationPromiseDeferred);
-            });
-
-            return loadOutputPriceListConfigurationPromiseDeferred.promise;
         }
 
         function setTitle() {
@@ -115,15 +100,10 @@
         }
 
         function buildPriceListTemplateObjFromScope() {
-            var outPutExcel;
-            if(outputConfigurationSelectiveAPI !=undefined)
-            {
-                outPutExcel = outputConfigurationSelectiveAPI.getData();
-            }
             var priceListTemplateObject = {
-                PriceListTemplateId:priceListTemplateId,
+                PriceListTemplateId: priceListTemplateId,
                 Name: $scope.scopeModel.name,
-                ConfigDetails: outPutExcel
+                ConfigDetails: configDetails
             };
             return priceListTemplateObject;
         }
@@ -133,11 +113,9 @@
 
             var priceListTemplateObject = buildPriceListTemplateObjFromScope();
 
-            return XBooster_PriceListConversion_PriceListTemplateAPIService.AddOutputPriceListTemplate(priceListTemplateObject)
+            return XBooster_PriceListConversion_PriceListTemplateAPIService.AddInputPriceListTemplate(priceListTemplateObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('PriceListTemplate', response, 'Name')) {
-                    if ($scope.onPriceListTemplateAdded != undefined)
-                        $scope.onPriceListTemplateAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -153,10 +131,8 @@
 
             var priceListTemplateObject = buildPriceListTemplateObjFromScope();
 
-            return XBooster_PriceListConversion_PriceListTemplateAPIService.UpdateOutputPriceListTemplate(priceListTemplateObject).then(function (response) {
+            return XBooster_PriceListConversion_PriceListTemplateAPIService.UpdateInputPriceListTemplate(priceListTemplateObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('PriceListTemplate', response, 'Name')) {
-                    if ($scope.onPriceListTemplateUpdated != undefined)
-                        $scope.onPriceListTemplateUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -167,6 +143,6 @@
         }
     }
 
-    appControllers.controller('XBooster_PriceListConversion_PriceListTemplateEditorController', PriceListTemplateEditorController);
+    appControllers.controller('XBooster_PriceListConversion_InputPriceListTemplateEditorController', InputPriceListTemplateEditorController);
 
 })(appControllers);

@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace XBooster.PriceListConversion.Entities
 {
-    public interface IInputPriceListExecutionContext
+    public class PriceListTemplateFilter
     {
-        int InputFileId { get;}
     }
 }

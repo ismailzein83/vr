@@ -21,7 +21,7 @@ app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsS
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/XBooster_PriceListConversion/Directives/PriceListTemplate/Templates/OutputPriceListTemplateGrid.html"
+            templateUrl: "/Client/Modules/XBooster_PriceListConversion/Directives/PriceListTemplate/OutputPriceListTemplateGrid/Templates/OutputPriceListTemplateGrid.html"
 
         };
 
@@ -86,7 +86,7 @@ app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsS
                 var onPriceListTemplateUpdated = function (priceListTemplateObj) {
                     gridAPI.itemUpdated(priceListTemplateObj);
                 }
-                XBooster_PriceListConversion_PriceListTemplateService.editPriceListTemplate(dataItem.Entity.PriceListTemplateId, onPriceListTemplateUpdated);
+                XBooster_PriceListConversion_PriceListTemplateService.editOutputPriceListTemplate(dataItem.Entity.PriceListTemplateId, onPriceListTemplateUpdated);
             }
         }
 

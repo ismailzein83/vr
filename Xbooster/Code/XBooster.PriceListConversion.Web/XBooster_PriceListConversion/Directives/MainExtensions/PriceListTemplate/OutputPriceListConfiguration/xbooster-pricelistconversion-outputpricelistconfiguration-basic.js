@@ -20,7 +20,7 @@
             },
             controllerAs: "outputbasicCtrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/XBooster_PriceListConversion/Directives/MainExtensions/PriceListTemplate/Templates/BasicOutputPriceListConfiguration.html"
+            templateUrl: "/Client/Modules/XBooster_PriceListConversion/Directives/MainExtensions/PriceListTemplate/OutputPriceListConfiguration/Templates/BasicOutputPriceListConfiguration.html"
         };
 
         function Outputpricelistconfiguration($scope, ctrl, $attrs) {
@@ -28,6 +28,8 @@
             var outPutWorkBookAPI;
             $scope.outPutFieldMappings;
             function initializeController() {
+                $scope.outPutFieldMappings = [{ fieldTitle: "First Row", isRequired: true, type: "row", fieldName: "FirstRow" }, { fieldTitle: "Code", isRequired: true, type: "cell", fieldName: "Code" }, { fieldTitle: "Zone", isRequired: true, type: "cell", fieldName: "Zone" }, { fieldTitle: "Rate", isRequired: true, type: "cell", fieldName: "Rate" }, { fieldTitle: "Effective Date", isRequired: true, type: "cell", fieldName: "EffectiveDate" }]
+
                 $scope.onOutPutReadyWoorkBook = function (api) {
                     outPutWorkBookAPI = api;
                 }
@@ -38,17 +40,17 @@
                 var api = {};
 
                 api.load = function (payload) {
+                  
                     if (payload != undefined) {
-                        $scope.outPutFieldMappings = payload.fieldMappings;
                         if (payload.configDetails !=undefined)
                         {
                             $scope.outPutFile = {
                                 fileId: payload.configDetails.TemplateFileId
                             }
                         }
-                        return loadOutputMappingFields(payload);
+                       
                     }
-
+                    return loadOutputMappingFields(payload);
 
                     function loadOutputMappingFields(payload) {
                         var promises = [];
@@ -61,10 +63,12 @@
                         }
                         return UtilsService.waitMultiplePromises(promises);
                     }
+
                     function setOutputFieldMappingAPI(dataItem, payloadData) {
                         var payload = {
                             context: buildOutputContext(),
                         };
+                  
                         if (payloadData != undefined && payloadData.configDetails != undefined)
                         {
                        
@@ -75,6 +79,7 @@
                             }
                         }
                         dataItem.onFieldReady = function (api) {
+                            
                             dataItem.fieldMappingAPI = api;
 
                             dataItem.readyPromiseDeferred.resolve();
@@ -85,7 +90,8 @@
                                   VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
                               });
                     }
-                    function getCellIndex(dataItem,configDetails)
+
+                    function getCellIndex(dataItem, configDetails)
                     {
                         switch(dataItem.fieldName)
                         {
@@ -120,6 +126,7 @@
 
                     return data;
                 }
+
                 function buildOutputContext() {
                     var context = {
                         getSelectedCell: getSelectedCell,

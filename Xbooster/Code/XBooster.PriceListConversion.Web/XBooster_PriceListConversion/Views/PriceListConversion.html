@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="ExcelConversion_PriceListConversionController">
     <vr-form name="formFilter" vr-loader="scopeModel.isLoading">
         <vr-validation-group validationcontext="inPutExcelGroupValid">
-            <div ng-show="scopeModel.showInputExcelToMap">
+            <div>
                 <vr-row removeline>
                     <vr-columns colnum="2">
                         <vr-fileupload extension="xls,xlsx,csv,xlsb" value="scopeModel.inPutFile" label="Input Excel" isrequired="true"> </vr-fileupload>
@@ -15,58 +15,28 @@
                     </vr-columns>
                     <vr-columns width="1/2row">
                         <vr-section title="Input Price List Mapping">
-                            <vr-tabs>
-                                <vr-tab header="'Codes'">
-                                    <vr-excelconversion-listmapping on-ready="scopeModel.onCodeListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
-                                </vr-tab>
-                                <vr-tab header="'Rates'">
-                                    <vr-excelconversion-listmapping on-ready="scopeModel.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
-                                </vr-tab>
-                            </vr-tabs>
+                            <vr-row>
+                                <vr-columns width="1/2row" >
+                                    <xbooster-pricelistconversion-inputpricelisttemplate-selector on-ready="scopeModel.onInputPriceListTemplateSelectorReady" onselectionchanged="scopeModel.onInputPriceListTemplateSelectionChanged"></xbooster-pricelistconversion-inputpricelisttemplate-selector>
+                                </vr-columns>
+                            </vr-row>
+                            <vr-row>
+                                <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingInputPriceListTemplate">
+                                    <xbooster-pricelistconversion-inputpricelistconfiguration-selective on-ready="scopeModel.onInputConfigurationSelectiveReady" normal-col-num="2"></xbooster-pricelistconversion-inputpricelistconfiguration-selective>
+                                </vr-columns>
+                            </vr-row>
                         </vr-section>
                     </vr-columns>
                 </vr-row>
             </div>
         </vr-validation-group>
-        <vr-validation-group validationcontext="outPutExcelGroupValid">
-            <div ng-show="scopeModel.showOutputExcelToMap">
-                <vr-row removeline>
-                    <vr-columns colnum="2">
-                        <vr-fileupload extension="xls,xlsx,csv,xlsb" value="scopeModel.outPutFile" label="Output Excel" isrequired="true"> </vr-fileupload>
-                    </vr-columns>
-                </vr-row>
-                <vr-row removeline>
-                    <vr-columns width="1/2row">
-                        <vr-section title="Excel Viewer">
-                            <vr-excel-wb fileid="scopeModel.outPutFile.fileId" on-ready="scopeModel.onOutPutReadyWoorkBook"></vr-excel-wb>
-                        </vr-section>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-section title="Output Price List Mapping">
-                            <vr-columns colnum="3/4row">
-                                <vr-datagrid datasource="scopeModel.outPutFieldMappings" norowhighlightonclick="true"
-                                             on-ready="onGridReady" hidegridmenu>
-                                    <vr-datagridcolumn headertext="'Field Name'" field="'fieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
-                                        <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onFieldReady" isrequired="dataItem.isRequired" customvalidate="dataItem.validate()" type="dataItem.type" normal-col-num="6"></vr-excelconversion-fieldmapping-cellfieldmapping>
-                                    </vr-datagridcolumn>
-                                </vr-datagrid>
-                            </vr-columns>
-                        </vr-section>
-                    </vr-columns>
-                </vr-row>
-
-            </div>
-
-        </vr-validation-group>
-
         <vr-row>
             <vr-row removeline>
                 <vr-actionbar showcollapsebutton="false">
                     <div transclude-to="buttons">
-                        <vr-button type="Next" validationcontext="inPutExcelGroupValid" data-onclick="scopeModel.next" ng-show="scopeModel.showInputExcelToMap"></vr-button>
-                        <vr-button type="Back" data-onclick="scopeModel.back" ng-show="scopeModel.showOutputExcelToMap"></vr-button>
-                        <vr-button type="Start" formname="formFilter" validationcontext="formFilter" ng-show="scopeModel.showOutputExcelToMap" data-onclick="scopeModel.startConvertAndDownload"></vr-button>
+                        <vr-button type="Save" formname="formFilter" validationcontext="formFilter"  data-onclick="scopeModel.saveInputConfiguration"></vr-button>
+                        <vr-button type="Convert" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.startConvertAndDownload"></vr-button>
+
                     </div>
                 </vr-actionbar>
             </vr-row>

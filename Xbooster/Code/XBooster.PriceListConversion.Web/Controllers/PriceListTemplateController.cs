@@ -28,6 +28,20 @@ namespace XBooster.PriceListConversion.Web.Controllers
         }
 
         [HttpPost]
+        [Route("UpdateOutputPriceListTemplate")]
+        public Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail> UpdateOutputPriceListTemplate(PriceListTemplate priceListTemplate)
+        {
+            return _manager.UpdateOutputPriceListTemplate(priceListTemplate);
+        }
+
+        [HttpPost]
+        [Route("AddOutputPriceListTemplate")]
+        public Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail> AddOutputPriceListTemplate(PriceListTemplate priceListTemplate)
+        {
+            return _manager.AddOutputPriceListTemplate(priceListTemplate);
+        }
+
+        [HttpPost]
         [Route("UpdateInputPriceListTemplate")]
         public Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail> UpdateInputPriceListTemplate(PriceListTemplate priceListTemplate)
         {
@@ -40,6 +54,7 @@ namespace XBooster.PriceListConversion.Web.Controllers
         {
             return _manager.AddInputPriceListTemplate(priceListTemplate);
         }
+
         [HttpGet]
         [Route("GetOutputPriceListConfigurationTemplateConfigs")]
         public IEnumerable<TemplateConfig> GetOutputPriceListConfigurationTemplateConfigs()
@@ -51,6 +66,26 @@ namespace XBooster.PriceListConversion.Web.Controllers
         public PriceListTemplate GetPriceListTemplate(int priceListTemplateId)
         {
             return _manager.GetPriceListTemplate(priceListTemplateId);
+        }
+        [HttpGet]
+        [Route("GetOutputPriceListTemplates")]
+        public IEnumerable<PriceListTemplateInfo> GetOutputPriceListTemplates(string filter = null)
+        {
+            PriceListTemplateFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<PriceListTemplateFilter>(filter) : null;
+            return _manager.GetOutputPriceListTemplates(deserializedFilter);
+        }
+        [HttpGet]
+        [Route("GetInputPriceListTemplates")]
+        public IEnumerable<PriceListTemplateInfo> GetInputPriceListTemplates(string filter = null)
+        {
+            PriceListTemplateFilter deserializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<PriceListTemplateFilter>(filter) : null;
+            return _manager.GetInputPriceListTemplates(deserializedFilter);
+        }
+        [HttpGet]
+        [Route("GetInputPriceListConfigurationTemplateConfigs")]
+        public IEnumerable<TemplateConfig> GetInputPriceListConfigurationTemplateConfigs()
+        {
+            return _manager.GetInputPriceListConfigurationTemplateConfigs();
         }
     }
 }

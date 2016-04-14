@@ -44,8 +44,11 @@
                 ctrl.validate = function () {
                     if ($scope.cellObject != undefined && context != undefined) {
                         var row = context.getFirstRowIndex();
+                        if (row != undefined && $scope.cellObject != undefined && $scope.cellObject.sheet != row.sheet)
+                            return "Error sheet index.";
                         if (row == undefined || $scope.cellObject.row != row.row)
                             return "Error row index.";
+
                     }
                     return null;
                 }
@@ -61,7 +64,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                  
                     if (payload != undefined) {
                         context = payload.context;
                         if(payload.cellFieldData !=undefined)

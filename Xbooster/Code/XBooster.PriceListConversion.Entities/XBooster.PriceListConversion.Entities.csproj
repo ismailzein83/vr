@@ -55,6 +55,8 @@
     <Compile Include="PriceListRecord.cs" />
     <Compile Include="PriceListTemplate.cs" />
     <Compile Include="PriceListTemplateDetail.cs" />
+    <Compile Include="PriceListTemplateFilter.cs" />
+    <Compile Include="PriceListTemplateInfo.cs" />
     <Compile Include="PriceListTemplateQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

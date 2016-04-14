@@ -39,7 +39,7 @@ namespace XBooster.PriceListConversion.Business
             PriceListTemplate priceListTemplate = priceListTemplates.GetRecord(priceListTemplateId);
             return (priceListTemplate != null && priceListTemplate.UserId == _loggedInUserId) ? priceListTemplate : null;
         }
-        public Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail> AddInputPriceListTemplate(PriceListTemplate priceListTemplate)
+        public Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail> AddOutputPriceListTemplate(PriceListTemplate priceListTemplate)
         {
             InsertOperationOutput<PriceListTemplateDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail>();
 
@@ -66,7 +66,7 @@ namespace XBooster.PriceListConversion.Business
 
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail> UpdateInputPriceListTemplate(PriceListTemplate priceListTemplate)
+        public Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail> UpdateOutputPriceListTemplate(PriceListTemplate priceListTemplate)
         {
             IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
             priceListTemplate.UserId = _loggedInUserId;
@@ -91,10 +91,79 @@ namespace XBooster.PriceListConversion.Business
             return updateOperationOutput;
         }
 
+
+        public Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail> AddInputPriceListTemplate(PriceListTemplate priceListTemplate)
+        {
+            InsertOperationOutput<PriceListTemplateDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PriceListTemplateDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int priceListTemplateId = -1;
+
+            IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
+            priceListTemplate.UserId = _loggedInUserId;
+            priceListTemplate.Type = Constants.InputPriceListTemplate;
+            bool insertActionSucc = dataManager.InsertPriceListTemplate(priceListTemplate, out priceListTemplateId);
+
+            if (insertActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                priceListTemplate.PriceListTemplateId = priceListTemplateId;
+                insertOperationOutput.InsertedObject = PriceListTemplateDetailMapper(priceListTemplate);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+        public Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail> UpdateInputPriceListTemplate(PriceListTemplate priceListTemplate)
+        {
+            IPriceListTemplateDataManager dataManager = PriceListConversionDataManagerFactory.GetDataManager<IPriceListTemplateDataManager>();
+            priceListTemplate.UserId = _loggedInUserId;
+            priceListTemplate.Type = Constants.InputPriceListTemplate;
+            bool updateActionSucc = dataManager.UpdatePriceListTemplate(priceListTemplate);
+            UpdateOperationOutput<PriceListTemplateDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<PriceListTemplateDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = PriceListTemplateDetailMapper(priceListTemplate);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
+
         public IEnumerable<TemplateConfig> GetOutputPriceListConfigurationTemplateConfigs()
         {
             var templateConfigManager = new TemplateConfigManager();
             return templateConfigManager.GetTemplateConfigurations(Constants.OutputPriceListConfigurationTemplateConfigs);
+        }
+        public IEnumerable<TemplateConfig> GetInputPriceListConfigurationTemplateConfigs()
+        {
+            var templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.InputPriceListConfigurationTemplateConfigs);
+        }
+        public IEnumerable<PriceListTemplateInfo> GetOutputPriceListTemplates(PriceListTemplateFilter filter)
+        {
+            Dictionary<int, PriceListTemplate> priceListTemplates = GetCachedPriceListTemplates();
+            return priceListTemplates.Values.MapRecords(PriceListTemplateInfoMapper,itm => itm.UserId == _loggedInUserId && itm.Type == Constants.OutputPriceListTemplate);
+        }
+        public IEnumerable<PriceListTemplateInfo> GetInputPriceListTemplates(PriceListTemplateFilter filter)
+        {
+            Dictionary<int, PriceListTemplate> priceListTemplates = GetCachedPriceListTemplates();
+            return priceListTemplates.Values.MapRecords(PriceListTemplateInfoMapper, itm => itm.UserId == _loggedInUserId && itm.Type == Constants.InputPriceListTemplate);
         }
         #endregion
 
@@ -136,7 +205,14 @@ namespace XBooster.PriceListConversion.Business
                 Entity = priceListTemplate
             };
         }
-
+        private PriceListTemplateInfo PriceListTemplateInfoMapper(PriceListTemplate priceListTemplate)
+        {
+            return new PriceListTemplateInfo
+            {
+                Name = priceListTemplate.Name,
+                PriceListTemplateId = priceListTemplate.PriceListTemplateId,
+            };
+        }
         #endregion
     }
 }
