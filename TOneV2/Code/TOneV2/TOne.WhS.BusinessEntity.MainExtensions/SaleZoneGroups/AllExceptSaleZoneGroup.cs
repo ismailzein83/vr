@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups
 
             if (saleZonesofSellingNumberPlan != null)
             {
-                IEnumerable<SaleZone> allExceptSaleZoneList = saleZonesofSellingNumberPlan.FindAllRecords(x => !this.ZoneIds.Contains(x.SaleZoneId));
+                IEnumerable<SaleZone> allExceptSaleZoneList = saleZonesofSellingNumberPlan.FindAllRecords(x => this.ZoneIds == null || !this.ZoneIds.Contains(x.SaleZoneId));
                 if(allExceptSaleZoneList != null)
                 {
                     allExceptZoneIds = allExceptSaleZoneList.Select(x => x.SaleZoneId);
