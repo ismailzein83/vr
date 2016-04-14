@@ -49,7 +49,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                 ctrl.onvaluechanged = function (value) {
                     var totalPercentage = 0;
                     for (var j = 0; j < ctrl.percentages.length; j++) {
-                        totalPercentage = totalPercentage + parseInt(ctrl.percentages[j].percentage);
+                        totalPercentage = totalPercentage + parseFloat(ctrl.percentages[j].percentage);
                     }
                     
                     if (value > 100 - totalPercentage)
@@ -59,8 +59,7 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
                 }
 
                 ctrl.removeFilter = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.percentages, dataItem.id, 'id');
-                    ctrl.percentages.splice(index, 1);
+                    ctrl.percentages.splice(ctrl.percentages.indexOf(dataItem), 1);
                 };
 
                 ctrl.validatePercentages = function () {
@@ -70,13 +69,12 @@ app.directive('vrWhsRoutingRouterulesettingsPercentageFixed', ['UtilsService',
 
                     var total = 0;
 
-                    for (var i = 0; i < ctrl.percentages.length; i++) {
-                        total += ctrl.percentages[i].percentage;
+                    for (var x = 0; x < ctrl.percentages.length; x++) {
+                        total += parseFloat(ctrl.percentages[x].percentage);
                     }
 
-                    if (total < 100) {
-                        return "Percentages must add up to a 100";
-                    }
+                    if (total != 100)
+                        return "Sum of all Percentages must be equal to 100";
 
                     return null;
                 };

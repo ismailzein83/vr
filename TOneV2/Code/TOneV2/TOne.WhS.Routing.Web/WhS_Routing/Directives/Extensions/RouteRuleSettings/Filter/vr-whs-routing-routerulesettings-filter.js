@@ -10,32 +10,6 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            ctrl.optionFilterSettingsGroupTemplates = [];
-            ctrl.datasource = [];
-
-            ctrl.addFilter = function () {
-                var dataItem = {
-                    id: ctrl.datasource.length + 1,
-                    configId: ctrl.selectedOptionFilterSettingsGroupTemplate.TemplateConfigID,
-                    editor: ctrl.selectedOptionFilterSettingsGroupTemplate.Editor,
-                    name: ctrl.selectedOptionFilterSettingsGroupTemplate.Name
-                };
-
-                dataItem.onDirectiveReady = function (api) {
-                    dataItem.directiveAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
-                };
-
-                ctrl.datasource.push(dataItem);
-                ctrl.selectedOptionFilterSettingsGroupTemplate = undefined;
-            };
-
-            ctrl.removeFilter = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
-                ctrl.datasource.splice(index, 1);
-            };
-
             var ctor = new filterCtor(ctrl, $scope);
             ctor.initializeController();
 
@@ -55,6 +29,48 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
     };
 
     function filterCtor(ctrl, $scope) {
+        var existingItems = [];
+
+        ctrl.optionFilterSettingsGroupTemplates = [];
+        ctrl.datasource = [];
+
+        ctrl.addFilter = function () {
+            var dataItem = {
+                id: ctrl.datasource.length + 1,
+                configId: ctrl.selectedOptionFilterSettingsGroupTemplate.TemplateConfigID,
+                editor: ctrl.selectedOptionFilterSettingsGroupTemplate.Editor,
+                name: ctrl.selectedOptionFilterSettingsGroupTemplate.Name
+            };
+
+            dataItem.onDirectiveReady = function (api) {
+                dataItem.directiveAPI = api;
+                var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
+            };
+
+            for (var x = 0; x < ctrl.optionFilterSettingsGroupTemplates.length; x++) {
+                if (ctrl.optionFilterSettingsGroupTemplates[x].TemplateConfigID == ctrl.selectedOptionFilterSettingsGroupTemplate.TemplateConfigID) {
+                    existingItems.push(ctrl.optionFilterSettingsGroupTemplates[x]);
+                    ctrl.optionFilterSettingsGroupTemplates.splice(x, 1);
+                    break;
+                }
+            }
+
+            ctrl.datasource.push(dataItem);
+            ctrl.selectedOptionFilterSettingsGroupTemplate = undefined;
+        };
+
+        ctrl.removeFilter = function (dataItem) {
+            var configId = dataItem.configId;
+            ctrl.datasource.splice(ctrl.datasource.indexOf(dataItem), 1);
+            for (var x = 0; x < existingItems.length; x++) {
+                if (existingItems[x].TemplateConfigID == configId) {
+                    ctrl.optionFilterSettingsGroupTemplates.push(existingItems[x]);
+                    existingItems.splice(x, 1);
+                    break;
+                }
+            }
+        };
 
         function initializeController() {
             defineAPI();
@@ -99,6 +115,23 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                     if (filterItems != undefined) {
                         for (var i = 0; i < filterItems.length; i++) {
                             addFilterItemToGrid(filterItems[i]);
+                        }
+                    }
+
+                    if (ctrl.datasource.length > 0) {
+                        for (var x = 0; x < ctrl.datasource.length; x++) {
+                            var itemFound = false;
+                            for (var j = 0; j < ctrl.optionFilterSettingsGroupTemplates.length; j++) {
+                                if (ctrl.datasource[x].configId == ctrl.optionFilterSettingsGroupTemplates[j].TemplateConfigID) {
+                                    existingItems.push(ctrl.optionFilterSettingsGroupTemplates[j]);
+                                    ctrl.optionFilterSettingsGroupTemplates.splice(j, 1);
+                                    itemFound = true;
+                                    break;
+                                }
+                            }
+                            if (itemFound) {
+                                continue;
+                            }
                         }
                     }
                 });
