@@ -111,7 +111,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public object Key
         {
-            get { return Code; }
+            get { return CodeEntity.Code; }
         }
 
         public void SetExcluded()
