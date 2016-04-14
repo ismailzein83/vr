@@ -32,7 +32,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public string TargetType
         {
-            get { return "NewZone"; }
+            get { return "Code"; }
         }
     }
 
