@@ -98,7 +98,7 @@ as (select * from (values
 (1002,'Cities','Cities','#/view/Common/Views/City/CityManagement',102,'VRCommon/City/GetFilteredCities',null,null,null,0,10),
 (1003,'Currencies','Currencies','#/view/Common/Views/Currency/CurrencyManagement',102,null,null,null,null,0,15),
 (1004,'Currency Exchange Rates','Currency Exchange Rates','#/view/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateManagement',102,null,null,null,null,0,20),
-(1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,null,null,null,null,0,25),
+(1005,'Rate Types','Rate Types','#/view/Common/Views/RateType/RateTypeManagement',102,'VRCommon/RateType/GetFilteredRateTypes',null,null,null,0,25),
 (1006,'System Logs','System Logs','#/view/Common/Views/logger/LoggerManagement',1,'VRCommon/LogAttribute/GetFilteredLoggers',null,null,null,0,10)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
