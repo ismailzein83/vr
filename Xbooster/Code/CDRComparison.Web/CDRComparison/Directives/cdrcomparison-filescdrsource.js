@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FileCDRSourceDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'VRCommon_FileService', 'UtilsService', 'VRUIUtilsService'];
+    FileCDRSourceDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'VRCommon_FileService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function FileCDRSourceDirective(CDRComparison_CDRComparisonAPIService, VRCommon_FileService, UtilsService, VRUIUtilsService) {
+    function FileCDRSourceDirective(CDRComparison_CDRComparisonAPIService, VRCommon_FileService, UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -27,9 +27,34 @@
 
             var fileReaderSelectiveAPI;
             var cdrSourceContext;
+            var isCompressed;
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.validateFile = function (fileName, fileSizeInBytes) {
+                    var fileSizeInMegaBytes = fileSizeInBytes * 0.000001;
+
+                    var nameParts = fileName.split('.');
+                    var fileExtension = nameParts[nameParts.length - 1];
+                    
+                    if (fileSizeInMegaBytes <= 5) {
+                        isCompressed = isCompressedFormat(fileExtension);
+                        return true;
+                    }
+                    else if (isCompressedFormat(fileExtension)) {
+                        isCompressed = true;
+                        return true;
+                    }
+                    else {
+                        VRNotificationService.showInformation("File '" + fileName + "' is > 5 MB. Please upload a compressed version <= 5 MB");
+                        return false;
+                    }
+
+                    function isCompressedFormat(extension) {
+                        return (extension == 'zip' || extension == 'rar');
+                    }
+                };
 
                 $scope.scopeModel.viewRecentFiles = function () {
                     var onRecentFileSelected = function (fileId) {
@@ -56,7 +81,7 @@
                     if (payload != undefined) {
                         cdrSourceContext = payload.cdrSourceContext;
                         fileReader = payload.FileReader;
-                        $scope.scopeModel.isCompressed = payload.IsCompressed;
+                        isCompressed = payload.IsCompressed; // It won't matter because it's reset when a file is uploaded
                     }
 
                     var loadFileReaderSelectivePromise = loadFileReaderSelective();
@@ -88,7 +113,7 @@
                     return {
                         $type: 'CDRComparison.Business.FileCDRSource, CDRComparison.Business',
                         FileId: $scope.scopeModel.file.fileId,
-                        IsCompressed: true, //$scope.scopeModel.isCompressed,
+                        IsCompressed: isCompressed,
                         FileReader: fileReaderSelectiveAPI.getData()
                     };
                 };
