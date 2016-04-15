@@ -37,7 +37,7 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(14001,'CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison',1401,'CDRComparison/CDRSourceConfig/GetCDRSourceConfigs',null,null,null,0,1),
+(14001,'CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison',1401,'CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample',null,null,null,0,1),
 (14002,'Price List Conversion','Price List Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion',1401,null,null,null,null,0,2),
 (14003,'Price List Template Management','Price List Template Management','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1401,null,null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -79,7 +79,10 @@ set identity_insert [sec].[BusinessEntity] off;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('CDRComparison/CDRSourceConfig/GetCDRSourceConfigs','CDRComparison_CompareCDRs: View')
+('CDRComparison/CDRSourceConfig/GetCDRSourceConfigs','CDRComparison_CompareCDRs: View'),
+('CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs','CDRComparison_CompareCDRs: View'),
+('CDRComparison/CDRComparison/GetFileReaderTemplateConfigs','CDRComparison_CompareCDRs: View'),
+('CDRComparison/CDRSource/ReadSample','CDRComparison_CompareCDRs: View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
