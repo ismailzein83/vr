@@ -8,8 +8,13 @@ namespace CDRComparison.Entities
 {
     public enum TimeUnitEnum
     {
-        Minutes = 0,
         Seconds = 1,
         Milliseconds = 2
+    }
+
+    public enum CDRSourceTimeUnitEnum
+    {
+        Minutes = 0,
+        Seconds = 1
     }
 }

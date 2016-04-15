@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CDRComparison\Constant\ModuleConfig.js" />
+    <Content Include="CDRComparison\Constant\CDRSourceTimeUnitEnum.js" />
     <Content Include="CDRComparison\Constant\TimeUnitEnum.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-cdrsource-selective.js" />
     <Content Include="CDRComparison\Directives\cdrcomparison-cdrsourceconfig-selector.js" />

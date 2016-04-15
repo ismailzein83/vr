@@ -12,7 +12,7 @@ namespace CDRComparison.Entities
 
         public List<NormalizationRule> NormalizationRules { get; set; }
 
-        public TimeUnitEnum DurationTimeUnit { get; set; }
+        public CDRSourceTimeUnitEnum DurationTimeUnit { get; set; }
 
         public abstract void ReadCDRs(IReadCDRsFromSourceContext context);
 

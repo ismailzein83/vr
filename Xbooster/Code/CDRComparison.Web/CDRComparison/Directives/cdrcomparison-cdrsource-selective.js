@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CDRSourceSelectiveDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'CDRComparison_CDRSourceAPIService', 'CDRComparison_CDRSourceConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    CDRSourceSelectiveDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'CDRComparison_CDRSourceAPIService', 'CDRComparison_CDRSourceConfigAPIService', 'CDRComparison_CDRSourceTimeUnitEnum', 'UtilsService', 'VRUIUtilsService'];
 
-    function CDRSourceSelectiveDirective(CDRComparison_CDRComparisonAPIService, CDRComparison_CDRSourceAPIService, CDRComparison_CDRSourceConfigAPIService, UtilsService, VRUIUtilsService) {
+    function CDRSourceSelectiveDirective(CDRComparison_CDRComparisonAPIService, CDRComparison_CDRSourceAPIService, CDRComparison_CDRSourceConfigAPIService, CDRComparison_CDRSourceTimeUnitEnum, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -42,13 +42,8 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
-                $scope.scopeModel.durationTimeUnits =
-                [
-                    { value: 0, description: 'Minutes' },
-                    { value: 1, description: 'Seconds' },
-                    { value: 2, description: 'Milliseconds' }
-                ];
-                $scope.scopeModel.selectedDurationTimeUnit = $scope.scopeModel.durationTimeUnits[1];
+                $scope.scopeModel.durationTimeUnits = UtilsService.getArrayEnum(CDRComparison_CDRSourceTimeUnitEnum);
+                $scope.scopeModel.selectedDurationTimeUnit = UtilsService.getItemByVal($scope.scopeModel.durationTimeUnits, CDRComparison_CDRSourceTimeUnitEnum.Seconds.value, 'value');
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;

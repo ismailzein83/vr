@@ -64,7 +64,7 @@ namespace CDRComparison.BP.Activities
                         IsPartnerCDR = inputArgument.IsPartnerCDRs
                     };
 
-                    item.DurationInSec = (inputArgument.CDRSource.DurationTimeUnit == TimeUnitEnum.Minutes) ? (cdr.DurationInSec * 60) : cdr.DurationInSec;
+                    item.DurationInSec = (inputArgument.CDRSource.DurationTimeUnit == CDRSourceTimeUnitEnum.Minutes) ? (cdr.DurationInSec * 60) : cdr.DurationInSec;
                     NormalizeNumbers(item, cdpnNormalizationSettings, cgpnNormalizationSettings);
                     
                     list.Add(item);

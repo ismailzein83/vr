@@ -40,7 +40,7 @@ namespace CDRComparison.MainExtensions
             var cdrs = new List<CDR>();
             Dictionary<string, PropertyInfo> cdrProperties = GetCDRProperties();
 
-            for (int rowIndex = 0; rowIndex < worksheet.Cells.Rows.Count; rowIndex++)
+            for (int rowIndex = this.FirstRowIndex; rowIndex < worksheet.Cells.Rows.Count; rowIndex++)
             {
                 var cdr = new CDR();
                 foreach (ExcelFileFieldMapping fldMapping in this.FieldMappings)
