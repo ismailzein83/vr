@@ -45,21 +45,43 @@ as (select * from (values
 ('VR_Sec/Users/ResetPassword','VR_Sec_Users: Reset Password'),
 ('VR_Sec/Users/LoadLoggedInUserProfile',null),
 ('VR_Sec/Users/EditUserProfile',null),
+
 ('VR_Sec/Group/GetFilteredGroups','VR_Sec_Group: View'),
 ('VR_Sec/Group/GetGroupInfo',null),
 ('VR_Sec/Group/GetGroup',null),
 ('VR_Sec/Group/AddGroup','VR_Sec_Group: Add'),
 ('VR_Sec/Group/UpdateGroup','VR_Sec_Group: Edit'),
+
 ('VR_Sec/View/AddView',null),
 ('VR_Sec/View/UpdateView',null),
 ('VR_Sec/View/GetView',null),
 ('VR_Sec/View/DeleteView',null),
 ('VR_Sec/View/GetFilteredDynamicViews',null),
 ('VR_Sec/View/UpdateViewsRank','VR_Sec_View: Edit'),
+
 ('VR_Sec/Menu/GetMenuItems',null),
-('VR_Sec/Menu/GetAllMenuItems',null),
+('VR_Sec/Menu/GetAllMenuItems','VR_Sec_View: Edit'),
+
+('VR_Sec/Module/AddModule','VR_Sec_View: AddModule'),
+('VR_Sec/Module/UpdateModule','VR_Sec_View: EditModule'),
+('VR_Sec/Module/GetModule',null),
+('VR_Sec/Module/GetModules',null),
+
+('VR_Sec/BusinessEntity/UpdateBusinessEntity','VR_Sec_BusinessEntity: EditEntity'),
+('VR_Sec/BusinessEntity/AddBusinessEntity','VR_Sec_BusinessEntity: AddEntity'),
+('VR_Sec/BusinessEntity/GetFilteredBusinessEntities',null),
+('VR_Sec/BusinessEntity/GetBusinessEntity',null),
+
+('VR_Sec/BusinessEntityModule/UpdateBusinessEntityModule','VR_Sec_BusinessEntity: EditModule'),
+('VR_Sec/BusinessEntityModule/AddBusinessEntityModule','VR_Sec_BusinessEntity: AddModule'),
+('VR_Sec/BusinessEntityModule/GetBusinessEntityModuleById',null),
+
+('VR_Sec/BusinessEntityNode/UpdateEntityNodesRank','VR_Sec_BusinessEntity: Ranking'),
 ('VR_Sec/BusinessEntityNode/GetEntityNodes','VR_Sec_Permission: View'),
 ('VR_Sec/BusinessEntityNode/ToggleBreakInheritance','VR_Sec_Permission: AllowInheritance'),
+('VR_Sec/BusinessEntityNode/GetEntityModules','VR_Sec_BusinessEntity: View'),
+
+
 ('VR_Sec/Permission/GetFilteredEntityPermissions','VR_Sec_Permission: View'),
 ('VR_Sec/Permission/GetHolderPermissions',null),
 ('VR_Sec/Permission/GetEffectivePermissions',null),
@@ -110,7 +132,8 @@ as (select * from (values
 (1,'VR_Sec_Users','Users',3,0,'["View", "Add", "Edit", "Reset Password"]'),
 (2,'VR_Sec_Group','Groups',3,0,'["View", "Add", "Edit"]'),
 (3,'VR_Sec_View','Ranking Page',3,0,'["Edit"]'),
-(4,'VR_Sec_Permission','Permission',3,0,'["View", "Edit", "Delete", "AllowInheritance"]')
+(4,'VR_Sec_Permission','Permission',3,0,'["View", "Edit", "Delete", "AllowInheritance"]'),
+(5,'VR_Sec_BusinessEntity','Business Entity',3,0,'["View","Ranking","AddEntity","AddModule","EditEntity","EditModule"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -156,7 +179,7 @@ as (select * from (values
 (1,'Users'					,'Users'				,'#/view/Security/Views/User/UserManagement'				,2,'VR_Sec/Users/GetFilteredUsers'	,null,null,null,0,1),
 (2,'Groups'					,'Groups'				,'#/view/Security/Views/Group/GroupManagement'				,2,'VR_Sec/Group/GetFilteredGroups'	,null,null,null,0,2),
 (3,'System Entities'		,'System Entities'		,'#/view/Security/Views/Permission/BusinessEntityManagement',2,'VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,3),
-(4,'System Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement',2,null,null,null,null,0,4),
+(4,'System Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement',2,'VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,0,4),
 (5,'Menu Management'		,'Menu Management'		,'#/view/Security/Views/Menu/MenuManagement'				,1,'VR_Sec/View/UpdateViewsRank'	,null,null,null,0,5),
 (6,'Organizational Charts'	,'Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'		,1,null								,null,null,null,0,6)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
