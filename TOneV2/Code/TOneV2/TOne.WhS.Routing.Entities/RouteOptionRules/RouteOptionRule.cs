@@ -13,6 +13,8 @@ namespace TOne.WhS.Routing.Entities
 
         public RouteOptionRuleSettings Settings { get; set; }
 
+        public string Name { get; set; }
+
         public string Description { get; set; }
 
         public override bool IsAnyCriteriaExcluded(object target)
@@ -41,7 +43,7 @@ namespace TOne.WhS.Routing.Entities
             };
             return customerGroupContext;
         }
-        
+
         public ICodeCriteriaGroupContext GetCodeCriteriaGroupContext()
         {
             ICodeCriteriaGroupContext context = ContextFactory.CreateContext<ICodeCriteriaGroupContext>();
@@ -62,7 +64,7 @@ namespace TOne.WhS.Routing.Entities
         {
             get
             {
-                if(this.Criteria != null && this.Criteria.SuppliersWithZonesGroupSettings != null)
+                if (this.Criteria != null && this.Criteria.SuppliersWithZonesGroupSettings != null)
                 {
                     var suppliersWithZones = this.GetSuppliersWithZonesGroupContext().GetSuppliersWithZones(this.Criteria.SuppliersWithZonesGroupSettings);
                     if (suppliersWithZones != null)

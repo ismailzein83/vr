@@ -13,6 +13,22 @@ namespace TOne.WhS.Routing.Business
 {
     public class RouteOptionRuleManager : Vanrise.Rules.RuleManager<RouteOptionRule, RouteOptionRuleDetail>
     {
+        public override bool ValidateBeforeAdd(RouteOptionRule rule)
+        {
+            Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
+            Func<RouteOptionRule, bool> filterExpression = (RouteOptionRule) => string.Compare(RouteOptionRule.Name, rule.Name, true) == 0;
+            IEnumerable<RouteOptionRule> result = cachedRules.FindAllRecords(filterExpression);
+            return result == null || result.Count() == 0 ? true : false;
+        }
+
+        public override bool ValidateBeforeUpdate(RouteOptionRule rule)
+        {
+            Dictionary<int, RouteOptionRule> cachedRules = base.GetAllRules();
+            Func<RouteOptionRule, bool> filterExpression = (RouteOptionRule) => string.Compare(RouteOptionRule.Name, rule.Name, true) == 0 && RouteOptionRule.RuleId != rule.RuleId;
+            IEnumerable<RouteOptionRule> result = cachedRules.FindAllRecords(filterExpression);
+            return result == null || result.Count() == 0 ? true : false;
+        }
+
         public RouteOptionRule GetMatchRule(RouteOptionRuleTarget target)
         {
             var ruleTrees = GetRuleTreesByPriority();
@@ -88,6 +104,7 @@ namespace TOne.WhS.Routing.Business
             Func<RouteOptionRule, bool> filterExpression = (routeOptionRule) =>
                 (input.Query.RoutingProductId == null || routeOptionRule.Criteria.RoutingProductId == input.Query.RoutingProductId)
                  && (input.Query.Code == null || this.CheckIfCodeCriteriaSettingsContains(routeOptionRule, input.Query.Code))
+                 && (string.IsNullOrEmpty(input.Query.Name) || (!string.IsNullOrEmpty(routeOptionRule.Name) && routeOptionRule.Name.ToLower().Contains(input.Query.Name.ToLower())))
                  && (input.Query.CustomerIds == null || this.CheckIfCustomerSettingsContains(routeOptionRule, input.Query.CustomerIds))
                  && (input.Query.SaleZoneIds == null || this.CheckIfSaleZoneSettingsContains(routeOptionRule, input.Query.SaleZoneIds));
 

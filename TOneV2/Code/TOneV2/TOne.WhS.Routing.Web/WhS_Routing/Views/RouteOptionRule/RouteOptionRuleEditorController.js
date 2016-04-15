@@ -194,6 +194,7 @@
         function getRouteOptionRule() {
             return WhS_Routing_RouteOptionRuleAPIService.GetRule(routeRuleId).then(function (routeOptionRule) {
                 routeOptionRuleEntity = routeOptionRule;
+                $scope.scopeModal.routeOptionRuleName = routeOptionRule != null ? routeOptionRule.Name : '';
                 routingProductId = routeOptionRuleEntity.Criteria != null ? routeOptionRuleEntity.Criteria.RoutingProductId : undefined;
             });
         }
@@ -383,6 +384,7 @@
 
             var routeOptionRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
+                Name: $scope.scopeModal.routeOptionRuleName,
                 Criteria: {
                     RoutingProductId: routingProductId,
                     ExcludedCodes: $scope.scopeModal.excludedCodes,
@@ -402,7 +404,7 @@
             var routeRuleObject = buildRouteOptionRuleObjFromScope();
             return WhS_Routing_RouteOptionRuleAPIService.AddRule(routeRuleObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Route Option Rule", response)) {
+                if (VRNotificationService.notifyOnItemAdded("Route Option Rule", response, "Name")) {
                     if ($scope.onRouteOptionRuleAdded != undefined)
                         $scope.onRouteOptionRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -417,7 +419,7 @@
             var routeRuleObject = buildRouteOptionRuleObjFromScope();
             WhS_Routing_RouteOptionRuleAPIService.UpdateRule(routeRuleObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Route Option Rule", response)) {
+                if (VRNotificationService.notifyOnItemUpdated("Route Option Rule", response, "Name")) {
                     if ($scope.onRouteOptionRuleUpdated != undefined)
                         $scope.onRouteOptionRuleUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

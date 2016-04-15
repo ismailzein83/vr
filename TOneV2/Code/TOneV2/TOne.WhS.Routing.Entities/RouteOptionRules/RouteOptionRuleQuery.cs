@@ -8,6 +8,8 @@ namespace TOne.WhS.Routing.Entities
 {
     public class RouteOptionRuleQuery
     {
+        public string Name { get; set; }
+
         public int? RoutingProductId { get; set; }
 
         public string Code { get; set; }
