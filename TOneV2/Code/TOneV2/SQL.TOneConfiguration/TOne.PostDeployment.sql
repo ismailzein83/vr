@@ -133,14 +133,15 @@ as (select * from (values
 (12027,'Product Routes','Product Routes','#/view/WhS_Routing/Views/RPRoute/RPRouteManagement',1210,null,null,null,null,0,5),
 (12028,'Customer Routes','Customer Routes','#/view/WhS_Routing/Views/CustomerRoute/CustomerRouteManagement',1210,null,null,null,null,0,3),
 (12029,'Route Rules','Route Rules','#/view/WhS_Routing/Views/RouteRule/RouteRuleManagement',1211,null,null,null,null,0,2),
-(12030,'Customer Identification Rules','Customer Identification Rules','#/view/WhS_CDRProcessing/Views/CustomerRule/CustomerIdentificationRuleManagement',1213,null,null,null,null,0,2),
-(12031,'Supplier Identification Rules','Supplier Identification Rules','#/view/WhS_CDRProcessing/Views/SupplierRule/SupplierIdentificationRuleManagement',1213,null,null,null,null,0,3),
-(12032,'Switch Identification Rules','Switch Identification Rules','#/view/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleManagement',1213,null,null,null,null,0,4),
-(12033,'Normalization Rules','Normalization Rules','#/view/WhS_CDRProcessing/Views/NormalizationRule/NormalizationRuleManagement',1213,null,null,null,null,0,5),
-(12034,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',1214,null,null,null,null,0,2),
-(12035,'Hourly Report','Hourly Report','#/view/WhS_Analytics/Views/HourlyReport',1214,null,null,null,null,0,3),
-(12036,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',1214,null,null,null,null,0,4),
-(12037,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5)
+(12030,'Route Options Rules','Route Options Rules','#/view/WhS_Routing/Views/RouteOptionRule/RouteOptionRuleManagement',1211,'WhS_Routing/RouteOptionRule/GetFilteredRouteOptionRules',null,null,null,0,2),
+(12031,'Customer Identification Rules','Customer Identification Rules','#/view/WhS_CDRProcessing/Views/CustomerRule/CustomerIdentificationRuleManagement',1213,null,null,null,null,0,2),
+(12032,'Supplier Identification Rules','Supplier Identification Rules','#/view/WhS_CDRProcessing/Views/SupplierRule/SupplierIdentificationRuleManagement',1213,null,null,null,null,0,3),
+(12033,'Switch Identification Rules','Switch Identification Rules','#/view/WhS_CDRProcessing/Views/SwitchRule/SwitchIdentificationRuleManagement',1213,null,null,null,null,0,4),
+(12034,'Normalization Rules','Normalization Rules','#/view/WhS_CDRProcessing/Views/NormalizationRule/NormalizationRuleManagement',1213,null,null,null,null,0,5),
+(12035,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',1214,null,null,null,null,0,2),
+(12036,'Hourly Report','Hourly Report','#/view/WhS_Analytics/Views/HourlyReport',1214,null,null,null,null,0,3),
+(12037,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',1214,null,null,null,null,0,4),
+(12038,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -260,13 +261,175 @@ set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('WhS_BE/RoutingProduct/GetFilteredRoutingProducts',null),
-('WhS_BE/RoutingProduct/AddRoutingProduct',null),
-('WhS_Routing/RouteRule/AddRule',null),
 ('WhS_BE/CarrierAccount/GetFilteredCarrierAccounts','Carrier:View'),
 ('WhS_BE/CarrierAccount/UpdateCarrierAccount','Carrier:Edit'),
 ('WhS_BE/CarrierAccount/AddCarrierAccount','Carrier:Add'),
-('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View')
+
+('WhS_BE/CodeGroup/GetFilteredCodeGroups',null),
+('WhS_BE/CodeGroup/GetAllCodeGroups',null),
+('WhS_BE/CodeGroup/GetCodeGroup',null),
+('WhS_BE/CodeGroup/UpdateCodeGroup',null),
+('WhS_BE/CodeGroup/AddCodeGroup',null),
+('WhS_BE/CodeGroup/DownloadCodeGroupListTemplate',null),
+('WhS_BE/CodeGroup/UploadCodeGroupList',null),
+('WhS_BE/CodeGroup/DownloadCodeGroupLog',null),
+
+('WhS_BE/SellingNumberPlan/GetFilteredSellingNumberPlans',null),
+('WhS_BE/SellingNumberPlan/GetSellingNumberPlans',null),
+('WhS_BE/SellingNumberPlan/AddSellingNumberPlan',null),
+('WhS_BE/SellingNumberPlan/UpdateSellingNumberPlan',null),
+('WhS_BE/SellingNumberPlan/GetSellingNumberPlan',null),
+
+('WhS_BE/SellingProduct/GetFilteredSellingProducts',null),
+('WhS_BE/SellingProduct/AddSellingProduct',null),
+('WhS_BE/SellingProduct/UpdateSellingProduct',null),
+('WhS_BE/SellingProduct/GetSellingProduct',null),
+('WhS_BE/SellingProduct/GetSellingProductsInfo',null),
+
+('WhS_BE/CustomerSellingProduct/GetFilteredCustomerSellingProducts',null),
+('WhS_BE/CustomerSellingProduct/AddCustomerSellingProduct',null),
+('WhS_BE/CustomerSellingProduct/UpdateCustomerSellingProduct',null),
+('WhS_BE/CustomerSellingProduct/GetCustomerSellingProduct',null),
+('WhS_BE/CustomerSellingProduct/IsCustomerAssignedToSellingProduct',null),
+
+('WhS_BE/CarrierAccount/GetCarrierAccountCurrency',null),
+('WhS_BE/CarrierAccount/GetCarrierAccount',null),
+('WhS_BE/CarrierAccount/GetCarrierAccountInfo',null),
+('WhS_BE/CarrierAccount/GetSupplierGroupTemplates',null),
+('WhS_BE/CarrierAccount/GetCustomerGroupTemplates',null),
+('WhS_BE/CarrierAccount/GetSuppliersWithZonesGroupsTemplates',null),
+
+('WhS_BE/CarrierProfile/GetFilteredCarrierProfiles',null),
+('WhS_BE/CarrierProfile/GetCarrierProfile',null),
+('WhS_BE/CarrierProfile/GetCarrierProfilesInfo',null),
+('WhS_BE/CarrierProfile/UpdateCarrierProfile',null),
+('WhS_BE/CarrierProfile/AddCarrierProfile',null),
+
+('WhS_BE/AccountManager/GetLinkedOrgChartId',null),
+('WhS_BE/AccountManager/GetFilteredAssignedCarriers',null),
+('WhS_BE/AccountManager/GetAssignedCarrierDetails',null),
+('WhS_BE/AccountManager/UpdateLinkedOrgChart',null),
+('WhS_BE/AccountManager/AssignCarriers',null),
+
+('WhS_BE/CustomerZone/GetCustomerZones',null),
+('WhS_BE/CustomerZone/GetCountriesToSell',null),
+('WhS_BE/CustomerZone/AddCustomerZones',null),
+
+('WhS_BE/RoutingProduct/GetFilteredRoutingProducts',null),
+('WhS_BE/RoutingProduct/AddRoutingProduct',null),
+('WhS_BE/RoutingProduct/GetRoutingProductsInfoBySellingNumberPlan',null),
+('WhS_BE/RoutingProduct/GetRoutingProductInfo',null),
+('WhS_BE/RoutingProduct/GetRoutingProduct',null),
+('WhS_BE/RoutingProduct/UpdateRoutingProduct',null),
+('WhS_BE/RoutingProduct/DeleteRoutingProduct',null),
+
+('WhS_BE/SaleCode/GetFilteredSaleCodes',null),
+
+('WhS_BE/SalePricelist/GetFilteredSalePriceLists',null),
+
+('WhS_BE/SaleRate/GetFilteredSaleRate',null),
+
+('WhS_BE/SaleZone/GetFilteredSaleZones',null),
+('WhS_BE/SaleZone/GetSaleZonesInfo',null),
+('WhS_BE/SaleZone/GetSaleZonesInfoByIds',null),
+('WhS_BE/SaleZone/GetSaleZone',null),
+('WhS_BE/SaleZone/GetSellingNumberPlanIdBySaleZoneIds',null),
+('WhS_BE/SaleZone/GetSaleZoneGroupTemplates',null),
+('WhS_BE/SaleZone/GetSaleZonesByName',null),
+('WhS_BE/SaleZone/GetSaleZoneInfoByCountryId',null),
+
+('WhS_BE/SupplierCode/GetFilteredSupplierCodes',null),
+('WhS_BE/SupplierRate/GetFilteredSupplierRates',null),
+('WhS_BE/SupplierZone/GetFilteredSupplierZones',null),
+('WhS_BE/SupplierZone/GetSupplierZoneInfo',null),
+('WhS_BE/SupplierZone/GetSupplierZoneInfoByIds',null),
+
+('WhS_BE/Switch/GetFilteredSwitches',null),
+('WhS_BE/Switch/GetSwitch',null),
+('WhS_BE/Switch/AddSwitch',null),
+('WhS_BE/Switch/UpdateSwitch',null),
+('WhS_BE/Switch/DeleteSwitch',null),
+('WhS_BE/Switch/GetSwitchesInfo',null),
+
+('WhS_BE/ZoneServiceConfig/GetFilteredZoneServiceConfigs',null),
+('WhS_BE/ZoneServiceConfig/GetAllZoneServiceConfigs',null),
+('WhS_BE/ZoneServiceConfig/GetZoneServiceConfig',null),
+('WhS_BE/ZoneServiceConfig/UpdateZoneServiceConfig',null),
+('WhS_BE/ZoneServiceConfig/AddZoneServiceConfig',null),
+
+('WhS_CodePrep/CodePreparation/GetZoneItems',null),
+('WhS_CodePrep/CodePreparation/CheckCodePreparationState',null),
+('WhS_CodePrep/CodePreparation/CancelCodePreparationState',null),
+('WhS_CodePrep/CodePreparation/GetCodeItems',null),
+('WhS_CodePrep/CodePreparation/DownloadImportCodePreparationTemplate',null),
+('WhS_CodePrep/CodePreparation/SaveChanges',null),
+('WhS_CodePrep/CodePreparation/MoveCodes',null),
+('WhS_CodePrep/CodePreparation/CloseCodes',null),
+('WhS_CodePrep/CodePreparation/SaveNewZone',null),
+('WhS_CodePrep/CodePreparation/SaveNewCode',null),
+('WhS_CodePrep/CodePreparation/GetChanges',null),
+('WhS_CodePrep/CodePreparation/CloseZone',null),
+('WhS_CodePrep/CodePreparation/RenameZone',null),
+
+('WhS_Routing/CustomerRoute/GetFilteredCustomerRoutes',null),
+
+('WhS_Routing/RouteRule/AddRule',null),
+('WhS_Routing/RouteRule/GetFilteredRouteRules',null),
+('WhS_Routing/RouteRule/GetRule',null),
+('WhS_Routing/RouteRule/UpdateRule',null),
+('WhS_Routing/RouteRule/DeleteRule',null),
+('WhS_Routing/RouteRule/GetCodeCriteriaGroupTemplates',null),
+('WhS_Routing/RouteRule/GetRouteRuleSettingsTemplates',null),
+
+('WhS_Routing/RouteRuleSettings/GetRouteOptionSettingsGroupTemplates',null),
+('WhS_Routing/RouteRuleSettings/GetRouteOptionOrderSettingsTemplates',null),
+('WhS_Routing/RouteRuleSettings/GetRouteOptionFilterSettingsTemplates',null),
+('WhS_Routing/RouteRuleSettings/GetRouteOptionPercentageSettingsTemplates',null),
+
+('WhS_Routing/RoutingDatabase/GetRoutingDatabaseInfo',null),
+
+('WhS_Routing/RPRoute/GetFilteredRPRoutes',null),
+('WhS_Routing/RPRoute/GetRPRouteOptionSupplier',null),
+('WhS_Routing/RPRoute/GetPoliciesOptionTemplates',null),
+('WhS_Routing/RPRoute/GetFilteredRPRouteOptions',null),
+
+('WhS_Sales/RatePlan/ValidateCustomer',null),
+('WhS_Sales/RatePlan/GetZoneLetters',null),
+('WhS_Sales/RatePlan/GetZoneItems',null),
+('WhS_Sales/RatePlan/GetZoneItem',null),
+('WhS_Sales/RatePlan/GetDefaultItem',null),
+('WhS_Sales/RatePlan/GetCostCalculationMethodTemplates',null),
+('WhS_Sales/RatePlan/GetRateCalculationMethodTemplates',null),
+('WhS_Sales/RatePlan/GetChangesSummary',null),
+('WhS_Sales/RatePlan/GetFilteredZoneRateChanges',null),
+('WhS_Sales/RatePlan/GetFilteredZoneRoutingProductChanges',null),
+('WhS_Sales/RatePlan/SavePriceList',null),
+('WhS_Sales/RatePlan/SaveChanges',null),
+('WhS_Sales/RatePlan/ApplyCalculatedRates',null),
+('WhS_Sales/RatePlan/CheckIfDraftExists',null),
+('WhS_Sales/RatePlan/DeleteDraft',null),
+('WhS_Sales/SellingRule/GetFilteredSellingRules',null),
+('WhS_Sales/SellingRule/GetRule',null),
+('WhS_Sales/SellingRule/AddRule',null),
+('WhS_Sales/SellingRule/UpdateRule',null),
+('WhS_Sales/SellingRule/DeleteRule',null),
+('WhS_Sales/SellingRule/GetCodeCriteriaGroupTemplates',null),
+('WhS_Sales/SellingRule/GetSellingRuleSettingsTemplates',null),
+
+('WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist','WhS_BE_SupplierPricelist: View'),
+
+('WhS_SupPL/SupplierPriceList/DownloadSupplierPriceListTemplate',null),
+('WhS_SupPL/SupplierPriceListPreview/GetFilteredZonePreview',null),
+('WhS_SupPL/SupplierPriceListPreview/GetFilteredCodePreview',null),
+('WhS_SupPL/SupplierPriceListPreview/GetFilteredRatePreview',null),
+
+('WhS_Routing/RouteOptionRule/AddRule',null),
+('WhS_Routing/RouteOptionRule/GetFilteredRouteOptionRules',null),
+('WhS_Routing/RouteOptionRule/GetRule',null),
+('WhS_Routing/RouteOptionRule/UpdateRule',null),
+('WhS_Routing/RouteOptionRule/DeleteRule',null),
+('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null)
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
