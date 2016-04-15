@@ -2,9 +2,9 @@
 
     'use strict';
 
-    concatenatedpartConstantDirective.$inject = [];
+    OutputfieldvalueConstant.$inject = [];
 
-    function concatenatedpartConstantDirective() {
+    function OutputfieldvalueConstant() {
         return {
             restrict: "E",
             scope: {
@@ -16,8 +16,8 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var concatenatedpartConstant = new ConcatenatedpartConstant($scope, ctrl, $attrs);
-                concatenatedpartConstant.initializeController();
+                var outputConstant = new OutputConstant($scope, ctrl, $attrs);
+                outputConstant.initializeController();
             },
             controllerAs: "constantCtrl",
             bindToController: true,
@@ -29,9 +29,9 @@
             var label = "";
             if (label != undefined)
                 label = attrs.label;
-            return "<vr-row removeline> <vr-columns colnum='{{constantCtrl.normalColNum * 2}}'><vr-textbox value='constantCtrl.value' " + label + " isrequired='true'> </vr-textbox>   </vr-columns></vr-row>"
+            return "<vr-row removeline> <vr-columns colnum='{{constantCtrl.normalColNum * 2}}'><vr-textbox value='constantCtrl.constant' " + label + " isrequired='true'> </vr-textbox>   </vr-columns></vr-row>"
         }
-        function ConcatenatedpartConstant($scope, ctrl, $attrs) {
+        function OutputConstant($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             function initializeController() {
                 defineAPI();
@@ -41,9 +41,12 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.concatenatedPart != undefined)
-                    {
-                        ctrl.value = payload.concatenatedPart.Constant;
+                    if (payload != undefined) {
+                        ctrl.constant = payload.Constant;
+                        if(payload.outputFieldValue != undefined)
+                        {
+                            ctrl.constant = payload.outputFieldValue.Value;
+                        }
                     }
 
                 };
@@ -56,8 +59,8 @@
 
                 function getData() {
                     var data = {
-                        $type: "Vanrise.ExcelConversion.MainExtensions.ConcatenatedParts.ConstantConcatenatedPart, Vanrise.ExcelConversion.MainExtensions ",
-                        Constant: ctrl.value
+                        $type: " XBooster.PriceListConversion.MainExtensions.OutputFieldValue.Constant, XBooster.PriceListConversion.MainExtensions ",
+                        Value: ctrl.constant
                     }
                     return data;
                 }
@@ -65,6 +68,6 @@
         }
     }
 
-    app.directive('vrExcelconversionConcatenatedpartConstant', concatenatedpartConstantDirective);
+    app.directive('xboosterPricelistconversionOutputfieldvalueConstant', OutputfieldvalueConstant);
 
 })(app);

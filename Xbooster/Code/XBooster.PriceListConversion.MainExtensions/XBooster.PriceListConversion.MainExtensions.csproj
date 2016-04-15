@@ -60,8 +60,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OutputFieldValue\Constant.cs" />
     <Compile Include="InputPriceListSettings\BasicInputPriceListSettings.cs" />
     <Compile Include="OutputPriceListSettings\BasicOutputPriceListSettings.cs" />
+    <Compile Include="OutputFieldValue\PriceListField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

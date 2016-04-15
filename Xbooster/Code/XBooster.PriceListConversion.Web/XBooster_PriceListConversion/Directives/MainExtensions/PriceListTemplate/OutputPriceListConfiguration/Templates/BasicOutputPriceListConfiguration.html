@@ -11,15 +11,40 @@
     </vr-columns>
     <vr-columns width="1/2row">
         <vr-section title="Price List Mapping">
-            <vr-columns colnum="3/4row">
-                <vr-datagrid datasource="outPutFieldMappings" norowhighlightonclick="true"
-                             on-ready="onGridReady" hidegridmenu>
-                    <vr-datagridcolumn headertext="'Field Name'" field="'fieldTitle'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15" disablesorting="true">
-                        <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onFieldReady" isrequired="dataItem.isRequired" customvalidate="dataItem.validate()" type="dataItem.type" normal-col-num="6"></vr-excelconversion-fieldmapping-cellfieldmapping>
-                    </vr-datagridcolumn>
-                </vr-datagrid>
-            </vr-columns>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-label>First Row</vr-label>
+                </vr-columns>
+                <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="onFirstRowReady" isrequired="true" type="'row'" normal-col-num="2"></vr-excelconversion-fieldmapping-cellfieldmapping>
+
+            </vr-row>
+
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-select datatextfield="fieldTitle" datavaluefield="fieldName"
+                               label="Field Type" datasource="outPutFieldMappings" selectedvalues="selectedoutputFieldMapping" onselectionchanged="outputbasicCtrl.onActionTemplateChanged">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="normal" withemptyline>
+                    <vr-button type="Add" data-onclick="outputbasicCtrl.addFilter" standalone vr-disabled="outputbasicCtrl.disableAddButton"></vr-button>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow" vr-loader="outputbasicCtrl.isLoadingDirective">
+                    <vr-validator validate="outputbasicCtrl.isValid()">
+                        <vr-datagrid datasource="outputbasicCtrl.datasource" norowhighlightonclick="true"
+                                     on-ready="onGridReady" enabledraggablerow="true" ondeleterow="outputbasicCtrl.removeFilter" hidegridmenu>
+                            <vr-datagridcolumn headertext="'Cell Mapping'" widthfactor="15" disablesorting="true">
+                                <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onFieldReady" isrequired="dataItem.isRequired" customvalidate="dataItem.validate()" type="dataItem.type" normal-col-num="6"></vr-excelconversion-fieldmapping-cellfieldmapping>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Field Type'" widthfactor="15" disablesorting="true">
+                                <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </vr-row>
         </vr-section>
     </vr-columns>
 </vr-row>
+

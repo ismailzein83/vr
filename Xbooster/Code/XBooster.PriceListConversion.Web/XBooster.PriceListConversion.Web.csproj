@@ -141,6 +141,9 @@
     <Content Include="web.config" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\InputPriceListConfiguration\Templates\BasicInputPriceListConfiguration.html" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\InputPriceListConfiguration\xbooster-pricelistconversion-inputpricelistconfiguration-basic.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputFieldValue\Templates\PriceListFieldTemplate.html" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputFieldValue\xbooster-pricelistconversion-outputfieldvalue-constant.js" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputFieldValue\xbooster-pricelistconversion-outputfieldvalue-pricelistfield.js" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputPriceListConfiguration\Templates\BasicOutputPriceListConfiguration.html" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputPriceListConfiguration\xbooster-pricelistconversion-outputpricelistconfiguration-basic.js" />
     <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\InputPriceListConfiguration\xbooster-pricelistconversion-inputpricelistconfiguration-selective.js" />
