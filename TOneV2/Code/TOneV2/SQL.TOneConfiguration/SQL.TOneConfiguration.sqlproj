@@ -319,6 +319,7 @@
     <None Include="Queueing.PostDeployment.sql" />
     <None Include="VR_Rules.PostDeployment.sql" />
     <None Include="Xbooster.PostDeployment.sql" />
+    <None Include="ExcelConversion.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

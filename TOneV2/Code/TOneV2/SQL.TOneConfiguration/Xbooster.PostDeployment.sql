@@ -91,3 +91,28 @@ on		1=1 and t.[Name] = s.[Name]
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+
+--[common].[TemplateConfig]----------------------80001 to 90000-------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [common].[TemplateConfig] on;
+;with cte_data([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(80001,'File','CDRComparison_CDRSource','cdrcomparison-filecdrsource',null,null),
+(80002,'Delimited File','CDRComparison_FileReader','cdrcomparison-flatfilereader',null,null),
+(80003,'Excel File','CDRComparison_FileReader','cdrcomparison-excelfilereader',null,null),
+(80004,'Basic','XBooster_PriceListConversion_OutputPriceListConfiguration','xbooster-pricelistconversion-outputpricelistconfiguration-basic',null,null),
+(80005,'Basic','XBooster_PriceListConversion_InputPriceListConfiguration','xbooster-pricelistconversion-inputpricelistconfiguration-basic',null,null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
+merge	[common].[TemplateConfig] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ConfigType] = s.[ConfigType],[Editor] = s.[Editor],[BehaviorFQTN] = s.[BehaviorFQTN],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings])
+	values(s.[ID],s.[Name],s.[ConfigType],s.[Editor],s.[BehaviorFQTN],s.[Settings]);
+set identity_insert [common].[TemplateConfig] off;
