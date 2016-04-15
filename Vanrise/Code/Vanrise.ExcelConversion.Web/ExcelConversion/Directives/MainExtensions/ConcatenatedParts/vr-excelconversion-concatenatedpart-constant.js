@@ -41,6 +41,11 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    if (payload != undefined && payload.concatenatedPart != undefined)
+                    {
+                        ctrl.value = payload.concatenatedPart.Constant;
+                    }
+
                 };
 
                 api.getData = getData;

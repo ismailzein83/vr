@@ -66,12 +66,11 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if(payload.cellFieldData !=undefined)
-                        {
+                        if (payload.fieldMapping != undefined) {
                             $scope.cellObject = {
-                                row: payload.cellFieldData.rowIndex,
-                                col: payload.cellFieldData.cellIndex,
-                                sheet: payload.cellFieldData.sheetIndex,
+                                row: payload.fieldMapping.RowIndex,
+                                col: payload.fieldMapping.CellIndex,
+                                sheet: payload.fieldMapping.SheetIndex,
                             }
                         }
                     }

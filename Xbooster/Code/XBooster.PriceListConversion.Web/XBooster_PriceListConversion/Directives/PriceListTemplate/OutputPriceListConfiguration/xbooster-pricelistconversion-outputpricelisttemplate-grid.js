@@ -21,7 +21,7 @@ app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsS
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/XBooster_PriceListConversion/Directives/PriceListTemplate/OutputPriceListTemplateGrid/Templates/OutputPriceListTemplateGrid.html"
+            templateUrl: "/Client/Modules/XBooster_PriceListConversion/Directives/PriceListTemplate/OutputPriceListConfiguration/Templates/OutputPriceListTemplateGrid.html"
 
         };
 

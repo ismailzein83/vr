@@ -51,10 +51,13 @@
                 var api = {};
 
                 api.load = function (payload) {
-
+                    var cellFieldMapping;
                     if (payload != undefined) {
                         context = payload.context;
-
+                        if (payload.concatenatedPart != undefined)
+                        {
+                            cellFieldMapping = payload.concatenatedPart.CellFieldMapping;
+                        }
                     }
 
                     var loadCellFieldPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -62,6 +65,10 @@
                         var payload = {
                             context: getContext(),
                         };
+                        if (cellFieldMapping != undefined)
+                        {
+                            payload.fieldMapping = cellFieldMapping;
+                        }
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, loadCellFieldPromiseDeferred);
                     });
 

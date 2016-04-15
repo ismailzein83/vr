@@ -58,10 +58,10 @@
             var selectorAPI;
 
             var directiveAPI;
-            var directiveReadyDeferred;
+            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
             var directivePayload;
 
-
+            var fieldMapping;
             function initializeController() {
                 $scope.templateConfigs = [];
                 $scope.selectedTemplateConfig;
@@ -91,7 +91,22 @@
                     var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
+                        fieldMapping = payload.fieldMapping;
+                        var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        directiveReadyDeferred.promise.then(function () {
+                            directiveReadyDeferred = undefined;
+                            var payloadDirective = {
+                                context: getContext()
+                            };
+                            if (fieldMapping != undefined)
+                            {
+                                payloadDirective.fieldMapping = fieldMapping;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
+                        });
+                        promises.push(loadDirectivePromiseDeferred.promise);
                     }
+                    
                     var getFieldMappingTemplateConfigsPromise = getFieldMappingTemplateConfigs();
                     promises.push(getFieldMappingTemplateConfigsPromise);
 
@@ -104,7 +119,10 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.templateConfigs.push(response[i]);
                                 }
-                                $scope.selectedTemplateConfig = $scope.templateConfigs[0];
+                                if (fieldMapping !=undefined)
+                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, fieldMapping.ConfigId, 'TemplateConfigID');
+                                else
+                                   $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                             }
                         });
                     }

@@ -72,11 +72,12 @@
                         if (payloadData != undefined && payloadData.configDetails != undefined)
                         {
                        
-                            payload.cellFieldData = {
-                                sheetIndex: payloadData.configDetails.SheetIndex,
-                                rowIndex: payloadData.configDetails.FirstRowIndex,
-                                cellIndex: getCellIndex(dataItem, payloadData.configDetails)
+                            payload.fieldMapping = {
+                                SheetIndex: payloadData.configDetails.SheetIndex,
+                                RowIndex: payloadData.configDetails.FirstRowIndex,
+                                CellIndex: getCellIndex(dataItem, payloadData.configDetails)
                             }
+                            console.log(payload.fieldMapping);
                         }
                         dataItem.onFieldReady = function (api) {
                             
@@ -153,7 +154,7 @@
                         if (firstRow.fieldMappingAPI != undefined) {
                             var obj = firstRow.fieldMappingAPI.getData();
                             if (obj != undefined)
-                                return { row: obj.RowIndex }
+                                return { row: obj.RowIndex, sheet: obj.SheetIndex}
 
                         }
                     }

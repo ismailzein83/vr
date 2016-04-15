@@ -26,6 +26,7 @@
             this.initializeController = initializeController;
             var context;
             var listName;
+            var listMappingData;
             function initializeController() {
                 ctrl.fieldMappings = [];
                 ctrl.updateLastRowIndexRange = function () {
@@ -74,11 +75,31 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     if (payload != undefined) {
                         var promises = [];
                         context = payload.context;
                         listName = payload.listName;
+                        listMappingData = payload.listMappingData;
+                        if (listMappingData != undefined)
+                        {
+                            if (listMappingData.FirstRowIndex)
+                            {
+                                ctrl.firstRowIndex = {
+                                    row: listMappingData.FirstRowIndex,
+                                    col: listMappingData.FirstRowIndex,
+                                    sheet: listMappingData.SheetIndex
+                                }
+                            }
+                            if (listMappingData.lastRowIndex)
+                            {
+                                ctrl.lastRowIndex = {
+                                    row: listMappingData.LastRowIndex,
+                                    col: listMappingData.LastRowIndex,
+                                    sheet: listMappingData.SheetIndex
+                                }
+                            }
+
+                        }
                         ctrl.fieldMappings = payload.fieldMappings;
                         for (var i = 0; i < ctrl.fieldMappings.length; i++) {
                             var item = ctrl.fieldMappings[i];
@@ -94,14 +115,23 @@
                         var payload = {
                             context: getContext()
                         };
+
+                        dataItem.normalColNum = ctrl.normalColNum;
+
                         dataItem.onFieldMappingReady = function (api) {
                             dataItem.fieldMappingAPI = api;
                             dataItem.readyPromiseDeferred.resolve();
                         }
-                        dataItem.normalColNum = ctrl.normalColNum;
-
                         dataItem.readyPromiseDeferred.promise
                       .then(function () {
+                          if (listMappingData != undefined && listMappingData.FieldMappings != undefined && listMappingData.FieldMappings.length > 0) {
+                              var fieldMapping = UtilsService.getItemByVal(listMappingData.FieldMappings, dataItem.FieldName, "FieldName");
+                              if (fieldMapping != undefined) {
+                                  payload.fieldMapping = fieldMapping;
+                                 
+                              }
+
+                          }
                           VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
                       });
                     }

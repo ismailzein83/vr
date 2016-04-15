@@ -158,9 +158,12 @@
 
             function saveInputConfiguration()
             {
+                var priceListTemplateId;
+                if(inputPriceListTemplateAPI != undefined)
+                    priceListTemplateId = inputPriceListTemplateAPI.getSelectedIds();
                 var onPriceListTemplatSaved = function (priceListTemplateObj) {
                 };
-                XBooster_PriceListConversion_PriceListTemplateService.saveInputPriceListTemplate(onPriceListTemplatSaved, buildInputConfigurationObj());
+                XBooster_PriceListConversion_PriceListTemplateService.saveInputPriceListTemplate(onPriceListTemplatSaved, buildInputConfigurationObj(), priceListTemplateId);
             }
         }
 

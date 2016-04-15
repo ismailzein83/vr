@@ -29,7 +29,7 @@
 
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
-            var label = "label='Output Configuration'";
+            var label = "label='Type'";
             if (attrs.hidelabel != undefined) {
                 label = "";
                 withemptyline = '';
@@ -37,7 +37,7 @@
 
 
             var template =
-                '<vr-row>'
+                '<vr-row ng-show="templateConfigs.length>1">'
               + '<vr-columns colnum="{{fieldmappingCtrl.normalColNum * 2}}">'
               + ' <vr-select on-ready="onSelectorReady"'
               + ' datasource="templateConfigs"'
@@ -49,7 +49,9 @@
               + 'hideremoveicon>'
           + '</vr-select>'
            + '</vr-row>'
-              + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>';
+          + '<vr-row>'
+                        + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>';
+          +'</vr-row>'
             return template;
 
         }
@@ -120,8 +122,8 @@
                                 if (configDetails != undefined)
                                 {
                                     $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, configDetails.ConfigId, 'TemplateConfigID');
-                                }
-                               // $scope.selectedTemplateConfig = $scope.templateConfigs[0];
+                                } else if ($scope.templateConfigs.length == 1)
+                                    $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                             }
                         });
                     }
