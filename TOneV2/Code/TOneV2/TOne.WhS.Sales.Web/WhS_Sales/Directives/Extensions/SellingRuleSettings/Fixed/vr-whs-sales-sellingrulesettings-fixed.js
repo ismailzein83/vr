@@ -40,7 +40,6 @@ app.directive('vrWhsSalesSellingrulesettingsFixed', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     if (payload.SellingRuleSettings != undefined) {
                         ctrl.fromRate = payload.SellingRuleSettings.FromRate;
                         ctrl.toRate = payload.SellingRuleSettings.ToRate;

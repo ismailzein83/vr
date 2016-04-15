@@ -12,7 +12,6 @@ function CarrierAccountEditorController($scope, CarrierAccountAPIService, Routin
         $scope.CarrierAccountId = undefined;
         if (parameters != undefined && parameters != null)
             $scope.CarrierAccountId = parameters.carrierAccountId;
-        console.log(parameters);
         editMode = true;
     }
     function defineScope() {

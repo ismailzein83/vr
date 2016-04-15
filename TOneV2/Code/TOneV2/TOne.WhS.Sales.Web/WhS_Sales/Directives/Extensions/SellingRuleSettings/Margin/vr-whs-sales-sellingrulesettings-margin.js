@@ -40,7 +40,6 @@ app.directive('vrWhsSalesSellingrulesettingsMargin', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     if (payload.SellingRuleSettings != undefined) {
                         ctrl.minMargin = payload.SellingRuleSettings.MinMargin;
                         ctrl.maxMargin = payload.SellingRuleSettings.MaxMargin;

@@ -87,12 +87,10 @@ function (VRNotificationService, WhS_Sales_SellingRuleAPIService, WhS_Sales_Sell
         }
 
         function hasUpdateRulePermission() {
-            console.log('hasUpdateRulePermission')
             return WhS_Sales_SellingRuleAPIService.HasUpdateRulePermission();
         }
 
         function hasDeleteRulePermission() {
-            console.log('hasDeleteRulePermission')
             return WhS_Sales_SellingRuleAPIService.HasDeleteRulePermission();
         }
 

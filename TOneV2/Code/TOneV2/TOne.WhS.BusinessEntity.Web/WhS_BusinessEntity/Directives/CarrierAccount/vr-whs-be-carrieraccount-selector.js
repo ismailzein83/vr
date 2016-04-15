@@ -57,11 +57,6 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             label = (attrs.getcustomers != undefined && attrs.getsuppliers != undefined) ? "Carrier" : label;
         }
 
-        //var required = "";
-        //console.log(attrs.isrequired);
-        //if (attrs.isrequired != undefined)
-        //    required = 'isrequired="' + attrs.isrequired + '"';
-
         var hideselectedvaluessection = "";
         if (attrs.hideselectedvaluessection != undefined)
             hideselectedvaluessection = "hideselectedvaluessection";
