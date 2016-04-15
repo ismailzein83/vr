@@ -32,7 +32,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             ctrl.selectedMeasures = [];
             ctrl.selectedDimensions = [];
             ctrl.datasource = [];
-            ctrl.selectedPeriods = [];
             ctrl.fromTime;
             ctrl.toTime;
             ctrl.dimensions = [];
@@ -63,7 +62,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             ctrl.Currency = query.Currency;
                             dimensionValues.length = 0;
                             ctrl.selectedDimensions.length = 0;
-                            ctrl.selectedPeriods.length = 0;
                             ctrl.selectedMeasures.length = 0;
                             ctrl.dimensions.length = 0;
                             ctrl.dimensionFields.length = 0;
@@ -109,7 +107,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 function loadGridQuery(query) {
                     ctrl.measures.length = 0;
                     ctrl.dimensions.length = 0;
-                    
+
                     dimensionValues.length = 0;
                     ctrl.fromTime = query.FromTime;
                     ctrl.toTime = query.ToTime;
@@ -132,16 +130,16 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     }
 
                     for (var i = 0; i < query.MeasureFields.length; i++)
-                        ctrl.measures.push(query.MeasureFields[i].Name);
+                        ctrl.measures.push(query.MeasureFields[i]);
 
                     for (var i = 0; i < query.Dimensions.length; i++)
-                        ctrl.dimensions.push(query.Dimensions[i].Name);
-
+                        ctrl.dimensions.push(query.Dimensions[i]);
+                    console.log(ctrl.dimensions);
                     isSummary = $attrs.withsummary != undefined;
                     var queryFinalized = {
                         Filters: query.Filters,
-                        DimensionFields: ctrl.dimensions,
-                        MeasureFields: ctrl.measures,
+                        DimensionFields: UtilsService.getPropValuesFromArray(ctrl.dimensions, "Key"),
+                        MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, "Key"),
                         FromTime: query.FromTime,
                         ToTime: query.ToTime,
                         Currency: query.Currency,

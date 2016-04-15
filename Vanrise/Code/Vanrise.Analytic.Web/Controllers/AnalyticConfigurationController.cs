@@ -15,7 +15,7 @@ namespace Vanrise.Analytic.Web.Controllers
     {
         [HttpGet]
         [Route("GetDimensionsInfo")]
-        public IEnumerable<DimensionInfo<DimensionConfiguration>> GetDimensionsInfo()
+        public IEnumerable<DimensionInfo> GetDimensionsInfo()
         {
             AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
             return manager.GetDimensionsInfo();

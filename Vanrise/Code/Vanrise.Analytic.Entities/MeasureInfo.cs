@@ -9,6 +9,7 @@ namespace Vanrise.Analytic.Entities
     public class MeasureInfo
     {
         public int Id { get; set; }
+        public string Key { get; set; }
         public string Name { get; set; }
     }
 }

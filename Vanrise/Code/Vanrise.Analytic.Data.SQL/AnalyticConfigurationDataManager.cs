@@ -61,6 +61,7 @@ namespace Vanrise.Analytic.Data.SQL
             {
                 Id = (int)reader["ID"],
                 Name = reader["Name"] as string,
+                DisplayName = reader["DisplayName"] as string,
                 Type = (ConfigurationType)reader["Type"],
                 Configuration = Vanrise.Common.Serializer.Deserialize<T>(reader["Configuration"] as string),
             };

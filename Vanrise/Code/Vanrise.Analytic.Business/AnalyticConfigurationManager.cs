@@ -16,7 +16,7 @@ namespace Vanrise.Analytic.Business
         {
 
         }
-        
+
         public IEnumerable<AnalyticConfiguration<DimensionConfiguration>> GetDimensions()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAnalyticDimensions",
@@ -40,7 +40,7 @@ namespace Vanrise.Analytic.Business
             return GetMeasures().MapRecords(MeasureInfoMapper);
 
         }
-        public IEnumerable<DimensionInfo<DimensionConfiguration>> GetDimensionsInfo()
+        public IEnumerable<DimensionInfo> GetDimensionsInfo()
         {
             return GetDimensions().MapRecords(DimensionInfoMapper);
 
@@ -50,16 +50,17 @@ namespace Vanrise.Analytic.Business
             return new MeasureInfo
             {
                 Id = measure.Id,
-                Name = measure.Name
+                Name = measure.DisplayName,
+                Key = measure.Name
             };
         }
-        DimensionInfo<DimensionConfiguration> DimensionInfoMapper(AnalyticConfiguration<DimensionConfiguration> dimension)
+        DimensionInfo DimensionInfoMapper(AnalyticConfiguration<DimensionConfiguration> dimension)
         {
-            return new DimensionInfo<DimensionConfiguration>
+            return new DimensionInfo
             {
                 Id = dimension.Id,
-                Configuration = dimension.Configuration,
-                Name = dimension.Name
+                Name = dimension.DisplayName,
+                Key = dimension.Name
             };
         }
 

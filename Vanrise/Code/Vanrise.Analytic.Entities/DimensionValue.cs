@@ -8,7 +8,6 @@ namespace Vanrise.Analytic.Entities
     public class DimensionValue
     {
         public Object Value { get; set; }
-
         public string Name { get; set; }
     }
 }

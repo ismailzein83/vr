@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class DimensionInfo<T>
+    public class DimensionInfo
     {
         public int Id { get; set; }
+        public string Key { get; set; }
         public string Name { get; set; }
-        public T Configuration { get; set; }
     }
 }
