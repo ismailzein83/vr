@@ -11,6 +11,9 @@ namespace Vanrise.Analytic.Data
     {
         IEnumerable<AnalyticConfiguration<MeasureConfiguration>> GetMeasures();
         IEnumerable<AnalyticConfiguration<DimensionConfiguration>> GetDimensions();
+
+        List<AnalyticItemConfig<T>> GetItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class;
+
         bool AreAnalyticConfigurationUpdated(ref object updateHandle);
     }
 }

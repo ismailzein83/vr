@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticQuery
     {
-        public int TableId { get; set; }
+        public string TableName { get; set; }
         public DateTime FromTime { get; set; }
         public DateTime ToTime { get; set; }
         public string Currency { get; set; }

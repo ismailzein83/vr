@@ -8,21 +8,12 @@ namespace Vanrise.Analytic.Entities
 {
     public interface IMeasureEvaluator
     {
-        List<string> GetColumns(IGetMeasureColumnsContext context);
-
-        Object GetMeasureValue(IGetMeasureValueContext context);
+        string GetMeasureExpression(IGetMeasureExpressionContext context);
     }
 
-    public interface IGetMeasureColumnsContext
+    public interface IGetMeasureExpressionContext
     {
-
-    }
-
-    public interface IGetMeasureValueContext
-    {
-        Object GetColumnValue(int columnIndex);
-
-        Object GetMeasureValue(string measureConfigName);
+        string GetMeasureExpression(string measureConfigName);
     }
 
 }

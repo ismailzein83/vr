@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 
 namespace Vanrise.Analytic.Business
@@ -10,6 +11,11 @@ namespace Vanrise.Analytic.Business
     public class ConfigurationManager
     {
         public AnalyticTable GetTable(int tableId)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal AnalyticTable GetTableByName(string tableName)
         {
             throw new NotImplementedException();
         }
@@ -23,10 +29,10 @@ namespace Vanrise.Analytic.Business
         {
             var measureConfigs = GetItemConfigs<AnalyticMeasureConfig>(tableId, AnalyticItemType.Measure);
             Dictionary<string, AnalyticMeasure> analyticMeasures = new Dictionary<string, AnalyticMeasure>();
-            foreach(var itemConfig in GetAllItemConfigs().Where(itm => itm.TableId == tableId && itm.ItemType == AnalyticItemType.Measure))
+            foreach (var itemConfig in measureConfigs)
             {
-                AnalyticMeasureConfig measureConfig = itemConfig.Config as AnalyticMeasureConfig;
-                if(measureConfig == null)
+                AnalyticMeasureConfig measureConfig = itemConfig.Config;
+                if (measureConfig == null)
                     throw new NullReferenceException("measureConfig");
                 AnalyticMeasure measure = new AnalyticMeasure
                 {
@@ -44,14 +50,15 @@ namespace Vanrise.Analytic.Business
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class
+        public IEnumerable<AnalyticItemConfig<T>> GetItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class
         {
-            return GetAllItemConfigs().Select(itm => itm.Config as T);
+            IAnalyticConfigurationDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticConfigurationDataManager>();
+            return dataManager.GetItemConfigs<T>(tableId, itemType);
         }
 
-        public IEnumerable<AnalyticItemConfig> GetAllItemConfigs()
-        {
-            throw new NotImplementedException();
-        }
+        //public IEnumerable<AnalyticItemConfig> GetAllItemConfigs()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

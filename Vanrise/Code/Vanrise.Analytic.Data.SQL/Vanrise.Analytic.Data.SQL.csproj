@@ -45,8 +45,7 @@
   <ItemGroup>
     <Compile Include="AnalyticConfigurationDataManager.cs" />
     <Compile Include="AnalyticDataManager.cs" />
-    <Compile Include="GetMeasureColumnsContext.cs" />
-    <Compile Include="GetMeasureValueContext.cs" />
+    <Compile Include="GetMeasureExpressionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

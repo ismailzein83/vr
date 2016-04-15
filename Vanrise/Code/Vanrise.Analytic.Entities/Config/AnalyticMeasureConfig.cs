@@ -10,11 +10,12 @@ namespace Vanrise.Analytic.Entities
 
     public class AnalyticMeasureConfig
     {
-        public string GetSQLColumnsExpression { get; set; }
+        public string SQLExpression { get; set; }
 
-        public string GetMeasureValueExpression { get; set; }
-
-        public List<string> DependentMeasureConfigNames { get; set; }
+        /// <summary>
+        /// either SQLExpression or GetSQLExpressionMethod should have value. SQLExpression has more priority than GetSQLExpressionMethod
+        /// </summary>
+        public string GetSQLExpressionMethod { get; set; }        
 
         public List<string> JoinConfigNames { get; set; }
 

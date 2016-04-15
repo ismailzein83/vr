@@ -65,11 +65,6 @@ namespace Vanrise.Analytic.Data.SQL
 
         public AnalyticSummaryBigResult<AnalyticRecord> GetFilteredAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-            AnalyticConfigurationDataManager dataManager = new AnalyticConfigurationDataManager();
-            var dimensionsConfig = dataManager.GetFilteredDimensions(input.Query.DimensionFields);
-            var measureConfig = dataManager.GetFilteredMeasures(input.Query.MeasureFields);
-            var dimensionsFilterConfig = dataManager.GetFilteredDimensions(input.Query.DimensionFields);
-
             Action<string> createTempTableIfNotExistsAction = (tempTableName) =>
             {
                 string query = BuildAnalyticQuery(input, tempTableName);
@@ -86,19 +81,19 @@ namespace Vanrise.Analytic.Data.SQL
             Dictionary<string, string> columnsMappings = new Dictionary<string, string>();
             for (int i = 0; i < input.Query.DimensionFields.Count; i++)
             {
-                var groupField = input.Query.DimensionFields[i];
-                columnsMappings.Add(String.Format("DimensionValues[{0}].Name", i), String.Format("DimensionName_{0}", groupField));
+                var dimensionName = input.Query.DimensionFields[i];
+                var dimension = _dimensions[dimensionName];
+                columnsMappings.Add(String.Format("DimensionValues[{0}].Name", i), GetDimensionNameColumnAlias(dimension));
             }
 
             for (int i = 0; i < input.Query.MeasureFields.Count; i++)
             {
-                var measureField = input.Query.MeasureFields[i];
-                var measureFieldConfig = measureConfig[measureField];
-                if (measureFieldConfig.ColumnName != null)
-                    columnsMappings.Add(String.Format("MeasureValues.{0}", input.Query.MeasureFields[i]), measureFieldConfig.ColumnName);
+                var measureName = input.Query.MeasureFields[i];
+                var measure = _measures[measureName];
+                columnsMappings.Add(String.Format("MeasureValues.{0}", input.Query.MeasureFields[i]), GetMeasureColumnAlias(measure));
             }
 
-            AnalyticSummaryBigResult<AnalyticRecord> rslt = RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, dimensionsConfig, measureConfig)
+            AnalyticSummaryBigResult<AnalyticRecord> rslt = RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, input.Query)
             , columnsMappings, new AnalyticSummaryBigResult<AnalyticRecord>()) as AnalyticSummaryBigResult<AnalyticRecord>;
 
             //if (input.Query.WithSummary)
@@ -115,9 +110,9 @@ namespace Vanrise.Analytic.Data.SQL
             StringBuilder groupByPartBuilder = new StringBuilder();
             StringBuilder ctePartBuilder = new StringBuilder();
 
-            List<string> lstCTEStatements = new List<string>();
+           // List<string> lstCTEStatements = new List<string>();
             HashSet<string> includeJoinConfigNames = new HashSet<string>();
-            List<string> lstWhereStatement = new List<string>();
+            //List<string> lstWhereStatement = new List<string>();
 
             #region MainQuery
             StringBuilder queryBuilder = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
@@ -157,10 +152,10 @@ namespace Vanrise.Analytic.Data.SQL
                     }
                 }
                 if (!String.IsNullOrEmpty(groupDimension.Config.IdColumn))
-                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS Dimension_{1}_Id", groupDimension.Config.IdColumn, groupDimension.AnalyticDimensionConfigId));
+                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", groupDimension.Config.IdColumn, GetDimensionIdColumnAlias(groupDimension)));
 
                 if (!String.IsNullOrEmpty(groupDimension.Config.NameColumn))
-                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS Dimension_{1}_Name", groupDimension.Config.NameColumn, groupDimension.AnalyticDimensionConfigId));
+                    AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", groupDimension.Config.NameColumn, GetDimensionNameColumnAlias(groupDimension)));
 
             }
             #endregion
@@ -194,13 +189,15 @@ namespace Vanrise.Analytic.Data.SQL
             {
                 AnalyticMeasure measure = _measures[measureName];
 
-                GetMeasureColumnsContext getColumnsContext = new GetMeasureColumnsContext();
-                List<string> columns = measure.Evaluator.GetColumns(getColumnsContext);
-                if (columns != null)
+                GetMeasureExpressionContext getMeasureExpressionContext = new GetMeasureExpressionContext();
+                string measureExpression = !string.IsNullOrWhiteSpace(measure.Config.SQLExpression) ? measure.Config.SQLExpression : measure.Evaluator.GetMeasureExpression(getMeasureExpressionContext);
+                AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", measureExpression, GetMeasureColumnAlias(measure)));
+
+                if (measure.Config.JoinConfigNames != null)
                 {
-                    for (int i = 0; i < columns.Count; i++)
+                    foreach (var join in measure.Config.JoinConfigNames)
                     {
-                        AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS Measure_{1}_Column_{2}", columns[i], measure.AnalyticMeasureConfigId, i));
+                        includeJoinConfigNames.Add(join);
                     }
                 }
             }
@@ -219,7 +216,7 @@ namespace Vanrise.Analytic.Data.SQL
 
             #endregion
 
-            #region Replacment Query
+            #region Query Replacement
 
             queryBuilder.Replace("#TOPRECORDS#", string.Format("{0}", input.Query.TopRecords != null ? "TOP(" + input.Query.TopRecords + ") " : ""));
             queryBuilder.Replace("#TABLENAME#", _table.Settings.TableName);
@@ -239,6 +236,57 @@ namespace Vanrise.Analytic.Data.SQL
             return queryBuilder.ToString();
         }
 
+        string GetDimensionIdColumnAlias(AnalyticDimension dimension)
+        {
+            return String.Format("Dimension_{0}_Id", dimension.AnalyticDimensionConfigId);
+        }
+
+        string GetDimensionNameColumnAlias(AnalyticDimension dimension)
+        {
+            return String.Format("Dimension_{0}_Name", dimension.AnalyticDimensionConfigId);
+        }
+
+        string GetMeasureColumnAlias(AnalyticMeasure measure)
+        {
+            return String.Format("Measure_{0}", measure.AnalyticMeasureConfigId);
+        }
+
+        private AnalyticRecord AnalyticRecordMapper(System.Data.IDataReader reader, AnalyticQuery analyticQuery)
+        {
+            AnalyticRecord record = new AnalyticRecord()
+            {
+                DimensionValues = analyticQuery.DimensionFields != null ? new DimensionValue[analyticQuery.DimensionFields.Count] : new DimensionValue[0],
+                MeasureValues = new MeasureValues()
+            };
+            var index = 0;
+            if (analyticQuery.DimensionFields != null)
+            {
+                foreach (var dimensionName in analyticQuery.DimensionFields)
+                {
+                    var dimension = _dimensions[dimensionName];
+                    object dimensionId = GetReaderValue<object>(reader, GetDimensionIdColumnAlias(dimension));
+                    if (dimensionId != null)
+                    {
+                        record.DimensionValues[index] = new DimensionValue
+                        {
+                            Value = dimensionId,
+                            Name = reader[GetDimensionNameColumnAlias(dimension)] as string
+                        };
+                    }
+
+                    index++;
+                }
+            }
+            index = 0;
+            foreach (var measureName in analyticQuery.MeasureFields)
+            {
+                var measure = _measures[measureName];
+                record.MeasureValues.Add(measureName, GetReaderValue<Object>(reader, GetMeasureColumnAlias(measure)));
+                index++;
+            }
+            index = 0;
+            return record;
+        }
 
         private AnalyticRecord AnalyticRecordMapper(System.Data.IDataReader reader, Dictionary<string, DimensionConfiguration> dimensionsConfig, Dictionary<string, MeasureConfiguration> measureConfig)
         {

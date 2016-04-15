@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public enum AnalyticItemType { Dimension = 1, Measure = 2, Join = 3 }
     
-    public class AnalyticItemConfig
+    public class AnalyticItemConfig<T>
     {
         public int AnalyticItemConfigId { get; set; }
 
@@ -20,6 +20,6 @@ namespace Vanrise.Analytic.Entities
 
         public AnalyticItemType ItemType { get; set; }
 
-        public Object Config { get; set; }
+        public T Config { get; set; }
     }
 }
