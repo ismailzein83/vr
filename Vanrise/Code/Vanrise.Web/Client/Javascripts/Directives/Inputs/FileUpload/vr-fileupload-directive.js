@@ -9,7 +9,8 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             onReady: '=',
             value: '=',
             hint: '@',
-            modulename: '@'
+            modulename: '@',
+            validationfunction: '='
         },
         controller: function ($scope, $element, $attrs,$timeout) {
             var ctrl = this;
@@ -67,17 +68,28 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                         return false;
                     }
                     else {
-                        $scope.isUploading = true;
                         var file = data.files[data.files.length - 1];
+                        
+                        if (ctrl.validationfunction != undefined) {
+                            if (ctrl.validationfunction(file.name, file.size)) {
+                                sumbitData();
+                            }
+                        }
+                        else {
+                            sumbitData();
+                        }
+                    }
+                    
+                    function sumbitData() {
+                        $scope.isUploading = true;
                         ctrl.file = {
                             name: file.name,
                             type: file.type,
                             size: file.size,
                             lastModifiedDate: file.lastModifiedDate
-                        }
+                        };
                         data.submit();
                     }
-                    
                 },
                 progress: function (e, data) {
                     $scope.$apply(function () {
