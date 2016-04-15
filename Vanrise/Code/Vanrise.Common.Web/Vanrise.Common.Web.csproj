@@ -187,6 +187,7 @@
     <Content Include="Common\Directives\Logger\vr-common-log-entry-grid.js" />
     <Content Include="Common\Directives\Logger\vr-common-log-entry-type-selector.js" />
     <Content Include="Common\Directives\Logger\vr-common-log-attribute-selector.js" />
+    <Content Include="Common\Directives\Logger\vr-log-entry-search.js" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveBooleanDirectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveChoicesDirectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\GenericDataRecord\Templates\SelectiveDateTimeDirectiveTemplate.html" />

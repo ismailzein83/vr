@@ -17,7 +17,13 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
     }
 
     function HasPermissionToActions(systemActionNames) {
-        return VR_Sec_SecurityAPIService.HasPermissionToActions(systemActionNames);
+        var dummyPromise = UtilsService.createPromiseDeferred();
+        if (getUserToken())
+            return VR_Sec_SecurityAPIService.HasPermissionToActions(systemActionNames);
+        else {
+            dummyPromise.resolve(false);
+            return dummyPromise.promise;
+        }
     }
 
     function isAllowed(attrValue) {
