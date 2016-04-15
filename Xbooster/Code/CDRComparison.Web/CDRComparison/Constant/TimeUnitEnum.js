@@ -1,4 +1,5 @@
 ﻿app.constant('CDRComparison_TimeUnitEnum', {
-    Seconds: { value: 0, description: "Seconds" },
-    Milliseconds: { value: 1, description: "Milliseconds" }
+    //Minutes: { value: 0, description: "Minutes" },
+    Seconds: { value: 1, description: "Seconds" },
+    Milliseconds: { value: 2, description: "Milliseconds" }
 });

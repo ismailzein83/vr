@@ -56,6 +56,7 @@
                     if (payload != undefined) {
                         cdrSourceContext = payload.cdrSourceContext;
                         fileReader = payload.FileReader;
+                        $scope.scopeModel.isCompressed = payload.IsCompressed;
                     }
 
                     var loadFileReaderSelectivePromise = loadFileReaderSelective();

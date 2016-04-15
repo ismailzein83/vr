@@ -42,6 +42,13 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
+                $scope.scopeModel.durationTimeUnits =
+                [
+                    { value: 0, description: 'Minutes' },
+                    { value: 1, description: 'Seconds' },
+                    { value: 2, description: 'Milliseconds' }
+                ];
+                $scope.scopeModel.selectedDurationTimeUnit = $scope.scopeModel.durationTimeUnits[1];
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -92,7 +99,7 @@
                         promises.push(loadSelfDeferred.promise);
 
                         getCDRSourceConfig().then(function () {
-                            UtilsService.waitMultipleAsyncOperations([loadDirective, loadNormalizationRules]).then(function () {
+                            UtilsService.waitMultipleAsyncOperations([loadDirective, loadNormalizationRules, loadStaticControls]).then(function () {
                                 loadSelfDeferred.resolve();
                             }).catch(function (error) {
                                 loadSelfDeferred.reject();
@@ -165,6 +172,9 @@
                             return cgpnNormalizationRuleLoadDeferred.promise;
                         }
                     }
+                    function loadStaticControls() {
+                        $scope.scopeModel.selectedDurationTimeUnit = UtilsService.getItemByVal($scope.scopeModel.durationTimeUnits, cdrSource.DurationTimeUnit, 'value');
+                    }
                 };
 
                 api.getData = getData;
@@ -187,6 +197,7 @@
                         data = directiveAPI.getData();
                         data.ConfigId = $scope.scopeModel.selectedTemplateConfig.TemplateConfigID;
                         data.NormalizationRules = getNormalizationRules();
+                        data.DurationTimeUnit = $scope.scopeModel.selectedDurationTimeUnit.value
                     }
                     return data;
 

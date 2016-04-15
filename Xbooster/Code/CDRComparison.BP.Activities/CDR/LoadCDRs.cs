@@ -61,11 +61,12 @@ namespace CDRComparison.BP.Activities
                         OriginalCDPN = cdr.CDPN,
                         OriginalCGPN = cdr.CGPN,
                         Time = cdr.Time,
-                        DurationInSec = cdr.DurationInSec,
                         IsPartnerCDR = inputArgument.IsPartnerCDRs
                     };
 
+                    item.DurationInSec = (inputArgument.CDRSource.DurationTimeUnit == TimeUnitEnum.Minutes) ? (cdr.DurationInSec * 60) : cdr.DurationInSec;
                     NormalizeNumbers(item, cdpnNormalizationSettings, cgpnNormalizationSettings);
+                    
                     list.Add(item);
                 }
                 var cdrBatch = new CDRBatch() { CDRs = list };
