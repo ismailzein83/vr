@@ -6,3 +6,5 @@ InterConnect	40001 to 50000
 Common			50001 to 60000
 Generic			60001 to 70000
 VR_Rules		70001 to 80000
+XBooster		80001 to 90000
+ExcelConversion	90001 to 100000

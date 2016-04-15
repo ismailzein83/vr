@@ -12,3 +12,4 @@ ClearVoice		2701 to 3000
 InterConnect	3001 to 3300
 TOne			3301 to 3600
 BI				3601 to 3900
+XBooster		3901 to 4200
