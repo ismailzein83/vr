@@ -10,8 +10,14 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredLoggers"), input);
         }
 
+        function HasViewSystemLogPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['GetFilteredLoggers']));
+        }
+
+
         return ({
-            GetFilteredLoggers: GetFilteredLoggers
+            GetFilteredLoggers: GetFilteredLoggers,
+            HasViewSystemLogPermission: HasViewSystemLogPermission
         });
     }
 
