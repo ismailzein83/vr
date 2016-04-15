@@ -60,28 +60,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
             api.load = function (payload) {
 
                 var promises = [];
-
-                function loadDimensions() {
-
-                    return VR_Analytic_AnalyticConfigurationAPIService.GetDimensionsInfo().then(function (response) {
-                        ctrl.dimensions.length = 0;
-                        angular.forEach(response, function (itm) {
-                            ctrl.dimensions.push(itm);
-                        });
-                    });
-                }
-
-                function loadMeasures() {
-                    return VR_Analytic_AnalyticConfigurationAPIService.GetMeasuresInfo().then(function (response) {
-                        ctrl.measures.length = 0;
-                        angular.forEach(response, function (itm) {
-                            ctrl.measures.push(itm);
-                        });
-                    });
-                }
-
-                loadDimensions();
-                loadMeasures();
                 return UtilsService.waitMultiplePromises(promises);
             }
 

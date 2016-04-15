@@ -121,7 +121,7 @@ namespace Vanrise.Analytic.Data.SQL
                                                                 --#CTEPART#
                                                                 AllResult AS( 
 			                                                    SELECT #TOPRECORDS# #SELECTPART#
-			                                                    FROM #TABLENAME# bs --WITH(NOLOCK ,INDEX(#TABLEINDEX#))
+			                                                    FROM #TABLENAME# ant --WITH(NOLOCK ,INDEX(#TABLEINDEX#))
                                                                 #JOINPART#
                                                                 #EXCHANGEJOINPART#
 			                                                    WHERE
@@ -225,7 +225,7 @@ namespace Vanrise.Analytic.Data.SQL
             queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
             queryBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
             queryBuilder.Replace("#FILTERPART#", filterPartBuilder.ToString());
-
+            queryBuilder.Replace("#EXCHANGEJOINPART#", "");
             if (groupByPartBuilder.Length > 0)
                 queryBuilder.Replace("#GROUPBYPART#", "GROUP BY " + groupByPartBuilder);
             else

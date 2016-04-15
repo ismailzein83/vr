@@ -15,11 +15,10 @@ namespace Vanrise.Analytic.Business
             IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetAnalyticRecords(input));
         }
-
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
-        {            
+        {
             IAnalyticDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticDataManager>();
-            ConfigurationManager configManager = new ConfigurationManager();            
+            ConfigurationManager configManager = new ConfigurationManager();
             var table = configManager.GetTableByName(input.Query.TableName);
             if (table == null)
                 throw new NullReferenceException(String.Format("table. Name '{0}'", input.Query.TableName));

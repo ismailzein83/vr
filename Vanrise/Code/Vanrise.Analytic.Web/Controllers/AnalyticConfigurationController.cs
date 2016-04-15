@@ -36,5 +36,13 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticManager manager = new AnalyticManager();
             return GetWebResponse(input, manager.GetFiltered(input));
         }
+
+        [HttpPost]
+        [Route("GetFilteredRecords")]
+        public Object GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        {
+            AnalyticManager manager = new AnalyticManager();
+            return GetWebResponse(input, manager.GetFilteredRecords(input));
+        }
     }
 }
