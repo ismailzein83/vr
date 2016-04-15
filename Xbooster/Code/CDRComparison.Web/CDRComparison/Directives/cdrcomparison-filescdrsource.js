@@ -47,7 +47,7 @@
                         return true;
                     }
                     else {
-                        VRNotificationService.showInformation("File '" + fileName + "' is > 5 MB. Please upload a compressed version <= 5 MB");
+                        VRNotificationService.showWarning("File '" + fileName + "' is > 5 MB. Please upload a compressed version <= 5 MB");
                         return false;
                     }
 
