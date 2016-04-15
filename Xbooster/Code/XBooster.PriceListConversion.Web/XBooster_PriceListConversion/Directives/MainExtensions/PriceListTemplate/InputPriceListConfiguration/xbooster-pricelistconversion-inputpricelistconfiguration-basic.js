@@ -35,7 +35,7 @@
             $scope.outPutFieldMappings;
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.dateTimeFormat = "yyyy/MM/dd";
                 $scope.scopeModel.onCodeListMappingReady = function (api) {
                     codeListAPI = api;
                     codeListMappingReadyPromiseDeferred.resolve();
@@ -57,7 +57,11 @@
                     if (payload != undefined) {
                         context = payload.context;
                         configDetails = payload.configDetails
-
+                        if (configDetails != undefined && configDetails.ExcelConversionSettings !=undefined)
+                        {
+                            $scope.scopeModel.dateTimeFormat = configDetails.ExcelConversionSettings.DateTimeFormat;
+                        }
+                     
                     }
                     promises.push(loadRateListMapping());
                     promises.push(loadCodeListMapping());
@@ -116,7 +120,7 @@
                     var obj = {
                         ListMappings: listMappings,
                         FieldMappings: null,
-                        DateTimeFormat: "yyyy/MM/dd"
+                        DateTimeFormat: $scope.scopeModel.dateTimeFormat
                     }
                     var basicConfiguration = {
                         $type: "XBooster.PriceListConversion.MainExtensions.InputPriceListSettings.BasicInputPriceListSettings,XBooster.PriceListConversion.MainExtensions",

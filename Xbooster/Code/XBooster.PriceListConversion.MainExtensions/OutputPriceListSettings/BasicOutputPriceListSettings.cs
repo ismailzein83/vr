@@ -1,6 +1,7 @@
 ﻿using Aspose.Cells;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
     {
         public int TemplateFileId { get; set; }
         public List<OutputTable> Tables { get; set; }
-       
+        public string DateTimeFormat { get; set; }
         public override byte[] Execute(IOutputPriceListExecutionContext context)
         {
             var fileManager = new VRFileManager();
@@ -30,21 +31,28 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
 
-            FieldValueExecutionContext fieldValueExecutionContext = new Business.FieldValueExecutionContext();
-            foreach (var item in context.Records)
+           
+           
+            foreach (var table in this.Tables)
             {
-                foreach (var table in this.Tables)
+                var workSheet = workbook.Worksheets[table.SheetIndex];
+                var rowIndex = table.RowIndex;
+                foreach (var item in context.Records)
                 {
-                    var workSheet = workbook.Worksheets[table.SheetIndex];
                     foreach (var field in table.FieldsMapping)
-                    {
-
+                     {
+                   
+                        FieldValueExecutionContext fieldValueExecutionContext = new Business.FieldValueExecutionContext();
                         fieldValueExecutionContext.Record = item;
                         field.FieldValue.Execute(fieldValueExecutionContext);
-                        workSheet.Cells[table.RowIndex, field.CellIndex].PutValue(fieldValueExecutionContext.FieldValue);
+                        var fieldValue  = fieldValueExecutionContext.FieldValue;
+                        if (fieldValueExecutionContext.FieldValue is DateTime)
+                             fieldValue =((DateTime) fieldValueExecutionContext.FieldValue).ToString(this.DateTimeFormat);
+                        workSheet.Cells[rowIndex, field.CellIndex].PutValue(fieldValue);
+                       
                     }
-                    table.RowIndex++;
-                }
+                    rowIndex++;
+                 }
             }
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = workbook.SaveToStream();

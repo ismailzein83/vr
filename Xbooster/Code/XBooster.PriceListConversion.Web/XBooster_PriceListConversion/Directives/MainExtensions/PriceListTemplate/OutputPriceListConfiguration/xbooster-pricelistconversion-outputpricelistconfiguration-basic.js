@@ -32,7 +32,7 @@
             $scope.outPutFieldMappings;
             function initializeController() {
                 $scope.outPutFieldMappings = [{ fieldTitle: "Code", isRequired: true, type: "cell", fieldName: "Code", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Zone", isRequired: true, type: "cell", fieldName: "Zone", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Rate", isRequired: true, type: "cell", fieldName: "Rate", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Effective Date", isRequired: true, type: "cell", fieldName: "EffectiveDate", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Custom", isRequired: true, fieldName: "Custom", configId: 1, editor: "xbooster-pricelistconversion-outputfieldvalue-constant" }]
-
+                $scope.dateTimeFormat = "yyyy/MM/dd";
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
 
@@ -104,6 +104,8 @@
                             }
                             if (payload.configDetails.Tables != undefined && payload.configDetails.Tables.length > 0)
                                 table = payload.configDetails.Tables[0];
+                            
+                            $scope.dateTimeFormat = payload.configDetails.DateTimeFormat;
                         }
                        
                     }
@@ -254,7 +256,8 @@
                     var data = {
                         $type: "XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings.BasicOutputPriceListSettings,XBooster.PriceListConversion.MainExtensions",
                         TemplateFileId: $scope.outPutFile.fileId,
-                        Tables:tables
+                        Tables: tables,
+                        DateTimeFormat: $scope.dateTimeFormat
                     }
                     return data;
                 }
