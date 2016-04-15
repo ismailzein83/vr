@@ -115,6 +115,7 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
                     });
 
                     if (filterItems != undefined) {
+                        ctrl.datasource.length = 0;
                         for (var i = 0; i < filterItems.length; i++) {
                             addFilterItemToGrid(filterItems[i]);
                         }
