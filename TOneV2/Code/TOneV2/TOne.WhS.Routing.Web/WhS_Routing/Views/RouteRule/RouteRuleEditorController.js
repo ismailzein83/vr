@@ -175,14 +175,25 @@
         }
 
         function loadAllControls() {
+            var promises = [];
             if (routingProductId != undefined) {
-                return getProductRoute().then(function () {
-                    loadData();
+                var getProductRoutePromise = getProductRoute();
+                promises.push(getProductRoutePromise);
+                var loadDataPromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadDataPromiseDeferred.promise);
+
+                getProductRoutePromise.then(function () {
+                    loadData().then(function () {
+                        loadDataPromiseDeferred.resolve();
+                    }).catch(function (error) {
+                        loadDataPromiseDeferred.reject(error);
+                    });
                 });
             }
             else {
-                return loadData();
+                promises.push(loadData());                
             }
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function loadData() {
