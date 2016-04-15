@@ -87,6 +87,7 @@
                     return {
                         $type: 'CDRComparison.Business.FileCDRSource, CDRComparison.Business',
                         FileId: $scope.scopeModel.file.fileId,
+                        IsCompressed: $scope.scopeModel.isCompressed,
                         FileReader: fileReaderSelectiveAPI.getData()
                     };
                 };

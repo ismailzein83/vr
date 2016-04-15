@@ -13,6 +13,8 @@ namespace CDRComparison.Business
     {
         public long FileId { get; set; }
 
+        public bool IsCompressed { get; set; }
+
         public CDRFileReader FileReader { get; set; }
 
         public override void ReadCDRs(IReadCDRsFromSourceContext context)
@@ -25,7 +27,7 @@ namespace CDRComparison.Business
             var file = fileManager.GetFile(this.FileId);
             if (file == null)
                 throw new Exception(String.Format("FileId {0}", this.FileId));
-            using (var readFromFileContext = new ReadCDRsFromFileContext(file, onCDRsReceived))
+            using (var readFromFileContext = new ReadCDRsFromFileContext(file, onCDRsReceived) { IsCompressed = this.IsCompressed })
             {
                 this.FileReader.ReadCDRs(readFromFileContext);
             }
@@ -40,7 +42,7 @@ namespace CDRComparison.Business
                 throw new Exception(String.Format("File '{0}' was not found", this.FileId));
 
             CDRSample cdrSample;
-            using (var readSampleFromFileContext = new ReadSampleFromFileContext(file))
+            using (var readSampleFromFileContext = new ReadSampleFromFileContext(file) { IsCompressed = this.IsCompressed })
             {
                 cdrSample = this.FileReader.ReadSample(readSampleFromFileContext);
             }

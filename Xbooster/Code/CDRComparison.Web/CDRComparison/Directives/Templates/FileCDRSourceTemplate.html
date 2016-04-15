@@ -5,5 +5,8 @@
     <vr-columns width="normal" withemptyline>
         <vr-button type="Help" data-onclick="scopeModel.viewRecentFiles" standalone></vr-button>
     </vr-columns>
+    <vr-columns colnum="{{fileSourceCtrl.normalColNum}}">
+        <vr-switch label="Is Compressed" value="scopeModel.isCompressed"></vr-switch>
+    </vr-columns>
 </vr-row>
 <cdrcomparison-filereader-selective on-ready="scopeModel.onFileReaderSelectiveReady" normal-col-num="{{fileSourceCtrl.normalColNum}}" isrequired="fileSourceCtrl.isrequired"></cdrcomparison-filereader-selective>

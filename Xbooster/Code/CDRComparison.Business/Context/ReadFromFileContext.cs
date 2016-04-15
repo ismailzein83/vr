@@ -12,6 +12,8 @@ namespace CDRComparison.Business
 {
     public abstract class ReadFromFileContext : IReadFromFileContext, IDisposable
     {
+        #region Fields / Properties
+
         VRFile _file;
 
         byte[] _content;
@@ -19,23 +21,77 @@ namespace CDRComparison.Business
         {
             get
             {
-                if(_content == null)
+                if (_content == null)
                 {
                     if (_file.Content == null)
                         throw new NullReferenceException("_file.Content");
-                    //try
-                    //{
-
-                    //    _content = UnZip(_file.Content);
-                    //}
-                    //catch
-                    //{
+                    if (this.IsCompressed)
+                    {
+                        try
+                        {
+                            _content = UnZip(_file.Content);
+                        }
+                        catch
+                        {
+                            _content = _file.Content;
+                        }
+                    }
+                    else
                         _content = _file.Content;
-                    //}
                 }
                 return _content;
             }
         }
+
+        StreamReader _strReader;
+        StreamReader StreamReader
+        {
+            get
+            {
+                if (_strReader == null)
+                    _strReader = new StreamReader(new MemoryStream(this.FileContent));
+                return _strReader;
+            }
+        }
+
+        public bool IsCompressed { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        public ReadFromFileContext(VRFile file)
+        {
+            if (file == null)
+                throw new ArgumentNullException("file");
+            this._file = file;
+        }
+        
+        #endregion
+
+        #region Public Methods
+
+        public bool TryReadLine(out string line)
+        {
+            line = this.StreamReader.ReadLine();
+            if (line != null)
+                return true;
+            else
+                return false;
+        }
+
+        public void Dispose()
+        {
+            if (_strReader != null)
+            {
+                _strReader.Close();
+                _strReader.Dispose();
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private byte[] UnZip(byte[] p)
         {
@@ -69,40 +125,6 @@ namespace CDRComparison.Business
             return unzippedBytes;
         }
 
-        StreamReader _strReader;
-        StreamReader StreamReader
-        {
-            get
-            {
-                if (_strReader == null)
-                    _strReader = new StreamReader(new MemoryStream(this.FileContent));
-                return _strReader;
-            }
-        }
-
-        public ReadFromFileContext(VRFile file)
-        {
-            if (file == null)
-                throw new ArgumentNullException("file");
-            this._file = file;
-        }
-
-        public bool TryReadLine(out string line)
-        {
-            line = this.StreamReader.ReadLine();
-            if (line != null)
-                return true;
-            else
-                return false;
-        }
-
-        public void Dispose()
-        {
-            if (_strReader != null)
-            {
-                _strReader.Close();
-                _strReader.Dispose();
-            }
-        }
+        #endregion
     }
 }

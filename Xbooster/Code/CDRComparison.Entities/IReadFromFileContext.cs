@@ -11,5 +11,7 @@ namespace CDRComparison.Entities
         byte[] FileContent { get; }
 
         bool TryReadLine(out string line);
+
+        bool IsCompressed { get; set; }
     }
 }
