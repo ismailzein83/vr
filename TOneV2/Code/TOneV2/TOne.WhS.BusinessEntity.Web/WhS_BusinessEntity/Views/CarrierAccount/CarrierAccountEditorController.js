@@ -7,18 +7,12 @@
     function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum) {
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var currencySelectorAPI;
         var currencySelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var activationStatusSelectorAPI;
         var activationStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var sellingNumberPlanDirectiveAPI;
-        $scope.scopeModal = {};
-        $scope.scopeModal.isEditMode;
-
-
+        var isEditMode;
         var carrierAccountId;
         var carrierProfileId;
         var carrierAccountEntity;
@@ -33,25 +27,27 @@
                 carrierAccountId = parameters.CarrierAccountId;
                 carrierProfileId = parameters.CarrierProfileId
             }
-            $scope.scopeModal.isEditMode = (carrierAccountId != undefined);
-            $scope.scopeModal.carrierProfileSelected = (carrierProfileId != undefined);
+            isEditMode = (carrierAccountId != undefined);
         }
 
         function defineScope() {
+            $scope.scopeModal = {};
+            $scope.scopeModal.disableCarrierProfile = (carrierProfileId != undefined) || isEditMode
+            $scope.scopeModal.disableCarrierAccountType = isEditMode
+            $scope.scopeModal.disableSellingNumberPlan = isEditMode
 
             $scope.hasSaveCarrierAccountPermission = function () {
-                if ($scope.scopeModal.isEditMode)
+                if (isEditMode)
                     return WhS_BE_CarrierAccountAPIService.HasUpdateCarrierAccountPermission();
                 else
                     return WhS_BE_CarrierAccountAPIService.HasAddCarrierAccountPermission();
             }
 
             $scope.scopeModal.SaveCarrierAccount = function () {
-                if ($scope.scopeModal.isEditMode) {
+                if (isEditMode)
                     return updateCarrierAccount();
-                } else {
+                else
                     return insertCarrierAccount();
-                }
             };
 
             $scope.scopeModal.onSellingNumberPlanDirectiveReady = function (api) {
@@ -101,7 +97,7 @@
 
             $scope.scopeModal.isLoading = true;
 
-            if ($scope.scopeModal.isEditMode) {
+            if (isEditMode) {
                 getCarrierAccount()
                     .then(function () {
                         loadAllControls()
@@ -113,10 +109,8 @@
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                         $scope.scopeModal.isLoading = false;
                     });
-            } else {
+            } else
                 loadAllControls();
-            }
-
         }
 
         function loadAllControls() {
@@ -130,7 +124,7 @@
         }
 
         function setTitle() {
-            $scope.title = $scope.scopeModal.isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierAccountEntity ? carrierAccountEntity.NameSuffix : null, 'Carrier Account') : UtilsService.buildTitleForAddEditor('Carrier Account');
+            $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(carrierAccountEntity ? carrierAccountEntity.NameSuffix : null, 'Carrier Account') : UtilsService.buildTitleForAddEditor('Carrier Account');
         }
 
         function loadCarrierProfileDirective() {
