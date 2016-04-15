@@ -61,7 +61,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         notify({ message: message, classes: cssClasses });
         setTimeout(function () {
             notify.closeAll();
-        }, 3000);
+        }, 5000);
     }
 
     function notifyException(error, scope) {
