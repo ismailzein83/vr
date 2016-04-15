@@ -152,7 +152,9 @@
     <Content Include="WhS_Analytics\Constant\RawCDRLogWhereInfoEnum.js" />
     <Content Include="WhS_Analytics\Directives\CDRLog\Templates\CDRLogGridTemplate.html" />
     <Content Include="WhS_Analytics\Directives\CDRLog\vr-whs-analytics-cdrlog-grid.js" />
+    <Content Include="WhS_Analytics\Directives\Generic\Templates\AnalyticFilterTemplate.html" />
     <Content Include="WhS_Analytics\Directives\Generic\Templates\GenericSettingsTemplate.html" />
+    <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-filter.js" />
     <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericchart.js" />
     <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericfilter.js" />
     <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericgrid.js" />
@@ -182,6 +184,8 @@
     <Content Include="WhS_Analytics\Views\TrafficMonitorController.js" />
     <Content Include="WhS_Analytics\Views\HourlyReport.html" />
     <Content Include="WhS_Analytics\Views\HourlyReportController.js" />
+    <Content Include="WhS_Analytics\Views\TrafficAnalysis\TrafficMonitorReport.html" />
+    <Content Include="WhS_Analytics\Views\TrafficAnalysis\TrafficMonitorReportController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
