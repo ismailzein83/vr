@@ -31,36 +31,10 @@ namespace TOne.WhS.CodePreparation.Business
 
             List<ZoneItem> allZoneItems = new List<ZoneItem>();
 
-            allZoneItems.AddRange(existingZones.MapRecords(zoneItemMapper));
-            allZoneItems.AddRange(existingChanges.NewZones.MapRecords(newZoneToZoneItemMapper, newZone => newZone.CountryId == countryId));
+            allZoneItems.AddRange(existingZones.MapRecords(SaleZoneToZoneItemMapper));
+            allZoneItems.AddRange(existingChanges.NewZones.MapRecords(NewZoneToZoneItemMapper, newZone => newZone.CountryId == countryId));
 
-
-
-            if (existingChanges.RenamedZones.Any())
-            {
-                foreach (RenamedZone renamedZone in existingChanges.RenamedZones)
-                {
-                    ZoneItem existingZoneToRename = allZoneItems.Where(x => x.Name.ToLower().Equals(renamedZone.OldZoneName.ToLower())).FirstOrDefault();
-                    if (existingZoneToRename != null)
-                    {
-                        existingZoneToRename.DraftStatus = existingZoneToRename.ZoneId.HasValue ? ZoneItemDraftStatus.Renamed : ZoneItemDraftStatus.New;
-                        existingZoneToRename.RenamedZone = renamedZone.OldZoneName;
-                        existingZoneToRename.Name = renamedZone.NewZoneName;
-                    }
-                }
-
-            }
-
-
-            if (existingChanges.DeletedZones.Any())
-            {
-                foreach (DeletedZone deletedZone in existingChanges.DeletedZones)
-                {
-                    ZoneItem existingZoneToClose = allZoneItems.Where(x => x.ZoneId == deletedZone.ZoneId).FirstOrDefault();
-                    if (existingZoneToClose != null)
-                        existingZoneToClose.DraftStatus = ZoneItemDraftStatus.ExistingClosed;
-                }
-            }
+            UpdateExistingZonesPerChanges(allZoneItems, existingChanges.RenamedZones, existingChanges.DeletedZones);
 
             return allZoneItems;
         }
@@ -72,12 +46,12 @@ namespace TOne.WhS.CodePreparation.Business
             CloseZoneOutput output = new CloseZoneOutput();
 
             SaleCodeManager saleCodeManager = new SaleCodeManager();
-            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveByZoneID(input.ZoneId.Value, DateTime.Now);
+            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveByZoneID(input.ZoneId, DateTime.Now);
 
             DeletedZone deletedZone = new DeletedZone()
             {
                 CountryId = input.CountryId,
-                ZoneId = (int)input.ZoneId,
+                ZoneId = input.ZoneId,
                 ZoneName = input.ZoneName
             };
 
@@ -96,7 +70,6 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 output.Message = string.Format("zone closed successfully.");
                 output.Result = CodePreparationOutputResult.Inserted;
-                output.ClosedZone = deletedZone;
             }
 
             return output;
@@ -114,7 +87,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 CountryId = input.CountryId,
                 ZoneId = input.ZoneId.HasValue ? input.ZoneId.Value : (int?)null,
-                OldZoneName = input.OldZoneName,
+                OriginalZoneName = input.OldZoneName,
                 NewZoneName = input.NewZoneName
             };
 
@@ -137,7 +110,7 @@ namespace TOne.WhS.CodePreparation.Business
         public NewZoneOutput SaveNewZone(NewZoneInput input)
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-           
+
             Changes existingChanges;
             List<ZoneItem> allZoneItems;
             MergeZoneItems(input.SellingNumberPlanId, out existingChanges, out allZoneItems);
@@ -192,44 +165,45 @@ namespace TOne.WhS.CodePreparation.Business
             RenamedZoneOutput zoneOutput = new RenamedZoneOutput();
             zoneOutput.Result = CodePreparationOutputResult.Failed;
 
-            if (existingChanges.RenamedZones.Any(item => item.NewZoneName.ToLower() == zoneToRename.OldZoneName.ToLower()) && !existingChanges.RenamedZones.Any(x => x.NewZoneName.ToLower().Equals(zoneToRename.NewZoneName.ToLower())) && !allZoneItems.Any(item => item.Name.ToLower() == zoneToRename.NewZoneName.ToLower()))
-            {
-                RenamedZone existingRenamedZone = existingChanges.RenamedZones.Where(item => item.NewZoneName.ToLower() == zoneToRename.OldZoneName.ToLower()).FirstOrDefault();
-                existingRenamedZone.NewZoneName = zoneToRename.NewZoneName;
-                existingRenamedZone.OldZoneName = existingRenamedZone.OldZoneName != null ? existingRenamedZone.OldZoneName : zoneToRename.OldZoneName;
-                zoneToRename.OldZoneName = existingRenamedZone.OldZoneName != null ? existingRenamedZone.OldZoneName : zoneToRename.OldZoneName;
-                zoneOutput.Result = CodePreparationOutputResult.Inserted;
-                zoneOutput.Zone = zoneToRename;
-            }
 
-            else if (!allZoneItems.Any(item => item.Name.ToLower() == zoneToRename.NewZoneName.ToLower()) && !existingChanges.RenamedZones.Any(x => x.NewZoneName.ToLower().Equals(zoneToRename.NewZoneName.ToLower())))
-            {
-                existingChanges.RenamedZones.Add(zoneToRename);
-                zoneOutput.Result = CodePreparationOutputResult.Inserted;
-                zoneOutput.Zone = zoneToRename;
-            }
-
-            else if (existingChanges.RenamedZones.Any(x => x.OldZoneName.ToLower().Equals(zoneToRename.NewZoneName.ToLower())) && existingChanges.RenamedZones.Any(item => item.NewZoneName.ToLower() == zoneToRename.OldZoneName.ToLower()))
-            {
-               RenamedZone existingRenamedZone = existingChanges.RenamedZones.Where(item => item.NewZoneName.ToLower() == zoneToRename.OldZoneName.ToLower()).FirstOrDefault();
-                existingRenamedZone.NewZoneName = zoneToRename.NewZoneName;
-                existingRenamedZone.OldZoneName = existingRenamedZone.OldZoneName != null ? existingRenamedZone.OldZoneName : zoneToRename.OldZoneName;
-                zoneToRename.OldZoneName = existingRenamedZone.OldZoneName != null ? existingRenamedZone.OldZoneName : zoneToRename.OldZoneName;
-                zoneOutput.Result = CodePreparationOutputResult.Inserted;
-                zoneOutput.Zone = zoneToRename;
-            }
-            else if (!existingChanges.RenamedZones.Any(item => item.NewZoneName.ToLower() == zoneToRename.NewZoneName.ToLower()) && existingChanges.RenamedZones.Any(item => item.NewZoneName.ToLower() == zoneToRename.OldZoneName.ToLower()) && !allZoneItems.Any(item => item.Name.ToLower() == zoneToRename.NewZoneName.ToLower()))
-            {
-                existingChanges.RenamedZones.Add(zoneToRename);
-                zoneOutput.Result = CodePreparationOutputResult.Inserted;
-                zoneOutput.Zone = zoneToRename;
-            }
-
-            else
+            if (existingChanges.RenamedZones.Any(item => item.NewZoneName.Equals(zoneToRename.NewZoneName, StringComparison.InvariantCultureIgnoreCase)))
             {
                 zoneOutput.Result = CodePreparationOutputResult.Existing;
                 zoneOutput.Zone = zoneToRename;
                 zoneOutput.Message = string.Format("Zone {0} already exists.", zoneToRename.NewZoneName);
+                return zoneOutput;
+            }
+
+            if (allZoneItems.Any(item => item.Name.Equals(zoneToRename.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) && !existingChanges.RenamedZones.Any(x => x.OriginalZoneName.Equals(zoneToRename.NewZoneName, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                zoneOutput.Result = CodePreparationOutputResult.Existing;
+                zoneOutput.Zone = zoneToRename;
+                zoneOutput.Message = string.Format("Zone {0} already exists.", zoneToRename.NewZoneName);
+                return zoneOutput;
+            }
+
+            if (allZoneItems.Any(item => item.Name.Equals(zoneToRename.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) && existingChanges.RenamedZones.Any(x => x.OriginalZoneName.Equals(zoneToRename.NewZoneName, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                if (existingChanges.RenamedZones.Any(item => item.NewZoneName.Equals(zoneToRename.OriginalZoneName, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    UpdateZoneInRenamedZones(existingChanges, zoneToRename, zoneOutput);
+                    return zoneOutput;
+                }
+
+                AddZoneToRenamedZones(existingChanges, zoneToRename, zoneOutput);
+                return zoneOutput;
+            }
+
+            if (!allZoneItems.Any(item => item.Name.Equals(zoneToRename.NewZoneName)))
+            {
+                if (existingChanges.RenamedZones.Any(item => item.NewZoneName.Equals(zoneToRename.OriginalZoneName, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    UpdateZoneInRenamedZones(existingChanges, zoneToRename, zoneOutput);
+                    return zoneOutput;
+                }
+
+                AddZoneToRenamedZones(existingChanges, zoneToRename, zoneOutput);
+                return zoneOutput;
 
             }
 
@@ -240,7 +214,7 @@ namespace TOne.WhS.CodePreparation.Business
         {
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             IEnumerable<SaleZone> existingZones = saleZoneManager.GetSaleZonesByCountryId(sellingNumberPlanId, deletedZone.CountryId);
-            SaleZone existingZoneToClose = existingZones.Where(zone => zone.SaleZoneId == deletedZone.ZoneId).FirstOrDefault();
+            SaleZone existingZoneToClose = existingZones.FindRecord(zone => zone.SaleZoneId == deletedZone.ZoneId);
 
             CloseZoneOutput zoneOutput = new CloseZoneOutput();
             zoneOutput.Result = CodePreparationOutputResult.Inserted;
@@ -250,7 +224,6 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     zoneOutput.Result = CodePreparationOutputResult.Failed;
                     zoneOutput.Message = string.Format("Can not close {0} zone because it is a pending zone", deletedZone.ZoneName);
-                    zoneOutput.ClosedZone = deletedZone;
                     return zoneOutput;
                 }
 
@@ -260,14 +233,12 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     zoneOutput.Result = CodePreparationOutputResult.Failed;
                     zoneOutput.Message = string.Format("Can not close {0} zone because it contains a pending closed code", deletedZone.ZoneName);
-                    zoneOutput.ClosedZone = deletedZone;
                     return zoneOutput;
                 }
                 else if (codeItem.BED > DateTime.Now)
                 {
                     zoneOutput.Result = CodePreparationOutputResult.Failed;
                     zoneOutput.Message = string.Format("Can not close {0} zone because it contains a pending effective code", deletedZone.ZoneName);
-                    zoneOutput.ClosedZone = deletedZone;
                     return zoneOutput;
                 }
             }
@@ -278,21 +249,68 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     zoneOutput.Result = CodePreparationOutputResult.Failed;
                     zoneOutput.Message = string.Format("Can not close {0} zone because it contains a new code", deletedZone.ZoneName);
-                    zoneOutput.ClosedZone = deletedZone;
                     return zoneOutput;
                 }
             }
 
             return zoneOutput;
         }
-        ZoneItemStatus? GetZoneItemStatus(DateTime BED)
+
+        void UpdateExistingZonesPerChanges(List<ZoneItem> allZoneItems, List<RenamedZone> renamedZones, List<DeletedZone> deletedZones)
         {
-            if (BED > DateTime.Now)
+            if (renamedZones.Any())
+            {
+                foreach (RenamedZone renamedZone in renamedZones)
+                {
+                    ZoneItem existingZoneToRename = allZoneItems.FindRecord(x => x.Name.Equals(renamedZone.OriginalZoneName, StringComparison.InvariantCultureIgnoreCase));
+                    if (existingZoneToRename != null)
+                    {
+                        existingZoneToRename.DraftStatus = existingZoneToRename.ZoneId.HasValue ? ZoneItemDraftStatus.Renamed : ZoneItemDraftStatus.New;
+                        existingZoneToRename.OriginalZoneName = renamedZone.OriginalZoneName;
+                        existingZoneToRename.Name = renamedZone.NewZoneName;
+                    }
+                }
+
+            }
+
+
+            if (deletedZones.Any())
+            {
+                foreach (DeletedZone deletedZone in deletedZones)
+                {
+                    ZoneItem existingZoneToClose = allZoneItems.FindRecord(x => x.ZoneId == deletedZone.ZoneId);
+                    if (existingZoneToClose != null)
+                        existingZoneToClose.DraftStatus = ZoneItemDraftStatus.ExistingClosed;
+                }
+            }
+        }
+        ZoneItemStatus? GetZoneItemStatus(SaleZone saleZone)
+        {
+            if (saleZone.EED.HasValue)
+                return ZoneItemStatus.PendingClosed;
+            if (saleZone.BED > DateTime.Now)
                 return ZoneItemStatus.PendingEffective;
             return null;
         }
 
-        void MergeZoneItems(int sellingNumberPlanId,out Changes changes,out List<ZoneItem> allZoneItems)
+        void UpdateZoneInRenamedZones(Changes existingChanges, RenamedZone zoneToRename, RenamedZoneOutput zoneOutput)
+        {
+            RenamedZone existingRenamedZone = existingChanges.RenamedZones.FindRecord(item => item.NewZoneName.Equals(zoneToRename.OriginalZoneName, StringComparison.InvariantCultureIgnoreCase));
+            existingRenamedZone.NewZoneName = zoneToRename.NewZoneName;
+            existingRenamedZone.OriginalZoneName = existingRenamedZone.OriginalZoneName != null ? existingRenamedZone.OriginalZoneName : zoneToRename.OriginalZoneName;
+            zoneToRename.OriginalZoneName = existingRenamedZone.OriginalZoneName != null ? existingRenamedZone.OriginalZoneName : zoneToRename.OriginalZoneName;
+            zoneOutput.Result = CodePreparationOutputResult.Inserted;
+            zoneOutput.Zone = zoneToRename;
+        }
+
+        void AddZoneToRenamedZones(Changes existingChanges, RenamedZone zoneToRename, RenamedZoneOutput zoneOutput)
+        {
+            existingChanges.RenamedZones.Add(zoneToRename);
+            zoneOutput.Result = CodePreparationOutputResult.Inserted;
+            zoneOutput.Zone = zoneToRename;
+        }
+
+        void MergeZoneItems(int sellingNumberPlanId, out Changes changes, out List<ZoneItem> allZoneItems)
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             changes = new Changes();
@@ -302,15 +320,15 @@ namespace TOne.WhS.CodePreparation.Business
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             IEnumerable<SaleZone> zones = saleZoneManager.GetSaleZones(sellingNumberPlanId, DateTime.Now);
 
-            allZoneItems.AddRange(zones.MapRecords(zoneItemMapper));
-            allZoneItems.AddRange(changes.NewZones.MapRecords(newZoneToZoneItemMapper));
+            allZoneItems.AddRange(zones.MapRecords(SaleZoneToZoneItemMapper));
+            allZoneItems.AddRange(changes.NewZones.MapRecords(NewZoneToZoneItemMapper));
         }
 
         #endregion
 
         #region Private Mappers
 
-        ZoneItem zoneItemMapper(SaleZone saleZone)
+        ZoneItem SaleZoneToZoneItemMapper(SaleZone saleZone)
         {
             return new ZoneItem()
             {
@@ -320,10 +338,10 @@ namespace TOne.WhS.CodePreparation.Business
                 EED = saleZone.EED,
                 Name = saleZone.Name,
                 DraftStatus = ZoneItemDraftStatus.ExistingNotChanged,
-                Status = saleZone.EED.HasValue ? ZoneItemStatus.PendingClosed : GetZoneItemStatus(saleZone.BED)
+                Status = GetZoneItemStatus(saleZone)
             };
         }
-        ZoneItem newZoneToZoneItemMapper(NewZone newZone)
+        ZoneItem NewZoneToZoneItemMapper(NewZone newZone)
         {
             return new ZoneItem()
             {

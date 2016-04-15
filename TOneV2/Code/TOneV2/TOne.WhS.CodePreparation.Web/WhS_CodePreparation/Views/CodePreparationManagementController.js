@@ -234,7 +234,7 @@
                 }
             }
 
-            function onZoneClosed(closedZone) {
+            function onZoneClosed() {
                 $scope.hasState = true;
                 $scope.showRenameZone = false;
 
@@ -242,7 +242,7 @@
 
                 zoneNode.DraftStatus = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
 
-                var node = mapClosedZoneToNode(closedZone);
+                var node = mapClosedZoneToNode();
                 treeAPI.createNode(node);
 
                 setCodesFilterObject();
@@ -255,7 +255,7 @@
                 var zoneNode = getCurrentZoneNode();
 
                 zoneNode.nodeName = renamedZone.NewZoneName;
-                zoneNode.renamedZone = renamedZone.OldZoneName;
+                zoneNode.originalZoneName = renamedZone.OriginalZoneName;
                 zoneNode.DraftStatus = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value;
                 zoneNode.icon = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon: WhS_CP_ZoneItemDraftStatusEnum.New.icon;
 
@@ -263,7 +263,7 @@
                 treeAPI.createNode(node);
 
                 $scope.currentNode.nodeName = renamedZone.NewZoneName;
-                $scope.currentNode.renamedZone = renamedZone.OldZoneName;
+                $scope.currentNode.originalZoneName = renamedZone.OriginalZoneName;
                 treeAPI.refreshTree($scope.nodes);
                 setCodesFilterObject();
 
@@ -342,7 +342,7 @@
 
                 var parameters = {
                     ZoneId: $scope.currentNode.nodeId,
-                    ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                    ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
                     ZoneStatus: $scope.currentNode.status
@@ -360,7 +360,7 @@
                 var codes = codesGridAPI.getSelectedCodes();
                 var parameters = {
                     ZoneId: $scope.currentNode.nodeId,
-                    ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                    ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
                     currentZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
@@ -380,7 +380,7 @@
                 var codes = codesGridAPI.getSelectedCodes();
                 var parameters = {
                     ZoneId: $scope.currentNode.nodeId,
-                    ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                    ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
                 };
@@ -400,7 +400,7 @@
                             SellingNumberPlanId: filter.sellingNumberPlanId,
                             CountryId: $scope.currentNode.countryId,
                             ZoneId: $scope.currentNode.nodeId,
-                            ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
+                            ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
                         };
                         return WhS_CodePrep_CodePrepAPIService.CloseZone(zoneInput)
                          .then(function (response) {
@@ -408,7 +408,7 @@
                                  VRNotificationService.showWarning(response.Message);
                              }
                              else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
-                                 onZoneClosed(response.ClosedZone);
+                                 onZoneClosed();
                                  VRNotificationService.showSuccess(response.Message);
                              }
                              else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
@@ -523,7 +523,7 @@
                 return {
                     nodeId: zoneInfo.ZoneId,
                     nodeName: zoneInfo.Name,
-                    renamedZone: zoneInfo.RenamedZone,
+                    originalZoneName: zoneInfo.OriginalZoneName,
                     hasRemoteChildren: false,
                     effectiveZones: [],
                     type: 'Zone',
@@ -541,7 +541,7 @@
                 return {
                     nodeId: renamedZone.ZoneId != null ? renamedZone.ZoneId : "generatedId_" + incrementalNodeId++,
                     nodeName: renamedZone.NewZoneName,
-                    renamedZone: renamedZone.OldZoneName,
+                    originalZoneName: renamedZone.OriginalZoneName,
                     hasRemoteChildren: false,
                     effectiveZones: [],
                     type: 'Zone',
@@ -552,15 +552,15 @@
             }
 
 
-            function mapClosedZoneToNode(closedZone) {
+            function mapClosedZoneToNode() {
                 return {
-                    nodeId: closedZone.ZoneId,
+                    nodeId: $scope.currentNode.nodeId,
                     nodeName: $scope.currentNode.nodeName,
                     hasRemoteChildren: false,
                     effectiveZones: [],
                     type: 'Zone',
                     DraftStatus: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value,
-                    countryId: closedZone.CountryId,
+                    countryId: $scope.currentNode.countryId,
                     icon: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon
                 };
 
@@ -573,8 +573,8 @@
                 codesFilter = {
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     ZoneId: $scope.currentNode.nodeId,
-                    ZoneName: $scope.currentNode.renamedZone != undefined ? $scope.currentNode.renamedZone : $scope.currentNode.nodeName,
-                    RenamedZone: $scope.currentNode.renamedZone,
+                    ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
+                    OriginalZoneName: $scope.currentNode.originalZoneName,
                     ZoneItemStatus: $scope.currentNode.status,
                     CountryId: $scope.currentNode.countryId,
                     ShowDraftStatus: $scope.hasState,

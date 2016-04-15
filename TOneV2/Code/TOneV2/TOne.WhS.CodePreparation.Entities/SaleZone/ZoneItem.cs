@@ -32,7 +32,7 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public string Name { get; set; }
 
-        public string RenamedZone { get; set; }
+        public string OriginalZoneName { get; set; }
 
         public DateTime? BED { get; set; }
 

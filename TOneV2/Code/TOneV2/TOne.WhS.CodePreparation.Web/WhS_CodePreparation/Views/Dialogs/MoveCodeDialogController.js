@@ -82,7 +82,7 @@
             var obj = {
                 Codes: $scope.codes,
                 CurrentZoneName:zoneName.toLowerCase() != currentZoneName.toLowerCase() ? zoneName :currentZoneName ,
-                NewZoneName: zoneItem.renamedZone != null ? zoneItem.renamedZone : zoneItem.nodeName
+                NewZoneName: zoneItem.originalZoneName != null ? zoneItem.originalZoneName : zoneItem.nodeName
             };
             return obj;
         }
