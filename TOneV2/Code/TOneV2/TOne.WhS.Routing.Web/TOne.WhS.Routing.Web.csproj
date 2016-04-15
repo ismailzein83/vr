@@ -217,7 +217,7 @@
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch-preview.js" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch.js" />
     <Content Include="WhS_Routing\Services\APIServices\CustomerRouteAPIService.js" />
-    <Content Include="WhS_Routing\Services\APIServices\RouteRuleOptionAPIService.js" />
+    <Content Include="WhS_Routing\Services\APIServices\RouteOptionRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RPRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
