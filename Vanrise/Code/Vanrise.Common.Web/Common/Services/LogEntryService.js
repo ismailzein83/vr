@@ -7,8 +7,8 @@ app.service('VRCommon_LogEntryService', ['VRCommon_MasterLogService','VRCommon_L
         });
 
         function registerLogToMaster() {
-            VRCommon_LogEntryAPIService.HasViewSystemLogPermission().then(function (response) {
-                if (response == true) {
+            //VRCommon_LogEntryAPIService.HasViewSystemLogPermission().then(function (response) {
+            //    if (response == true) {
                     var tabDefinition = {
                         title: "Log Entry",
                         directive: "vr-log-entry-search",
@@ -18,9 +18,9 @@ app.service('VRCommon_LogEntryService', ['VRCommon_MasterLogService','VRCommon_L
                         }
                     }
                     VRCommon_MasterLogService.addTabDefinition(tabDefinition);
-                }
-               
-            })
+                //}
+
+            //});
                
         }
 
