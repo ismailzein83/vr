@@ -39,7 +39,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (14001,'CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison',1401,'CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample',null,null,null,0,1),
 (14002,'Price List Conversion','Price List Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion',1401,null,null,null,null,0,2),
-(14003,'Price List Template Management','Price List Template Management','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1401,null,null,null,null,0,3)
+(14003,'Price List Templates','Price List Templates','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1401,null,null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
