@@ -39,8 +39,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (8001,'Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement',1,'CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,0,15),
 (8002,'Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement',801,'CP_SupPriceList/PriceList/GetUpdated',null,null,null,0,10),
-(8003,'Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement',801,'CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11)
-
+(8003,'Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement',801,'CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,0,11),
+(8004,'Pricelists History','Pricelists History','#/view/CP_SupplierPricelist/Views/SupplierPriceList/PriceLists',801,'CP_SupPriceList/PriceList/GetFilteredPriceLists',null,null,null,0,12)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -103,22 +103,27 @@ set identity_insert [sec].[BusinessEntity] off;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('CP_SupPriceList/Customer/GetFilteredCustomers','CP_SupPriceList_Customer:View'),
 ('CP_SupPriceList/PriceList/GetUpdated','CP_SupPriceList_PriceList:View'),
-('CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings','CP_SupPriceList_SupplierMapping:View'),
 ('CP_SupPriceList/PriceList/ImportPriceList','CP_SupPriceList_PriceList:Upload Pricelist'),
+('CP_SupPriceList/PriceList/GetFilteredPriceLists','CP_SupPriceList_PriceList :Search'),
+
 ('CP_SupPriceList/CustomerUser/AddCustomerUser','CP_SupPriceList_Customer:Assign/Unassign User'),
 ('CP_SupPriceList/CustomerUser/DeleteCustomerUser','CP_SupPriceList_Customer:Assign/Unassign User'),
+('CP_SupPriceList/CustomerUser/IsCurrentUserCustomer',null),
+
+('CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings','CP_SupPriceList_SupplierMapping:View'),
 ('CP_SupPriceList/SupplierMapping/AddCustomerSupplierMapping','CP_SupPriceList_SupplierMapping:Add/Edit'),
 ('CP_SupPriceList/SupplierMapping/UpdateCustomerSupplierMapping','CP_SupPriceList_SupplierMapping:Add/Edit'),
 ('CP_SupPriceList/SupplierMapping/GetCustomerSuppliers',null),
 ('CP_SupPriceList/SupplierMapping/GetCustomerSupplierMapping','CP_SupPriceList_SupplierMapping:View'),
+('CP_SupPriceList/SupplierMapping/DeleteCustomerSupplierMapping',null),
+
+('CP_SupPriceList/Customer/GetFilteredCustomers','CP_SupPriceList_Customer:View'),
 ('CP_SupPriceList/Customer/GetCustomer','CP_SupPriceList_Customer:View'),
 ('CP_SupPriceList/Customer/GetCustomerTemplates',null),
 ('CP_SupPriceList/Customer/GetCustomerInfos',null),
 ('CP_SupPriceList/Customer/AddCustomer','CP_SupPriceList_Customer:Add'),
-('CP_SupPriceList/Customer/UpdateCustomer','CP_SupPriceList_Customer:Edit'),
-('CP_SupPriceList/CustomerUser/IsCurrentUserCustomer',null)
+('CP_SupPriceList/Customer/UpdateCustomer','CP_SupPriceList_Customer:Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
