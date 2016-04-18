@@ -128,6 +128,7 @@
     <Compile Include="Controllers\CDRSourceConfigController.cs" />
     <Compile Include="Controllers\CDRSourceController.cs" />
     <Compile Include="Controllers\DisputeCDRController.cs" />
+    <Compile Include="Controllers\FileCDRSourceController.cs" />
     <Compile Include="Controllers\MissingCDRController.cs" />
     <Compile Include="Controllers\PartialMatchCDRController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -160,6 +161,7 @@
     <Content Include="CDRComparison\Services\APIServices\CDRSourceAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\CDRSourceConfigAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\DisputeCDRAPIService.js" />
+    <Content Include="CDRComparison\Services\APIServices\FileCDRSourceAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\MissingCDRAPIService.js" />
     <Content Include="CDRComparison\Services\APIServices\PartialMatchCDRAPIService.js" />
     <Content Include="CDRComparison\Services\CDRComparisonService.js" />

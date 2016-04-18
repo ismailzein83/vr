@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FileCDRSourceDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'VRCommon_FileService', 'VRCommon_FileAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    FileCDRSourceDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'VRCommon_FileService', 'CDRComparison_FileCDRSourceAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function FileCDRSourceDirective(CDRComparison_CDRComparisonAPIService, VRCommon_FileService, VRCommon_FileAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function FileCDRSourceDirective(CDRComparison_CDRComparisonAPIService, VRCommon_FileService, CDRComparison_FileCDRSourceAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -115,7 +115,7 @@
                     }
 
                     function getMaxUncompressedFileSizeInMegaBytes() {
-                        return VRCommon_FileAPIService.GetMaxUncompressedFileSizeInMegaBytes().then(function (response) {
+                        return CDRComparison_FileCDRSourceAPIService.GetMaxUncompressedFileSizeInMegaBytes().then(function (response) {
                             sizeInMegaBytes = response;
                         });
                     }

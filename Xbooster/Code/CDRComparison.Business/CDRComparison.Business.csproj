@@ -38,6 +38,7 @@
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -80,6 +81,7 @@
     <Compile Include="Context\NormalizeRuleContext.cs" />
     <Compile Include="DisputeCDRManager.cs" />
     <Compile Include="FileCDRSource.cs" />
+    <Compile Include="FileCDRSourceManager.cs" />
     <Compile Include="MissingCDRManager.cs" />
     <Compile Include="PartialMatchCDRManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
