@@ -2,9 +2,9 @@
 
     "use strict";
 
-    newCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','WhS_CP_NewCPOutputResultEnum'];
+    newCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_ValidationOutput', 'WhS_CodePrep_CodePrepService'];
 
-    function newCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_NewCPOutputResultEnum) {
+    function newCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_ValidationOutput, WhS_CodePrep_CodePrepService) {
 
         var countryId;
         var editMode;
@@ -121,23 +121,19 @@
             var input = getNewCodeFromCodeObj(codeItems);
             return WhS_CodePrep_CodePrepAPIService.SaveNewCode(input)
             .then(function (response) {
-                if (response.Result == WhS_CP_NewCPOutputResultEnum.Existing.value) {
-                    VRNotificationService.showWarning(response.Message);
-
+                if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
+                    WhS_CodePrep_CodePrepService.NotifyValidationWarning(response.Message);
                     $scope.codes.length = 0;
                     for (var i = 0; i < response.CodeItems.length;i++)
                     {
                         $scope.codes.push({ code: response.CodeItems[i].Code, message: response.CodeItems[i].Message});
                     }
                 }
-                else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
+                else if (response.Result == WhS_CP_ValidationOutput.Success.value) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onCodeAdded != undefined)
                         $scope.onCodeAdded(response.CodeItems);
                     $scope.modalContext.closeModal();
-                }
-                else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
-                    VRNotificationService.showError(response.Message);
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);

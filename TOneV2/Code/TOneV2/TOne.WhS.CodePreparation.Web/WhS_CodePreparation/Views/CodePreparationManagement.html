@@ -3,9 +3,9 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
             <vr-row removeline>
                 <vr-validation-group validationcontext="SearchGroup">
-                    <vr-columns width="normal" vr-loader="isLoadingSellingNumberPlan">
-                        <vr-whs-be-sellingnumberplan-selector isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="onSellingNumberPlanSelectorChanged" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
-                    </vr-columns>
+                    <span  vr-loader="isLoadingSellingNumberPlan">
+                        <vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="onSellingNumberPlanSelectorChanged" selectedvalues="selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>
+                    </span>
                 </vr-validation-group>
             </vr-row>
         </div>
@@ -14,7 +14,6 @@
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-
                 <vr-button type="Apply" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="applyCodePreparationState"></vr-button>
                 <vr-button type="CancelChanges" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="cancelState"></vr-button>
                 <vr-button type="Upload" ng-show="hasState==false" validationcontext="SearchGroup" data-onclick="uploadCodePreparation"></vr-button>
@@ -22,7 +21,7 @@
                 <vr-button type="Add" text="New Code" ng-show="showAddNewCode" formname="formFilter" validationcontext="SearchGroup" data-onclick="newCodeClicked"></vr-button>
                 <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="SearchGroup" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0 "></vr-button>
                 <vr-button type="Rename" formname="formFilter" validationcontext="SearchGroup" data-onclick="renameZoneClicked" ng-show="showRenameZone"></vr-button>
-                <vr-button type="End" formname="formFilter" validationcontext="SearchGroup" data-onclick="endClicked" ng-show="showEnd"></vr-button>
+                <vr-button type="End" formname="formFilter" validationcontext="SearchGroup" data-onclick="endClicked" ng-show="showEnd || selectedCodes.length > 0"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

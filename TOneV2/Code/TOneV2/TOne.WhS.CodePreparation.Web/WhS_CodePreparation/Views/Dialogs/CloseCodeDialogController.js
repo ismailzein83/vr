@@ -2,9 +2,9 @@
 
     "use strict";
 
-    closeCodeDialogController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','WhS_CP_NewCPOutputResultEnum'];
+    closeCodeDialogController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_ValidationOutput', 'WhS_CodePrep_CodePrepService'];
 
-    function closeCodeDialogController($scope, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_CPOutputResultEnum) {
+    function closeCodeDialogController($scope, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_ValidationOutput, WhS_CodePrep_CodePrepService) {
 
         var countryId;
         var sellingNumberPlanId;
@@ -71,17 +71,14 @@
             var input = getCloseCodeInput(closeItem);
             return WhS_CodePrep_CodePrepAPIService.CloseCodes(input)
             .then(function (response) {
-                if (response.Result ==  WhS_CP_CPOutputResultEnum.Existing.value) {
-                    VRNotificationService.showWarning(response.Message);
+                if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
+                    WhS_CodePrep_CodePrepService.NotifyValidationWarning(response.Message);
                 }
-                else if (response.Result == WhS_CP_CPOutputResultEnum.Inserted.value) {
+                else if (response.Result == WhS_CP_ValidationOutput.Success.value) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onCodesClosed != undefined)
                         $scope.onCodesClosed(response.NewCodes);
                     $scope.modalContext.closeModal();
-                }
-                else if (response.Result == WhS_CP_CPOutputResultEnum.Failed.value) {
-                    VRNotificationService.showError(response.Message);
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);

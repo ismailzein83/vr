@@ -29,4 +29,12 @@ namespace TOne.WhS.CodePreparation.Entities
 
     }
 
+
+    public enum ValidationOutput
+    {
+        Success = 0,
+        ValidationError =1,
+        Failed=2
+    }
+
 }

@@ -157,6 +157,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_CodePreparation\Constant\ValidationOutput.js" />
     <Content Include="WhS_CodePreparation\Constant\ZoneItemStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\ZoneItemDraftStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\CodeItemStatusEnum.js" />
@@ -176,6 +177,7 @@
     <Content Include="WhS_CodePreparation\Images\PendingOpen.png" />
     <Content Include="WhS_CodePreparation\Images\PendingOpened.png" />
     <Content Include="WhS_CodePreparation\Images\ClosedZone.png" />
+    <Content Include="WhS_CodePreparation\Services\CodePreparationService.js" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationAPIService.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationController.js" />

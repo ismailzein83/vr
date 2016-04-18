@@ -2,9 +2,9 @@
 
     "use strict";
 
-    newZoneDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','WhS_CP_NewCPOutputResultEnum'];
+    newZoneDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','WhS_CP_ValidationOutput', 'WhS_CodePrep_CodePrepService'];
 
-    function newZoneDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_NewCPOutputResultEnum) {
+    function newZoneDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_ValidationOutput, WhS_CodePrep_CodePrepService) {
 
         var zoneId;
         var countryId;
@@ -122,22 +122,18 @@
             var input = getNewZoneFromZoneObj(zoneItem);
             return WhS_CodePrep_CodePrepAPIService.SaveNewZone(input)
             .then(function (response) {
-
-                if (response.Result ==  WhS_CP_NewCPOutputResultEnum.Existing.value) {
-                    VRNotificationService.showWarning(response.Message);
-                    $scope.zones.length = 0;
-                    for (var i = 0; i < response.ZoneItems.length; i++) {
-                        $scope.zones.push({ zone: response.ZoneItems[i].Name, message: response.ZoneItems[i].Message });
-                    }
-                }
-                else if (response.Result == WhS_CP_NewCPOutputResultEnum.Inserted.value) {
+                if (response.Result == WhS_CP_ValidationOutput.Success.value) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onZoneAdded != undefined)
                         $scope.onZoneAdded(response.ZoneItems);
                     $scope.modalContext.closeModal();
                 }
-                else if (response.Result == WhS_CP_NewCPOutputResultEnum.Failed.value) {
-                    VRNotificationService.showError(response.Message);
+                else if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
+                    $scope.zones.length = 0;
+                    for (var i = 0; i < response.ZoneItems.length; i++) {
+                        $scope.zones.push({ zone: response.ZoneItems[i].Name, message: response.ZoneItems[i].Message });
+                    }
+                    WhS_CodePrep_CodePrepService.NotifyValidationWarning(response.Message);
                 }
               
 

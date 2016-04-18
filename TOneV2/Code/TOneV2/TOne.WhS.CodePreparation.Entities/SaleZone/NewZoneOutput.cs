@@ -14,6 +14,6 @@ namespace TOne.WhS.CodePreparation.Entities
         }
         public string Message { get; set; }
         public List<ZoneItem> ZoneItems { get; set; }
-        public CodePreparationOutputResult Result { get; set; }
+        public ValidationOutput Result { get; set; }
     }
 }

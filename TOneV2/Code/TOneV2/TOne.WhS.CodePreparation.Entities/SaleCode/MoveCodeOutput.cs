@@ -12,6 +12,6 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public List<CodeItem> NewCodes { get; set; }
 
-        public CodePreparationOutputResult Result { get; set; }
+        public ValidationOutput Result { get; set; }
     }
 }
