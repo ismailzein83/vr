@@ -1,12 +1,14 @@
 ﻿CREATE PROCEDURE [CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]
-@PriceListStatusIDs varchar(max),
+@PriceListStatusIDs varchar(max)= null,
 @CustomerId int = null
 AS
 BEGIN
 	DECLARE @PriceListStatusIDsTable TABLE (PriceListStatusID int)
+	if @PriceListStatusIDs !=null
+	begin
 	INSERT INTO @PriceListStatusIDsTable (PriceListStatusID)
 	select Convert(int, ParsedString) from [CP_SupPriceList].[ParseStringList](@PriceListStatusIDs)
-
+	end 
 	SET NOCOUNT ON;
 	
 	SELECT [ID]
