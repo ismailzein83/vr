@@ -16,10 +16,6 @@
         function GetFilteredRecentFiles(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, 'GetFilteredRecentFiles'), input);
         }
-
-        function GetMaxUncompressedFileSizeInMegaBytes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, 'GetMaxUncompressedFileSizeInMegaBytes'));
-        }
     }
 
     appControllers.service('VRCommon_FileAPIService', FileAPIService);

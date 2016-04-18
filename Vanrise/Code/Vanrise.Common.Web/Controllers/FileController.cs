@@ -126,14 +126,6 @@ namespace Vanrise.Common.Web
             return GetWebResponse(input, manager.GetFilteredRecentFiles(input));
         }
 
-        [HttpGet]
-        [Route("GetMaxUncompressedFileSizeInMegaBytes")]
-        public decimal? GetMaxUncompressedFileSizeInMegaBytes()
-        {
-            VRFileManager manager = new VRFileManager();
-            return manager.GetMaxUncompressedFileSizeInMegaBytes();
-        }
-
         private static byte[] ReadToEnd(System.IO.Stream stream)
         {
             long originalPosition = 0;
