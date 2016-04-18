@@ -29,26 +29,22 @@
 
             var firstRowAPI;
             var firstRowReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            $scope.outPutFieldMappings;
             function initializeController() {
                 $scope.repeatOtherValues = false;
-                $scope.outPutFieldMappings = [{ fieldTitle: "Code", isRequired: true, type: "cell", fieldName: "Code", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Zone", isRequired: true, type: "cell", fieldName: "Zone", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Rate", isRequired: true, type: "cell", fieldName: "Rate", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Effective Date", isRequired: false, type: "cell", fieldName: "EffectiveDate", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Custom", isRequired: true, fieldName: "Custom", configId: 1, editor: "xbooster-pricelistconversion-outputfieldvalue-constant" }]
                 $scope.dateTimeFormat = "yyyy/MM/dd";
                 ctrl.datasource = [];
+
                 ctrl.isValid = function () {
 
                     if (ctrl.datasource.length > 0)
                         return null;
                     return "At least one field type should be selected.";
                 }
-                ctrl.disableAddButton = true;
+
                 ctrl.addFilter = function () {
                     var dataItem = {
                         id: ctrl.datasource.length + 1,
-                        editor: $scope.selectedoutputFieldMapping.editor,
-                        name: $scope.selectedoutputFieldMapping.fieldName,
-                        configId: $scope.selectedoutputFieldMapping.configId,
-                        isRequired: $scope.selectedoutputFieldMapping.isRequired,
+                        isRequired: validate
                     };
                     dataItem.onFieldReady = function (api) {
                         dataItem.fieldAPI = api;
@@ -58,24 +54,20 @@
                         var setLoader = function (value) { ctrl.isLoadingDirective = value };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldAPI, payload, setLoader);
                     };
-                    var directivePayload = {
-                        FieldName: $scope.selectedoutputFieldMapping.fieldName,
-                        FieldTitle: $scope.selectedoutputFieldMapping.fieldTitle
-                    }
-                    dataItem.onDirectiveReady = function (api) {
-                        dataItem.directiveAPI = api;
-                        
+
+                    var directivePayload;
+                    dataItem.onFieldMappingDirectiveReady = function (api) {
+                        dataItem.fieldMappingAPI = api;
+
                         var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, directivePayload, setLoader);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldMappingAPI, directivePayload, setLoader);
                     };
                     ctrl.datasource.push(dataItem);
 
 
                     $scope.selectedoutputFieldMapping = undefined;
                 };
-                ctrl.onActionTemplateChanged = function () {
-                    ctrl.disableAddButton = ($scope.selectedoutputFieldMapping == undefined);
-                };
+
                 ctrl.removeFilter = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
                     ctrl.datasource.splice(index, 1);
@@ -86,6 +78,7 @@
                     firstRowAPI = api;
                     firstRowReadyPromiseDeferred.resolve();
                 }
+
                 $scope.onOutPutReadyWoorkBook = function (api) {
                     outPutWorkBookAPI = api;
                 }
@@ -139,14 +132,9 @@
                         {
                             for (var i = 0; i < table.FieldsMapping.length; i++) {
                                 var item = table.FieldsMapping[i];
-                                var configItem;
-                                if (item.FieldValue != undefined)
-                                    configItem = UtilsService.getItemByVal($scope.outPutFieldMappings, item.FieldValue.ConfigId, "configId");
                                 var dataItem = {
                                     id: ctrl.datasource.length + 1,
-                                    editor: configItem.editor,
-                                    configId: configItem.configId,
-                                    isRequired: configItem.isRequired,
+                                    isRequired: validate
                                 };
                                 dataItem.readyPromiseDeferred = UtilsService.createPromiseDeferred();
                                 dataItem.loadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -175,18 +163,11 @@
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
-                    function setOutputFieldMappingAPI(dataItem,item, table) {
+                    function setOutputFieldMappingAPI(dataItem, item, table) {
                         var fieldPayload = {
                             context: buildOutputContext(),
                         };
-                        var directivePayload;
-                        if (dataItem.fieldName != undefined &&  dataItem.fieldTitle != undefined)
-                        {
-                            directivePayload = {
-                                FieldName:dataItem.fieldName,
-                                FieldTitle: dataItem.fieldTitle
-                            }
-                        }
+                        var directivePayload = {}; 
                         if (item != undefined && table !=undefined)
                         {
                            
@@ -195,8 +176,7 @@
                                 RowIndex: table.RowIndex,
                                 CellIndex: item.CellIndex
                             }
-                           
-                            if(item.FieldValue !=undefined)
+                            if (item.FieldValue != undefined)
                             {
                                 directivePayload = {
                                     outputFieldValue: item.FieldValue
@@ -215,49 +195,33 @@
                                   VRUIUtilsService.callDirectiveLoad(dataItem.fieldAPI, fieldPayload, dataItem.loadFieldPromiseDeferred);
                               });
 
-         
-                        dataItem.onDirectiveReady = function (api) {
+                        dataItem.onFieldMappingDirectiveReady = function (api) {
 
-                            dataItem.directiveAPI = api;
+                            dataItem.fieldMappingAPI = api;
 
                             dataItem.readyPromiseDeferred.resolve();
                         }
 
                         dataItem.readyPromiseDeferred.promise
                               .then(function () {
-                                  VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, directivePayload, dataItem.loadPromiseDeferred);
+                                  VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, directivePayload, dataItem.loadPromiseDeferred);
                               });
                         ctrl.datasource.push(dataItem);
                     }
                     function getDefaultDataItemArray()
                     {
                         var dataItems = [];
-                        var code = $scope.outPutFieldMappings[0];
-                        var zone = $scope.outPutFieldMappings[1];
-                        var rate = $scope.outPutFieldMappings[2];
                         dataItems.push({
                             id: ctrl.datasource.length + 1,
-                            editor: code.editor,
-                            configId: code.configId,
-                            fieldName: code.fieldName,
-                            fieldTitle: code.fieldTitle,
-                            isRequired: code.isRequired,
+                            isRequired: validate
                         });
                         dataItems.push({
                             id: ctrl.datasource.length + 1,
-                            editor: zone.editor,
-                            configId: zone.configId,
-                            fieldName: zone.fieldName,
-                            fieldTitle: zone.fieldTitle,
-                            isRequired: zone.isRequired,
+                            isRequired: validate
                         });
                         dataItems.push({
                             id: ctrl.datasource.length + 1,
-                            editor: rate.editor,
-                            configId: rate.configId,
-                            fieldName: rate.fieldName,
-                            fieldTitle: rate.fieldTitle,
-                            isRequired: rate.isRequired,
+                            isRequired: validate
                         });
                         return dataItems;
                     }
@@ -281,20 +245,16 @@
                     {
                         fieldsMapping = [];
                         for(var i=0;i<ctrl.datasource.length;i++)
-                        {
+                        {   
                             var item = ctrl.datasource[i];
 
                             var cellIndex;
                             if(item.fieldAPI != undefined && item.fieldAPI.getData() !=undefined)
                                 cellIndex = item.fieldAPI.getData().CellIndex;
                             var fieldValueData;
-                            if(item.directiveAPI !=undefined)
+                            if (item.fieldMappingAPI != undefined)
                             {
-                                fieldValueData = item.directiveAPI.getData();
-                                if(fieldValueData != undefined)
-                                {
-                                    fieldValueData.ConfigId = item.configId;
-                                }
+                                fieldValueData = item.fieldMappingAPI.getData();
                             }
                             fieldsMapping.push({
                                 CellIndex:cellIndex,
@@ -316,11 +276,22 @@
                         DateTimeFormat: $scope.dateTimeFormat,
                         RepeatOtherValues: $scope.repeatOtherValues
                     }
-                    return data;
+                        return data;
                 }
 
      
             }
+            function validate(dataItem)
+            {
+                if (dataItem.fieldMappingAPI != undefined) {
+                    var fieldData = dataItem.fieldMappingAPI.getData();
+                    if (fieldData != undefined && fieldData.FieldName == "EffectiveDate")
+                        return false;
+                }
+                return true;
+
+            }
+
             function buildOutputContext() {
                 var context = {
                     getSelectedCell: getSelectedCell,

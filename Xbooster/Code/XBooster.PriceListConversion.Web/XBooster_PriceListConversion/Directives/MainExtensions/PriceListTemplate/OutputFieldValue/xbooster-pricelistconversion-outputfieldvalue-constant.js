@@ -29,7 +29,7 @@
             var label = "";
             if (label != undefined)
                 label = attrs.label;
-            return "<vr-row removeline> <vr-columns colnum='{{constantCtrl.normalColNum * 2}}'><vr-textbox value='constantCtrl.constant' " + label + " isrequired='true'> </vr-textbox>   </vr-columns></vr-row>"
+            return "<vr-columns colnum='{{constantCtrl.normalColNum}}'><vr-textbox value='constantCtrl.constant' " + label + " isrequired='true'> </vr-textbox>   </vr-columns>"
         }
         function OutputConstant($scope, ctrl, $attrs) {
             this.initializeController = initializeController;

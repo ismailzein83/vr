@@ -12,5 +12,9 @@ namespace XBooster.PriceListConversion.Business
         public static string InputPriceListTemplate = "XBooster_PriceListConversion_InputPriceListTemplate";
         public static string OutputPriceListConfigurationTemplateConfigs = "XBooster_PriceListConversion_OutputPriceListConfiguration";
         public static string InputPriceListConfigurationTemplateConfigs = "XBooster_PriceListConversion_InputPriceListConfiguration";
+        public static string OutputFieldMappingTemplateConfigs = "XBooster_PriceListConversion_OutputFieldMapping";
+
+
+        
     }
 }

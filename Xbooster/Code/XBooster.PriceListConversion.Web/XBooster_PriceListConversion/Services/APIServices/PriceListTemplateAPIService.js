@@ -53,7 +53,9 @@
         function GetInputPriceListConfigurationTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetInputPriceListConfigurationTemplateConfigs'));
         }
-        
+        function GetOutputFieldMappingTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetOutputFieldMappingTemplateConfigs'));
+        }
 
         return ({
             GetFilteredInputPriceListTemplates: GetFilteredInputPriceListTemplates,
@@ -65,7 +67,8 @@
             GetPriceListTemplate: GetPriceListTemplate,
             GetOutputPriceListTemplates: GetOutputPriceListTemplates,
             GetInputPriceListConfigurationTemplateConfigs: GetInputPriceListConfigurationTemplateConfigs,
-            GetInputPriceListTemplates: GetInputPriceListTemplates
+            GetInputPriceListTemplates: GetInputPriceListTemplates,
+            GetOutputFieldMappingTemplateConfigs: GetOutputFieldMappingTemplateConfigs
 
         });
     }

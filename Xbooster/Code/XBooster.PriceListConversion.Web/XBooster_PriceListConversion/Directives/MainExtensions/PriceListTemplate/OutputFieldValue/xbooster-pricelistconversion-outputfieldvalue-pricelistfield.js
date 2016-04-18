@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OutputfieldvaluePricelistfield.$inject = [];
+    OutputfieldvaluePricelistfield.$inject = ["UtilsService"];
 
-    function OutputfieldvaluePricelistfield() {
+    function OutputfieldvaluePricelistfield(UtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -26,8 +26,15 @@
         };
         function OutputPricelistfield($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var selectorAPI;
             function initializeController() {
-                defineAPI();
+                $scope.outputFieldMappings = [{ fieldTitle: "Code", isRequired: true, type: "cell", fieldName: "Code" }, { fieldTitle: "Zone", isRequired: true, type: "cell", fieldName: "Zone" }, { fieldTitle: "Rate", isRequired: true, type: "cell", fieldName: "Rate" }, { fieldTitle: "Effective Date", isRequired: false, type: "cell", fieldName: "EffectiveDate" }]
+
+                ctrl.onSelectorReady = function (api) {
+
+                    selectorAPI = api;
+                    defineAPI();
+                };
             }
 
             function defineAPI() {
@@ -35,11 +42,8 @@
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        ctrl.fieldName = payload.FieldName;
-                        ctrl.titleName = payload.FieldTitle;
                         if (payload.outputFieldValue != undefined) {
-                            ctrl.fieldName = payload.outputFieldValue.FieldName;
-                            ctrl.titleName = payload.outputFieldValue.FieldName;
+                            $scope.selectedOutputFieldMapping = UtilsService.getItemByVal($scope.outputFieldMappings, payload.outputFieldValue.FieldName, "fieldName");
                         }
                     }
 
@@ -54,7 +58,7 @@
                 function getData() {
                     var data = {
                         $type: " XBooster.PriceListConversion.MainExtensions.OutputFieldValue.PriceListField, XBooster.PriceListConversion.MainExtensions ",
-                        FieldName: ctrl.fieldName
+                        FieldName: $scope.selectedOutputFieldMapping != undefined?$scope.selectedOutputFieldMapping.fieldName:undefined
                     }
                     return data;
                 }

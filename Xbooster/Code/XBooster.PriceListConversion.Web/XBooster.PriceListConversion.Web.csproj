@@ -145,6 +145,7 @@
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputFieldValue\xbooster-pricelistconversion-outputfieldvalue-constant.js" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputFieldValue\xbooster-pricelistconversion-outputfieldvalue-pricelistfield.js" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputPriceListConfiguration\Templates\BasicOutputPriceListConfiguration.html" />
+    <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputPriceListConfiguration\xbooster-pricelistconversion-outputfieldmapping-selective.js" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputPriceListConfiguration\xbooster-pricelistconversion-outputpricelistconfiguration-basic.js" />
     <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\InputPriceListConfiguration\xbooster-pricelistconversion-inputpricelistconfiguration-selective.js" />
     <Content Include="XBooster_PriceListConversion\Directives\PriceListTemplate\InputPriceListConfiguration\xbooster-pricelistconversion-inputpricelisttemplate-selector.js" />

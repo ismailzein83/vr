@@ -165,6 +165,11 @@ namespace XBooster.PriceListConversion.Business
             Dictionary<int, PriceListTemplate> priceListTemplates = GetCachedPriceListTemplates();
             return priceListTemplates.Values.MapRecords(PriceListTemplateInfoMapper, itm => itm.UserId == _loggedInUserId && itm.Type == Constants.InputPriceListTemplate);
         }
+        public IEnumerable<TemplateConfig> GetOutputFieldMappingTemplateConfigs()
+        {
+            var templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.OutputFieldMappingTemplateConfigs);
+        }
         #endregion
 
         #region Private Classes

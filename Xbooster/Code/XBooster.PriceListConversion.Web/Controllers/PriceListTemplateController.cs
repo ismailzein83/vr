@@ -87,5 +87,11 @@ namespace XBooster.PriceListConversion.Web.Controllers
         {
             return _manager.GetInputPriceListConfigurationTemplateConfigs();
         }
+        [HttpGet]
+        [Route("GetOutputFieldMappingTemplateConfigs")]
+        public IEnumerable<TemplateConfig> GetOutputFieldMappingTemplateConfigs()
+        {
+            return _manager.GetOutputFieldMappingTemplateConfigs();
+        }
     }
 }
