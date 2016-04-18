@@ -34,5 +34,12 @@ namespace CP.SupplierPricelist.Web.Controllers
             ImportPriceListManager manager = new ImportPriceListManager();
             return manager.GetBeforeId(input);
         }
+        [HttpPost]
+        [Route("GetFilteredPriceLists")]
+        public object GetFilteredPriceLists(DataRetrievalInput<PriceListQuery> input)
+        {
+            ImportPriceListManager manager = new ImportPriceListManager();
+            return GetWebResponse(input, manager.GetFilterePriceLists(input));
+        }
     }
 }
