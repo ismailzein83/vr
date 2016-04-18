@@ -192,10 +192,12 @@
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-history-grid.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-status-selector.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-monitor-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceSearch.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceTrackingMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceTrackingHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-log-search.js" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\bp-validation-message-history-grid.js" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\bp-validation-message-monitor-grid.js" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\Templates\BPValidationMessageHistoryGridTemplate.html" />
@@ -216,6 +218,7 @@
     <Content Include="BusinessProcess\Services\BPSchedulerTaskService.js" />
     <Content Include="BusinessProcess\Services\BPValidationMessageService.js" />
     <Content Include="BusinessProcess\Services\BPTaskService.js" />
+    <Content Include="BusinessProcess\Services\BusinessProcessLogService.js" />
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetManagement.html" />
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetManagementController.js" />
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetEditor.html" />
@@ -234,6 +237,7 @@
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceMonitorController.js" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditor.html" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditorController.js" />
+    <Content Include="BusinessProcess\VR_BusinessProcess_ModuleInitialization.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

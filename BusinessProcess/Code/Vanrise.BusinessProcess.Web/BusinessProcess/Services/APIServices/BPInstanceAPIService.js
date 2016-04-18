@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    BusinessProcess_BPInstanceAPIService.$inject = ['BaseAPIService', 'UtilsService', 'BusinessProcess_BP_ModuleConfig'];
+    BusinessProcess_BPInstanceAPIService.$inject = ['BaseAPIService', 'UtilsService','SecurityService', 'BusinessProcess_BP_ModuleConfig'];
 
-    function BusinessProcess_BPInstanceAPIService(BaseAPIService, UtilsService, BusinessProcess_BP_ModuleConfig) {
+    function BusinessProcess_BPInstanceAPIService(BaseAPIService, UtilsService, SecurityService, BusinessProcess_BP_ModuleConfig) {
 
         function GetUpdated(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "GetUpdated"), input);
@@ -16,7 +16,9 @@
         function GetFilteredBPInstances(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "GetFilteredBPInstances"), input);
         }
-
+        function HasViewFilteredBPInstancesPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", ['GetFilteredBPInstances']));
+        }
         function GetBPInstance(id) {
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "GetBPInstance"), {
                 id: id
@@ -31,6 +33,7 @@
             GetUpdated: GetUpdated,
             GetBeforeId: GetBeforeId,
             GetFilteredBPInstances: GetFilteredBPInstances,
+            HasViewFilteredBPInstancesPermission:HasViewFilteredBPInstancesPermission,
             GetBPInstance: GetBPInstance,
             CreateNewProcess: CreateNewProcess
         });
