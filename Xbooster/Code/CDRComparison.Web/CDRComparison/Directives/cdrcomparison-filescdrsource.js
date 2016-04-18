@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FileCDRSourceDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'VRCommon_FileService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    FileCDRSourceDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'VRCommon_FileService', 'VRCommon_FileAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function FileCDRSourceDirective(CDRComparison_CDRComparisonAPIService, VRCommon_FileService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function FileCDRSourceDirective(CDRComparison_CDRComparisonAPIService, VRCommon_FileService, VRCommon_FileAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -28,17 +28,20 @@
             var fileReaderSelectiveAPI;
             var cdrSourceContext;
             var isCompressed;
+            var sizeInMegaBytes;
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.validateFile = function (fileName, fileSizeInBytes) {
+
                     var fileSizeInMegaBytes = fileSizeInBytes * 0.000001;
+                    var maxSize = (sizeInMegaBytes != null) ? sizeInMegaBytes : 5
 
                     var nameParts = fileName.split('.');
                     var fileExtension = nameParts[nameParts.length - 1];
                     
-                    if (fileSizeInMegaBytes <= 5) {
+                    if (fileSizeInMegaBytes <= maxSize) {
                         isCompressed = isCompressedFormat(fileExtension);
                         return true;
                     }
@@ -47,7 +50,7 @@
                         return true;
                     }
                     else {
-                        VRNotificationService.showWarning("File '" + fileName + "' is > 5 MB. Please upload a compressed version <= 5 MB");
+                        VRNotificationService.showWarning("File '" + fileName + "' is > " + maxSize + " MB. Please upload a compressed version <= " + maxSize + " MB");
                         return false;
                     }
 
@@ -87,6 +90,9 @@
                     var loadFileReaderSelectivePromise = loadFileReaderSelective();
                     promises.push(loadFileReaderSelectivePromise);
 
+                    var getMaxUncompressedFileSizeInMegaBytesPromise = getMaxUncompressedFileSizeInMegaBytes();
+                    promises.push(getMaxUncompressedFileSizeInMegaBytesPromise);
+
                     return UtilsService.waitMultiplePromises(promises);
 
                     function loadFileReaderSelective() {
@@ -106,6 +112,12 @@
                         payloadObject.fileCDRSourceContext.disableReadSampleButton = function () {
                             return ($scope.scopeModel.file == null || $scope.scopeModel.file.fileId == null);
                         };
+                    }
+
+                    function getMaxUncompressedFileSizeInMegaBytes() {
+                        return VRCommon_FileAPIService.GetMaxUncompressedFileSizeInMegaBytes().then(function (response) {
+                            sizeInMegaBytes = response;
+                        });
                     }
                 };
 
