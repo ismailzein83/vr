@@ -84,7 +84,10 @@ namespace CP.SupplierPricelist.Data.SQL
             return pricelist;
         }
 
-
+        public List<PriceList> GetPriceLists()
+        {
+            return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetPriceLists]", PriceListMapper);
+        }
         public List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses)
         {
             string pricelistStatuIds = null;
