@@ -9,8 +9,7 @@ app.config(['$httpProvider', function ($httpProvider) {
         };
     });
 }]);
-
-app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetrievalResultTypeEnum) {
+app.service('BaseAPIService', function ($http, $q,$location, $rootScope, notify, DataRetrievalResultTypeEnum) {
 
     return ({
         get: get,
@@ -49,8 +48,7 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetri
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
-
-                if (status === 401)
+                if (status === 401 && location.pathname.indexOf('/Security/Login') < 0 )
                     window.location.href = '/Security/Login';
 
                 console.log('');
@@ -104,7 +102,7 @@ app.service('BaseAPIService', function ($http, $q, $rootScope, notify, DataRetri
             })
             .error(function (data, status, headers, config) {
 
-                if (status === 401)
+                if (status === 401 && location.pathname.indexOf('/Security/Login') < 0)
                     window.location.href = '/Security/Login';
 
                 console.log('');
