@@ -36,7 +36,7 @@
 
 
             var template =
-                '<vr-row ng-show="templateConfigs.length>1">'
+                '<vr-row ng-show="showConfigurationSelector">'
               + '<vr-columns colnum="{{fieldmappingCtrl.normalColNum * 2}}" >'
               + ' <vr-select on-ready="onSelectorReady"'
               + ' datasource="templateConfigs"'
@@ -62,6 +62,7 @@
             var configDetails;
             function initializeController() {
                 $scope.templateConfigs = [];
+                $scope.showConfigurationSelector = false;
                 $scope.selectedTemplateConfig;
 
                 $scope.onSelectorReady = function (api) {
@@ -120,6 +121,10 @@
                                     $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, configDetails.ConfigId, 'TemplateConfigID');
                                 }else if($scope.templateConfigs.length == 1)
                                     $scope.selectedTemplateConfig = $scope.templateConfigs[0];
+                                if ($scope.templateConfigs.length > 1)
+                                {
+                                    $scope.showConfigurationSelector = true;
+                                }
                             }
                         });
                     }

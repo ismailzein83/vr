@@ -17,8 +17,10 @@
                         <vr-section title="Input Price List Mapping">
                             <vr-row>
                                 <vr-columns width="1/2row" >
-                                    <xbooster-pricelistconversion-inputpricelisttemplate-selector on-ready="scopeModel.onInputPriceListTemplateSelectorReady" onselectionchanged="scopeModel.onInputPriceListTemplateSelectionChanged"></xbooster-pricelistconversion-inputpricelisttemplate-selector>
-                                </vr-columns>
+                                    <vr-row>
+                                        <xbooster-pricelistconversion-inputpricelisttemplate-selector on-ready="scopeModel.onInputPriceListTemplateSelectorReady" onselectionchanged="scopeModel.onInputPriceListTemplateSelectionChanged" normal-col-num="12"></xbooster-pricelistconversion-inputpricelisttemplate-selector>
+                                     </vr-row>
+                                 </vr-columns>
                             </vr-row>
                             <vr-row>
                                 <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingInputPriceListTemplate">

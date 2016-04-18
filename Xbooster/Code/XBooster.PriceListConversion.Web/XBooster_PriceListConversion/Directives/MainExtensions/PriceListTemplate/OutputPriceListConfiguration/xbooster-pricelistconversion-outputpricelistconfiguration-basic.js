@@ -31,7 +31,8 @@
             var firstRowReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             $scope.outPutFieldMappings;
             function initializeController() {
-                $scope.outPutFieldMappings = [{ fieldTitle: "Code", isRequired: true, type: "cell", fieldName: "Code", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Zone", isRequired: true, type: "cell", fieldName: "Zone", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Rate", isRequired: true, type: "cell", fieldName: "Rate", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Effective Date", isRequired: true, type: "cell", fieldName: "EffectiveDate", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Custom", isRequired: true, fieldName: "Custom", configId: 1, editor: "xbooster-pricelistconversion-outputfieldvalue-constant" }]
+                $scope.repeatOtherValues = false;
+                $scope.outPutFieldMappings = [{ fieldTitle: "Code", isRequired: true, type: "cell", fieldName: "Code", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Zone", isRequired: true, type: "cell", fieldName: "Zone", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Rate", isRequired: true, type: "cell", fieldName: "Rate", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Effective Date", isRequired: false, type: "cell", fieldName: "EffectiveDate", configId: 0, editor: "xbooster-pricelistconversion-outputfieldvalue-pricelistfield" }, { fieldTitle: "Custom", isRequired: true, fieldName: "Custom", configId: 1, editor: "xbooster-pricelistconversion-outputfieldvalue-constant" }]
                 $scope.dateTimeFormat = "yyyy/MM/dd";
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
@@ -47,6 +48,7 @@
                         editor: $scope.selectedoutputFieldMapping.editor,
                         name: $scope.selectedoutputFieldMapping.fieldName,
                         configId: $scope.selectedoutputFieldMapping.configId,
+                        isRequired: $scope.selectedoutputFieldMapping.isRequired,
                     };
                     dataItem.onFieldReady = function (api) {
                         dataItem.fieldAPI = api;
@@ -106,6 +108,7 @@
                                 table = payload.configDetails.Tables[0];
                             
                             $scope.dateTimeFormat = payload.configDetails.DateTimeFormat;
+                            $scope.repeatOtherValues = payload.configDetails.RepeatOtherValues;
                         }
                        
                     }
@@ -143,6 +146,7 @@
                                     id: ctrl.datasource.length + 1,
                                     editor: configItem.editor,
                                     configId: configItem.configId,
+                                    isRequired: configItem.isRequired,
                                 };
                                 dataItem.readyPromiseDeferred = UtilsService.createPromiseDeferred();
                                 dataItem.loadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -153,6 +157,20 @@
                                 setOutputFieldMappingAPI(dataItem,item, table);
                             }
                            
+                        } else {
+                            var dataItems = getDefaultDataItemArray();
+                            for (var i = 0; i < dataItems.length; i++)
+                            {
+                               var dataItem = dataItems[i];
+                               dataItem.readyPromiseDeferred = UtilsService.createPromiseDeferred();
+                               dataItem.loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                               dataItem.fieldReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                               dataItem.loadFieldPromiseDeferred = UtilsService.createPromiseDeferred();
+                               promises.push(dataItem.loadPromiseDeferred.promise);
+                               promises.push(dataItem.loadFieldPromiseDeferred.promise);
+                               setOutputFieldMappingAPI(dataItem);
+                            }
+
                         }
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -162,6 +180,13 @@
                             context: buildOutputContext(),
                         };
                         var directivePayload;
+                        if (dataItem.fieldName != undefined &&  dataItem.fieldTitle != undefined)
+                        {
+                            directivePayload = {
+                                FieldName:dataItem.fieldName,
+                                FieldTitle: dataItem.fieldTitle
+                            }
+                        }
                         if (item != undefined && table !=undefined)
                         {
                            
@@ -204,7 +229,38 @@
                               });
                         ctrl.datasource.push(dataItem);
                     }
-
+                    function getDefaultDataItemArray()
+                    {
+                        var dataItems = [];
+                        var code = $scope.outPutFieldMappings[0];
+                        var zone = $scope.outPutFieldMappings[1];
+                        var rate = $scope.outPutFieldMappings[2];
+                        dataItems.push({
+                            id: ctrl.datasource.length + 1,
+                            editor: code.editor,
+                            configId: code.configId,
+                            fieldName: code.fieldName,
+                            fieldTitle: code.fieldTitle,
+                            isRequired: code.isRequired,
+                        });
+                        dataItems.push({
+                            id: ctrl.datasource.length + 1,
+                            editor: zone.editor,
+                            configId: zone.configId,
+                            fieldName: zone.fieldName,
+                            fieldTitle: zone.fieldTitle,
+                            isRequired: zone.isRequired,
+                        });
+                        dataItems.push({
+                            id: ctrl.datasource.length + 1,
+                            editor: rate.editor,
+                            configId: rate.configId,
+                            fieldName: rate.fieldName,
+                            fieldTitle: rate.fieldTitle,
+                            isRequired: rate.isRequired,
+                        });
+                        return dataItems;
+                    }
                 };
 
                 api.getData = getData;
@@ -257,7 +313,8 @@
                         $type: "XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings.BasicOutputPriceListSettings,XBooster.PriceListConversion.MainExtensions",
                         TemplateFileId: $scope.outPutFile.fileId,
                         Tables: tables,
-                        DateTimeFormat: $scope.dateTimeFormat
+                        DateTimeFormat: $scope.dateTimeFormat,
+                        RepeatOtherValues: $scope.repeatOtherValues
                     }
                     return data;
                 }

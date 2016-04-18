@@ -18,7 +18,8 @@
                 ismultipleselection: "@",
                 isrequired: "=",
                 isdisabled: "=",
-                onitemadded: "="
+                onitemadded: "=",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -106,7 +107,7 @@
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
-            return '<div><vr-select on-ready="ctrl.onSelectorReady" label="' + label + '" entityName="PriceList Template" datasource="ctrl.datasource" datavaluefield="PriceListTemplateId" datatextfield="Name" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + multipleselection + ' isrequired="ctrl.isrequired" vr-disabled="ctrl.isdisabled" haspermission="ctrl.haspermission"></vr-select></div>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select on-ready="ctrl.onSelectorReady" label="' + label + '" entityName="PriceList Template" datasource="ctrl.datasource" datavaluefield="PriceListTemplateId" datatextfield="Name" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + multipleselection + ' isrequired="ctrl.isrequired" vr-disabled="ctrl.isdisabled" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
         }
     }
 

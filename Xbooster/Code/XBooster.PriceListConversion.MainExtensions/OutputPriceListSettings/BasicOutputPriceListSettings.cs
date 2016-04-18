@@ -17,6 +17,7 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
         public int TemplateFileId { get; set; }
         public List<OutputTable> Tables { get; set; }
         public string DateTimeFormat { get; set; }
+        public bool RepeatOtherValues { get; set; }
         public override byte[] Execute(IOutputPriceListExecutionContext context)
         {
             var fileManager = new VRFileManager();
@@ -39,18 +40,29 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
                 var rowIndex = table.RowIndex;
                 foreach (var item in context.Records)
                 {
-                    foreach (var field in table.FieldsMapping)
-                     {
-                   
-                        FieldValueExecutionContext fieldValueExecutionContext = new Business.FieldValueExecutionContext();
-                        fieldValueExecutionContext.Record = item;
-                        field.FieldValue.Execute(fieldValueExecutionContext);
-                        var fieldValue  = fieldValueExecutionContext.FieldValue;
-                        if (fieldValueExecutionContext.FieldValue is DateTime)
-                             fieldValue =((DateTime) fieldValueExecutionContext.FieldValue).ToString(this.DateTimeFormat);
-                        workSheet.Cells[rowIndex, field.CellIndex].PutValue(fieldValue);
-                       
+                    for (var i = 0; i <= workSheet.Cells.Rows[table.RowIndex].LastCell.Column ; i++)
+                    {
+                        foreach (var field in table.FieldsMapping)
+                        {
+                            if (this.RepeatOtherValues && i != field.CellIndex)
+                            {
+                                workSheet.Cells[rowIndex, i].PutValue(workSheet.Cells[table.RowIndex, i].Value);
+                            }
+                            else if (i == field.CellIndex)
+                            {
+                                FieldValueExecutionContext fieldValueExecutionContext = new Business.FieldValueExecutionContext();
+                                fieldValueExecutionContext.Record = item;
+                                field.FieldValue.Execute(fieldValueExecutionContext);
+                                var fieldValue = fieldValueExecutionContext.FieldValue;
+                                if (fieldValueExecutionContext.FieldValue is DateTime)
+                                    fieldValue = ((DateTime)fieldValueExecutionContext.FieldValue).ToString(this.DateTimeFormat);
+                                workSheet.Cells[rowIndex, field.CellIndex].PutValue(fieldValue);
+                            }
+
+
+                        }
                     }
+                   
                     rowIndex++;
                  }
             }
