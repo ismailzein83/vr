@@ -9,8 +9,7 @@
         var controller = 'File';
 
         return {
-            GetFilteredRecentFiles: GetFilteredRecentFiles,
-            GetMaxUncompressedFileSizeInMegaBytes: GetMaxUncompressedFileSizeInMegaBytes
+            GetFilteredRecentFiles: GetFilteredRecentFiles
         };
 
         function GetFilteredRecentFiles(input) {

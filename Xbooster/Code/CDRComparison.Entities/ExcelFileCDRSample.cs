@@ -10,6 +10,7 @@ namespace CDRComparison.Entities
     {
         public int ColumnCount { get; set; }
         public IEnumerable<ExcelFileDataRow> Rows { get; set; }
+        public string ErrorMessage { get; set; }
     }
 
     public class ExcelFileDataRow

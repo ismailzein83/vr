@@ -31,10 +31,10 @@
             var fieldMappings;
 
             var cdrFields = [
-                { value: 1, description: 'CDPN' },
-                { value: 2, description: 'CGPN' },
-                { value: 3, description: 'Time' },
-                { value: 4, description: 'DurationInSec' }
+                { value: 1, description: 'CDPN', title: 'CDPN' },
+                { value: 2, description: 'CGPN', title: 'CGPN' },
+                { value: 3, description: 'Time', title: 'Time' },
+                { value: 4, description: 'DurationInSec', title: 'Duration' }
             ];
 
             function initializeController() {

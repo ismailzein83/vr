@@ -75,14 +75,26 @@ namespace CDRComparison.MainExtensions
             byte[] fileContent = context.FileContent;
             var fileStream = new MemoryStream(fileContent);
 
-            Workbook workbook = new Workbook(fileStream);
+            Workbook workbook;
+
+            try
+            {
+                workbook = new Workbook(fileStream);
+            }
+            catch
+            {
+                sample.ColumnCount = 0;
+                sample.ErrorMessage = "Invalid excel file";
+                return sample;
+            }
+
             Worksheet worksheet = workbook.Worksheets[0];
 
             for (int rowIndex = 0; rowIndex < worksheet.Cells.Rows.Count && rowIndex < 10; rowIndex++)
             {
                 var data = new List<string>();
                 Aspose.Cells.Row row = worksheet.Cells.Rows[rowIndex];
-                
+
                 for (int columnIndex = 0; columnIndex <= row.LastCell.Column; columnIndex++)
                 {
                     Cell cell = worksheet.Cells[rowIndex, columnIndex];
@@ -94,7 +106,7 @@ namespace CDRComparison.MainExtensions
                 sample.ColumnCount = row.LastCell.Column + 1;
                 rows.Add(new ExcelFileDataRow() { Data = data });
             }
-            
+
             sample.Rows = rows;
             return sample;
         }
