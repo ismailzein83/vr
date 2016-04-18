@@ -36,8 +36,8 @@
             <vr-row removeline>
                 <vr-actionbar showcollapsebutton="false">
                     <div transclude-to="buttons">
-                        <vr-button type="Save" formname="formFilter" validationcontext="formFilter"  data-onclick="scopeModel.saveInputConfiguration"></vr-button>
-                        <vr-button type="Convert" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.startConvertAndDownload"></vr-button>
+                        <vr-button type="Save" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.saveInputConfiguration" haspermission="hassaveInputConfigurationPermission"></vr-button>
+                        <vr-button type="Convert" formname="formFilter" validationcontext="formFilter" data-onclick="scopeModel.startConvertAndDownload" haspermission="hasConvertAndDownloadPermission"></vr-button>
 
                     </div>
                 </vr-actionbar>

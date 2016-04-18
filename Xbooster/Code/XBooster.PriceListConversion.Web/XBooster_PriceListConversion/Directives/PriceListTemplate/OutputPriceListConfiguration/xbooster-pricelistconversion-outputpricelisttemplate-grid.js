@@ -71,7 +71,7 @@ app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsS
                 {
                     name: "Edit",
                     clicked: editPriceListTemplate,
-                   // haspermission: hasEditDataStorePermission
+                    haspermission: hasUpdateOutputPriceListTemplatePermission
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -79,9 +79,9 @@ app.directive("xboosterPricelistconversionOutputpricelisttemplateGrid", ["UtilsS
                 }
             }
 
-            //function hasEditDataStorePermission() {
-            //    return VR_GenericData_DataStoreAPIService.HasUpdateDataStore();
-            //};
+            function hasUpdateOutputPriceListTemplatePermission() {
+                return XBooster_PriceListConversion_PriceListTemplateAPIService.HasUpdateOutputPriceListTemplatePermission();
+            };
             function editPriceListTemplate(dataItem) {
                 var onPriceListTemplateUpdated = function (priceListTemplateObj) {
                     gridAPI.itemUpdated(priceListTemplateObj);

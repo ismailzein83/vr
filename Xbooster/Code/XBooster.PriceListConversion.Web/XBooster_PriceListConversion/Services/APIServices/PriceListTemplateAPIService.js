@@ -53,8 +53,28 @@
         function GetInputPriceListConfigurationTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetInputPriceListConfigurationTemplateConfigs'));
         }
+
         function GetOutputFieldMappingTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, 'GetOutputFieldMappingTemplateConfigs'));
+        }
+
+        function HasaddOutputPriceListTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, ['AddOutputPriceListTemplate']));
+        }
+
+        function HasUpdateOutputPriceListTemplatePermission() {
+             return  SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, ['UpdateOutputPriceListTemplate']));
+        }
+        function HasaddInputPriceListTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, ['AddInputPriceListTemplate']));
+        }
+
+        function HasUpdateInputPriceListTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(XBooster_PriceListConversion_ModuleConfig.moduleName, controllerName, ['UpdateInputPriceListTemplate']));
+        }
+
+        function HassaveInputConfigurationPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(moduleConfig.moduleName, controllerName, ['UpdateInputPriceListTemplate', 'AddInputPriceListTemplate']));
         }
 
         return ({
@@ -68,8 +88,12 @@
             GetOutputPriceListTemplates: GetOutputPriceListTemplates,
             GetInputPriceListConfigurationTemplateConfigs: GetInputPriceListConfigurationTemplateConfigs,
             GetInputPriceListTemplates: GetInputPriceListTemplates,
-            GetOutputFieldMappingTemplateConfigs: GetOutputFieldMappingTemplateConfigs
-
+            GetOutputFieldMappingTemplateConfigs: GetOutputFieldMappingTemplateConfigs,
+            HasaddOutputPriceListTemplatePermission: HasaddOutputPriceListTemplatePermission,
+            HasUpdateOutputPriceListTemplatePermission: HasUpdateOutputPriceListTemplatePermission,
+            HassaveInputConfigurationPermission: HassaveInputConfigurationPermission,
+            HasaddInputPriceListTemplatePermission: HasaddInputPriceListTemplatePermission,
+            HasUpdateInputPriceListTemplatePermission: HasUpdateInputPriceListTemplatePermission
         });
     }
     appControllers.service('XBooster_PriceListConversion_PriceListTemplateAPIService', PriceListTemplateAPIService);

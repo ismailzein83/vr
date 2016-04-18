@@ -44,14 +44,14 @@
                 outputPriceListConfigurationReadyPromiseDeferred.resolve();
             };
         }
-        //$scope.hasSaveUserPermission = function () {
-        //    if (isEditMode) {
-        //        return VR_Sec_UserAPIService.HasUpdateUserPermission();
-        //    }
-        //    else {
-        //        return VR_Sec_UserAPIService.HasAddUserPermission();
-        //    }
-        //};
+        $scope.hasSavePriceListTemplatePermission = function () {
+            if (isEditMode) {
+                return XBooster_PriceListConversion_PriceListTemplateAPIService.HasUpdateOutputPriceListTemplatePermission();
+            }
+            else {
+                return XBooster_PriceListConversion_PriceListTemplateAPIService.HasaddOutputPriceListTemplatePermission();
+            }
+        };
 
         function load() {
             $scope.scopeModel.isLoading = true;

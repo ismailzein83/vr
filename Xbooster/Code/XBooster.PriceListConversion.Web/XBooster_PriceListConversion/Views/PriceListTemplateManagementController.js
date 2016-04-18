@@ -20,9 +20,9 @@
             $scope.search = function () {
                 return priceListTemplateGridAPI.loadGrid(getFilterObject());
             };
-            //$scope.hasAddDataStore = function () {
-            //    return VR_GenericData_DataStoreAPIService.HasAddDataStore();
-            //}
+            $scope.hasaddPriceListTemplatePermission = function () {
+                return XBooster_PriceListConversion_PriceListTemplateAPIService.HasaddOutputPriceListTemplatePermission();
+            }
             $scope.addPriceListTemplate = function () {
                 var onPriceListTemplateAdded = function (priceListTemplateObj) {
                     priceListTemplateGridAPI.onPriceListTemplateAdded(priceListTemplateObj);

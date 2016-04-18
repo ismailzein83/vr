@@ -11,8 +11,13 @@
                 responseTypeAsBufferArray: true
             });
         }
+
+        function HasConvertAndDownloadPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(moduleConfig.moduleName, controllerName, ['ConvertAndDownloadPriceList']));
+        }
         return ({
-            ConvertAndDownloadPriceList: ConvertAndDownloadPriceList
+            ConvertAndDownloadPriceList: ConvertAndDownloadPriceList,
+            HasConvertAndDownloadPermission: HasConvertAndDownloadPermission
         });
     }
     appControllers.service('XBooster_PriceListConversion_PriceListConversionAPIService', PriceListConversionAPIService);

@@ -81,6 +81,13 @@
                     }
                     
                 }
+
+                function hassaveInputConfigurationPermission() {
+                    return XBooster_PriceListConversion_PriceListTemplateAPIService.HassaveInputConfigurationPermission();
+                };
+                function hasConvertAndDownloadPermission() {
+                    return XBooster_PriceListConversion_PriceListConversionAPIService.HasConvertAndDownloadPermission();
+                };
             }
 
             function load() {
