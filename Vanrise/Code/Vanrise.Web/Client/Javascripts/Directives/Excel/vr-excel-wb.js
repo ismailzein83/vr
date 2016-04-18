@@ -35,6 +35,8 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
                     ctrl.scopeModel.datasource.length = 0;
                 }
             });
+          
+            
 
             var excelWoorkBook = new ExcelWoorkBook(ctrl, $scope, $attrs);
             excelWoorkBook.initializeController();
@@ -56,7 +58,7 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
     };
 
     function getWorkBookTemplate(attrs) {        
-        return '<vr-tabs on-ready="onReadyTabs" vr-loader="ctrl.isloadingdata" onselectionchanged="ctrl.onSelectionTabChanged">'
+        return '<vr-tabs on-ready="onReadyTabs" vr-loader="ctrl.isloadingdata" onselectionchanged="ctrl.onSelectionTabChanged()" selectedindex="ctrl.wsindex">'
                + '<vr-tab  ng-repeat="dataItem in ctrl.scopeModel.datasource.Sheets"  header="dataItem.Name" tabobject="ctrl.scopeModel.tabObjects[$index]" vr-loader="isloadingdatatab{{$index}}">'
                + '<vr-excel-ws data="dataItem" on-ready="onReadyWoorkSheet" fileid="ctrl.fileid" index="$index"   ></vr-excel-ws>'
                + '</vr-tab>'
@@ -82,13 +84,20 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
                 var selectedIndex = ctrl.sheetindex != undefined ? ctrl.sheetindex : 0;
                 if (index == selectedIndex)
                     ctrl.scopeModel.tabObjects[index].isSelected = true;
+                
 
                 ctrl.scopeModel.tabObjects[index].api = api;
+            }
+            
+            $scope.$watch('ctrl.wsindex', function () {
+                    if (ctrl.scopeModel.tabObjects[ctrl.wsindex] != undefined && ctrl.scopeModel.tabObjects[ctrl.wsindex].api != undefined) {
+                        
+                        if(!ctrl.scopeModel.tabObjects[ctrl.wsindex].api.isrendered)
+                            ctrl.scopeModel.tabObjects[ctrl.wsindex].api.reLoadRefresh();
+                      
+                    }
 
-            }
-            ctrl.onSelectionTabChanged = function (index) {
-                ctrl.scopeModel.tabObjects[index].api.render();
-            }
+            });
            
             var api = {};
             api.clearAtIndex = function (i) {
