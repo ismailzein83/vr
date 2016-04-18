@@ -60,6 +60,8 @@ namespace TOne.WhS.Routing.Entities
             get { return this.SupplierZoneId; }
         }
 
+        public decimal OptionWeight { get; set; }
+        
         #endregion
     }
 }

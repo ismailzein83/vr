@@ -9,6 +9,9 @@ namespace TOne.WhS.Routing.Business
 {
     public class RouteOptionOrderExecutionContext : IRouteOptionOrderExecutionContext
     {
+
         public IEnumerable<IRouteOptionOrderTarget> Options { get; set; }
+
+        public OrderDirection OrderDitection { get; set; }
     }
 }

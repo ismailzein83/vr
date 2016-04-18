@@ -12,7 +12,11 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
     {
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {
-            context.Options = context.Options.OrderBy(itm => itm.SupplierRate);
+            context.OrderDitection = OrderDirection.Ascending;
+            foreach(IRouteOptionOrderTarget option in context.Options)
+            {
+                option.OptionWeight = option.SupplierRate;
+            }
         }
     }
 }

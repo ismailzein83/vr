@@ -23,7 +23,7 @@ namespace TOne.WhS.Routing.Business
                 int optionsAdded = 0;
                 foreach (RouteOptionRuleTarget option in options)
                 {
-                    if(!FilterOption(target, option))
+                    if (!FilterOption(target, option))
                     {
                         if (context.TryAddOption(option))
                         {
@@ -31,7 +31,7 @@ namespace TOne.WhS.Routing.Business
                             if (context.NumberOfOptions.HasValue && context.NumberOfOptions.Value == optionsAdded)
                                 break;
                         }
-                    }                    
+                    }
                 }
                 ApplyOptionsPercentage(context.GetOptions());
             }
@@ -155,16 +155,73 @@ namespace TOne.WhS.Routing.Business
 
         private IEnumerable<T> ApplyOptionsOrder<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget
         {
-            if (this.OptionOrderSettings != null)
+            if (this.OptionOrderSettings != null && OptionOrderSettings.Count > 0)
             {
-                var optionOrderContext = new RouteOptionOrderExecutionContext
+                if (OptionOrderSettings.Count == 1)
                 {
-                    Options = options.VRCast<IRouteOptionOrderTarget>()
-                };
-                this.OptionOrderSettings.FirstOrDefault().Execute(optionOrderContext);
-                options = optionOrderContext.Options.VRCast<T>();
+                    RouteOptionOrderSettings optionOrderSettings = OptionOrderSettings[0];
+                    var optionOrderContext = ExecuteOptionOrderSettings<T>(options, optionOrderSettings);
+                    switch (optionOrderContext.OrderDitection)
+                    {
+                        case OrderDirection.Ascending: options = optionOrderContext.Options.OrderBy(itm => itm.OptionWeight).VRCast<T>(); break;
+                        case OrderDirection.Descending: options = optionOrderContext.Options.OrderByDescending(itm => itm.OptionWeight).VRCast<T>(); break;
+                    }
+                }
+                else
+                {
+                    Dictionary<int, WeightResult> orderValues = new Dictionary<int, WeightResult>();
+                    Func<IRouteOptionOrderTarget, bool> predicate = (itm) => itm.OptionWeight != 0;
+
+                    foreach (RouteOptionOrderSettings optionOrderSettings in OptionOrderSettings)
+                    {
+                        var optionOrderContext = ExecuteOptionOrderSettings<T>(options, optionOrderSettings);
+
+                        IEnumerable<IRouteOptionOrderTarget> data = optionOrderContext.Options.FindAllRecords<IRouteOptionOrderTarget>(predicate);
+                        if (data == null || data.Count() == 0)
+                        {
+                            continue;
+                        }
+                        decimal maxWeightAbs = data.Max(itm => Math.Abs(itm.OptionWeight));
+
+                        foreach (IRouteOptionOrderTarget option in optionOrderContext.Options)
+                        {
+                            WeightResult result;
+                            var weightNormalized = (option.OptionWeight / maxWeightAbs) * (optionOrderSettings.PercentageValue.Value / 100);
+                            if (!orderValues.TryGetValue(option.SupplierId, out result))
+                            {
+                                result = new WeightResult();
+                                orderValues.Add(option.SupplierId, result);
+                            }
+                            switch (optionOrderContext.OrderDitection)
+                            {
+                                case OrderDirection.Ascending: result.Result += weightNormalized; break;
+                                case OrderDirection.Descending: result.Result -= weightNormalized; break;
+                            }
+                        }
+                    }
+                    if (orderValues.Count > 0)
+                    {
+                        List<T> list = new List<T>();
+                        var resultOrdered = orderValues.OrderBy(itm => itm.Value.Result);
+                        foreach (KeyValuePair<int, WeightResult> item in resultOrdered)
+                        {
+                            list.Add(options.First(itm => itm.SupplierId == item.Key));
+                        }
+                        options = list;
+                    }
+                }
             }
             return options;
+        }
+
+        private RouteOptionOrderExecutionContext ExecuteOptionOrderSettings<T>(IEnumerable<T> options, RouteOptionOrderSettings optionOrderSettings) where T : IRouteOptionOrderTarget
+        {
+            var optionOrderContext = new RouteOptionOrderExecutionContext
+            {
+                Options = options.VRCast<IRouteOptionOrderTarget>(),
+            };
+            optionOrderSettings.Execute(optionOrderContext);
+            return optionOrderContext;
         }
 
         private bool FilterOption(RouteRuleTarget target, RouteOptionRuleTarget option)
@@ -199,5 +256,14 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
+
+        private class WeightResult
+        {
+            public WeightResult()
+            {
+                Result = 0;
+            }
+            public decimal Result { get; set; }
+        }
     }
 }

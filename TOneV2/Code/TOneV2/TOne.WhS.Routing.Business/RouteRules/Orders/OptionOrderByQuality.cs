@@ -12,7 +12,12 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
     {
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {
-            throw new NotImplementedException();
+            context.OrderDitection = OrderDirection.Descending;
+            foreach (IRouteOptionOrderTarget option in context.Options)
+            {
+                Random rand = new Random();
+                option.OptionWeight = Convert.ToDecimal(rand.NextDouble() * 1000);
+            }
         }
     }
 }
