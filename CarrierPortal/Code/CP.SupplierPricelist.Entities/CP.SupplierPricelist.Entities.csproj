@@ -68,6 +68,7 @@
     <Compile Include="PriceListStatus.cs" />
     <Compile Include="PriceList\PriceList.cs" />
     <Compile Include="PriceList\PriceListDetail.cs" />
+    <Compile Include="PriceList\PriceListQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierInfo.cs" />
     <Compile Include="Customer\CustomerSupplierMappingSettings.cs" />
