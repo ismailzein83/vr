@@ -62,7 +62,6 @@
     <Compile Include="RawCDR\RawCDRInput.cs" />
     <Compile Include="VariationReport\TimePeriod.cs" />
     <Compile Include="VariationReport\VariationReportBigResult.cs" />
-    <Compile Include="VariationReport\VariationReportPeriodValue.cs" />
     <Compile Include="VariationReport\VariationReportQuery.cs" />
     <Compile Include="VariationReport\VariationReportRecord.cs" />
   </ItemGroup>

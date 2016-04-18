@@ -9,7 +9,7 @@ namespace TOne.WhS.Analytics.Business
 {
     public class VariationReportManager
     {
-        public VariationReportBigResult GetFilteredVariationReport(Vanrise.Entities.DataRetrievalInput<VariationReportRecord> input)
+        public VariationReportBigResult GetFilteredVariationReport(Vanrise.Entities.DataRetrievalInput<VariationReportQuery> input)
         {
             throw new NotImplementedException();
         }
