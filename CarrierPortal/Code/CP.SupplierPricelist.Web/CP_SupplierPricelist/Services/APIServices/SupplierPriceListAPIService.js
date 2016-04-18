@@ -23,13 +23,17 @@
         function GetBeforeId(input) {
             return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "GetBeforeId"), input);
         }
+        function GetFilteredPriceLists(input) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, "PriceList", "GetFilteredPriceLists"), input);
+        }
         return ({
             importPriceList: importPriceList,
             GetUpdated: GetUpdated,
             GetUploadPriceListTemplates: GetUploadPriceListTemplates,
             GetResultPriceListTemplates: GetResultPriceListTemplates,
             HasImportPriceList: HasImportPriceList,
-            GetBeforeId: GetBeforeId
+            GetBeforeId: GetBeforeId,
+            GetFilteredPriceLists: GetFilteredPriceLists
         });
 
     }

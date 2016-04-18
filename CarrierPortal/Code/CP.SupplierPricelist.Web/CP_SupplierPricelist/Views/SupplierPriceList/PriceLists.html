@@ -1,0 +1,49 @@
+﻿<vr-panel ng-controller="CP_SupplierPriceList_PriceListsController">
+
+    <vr-form name="formFilter" vr-loader="isLoading">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns colnum="2">
+                    <vr-cp-customer-selector selectedvalues="customer" on-ready="onCustomerDirectiveReady" ismultipleselection isrequired="true" onselectionchanged="onCustomerSelectionChanged"></vr-cp-customer-selector>
+                </vr-columns>
+                <vr-columns colnum="2" ng-hide="customer.length > 1">
+                    <vr-cp-carrieraccount-selector  on-ready="onReadyCarrierAccountSelector" ismultipleselection customlabel="Supplier Accounts"></vr-cp-carrieraccount-selector>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-select datatextfield="title" datavaluefield="pricelistTypeID" label="PriceList Type " datasource="priceListTypes" text="None"
+                               selectedvalues="selectedpriceListType">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="date" label="From Effective Date" value="fromEffectiveDate" customvalidate="validateDateTime()"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="date" label="To Effective Date" value="toEffectiveDate" customvalidate="validateDateTime()"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-select datatextfield="title" datavaluefield="resultID" label="PriceList Result " datasource="priceListResults" text="None"
+                               selectedvalues="selectedpriceListResult">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-select datatextfield="title" datavaluefield="statusID" label="PriceList Status " datasource="priceListStatus" text="None"
+                               selectedvalues="selectedpriceListStatus">
+                    </vr-select>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-cp-pricelists-grid on-ready="onGridReady"></vr-cp-pricelists-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+
+</vr-panel>

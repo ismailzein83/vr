@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="pricelist"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             idfield="Id" dataretrievalfunction="dataRetrievalFunction" >
+
+    <vr-datagridcolumn headertext="'Customer Name'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Supplier Account Name'" field="'Entity.CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'PriceList Type'" field="'PriceListTypeValue'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective On Date'" field="'Entity.EffectiveOnDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'PriceList Status'" field="'PriceListStatusDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'PriceList Result'" field="'PriceListResultDescription'" type="'Text'"></vr-datagridcolumn>
+
+</vr-datagrid>
