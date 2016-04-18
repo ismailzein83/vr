@@ -9,11 +9,16 @@
         var controller = 'File';
 
         return {
-            GetFilteredRecentFiles: GetFilteredRecentFiles
+            GetFilteredRecentFiles: GetFilteredRecentFiles,
+            GetMaxUncompressedFileSizeInMegaBytes: GetMaxUncompressedFileSizeInMegaBytes
         };
 
         function GetFilteredRecentFiles(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, 'GetFilteredRecentFiles'), input);
+        }
+
+        function GetMaxUncompressedFileSizeInMegaBytes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, 'GetMaxUncompressedFileSizeInMegaBytes'));
         }
     }
 

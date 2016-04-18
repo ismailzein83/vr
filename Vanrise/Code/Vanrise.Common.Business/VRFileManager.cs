@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,6 +62,15 @@ namespace Vanrise.Common.Business
         {
             input.Query.UserId = SecurityContext.Current.GetLoggedInUserId();
             return DataRetrievalManager.Instance.ProcessResult(input, _datamanager.GetFilteredRecentFiles(input));
+        }
+
+        public decimal? GetMaxUncompressedFileSizeInMegaBytes()
+        {
+            string size = ConfigurationManager.AppSettings["VRFile_Max_Uncompressed_MB_Size"];
+            if (size != null)
+                return Convert.ToDecimal(size);
+            else
+                return null;
         }
 
         #endregion
