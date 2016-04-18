@@ -70,12 +70,10 @@ namespace Vanrise.ExcelConversion.Business
                         {
                             var cell = row.GetCellOrNull(colIndex);
                             ExcelCell eCell = new ExcelCell();
-                            if (cell != null)
-                            {
-                                eCell.Value = cell.Value;
-                                eRow.Cells.Add(eCell);
+                           
+                            eCell.Value = (cell != null)?cell.Value:null;
+                            eRow.Cells.Add(eCell);
 
-                            }
 
                         }
                     }
