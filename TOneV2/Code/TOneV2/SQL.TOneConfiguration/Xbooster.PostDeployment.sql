@@ -38,8 +38,9 @@ set identity_insert [sec].[View] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (14001,'CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison',1401,'CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample & CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes',null,null,null,0,1),
-(14002,'Pricelist Conversion','Pricelist Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion',1401,null,null,null,null,0,2),
-(14003,'Pricelist Templates','Pricelist Templates','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1401,null,null,null,null,0,3)
+(14002,'Pricelist Conversion','Pricelist Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion',1401,'XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListConversion/ConvertAndDownloadPriceList',null,null,null,0,2),
+(14003,'Pricelist Templates','Pricelist Templates','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1401,'XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates',null,null,null,0,3)
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -60,7 +61,8 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(3901,'CDRComparison_CompareCDRs','Compare CDRs',1,0,'["View"]')
+(3901,'CDRComparison_CompareCDRs','Compare CDRs',1,0,'["View"]'),
+(3902,'XBooster_PriceListConversion','PriceList Conversion',1,0,'["View","Add","Edit","Convert"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -83,7 +85,19 @@ as (select * from (values
 ('CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs','CDRComparison_CompareCDRs: View'),
 ('CDRComparison/CDRComparison/GetFileReaderTemplateConfigs','CDRComparison_CompareCDRs: View'),
 ('CDRComparison/CDRSource/ReadSample','CDRComparison_CompareCDRs: View'),
-('CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes','CDRComparison_CompareCDRs: View')
+('CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes','CDRComparison_CompareCDRs: View'),
+('XBooster_PriceListConversion/PriceListTemplate/UpdateOutputPriceListTemplate','XBooster_PriceListConversion:Edit'),
+('XBooster_PriceListConversion/PriceListTemplate/AddOutputPriceListTemplate','XBooster_PriceListConversion:Add'),
+('XBooster_PriceListConversion/PriceListTemplate/UpdateInputPriceListTemplate','XBooster_PriceListConversion:Edit'),
+('XBooster_PriceListConversion/PriceListTemplate/AddInputPriceListTemplate','XBooster_PriceListConversion:Add'),
+('XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates','XBooster_PriceListConversion:View'),
+('XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates','XBooster_PriceListConversion:View'),
+('XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetPriceListTemplate','XBooster_PriceListConversion:View'),
+('XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetOutputPriceListTemplates','XBooster_PriceListConversion:View'),
+('XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetInputPriceListTemplates','XBooster_PriceListConversion:View'),
+('XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetInputPriceListConfigurationTemplateConfigs','XBooster_PriceListConversion:View'),
+('XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetOutputFieldMappingTemplateConfigs','XBooster_PriceListConversion:View'),
+('XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListConversion/ConvertAndDownloadPriceList','XBooster_PriceListConversion:Convert')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -104,7 +118,9 @@ as (select * from (values
 (80002,'Delimited File','CDRComparison_FileReader','cdrcomparison-flatfilereader',null,null),
 (80003,'Excel File','CDRComparison_FileReader','cdrcomparison-excelfilereader',null,null),
 (80004,'Basic','XBooster_PriceListConversion_OutputPriceListConfiguration','xbooster-pricelistconversion-outputpricelistconfiguration-basic',null,null),
-(80005,'Basic','XBooster_PriceListConversion_InputPriceListConfiguration','xbooster-pricelistconversion-inputpricelistconfiguration-basic',null,null)
+(80005,'Basic','XBooster_PriceListConversion_InputPriceListConfiguration','xbooster-pricelistconversion-inputpricelistconfiguration-basic',null,null),
+(80006,'Pricelist Field','XBooster_PriceListConversion_OutputFieldMapping','xbooster-pricelistconversion-outputfieldvalue-pricelistfield',null,null),
+(80007,'Constant','XBooster_PriceListConversion_OutputFieldMapping','xbooster-pricelistconversion-outputfieldvalue-constant',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t
