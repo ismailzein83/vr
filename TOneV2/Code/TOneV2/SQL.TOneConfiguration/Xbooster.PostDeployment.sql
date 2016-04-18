@@ -37,7 +37,7 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(14001,'CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison',1401,'CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample',null,null,null,0,1),
+(14001,'CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison',1401,'CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample & CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes',null,null,null,0,1),
 (14002,'Pricelist Conversion','Pricelist Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion',1401,null,null,null,null,0,2),
 (14003,'Pricelist Templates','Pricelist Templates','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1401,null,null,null,null,0,3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -82,7 +82,8 @@ as (select * from (values
 ('CDRComparison/CDRSourceConfig/GetCDRSourceConfigs','CDRComparison_CompareCDRs: View'),
 ('CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs','CDRComparison_CompareCDRs: View'),
 ('CDRComparison/CDRComparison/GetFileReaderTemplateConfigs','CDRComparison_CompareCDRs: View'),
-('CDRComparison/CDRSource/ReadSample','CDRComparison_CompareCDRs: View')
+('CDRComparison/CDRSource/ReadSample','CDRComparison_CompareCDRs: View'),
+('CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes','CDRComparison_CompareCDRs: View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
