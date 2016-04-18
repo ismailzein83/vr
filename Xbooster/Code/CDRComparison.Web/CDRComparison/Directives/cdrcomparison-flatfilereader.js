@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FlatFileReaderDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'UtilsService', 'VRUIUtilsService'];
+    FlatFileReaderDirective.$inject = ['CDRComparison_CDRComparisonAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function FlatFileReaderDirective(CDRComparison_CDRComparisonAPIService, UtilsService, VRUIUtilsService) {
+    function FlatFileReaderDirective(CDRComparison_CDRComparisonAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -185,11 +185,16 @@
 
                 return cdrSourceContext.readSample().then(function (response) {
                     if (response != null) {
-                        defineGridColumns(response.ColumnCount);
-                        for (var j = 0; j < response.Rows.length; j++) {
-                            $scope.scopeModel.sampleData.push(response.Rows[j]);
+                        if (response.ErrorMessage != null) {
+                            VRNotificationService.showError(response.ErrorMessage);
                         }
-                        defineHeaderGridDataItem(response.ColumnCount);
+                        else {
+                            defineGridColumns(response.ColumnCount);
+                            for (var j = 0; j < response.Rows.length; j++) {
+                                $scope.scopeModel.sampleData.push(response.Rows[j]);
+                            }
+                            defineHeaderGridDataItem(response.ColumnCount);
+                        }
                     }
                 }).finally(function () {
                     $scope.scopeModel.isLoadingSampleGrid = false;

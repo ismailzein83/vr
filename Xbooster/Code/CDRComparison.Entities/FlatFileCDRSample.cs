@@ -9,8 +9,8 @@ namespace CDRComparison.Entities
     public class FlatFileCDRSample : CDRSample
     {
         public int ColumnCount { get; set; }
-
         public IEnumerable<FlatFileDataRow> Rows { get; set; }
+        public string ErrorMessage { get; set; }
     }
 
     public class FlatFileDataRow

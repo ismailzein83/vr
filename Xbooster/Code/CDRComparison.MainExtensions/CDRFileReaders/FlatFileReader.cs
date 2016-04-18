@@ -82,7 +82,11 @@ namespace CDRComparison.MainExtensions
                 if (counter == 0)
                     sample.ColumnCount = data.Length;
                 else if (data.Length != sample.ColumnCount)
-                    throw new Exception(String.Format("Row '{0}' has an invalid number of columns", counter + 1));
+                {
+                    sample.ColumnCount = 0;
+                    sample.ErrorMessage = String.Format("Row '{0}' has an invalid number of columns", counter + 1);
+                    return sample;
+                }
 
                 rows.Add(new FlatFileDataRow() { Data = data });
                 counter++;
