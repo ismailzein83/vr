@@ -7,6 +7,7 @@ using System.Linq;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 using Vanrise.Entities;
+using System;
 
 namespace CP.SupplierPricelist.Business
 {
@@ -64,14 +65,32 @@ namespace CP.SupplierPricelist.Business
             priceListUpdateOutputs.MaxTimeStamp = maxTimeStamp;
             return priceListUpdateOutputs;
         }
-
+        public IDataRetrievalResult<PriceListDetail> GetFilterePriceLists(DataRetrievalInput<PriceListQuery> input)
+        {
+            var pricelists = GetPriceLists();
+            Func<PriceList, bool> filterExpression = item =>
+                (
+                (input.Query.CarriersID == null || input.Query.CarriersID.Count() == 0 || input.Query.CarriersID.Contains(item.CustomerId))
+                 &&
+                 (input.Query.PriceListType == -1 || input.Query.PriceListType == (int)item.PriceListType)
+                  &&
+                 (input.Query.PriceListResult == -1 || input.Query.PriceListResult == (int)item.Result)
+                  &&
+                 (input.Query.PriceListStatus == -1 || input.Query.PriceListStatus == (int)item.Status)
+                  &&
+                 (input.Query.FromEffectiveOnDate == new DateTime() || item.EffectiveOnDate >= input.Query.FromEffectiveOnDate)
+                 &&
+                 (input.Query.ToEffectiveOnDate == new DateTime() || item.EffectiveOnDate <= input.Query.ToEffectiveOnDate)
+                     );
+            return DataRetrievalManager.Instance.ProcessResult(input, pricelists.ToBigResult(input, filterExpression, priceListDetailMapper));
+        }
         PriceListDetail priceListDetailMapper(PriceList priceList)
         {
             UserManager userManager = new UserManager();
             User user = userManager.GetUserbyId(priceList.UserId);
 
             CustomerManager customerManager = new CustomerManager();
-            var priceListDetail = new PriceListDetail()
+            var priceListDetail = new PriceListDetail
             {
                 Entity = priceList,
                 PriceListStatusDescription = Utilities.GetEnumDescription(priceList.Status),
@@ -83,6 +102,12 @@ namespace CP.SupplierPricelist.Business
             priceListDetail.CustomerName = customer != null ? customer.Name : "";
 
             return priceListDetail;
+        }
+        public Dictionary<long, PriceList> GetPriceLists()
+        {
+            IPriceListDataManager dataManager =
+                ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
+            return dataManager.GetPriceLists().ToDictionary(c => c.PriceListId, c => c);
         }
         public List<PriceList> GetPriceLists(List<PriceListStatus> listPriceListStatuses)
         {
