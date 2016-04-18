@@ -8,7 +8,9 @@
                             <cdrcomparison-cdrsourceconfig-selector on-ready="onSystemConfigSelectorReady" onselectitem="onSystemConfigSelected"></cdrcomparison-cdrsourceconfig-selector>
                         </vr-columns>
                     </vr-row>
-                    <cdrcomparison-cdrsource-selective on-ready="onSystemSelectiveReady" normal-col-num="4" isrequired="true"></cdrcomparison-cdrsource-selective>
+                    <div ng-if="showSystemSelective">
+                        <cdrcomparison-cdrsource-selective on-ready="onSystemSelectiveReady" normal-col-num="4" isrequired="true"></cdrcomparison-cdrsource-selective>
+                    </div>
                 </vr-section>
             </vr-columns>
             <vr-columns width="1/2row">
@@ -18,7 +20,9 @@
                             <cdrcomparison-cdrsourceconfig-selector on-ready="onPartnerConfigSelectorReady" onselectitem="onPartnerConfigSelected"></cdrcomparison-cdrsourceconfig-selector>
                         </vr-columns>
                     </vr-row>
-                    <cdrcomparison-cdrsource-selective on-ready="onPartnerSelectiveReady" normal-col-num="4" isrequired="true"></cdrcomparison-cdrsource-selective>
+                    <div ng-if="showPartnerSelective">
+                        <cdrcomparison-cdrsource-selective on-ready="onPartnerSelectiveReady" normal-col-num="4" isrequired="true"></cdrcomparison-cdrsource-selective>
+                    </div>
                 </vr-section>
             </vr-columns>
         </vr-row>

@@ -23,6 +23,9 @@
 
         function defineScope() {
 
+            $scope.showSystemSelective = true;
+            $scope.showPartnerSelective = true;
+
             $scope.onSystemConfigSelectorReady = function (api) {
                 systemConfigSelectorAPI = api;
                 systemConfigSelectorReadyDeferred.resolve();
@@ -34,19 +37,39 @@
             };
 
             $scope.onSystemConfigSelected = function (selectedConfig) {
-                var loadSystemConfigFunction = function () {
-                    var systemSelectivePayload = { cdrSourceConfigId: selectedConfig.CDRSourceConfigId };
-                    return systemSelectiveAPI.load(systemSelectivePayload);
-                };
-                loadConfig(loadSystemConfigFunction);
+                if (selectedConfig != undefined) {
+                    $scope.showSystemSelective = false;
+                    systemSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                    systemSelectiveReadyDeferred.promise.then(function () {
+                        var loadSystemConfigFunction = function () {
+                            var systemSelectivePayload = { cdrSourceConfigId: selectedConfig.CDRSourceConfigId };
+                            return systemSelectiveAPI.load(systemSelectivePayload);
+                        };
+                        loadConfig(loadSystemConfigFunction);
+                    });
+
+                    UtilsService.safeApply($scope);
+                    $scope.showSystemSelective = true;
+                }
             };
 
             $scope.onPartnerConfigSelected = function (selectedConfig) {
-                var loadPartnerConfigFunction = function () {
-                    var partnerSelectivePayload = { cdrSourceConfigId: selectedConfig.CDRSourceConfigId };
-                    return partnerSelectiveAPI.load(partnerSelectivePayload);
-                };
-                loadConfig(loadPartnerConfigFunction);
+                if (selectedConfig != undefined) {
+                    $scope.showPartnerSelective = false;
+                    partnerSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                    partnerSelectiveReadyDeferred.promise.then(function () {
+                        var loadPartnerConfigFunction = function () {
+                            var partnerSelectivePayload = { cdrSourceConfigId: selectedConfig.CDRSourceConfigId };
+                            return partnerSelectiveAPI.load(partnerSelectivePayload);
+                        };
+                        loadConfig(loadPartnerConfigFunction);
+                    });
+
+                    UtilsService.safeApply($scope);
+                    $scope.showPartnerSelective = true;
+                }
             };
 
             $scope.onSystemSelectiveReady = function (api) {
