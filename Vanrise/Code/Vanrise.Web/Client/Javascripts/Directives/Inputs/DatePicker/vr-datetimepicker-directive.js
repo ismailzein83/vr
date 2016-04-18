@@ -344,9 +344,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                 
 
             var dateTemplate =
-                 '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"   >'
+                 '<div   >'
                   + '<vr-validator validate="ctrl.validate()">'
-                  + '<div id="divDatePicker" ng-model="ctrl.value" class="input-group form-control" ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: 26px;padding: 0px;display:block;">'
+                  + '<div id="divDatePicker" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  ng-model="ctrl.value" class="input-group form-control" ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: 26px;padding: 0px;display:block;">'
                             + '<input class=" vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 24px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                             + '<div  ng-show="showtd==true"  class="hand-cursor" style="max-width:' + 20 * n + 'px;position: absolute;z-index: 11;min-width: 20px;right: 0px;top:0px" >' + icontemplate + '</div>'
                       + '</div>'
