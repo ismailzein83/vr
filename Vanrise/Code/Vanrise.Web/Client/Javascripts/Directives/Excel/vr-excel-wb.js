@@ -83,23 +83,19 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
             $scope.onReadyWoorkSheet = function (api) {
                 var index = ctrl.scopeModel.tabObjects.length - 1;
                 var selectedIndex = ctrl.sheetindex != undefined ? ctrl.sheetindex : 0;
-                if (index == selectedIndex)
-                    ctrl.scopeModel.tabObjects[index].isSelected = true;              
+                if (index == selectedIndex) {
+                    ctrl.scopeModel.tabObjects[index].isSelected = true;
+                    api.reLoadRefresh();
 
+                }
                 ctrl.scopeModel.tabObjects[index].api = api;
-                api.reLoadRefresh();
 
             }
             ctrl.wsindex = 0;
             $scope.$watch('ctrl.wsindex', function () {
-                    if (ctrl.scopeModel.tabObjects[ctrl.wsindex] != undefined && ctrl.scopeModel.tabObjects[ctrl.wsindex].api != undefined) {                        
-                        if (!ctrl.scopeModel.tabObjects[ctrl.wsindex].api.isrendered) {
-                            ctrl.scopeModel.tabObjects[ctrl.wsindex].api.reLoadRefresh();
-
-                        }
-                      
-                    }
-
+                if (ctrl.scopeModel.tabObjects[ctrl.wsindex] != undefined && ctrl.scopeModel.tabObjects[ctrl.wsindex].api != undefined) {                        
+                        ctrl.scopeModel.tabObjects[ctrl.wsindex].api.reLoadRefresh();
+                }
             });
            
             var api = {};

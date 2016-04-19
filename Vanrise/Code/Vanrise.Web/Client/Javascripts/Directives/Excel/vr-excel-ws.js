@@ -133,8 +133,6 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
 
                 },1);
             };
-            
-           
             if (scope.onReady != undefined && typeof (scope.onReady) == 'function') {
                 scope.onReady(api);
             }
