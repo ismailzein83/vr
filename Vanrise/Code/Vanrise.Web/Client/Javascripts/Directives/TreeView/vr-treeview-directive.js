@@ -204,6 +204,16 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
                 });
             };
 
+            api.renameNode = function (newName) {
+                var node = treeElement.jstree('get_selected');
+                treeElement.jstree(true).rename_node(node, newName);
+            }
+
+            api.changeNodeIcon = function (icon) {
+                var node = treeElement.jstree('get_selected');
+                treeElement.jstree(true).set_icon(node, icon);
+            }
+
             api.createNode = function (node) {
                 var treeItem = createTreeItemFromSource(node);
                 var parentNode = treeElement.jstree('get_selected');
