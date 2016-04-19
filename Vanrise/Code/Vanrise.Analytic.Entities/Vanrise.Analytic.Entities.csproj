@@ -46,6 +46,12 @@
     <Compile Include="AnalyticConfiguration.cs" />
     <Compile Include="AnalyticQuery.cs" />
     <Compile Include="AnalyticRecord.cs" />
+    <Compile Include="AnalyticReport\AnalyticGridWidget.cs" />
+    <Compile Include="AnalyticReport\AnalyticReport.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportSettings.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportSearchSettings.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportWidget.cs" />
+    <Compile Include="AnalyticReport\GenericSearchSettings.cs" />
     <Compile Include="AnalyticSummaryBigResult.cs" />
     <Compile Include="Config\AnalyticDimension.cs" />
     <Compile Include="Config\AnalyticDimensionConfig.cs" />
