@@ -7,22 +7,22 @@ namespace TOne.WhS.Routing.Business
 {
     public class TrafficStatsQualityMeasureManager
     {
-        public decimal GetTrafficStatsQualityMeasure(long supplierZoneId)
+        public decimal? GetTrafficStatsQualityMeasure(long supplierZoneId)
         {
             return GetCachedQualityMeasurementBySupplierZone().GetRecord(supplierZoneId);
         }
 
-        public decimal GetTrafficStatsQualityMeasure(long saleZoneId, int supplierId)
+        public decimal? GetTrafficStatsQualityMeasure(long saleZoneId, int supplierId)
         {
             return GetCachedQualityMeasurementBySaleZoneSupplier().GetRecord(string.Format("{0}_{1}", supplierId, saleZoneId));
         }
 
-        private Dictionary<string, decimal> GetCachedQualityMeasurementBySaleZoneSupplier()
+        private Dictionary<string, decimal?> GetCachedQualityMeasurementBySaleZoneSupplier()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetQualityMeasurementGroupBySaleZone_Supplier",
                () =>
                {
-                   Dictionary<string, decimal> result = new Dictionary<string, decimal>();
+                   Dictionary<string, decimal?> result = new Dictionary<string, decimal?>();
                    ITrafficStatsMeasureDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ITrafficStatsMeasureDataManager>();
                    List<SaleZoneSupplierTrafficStatsMeasure> items = dataManager.GetQualityMeasurementsGroupBySaleZoneSupplier(new TimeSpan(5, 0, 0));
                    if (items != null && items.Count > 0)
@@ -36,12 +36,12 @@ namespace TOne.WhS.Routing.Business
                });
         }
 
-        private Dictionary<long, decimal> GetCachedQualityMeasurementBySupplierZone()
+        private Dictionary<long, decimal?> GetCachedQualityMeasurementBySupplierZone()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetQualityMeasurementGroupBySupplierZone",
                () =>
                {
-                   Dictionary<long, decimal> result = new Dictionary<long, decimal>();
+                   Dictionary<long, decimal?> result = new Dictionary<long, decimal?>();
                    ITrafficStatsMeasureDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ITrafficStatsMeasureDataManager>();
                    List<SupplierZoneTrafficStatsMeasure> items = dataManager.GetQualityMeasurementsGroupBySupplierZone(new TimeSpan(5000, 0, 0));
                    if (items != null && items.Count > 0)

@@ -1,4 +1,6 @@
-﻿using TOne.WhS.Routing.Entities;
+﻿using System;
+using System.Collections.Generic;
+using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business.RouteRules.Orders
 {
@@ -8,12 +10,32 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
         {
             context.OrderDitection = OrderDirection.Descending;
             TrafficStatsQualityMeasureManager manager = new TrafficStatsQualityMeasureManager();
+            List<IRouteOptionOrderTarget> suppliersNotFound = new List<IRouteOptionOrderTarget>();
+
+            decimal? supplierTQI;
+            decimal maxTQI = 0;
             foreach (IRouteOptionOrderTarget option in context.Options)
             {
                 if (option.SupplierZoneId.HasValue)
-                    option.OptionWeight = manager.GetTrafficStatsQualityMeasure(option.SupplierZoneId.Value);
+                    supplierTQI = manager.GetTrafficStatsQualityMeasure(option.SupplierZoneId.Value);
                 else
-                    option.OptionWeight = manager.GetTrafficStatsQualityMeasure(option.SaleZoneId.Value, option.SupplierId);
+                    supplierTQI = manager.GetTrafficStatsQualityMeasure(option.SaleZoneId.Value, option.SupplierId);
+
+                if (supplierTQI.HasValue)
+                {
+                    option.OptionWeight = supplierTQI.Value;
+                    maxTQI = Math.Max(maxTQI, supplierTQI.Value);
+                }
+                else
+                    suppliersNotFound.Add(option);
+            }
+
+            if (suppliersNotFound.Count > 0)
+            {
+                foreach (IRouteOptionOrderTarget option in suppliersNotFound)
+                {
+                    option.OptionWeight = maxTQI;
+                }
             }
         }
     }
