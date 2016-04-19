@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Routing.Entities;
+﻿using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business.RouteRules.Orders
 {
@@ -13,10 +7,13 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {
             context.OrderDitection = OrderDirection.Descending;
+            TrafficStatsQualityMeasureManager manager = new TrafficStatsQualityMeasureManager();
             foreach (IRouteOptionOrderTarget option in context.Options)
             {
-                Random rand = new Random();
-                option.OptionWeight = Convert.ToDecimal(rand.NextDouble() * 1000);
+                if (option.SupplierZoneId.HasValue)
+                    option.OptionWeight = manager.GetTrafficStatsQualityMeasure(option.SupplierZoneId.Value);
+                else
+                    option.OptionWeight = manager.GetTrafficStatsQualityMeasure(option.SaleZoneId.Value, option.SupplierId);
             }
         }
     }

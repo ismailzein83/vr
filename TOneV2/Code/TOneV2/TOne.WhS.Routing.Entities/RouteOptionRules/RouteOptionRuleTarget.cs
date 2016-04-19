@@ -63,5 +63,16 @@ namespace TOne.WhS.Routing.Entities
         public decimal OptionWeight { get; set; }
         
         #endregion
+
+
+        long? IRouteOptionOrderTarget.SaleZoneId
+        {
+            get { return this.RouteTarget.SaleZoneId; }
+        }
+
+        long? IRouteOptionOrderTarget.SupplierZoneId
+        {
+            get { return this.SupplierZoneId; }
+        }
     }
 }

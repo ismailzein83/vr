@@ -226,6 +226,7 @@
     <add key="TOneWhS_SPL_DBConnStringKey" value="TOneV2DBConnString"/>
     <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="TOneWhS_TS_DBConnStringKey" value="TOneV2DBConnString"/>
   </appSettings>
   <system.codedom>
     <compilers>

@@ -257,7 +257,8 @@ namespace TOne.WhS.Routing.Business
                         rpRouteOptions.Add(new RPRouteOption
                             {
                                 SupplierId = optionSupplierDetails.SupplierId,
-                                SupplierRate = supplierZoneToRPOptionPolicyExecutionContext.EffectiveRate
+                                SupplierRate = supplierZoneToRPOptionPolicyExecutionContext.EffectiveRate,
+                                SaleZoneId = saleZoneId
                             });
                     }
                     IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;

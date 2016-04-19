@@ -15,5 +15,17 @@ namespace TOne.WhS.Routing.Entities
         public Decimal? Percentage { get; set; }
 
         public decimal OptionWeight { get; set; }
+
+        public long SaleZoneId { get; set; }
+
+        long? IRouteOptionOrderTarget.SaleZoneId
+        {
+            get { return this.SaleZoneId; }
+        }
+
+        long? IRouteOptionOrderTarget.SupplierZoneId
+        {
+            get { return null; }
+        }
     }
 }

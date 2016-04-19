@@ -75,6 +75,7 @@
     <Compile Include="CodeMatchBuilder.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerRouteManager.cs" />
+    <Compile Include="TrafficStatsQualityMeasure\TrafficStatsQualityMeasureManager.cs" />
     <Compile Include="RouteOptionRuleManager.cs" />
     <Compile Include="RouteRuleManager.cs" />
     <Compile Include="RouteRules\Contexts\RouteOptionFilterExecutionContext.cs" />

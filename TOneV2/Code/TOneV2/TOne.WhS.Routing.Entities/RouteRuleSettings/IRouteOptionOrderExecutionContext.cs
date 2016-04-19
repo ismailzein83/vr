@@ -14,6 +14,10 @@ namespace TOne.WhS.Routing.Entities
         Decimal OptionWeight { get; set; }
 
         int SupplierId { get; set; }
+
+        long? SaleZoneId { get; }
+
+        long? SupplierZoneId { get;  }
     }
 
     public interface IRouteOptionOrderExecutionContext
