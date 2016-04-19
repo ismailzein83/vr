@@ -125,7 +125,7 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.AllExceptSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
-                        SellingNumberPlanId: sellingNumberPlanParameter != undefined ? sellingNumberPlanParameter : sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                        SellingNumberPlanId: sellingNumberPlanParameter != undefined && sellingNumberPlanParameter > 0 ? sellingNumberPlanParameter : sellingNumberPlanDirectiveAPI.getSelectedIds(),
                         ZoneIds: saleZoneDirectiveAPI.getSelectedIds()
                     };
                 }

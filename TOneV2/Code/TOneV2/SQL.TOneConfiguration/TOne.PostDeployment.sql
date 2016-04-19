@@ -240,7 +240,8 @@ as (select * from (values
 (33,'Margin','WhS_Sales_SellingRuleSettingsType','vr-whs-sales-sellingrulesettings-margin',null,null),
 (34,'Fixed','WhS_Sales_SellingRuleSettingsType','vr-whs-sales-sellingrulesettings-fixed',null,null),
 (35,'Block','WhS_Routing_RouteOptionRuleSettingsType','vr-whs-routing-routeoptionrulesettings-block',null,null),
-(36,'By Quality','WhS_Routing_RouteRuleOptionOrderSettings','vr-whs-routing-routerulesettings-order-byquality',null,null)
+(36,'By Quality','WhS_Routing_RouteRuleOptionOrderSettings','vr-whs-routing-routerulesettings-order-byquality',null,null),
+(37,'Specific Selling Number Plans','WhS_BE_SaleZoneGroup','vr-whs-be-sellingnumberplan-selective',null,'{"$type":"TOne.WhS.BusinessEntity.MainExtensions.SellingNumberPlan.SelectiveSellingNumberPlanTemplateConfigSettings, TOne.WhS.BusinessEntity.MainExtensions","IsHiddenInRP":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ConfigType],[Editor],[BehaviorFQTN],[Settings]))
 merge	[common].[TemplateConfig] as t

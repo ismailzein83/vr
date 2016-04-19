@@ -93,6 +93,21 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
+        public string GetDescription(IEnumerable<int> sellingNumberPlanIds)
+        {
+            List<string> sellingNumberPlanNames = new List<string>();
+            foreach (int sellingNumberPlanId in sellingNumberPlanIds)
+            {
+                SellingNumberPlan sellingNumberPlan = GetSellingNumberPlan(sellingNumberPlanId);
+                sellingNumberPlanNames.Add(sellingNumberPlan.Name);
+            }
+
+            if (sellingNumberPlanNames != null)
+                return string.Join(", ", sellingNumberPlanNames.Select(x => x));
+
+            return string.Empty;
+        }
+
         #endregion
   
         #region Private Method
