@@ -10,7 +10,7 @@ namespace Vanrise.Analytic.Entities
     {
         public List<int> AnalyticTableIds { get; set; }
 
-        public List<AnalyticReportSearchSettings>  SearchSettings { get; set; }
+        public AnalyticReportSearchSettings  SearchSettings { get; set; }
 
         public List<AnalyticReportWidget> Widgets { get; set; }
     }
