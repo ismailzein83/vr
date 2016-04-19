@@ -23,6 +23,7 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
                 ctrl.scopeModel.tabObjects.length = 0;
                 excelAPIService.ReadExcelFile(ctrl.fileid).then(function (response) {
                     ctrl.scopeModel.datasource = response;
+                }).finally(function () {
                     ctrl.isloadingdata = false;
                 });
             }

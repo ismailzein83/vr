@@ -57,18 +57,19 @@ namespace Vanrise.ExcelConversion.Business
                 int nbOfSheetColumns = 0;
                 for (int j = 0; j <= 100; j++)
                 {
-                    Row row = (Row)sheet.Cells.Rows[j];
-
-                    if (row != null && !row.IsBlank)
+                    Row row = sheet.Cells.Rows[j]!=null ?(Row)sheet.Cells.Rows[j] :null;
+                    int maxDataRow = sheet.Cells.MaxDataRow;
+                    int maxdatacol = sheet.Cells.MaxDataColumn;
+                    ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
+                    eSheet.Rows.Add(eRow);
+                    if ( j<= maxDataRow)
                     {
-                        ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
-                        eSheet.Rows.Add(eRow);
-                        int nbOfRowColumns = row.LastCell.Column + 1;
+                        int nbOfRowColumns = (row != null && row.LastCell!=null) ? row.LastCell.Column + 1 : 0;
                         if (nbOfRowColumns > nbOfSheetColumns)
                             nbOfSheetColumns = nbOfRowColumns;
-                        for (int colIndex = 0; colIndex < nbOfRowColumns; colIndex++)
+                        for (int colIndex = 0; colIndex < maxdatacol; colIndex++)
                         {
-                            var cell = row.GetCellOrNull(colIndex);
+                            var cell = (row!=null)?row.GetCellOrNull(colIndex):null;
                             ExcelCell eCell = new ExcelCell();
                            
                             eCell.Value = (cell != null)?cell.Value:null;
@@ -88,7 +89,6 @@ namespace Vanrise.ExcelConversion.Business
 
         public ExcelWorksheet ReadExcelFilePage(ExcelPageQuery Query)
         {
-            System.Threading.Thread.Sleep(2000);
 
             var fileManager = new VRFileManager();
             var file = fileManager.GetFile(Query.FileId);
