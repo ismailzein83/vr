@@ -12,7 +12,7 @@ CREATE PROCEDURE [dbo].[sp_CDRSourceConfig_Insert]
 	@ID INT OUT
 AS
 BEGIN
-	IF NOT EXISTS(SELECT NULL FROM dbo.CDRSourceConfig WHERE Name = @Name)
+	IF NOT EXISTS(SELECT NULL FROM dbo.CDRSourceConfig WHERE Name = @Name AND UserID = @UserID)
 	BEGIN
 		INSERT INTO dbo.CDRSourceConfig (Name, CDRSource, SettingsTaskExecutionInfo, IsPartnerCDRSource, UserID)
 		VALUES (@Name, @CDRSource, @SettingsTaskExecutionInfo, @IsPartnerCDRSource, @UserID)
