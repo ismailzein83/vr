@@ -160,6 +160,8 @@
     <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingCodePrefixOptions.js" />
     <Content Include="WhS_Routing\Constant\RoutingDatabaseTypeEnum.js" />
+    <Content Include="WhS_Routing\Constant\RateOptionEnum.js" />
+    <Content Include="WhS_Routing\Constant\RateOptionTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingProcessTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingSaleZoneRangeOptions.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteDetailTemplate.html" />
@@ -167,10 +169,9 @@
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-details.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\vr-whs-routing-customerroute-grid.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-block.js" />
-    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\MinProfitDirective.html" />
-    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RemoveLossDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RateDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
-    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-minprofit.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-rate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
@@ -180,7 +181,6 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-regular.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\Templates\OptionPercentageFixedDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\Templates\SelectiveOptionDirective.html" />
-    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-removeloss.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byrate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
