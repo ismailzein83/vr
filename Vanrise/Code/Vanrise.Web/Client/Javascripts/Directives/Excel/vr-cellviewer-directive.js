@@ -133,8 +133,8 @@
                         + '<span ng-show="ctrl.type == \'cell\' || ctrl.type == undefined " >Row{{ctrl.value.row}};Col{{ctrl.value.col}}</span>'
                         + '<span ng-show="ctrl.type == \'row\'">Row{{ctrl.value.row}}</span>'
                         + '</a>'
-                        + '<span ng-show="ctrl.value ==null && (ctrl.type == \'cell\' || ctrl.type == undefined)" ng-click="updateRange()" style="min-height: 28px;cursor: pointer; cursor: hand;"> Select cell from excel & click here.</span>'
-                        + '<span ng-show="ctrl.value ==null && (ctrl.type == \'row\')" ng-click="updateRange()" style="min-height: 28px;cursor: pointer; cursor: hand;"> Select row from excel & click here.</span>'
+                        + '<span ng-show="ctrl.value ==null && (ctrl.type == \'cell\' || ctrl.type == undefined)" ng-click="updateRange()" style="min-height: 28px;cursor: pointer; cursor: hand;"> Select cell from excel and click here.</span>'
+                        + '<span ng-show="ctrl.value ==null && (ctrl.type == \'row\')" ng-click="updateRange()" style="min-height: 28px;cursor: pointer; cursor: hand;"> Select row from excel and click here.</span>'
 
                         + '<span ng-show="ctrl.value !=null" class="glyphicon glyphicon-remove hand-cursor" style="top: 0px;" aria-hidden="true" ng-click="ctrl.remove()"></span>'
                         + '</div>'
