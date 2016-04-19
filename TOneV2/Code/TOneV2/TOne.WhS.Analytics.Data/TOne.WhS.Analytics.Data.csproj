@@ -54,6 +54,7 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="IGenericAnalyticDataManager.cs" />
     <Compile Include="IRawCDRDataManager.cs" />
+    <Compile Include="IVariationReportDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

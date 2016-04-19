@@ -60,6 +60,7 @@
     <Compile Include="Generic\GenericAnalyticConfigManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawCDRDataManager.cs" />
+    <Compile Include="VariationReportDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
