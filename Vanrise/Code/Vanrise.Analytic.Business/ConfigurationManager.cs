@@ -114,6 +114,21 @@ namespace Vanrise.Analytic.Business
 
                 }
             });
+
+            analyticDimensions.Add("SupplierZone", new AnalyticDimension()
+            {
+                AnalyticDimensionConfigId = 2,
+                Config = new AnalyticDimensionConfig()
+                {
+                    FieldType = new FieldTextType(),
+                    GroupByColumns = new List<string>() { "ant.SupplierZoneID", "suppz.Name" },
+                    IdColumn = "ISNULL(ant.SupplierZoneID,'N/A')",
+                    JoinConfigNames = new List<string>() { "SupplierZoneJoin" },
+                    NameColumn = "suppz.Name"
+
+                }
+            });
+
             return analyticDimensions;
         }
         public Dictionary<string, AnalyticMeasure> GetMockData_Measures(int tableId)

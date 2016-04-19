@@ -1,11 +1,15 @@
 ﻿
-<div ng-show="analyticrecordsctrl.showGrid">
+<div ng-show="analyticrecordsctrl.showGrid">{{ctrl.dimensionFields}}
 
     <vr-datagrid datasource="analyticrecordsctrl.datasource" defaultsortbyfieldname="analyticrecordsctrl.sortField" pagingtype="'Pager'" dataretrievalfunction="analyticrecordsctrl.dataRetrievalFunction" on-ready="analyticrecordsctrl.gridReady">
-        <vr-datagridcolumn ng-repeat="dimension in analyticrecordsctrl.dimensions" headertext="dimension" type="dimension.type"
+        <vr-datagridcolumn ng-repeat="dimension in analyticrecordsctrl.dimensions" headertext="dimension.description" type="dimension.type"
                            numberprecision="dimension.numberPrecision" field="'DimensionValues[' + $index + '].Name'" columnindex="$index" widthfactor="15"></vr-datagridcolumn>
 
         <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.measures" headertext="measure" type="measure.type"
                            field="'MeasureValues.' + measure + ''" tag="measure" summaryfield="'MeasureValues.' + measure + ''"></vr-datagridcolumn>
+
+        <vr-datagridexpandablerow>
+            <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+        </vr-datagridexpandablerow>
     </vr-datagrid>
 </div>

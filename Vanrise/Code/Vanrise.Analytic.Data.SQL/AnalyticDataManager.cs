@@ -452,9 +452,29 @@ namespace Vanrise.Analytic.Data.SQL
             return queryBuilder.ToString();
         }
 
-        private void AddFilterToFilterPart(StringBuilder filterPartBuilder, List<object> list, string p)
+        private void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
         {
-            throw new NotImplementedException();
+            if (values != null && values.Count() > 0)
+            {
+                if (values[0].GetType() == typeof(string) || values[0].GetType() == typeof(DateTime))
+                {
+                    StringBuilder builder = new StringBuilder();
+                    if (values.Count == 1)
+                        builder.Append("'").Append(values[0]).Append("'");
+                    else
+                    {
+                        foreach (T val in values)
+                        {
+                            builder.Append("'").Append(val).Append("' ,");
+                        }
+                        builder.Length--;
+                    }
+
+                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, builder);
+                }
+                else
+                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, String.Join(", ", values));
+            }
         }
 
         private void AddColumnToStringBuilder(StringBuilder builder, string column)
