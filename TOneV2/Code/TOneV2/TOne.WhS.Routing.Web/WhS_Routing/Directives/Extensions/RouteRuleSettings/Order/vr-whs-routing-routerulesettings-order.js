@@ -32,6 +32,11 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
     function filterCtor(ctrl, $scope) {
         var existingItems = [];
         ctrl.isValid = function () {
+            var result = checkRequiredFilters();
+            if (result != null) {
+                return result;
+            }
+
             if (ctrl.datasource.length < 2)
                 return null;
 
@@ -49,11 +54,16 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
         ctrl.datasource = [];
 
         ctrl.addOptionOrderType = function () {
+            addNewItem(ctrl.selectedOptionOrderSettingsGroupTemplate);
+            ctrl.selectedOptionOrderSettingsGroupTemplate = undefined;
+        };
+
+        function addNewItem(itemAdded) {
             var dataItem = {
                 id: ctrl.datasource.length + 1,
-                configId: ctrl.selectedOptionOrderSettingsGroupTemplate.TemplateConfigID,
-                editor: ctrl.selectedOptionOrderSettingsGroupTemplate.Editor,
-                name: ctrl.selectedOptionOrderSettingsGroupTemplate.Name,
+                configId: itemAdded.TemplateConfigID,
+                editor: itemAdded.Editor,
+                name: itemAdded.Name,
                 percentageValue: undefined
             };
 
@@ -64,7 +74,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             };
 
             for (var x = 0; x < ctrl.optionOrderSettingsGroupTemplates.length; x++) {
-                if (ctrl.optionOrderSettingsGroupTemplates[x].TemplateConfigID == ctrl.selectedOptionOrderSettingsGroupTemplate.TemplateConfigID) {
+                if (ctrl.optionOrderSettingsGroupTemplates[x].TemplateConfigID == itemAdded.TemplateConfigID) {
                     existingItems.push(ctrl.optionOrderSettingsGroupTemplates[x]);
                     ctrl.optionOrderSettingsGroupTemplates.splice(x, 1);
                     break;
@@ -72,8 +82,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             }
 
             ctrl.datasource.push(dataItem);
-            ctrl.selectedOptionOrderSettingsGroupTemplate = undefined;
-        };
+        }
 
         ctrl.removeOption = function (dataItem) {
             var configId = dataItem.configId;
@@ -86,6 +95,38 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                 }
             }
         };
+
+        function checkRequiredFilters() {
+            var requiredFiltersNames = [];
+            if (ctrl.optionOrderSettingsGroupTemplates.length == 0) {
+                return null;
+            }
+            angular.forEach(ctrl.optionOrderSettingsGroupTemplates, function (dataItem) {
+                if (dataItem.Settings != null && dataItem.Settings.IsRequired) {
+                    requiredFiltersNames.push(dataItem.Name);
+                }
+            });
+            var result = null;
+            if (requiredFiltersNames.length > 0) {
+                result = '';
+                if (requiredFiltersNames.length == 1) {
+                    result = 'Order ' + requiredFiltersNames[0] + ' is required';
+                }
+                else {
+                    result = result = 'Order ' + requiredFiltersNames[0];
+                    for (var x = 1; x < requiredFiltersNames.length; x++) {
+                        var currentItem = requiredFiltersNames[x];
+                        if (x == requiredFiltersNames.length - 1) {
+                            result += ' and ' + currentItem + ' are required';
+                        }
+                        else {
+                            result += ', ' + currentItem;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
 
         function initializeController() {
             defineAPI();
@@ -150,6 +191,17 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                             }
                         }
                     }
+                    
+                    if (ctrl.optionOrderSettingsGroupTemplates.length > 0) {
+                        for (var m = (ctrl.optionOrderSettingsGroupTemplates.length - 1) ; m >= 0; m--) {
+                            var currentItem = ctrl.optionOrderSettingsGroupTemplates[m];
+                            if (currentItem.Settings != null && currentItem.Settings.IsRequired) {
+                                addNewItem(currentItem);
+                                ctrl.optionOrderSettingsGroupTemplates.splice(m, 1);
+                            }
+                        }
+                    }
+
                 });
 
                 promises.push(loadTemplatesPromise);
@@ -185,7 +237,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
 
             function getOrderOptions() {
                 var orderOptions = [];
-                
+
                 angular.forEach(ctrl.datasource, function (dataItem) {
 
                     var orderOption = dataItem.directiveAPI.getData();

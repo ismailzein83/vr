@@ -15,4 +15,9 @@ namespace TOne.WhS.Routing.Entities
 
         public abstract void Execute(IRouteOptionOrderExecutionContext context);
     }
+
+    public class OptionOrderTemplateConfigSettings
+    {
+        public bool IsRequired { get; set; }
+    }
 }
