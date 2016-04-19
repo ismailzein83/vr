@@ -77,7 +77,6 @@
     <Compile Include="CPSaleCodeManager.cs" />
     <Compile Include="CPSaleZoneManager.cs" />
     <Compile Include="CodePreparationManager.cs" />
-    <Compile Include="NewSaleCodeManager.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="ProcessCountryCodesContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

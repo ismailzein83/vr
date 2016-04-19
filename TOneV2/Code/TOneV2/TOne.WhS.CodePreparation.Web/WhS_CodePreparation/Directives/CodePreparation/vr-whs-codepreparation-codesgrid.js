@@ -100,8 +100,8 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
 
             function mapDataNeeded(dataItem) {
                 dataItem.ShowDraftStatusIcon = true;
-                dataItem.ShowSelectCode = $scope.ShowSelectCode;
                 dataItem.ShowStatus = dataItem.Status != null;
+                dataItem.ShowSelectCode = $scope.ShowSelectCode && dataItem.DraftStatus == WhS_CP_CodeItemDraftStatusEnum.ExistingNotChanged.value && dataItem.Status == null;
 
                 switch (dataItem.DraftStatus) {
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingNotChanged.value:

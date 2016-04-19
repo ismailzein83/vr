@@ -40,15 +40,9 @@
         }
 
         function load() {
-
-            $scope.isGettingData = true;
-            loadAllControls();
             $scope.title = "Close Codes for " + currentZoneName;
         }
-        function loadAllControls() {
-            $scope.isLoading = false;
-            $scope.isGettingData = false;
-        }
+       
 
         function buildCodeCloseObjFromScope() {
             var obj = {

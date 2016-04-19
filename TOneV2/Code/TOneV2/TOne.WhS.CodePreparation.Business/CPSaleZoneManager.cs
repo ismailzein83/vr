@@ -261,13 +261,11 @@ namespace TOne.WhS.CodePreparation.Business
             existingRenamedZone.NewZoneName = zoneToRename.NewZoneName;
             existingRenamedZone.OriginalZoneName = existingRenamedZone.OriginalZoneName != null ? existingRenamedZone.OriginalZoneName : zoneToRename.OriginalZoneName;
             zoneToRename.OriginalZoneName = existingRenamedZone.OriginalZoneName != null ? existingRenamedZone.OriginalZoneName : zoneToRename.OriginalZoneName;
-            zoneOutput.Result = ValidationOutput.Success;
             zoneOutput.Zone = zoneToRename;
         }
         void AddZoneToRenamedZones(Changes existingChanges, RenamedZone zoneToRename, RenamedZoneOutput zoneOutput)
         {
             existingChanges.RenamedZones.Add(zoneToRename);
-            zoneOutput.Result = ValidationOutput.Success;
             zoneOutput.Zone = zoneToRename;
         }
         void MergeZoneItems(int sellingNumberPlanId, out Changes changes, out List<ZoneItem> allZoneItems)

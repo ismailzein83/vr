@@ -42,14 +42,7 @@
         }
 
         function load() {
-
-            $scope.isGettingData = true;
-            loadAllControls();
             $scope.title = "Rename " + oldZoneName + " Zone";
-        }
-        function loadAllControls() {
-            $scope.isLoading = false;
-            $scope.isGettingData = false;
         }
 
         function buildRenamedZoneObjFromScope() {
