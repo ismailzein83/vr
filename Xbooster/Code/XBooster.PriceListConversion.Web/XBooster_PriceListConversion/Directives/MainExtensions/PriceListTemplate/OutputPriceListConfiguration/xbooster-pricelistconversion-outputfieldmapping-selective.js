@@ -35,7 +35,7 @@
 
 
             var template =
-                '<vr-row>'
+                '<vr-row removeline>'
               + '<vr-columns colnum="{{fieldmappingCtrl.normalColNum}}">'
               + ' <vr-select on-ready="onSelectorReady"'
               + ' datasource="templateConfigs"'
@@ -111,7 +111,7 @@
                                     $scope.templateConfigs.push(response[i]);
                                 }
 
-                                if (outputFieldValue != undefined) {
+                                if (outputFieldValue != undefined && !outputFieldValue.isDefaultData) {
                                     $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, outputFieldValue.ConfigId, 'TemplateConfigID');
                                 } else
                                     $scope.selectedTemplateConfig = $scope.templateConfigs[0];

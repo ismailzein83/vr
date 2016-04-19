@@ -87,7 +87,9 @@ namespace XBooster.PriceListConversion.Business
                     ConvertedExcelField bEDField;
                     if (obj.Fields.TryGetValue("EffectiveDate", out bEDField))
                     {
-                        priceListRecord.EffectiveDate = (DateTime)bEDField.FieldValue;
+                        DateTime result;
+                        DateTime.TryParse(bEDField.FieldValue.ToString(),out result);
+                        priceListRecord.EffectiveDate = result;
                     };
                     decimal rate;
                     if (rateByZone.TryGetValue(priceListRecord.Zone, out rate))

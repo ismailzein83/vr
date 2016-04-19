@@ -156,7 +156,7 @@
                                dataItem.loadFieldPromiseDeferred = UtilsService.createPromiseDeferred();
                                promises.push(dataItem.loadPromiseDeferred.promise);
                                promises.push(dataItem.loadFieldPromiseDeferred.promise);
-                               setOutputFieldMappingAPI(dataItem);
+                               setOutputFieldMappingAPI(dataItem, dataItem.item);
                             }
 
                         }
@@ -168,14 +168,16 @@
                             context: buildOutputContext(),
                         };
                         var directivePayload = {}; 
-                        if (item != undefined && table !=undefined)
+                        if (item != undefined )
                         {
-                           
-                            fieldPayload.fieldMapping = {
-                                SheetIndex: table.SheetIndex,
-                                RowIndex: table.RowIndex,
-                                CellIndex: item.CellIndex
+                            if (table != undefined) {
+                                fieldPayload.fieldMapping = {
+                                    SheetIndex: table.SheetIndex,
+                                    RowIndex: table.RowIndex,
+                                    CellIndex: item.CellIndex
+                                }
                             }
+                            
                             if (item.FieldValue != undefined)
                             {
                                 directivePayload = {
@@ -213,15 +215,18 @@
                         var dataItems = [];
                         dataItems.push({
                             id: ctrl.datasource.length + 1,
-                            isRequired: validate
+                            isRequired: validate,
+                            item: { FieldValue: { FieldName: "Code", isDefaultData: true } }
                         });
                         dataItems.push({
                             id: ctrl.datasource.length + 1,
-                            isRequired: validate
+                            isRequired: validate,
+                            item: { FieldValue: { FieldName: "Zone", isDefaultData: true } }
                         });
                         dataItems.push({
                             id: ctrl.datasource.length + 1,
-                            isRequired: validate
+                            isRequired: validate,
+                            item: { FieldValue: { FieldName: "Rate", isDefaultData: true } }
                         });
                         return dataItems;
                     }

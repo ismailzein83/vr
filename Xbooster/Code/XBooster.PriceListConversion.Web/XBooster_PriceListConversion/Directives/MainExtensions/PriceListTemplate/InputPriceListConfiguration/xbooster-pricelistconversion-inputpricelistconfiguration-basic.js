@@ -72,7 +72,7 @@
                         rateListMappingReadyPromiseDeferred.promise.then(function () {
                             var payload = {
                                 context: getContext(),
-                                fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell" }],
+                                fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: false, type: "cell" }],
                                 listName: "RateList"
                             };
                             if (configDetails != undefined && configDetails.ExcelConversionSettings && configDetails.ExcelConversionSettings.ListMappings.length >0)
@@ -90,7 +90,7 @@
                         codeListMappingReadyPromiseDeferred.promise.then(function () {
                             var payload = {
                                 context: getContext(),
-                                fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell" }],
+                                fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: false, type: "cell" }],
                                 listName: "CodeList"
                             };
                             if (configDetails != undefined && configDetails.ExcelConversionSettings && configDetails.ExcelConversionSettings.ListMappings.length > 0) {

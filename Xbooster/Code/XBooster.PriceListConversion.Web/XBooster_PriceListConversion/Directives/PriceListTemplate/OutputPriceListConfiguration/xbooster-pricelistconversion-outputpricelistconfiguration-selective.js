@@ -37,7 +37,7 @@
 
 
             var template =
-                '<vr-row ng-show="templateConfigs.length>1">'
+                '<vr-row  ng-show="templateConfigs.length>1">'
               + '<vr-columns colnum="{{fieldmappingCtrl.normalColNum * 2}}">'
               + ' <vr-select on-ready="onSelectorReady"'
               + ' datasource="templateConfigs"'
@@ -47,9 +47,9 @@
               + label
                + ' isrequired="fieldmappingCtrl.isrequired"'
               + 'hideremoveicon>'
-          + '</vr-select>'
+          + '</vr-select></vr-columns>'
            + '</vr-row>'
-          + '<vr-row>'
+          + '<vr-row >'
                         + '<vr-directivewrapper directive="selectedTemplateConfig.Editor" on-ready="onDirectiveReady" normal-col-num="{{fieldmappingCtrl.normalColNum}}" isrequired="fieldmappingCtrl.isrequired" customvalidate="fieldmappingCtrl.customvalidate" type="fieldmappingCtrl.type"></vr-directivewrapper>';
           +'</vr-row>'
             return template;

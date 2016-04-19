@@ -20,8 +20,18 @@
             },
             controllerAs: "cellfieldmappingCtrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/ExcelConversion/Directives/MainExtensions/FieldMapping/Templates/CellFieldMappingTemplate.html"
+            template: function (element, attrs) {
+                return getTamplate(attrs);
+            }
         };
+        function getTamplate(attrs) {
+            var label = "";
+            if (attrs.label != undefined)
+                label = "label='"+attrs.label+"'";
+            return ' <vr-columns colnum="{{cellfieldmappingCtrl.normalColNum * 2}}" >'
+                          + ' <vr-cellviewer ' + label + ' on-select="cellfieldmappingCtrl.selectCell" on-update="cellfieldmappingCtrl.updateRange" value="cellObject" customvalidate="cellfieldmappingCtrl.validate()" isrequired="cellfieldmappingCtrl.isrequired" type="cellfieldmappingCtrl.type"> </vr-cellviewer>'
+                           + '</vr-columns>';
+        }
 
         function CellFieldMapping($scope, ctrl, $attrs) {
             this.initializeController = initializeController;

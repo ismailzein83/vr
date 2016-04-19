@@ -12,11 +12,7 @@
     <vr-columns width="1/2row">
         <vr-section title="Pricelist Mapping">
             <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-label>First Row</vr-label>
-                </vr-columns>
-                <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="onFirstRowReady" isrequired="true" type="'row'" normal-col-num="2"></vr-excelconversion-fieldmapping-cellfieldmapping>
-
+                    <vr-excelconversion-fieldmapping-cellfieldmapping label="First Row" on-ready="onFirstRowReady" isrequired="true" type="'row'" normal-col-num="2"></vr-excelconversion-fieldmapping-cellfieldmapping>
             </vr-row>
 
             <vr-row>
@@ -29,7 +25,7 @@
                     <vr-validator validate="outputbasicCtrl.isValid()">
                         <vr-datagrid datasource="outputbasicCtrl.datasource" norowhighlightonclick="true"
                                      on-ready="onGridReady" ondeleterow="outputbasicCtrl.removeFilter" hidegridmenu>
-                            <vr-datagridcolumn headertext="'Cell Mapping'" widthfactor="15" disablesorting="true">
+                            <vr-datagridcolumn headertext="'Excel Field'" widthfactor="15" disablesorting="true">
                                 <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onFieldReady" isrequired="dataItem.isRequired(dataItem)" normal-col-num="6"></vr-excelconversion-fieldmapping-cellfieldmapping>
                             </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Field Type'" widthfactor="15" disablesorting="true">
