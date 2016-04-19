@@ -94,6 +94,9 @@
             dimensions.push({
                 value: 'SaleZone',
                 description: 'Sale Zone'
+            }, {
+                value: 'SupplierZone',
+                description: 'Supplier Zone'
             });
             //dimensions.push('SupplierZone');
         }
