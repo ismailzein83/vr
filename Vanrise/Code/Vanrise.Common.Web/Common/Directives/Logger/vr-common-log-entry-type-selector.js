@@ -10,7 +10,6 @@ app.directive('vrCommonLogEntryTypeSelector', [ 'VRCommon_LogEntryTypeEnum', 'Ut
                 onselectionchanged: '=',
                 isrequired: '=',
                 isdisabled: "=",
-                selectedvalues: "=",
                 showaddbutton: '@'
             },
             controller: function ($scope, $element, $attrs) {
@@ -58,7 +57,6 @@ app.directive('vrCommonLogEntryTypeSelector', [ 'VRCommon_LogEntryTypeEnum', 'Ut
         function TypeSelector(ctrl, $scope, attrs) {
 
             var selectorAPI;
-            ctrl.datasource = UtilsService.getArrayEnum(VRCommon_LogEntryTypeEnum);
             function initializeController() {
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -76,6 +74,7 @@ app.directive('vrCommonLogEntryTypeSelector', [ 'VRCommon_LogEntryTypeEnum', 'Ut
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
+                    ctrl.datasource = UtilsService.getArrayEnum(VRCommon_LogEntryTypeEnum);
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }

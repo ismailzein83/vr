@@ -25,6 +25,7 @@ namespace Vanrise.Logging.SQL
             _columnMapper.Add("ApplicationName", "ApplicationNameId");
             _columnMapper.Add("AssemblyName", "AssemblyNameId");
             _columnMapper.Add("TypeName", "TypeNameId");
+            _columnMapper.Add("EntryTypeName", "EntryType");
             _columnMapper.Add("MethodName", "MethodNameId");
         }
 
@@ -102,7 +103,7 @@ namespace Vanrise.Logging.SQL
         }
 
 
-        public Vanrise.Entities.BigResult<Vanrise.Entities.LogEntry> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input)
+        public Vanrise.Entities.BigResult<Vanrise.Entities.LogEntry> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {

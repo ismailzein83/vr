@@ -122,7 +122,8 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\LogEntryController.cs" />
+    <Compile Include="Controllers\LogAttributeController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CurrencyExchangeRateController.cs" />
@@ -184,6 +185,7 @@
     <Content Include="Common\Directives\GenericDataRecord\vr-common-datarecordfield-grid.js" />
     <Content Include="Common\Directives\Hour\vr-common-hour-selector.js" />
     <Content Include="Common\Directives\Logger\Templates\LoggerGridTemplate.html" />
+    <Content Include="Common\Directives\Logger\Templates\LoggerSearch.html" />
     <Content Include="Common\Directives\Logger\vr-common-log-entry-grid.js" />
     <Content Include="Common\Directives\Logger\vr-common-log-entry-type-selector.js" />
     <Content Include="Common\Directives\Logger\vr-common-log-attribute-selector.js" />

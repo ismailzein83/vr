@@ -8,7 +8,7 @@ using Vanrise.Logging.SQL;
 
 namespace Vanrise.Common.Business
 {
-    public class LoggingManager
+    public class LogManager
     {
         internal static SQLDataManager GetDataManager()
         {
@@ -25,11 +25,11 @@ namespace Vanrise.Common.Business
             return null;
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Entities.LogEntryDetail> GetFilteredLoggers(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<Vanrise.Entities.LogEntryDetail> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input)
         {
             SQLDataManager manager = GetDataManager();
 
-            BigResult<Vanrise.Entities.LogEntry> loggerResult = manager.GetFilteredSupplierCodes(input);
+            BigResult<Vanrise.Entities.LogEntry> loggerResult = manager.GetFilteredLogs(input);
 
             BigResult<Vanrise.Entities.LogEntryDetail> loggerDetailResult = new BigResult<Vanrise.Entities.LogEntryDetail>()
             {
@@ -41,20 +41,18 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, loggerDetailResult);
         }
 
-        public List<LogAttribute> GetSpecificLogAttribute(int attribute)
+        public IEnumerable<LogAttribute> GeLogAttributesById(int attribute)
         {
-            List<LogAttribute> specificLogAttribute = new List<LogAttribute>();
-            specificLogAttribute = GetCachedLogAttributes().Where(l => l.AttributeType == attribute).ToList();
-            return specificLogAttribute;
+            return GetCachedLogAttributes().FindAllRecords(itm => itm.AttributeType == attribute);
         }
-        private List<LogAttribute> GetCachedLogAttributes()
+        private Dictionary<int, LogAttribute> GetCachedLogAttributes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetLogAttributes"),
                () =>
                {
                    SQLDataManager dataManager = GetDataManager();
                    List<LogAttribute> allLogAttributes = dataManager.GetLogAttributes();
-                   return allLogAttributes;
+                   return allLogAttributes.ToDictionary(l => l.LogAttributeID, l => l);
                });
         }
 
@@ -84,13 +82,12 @@ namespace Vanrise.Common.Business
 
         private string GetAttributeName(int attributeId)
         {
-            SQLDataManager manager = GetDataManager();
-            LogAttribute logAttribute = GetCachedLogAttributes().Where(l => l.LogAttributeID == attributeId).FirstOrDefault();
+            LogAttribute logAttribute = GetCachedLogAttributes().GetRecord(attributeId);
 
             if (logAttribute != null)
                 return logAttribute.Description;
 
-            return "Attribute Not Found";
+            return null;
         }
     }
 }

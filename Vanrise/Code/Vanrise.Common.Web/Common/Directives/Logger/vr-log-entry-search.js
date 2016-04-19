@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrLogEntrySearch", ['VRCommon_LogAttributeEnum', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService',
-function ( VRCommon_LogAttributeEnum , VRNotificationService,UtilsService, VRUIUtilsService) {
+app.directive("vrLogEntrySearch", ['VRCommon_LogAttributeEnum', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService','VRValidationService',
+function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService) {
 
     var directiveDefinitionObject = {
 
@@ -105,27 +105,39 @@ function ( VRCommon_LogAttributeEnum , VRNotificationService,UtilsService, VRUIU
                 methodDirectiveApi = api;
                 methodReadyPromiseDeferred.resolve();
             }
-
+            $scope.validateDateTime = function () {
+                return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            }
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(filter);
             }
-
         }
 
         function load() {
-            return loadAllControls();
+            $scope.isLoadingFilters = true;
+            loadAllControls();
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadMachineSelector, loadApplicationSelector, loadAssemblySelector, loadTypeSelector, loadMethodSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadEntryTypeSelector, loadMachineSelector, loadApplicationSelector, loadAssemblySelector, loadTypeSelector, loadMethodSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  //  $scope.isLoadingFilters = false;
+                  $scope.isLoadingFilters = false;
               });
         }
+        function loadEntryTypeSelector() {
+            var logEntryTypeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            entryTypeReadyPromiseDeferred.promise
+                .then(function () {
+                    VRUIUtilsService.callDirectiveLoad(entryTypeDirectiveApi, undefined, logEntryTypeLoadPromiseDeferred);
+                });
+            return logEntryTypeLoadPromiseDeferred.promise;
+        }
+
         function loadMachineSelector() {
             var machineLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             var payload = {
@@ -188,7 +200,6 @@ function ( VRCommon_LogAttributeEnum , VRNotificationService,UtilsService, VRUIU
 
         function setFilterObject() {
             filter = {
-                //SupplierIds: supplierDirectiveApi.getSelectedIds(),
                 MachineIds: machineDirectiveApi.getSelectedIds(),
                 ApplicationIds: applicationDirectiveApi.getSelectedIds(),
                 TypeIds: typeDirectiveApi.getSelectedIds(),

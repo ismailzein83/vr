@@ -4,19 +4,19 @@
     logEntryAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
     function logEntryAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
-        var controllerName = 'LogAttribute';
+        var controllerName = 'LogEntry';
 
-        function GetFilteredLoggers(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredLoggers"), input);
+        function GetFilteredLogs(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredLogs"), input);
         }
 
         function HasViewSystemLogPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['GetFilteredLoggers']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['GetFilteredLogs']));
         }
 
 
         return ({
-            GetFilteredLoggers: GetFilteredLoggers,
+            GetFilteredLogs: GetFilteredLogs,
             HasViewSystemLogPermission: HasViewSystemLogPermission
         });
     }

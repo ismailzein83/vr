@@ -1,7 +1,7 @@
 ﻿'use strict';
 app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService', 'VRCommon_LogAttributeEnum', 'UtilsService', 'VRUIUtilsService',
     function (VRCommon_LogAttributeAPIService, VRCommon_LogAttributeEnum, UtilsService, VRUIUtilsService) {
-
+        var selectorAPI;
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -11,9 +11,7 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
                 selectedvalues: '=',
                 isrequired: "=",
                 onselectitem: "=",
-                ondeselectitem: "=",
-                isdisabled: "=",
-                hideremoveicon: '@'
+                ondeselectitem: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -34,10 +32,7 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
                     VRCommon_LogAttributeService.addLogAttribute(onLogAttributeAdded);
                 }
 
-                //ctrl.haspermission = function () {
-                //    return VRCommon_LogAttributeAPIService.HasAddLogAttributePermission();
-                //};
-
+               
                 var ctor = new LogAttributeCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
@@ -74,13 +69,16 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
             return '<vr-select ' + multipleselection + '  datatextfield="Description" datavaluefield="LogAttributeID" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="LogAttribute" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select>'
+                + ' label="' + label + '" ' + addCliked + ' on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="LogAttribute" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select>'
         }
 
         function LogAttributeCtor(ctrl, $scope, attrs) {
-
             function initializeController() {
-                defineAPI();
+                ctrl.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                }
+
             }
 
             function defineAPI() {
@@ -94,8 +92,8 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
                         selectedIds = payload.selectedIds;
                         attribute = payload.attribute;
                     }
-
-                    return getLogAttributeInfo(attrs, ctrl, selectedIds, attribute);
+                    if (attribute!=undefined)
+                        return getLogAttributeInfo(attrs, ctrl, selectedIds, attribute);
                 }
 
                 api.getSelectedIds = function () {
@@ -109,8 +107,8 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
         }
 
         function getLogAttributeInfo(attrs, ctrl, selectedIds, attribute) {
-            return VRCommon_LogAttributeAPIService.GetSpecificLogAttribute(attribute).then(function (response) {
-                ctrl.datasource.length = 0;
+            return VRCommon_LogAttributeAPIService.GetLogAttributesById(attribute).then(function (response) {
+                selectorAPI.clearDataSource();
                 angular.forEach(response, function (itm) {
                     ctrl.datasource.push(itm);
                 });

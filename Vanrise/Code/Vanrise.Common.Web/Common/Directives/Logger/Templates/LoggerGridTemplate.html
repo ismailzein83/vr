@@ -1,17 +1,17 @@
-﻿<vr-datagrid datasource="loggers"
+﻿<vr-datagrid datasource="logs"
              on-ready="onGridReady"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Entity.LogEntryId">
+             idfield="Entity.LogEntryId" defaultsortdirection="'DESC'">
 
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.LogEntryId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Machine Name'" field="'MachineName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Application Name'" field="'ApplicationName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Assembly Name'" field="'AssemblyName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Type Name'" field="'TypeName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Method Name'" field="'MethodName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Entry Type'" field="'EntryTypeName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Event Time'" field="'Entity.EventTime'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.LogEntryId'" type="'Text'" widthfactor="0.5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Machine Name'" field="'MachineName'" type="'Text'" widthfactor="0.9"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Application Name'" field="'ApplicationName'" type="'Text'" widthfactor="0.9"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Assembly Name'" field="'AssemblyName'" type="'Text'" widthfactor="0.9"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type Name'" field="'TypeName'" type="'Text'" widthfactor="0.9"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Method Name'" field="'MethodName'" type="'Text'" widthfactor="0.9"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Entry Type'" field="'EntryTypeName'" type="'Text'" widthfactor="0.9"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Event Time'" field="'Entity.EventTime'" type="'Text'" widthfactor="0.9"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'" widthfactor="3"></vr-datagridcolumn>
 </vr-datagrid>

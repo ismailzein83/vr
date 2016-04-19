@@ -27,12 +27,11 @@ function (UtilsService, VRNotificationService, VRCommon_LogEntryAPIService) {
     function LoggerGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
-        var disabCountry;
         this.initializeController = initializeController;
 
         function initializeController() {
 
-            $scope.loggers = [];
+            $scope.logs = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
@@ -49,7 +48,7 @@ function (UtilsService, VRNotificationService, VRCommon_LogEntryAPIService) {
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return VRCommon_LogEntryAPIService.GetFilteredLoggers(dataRetrievalInput)
+                return VRCommon_LogEntryAPIService.GetFilteredLogs(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })

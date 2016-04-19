@@ -10,12 +10,6 @@
                     <vr-row>
                         <vr-columns width="normal">
                             <vr-common-log-entry-type-selector ismultipleselection label="Machine" on-ready="onEntryTypeDirectiveReady"></vr-common-log-entry-type-selector>
-                        </vr-columns>                      
-                        <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" label="From" value="fromDate" customvalidate="validateDateTime()"></vr-datetimepicker>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" label="To" value="toDate" customvalidate="validateDateTime()"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-common-log-attribute-selector ismultipleselection label="Machine" on-ready="onMachineDirectiveReady"></vr-common-log-attribute-selector>
@@ -25,6 +19,12 @@
                         </vr-columns>
                         <vr-columns ng-show="advancedSelected" width="normal">
                             <vr-common-log-attribute-selector ismultipleselection label="Assembly" on-ready="onAssemblyDirectiveReady"></vr-common-log-attribute-selector>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="dateTime" label="From" value="fromDate" customvalidate="validateDateTime()"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="normal">
+                            <vr-datetimepicker type="dateTime" label="To" value="toDate" customvalidate="validateDateTime()"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns ng-show="advancedSelected" width="normal">
                             <vr-common-log-attribute-selector ismultipleselection label="Type" on-ready="onTypeDirectiveReady"></vr-common-log-attribute-selector>

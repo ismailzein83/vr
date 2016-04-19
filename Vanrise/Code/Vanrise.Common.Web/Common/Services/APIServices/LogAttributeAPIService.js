@@ -6,15 +6,15 @@
     function logAttributeAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
         var controllerName = 'LogAttribute';
 
-        function GetSpecificLogAttribute(attribute) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetSpecificLogAttribute"), {
+        function GetLogAttributesById(attribute) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetLogAttributesById"), {
                 attribute: attribute
             });
 
         }
 
         return ({
-            GetSpecificLogAttribute: GetSpecificLogAttribute
+            GetLogAttributesById: GetLogAttributesById
         });
     }
 
