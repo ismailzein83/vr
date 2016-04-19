@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PriceListTemplateService.$inject = ['VRModalService', 'VRNotificationService'];
+    PriceListTemplateService.$inject = ['VRModalService'];
 
-    function PriceListTemplateService(VRModalService, VRNotificationService) {
+    function PriceListTemplateService(VRModalService) {
 
         function editOutputPriceListTemplate(priceListTemplateId, onPriceListTemplateUpdated) {
             var settings = {

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InputPriceListTemplateEditorController.$inject = ['$scope', 'XBooster_PriceListConversion_PriceListTemplateAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    InputPriceListTemplateEditorController.$inject = ['$scope', 'XBooster_PriceListConversion_PriceListTemplateAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-    function InputPriceListTemplateEditorController($scope, XBooster_PriceListConversion_PriceListTemplateAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function InputPriceListTemplateEditorController($scope, XBooster_PriceListConversion_PriceListTemplateAPIService, VRNotificationService, VRNavigationService, UtilsService) {
         var isEditMode;
         var priceListTemplateId;
         var priceListTemplateEntity;

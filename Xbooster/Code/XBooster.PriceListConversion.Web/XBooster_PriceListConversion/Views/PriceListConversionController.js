@@ -1,8 +1,8 @@
 ﻿(
     function (appControllers) {
         "use strict";
-        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'XBooster_PriceListConversion_PriceListConversionAPIService','VRModalService','XBooster_PriceListConversion_PriceListTemplateService','XBooster_PriceListConversion_PriceListTemplateAPIService'];
-        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, XBooster_PriceListConversion_PriceListConversionAPIService, VRModalService, XBooster_PriceListConversion_PriceListTemplateService, XBooster_PriceListConversion_PriceListTemplateAPIService) {
+        priceListConversionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'XBooster_PriceListConversion_PriceListConversionAPIService','XBooster_PriceListConversion_PriceListTemplateService','XBooster_PriceListConversion_PriceListTemplateAPIService'];
+        function priceListConversionController($scope, UtilsService, VRNotificationService, VRUIUtilsService, XBooster_PriceListConversion_PriceListConversionAPIService, XBooster_PriceListConversion_PriceListTemplateService, XBooster_PriceListConversion_PriceListTemplateAPIService) {
 
             var inputWorkBookApi;
             var outPutWorkBookAPI;

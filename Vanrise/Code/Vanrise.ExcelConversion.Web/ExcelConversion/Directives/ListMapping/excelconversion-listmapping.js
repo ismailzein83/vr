@@ -90,7 +90,7 @@
                                     sheet: listMappingData.SheetIndex
                                 }
                             }
-                            if (listMappingData.lastRowIndex)
+                            if (listMappingData.LastRowIndex)
                             {
                                 ctrl.lastRowIndex = {
                                     row: listMappingData.LastRowIndex,
