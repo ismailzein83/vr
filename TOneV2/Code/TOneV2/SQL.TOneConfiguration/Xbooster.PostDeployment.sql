@@ -16,7 +16,8 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1401,'CDR Tools',null,null,'/images/menu-icons/Purchase Area.png',4,0)
+(1401,'CDR Tools',null,null,'/images/menu-icons/Purchase Area.png',4,0),
+(1402,'Supplier Pricelists',null,null,'/images/menu-icons/Purchase Area.png',5,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -38,8 +39,8 @@ set identity_insert [sec].[View] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (14001,'CDR Comparison','CDR Comparison','#/view/CDRComparison/Views/CDRComparison',1401,'CDRComparison/CDRSourceConfig/GetCDRSourceConfigs & CDRComparison/CDRComparison/GetCDRSourceTemplateConfigs & CDRComparison/CDRComparison/GetFileReaderTemplateConfigs & CDRComparison/CDRSource/ReadSample & CDRComparison/FileCDRSource/GetMaxUncompressedFileSizeInMegaBytes',null,null,null,0,1),
-(14002,'Pricelist Conversion','Pricelist Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion',1401,'XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListConversion/ConvertAndDownloadPriceList',null,null,null,0,2),
-(14003,'Pricelist Templates','Pricelist Templates','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1401,'XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates',null,null,null,0,3)
+(14002,'Conversion','Pricelist Conversion','#/view/XBooster_PriceListConversion/Views/PriceListConversion',1402,'XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListConversion/ConvertAndDownloadPriceList',null,null,null,0,1),
+(14003,'Templates','Pricelist Templates','#/view/XBooster_PriceListConversion/Views/PriceListTemplateManagement',1402,'XBooster_PriceListConversion/PriceListTemplate/XBooster_PriceListConversion/PriceListTemplate/GetFilteredInputPriceListTemplates',null,null,null,0,2)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
