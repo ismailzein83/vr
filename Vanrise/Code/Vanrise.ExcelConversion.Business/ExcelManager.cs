@@ -55,10 +55,10 @@ namespace Vanrise.ExcelConversion.Business
                 ewb.Sheets.Add(eSheet);
                 eSheet.Name = sheet.Name;
                 int nbOfSheetColumns = 0;
-                for (int j = 0; j <= 100; j++)
+                int maxDataRow = sheet.Cells.MaxDataRow;
+                for (int j = 0; j <= 100 && j <= maxDataRow; j++)
                 {
                     Row row = sheet.Cells.Rows[j]!=null ?(Row)sheet.Cells.Rows[j] :null;
-                    int maxDataRow = sheet.Cells.MaxDataRow;
                     int maxdatacol = sheet.Cells.MaxDataColumn;
                     ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
                     eSheet.Rows.Add(eRow);

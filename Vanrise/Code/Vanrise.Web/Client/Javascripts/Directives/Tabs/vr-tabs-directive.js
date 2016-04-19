@@ -22,7 +22,7 @@ app.directive('vrTabs', ['MultiTranscludeService', function (MultiTranscludeServ
                 if (ctrl.tabs[ctrl.selectedTabIndex] != undefined)
                     ctrl.tabs[ctrl.selectedTabIndex].isLoaded = true;
                 if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
-                    ctrl.onselectionchanged(ctrl.selectedTabIndex);
+                    ctrl.onselectionchanged();
                 }
             }
 

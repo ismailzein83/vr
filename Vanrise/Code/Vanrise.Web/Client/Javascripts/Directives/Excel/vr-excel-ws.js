@@ -127,7 +127,7 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                         clearInterval(inter);
                         api.isrendered = true;
                     }
-                    if (scope.i <= 1000) {
+                    if (scope.i <=1000) {
                         api.render();
                     }
 
