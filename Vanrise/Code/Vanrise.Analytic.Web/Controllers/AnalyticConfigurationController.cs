@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 namespace Vanrise.Analytic.Web.Controllers
 {
@@ -35,6 +36,14 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             AnalyticManager manager = new AnalyticManager();
             return GetWebResponse(input, manager.GetFiltered(input));
+        }
+
+        [HttpGet]
+        [Route("GetAnalyticReportSettingsTemplateConfigs")]
+        public IEnumerable<TemplateConfig> GetAnalyticReportSettingsTemplateConfigs()
+        {
+            AnalyticManager manager = new AnalyticManager();
+            return manager.GetAnalyticReportSettingsTemplateConfigs();
         }
 
     }

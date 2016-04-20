@@ -19,11 +19,15 @@
         function GetFilteredRecords(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredRecords"), input);
         }
+        function GetAnalyticReportSettingsTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticReportSettingsTemplateConfigs"));
+        }
         return ({
             GetDimensionsInfo: GetDimensionsInfo,
             GetMeasuresInfo: GetMeasuresInfo,
             GetFilteredRecords: GetFilteredRecords,
-            GetAnalyticRecords: GetAnalyticRecords
+            GetAnalyticRecords: GetAnalyticRecords,
+            GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs
         });
     }
 

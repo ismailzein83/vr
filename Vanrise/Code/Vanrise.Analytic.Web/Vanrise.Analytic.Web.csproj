@@ -77,7 +77,9 @@
     <Compile Include="Controllers\AnalyticTableController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Analytic\Directives\MainExtensions\Widgets\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
       <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
@@ -100,11 +102,14 @@
     <Content Include="Analytic\Constants\ModuleConfig.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-selector.js" />
+    <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-reportsearchsettings-selective.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-table-selector.js" />
     <Content Include="Analytic\Directives\Grid\Templates\AnalyticReportGridFilter.html" />
     <Content Include="Analytic\Directives\Grid\Templates\AnalyticRecordsDataGrid.html" />
     <Content Include="Analytic\Directives\Grid\vr-analytic-datagrid-analyticrecords.js" />
     <Content Include="Analytic\Directives\Grid\vr-analytic-gridfilter.js" />
+    <Content Include="Analytic\Directives\MainExtensions\SearchSettings\Templates\GenericSearchTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticConfigurationAPIService.js" />

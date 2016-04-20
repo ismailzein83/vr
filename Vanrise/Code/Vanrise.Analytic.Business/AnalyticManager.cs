@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.Analytic.Business
 {
@@ -29,6 +31,12 @@ namespace Vanrise.Analytic.Business
             dataManager.Measures = configManager.GetMeasures(table.AnalyticTableId);
             dataManager.Joins = configManager.GetJoins(table.AnalyticTableId);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAnalyticRecords(input));
+        }
+
+        public IEnumerable<TemplateConfig> GetAnalyticReportSettingsTemplateConfigs()
+        {
+            var templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.AnalyticReportSettingsConfigType);
         }
     }
 }

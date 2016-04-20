@@ -11,10 +11,8 @@
         var recordTypeEntity;
         var viewId;
 
-        //var dataRecordTypeSelectorAPI;
-        //var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        
+        var searchSettingDirectiveAPI;
+        var searchSettingReadyDeferred;
 
 
         var menuItems;
@@ -22,8 +20,6 @@
         var tableSelectorAPI;
         var tableSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var groupingDimensionSelectorAPI;
-        var filterDimensionSelectorAPI;
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
         var viewEntity;
@@ -43,90 +39,22 @@
         function defineScope() {
             $scope.scopeModel = {}
             $scope.scopeModel.selectedTables = [];
+
+            $scope.scopeModel.onSearchSettingsDirectiveReady = function(api)
+            {
+                searchSettingDirectiveAPI = api;
+                    var setLoader = function (value) { $scope.isLoadingDimensionDirective = value };
+                    var payload = {
+                        tableIds: tableSelectorAPI.getSelectedIds()
+                    }
+            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, searchSettingDirectiveAPI, payload, setLoader);
+            }
+
             $scope.scopeModel.onTableSelectorDirectiveReady = function(api)
             {
                 tableSelectorAPI = api;
                 tableSelectorReadyDeferred.resolve();
             }
-
-            $scope.scopeModel.onGroupingDimensionSelectorDirectiveReady = function (api)
-            {
-                groupingDimensionSelectorAPI = api;
-                var setLoader = function (value) { $scope.isLoadingDimensionDirective = value };
-                var payload = {
-                    filter: { TableIds: tableSelectorAPI.getSelectedIds()}
-                }
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, groupingDimensionSelectorAPI, payload, setLoader);
-            }
-            $scope.scopeModel.groupingDimensions = [];
-            $scope.scopeModel.isValidGroupingDimensions = function () {
-
-                if ($scope.scopeModel.groupingDimensions.length > 0)
-                    return null;
-                return "At least one dimention should be selected.";
-            }
-            $scope.scopeModel.onSelectGroupingDimensionItem = function (dimension) {
-                var dataItem ={
-                    AnalyticItemConfigId: dimension.AnalyticItemConfigId,
-                    Title: dimension.Title,
-                    Name: dimension.Name,
-                    IsSelected :false
-                };
-                $scope.scopeModel.groupingDimensions.push(dataItem);
-            }
-            $scope.scopeModel.onDeselectGroupingDimensionItem = function (dataItem) {
-                var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.groupingDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
-                $scope.scopeModel.groupingDimensions.splice(datasourceIndex, 1);
-            }
-            $scope.scopeModel.removeGroupingDimension = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGroupingDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
-                $scope.scopeModel.selectedGroupingDimensions.splice(index, 1);
-                var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.groupingDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
-                $scope.scopeModel.groupingDimensions.splice(datasourceIndex, 1);
-            };
-
-
-            $scope.scopeModel.filterDimensions = [];
-            $scope.scopeModel.onFilterDimensionSelectorDirectiveReady = function (api) {
-                filterDimensionSelectorAPI = api;
-                var setLoader = function (value) { $scope.isLoadingDimensionDirective = value };
-                var payload = {
-                    filter: { TableIds: tableSelectorAPI.getSelectedIds() }
-                }
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionSelectorAPI, payload, setLoader);
-            }
-            $scope.scopeModel.isValidFilterDimensions = function () {
-
-                if ($scope.scopeModel.filterDimensions.length > 0)
-                    return null;
-                return "At least one dimention should be selected.";
-            }
-            $scope.scopeModel.onSelectFilterDimensionItem = function (dimension) {
-                var dataItem = {
-                    AnalyticItemConfigId: dimension.AnalyticItemConfigId,
-                    Title: dimension.Title,
-                    Name: dimension.Name,
-                    IsRequired: false,
-                    onFieldTypeReady:function(api)
-                    {
-                        dataItem.fieldAPI = api;
-                        var setLoader = function (value) { $scope.isLoadingDimensionDirective = value };
-                        var payload;
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldAPI, payload, setLoader);
-                    }
-                };
-                $scope.scopeModel.filterDimensions.push(dataItem);
-            }
-            $scope.scopeModel.onDeselectFilterDimensionItem = function (dataItem) {
-                var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
-                $scope.scopeModel.filterDimensions.splice(datasourceIndex, 1);
-            }
-            $scope.scopeModel.removeFilterDimension = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGroupingDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
-                $scope.scopeModel.selectedGroupingDimensions.splice(index, 1);
-                var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
-                $scope.scopeModel.filterDimensions.splice(datasourceIndex, 1);
-            };
 
 
             $scope.scopeModel.SaveGenericBEEditor = function () {
@@ -255,14 +183,9 @@
 
         function buildViewObjectFromScope() {
             var viewSettings = {
-                $type: "Vanrise.GenericData.Entities.GenericBEDefinitionSettings, Vanrise.GenericData.Entities",
-                DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
-                FieldPath: $scope.scopeModel.selectedTitleFieldPath.Name,
-                EditorDesign: genericEditorDesignAPI.getData(),
-                ManagementDesign: {
-                    GridDesign: gridFieldsDirectiveAPI.getData(),
-                    FilterDesign: filterFieldsDirectiveAPI.getData()
-                }
+                $type: "Vanrise.Analytic.Entities.AnalyticReportSettings, Vanrise.Analytic.Entities",
+                AnalyticTableIds:tableSelectorAPI!=undefined?tableSelectorAPI.getSelectedIds():undefined,
+                GroupingDimensions: searchSettingDirectiveAPI !=undefined?searchSettingDirectiveAPI.getData():undefined,
             };
             return {
                 ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
@@ -270,7 +193,7 @@
                 Title: $scope.scopeModel.businessEntityTitle,
                 ModuleId: $scope.scopeModel.selectedMenuItem.Id,
                 Settings: viewSettings,
-                Type: viewEntity !=undefined?viewEntity.Type:undefined,
+                Type: viewEntity!=undefined?viewEntity.Type:undefined,
                 
             };
         }
