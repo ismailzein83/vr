@@ -163,9 +163,12 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                         orderOptions.push(optionOrderItem);
                     }
                 }
-
+                var requiredItems = [];
                 var loadTemplatesPromise = WhS_Routing_RoutRuleSettingsAPIService.GetRouteOptionOrderSettingsTemplates().then(function (response) {
                     angular.forEach(response, function (item) {
+                        if (item.Settings != null && item.Settings.IsRequired) {
+                            requiredItems.push(item);
+                        }
                         ctrl.optionOrderSettingsGroupTemplates.push(item);
                     });
 
@@ -191,13 +194,16 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                             }
                         }
                     }
-                    
-                    if (ctrl.optionOrderSettingsGroupTemplates.length > 0) {
-                        for (var m = (ctrl.optionOrderSettingsGroupTemplates.length - 1) ; m >= 0; m--) {
-                            var currentItem = ctrl.optionOrderSettingsGroupTemplates[m];
-                            if (currentItem.Settings != null && currentItem.Settings.IsRequired) {
-                                addNewItem(currentItem);
-                                ctrl.optionOrderSettingsGroupTemplates.splice(m, 1);
+
+                    if (requiredItems.length > 0 && ctrl.optionOrderSettingsGroupTemplates.length > 0) {
+                        for (var y = 0; y < requiredItems.length; y++) {
+                            var currentRequiredItem = requiredItems[y];
+                            for (var z = 0 ; z < ctrl.optionOrderSettingsGroupTemplates.length; z++) {
+                                var currentItem = ctrl.optionOrderSettingsGroupTemplates[z];
+                                if (currentItem.TemplateConfigID == currentRequiredItem.TemplateConfigID) {
+                                    addNewItem(currentItem);
+                                    break;
+                                }
                             }
                         }
                     }
