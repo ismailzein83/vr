@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePreparationManagementController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService', 'WhS_CP_NewCPOutputResultEnum', 'WhS_CP_ZoneItemDraftStatusEnum', 'WhS_CP_ZoneItemStatusEnum', 'WhS_CP_ValidationOutput', 'WhS_CodePrep_CodePrepService'];
+    CodePreparationManagementController.$inject = ['$scope', 'WhS_CP_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService', 'WhS_CP_NewCPOutputResultEnum', 'WhS_CP_ZoneItemDraftStatusEnum', 'WhS_CP_ZoneItemStatusEnum', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService'];
 
-    function CodePreparationManagementController($scope, WhS_CodePrep_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService, WhS_CP_NewCPOutputResultEnum, WhS_CP_ZoneItemDraftStatusEnum, WhS_CP_ZoneItemStatusEnum, WhS_CP_ValidationOutput, WhS_CodePrep_CodePrepService) {
+    function CodePreparationManagementController($scope, WhS_CP_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService, WhS_CP_NewCPOutputResultEnum, WhS_CP_ZoneItemDraftStatusEnum, WhS_CP_ZoneItemStatusEnum, WhS_CP_ValidationOutput, WhS_CP_CodePrepService) {
 
         //#region Global Variables
 
@@ -12,11 +12,8 @@
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var treeAPI;
         var codesGridAPI;
-        var currencyDirectiveAPI;
-        var currencyReadyPromiseDeferred;
         var countries = [];
         var filter;
-        var incrementalNodeId = 0;
 
         //#endregion
 
@@ -36,21 +33,21 @@
             $scope.selectedSellingNumberPlan;
             $scope.currentNode;
 
-            showState(false);
-            showSaleCodes(false);
+            hideShowState(false);
+            hideShowSaleCodes(false);
 
             $scope.selectedCodes = [];
 
             $scope.applyCodePreparationState = function () {
                 var onCodePreparationStateApplied = function () {
                 };
-                return WhS_CodePrep_CodePrepAPIService.ApplyCodePreparationState(filter.sellingNumberPlanId, onCodePreparationStateApplied);
+                return WhS_CP_CodePrepAPIService.ApplyCodePreparationState(filter.sellingNumberPlanId, onCodePreparationStateApplied);
             }
 
             $scope.uploadCodePreparation = function () {
                 var onCodePreparationUpdated = function () {
                 };
-                return WhS_CodePrep_CodePrepAPIService.UploadCodePreparationSheet(filter.sellingNumberPlanId, onCodePreparationUpdated);
+                return WhS_CP_CodePrepAPIService.UploadCodePreparationSheet(filter.sellingNumberPlanId, onCodePreparationUpdated);
             }
 
             $scope.onSellingNumberPlanSelectorReady = function (api) {
@@ -62,42 +59,37 @@
                 treeAPI = api;
             }
 
-            $scope.countriesTreeValueChanged = function () {
+            $scope.onNodeSelection = function () {
+
+                var promise;
 
                 if ($scope.currentNode != undefined) {
-                    $scope.selectedCodes.length = 0;
                     if ($scope.currentNode.type == 'Zone') {
-                        checkState();
-
-                        showRenameZone($scope.currentNode.DraftStatus, $scope.currentNode.status);
-                        showEnd($scope.currentNode.DraftStatus, $scope.currentNode.status);
-                        showAddCode($scope.currentNode.DraftStatus, $scope.currentNode.status);
-                        showSaleCodes(true);
-                        showAddZone(false);
-
+                        clearCodesSelection();
+                        setZoneStateVisibility($scope.currentNode.DraftStatus, $scope.currentNode.status);
                         codesGridAPI.clearUpdatedItems();
-                        return codesGridAPI.loadGrid(getCodesFilterObject());
+                        promise = codesGridAPI.loadGrid(getCodesFilterObject());
                     }
-
-                    clear(false);
-                    showAddZone(true);
+                    else
+                        setCountryStateVisibility();
                 }
+
+                return promise;
 
             }
 
             $scope.loadEffectiveSaleZones = function (countryNode) {
                 var effectiveZonesPromiseDeffered = UtilsService.createPromiseDeferred();
-                WhS_CodePrep_CodePrepAPIService.GetZoneItems(filter.sellingNumberPlanId, countryNode.nodeId).then(function (response) {
+                WhS_CP_CodePrepAPIService.GetZoneItems(filter.sellingNumberPlanId, countryNode.nodeId).then(function (response) {
                     var effectiveZones = [];
                     angular.forEach(response, function (itm) {
                         effectiveZones.push(mapZoneToNode(itm));
                     });
 
                     var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, countryNode.nodeId, 'nodeId');
-                    var parentNode = $scope.nodes[countryIndex];
+                    var currentCountry = $scope.nodes[countryIndex];
+                    currentCountry.effectiveZones = effectiveZones;
 
-                    parentNode.effectiveZones = effectiveZones;
-                    $scope.nodes[countryIndex] = parentNode;
                     effectiveZonesPromiseDeffered.resolve(effectiveZones);
                 });
                 return effectiveZonesPromiseDeffered.promise;
@@ -105,9 +97,8 @@
 
             $scope.onSellingNumberPlanSelectorChanged = function () {
                 var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
-                clear(false);
+                setSellingNumberPlanChangedStateVisibility();
                 if (selectedSellingNumberPlanId != undefined) {
-                    countries.length = 0;
                     filter = getFilter();
                     $scope.isLoadingCountries = true;
                     UtilsService.waitMultipleAsyncOperations([getCountries, checkState]).then(function () {
@@ -118,8 +109,6 @@
                         $scope.isLoadingCountries = false;
                     });
                 }
-                else
-                    $scope.selectedCodes.length = 0;
             }
 
 
@@ -186,7 +175,7 @@
                 return VRNotificationService.showConfirmation().then(function (result) {
                     if (result) {
                         countries.length = 0;
-                        return WhS_CodePrep_CodePrepAPIService.CancelCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
+                        return WhS_CP_CodePrepAPIService.CancelCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
                             $scope.hasState = !response;
                             $scope.onSellingNumberPlanSelectorChanged();
                         });
@@ -241,7 +230,7 @@
 
         function onZoneAdded(addedZones) {
             if (addedZones != undefined) {
-                showState(true);
+                hideShowState(true);
                 var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.nodeId, 'nodeId');
                 var countryNode = $scope.nodes[countryIndex];
                 for (var i = 0; i < addedZones.length; i++) {
@@ -256,44 +245,51 @@
         }
 
         function onZoneClosed() {
-            showState(true);
+            hideShowState(true);
 
             var zoneNode = getCurrentZoneNode();
-            zoneNode.DraftStatus = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
+            var draftStatus = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
+            
 
-            showRenameZone(zoneNode.DraftStatus, zoneNode.Status);
-            showEnd(zoneNode.DraftStatus, zoneNode.Status);
-            showAddCode(zoneNode.DraftStatus, zoneNode.Status);
+            $scope.currentNode.DraftStatus = draftStatus;
+            $scope.currentNode.icon = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon;
+            zoneNode.DraftStatus = draftStatus;
+            hideShowRenameZone(draftStatus, zoneNode.Status);
+            hideShowEnd(draftStatus, zoneNode.Status);
+            hideShowAddCode(draftStatus, zoneNode.Status);
 
-            var node = mapClosedZoneToNode();
-            treeAPI.createNode(node);
+            treeAPI.changeNodeIcon(WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon);
 
             return codesGridAPI.loadGrid(getCodesFilterObject());
         }
 
         function onZoneRenamed(renamedZone) {
-            showState(true);
+            hideShowState(true);
 
             var zoneNode = getCurrentZoneNode();
+            var draftStatus = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value;
+            var icon = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon;
+
+            $scope.currentNode.nodeName = renamedZone.NewZoneName;
+            $scope.currentNode.originalZoneName = renamedZone.OriginalZoneName;
 
             zoneNode.nodeName = renamedZone.NewZoneName;
             zoneNode.originalZoneName = renamedZone.OriginalZoneName;
-            zoneNode.DraftStatus = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value;
-            zoneNode.icon = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon;
 
-            showEnd(zoneNode.DraftStatus, zoneNode.Status);
+            zoneNode.DraftStatus = draftStatus;
+            zoneNode.icon = icon;
 
-            var node = mapRenamedZoneToNode(renamedZone);
-            treeAPI.createNode(node);
+            hideShowEnd(draftStatus, zoneNode.Status);
 
-            treeAPI.refreshTree($scope.nodes);
+            treeAPI.renameNode(renamedZone.NewZoneName);
+            treeAPI.changeNodeIcon(icon);
 
             return codesGridAPI.loadGrid(getCodesFilterObject());
         }
 
         function onCodeAdded(addedCodes) {
             if (addedCodes != undefined) {
-                showState(true);
+                hideShowState(true);
                 for (var i = 0; i < addedCodes.length; i++)
                     codesGridAPI.onCodeAdded(addedCodes[i]);
 
@@ -309,8 +305,8 @@
         function onCodesMoved(movedCodes) {
 
             if (movedCodes != undefined) {
-                $scope.selectedCodes.length = 0;
-                showState(true);
+                clearCodesSelection();
+                hideShowState(true);
                 for (var i = 0; i < movedCodes.length; i++)
                     codesGridAPI.onCodeClosed(movedCodes[i]);
 
@@ -325,8 +321,8 @@
 
         function onCodesClosed(closedCodes) {
             if (closedCodes != undefined) {
-                $scope.selectedCodes.length = 0;
-                showState(true);
+                clearCodesSelection();
+                hideShowState(true);
                 for (var i = 0; i < closedCodes.length; i++)
                     codesGridAPI.onCodeClosed(closedCodes[i]);
 
@@ -345,6 +341,7 @@
                 ZoneId: $scope.currentNode.nodeId,
                 ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
                 SellingNumberPlanId: filter.sellingNumberPlanId,
+                CountryId: $scope.currentNode.countryId,
                 Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
             };
             var settings = {};
@@ -365,14 +362,14 @@
                         ZoneId: $scope.currentNode.nodeId,
                         ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
                     };
-                    return WhS_CodePrep_CodePrepAPIService.CloseZone(zoneInput)
+                    return WhS_CP_CodePrepAPIService.CloseZone(zoneInput)
                      .then(function (response) {
                          if (response.Result == WhS_CP_ValidationOutput.Success.value) {
                              onZoneClosed();
                              VRNotificationService.showSuccess(response.Message);
                          }
                          else if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
-                             WhS_CodePrep_CodePrepService.NotifyValidationWarning(response.Message);
+                             WhS_CP_CodePrepService.NotifyValidationWarning(response.Message);
                          }
                      }).catch(function (error) {
                          VRNotificationService.notifyException(error, $scope);
@@ -385,46 +382,76 @@
             });
         }
 
-        function clear(flag) {
-            showSaleCodes(flag);
-            $scope.showAddNewCode = flag;
-            showAddZone(flag);
-            $scope.showRenameZone = flag;
-            $scope.showEnd = flag;
+
+        
+
+        function clearCodesSelection() {
+            $scope.selectedCodes.length = 0;
         }
 
-        function showRenameZone(draftStatus, status) {
+        //#region "Hide Show"
+
+        function setZoneStateVisibility(draftStatus, status) {
+            hideShowRenameZone(draftStatus, status);
+            hideShowEnd(draftStatus, status);
+            hideShowAddCode(draftStatus, status);
+            hideShowSaleCodes(true);
+            hideShowAddZone(false);
+        }
+
+        function setCountryStateVisibility() {
+            hideShowSaleCodes(false);
+            $scope.showAddNewCode = false;
+            hideShowAddZone(true);
+            $scope.showRenameZone = false;
+            $scope.showEnd = false;
+        }
+
+        function setSellingNumberPlanChangedStateVisibility() {
+            hideShowSaleCodes(false);
+            $scope.showAddNewCode = false;
+            hideShowAddZone(false);
+            $scope.showRenameZone = false;
+            $scope.showEnd = false;
+            hideShowState(false);
+            clearCodesSelection();
+        }
+
+        function hideShowRenameZone(draftStatus, status) {
             if (status != null)
                 $scope.showRenameZone = false;
             else
                 $scope.showRenameZone = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
         }
 
-        function showEnd(draftStatus, status) {
+        function hideShowEnd(draftStatus, status) {
             if (status != null)
                 $scope.showEnd = false;
             else
                 $scope.showEnd = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && draftStatus != WhS_CP_ZoneItemDraftStatusEnum.New.value && draftStatus != WhS_CP_ZoneItemDraftStatusEnum.Renamed.value;
         }
 
-        function showAddCode(draftStatus, status) {
+        function hideShowAddCode(draftStatus, status) {
             if (status != null)
                 $scope.showAddNewCode = status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value;
             else
                 $scope.showAddNewCode = draftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
         }
 
-        function showAddZone(flag) {
+        function hideShowAddZone(flag) {
             $scope.showAddNewZone = flag;
         }
 
-        function showSaleCodes(flag) {
+        function hideShowSaleCodes(flag) {
             $scope.showGrid = flag;
         }
 
-        function showState(flag) {
+        function hideShowState(flag) {
             $scope.hasState = flag;
         }
+
+
+        //#endRegion
 
         function getCurrentZoneNode() {
             var countryIndex = UtilsService.getItemIndexByVal($scope.nodes, $scope.currentNode.countryId, 'nodeId');
@@ -468,7 +495,7 @@
 
         function checkState() {
             countries.length = 0;
-            return WhS_CodePrep_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
+            return WhS_CP_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
                 $scope.hasState = response;
             });
         }
@@ -535,34 +562,6 @@
             };
         }
 
-        function mapRenamedZoneToNode(renamedZone) {
-
-            return {
-                nodeId: renamedZone.ZoneId != null ? renamedZone.ZoneId : "generatedId_" + incrementalNodeId++,
-                nodeName: renamedZone.NewZoneName,
-                originalZoneName: renamedZone.OriginalZoneName,
-                hasRemoteChildren: false,
-                effectiveZones: [],
-                type: 'Zone',
-                DraftStatus: renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value,
-                countryId: renamedZone.CountryId,
-                icon: renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon
-            };
-        }
-
-        function mapClosedZoneToNode() {
-            return {
-                nodeId: $scope.currentNode.nodeId,
-                nodeName: $scope.currentNode.nodeName,
-                hasRemoteChildren: false,
-                effectiveZones: [],
-                type: 'Zone',
-                DraftStatus: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value,
-                countryId: $scope.currentNode.countryId,
-                icon: WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon
-            };
-
-        }
 
         //#endregion
 

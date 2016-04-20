@@ -2,18 +2,21 @@
 
     "use strict";
 
-    newCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_ValidationOutput', 'WhS_CodePrep_CodePrepService'];
+    NewCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService'];
 
-    function newCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_ValidationOutput, WhS_CodePrep_CodePrepService) {
+    function NewCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_ValidationOutput, WhS_CP_CodePrepService) {
 
         var countryId;
-        var editMode;
-        var codeEntity;
         var sellingNumberPlanId;
         var zoneName;
         var zoneId;
-        defineScope();
+
         loadParameters();
+
+        defineScope();
+
+        load();
+
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
@@ -23,31 +26,30 @@
                 zoneName = parameters.ZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
             }
-            editMode = ($scope.code != undefined);
-            load();
+
         }
+
         function defineScope() {
             $scope.code;
             $scope.codeValue;
             $scope.codes = [];
+
             $scope.saveCode = function () {
-                if (editMode) {
-                    return updateCode();
-                }
-                else {
-                    return insertCode();
-                }
+                return insertCode();
             };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
+
             $scope.disabledCode = true;
+
             $scope.onCodeValueChange = function (value) {
-                $scope.disabledCode = (value == undefined) || UtilsService.getItemIndexByVal($scope.codes, value,"code")!=-1;
+                $scope.disabledCode = (value == undefined) || UtilsService.getItemIndexByVal($scope.codes, value, "code") != -1;
             }
+
             $scope.addCodeValue = function () {
-                $scope.codes.push({ code: $scope.codeValue});
+                $scope.codes.push({ code: $scope.codeValue });
                 $scope.codeValue = undefined;
                 $scope.disabledCode = true;
             };
@@ -60,41 +62,15 @@
         }
 
         function load() {
-
-            $scope.isGettingData = true;
-            if (zoneId != undefined) {
-                $scope.title = UtilsService.buildTitleForAddEditor("Code for " + zoneName);
-                loadAllControls();
-            }
-            else if (editMode) {
-                getCode().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            codeEntity = undefined;
-                        });
-                }).catch(function () {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
-            }
-            else {
-                loadAllControls();
-                $scope.title = UtilsService.buildTitleForAddEditor("Code for " + zoneName);
-            }
-        }
-        function loadAllControls() {
-            $scope.isGettingData = false;
+            $scope.title = UtilsService.buildTitleForAddEditor("Code for " + zoneName);
         }
 
-
-        function getCode() {
-
-        }
 
         function buildCodesObjFromScope() {
             var result = [];
             for (var i = 0; i < $scope.codes.length ; i++) {
                 result.push({
-                    Code:  $scope.codes[i].code,
+                    Code: $scope.codes[i].code,
                     ZoneName: zoneName,
                     CountryId: countryId
                 });
@@ -102,31 +78,24 @@
             return result;
         }
 
-        function getNewCodeFromCodeObj(codeItems) {
+        function getNewCodeFromCodeObj() {
             return {
                 SellingNumberPlanId: sellingNumberPlanId,
                 CountryId: countryId,
                 ZoneId: zoneId,
-                NewCodes: codeItems,
+                NewCodes: buildCodesObjFromScope(),
             }
         }
 
-        function fillScopeFromCodeObj(code) {
-            $scope.name = code.Code;
-            $scope.title = UtilsService.buildTitleForUpdateEditor($scope.code, "Code for " + zoneName);
-        }
         function insertCode() {
-            var codeItems = buildCodesObjFromScope();
-
-            var input = getNewCodeFromCodeObj(codeItems);
-            return WhS_CodePrep_CodePrepAPIService.SaveNewCode(input)
+            var input = getNewCodeFromCodeObj();
+            return WhS_CP_CodePrepAPIService.SaveNewCode(input)
             .then(function (response) {
                 if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
-                    WhS_CodePrep_CodePrepService.NotifyValidationWarning(response.Message);
+                    WhS_CP_CodePrepService.NotifyValidationWarning(response.Message);
                     $scope.codes.length = 0;
-                    for (var i = 0; i < response.CodeItems.length;i++)
-                    {
-                        $scope.codes.push({ code: response.CodeItems[i].Code, message: response.CodeItems[i].Message});
+                    for (var i = 0; i < response.CodeItems.length; i++) {
+                        $scope.codes.push({ code: response.CodeItems[i].Code, message: response.CodeItems[i].Message });
                     }
                 }
                 else if (response.Result == WhS_CP_ValidationOutput.Success.value) {
@@ -139,18 +108,8 @@
                 VRNotificationService.notifyException(error, $scope);
             });
         }
-        function updateCode() {
-
-        }
-
-        function applyChanges(codeChanges, codeItem) {
-            var codeItemNew = {
-
-            };
-            codeChanges.push(codeItemNew);
-        }
 
     }
 
-    appControllers.controller('WhS_Codepreparation_NewcodedialogController', newCodeDialogController);
+    appControllers.controller('WhS_CP_NewCodeDialogController', NewCodeDialogController);
 })(appControllers);

@@ -10,7 +10,7 @@ namespace TOne.WhS.CodePreparation.Entities
     {
         public string Message { get; set; }
 
-        public List<CodeItem> NewCodes { get; set; }
+        public IEnumerable<CodeItem> NewCodes { get; set; }
 
         public ValidationOutput Result { get; set; }
     }

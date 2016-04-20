@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsCodepreparationCodesgrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_CodePrep_CodePrepAPIService', 'UtilsService', 'WhS_CP_CodeItemDraftStatusEnum', 'WhS_CP_CodeItemStatusEnum',
-function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIService, UtilsService, WhS_CP_CodeItemDraftStatusEnum, WhS_CP_CodeItemStatusEnum) {
+app.directive('vrWhsCodepreparationCodesgrid', ['VRNotificationService', 'VRUIUtilsService', 'WhS_CP_CodePrepAPIService', 'UtilsService', 'WhS_CP_CodeItemDraftStatusEnum', 'WhS_CP_CodeItemStatusEnum',
+function (VRNotificationService, VRUIUtilsService, WhS_CP_CodePrepAPIService, UtilsService, WhS_CP_CodeItemDraftStatusEnum, WhS_CP_CodeItemStatusEnum) {
 
     var directiveDefinitionObject = {
 
@@ -56,14 +56,8 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                     }
                     directiveAPI.clearUpdatedItems = gridAPI.clearUpdatedItems;
                     directiveAPI.getSelectedCodes = function () {
-                        var selectedCodes = [];
-                        angular.forEach($scope.salecodes, function (itm) {
-                            if (itm.IsSelected)
-                                selectedCodes.push(itm);
-                        });
-                        return selectedCodes;
+                        return ctrl.selectedcodes;
                     };
-
 
                     return directiveAPI;
                 }
@@ -82,7 +76,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
             }
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_CodePrep_CodePrepAPIService.GetCodeItems(dataRetrievalInput)
+                return WhS_CP_CodePrepAPIService.GetCodeItems(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0 ; i < response.Data.length; i++) {
@@ -100,7 +94,7 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
 
             function mapDataNeeded(dataItem) {
                 dataItem.ShowDraftStatusIcon = true;
-                dataItem.ShowStatus = dataItem.Status != null;
+                dataItem.ShowStatusIcon = dataItem.Status != null;
                 dataItem.ShowSelectCode = $scope.ShowSelectCode && dataItem.DraftStatus == WhS_CP_CodeItemDraftStatusEnum.ExistingNotChanged.value && dataItem.Status == null;
 
                 switch (dataItem.DraftStatus) {
@@ -108,13 +102,13 @@ function (VRNotificationService, VRUIUtilsService, WhS_CodePrep_CodePrepAPIServi
                         dataItem.ShowDraftStatusIcon = false;
                         break;
 
-                    case WhS_CP_CodeItemDraftStatusEnum.ExistingMoved.value:
+                    case WhS_CP_CodeItemDraftStatusEnum.MovedFrom.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/MovedFrom.png";
-                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.NewMoved.label + " " + dataItem.OtherCodeZoneName;
+                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.MovedTo.label + " " + dataItem.OtherCodeZoneName;
                         break;
-                    case WhS_CP_CodeItemDraftStatusEnum.NewMoved.value:
+                    case WhS_CP_CodeItemDraftStatusEnum.MovedTo.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/MovedTo.png";
-                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.ExistingMoved.label + " " + dataItem.OtherCodeZoneName;
+                        dataItem.DraftStatusIconTooltip = WhS_CP_CodeItemDraftStatusEnum.MovedFrom.label + " " + dataItem.OtherCodeZoneName;
                         break
                     case WhS_CP_CodeItemDraftStatusEnum.ExistingClosed.value:
                         dataItem.DraftStatusIconUrl = "Client/Modules/WhS_CodePreparation/Images/Closed.png";

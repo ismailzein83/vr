@@ -2,9 +2,9 @@
 
     "use strict";
 
-    moveCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_ValidationOutput', 'WhS_CodePrep_CodePrepService', 'WhS_CP_ZoneItemDraftStatusEnum'];
+    MoveCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService', 'WhS_CP_ZoneItemDraftStatusEnum'];
 
-    function moveCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService,  WhS_CP_ValidationOutput, WhS_CodePrep_CodePrepService,WhS_CP_ZoneItemDraftStatusEnum) {
+    function MoveCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_ValidationOutput, WhS_CP_CodePrepService, WhS_CP_ZoneItemDraftStatusEnum) {
 
         var countryId;
         var sellingNumberPlanId;
@@ -28,7 +28,7 @@
                 currentZoneName = parameters.currentZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
                 zoneItems = parameters.ZoneDataSource;
-               
+
             }
         }
 
@@ -47,14 +47,13 @@
         }
 
         function load() {
-
+            $scope.title = "Move Code from " + currentZoneName;
             $scope.isGettingData = true;
             loadAllControls();
-            $scope.title = "Move Code from " + currentZoneName;
         }
+
         function loadAllControls() {
             loadSaleZoneSelector();
-            $scope.isLoading = false;
             $scope.isGettingData = false;
         }
 
@@ -70,40 +69,40 @@
 
             if (index != -1)
                 $scope.saleZones.splice(index, 1);
-
         }
 
-     
+
         function buildCodeMoveObjFromScope() {
             var zoneItemIndex = UtilsService.getItemIndexByVal(zoneItems, $scope.selectedZone.Name, "nodeName");
             var zoneItem = zoneItems[zoneItemIndex];
 
-            
+
             var obj = {
                 Codes: $scope.codes,
-                CurrentZoneName:zoneName.toLowerCase() != currentZoneName.toLowerCase() ? zoneName :currentZoneName ,
+                CurrentZoneName: zoneName.toLowerCase() != currentZoneName.toLowerCase() ? zoneName : currentZoneName,
                 NewZoneName: zoneItem.originalZoneName != null ? zoneItem.originalZoneName : zoneItem.nodeName
             };
             return obj;
         }
 
-        function getMoveCodeInput(codeObj) {
+        function getMoveCodeInput() {
+            var moveItem = buildCodeMoveObjFromScope();
             return {
                 SellingNumberPlanId: sellingNumberPlanId,
                 CountryId: countryId,
-                Codes: codeObj.Codes,
-                CurrentZoneName: codeObj.CurrentZoneName,
-                NewZoneName: codeObj.NewZoneName
+                Codes: moveItem.Codes,
+                CurrentZoneName: moveItem.CurrentZoneName,
+                NewZoneName: moveItem.NewZoneName,
+                ZoneId: zoneId
             }
         }
 
         function moveCodes() {
-            var moveItem = buildCodeMoveObjFromScope();
-            var input = getMoveCodeInput(moveItem);
-            return WhS_CodePrep_CodePrepAPIService.MoveCodes(input)
+            var input = getMoveCodeInput();
+            return WhS_CP_CodePrepAPIService.MoveCodes(input)
             .then(function (response) {
                 if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
-                    WhS_CodePrep_CodePrepService.NotifyValidationWarning(response.Message);
+                    WhS_CP_CodePrepService.NotifyValidationWarning(response.Message);
                 }
                 else if (response.Result == WhS_CP_ValidationOutput.Success.value) {
                     VRNotificationService.showSuccess(response.Message);
@@ -117,5 +116,5 @@
         }
     }
 
-    appControllers.controller('whs-codepreparation-movecodedialog', moveCodeDialogController);
+    appControllers.controller('Whs_CP_MoveCodeDialogController', MoveCodeDialogController);
 })(appControllers);

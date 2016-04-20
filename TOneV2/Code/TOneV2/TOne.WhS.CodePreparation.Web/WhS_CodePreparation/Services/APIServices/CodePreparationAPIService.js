@@ -118,5 +118,5 @@
         });
     }
 
-    appControllers.service("WhS_CodePrep_CodePrepAPIService", codePreparationAPIService);
+    appControllers.service("WhS_CP_CodePrepAPIService", codePreparationAPIService);
 })(appControllers);

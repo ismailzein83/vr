@@ -10,6 +10,8 @@ namespace TOne.WhS.CodePreparation.Entities
     {
         public int SellingNumberPlanId { get; set; }
         public int CountryId { get; set; }
+
+        public int ZoneId { get; set; }
         public string ZoneName { get; set; }
         public List<string> Codes { get; set; }
     }

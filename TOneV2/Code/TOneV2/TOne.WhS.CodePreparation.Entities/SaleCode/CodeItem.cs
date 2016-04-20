@@ -15,11 +15,11 @@ namespace TOne.WhS.CodePreparation.Entities
         New = 1,
         [Description("Existing Closed")]
         ExistingClosed = 2,
-        [Description("Existing Moved")]
-        ExistingMoved = 3,
-        [Description("New Moved")]
-        NewMoved = 4,
-        [Description("Closed")]
+        [Description("Moved From")]
+        MovedFrom = 3,
+        [Description("Moved To")]
+        MovedTo = 4,
+        [Description("Code in Closed Zone")]
         ClosedZoneCode=5
     }
 

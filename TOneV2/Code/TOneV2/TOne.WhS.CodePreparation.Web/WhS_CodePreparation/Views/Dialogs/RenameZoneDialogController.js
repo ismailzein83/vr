@@ -2,9 +2,9 @@
 
     "use strict";
 
-    renameZoneDialogController.$inject = ['$scope', 'WhS_CodePrep_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_NewCPOutputResultEnum', 'WhS_CP_ValidationOutput', 'WhS_CodePrep_CodePrepService'];
+    RenameZoneDialogController.$inject = ['$scope', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_NewCPOutputResultEnum', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService'];
 
-    function renameZoneDialogController($scope, WhS_CodePrep_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_CPOutputResultEnum, WhS_CP_ValidationOutput, WhS_CodePrep_CodePrepService) {
+    function RenameZoneDialogController($scope, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_CPOutputResultEnum, WhS_CP_ValidationOutput, WhS_CP_CodePrepService) {
 
         var countryId;
         var sellingNumberPlanId;
@@ -59,7 +59,7 @@
 
     function renameZone() {
         var input = buildRenamedZoneObjFromScope();
-        return WhS_CodePrep_CodePrepAPIService.RenameZone(input)
+        return WhS_CP_CodePrepAPIService.RenameZone(input)
         .then(function (response) {
             if (response.Result == WhS_CP_ValidationOutput.Success.value) {
                 VRNotificationService.showSuccess(response.Message);
@@ -67,7 +67,7 @@
                 $scope.modalContext.closeModal();
             }
             else if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
-                WhS_CodePrep_CodePrepService.NotifyValidationWarning(response.Message);
+                WhS_CP_CodePrepService.NotifyValidationWarning(response.Message);
             }
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
@@ -75,5 +75,5 @@
     }
 }
 
-    appControllers.controller('whs-codepreparation-renamezonedialog', renameZoneDialogController);
+    appControllers.controller('Whs_CP_RenameZoneDialogController', RenameZoneDialogController);
 })(appControllers);

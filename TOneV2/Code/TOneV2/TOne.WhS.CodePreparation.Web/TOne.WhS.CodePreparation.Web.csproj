@@ -178,7 +178,7 @@
     <Content Include="WhS_CodePreparation\Images\PendingOpened.png" />
     <Content Include="WhS_CodePreparation\Images\ClosedZone.png" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationService.js" />
-    <Content Include="WhS_CodePreparation\Services\CodePreparationAPIService.js" />
+    <Content Include="WhS_CodePreparation\Services\APIServices\CodePreparationAPIService.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparation.html" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationController.js" />
     <Content Include="WhS_CodePreparation\Views\CodePreparationManagement.html" />

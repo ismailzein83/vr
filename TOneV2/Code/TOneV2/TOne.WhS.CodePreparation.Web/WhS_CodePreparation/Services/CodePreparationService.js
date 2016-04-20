@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    codePreparationService.$inject = ["BaseAPIService", "UtilsService", "WhS_CP_ModuleConfig", "VRModalService", "VRNotificationService"];
+    codePreparationService.$inject = ["VRNotificationService"];
 
-    function codePreparationService(BaseAPIService, UtilsService, WhS_CP_ModuleConfig, VRModalService, VRNotificationService) {
+    function codePreparationService(VRNotificationService) {
 
         function NotifyValidationWarning(message) {
             VRNotificationService.showWarning(message);
@@ -16,5 +16,5 @@
         });
     }
 
-    appControllers.service("WhS_CodePrep_CodePrepService", codePreparationService);
+    appControllers.service("WhS_CP_CodePrepService", codePreparationService);
 })(appControllers);
