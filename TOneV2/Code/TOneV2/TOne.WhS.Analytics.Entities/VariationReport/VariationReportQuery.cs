@@ -19,7 +19,7 @@ namespace TOne.WhS.Analytics.Entities
         public List<VariationReportDimensionFilter> DimensionFilters { get; set; }
     }
 
-    public enum VariationReportTimePeriod { Daily = 1, Weekly = 2, Monthly = 3 }
+    public enum VariationReportTimePeriod { Daily = 0, Weekly = 1, Monthly = 2 }
 
     public enum VariationReportType
     {

@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.dataSource"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             defaultsortbyfieldname="'DimensionId'"
+             pagingtype="'PagingOnScroll'">
+    <vr-datagridcolumn headertext="scopeModel.dimensionTitle" field="'DimensionName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Days AVG'" field="'Average'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Days %'" field="'Percentage'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Previous Period %'" field="'PreviousPeriodPercentage'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="definition in scopeModel.timePeriodDefinitions" headertext="definition.PeriodDescription" field="'TimePeriodValues['+$index+']'" type="'Text'" disablesorting></vr-datagridcolumn>
+</vr-datagrid>
