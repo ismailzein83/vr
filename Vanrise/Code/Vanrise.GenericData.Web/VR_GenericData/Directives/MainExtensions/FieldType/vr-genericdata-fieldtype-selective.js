@@ -21,9 +21,39 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Templates/FieldTypeSelectiveTemplate.html"
+            template: function (element, attrs) {
+                return getDirectiveTemplate(attrs);
+            }
         };
+        function getDirectiveTemplate(attrs)
+        {
+            var label = 'label="Type"';
+            var removeLine = "";
+            if (attrs.hidelabel != undefined)
+            {
+                label = "";
+                removeLine = "removeline";
+            }
+              
 
+            return '<vr-row ' + removeLine + ' >'
+                      + '<vr-columns width="1/3row">'
+                            + '<vr-select on-ready="scopeModel.onSelectorReady"'
+                            + 'datasource="scopeModel.fieldTypeConfigs"'
+                            + 'selectedvalues="scopeModel.selectedFieldTypeConfig"'
+                            + 'datavaluefield="DataRecordFieldTypeConfigId"'
+                            + 'datatextfield="Title"'
+                            + label
+                            + ' text="None"'
+                             + ' isrequired'
+                             + ' hideremoveicon>'
+                     + '</vr-select>'
+                    + '</vr-columns>'
+                   + ' <vr-columns width="2/3row" ng-if="scopeModel.selectedFieldTypeConfig != undefined" vr-loader="scopeModel.isLoadingDirective">'
+                       + ' <vr-directivewrapper directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>'
+                   + '</vr-columns>'
+                   + ' </vr-row>';
+        }
         function DataRecordFieldTypeSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 

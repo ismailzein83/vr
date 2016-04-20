@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnalyticDimensionSelectorDirective.$inject = ['VR_Analytic_AnalyticItemConfigAPIService', 'UtilsService', 'VRUIUtilsService'];
+    AnalyticTableSelectorDirective.$inject = ['VR_Analytic_AnalyticTableAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function AnalyticDimensionSelectorDirective(VR_Analytic_AnalyticItemConfigAPIService, UtilsService, VRUIUtilsService) {
+    function AnalyticTableSelectorDirective(VR_Analytic_AnalyticTableAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -16,16 +16,15 @@
                 ismultipleselection: "@",
                 isrequired: "=",
                 isdisabled: "=",
-                customlabel: "@",
-                normalColNum:'='
+                customlabel: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.datasource = [];
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
-                var analyticDimensionSelector = new AnalyticDimensionSelector(ctrl, $scope, $attrs);
-                analyticDimensionSelector.initializeController();
+                var analyticTableSelector = new AnalyticTableSelector(ctrl, $scope, $attrs);
+                analyticTableSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -41,7 +40,7 @@
             }
         };
 
-        function AnalyticDimensionSelector(ctrl, $scope, attrs) {
+        function AnalyticTableSelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -60,7 +59,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var filter;
                     var selectedIds;
 
@@ -69,7 +67,7 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    return VR_Analytic_AnalyticItemConfigAPIService.GetDimensionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Analytic_AnalyticTableAPIService.GetAnalyticTablesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {
@@ -79,13 +77,13 @@
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'AnalyticItemConfigId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'AnalyticTableId', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('AnalyticItemConfigId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('AnalyticTableId', attrs, ctrl);
                 }
 
                 return api;
@@ -96,9 +94,9 @@
 
             var multipleselection = '';
 
-            var label = 'Dimension';
+            var label = 'Table';
             if (attrs.ismultipleselection != undefined) {
-                label = 'Dimensions';
+                label = 'Tables';
                 multipleselection = 'ismultipleselection';
             }
 
@@ -110,15 +108,15 @@
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            return '<div>'
                 + '<vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
                     + ' selectedvalues="ctrl.selectedvalues"'
                     + ' onselectionchanged="ctrl.onselectionchanged"'
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="AnalyticItemConfigId"'
-                    + ' datatextfield="Title"'
+                    + ' datavaluefield="AnalyticTableId"'
+                    + ' datatextfield="Name"'
                     + ' ' + multipleselection
                     + ' ' + hideselectedvaluessection
                     + ' isrequired="ctrl.isrequired"'
@@ -127,10 +125,10 @@
                     + ' label="' + label + '"'
                     + ' entityName="' + label + '"'
                 + '</vr-select>'
-            + '</vr-columns>';
+            + '</div>';
         }
     }
 
-    app.directive('vrAnalyticDimensionSelector', AnalyticDimensionSelectorDirective);
+    app.directive('vrAnalyticTableSelector', AnalyticTableSelectorDirective);
 
 })(app);

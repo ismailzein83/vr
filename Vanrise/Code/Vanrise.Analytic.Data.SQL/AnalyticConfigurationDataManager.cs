@@ -76,7 +76,7 @@ namespace Vanrise.Analytic.Data.SQL
 
         public List<AnalyticItemConfig<T>> GetItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class
         {
-            return GetItemsSP("", AnalyticItemConfigReader<T>, tableId, (int)itemType);
+            return GetItemsSP("[Analytic].[sp_AnalyticItemConfig_GetByTableIdAndItemType]", AnalyticItemConfigReader<T>, tableId, (int)itemType);
         }
 
         private AnalyticItemConfig<T> AnalyticItemConfigReader<T>(IDataReader reader) where T : class

@@ -7,8 +7,10 @@ using TestRuntime.ExecutionFlows;
 using TOne.WhS.CDRProcessing.Entities;
 using TOne.WhS.CDRProcessing.QueueActivators;
 using TOne.WhS.CodePreparation.BP.Arguments;
+using Vanrise.Analytic.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
@@ -38,6 +40,32 @@ namespace TestRuntime.Tasks
             //var tree = Vanrise.Common.Serializer.Serialize(queueFlowTree);
             var myflow = AllFlows.GetImportCDRFlow();
             var tree1 = Vanrise.Common.Serializer.Serialize("test");
+
+
+
+
+            AnalyticDimensionConfig AnalyticDimensionConfig = new AnalyticDimensionConfig()
+            {
+                FieldType = new FieldTextType(),
+                GroupByColumns = new List<string>() { "ant.SaleZoneID", "salz.Name" },
+                IdColumn = "ISNULL(ant.SaleZoneID,'N/A')",
+                JoinConfigNames = new List<string>() { "SaleZoneJoin" },
+                NameColumn = "salz.Name"
+
+            };
+            AnalyticDimensionConfig AnalyticDimensionConfig1 = new AnalyticDimensionConfig()
+            {
+                FieldType = new FieldTextType(),
+                GroupByColumns = new List<string>() { "ant.SupplierZoneID", "suppz.Name" },
+                IdColumn = "ISNULL(ant.SupplierZoneID,'N/A')",
+                JoinConfigNames = new List<string>() { "SupplierZoneJoin" },
+                NameColumn = "suppz.Name"
+
+            };
+            var test = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig);
+            var test1 = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig1);
+            Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig);
+
             //QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
             //var queuesByStages = executionFlowManager.GetQueuesByStages(2);
             //CDR cdr = new CDR

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Analytic.Entities;
 
-namespace Vanrise.Analytic.Entities
+namespace Vanrise.Analytic.MainExtensions.SearchSettings
 {
     public class GenericSearchSettings : AnalyticReportSearchSettings
     {
-        public List<GenericSearchSettingsDimension> Dimensions { get; set; }
+        public List<GenericSearchSettingsDimension> GroupingDimensions { get; set; }
 
         public List<GenericSearchSettingsFilter> Filters { get; set; }
     }

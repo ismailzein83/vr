@@ -1,0 +1,103 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_AnalyticReportSettingsEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
+    <vr-modalbody maxheight="'600px'">
+        <vr-form validationcontext="analyticReportSettingsEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-section title="Page Setting">
+                                <vr-row removeline>
+                                    <vr-textbox value="scopeModel.reportName" isrequired="true" label="Report Name" customvalidate="scopeModel.validate()"></vr-textbox>
+                                </vr-row>
+                                <vr-row>
+                                    <vr-textbox value="scopeModel.reportTitle" isrequired="true" label="Report Title" customvalidate="scopeModel.validate()"></vr-textbox>
+                                </vr-row>
+                                <vr-row>
+                                    <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTables" ismultipleselection></vr-analytic-table-selector>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="2/3row">
+                            <vr-section title="Menu Location">
+                                <vr-validator validate="scopeModel.validateMenuLocation()">
+                                    <vr-treeview on-ready="scopeModel.onTreeReady"
+                                                 datavaluefield="Id"
+                                                 datatextfield="Name"
+                                                 datachildrenfield="Childs"
+                                                 selecteditem="scopeModel.selectedMenuItem"
+                                                 wholerow>
+                                    </vr-treeview>
+                                </vr-validator>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+
+                </vr-tab>
+                <vr-tab header="'Search Settings'">
+                    <vr-row ng-if="scopeModel.selectedTables !=undefined &&  scopeModel.selectedTables.length>0">
+                        <vr-columns width="fullrow">
+                            <vr-section title="Grouping Dimensions">
+                                <vr-row>
+                                    <vr-analytic-dimension-selector on-ready="scopeModel.onGroupingDimensionSelectorDirectiveReady" isrequired="true" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedGroupingDimensions" onselectitem="scopeModel.onSelectGroupingDimensionItem" ondeselectitem="scopeModel.onDeselectGroupingDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
+                                    <vr-columns width="2/3row" withemptyline>
+                                        <vr-validator validate="scopeModel.isValidGroupingDimensions()">
+                                            <vr-datagrid datasource="scopeModel.groupingDimensions"
+                                                         on-ready="onGridReady" ondeleterow="scopeModel.removeGroupingDimension" hidegridmenu norowhighlightonclick="'true'">
+                                                <vr-datagridcolumn headertext="'Dimension Name'" field="'Title'" widthfactor="5"></vr-datagridcolumn>
+                                                <vr-datagridcolumn headertext="'Is Selected'" widthfactor="10">
+                                                    <vr-switch value="dataItem.IsSelected"></vr-switch>
+                                                </vr-datagridcolumn>
+                                            </vr-datagrid>
+                                        </vr-validator>
+                                    </vr-columns>
+                                </vr-row>
+                            </vr-section>
+                         </vr-columns>
+                        </vr-row>
+                    <vr-row ng-if="scopeModel.selectedTables !=undefined &&  scopeModel.selectedTables.length>0">
+                        <vr-columns width="fullrow">
+                            <vr-section title="Filters">
+                                <vr-row>
+                                    <vr-analytic-dimension-selector on-ready="scopeModel.onFilterDimensionSelectorDirectiveReady" isrequired="true" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedFilterDimensions" onselectitem="    scopeModel.onSelectFilterDimensionItem" ondeselectitem="    scopeModel.onDeselectFilterDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
+                                </vr-row>
+                                <vr-row>
+                                    <vr-columns width="fullrow" withemptyline>
+                                        <vr-validator validate="scopeModel.isValidFilterDimensions()">
+                                            <vr-datagrid datasource="scopeModel.filterDimensions"
+                                                         on-ready="onGridReady" ondeleterow="scopeModel.removeFilterDimension" hidegridmenu norowhighlightonclick="'true'">
+                                                <vr-datagridcolumn headertext="'Dimension Name'" field="'Title'" widthfactor="5"></vr-datagridcolumn>
+                                                <vr-datagridcolumn headertext="'Title'" widthfactor="5">
+                                                    <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                                                </vr-datagridcolumn>
+                                                <vr-datagridcolumn headertext="'Is Required'" widthfactor="5">
+                                                    <vr-switch value="dataItem.IsRequired"></vr-switch>
+                                                </vr-datagridcolumn>
+                                                <vr-datagridcolumn headertext="'Field Type'" widthfactor="15">
+                                                    <vr-genericdata-fieldtype-selective on-ready="dataItem.onFieldTypeReady" hidelabel></vr-genericdata-fieldtype-selective>
+                                                </vr-datagridcolumn>
+                                            </vr-datagrid>
+                                        </vr-validator>
+                                    </vr-columns>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Widgets'">
+                    <vr-row ng-show="scopeModel.selectedDataRecordType !=undefined">
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="analyticReportSettingsEditorGroup" haspermission="scopeModel.hasSaveGenericBEEditor" data-onclick="scopeModel.SaveGenericBEEditor"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>
