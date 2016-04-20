@@ -53,7 +53,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, User
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
                     }
-                    directiveAPI.onDynamicPageAdded = function (dynamicPageObject) {
+                    directiveAPI.onViewAdded = function (dynamicPageObject) {
                         fillNeededData(dynamicPageObject);
                         gridAPI.itemAdded(dynamicPageObject);
                     }

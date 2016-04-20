@@ -55,6 +55,7 @@
     <Compile Include="UserDataManager.cs" />
     <Compile Include="UserGroupDataManager.cs" />
     <Compile Include="ViewDataManager.cs" />
+    <Compile Include="ViewTypeDataManager.cs" />
     <Compile Include="WidgetDataManager.cs" />
     <Compile Include="WidgetDefinitionDataManager.cs" />
   </ItemGroup>

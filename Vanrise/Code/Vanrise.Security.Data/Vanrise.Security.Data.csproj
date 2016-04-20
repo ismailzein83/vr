@@ -55,6 +55,7 @@
     <Compile Include="IUserDataManager.cs" />
     <Compile Include="IUserGroupDataManager.cs" />
     <Compile Include="IViewDataManager.cs" />
+    <Compile Include="IViewTypeDataManager.cs" />
     <Compile Include="IWidgetDefinitionDataManager.cs" />
     <Compile Include="IWidgetsDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

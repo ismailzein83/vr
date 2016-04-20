@@ -1,0 +1,32 @@
+﻿<vr-panel ng-controller="VR_Sec_ViewManagementController" vr-loader="isLoading">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="viewName" label="View Name"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-sec-viewtype-selector on-ready="onViewTypeDirectiveReady" ismultipleselection></vr-sec-viewtype-selector>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Add" haspermission="hasAddViewPermission" formname="formFilter" menuactions="addMenuActions" isasynchronous=" true"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+
+    <div>
+
+        <vr-row>
+            <vr-columns colnum="12">
+                <vr-sec-view-grid on-ready="onGridReady"></vr-sec-view-grid>
+            </vr-columns>
+        </vr-row>
+    </div>
+
+</vr-panel>

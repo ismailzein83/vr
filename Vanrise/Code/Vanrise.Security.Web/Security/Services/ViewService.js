@@ -12,12 +12,12 @@
             editView: editView
         });
  
-        function addDynamicPage(onDynamicPageAdded) {
+        function addDynamicPage(onViewAdded) {
             var modalSettings = {
             };
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onDynamicPageAdded = onDynamicPageAdded;
+                modalScope.onViewAdded = onViewAdded;
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', null, modalSettings);
@@ -25,7 +25,7 @@
 
         function updateDynamicPage(viewId, onDynamicPageUpdated) {
             var modalParameters = {
-                ViewId: viewId
+                viewId: viewId
             };
 
             var modalSettings = {};

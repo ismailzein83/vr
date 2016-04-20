@@ -7,6 +7,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
     ColumnWidthEnum, VRModalService, VRUIUtilsService, VR_Sec_ViewTypeEnum) {
     $scope.scopeModal = {};
     var viewId;
+    var viewTypeName = "VR_Sec_BI";
     var viewEntity;
     var isEditMode;
     var previewDirectiveAPI;
@@ -30,7 +31,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
         if (parameters != undefined && parameters != null)
-            viewId = parameters.ViewId;
+            viewId = parameters.viewId;
         isEditMode = (viewId != undefined);
 
     }
@@ -344,12 +345,12 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
     }
 
     function addView() {
-
+        $scope.scopeModal.View.ViewTypeName = viewTypeName;
         return VR_Sec_ViewAPIService.AddView($scope.scopeModal.View)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("View", response, "Name")) {
-                    if ($scope.onDynamicPageAdded != undefined)
-                        $scope.onDynamicPageAdded(response.InsertedObject);
+                    if ($scope.onViewAdded != undefined)
+                        $scope.onViewAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             })
@@ -429,7 +430,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         $scope.scopeModal.View = {
             Name: $scope.scopeModal.pageName,
             Title: $scope.scopeModal.pageName,
-            Type: VR_Sec_ViewTypeEnum.Dynamic.value,
+            Type: viewEntity !=undefined?viewEntity.Type:undefined,
             Url: "#/viewwithparams/Security/Views/DynamicPages/DynamicPagePreview",
             ModuleId: $scope.scopeModal.selectedMenuNode.Id,
             Audience: Audiences,

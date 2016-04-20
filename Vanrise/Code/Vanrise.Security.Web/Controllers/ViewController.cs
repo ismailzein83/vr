@@ -20,7 +20,7 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("AddView")]
-        public Vanrise.Entities.InsertOperationOutput<ViewDetail> AddView(View view)
+        public Vanrise.Entities.InsertOperationOutput<ViewDetail> AddView(ViewToAdd view)
         {
             return _manager.AddView(view);
         }
@@ -67,4 +67,5 @@ namespace Vanrise.Security.Web.Controllers
             return GetWebResponse(input, _manager.GetFilteredViews(input));
         }
     }
+
 }

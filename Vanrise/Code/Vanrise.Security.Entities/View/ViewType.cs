@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class ViewQuery
+    public class ViewType
     {
-        public int? ModuleId { get; set; }
-        public List<int> ViewTypes { get; set; }
+        public int ViewTypeId { get; set; }
         public string Name { get; set; }
+        public string Title { get; set; }
+        public string Editor { get; set; }
+        public bool EnableAdd { get; set; }
     }
 }

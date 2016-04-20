@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ViewAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig', 'SecurityService'];
+    ViewAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Sec_ModuleConfig', 'SecurityService', 'VR_Sec_ViewTypeAPIService'];
 
-    function ViewAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig, SecurityService) {
+    function ViewAPIService(BaseAPIService, UtilsService, VR_Sec_ModuleConfig, SecurityService, VR_Sec_ViewTypeAPIService) {
         var controllerName = 'View';
 
         return ({
@@ -34,11 +34,11 @@
         }
 
         function AddView(view) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'AddView'), view);
+                return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'AddView'), view);
         }
 
         function UpdateView(view) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateView'), view);
+           return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateView'), view);
         }
 
         function UpdateViewsRank(updatedIds) {

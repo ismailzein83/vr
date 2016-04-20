@@ -132,8 +132,8 @@
     <Content Include="Security\Directives\Group\Templates\GroupGrid.html" />
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
     <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />
-    <Content Include="Security\Directives\Menu\View\Templates\ViewGridTemplate.html" />
-    <Content Include="Security\Directives\Menu\View\vr-sec-menu-view-grid.js" />
+    <Content Include="Security\Directives\View\Templates\ViewGridTemplate.html" />
+    <Content Include="Security\Directives\View\vr-sec-view-grid.js" />
     <Content Include="Security\Directives\OrgChart\Templates\OrgChartGrid.html" />
     <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-selector.js" />
     <Content Include="Security\Directives\OrgChart\vr-sec-orgchart-grid.js" />
@@ -142,6 +142,7 @@
     <Content Include="Security\Directives\User\Templates\UsersGrid.html" />
     <Content Include="Security\Directives\User\vr-sec-user-selector.js" />
     <Content Include="Security\Directives\User\vr-sec-user-grid.js" />
+    <Content Include="Security\Directives\View\vr-sec-viewtype-selector.js" />
     <Content Include="Security\Directives\Widget\Templates\WidgetPreview.html" />
     <Content Include="Security\Directives\Widget\Templates\WidgetsGrid.html" />
     <Content Include="Security\Directives\Widget\vr-sec-widget-grid.js" />
@@ -157,6 +158,7 @@
     <Content Include="Security\Services\APIServices\GroupAPIService.js" />
     <Content Include="Security\Services\APIServices\UsersAPIService.js" />
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
+    <Content Include="Security\Services\APIServices\ViewTypeAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetAPIService.js" />
     <Content Include="Security\Services\APIServices\WidgetDefinitionAPIService.js" />
     <Content Include="Security\Services\BusinessEntityDefinitionService.js" />
@@ -232,6 +234,7 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\ViewTypeController.cs" />
     <Compile Include="Controllers\WidgetDefinitionController.cs" />
     <Compile Include="Controllers\WidgetController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -259,6 +262,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Security\Views\View\ViewManagement.html" />
+    <Content Include="Security\Views\View\ViewManagementController.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetPreview.html" />
     <Content Include="Security\Views\WidgetsPages\WidgetPreviewController.js" />
     <Content Include="Security\Views\WidgetsPages\WidgetEditor.html" />
@@ -274,6 +279,9 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Security\Directives\Menu\View\Templates\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

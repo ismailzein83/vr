@@ -32,11 +32,11 @@ function dynamicPageManagementController($scope, VR_Sec_ViewService, VR_Sec_View
     }
 
     function addDynamicPage() {
-        var onDynamicPageAdded = function (dynamicPageObj) {
+        var onViewAdded = function (dynamicPageObj) {
             if (mainGridAPI != undefined)
-                mainGridAPI.onDynamicPageAdded(dynamicPageObj);
+                mainGridAPI.onViewAdded(dynamicPageObj);
         };
-        VR_Sec_ViewService.addDynamicPage(onDynamicPageAdded);
+        VR_Sec_ViewService.addDynamicPage(onViewAdded);
     }
 
     function load() {

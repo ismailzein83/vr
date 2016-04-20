@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public enum ViewType  {  System = 0, Dynamic = 1 }
+    //public enum ViewType  {  System = 0, Dynamic = 1 }
 
     public class View
     {
@@ -24,7 +24,7 @@ namespace Vanrise.Security.Entities
 
         public AudienceWrapper Audience { get; set; }
 
-        public ViewType Type { get; set; }
+        public int Type { get; set; }
 
         public ViewContent ViewContent { get; set; }
 

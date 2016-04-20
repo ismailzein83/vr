@@ -7,6 +7,7 @@
     function GenericBEEditorDefintionController($scope, VR_GenericData_BusinessEntityDefinitionAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_GenericData_DataRecordTypeAPIService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewTypeEnum, InsertOperationResultEnum) {
 
         var isEditMode;
+        var viewTypeName = "VR_GenericData_GenericBusinessEntity";
         var businessEntityDefinitionEntity;
         var recordTypeEntity;
         var businessEntityDefinitionId;
@@ -382,10 +383,16 @@
                 });
             }
             function updateView() {
+                
                 if (viewEntity != null)
                     return VR_Sec_ViewAPIService.UpdateView(buildViewObjectFromScope(businessEntityDefinitionId));
                 else
-                    return VR_Sec_ViewAPIService.AddView(buildViewObjectFromScope(businessEntityDefinitionId));
+                {
+                    var view = buildViewObjectFromScope(businessEntityDefinitionId);
+                    view.ViewTypeName = viewTypeName;
+                    return VR_Sec_ViewAPIService.AddView(view);
+                }
+                 
             }
         }
 

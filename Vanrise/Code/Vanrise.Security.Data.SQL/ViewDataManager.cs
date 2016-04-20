@@ -99,7 +99,7 @@ namespace Vanrise.Security.Data.SQL
                 ViewContent = ((reader["Content"] as string) != null) ? Common.Serializer.Deserialize<ViewContent>(reader["Content"] as string) : null,
                 Settings = reader["Settings"] != DBNull.Value ? Common.Serializer.Deserialize(reader["Settings"] as string) as ViewSettings : null,
                 Rank = GetReaderValue<int>(reader, "Rank"),
-                Type = (ViewType)reader["Type"],
+                Type = (int)reader["Type"],
 
             };
 

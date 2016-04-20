@@ -33,7 +33,7 @@ namespace Vanrise.Security.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dynamicViews.ToBigResult(input, filterExpression, ViewDetailMapper));
         }
-        public Vanrise.Entities.InsertOperationOutput<ViewDetail> AddView(View view)
+        public Vanrise.Entities.InsertOperationOutput<ViewDetail> AddView(ViewToAdd view)
         {
             InsertOperationOutput<ViewDetail> insertOperationOutput = new InsertOperationOutput<ViewDetail>();
 
@@ -41,6 +41,12 @@ namespace Vanrise.Security.Business
             insertOperationOutput.InsertedObject = null;
             int viewId = -1;
             IViewDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IViewDataManager>();
+            if(view.ViewTypeName != null)
+            {
+                ViewTypeManager viewTypeManager = new ViewTypeManager();
+                int viewTypeId = viewTypeManager.GetViewTypeIdByName(view.ViewTypeName);
+                view.Type = viewTypeId;
+            }
             bool insertActionSucc = dataManager.AddView(view, out viewId);
 
             if (insertActionSucc)
@@ -177,7 +183,7 @@ namespace Vanrise.Security.Business
         public IEnumerable<View> GetDynamicViews()
         {
             var allViews = GetCachedViews().Values;
-            return allViews.FindAllRecords(x => x.Type == ViewType.Dynamic);
+            return allViews.FindAllRecords(x => x.ViewContent != null);
         }
 
         public IDataRetrievalResult<ViewDetail> GetFilteredViews(DataRetrievalInput<ViewQuery> input)
@@ -185,7 +191,10 @@ namespace Vanrise.Security.Business
             var allItems = GetCachedViews();
 
             Func<View, bool> filterExpression = (itemObject) =>
-                 (input.Query.ModuleId == null || itemObject.ModuleId == input.Query.ModuleId);
+                 ((input.Query.ModuleId == null || itemObject.ModuleId == input.Query.ModuleId)
+                 && (input.Query.ViewTypes == null || input.Query.ViewTypes.Contains(itemObject.Type))
+                  && (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                 );
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, ViewDetailMapper));
         }
@@ -222,7 +231,7 @@ namespace Vanrise.Security.Business
                 var view = views[i];
                 if (view.Settings != null)
                     view.Url = view.Settings.GetURL(view);
-                if (view.Type == ViewType.Dynamic)
+                if (view.ViewContent !=null)
                     view.Url = string.Format("{0}/{{\"viewId\":\"{1}\"}}", view.Url, view.ViewId);
             }
             return views;

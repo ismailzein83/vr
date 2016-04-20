@@ -7,7 +7,7 @@
     function GenericRuleDefinitionEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewAPIService, InsertOperationResultEnum, VR_Sec_ViewTypeEnum, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var isEditMode;
-
+        var viewTypeName = "VR_GenericData_GenericRule";
         var menuItems;
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -230,7 +230,9 @@
                 });
             }
             function insertView() {
-                return VR_Sec_ViewAPIService.AddView(buildViewObjectFromScope(serverResponse.InsertedObject.GenericRuleDefinitionId));
+                var view = buildViewObjectFromScope(serverResponse.InsertedObject.GenericRuleDefinitionId);
+                view.ViewTypeName = viewTypeName;
+                return VR_Sec_ViewAPIService.AddView(view);
             }
         }
         function update() {
@@ -258,9 +260,14 @@
             }
             function updateView() {
                 if (viewEntity != null)
-                    return VR_Sec_ViewAPIService.UpdateView(buildViewObjectFromScope(genericRuleDefinitionId));
+                    return VR_Sec_ViewAPIService.UpdateView(buildViewObjectFromScope(genericRuleDefinitionId), viewTypeName);
                 else
-                    return VR_Sec_ViewAPIService.AddView(buildViewObjectFromScope(genericRuleDefinitionId));
+                {
+                    var view = buildViewObjectFromScope(genericRuleDefinitionId);
+                    view.ViewTypeName = viewTypeName;
+                    return VR_Sec_ViewAPIService.AddView(view);
+                }
+                    
             }
         }
 

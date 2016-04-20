@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService','VR_Sec_ViewService', function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService) {
+app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService', 'VR_Sec_ViewService', 'VRModalService', 'VR_Sec_ViewTypeAPIService', 'UtilsService', function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, VRModalService, VR_Sec_ViewTypeAPIService, UtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -18,7 +18,7 @@ app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIServ
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Security/Directives/Menu/View/Templates/ViewGridTemplate.html"
+        templateUrl: "/Client/Modules/Security/Directives/View/Templates/ViewGridTemplate.html"
 
     };
 
@@ -28,7 +28,7 @@ app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIServ
         this.initializeController = initializeController;
 
         function initializeController() {
-
+            ctrl.viewTypes = [];
             $scope.views = [];
 
             $scope.onGridReady = function (api) {
@@ -41,9 +41,18 @@ app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIServ
                     var directiveAPI = {};
 
                     directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
+                        var promises = [];
+                        var loadViewTypes = VR_Sec_ViewTypeAPIService.GetViewTypes().then(function (response) {
+                            ctrl.viewTypes.length = 0;
+                            ctrl.viewTypes = response;
+                        });
+                        promises.push(loadViewTypes);
+                        promises.push(gridAPI.retrieveData(query));
+                        return UtilsService.waitMultiplePromises(promises);
                     }
-
+                    directiveAPI.onViewAdded = function (viewObj) {
+                        gridAPI.itemAdded(viewObj);
+                    }
                     return directiveAPI;
                 }
             };
@@ -72,11 +81,23 @@ app.directive("vrSecMenuViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIServ
             return VR_Sec_ViewAPIService.HasUpdateViewPermission();
         }
         function editView(viewObj) {
-            var onViewUpdated = function (viewObj) {
-                gridAPI.itemUpdated(viewObj);
-            }
+            console.log(ctrl.viewTypes);
+            console.log(viewObj);
+            var viewType = UtilsService.getItemByVal(ctrl.viewTypes, viewObj.Entity.Type, "ViewTypeId");
 
-            VR_Sec_ViewService.editView(viewObj.Entity.ViewId, onViewUpdated);
+            var modalParameters = {
+                viewId: viewObj.Entity.ViewId
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onViewUpdated = function (viewObj) {
+                    gridAPI.itemUpdated(viewObj);
+                }
+            };
+            VRModalService.showModal(viewType.Editor, modalParameters, modalSettings);
+
         }
     }
 
