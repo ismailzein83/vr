@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AnalyticConfigurationController.cs" />
+    <Compile Include="Controllers\AnalyticController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -98,6 +99,7 @@
     <Content Include="Analytic\Directives\Grid\vr-analytic-datagrid-analyticrecords.js" />
     <Content Include="Analytic\Directives\Grid\vr-analytic-gridfilter.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
+    <Content Include="Analytic\Services\APIServices\AnalyticAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticConfigurationAPIService.js" />
     <Content Include="Analytic\Views\Reports\AnalyticReport.html" />
     <Content Include="Analytic\Views\Reports\AnalyticReportController.js" />

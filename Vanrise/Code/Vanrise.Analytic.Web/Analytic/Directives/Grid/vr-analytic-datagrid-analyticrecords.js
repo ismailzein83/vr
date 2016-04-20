@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VRModalService',
-    function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VRModalService) {
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService',
+    function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -25,19 +25,15 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
         function GenericGrid($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
-            var dimensionValues = [];
             ctrl.datasource = [];
-            ctrl.fromTime;
-            ctrl.toTime;
-            ctrl.dimensions = [];
+            ctrl.groupingDimensions = [];
             ctrl.measures = [];
-            ctrl.selectedDimensions = [];
-            ctrl.dimensionFields = [];
-            ctrl.parameters;
+            ctrl.drillDownDimensions = [];
             ctrl.sortField = "";
             var gridApi;
             var drillDown;
-            var isSummary = false;
+            var fromTime;
+            var toTime;
 
             function initializeController() {
 
@@ -51,169 +47,111 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     function getDirectiveAPI() {
                         var directiveAPI = {};
 
-                        directiveAPI.loadGrid = function (query) {
-                            ctrl.filters = query.Filters;
-                            var filters = query.Filters;
-                            ctrl.Currency = query.Currency;
+                        directiveAPI.loadGrid = function (payLoad) {
 
-                            dimensionValues.length = 0;
-                            ctrl.selectedDimensions.length = 0;
-                            ctrl.dimensions.length = 0;
-                            ctrl.dimensionFields.length = 0;
-                            ctrl.measures.length = 0;
-                            var queryFinalized = loadGridQuery(query);
+                            var filters = payLoad.Filters;
+                            var queryFinalized = loadGridQuery(payLoad);
+                            fromTime = payLoad.FromTime;
+                            toTime = payLoad.ToTime;
+
                             var drillDownDefinitions = [];
-                            for (var i = 0; i < query.Dimensions.length; i++) {
+
+                            for (var i = 0; i < payLoad.groupingDimensions.length; i++) {
                                 var selectedDimensions = [];
-                                var dimension = query.Dimensions[i];
-                                for (var j = 0; j < ctrl.selectedDimensions.length; j++)
-                                    if (ctrl.selectedDimensions[j] != dimension.value) {
-                                        selectedDimensions.push(ctrl.selectedDimensions[j]);
-                                        setDrillDownData(query.Dimensions[i], selectedDimensions);
-                                    }
+                                var dimension = payLoad.groupingDimensions[i];
+                                for (var j = 0; j < ctrl.groupingDimensions.length; j++)
+                                    if (ctrl.groupingDimensions[j].DimensionName != dimension.DimensionName)
+                                        selectedDimensions.push(ctrl.groupingDimensions[j].DimensionName);
+                                setDrillDownData(payLoad.groupingDimensions[i], selectedDimensions)
                             }
-
-
 
                             function setDrillDownData(dimension, selectedDimensions) {
                                 var objData = {};
 
-                                objData.title = dimension.description;
+                                objData.title = dimension.Title;
 
                                 objData.directive = "vr-analytic-datagrid-analyticrecords";
 
                                 objData.loadDirective = function (directiveAPI, dataItem) {
 
-                                    var selectedfilters = [];
-                                    for (var j = 0; j < ctrl.dimensionFields.length; j++) {
-                                        selectedfilters.push({
-                                            Dimension: ctrl.dimensionFields[j],
-                                            FilterValues: [dataItem.DimensionValues[j].Value]
-                                        });
-                                    }
-
-                                    for (var i = 0; i < filters.length; i++)
-                                        selectedfilters.push(filters[i]);
-
                                     dataItem.gridAPI = directiveAPI;
 
-                                    var query = {
-                                        Filters: selectedfilters,
-                                        Dimensions: [dimension],
-                                        DimensionFields: [dimension.value],
-                                        MeasureFields: ctrl.measures,
-                                        DimensionsSelected: selectedDimensions,
-                                        MeasureThreshold: ctrl.parameters,
-                                        FromTime: ctrl.fromTime,
-                                        ToTime: ctrl.toTime,
-                                        Currency: ctrl.Currency,
-                                        WithSummary: isSummary
+                                    //UpdateFilters
+                                    var newFilters = [];
+                                    for (var j = 0; j < ctrl.groupingDimensions.length; j++) {
+                                        newFilters.push({
+                                            Dimension: ctrl.groupingDimensions[j].DimensionName,
+                                            FilterValues: [dataItem.DimensionValues[j].Id]
+                                        });
                                     }
-                                    return dataItem.gridAPI.loadGrid(query);
+                                    for (var i = 0; i < filters.length; i++)
+                                        newFilters.push(filters[i]);
+
+                                    var drillDownPayLoad = {
+                                        groupingDimensions: [dimension],
+                                        dimensionsFilter: newFilters,
+                                        measures: ctrl.measures,
+                                        fromTime: fromTime,
+                                        toTime: toTime
+                                    }
+                                    return dataItem.gridAPI.loadGrid(drillDownPayLoad);
                                 };
 
                                 drillDownDefinitions.push(objData);
                             }
 
                             drillDown = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, undefined);
-
-
                             return gridApi.retrieveData(queryFinalized);
                         }
-
                         return directiveAPI;
                     }
-
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     console.log(dataRetrievalInput);
                     ctrl.showGrid = true;
 
-                    return VR_Analytic_AnalyticConfigurationAPIService.GetFilteredRecords(dataRetrievalInput)
+                    return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 drillDown.setDrillDownExtensionObject(response.Data[i]);
                             }
-                            if (isSummary)
-                                gridApi.setSummary(response.Summary);
                             onResponseReady(response);
                         });
                 };
 
-                ctrl.checkExpandablerow = function (groupKeys) {
-                    return groupKeys.length !== ctrl.groupKeys.length;
-                };
+                function loadGridQuery(payLoad) {
+                    var dimensionFilters = [];
+                    var dimensions = [];
+                    ctrl.groupingDimensions = payLoad.groupingDimensions;
+                    ctrl.measures = payLoad.measures;
 
-                function loadGridQuery(query) {
-                    dimensionValues.length = 0;
+                    if (payLoad.Settings != undefined) {
 
-                    ctrl.fromTime = query.FromTime;
-                    ctrl.toTime = query.ToTime;
-                    if (query.MeasureThreshold != undefined) {
-                        ctrl.parameters = query.MeasureThreshold;
-                        ctrl.mainGrid = false;
                     }
 
-                    if (query.DimensionsSelected != undefined) {
-                        for (var i = 0; i < query.DimensionsSelected.length; i++) {
-                            ctrl.selectedDimensions.push(query.DimensionsSelected[i]);
-                        }
-                    }
-                    if (query.FixedDimensionFields != undefined) {
-                        for (var i = 0; i < query.FixedDimensionFields.length; i++) {
-                            ctrl.dimensionFields.push(query.FixedDimensionFields[i]);
-                        }
-                    }
-                    if (query.Dimensions != undefined) {
-                        for (var i = 0; i < query.Dimensions.length; i++) {
-                            if (UtilsService.contains(query.DimensionFields, query.Dimensions[i].value))
-                            ctrl.dimensions.push(query.Dimensions[i]);
-                    }
-                }
+                    if (payLoad.groupingDimensions != undefined) {
 
-                    if (query.DimensionFields != undefined) {
-                        for (var i = 0; i < query.DimensionFields.length; i++) {
-                            ctrl.dimensionFields.push(query.DimensionFields[i]);
-                            ctrl.selectedDimensions.push(query.DimensionFields[i]);
                     }
-                        dimensionValues = query.DimensionFields;
-                }
-
-                    for (var i = 0; i < query.MeasureFields.length; i++)
-                        ctrl.measures.push(query.MeasureFields[i]);
-
-                    console.log(ctrl.dimensions);
-                    isSummary = $attrs.withsummary != undefined;
 
                     var queryFinalized = {
-                            Filters: query.Filters,
-                            DimensionFields: dimensionValues,
-                            Dimensions: query.Dimensions,
-                            MeasureFields: ctrl.measures,
-                            FromTime: query.FromTime,
-                            ToTime: query.ToTime,
-                            Currency: query.Currency,
-                            WithSummary: isSummary
-                }
-
-                    function GetSelectedDimensions() {
-                        var result = [];
-                        for (var i = 0; i < ctrl.dimensions.length; i++) {
-                            if (!UtilsService.contains(dimensionValues, ctrl.dimensions[i].value))
-                                result.push(ctrl.dimensions[i]);
+                        Filters: payLoad.Filters,
+                        DimensionFields: UtilsService.getPropValuesFromArray(ctrl.groupingDimensions, 'DimensionName'),
+                        MeasureFields: ctrl.measures,
+                        FromTime: payLoad.FromTime,
+                        ToTime: payLoad.ToTime,
+                        Currency: payLoad.Currency,
+                        WithSummary: $attrs.withsummary != undefined
                     }
-                        return result;
-                }
 
-                    if (ctrl.dimensions.length > 0)
+                    if (payLoad.groupingDimensions.length > 0)
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else
                         ctrl.sortField = 'MeasureValues.' + ctrl.measures[0];
                     return queryFinalized;
+                }
             }
         }
-    }
         return directiveDefinitionObject;
-}
+    }
 ]);
