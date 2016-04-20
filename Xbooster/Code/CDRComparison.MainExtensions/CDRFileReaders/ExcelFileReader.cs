@@ -35,6 +35,8 @@ namespace CDRComparison.MainExtensions
             var fileStream = new MemoryStream(fileContent);
 
             Workbook workbook = new Workbook(fileStream);
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
             Worksheet worksheet = workbook.Worksheets[0];
 
             var cdrs = new List<CDR>();
@@ -76,7 +78,8 @@ namespace CDRComparison.MainExtensions
             var fileStream = new MemoryStream(fileContent);
 
             Workbook workbook;
-
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
             try
             {
                 workbook = new Workbook(fileStream);

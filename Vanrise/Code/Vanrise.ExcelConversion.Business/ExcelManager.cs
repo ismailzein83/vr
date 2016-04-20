@@ -24,7 +24,8 @@ namespace Vanrise.ExcelConversion.Business
                 throw new NullReferenceException(String.Format("file.Content '{0}'", fileId));
             MemoryStream stream = new MemoryStream(file.Content);
             Workbook workbook = new Workbook(stream);
-
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
             ExcelWorkbook ewb = new ExcelWorkbook() { Sheets = new List<ExcelWorksheet>() };
             foreach (var sheet in workbook.Worksheets)
             {
@@ -99,7 +100,8 @@ namespace Vanrise.ExcelConversion.Business
                 throw new NullReferenceException(String.Format("file.Content '{0}'", Query.FileId));
             MemoryStream stream = new MemoryStream(file.Content);
             Workbook workbook = new Workbook(stream);
-
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
             ExcelWorkbook ewb = new ExcelWorkbook() { Sheets = new List<ExcelWorksheet>() };
             var sheet = workbook.Worksheets[Query.SheetIndex];
             if (sheet == null)
