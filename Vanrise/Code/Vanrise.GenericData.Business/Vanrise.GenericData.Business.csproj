@@ -68,6 +68,7 @@
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByKey.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByPrefix.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\IGenericRuleStructureBehavior.cs" />
+    <Compile Include="GetRecordStorageDataManagerContext.cs" />
     <Compile Include="SummaryTransformation\DynamicTypeGenerator.cs" />
     <Compile Include="SummaryTransformation\IGenericSummaryTransformer.cs" />
     <Compile Include="SummaryTransformation\SummaryTransformationDefinitionManager.cs" />

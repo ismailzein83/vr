@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class DataRecord
+    public class DataRecordFieldValue
     {
-        public Dictionary<string, Object> FieldValues { get; set; }
+        public Object Value { get; set; }
+
+        public string Description { get; set; }
     }
 }

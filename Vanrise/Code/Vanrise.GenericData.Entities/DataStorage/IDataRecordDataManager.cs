@@ -9,6 +9,8 @@ namespace Vanrise.GenericData.Entities
     public interface IDataRecordDataManager : Vanrise.Data.IBulkApplyDataManager<Object>
     {
         void ApplyStreamToDB(object stream);
+
+        Vanrise.Entities.BigResult<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input);
     }
 
     public interface ISummaryRecordDataManager

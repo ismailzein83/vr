@@ -32,30 +32,17 @@ namespace Vanrise.GenericData.QueueActivators
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
-
-            var dataRecordStorage = _dataRecordStorageManager.GetDataRecordStorage(this.DataRecordStorageId);
-
-            if (dataRecordStorage == null)
-                throw new NullReferenceException(String.Format("dataRecordStorage. Id '{0}'", this.DataRecordStorageId));
-            if (dataRecordStorage.Settings == null)
-                throw new NullReferenceException("dataRecordStorage.Settings");
-
-            var dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
-            if (dataStore == null)
-                throw new NullReferenceException(String.Format("dataStore. dataStore Id '{0}' dataRecordStorage Id '{1}'", dataRecordStorage.Settings.ConfigId, this.DataRecordStorageId));
-            var getRecordStorageDataManagerContext = new GetRecordStorageDataManagerContext
-            {
-                DataStore = dataStore,
-                DataRecordStorage = dataRecordStorage
-            };
-            var dataManager = dataStore.Settings.GetDataRecordDataManager(getRecordStorageDataManagerContext);
-            var dbApplyStream = dataManager.InitialiazeStreamForDBApply();
+            
+            var recordStorageDataManager = _dataRecordStorageManager.GetStorageDataManager(this.DataRecordStorageId);
+            if (recordStorageDataManager == null)
+                throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", this.DataRecordStorageId));
+            var dbApplyStream = recordStorageDataManager.InitialiazeStreamForDBApply();
             foreach(var record in batchRecords)
             {
-                dataManager.WriteRecordToStream(record as Object, dbApplyStream);
+                recordStorageDataManager.WriteRecordToStream(record as Object, dbApplyStream);
             }
-            var streamReadyToApply = dataManager.FinishDBApplyStream(dbApplyStream);
-            dataManager.ApplyStreamToDB(streamReadyToApply);
+            var streamReadyToApply = recordStorageDataManager.FinishDBApplyStream(dbApplyStream);
+            recordStorageDataManager.ApplyStreamToDB(streamReadyToApply);
         }
     }
 }

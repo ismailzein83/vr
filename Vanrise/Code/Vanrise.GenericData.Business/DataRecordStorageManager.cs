@@ -21,6 +21,50 @@ namespace Vanrise.GenericData.Business
 
         #region Public Methods
 
+        public Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
+        {
+            var dataRecordStorage = GetDataRecordStorage(input.Query.DataRecordStorageId);
+            if (dataRecordStorage == null)
+                throw new NullReferenceException(String.Format("dataRecordStorage Id '{0}'", input.Query.DataRecordStorageId));
+            if (dataRecordStorage.Settings == null)
+                throw new NullReferenceException(String.Format("dataRecordStorage.Settings Id '{0}'", input.Query.DataRecordStorageId));
+
+            var recordTypeManager = new DataRecordTypeManager();
+            var recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+            if (recordType == null)
+                throw new NullReferenceException(String.Format("recordType ID '{0}'", dataRecordStorage.DataRecordTypeId));
+            if (recordType.Fields == null)
+                throw new NullReferenceException(String.Format("recordType.Fields ID '{0}'", dataRecordStorage.DataRecordTypeId));
+
+            var dataManager = GetStorageDataManager(dataRecordStorage);
+            if (dataManager == null)
+                throw new NullReferenceException(String.Format("dataManager. ID '{0}'", input.Query.DataRecordStorageId));
+
+            var dataRecordsResult = dataManager.GetFilteredDataRecords(input);
+            if (dataRecordsResult == null)
+                return null;
+            Vanrise.Entities.BigResult<DataRecordDetail> dataRecordDetailsResult = new Vanrise.Entities.BigResult<DataRecordDetail>
+            {
+                ResultKey = dataRecordsResult.ResultKey,
+                TotalCount = dataRecordsResult.TotalCount
+            };
+            
+            if (dataRecordsResult.Data != null)
+                dataRecordDetailsResult.Data = dataRecordsResult.Data.MapRecords(itm => DataRecordDetailMapper(itm, recordType));
+            return DataRetrievalManager.Instance.ProcessResult(input, dataRecordDetailsResult);
+        }
+
+        public IDataRecordDataManager GetStorageDataManager(int recordStorageId)
+        {
+            var dataRecordStorage = GetDataRecordStorage(recordStorageId);
+            if (dataRecordStorage == null)
+                throw new NullReferenceException(String.Format("dataRecordStorage. Id '{0}'", recordStorageId));
+            if (dataRecordStorage.Settings == null)
+                throw new NullReferenceException(String.Format("dataRecordStorage.Settings. Id '{0}'", recordStorageId));
+
+            return GetStorageDataManager(dataRecordStorage);
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<DataRecordStorageDetail> GetFilteredDataRecordStorages(Vanrise.Entities.DataRetrievalInput<DataRecordStorageQuery> input)
         {
             var cachedDataRecordStorages = GetCachedDataRecordStorages();
@@ -134,6 +178,22 @@ namespace Vanrise.GenericData.Business
                 throw new ArgumentNullException("dataStore.Settings");
         }
 
+        private IDataRecordDataManager GetStorageDataManager(DataRecordStorage dataRecordStorage)
+        {
+            var dataStore = _dataStoreManager.GeDataStore(dataRecordStorage.DataStoreId);
+            if (dataStore == null)
+                throw new NullReferenceException(String.Format("dataStore. dataStore Id '{0}' dataRecordStorage Id '{1}'", dataRecordStorage.DataStoreId, dataRecordStorage.DataRecordStorageId));
+            if (dataStore.Settings == null)
+                throw new NullReferenceException(String.Format("dataStore.Settings. dataStore Id '{0}' dataRecordStorage Id '{1}'", dataRecordStorage.DataStoreId, dataRecordStorage.DataRecordStorageId));
+            var getRecordStorageDataManagerContext = new GetRecordStorageDataManagerContext
+            {
+                DataStore = dataStore,
+                DataRecordStorage = dataRecordStorage
+            };
+            return dataStore.Settings.GetDataRecordDataManager(getRecordStorageDataManagerContext);
+        }
+
+
         #endregion
 
         #region Private Classes
@@ -173,6 +233,25 @@ namespace Vanrise.GenericData.Business
                 Name = dataRecordStorage.Name
             };
         }
+
+
+        private DataRecordDetail DataRecordDetailMapper(DataRecord dataRecord, DataRecordType recordType)
+        {
+            var dataRecordDetail = new DataRecordDetail() { FieldValues = new Dictionary<string, DataRecordFieldValue>() };
+            foreach (var fld in recordType.Fields)
+            {
+                DataRecordFieldValue fldValueDetail = new DataRecordFieldValue();
+                Object value;
+                if (dataRecord.FieldValues.TryGetValue(fld.Name, out value))
+                {
+                    fldValueDetail.Value = value;
+                    fldValueDetail.Description = fld.Type.GetDescription(value);
+                }
+                dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
+            }
+            return dataRecordDetail;
+        }
+
         #endregion
     }
 }

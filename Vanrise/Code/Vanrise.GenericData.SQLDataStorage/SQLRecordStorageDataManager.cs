@@ -17,6 +17,22 @@ namespace Vanrise.GenericData.SQLDataStorage
         SQLDataRecordStorageSettings _dataRecordStorageSettings;
         DataRecordStorage _dataRecordStorage;
         SummaryTransformationDefinition _summaryTransformationDefinition;
+
+        DataRecordType _dataRecordType;
+        DataRecordType DataRecordType
+        {
+            get
+            {
+                if(_dataRecordType == null)
+                {
+                    DataRecordTypeManager manager = new DataRecordTypeManager();
+                    _dataRecordType = manager.GetDataRecordType(_dataRecordStorage.DataRecordTypeId);
+                    if (_dataRecordType == null)
+                        throw new NullReferenceException(String.Format("_dataRecordType ID '{0}'", _dataRecordStorage.DataRecordTypeId));
+                }
+                return _dataRecordType;
+            }
+        }
         
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage)
             : base(dataStoreSettings.ConnectionString, false)
@@ -283,6 +299,233 @@ namespace Vanrise.GenericData.SQLDataStorage
                 {
                     cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart));
                 });
+        }
+
+        public Vanrise.Entities.BigResult<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
+        {   
+            Action<string> createTempTableAction = (tempTableName) =>
+                {
+                    StringBuilder queryBuilder = new StringBuilder();
+                    int parameterIndex = 0;
+                    Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+                    String recordFilter = BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
+                    ExecuteNonQueryText(queryBuilder.ToString(),
+                        (cmd) =>
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@FromTime", input.Query.FromTime));
+                            cmd.Parameters.Add(new SqlParameter("@ToTime", input.Query.ToTime));
+                            foreach (var prm in parameterValues)
+                            {
+                                cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                            }
+                        });
+                };
+            return RetrieveData(input, createTempTableAction, DataRecordMapper);
+        }
+
+        private DataRecord DataRecordMapper(IDataReader reader)
+        {
+            Dictionary<string, Object> fieldValues = new Dictionary<string, object>();
+            foreach (var column in _dataRecordStorageSettings.Columns)
+            {
+                fieldValues.Add(column.ValueExpression, reader[column.ColumnName]);
+            }
+            return new DataRecord { FieldValues = fieldValues };
+        }
+
+        private string BuildRecordFilter(RecordFilterGroup filterGroup, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var filter in filterGroup.Filters)
+            {
+                if (builder.Length > 0)
+                    builder.AppendFormat(" {0} ", filterGroup.LogicalOperator);
+
+                RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
+                if (childFilterGroup != null)
+                {
+                    builder.Append(BuildRecordFilter(childFilterGroup, ref parameterIndex, parameterValues));
+                    break;
+                }
+
+                EmptyRecordFilter emptyFilter = filter as EmptyRecordFilter;
+                if (emptyFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(emptyFilter, ref parameterIndex, parameterValues));
+                    break;
+                }
+
+                NonEmptyRecordFilter nonEmptyFilter = filter as NonEmptyRecordFilter;
+                if (nonEmptyFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(nonEmptyFilter, ref parameterIndex, parameterValues));
+                    break;
+                }
+
+                StringRecordFilter stringFilter = filter as StringRecordFilter;
+                if (stringFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(stringFilter, ref parameterIndex, parameterValues));
+                    break;
+                }
+
+                NumberRecordFilter numberFilter = filter as NumberRecordFilter;
+                if (numberFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(numberFilter, ref parameterIndex, parameterValues));
+                    break;
+                }
+
+                DateTimeRecordFilter dateTimeFilter = filter as DateTimeRecordFilter;
+                if (dateTimeFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(dateTimeFilter, ref parameterIndex, parameterValues));
+                    break;
+                }
+
+                BooleanRecordFilter booleanFilter = filter as BooleanRecordFilter;
+                if (booleanFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(booleanFilter, ref parameterIndex, parameterValues));
+                    break;
+                }
+
+                NumberListRecordFilter numberListFilter = filter as NumberListRecordFilter;
+                if (numberListFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(numberListFilter, ref parameterIndex, parameterValues));
+                    break;
+                }                
+            }
+           
+            return String.Format("({0})", builder);
+        }
+
+        private string BuildRecordFilter(EmptyRecordFilter emptyFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            return string.Format("{0} IS NULL", GetColumnName(emptyFilter));
+        }
+
+        private string BuildRecordFilter(NonEmptyRecordFilter nonEmptyFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            return string.Format("{0} IS NOT NULL", GetColumnName(nonEmptyFilter));
+        }
+
+        private string BuildRecordFilter(StringRecordFilter stringFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            string parameterName = GenerateParameterName(ref parameterIndex);
+            string compareOperator = null;
+
+            switch (stringFilter.CompareOperator)
+            {
+                case StringRecordFilterOperator.Equals: compareOperator = "="; break;
+                case StringRecordFilterOperator.NotEquals: compareOperator = "<>"; break;
+                case StringRecordFilterOperator.Contains: 
+                    compareOperator = "LIKE";
+                    parameterName = string.Format("'%' + {0} + '%'", parameterName);
+                    break;
+                case StringRecordFilterOperator.NotContains: 
+                     compareOperator = "NOT LIKE";
+                    parameterName = string.Format("'%' + {0} + '%'", parameterName);
+                    break;
+                case StringRecordFilterOperator.StartsWith: 
+                    compareOperator = "LIKE";
+                    parameterName = string.Format("{0} + '%'", parameterName);
+                    break;
+                case StringRecordFilterOperator.NotStartsWith:
+                    compareOperator = "NOT LIKE";
+                    parameterName = string.Format("{0} + '%'", parameterName);
+                    break;
+                case StringRecordFilterOperator.EndsWith:
+                    compareOperator = "LIKE";
+                    parameterName = string.Format("'%' + {0}", parameterName);
+                    break;
+                case StringRecordFilterOperator.NotEndsWith:
+                    compareOperator = "NOT LIKE";
+                    parameterName = string.Format("'%' + {0}", parameterName);
+                    break;
+            }
+            parameterValues.Add(parameterName, stringFilter.Value);
+            return string.Format("{0} {1} {2}", GetColumnName(stringFilter), compareOperator, parameterName);
+        }
+
+        private string BuildRecordFilter(NumberRecordFilter numberFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            string parameterName = GenerateParameterName(ref parameterIndex);
+            string compareOperator = null;
+            
+            switch(numberFilter.CompareOperator)
+            {
+                case NumberRecordFilterOperator.Equals: compareOperator = "="; break;
+                case NumberRecordFilterOperator.NotEquals: compareOperator = "<>"; break;
+                case NumberRecordFilterOperator.Greater: compareOperator = ">"; break;
+                case NumberRecordFilterOperator.GreaterOrEquals: compareOperator = ">="; break;
+                case NumberRecordFilterOperator.Less: compareOperator = "<"; break;
+                case NumberRecordFilterOperator.LessOrEquals: compareOperator = "<="; break;
+            }
+            parameterValues.Add(parameterName, numberFilter.Value);
+            return string.Format("{0} {1} {2}", GetColumnName(numberFilter), compareOperator, parameterName);
+        }
+
+        private string BuildRecordFilter(DateTimeRecordFilter dateTimeFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            string parameterName = GenerateParameterName(ref parameterIndex);
+            string compareOperator = null;
+
+            switch (dateTimeFilter.CompareOperator)
+            {
+                case DateTimeRecordFilterOperator.Equals: compareOperator = "="; break;
+                case DateTimeRecordFilterOperator.NotEquals: compareOperator = "<>"; break;
+                case DateTimeRecordFilterOperator.Greater: compareOperator = ">"; break;
+                case DateTimeRecordFilterOperator.GreaterOrEquals: compareOperator = ">="; break;
+                case DateTimeRecordFilterOperator.Less: compareOperator = "<"; break;
+                case DateTimeRecordFilterOperator.LessOrEquals: compareOperator = "<="; break;
+            }
+            parameterValues.Add(parameterName, dateTimeFilter.Value);
+            return string.Format("{0} {1} {2}", GetColumnName(dateTimeFilter), compareOperator, parameterName);
+        }
+
+        private string BuildRecordFilter(BooleanRecordFilter booleanFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            return string.Format("{0} = {1}", GetColumnName(booleanFilter), booleanFilter.IsTrue ? "1" : "0");
+        }
+
+        private string BuildRecordFilter(NumberListRecordFilter numberListFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            return BuildRecordFilter<Decimal>(numberListFilter, ref parameterIndex, parameterValues);
+        }
+
+        string BuildRecordFilter<T>(ListRecordFilter<T> listFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            StringBuilder valuesBuilder = new StringBuilder();
+            foreach (var value in listFilter.Values)
+            {
+                if (valuesBuilder.Length > 0)
+                    valuesBuilder.Append(", ");
+                string parameterName = GenerateParameterName(ref parameterIndex);
+                parameterValues.Add(parameterName, value);
+                valuesBuilder.Append(parameterName);
+            }
+            string compareOperator = listFilter.CompareOperator == ListRecordFilterOperator.In ? "IN" : "NOT IN";
+            return string.Format("{0} {1} ({2})", GetColumnName(listFilter), compareOperator, valuesBuilder);
+        }
+
+        string GenerateParameterName(ref int parameterIndex)
+        {
+            return String.Format("@Prm_{0}", parameterIndex++);
+        }
+
+        string GetColumnName(RecordFilter recordFilter)
+        {
+            return GetColumnNameFromFieldName(recordFilter.FieldName);
+        }
+
+        string GetColumnNameFromFieldName(string fieldName)
+        {
+            var column = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == fieldName);
+            if (column == null)
+                throw new NullReferenceException(String.Format("column. RecordStorageId '{0}'. FieldName '{1}'", -_dataRecordStorage.DataRecordStorageId, fieldName));
+            return column.ColumnName;
         }
     }
 }

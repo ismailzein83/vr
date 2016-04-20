@@ -52,7 +52,6 @@
     <Compile Include="GenericSummaryRecordBatch.cs" />
     <Compile Include="GenericSummaryRecordBatchQueueItemType.cs" />
     <Compile Include="GenericSummaryTransformationManager.cs" />
-    <Compile Include="GetRecordStorageDataManagerContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreBatchQueueActivator.cs" />
     <Compile Include="TransformBatchQueueActivator.cs" />
