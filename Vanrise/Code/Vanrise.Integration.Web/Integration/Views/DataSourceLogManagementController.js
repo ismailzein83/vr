@@ -1,9 +1,8 @@
-﻿DataSourceLogManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
+﻿DataSourceLogManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
 function DataSourceLogManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var gridApi;
-    var searchApi;
     var dataSourceDirectiveAPI;
     var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -17,16 +16,12 @@ function DataSourceLogManagementController($scope, UtilsService, VRNotificationS
         $scope.severities = [];
         $scope.selectedSeverities = [];
         var fromDate = new Date();
-        
+
         fromDate.setHours(0, 0, 0, 0);
         $scope.selectedFromDateTime = fromDate;
 
         $scope.gridReady = function (api) {
             gridApi = api;
-        }
-        $scope.searchReady = function (api) {
-            searchApi = api;
-            searchApi.load();
         }
 
         $scope.searchClicked = function () {
@@ -37,7 +32,7 @@ function DataSourceLogManagementController($scope, UtilsService, VRNotificationS
             dataSourceDirectiveAPI = api;
             dataSourceReadyPromiseDeferred.resolve();
         }
-      
+
     }
 
     function load() {
@@ -54,8 +49,7 @@ function DataSourceLogManagementController($scope, UtilsService, VRNotificationS
         });
     }
 
-    function loadDatasourceSelector()
-    {
+    function loadDatasourceSelector() {
         var dataSourceLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
         dataSourceReadyPromiseDeferred.promise
