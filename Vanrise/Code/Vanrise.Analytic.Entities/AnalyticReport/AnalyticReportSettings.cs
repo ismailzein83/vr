@@ -11,7 +11,7 @@ namespace Vanrise.Analytic.Entities
 
         public override string GetURL(Security.Entities.View view)
         {
-            return String.Format("#/viewwithparams/Analytic/Views/GenericAnalytic/GenericAnalyticReport/{{\"viewId\":\"{0}\"}}", view.ViewId);
+            return String.Format("#/viewwithparams/Analytic/Views/GenericAnalytic/Runtime/GenericAnalyticReport/{{\"viewId\":\"{0}\"}}", view.ViewId);
         }
         public List<int> AnalyticTableIds { get; set; }
 
