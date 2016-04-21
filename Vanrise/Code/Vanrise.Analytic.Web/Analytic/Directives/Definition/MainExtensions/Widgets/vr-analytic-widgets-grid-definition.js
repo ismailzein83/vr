@@ -101,15 +101,48 @@
                 var api = {};
 
                 api.load = function (payload) {
-
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
+                        var selectedDimensionIds;
+                        var selectedMeasureIds;
+                        if (payload.widgetEntity != undefined)
+                        {
+                            $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearchSection;
+                            selectedDimensionIds = [];
+                            if(payload.widgetEntity.Dimensions !=undefined && payload.widgetEntity.Dimensions.length>0)
+                            {
+                                for(var i=0; i<payload.widgetEntity.Dimensions.length; i++)
+                                {
+                                    var dimension = payload.widgetEntity.Dimensions[i];
+                                    selectedDimensionIds.push(dimension.DimensionName);
+                                    $scope.scopeModel.dimensions.push({
+                                        Name: dimension.DimensionName,
+                                        Title: dimension.Title,
+                                        IsRootDimension: dimension.IsRootDimension,
+                                    });
+                                }
+                            }
+
+                            selectedMeasureIds = [];
+                            if (payload.widgetEntity.Measures != undefined && payload.widgetEntity.Measures.length > 0) {
+                                for (var i = 0; i < payload.widgetEntity.Measures.length; i++) {
+                                    var measure = payload.widgetEntity.Measures[i];
+                                    selectedMeasureIds.push(measure.MeasureName);
+                                    $scope.scopeModel.measures.push({
+                                        Name: measure.MeasureName,
+                                        Title: measure.Title,
+                                    });
+                                }
+                            }
+                        }
+
                         var promises = [];
 
                         var loadDimensionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         dimensionReadyDeferred.promise.then(function () {
                             var payloadGroupingDirective = {
-                                filter: { TableIds: tableIds }
+                                filter: { TableIds: tableIds },
+                                selectedIds: selectedDimensionIds
                             };
 
                             VRUIUtilsService.callDirectiveLoad(dimensionSelectorAPI, payloadGroupingDirective, loadDimensionDirectivePromiseDeferred);
@@ -119,7 +152,8 @@
                         var loadMeasureDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         measureReadyDeferred.promise.then(function () {
                             var payloadFilterDirective = {
-                                filter: { TableIds: tableIds }
+                                filter: { TableIds: tableIds },
+                                selectedIds: selectedMeasureIds
                             };
 
                             VRUIUtilsService.callDirectiveLoad(measureSelectorAPI, payloadFilterDirective, loadMeasureDirectivePromiseDeferred);

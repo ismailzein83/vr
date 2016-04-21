@@ -42,7 +42,7 @@ namespace Vanrise.Security.Data.SQL
             string serializedSettings = view.Settings != null ? Common.Serializer.Serialize(view.Settings) : null;
             object viewId;
             int recordesEffected = ExecuteNonQuerySP("sec.sp_View_Insert", out viewId, view.Name, view.Title, view.Url, view.ModuleId,
-               serialziedAudience, serialziedContent, serializedSettings, (int)view.Type);
+               serialziedAudience, serialziedContent, serializedSettings, view.Type);
             insertedId = (recordesEffected > 0) ? (int)viewId : -1;
             return (recordesEffected > 0);
         }

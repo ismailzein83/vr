@@ -8,10 +8,10 @@
                         <vr-columns width="1/3row">
                             <vr-section title="Page Setting">
                                 <vr-row removeline>
-                                    <vr-textbox value="scopeModel.reportName" isrequired="true" label="Report Name" customvalidate="scopeModel.validate()"></vr-textbox>
+                                    <vr-textbox value="scopeModel.reportName" isrequired="true" label="Menu Title" customvalidate="scopeModel.validate()"></vr-textbox>
                                 </vr-row>
                                 <vr-row>
-                                    <vr-textbox value="scopeModel.reportTitle" isrequired="true" label="Report Title" customvalidate="scopeModel.validate()"></vr-textbox>
+                                    <vr-textbox value="scopeModel.reportTitle" isrequired="true" label="Page Title" customvalidate="scopeModel.validate()"></vr-textbox>
                                 </vr-row>
                                 <vr-row>
                                     <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTables" ismultipleselection></vr-analytic-table-selector>
@@ -40,15 +40,15 @@
                     </span>
                 </vr-tab>
                 <vr-tab header="'Widgets'">
-                    <vr-row ng-show="scopeModel.selectedTables !=undefined && scopeModel.selectedTables.length>0">
+                    <vr-row ng-if="scopeModel.selectedTables !=undefined && scopeModel.selectedTables.length>0">
                         <vr-columns width="normal">
                             <vr-button type="Add" data-onclick="scopeModel.addWidget" standalone></vr-button>
                         </vr-columns>
                         <vr-columns width="fullrow">
                             <vr-validator validate="scopeModel.isWidgetValid()">
                                 <vr-datagrid datasource="scopeModel.widgets" norowhighlightonclick="true"
-                                             on-ready="onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeWidget" hidegridmenu>
-                                    <vr-datagridcolumn headertext="'Widget Name'" field="'WidgetTitle'" widthfactor="5"></vr-datagridcolumn>
+                                             on-ready="onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeWidget" menuactions="widgetsGridMenuActions" hidegridmenu >
+                                    <vr-datagridcolumn headertext="'Widget Name'" field="'widgetSettings.WidgetTitle'" widthfactor="5"></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>
                         </vr-columns>

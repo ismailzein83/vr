@@ -10,7 +10,6 @@
             scope: {
                 onReady: "=",
                 normalColNum: '@',
-                isrequired: '=',
                 label: '@',
                 customvalidate: '=',
                 type: "="
@@ -39,10 +38,10 @@
                 '<vr-row>'
 
                + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
-                + ' <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" selectedvalues="scopeModel.selectedTable"></vr-analytic-table-selector>'
+                + ' <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTable" hideremoveicon></vr-analytic-table-selector>'
               + ' </vr-columns>'
               + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
-                + ' <vr-textbox label="Title" value="scopeModel.widgetTitle"></vr-textbox>'
+                + ' <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>'
               + ' </vr-columns>'
               + '<vr-columns colnum="{{searchSettingsCtrl.normalColNum}}" ng-if="scopeModel.selectedTable !=undefined">'
               + ' <vr-select on-ready="scopeModel.onSelectorReady"'
@@ -51,7 +50,7 @@
                + 'datavaluefield="TemplateConfigID"'
               + ' datatextfield="Name"'
               + label
-               + ' isrequired="searchSettingsCtrl.isrequired"'
+               + ' isrequired="true"'
               + 'hideremoveicon>'
           + '</vr-select>'
            + ' </vr-columns>'
@@ -65,7 +64,7 @@
             var selectorAPI;
 
             var directiveAPI;
-            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var directiveReadyDeferred;
             var directivePayload;
 
             var tableSelectorAPI;
@@ -92,7 +91,7 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
                 defineAPI();
 
@@ -107,23 +106,34 @@
                     if (payload != undefined) {
                         tableIds = payload.tableIds;
 
-                            var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                            tableSelectorReadyDeferred.promise.then(function () {
-                                var payLoadTableSelector = {
-                                    filter: { OnlySelectedIds: tableIds }
+                        if (payload.widgetEntity != undefined)
+                        {
+                            $scope.scopeModel.widgetTitle = payload.widgetEntity.WidgetTitle;
+                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                            var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            directiveReadyDeferred.promise.then(function () {
+                                directiveReadyDeferred = undefined;
+                                var payloadDirective = {
+                                    tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined,
+                                    widgetEntity: payload.widgetEntity
                                 };
 
-                                VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoadTableSelector, loadTableSelectorPromiseDeferred);
+                                VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                             });
-                            promises.push(loadTableSelectorPromiseDeferred.promise);
-                        //var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        //directiveReadyDeferred.promise.then(function () {
-                        //    directiveReadyDeferred = undefined;
-                        //    var payloadDirective;
+                            promises.push(loadDirectivePromiseDeferred.promise);
 
-                        //    VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
-                        //});
-                        //promises.push(loadDirectivePromiseDeferred.promise);
+                        }
+                        var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        tableSelectorReadyDeferred.promise.then(function () {
+                            var payLoadTableSelector = {
+                                filter: { OnlySelectedIds: tableIds },
+                                selectedIds: payload.widgetEntity != undefined ? payload.widgetEntity.AnalyticTableId : undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoadTableSelector, loadTableSelectorPromiseDeferred);
+                        });
+                        promises.push(loadTableSelectorPromiseDeferred.promise);
+
                             var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
                             promises.push(getWidgetsTemplateConfigsPromise);
 
@@ -137,8 +147,8 @@
                                         for (var i = 0; i < response.length; i++) {
                                             $scope.scopeModel.templateConfigs.push(response[i]);
                                         }
-                                        //if (fieldMapping != undefined)
-                                        //    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, fieldMapping.ConfigId, 'TemplateConfigID');
+                                        if (payload.widgetEntity != undefined)
+                                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, payload.widgetEntity.ConfigId, 'TemplateConfigID');
                                         //else
                                         //$scope.selectedTemplateConfig = $scope.templateConfigs[0];
                                     }

@@ -80,7 +80,8 @@
                     var loadWidgetSelectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     widgetSelectiveReadyDeferred.promise.then(function () {
                         var payLoad = {
-                            tableIds: tableIds
+                            tableIds: tableIds,
+                            widgetEntity: widgetEntity
                         };
                         VRUIUtilsService.callDirectiveLoad(widgetSelectiveAPI, payLoad, loadWidgetSelectivePromiseDeferred);
                     });
@@ -108,7 +109,7 @@
         function update() {
             var widgetObj = buildWidgetObjectFromScope();
             if ($scope.onWidgetUpdated != undefined) {
-                $scope.onWidgetUpdated(response.UpdatedObject);
+                $scope.onWidgetUpdated(widgetObj);
             }
             $scope.modalContext.closeModal();
         }

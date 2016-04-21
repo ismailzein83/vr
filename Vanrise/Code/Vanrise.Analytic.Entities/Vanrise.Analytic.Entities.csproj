@@ -90,6 +90,10 @@
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

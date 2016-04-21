@@ -68,9 +68,10 @@
             $scope.scopeModel.widgets = [];
             $scope.scopeModel.addWidget = function()
             {
+                console.log($scope.scopeModel.widgets);
                 var onWidgetAdd=function(widget)
                 {
-                    $scope.scopeModel.widgets.push(widget);
+                    $scope.scopeModel.widgets.push({ widgetSettings: widget });
                 }
                 Analytic_AnalyticService.addWidget(onWidgetAdd, tableSelectorAPI.getSelectedIds());
             }
@@ -82,6 +83,8 @@
                     return null;
                 return "At least one widget should be selected.";
             }
+
+
             //$scope.scopeModal.hasSaveGenericBEEditor = function () {
             //    if (isEditMode) {
             //        return VR_GenericData_BusinessEntityDefinitionAPIService.HasUpdateBusinessEntityDefinition();
@@ -90,6 +93,14 @@
             //        return VR_GenericData_BusinessEntityDefinitionAPIService.HasAddBusinessEntityDefinition();
             //    }
             //}
+
+           
+
+            $scope.widgetsGridMenuActions = function (dataItem) {
+                return getwidgetGridMenuActions();
+            }
+
+           
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -102,6 +113,24 @@
             $scope.scopeModel.validateMenuLocation = function () {
                 return ($scope.scopeModel.selectedMenuItem != undefined) ? null : 'No menu location selected';
             };
+        }
+        function getwidgetGridMenuActions()
+        {
+            var defaultMenuActions = [
+              {
+                  name: "Edit",
+                  clicked: editWidget,
+              }];
+            return defaultMenuActions;
+        }
+        function editWidget(dataItem)
+        {
+            var onWidgetUpdated = function (widgetObj) {
+                var index = $scope.scopeModel.widgets.indexOf(dataItem);
+                $scope.scopeModel.widgets[index].widgetSettings = widgetObj;
+            }
+            Analytic_AnalyticService.editWidget(dataItem.widgetSettings, onWidgetUpdated, tableSelectorAPI.getSelectedIds());
+
         }
 
         function load() {
@@ -199,20 +228,32 @@
 
 
         function buildViewObjectFromScope() {
+            var widgets = [];
+            if ($scope.scopeModel.widgets != undefined && $scope.scopeModel.widgets.length > 0)
+            {
+                for(var i=0;i<$scope.scopeModel.widgets.length;i++)
+                {
+                    widgets.push($scope.scopeModel.widgets[i].widgetSettings);
+                }
+            }
+
             var viewSettings = {
                 $type: "Vanrise.Analytic.Entities.AnalyticReportSettings, Vanrise.Analytic.Entities",
                 AnalyticTableIds:tableSelectorAPI!=undefined?tableSelectorAPI.getSelectedIds():undefined,
-                GroupingDimensions: searchSettingDirectiveAPI !=undefined?searchSettingDirectiveAPI.getData():undefined,
+                SearchSettings: searchSettingDirectiveAPI != undefined ? searchSettingDirectiveAPI.getData() : undefined,
+                Widgets: widgets
             };
-            return {
+            var view = {
                 ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
-                Name: $scope.scopeModel.businessEntityName,
-                Title: $scope.scopeModel.businessEntityTitle,
+                Name: $scope.scopeModel.reportName,
+                Title: $scope.scopeModel.reportTitle,
                 ModuleId: $scope.scopeModel.selectedMenuItem.Id,
                 Settings: viewSettings,
-                Type: viewEntity!=undefined?viewEntity.Type:undefined,
-                
+                Type: viewEntity != undefined ? viewEntity.Type : undefined,
+
             };
+            
+            return view;
         }
 
 
@@ -220,7 +261,7 @@
             $scope.scopeModel.isLoading = true;
             var serverResponse;
             var viewEntityObj = buildViewObjectFromScope();
-            viewEntityObj.ViewTypeName = viewTypeName;
+            viewEntityObj.ViewTypeName = viewTypeName; console.log(viewEntityObj);
             return VR_Sec_ViewAPIService.AddView(viewEntityObj).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Analytic Report', response, 'Name')) {
                     if ($scope.onViewAdded != undefined) {

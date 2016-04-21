@@ -79,13 +79,13 @@
                         }
 
                         if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'AnalyticItemConfigId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'Name', attrs, ctrl);
                         }
                     });
                 }
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('AnalyticItemConfigId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
                 }
 
                 return api;
