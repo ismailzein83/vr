@@ -40,10 +40,13 @@ namespace TOne.WhS.Analytics.Business
             {
                 case VariationReportType.InBoundMinutes:
                 case VariationReportType.OutBoundMinutes:
+                case VariationReportType.InBoundAmount:
+                case VariationReportType.OutBoundAmount:
                     foreach (VariationReportRecord reportRecord in reportRecords)
                         reportRecord.DimensionName = _carrierAccountManager.GetCarrierAccountName((int)reportRecord.DimensionId);
                     break;
                 case VariationReportType.TopDestinationMinutes:
+                case VariationReportType.TopDestinationAmount:
                     foreach (VariationReportRecord reportRecord in reportRecords)
                         reportRecord.DimensionName = _saleZoneManager.GetSaleZoneName((long)reportRecord.DimensionId);
                     break;

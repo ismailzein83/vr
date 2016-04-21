@@ -1,11 +1,12 @@
 ﻿<vr-datagrid on-ready="scopeModel.onGridReady"
              datasource="scopeModel.dataSource"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             defaultsortbyfieldname="'DimensionId'"
+             defaultsortbyfieldname="'Average'"
+             defaultsortdirection="'DESC'"
              pagingtype="'PagingOnScroll'">
     <vr-datagridcolumn headertext="scopeModel.dimensionTitle" field="'DimensionName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Days AVG'" field="'Average'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Days %'" field="'Percentage'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Previous Period %'" field="'PreviousPeriodPercentage'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="definition in scopeModel.timePeriodDefinitions" headertext="definition.PeriodDescription" field="'TimePeriodValues['+$index+']'" type="'Text'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Periods AVG'" field="'Average'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Periods %'" field="'Percentage'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Previous Period %'" field="'PreviousPeriodPercentage'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="definition in scopeModel.timePeriodDefinitions" headertext="definition.PeriodDescription" field="'TimePeriodValues['+$index+']'" type="'Number'" disablesorting></vr-datagridcolumn>
 </vr-datagrid>

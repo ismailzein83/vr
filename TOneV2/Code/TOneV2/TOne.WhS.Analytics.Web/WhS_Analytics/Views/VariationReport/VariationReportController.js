@@ -17,7 +17,7 @@
             $scope.scopeModel.reportTypes = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTypeEnum);
             $scope.scopeModel.selectedReportType = UtilsService.getEnum(WhS_Analytics_VariationReportTypeEnum, 'value', WhS_Analytics_VariationReportTypeEnum.InBoundMinutes.value);
 
-            $scope.scopeModel.toDate = new Date('2016-01-05');
+            $scope.scopeModel.toDate = new Date('2016-01-04');
 
             $scope.scopeModel.periodTypes = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTimePeriodEnum);;
             $scope.scopeModel.selectedPeriodType = UtilsService.getEnum(WhS_Analytics_VariationReportTimePeriodEnum, 'value', WhS_Analytics_VariationReportTimePeriodEnum.Daily.value);

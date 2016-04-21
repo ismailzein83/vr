@@ -63,8 +63,9 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder createTempTableQueryBuilder = new StringBuilder
             (
                 @"IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
-                BEGIN 
-                    SELECT #TOP_PART##DIMENTION_COLUMN_NAME# AS DimensionId#DAYS_AVG_PART##DAYS_PERCENTAGE_PART##PREVIOUS_PERIOD_PERCENTAGE_PART##SUM_PART#
+                BEGIN
+                    #EXCHANGE_RATES_TABLE#
+                    SELECT #TOP_PART##DIMENTION_COLUMN_NAME# AS DimensionId#AVERAGE_PART##PERCENTAGE_PART##PREVIOUS_PERIOD_PERCENTAGE_PART##SUM_PART#
                     INTO #TEMP_TABLE_NAME#
                     
                     FROM TOneWhs_Analytic.BillingStats bs#JOIN_PART#
@@ -72,23 +73,23 @@ namespace TOne.WhS.Analytics.Data.SQL
                     WHERE bs.CallDate >= @SmallestFromDate AND CallDate < @LargestToDate
                     
                     GROUP BY #DIMENTION_COLUMN_NAME#
-                    ORDER BY SUM(#SUM_COLUMN_NAME#) DESC
+                    #ORDER_BY_PART#
                 END"
             );
 
-            string sumColumnName = GetSumColumnName(input.Query.ReportType);
-
             createTempTableQueryBuilder.Replace("#TEMP_TABLE_NAME#", tempTableName);
+
+            createTempTableQueryBuilder.Replace("#EXCHANGE_RATES_TABLE#", GetExchangeRatesTable(input.Query.ReportType));
             createTempTableQueryBuilder.Replace("#TOP_PART#", GetTopPart(input.Query.ReportType));
             createTempTableQueryBuilder.Replace("#DIMENTION_COLUMN_NAME#", GetDimentionColumnNameAndSetDimensionTitle(input.Query.ReportType));
 
-            createTempTableQueryBuilder.Replace("#DAYS_AVG_PART#", GetDaysAveragePart(input.Query.ReportType, input.Query.NumberOfPeriods));
-            createTempTableQueryBuilder.Replace("#DAYS_PERCENTAGE_PART#", GetDaysPercentagePart(input.Query.ReportType, input.Query.NumberOfPeriods));
+            createTempTableQueryBuilder.Replace("#AVERAGE_PART#", GetAveragePart(input.Query.ReportType, input.Query.NumberOfPeriods));
+            createTempTableQueryBuilder.Replace("#PERCENTAGE_PART#", GetPercentagePart(input.Query.ReportType, input.Query.NumberOfPeriods));
             createTempTableQueryBuilder.Replace("#PREVIOUS_PERIOD_PERCENTAGE_PART#", GetPreviousPeriodPercentagePart(input.Query.ReportType, input.Query.NumberOfPeriods));
 
-            createTempTableQueryBuilder.Replace("#SUM_PART#", GetSumPart(input.Query.NumberOfPeriods, sumColumnName));
-            createTempTableQueryBuilder.Replace("#JOIN_PART#", GetJoinPart(input.Query.NumberOfPeriods));
-            createTempTableQueryBuilder.Replace("#SUM_COLUMN_NAME#", sumColumnName);
+            createTempTableQueryBuilder.Replace("#SUM_PART#", GetSumPart(input.Query.ReportType, input.Query.NumberOfPeriods));
+            createTempTableQueryBuilder.Replace("#JOIN_PART#", GetJoinPart(input.Query.ReportType, input.Query.NumberOfPeriods));
+            createTempTableQueryBuilder.Replace("#ORDER_BY_PART#", GetOrderByPart(input.Query.ReportType));
 
             ExecuteNonQueryText(createTempTableQueryBuilder.ToString(), (cmd) =>
             {
@@ -100,13 +101,38 @@ namespace TOne.WhS.Analytics.Data.SQL
                 cmd.Parameters.Add(tableParameter);
 
                 cmd.Parameters.Add(new SqlParameter("@SmallestFromDate", GetSmallestFromDate(timePeriodsTable)));
-                cmd.Parameters.Add(new SqlParameter("@LargestToDate", input.Query.ToDate));
+                cmd.Parameters.Add(new SqlParameter("@LargestToDate", input.Query.ToDate.AddDays(1)));
             });
+        }
+
+        string GetExchangeRatesTable(VariationReportType reportType)
+        {
+            switch (reportType)
+            {
+                case VariationReportType.InBoundAmount:
+                case VariationReportType.OutBoundAmount:
+                case VariationReportType.TopDestinationAmount:
+                    return @"DECLARE @ExchangeRates TABLE
+                    (
+	                    CurrencyID INT NOT NULL,
+	                    Rate DECIMAL(18, 6) NOT NULL,
+	                    BED DATETIME NOT NULL,
+	                    EED DATETIME,
+	                    PRIMARY KEY(CurrencyID, BED)
+                    )
+                    INSERT INTO @ExchangeRates
+                    SELECT * FROM Common.getExchangeRates(@SmallestFromDate, @LargestToDate)";
+                case VariationReportType.InBoundMinutes:
+                case VariationReportType.OutBoundMinutes:
+                case VariationReportType.TopDestinationMinutes:
+                    return null;
+            }
+            throw new ArgumentException("reportType");
         }
 
         string GetTopPart(VariationReportType reportType)
         {
-            return (reportType == VariationReportType.TopDestinationMinutes) ? "TOP 5 " : null;
+            return (reportType == VariationReportType.TopDestinationMinutes || reportType == VariationReportType.TopDestinationAmount) ? "TOP 5 " : null;
         }
 
         string GetDimentionColumnNameAndSetDimensionTitle(VariationReportType reportType)
@@ -115,14 +141,17 @@ namespace TOne.WhS.Analytics.Data.SQL
             switch (reportType)
             {
                 case VariationReportType.InBoundMinutes:
+                case VariationReportType.InBoundAmount:
                     dimensionColumnName = "CustomerID";
                     _dimensionTitle = "Customer";
                     break;
                 case VariationReportType.OutBoundMinutes:
+                case VariationReportType.OutBoundAmount:
                     dimensionColumnName = "SupplierID";
                     _dimensionTitle = "Supplier";
                     break;
                 case VariationReportType.TopDestinationMinutes:
+                case VariationReportType.TopDestinationAmount:
                     dimensionColumnName = "SaleZoneID";
                     _dimensionTitle = "Sale Zone";
                     break;
@@ -132,47 +161,46 @@ namespace TOne.WhS.Analytics.Data.SQL
             return dimensionColumnName;
         }
 
-        string GetDaysAveragePart(VariationReportType reportType, int numberOfPeriods)
+        string GetAveragePart(VariationReportType reportType, int numberOfPeriods)
         {
-            return String.Format(", SUM({0}) / 60 / {1} AS DaysAvg", GetSumColumnName(reportType), numberOfPeriods);
+            return String.Format(", SUM({0}){1} / {2} AS Average", GetSumExpression(reportType), GetSumExpressionExtension(reportType), numberOfPeriods);
         }
 
-        string GetDaysPercentagePart(VariationReportType reportType, int numberOfPeriods)
+        string GetPercentagePart(VariationReportType reportType, int numberOfPeriods)
         {
-            return String.Format(", ((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END) / 60) - (SUM({0}) / 60 / {1})) / dbo.ZeroToMax(SUM({0}) / 60 / {1}) * 100 as DaysPercentage", GetSumColumnName(reportType), numberOfPeriods);
+            return String.Format
+            (
+                ", ((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) - (SUM({0}){1} / {2})) / dbo.ZeroToMax(SUM({0}){1} / {2}) * 100 AS Percentage",
+                GetSumExpression(reportType), GetSumExpressionExtension(reportType),
+                numberOfPeriods
+            );
         }
 
         string GetPreviousPeriodPercentagePart(VariationReportType reportType, int numberOfPeriods)
         {
             return (numberOfPeriods > 1) ?
-                String.Format(", ((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END) / 60) - (SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END) / 60)) / dbo.ZeroToMax(SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END) / 60) * 100 as PreviousPeriodPercentage", GetSumColumnName(reportType), numberOfPeriods) : null;
+                String.Format
+                (
+                    @", ((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) - (SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END){1})) /
+                        dbo.ZeroToMax(SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) * 100 AS PreviousPeriodPercentage",
+                    GetSumExpression(reportType),
+                    GetSumExpressionExtension(reportType)
+                ) : null;
         }
 
-        string GetSumPart(int rowsCount, string sumColumnName)
+        string GetSumPart(VariationReportType reportType, int rowsCount)
         {
             StringBuilder sumPartBuilder = new StringBuilder();
+            string sumExpression = GetSumExpression(reportType);
+            string sumExpressionExtension = GetSumExpressionExtension(reportType);
             for (int i = 0; i < rowsCount; i++)
             {
-                sumPartBuilder.Append(String.Format(", SUM(CASE WHEN p{0}.FromDate IS NOT NULL THEN {1} ELSE 0 END) / 60 Period{0}Sum", i + 1, sumColumnName));
+                sumPartBuilder.Append(String.Format(", SUM(CASE WHEN p{0}.FromDate IS NOT NULL THEN {1} ELSE 0 END){2} Period{0}Sum", i + 1, sumExpression, sumExpressionExtension));
             }
             return sumPartBuilder.ToString();
         }
 
-        string GetJoinPart(int rowsCount)
-        {
-            StringBuilder joinPartBuilder = new StringBuilder();
-            for (int i = 0; i < rowsCount; i++)
-            {
-                joinPartBuilder.Append(String.Format(" LEFT JOIN @TimePeriods p{0} on bs.CallDate >= p{0}.FromDate AND bs.CallDate < p{0}.ToDate AND p{0}.PeriodIndex = {0}", i + 1));
-            }
-            return joinPartBuilder.ToString();
-        }
-
-        DateTime GetSmallestFromDate(DataTable timePeriodsTable)
-        {
-            DataRow lastRow = timePeriodsTable.Rows[timePeriodsTable.Rows.Count - 1];
-            return Convert.ToDateTime(lastRow["FromDate"]);
-        }
+        #region Sum Expression
 
         string GetSumColumnName(VariationReportType reportType)
         {
@@ -183,13 +211,99 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportType.TopDestinationMinutes:
                     sumColumnName = "SaleDuration";
                     break;
+
                 case VariationReportType.OutBoundMinutes:
                     sumColumnName = "CostDuration";
                     break;
+
+                case VariationReportType.InBoundAmount:
+                case VariationReportType.TopDestinationAmount:
+                    sumColumnName = "SaleNets";
+                    break;
+
+                case VariationReportType.OutBoundAmount:
+                    sumColumnName = "CostNets";
+                    break;
+
                 default:
-                    throw new ArgumentException("reportType");
+                    throw new NotImplementedException();
             }
             return sumColumnName;
+        }
+
+        string GetSumExpression(VariationReportType reportType)
+        {
+            string sumColumnName = GetSumColumnName(reportType);
+            string sumExpression = sumColumnName;
+            switch (reportType)
+            {
+                case VariationReportType.InBoundAmount:
+                case VariationReportType.TopDestinationAmount:
+                    sumExpression = String.Format("({0} / ISNULL(SER.Rate, 1))", sumColumnName);
+                    break;
+                case VariationReportType.OutBoundAmount:
+                    sumExpression = String.Format("({0} / ISNULL(CER.Rate, 1))", sumColumnName);
+                    break;
+            }
+            return sumExpression;
+        }
+
+        string GetSumExpressionExtension(VariationReportType reportType)
+        {
+            string sumExpressionExtension;
+            switch (reportType)
+            {
+                case VariationReportType.InBoundMinutes:
+                case VariationReportType.OutBoundMinutes:
+                case VariationReportType.TopDestinationMinutes:
+                    sumExpressionExtension = " / 60";
+                    break;
+                default:
+                    sumExpressionExtension = null;
+                    break;
+            }
+            return sumExpressionExtension;
+        }
+        
+        #endregion
+
+        string GetJoinPart(VariationReportType reportType, int rowsCount)
+        {
+            StringBuilder joinPartBuilder = new StringBuilder();
+            switch (reportType)
+            {
+                case VariationReportType.InBoundAmount:
+                case VariationReportType.OutBoundAmount:
+                case VariationReportType.TopDestinationAmount:
+                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ExchangeRates SER on bs.SaleCurrency = SER.CurrencyID AND bs.CallDate >= SER.BED AND (SER.EED IS NULL OR bs.CallDate < SER.EED)"));
+                    joinPartBuilder.Append(String.Format(" LEFT JOIN @ExchangeRates CER on bs.CostCurrency = CER.CurrencyID AND bs.CallDate >= CER.BED AND (CER.EED IS NULL OR bs.CallDate < CER.EED)"));
+                    break;
+            }
+            for (int i = 0; i < rowsCount; i++)
+            {
+                joinPartBuilder.Append(String.Format(" LEFT JOIN @TimePeriods p{0} on bs.CallDate >= p{0}.FromDate AND bs.CallDate < p{0}.ToDate AND p{0}.PeriodIndex = {0}", i + 1));
+            }
+            return joinPartBuilder.ToString();
+        }
+
+        string GetOrderByPart(VariationReportType reportType)
+        {
+            string orderByExpression = String.Format("ORDER BY SUM({0}) DESC", GetSumColumnName(reportType));
+            switch (reportType)
+            {
+                case VariationReportType.InBoundAmount:
+                case VariationReportType.OutBoundAmount:
+                case VariationReportType.TopDestinationAmount:
+                    orderByExpression = String.Format("ORDER BY SUM((SaleNets / ISNULL(SER.Rate, 1)) - (CostNets / ISNULL(CER.Rate, 1))) DESC");
+                    break;
+            }
+            return orderByExpression;
+        }
+
+        DateTime GetSmallestFromDate(DataTable timePeriodsTable)
+        {
+            DataRow lastRow = timePeriodsTable.Rows[timePeriodsTable.Rows.Count - 1];
+            return Convert.ToDateTime(lastRow["FromDate"]);
         }
 
         #region Time Periods
@@ -212,8 +326,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 DateTime fromDate = GetFromDate(input.Query.TimePeriod, toDate);
 
                 row["PeriodIndex"] = i + 1;
-                row["FromDate"] = fromDate;
-                row["ToDate"] = toDate;
+                row["FromDate"] = fromDate.Date;
+                row["ToDate"] = toDate.Date;
 
                 toDate = fromDate;
                 table.Rows.Add(row);
@@ -271,8 +385,8 @@ namespace TOne.WhS.Analytics.Data.SQL
             var variationReportRecord = new VariationReportRecord()
             {
                 DimensionId = (object)reader["DimensionId"],
-                Average = (decimal)reader["DaysAvg"],
-                Percentage = Convert.ToDecimal((double)reader["DaysPercentage"]),
+                Average = (decimal)reader["Average"],
+                Percentage = Convert.ToDecimal((double)reader["Percentage"]),
                 PreviousPeriodPercentage = Convert.ToDecimal((double)reader["PreviousPeriodPercentage"])
             };
 
