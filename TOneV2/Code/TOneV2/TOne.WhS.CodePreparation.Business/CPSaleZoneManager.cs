@@ -86,7 +86,8 @@ namespace TOne.WhS.CodePreparation.Business
             };
 
            List<ZoneItem> allZoneItems = ValidateRenamedZone(input.SellingNumberPlanId);
-           if (allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+           ZoneItem item = allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase));
+           if (item != null)
             {
                 output.Result = ValidationOutput.ValidationError;
                 output.Zone = renamedZone;
@@ -133,9 +134,12 @@ namespace TOne.WhS.CodePreparation.Business
            
             NewZoneOutput output = new NewZoneOutput();
             
+            ZoneItem item=new ZoneItem();
+
             foreach (NewZone newZone in input.NewZones)
             {
-                 if (allZoneItems.FindRecord(x => x.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
+                item = allZoneItems.FindRecord(x => x.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase));
+                 if (item != null)
                      output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} Already Exists.", newZone.Name) });
                  else
                      output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });
@@ -226,8 +230,19 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
 
+            if (changes.DeletedZones.Any())
+            {
+                foreach (DeletedZone deletedZone in changes.DeletedZones)
+                {
+                    ZoneItem existingZoneToClose = allZoneItems.FindRecord(x => x.ZoneId == deletedZone.ZoneId);
+                    if (existingZoneToClose != null)
+                        existingZoneToClose.DraftStatus = ZoneItemDraftStatus.ExistingClosed;
+                }
+            }
+
             return allZoneItems;
         }
+       
         void UpdateAllZoneItemsPerChanges(List<ZoneItem> allZoneItems, List<RenamedZone> renamedZones, List<DeletedZone> deletedZones)
         {
             if (renamedZones.Any())

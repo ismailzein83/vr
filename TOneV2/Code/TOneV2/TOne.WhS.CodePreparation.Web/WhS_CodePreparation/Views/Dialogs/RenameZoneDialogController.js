@@ -10,7 +10,6 @@
         var sellingNumberPlanId;
         var oldZoneName;
         var zoneId;
-        var nodes;
 
         loadParameters();
 
@@ -25,7 +24,6 @@
                 oldZoneName = parameters.ZoneName;
                 countryId = parameters.CountryId;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
-                nodes = parameters.Nodes;
             }
         }
 

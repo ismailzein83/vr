@@ -50,12 +50,15 @@ namespace TOne.WhS.CodePreparation.Business
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             Changes changes = GetChanges(input.SellingNumberPlanId);
 
-            DeletedCode deletedCode = new DeletedCode();
+
 
             foreach (var code in input.Codes)
             {
-                deletedCode.Code = code;
-                deletedCode.ZoneName = input.ZoneName;
+                DeletedCode deletedCode = new DeletedCode()
+                {
+                    Code = code,
+                    ZoneName = input.ZoneName
+                };
 
                 changes.DeletedCodes.Add(deletedCode);
             }
@@ -104,16 +107,18 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             Changes existingChanges = GetChanges(input.SellingNumberPlanId);
-            NewCode newCode = new NewCode();
+
 
             foreach (var code in input.Codes)
             {
-                newCode.Code = code;
-                newCode.ZoneName = input.NewZoneName;
-                newCode.ZoneId = input.ZoneId;
-                newCode.OldZoneName = input.CurrentZoneName;
-                newCode.CountryId = input.CountryId;
-
+                NewCode newCode = new NewCode()
+                {
+                    Code = code,
+                    ZoneName = input.NewZoneName,
+                    ZoneId = input.ZoneId,
+                    OldZoneName = input.CurrentZoneName,
+                    CountryId = input.CountryId
+                };
                 existingChanges.NewCodes.Add(newCode);
             }
 

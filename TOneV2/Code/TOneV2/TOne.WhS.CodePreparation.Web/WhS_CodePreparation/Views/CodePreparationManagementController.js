@@ -62,10 +62,9 @@
             $scope.onNodeSelection = function () {
 
                 var promise;
-
+                clearCodesSelection();
                 if ($scope.currentNode != undefined) {
                     if ($scope.currentNode.type == 'Zone') {
-                        clearCodesSelection();
                         setZoneStateVisibility($scope.currentNode.DraftStatus, $scope.currentNode.status);
                         codesGridAPI.clearUpdatedItems();
                         promise = codesGridAPI.loadGrid(getCodesFilterObject());
@@ -122,7 +121,6 @@
                 var parameters = {
                     CountryId: $scope.currentNode.nodeId,
                     CountryName: $scope.currentNode.nodeName,
-                    Nodes: $scope.nodes,
                     SellingNumberPlanId: filter.sellingNumberPlanId
                 };
                 var settings = {};
@@ -190,7 +188,6 @@
                     ZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
-                    Nodes : $scope.nodes
                 };
                 var settings = {};
                 settings.onScopeReady = function (modalScope) {
