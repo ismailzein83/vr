@@ -5,17 +5,27 @@ using Vanrise.Data.SQL;
 using CP.SupplierPricelist.Entities;
 using System.Data;
 using Vanrise.Common;
-
+using Vanrise.Entities;
 namespace CP.SupplierPricelist.Data.SQL
 {
     public class PriceListDataManager : BaseSQLDataManager, IPriceListDataManager
     {
+        private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
+
+        
+        static PriceListDataManager()
+        {
+            _mapper.Add("CustomerName", "CustomerID");
+            _mapper.Add("PriceListTypeValue", "PriceListType");
+            _mapper.Add("PriceListStatusDescription", "Status");
+            _mapper.Add("PriceListResultDescription", "Result");
+
+        }
         public PriceListDataManager() :
             base(GetConnectionStringName("CP_DBConnStringKey", "CP_DBConnString"))
         {
 
         }
-
         public bool Insert(PriceList priceList, int resultIdtoBeExcluded, out int priceListId)
         {
             object id;
@@ -83,11 +93,51 @@ namespace CP.SupplierPricelist.Data.SQL
 
             return pricelist;
         }
-
-        public List<PriceList> GetPriceLists()
+               
+        public BigResult<PriceList> GetPriceListsFilteredFromTemp(DataRetrievalInput<PriceListQuery> input)
         {
-            return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetPriceLists]", PriceListMapper);
+            Action<string> createTempTableAction = (tempTableName) =>
+            {
+                string customersids = null;
+                if (input.Query.CustomersIDs != null && input.Query.CustomersIDs.Count() > 0)
+                    customersids = string.Join<int>(",", input.Query.CustomersIDs);
+
+                string carrierids = null;
+                if (input.Query.CarrierAccounts != null && input.Query.CarrierAccounts.Count() > 0)
+                    carrierids = string.Join<string>(",", input.Query.CarrierAccounts);
+
+                string types = null;
+                if (input.Query.PriceListTypes != null && input.Query.PriceListTypes.Count() > 0)
+                    types = string.Join<int>(",", input.Query.PriceListTypes);
+
+                string results = null;
+                if (input.Query.PriceListResults != null && input.Query.PriceListResults.Count() > 0)
+                    results = string.Join<int>(",", input.Query.PriceListResults);
+
+                string statuses = null;
+                if (input.Query.PriceListStatuses != null && input.Query.PriceListStatuses.Count() > 0)
+                    statuses = string.Join<int>(",", input.Query.PriceListStatuses);
+
+
+                ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_GetTempByFiltred]",
+                    tempTableName,
+                    input.Query.FromEffectiveOnDate,
+                    input.Query.ToEffectiveOnDate,
+                    input.Query.UserId ,
+                    customersids,
+                    carrierids,
+                    types,
+                    results,
+                    statuses
+                   );
+            };
+
+            if (input.SortByColumnName != null)
+                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
+
+            return RetrieveData(input, createTempTableAction, PriceListMapper ,_mapper );
         }
+
         public List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses)
         {
             string pricelistStatuIds = null;

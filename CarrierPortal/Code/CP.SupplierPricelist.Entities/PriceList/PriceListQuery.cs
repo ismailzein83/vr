@@ -8,19 +8,15 @@ namespace CP.SupplierPricelist.Entities
 {
     public class PriceListQuery
     {
-        public List<int> CarriersID { get; set; }
+        public List<int> CustomersIDs { get; set; }
         public List<string> CarrierAccounts { get; set; }
-        public int PriceListType { get; set; }
-        public int PriceListResult { get; set; }
-        public int PriceListStatus { get; set; }
+        public List<int> PriceListTypes { get; set; }
+        public List<int> PriceListResults { get; set; }
+        public List<int> PriceListStatuses { get; set; }
         public DateTime FromEffectiveOnDate { get; set; }
-        public DateTime ToEffectiveOnDate { get; set; }
+        public DateTime? ToEffectiveOnDate { get; set; }
+        public int UserId { get; set; }
 
-        public PriceListQuery()
-        {
-            PriceListResult = -1;
-            PriceListType = -1;
-            PriceListStatus = -1;
-        }
+       
     }
 }

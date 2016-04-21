@@ -178,7 +178,9 @@
     <Content Include="CP_SupplierPricelist\Directives\SupplierMapping\vr-cp-carrieraccount-selector.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\Templates\PriceListsGridTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\Templates\SupplierPriceListGridTemplate.html" />
+    <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-pricelistresult-selector.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-pricelists-grid.js" />
+    <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-priceliststatus-selector.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-pricelisttype-selector.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-supplierpricelist-grid.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierMapping\Templates\SupplierMappingGridTemplate.html" />

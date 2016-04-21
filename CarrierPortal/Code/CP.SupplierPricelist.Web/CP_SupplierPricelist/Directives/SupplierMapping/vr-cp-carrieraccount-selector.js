@@ -9,7 +9,6 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
                 ismultipleselection: "@",
                 onselectionchanged: '=',
                 isrequired: '=',
-                isdisabled: "=",
                 selectedvalues: "="
             },
             controller: function ($scope, $element, $attrs) {
@@ -53,7 +52,7 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="SupplierName" datavaluefield="SupplierId" isrequired="ctrl.isrequired" '
-                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="'+ label +'" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady"  onselectionchanged="ctrl.onselectionchanged" entityName="'+ label +'" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>';
         }
         function supplierInfoSelector(ctrl, $scope, attrs) {

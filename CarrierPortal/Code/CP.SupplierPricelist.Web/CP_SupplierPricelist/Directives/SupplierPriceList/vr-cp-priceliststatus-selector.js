@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCpPricelisttypeSelector', ['CP_SupplierPriceList_PriceListTypeEnum', 'UtilsService', 'VRUIUtilsService',
-    function ( CP_SupplierPriceList_PriceListTypeEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrCpPriceliststatusSelector', ['CP_SupplierPricelist_PriceListStatusEnum', 'UtilsService', 'VRUIUtilsService',
+    function (CP_SupplierPricelist_PriceListStatusEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -19,7 +19,7 @@ app.directive('vrCpPricelisttypeSelector', ['CP_SupplierPriceList_PriceListTypeE
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
-                var selector = new pricelistTypeInfoSelector(ctrl, $scope, $attrs);
+                var selector = new pricelistStatusSelector(ctrl, $scope, $attrs);
                 selector.initializeController();
 
 
@@ -34,30 +34,30 @@ app.directive('vrCpPricelisttypeSelector', ['CP_SupplierPriceList_PriceListTypeE
                 }
             },
             template: function (element, attrs) {
-                return getPriceListTypeTemplate(attrs);
+                return getPriceListResultTemplate(attrs);
             }
 
         };
 
-        function getPriceListTypeTemplate(attrs) {
+        function getPriceListResultTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Pricelist Type";
+            var label = "Pricelist Status";
             if (attrs.ismultipleselection != undefined) {
-                label = "Pricelist Types";
+                label = "Pricelist Statuses ";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Value" datavaluefield="ID" isrequired="ctrl.isrequired" '
+                + '<vr-select ' + multipleselection + '  datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" '
                 + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>';
         }
         
 
-            function pricelistTypeInfoSelector(ctrl, $scope, attrs) {
+        function pricelistStatusSelector(ctrl, $scope, attrs) {
 
             var selectorAPI;
             function initializeController() {
@@ -71,16 +71,16 @@ app.directive('vrCpPricelisttypeSelector', ['CP_SupplierPriceList_PriceListTypeE
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('ID', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                 }
                 api.load = function (payload) {
                     var selectedIds;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
-                    ctrl.datasource = UtilsService.getArrayEnum(CP_SupplierPriceList_PriceListTypeEnum);
+                    ctrl.datasource = UtilsService.getArrayEnum(CP_SupplierPricelist_PriceListStatusEnum);
                     if (selectedIds != undefined) {
-                        VRUIUtilsService.setSelectedValues(selectedIds, 'ID', attrs, ctrl);
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
 
 

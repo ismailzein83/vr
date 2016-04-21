@@ -2,26 +2,31 @@
     function (appControllers) {
         "use strict";
 
-        function priceListsController($scope, utilsService, vrNotificationService, vruiUtilsService, CP_SupplierPriceList_PriceListTypeEnum, CP_SupplierPricelist_PriceListResultEnum, CP_SupplierPricelist_PriceListStatusEnum, vrValidationService) {
+        function priceListsController($scope, utilsService, vrNotificationService, vruiUtilsService,vrValidationService) {
             var gridAPI;
+
             var customerDirectiveApi;
             var customerReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
             var carrierDirectiveApi;
             var carrierReadyPromiseDeferred = utilsService.createPromiseDeferred();
-            var PricelistTypeDirectiveAPI;
-            var PricelistTypeReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
+            var typeDirectiveAPI;
+            var typeReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
+            var resultDirectiveAPI;
+            var resultReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
+            var statusDirectiveAPI;
+            var statusReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
 
             defineScope();
             load();
             function defineScope() {
                 $scope.fromEffectiveDate = new Date();
-              //  $scope.toEffectiveDate = new Date();
-                $scope.priceListTypes = [];
-                $scope.priceListResults = [];
-                $scope.priceListStatus = [];
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-                    //api.loadGrid({});
                 }
                 $scope.validateDateTime = function () {
                     return vrValidationService.validateTimeRange($scope.fromEffectiveDate, $scope.toEffectiveDate);
@@ -35,18 +40,15 @@
                 }
                 $scope.onReadyCarrierAccountSelector = function (api) {
                     carrierDirectiveApi = api;
-                    var setLoader = function (value) { $scope.isLoadingCarrierDirective = value };
-                    vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierDirectiveApi, undefined, setLoader, carrierReadyPromiseDeferred);
+                    carrierReadyPromiseDeferred.resolve();
                 }
                 $scope.onCustomerSelectionChanged = function () {
                    var listCustomer = customerDirectiveApi.getSelectedIds();
                     if (listCustomer && listCustomer.length == 0) {
-                      //  $scope.carrierAccount = undefined;
                         carrierDirectiveApi.load({ filter: undefined });
                     }
                     else if (listCustomer != undefined && listCustomer.length < 2)
                     {
-                     //   $scope.carrierAccount = undefined;
                         var obj = {
                             filter: {
                                 CustomerIdForCurrentSupplier: listCustomer[0]
@@ -56,16 +58,28 @@
                     }
                 }
                 $scope.onPricelistTypeDirectiveReady = function (api) {
-                    PricelistTypeDirectiveAPI = api;
-                    PricelistTypeReadyPromiseDeferred.resolve();
+                    typeDirectiveAPI = api;
+                    typeReadyPromiseDeferred.resolve();
                 }
+
+                $scope.onPricelistResultDirectiveReady = function (api) {
+                    resultDirectiveAPI = api;
+                    resultReadyPromiseDeferred.resolve();
+                }
+
+                $scope.onPricelistStatusDirectiveReady = function (api) {
+                    statusDirectiveAPI = api;
+                    statusReadyPromiseDeferred.resolve();
+                }
+
+               
             }
             function load() {
                 loadAllControls();
             }
             function loadAllControls() {
                 $scope.isLoadingFilters = true;
-                return utilsService.waitMultipleAsyncOperations([loadPriceListType, loadPriceListStatus, loadPriceListResult, loadCustomer, loadPricelistTypesSelector])
+                return utilsService.waitMultipleAsyncOperations([loadCustomer,  loadPriceListType, loadPriceListResult, loadPriceListStatus ])
                    .catch(function (error) {
                        vrNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -73,24 +87,7 @@
                       $scope.isLoadingFilters = false;
                   });
             }
-            function loadPriceListType() {
-                angular.forEach(CP_SupplierPriceList_PriceListTypeEnum, function (value, key) {
-                    $scope.priceListTypes.push({ pricelistTypeID: value.ID, title: value.Value });
-                }
-                );
-            }
-            function loadPriceListStatus() {
-                angular.forEach(CP_SupplierPricelist_PriceListStatusEnum, function (value, key) {
-                    $scope.priceListStatus.push({ statusID: value.value, title: value.description });
-                }
-                );
-            }
-            function loadPriceListResult() {
-                angular.forEach(CP_SupplierPricelist_PriceListResultEnum, function (value, key) {
-                    $scope.priceListResults.push({ resultID: value.value, title: value.description });
-                }
-                );
-            }         
+            
             function loadCustomer() {
                 var customerLoadPromiseDeferred = utilsService.createPromiseDeferred();
                 customerReadyPromiseDeferred.promise.then(function () {
@@ -98,28 +95,43 @@
                 });
                 return customerLoadPromiseDeferred.promise;
             }
-            function loadPricelistTypesSelector() {
+            function loadPriceListType() {
                 var pricelistTypeLoadPromiseDeferred = utilsService.createPromiseDeferred();
-                PricelistTypeReadyPromiseDeferred.promise.then(function () {
-                    vruiUtilsService.callDirectiveLoad(PricelistTypeDirectiveAPI, undefined,pricelistTypeLoadPromiseDeferred);
+                typeReadyPromiseDeferred.promise.then(function () {
+                    vruiUtilsService.callDirectiveLoad(typeDirectiveAPI, undefined,pricelistTypeLoadPromiseDeferred);
                 });
                 return pricelistTypeLoadPromiseDeferred.promise;
             }
+            function loadPriceListResult() {
+                var pricelistResultLoadPromiseDeferred = utilsService.createPromiseDeferred();
+                resultReadyPromiseDeferred.promise.then(function () {
+                    vruiUtilsService.callDirectiveLoad(resultDirectiveAPI, undefined, pricelistResultLoadPromiseDeferred);
+                });
+                return pricelistResultLoadPromiseDeferred.promise;
+            }
+            function loadPriceListStatus() {
+                var pricelistStatusLoadPromiseDeferred = utilsService.createPromiseDeferred();
+                statusReadyPromiseDeferred.promise.then(function () {
+                    vruiUtilsService.callDirectiveLoad(statusDirectiveAPI, undefined, pricelistStatusLoadPromiseDeferred);
+                });
+                return pricelistStatusLoadPromiseDeferred.promise;
+            }
+           
             function getFilterObject() {
                 var data = {
-                    CarriersID: customerDirectiveApi.getSelectedIds(),
-                    PriceListType: $scope.selectedpriceListType != undefined ? $scope.selectedpriceListType.pricelistTypeID : -1,
-                    PriceListResult: $scope.selectedpriceListResult != undefined ? $scope.selectedpriceListResult.resultID : -1,
-                    PriceListStatus: $scope.selectedpriceListStatus != undefined ? $scope.selectedpriceListStatus.statusID : -1,
+                    CustomersIDs:  customerDirectiveApi.getSelectedIds(),
+                    CarrierAccounts: $scope.customers.length == 1 ? carrierDirectiveApi.getSelectedIds() : null,
+                    PriceListTypes: typeDirectiveAPI.getSelectedIds(),
+                    PriceListResults: resultDirectiveAPI.getSelectedIds(),
+                    PriceListStatuses: statusDirectiveAPI.getSelectedIds(),
                     FromEffectiveOnDate: $scope.fromEffectiveDate,
-                    ToEffectiveOnDate: $scope.toEffectiveDate,
-                    CarrierAccounts: carrierDirectiveApi.getSelectedIds()
+                    ToEffectiveOnDate: $scope.toEffectiveDate
                 };
                 return data;
             }    
         }
 
-        priceListsController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'CP_SupplierPriceList_PriceListTypeEnum', 'CP_SupplierPricelist_PriceListResultEnum', 'CP_SupplierPricelist_PriceListStatusEnum', 'VRValidationService'];
+        priceListsController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
         appControllers.controller('CP_SupplierPriceList_PriceListsController', priceListsController);
     }
 )(appControllers);
