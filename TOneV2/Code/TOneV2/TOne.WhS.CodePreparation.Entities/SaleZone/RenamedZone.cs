@@ -10,9 +10,6 @@ namespace TOne.WhS.CodePreparation.Entities
     {
         public int CountryId { get; set; }
         public int? ZoneId { get; set; }
-
-        public string OriginalZoneName { get; set; }
-
         public string NewZoneName { get; set; }
     }
 }

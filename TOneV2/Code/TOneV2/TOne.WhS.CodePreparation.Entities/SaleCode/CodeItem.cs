@@ -48,8 +48,6 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public CodeItemStatus? Status { get; set; }
 
-        public string DraftStatusDescription { get; set; }
-
         /// <summary>
         /// in case the Code is moved, this property stores the Zone Name of the other code. the other code is the existing code if this is the new one and vice versa
         /// </summary>

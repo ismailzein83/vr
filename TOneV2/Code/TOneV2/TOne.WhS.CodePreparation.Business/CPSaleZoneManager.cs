@@ -75,28 +75,48 @@ namespace TOne.WhS.CodePreparation.Business
         public RenamedZoneOutput RenameZone(RenamedZoneInput input)
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            Changes existingChanges;
-            List<ZoneItem> allZoneItems;
-            MergeZoneItems(input.SellingNumberPlanId, out existingChanges, out allZoneItems);
+            Changes changes = GetChanges(input.SellingNumberPlanId);
 
-            RenamedZone renamedZone = new RenamedZone
+            RenamedZoneOutput output = new RenamedZoneOutput();
+
+            RenamedZone renamedZone = new RenamedZone()
             {
                 CountryId = input.CountryId,
-                ZoneId = input.ZoneId.HasValue ? input.ZoneId.Value : (int?)null,
-                OriginalZoneName = input.OldZoneName,
                 NewZoneName = input.NewZoneName
             };
 
-            RenamedZoneOutput output = ValidateRenamedZone(allZoneItems, existingChanges, renamedZone);
-
-            if (output.Result == ValidationOutput.ValidationError)
+           List<ZoneItem> allZoneItems = ValidateRenamedZone(input.SellingNumberPlanId);
+           if (allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+            {
+                output.Result = ValidationOutput.ValidationError;
+                output.Zone = renamedZone;
+                output.Message = string.Format("Zone {0} already exists!", input.NewZoneName);
                 return output;
+            }
+
+            if (input.ZoneId.HasValue)
+            {
+                renamedZone.ZoneId = input.ZoneId.Value;
+
+                if (changes.RenamedZones.Any(x => x.ZoneId == input.ZoneId))
+                    UpdateZoneInRenamedZones(changes.RenamedZones, renamedZone);
+                else
+                    AddZoneToRenamedZones(changes.RenamedZones, renamedZone);
+
+            }
+            else
+                UpdateZoneInNewZones(changes.NewZones, input);
+
+
+            UpdateCodesChangesPerRenamedZone(changes.NewCodes,changes.DeletedCodes, input);
+
 
             bool renameActionSucc = false;
-            renameActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
+            renameActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, changes, CodePreparationStatus.Draft);
 
             if (renameActionSucc)
             {
+                output.Zone = renamedZone;
                 output.Message = string.Format("zone renamed successfully.");
                 return output;
             }
@@ -108,20 +128,36 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
 
-            Changes existingChanges;
-            List<ZoneItem> allZoneItems;
-            MergeZoneItems(input.SellingNumberPlanId, out existingChanges, out allZoneItems);
+            Changes existingChanges = GetChanges(input.SellingNumberPlanId);
+            List<ZoneItem> allZoneItems = ValidateRenamedZone(input.SellingNumberPlanId);
+           
+            NewZoneOutput output = new NewZoneOutput();
+            
+            foreach (NewZone newZone in input.NewZones)
+            {
+                 if (allZoneItems.FindRecord(x => x.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
+                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} Already Exists.", newZone.Name) });
+                 else
+                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });
+            }
 
-            NewZoneOutput output = ValidateNewZone(allZoneItems, existingChanges.NewZones, existingChanges.RenamedZones, input.NewZones);
-
-            if (output.Result == ValidationOutput.ValidationError)
+            if(output.ZoneItems.Any(x=>x.Message != null))
+            {
+                output.Result = ValidationOutput.ValidationError;
+                output.Message = string.Format("Process Warning.");
                 return output;
+            }
+
+            
+
+            existingChanges.NewZones.AddRange(input.NewZones);
 
             bool insertActionSucc = false;
             insertActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, existingChanges, CodePreparationStatus.Draft);
 
             if (insertActionSucc)
             {
+                output.Result = ValidationOutput.Success;
                 output.Message = string.Format("Zones added successfully.");
                 return output;
             }
@@ -133,70 +169,7 @@ namespace TOne.WhS.CodePreparation.Business
         #endregion
 
         #region Private Methods
-        NewZoneOutput ValidateNewZone(List<ZoneItem> allZoneItems, List<NewZone> newZones, List<RenamedZone> renamedZones, List<NewZone> newAddedZones)
-        {
-            NewZoneOutput zoneOutput = new NewZoneOutput();
-            zoneOutput.Result = ValidationOutput.Success;
 
-            foreach (NewZone newZone in newAddedZones)
-            {
-                if (renamedZones.Any(x => x.NewZoneName.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)))
-                    zoneOutput.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} Already Exists.", newZone.Name) });
-
-                else if (!allZoneItems.Any(item => item.Name.ToLower() == newZone.Name.ToLower())
-                    || (allZoneItems.Any(item => item.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase))
-                    && renamedZones.Any(x => x.OriginalZoneName.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase))))
-                {
-                    newZones.Add(newZone);
-                    zoneOutput.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });
-                }
-
-                else
-                    zoneOutput.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} Already Exists.", newZone.Name) });
-            }
-
-            foreach (ZoneItem zoneItem in zoneOutput.ZoneItems)
-            {
-                if (zoneItem.Message != null)
-                {
-                    zoneOutput.Result = ValidationOutput.ValidationError;
-                    zoneOutput.Message = string.Format("Process Warning.");
-                    break;
-                }
-
-            }
-            return zoneOutput;
-        }
-        RenamedZoneOutput ValidateRenamedZone(List<ZoneItem> allZoneItems, Changes existingChanges, RenamedZone zoneToRename)
-        {
-            RenamedZoneOutput zoneOutput = new RenamedZoneOutput();
-            zoneOutput.Result = ValidationOutput.ValidationError;
-
-            if (existingChanges.RenamedZones.Any(item => item.NewZoneName.Equals(zoneToRename.NewZoneName, StringComparison.InvariantCultureIgnoreCase)))
-            {
-                zoneOutput.Zone = zoneToRename;
-                zoneOutput.Message = string.Format("Zone {0} already exists.", zoneToRename.NewZoneName);
-                return zoneOutput;
-            }
-
-            else if (allZoneItems.Any(item => item.Name.Equals(zoneToRename.NewZoneName, StringComparison.InvariantCultureIgnoreCase))
-                && !existingChanges.RenamedZones.Any(x => x.OriginalZoneName.Equals(zoneToRename.NewZoneName, StringComparison.InvariantCultureIgnoreCase)))
-            {
-                zoneOutput.Zone = zoneToRename;
-                zoneOutput.Message = string.Format("Zone {0} already exists.", zoneToRename.NewZoneName);
-                return zoneOutput;
-            }
-
-            else if (existingChanges.RenamedZones.Any(item => item.NewZoneName.Equals(zoneToRename.OriginalZoneName, StringComparison.InvariantCultureIgnoreCase)))
-                UpdateZoneInRenamedZones(existingChanges, zoneToRename, zoneOutput);
-
-            else
-                AddZoneToRenamedZones(existingChanges, zoneToRename, zoneOutput);
-
-            zoneOutput.Result = ValidationOutput.Success;
-            return zoneOutput;
-
-        }
         CloseZoneOutput ValidateClosedZone(IEnumerable<CodeItem> codeItems, DeletedZone deletedZone, List<NewCode> newAddedCodes)
         {
             CloseZoneOutput zoneOutput = new CloseZoneOutput();
@@ -228,17 +201,43 @@ namespace TOne.WhS.CodePreparation.Business
             zoneOutput.Result = ValidationOutput.Success;
             return zoneOutput;
         }
+
+        List<ZoneItem> ValidateRenamedZone(int sellingNumberPlanId)
+        {
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+
+            IEnumerable<SaleZone> existingZones = saleZoneManager.GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+            Changes changes = GetChanges(sellingNumberPlanId);
+
+            List<ZoneItem> allZoneItems = new List<ZoneItem>();
+
+            allZoneItems.AddRange(existingZones.MapRecords(SaleZoneToZoneItemMapper));
+            allZoneItems.AddRange(changes.NewZones.MapRecords(NewZoneToZoneItemMapper));
+
+            if (changes.RenamedZones.Any())
+            {
+                foreach (RenamedZone renamedZone in changes.RenamedZones)
+                {
+                    ZoneItem existingZoneToRename = allZoneItems.FindRecord(x => x.ZoneId == renamedZone.ZoneId);
+                    if (existingZoneToRename != null)
+                    {
+                        existingZoneToRename.Name = renamedZone.NewZoneName;
+                    }
+                }
+            }
+
+            return allZoneItems;
+        }
         void UpdateAllZoneItemsPerChanges(List<ZoneItem> allZoneItems, List<RenamedZone> renamedZones, List<DeletedZone> deletedZones)
         {
             if (renamedZones.Any())
             {
                 foreach (RenamedZone renamedZone in renamedZones)
                 {
-                    ZoneItem existingZoneToRename = allZoneItems.FindRecord(x => x.Name.Equals(renamedZone.OriginalZoneName, StringComparison.InvariantCultureIgnoreCase));
+                    ZoneItem existingZoneToRename = allZoneItems.FindRecord(x => x.ZoneId == renamedZone.ZoneId);
                     if (existingZoneToRename != null)
                     {
-                        existingZoneToRename.DraftStatus = existingZoneToRename.ZoneId.HasValue ? ZoneItemDraftStatus.Renamed : ZoneItemDraftStatus.New;
-                        existingZoneToRename.OriginalZoneName = renamedZone.OriginalZoneName;
+                        existingZoneToRename.DraftStatus = ZoneItemDraftStatus.Renamed;
                         existingZoneToRename.Name = renamedZone.NewZoneName;
                     }
                 }
@@ -255,32 +254,46 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
         }
-        void UpdateZoneInRenamedZones(Changes existingChanges, RenamedZone zoneToRename, RenamedZoneOutput zoneOutput)
+
+        void AddZoneToRenamedZones(List<RenamedZone> renamedZones, RenamedZone zoneToRename)
         {
-            RenamedZone existingRenamedZone = existingChanges.RenamedZones.FindRecord(item => item.NewZoneName.Equals(zoneToRename.OriginalZoneName, StringComparison.InvariantCultureIgnoreCase));
+            renamedZones.Add(zoneToRename);
+        }
+
+        void UpdateZoneInRenamedZones(IEnumerable<RenamedZone> renamedZones, RenamedZone zoneToRename)
+        {
+            RenamedZone existingRenamedZone = renamedZones.FindRecord(x => x.ZoneId == zoneToRename.ZoneId);
             existingRenamedZone.NewZoneName = zoneToRename.NewZoneName;
-            existingRenamedZone.OriginalZoneName = existingRenamedZone.OriginalZoneName != null ? existingRenamedZone.OriginalZoneName : zoneToRename.OriginalZoneName;
-            zoneToRename.OriginalZoneName = existingRenamedZone.OriginalZoneName != null ? existingRenamedZone.OriginalZoneName : zoneToRename.OriginalZoneName;
-            zoneOutput.Zone = zoneToRename;
         }
-        void AddZoneToRenamedZones(Changes existingChanges, RenamedZone zoneToRename, RenamedZoneOutput zoneOutput)
-        {
-            existingChanges.RenamedZones.Add(zoneToRename);
-            zoneOutput.Zone = zoneToRename;
-        }
-        void MergeZoneItems(int sellingNumberPlanId, out Changes changes, out List<ZoneItem> allZoneItems)
-        {
-            ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            changes = new Changes();
-            allZoneItems = new List<ZoneItem>();
-            changes = GetChanges(sellingNumberPlanId);
 
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            IEnumerable<SaleZone> zones = saleZoneManager.GetSaleZones(sellingNumberPlanId, DateTime.Now);
+        void UpdateCodesChangesPerRenamedZone(IEnumerable<NewCode> newCodes,IEnumerable<DeletedCode> deletedCodes, RenamedZoneInput zoneToRename)
+        {
+            foreach (NewCode code in newCodes)
+            {
+                if (code.ZoneName.Equals(zoneToRename.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
+                    code.ZoneName = zoneToRename.NewZoneName;
+                else if (code.OldZoneName != null && code.OldZoneName.Equals(zoneToRename.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
+                    code.OldZoneName = zoneToRename.NewZoneName;
+            }
 
-            allZoneItems.AddRange(zones.MapRecords(SaleZoneToZoneItemMapper));
-            allZoneItems.AddRange(changes.NewZones.MapRecords(NewZoneToZoneItemMapper));
+            foreach (DeletedCode deletedCode in deletedCodes)
+            {
+                if (deletedCode.ZoneName.Equals(zoneToRename.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
+                    deletedCode.ZoneName = zoneToRename.NewZoneName;
+            }
+
         }
+
+        void UpdateZoneInNewZones(IEnumerable<NewZone> newZones, RenamedZoneInput zoneToRename)
+        {
+            foreach (NewZone newZone in newZones)
+            {
+                if (newZone.Name.Equals(zoneToRename.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
+                    newZone.Name = zoneToRename.NewZoneName;
+            }
+        }
+
+
         ZoneItemStatus? GetZoneItemStatus(SaleZone saleZone)
         {
             if (saleZone.EED.HasValue)

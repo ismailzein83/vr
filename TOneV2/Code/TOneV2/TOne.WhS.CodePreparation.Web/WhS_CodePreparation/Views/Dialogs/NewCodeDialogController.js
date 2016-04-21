@@ -37,7 +37,7 @@
             $scope.saveCode = function () {
                 return insertCode();
             };
-
+             
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -72,6 +72,7 @@
                 result.push({
                     Code: $scope.codes[i].code,
                     ZoneName: zoneName,
+                    ZoneId: zoneId,
                     CountryId: countryId
                 });
             }

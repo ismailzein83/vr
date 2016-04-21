@@ -122,6 +122,7 @@
                 var parameters = {
                     CountryId: $scope.currentNode.nodeId,
                     CountryName: $scope.currentNode.nodeName,
+                    Nodes: $scope.nodes,
                     SellingNumberPlanId: filter.sellingNumberPlanId
                 };
                 var settings = {};
@@ -135,7 +136,7 @@
             $scope.newCodeClicked = function () {
                 var parameters = {
                     ZoneId: $scope.currentNode.nodeId,
-                    ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
+                    ZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
                     ZoneStatus: $scope.currentNode.status
@@ -152,8 +153,7 @@
                 var codes = codesGridAPI.getSelectedCodes();
                 var parameters = {
                     ZoneId: $scope.currentNode.nodeId,
-                    ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
-                    currentZoneName: $scope.currentNode.nodeName,
+                    ZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
                     CountryId: $scope.currentNode.countryId,
                     ZoneDataSource: GetCurrentCountryNodeZones(),
@@ -189,7 +189,8 @@
                     ZoneId: $scope.currentNode.nodeId,
                     ZoneName: $scope.currentNode.nodeName,
                     SellingNumberPlanId: filter.sellingNumberPlanId,
-                    CountryId: $scope.currentNode.countryId
+                    CountryId: $scope.currentNode.countryId,
+                    Nodes : $scope.nodes
                 };
                 var settings = {};
                 settings.onScopeReady = function (modalScope) {
@@ -249,11 +250,12 @@
 
             var zoneNode = getCurrentZoneNode();
             var draftStatus = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value;
-            
+
 
             $scope.currentNode.DraftStatus = draftStatus;
             $scope.currentNode.icon = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon;
             zoneNode.DraftStatus = draftStatus;
+
             hideShowRenameZone(draftStatus, zoneNode.Status);
             hideShowEnd(draftStatus, zoneNode.Status);
             hideShowAddCode(draftStatus, zoneNode.Status);
@@ -271,13 +273,11 @@
             var icon = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon;
 
             $scope.currentNode.nodeName = renamedZone.NewZoneName;
-            $scope.currentNode.originalZoneName = renamedZone.OriginalZoneName;
-
-            zoneNode.nodeName = renamedZone.NewZoneName;
-            zoneNode.originalZoneName = renamedZone.OriginalZoneName;
+            $scope.currentNode.DraftStatus = draftStatus;
 
             zoneNode.DraftStatus = draftStatus;
             zoneNode.icon = icon;
+            zoneNode.nodeName = renamedZone.NewZoneName;
 
             hideShowEnd(draftStatus, zoneNode.Status);
 
@@ -339,7 +339,7 @@
             var codes = codesGridAPI.getSelectedCodes();
             var parameters = {
                 ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
+                ZoneName: $scope.currentNode.nodeName,
                 SellingNumberPlanId: filter.sellingNumberPlanId,
                 CountryId: $scope.currentNode.countryId,
                 Codes: UtilsService.getPropValuesFromArray(codes, 'Code')
@@ -360,7 +360,7 @@
                         SellingNumberPlanId: filter.sellingNumberPlanId,
                         CountryId: $scope.currentNode.countryId,
                         ZoneId: $scope.currentNode.nodeId,
-                        ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
+                        ZoneName: $scope.currentNode.nodeName,
                     };
                     return WhS_CP_CodePrepAPIService.CloseZone(zoneInput)
                      .then(function (response) {
@@ -383,7 +383,7 @@
         }
 
 
-        
+
 
         function clearCodesSelection() {
             $scope.selectedCodes.length = 0;
@@ -551,7 +551,6 @@
             return {
                 nodeId: zoneInfo.ZoneId,
                 nodeName: zoneInfo.Name,
-                originalZoneName: zoneInfo.OriginalZoneName,
                 hasRemoteChildren: false,
                 effectiveZones: [],
                 type: 'Zone',
@@ -570,8 +569,7 @@
             return {
                 SellingNumberPlanId: filter.sellingNumberPlanId,
                 ZoneId: $scope.currentNode.nodeId,
-                ZoneName: $scope.currentNode.originalZoneName != undefined ? $scope.currentNode.originalZoneName : $scope.currentNode.nodeName,
-                OriginalZoneName: $scope.currentNode.originalZoneName,
+                ZoneName: $scope.currentNode.nodeName,
                 ZoneItemStatus: $scope.currentNode.status,
                 CountryId: $scope.currentNode.countryId,
                 ShowDraftStatus: $scope.hasState,

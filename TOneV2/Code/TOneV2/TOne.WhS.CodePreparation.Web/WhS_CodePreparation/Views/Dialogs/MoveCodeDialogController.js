@@ -2,13 +2,12 @@
 
     "use strict";
 
-    MoveCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService', 'WhS_CP_ZoneItemDraftStatusEnum'];
+    MoveCodeDialogController.$inject = ['$scope', 'WhS_BE_SaleZoneAPIService', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService', 'WhS_CP_ZoneItemDraftStatusEnum', 'WhS_CP_ZoneItemStatusEnum'];
 
-    function MoveCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_ValidationOutput, WhS_CP_CodePrepService, WhS_CP_ZoneItemDraftStatusEnum) {
+    function MoveCodeDialogController($scope, WhS_BE_SaleZoneAPIService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_CP_ValidationOutput, WhS_CP_CodePrepService, WhS_CP_ZoneItemDraftStatusEnum, WhS_CP_ZoneItemStatusEnum) {
 
         var countryId;
         var sellingNumberPlanId;
-        var currentZoneName;
         var zoneName;
         var zoneId;
         var zoneItems;
@@ -25,7 +24,6 @@
                 $scope.codes = parameters.Codes;
                 countryId = parameters.CountryId;
                 zoneName = parameters.ZoneName;
-                currentZoneName = parameters.currentZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
                 zoneItems = parameters.ZoneDataSource;
 
@@ -47,7 +45,7 @@
         }
 
         function load() {
-            $scope.title = "Move Code from " + currentZoneName;
+            $scope.title = "Move Code from " + zoneName;
             $scope.isGettingData = true;
             loadAllControls();
         }
@@ -61,11 +59,13 @@
         function loadSaleZoneSelector() {
 
             for (var i = 0; i < zoneItems.length ; i++) {
-                if (zoneItems[i].DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value)
-                    $scope.saleZones.push({ "Name": zoneItems[i].nodeName });
+                var zoneItem = zoneItems[i];
+                if (zoneItem.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value)
+                    if (zoneItem.status == null || zoneItem.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value)
+                      $scope.saleZones.push({ "Name": zoneItems[i].nodeName });
             }
 
-            var index = UtilsService.getItemIndexByVal($scope.saleZones, currentZoneName, "Name");
+            var index = UtilsService.getItemIndexByVal($scope.saleZones, zoneName, "Name");
 
             if (index != -1)
                 $scope.saleZones.splice(index, 1);
@@ -79,8 +79,8 @@
 
             var obj = {
                 Codes: $scope.codes,
-                CurrentZoneName: zoneName.toLowerCase() != currentZoneName.toLowerCase() ? zoneName : currentZoneName,
-                NewZoneName: zoneItem.originalZoneName != null ? zoneItem.originalZoneName : zoneItem.nodeName
+                CurrentZoneName: zoneName,
+                NewZoneName: zoneItem.nodeName
             };
             return obj;
         }

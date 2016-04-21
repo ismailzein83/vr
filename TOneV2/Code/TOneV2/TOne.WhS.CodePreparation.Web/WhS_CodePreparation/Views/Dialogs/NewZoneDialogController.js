@@ -9,6 +9,7 @@
         var zoneId;
         var countryId;
         var countryName;
+        var nodes;
         var sellingNumberPlanId;
 
         loadParameters();
@@ -23,6 +24,7 @@
                 zoneId = parameters.ZoneId;
                 countryId = parameters.CountryId;
                 countryName = parameters.CountryName;
+                nodes = parameters.Nodes;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
             }
         }
@@ -40,6 +42,7 @@
             $scope.saveZone = function () {
                 return insertZone();
             };
+
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()

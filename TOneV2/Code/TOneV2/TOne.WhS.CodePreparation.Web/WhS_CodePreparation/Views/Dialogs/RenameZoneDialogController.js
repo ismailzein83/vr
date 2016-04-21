@@ -10,6 +10,7 @@
         var sellingNumberPlanId;
         var oldZoneName;
         var zoneId;
+        var nodes;
 
         loadParameters();
 
@@ -24,9 +25,9 @@
                 oldZoneName = parameters.ZoneName;
                 countryId = parameters.CountryId;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
+                nodes = parameters.Nodes;
             }
         }
-
 
         function defineScope() {
             $scope.zoneName = oldZoneName;
@@ -55,25 +56,25 @@
             };
             return obj;
         }
-    
 
-    function renameZone() {
-        var input = buildRenamedZoneObjFromScope();
-        return WhS_CP_CodePrepAPIService.RenameZone(input)
-        .then(function (response) {
-            if (response.Result == WhS_CP_ValidationOutput.Success.value) {
-                VRNotificationService.showSuccess(response.Message);
-                $scope.onZoneRenamed(response.Zone);
-                $scope.modalContext.closeModal();
-            }
-            else if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
-                WhS_CP_CodePrepService.NotifyValidationWarning(response.Message);
-            }
-        }).catch(function (error) {
-            VRNotificationService.notifyException(error, $scope);
-        });
+
+        function renameZone() {
+            var input = buildRenamedZoneObjFromScope();
+            return WhS_CP_CodePrepAPIService.RenameZone(input)
+            .then(function (response) {
+                if (response.Result == WhS_CP_ValidationOutput.Success.value) {
+                    VRNotificationService.showSuccess(response.Message);
+                    $scope.onZoneRenamed(response.Zone);
+                    $scope.modalContext.closeModal();
+                }
+                else if (response.Result == WhS_CP_ValidationOutput.ValidationError.value) {
+                    WhS_CP_CodePrepService.NotifyValidationWarning(response.Message);
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+        }
     }
-}
 
     appControllers.controller('Whs_CP_RenameZoneDialogController', RenameZoneDialogController);
 })(appControllers);
