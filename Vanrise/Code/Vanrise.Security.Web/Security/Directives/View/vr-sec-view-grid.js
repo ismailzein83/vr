@@ -81,8 +81,6 @@ app.directive("vrSecViewGrid", ['VRNotificationService', 'VR_Sec_ViewAPIService'
             return VR_Sec_ViewAPIService.HasUpdateViewPermission();
         }
         function editView(viewObj) {
-            console.log(ctrl.viewTypes);
-            console.log(viewObj);
             var viewType = UtilsService.getItemByVal(ctrl.viewTypes, viewObj.Entity.Type, "ViewTypeId");
 
             var modalParameters = {

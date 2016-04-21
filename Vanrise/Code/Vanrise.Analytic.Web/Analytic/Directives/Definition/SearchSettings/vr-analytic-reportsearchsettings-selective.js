@@ -57,7 +57,7 @@
             var selectorAPI;
 
             var directiveAPI;
-            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var directiveReadyDeferred;
             var directivePayload;
             var tableIds;
             function initializeController() {
@@ -77,7 +77,7 @@
                     var setLoader = function (value) {
                         $scope.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
 
             }
@@ -88,16 +88,26 @@
                 api.load = function (payload) {
 
                     var promises = [];
+                    var searchSettings;
                     if (payload != undefined) {
                         tableIds = payload.tableIds;
-                        //var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        //directiveReadyDeferred.promise.then(function () {
-                        //    directiveReadyDeferred = undefined;
-                        //    var payloadDirective;
+                        searchSettings = payload.searchSettings;
+                        if(searchSettings !=undefined)
+                        {
+                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                            var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            directiveReadyDeferred.promise.then(function () {
+                                directiveReadyDeferred = undefined;
+                                var payloadDirective = {
+                                    searchSettings: searchSettings,
+                                    tableIds: tableIds
+                                };
 
-                        //    VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
-                        //});
-                        //promises.push(loadDirectivePromiseDeferred.promise);
+                                VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
+                            });
+                            promises.push(loadDirectivePromiseDeferred.promise);
+                        }
+                       
                     }
 
                     var getAnalyticReportSettingsTemplateConfigsPromise = getAnalyticReportSettingsTemplateConfigs();
@@ -112,9 +122,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.templateConfigs.push(response[i]);
                                 }
-                                //if (fieldMapping != undefined)
-                                //    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, fieldMapping.ConfigId, 'TemplateConfigID');
-                                //else
+                                if (searchSettings != undefined)
+                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, searchSettings.ConfigId, 'TemplateConfigID');
+                                else
                                     $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                             }
                         });

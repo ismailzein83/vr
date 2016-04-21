@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AnalyticWidgetEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'VR_Sec_ViewTypeEnum', 'InsertOperationResultEnum'];
+    AnalyticWidgetEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function AnalyticWidgetEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewTypeEnum, InsertOperationResultEnum) {
+    function AnalyticWidgetEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
         var widgetSelectiveAPI;

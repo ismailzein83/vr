@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AnalyticReportSettingsEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'VR_Sec_ViewTypeEnum', 'InsertOperationResultEnum','Analytic_AnalyticService'];
+    AnalyticReportSettingsEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService','Analytic_AnalyticService'];
 
-    function AnalyticReportSettingsEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewTypeEnum, InsertOperationResultEnum, Analytic_AnalyticService) {
+    function AnalyticReportSettingsEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, Analytic_AnalyticService) {
 
         var isEditMode;
         var viewTypeName = "VR_Analytic";
@@ -47,7 +47,7 @@
                     var payload = {
                         tableIds: tableSelectorAPI.getSelectedIds()
                     }
-            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, searchSettingDirectiveAPI, payload, setLoader);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, searchSettingDirectiveAPI, payload, setLoader, searchSettingReadyDeferred);
             }
 
             $scope.scopeModel.onTableSelectorDirectiveReady = function(api)
@@ -68,7 +68,6 @@
             $scope.scopeModel.widgets = [];
             $scope.scopeModel.addWidget = function()
             {
-                console.log($scope.scopeModel.widgets);
                 var onWidgetAdd=function(widget)
                 {
                     $scope.scopeModel.widgets.push({ widgetSettings: widget });
@@ -76,7 +75,11 @@
                 Analytic_AnalyticService.addWidget(onWidgetAdd, tableSelectorAPI.getSelectedIds());
             }
 
-
+            $scope.scopeModel.removeWidget = function(dataItem)
+            {
+                var datasourceIndex = $scope.scopeModel.widgets.indexOf(dataItem);
+                $scope.scopeModel.widgets.splice(datasourceIndex, 1);
+            }
             $scope.scopeModel.isWidgetValid = function()
             {
                 if ($scope.scopeModel.widgets.length > 0)
@@ -84,22 +87,9 @@
                 return "At least one widget should be selected.";
             }
 
-
-            //$scope.scopeModal.hasSaveGenericBEEditor = function () {
-            //    if (isEditMode) {
-            //        return VR_GenericData_BusinessEntityDefinitionAPIService.HasUpdateBusinessEntityDefinition();
-            //    }
-            //    else {
-            //        return VR_GenericData_BusinessEntityDefinitionAPIService.HasAddBusinessEntityDefinition();
-            //    }
-            //}
-
-           
-
             $scope.widgetsGridMenuActions = function (dataItem) {
                 return getwidgetGridMenuActions();
             }
-
            
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
@@ -149,7 +139,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadTableSelector]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadTableSelector, loadSearchSettings]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -168,6 +158,14 @@
                     if (viewEntity != undefined) {
                         $scope.scopeModel.reportName = viewEntity.Name;
                         $scope.scopeModel.reportTitle = viewEntity.Title;
+                        if (viewEntity != undefined && viewEntity.Settings !=undefined && viewEntity.Settings.Widgets!=undefined && viewEntity.Settings.Widgets.length>0)
+                        {
+                            for(var i=0 ; i<viewEntity.Settings.Widgets.length;i++)
+                            {
+                                $scope.scopeModel.widgets.push({ widgetSettings: viewEntity.Settings.Widgets[i] });
+                            }
+                        }
+                            
                     }
                 }
                
@@ -215,6 +213,29 @@
                         VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoad, loadTableSelectorPromiseDeferred);
                     });
                     return loadTableSelectorPromiseDeferred.promise;
+                }
+
+                function loadSearchSettings() {
+                    if (viewEntity != undefined && viewEntity.Settings != undefined)
+                    {
+                        searchSettingReadyDeferred = UtilsService.createPromiseDeferred();
+                        var loadSearchSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+                        searchSettingReadyDeferred.promise.then(function () {
+                            searchSettingReadyDeferred = undefined;
+                            var payLoad;
+                            if (viewEntity != undefined && viewEntity.Settings != undefined) {
+                                payLoad = {
+                                    tableIds:viewEntity.Settings.AnalyticTableIds,
+                                    searchSettings: viewEntity.Settings.SearchSettings
+                                }
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(searchSettingDirectiveAPI, payLoad, loadSearchSettingsPromiseDeferred);
+                        });
+                        return loadSearchSettingsPromiseDeferred.promise;
+
+                    }
+                   
                 }
             }
 

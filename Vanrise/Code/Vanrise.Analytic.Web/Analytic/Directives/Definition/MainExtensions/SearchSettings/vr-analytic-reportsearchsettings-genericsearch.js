@@ -108,17 +108,70 @@
                 var api = {};
 
                 api.load = function (payload) {
-             
-                    if (payload != undefined && payload.tableIds!=undefined) {
-                        var tableIds = payload.tableIds;
+                    if (payload != undefined && payload.tableIds != undefined) {
                         var promises = [];
+                        var tableIds = payload.tableIds;
+                        var selectedGroupingIds;
+                        var selectedFilterIds;
+                        if (payload.searchSettings != undefined)
+                        {
+                            if(payload.searchSettings.GroupingDimensions !=undefined && payload.searchSettings.GroupingDimensions.length>0)
+                            {
+                                selectedGroupingIds = [];
+                                for(var i=0 ; i<payload.searchSettings.GroupingDimensions.length;i++)
+                                {
+                                    var groupingDimension = payload.searchSettings.GroupingDimensions[i];
+                                    selectedGroupingIds.push(groupingDimension.DimensionName);
+                                    $scope.scopeModel.groupingDimensions.push({
+                                        Name: groupingDimension.DimensionName,
+                                        Title: groupingDimension.DimensionName,
+                                        IsSelected: groupingDimension.IsSelected
+                                    });
+                                }
+                            }
+                            if (payload.searchSettings.Filters != undefined && payload.searchSettings.Filters.length > 0) {
+                                selectedFilterIds = [];
+                                for (var i = 0 ; i < payload.searchSettings.Filters.length; i++) {
+                                    var filterDimension = payload.searchSettings.Filters[i];
+                                    selectedFilterIds.push(filterDimension.DimensionName);
+                                    var dataItem = {
+                                        Name: filterDimension.DimensionName,
+                                        Title: filterDimension.Title,
+                                        IsRequired: filterDimension.IsRequired,
+                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        payload: filterDimension.FieldType
+                                    }
+                                    promises.push(dataItem.loadPromiseDeferred.promise);
+                                    addDataItemToFilterGrid(dataItem)
+                                }
+                            }
+                        }
+                        function addDataItemToFilterGrid(dataItem) {
+
+                            var dataItemPayload = dataItem.payload;
+
+                            dataItem.onFieldTypeReady = function (api) {
+                                dataItem.fieldAPI = api;
+                                dataItem.readyPromiseDeferred.resolve();
+                            };
+
+                            dataItem.readyPromiseDeferred.promise
+                                .then(function () {
+                                    VRUIUtilsService.callDirectiveLoad(dataItem.fieldAPI, dataItemPayload, dataItem.loadPromiseDeferred);
+                                });
+
+                            $scope.scopeModel.filterDimensions.push(dataItem);
+                        }
+                     
 
                         var loadGroupingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         groupingDimensionReadyDeferred.promise.then(function () {
                             var payloadGroupingDirective = {
-                                filter: { TableIds: tableIds }
+                                filter: { TableIds: tableIds },
+                                selectedIds: selectedGroupingIds
                             };
-
+                         
                             VRUIUtilsService.callDirectiveLoad(groupingDimensionSelectorAPI, payloadGroupingDirective, loadGroupingDirectivePromiseDeferred);
                         });
                         promises.push(loadGroupingDirectivePromiseDeferred.promise);
@@ -126,7 +179,8 @@
                         var loadFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         filterDimensionReadyDeferred.promise.then(function () {
                             var payloadFilterDirective = {
-                                filter: { TableIds: tableIds }
+                                filter: { TableIds: tableIds },
+                                selectedIds: selectedFilterIds
                             };
 
                             VRUIUtilsService.callDirectiveLoad(filterDimensionSelectorAPI, payloadFilterDirective, loadFilterDirectivePromiseDeferred);
