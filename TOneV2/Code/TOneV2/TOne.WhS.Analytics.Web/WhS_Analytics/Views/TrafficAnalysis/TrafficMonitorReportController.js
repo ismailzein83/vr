@@ -19,7 +19,6 @@
 
         function defineScope() {
 
-
             $scope.onGridReady = function (api) {
                 gridApi = api;
             }
@@ -45,18 +44,15 @@
         function getQuery() {
             var selectedObject = filterDirectiveAPI.getData();
             var query = {
-                Filters: selectedObject.selectedfilters,
-                DimensionFields: selectedObject.selecteddimensions,
-                FixedDimensionFields: selectedObject.selectedperiod,
-                MeasureFields: measures,
-                Dimensions: dimensions,
+                Settings: GetAnalyticWidgetSettings(),
+                dimensionFilters: selectedObject.selectedfilters,
+                groupingDimensions: getGroupingDimensions(),
+                measures: measures,
                 FromTime: selectedObject.fromdate,
-                ToTime: selectedObject.todate,
-                Currency: selectedObject.currency,
+                ToTime: selectedObject.todate
             };
             return query;
         }
-
 
         function load() {
             loadDimensions();
@@ -91,21 +87,48 @@
 
         function loadDimensions() {
             dimensions.length = 0;
-            dimensions.push({
-                value: 'SaleZone',
-                description: 'Sale Zone'
-            }, {
-                value: 'SupplierZone',
-                description: 'Supplier Zone'
-            });
-            //dimensions.push('SupplierZone');
+            dimensions.push(GetMockDimension('SaleZone', false, 'Sale Zone'));
+            dimensions.push(GetMockDimension('SupplierZone', false, 'Supplier Zone'));
+            dimensions.push(GetMockDimension('Customer', false, 'Customer'));
+            dimensions.push(GetMockDimension('Supplier', false, 'Supplier'));
         }
 
         function loadMeasures() {
             measures.length = 0;
-            measures.push('DeliveredAttempts');
+            measures.push(GetMockMeasure('DeliveredAttempts', 'Delivered Attempts'));
+            measures.push(GetMockMeasure('NumberOfCalls', 'Number Of Calls'));
+            measures.push(GetMockMeasure('SuccessfulAttempts', 'Successful Attempts'));
         }
 
+        function getGroupingDimensions() {
+            return filterDirectiveAPI.getData().selecteddimensions;
+            //var groupingDimensions = [];
+            //groupingDimensions.push(GetMockDimension('SaleZone', false, 'Sale Zone'));
+            //groupingDimensions.push(GetMockDimension('SupplierZone', false, 'Supplier Zone'));
+            //return groupingDimensions;
+        }
+
+        function GetMockDimension(name, isRoot, title) {
+            return {
+                DimensionName: name,
+                IsRootDimension: isRoot,
+                Title: title
+            };
+        }
+        function GetMockMeasure(name, title) {
+            return {
+                MeasureName: name,
+                Title: title
+            };
+        }
+
+        function GetAnalyticWidgetSettings() {
+            return {
+                RootDimensionsFromSearchSection: false,
+                Dimensions: dimensions,
+                Measures: measures
+            };
+        }
     }
     appControllers.controller('WhS_Analytics_TrafficMonitorReportController', whSAnalyticsTrafficMonitorReportController);
 

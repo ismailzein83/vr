@@ -136,7 +136,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
                     selectedfilters.push(filterZones);
 
                 var selectedobject = {
-                    selecteddimensions: UtilsService.getPropValuesFromArray(ctrl.selecteddimensions, "value"),
+                    selecteddimensions: ctrl.selecteddimensions,
                     selectedfilters: selectedfilters,
                     selectedperiod: ctrl.selectedperiod != undefined ? ctrl.selectedperiod.value : undefined,
                     fromdate: ctrl.fromdate,
