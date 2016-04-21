@@ -48,28 +48,33 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.loadGrid = function (payLoad) {
-
-                            var filters = payLoad.Filters;
+                            ctrl.drillDownDimensions.length = 0;
+                            if (payLoad.DrillDownDimensions != undefined) {
+                                for (var i = 0; i < payLoad.DrillDownDimensions.length; i++) {
+                                    ctrl.drillDownDimensions.push(payLoad.DrillDownDimensions[i]);
+                                }
+                            }
+                            var filters = payLoad.dimensionFilters;
                             var queryFinalized = loadGridQuery(payLoad);
-                            fromTime = payLoad.FromTime;
-                            toTime = payLoad.ToTime;
 
                             var drillDownDefinitions = [];
 
-                            for (var i = 0; i < payLoad.groupingDimensions.length; i++) {
+                            for (var i = 0; i < ctrl.drillDownDimensions.length; i++) {
                                 var selectedDimensions = [];
-                                var dimension = payLoad.groupingDimensions[i];
+                                var dimension = ctrl.drillDownDimensions[i];
                                 for (var j = 0; j < ctrl.groupingDimensions.length; j++)
                                     if (ctrl.groupingDimensions[j].DimensionName != dimension.DimensionName)
                                         selectedDimensions.push(ctrl.groupingDimensions[j].DimensionName);
-                                setDrillDownData(payLoad.groupingDimensions[i], selectedDimensions)
+                                setDrillDownData(ctrl.drillDownDimensions[i], selectedDimensions)
                             }
 
                             function setDrillDownData(dimension, selectedDimensions) {
                                 var objData = {};
-
                                 objData.title = dimension.Title;
-
+                                var drillDownDimensions = [];
+                                for (var i = 0; i < ctrl.drillDownDimensions.length; i++) {
+                                    drillDownDimensions.push(ctrl.drillDownDimensions[i]);
+                                }
                                 objData.directive = "vr-analytic-datagrid-analyticrecords";
 
                                 objData.loadDirective = function (directiveAPI, dataItem) {
@@ -81,18 +86,26 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                     for (var j = 0; j < ctrl.groupingDimensions.length; j++) {
                                         newFilters.push({
                                             Dimension: ctrl.groupingDimensions[j].DimensionName,
-                                            FilterValues: [dataItem.DimensionValues[j].Id]
+                                            FilterValues: [dataItem.DimensionValues[j].Value]
                                         });
                                     }
                                     for (var i = 0; i < filters.length; i++)
                                         newFilters.push(filters[i]);
 
+                                    //Remove Current Dimension from DrillDownDimensions
+                                    if (UtilsService.contains(drillDownDimensions, dimension)) {
+                                        var dimensionIndex = UtilsService.getItemIndexByVal(drillDownDimensions, dimension.DimensionName, 'DimensionName');
+                                        drillDownDimensions.splice(dimensionIndex, 1);
+                                    }
+
+
                                     var drillDownPayLoad = {
                                         groupingDimensions: [dimension],
-                                        dimensionsFilter: newFilters,
+                                        dimensionFilters: newFilters,
                                         measures: ctrl.measures,
-                                        fromTime: fromTime,
-                                        toTime: toTime
+                                        FromTime: fromTime,
+                                        ToTime: toTime,
+                                        DrillDownDimensions: drillDownDimensions
                                     }
                                     return dataItem.gridAPI.loadGrid(drillDownPayLoad);
                                 };
@@ -121,25 +134,42 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 };
 
                 function loadGridQuery(payLoad) {
-                    var dimensionFilters = [];
-                    var dimensions = [];
-                    ctrl.groupingDimensions = payLoad.groupingDimensions;
-                    ctrl.measures = payLoad.measures;
+
+                    fromTime = payLoad.FromTime;
+                    toTime = payLoad.ToTime;
+                    ctrl.groupingDimensions.length = 0;
+                    ctrl.measures.length = 0;
 
                     if (payLoad.Settings != undefined) {
+                        if (payLoad.Settings.Dimensions != undefined) {
+                            for (var i = 0; i < payLoad.Settings.Dimensions.length; i++) {
+                                var dimension = payLoad.Settings.Dimensions[i];
+                                var groupingDimension = UtilsService.getItemByVal(payLoad.groupingDimensions, dimension.DimensionName, 'DimensionName');
+                                if (groupingDimension == undefined) {
+                                    ctrl.drillDownDimensions.push(dimension);
+                                }
+                            }
+                        }
+                    }
 
+                    if (payLoad.measures != undefined) {
+                        for (var i = 0; i < payLoad.measures.length; i++) {
+                            ctrl.measures.push(payLoad.measures[i]);
+                        }
                     }
 
                     if (payLoad.groupingDimensions != undefined) {
-
+                        for (var i = 0; i < payLoad.groupingDimensions.length; i++) {
+                            ctrl.groupingDimensions.push(payLoad.groupingDimensions[i]);
+                        }
                     }
 
                     var queryFinalized = {
-                        Filters: payLoad.Filters,
+                        Filters: payLoad.dimensionFilters,
                         DimensionFields: UtilsService.getPropValuesFromArray(ctrl.groupingDimensions, 'DimensionName'),
-                        MeasureFields: ctrl.measures,
-                        FromTime: payLoad.FromTime,
-                        ToTime: payLoad.ToTime,
+                        MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
+                        FromTime: fromTime,
+                        ToTime: toTime,
                         Currency: payLoad.Currency,
                         WithSummary: $attrs.withsummary != undefined
                     }

@@ -129,6 +129,34 @@ namespace Vanrise.Analytic.Business
                 }
             });
 
+            analyticDimensions.Add("Customer", new AnalyticDimension()
+            {
+                AnalyticDimensionConfigId = 3,
+                Config = new AnalyticDimensionConfig()
+                {
+                    FieldType = new FieldTextType(),
+                    GroupByColumns = new List<string>() { "ant.CustomerID", "cp.Name" },
+                    IdColumn = "ISNULL(ant.CustomerId,'N/A')",
+                    JoinConfigNames = new List<string>() { "CustomerJoin", "CustomerProfileJoin" },
+                    NameColumn = "cp.Name"
+
+                }
+            });
+
+            analyticDimensions.Add("Supplier", new AnalyticDimension()
+            {
+                AnalyticDimensionConfigId = 4,
+                Config = new AnalyticDimensionConfig()
+                {
+                    FieldType = new FieldTextType(),
+                    GroupByColumns = new List<string>() { "ant.SupplierID", "cp1.Name" },
+                    IdColumn = "ISNULL(ant.SupplierID,'N/A')",
+                    JoinConfigNames = new List<string>() { "SupplierJoin", "SupplierProfileJoin" },
+                    NameColumn = "cp1.Name"
+
+                }
+            });
+
             return analyticDimensions;
         }
         public Dictionary<string, AnalyticMeasure> GetMockData_Measures(int tableId)
@@ -137,12 +165,36 @@ namespace Vanrise.Analytic.Business
             Dictionary<string, AnalyticMeasure> analyticMeasures = new Dictionary<string, AnalyticMeasure>();
             analyticMeasures.Add("DeliveredAttempts", new AnalyticMeasure()
             {
-                AnalyticMeasureConfigId = 2,
+                AnalyticMeasureConfigId = 5,
                 Config = new AnalyticMeasureConfig()
                 {
                     JoinConfigNames = null,
                     GetSQLExpressionMethod = "",
                     SQLExpression = "Sum(ant.DeliveredAttempts)",
+                    SummaryFunction = AnalyticSummaryFunction.Sum
+                }
+            });
+
+            analyticMeasures.Add("NumberOfCalls", new AnalyticMeasure()
+            {
+                AnalyticMeasureConfigId = 6,
+                Config = new AnalyticMeasureConfig()
+                {
+                    JoinConfigNames = null,
+                    GetSQLExpressionMethod = "",
+                    SQLExpression = "Sum(ant.NumberOfCalls)",
+                    SummaryFunction = AnalyticSummaryFunction.Sum
+                }
+            });
+
+            analyticMeasures.Add("SuccessfulAttempts", new AnalyticMeasure()
+            {
+                AnalyticMeasureConfigId = 7,
+                Config = new AnalyticMeasureConfig()
+                {
+                    JoinConfigNames = null,
+                    GetSQLExpressionMethod = "",
+                    SQLExpression = "Sum(ant.SuccessfulAttempts)",
                     SummaryFunction = AnalyticSummaryFunction.Sum
                 }
             });
@@ -167,6 +219,35 @@ namespace Vanrise.Analytic.Business
                 }
             });
 
+            analyticJoins.Add("CustomerJoin", new AnalyticJoin()
+            {
+                Config = new AnalyticJoinConfig()
+                {
+                    JoinStatement = "JOIN TOneWhS_BE.CarrierAccount ca WITH (NOLOCK) ON ca.ID = ant.CustomerId"
+                }
+            });
+            analyticJoins.Add("SupplierJoin", new AnalyticJoin()
+            {
+                Config = new AnalyticJoinConfig()
+                {
+                    JoinStatement = "JOIN TOneWhS_BE.CarrierAccount ca1 WITH (NOLOCK) ON ca1.ID = ant.SupplierId"
+                }
+            });
+
+            analyticJoins.Add("CustomerProfileJoin", new AnalyticJoin()
+            {
+                Config = new AnalyticJoinConfig()
+                {
+                    JoinStatement = "JOIN TOneWhS_BE.CarrierProfile cp WITH (NOLOCK) ON cp.ID = ca.CarrierProfileID"
+                }
+            });
+            analyticJoins.Add("SupplierProfileJoin", new AnalyticJoin()
+            {
+                Config = new AnalyticJoinConfig()
+                {
+                    JoinStatement = "JOIN TOneWhS_BE.CarrierProfile cp1 WITH (NOLOCK) ON cp1.ID = ca1.CarrierProfileID"
+                }
+            });
             return analyticJoins;
         }
 
