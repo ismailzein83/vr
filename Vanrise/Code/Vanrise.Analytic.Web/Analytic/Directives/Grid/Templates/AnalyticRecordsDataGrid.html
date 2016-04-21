@@ -7,7 +7,7 @@
         <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.measures" headertext="measure.Title" type="measure.type"
                            field="'MeasureValues.' + measure.MeasureName + ''" tag="measure" summaryfield="'MeasureValues.' + measure.MeasureName + ''"></vr-datagridcolumn>
 
-        <vr-datagridexpandablerow>
+        <vr-datagridexpandablerow ng-if="analyticrecordsctrl.drillDownDimensions.length > 0">
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
         </vr-datagridexpandablerow>
     </vr-datagrid>
