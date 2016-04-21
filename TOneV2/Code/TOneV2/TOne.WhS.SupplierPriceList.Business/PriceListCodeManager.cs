@@ -12,20 +12,6 @@ namespace TOne.WhS.SupplierPriceList.Business
     public class PriceListCodeManager
     {
         BusinessEntity.Business.CodeGroupManager codeGroupManager = new BusinessEntity.Business.CodeGroupManager();
-
-        //TODO: this is used by testing and needs to be removed when DI is applied for testing on this module
-        public Dictionary<int, TOne.WhS.BusinessEntity.Entities.CodeGroup> _codeGroupsMocData { get; set; }
-
-        List<CodeValidation> _validations = new List<CodeValidation>();
-
-        public List<CodeValidation> Validations
-        {
-            get
-            {
-                return _validations;
-            }
-        }
-
         public void ProcessCountryCodes(IProcessCountryCodesContext context)
         {
             ZonesByName newAndExistingZones = new ZonesByName();
@@ -113,8 +99,8 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     switch (importedCode.ChangeType)
                     {
-                        case CodeChangeType.New: _validations.Add(new CodeValidation { Code = importedCode.Code, ValidationType = CodeValidationType.RetroActiveNewCode }); break;
-                        case CodeChangeType.Moved: _validations.Add(new CodeValidation { Code = importedCode.Code, ValidationType = CodeValidationType.RetroActiveMovedCode }); break;
+                        //case CodeChangeType.New: _validations.Add(new CodeValidation { Code = importedCode.Code, ValidationType = CodeValidationType.RetroActiveNewCode }); break;
+                        // case CodeChangeType.Moved: _validations.Add(new CodeValidation { Code = importedCode.Code, ValidationType = CodeValidationType.RetroActiveMovedCode }); break;
                     }
                 }
             }
@@ -162,7 +148,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
         }
 
-        private bool AddImportedCode(ImportedCode importedCode, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
+        private void AddImportedCode(ImportedCode importedCode, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
         {
             List<IZone> zones;
             if (!newAndExistingZones.TryGetValue(importedCode.ZoneName, out zones))
@@ -174,17 +160,8 @@ namespace TOne.WhS.SupplierPriceList.Business
                 newAndExistingZones.Add(importedCode.ZoneName, zones);
             }
 
-            TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup;
-            if (_codeGroupsMocData != null)
-                codeGroup = this.GetMatchCodeGroupUsedForTesting(importedCode.Code);
-            else
-                codeGroup = codeGroupManager.GetMatchCodeGroup(importedCode.Code);
+            BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(importedCode.Code);
 
-            if (codeGroup == null)
-            {
-                AddValidationError(importedCode, CodeValidationType.NoCodeGroup);
-                return false;
-            }
             List<IZone> addedZones = new List<IZone>();
             DateTime currentCodeBED = importedCode.BED;
             bool shouldAddMoreCodes = true;
@@ -199,11 +176,6 @@ namespace TOne.WhS.SupplierPriceList.Business
                         if (!shouldAddMoreCodes)
                             break;
                     }
-                    if (zone.CountryId != codeGroup.CountryId)
-                    {
-                        AddValidationError(importedCode, CodeValidationType.CodeGroupWrongCountry);
-                        return false;
-                    }
                     AddNewCode(importedCode, codeGroup.CodeGroupId, ref currentCodeBED, zone, out shouldAddMoreCodes);
                     if (!shouldAddMoreCodes)
                         break;
@@ -216,16 +188,6 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
             if (addedZones.Count > 0)
                 zones.AddRange(addedZones);
-            return true;
-        }
-
-        private void AddValidationError(ImportedCode importedCode, CodeValidationType validationType)
-        {
-            _validations.Add(new CodeValidation
-            {
-                Code = importedCode.Code,
-                ValidationType = validationType
-            });
         }
 
         private NewZone AddNewZone(List<IZone> addedZones, string zoneName, int countryId, DateTime bed, DateTime? eed)
@@ -340,17 +302,5 @@ namespace TOne.WhS.SupplierPriceList.Business
                 }
             }
         }
-
-
-        #region Test Data
-
-        private TOne.WhS.BusinessEntity.Entities.CodeGroup GetMatchCodeGroupUsedForTesting(string code)
-        {
-            TOne.WhS.BusinessEntity.Business.CodeIterator<TOne.WhS.BusinessEntity.Entities.CodeGroup> codeIterator =
-                new CodeIterator<TOne.WhS.BusinessEntity.Entities.CodeGroup>(_codeGroupsMocData.Values);
-            return codeIterator.GetLongestMatch(code);
-        }
-
-        #endregion
     }
 }
