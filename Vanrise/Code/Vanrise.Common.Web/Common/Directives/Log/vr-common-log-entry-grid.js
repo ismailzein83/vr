@@ -20,7 +20,7 @@ function (UtilsService, VRNotificationService, VRCommon_LogEntryAPIService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Common/Directives/Logger/Templates/LoggerGridTemplate.html"
+        templateUrl: "/Client/Modules/Common/Directives/Log/Templates/LogGridTemplate.html"
 
     };
 

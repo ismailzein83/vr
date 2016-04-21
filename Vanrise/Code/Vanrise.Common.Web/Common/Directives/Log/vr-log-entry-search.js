@@ -19,7 +19,7 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Common/Directives/Logger/Templates/LoggerSearch.html"
+        templateUrl: "/Client/Modules/Common/Directives/Log/Templates/LogSearch.html"
 
     };
 

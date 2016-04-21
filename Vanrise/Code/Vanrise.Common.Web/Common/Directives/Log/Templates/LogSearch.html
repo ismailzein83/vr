@@ -2,22 +2,16 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-choices selectedindex="selectedTabIndex">
-                        <vr-choice isselected="basicSelected">Basic</vr-choice>
-                        <vr-choice isselected="advancedSelected">Advanced</vr-choice>
-                    </vr-choices>
-                    <vr-row>
                         <vr-columns width="normal">
                             <vr-common-log-entry-type-selector ismultipleselection label="Machine" on-ready="onEntryTypeDirectiveReady"></vr-common-log-entry-type-selector>
                         </vr-columns>
-                        <vr-columns width="normal" ng-show="advancedSelected">
+                        <vr-columns width="normal" >
                             <vr-common-log-attribute-selector ismultipleselection label="Machine" on-ready="onMachineDirectiveReady"></vr-common-log-attribute-selector>
                         </vr-columns>
-                        <vr-columns ng-show="advancedSelected" width="normal">
+                        <vr-columns  width="normal">
                             <vr-common-log-attribute-selector ismultipleselection label="Application" on-ready="onApplicationDirectiveReady"></vr-common-log-attribute-selector>
                         </vr-columns>
-                        <vr-columns ng-show="advancedSelected" width="normal">
+                        <vr-columns  width="normal">
                             <vr-common-log-attribute-selector ismultipleselection label="Assembly" on-ready="onAssemblyDirectiveReady"></vr-common-log-attribute-selector>
                         </vr-columns>
                         <vr-columns width="normal">
@@ -26,18 +20,15 @@
                         <vr-columns width="normal">
                             <vr-datetimepicker type="dateTime" label="To" value="toDate" customvalidate="validateDateTime()"></vr-datetimepicker>
                         </vr-columns>
-                        <vr-columns ng-show="advancedSelected" width="normal">
+                        <vr-columns  width="normal">
                             <vr-common-log-attribute-selector ismultipleselection label="Type" on-ready="onTypeDirectiveReady"></vr-common-log-attribute-selector>
                         </vr-columns>
-                        <vr-columns ng-show="advancedSelected" width="normal">
+                        <vr-columns  width="normal">
                             <vr-common-log-attribute-selector ismultipleselection label="Method" on-ready="onMethodDirectiveReady"></vr-common-log-attribute-selector>
                         </vr-columns>
-                        <vr-columns width="normal" ng-show="advancedSelected">
+                        <vr-columns width="normal" >
                             <vr-textbox label="Message" value="Message"></vr-textbox>
                         </vr-columns>
-                    </vr-row>
-                </vr-columns>
-
             </vr-row>
         </div>
         <vr-row removeline>
