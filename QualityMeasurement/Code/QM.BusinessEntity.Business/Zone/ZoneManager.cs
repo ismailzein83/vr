@@ -179,12 +179,16 @@ namespace QM.BusinessEntity.Business
 
         private ZoneInfo ZoneInfoMapper(Zone zone)
         {
-            return new ZoneInfo()
-            {
-                ZoneId = zone.ZoneId,
-                Name = zone.Name,
-            };
-        }
+            ZoneInfo zoneInfo = new ZoneInfo();
+            zoneInfo.ZoneId = zone.ZoneId;
+            zoneInfo.Name = zone.Name;
+            
+            CountryManager manager = new CountryManager();
+            var country = manager.GetCountry(zone.CountryId);
+            zoneInfo.LongName = (country != null) ? country.Name + " - " + zone.Name : "";
+
+            return zoneInfo;
+       }
 
         private ZoneDetail ZoneDetailMapper(Zone zone)
         {

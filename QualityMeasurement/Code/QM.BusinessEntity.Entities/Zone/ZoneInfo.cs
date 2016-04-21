@@ -6,5 +6,7 @@ namespace QM.BusinessEntity.Entities
         public long ZoneId { get; set; }
 
         public string Name { get; set; }
+
+        public string LongName { get; set; }
     }
 }
