@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 app.directive("vrCpSupplierpricelistGrid", ["UtilsService", "CP_SupplierPricelist_SupplierPriceListAPIService", "CP_SupplierPricelist_SupplierPriceListService", "FileAPIService", "VRNotificationService",
-function (utilsService, supplierPriceListApiService, supplierPriceListService, fileApiService, vrNotificationService) {
+function (utilsService, CP_SupplierPricelist_SupplierPriceListAPIService, CP_SupplierPricelist_SupplierPriceListService, fileApiService, vrNotificationService) {
 
     function SupplierPriceListGrid($scope, ctrl) {
 
@@ -26,7 +26,7 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
                         var pageInfo = gridAPI.getPageInfo();
                         input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
 
-                        supplierPriceListApiService.GetUpdated(input).then(function (response) {
+                        CP_SupplierPricelist_SupplierPriceListAPIService.GetUpdated(input).then(function (response) {
 
                             if (response != undefined) {
                                 for (var i = 0; i < response.ListPriceListDetails.length; i++) {
@@ -106,7 +106,7 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
             var pageInfo = gridAPI.getPageInfo();
             input.LessThanID = minId;
             input.NbOfRows = pageInfo.toRow - pageInfo.fromRow;
-            return supplierPriceListService.GetBeforeId(input).then(function (response) {
+            return CP_SupplierPricelist_SupplierPriceListService.GetBeforeId(input).then(function (response) {
                 if (response != undefined) {
                     for (var i = 0; i < response.PriceLists.length; i++) {
                         var testCall = response.PriceLists[i];
@@ -120,11 +120,11 @@ function (utilsService, supplierPriceListApiService, supplierPriceListService, f
             return getData();
         }
         $scope.getColorStatus = function (dataItem) {
-            return supplierPriceListService.getSupplierPriceListStatusColor(dataItem.Entity.Status);
+            return CP_SupplierPricelist_SupplierPriceListService.getSupplierPriceListStatusColor(dataItem.Entity.Status);
         };
 
         $scope.getColorResult = function (dataItem) {
-            return supplierPriceListService.getSupplierPriceListResultColor(dataItem.Entity.Result);
+            return CP_SupplierPricelist_SupplierPriceListService.getSupplierPriceListResultColor(dataItem.Entity.Result);
         };
     }
 

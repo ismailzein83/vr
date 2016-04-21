@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 app.directive("vrCpPricelistsGrid", ["UtilsService", "CP_SupplierPricelist_SupplierPriceListAPIService", "CP_SupplierPricelist_SupplierPriceListService", "VRUIUtilsService", "VRNotificationService",
-function (utilsService, supplierApiService, supplierService, vRuiUtilsService, vRNotificationService) {
+function (utilsService, CP_SupplierPricelist_SupplierPriceListAPIService, CP_SupplierPricelist_SupplierPriceListService, vRuiUtilsService, vRNotificationService) {
 
     var gridAPI;
 
@@ -30,7 +30,7 @@ function (utilsService, supplierApiService, supplierService, vRuiUtilsService, v
         this.initializeController = initializeController;;
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return supplierApiService.GetFilteredPriceLists(dataRetrievalInput)
+            return CP_SupplierPricelist_SupplierPriceListAPIService.GetFilteredPriceLists(dataRetrievalInput)
                .then(function (response) {
 
                    onResponseReady(response);
@@ -38,6 +38,14 @@ function (utilsService, supplierApiService, supplierService, vRuiUtilsService, v
                .catch(function (error) {
                    vRNotificationService.notifyExceptionWithClose(error, $scope);
                });
+        };
+
+        $scope.getColorStatus = function (dataItem) {
+            return CP_SupplierPricelist_SupplierPriceListService.getSupplierPriceListStatusColor(dataItem.Entity.Status);
+        };
+
+        $scope.getColorResult = function (dataItem) {
+            return CP_SupplierPricelist_SupplierPriceListService.getSupplierPriceListResultColor(dataItem.Entity.Result);
         };
     }
     var directiveDefinitionObject = {
