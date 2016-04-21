@@ -6,7 +6,9 @@
 
     function AnalyticService(VRModalService) {
         return ({
-            OpenAnalyticReport: OpenAnalyticReport
+            OpenAnalyticReport: OpenAnalyticReport,
+            addWidget: addWidget,
+            editWidget: editWidget
         });
 
         function OpenAnalyticReport() {
@@ -19,6 +21,33 @@
                 title: entityName
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/Reports/AnalyticReport.html', parameters, modalSettings);
+        }
+
+        function addWidget(onWidgetAdded, tableIds) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onWidgetAdded = onWidgetAdded;
+            };
+            var modalParameters = {
+                tableIds: tableIds
+            };
+            VRModalService.showModal('/Client/Modules/Analytic/Views/AnalyticWidgetEditor.html', modalParameters, modalSettings);
+        }
+
+        function editWidget(widgetEntity, onWidgetUpdated, tableIds) {
+            var modalParameters = {
+                tableIds: tableIds,
+                widgetEntity: widgetEntity
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onWidgetUpdated = onWidgetUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/AnalyticWidgetEditor.html', modalParameters, modalSettings);
         }
     }
 

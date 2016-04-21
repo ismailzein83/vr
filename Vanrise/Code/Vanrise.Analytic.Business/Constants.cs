@@ -9,5 +9,6 @@ namespace Vanrise.Analytic.Business
     public static class Constants
     {
         public const string AnalyticReportSettingsConfigType = "Analytic_AnalyticReportSettings";
+        public const string AnalyticWidgetsConfigType = "Analytic_AnalyticWidgetsSettings";
     }
 }

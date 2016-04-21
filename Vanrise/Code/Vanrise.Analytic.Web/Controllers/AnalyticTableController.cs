@@ -18,7 +18,9 @@ namespace Vanrise.Analytic.Web.Controllers
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(string filter = null)
         {
             AnalyticTableManager manager = new AnalyticTableManager();
-            return manager.GetAnalyticTablesInfo();
+            AnalyticTableInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticTableInfoFilter>(filter) : null;
+
+            return manager.GetAnalyticTablesInfo(serializedFilter);
         }
     }
 }

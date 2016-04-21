@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AnalyticReportSettingsEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'VR_Sec_ViewTypeEnum', 'InsertOperationResultEnum'];
+    AnalyticReportSettingsEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'VR_Sec_ViewTypeEnum', 'InsertOperationResultEnum','Analytic_AnalyticService'];
 
-    function AnalyticReportSettingsEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewTypeEnum, InsertOperationResultEnum) {
+    function AnalyticReportSettingsEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, VR_Sec_ViewTypeEnum, InsertOperationResultEnum, Analytic_AnalyticService) {
 
         var isEditMode;
         var viewTypeName = "VR_Analytic";
@@ -65,6 +65,23 @@
                     return insert();
                 }
             };
+            $scope.scopeModel.widgets = [];
+            $scope.scopeModel.addWidget = function()
+            {
+                var onWidgetAdd=function(widget)
+                {
+                    $scope.scopeModel.widgets.push(widget);
+                }
+                Analytic_AnalyticService.addWidget(onWidgetAdd, tableSelectorAPI.getSelectedIds());
+            }
+
+
+            $scope.scopeModel.isWidgetValid = function()
+            {
+                if ($scope.scopeModel.widgets.length > 0)
+                    return null;
+                return "At least one widget should be selected.";
+            }
             //$scope.scopeModal.hasSaveGenericBEEditor = function () {
             //    if (isEditMode) {
             //        return VR_GenericData_BusinessEntityDefinitionAPIService.HasUpdateBusinessEntityDefinition();

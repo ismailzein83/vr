@@ -64,7 +64,24 @@ namespace TestRuntime.Tasks
             };
             var test = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig);
             var test1 = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig1);
-            Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig);
+
+
+
+
+
+            AnalyticMeasure AnalyticMeasure = new AnalyticMeasure()
+            {
+                AnalyticMeasureConfigId = 2,
+                Config = new AnalyticMeasureConfig()
+                {
+                    JoinConfigNames = null,
+                    GetSQLExpressionMethod = "",
+                    SQLExpression = "Sum(ant.DeliveredAttempts)",
+                    SummaryFunction = AnalyticSummaryFunction.Sum
+                }
+            };
+            var test5 = Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
+            Vanrise.Common.Serializer.Serialize(AnalyticMeasure);
 
             //QueueExecutionFlowManager executionFlowManager = new QueueExecutionFlowManager();
             //var queuesByStages = executionFlowManager.GetQueuesByStages(2);

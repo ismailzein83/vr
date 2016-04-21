@@ -100,12 +100,12 @@
                         //promises.push(loadDirectivePromiseDeferred.promise);
                     }
 
-                    var getFieldMappingTemplateConfigsPromise = getFieldMappingTemplateConfigs();
-                    promises.push(getFieldMappingTemplateConfigsPromise);
+                    var getAnalyticReportSettingsTemplateConfigsPromise = getAnalyticReportSettingsTemplateConfigs();
+                    promises.push(getAnalyticReportSettingsTemplateConfigsPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                    function getFieldMappingTemplateConfigs() {
+                    function getAnalyticReportSettingsTemplateConfigs() {
                         return VR_Analytic_AnalyticConfigurationAPIService.GetAnalyticReportSettingsTemplateConfigs().then(function (response) {
                             selectorAPI.clearDataSource();
                             if (response != null) {

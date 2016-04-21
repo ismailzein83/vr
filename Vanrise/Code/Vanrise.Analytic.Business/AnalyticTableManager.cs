@@ -12,9 +12,14 @@ namespace Vanrise.Analytic.Business
     public class AnalyticTableManager
     {
         #region Public Methods
-        public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo()
+        public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(AnalyticTableInfoFilter filter)
         {
             var analyticTables = GetCachedAnalyticTables();
+            if(filter !=null)
+            {
+                return analyticTables.MapRecords(AnalyticTableInfoMapper,x => filter.OnlySelectedIds.Contains(x.AnalyticTableId));
+            }
+           
             return analyticTables.MapRecords(AnalyticTableInfoMapper);
         }
         #endregion

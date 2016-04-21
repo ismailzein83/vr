@@ -51,6 +51,7 @@
     <Compile Include="AnalyticReport\AnalyticReportSearchSettings.cs" />
     <Compile Include="AnalyticReport\AnalyticReportWidget.cs" />
     <Compile Include="AnalyticSummaryBigResult.cs" />
+    <Compile Include="Config\AnalyticTableInfoFilter.cs" />
     <Compile Include="Config\Dimension\AnalyticDimension.cs" />
     <Compile Include="Config\Dimension\AnalyticDimensionConfig.cs" />
     <Compile Include="Config\Dimension\AnalyticDimensionConfigInfo.cs" />

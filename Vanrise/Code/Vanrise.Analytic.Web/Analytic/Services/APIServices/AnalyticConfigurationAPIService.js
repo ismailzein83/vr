@@ -22,12 +22,16 @@
         function GetAnalyticReportSettingsTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticReportSettingsTemplateConfigs"));
         }
+        function GetWidgetsTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetWidgetsTemplateConfigs"));
+        }
         return ({
             GetDimensionsInfo: GetDimensionsInfo,
             GetMeasuresInfo: GetMeasuresInfo,
             GetFilteredRecords: GetFilteredRecords,
             GetAnalyticRecords: GetAnalyticRecords,
-            GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs
+            GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
+            GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs
         });
     }
 

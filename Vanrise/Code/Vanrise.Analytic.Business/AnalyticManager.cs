@@ -38,5 +38,10 @@ namespace Vanrise.Analytic.Business
             var templateConfigManager = new TemplateConfigManager();
             return templateConfigManager.GetTemplateConfigurations(Constants.AnalyticReportSettingsConfigType);
         }
+        public IEnumerable<TemplateConfig> GetWidgetsTemplateConfigs()
+        {
+            var templateConfigManager = new TemplateConfigManager();
+            return templateConfigManager.GetTemplateConfigurations(Constants.AnalyticWidgetsConfigType);
+        }
     }
 }
