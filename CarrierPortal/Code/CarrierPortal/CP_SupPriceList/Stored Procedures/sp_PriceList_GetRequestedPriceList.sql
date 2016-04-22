@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]
 @PriceListStatusIDs varchar(max)= null,
-@CustomerId int = null
+@CustomerId int = null,
+@UserID int = null
 AS
 BEGIN
 	DECLARE @PriceListStatusIDsTable TABLE (PriceListStatusID int)
@@ -32,4 +33,5 @@ BEGIN
   FROM [CP_SupPriceList].[PriceList]
   WHERE (@PriceListStatusIDs  is null or [CP_SupPriceList].[PriceList].[Status] in (select PriceListStatusID from @PriceListStatusIDsTable))
   and (@CustomerId  is null or	@CustomerId= CustomerID)
+  and (@UserID is null or @UserID = UserID)
 END
