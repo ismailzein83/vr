@@ -32,7 +32,7 @@ namespace CP.SupplierPricelist.Entities
         Country_Pricelist = 1,
         [Description("Rate Change")]
         Rate_Change_Pricelist = 2,
-        [Description("Mixed_Full_Country_And_Changes")]
+        [Description("Mixed")]
         Mixed_Full_Country_And_Changes = 3
     }
 }

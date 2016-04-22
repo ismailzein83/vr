@@ -27,6 +27,7 @@
                 $scope.fromEffectiveDate = new Date();
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    gridAPI.loadGrid(getFilterObject())
                 }
                 $scope.validateDateTime = function () {
                     return vrValidationService.validateTimeRange($scope.fromEffectiveDate, $scope.toEffectiveDate);
@@ -44,11 +45,9 @@
                 }
                 $scope.onCustomerSelectionChanged = function () {
                    var listCustomer = customerDirectiveApi.getSelectedIds();
-                    if (listCustomer && listCustomer.length == 0) {
-                        carrierDirectiveApi.load({ filter: undefined });
-                    }
-                    else if (listCustomer != undefined && listCustomer.length < 2)
-                    {
+
+                   if (listCustomer != undefined && listCustomer.length < 2)
+                   {
                         var obj = {
                             filter: {
                                 CustomerIdForCurrentSupplier: listCustomer[0]

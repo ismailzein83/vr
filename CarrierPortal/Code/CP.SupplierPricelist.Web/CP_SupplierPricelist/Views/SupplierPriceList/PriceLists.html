@@ -12,7 +12,7 @@
                         <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-cp-customer-selector selectedvalues="customers" on-ready="onCustomerDirectiveReady" ismultipleselection onselectionchanged="onCustomerSelectionChanged"></vr-cp-customer-selector>
                         </vr-columns>
-                        <vr-columns width="normal" ng-show="advancedSelected && customers  && customers.length < 2">
+                        <vr-columns width="normal" ng-show="advancedSelected && customers.length >0 && customers.length < 2" >
                             <vr-cp-carrieraccount-selector on-ready="onReadyCarrierAccountSelector" ismultipleselection customlabel="Supplier Accounts"></vr-cp-carrieraccount-selector>
                         </vr-columns>
                         <vr-columns width="normal" ng-show="advancedSelected">

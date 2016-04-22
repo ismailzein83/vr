@@ -76,7 +76,6 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
-
                     }
                     var serializedFilter = {};
                     if (filter != undefined)

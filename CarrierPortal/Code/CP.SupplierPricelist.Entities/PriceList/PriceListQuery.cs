@@ -15,7 +15,6 @@ namespace CP.SupplierPricelist.Entities
         public List<int> PriceListStatuses { get; set; }
         public DateTime FromEffectiveOnDate { get; set; }
         public DateTime? ToEffectiveOnDate { get; set; }
-        public int UserId { get; set; }
 
        
     }

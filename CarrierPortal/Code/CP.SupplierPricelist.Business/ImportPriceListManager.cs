@@ -67,9 +67,9 @@ namespace CP.SupplierPricelist.Business
         }
         public IDataRetrievalResult<PriceListDetail> GetFilterePriceLists(DataRetrievalInput<PriceListQuery> input)
         {
-            input.Query.UserId = SecurityContext.Current.GetLoggedInUserId();
+            int userId = SecurityContext.Current.GetLoggedInUserId();
             IPriceListDataManager dataManager = ImportPriceListDataManagerFactory.GetDataManager<IPriceListDataManager>();
-            BigResult<PriceList> priceListResult = dataManager.GetPriceListsFilteredFromTemp(input);
+            BigResult<PriceList> priceListResult = dataManager.GetPriceListsFilteredFromTemp(input, userId);
         
             BigResult<PriceListDetail> priceListDetailResult = new BigResult<PriceListDetail>()
             {

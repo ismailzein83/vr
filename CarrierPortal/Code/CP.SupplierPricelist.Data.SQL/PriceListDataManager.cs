@@ -93,8 +93,8 @@ namespace CP.SupplierPricelist.Data.SQL
 
             return pricelist;
         }
-               
-        public BigResult<PriceList> GetPriceListsFilteredFromTemp(DataRetrievalInput<PriceListQuery> input)
+
+        public BigResult<PriceList> GetPriceListsFilteredFromTemp(DataRetrievalInput<PriceListQuery> input, int userId)
         {
             Action<string> createTempTableAction = (tempTableName) =>
             {
@@ -119,11 +119,11 @@ namespace CP.SupplierPricelist.Data.SQL
                     statuses = string.Join<int>(",", input.Query.PriceListStatuses);
 
 
-                ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_GetTempByFiltred]",
+                ExecuteNonQuerySP("[CP_SupPriceList].[sp_PriceList_CreateTempByFiltred]",
                     tempTableName,
                     input.Query.FromEffectiveOnDate,
                     input.Query.ToEffectiveOnDate,
-                    input.Query.UserId ,
+                    userId ,
                     customersids,
                     carrierids,
                     types,
