@@ -43,8 +43,8 @@ namespace TestRuntime
             ////return;
             System.Threading.ThreadPool.SetMaxThreads(10000, 10000);
 
-            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("DemoRawCDR");
+            //var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            //Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("DemoRawCDR");
 
             //Vanrise.Queueing.PersistentQueueFactory.Default.CreateQueueIfNotExists<TOne.CDR.Entities.CDRBatch>(0, "testCDRQueue");
             //var queue = Vanrise.Queueing.PersistentQueueFactory.Default.GetQueue("testCDRQueue");
@@ -52,6 +52,8 @@ namespace TestRuntime
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             var runtimeServices = new List<RuntimeService>();
             runtimeServices.Add(queueActivationService);
@@ -60,6 +62,7 @@ namespace TestRuntime
 
             runtimeServices.Add(schedulerService);
             runtimeServices.Add(dsRuntimeService);
+            runtimeServices.Add(bigDataService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();

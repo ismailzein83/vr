@@ -14,18 +14,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SupplierRateDetail> GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
         {
-            ISupplierRateDataManager manager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-
-            BigResult<SupplierRate> supplierRateResult = manager.GetFilteredSupplierRates(input);
-
-            BigResult<SupplierRateDetail> supplierRateDetailResult = new BigResult<SupplierRateDetail>()
-            {
-                ResultKey = supplierRateResult.ResultKey,
-                TotalCount = supplierRateResult.TotalCount,
-                Data = supplierRateResult.Data.MapRecords(SupplierRateDetailMapper)
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, supplierRateDetailResult);
+            return BigDataManager.Instance.RetrieveData(input, new SupplierRateRequestHandler());
         }
         public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
@@ -123,5 +112,23 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
+        #region Private Classes
+
+        private class SupplierRateRequestHandler : BigDataRequestHandler<SupplierRateQuery, SupplierRate, SupplierRateDetail>
+        {
+            public override SupplierRateDetail EntityDetailMapper(SupplierRate entity)
+            {
+                SupplierRateManager manager = new SupplierRateManager();
+                return manager.SupplierRateDetailMapper(entity);
+            }
+
+            public override IEnumerable<SupplierRate> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
+            {
+                ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+                return dataManager.GetAllFilteredSupplierRates(input);
+            }
+        }
+
+        #endregion
     }
 }

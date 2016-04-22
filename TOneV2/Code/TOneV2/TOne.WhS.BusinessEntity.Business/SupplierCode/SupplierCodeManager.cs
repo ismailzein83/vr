@@ -37,19 +37,9 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public Vanrise.Entities.IDataRetrievalResult<SupplierCodeDetail> GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
         {
-            ISupplierCodeDataManager manager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-
-            BigResult<SupplierCode> supplierCodeResult = manager.GetFilteredSupplierCodes(input);
-
-            BigResult<SupplierCodeDetail> supplierCodeDetailResult = new BigResult<SupplierCodeDetail>()
-            {
-                ResultKey = supplierCodeResult.ResultKey,
-                TotalCount = supplierCodeResult.TotalCount,
-                Data = supplierCodeResult.Data.MapRecords(SupplierCodeDetailMapper)
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, supplierCodeDetailResult);
+            return BigDataManager.Instance.RetrieveData(input, new SupplierCodeRequestHandler());
         }
+
         public long ReserveIDRange(int numberOfIDs)
         {
             long startingId;
@@ -78,6 +68,25 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return "Zone Not Found";
         }
+        #endregion
+
+        #region Private Classes
+
+        private class SupplierCodeRequestHandler : BigDataRequestHandler<SupplierCodeQuery, SupplierCode, SupplierCodeDetail>
+        {
+            public override SupplierCodeDetail EntityDetailMapper(SupplierCode entity)
+            {
+                SupplierCodeManager manager = new SupplierCodeManager();
+                return manager.SupplierCodeDetailMapper(entity);
+            }
+
+            public override IEnumerable<SupplierCode> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
+            {
+                ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
+                return dataManager.GetAllFilteredSupplierCodes(input);
+            }
+        }
+
         #endregion
 
     }

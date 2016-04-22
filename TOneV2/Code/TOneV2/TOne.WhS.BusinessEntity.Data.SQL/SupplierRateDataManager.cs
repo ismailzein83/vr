@@ -78,6 +78,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return RetrieveData(input, createTempTableAction, SupplierRateMapper, _columnMapper);
         }
+
+        public IEnumerable<SupplierRate> GetAllFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<SupplierRateQuery> input)
+        {
+            string zonesids = null;
+            if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
+                zonesids = string.Join<int>(",", input.Query.ZoneIds);
+
+
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetFiltered]", SupplierRateMapper, input.Query.SupplierId, zonesids, input.Query.EffectiveOn);
+        }
+
         #endregion
 
         #region Private Methods

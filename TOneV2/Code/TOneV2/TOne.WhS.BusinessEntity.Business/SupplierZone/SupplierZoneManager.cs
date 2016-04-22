@@ -31,7 +31,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if(filter!=null)
                 supplierZones = GetSupplierZoneBySupplier(filter);
             else
-             supplierZones = GetCachedSupplierZones();
+             supplierZones = GetCachedSupplierZones().Values;
             return supplierZones.MapRecords(SupplierZoneInfoMapper, x => x.Name.ToLower().Contains(searchValue.ToLower()));
            
         }       
@@ -47,8 +47,8 @@ namespace TOne.WhS.BusinessEntity.Business
         } 
         public SupplierZone GetSupplierZone(long zoneId)
         {
-            List<SupplierZone> supplierZones = GetCachedSupplierZones();
-            return supplierZones.FindRecord(x => x.SupplierZoneId == zoneId);
+            var supplierZones = GetCachedSupplierZones();
+            return supplierZones.GetRecord(zoneId);
         }
         public string GetSupplierZoneName(long zoneId)
         {
@@ -57,7 +57,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
         {
-            List<SupplierZone> allSupplierZones = GetCachedSupplierZones();
+            var allSupplierZones = GetCachedSupplierZones();
             return allSupplierZones.MapRecords(SupplierZoneInfoMapper, x => selectedIds.Contains(x.SupplierZoneId));
         }
         public long ReserveIDRange(int numberOfIDs)
@@ -70,13 +70,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Members
 
-        List<SupplierZone> GetCachedSupplierZones()
+        Dictionary<long, SupplierZone> GetCachedSupplierZones()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierZones",
                () =>
                {
                    ISupplierZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-                   return dataManager.GetSupplierZones();
+                   return dataManager.GetSupplierZones().ToDictionary(itm => itm.SupplierZoneId, itm => itm);
                });
         }
 
@@ -127,7 +127,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private IEnumerable<SupplierZone> GetSupplierZoneBySupplier(SupplierZoneInfoFilter filter)
         {
-            IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones();
+            var supplierZones = GetCachedSupplierZones();
             Func<SupplierZone, bool> filterExpression = (item) =>
                  (item.SupplierId == filter.SupplierId);
 

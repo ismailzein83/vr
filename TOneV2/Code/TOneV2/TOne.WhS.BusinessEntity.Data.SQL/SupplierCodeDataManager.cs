@@ -76,6 +76,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return RetrieveData(input, createTempTableAction, SupplierCodeMapper, _columnMapper);
         }
 
+        public IEnumerable<SupplierCode> GetAllFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
+        {
+            string zoneIds = null;
+            if (input.Query.ZoneIds != null && input.Query.ZoneIds.Count() > 0)
+                zoneIds = string.Join<int>(",", input.Query.ZoneIds);
+
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierCode_GetFiltered]", SupplierCodeMapper, input.Query.Code, input.Query.SupplierId, zoneIds, input.Query.EffectiveOn);
+        }
+
         public bool AreSupplierCodesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SupplierCode", ref updateHandle);
