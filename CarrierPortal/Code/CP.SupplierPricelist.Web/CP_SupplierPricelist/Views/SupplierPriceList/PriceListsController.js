@@ -17,8 +17,8 @@
             var resultDirectiveAPI;
             var resultReadyPromiseDeferred = utilsService.createPromiseDeferred();
 
-            var statusDirectiveAPI;
-            var statusReadyPromiseDeferred = utilsService.createPromiseDeferred();
+            var groupedStatusDirectiveAPI;
+            var groupedStatusReadyPromiseDeferred = utilsService.createPromiseDeferred();
 
 
             defineScope();
@@ -66,9 +66,9 @@
                     resultReadyPromiseDeferred.resolve();
                 }
 
-                $scope.onPricelistStatusDirectiveReady = function (api) {
-                    statusDirectiveAPI = api;
-                    statusReadyPromiseDeferred.resolve();
+                $scope.onPricelistGroupedStatusDirectiveReady = function (api) {
+                    groupedStatusDirectiveAPI = api;
+                    groupedStatusReadyPromiseDeferred.resolve();
                 }
 
                
@@ -78,7 +78,7 @@
             }
             function loadAllControls() {
                 $scope.isLoadingFilters = true;
-                return utilsService.waitMultipleAsyncOperations([loadCustomer,  loadPriceListType, loadPriceListResult, loadPriceListStatus ])
+                return utilsService.waitMultipleAsyncOperations([loadCustomer,  loadPriceListType, loadPriceListResult, loadPriceListGroupedStatus ])
                    .catch(function (error) {
                        vrNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -108,12 +108,12 @@
                 });
                 return pricelistResultLoadPromiseDeferred.promise;
             }
-            function loadPriceListStatus() {
-                var pricelistStatusLoadPromiseDeferred = utilsService.createPromiseDeferred();
-                statusReadyPromiseDeferred.promise.then(function () {
-                    vruiUtilsService.callDirectiveLoad(statusDirectiveAPI, undefined, pricelistStatusLoadPromiseDeferred);
+            function loadPriceListGroupedStatus() {
+                var pricelistGroupedStatusLoadPromiseDeferred = utilsService.createPromiseDeferred();
+                groupedStatusReadyPromiseDeferred.promise.then(function () {
+                    vruiUtilsService.callDirectiveLoad(groupedStatusDirectiveAPI, undefined, pricelistGroupedStatusLoadPromiseDeferred);
                 });
-                return pricelistStatusLoadPromiseDeferred.promise;
+                return pricelistGroupedStatusLoadPromiseDeferred.promise;
             }
            
             function getFilterObject() {
@@ -121,7 +121,7 @@
                     CustomersIDs:  customerDirectiveApi.getSelectedIds(),
                     PriceListTypes: typeDirectiveAPI.getSelectedIds(),
                     PriceListResults: resultDirectiveAPI.getSelectedIds(),
-                    PriceListStatuses: statusDirectiveAPI.getSelectedIds(),
+                    PriceListStatuses: groupedStatusDirectiveAPI.getSelectedIds(),
                     FromEffectiveOnDate: $scope.fromEffectiveDate,
                     ToEffectiveOnDate: $scope.toEffectiveDate
                 };

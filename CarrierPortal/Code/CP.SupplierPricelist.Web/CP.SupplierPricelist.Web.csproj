@@ -158,6 +158,7 @@
   <ItemGroup>
     <Content Include="CP_SupplierPricelist\Constant\ModuleConfig.js" />
     <Content Include="CP_SupplierPricelist\Constant\PriceListResultEnum.js" />
+    <Content Include="CP_SupplierPricelist\Constant\PriceListGroupedStatusEnum.js" />
     <Content Include="CP_SupplierPricelist\Constant\PriceListStatusEnum.js" />
     <Content Include="CP_SupplierPricelist\Constant\PriceListTypeEnum.js" />
     <Content Include="CP_SupplierPricelist\Directives\CustomerUser\Templates\CustomerUserGridTemplate.html" />
@@ -180,7 +181,7 @@
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\Templates\SupplierPriceListGridTemplate.html" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-pricelistresult-selector.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-pricelists-grid.js" />
-    <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-priceliststatus-selector.js" />
+    <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-pricelistgroupedstatus-selector.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-pricelisttype-selector.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierPriceList\vr-cp-supplierpricelist-grid.js" />
     <Content Include="CP_SupplierPricelist\Directives\SupplierMapping\Templates\SupplierMappingGridTemplate.html" />

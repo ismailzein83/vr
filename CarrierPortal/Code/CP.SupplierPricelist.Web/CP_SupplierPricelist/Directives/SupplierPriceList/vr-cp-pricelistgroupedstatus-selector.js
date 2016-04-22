@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrCpPriceliststatusSelector', ['CP_SupplierPricelist_PriceListGroupedStatusEnum', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrCpPricelistgroupedstatusSelector', ['CP_SupplierPricelist_PriceListGroupedStatusEnum', 'UtilsService', 'VRUIUtilsService',
     function (CP_SupplierPricelist_PriceListGroupedStatusEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -19,7 +19,7 @@ app.directive('vrCpPriceliststatusSelector', ['CP_SupplierPricelist_PriceListGro
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
-                var selector = new pricelistStatusSelector(ctrl, $scope, $attrs);
+                var selector = new pricelistGroupedStatusSelector(ctrl, $scope, $attrs);
                 selector.initializeController();
 
 
@@ -34,12 +34,12 @@ app.directive('vrCpPriceliststatusSelector', ['CP_SupplierPricelist_PriceListGro
                 }
             },
             template: function (element, attrs) {
-                return getPriceListResultTemplate(attrs);
+                return getPriceListGroupedStatusTemplate(attrs);
             }
 
         };
 
-        function getPriceListResultTemplate(attrs) {
+        function getPriceListGroupedStatusTemplate(attrs) {
 
             var multipleselection = "";
             var label = "Pricelist Status";
@@ -55,7 +55,7 @@ app.directive('vrCpPriceliststatusSelector', ['CP_SupplierPricelist_PriceListGro
         }
         
 
-        function pricelistStatusSelector(ctrl, $scope, attrs) {
+        function pricelistGroupedStatusSelector(ctrl, $scope, attrs) {
 
             var selectorAPI;
             function initializeController() {
