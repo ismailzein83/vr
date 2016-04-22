@@ -6,8 +6,6 @@
 CREATE PROCEDURE [TOneWhS_BE].[sp_CarrierAccount_Update]
 	@ID int,
 	@Name nvarchar(255),
-	@CarrierProfileId int,
-	@AccountType int,
 	@CustomerSettings nvarchar(MAX),
 	@SupplierSettings nvarchar(MAX),
 	@CarrierAccountSettings nvarchar(MAX)
@@ -17,8 +15,6 @@ IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierAccount WHERE [NameSuffix] = @Name
 BEGIN
 	Update TOneWhS_BE.CarrierAccount
 	Set NameSuffix = @Name,
-		CarrierProfileID=@CarrierProfileId,
-		AccountType=@AccountType,
 		CustomerSettings=@CustomerSettings,
 		SupplierSettings = @SupplierSettings,
 		CarrierAccountSettings=@CarrierAccountSettings

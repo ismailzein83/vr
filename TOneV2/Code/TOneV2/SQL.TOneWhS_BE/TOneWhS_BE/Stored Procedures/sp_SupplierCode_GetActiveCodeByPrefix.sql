@@ -26,6 +26,6 @@ BEGIN
 	  LEFT JOIN [TOneWhS_BE].SupplierZone sz ON sc.ZoneID=sz.ID 
 	  JOIN @ActiveSuppliersInfo s on s.SupplierId = sz.SupplierId
 	  Where ((sc.[Code] like @CodePrefix + '%' And @GetChildCodes = 1) OR (@CodePrefix like sc.Code + '%'  And @GetParentCodes = 1))
-	  AND (@IsFuture = 0 AND sc.BED <= @EffectiveOn AND (sc.EED > @EffectiveOn OR sc.EED IS NULL))
-	  OR (@IsFuture = 1 AND (sc.BED > GETDATE() OR sc.EED IS NULL))
+	  AND ((@IsFuture = 0 AND sc.BED <= @EffectiveOn AND (sc.EED > @EffectiveOn OR sc.EED IS NULL))
+	  OR (@IsFuture = 1 AND (sc.BED > GETDATE() OR sc.EED IS NULL)))
 END

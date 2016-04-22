@@ -1,7 +1,7 @@
 ﻿-- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
+-- Author:		Mostafa Jawhari
+-- Modify date: 04-13-2016
+-- Description:	Adding try catch will rollback.
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_SyncWithImportedData]
 	@ProcessInstanceID Bigint,
@@ -9,7 +9,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_SyncWithImportedData]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	
+
+Begin Try
 	BEGIN TRAN
 	
 	Insert into TOneWhS_BE.SaleZone (ID,SellingNumberPlanID, CountryID, Name, BED, EED)
@@ -33,4 +34,11 @@ BEGIN
 	
 	
 	COMMIT TRAN
+	End Try
+	
+	Begin Catch
+	If @@TranCount>0
+		RollBack Tran
+	End Catch 
+
 END

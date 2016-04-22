@@ -140,7 +140,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingProduct_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingProduct_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingProduct_GetAll.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingProduct_Delete.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SellingNumberPlan_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetByNumberPlan.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_GetAll.sql" />
@@ -275,5 +274,12 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByZoneId_1.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetBySellingNumberPlan_1.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCountry_1.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetEffectiveByZoneId.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByZoneIds.sql" />
+    <Build Include="TOneWhS_Analytic\Stored Procedures\sp_TrafficStatsMeasure_GroupBySupplierZone.sql" />
+    <Build Include="TOneWhS_Analytic\Stored Procedures\sp_TrafficStatsMeasure_GroupBySaleZone_Supplier.sql" />
+    <Build Include="TOneWhS_Analytic\User Defined Types\VariationReportTimePeriodType.sql" />
   </ItemGroup>
 </Project>

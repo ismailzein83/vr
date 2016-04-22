@@ -1,6 +1,4 @@
-﻿
-
--- =============================================
+﻿-- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
@@ -27,8 +25,8 @@ BEGIN
 	  FROM [TOneWhS_BE].SaleRate sr 
 	  JOIN [TOneWhS_BE].SalePriceList spl ON sr.PriceListID = spl.ID 
 	  Join @ActiveCustomersInfo ci on ci.CustomerId = spl.OwnerId
-	  Where (@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
-		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL))
+	  Where ((@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
+		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL)))
 		AND spl.OwnerType = @CustomerOwnerType 
 		
 	Union
@@ -42,7 +40,7 @@ BEGIN
 		  ,sr.EED
 	  FROM [TOneWhS_BE].SaleRate sr 
 	  JOIN [TOneWhS_BE].SalePriceList spl ON sr.PriceListID = spl.ID 
-	   Where (@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
-		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL))
+	   Where ((@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
+		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL)))
 		AND spl.OwnerType <> @CustomerOwnerType 
 END

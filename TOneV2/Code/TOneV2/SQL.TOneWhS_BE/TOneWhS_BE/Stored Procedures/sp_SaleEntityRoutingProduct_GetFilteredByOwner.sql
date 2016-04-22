@@ -24,8 +24,8 @@ BEGIN
 			   ,se.[EED]
 		FROM    [TOneWhS_BE].[SaleEntityRoutingProduct] se
 		JOIN	@ActiveCustomersInfo ci on ci.CustomerId = se.OwnerId
-		WHERE	(@IsFuture = 0 AND se.BED <= @EffectiveTime AND (se.EED > @EffectiveTime OR se.EED IS NULL))
-				OR (@IsFuture = 1 AND (se.BED > GETDATE() OR se.EED IS NULL))
+		WHERE	((@IsFuture = 0 AND se.BED <= @EffectiveTime AND (se.EED > @EffectiveTime OR se.EED IS NULL))
+				OR (@IsFuture = 1 AND (se.BED > GETDATE() OR se.EED IS NULL)))
 				AND se.OwnerType = @CustomerOwnerType 
 				AND (@IsDefault = 1 OR se.ZoneId IS NOT NULL)
 
@@ -39,8 +39,8 @@ BEGIN
 			   ,se.[BED]
 			   ,se.[EED]
 		FROM    [TOneWhS_BE].[SaleEntityRoutingProduct] se
-		WHERE	(@IsFuture = 0 AND se.BED <= @EffectiveTime AND (se.EED > @EffectiveTime OR se.EED IS NULL))
-				OR (@IsFuture = 1 AND (se.BED > GETDATE() OR se.EED IS NULL))
+		WHERE	((@IsFuture = 0 AND se.BED <= @EffectiveTime AND (se.EED > @EffectiveTime OR se.EED IS NULL))
+				OR (@IsFuture = 1 AND (se.BED > GETDATE() OR se.EED IS NULL)))
 				AND se.OwnerType <> @CustomerOwnerType
 				AND (@IsDefault = 1 OR se.ZoneId IS NOT NULL)
 END

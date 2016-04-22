@@ -9,7 +9,7 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierPriceList_Insert]
 	@Id int out
 AS
 BEGIN
-	Insert into TOneWhS_BE.SupplierPriceList(SupplierID,CurrencyID)
-	Values(@SupplierAccountId,@CurrencyId)
+	Insert into TOneWhS_BE.SupplierPriceList(SupplierID,CurrencyID,CreatedTime)
+	Values(@SupplierAccountId,@CurrencyId,GETDATE())
 	Set @Id = @@IDENTITY
 END

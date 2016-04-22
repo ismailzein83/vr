@@ -12,9 +12,11 @@ BEGIN
 	SET NOCOUNT ON;
 
     SELECT [ID]
+	  ,[CreatedTime]
       ,[SupplierID]
       ,[CurrencyID]
       ,[FileID]
-      from TOneWhS_BE.SupplierPriceList
+      FROM TOneWhS_BE.SupplierPriceList
+	  ORDER BY ID DESC
 
 END

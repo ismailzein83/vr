@@ -26,6 +26,8 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_TrafficStats_DateTimeFirst]
     ON [TOneWhS_Analytic].[TrafficStats]([FirstCDRAttempt] DESC);
@@ -39,4 +41,9 @@ CREATE NONCLUSTERED INDEX [IX_TrafficStats_Supplier]
 GO
 CREATE NONCLUSTERED INDEX [IX_TrafficStats_Customer]
     ON [TOneWhS_Analytic].[TrafficStats]([CustomerID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_TrafficStats_SaleZone]
+    ON [TOneWhS_Analytic].[TrafficStats]([SaleZoneID] ASC);
 

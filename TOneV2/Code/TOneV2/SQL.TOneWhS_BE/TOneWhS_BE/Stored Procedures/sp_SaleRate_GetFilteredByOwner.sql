@@ -1,10 +1,9 @@
-﻿
--- =============================================
+﻿-- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetFilteredByOwner]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetFilteredByOwner]
 	-- Add the parameters for the stored procedure here
 	@CustomerOwnerType int,
 	@EffectiveTime DateTime,
@@ -26,8 +25,8 @@ BEGIN
 	  FROM [TOneWhS_BE].SaleRate sr 
 	  LEFT JOIN [TOneWhS_BE].SalePriceList spl ON sr.PriceListID = spl.ID 
 	  Left Join @ActiveCustomersInfo ci on ci.CustomerId = spl.OwnerId
-	  Where (@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
-		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL))
+	  Where ((@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
+		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL)))
 		AND spl.OwnerType = @CustomerOwnerType 
 		
 	Union
@@ -41,7 +40,7 @@ BEGIN
 		  ,sr.EED
 	  FROM [TOneWhS_BE].SaleRate sr 
 	  LEFT JOIN [TOneWhS_BE].SalePriceList spl ON sr.PriceListID = spl.ID 
-	   Where (@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
-		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL))
+	   Where ((@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))
+		OR (@IsFuture = 1 AND (sr.BED > GETDATE() OR sr.EED IS NULL)))
 		AND spl.OwnerType <> @CustomerOwnerType 
 END
