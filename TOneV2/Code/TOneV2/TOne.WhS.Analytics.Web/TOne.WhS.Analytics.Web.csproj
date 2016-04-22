@@ -152,6 +152,7 @@
     <Content Include="WhS_Analytics\Constant\GenericAnalyticMeasureEnum.js" />
     <Content Include="WhS_Analytics\Constant\ModuleConfig.js" />
     <Content Include="WhS_Analytics\Constant\RawCDRLogWhereInfoEnum.js" />
+    <Content Include="WhS_Analytics\Constant\VariationReportDimensionEnum.js" />
     <Content Include="WhS_Analytics\Constant\VariationReportTimePeriodEnum.js" />
     <Content Include="WhS_Analytics\Constant\VariationReportTypeEnum.js" />
     <Content Include="WhS_Analytics\Directives\BlockedAttempts\Templates\BlockedAttemptsGridTemplate.html" />
