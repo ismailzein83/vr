@@ -125,7 +125,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                             shouldNotAddCode = true;
                             break;
                         }
-                        else if (importedCode.EED.HasValue && importedCode.EED.VRLessThan(existingCode.EED))
+                        if (importedCode.EED.HasValue && importedCode.EED.VRLessThan(existingCode.EED))
                         {
                             existingCode.ChangedCode = new ChangedCode
                                 {
@@ -137,11 +137,11 @@ namespace TOne.WhS.SupplierPriceList.Business
                             break;
                         }
                     }
-                    DateTime existingCodeEED = Utilities.Max(importedCode.BED, existingCode.BED);
+                    DateTime existingCodeEed = Utilities.Max(importedCode.BED, existingCode.BED);
                     existingCode.ChangedCode = new ChangedCode
                     {
                         CodeId = existingCode.CodeEntity.SupplierCodeId,
-                        EED = existingCodeEED
+                        EED = existingCodeEed
                     };
                     importedCode.ChangedExistingCodes.Add(existingCode);
                 }
@@ -241,8 +241,9 @@ namespace TOne.WhS.SupplierPriceList.Business
                     existingCode.ChangedCode = new ChangedCode
                     {
                         CodeId = existingCode.CodeEntity.SupplierCodeId,
-                        EED = codeCloseDate
+                        EED = codeCloseDate < existingCode.BED ? existingCode.BED : codeCloseDate
                     };
+
                 }
             }
         }
