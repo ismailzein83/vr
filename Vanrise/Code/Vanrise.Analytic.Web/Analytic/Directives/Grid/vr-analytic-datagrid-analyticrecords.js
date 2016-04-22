@@ -102,9 +102,9 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
 
                                     var drillDownPayLoad = {
-                                        groupingDimensions: [dimension],
-                                        dimensionFilters: newFilters,
-                                        measures: ctrl.measures,
+                                        GroupingDimensions: [dimension],
+                                        DimensionFilters: newFilters,
+                                        Measures: ctrl.measures,
                                         FromTime: fromTime,
                                         ToTime: toTime,
                                         DrillDownDimensions: drillDownDimensions
@@ -156,14 +156,17 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 }
                             }
                         }
+                        if (payLoad.Settings.Measures != undefined) {
+                            for (var i = 0; i < payLoad.Settings.Measures.length; i++) {
+                                ctrl.measures.push(payLoad.Settings.Measures[i]);
+                            }
+                        }
                     }
-
-                    if (payLoad.Measures != undefined) {
+                    else if (payLoad.Measures != undefined) {
                         for (var i = 0; i < payLoad.Measures.length; i++) {
                             ctrl.measures.push(payLoad.Measures[i]);
                         }
                     }
-
                     if (payLoad.GroupingDimensions != undefined) {
                         for (var i = 0; i < payLoad.GroupingDimensions.length; i++) {
                             ctrl.groupingDimensions.push(payLoad.GroupingDimensions[i]);
@@ -178,7 +181,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         ToTime: toTime,
                         Currency: payLoad.Currency,
                         WithSummary: isSummary,
-                        TableId : payLoad.TableId
+                        TableId: payLoad.TableId
                     }
 
                     if (payLoad.GroupingDimensions.length > 0)

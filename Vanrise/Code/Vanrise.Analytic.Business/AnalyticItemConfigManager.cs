@@ -44,7 +44,7 @@ namespace Vanrise.Analytic.Business
                 {
                     AnalyticMeasureConfigId = itemConfig.AnalyticItemConfigId,
                     Config = measureConfig,
-                    Evaluator = DynamicTypeGenerator.GetMeasureEvaluator(itemConfig.AnalyticItemConfigId)
+                    Evaluator = null// DynamicTypeGenerator.GetMeasureEvaluator(itemConfig.AnalyticItemConfigId)
                 };
                 analyticMeasures.Add(itemConfig.Name, measure);
             }
@@ -85,16 +85,16 @@ namespace Vanrise.Analytic.Business
             if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
                 throw new NullReferenceException("AnalyticMeasureConfigInfoFilter");
             List<AnalyticMeasureConfigInfo> measureConfigs = new List<AnalyticMeasureConfigInfo>();
-            foreach(var tableId in filter.TableIds)
+            foreach (var tableId in filter.TableIds)
             {
                 var measures = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, AnalyticItemType.Measure);
                 measureConfigs.AddRange(measures.MapRecords(AnalyticMeasureConfigInfoMapper));
             }
             return measureConfigs;
         }
-     
+
         #endregion
-      
+
         #region Private Methods
 
         private IEnumerable<AnalyticItemConfig<T>> GetCachedAnalyticItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class
@@ -103,7 +103,7 @@ namespace Vanrise.Analytic.Business
                () =>
                {
                    IAnalyticItemConfigDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticItemConfigDataManager>();
-                    return dataManager.GetItemConfigs<T>(tableId, itemType);
+                   return dataManager.GetItemConfigs<T>(tableId, itemType);
                });
         }
 
@@ -121,7 +121,7 @@ namespace Vanrise.Analytic.Business
                 return _dataManager.AreAnalyticItemConfigUpdated(ref _updateHandle);
             }
         }
-         
+
         #endregion
 
         #region Mapper
