@@ -48,7 +48,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     function getDirectiveAPI() {
                         var directiveAPI = {};
 
-                        directiveAPI.loadGrid = function (payLoad) {
+                        directiveAPI.load = function (payLoad) {
                             isSummary = $attrs.withsummary != undefined;
                             ctrl.drillDownDimensions.length = 0;
                             if (payLoad.DrillDownDimensions != undefined) {
@@ -107,9 +107,10 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                         Measures: ctrl.measures,
                                         FromTime: fromTime,
                                         ToTime: toTime,
-                                        DrillDownDimensions: drillDownDimensions
+                                        DrillDownDimensions: drillDownDimensions,
+                                        TableId: payLoad.TableId
                                     }
-                                    return dataItem.gridAPI.loadGrid(drillDownPayLoad);
+                                    return dataItem.gridAPI.load(drillDownPayLoad);
                                 };
 
                                 drillDownDefinitions.push(objData);

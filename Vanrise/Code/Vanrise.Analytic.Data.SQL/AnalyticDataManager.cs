@@ -48,7 +48,9 @@ namespace Vanrise.Analytic.Data.SQL
                 rslt.Summary = GetSummary(input);
             return rslt;
         }
-        private AnalyticRecord GetSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+
+        #region Private Methods
+        AnalyticRecord GetSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             string query = BuildAnalyticQuery(input, "AnalyticSummaryTable", input.Query.WithSummary);
             return GetItemText(query, reader => AnalyticRecordMapper(reader, input.Query, true), (cmd) =>
@@ -59,7 +61,9 @@ namespace Vanrise.Analytic.Data.SQL
                         cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
                 });
         }
-        private string BuildAnalyticQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, bool isSummary)
+
+        #region Query Builder
+        string BuildAnalyticQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, bool isSummary)
         {
             StringBuilder selectPartBuilder = new StringBuilder();
             StringBuilder joinPartBuilder = new StringBuilder();
@@ -208,7 +212,58 @@ namespace Vanrise.Analytic.Data.SQL
         {
             return String.Format("Measure_{0}", measure.AnalyticMeasureConfigId);
         }
-        private AnalyticRecord AnalyticRecordMapper(System.Data.IDataReader reader, AnalyticQuery analyticQuery, bool isSummary)
+        void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
+        {
+            if (values != null && values.Count() > 0)
+            {
+                if (values[0].GetType() == typeof(string) || values[0].GetType() == typeof(DateTime))
+                {
+                    StringBuilder builder = new StringBuilder();
+                    if (values.Count == 1)
+                        builder.Append("'").Append(values[0]).Append("'");
+                    else
+                    {
+                        foreach (T val in values)
+                        {
+                            builder.Append("'").Append(val).Append("' ,");
+                        }
+                        builder.Length--;
+                    }
+
+                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, builder);
+                }
+                else
+                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, String.Join(", ", values));
+            }
+        }
+        void AddColumnToStringBuilder(StringBuilder builder, string column)
+        {
+            if (builder.Length > 0)
+            {
+                builder.Append(" , ");
+            }
+            builder.Append(column);
+        }
+        void AddStatementToStringBuilder(StringBuilder builder, string statement)
+        {
+            if (statement.Length != 0)
+                builder.Append(" " + statement + " , ");
+        }
+        void AddStatementToJoinPart(StringBuilder joinPartBuilder, string statement)
+        {
+            joinPartBuilder.Append(" " + statement + " ");
+        }
+        void AddPartOfJoinStatment(StringBuilder joinPartBuilder, string statement)
+        {
+            if (joinPartBuilder != null && joinPartBuilder.Length > 0)
+                joinPartBuilder.Append("AND");
+            joinPartBuilder.Append(" " + statement + " ");
+        }
+
+        #endregion
+
+        #region Mappers
+        AnalyticRecord AnalyticRecordMapper(System.Data.IDataReader reader, AnalyticQuery analyticQuery, bool isSummary)
         {
             AnalyticRecord record = new AnalyticRecord()
                 {
@@ -248,59 +303,13 @@ namespace Vanrise.Analytic.Data.SQL
             index = 0;
             return record;
         }
-        private void AddFilterToFilterPart<T>(StringBuilder filterBuilder, List<T> values, string column)
-        {
-            if (values != null && values.Count() > 0)
-            {
-                if (values[0].GetType() == typeof(string) || values[0].GetType() == typeof(DateTime))
-                {
-                    StringBuilder builder = new StringBuilder();
-                    if (values.Count == 1)
-                        builder.Append("'").Append(values[0]).Append("'");
-                    else
-                    {
-                        foreach (T val in values)
-                        {
-                            builder.Append("'").Append(val).Append("' ,");
-                        }
-                        builder.Length--;
-                    }
 
-                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, builder);
-                }
-                else
-                    filterBuilder.AppendFormat(" AND {0} IN ({1}) ", column, String.Join(", ", values));
-            }
-        }
-        private void AddColumnToStringBuilder(StringBuilder builder, string column)
-        {
-            if (builder.Length > 0)
-            {
-                builder.Append(" , ");
-            }
-            builder.Append(column);
-        }
-        private void AddStatementToStringBuilder(StringBuilder builder, string statement)
-        {
-            if (statement.Length != 0)
-                builder.Append(" " + statement + " , ");
-        }
-        private void AddStatementToJoinPart(StringBuilder joinPartBuilder, string statement)
-        {
-            joinPartBuilder.Append(" " + statement + " ");
-        }
-        private void AddPartOfJoinStatment(StringBuilder joinPartBuilder, string statement)
-        {
-            if (joinPartBuilder != null && joinPartBuilder.Length > 0)
-                joinPartBuilder.Append("AND");
-            joinPartBuilder.Append(" " + statement + " ");
-        }
+        #endregion
 
-        public class JoinStatement
-        {
-            public const string ConvertedToCurrency = "LEFT JOIN ExchangeRatesConvertedToCurrency ERC ON ERC.CurrencyID = bs.CostCurrency AND ERC.BED>=bs.CallDate and( ERC.EED IS NULL OR ERC.EED <bs.CallDate) LEFT JOIN ExchangeRatesConvertedToCurrency ERS ON ERS.CurrencyID = bs.SaleCurrency AND ERS.BED>=bs.CallDate and( ERS.EED IS NULL OR ERS.EED <bs.CallDate) ";
-            public const string ExchangeCurrency = "LEFT JOIN ExchangeRates ERC ON ERC.CurrencyID = bs.CostCurrency AND ERC.BED>=bs.CallDate and( ERC.EED IS NULL OR ERC.EED <bs.CallDate) LEFT JOIN ExchangeRates ERS ON ERS.CurrencyID = bs.SaleCurrency AND ERS.BED>=bs.CallDate and( ERS.EED IS NULL OR ERS.EED <bs.CallDate) ";
-        }
+        #endregion
+
+        #region IAnalyticDataManager Implementation
+
         AnalyticTable _table;
         public AnalyticTable Table
         {
@@ -324,5 +333,15 @@ namespace Vanrise.Analytic.Data.SQL
         {
             set { _joins = value; }
         }
+
+        #endregion
+
+        #region Overriden Methods
+        protected override string GetConnectionString()
+        {
+            return _table.Settings.ConnectionString;
+        }
+
+        #endregion
     }
 }
