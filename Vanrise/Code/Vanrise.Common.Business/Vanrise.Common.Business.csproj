@@ -41,6 +41,9 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,7 +57,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BigDataManager.cs" />
+    <Compile Include="BigData\BigDataManager.cs" />
+    <Compile Include="BigData\BigDataRequestHandler.cs" />
+    <Compile Include="BigData\BigDataRuntimeService.cs" />
+    <Compile Include="BigData\BigDataServiceCacheManager.cs" />
+    <Compile Include="BigData\BigDataWCFService.cs" />
+    <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Country\CountryManager.cs" />

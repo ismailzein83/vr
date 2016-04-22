@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticateOperationOutput.cs" />
+    <Compile Include="BigData\BigDataService.cs" />
     <Compile Include="City\CityInfo.cs" />
     <Compile Include="City\City.cs" />
     <Compile Include="City\CityDetail.cs">
