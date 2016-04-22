@@ -12,7 +12,7 @@
         var measures = [];
         var periods = [];
         var dimensions = [];
-
+        var tableId = 2;
         defineScope();
         load();
 
@@ -38,18 +38,19 @@
         }
 
         function loadGrid() {
-            return gridApi.loadGrid(getQuery());
+            return gridApi.load(getQuery());
         }
 
         function getQuery() {
             var selectedObject = filterDirectiveAPI.getData();
             var query = {
                 Settings: GetAnalyticWidgetSettings(),
-                dimensionFilters: selectedObject.selectedfilters,
-                groupingDimensions: getGroupingDimensions(),
-                measures: measures,
+                DimensionFilters: selectedObject.selectedfilters,
+                GroupingDimensions: getGroupingDimensions(),
+                Measures: measures,
                 FromTime: selectedObject.fromdate,
-                ToTime: selectedObject.todate
+                ToTime: selectedObject.todate,
+                TableId: tableId
             };
             return query;
         }
@@ -87,10 +88,11 @@
 
         function loadDimensions() {
             dimensions.length = 0;
-            dimensions.push(GetMockDimension('SaleZone', false, 'Sale Zone'));
-            dimensions.push(GetMockDimension('SupplierZone', false, 'Supplier Zone'));
-            dimensions.push(GetMockDimension('Customer', false, 'Customer'));
-            dimensions.push(GetMockDimension('Supplier', false, 'Supplier'));
+            dimensions.push(GetMockDimension('SaleZone', false, 'Sale Zone', false, null));
+            dimensions.push(GetMockDimension('SaleCode', false, 'Sale Code', false, 'SaleZone'));
+            dimensions.push(GetMockDimension('SupplierZone', false, 'Supplier Zone', true, 'Supplier'));
+            dimensions.push(GetMockDimension('Customer', false, 'Customer', false, null));
+            dimensions.push(GetMockDimension('Supplier', false, 'Supplier', false, null));
         }
 
         function loadMeasures() {
@@ -98,6 +100,7 @@
             measures.push(GetMockMeasure('DeliveredAttempts', 'Delivered Attempts'));
             measures.push(GetMockMeasure('NumberOfCalls', 'Number Of Calls'));
             measures.push(GetMockMeasure('SuccessfulAttempts', 'Successful Attempts'));
+            measures.push(GetMockMeasure('DeliveredNumberOfCalls', 'AVG Delivered Calls Number'));
         }
 
         function getGroupingDimensions() {
@@ -108,11 +111,13 @@
             //return groupingDimensions;
         }
 
-        function GetMockDimension(name, isRoot, title) {
+        function GetMockDimension(name, isRoot, title, isRequired, parentDimension) {
             return {
                 DimensionName: name,
                 IsRootDimension: isRoot,
-                Title: title
+                Title: title,
+                ParentDimension: parentDimension,
+                IsRequiredFromParent: isRequired
             };
         }
         function GetMockMeasure(name, title) {
