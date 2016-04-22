@@ -50,6 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NewData\CodeToAdd.cs" />
+    <Compile Include="NewData\CodeToClose.cs" />
+    <Compile Include="NewData\CodeToMove.cs" />
     <Compile Include="SaleCode\CloseCodesOutput.cs" />
     <Compile Include="SaleCode\CloseCodesInput.cs" />
     <Compile Include="CountryToProcess.cs" />
