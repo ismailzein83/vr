@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Runtime;
 
-namespace QualityMeasurement.DevRuntime.Tasks
+namespace QM.Runtime.Tasks
 {
     public class ScheduleTestCallsTask : ITask
     {

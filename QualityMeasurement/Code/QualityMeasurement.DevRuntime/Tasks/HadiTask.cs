@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace QualityMeasurement.DevRuntime.Tasks
+namespace QM.Runtime.Tasks
 {
     public class HadiTask : ITask
     {

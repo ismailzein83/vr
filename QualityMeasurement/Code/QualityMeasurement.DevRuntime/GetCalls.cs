@@ -10,7 +10,7 @@ using QM.BusinessEntity.Entities;
 using QM.CLITester.Business;
 using QM.CLITester.Entities;
 
-namespace QualityMeasurement.DevRuntime
+namespace QM.Runtime
 {
     public class GetCalls
     {

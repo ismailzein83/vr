@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using QM.CLITester.Business;
 using QM.CLITester.Entities;
 
-namespace QualityMeasurement.DevRuntime
+namespace QM.Runtime
 {
     public class GetResults
     {

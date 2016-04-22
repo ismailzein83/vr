@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace QualityMeasurement.DevRuntime
+namespace QM.Runtime
 {
     public partial class MainForm : Form
     {

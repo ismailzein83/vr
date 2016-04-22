@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("QualityMeasurement.DevRuntime")]
+[assembly: AssemblyTitle("QM.Runtime")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Hewlett-Packard Company")]
-[assembly: AssemblyProduct("QualityMeasurement.DevRuntime")]
+[assembly: AssemblyProduct("QM.Runtime")]
 [assembly: AssemblyCopyright("Copyright © Hewlett-Packard Company 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

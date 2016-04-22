@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Vanrise.Runtime;
 
-namespace QualityMeasurement.DevRuntime
+namespace QM.Runtime
 {
     class Program
     {

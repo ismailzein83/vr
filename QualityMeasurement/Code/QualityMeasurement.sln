@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web", "..\..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj", "{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}"
 EndProject
@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.BusinessEntity.Business"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{D12106CC-2DB4-49FA-80BC-16497A1922D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityMeasurement.DevRuntime", "QualityMeasurement.DevRuntime\QualityMeasurement.DevRuntime.csproj", "{2B9ADE39-9B14-4660-A225-D6FAF6BA03B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.Runtime", "QualityMeasurement.DevRuntime\QM.Runtime.csproj", "{2B9ADE39-9B14-4660-A225-D6FAF6BA03B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM.BusinessEntity.Data", "QM.BusinessEntity.Data\QM.BusinessEntity.Data.csproj", "{F088847E-2BCD-446A-B51A-3DBAAF7AC835}"
 EndProject
@@ -113,30 +113,30 @@ Global
 		SccProjectTopLevelParentUniqueName13 = QualityMeasurement.sln
 		SccProjectName13 = QM.BusinessEntity.Business
 		SccLocalPath13 = QM.BusinessEntity.Business
-		SccProjectUniqueName14 = QualityMeasurement.DevRuntime\\QualityMeasurement.DevRuntime.csproj
+		SccProjectUniqueName14 = QM.BusinessEntity.Data\\QM.BusinessEntity.Data.csproj
 		SccProjectTopLevelParentUniqueName14 = QualityMeasurement.sln
-		SccProjectName14 = QualityMeasurement.DevRuntime
-		SccLocalPath14 = QualityMeasurement.DevRuntime
-		SccProjectUniqueName15 = QM.BusinessEntity.Data\\QM.BusinessEntity.Data.csproj
+		SccProjectName14 = QM.BusinessEntity.Data
+		SccLocalPath14 = QM.BusinessEntity.Data
+		SccProjectUniqueName15 = QM.BusinessEntity.Web\\QM.BusinessEntity.Web.csproj
 		SccProjectTopLevelParentUniqueName15 = QualityMeasurement.sln
-		SccProjectName15 = QM.BusinessEntity.Data
-		SccLocalPath15 = QM.BusinessEntity.Data
-		SccProjectUniqueName16 = QM.BusinessEntity.Web\\QM.BusinessEntity.Web.csproj
+		SccProjectName15 = QM.BusinessEntity.Web
+		SccLocalPath15 = QM.BusinessEntity.Web
+		SccProjectUniqueName16 = QM.CLITester.iTestIntegration\\QM.CLITester.iTestIntegration.csproj
 		SccProjectTopLevelParentUniqueName16 = QualityMeasurement.sln
-		SccProjectName16 = QM.BusinessEntity.Web
-		SccLocalPath16 = QM.BusinessEntity.Web
-		SccProjectUniqueName17 = QM.CLITester.iTestIntegration\\QM.CLITester.iTestIntegration.csproj
+		SccProjectName16 = QM.CLITester.iTestIntegration
+		SccLocalPath16 = QM.CLITester.iTestIntegration
+		SccProjectUniqueName17 = QM.BusinessEntity.Data.SQL\\QM.BusinessEntity.Data.SQL.csproj
 		SccProjectTopLevelParentUniqueName17 = QualityMeasurement.sln
-		SccProjectName17 = QM.CLITester.iTestIntegration
-		SccLocalPath17 = QM.CLITester.iTestIntegration
-		SccProjectUniqueName18 = QM.BusinessEntity.Data.SQL\\QM.BusinessEntity.Data.SQL.csproj
+		SccProjectName17 = QM.BusinessEntity.Data.SQL
+		SccLocalPath17 = QM.BusinessEntity.Data.SQL
+		SccProjectUniqueName18 = QualityMeasurementBI\\QualityMeasurementBI.sqlproj
 		SccProjectTopLevelParentUniqueName18 = QualityMeasurement.sln
-		SccProjectName18 = QM.BusinessEntity.Data.SQL
-		SccLocalPath18 = QM.BusinessEntity.Data.SQL
-		SccProjectUniqueName19 = QualityMeasurementBI\\QualityMeasurementBI.sqlproj
+		SccProjectName18 = QualityMeasurementBI
+		SccLocalPath18 = QualityMeasurementBI
+		SccProjectUniqueName19 = QualityMeasurement.DevRuntime\\QM.Runtime.csproj
 		SccProjectTopLevelParentUniqueName19 = QualityMeasurement.sln
-		SccProjectName19 = QualityMeasurementBI
-		SccLocalPath19 = QualityMeasurementBI
+		SccProjectName19 = QualityMeasurement.DevRuntime
+		SccLocalPath19 = QualityMeasurement.DevRuntime
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -228,26 +228,26 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {B2173A72-324C-4051-A3F6-9AA34CB567F8}
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {B2173A72-324C-4051-A3F6-9AA34CB567F8}
-		{26C87613-1AFD-4E09-AF4F-ABD15B355DE9} = {A778067A-6C9A-4381-8ABE-86C10270FF38}
+		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {B2173A72-324C-4051-A3F6-9AA34CB567F8}
 		{FBEA42FB-3BA1-46EB-8AD3-8284790B9F18} = {B2173A72-324C-4051-A3F6-9AA34CB567F8}
+		{3A6E0786-5D02-4CB5-94D5-D5A6C12137C1} = {2302AA58-DCC8-4297-A4CC-7E4621EA3915}
+		{CA626875-C7AC-496D-9B3D-A1499821B160} = {2302AA58-DCC8-4297-A4CC-7E4621EA3915}
 		{56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6} = {08EC7B5D-EC5C-4CB4-8F06-FE39618C5FF3}
+		{C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6} = {08EC7B5D-EC5C-4CB4-8F06-FE39618C5FF3}
+		{26C87613-1AFD-4E09-AF4F-ABD15B355DE9} = {A778067A-6C9A-4381-8ABE-86C10270FF38}
 		{839F51FE-EBE9-469B-AAC3-580910943C87} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
 		{C4B98A4D-00C9-4DF6-87D0-416D4F1E5491} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
 		{563B868D-C190-48FD-AEB6-16FDF5CE6D7F} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
 		{724B8B1B-B990-4F4A-B886-D299CFF49219} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
-		{3A6E0786-5D02-4CB5-94D5-D5A6C12137C1} = {2302AA58-DCC8-4297-A4CC-7E4621EA3915}
 		{3F030941-26B2-4F82-8265-F67B4D89232F} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
-		{C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6} = {08EC7B5D-EC5C-4CB4-8F06-FE39618C5FF3}
+		{9345E10C-5A25-4E94-9245-691523D20277} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
 		{B610FB7A-8278-4C68-BF4F-09C94BC5A8D0} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{41D4A666-01ED-43E6-BACD-0FEC6DD106E8} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{E4D4007F-5889-4D28-9C4E-710D8908A60F} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
-		{2B9ADE39-9B14-4660-A225-D6FAF6BA03B9} = {D12106CC-2DB4-49FA-80BC-16497A1922D9}
 		{F088847E-2BCD-446A-B51A-3DBAAF7AC835} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
 		{DF8E18EB-E9CE-4BAD-8F06-6162BACA8796} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
-		{9345E10C-5A25-4E94-9245-691523D20277} = {56C9EC2C-BDF7-4BC0-8ECB-C0F12183EAD6}
 		{E44A16BA-5FCF-412B-8405-DFD0B8C91529} = {C0CEBC5E-F2E3-4F02-B18A-6F709145CCF6}
-		{CA626875-C7AC-496D-9B3D-A1499821B160} = {2302AA58-DCC8-4297-A4CC-7E4621EA3915}
+		{2B9ADE39-9B14-4660-A225-D6FAF6BA03B9} = {D12106CC-2DB4-49FA-80BC-16497A1922D9}
 	EndGlobalSection
 EndGlobal

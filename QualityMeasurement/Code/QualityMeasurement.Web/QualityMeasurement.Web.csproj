@@ -154,35 +154,6 @@
     <Reference Include="Vanrise.BI.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BI.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Client">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Data">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Data.SQL">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Web">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.WFActivities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -218,26 +189,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Integration.Business">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Data">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Data.SQL">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Data.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Integration.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Queueing.Entities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>

@@ -1,4 +1,4 @@
-﻿namespace QualityMeasurement.DevRuntime
+﻿namespace QM.Runtime
 {
     partial class Form1
     {
