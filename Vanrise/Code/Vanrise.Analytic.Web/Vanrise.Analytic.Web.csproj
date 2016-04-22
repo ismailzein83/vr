@@ -107,10 +107,8 @@
     <Content Include="Analytic\Directives\Definition\SearchSettings\vr-analytic-reportsearchsettings-selective.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-table-selector.js" />
     <Content Include="Analytic\Directives\Definition\Widgets\vr-analytic-widgets-selective.js" />
-    <Content Include="Analytic\Directives\Grid\Templates\AnalyticReportGridFilter.html" />
     <Content Include="Analytic\Directives\Grid\Templates\AnalyticRecordsDataGrid.html" />
     <Content Include="Analytic\Directives\Grid\vr-analytic-datagrid-analyticrecords.js" />
-    <Content Include="Analytic\Directives\Grid\vr-analytic-gridfilter.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\SearchSettings\Templates\GenericSearchTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
