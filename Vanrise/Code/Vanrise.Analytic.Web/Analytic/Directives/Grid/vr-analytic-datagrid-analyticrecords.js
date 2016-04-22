@@ -177,7 +177,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         FromTime: fromTime,
                         ToTime: toTime,
                         Currency: payLoad.Currency,
-                        WithSummary: isSummary
+                        WithSummary: isSummary,
+                        TableId : payLoad.TableId
                     }
 
                     if (payLoad.GroupingDimensions.length > 0)

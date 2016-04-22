@@ -19,12 +19,10 @@ namespace Vanrise.Analytic.MainExtensions.Widgets
     public class AnalyticGridWidgetDimension
     {
         public string DimensionName { get; set; }
-
-        public bool IsRootDimension { get; set; }
-
-        public string ParentDimension { get; set; }
-
         public string Title { get; set; }
+        public bool IsRootDimension { get; set; }
+        public string ParentDimension { get; set; }
+        public bool IsRequiredFromParent { get; set; }
     }
 
     public class AnalyticGridWidgetMeasure
