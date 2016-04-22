@@ -22,6 +22,11 @@ namespace Vanrise.Analytic.Business
            
             return analyticTables.MapRecords(AnalyticTableInfoMapper);
         }
+        public AnalyticTable GetAnalyticTableById(int analyticTableId)
+        {
+            var analyticTables = GetCachedAnalyticTables();
+            return analyticTables.GetRecord(analyticTableId);
+        }
         #endregion
 
         #region Private Methods

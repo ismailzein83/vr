@@ -14,42 +14,19 @@ namespace Vanrise.Analytic.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "AnalyticConfiguration")]
     public class AnalyticConfigurationController : Vanrise.Web.Base.BaseAPIController
     {
-        [HttpGet]
-        [Route("GetDimensionsInfo")]
-        public IEnumerable<DimensionInfo> GetDimensionsInfo()
-        {
-            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
-            return manager.GetDimensionsInfo();
-        }
-
-        [HttpGet]
-        [Route("GetMeasuresInfo")]
-        public IEnumerable<MeasureInfo> GetMeasuresInfo()
-        {
-            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
-            return manager.GetMeasuresInfo();
-        }
-
-        [HttpPost]
-        [Route("GetAnalyticRecords")]
-        public Object GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
-        {
-            AnalyticManager manager = new AnalyticManager();
-            return GetWebResponse(input, manager.GetFiltered(input));
-        }
 
         [HttpGet]
         [Route("GetAnalyticReportSettingsTemplateConfigs")]
         public IEnumerable<TemplateConfig> GetAnalyticReportSettingsTemplateConfigs()
         {
-            AnalyticManager manager = new AnalyticManager();
+            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
             return manager.GetAnalyticReportSettingsTemplateConfigs();
         }
         [HttpGet]
         [Route("GetWidgetsTemplateConfigs")]
         public IEnumerable<TemplateConfig> GetWidgetsTemplateConfigs()
         {
-            AnalyticManager manager = new AnalyticManager();
+            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
             return manager.GetWidgetsTemplateConfigs();
         }
     }

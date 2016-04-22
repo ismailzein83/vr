@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyticConfigurationDataManager.cs" />
     <Compile Include="AnalyticDataManager.cs" />
     <Compile Include="AnalyticItemConfigDataManager.cs" />
     <Compile Include="AnalyticTableDataManager.cs" />

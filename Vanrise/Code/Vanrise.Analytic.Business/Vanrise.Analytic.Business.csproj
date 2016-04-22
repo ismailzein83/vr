@@ -47,7 +47,6 @@
     <Compile Include="AnalyticItemConfigManager.cs" />
     <Compile Include="AnalyticManager.cs" />
     <Compile Include="AnalyticTableManager.cs" />
-    <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DynamicTypeGenerator.cs" />
     <Compile Include="MeasureEvaluatorRuntimeType.cs" />

@@ -34,6 +34,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var drillDown;
             var fromTime;
             var toTime;
+            var isSummary;
 
             function initializeController() {
 
@@ -48,13 +49,14 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.loadGrid = function (payLoad) {
+                            isSummary = $attrs.withsummary != undefined;
                             ctrl.drillDownDimensions.length = 0;
                             if (payLoad.DrillDownDimensions != undefined) {
                                 for (var i = 0; i < payLoad.DrillDownDimensions.length; i++) {
                                     ctrl.drillDownDimensions.push(payLoad.DrillDownDimensions[i]);
                                 }
                             }
-                            var filters = payLoad.dimensionFilters;
+                            var filters = payLoad.DimensionFilters;
                             var queryFinalized = loadGridQuery(payLoad);
 
                             var drillDownDefinitions = [];
@@ -126,8 +128,12 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                                drillDown.setDrillDownExtensionObject(response.Data[i]);
+                            if (response && response.Data) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    drillDown.setDrillDownExtensionObject(response.Data[i]);
+                                }
+                                if (isSummary)
+                                    gridApi.setSummary(response.Summary);
                             }
                             onResponseReady(response);
                         });
@@ -144,7 +150,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         if (payLoad.Settings.Dimensions != undefined) {
                             for (var i = 0; i < payLoad.Settings.Dimensions.length; i++) {
                                 var dimension = payLoad.Settings.Dimensions[i];
-                                var groupingDimension = UtilsService.getItemByVal(payLoad.groupingDimensions, dimension.DimensionName, 'DimensionName');
+                                var groupingDimension = UtilsService.getItemByVal(payLoad.GroupingDimensions, dimension.DimensionName, 'DimensionName');
                                 if (groupingDimension == undefined) {
                                     ctrl.drillDownDimensions.push(dimension);
                                 }
@@ -152,29 +158,29 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         }
                     }
 
-                    if (payLoad.measures != undefined) {
-                        for (var i = 0; i < payLoad.measures.length; i++) {
-                            ctrl.measures.push(payLoad.measures[i]);
+                    if (payLoad.Measures != undefined) {
+                        for (var i = 0; i < payLoad.Measures.length; i++) {
+                            ctrl.measures.push(payLoad.Measures[i]);
                         }
                     }
 
-                    if (payLoad.groupingDimensions != undefined) {
-                        for (var i = 0; i < payLoad.groupingDimensions.length; i++) {
-                            ctrl.groupingDimensions.push(payLoad.groupingDimensions[i]);
+                    if (payLoad.GroupingDimensions != undefined) {
+                        for (var i = 0; i < payLoad.GroupingDimensions.length; i++) {
+                            ctrl.groupingDimensions.push(payLoad.GroupingDimensions[i]);
                         }
                     }
 
                     var queryFinalized = {
-                        Filters: payLoad.dimensionFilters,
+                        Filters: payLoad.DimensionFilters,
                         DimensionFields: UtilsService.getPropValuesFromArray(ctrl.groupingDimensions, 'DimensionName'),
                         MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                         FromTime: fromTime,
                         ToTime: toTime,
                         Currency: payLoad.Currency,
-                        WithSummary: $attrs.withsummary != undefined
+                        WithSummary: isSummary
                     }
 
-                    if (payLoad.groupingDimensions.length > 0)
+                    if (payLoad.GroupingDimensions.length > 0)
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else
                         ctrl.sortField = 'MeasureValues.' + ctrl.measures[0];

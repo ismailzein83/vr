@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticDataManagerFactory.cs" />
-    <Compile Include="IAnalyticConfigurationDataManager.cs" />
     <Compile Include="IAnalyticDataManager.cs" />
     <Compile Include="IAnalyticItemConfigDataManager.cs" />
     <Compile Include="IAnalyticTableDataManager.cs" />

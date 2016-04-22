@@ -9,8 +9,6 @@ namespace Vanrise.Analytic.Data
 {
     public interface IAnalyticDataManager : IDataManager
     {
-        AnalyticSummaryBigResult<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
-
         AnalyticSummaryBigResult<AnalyticRecord> GetFilteredAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
 
         AnalyticTable Table { set; }

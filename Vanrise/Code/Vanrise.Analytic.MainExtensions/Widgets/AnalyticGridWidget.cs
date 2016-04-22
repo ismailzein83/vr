@@ -22,6 +22,8 @@ namespace Vanrise.Analytic.MainExtensions.Widgets
 
         public bool IsRootDimension { get; set; }
 
+        public string ParentDimension { get; set; }
+
         public string Title { get; set; }
     }
 
