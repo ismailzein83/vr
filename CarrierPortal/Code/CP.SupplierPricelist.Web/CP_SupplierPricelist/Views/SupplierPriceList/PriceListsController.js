@@ -119,13 +119,14 @@
             function getFilterObject() {
                 var data = {
                     CustomersIDs:  customerDirectiveApi.getSelectedIds(),
-                    CarrierAccounts: $scope.customers.length == 1 ? carrierDirectiveApi.getSelectedIds() : null,
                     PriceListTypes: typeDirectiveAPI.getSelectedIds(),
                     PriceListResults: resultDirectiveAPI.getSelectedIds(),
                     PriceListStatuses: statusDirectiveAPI.getSelectedIds(),
                     FromEffectiveOnDate: $scope.fromEffectiveDate,
                     ToEffectiveOnDate: $scope.toEffectiveDate
                 };
+                if ($scope.customers.length == 1)
+                    data.CarrierAccounts = carrierDirectiveApi.getSelectedIds();
                 return data;
             }    
         }
