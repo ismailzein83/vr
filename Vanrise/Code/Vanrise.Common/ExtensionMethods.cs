@@ -21,12 +21,12 @@ namespace Vanrise.Common
 
         #region Dictionary Extension
 
-        public static Q GetOrCreateItem<T, Q>(this Dictionary<T, Q> dictionary, T itemKey)
+        public static Q GetOrCreateItem<T, Q>(this IDictionary<T, Q> dictionary, T itemKey)
         {
             return GetOrCreateItem(dictionary, itemKey, () => Activator.CreateInstance<Q>());
         }
 
-        public static Q GetOrCreateItem<T, Q>(this Dictionary<T, Q> dictionary, T itemKey, Func<Q> createInstance)
+        public static Q GetOrCreateItem<T, Q>(this IDictionary<T, Q> dictionary, T itemKey, Func<Q> createInstance)
         {
             Q value;
             if (!dictionary.TryGetValue(itemKey, out value))

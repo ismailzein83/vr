@@ -71,6 +71,7 @@
     <Compile Include="EntitySynchronization\ISourceItem.cs" />
     <Compile Include="EntitySynchronization\ISourceItemReader.cs" />
     <Compile Include="ExcelResult.cs" />
+    <Compile Include="ExtensionConfiguration.cs" />
     <Compile Include="File\FileUploadResult.cs" />
     <Compile Include="File\VRFileQuery.cs" />
     <Compile Include="GenericConfig\GenericConfiguration.cs" />

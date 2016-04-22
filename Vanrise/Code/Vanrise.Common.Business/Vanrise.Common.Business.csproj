@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BigDataManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Country\CountryManager.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="CurrencyExchangeRateManager.cs" />
     <Compile Include="CurrencyManager.cs" />
     <Compile Include="EntitySynchronization\SourceItemSynchronizer.cs" />
+    <Compile Include="ExtensionConfigurationManager.cs" />
     <Compile Include="GenericConfig\GenericConfigurationManager.cs" />
     <Compile Include="GenericDataRecord\DataRecordFieldManager.cs" />
     <Compile Include="GenericDataRecord\DataRecordTypeManager.cs" />
