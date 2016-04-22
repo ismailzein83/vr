@@ -86,8 +86,8 @@ namespace TOne.WhS.CodePreparation.Business
             };
 
            List<ZoneItem> allZoneItems = ValidateRenamedZone(input.SellingNumberPlanId);
-           ZoneItem item = allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase));
-           if (item != null)
+
+           if (allZoneItems.FindRecord(x => x.Name.Equals(input.NewZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
             {
                 output.Result = ValidationOutput.ValidationError;
                 output.Zone = renamedZone;
@@ -134,13 +134,11 @@ namespace TOne.WhS.CodePreparation.Business
            
             NewZoneOutput output = new NewZoneOutput();
             
-            ZoneItem item=new ZoneItem();
-
             foreach (NewZone newZone in input.NewZones)
             {
-                item = allZoneItems.FindRecord(x => x.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase));
-                 if (item != null)
-                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} Already Exists.", newZone.Name) });
+
+                if (allZoneItems.FindRecord(x => x.Name.Equals(newZone.Name, StringComparison.InvariantCultureIgnoreCase)) != null)
+                     output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId, Message = string.Format("Zone {0} already exists.", newZone.Name) });
                  else
                      output.ZoneItems.Add(new ZoneItem { DraftStatus = ZoneItemDraftStatus.New, Name = newZone.Name, CountryId = newZone.CountryId });
             }
@@ -227,16 +225,6 @@ namespace TOne.WhS.CodePreparation.Business
                     {
                         existingZoneToRename.Name = renamedZone.NewZoneName;
                     }
-                }
-            }
-
-            if (changes.DeletedZones.Any())
-            {
-                foreach (DeletedZone deletedZone in changes.DeletedZones)
-                {
-                    ZoneItem existingZoneToClose = allZoneItems.FindRecord(x => x.ZoneId == deletedZone.ZoneId);
-                    if (existingZoneToClose != null)
-                        existingZoneToClose.DraftStatus = ZoneItemDraftStatus.ExistingClosed;
                 }
             }
 

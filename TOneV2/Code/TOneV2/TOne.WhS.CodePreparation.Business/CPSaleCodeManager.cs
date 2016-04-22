@@ -70,7 +70,7 @@ namespace TOne.WhS.CodePreparation.Business
             closeActionSucc = dataManager.InsertOrUpdateChanges(input.SellingNumberPlanId, changes, CodePreparationStatus.Draft);
             if (closeActionSucc)
             {
-                output.NewCodes = changes.DeletedCodes.FindAllRecords(x => input.Codes.Contains(x.Code)).MapRecords(DeletedCodeToCodeItemMapper);
+                output.ClosedCodes = changes.DeletedCodes.FindAllRecords(x => input.Codes.Contains(x.Code)).MapRecords(DeletedCodeToCodeItemMapper);
                 output.Message = string.Format("Codes closed successfully.");
                 output.Result = ValidationOutput.Success;
             }
@@ -151,7 +151,7 @@ namespace TOne.WhS.CodePreparation.Business
                 var newCode = newCodes.FindRecord(x => x.Code == saleCode.Code && x.ZoneId == saleCode.ZoneId);
                 var deletedCode = deletedCodes.FindRecord(x => x.Code == saleCode.Code);
 
-                if (newCode != null)
+                if (newCode != null && newCode.OldZoneName != null)
                 {
                     CodeItem codeItem = new CodeItem()
                     {
@@ -168,7 +168,7 @@ namespace TOne.WhS.CodePreparation.Business
                 {
                     CodeItem codeItem = new CodeItem()
                     {
-                        BED = null,
+                        BED = saleCode.BED,
                         Code = deletedCode.Code,
                         EED = null,
                         DraftStatus = CodeItemDraftStatus.ExistingClosed,
@@ -263,7 +263,7 @@ namespace TOne.WhS.CodePreparation.Business
                     codeItem.Message = string.Format("Code should be added under Country {0}.", country.Name);
                     codeOutput.CodeItems.Add(codeItem);
                 }
-                else if ((!allCodeItems.Any(item => item.Code == newCode.Code) && newCodes.Where(code => code.Code == newCode.Code).Count() == 0) || deletedCodes.Any(x => x.Code == newCode.Code))
+                else if ((!allCodeItems.Any(item => item.Code == newCode.Code) && !newCodes.Any(item => item.Code == newCode.Code)) || deletedCodes.Any(x => x.Code == newCode.Code))
                 {
                     newCodes.Add(newCode);
                     codeOutput.CodeItems.Add(codeItem);

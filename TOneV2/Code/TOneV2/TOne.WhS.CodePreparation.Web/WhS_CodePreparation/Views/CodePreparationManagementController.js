@@ -114,7 +114,6 @@
             $scope.saleCodesGridReady = function (api) {
 
                 codesGridAPI = api;
-                $scope.selectedCodes = codesGridAPI.getSelectedCodes();
             }
 
             $scope.newZoneClicked = function () {
@@ -252,6 +251,7 @@
             $scope.currentNode.DraftStatus = draftStatus;
             $scope.currentNode.icon = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon;
             zoneNode.DraftStatus = draftStatus;
+            zoneNode.icon = WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.icon;
 
             hideShowRenameZone(draftStatus, zoneNode.Status);
             hideShowEnd(draftStatus, zoneNode.Status);

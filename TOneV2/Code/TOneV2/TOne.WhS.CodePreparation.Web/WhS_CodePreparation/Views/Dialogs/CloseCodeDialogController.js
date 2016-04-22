@@ -66,7 +66,7 @@
                 else if (response.Result == WhS_CP_ValidationOutput.Success.value) {
                     VRNotificationService.showSuccess(response.Message);
                     if ($scope.onCodesClosed != undefined)
-                        $scope.onCodesClosed(response.NewCodes);
+                        $scope.onCodesClosed(response.ClosedCodes);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
