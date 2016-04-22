@@ -1,0 +1,27 @@
+﻿<div style="border:2px solid;">
+    <vr-row>
+        <vr-columns width="1/4row" class="pull-right">
+            <button type="button" class="btn btn-xs btn-primary" data-add="group" ng-click="ctrl.addGroup()">
+                <i class="glyphicon glyphicon-plus-sign"></i> Add Group
+            </button>
+        </vr-columns>
+
+        <vr-columns width="1/4row" class="pull-right">
+            <button type="button" class="btn btn-xs btn-primary" data-add="rule" ng-click="ctrl.addRule()">
+                <i class="glyphicon glyphicon-plus"></i> Add Rule
+            </button>
+        </vr-columns>
+    </vr-row>
+
+    <vr-row>
+        <vr-columns width="fullrow" ng-repeat="rule in ctrl.rules">
+            <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-rulefilter'" on-ready="rule.onRuleFilterReady"></vr-directivewrapper>
+        </vr-columns>
+    </vr-row>
+
+    <vr-row>
+        <vr-columns width="fullrow" ng-repeat="group in ctrl.groups">
+            <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-groupfilter'" on-ready="group.onGroupFilterReady"></vr-directivewrapper>
+        </vr-columns>
+    </vr-row>
+</div>

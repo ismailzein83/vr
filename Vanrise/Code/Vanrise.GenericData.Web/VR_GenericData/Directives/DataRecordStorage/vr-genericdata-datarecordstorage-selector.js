@@ -68,8 +68,9 @@
 
                 api.load = function (payload) {
                     var selectedIds;
-                    var filter = {};
+                    var filter = null;
                     if (payload != undefined) {
+                        filter = {};
                         filter.DataRecordTypeId = payload.DataRecordTypeId;
                         if (payload.showaddbutton)
                             ctrl.onAddDataStorageRecord = onAddDataStorageRecord;

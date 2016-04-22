@@ -1,0 +1,15 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_DataRecordTypeFieldFilterEditorController" width="'40%'" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formDataRecordStorageEditor">
+            <vr-genericdata-datarecordtypefield-groupfilter on-ready="onGroupFilterReady" ></vr-genericdata-datarecordtypefield-groupfilter>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDataRecordStorageEditor" data-onclick="save"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

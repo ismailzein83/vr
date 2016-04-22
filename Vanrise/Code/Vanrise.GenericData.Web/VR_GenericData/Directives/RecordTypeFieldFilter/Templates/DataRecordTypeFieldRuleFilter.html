@@ -1,0 +1,12 @@
+﻿<div style="border:2px solid;">
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-select label="Field" datatextfield="name" datavaluefield="name"
+                       datasource="datasource" selectedvalues="dataRecordTypeField"></vr-select>
+        </vr-columns>
+
+        <vr-columns width="3/4row" ng-show="dataRecordTypeField.editor!=undefined">
+            <vr-directivewrapper directive="dataRecordTypeField.editor" on-ready="onDataRecordTypeFieldEditorReady"></vr-directivewrapper>
+        </vr-columns>
+    </vr-row>
+</div>

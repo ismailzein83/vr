@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             get
             {
-                if(_dataRecordType == null)
+                if (_dataRecordType == null)
                 {
                     DataRecordTypeManager manager = new DataRecordTypeManager();
                     _dataRecordType = manager.GetDataRecordType(_dataRecordStorage.DataRecordTypeId);
@@ -33,7 +33,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 return _dataRecordType;
             }
         }
-        
+
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage)
             : base(dataStoreSettings.ConnectionString, false)
         {
@@ -152,7 +152,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         string BuildDropAndCreateTableTypeScript()
         {
-            string schemaName= !String.IsNullOrEmpty(_dataRecordStorageSettings.TableSchema) ? _dataRecordStorageSettings.TableSchema : "dbo";
+            string schemaName = !String.IsNullOrEmpty(_dataRecordStorageSettings.TableSchema) ? _dataRecordStorageSettings.TableSchema : "dbo";
             string tableName = _dataRecordStorageSettings.TableName;
             StringBuilder builder = new StringBuilder();
             builder.AppendFormat(@"IF  EXISTS (SELECT * FROM sys.types st JOIN sys.schemas ss ON st.schema_id = ss.schema_id WHERE st.name = N'{1}Type'
@@ -160,7 +160,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                                     DROP TYPE [{0}].[{1}Type]
                                     
                                     "
-                , schemaName, tableName );
+                , schemaName, tableName);
             builder.AppendLine();
             builder.AppendFormat(@"CREATE TYPE [{0}].[{1}Type] AS TABLE ", schemaName, tableName);
             builder.AppendLine(BuildColumnDefinitionsScript());
@@ -229,7 +229,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         public void InsertSummaryRecords(IEnumerable<dynamic> records)
         {
             var dbApplyStream = this.InitialiazeStreamForDBApply();
-            foreach(var record in records)
+            foreach (var record in records)
             {
                 this.WriteRecordToStream(record, dbApplyStream);
             }
@@ -249,7 +249,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 throw new NullReferenceException(String.Format("idColumnMapping.ColumnName '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
 
             StringBuilder columnsUpdateBuilder = new StringBuilder();
-            foreach(var columnsMapping in _dataRecordStorageSettings.Columns)
+            foreach (var columnsMapping in _dataRecordStorageSettings.Columns)
             {
                 if (columnsUpdateBuilder.Length > 0)
                     columnsUpdateBuilder.Append(", ");
@@ -278,13 +278,13 @@ namespace Vanrise.GenericData.SQLDataStorage
             if (recordRuntimeType == null)
                 throw new NullReferenceException(String.Format("recordRuntimeType '{0}'", _dataRecordStorage.DataRecordTypeId));
             StringBuilder queryBuilder = new StringBuilder(@"SELECT #COLUMNS# FROM #TABLE# WHERE #BATCHSTARTCOLUMN# = @BatchStart");
-           
+
             var batchStartColumnMapping = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == _summaryTransformationDefinition.SummaryBatchStartFieldName);
-            if(batchStartColumnMapping == null)
+            if (batchStartColumnMapping == null)
                 throw new NullReferenceException(String.Format("batchStartColumnMapping '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
             if (batchStartColumnMapping.ColumnName == null)
                 throw new NullReferenceException(String.Format("batchStartColumnMapping.ColumnName '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
-            
+
             queryBuilder.Replace("#COLUMNS#", this.DynamicManager.ColumnNamesCommaDelimited);
             queryBuilder.Replace("#TABLE#", GetTableName());
             queryBuilder.Replace("#BATCHSTARTCOLUMN#", batchStartColumnMapping.ColumnName);
@@ -301,19 +301,20 @@ namespace Vanrise.GenericData.SQLDataStorage
                 });
         }
 
-        public Vanrise.Entities.BigResult<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
-        {   
+        public Vanrise.Entities.BigResult<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, out List<DataRecordColumn> columns)
+        {
+            columns = BuildColumnsDefinitions();
             Action<string> createTempTableAction = (tempTableName) =>
                 {
-                    StringBuilder queryBuilder = new StringBuilder();
+                    string query = BuildQuery(input, tempTableName);
                     int parameterIndex = 0;
                     Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
                     String recordFilter = BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
-                    ExecuteNonQueryText(queryBuilder.ToString(),
+                    ExecuteNonQueryText(query,
                         (cmd) =>
                         {
-                            cmd.Parameters.Add(new SqlParameter("@FromTime", input.Query.FromTime));
-                            cmd.Parameters.Add(new SqlParameter("@ToTime", input.Query.ToTime));
+                            cmd.Parameters.Add(new SqlParameter("@FromTime",ToDBNullIfDefault(input.Query.FromTime)));
+                            cmd.Parameters.Add(new SqlParameter("@ToTime", ToDBNullIfDefault(input.Query.ToTime)));
                             foreach (var prm in parameterValues)
                             {
                                 cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
@@ -321,6 +322,36 @@ namespace Vanrise.GenericData.SQLDataStorage
                         });
                 };
             return RetrieveData(input, createTempTableAction, DataRecordMapper);
+        }
+
+        private List<DataRecordColumn> BuildColumnsDefinitions()
+        {
+            List<DataRecordColumn> columnDefinitions = new List<DataRecordColumn>();
+
+            foreach (var column in _dataRecordStorageSettings.Columns)
+            {
+                DataRecordColumn item = new DataRecordColumn()
+                {
+                    Title = column.ValueExpression
+                };
+                columnDefinitions.Add(item);
+            }
+
+            return columnDefinitions;
+        }
+
+        private string BuildQuery(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, string tempTableName)
+        {
+            string dateTimeColumn = "DateTimeCol";
+            string tableName = GetTableName();
+            StringBuilder str = new StringBuilder(string.Format(@"IF OBJECT_ID('{0}', N'U') IS NULL 
+                                                                BEGIN 
+                                                                    select * INTO {0} from {1} 
+                                                                    where (@FromTime is null or {2} >= @FromTime) 
+                                                                    and (@ToTime is null or {2} < @ToTime) 
+                                                                END", tempTableName, tableName, dateTimeColumn));
+            input.SortByColumnName = dateTimeColumn;
+            return str.ToString();
         }
 
         private DataRecord DataRecordMapper(IDataReader reader)
@@ -335,6 +366,9 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         private string BuildRecordFilter(RecordFilterGroup filterGroup, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
+            if (filterGroup == null || filterGroup.Filters == null)
+                return null;
+
             StringBuilder builder = new StringBuilder();
             foreach (var filter in filterGroup.Filters)
             {
@@ -395,9 +429,9 @@ namespace Vanrise.GenericData.SQLDataStorage
                 {
                     builder.Append(BuildRecordFilter(numberListFilter, ref parameterIndex, parameterValues));
                     break;
-                }                
+                }
             }
-           
+
             return String.Format("({0})", builder);
         }
 
@@ -420,15 +454,15 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 case StringRecordFilterOperator.Equals: compareOperator = "="; break;
                 case StringRecordFilterOperator.NotEquals: compareOperator = "<>"; break;
-                case StringRecordFilterOperator.Contains: 
+                case StringRecordFilterOperator.Contains:
                     compareOperator = "LIKE";
                     parameterName = string.Format("'%' + {0} + '%'", parameterName);
                     break;
-                case StringRecordFilterOperator.NotContains: 
-                     compareOperator = "NOT LIKE";
+                case StringRecordFilterOperator.NotContains:
+                    compareOperator = "NOT LIKE";
                     parameterName = string.Format("'%' + {0} + '%'", parameterName);
                     break;
-                case StringRecordFilterOperator.StartsWith: 
+                case StringRecordFilterOperator.StartsWith:
                     compareOperator = "LIKE";
                     parameterName = string.Format("{0} + '%'", parameterName);
                     break;
@@ -453,8 +487,8 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             string parameterName = GenerateParameterName(ref parameterIndex);
             string compareOperator = null;
-            
-            switch(numberFilter.CompareOperator)
+
+            switch (numberFilter.CompareOperator)
             {
                 case NumberRecordFilterOperator.Equals: compareOperator = "="; break;
                 case NumberRecordFilterOperator.NotEquals: compareOperator = "<>"; break;

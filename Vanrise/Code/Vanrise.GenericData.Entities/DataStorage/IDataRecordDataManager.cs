@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         void ApplyStreamToDB(object stream);
 
-        Vanrise.Entities.BigResult<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input);
+        Vanrise.Entities.BigResult<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, out List<DataRecordColumn> columns);
     }
 
     public interface ISummaryRecordDataManager

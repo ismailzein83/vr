@@ -1,0 +1,12 @@
+﻿<!--<div ng-show="ctrl.showGrid">-->
+<div>
+    <vr-datagrid datasource="ctrl.dataRecordStorageLogs"
+                 dataretrievalfunction="ctrl.dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="ctrl.onGridReady"
+                 menuactions="ctrl.menuActions" defaultsortbyfieldname="ctrl.sortField">
+        <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.Title"
+                           field="'FieldValues.' + column.Title + '.Description'"
+                            tag="column" columnindex="$index"></vr-datagridcolumn>
+    </vr-datagrid>
+</div>

@@ -40,15 +40,16 @@ namespace Vanrise.GenericData.Business
             if (dataManager == null)
                 throw new NullReferenceException(String.Format("dataManager. ID '{0}'", input.Query.DataRecordStorageId));
 
-            var dataRecordsResult = dataManager.GetFilteredDataRecords(input);
+            List<DataRecordColumn> columns;
+            var dataRecordsResult = dataManager.GetFilteredDataRecords(input, out columns);
             if (dataRecordsResult == null)
                 return null;
-            Vanrise.Entities.BigResult<DataRecordDetail> dataRecordDetailsResult = new Vanrise.Entities.BigResult<DataRecordDetail>
+            Vanrise.GenericData.Entities.DataRecordDetailBigResult<DataRecordDetail> dataRecordDetailsResult = new Vanrise.GenericData.Entities.DataRecordDetailBigResult<DataRecordDetail>
             {
                 ResultKey = dataRecordsResult.ResultKey,
-                TotalCount = dataRecordsResult.TotalCount
+                TotalCount = dataRecordsResult.TotalCount,
+                Columns = columns
             };
-            
             if (dataRecordsResult.Data != null)
                 dataRecordDetailsResult.Data = dataRecordsResult.Data.MapRecords(itm => DataRecordDetailMapper(itm, recordType));
             return DataRetrievalManager.Instance.ProcessResult(input, dataRecordDetailsResult);
@@ -230,7 +231,8 @@ namespace Vanrise.GenericData.Business
             return new DataRecordStorageInfo()
             {
                 DataRecordStorageId = dataRecordStorage.DataRecordStorageId,
-                Name = dataRecordStorage.Name
+                Name = dataRecordStorage.Name,
+                DataRecordTypeId = dataRecordStorage.DataRecordTypeId
             };
         }
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Vanrise.GenericData.Entities
+﻿namespace Vanrise.GenericData.Entities
 {
     public class DataRecordFieldTypeConfig
     {
@@ -21,5 +15,7 @@ namespace Vanrise.GenericData.Entities
         public string FilterEditor { get; set; }
 
         public bool IsSupportedInGenericRule { get; set; }
+
+        public string FieldTypeEditor { get; set; }
     }
 }
