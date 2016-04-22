@@ -49,6 +49,7 @@
     <Compile Include="CurrencyExchangeRateDataManager.cs" />
     <Compile Include="DataRecordFieldDataManager.cs" />
     <Compile Include="DataRecordTypeDataManager.cs" />
+    <Compile Include="ExtensionConfigurationDataManager.cs" />
     <Compile Include="GenericConfigurationDataManager.cs" />
     <Compile Include="IDManagerDataManager.cs" />
     <Compile Include="SummaryTransformationDataManager.cs" />
