@@ -7,7 +7,10 @@
                     <vr-validator validate="scopeModel.isValidGroupingDimensions()">
                         <vr-datagrid datasource="scopeModel.groupingDimensions"
                                      on-ready="onGridReady" ondeleterow="scopeModel.removeGroupingDimension" hidegridmenu norowhighlightonclick="'true'">
-                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Title'" widthfactor="5"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Title'" widthfactor="5">
+                                <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                            </vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Is Selected'" widthfactor="10">
                                 <vr-switch value="dataItem.IsSelected"></vr-switch>
                             </vr-datagridcolumn>
@@ -29,7 +32,7 @@
                     <vr-validator validate="scopeModel.isValidFilterDimensions()">
                         <vr-datagrid datasource="scopeModel.filterDimensions"
                                      on-ready="onGridReady" ondeleterow="scopeModel.removeFilterDimension" hidegridmenu norowhighlightonclick="'true'">
-                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Title'" widthfactor="5"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Title'" widthfactor="5">
                                 <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                             </vr-datagridcolumn>

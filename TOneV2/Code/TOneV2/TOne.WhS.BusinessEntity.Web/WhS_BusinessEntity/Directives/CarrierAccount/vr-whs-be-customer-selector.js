@@ -7,7 +7,7 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             scope: {
                 onReady: '=',
                 ismultipleselection: '@',
-                isrequired: '@',
+                isrequired: '=',
                 normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {

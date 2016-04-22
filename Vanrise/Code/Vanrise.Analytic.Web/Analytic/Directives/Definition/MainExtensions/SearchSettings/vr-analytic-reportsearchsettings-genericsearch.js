@@ -45,7 +45,8 @@
                 }
                 $scope.scopeModel.onSelectGroupingDimensionItem = function (dimension) {
                     var dataItem = {
-                        AnalyticItemConfigId: dimension.AnalyticItemConfigId,
+
+                        Id: dimension.AnalyticItemConfigId,
                         Title: dimension.Title,
                         Name: dimension.Name,
                         IsSelected: false
@@ -53,13 +54,15 @@
                     $scope.scopeModel.groupingDimensions.push(dataItem);
                 }
                 $scope.scopeModel.onDeselectGroupingDimensionItem = function (dataItem) {
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.groupingDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    console.log(dataItem);
+                    console.log($scope.scopeModel.groupingDimensions);
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.groupingDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.groupingDimensions.splice(datasourceIndex, 1);
                 }
                 $scope.scopeModel.removeGroupingDimension = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGroupingDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGroupingDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.selectedGroupingDimensions.splice(index, 1);
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.groupingDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.groupingDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.groupingDimensions.splice(datasourceIndex, 1);
                 };
 
@@ -91,13 +94,13 @@
                     $scope.scopeModel.filterDimensions.push(dataItem);
                 }
                 $scope.scopeModel.onDeselectFilterDimensionItem = function (dataItem) {
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.filterDimensions.splice(datasourceIndex, 1);
                 }
                 $scope.scopeModel.removeFilterDimension = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGroupingDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGroupingDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.selectedGroupingDimensions.splice(index, 1);
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.filterDimensions.splice(datasourceIndex, 1);
                 };
 
