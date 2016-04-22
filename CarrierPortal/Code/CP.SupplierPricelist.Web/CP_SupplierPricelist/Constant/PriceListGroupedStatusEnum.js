@@ -5,5 +5,5 @@
     Completed: { value: 4,valuesEnum:[30], description: "Completed" },
     UploadFailedWithRetry: { value: 5, valuesEnum: [40,50], description: "Suspended" },
     ResultFailedWithNoRetry: { value: 6, valuesEnum: [60,70], description: "Aborted" },
-    UnderProcessing: { value: 7, valuesEnum: [80], description: "Successfully Uploaded" }
+    UnderProcessing: { value: 7, valuesEnum: [80], description: "Under Processing" }
 });
