@@ -20,15 +20,15 @@
                         </vr-columns>                        
                         <vr-columns width="normal" ng-show="advancedSelected">
                             <vr-cp-pricelistresult-selector ismultipleselection on-ready="onPricelistResultDirectiveReady"></vr-cp-pricelistresult-selector>
+                        </vr-columns>                       
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-cp-pricelistgroupedstatus-selector ismultipleselection on-ready="onPricelistGroupedStatusDirectiveReady"></vr-cp-pricelistgroupedstatus-selector>
                         </vr-columns>
                         <vr-columns width="normal">
-                            <vr-datetimepicker type="date"  label="From Effective Date" value="fromEffectiveDate" customvalidate="validateDateTime()" isrequired></vr-datetimepicker>
+                            <vr-datetimepicker type="date" label="From Effective Date" value="fromEffectiveDate" customvalidate="validateDateTime()" isrequired></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="normal">
                             <vr-datetimepicker type="date" label="To Effective Date" value="toEffectiveDate" customvalidate="validateDateTime()"></vr-datetimepicker>
-                        </vr-columns>
-                        <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-cp-pricelistgroupedstatus-selector ismultipleselection on-ready="onPricelistGroupedStatusDirectiveReady"></vr-cp-pricelistgroupedstatus-selector>
                         </vr-columns>
                     </vr-row>
                 </vr-columns>
