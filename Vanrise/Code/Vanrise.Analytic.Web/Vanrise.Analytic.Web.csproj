@@ -75,7 +75,6 @@
     <Compile Include="Controllers\AnalyticController.cs" />
     <Compile Include="Controllers\AnalyticItemConfigController.cs" />
     <Compile Include="Controllers\AnalyticTableController.cs" />
-    <Compile Include="Controllers\WidgetDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -119,7 +118,6 @@
     <Content Include="Analytic\Services\APIServices\AnalyticConfigurationAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemConfigAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
-    <Content Include="Analytic\Services\APIServices\WidgetDefinitionAPIService.js" />
     <Content Include="Analytic\Views\AnalyticReportSettingsEditor.html" />
     <Content Include="Analytic\Views\AnalyticReportSettingsEditorController.js" />
     <Content Include="Analytic\Views\AnalyticWidgetEditor.html" />

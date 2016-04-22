@@ -12,15 +12,4 @@ namespace Vanrise.Entities
 
         public string Title { get; set; }        
     }
-
-    public class ExtensionConfigurationEntity
-    {
-        public int ExtensionConfigurationId { get; set; }
-
-        public string Title { get; set; }
-
-        public string Type { get; set; }
-
-        public Object Settings { get; set; }
-    }
 }

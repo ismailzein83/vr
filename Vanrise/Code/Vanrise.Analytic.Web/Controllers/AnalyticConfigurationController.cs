@@ -22,9 +22,9 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
             return manager.GetAnalyticReportSettingsTemplateConfigs();
         }
-        [HttpGet]
+        [HttpGet] 
         [Route("GetWidgetsTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetWidgetsTemplateConfigs()
+        public IEnumerable<WidgetDefinitionSetting> GetWidgetsTemplateConfigs()
         {
             AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
             return manager.GetWidgetsTemplateConfigs();
