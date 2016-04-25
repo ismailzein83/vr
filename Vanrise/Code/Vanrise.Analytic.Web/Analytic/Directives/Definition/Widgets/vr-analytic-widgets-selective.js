@@ -36,13 +36,13 @@
 
             var template =
                 '<vr-row>'
-
+               + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
+                + ' <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>'
+              + ' </vr-columns>'
                + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
                 + ' <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTable" hideremoveicon></vr-analytic-table-selector>'
               + ' </vr-columns>'
-              + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
-                + ' <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>'
-              + ' </vr-columns>'
+
               + '<vr-columns colnum="{{searchSettingsCtrl.normalColNum}}" ng-if="scopeModel.selectedTable !=undefined">'
               + ' <vr-select on-ready="scopeModel.onSelectorReady"'
               + ' datasource="scopeModel.templateConfigs"'

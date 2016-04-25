@@ -48,7 +48,7 @@
                             <vr-validator validate="scopeModel.isWidgetValid()">
                                 <vr-datagrid datasource="scopeModel.widgets" norowhighlightonclick="true"
                                              on-ready="onGridReady" enabledraggablerow="true" ondeleterow="scopeModel.removeWidget" menuactions="widgetsGridMenuActions" hidegridmenu >
-                                    <vr-datagridcolumn headertext="'Widget Name'" field="'widgetSettings.WidgetTitle'" widthfactor="5"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Widget Name'" field="'widgetSettings.WidgetTitle'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>
                         </vr-columns>
