@@ -42,6 +42,8 @@ namespace Vanrise.Common.Business
 
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["BigDataCache_PingBigDataServiceTimeOutInterval"], out _pingBigDataServiceTimeOutInterval))
                 _pingBigDataServiceTimeOutInterval = TimeSpan.FromMilliseconds(500);
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["BigDataCache_PingBigDataServiceCheckInterval"], out _pingBigDataServiceCheckInterval))
+                _pingBigDataServiceCheckInterval = TimeSpan.FromMinutes(2);
         }
 
         #endregion
@@ -55,6 +57,7 @@ namespace Vanrise.Common.Business
         int _cleanCacheAgePriorityFactor;
 
         TimeSpan _pingBigDataServiceTimeOutInterval;
+        TimeSpan _pingBigDataServiceCheckInterval;
 
         private ConcurrentDictionary<Guid, CachedBigData> _cachedData = new ConcurrentDictionary<Guid, CachedBigData>();
         internal IEnumerable<Guid> CachedObjectIds
@@ -67,6 +70,7 @@ namespace Vanrise.Common.Business
         internal long _totalRecordsCount;
 
         internal bool _isCachedDataChanged;
+        ConcurrentDictionary<string, DateTime> _unreachableServiceURLs = new ConcurrentDictionary<string, DateTime>();
 
         #endregion
 
@@ -116,6 +120,12 @@ namespace Vanrise.Common.Business
             string serializedResult = null;
             foreach (var bigDataService in GetBigDataServicesByPriority(cacheObjectId))
             {
+                DateTime unreachableCheckTime;
+                if(_unreachableServiceURLs.TryGetValue(bigDataService.URL, out unreachableCheckTime))
+                {
+                    if ((DateTime.Now - unreachableCheckTime) < _pingBigDataServiceCheckInterval)
+                        continue;
+                }
                 bool isServiceCallSucceeded = TryCreateServiceClient(bigDataService,
                     (client) =>
                     {
@@ -131,6 +141,8 @@ namespace Vanrise.Common.Business
                     rslt = Vanrise.Common.Serializer.Deserialize(serializedResult) as IDataRetrievalResult<R>;
                     return true;
                 }
+                else
+                    _unreachableServiceURLs.AddOrUpdate(bigDataService.URL, DateTime.Now, (k, v) => DateTime.Now);
             }
             rslt = null;
             return false;
@@ -194,8 +206,12 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<BigDataService> GetBigDataServicesByPriority(Guid cacheObjectId)
         {
-            IBigDataServiceDataManager dataManager = CommonDataManagerFactory.GetDataManager<IBigDataServiceDataManager>();
-            IEnumerable<BigDataService> allServices = dataManager.GetAll();
+            IEnumerable<BigDataService> allServices = Vanrise.Caching.CacheManagerFactory.GetCacheManager<BigDataServiceCacheManager>().GetOrCreateObject("GetAllBigDataServices",
+                () =>
+                {
+                    IBigDataServiceDataManager dataManager = CommonDataManagerFactory.GetDataManager<IBigDataServiceDataManager>();
+                    return dataManager.GetAll();
+                });
             return allServices.OrderBy(itm => itm.CachedObjectIds != null && itm.CachedObjectIds.Contains(cacheObjectId) ? 0 : 1).ThenBy(itm => itm.TotalCachedRecordsCount);
         }
 

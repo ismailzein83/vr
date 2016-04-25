@@ -12,7 +12,7 @@ namespace Vanrise.Common.Data.SQL
     public class BigDataServiceDataManager : BaseSQLDataManager, IBigDataServiceDataManager
     {
         public BigDataServiceDataManager()
-            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
+            : base(GetConnectionStringName("BigDataServiceDBConnStringKey", "BigDataServiceDBConnString"))
         {
 
         }
