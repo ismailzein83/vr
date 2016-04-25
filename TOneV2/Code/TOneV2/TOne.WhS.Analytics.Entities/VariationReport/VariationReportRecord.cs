@@ -12,6 +12,8 @@ namespace TOne.WhS.Analytics.Entities
 
         public string DimensionName { get; set; }
 
+        public string DimensionSuffix { get; set; }
+
         public List<Decimal> TimePeriodValues { get; set; }
 
         public decimal Average { get; set; }

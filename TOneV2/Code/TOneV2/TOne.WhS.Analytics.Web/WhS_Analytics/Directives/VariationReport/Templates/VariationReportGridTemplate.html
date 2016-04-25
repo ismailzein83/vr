@@ -1,7 +1,7 @@
 ﻿<vr-datagrid on-ready="scopeModel.onGridReady"
              datasource="scopeModel.dataSource"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             defaultsortbyfieldname="'Average'"
+             defaultsortbyfieldname="scopeModel.sortByField"
              defaultsortdirection="'DESC'"
              pagingtype="'PagingOnScroll'">
     <vr-datagridcolumn headertext="scopeModel.dimensionTitle" field="'DimensionName'" type="'Text'"></vr-datagridcolumn>

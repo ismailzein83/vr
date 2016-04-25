@@ -60,39 +60,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         void CreateTempTableIfNotExists(DataRetrievalInput<VariationReportQuery> input, string tempTableName)
         {
-            StringBuilder createTempTableQueryBuilder = new StringBuilder
-            (
-                @"IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
-                BEGIN
-                    #EXCHANGE_RATES_TABLE#
-                    SELECT #TOP_PART##DIMENTION_COLUMN_NAME# AS DimensionId#AVERAGE_PART##PERCENTAGE_PART##PREVIOUS_PERIOD_PERCENTAGE_PART##SUM_PART#
-                    INTO #TEMP_TABLE_NAME#
-                    
-                    FROM TOneWhs_Analytic.BillingStats bs#JOIN_PART#
-                    
-                    #WHERE_PART#
-                    
-                    GROUP BY #DIMENTION_COLUMN_NAME#
-                    #ORDER_BY_PART#
-                END"
-            );
-
-            createTempTableQueryBuilder.Replace("#TEMP_TABLE_NAME#", tempTableName);
-
-            createTempTableQueryBuilder.Replace("#EXCHANGE_RATES_TABLE#", GetExchangeRatesTable(input.Query.ReportType));
-            createTempTableQueryBuilder.Replace("#TOP_PART#", GetTopPart(input.Query.ReportType));
-            createTempTableQueryBuilder.Replace("#DIMENTION_COLUMN_NAME#", GetDimentionColumnNameAndSetDimensionTitle(input.Query.ReportType));
-
-            createTempTableQueryBuilder.Replace("#AVERAGE_PART#", GetAveragePart(input.Query.ReportType, input.Query.NumberOfPeriods));
-            createTempTableQueryBuilder.Replace("#PERCENTAGE_PART#", GetPercentagePart(input.Query.ReportType, input.Query.NumberOfPeriods));
-            createTempTableQueryBuilder.Replace("#PREVIOUS_PERIOD_PERCENTAGE_PART#", GetPreviousPeriodPercentagePart(input.Query.ReportType, input.Query.NumberOfPeriods));
-
-            createTempTableQueryBuilder.Replace("#SUM_PART#", GetSumPart(input.Query.ReportType, input.Query.NumberOfPeriods));
-            createTempTableQueryBuilder.Replace("#JOIN_PART#", GetJoinPart(input.Query.ReportType, input.Query.NumberOfPeriods));
-            createTempTableQueryBuilder.Replace("#WHERE_PART#", GetWherePart(input.Query.DimensionFilters));
-            createTempTableQueryBuilder.Replace("#ORDER_BY_PART#", GetOrderByPart(input.Query.ReportType));
-
-            ExecuteNonQueryText(createTempTableQueryBuilder.ToString(), (cmd) =>
+            ExecuteNonQueryText(GetTempTableQuery(input.Query, tempTableName), (cmd) =>
             {
                 DataTable timePeriodsTable = BuildTimePeriodsTable(input);
                 var tableParameter = new SqlParameter("@TimePeriods", SqlDbType.Structured);
@@ -106,12 +74,38 @@ namespace TOne.WhS.Analytics.Data.SQL
             });
         }
 
+        #region Temp Table Query
+
+        string GetTempTableQuery(VariationReportQuery query, string tempTableName)
+        {
+            var createTempTableQueryBuilder = new StringBuilder
+            (
+                @"IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
+                BEGIN
+                    #EXCHANGE_RATES_TABLE#
+                    #QUERY_PART#
+                END"
+            );
+
+            createTempTableQueryBuilder.Replace("#EXCHANGE_RATES_TABLE#", GetExchangeRatesTable(query.ReportType));
+
+            string queryPart = (query.ReportType == VariationReportType.InOutBoundMinutes || query.ReportType == VariationReportType.InOutBoundAmount) ?
+                GetMultiBoundQuery(query) :
+                GetSingleBoundQuery(query, null, "INTO #TEMP_TABLE_NAME#");
+
+            createTempTableQueryBuilder.Replace("#QUERY_PART#", queryPart);
+            createTempTableQueryBuilder.Replace("#TEMP_TABLE_NAME#", tempTableName);
+
+            return createTempTableQueryBuilder.ToString();
+        }
+
         string GetExchangeRatesTable(VariationReportType reportType)
         {
             switch (reportType)
             {
                 case VariationReportType.InBoundAmount:
                 case VariationReportType.OutBoundAmount:
+                case VariationReportType.InOutBoundAmount:
                 case VariationReportType.TopDestinationAmount:
                     return @"DECLARE @ExchangeRates TABLE
                     (
@@ -123,12 +117,123 @@ namespace TOne.WhS.Analytics.Data.SQL
                     )
                     INSERT INTO @ExchangeRates
                     SELECT * FROM Common.getExchangeRates(@SmallestFromDate, @LargestToDate)";
-                case VariationReportType.InBoundMinutes:
-                case VariationReportType.OutBoundMinutes:
-                case VariationReportType.TopDestinationMinutes:
+                default:
                     return null;
             }
-            throw new ArgumentException("reportType");
+        }
+
+        #region Multi Bound Query
+
+        string GetMultiBoundQuery(VariationReportQuery query)
+        {
+            var multiBoundQueryBuilder = new StringBuilder
+            (@"
+                #IN_BOUND_QUERY#
+                #OUT_BOUND_QUERY#
+
+                SELECT InResult.DimensionId,
+                    ' / Total' AS DimensionSuffix,
+                    InResult.Average - OutResult.Average Average,
+                    InResult.Percentage - OutResult.Percentage Percentage,
+                    InResult.PreviousPeriodPercentage - OutResult.PreviousPeriodPercentage PreviousPeriodPercentage
+                    #TOTAL_RESULT_SUM_PART#
+                INTO #TotalResult
+                FROM #InResult InResult JOIN #OutResult OutResult ON InResult.DimensionId = OutResult.DimensionId
+
+                SELECT * INTO #TEMP_TABLE_NAME#
+                FROM (SELECT * FROM #InResult UNION ALL SELECT * FROM #OutResult UNION ALL SELECT * FROM #TotalResult) AS FinalResult
+                
+                ORDER BY FinalResult.DimensionId
+            ");
+
+            VariationReportQuery inResultQuery;
+            VariationReportQuery outResultQuery;
+            SetInOutResultQueries(query, out inResultQuery, out outResultQuery);
+
+            multiBoundQueryBuilder.Replace("#IN_BOUND_QUERY#", GetSingleBoundQuery(inResultQuery, " / In", "INTO #InResult"));
+            multiBoundQueryBuilder.Replace("#OUT_BOUND_QUERY#", GetSingleBoundQuery(outResultQuery, " / Out", "INTO #OutResult"));
+            multiBoundQueryBuilder.Replace("#TOTAL_RESULT_SUM_PART#", GetTotalResultSumPart(query.NumberOfPeriods));
+
+            return multiBoundQueryBuilder.ToString();
+        }
+
+        void SetInOutResultQueries(VariationReportQuery query, out VariationReportQuery inResultQuery, out VariationReportQuery outResultQuery)
+        {
+            if (query.ReportType == VariationReportType.InOutBoundMinutes)
+            {
+                inResultQuery = new VariationReportQuery() { ReportType = VariationReportType.InBoundMinutes };
+                outResultQuery = new VariationReportQuery() { ReportType = VariationReportType.OutBoundMinutes };
+            }
+            else // VariationReportType.InOutBoundAmount
+            {
+                inResultQuery = new VariationReportQuery() { ReportType = VariationReportType.InBoundAmount };
+                outResultQuery = new VariationReportQuery() { ReportType = VariationReportType.OutBoundAmount };
+            }
+
+            inResultQuery.ToDate = query.ToDate;
+            inResultQuery.TimePeriod = query.TimePeriod;
+            inResultQuery.NumberOfPeriods = query.NumberOfPeriods;
+            inResultQuery.DimensionFilters = query.DimensionFilters;
+
+            outResultQuery.ToDate = query.ToDate;
+            outResultQuery.TimePeriod = query.TimePeriod;
+            outResultQuery.NumberOfPeriods = query.NumberOfPeriods;
+            outResultQuery.DimensionFilters = query.DimensionFilters;
+        }
+
+        string GetTotalResultSumPart(int numberOfPeriods)
+        {
+            var totalResultSumPartBuilder = new StringBuilder();
+            for (int i = 0; i < numberOfPeriods; i++)
+            {
+                totalResultSumPartBuilder.Append(String.Format(", InResult.Period{0}Sum - OutResult.Period{0}Sum AS Period{0}Sum", i + 1));
+            }
+            return totalResultSumPartBuilder.ToString();
+        }
+
+        #endregion
+
+        #region Single Bound Query
+
+        string GetSingleBoundQuery(VariationReportQuery query, string dimensionSuffix, string intoPart)
+        {
+            var singleResultQueryBuilder = new StringBuilder
+            (
+                @"SELECT #TOP_PART#
+                    #DIMENTION_COLUMN_NAME# AS DimensionId
+                    #DIMENSION_SUFFIX#
+                    #AVERAGE_PART#
+                    #PERCENTAGE_PART#
+                    #PREVIOUS_PERIOD_PERCENTAGE_PART#
+                    #SUM_PART#
+
+                #INTO_PART#
+
+                FROM TOneWhs_Analytic.BillingStats bs
+                #JOIN_PART#
+
+                #WHERE_PART#
+
+                GROUP BY #DIMENTION_COLUMN_NAME#
+                #ORDER_BY_PART#"
+            );
+
+            singleResultQueryBuilder.Replace("#TOP_PART#", GetTopPart(query.ReportType));
+            singleResultQueryBuilder.Replace("#DIMENTION_COLUMN_NAME#", GetDimentionColumnNameAndSetDimensionTitle(query.ReportType));
+            singleResultQueryBuilder.Replace("#DIMENSION_SUFFIX#", String.Format(", '{0}' AS DimensionSuffix", dimensionSuffix));
+
+            singleResultQueryBuilder.Replace("#AVERAGE_PART#", GetAveragePart(query.ReportType, query.NumberOfPeriods));
+            singleResultQueryBuilder.Replace("#PERCENTAGE_PART#", GetPercentagePart(query.ReportType, query.NumberOfPeriods));
+            singleResultQueryBuilder.Replace("#PREVIOUS_PERIOD_PERCENTAGE_PART#", GetPreviousPeriodPercentagePart(query.ReportType, query.NumberOfPeriods));
+
+            singleResultQueryBuilder.Replace("#SUM_PART#", GetSumPart(query.ReportType, query.NumberOfPeriods));
+            singleResultQueryBuilder.Replace("#INTO_PART#", intoPart);
+
+            singleResultQueryBuilder.Replace("#JOIN_PART#", GetJoinPart(query.ReportType, query.NumberOfPeriods));
+            singleResultQueryBuilder.Replace("#WHERE_PART#", GetWherePart(query.DimensionFilters));
+            singleResultQueryBuilder.Replace("#ORDER_BY_PART#", GetOrderByPart(query.ReportType));
+
+            return singleResultQueryBuilder.ToString();
         }
 
         string GetTopPart(VariationReportType reportType)
@@ -331,11 +436,9 @@ namespace TOne.WhS.Analytics.Data.SQL
             return orderByExpression;
         }
 
-        DateTime GetSmallestFromDate(DataTable timePeriodsTable)
-        {
-            DataRow lastRow = timePeriodsTable.Rows[timePeriodsTable.Rows.Count - 1];
-            return Convert.ToDateTime(lastRow["FromDate"]);
-        }
+        #endregion
+
+        #endregion
 
         #region Time Periods
 
@@ -407,6 +510,12 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #endregion
 
+        DateTime GetSmallestFromDate(DataTable timePeriodsTable)
+        {
+            DataRow lastRow = timePeriodsTable.Rows[timePeriodsTable.Rows.Count - 1];
+            return Convert.ToDateTime(lastRow["FromDate"]);
+        }
+
         #endregion
 
         #region Mappers
@@ -416,6 +525,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             var variationReportRecord = new VariationReportRecord()
             {
                 DimensionId = (object)reader["DimensionId"],
+                DimensionSuffix = reader["DimensionSuffix"] as string,
                 Average = (decimal)reader["Average"],
                 Percentage = Convert.ToDecimal((double)reader["Percentage"]),
                 PreviousPeriodPercentage = Convert.ToDecimal((double)reader["PreviousPeriodPercentage"])
