@@ -58,6 +58,7 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
         }
 
         function defineScope() {
+            $scope.showGrid = false;
             $scope.onBPDefinitionDirectiveReady = function (api) {
                 bpDefinitionDirectiveApi = api;
                 bpDefinitionReadyPromiseDeferred.resolve();
@@ -70,10 +71,10 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid(filter);
             };
 
             $scope.searchClicked = function () {
+                $scope.showGrid = true;
                 getFilterObject();
                 return gridAPI.loadGrid(filter);
             };

@@ -9,7 +9,7 @@ app.service('BusinessProcess_BusinessProcessLogService', ['VRCommon_MasterLogSer
             BusinessProcess_BPInstanceAPIService.HasViewFilteredBPInstancesPermission().then(function (response) {
                 if (response == true) {
                     var tabDefinition = {
-                        title: "Business Process Log",
+                        title: "Business Process",
                         directive: "bp-instance-log-search",
                         hide: true,
                         loadDirective: function (directiveAPI) {
