@@ -152,6 +152,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
         }
 
+        public List<SaleZone> GetEffectiveSaleZonesBySellingNumberPlan(int sellingNumberPlanId, DateTime minimumDate)
+        {
+            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            return dataManager.GetEffectiveSaleZonesBySellingNumberPlan(sellingNumberPlanId, minimumDate);
+        }
+
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             var saleZoneNames = new List<string>();

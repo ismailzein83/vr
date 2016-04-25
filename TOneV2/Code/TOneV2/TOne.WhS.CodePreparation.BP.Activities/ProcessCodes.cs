@@ -12,15 +12,19 @@ using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
+
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public class GetDataFromView : CodeActivity
+
+    public sealed class ProcessCodes : CodeActivity
     {
-        [RequiredArgument]
-        public InArgument<int> SellingNumberPlanId { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<Changes> Changes { get; set; }
+
         [RequiredArgument]
         public OutArgument<IEnumerable<CodeToAdd>> CodesToAdd { get; set; }
 
@@ -35,13 +39,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            Changes changes = Changes.Get(context);
             DateTime startReading = DateTime.Now;
-            int sellingNumberPlanId = SellingNumberPlanId.Get(context);
-            CodePreparationManager codePreparationManager = new CodePreparationManager();
-            Changes changes = codePreparationManager.GetChanges(sellingNumberPlanId);
-
             CodeGroupManager codeGroupManager = new CodeGroupManager();
-
             List<CodeToAdd> codesToAdd = new List<CodeToAdd>();
             List<CodeToMove> codesToMove = new List<CodeToMove>();
             List<CodeToClose> codesToClose = new List<CodeToClose>();
@@ -49,29 +49,29 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             foreach (NewCode code in changes.NewCodes)
             {
                 CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
-                
+
                 if (code.OldZoneName != null)
                 {
                     codesToMove.Add(new CodeToMove
-                           {
-                               Code = code.Code,
-                               CodeGroup = codeGroup,
-                               BED = minimumDate,
-                               EED = null,
-                               ZoneName = code.ZoneName,
-                               OldZoneName = code.OldZoneName
-                           });
+                    {
+                        Code = code.Code,
+                        CodeGroup = codeGroup,
+                        BED = minimumDate,
+                        EED = null,
+                        ZoneName = code.ZoneName,
+                        OldZoneName = code.OldZoneName
+                    });
                 }
                 else
                 {
                     codesToAdd.Add(new CodeToAdd
-                           {
-                               Code = code.Code,
-                               CodeGroup = codeGroup,
-                               BED = minimumDate,
-                               EED = null,
-                               ZoneName = code.ZoneName,
-                           });
+                    {
+                        Code = code.Code,
+                        CodeGroup = codeGroup,
+                        BED = minimumDate,
+                        EED = null,
+                        ZoneName = code.ZoneName,
+                    });
                 }
 
             }
@@ -79,14 +79,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             foreach (DeletedCode code in changes.DeletedCodes)
             {
                 CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
-                    codesToClose.Add(new CodeToClose
-                           {
-                               Code = code.Code,
-                               CodeGroup = codeGroup,
-                               CloseEffectiveDate = minimumDate,
-                               ZoneName = code.ZoneName,
-                           });
+                codesToClose.Add(new CodeToClose
+                {
+                    Code = code.Code,
+                    CodeGroup = codeGroup,
+                    CloseEffectiveDate = minimumDate,
+                    ZoneName = code.ZoneName,
+                });
             }
+
 
             TimeSpan spent = DateTime.Now.Subtract(startReading);
             context.WriteTrackingMessage(LogEntryType.Information, "Converting Data to Work Flow Stracture done and Takes: {0}", spent);

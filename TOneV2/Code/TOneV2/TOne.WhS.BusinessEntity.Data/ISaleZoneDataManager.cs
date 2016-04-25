@@ -21,5 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture);
 
         List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId,int countryId, DateTime minimumDate);
+
+        List<SaleZone> GetEffectiveSaleZonesBySellingNumberPlan(int sellingNumberPlanId, DateTime minimumDate);
     }
 }

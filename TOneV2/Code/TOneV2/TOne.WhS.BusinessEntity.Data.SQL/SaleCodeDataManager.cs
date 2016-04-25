@@ -91,6 +91,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByCountry", SaleCodeMapper, countryId, effectiveDate);
         }
 
+        public List<SaleCode> GetSaleCodesByZoneIDs(List<int> zoneIds, DateTime effectiveDate)
+        {
+            string allZoneIds = null;
+            if (zoneIds != null && zoneIds.Count() > 0)
+                allZoneIds = string.Join<int>(",", zoneIds);
+            return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetByZoneIds", SaleCodeMapper, allZoneIds, effectiveDate);
+        }
+
         public bool AreSaleCodesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SaleCode", ref updateHandle);

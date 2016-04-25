@@ -90,12 +90,14 @@
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="GetDataFromSource.cs" />
-    <Compile Include="GetDataFromView.cs" />
+    <Compile Include="GetChanges.cs" />
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingZones.cs" />
     <Compile Include="GetImportedDataValidationRules.cs" />
     <Compile Include="PrepareExistingCodes.cs" />
     <Compile Include="PrepareExistingZones.cs" />
+    <Compile Include="ProcessZones.cs" />
+    <Compile Include="ProcessCodes.cs" />
     <Compile Include="ProcessCountryCodes.cs" />
     <Compile Include="ReserveIdForCodePreparation.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />

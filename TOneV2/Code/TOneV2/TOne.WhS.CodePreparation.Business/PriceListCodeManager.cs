@@ -59,12 +59,72 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 addedCodes.Add(obj);
             }
+
+
+            CloseZonesWithNoCodes(context.ExistingZones);
             context.NewCodes = addedCodes;
             context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is AddedZone)).Select(itm => itm as AddedZone);
 
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
         }
+
+        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones)
+        {
+            foreach (var existingZone in existingZones)
+            {
+                DateTime? maxCodeEED = DateTime.MinValue;
+                bool hasCodes = false;
+                if (existingZone.ExistingCodes != null)
+                {
+                    foreach (var existingCode in existingZone.ExistingCodes)
+                    {
+                        if (existingCode.EED.VRGreaterThan(existingCode.CodeEntity.BED))
+                        {
+                            hasCodes = true;
+                            if (existingCode.EED.VRGreaterThan(maxCodeEED))
+                            {
+                                maxCodeEED = existingCode.EED;
+                                if (!maxCodeEED.HasValue)
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                if (existingZone.AddedCodes != null)
+                {
+                    foreach (var addedCode in existingZone.AddedCodes)
+                    {
+                        if (addedCode.EED.VRGreaterThan(addedCode.BED))
+                        {
+                            hasCodes = true;
+                            if (addedCode.EED.VRGreaterThan(maxCodeEED))
+                            {
+                                maxCodeEED = addedCode.EED;
+                                if (!maxCodeEED.HasValue)
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                if (!hasCodes || maxCodeEED.HasValue)
+                {
+                    if (!hasCodes)
+                        maxCodeEED = existingZone.BED;
+                    if (maxCodeEED != existingZone.EED)
+                    {
+                        existingZone.ChangedZone = new ChangedZone
+                        {
+                            ZoneId = existingZone.ZoneId,
+                            EED = maxCodeEED.Value
+                        };
+                    }
+                }
+            }
+        }
+
 
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
