@@ -148,95 +148,96 @@
                 });
 
 
-                function setTitle() {
-                    if (isEditMode && viewEntity != undefined)
-                        $scope.title = UtilsService.buildTitleForUpdateEditor(viewEntity.Name, 'Analytic Report Editor');
-                    else
-                        $scope.title = UtilsService.buildTitleForAddEditor('Analytic Report Editor');
+              
+            }
+
+            function setTitle() {
+                if (isEditMode && viewEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(viewEntity.Name, 'Analytic Report Editor');
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor('Analytic Report Editor');
+            }
+
+            function loadStaticData() {
+                if (viewEntity != undefined) {
+                    $scope.scopeModel.reportName = viewEntity.Name;
+                    $scope.scopeModel.reportTitle = viewEntity.Title;
+                    if (viewEntity != undefined && viewEntity.Settings != undefined && viewEntity.Settings.Widgets != undefined && viewEntity.Settings.Widgets.length > 0) {
+                        for (var i = 0 ; i < viewEntity.Settings.Widgets.length; i++) {
+                            $scope.scopeModel.widgets.push({ widgetSettings: viewEntity.Settings.Widgets[i] });
+                        }
+                    }
+
                 }
-                function loadStaticData() {
-                    if (viewEntity != undefined) {
-                        $scope.scopeModel.reportName = viewEntity.Name;
-                        $scope.scopeModel.reportTitle = viewEntity.Title;
-                        if (viewEntity != undefined && viewEntity.Settings !=undefined && viewEntity.Settings.Widgets!=undefined && viewEntity.Settings.Widgets.length>0)
-                        {
-                            for(var i=0 ; i<viewEntity.Settings.Widgets.length;i++)
-                            {
-                                $scope.scopeModel.widgets.push({ widgetSettings: viewEntity.Settings.Widgets[i] });
+            }
+
+            function loadTree() {
+                var treeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                loadMenuItems().then(function () {
+                    treeReadyDeferred.promise.then(function () {
+                        if (viewEntity != undefined) {
+
+                            $scope.scopeModel.selectedMenuItem = treeAPI.setSelectedNode(menuItems, viewEntity.ModuleId, "Id", "Childs");
+                        }
+                        treeAPI.refreshTree(menuItems);
+                        treeLoadDeferred.resolve();
+                    });
+                }).catch(function (error) {
+                    treeLoadDeferred.reject(error);
+                });
+
+                function loadMenuItems() {
+                    return VR_Sec_MenuAPIService.GetAllMenuItems(false).then(function (response) {
+                        if (response) {
+                            menuItems = [];
+                            for (var i = 0; i < response.length; i++) {
+                                menuItems.push(response[i]);
                             }
                         }
-                            
-                    }
+                    });
                 }
+
+                return treeLoadDeferred.promise;
+
                
-                function loadTree() {
-                    var treeLoadDeferred = UtilsService.createPromiseDeferred();
+            }
 
-                    loadMenuItems().then(function () {
-                        treeReadyDeferred.promise.then(function () {
-                            if (viewEntity != undefined) {
-
-                                $scope.scopeModel.selectedMenuItem = treeAPI.setSelectedNode(menuItems, viewEntity.ModuleId, "Id", "Childs");
-                            }
-                            treeAPI.refreshTree(menuItems);
-                            treeLoadDeferred.resolve();
-                        });
-                    }).catch(function (error) {
-                        treeLoadDeferred.reject(error);
-                    });
-
-                    return treeLoadDeferred.promise;
-
-                    function loadMenuItems() {
-                        return VR_Sec_MenuAPIService.GetAllMenuItems(false).then(function (response) {
-                            if (response) {
-                                menuItems = [];
-                                for (var i = 0; i < response.length; i++) {
-                                    menuItems.push(response[i]);
-                                }
-                            }
-                        });
+            function loadTableSelector() {
+                var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                tableSelectorReadyDeferred.promise.then(function () {
+                    var payLoad;
+                    if (viewEntity != undefined && viewEntity.Settings != undefined) {
+                        payLoad = {
+                            selectedIds: viewEntity.Settings.AnalyticTableIds
+                        }
                     }
-                }
 
-                function loadTableSelector() {
-                    var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                    tableSelectorReadyDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoad, loadTableSelectorPromiseDeferred);
+                });
+                return loadTableSelectorPromiseDeferred.promise;
+            }
+
+            function loadSearchSettings() {
+                if (viewEntity != undefined && viewEntity.Settings != undefined) {
+                    searchSettingReadyDeferred = UtilsService.createPromiseDeferred();
+                    var loadSearchSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+                    searchSettingReadyDeferred.promise.then(function () {
+                        searchSettingReadyDeferred = undefined;
                         var payLoad;
-                        if (viewEntity != undefined && viewEntity.Settings != undefined)
-                        {
+                        if (viewEntity != undefined && viewEntity.Settings != undefined) {
                             payLoad = {
-                                selectedIds: viewEntity.Settings.AnalyticTableIds
+                                tableIds: viewEntity.Settings.AnalyticTableIds,
+                                searchSettings: viewEntity.Settings.SearchSettings
                             }
                         }
-                            
-                        VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoad, loadTableSelectorPromiseDeferred);
+
+                        VRUIUtilsService.callDirectiveLoad(searchSettingDirectiveAPI, payLoad, loadSearchSettingsPromiseDeferred);
                     });
-                    return loadTableSelectorPromiseDeferred.promise;
+                    return loadSearchSettingsPromiseDeferred.promise;
+
                 }
 
-                function loadSearchSettings() {
-                    if (viewEntity != undefined && viewEntity.Settings != undefined)
-                    {
-                        searchSettingReadyDeferred = UtilsService.createPromiseDeferred();
-                        var loadSearchSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
-                        searchSettingReadyDeferred.promise.then(function () {
-                            searchSettingReadyDeferred = undefined;
-                            var payLoad;
-                            if (viewEntity != undefined && viewEntity.Settings != undefined) {
-                                payLoad = {
-                                    tableIds:viewEntity.Settings.AnalyticTableIds,
-                                    searchSettings: viewEntity.Settings.SearchSettings
-                                }
-                            }
-
-                            VRUIUtilsService.callDirectiveLoad(searchSettingDirectiveAPI, payLoad, loadSearchSettingsPromiseDeferred);
-                        });
-                        return loadSearchSettingsPromiseDeferred.promise;
-
-                    }
-                   
-                }
             }
 
             function getView() {
@@ -280,7 +281,6 @@
 
         function insert() {
             $scope.scopeModel.isLoading = true;
-            var serverResponse;
             var viewEntityObj = buildViewObjectFromScope();
             viewEntityObj.ViewTypeName = viewTypeName; console.log(viewEntityObj);
             return VR_Sec_ViewAPIService.AddView(viewEntityObj).then(function (response) {

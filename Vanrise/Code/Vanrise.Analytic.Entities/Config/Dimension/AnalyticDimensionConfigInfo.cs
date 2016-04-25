@@ -11,5 +11,7 @@ namespace Vanrise.Analytic.Entities
         public int AnalyticItemConfigId { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
+        public string ParentDimension { get; set; }
+        public bool IsRequiredFromParent { get; set; }
     }
 }

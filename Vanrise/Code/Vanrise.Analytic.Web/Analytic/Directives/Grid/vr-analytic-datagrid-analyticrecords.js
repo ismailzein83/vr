@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService',
-    function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService) {
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService','VR_Analytic_AnalyticItemConfigAPIService',
+    function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -30,6 +30,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             ctrl.groupingDimensions = [];
             ctrl.measures = [];
             ctrl.drillDownDimensions = [];
+            ctrl.dimensionsConfig = [];
             ctrl.sortField = "";
             var gridApi;
             var drillDown;
@@ -50,71 +51,32 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.load = function (payLoad) {
-
-                            var filters = payLoad.DimensionFilters;
-                            var queryFinalized = loadGridQuery(payLoad);
-
-                            applyDimensionRules();
-
-                            var drillDownDefinitions = [];
-
-                            for (var i = 0; i < ctrl.drillDownDimensions.length; i++) {
-                                var selectedDimensions = [];
-                                var dimension = ctrl.drillDownDimensions[i];
-                                for (var j = 0; j < ctrl.groupingDimensions.length; j++)
-                                    if (ctrl.groupingDimensions[j].DimensionName != dimension.DimensionName)
-                                        selectedDimensions.push(ctrl.groupingDimensions[j].DimensionName);
-                                setDrillDownData(ctrl.drillDownDimensions[i], selectedDimensions)
-                            }
-
-                            function setDrillDownData(dimension, selectedDimensions) {
-                                var objData = {};
-                                objData.title = dimension.Title;
-                                var drillDownDimensions = [];
-                                for (var i = 0; i < ctrl.drillDownDimensions.length; i++) {
-                                    drillDownDimensions.push(ctrl.drillDownDimensions[i]);
+                            if (payLoad.DimensionsConfig == undefined)
+                            {
+                                var filter = {
+                                    TableIds: [payLoad.TableId]
                                 }
-                                objData.directive = "vr-analytic-datagrid-analyticrecords";
+                                var promiseReadyDeferred = UtilsService.createPromiseDeferred();
 
-                                objData.loadDirective = function (directiveAPI, dataItem) {
-
-                                    dataItem.gridAPI = directiveAPI;
-
-                                    //UpdateFilters
-                                    var newFilters = [];
-                                    for (var j = 0; j < ctrl.groupingDimensions.length; j++) {
-                                        newFilters.push({
-                                            Dimension: ctrl.groupingDimensions[j].DimensionName,
-                                            FilterValues: [dataItem.DimensionValues[j].Value]
-                                        });
+                                VR_Analytic_AnalyticItemConfigAPIService.GetDimensionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                                    if (response)
+                                    {
+                                        for(var i=0;i<response.length;i++)
+                                        {
+                                            ctrl.dimensionsConfig.push(response[i]);
+                                        }
                                     }
-                                    for (var i = 0; i < filters.length; i++)
-                                        newFilters.push(filters[i]);
+                                    loadGrid(payLoad).finally(function () {
+                                        promiseReadyDeferred.resolve();
+                                    }).catch(function (error) {
+                                        promiseReadyDeferred.reject(error);
+                                    });
 
-                                    //Remove Current Dimension from DrillDownDimensions
-                                    if (UtilsService.contains(drillDownDimensions, dimension)) {
-                                        var dimensionIndex = UtilsService.getItemIndexByVal(drillDownDimensions, dimension.DimensionName, 'DimensionName');
-                                        drillDownDimensions.splice(dimensionIndex, 1);
-                                    }
-
-                                    var drillDownPayLoad = {
-                                        Dimensions:ctrl.dimensions,
-                                        GroupingDimensions: [dimension],
-                                        DimensionFilters: newFilters,
-                                        Measures: ctrl.measures,
-                                        FromTime: fromTime,
-                                        ToTime: toTime,
-                                        DrillDownDimensions: drillDownDimensions,
-                                        TableId: payLoad.TableId
-                                    }
-                                    return dataItem.gridAPI.load(drillDownPayLoad);
-                                };
-
-                                drillDownDefinitions.push(objData);
+                                });
+                                return promiseReadyDeferred.promise;
+                            } else {
+                                return loadGrid(payLoad);
                             }
-
-                            drillDown = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, undefined);
-                            return gridApi.retrieveData(queryFinalized);
                         }
                         return directiveAPI;
                     }
@@ -137,8 +99,78 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         });
                 };
 
-                function loadGridQuery(payLoad) {
+                function loadGrid(payLoad)
+                {
+                    var filters = payLoad.DimensionFilters;
+                    var queryFinalized = loadGridQuery(payLoad);
 
+                    applyDimensionRules();
+
+                    var drillDownDefinitions = [];
+
+                    for (var i = 0; i < ctrl.drillDownDimensions.length; i++) {
+                        var selectedDimensions = [];
+                        var dimension = ctrl.drillDownDimensions[i];
+                        for (var j = 0; j < ctrl.groupingDimensions.length; j++)
+                            if (ctrl.groupingDimensions[j].DimensionName != dimension.DimensionName)
+                                selectedDimensions.push(ctrl.groupingDimensions[j].DimensionName);
+                        setDrillDownData(ctrl.drillDownDimensions[i], selectedDimensions)
+                    }
+
+                    function setDrillDownData(dimension, selectedDimensions) {
+                        var objData = {};
+                        objData.title = dimension.Title;
+                        var drillDownDimensions = [];
+                        for (var i = 0; i < ctrl.drillDownDimensions.length; i++) {
+                            drillDownDimensions.push(ctrl.drillDownDimensions[i]);
+                        }
+                        objData.directive = "vr-analytic-datagrid-analyticrecords";
+
+                        objData.loadDirective = function (directiveAPI, dataItem) {
+
+                            dataItem.gridAPI = directiveAPI;
+
+                            //UpdateFilters
+                            var newFilters = [];
+                            for (var j = 0; j < ctrl.groupingDimensions.length; j++) {
+                                newFilters.push({
+                                    Dimension: ctrl.groupingDimensions[j].DimensionName,
+                                    FilterValues: [dataItem.DimensionValues[j].Value]
+                                });
+                            }
+                            for (var i = 0; i < filters.length; i++)
+                                newFilters.push(filters[i]);
+
+                            //Remove Current Dimension from DrillDownDimensions
+                            if (UtilsService.contains(drillDownDimensions, dimension)) {
+                                var dimensionIndex = UtilsService.getItemIndexByVal(drillDownDimensions, dimension.DimensionName, 'DimensionName');
+                                drillDownDimensions.splice(dimensionIndex, 1);
+                            }
+
+                            var drillDownPayLoad = {
+                                DimensionsConfig: ctrl.dimensionsConfig,
+                                Dimensions: ctrl.dimensions,
+                                GroupingDimensions: [dimension],
+                                DimensionFilters: newFilters,
+                                Measures: ctrl.measures,
+                                FromTime: fromTime,
+                                ToTime: toTime,
+                                DrillDownDimensions: drillDownDimensions,
+                                TableId: payLoad.TableId
+                            }
+                            return dataItem.gridAPI.load(drillDownPayLoad);
+                        };
+
+                        drillDownDefinitions.push(objData);
+                    }
+
+                    drillDown = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, undefined);
+                    return gridApi.retrieveData(queryFinalized);
+                }
+
+
+                function loadGridQuery(payLoad) {
+          
                     fromTime = payLoad.FromTime;
                     toTime = payLoad.ToTime;
                     isSummary = $attrs.withsummary != undefined;
@@ -146,9 +178,12 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     ctrl.measures.length = 0;
                     ctrl.drillDownDimensions.length = 0;
 
-                    if (payLoad.Dimensions != undefined)
-                    {
+                    if (payLoad.Dimensions != undefined) {
                         ctrl.dimensions = payLoad.Dimensions;
+                    }
+                    if (payLoad.DimensionsConfig != undefined)
+                    {
+                        ctrl.dimensionsConfig = payLoad.DimensionsConfig;
                     }
                     if (payLoad.DrillDownDimensions != undefined) {
                         for (var i = 0; i < payLoad.DrillDownDimensions.length; i++) {
@@ -187,7 +222,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         }
                         if (payLoad.GroupingDimensions != undefined) {
                             for (var i = 0; i < payLoad.GroupingDimensions.length; i++) {
-                                ctrl.groupingDimensions.push( UtilsService.getItemByVal(ctrl.dimensions,payLoad.GroupingDimensions[i].DimensionName, 'DimensionName'));
+                                ctrl.groupingDimensions.push(UtilsService.getItemByVal(ctrl.dimensions, payLoad.GroupingDimensions[i].DimensionName, 'DimensionName'));
                             }
                         }
                     }
@@ -211,11 +246,28 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 }
 
                 function applyDimensionRules() {
-                    for (var i = 0; i < ctrl.groupingDimensions; i++) {
-                        var groupingDimension = ctrl.groupingDimension[i];
-                        if (groupingDimension.ParentDimension)
+                    for (var i = 0; i < ctrl.dimensions.length; i++) {
+                        var dimension = ctrl.dimensions[i];
+                        if (dimension != undefined)
                         {
-                           //var parentDimension = UtilsService.getItemIndexByVal()
+                            var dimensionConfig = UtilsService.getItemByVal(ctrl.dimensionsConfig, dimension.DimensionName, 'Name');
+                            if (dimensionConfig != undefined && dimensionConfig.IsRequiredFromParent && dimensionConfig.ParentDimension != undefined)
+                            {
+                                var groupingDimension = UtilsService.getItemByVal(ctrl.groupingDimensions, dimensionConfig.ParentDimension, 'DimensionName');
+
+                                if (groupingDimension == undefined)
+                                {
+                                    var groupingDimensionIndex = UtilsService.getItemIndexByVal(ctrl.drillDownDimensions, dimensionConfig.Name, 'DimensionName');
+                                    ctrl.drillDownDimensions.splice(groupingDimensionIndex, 1);
+                                } else if (ctrl.drillDownDimensions.indexOf(dimension) == -1)
+                                {
+                                    ctrl.drillDownDimensions.push(dimension);
+                                }
+                            }else if(dimensionConfig.ParentDimension != undefined)
+                            {
+                                var groupingDimensionIndex = UtilsService.getItemIndexByVal(ctrl.drillDownDimensions, dimensionConfig.ParentDimension, 'DimensionName');
+                                ctrl.drillDownDimensions.splice(groupingDimensionIndex, 1);
+                            }
                         }
                     }
                 }

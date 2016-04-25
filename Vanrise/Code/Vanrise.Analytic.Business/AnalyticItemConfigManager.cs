@@ -76,7 +76,7 @@ namespace Vanrise.Analytic.Business
             foreach (var tableId in filter.TableIds)
             {
                 var dimensions = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, AnalyticItemType.Dimension);
-                dimensionConfigs.AddRange(dimensions.MapRecords(AnalyticDimensionConfigInfoMapper));
+                dimensionConfigs.AddRange(dimensions.MapRecords(AnalyticDimensionConfigInfoMapper, x => (filter.HideIsRequiredFromParent== false || x.Config.IsRequiredFromParent != filter.HideIsRequiredFromParent)));
             }
             return dimensionConfigs;
         }
@@ -125,22 +125,24 @@ namespace Vanrise.Analytic.Business
         #endregion
 
         #region Mapper
-        AnalyticDimensionConfigInfo AnalyticDimensionConfigInfoMapper(AnalyticItemConfig<AnalyticDimensionConfig> AnalyticItemConfig)
+        AnalyticDimensionConfigInfo AnalyticDimensionConfigInfoMapper(AnalyticItemConfig<AnalyticDimensionConfig> analyticItemConfig)
         {
             return new AnalyticDimensionConfigInfo
             {
-                AnalyticItemConfigId = AnalyticItemConfig.AnalyticItemConfigId,
-                Name = AnalyticItemConfig.Name,
-                Title = AnalyticItemConfig.Title
+                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
+                Name = analyticItemConfig.Name,
+                Title = analyticItemConfig.Title,
+                IsRequiredFromParent = analyticItemConfig.Config.IsRequiredFromParent,
+                ParentDimension = analyticItemConfig.Config.ParentDimension,
             };
         }
-        AnalyticMeasureConfigInfo AnalyticMeasureConfigInfoMapper(AnalyticItemConfig<AnalyticMeasureConfig> AnalyticItemConfig)
+        AnalyticMeasureConfigInfo AnalyticMeasureConfigInfoMapper(AnalyticItemConfig<AnalyticMeasureConfig> analyticItemConfig)
         {
             return new AnalyticMeasureConfigInfo
             {
-                AnalyticItemConfigId = AnalyticItemConfig.AnalyticItemConfigId,
-                Name = AnalyticItemConfig.Name,
-                Title = AnalyticItemConfig.Title
+                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
+                Name = analyticItemConfig.Name,
+                Title = analyticItemConfig.Title
             };
         }
         #endregion

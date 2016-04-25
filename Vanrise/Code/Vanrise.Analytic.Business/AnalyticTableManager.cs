@@ -66,7 +66,8 @@ namespace Vanrise.Analytic.Business
             return new AnalyticTableInfo()
             {
                 AnalyticTableId = analyticTable.AnalyticTableId,
-                Name = analyticTable.Name
+                Name = analyticTable.Name,
+
             };
         }
         #endregion

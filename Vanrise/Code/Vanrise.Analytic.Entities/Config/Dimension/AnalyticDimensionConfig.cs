@@ -15,7 +15,8 @@ namespace Vanrise.Analytic.Entities
         public List<string> JoinConfigNames { get; set; }
 
         public List<string> GroupByColumns { get; set; }
-
+        public string ParentDimension { get; set; }
+        public bool IsRequiredFromParent { get; set; }
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
 
         public string CurrencySQLColumnName { get; set; }

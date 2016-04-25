@@ -99,7 +99,7 @@
 
             function defineAPI() {
                 var api = {};
-
+                var widgetEntity;
                 api.load = function (payload) {
                
                     var promises = [];
@@ -108,6 +108,7 @@
 
                         if (payload.widgetEntity != undefined)
                         {
+                            widgetEntity = payload.widgetEntity;
                             $scope.scopeModel.widgetTitle = payload.widgetEntity.WidgetTitle;
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -134,27 +135,14 @@
                         });
                         promises.push(loadTableSelectorPromiseDeferred.promise);
 
+                           
                             var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
                             promises.push(getWidgetsTemplateConfigsPromise);
 
                             return UtilsService.waitMultiplePromises(promises);
-
-                            function getWidgetsTemplateConfigs() {
-                                return VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {
-                                    if (selectorAPI !=undefined)
-                                    selectorAPI.clearDataSource();
-                                    if (response != null) {
-                                        for (var i = 0; i < response.length; i++) {
-                                            $scope.scopeModel.templateConfigs.push(response[i]);
-                                        }
-                                        if (payload.widgetEntity != undefined)
-                                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, payload.widgetEntity.ConfigId, 'ExtensionConfigurationId');
-                                        //else
-                                        //$scope.selectedTemplateConfig = $scope.templateConfigs[0];
-                                    }
-                                });
-                            }
                     }
+
+
 
                     
 
@@ -179,6 +167,21 @@
                         }
                     }
                     return data;
+                }
+                function getWidgetsTemplateConfigs() {
+                    return VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {
+                        if (selectorAPI != undefined)
+                            selectorAPI.clearDataSource();
+                        if (response != null) {
+                            for (var i = 0; i < response.length; i++) {
+                                $scope.scopeModel.templateConfigs.push(response[i]);
+                            }
+                            if (widgetEntity != undefined)
+                                $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, widgetEntity.ConfigId, 'ExtensionConfigurationId');
+                            //else
+                            //$scope.selectedTemplateConfig = $scope.templateConfigs[0];
+                        }
+                    });
                 }
             }
         }

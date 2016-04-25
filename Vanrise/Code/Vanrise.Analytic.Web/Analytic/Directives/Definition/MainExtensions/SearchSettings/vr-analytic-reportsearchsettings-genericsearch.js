@@ -130,7 +130,12 @@
                                     });
                                 }
                             }
+
+
                             if (payload.searchSettings.Filters != undefined && payload.searchSettings.Filters.length > 0) {
+
+
+
                                 selectedFilterIds = [];
                                 for (var i = 0 ; i < payload.searchSettings.Filters.length; i++) {
                                     var filterDimension = payload.searchSettings.Filters[i];
@@ -148,28 +153,13 @@
                                 }
                             }
                         }
-                        function addDataItemToFilterGrid(dataItem) {
-
-                            var dataItemPayload = dataItem.payload;
-
-                            dataItem.onFieldTypeReady = function (api) {
-                                dataItem.fieldAPI = api;
-                                dataItem.readyPromiseDeferred.resolve();
-                            };
-
-                            dataItem.readyPromiseDeferred.promise
-                                .then(function () {
-                                    VRUIUtilsService.callDirectiveLoad(dataItem.fieldAPI, dataItemPayload, dataItem.loadPromiseDeferred);
-                                });
-
-                            $scope.scopeModel.filterDimensions.push(dataItem);
-                        }
+                       
                      
 
                         var loadGroupingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         groupingDimensionReadyDeferred.promise.then(function () {
                             var payloadGroupingDirective = {
-                                filter: { TableIds: tableIds },
+                                filter: { TableIds: tableIds,HideIsRequiredFromParent:true },
                                 selectedIds: selectedGroupingIds
                             };
                          
@@ -180,7 +170,7 @@
                         var loadFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         filterDimensionReadyDeferred.promise.then(function () {
                             var payloadFilterDirective = {
-                                filter: { TableIds: tableIds },
+                                filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
                                 selectedIds: selectedFilterIds
                             };
 
@@ -189,6 +179,22 @@
                         promises.push(loadFilterDirectivePromiseDeferred.promise);
 
                         return UtilsService.waitMultiplePromises(promises);
+                    }
+                    function addDataItemToFilterGrid(dataItem) {
+
+                        var dataItemPayload = dataItem.payload;
+
+                        dataItem.onFieldTypeReady = function (api) {
+                            dataItem.fieldAPI = api;
+                            dataItem.readyPromiseDeferred.resolve();
+                        };
+
+                        dataItem.readyPromiseDeferred.promise
+                            .then(function () {
+                                VRUIUtilsService.callDirectiveLoad(dataItem.fieldAPI, dataItemPayload, dataItem.loadPromiseDeferred);
+                            });
+
+                        $scope.scopeModel.filterDimensions.push(dataItem);
                     }
 
                 };
