@@ -101,10 +101,8 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
 
                     if (response.Fields != undefined)
                         angular.forEach(response.Fields, function (item) {
-                            item.fieldTypeEditor = 'vr-genericdata-fieldtype-text-filtereditor';
                             ctrl.datasource.push(item);
                         });
-                    console.log(ctrl.datasource);
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
                 });

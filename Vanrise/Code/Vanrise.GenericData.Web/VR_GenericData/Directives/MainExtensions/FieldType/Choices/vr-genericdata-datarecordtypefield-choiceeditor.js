@@ -17,20 +17,21 @@ app.directive('vrGenericdataDatarecordtypefieldChoiceeditor', ['VR_GenericData_L
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordTypeFieldFilter/Editor/Templates/DataRecordTypeFieldChoiceEditor.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Choices/Templates/DataRecordTypeFieldChoiceEditor.html"
 
         };
 
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {
             var selectedObj;
-
+            var choiceFilterEditorApi;
 
             $scope.onChoiceFilterEditorReady = function (api) {
-                var payload = { fieldType: { Choices: selectedObj.values } };
+                choiceFilterEditorApi = api;
+                var payload = { fieldType: selectedObj.Entity.Type };
                 api.load(payload);
             }
 
-            
+
             function initializeController() {
                 defineAPI();
             }
@@ -41,6 +42,26 @@ app.directive('vrGenericdataDatarecordtypefieldChoiceeditor', ['VR_GenericData_L
                 api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_ListRecordFilterOperatorEnum);
                     selectedObj = payload;
+                }
+
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.GenericData.Entities.NumberListRecordFilter, Vanrise.GenericData.Entities",
+                        CompareOperator: $scope.selectedFilter.value,
+                        Values: choiceFilterEditorApi.getData().ChoiceIds
+                    };
+                }
+
+                api.getExpression = function () {
+                    var ids = choiceFilterEditorApi.getData().ChoiceIds;
+                    var expression = $scope.selectedFilter.description + ' (' + ids[0];
+                    if (ids.length > 1) {
+                        for (var x = 1; x < ids.length; x++) {
+                            expression += ', ' + ids[x];
+                        }
+                    }
+                    expression += ')';
+                    return expression;
                 }
 
                 if (ctrl.onReady != null)

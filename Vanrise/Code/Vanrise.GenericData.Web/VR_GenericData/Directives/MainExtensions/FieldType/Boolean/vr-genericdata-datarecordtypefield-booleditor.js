@@ -17,8 +17,7 @@ app.directive('vrGenericdataDatarecordtypefieldBooleditor', ['VR_GenericData_Str
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordTypeFieldFilter/Editor/Templates/DataRecordTypeFieldBoolEditor.html"
-
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Boolean/Templates/DataRecordTypeFieldBoolEditor.html"
         };
 
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {
@@ -31,7 +30,19 @@ app.directive('vrGenericdataDatarecordtypefieldBooleditor', ['VR_GenericData_Str
                 var api = {};
 
                 api.load = function () {
-                    $scope.filters = UtilsService.getArrayEnum(VR_GenericData_StringRecordFilterOperatorEnum);
+
+                }
+
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.GenericData.Entities.BooleanRecordFilter, Vanrise.GenericData.Entities",
+                        IsTrue: $scope.isTrue
+
+                    };
+                }
+
+                api.getExpression = function () {
+                    return $scope.isTrue ? 'Is True' : 'Is False';
                 }
 
                 if (ctrl.onReady != null)

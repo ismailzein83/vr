@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_GenericData_DataRecordTypeAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_RecordQueryLogicalOperatorEnum',
+    function (VR_GenericData_DataRecordTypeAPIService, UtilsService, VRUIUtilsService, VR_GenericData_RecordQueryLogicalOperatorEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -33,9 +33,18 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                             context: context
                         };
                         api.load(payload);
+                        rule.api = api;
                     }
                 };
                 ctrl.rules.push(rule);
+            }
+            ctrl.condition = 'And';
+            ctrl.andSelected = function () {
+                ctrl.condition = 'And';
+            }
+
+            ctrl.orSelected = function () {
+                ctrl.condition = 'Or';
             }
             ctrl.addGroup = function () {
                 var group = {
@@ -45,12 +54,14 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                             context: context
                         };
                         api.load(payload);
+                        group.api = api;
                     }
                 };
 
 
                 ctrl.groups.push(group);
             }
+
             ctrl.groups = [];
             ctrl.rules = [];
 
@@ -67,6 +78,59 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                         dataRecordTypeId = payload.dataRecordTypeId;
                         context = payload.context;
                     }
+                }
+
+                api.getData = function () {
+
+                    var filters = [];
+                    if (ctrl.rules.length > 0) {
+
+                        for (var x = 0; x < ctrl.rules.length; x++) {
+                            var currentRule = ctrl.rules[x];
+                            filters.push(currentRule.api.getData());
+                        }
+                    }
+
+                    if (ctrl.groups.length > 0) {
+                        for (var y = 0; y < ctrl.groups.length; y++) {
+                            var currentGroup = ctrl.groups[y];
+                            filters.push(currentGroup.api.getData());
+                        }
+                    }
+                    var logicalOperator = UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'description', ctrl.condition);
+                    var filterGroup = {
+                        $type: "Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities",
+                        LogicalOperator: logicalOperator.value,
+                        Filters: filters
+                    };
+                    return filterGroup;
+                }
+
+                api.getExpression = function () {
+                    var logicalOperator = UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'description', ctrl.condition);
+
+                    var expression = '';
+                    if (ctrl.rules.length > 0) {
+                        for (var x = 0; x < ctrl.rules.length; x++) {
+                            var currentRule = ctrl.rules[x];
+                            if (expression.length > 0) {
+                                expression += ' ' + logicalOperator.description + ' ';
+                            }
+                            expression += currentRule.api.getExpression();
+                        }
+                    }
+
+                    if (ctrl.groups.length > 0) {
+                        for (var y = 0; y < ctrl.groups.length; y++) {
+                            var currentGroup = ctrl.groups[y];
+                            if (expression.length > 0) {
+                                expression += ' ' + logicalOperator.description;
+                            }
+                            expression += ' (' + currentGroup.api.getExpression() + ')';
+                        }
+                    }
+
+                    return expression;
                 }
 
                 if (ctrl.onReady != null)

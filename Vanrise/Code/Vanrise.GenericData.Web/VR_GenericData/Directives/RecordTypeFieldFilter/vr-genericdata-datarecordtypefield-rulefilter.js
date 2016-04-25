@@ -23,10 +23,12 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
 
         function recordTypeFieldRuleFilterCtor(ctrl, $scope, $attrs) {
             $scope.dataRecordTypeField;
+            var dataRecordTypeFieldEditorApi;
 
             var dataRecordTypeId;
             var context;
             $scope.onDataRecordTypeFieldEditorReady = function (api) {
+                dataRecordTypeFieldEditorApi = api;
                 api.load($scope.dataRecordTypeField);
             }
             $scope.onSelectorReady = function (api) {
@@ -48,6 +50,16 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                         $scope.datasource = context.getFields();
                     }
                 }
+
+                api.getData = function () {
+                    var obj = dataRecordTypeFieldEditorApi.getData();
+                    obj.FieldName = $scope.dataRecordTypeField.Entity.Name;
+                    return obj;
+                }
+
+                api.getExpression = function () {
+                    return $scope.dataRecordTypeField.Entity.Name + ' ' + dataRecordTypeFieldEditorApi.getExpression();
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

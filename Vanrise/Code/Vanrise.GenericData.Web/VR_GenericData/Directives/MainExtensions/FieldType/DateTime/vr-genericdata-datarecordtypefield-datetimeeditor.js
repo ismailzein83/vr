@@ -17,7 +17,7 @@ app.directive('vrGenericdataDatarecordtypefieldDatetimeeditor', ['VR_GenericData
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordTypeFieldFilter/Editor/Templates/DataRecordTypeFieldDateTimeEditor.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/DateTime/Templates/DataRecordTypeFieldDateTimeEditor.html"
 
         };
 
@@ -32,6 +32,18 @@ app.directive('vrGenericdataDatarecordtypefieldDatetimeeditor', ['VR_GenericData
 
                 api.load = function () {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_DateTimeRecordFilterOperatorEnum);
+                }
+
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.GenericData.Entities.DateTimeRecordFilter, Vanrise.GenericData.Entities",
+                        CompareOperator: $scope.selectedFilter.value,
+                        Value: $scope.date
+                    };
+                }
+
+                api.getExpression = function () {
+                    return $scope.selectedFilter.description + ' ' + $scope.date;
                 }
 
                 if (ctrl.onReady != null)

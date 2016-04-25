@@ -51,6 +51,7 @@
     <Compile Include="BusinessEntity\BaseBEManager.cs" />
     <Compile Include="BusinessEntity\IExtensibleBEManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DataRecordFieldManager.cs" />
     <Compile Include="DataRecordFieldTypeConfigManager.cs" />
     <Compile Include="DataRecordStorageManager.cs" />
     <Compile Include="DataRecordTypeManager.cs" />

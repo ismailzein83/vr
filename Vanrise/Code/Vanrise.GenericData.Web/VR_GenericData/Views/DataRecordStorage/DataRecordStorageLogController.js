@@ -11,6 +11,8 @@
 
         var gridAPI;
         var gridQuery = {};
+        var filterObj;
+        $scope.expression;
         $scope.selectedDataRecordStorage = undefined;
 
         defineScope();
@@ -33,7 +35,11 @@
             };
 
             $scope.addFilter = function () {
-                VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter($scope.selectedDataRecordStorage.DataRecordTypeId);
+                var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
+                    filterObj = filter;
+                    $scope.expression = expression;
+                }
+                VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter($scope.selectedDataRecordStorage.DataRecordTypeId, onDataRecordFieldTypeFilterAdded);
             };
 
             $scope.validateTimeRange = function () {
@@ -65,7 +71,8 @@
             gridQuery = {
                 DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds(),
                 FromTime: $scope.fromDate,
-                ToTime: $scope.toDate
+                ToTime: $scope.toDate,
+                FilterGroup: filterObj
             };
         }
     }

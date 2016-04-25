@@ -13,6 +13,9 @@
                     <vr-datetimepicker label="To" value="toDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
+            <vr-row ng-show="expression !=undefined">
+                <vr-columns colnum="12"><vr-label isvalue>{{expression}}</vr-label></vr-columns>
+            </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">

@@ -17,15 +17,18 @@ app.directive('vrGenericdataDatarecordtypefieldBusinessentityeditor', ['VR_Gener
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/RecordTypeFieldFilter/Editor/Templates/DataRecordTypeFieldBusinessEntityEditor.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/BusinessEntity/Templates/DataRecordTypeFieldBusinessEntityEditor.html"
 
         };
 
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {
-            $scope.businessEntitySelector;
+            var businessEntityApi;
+            var selectedObj;
 
-            $scope.onBusinessEntitySelectorReady = function (api) {
-                api.load();
+            $scope.onBusinessEntityReady = function (api) {
+                var payload = { fieldType: selectedObj.Entity.Type };
+                api.load(payload);
+                businessEntityApi = api;
             }
 
             function initializeController() {
@@ -37,7 +40,27 @@ app.directive('vrGenericdataDatarecordtypefieldBusinessentityeditor', ['VR_Gener
 
                 api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_ListRecordFilterOperatorEnum);
-                    $scope.businessEntitySelector = payload.selector;
+                    selectedObj = payload;
+                }
+
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.GenericData.Entities.NumberListRecordFilter, Vanrise.GenericData.Entities",
+                        CompareOperator: $scope.selectedFilter.value,
+                        Values: businessEntityApi.getData().BusinessEntityIds
+                    };
+                }
+
+                api.getExpression = function () {
+                    var ids = businessEntityApi.getData().BusinessEntityIds;
+                    var expression = $scope.selectedFilter.description + ' (' + ids[0];
+                    if (ids.length > 1) {
+                        for (var x = 1; x < ids.length; x++) {
+                            expression += ', ' + ids[x];
+                        }
+                    }
+                    expression += ')';
+                    return expression;
                 }
 
                 if (ctrl.onReady != null)

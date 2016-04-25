@@ -306,14 +306,15 @@ namespace Vanrise.GenericData.SQLDataStorage
             columns = BuildColumnsDefinitions();
             Action<string> createTempTableAction = (tempTableName) =>
                 {
-                    string query = BuildQuery(input, tempTableName);
+
                     int parameterIndex = 0;
                     Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
                     String recordFilter = BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
+                    string query = BuildQuery(input, tempTableName, recordFilter);
                     ExecuteNonQueryText(query,
                         (cmd) =>
                         {
-                            cmd.Parameters.Add(new SqlParameter("@FromTime",ToDBNullIfDefault(input.Query.FromTime)));
+                            cmd.Parameters.Add(new SqlParameter("@FromTime", ToDBNullIfDefault(input.Query.FromTime)));
                             cmd.Parameters.Add(new SqlParameter("@ToTime", ToDBNullIfDefault(input.Query.ToTime)));
                             foreach (var prm in parameterValues)
                             {
@@ -340,16 +341,19 @@ namespace Vanrise.GenericData.SQLDataStorage
             return columnDefinitions;
         }
 
-        private string BuildQuery(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, string tempTableName)
+        private string BuildQuery(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, string tempTableName, string recordFilter)
         {
             string dateTimeColumn = "DateTimeCol";
             string tableName = GetTableName();
+
+            string recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" and {0} ", recordFilter) : string.Empty;
             StringBuilder str = new StringBuilder(string.Format(@"IF OBJECT_ID('{0}', N'U') IS NULL 
                                                                 BEGIN 
                                                                     select * INTO {0} from {1} 
                                                                     where (@FromTime is null or {2} >= @FromTime) 
                                                                     and (@ToTime is null or {2} < @ToTime) 
-                                                                END", tempTableName, tableName, dateTimeColumn));
+                                                                    {3}
+                                                                END", tempTableName, tableName, dateTimeColumn, recordFilterResult));
             input.SortByColumnName = dateTimeColumn;
             return str.ToString();
         }
@@ -379,56 +383,56 @@ namespace Vanrise.GenericData.SQLDataStorage
                 if (childFilterGroup != null)
                 {
                     builder.Append(BuildRecordFilter(childFilterGroup, ref parameterIndex, parameterValues));
-                    break;
+                    continue;
                 }
 
                 EmptyRecordFilter emptyFilter = filter as EmptyRecordFilter;
                 if (emptyFilter != null)
                 {
                     builder.Append(BuildRecordFilter(emptyFilter, ref parameterIndex, parameterValues));
-                    break;
+                    continue;
                 }
 
                 NonEmptyRecordFilter nonEmptyFilter = filter as NonEmptyRecordFilter;
                 if (nonEmptyFilter != null)
                 {
                     builder.Append(BuildRecordFilter(nonEmptyFilter, ref parameterIndex, parameterValues));
-                    break;
+                    continue;
                 }
 
                 StringRecordFilter stringFilter = filter as StringRecordFilter;
                 if (stringFilter != null)
                 {
                     builder.Append(BuildRecordFilter(stringFilter, ref parameterIndex, parameterValues));
-                    break;
+                    continue;
                 }
 
                 NumberRecordFilter numberFilter = filter as NumberRecordFilter;
                 if (numberFilter != null)
                 {
                     builder.Append(BuildRecordFilter(numberFilter, ref parameterIndex, parameterValues));
-                    break;
+                    continue;
                 }
 
                 DateTimeRecordFilter dateTimeFilter = filter as DateTimeRecordFilter;
                 if (dateTimeFilter != null)
                 {
                     builder.Append(BuildRecordFilter(dateTimeFilter, ref parameterIndex, parameterValues));
-                    break;
+                    continue;
                 }
 
                 BooleanRecordFilter booleanFilter = filter as BooleanRecordFilter;
                 if (booleanFilter != null)
                 {
                     builder.Append(BuildRecordFilter(booleanFilter, ref parameterIndex, parameterValues));
-                    break;
+                    continue;
                 }
 
                 NumberListRecordFilter numberListFilter = filter as NumberListRecordFilter;
                 if (numberListFilter != null)
                 {
                     builder.Append(BuildRecordFilter(numberListFilter, ref parameterIndex, parameterValues));
-                    break;
+                    continue;
                 }
             }
 
@@ -448,6 +452,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         private string BuildRecordFilter(StringRecordFilter stringFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
             string parameterName = GenerateParameterName(ref parameterIndex);
+            string modifiedParameterName = parameterName;
             string compareOperator = null;
 
             switch (stringFilter.CompareOperator)
@@ -456,31 +461,31 @@ namespace Vanrise.GenericData.SQLDataStorage
                 case StringRecordFilterOperator.NotEquals: compareOperator = "<>"; break;
                 case StringRecordFilterOperator.Contains:
                     compareOperator = "LIKE";
-                    parameterName = string.Format("'%' + {0} + '%'", parameterName);
+                    modifiedParameterName = string.Format("'%' + {0} + '%'", parameterName);
                     break;
                 case StringRecordFilterOperator.NotContains:
                     compareOperator = "NOT LIKE";
-                    parameterName = string.Format("'%' + {0} + '%'", parameterName);
+                    modifiedParameterName = string.Format("'%' + {0} + '%'", parameterName);
                     break;
                 case StringRecordFilterOperator.StartsWith:
                     compareOperator = "LIKE";
-                    parameterName = string.Format("{0} + '%'", parameterName);
+                    modifiedParameterName = string.Format("{0} + '%'", parameterName);
                     break;
                 case StringRecordFilterOperator.NotStartsWith:
                     compareOperator = "NOT LIKE";
-                    parameterName = string.Format("{0} + '%'", parameterName);
+                    modifiedParameterName = string.Format("{0} + '%'", parameterName);
                     break;
                 case StringRecordFilterOperator.EndsWith:
                     compareOperator = "LIKE";
-                    parameterName = string.Format("'%' + {0}", parameterName);
+                    modifiedParameterName = string.Format("'%' + {0}", parameterName);
                     break;
                 case StringRecordFilterOperator.NotEndsWith:
                     compareOperator = "NOT LIKE";
-                    parameterName = string.Format("'%' + {0}", parameterName);
+                    modifiedParameterName = string.Format("'%' + {0}", parameterName);
                     break;
             }
             parameterValues.Add(parameterName, stringFilter.Value);
-            return string.Format("{0} {1} {2}", GetColumnName(stringFilter), compareOperator, parameterName);
+            return string.Format("{0} {1} {2}", GetColumnName(stringFilter), compareOperator, modifiedParameterName);
         }
 
         private string BuildRecordFilter(NumberRecordFilter numberFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)

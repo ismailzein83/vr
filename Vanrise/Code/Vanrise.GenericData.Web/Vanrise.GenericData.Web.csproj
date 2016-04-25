@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\DataRecordStorageLogController.cs" />
     <Compile Include="Controllers\ExtensibleBEController.cs" />
     <Compile Include="Controllers\BusinessEntityDefinitionController.cs" />
@@ -344,20 +345,20 @@
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationRecordTypeManagement.html" />
     <Content Include="VR_GenericData\Directives\ExpressionBuilder\vr-genericdata-datatransformation-expressionbuilder.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\vr-genericdata-fieldtype-selective.js" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\Templates\DataRecordTypeFieldBoolEditor.html" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\Templates\DataRecordTypeFieldBusinessEntityEditor.html" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\Templates\DataRecordTypeFieldChoiceEditor.html" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\Templates\DataRecordTypeFieldDateTimeEditor.html" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\Templates\DataRecordTypeFieldDecimalEditor.html" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\Templates\DataRecordTypeFieldTextEditor.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\Templates\DataRecordTypeFieldBoolEditor.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\Templates\DataRecordTypeFieldBusinessEntityEditor.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Choices\Templates\DataRecordTypeFieldChoiceEditor.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\Templates\DataRecordTypeFieldDateTimeEditor.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\Templates\DataRecordTypeFieldDecimalEditor.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\Templates\DataRecordTypeFieldTextEditor.html" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Templates\DataRecordTypeFieldRuleFilter.html" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Templates\DataRecordTypeFieldGroupFilter.html" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\vr-genericdata-datarecordtypefield-datetimeeditor.js" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\vr-genericdata-datarecordtypefield-choiceeditor.js" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\vr-genericdata-datarecordtypefield-decimaleditor.js" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\vr-genericdata-datarecordtypefield-booleditor.js" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\vr-genericdata-datarecordtypefield-businessEntityeditor.js" />
-    <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\vr-genericdata-datarecordtypefield-texteditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\vr-genericdata-datarecordtypefield-datetimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Choices\vr-genericdata-datarecordtypefield-choiceeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\vr-genericdata-datarecordtypefield-decimaleditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-datarecordtypefield-booleditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-datarecordtypefield-businessEntityeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-datarecordtypefield-texteditor.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\vr-genericdata-datarecordtypefield-rulefilter.js" />
     <Content Include="VR_GenericData\Directives\RecordType\Templates\DataRecordTypeGrid.html" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\vr-genericdata-datatransformation-recordtype-management.js" />
@@ -373,6 +374,7 @@
     <Content Include="VR_GenericData\Directives\SummaryTransformationDefinition\vr-genericdata-summarytransformationdefinition-selector.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldTypeConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageLogAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageAPIService.js" />
@@ -458,7 +460,9 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_GenericData\Directives\RecordTypeFieldFilter\Editor\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />

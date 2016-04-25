@@ -35,7 +35,7 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericDataRecord/DataRecordTypeEditor.html', modalParameters, modalSettings);
         }
 
-        function addDataRecordTypeFieldFilter(dataRecordTypeId, onDataRecordFieldTypeAdded) {
+        function addDataRecordTypeFieldFilter(dataRecordTypeId, onDataRecordFieldTypeFilterAdded) {
             var modalParameters = {
                 DataRecordTypeId: dataRecordTypeId
             };
@@ -43,7 +43,7 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onDataRecordFieldTypeAdded = onDataRecordFieldTypeAdded;
+                modalScope.onDataRecordFieldTypeFilterAdded = onDataRecordFieldTypeFilterAdded;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordTypeField/DataRecordTypeFieldFilterEditor.html', modalParameters, modalSettings);

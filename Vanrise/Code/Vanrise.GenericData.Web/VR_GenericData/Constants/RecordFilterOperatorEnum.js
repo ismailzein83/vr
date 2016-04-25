@@ -31,3 +31,9 @@ app.constant('VR_GenericData_ListRecordFilterOperatorEnum', {
     In: { value: 0, description: 'In' },
     NotIn: { value: 1, description: 'Not In' }
 });
+
+app.constant('VR_GenericData_RecordQueryLogicalOperatorEnum', {
+    And: { value: 1, description: 'And' },
+    Or: { value: 2, description: 'Or' }
+});
+

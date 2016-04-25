@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageFilterEditorController.$inject = ['$scope', 'VRNavigationService'];
+    DataRecordStorageFilterEditorController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService'];
 
-    function DataRecordStorageFilterEditorController($scope, VRNavigationService) {
+    function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService) {
 
         $scope.dataRecordTypeId;
         loadParameters();
@@ -24,12 +24,19 @@
         function defineScope() {
             $scope.onGroupFilterReady = function (api) {
                 groupFilterAPI = api;
-                loadContext();
                 var payload = { dataRecordTypeId: $scope.dataRecordTypeId, context: context };
-                groupFilterAPI.load(payload);
+                loadContext().then(function () {
+                    groupFilterAPI.load(payload);
+                });
             };
 
             $scope.save = function () {
+                var expression = groupFilterAPI.getExpression();
+                console.log(expression);
+                if ($scope.onDataRecordFieldTypeFilterAdded != undefined) {
+                    $scope.onDataRecordFieldTypeFilterAdded(groupFilterAPI.getData(), groupFilterAPI.getExpression());
+                }
+
                 $scope.modalContext.closeModal();
             };
 
@@ -39,18 +46,14 @@
         }
 
         function loadContext() {
-            var obj1 = { name: 'TextField', editor: 'vr-genericdata-datarecordtypefield-texteditor' };
-            var obj2 = { name: 'DecimalField', editor: 'vr-genericdata-datarecordtypefield-decimaleditor' };
-            var obj3 = { name: 'DateTimeField', editor: 'vr-genericdata-datarecordtypefield-datetimeeditor' };
-            var obj4 = { name: 'ChoiceField', editor: 'vr-genericdata-datarecordtypefield-choiceeditor', values: [{ Value: 1, Text: 'Val1' }, { Value: 2, Text: 'Val2' }, { Value: 3, Text: 'Val3' }] };
-            var obj5 = { name: 'BoolField', editor: 'vr-genericdata-datarecordtypefield-booleditor' };
-            var obj6 = { name: 'BusinessEntityField', editor: 'vr-genericdata-datarecordtypefield-businessEntityeditor', selector: 'vr-whs-be-customer-selector' };
-            context.dataRecordFieldTypeConfigs.push(obj1);
-            context.dataRecordFieldTypeConfigs.push(obj2);
-            context.dataRecordFieldTypeConfigs.push(obj3);
-            context.dataRecordFieldTypeConfigs.push(obj4);
-            context.dataRecordFieldTypeConfigs.push(obj5);
-            context.dataRecordFieldTypeConfigs.push(obj6);
+            var obj = { DataRecordTypeId: $scope.dataRecordTypeId };
+            var serializedFilter = UtilsService.serializetoJson(obj);
+            return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
+                if (response != undefined)
+                    angular.forEach(response, function (item) {
+                        context.dataRecordFieldTypeConfigs.push(item);
+                    });
+            });
         }
     }
 
