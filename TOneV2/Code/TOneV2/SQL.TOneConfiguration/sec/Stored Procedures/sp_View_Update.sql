@@ -28,9 +28,7 @@ IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName and Id!=@pageID)
 				Title = @Title,
 				Audience=@Audience,
 				[Content]=@Content,
-				Settings = @Settings,
-				[Type]=@Type
-			
+				Settings = @Settings
 		WHERE	Id = @pageID
 	END
 END
