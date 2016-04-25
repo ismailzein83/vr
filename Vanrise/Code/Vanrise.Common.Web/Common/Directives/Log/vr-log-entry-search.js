@@ -69,11 +69,11 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
         }
 
         function defineScope() {
+            $scope.showGrid = false;
             $scope.searchClicked = function () {
-                if (gridAPI != undefined) {
-                    setFilterObject();
-                    return gridAPI.loadGrid(filter);
-                }
+                $scope.showGrid = true;
+                setFilterObject();
+                return gridAPI.loadGrid(filter);
             };
 
             $scope.onEntryTypeDirectiveReady = function (api) {
@@ -110,7 +110,6 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
             }
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                api.loadGrid(filter);
             }
         }
 

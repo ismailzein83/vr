@@ -9,7 +9,7 @@ app.service('VRCommon_DataSourceLogService', ['VRCommon_MasterLogService',
 
         function registerLogToMaster() {
             var tabDefinition = {
-                title: "Data Source Log",
+                title: "Data Source",
                 directive: "vr-integration-log-search",
                 loadDirective: function (directiveAPI) {
                     return directiveAPI.load();

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonLogEntryGrid", ["UtilsService", "VRNotificationService", "VRCommon_LogEntryAPIService",
-function (UtilsService, VRNotificationService, VRCommon_LogEntryAPIService) {
+app.directive("vrCommonLogEntryGrid", ["UtilsService", "VRNotificationService", "VRCommon_LogEntryAPIService", "VRCommon_LogEntryService",
+function (UtilsService, VRNotificationService, VRCommon_LogEntryAPIService, VRCommon_LogEntryService) {
 
     var directiveDefinitionObject = {
 
@@ -56,15 +56,12 @@ function (UtilsService, VRNotificationService, VRCommon_LogEntryAPIService) {
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-            //defineMenuActions();
+            
         }
 
-        //function defineMenuActions() {
-        //    $scope.gridMenuActions = [{
-        //        name: "Download",
-        //        clicked: downloadPriceList
-        //    }];
-        //}
+        $scope.getTypeColor = function (dataItem) {
+            return VRCommon_LogEntryService.getTypeColor(dataItem.Entity.EntryType);
+        };
 
     }
 

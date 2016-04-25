@@ -69,7 +69,7 @@ app.directive('vrCommonLogAttributeSelector', ['VRCommon_LogAttributeAPIService'
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
             return '<vr-select ' + multipleselection + '  datatextfield="Description" datavaluefield="LogAttributeID" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="LogAttribute" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select>'
+                + ' label="' + label + '" ' + addCliked + ' on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + '></vr-select>'
         }
 
         function LogAttributeCtor(ctrl, $scope, attrs) {
