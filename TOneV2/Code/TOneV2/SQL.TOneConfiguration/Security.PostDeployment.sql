@@ -155,7 +155,7 @@ set identity_insert [sec].[Module] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Administration','Administration',null,'/images/menu-icons/Administration.png',1,0),
-(2,'Security',null,1,null,1,0),
+(2,'Security',null,1,null,2,0),
 (3,'System',null,1,null,1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
