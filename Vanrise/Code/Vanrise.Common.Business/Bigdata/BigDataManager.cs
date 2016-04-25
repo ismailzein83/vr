@@ -39,6 +39,8 @@ namespace Vanrise.Common.Business
                 _cleanCacheSizePriorityFactor = 10;
             if (!int.TryParse(ConfigurationManager.AppSettings["BigDataCache_CleanAgePriorityFactor"], out _cleanCacheAgePriorityFactor))
                 _cleanCacheAgePriorityFactor = 1;
+            if (!int.TryParse(ConfigurationManager.AppSettings["BigDataCache_MinRecordCountToCache"], out _minRecordCountToCache))
+                _minRecordCountToCache = 50;
 
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["BigDataCache_PingBigDataServiceTimeOutInterval"], out _pingBigDataServiceTimeOutInterval))
                 _pingBigDataServiceTimeOutInterval = TimeSpan.FromMilliseconds(500);
@@ -55,6 +57,7 @@ namespace Vanrise.Common.Business
         long _cleanCacheStopOnRecordCount;
         int _cleanCacheSizePriorityFactor;
         int _cleanCacheAgePriorityFactor;
+        int _minRecordCountToCache;
 
         TimeSpan _pingBigDataServiceTimeOutInterval;
         TimeSpan _pingBigDataServiceCheckInterval;
@@ -152,19 +155,22 @@ namespace Vanrise.Common.Business
         {
             CleanCacheIfNeeded();
             var dataList = requestHandler.RetrieveAllData(input).ToList();
-            var recordsCount = dataList != null ? dataList.Count : 0;
-            lock (this)
-            {
-                _totalRecordsCount += recordsCount;
-            }
+            var recordsCount = dataList != null ? dataList.Count : 0;           
             var cachedBigData = new CachedBigData
             {
                 CacheObjectId = Guid.NewGuid(),
                 Data = dataList,
                 RecordsCount = recordsCount
             };
-            _cachedData.TryAdd(cachedBigData.CacheObjectId, cachedBigData);
-            _isCachedDataChanged = true;
+            if (recordsCount > _minRecordCountToCache)
+            {
+                lock (this)
+                {
+                    _totalRecordsCount += recordsCount;
+                }
+                _cachedData.TryAdd(cachedBigData.CacheObjectId, cachedBigData);
+                _isCachedDataChanged = true;
+            }
             return cachedBigData;
         }
 
