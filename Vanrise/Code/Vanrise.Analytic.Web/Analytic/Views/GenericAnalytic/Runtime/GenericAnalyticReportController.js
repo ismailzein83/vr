@@ -196,7 +196,10 @@
             var groupingDimensions = [];
             if($scope.scopeModel.selectedGroupingDimentions !=undefined && $scope.scopeModel.selectedGroupingDimentions.length>0)
             {
-                groupingDimensions = UtilsService.getPropValuesFromArray($scope.scopeModel.selectedGroupingDimentions, "DimensionName");
+                for (var i = 0; i < $scope.scopeModel.selectedGroupingDimentions.length; i++) {
+                    groupingDimensions.push({ DimensionName: $scope.scopeModel.selectedGroupingDimentions[i].DimensionName });
+
+                }
             }else
             {
                 for(var i=0;i<viewEntity.Settings.SearchSettings.GroupingDimensions.length;i++)

@@ -12,10 +12,14 @@
                     <vr-validator validate="scopeModel.isValidDimensions()">
                         <vr-datagrid datasource="scopeModel.dimensions"
                                      on-ready="onGridReady" ondeleterow="    scopeModel.removeDimension" hidegridmenu norowhighlightonclick="'true'">
-                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Title'" widthfactor="5"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Is Root'" widthfactor="10">
+                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Title'" widthfactor="10">
+                                <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="10">
                                 <vr-switch value="dataItem.IsRootDimension"></vr-switch>
                             </vr-datagridcolumn>
+ 
                         </vr-datagrid>
                     </vr-validator>
                 </vr-columns>

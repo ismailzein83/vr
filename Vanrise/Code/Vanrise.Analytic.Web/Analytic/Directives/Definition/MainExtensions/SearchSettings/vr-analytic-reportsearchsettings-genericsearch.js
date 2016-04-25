@@ -54,8 +54,6 @@
                     $scope.scopeModel.groupingDimensions.push(dataItem);
                 }
                 $scope.scopeModel.onDeselectGroupingDimensionItem = function (dataItem) {
-                    console.log(dataItem);
-                    console.log($scope.scopeModel.groupingDimensions);
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.groupingDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.groupingDimensions.splice(datasourceIndex, 1);
                 }
@@ -98,8 +96,8 @@
                     $scope.scopeModel.filterDimensions.splice(datasourceIndex, 1);
                 }
                 $scope.scopeModel.removeFilterDimension = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedGroupingDimensions, dataItem.Name, 'Name');
-                    $scope.scopeModel.selectedGroupingDimensions.splice(index, 1);
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedFilterDimensions, dataItem.Name, 'Name');
+                    $scope.scopeModel.selectedFilterDimensions.splice(index, 1);
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.filterDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.filterDimensions.splice(datasourceIndex, 1);
                 };

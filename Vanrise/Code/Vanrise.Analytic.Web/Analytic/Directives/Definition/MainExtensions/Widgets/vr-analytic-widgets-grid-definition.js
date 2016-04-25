@@ -53,13 +53,13 @@
                     $scope.scopeModel.dimensions.push(dataItem);
                 }
                 $scope.scopeModel.onDeselectDimensionItem = function (dataItem) {
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.dimensions.splice(datasourceIndex, 1);
                 }
                 $scope.scopeModel.removeDimension = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedDimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedDimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.selectedDimensions.splice(index, 1);
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dataItem.Name, 'Name');
                     $scope.scopeModel.dimensions.splice(datasourceIndex, 1);
                 };
 
@@ -84,13 +84,13 @@
                     $scope.scopeModel.measures.push(dataItem);
                 }
                 $scope.scopeModel.onDeselectMeasureItem = function (dataItem) {
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.Name, 'Name');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
                 }
                 $scope.scopeModel.removeMeasure = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedMeasures, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedMeasures, dataItem.Name, 'Name');
                     $scope.scopeModel.selectedMeasures.splice(index, 1);
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.AnalyticItemConfigId, 'AnalyticItemConfigId');
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.AnalyticItemConfigId, 'Name');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
                 };
 
