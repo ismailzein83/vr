@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockedAttemptsManager.cs" />
     <Compile Include="CDRManager.cs" />
     <Compile Include="GenericAnalyticManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

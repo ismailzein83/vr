@@ -1,9 +1,63 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-panel ng-controller="WhS_Analytics_BlockedAttemptsController">
+    <vr-form name="formFilter">
 
-</body>
-</html>
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-timerange on-ready="onTimeRangeDirectiveReady" width="normal" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-row>
+
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-whs-be-switch-selector on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
+                        </vr-columns>
+
+                        <span ng-show="advancedSelected">
+                            <vr-whs-be-carrieraccount-selector normal-col-num="2" ismultipleselection getcustomers on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+                        </span>
+
+
+                        <span ng-show="advancedSelected">
+                            <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady" />
+                        </span>
+
+                        <vr-columns width="normal" ng-show="advancedSelected">
+                            <vr-switch value="groupbyNumber" label="Group by Number"></vr-switch>
+                        </vr-columns>
+
+                    </vr-row>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+
+        <vr-row>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-analytics-blockedattempts-grid on-ready="onMainGridReady" shownumber="groupbyNumber"></vr-whs-analytics-blockedattempts-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
+
+
+
+

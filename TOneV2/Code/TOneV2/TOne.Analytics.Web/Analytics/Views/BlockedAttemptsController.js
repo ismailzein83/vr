@@ -1,80 +1,51 @@
-﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', '$q', 'BlockedAttemptsAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp','AnalyticsService','VRModalService'];
+﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', '$q', 'BlockedAttemptsAPIService', 'VRNotificationService', 'DataRetrievalResultTypeEnum', 'PeriodEnum', 'CarrierAccountAPIService', 'CarrierTypeEnum', 'ZonesService', 'BusinessEntityAPIService_temp', 'AnalyticsService', 'VRModalService'];
 
 function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIService, VRNotificationService, DataRetrievalResultTypeEnum, PeriodEnum, CarrierAccountAPIService, CarrierTypeEnum, ZonesService, BusinessEntityAPIService, AnalyticsService, VRModalService) {
 
+    var customerAccountDirectiveAPI;
+    var customerAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var saleZoneDirectiveAPI;
+    var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var switchDirectiveAPI;
+    var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     var mainGridAPI;
-    var measures = [];
     defineScope();
     load();
 
     function defineScope() {
-        definePeriods();
-        $scope.toDate;
-        $scope.fromDate;
-        $scope.advancedFromDate;
-        $scope.advancedToDate;
-        $scope.isShown = false;
-        var date;
-        var customize = {
-            value: -1,
-            description: "Customize"
-        }
-        $scope.periodSelectionChanged = function () {
-            if ($scope.selectedPeriod != undefined && $scope.selectedPeriod.value != -1) {
-                date = UtilsService.getPeriod($scope.selectedPeriod.value);
-                $scope.fromDate = date.from;
-                $scope.toDate = date.to;
-            }
-
-        }
-        $scope.onBlurFromChanged= function () 
-        {
-            var from = UtilsService.getShortDate($scope.fromDate);
-            var oldFrom = UtilsService.getShortDate(date.from);
-            if (from != oldFrom)
-                $scope.selectedPeriod = customize;
-        }
-        $scope.onBlurToChanged = function () {
-            var to = UtilsService.getShortDate( $scope.toDate);
-            var oldTo = UtilsService.getShortDate(date.to);
-            if (to != oldTo)
-                $scope.selectedPeriod = customize;
-           
-        }
-        $scope.data = [];
-        $scope.switches = [];
-        $scope.zones = [];
-        $scope.selectedZones = [];
-        $scope.selectedSwitches = [];
-        $scope.customers = [];
-        $scope.selectedCustomers = [];
-        $scope.showResult = false;
+        var date = new Date();
+        $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 00, 00, 00, 00);
+        $scope.toDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 00, 00, 00, 00);
         $scope.groupByNumber = false;
-        $scope.measures = measures;
-        defineMenuActions();
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         }
-        $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-            return BlockedAttemptsAPIService.GetBlockedAttempts(dataRetrievalInput).then(function (response) {
-                onResponseReady(response);
-                $scope.showResult = true;
-            })
-        };
 
-       
+        $scope.onCustomerAccountDirectiveReady = function (api) {
+            customerAccountDirectiveAPI = api;
+            customerAccountReadyPromiseDeferred.resolve();
+        }
+
+        $scope.onSwitchDirectiveReady = function (api) {
+            switchDirectiveAPI = api;
+            switchReadyPromiseDeferred.resolve();
+        }
+
+        $scope.onSaleZoneDirectiveReady = function (api) {
+            saleZoneDirectiveAPI = api;
+            saleZoneReadyPromiseDeferred.resolve();
+        }
+
         $scope.searchClicked = function () {
-            
             return retrieveData();
         };
-        $scope.searchZones = function (text) {
-            return ZonesService.getSalesZones(text);
-        }
     }
 
     function retrieveData() {
-            $scope.isShown = $scope.groupByNumber;
-        var filter=buildFilter();
+        var filter = buildFilter();
         var query = {
             Filter: filter,
             From: $scope.fromDate,
@@ -84,75 +55,51 @@ function BlockedAttemptsController($scope, UtilsService, $q, BlockedAttemptsAPIS
         return mainGridAPI.retrieveData(query);
     }
     function load() {
-        loadSwitches();
+        $scope.isLoading = true;
+        loadAllControls();
     }
 
-    function defineMenuActions() {
-        $scope.gridMenuActions = [{
-            name: "CDRs",
-            clicked: function (dataItem) {
-                var modalSettings = {
-                    useModalTemplate: true,
-                    width: "80%"//,
-                    //maxHeight: "800px"
-                };
-                var parameters = {
-                    fromDate: $scope.fromDate,
-                    toDate: $scope.toDate,
-                    customerIds: dataItem.CustomerID != null || dataItem.CustomerID != undefined ? [dataItem.CustomerID] : null,
-                    zoneIds: dataItem.OurZoneID != null || dataItem.OurZoneID != undefined ? [dataItem.OurZoneID] : null,
-                    supplierIds: dataItem.SupplierID != null || dataItem.SupplierID != undefined ? [dataItem.SupplierID] : null,
-                    switchIds: [dataItem.SwitchID],
-                    ///[dataItem.GroupKeyValues[0].Id]
-                };
-
-                modalSettings.onScopeReady = function (modalScope) {
-                    modalScope.title = "CDR Log";
-                };
-
-
-
-                VRModalService.showModal('/Client/Modules/Analytics/Views/CDR/CDRLog.html', parameters, modalSettings);
-            }
-        }];
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([loadCustomers, loadSaleZones, loadSwitches])
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoading = false;
+            });
     }
 
     function buildFilter() {
         var filter = {};
-        filter.SwitchIds = getFilterIds($scope.selectedSwitches, "SwitchId");
-        filter.CustomerIds = getFilterIds($scope.selectedCustomers, "CarrierAccountID");
-
-        filter.ZoneIds = getFilterIds($scope.selectedZones, "ZoneId");
+        filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
+        filter.CustomerIds = customerAccountDirectiveAPI.getSelectedIds();
+        filter.SaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
         return filter;
-    
-    }
 
-    function getFilterIds(values, idProp) {
-        var filterIds = [];
-        if (values.length > 0) {
-            angular.forEach(values, function (val) {
-                filterIds.push(val[idProp]);
-            });
-        }
-        return filterIds;
     }
 
     function loadSwitches() {
-        return BusinessEntityAPIService.GetSwitches().then(function (response) {
-            angular.forEach(response, function (itm) {
-                $scope.switches.push(itm);
-            });
+        var loadSwitchPromiseDeferred = UtilsService.createPromiseDeferred();
+        switchReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(switchDirectiveAPI, undefined, loadSwitchPromiseDeferred);
         });
+        return loadSwitchPromiseDeferred.promise;
     }
 
+    function loadSaleZones() {
+        var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
+        saleZoneReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, undefined, loadSaleZonePromiseDeferred);
+        });
+        return loadSaleZonePromiseDeferred.promise;
+    }
 
-
-
-    function definePeriods() {
-        $scope.periods = [];
-        for (var p in PeriodEnum)
-            $scope.periods.push(PeriodEnum[p]);
-        $scope.selectedPeriod = PeriodEnum.Today;
+    function loadCustomers() {
+        var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+        customerAccountReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, undefined, loadCustomerAccountPromiseDeferred);
+        });
+        return loadCustomerAccountPromiseDeferred.promise;
     }
 
 };

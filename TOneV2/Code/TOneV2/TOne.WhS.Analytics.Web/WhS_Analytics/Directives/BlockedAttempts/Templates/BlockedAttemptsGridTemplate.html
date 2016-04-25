@@ -1,1 +1,17 @@
-﻿
+﻿<div vr-loader="ctrl.isLoadingGrid">
+    <vr-datagrid datasource="blockedAttempts"
+                 on-ready="onGridReady"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 menuactions="gridMenuActions">
+        <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Blocked Attempts'" field="'Entity.BlockedAttempts'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Release Code'" field="'Entity.ReleaseCode'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Release Source'" field="'Entity.ReleaseSource'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'First Attempt'" field="'Entity.FirstAttempt'" type="'Datetime'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Last Attempt'" field="'Entity.LastAttempt'" type="'Datetime'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Caller Number'" field="'Entity.CGPN'" type="'Text'" ng-show="shownumber"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Dialed Number'" field="'Entity.CDPN'" type="'Text'" ng-show="shownumber"></vr-datagridcolumn>
+    </vr-datagrid>
+</div>
