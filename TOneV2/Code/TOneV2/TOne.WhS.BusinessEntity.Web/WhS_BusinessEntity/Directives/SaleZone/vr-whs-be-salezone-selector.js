@@ -44,9 +44,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                 multipleselection = "ismultipleselection";
             }
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-show="ctrl.isSellingNumberPlanVisible">'
-                   + ' <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberReady"  onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
-                   + ' </vr-columns>'
+            return '<span  ng-show="ctrl.isSellingNumberPlanVisible">'
+                   + ' <vr-whs-be-sellingnumberplan-selector  normal-col-num="{{ctrl.normalColNum}}"   on-ready="ctrl.onSellingNumberReady"  onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
+                   + ' </span>'
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '  <vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
