@@ -50,14 +50,10 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                ctrl.isLoadingGrid = true;
                 return WhS_Analytics_BlockedAttemptsAPIService.GetBlockedAttemptsData(dataRetrievalInput)
                                  .then(function (response) {
                                      $scope.shownumber = ctrl.shownumber;
                                      onResponseReady(response);
-                                 })
-                                 .finally(function () {
-                                     ctrl.isLoadingGrid = false;
                                  })
                                  .catch(function (error) {
                                      VRNotificationService.notifyException(error, $scope);

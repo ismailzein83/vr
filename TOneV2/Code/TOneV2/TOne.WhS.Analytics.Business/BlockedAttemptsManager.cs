@@ -35,14 +35,11 @@ namespace TOne.WhS.Analytics.Business
 
         public BlockedAttemptDetail blockedAttemptDetailMapper(BlockedAttempt blockedAttempt)
         {
-            CarrierAccount customer=  _carrierAccountManager.GetCarrierAccount(blockedAttempt.CustomerID);
-            SaleZone salezone = _saleZoneManager.GetSaleZone(blockedAttempt.SaleZoneID);
-            
             BlockedAttemptDetail blockedAttemptDetail = new BlockedAttemptDetail
             {
                 Entity = blockedAttempt,
-                CustomerName = customer != null ? customer.NameSuffix : string.Empty,
-                SaleZoneName = salezone != null ? salezone.Name : string.Empty,
+                CustomerName = _carrierAccountManager.GetCarrierAccountName(blockedAttempt.CustomerID),
+                SaleZoneName = _saleZoneManager.GetSaleZoneName(blockedAttempt.SaleZoneID),
             };
             return blockedAttemptDetail;
         }

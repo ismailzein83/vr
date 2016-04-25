@@ -123,7 +123,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         private void AddSelectColumnToQuery(StringBuilder selectColumnBuilder)
         {
-            selectColumnBuilder.Append(@" CustomerID,SaleZoneID,ReleaseCode,ReleaseSource,Count (*) AS BlockedAttempts,DATEADD(ms,-datepart(ms,Min(Attempt)),Min(Attempt)) AS FirstAttempt,DATEADD(ms,-datepart(ms,Max(Attempt)),Max(Attempt)) AS LastAttempt ");
+            selectColumnBuilder.Append(@" CustomerID,SaleZoneID,ReleaseCode,ReleaseSource,Count (*) AS BlockedAttempts, Min(Attempt) AS FirstAttempt, Max(Attempt) AS LastAttempt ");
             if (filter.GroupByNumber)
                 selectColumnBuilder.Append(",CDPN,CGPN");
         }

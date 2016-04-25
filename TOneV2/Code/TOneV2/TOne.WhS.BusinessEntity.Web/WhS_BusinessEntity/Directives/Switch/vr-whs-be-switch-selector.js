@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeSwitchSelector', ['WhS_BE_SwitchAPIService', 'UtilsService','VRUIUtilsService',
+app.directive('vrWhsBeSwitchSelector', ['WhS_BE_SwitchAPIService', 'UtilsService', 'VRUIUtilsService',
 function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -10,7 +10,7 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
             isdisabled: "=",
             onselectionchanged: '=',
             isrequired: "@",
-            selectedvalues:'='
+            selectedvalues: '='
 
         },
         controller: function ($scope, $element, $attrs) {
@@ -44,15 +44,19 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        if (attrs.ismultipleselection != undefined)
-            multipleselection = "ismultipleselection"
+        var label = "Switch";
+        if (attrs.ismultipleselection != undefined) {
+            label = "Switches";
+            multipleselection = "ismultipleselection";
+        }
+
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
         var disabled = "";
         return '<div  vr-loader="isLoadingDirective">'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SwitchId" '
-        + required + ' label="Switch" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+        + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</div>'
     }
 
