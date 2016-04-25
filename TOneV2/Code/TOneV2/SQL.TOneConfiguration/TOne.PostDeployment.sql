@@ -261,9 +261,21 @@ set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('WhS_BE/CarrierAccount/GetFilteredCarrierAccounts','Carrier:View'),
-('WhS_BE/CarrierAccount/UpdateCarrierAccount','Carrier:Edit'),
-('WhS_BE/CarrierAccount/AddCarrierAccount','Carrier:Add'),
+('WhS_BE/CarrierAccount/GetFilteredCarrierAccounts',null),
+('WhS_BE/CarrierAccount/UpdateCarrierAccount',null),
+('WhS_BE/CarrierAccount/AddCarrierAccount',null),
+('WhS_BE/CarrierAccount/GetCarrierAccountCurrency',null),
+('WhS_BE/CarrierAccount/GetCarrierAccount',null),
+('WhS_BE/CarrierAccount/GetCarrierAccountInfo',null),
+('WhS_BE/CarrierAccount/GetSupplierGroupTemplates',null),
+('WhS_BE/CarrierAccount/GetCustomerGroupTemplates',null),
+('WhS_BE/CarrierAccount/GetSuppliersWithZonesGroupsTemplates',null),
+
+('WhS_BE/CarrierProfile/GetFilteredCarrierProfiles',null),
+('WhS_BE/CarrierProfile/GetCarrierProfile',null),
+('WhS_BE/CarrierProfile/GetCarrierProfilesInfo',null),
+('WhS_BE/CarrierProfile/UpdateCarrierProfile',null),
+('WhS_BE/CarrierProfile/AddCarrierProfile',null),
 
 ('WhS_BE/CodeGroup/GetFilteredCodeGroups',null),
 ('WhS_BE/CodeGroup/GetAllCodeGroups',null),
@@ -292,18 +304,7 @@ as (select * from (values
 ('WhS_BE/CustomerSellingProduct/GetCustomerSellingProduct',null),
 ('WhS_BE/CustomerSellingProduct/IsCustomerAssignedToSellingProduct',null),
 
-('WhS_BE/CarrierAccount/GetCarrierAccountCurrency',null),
-('WhS_BE/CarrierAccount/GetCarrierAccount',null),
-('WhS_BE/CarrierAccount/GetCarrierAccountInfo',null),
-('WhS_BE/CarrierAccount/GetSupplierGroupTemplates',null),
-('WhS_BE/CarrierAccount/GetCustomerGroupTemplates',null),
-('WhS_BE/CarrierAccount/GetSuppliersWithZonesGroupsTemplates',null),
 
-('WhS_BE/CarrierProfile/GetFilteredCarrierProfiles',null),
-('WhS_BE/CarrierProfile/GetCarrierProfile',null),
-('WhS_BE/CarrierProfile/GetCarrierProfilesInfo',null),
-('WhS_BE/CarrierProfile/UpdateCarrierProfile',null),
-('WhS_BE/CarrierProfile/AddCarrierProfile',null),
 
 ('WhS_BE/AccountManager/GetLinkedOrgChartId',null),
 ('WhS_BE/AccountManager/GetFilteredAssignedCarriers',null),
