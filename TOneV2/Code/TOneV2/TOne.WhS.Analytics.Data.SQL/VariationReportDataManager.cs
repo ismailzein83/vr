@@ -70,7 +70,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                     
                     FROM TOneWhs_Analytic.BillingStats bs#JOIN_PART#
                     
-                    WHERE bs.CallDate >= @SmallestFromDate AND CallDate < @LargestToDate
+                    #WHERE_PART#
                     
                     GROUP BY #DIMENTION_COLUMN_NAME#
                     #ORDER_BY_PART#
@@ -89,6 +89,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             createTempTableQueryBuilder.Replace("#SUM_PART#", GetSumPart(input.Query.ReportType, input.Query.NumberOfPeriods));
             createTempTableQueryBuilder.Replace("#JOIN_PART#", GetJoinPart(input.Query.ReportType, input.Query.NumberOfPeriods));
+            createTempTableQueryBuilder.Replace("#WHERE_PART#", GetWherePart(input.Query.DimensionFilters));
             createTempTableQueryBuilder.Replace("#ORDER_BY_PART#", GetOrderByPart(input.Query.ReportType));
 
             ExecuteNonQueryText(createTempTableQueryBuilder.ToString(), (cmd) =>
@@ -264,7 +265,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             }
             return sumExpressionExtension;
         }
-        
+
         #endregion
 
         string GetJoinPart(VariationReportType reportType, int rowsCount)
@@ -285,6 +286,36 @@ namespace TOne.WhS.Analytics.Data.SQL
             }
             return joinPartBuilder.ToString();
         }
+
+        #region Where Part
+
+        string GetWherePart(IEnumerable<VariationReportDimensionFilter> dimensionFilters)
+        {
+            var wherePartBuilder = new StringBuilder("WHERE bs.CallDate >= @SmallestFromDate AND CallDate < @LargestToDate");
+            if (dimensionFilters != null)
+            {
+                // The loop doesn't account for filter values that should be enclosed using single quotes
+                foreach (VariationReportDimensionFilter dimensionFilter in dimensionFilters)
+                    wherePartBuilder.Append(String.Format(" AND {0} IN ({1})", GetDimensionColumnName(dimensionFilter.Dimension), String.Join(",", dimensionFilter.FilterValues)));
+            }
+            return wherePartBuilder.ToString();
+        }
+
+        string GetDimensionColumnName(VariationReportDimension dimension)
+        {
+            switch (dimension)
+            {
+                case VariationReportDimension.Customer:
+                    return "CustomerID";
+                case VariationReportDimension.Supplier:
+                    return "SupplierID";
+                case VariationReportDimension.Zone:
+                    return "SaleZoneID";
+            }
+            throw new ArgumentException("dimension");
+        }
+
+        #endregion
 
         string GetOrderByPart(VariationReportType reportType)
         {

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VariationReportGridDirective.$inject = ['WhS_Analytics_VariationReportAPIService', 'VRNotificationService'];
+    VariationReportGridDirective.$inject = ['WhS_Analytics_VariationReportAPIService', 'WhS_Analytics_VariationReportDimensionEnum', 'WhS_Analytics_VariationReportTypeEnum', 'WhS_Analytics_VariationReportTimePeriodEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function VariationReportGridDirective(WhS_Analytics_VariationReportAPIService, VRNotificationService) {
+    function VariationReportGridDirective(WhS_Analytics_VariationReportAPIService, WhS_Analytics_VariationReportDimensionEnum, WhS_Analytics_VariationReportTypeEnum, WhS_Analytics_VariationReportTimePeriodEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -25,12 +25,16 @@
             this.initializeController = initializeController;
 
             var gridAPI;
+            var gridDrillDownTabsObj;
 
             function initializeController() {
+
                 $scope.scopeModel = {};
+
                 $scope.scopeModel.dataSource = [];
                 $scope.scopeModel.dimensionTitle;
                 $scope.scopeModel.timePeriodDefinitions = [];
+                $scope.scopeModel.drillDownDimensionValues = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -41,6 +45,10 @@
                     return WhS_Analytics_VariationReportAPIService.GetFilteredVariationReportRecords(dataRetrievalInput).then(function (response) {
                         if (response != null) {
                             $scope.scopeModel.dimensionTitle = response.DimensionTitle;
+
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
 
                             if (response.TimePeriods != null) {
                                 $scope.scopeModel.timePeriodDefinitions.length = 0;
@@ -60,7 +68,76 @@
                 var api = {};
 
                 api.load = function (query) {
+                    $scope.scopeModel.drillDownDimensionValues.length = 0;
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(getDrillDownDefinitions(query), gridAPI, undefined);
                     return gridAPI.retrieveData(query);
+
+                    function getDrillDownDefinitions(gridQuery) {
+
+                        setDrillDownDimensionValues(gridQuery);
+
+                        var drillDownTabDefinitions = [];
+                        for (var i = 0; i < $scope.scopeModel.drillDownDimensionValues.length; i++) {
+                            drillDownTabDefinitions.push(getDrillDownDefinition($scope.scopeModel.drillDownDimensionValues[i], gridQuery));
+                        }
+                        return drillDownTabDefinitions
+                    }
+
+                    function setDrillDownDimensionValues(gridQuery) {
+
+                        var currentReportDimensionValue = getDimensionValue(gridQuery.ReportType);
+                        var filterDimensionValues = (gridQuery.DimensionFilters != null) ? UtilsService.getPropValuesFromArray(gridQuery.DimensionFilters, 'Dimension') : [];
+
+                        for (var propertyName in WhS_Analytics_VariationReportDimensionEnum) {
+                            var dimensionValue = WhS_Analytics_VariationReportDimensionEnum[propertyName].value;
+                            if (dimensionValue != currentReportDimensionValue && !UtilsService.contains(filterDimensionValues, dimensionValue))
+                                $scope.scopeModel.drillDownDimensionValues.push(dimensionValue);
+                        }
+                    }
+
+                    function getDimensionValue(reportTypeValue) {
+                        return UtilsService.getEnum(WhS_Analytics_VariationReportTypeEnum, 'value', reportTypeValue).dimensionValue;
+                    }
+
+                    function getDrillDownDefinition(drillDownDimensionValue, gridQuery) {
+                        return {
+                            title: getDimensionPluralDescription(drillDownDimensionValue),
+                            directive: 'vr-whs-analytics-variationreport-grid',
+                            loadDirective: function (directiveAPI, dataItem) {
+
+                                var dimensionFilters = (gridQuery.DimensionFilters != null) ? UtilsService.cloneObject(gridQuery.DimensionFilters, true) : [];
+
+                                dimensionFilters.push({
+                                    Dimension: getDimensionValue(gridQuery.ReportType),
+                                    FilterValues: [dataItem.DimensionId]
+                                });
+
+                                var directiveQuery = {
+                                    ReportType: getDrillDownReportTypeValue(gridQuery.ReportType, drillDownDimensionValue),
+                                    ToDate: gridQuery.ToDate,
+                                    TimePeriod: gridQuery.TimePeriod,
+                                    NumberOfPeriods: gridQuery.NumberOfPeriods,
+                                    DimensionFilters: dimensionFilters
+                                };
+
+                                return directiveAPI.load(directiveQuery);
+                            }
+                        };
+
+                        function getDimensionPluralDescription(dimensionValue) {
+                            return UtilsService.getEnum(WhS_Analytics_VariationReportDimensionEnum, 'value', dimensionValue).pluralDescription;
+                        }
+                        function getDrillDownReportTypeValue(currentReportTypeValue, drillDownDimensionValue) {
+
+                            var currentReportTypeCategory = UtilsService.getEnum(WhS_Analytics_VariationReportTypeEnum, 'value', currentReportTypeValue).category;
+
+                            for (var propertyName in WhS_Analytics_VariationReportTypeEnum) {
+                                var reportTypeObj = WhS_Analytics_VariationReportTypeEnum[propertyName];
+                                if (reportTypeObj.category == currentReportTypeCategory && reportTypeObj.value != currentReportTypeValue && reportTypeObj.dimensionValue == drillDownDimensionValue)
+                                    return reportTypeObj.value;
+                            }
+                        }
+                    }
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

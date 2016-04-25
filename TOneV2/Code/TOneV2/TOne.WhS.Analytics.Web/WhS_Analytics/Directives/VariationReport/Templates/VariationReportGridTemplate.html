@@ -9,4 +9,7 @@
     <vr-datagridcolumn headertext="'Periods %'" field="'Percentage'" type="'Number'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Previous Period %'" field="'PreviousPeriodPercentage'" type="'Number'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="definition in scopeModel.timePeriodDefinitions" headertext="definition.PeriodDescription" field="'TimePeriodValues['+$index+']'" type="'Number'" disablesorting></vr-datagridcolumn>
+    <vr-datagridexpandablerow ng-if="scopeModel.drillDownDimensionValues.length > 0">
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>
