@@ -1,6 +1,6 @@
-﻿BlockedAttemptsController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'WhS_BE_SaleZoneAPIService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
+﻿BlockedAttemptsController.$inject = ["$scope", "UtilsService", "VRNavigationService", "WhS_BE_SaleZoneAPIService", "VRNotificationService", "VRUIUtilsService", "VRValidationService", "PeriodEnum"];
 
-function BlockedAttemptsController($scope, UtilsService, VRNavigationService, WhS_BE_SaleZoneAPIService, VRNotificationService, VRUIUtilsService, VRValidationService) {
+function BlockedAttemptsController($scope, UtilsService, VRNavigationService, WhS_BE_SaleZoneAPIService, VRNotificationService, VRUIUtilsService, VRValidationService, PeriodEnum) {
 
     var mainGridAPI;
 
@@ -24,6 +24,9 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
         $scope.groupbyNumber = false;
         $scope.fromDate;
         $scope.toDate;
+
+        $scope.today = PeriodEnum.Today;
+
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
             timeRangeReadyPromiseDeferred.resolve();
@@ -125,4 +128,4 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
 
 };
 
-appControllers.controller('WhS_Analytics_BlockedAttemptsController', BlockedAttemptsController);
+appControllers.controller("WhS_Analytics_BlockedAttemptsController", BlockedAttemptsController);
