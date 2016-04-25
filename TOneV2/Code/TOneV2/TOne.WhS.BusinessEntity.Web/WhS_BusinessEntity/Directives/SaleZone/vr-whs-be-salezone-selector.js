@@ -58,7 +58,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'UtilsSer
                    + '  isrequired="ctrl.isrequired"'
                    + '  vr-disabled="ctrl.isdisabled"'
                    + '  label="' + label + '"'
-                   + '  entityName="' + label + '">'
+                   + '  entityName="Sale Zone">'
                    + '</vr-select>'
                    + '</vr-columns>'
         }
