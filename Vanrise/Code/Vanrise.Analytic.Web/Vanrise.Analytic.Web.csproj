@@ -77,9 +77,7 @@
     <Compile Include="Controllers\AnalyticTableController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Analytic\Directives\Runtime\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
       <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
@@ -102,24 +100,29 @@
     <Content Include="Analytic\Constants\ModuleConfig.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-selector.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticTable\Templates\AnalyticTableGridTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticTable\vr-analytic-analytictable-grid.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Templates\GridWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\vr-analytic-widgets-grid-definition.js" />
     <Content Include="Analytic\Directives\Definition\SearchSettings\vr-analytic-reportsearchsettings-selective.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-table-selector.js" />
     <Content Include="Analytic\Directives\Definition\Widgets\vr-analytic-widgets-selective.js" />
-    <Content Include="Analytic\Directives\Grid\Templates\AnalyticRecordsDataGrid.html" />
-    <Content Include="Analytic\Directives\Grid\vr-analytic-datagrid-analyticrecords.js" />
+    <Content Include="Analytic\Directives\Runtime\Grid\Templates\AnalyticRecordsDataGrid.html" />
+    <Content Include="Analytic\Directives\Runtime\Grid\vr-analytic-datagrid-analyticrecords.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\SearchSettings\Templates\GenericSearchTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
+    <Content Include="Analytic\Services\AnalyticTableService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticConfigurationAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemConfigAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
-    <Content Include="Analytic\Views\AnalyticReportSettingsEditor.html" />
-    <Content Include="Analytic\Views\AnalyticReportSettingsEditorController.js" />
-    <Content Include="Analytic\Views\AnalyticWidgetEditor.html" />
-    <Content Include="Analytic\Views\AnalyticWidgetEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportSettingsEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportSettingsEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticTableManagement.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticTableManagementController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticWidgetEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticWidgetEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReport.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReportController.js" />
     <Content Include="Analytic\Views\Reports\AnalyticReport.html" />

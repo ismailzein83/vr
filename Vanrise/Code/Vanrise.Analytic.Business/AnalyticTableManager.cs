@@ -12,6 +12,15 @@ namespace Vanrise.Analytic.Business
     public class AnalyticTableManager
     {
         #region Public Methods
+        public Vanrise.Entities.IDataRetrievalResult<AnalyticTableDetail> GetFilteredAnalyticTables(Vanrise.Entities.DataRetrievalInput<AnalyticTableQuery> input)
+        {
+            var analyticTables = GetCachedAnalyticTables();
+
+            Func<AnalyticTable, bool> filterExpression = (prod) =>
+                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, analyticTables.ToBigResult(input, filterExpression, AnalyticTableDetailMapper));
+        }
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(AnalyticTableInfoFilter filter)
         {
             var analyticTables = GetCachedAnalyticTables();
@@ -61,6 +70,14 @@ namespace Vanrise.Analytic.Business
 
         #region Mappers
 
+        AnalyticTableDetail AnalyticTableDetailMapper(AnalyticTable analyticTable)
+        {
+            return new AnalyticTableDetail()
+            {
+                Entity = analyticTable,
+            };
+
+        }
         AnalyticTableInfo AnalyticTableInfoMapper(AnalyticTable analyticTable)
         {
             return new AnalyticTableInfo()

@@ -1,0 +1,26 @@
+﻿<vr-panel ng-controller="VR_Analytic_AnalyticTableManagementController" vr-loader="isLoading">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="tableName" label="Table Name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <!--<vr-button type="Add" formname="formFilter"  isasynchronous=" true"></vr-button>-->
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+    </vr-form>
+    <div>
+        <vr-row>
+            <vr-columns colnum="12">
+                <vr-analytic-analytictable-grid on-ready="onGridReady"></vr-analytic-analytictable-grid>
+            </vr-columns>
+        </vr-row>
+    </div>
+</vr-panel>

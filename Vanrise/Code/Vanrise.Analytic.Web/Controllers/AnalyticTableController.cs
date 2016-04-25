@@ -22,5 +22,12 @@ namespace Vanrise.Analytic.Web.Controllers
 
             return manager.GetAnalyticTablesInfo(serializedFilter);
         }
+        [HttpPost]
+        [Route("GetFilteredAnalyticTables")]
+        public object GetFilteredAnalyticTables(Vanrise.Entities.DataRetrievalInput<AnalyticTableQuery> input)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return GetWebResponse(input, manager.GetFilteredAnalyticTables(input));
+        }
     }
 }

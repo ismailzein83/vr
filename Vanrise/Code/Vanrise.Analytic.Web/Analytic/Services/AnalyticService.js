@@ -32,7 +32,7 @@
             var modalParameters = {
                 tableIds: tableIds
             };
-            VRModalService.showModal('/Client/Modules/Analytic/Views/AnalyticWidgetEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticWidgetEditor.html', modalParameters, modalSettings);
         }
 
         function editWidget(widgetEntity, onWidgetUpdated, tableIds) {
@@ -47,7 +47,7 @@
                 modalScope.onWidgetUpdated = onWidgetUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Analytic/Views/AnalyticWidgetEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticWidgetEditor.html', modalParameters, modalSettings);
         }
     }
 

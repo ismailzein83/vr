@@ -12,8 +12,13 @@
                     filter: filter
                 });
         }
+        function GetFilteredAnalyticTables(input)
+        {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredAnalyticTables"), input);
+        }
         return ({
-            GetAnalyticTablesInfo: GetAnalyticTablesInfo
+            GetAnalyticTablesInfo: GetAnalyticTablesInfo,
+            GetFilteredAnalyticTables: GetFilteredAnalyticTables
         });
     }
 
