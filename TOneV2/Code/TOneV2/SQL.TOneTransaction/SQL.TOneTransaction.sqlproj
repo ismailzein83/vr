@@ -88,6 +88,10 @@
     <Folder Include="summarytransformation\Tables\" />
     <Folder Include="summarytransformation\Functions\" />
     <Folder Include="summarytransformation\Stored Procedures\" />
+    <Folder Include="common\" />
+    <Folder Include="common\Tables\" />
+    <Folder Include="common\Functions\" />
+    <Folder Include="common\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -199,6 +203,13 @@
     <Build Include="summarytransformation\Stored Procedures\sp_SummaryBatchLock_TryLock.sql" />
     <Build Include="summarytransformation\Stored Procedures\sp_SummaryBatchLock_UnLock.sql" />
     <Build Include="Security\summarytransformation.sql" />
+    <Build Include="common\Tables\BigDataService.sql" />
+    <Build Include="common\Functions\ParseStringList.sql" />
+    <Build Include="common\Stored Procedures\sp_BigDataService_DeleteTimedOut.sql" />
+    <Build Include="common\Stored Procedures\sp_BigDataService_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_BigDataService_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_BigDataService_Update.sql" />
+    <Build Include="Security\common.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

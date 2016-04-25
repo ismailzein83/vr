@@ -50,6 +50,7 @@
     <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString"/>
     <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString"/>
     <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="BigDataServiceDBConnStringKey" value="TransactionDBConnString"/>
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="IntegrationConnStringKey" value="TransactionDBConnString"/>
     <add key="TOneWhS_Routing_DBConnStringKey" value="RoutingDBConnStringTemplateKey"/>
