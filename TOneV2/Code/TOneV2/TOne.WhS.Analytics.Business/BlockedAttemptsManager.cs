@@ -41,8 +41,8 @@ namespace TOne.WhS.Analytics.Business
             BlockedAttemptDetail blockedAttemptDetail = new BlockedAttemptDetail
             {
                 Entity = blockedAttempt,
-                CustomerName = customer != null ? customer.NameSuffix : "N/A",
-                SaleZoneName = salezone != null ? salezone.Name : "N/A",
+                CustomerName = customer != null ? customer.NameSuffix : string.Empty,
+                SaleZoneName = salezone != null ? salezone.Name : string.Empty,
             };
             return blockedAttemptDetail;
         }
