@@ -155,7 +155,8 @@ set identity_insert [sec].[Module] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Administration','Administration',null,'/images/menu-icons/Administration.png',1,0),
-(2,'Security',null,1,null,1,0)
+(2,'Security',null,1,null,1,0),
+(3,'System',null,1,null,1,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
@@ -180,8 +181,8 @@ as (select * from (values
 (2,'Groups'					,'Groups'				,'#/view/Security/Views/Group/GroupManagement'				,2,'VR_Sec/Group/GetFilteredGroups'	,null,null,null,0,2),
 (3,'System Entities'		,'System Entities'		,'#/view/Security/Views/Permission/BusinessEntityManagement',2,'VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,3),
 (4,'System Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement',2,'VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,0,4),
-(5,'Menu Management'		,'Menu Management'		,'#/view/Security/Views/Menu/MenuManagement'				,1,'VR_Sec/View/UpdateViewsRank'	,null,null,null,0,5),
-(6,'Organizational Charts'	,'Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'		,1,null								,null,null,null,0,6)
+(5,'Menu Management'		,'Menu Management'		,'#/view/Security/Views/Menu/MenuManagement'				,3,'VR_Sec/View/UpdateViewsRank'	,null,null,null,0,1),
+(6,'Organizational Charts'	,'Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'		,3,null								,null,null,null,0,25)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
