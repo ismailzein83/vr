@@ -521,7 +521,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
-(2,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.ExcludeItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":2}}'),
+(2,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (4,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (5,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
@@ -564,7 +564,7 @@ as (select * from (values
 (10,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"BED Zones Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.ZoneBEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'),
 (11,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"BED Codes Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.CodeBEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'),
 (12,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Codes Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.CodeEEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}'),
-(13,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Zone Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.ZoneeEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}')
+(13,'ValidateAfterProcessing',3,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"EED Zone Rule","Condition": {"$type":"TOne.WhS.SupplierPriceList.Business.ZoneEEDCondition, TOne.WhS.SupplierPriceList.Business"},"ActionTypes":[3]}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[BPDefintionId],[Settings]))
 merge	[bp].[BPBusinessRuleDefinition] as t
