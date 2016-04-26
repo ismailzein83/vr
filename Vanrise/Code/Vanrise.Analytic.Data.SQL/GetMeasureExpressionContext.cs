@@ -9,9 +9,18 @@ namespace Vanrise.Analytic.Data.SQL
 {
     public class GetMeasureExpressionContext : IGetMeasureExpressionContext
     {
+        Func<string, IGetMeasureExpressionContext, string> _getMeasureExpression;
+
+        public GetMeasureExpressionContext(Func<string, IGetMeasureExpressionContext, string> getMeasureExpression)
+        {
+            if (_getMeasureExpression == null)
+                throw new ArgumentNullException("getMeasureExpression");
+            _getMeasureExpression = getMeasureExpression;
+        }
+
         public string GetMeasureExpression(string measureConfigName)
         {
-            throw new NotImplementedException();
+            return _getMeasureExpression(measureConfigName, this);
         }
     }
 }

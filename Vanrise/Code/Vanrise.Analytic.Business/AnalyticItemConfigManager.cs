@@ -33,22 +33,28 @@ namespace Vanrise.Analytic.Business
         }
         public Dictionary<string, AnalyticMeasure> GetMeasures(int tableId)
         {
-            var measureConfigs = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, AnalyticItemType.Measure);
-            Dictionary<string, AnalyticMeasure> analyticMeasures = new Dictionary<string, AnalyticMeasure>();
-            foreach (var itemConfig in measureConfigs)
-            {
-                AnalyticMeasureConfig measureConfig = itemConfig.Config;
-                if (measureConfig == null)
-                    throw new NullReferenceException("measureConfig");
-                AnalyticMeasure measure = new AnalyticMeasure
+            string cacheName = String.Format("GetMeasures_{0}", tableId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                () =>
                 {
-                    AnalyticMeasureConfigId = itemConfig.AnalyticItemConfigId,
-                    Config = measureConfig,
-                    Evaluator = null// DynamicTypeGenerator.GetMeasureEvaluator(itemConfig.AnalyticItemConfigId)
-                };
-                analyticMeasures.Add(itemConfig.Name, measure);
-            }
-            return analyticMeasures;
+                    var measureConfigs = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, AnalyticItemType.Measure);
+                    Dictionary<string, AnalyticMeasure> analyticMeasures = new Dictionary<string, AnalyticMeasure>();
+                    foreach (var itemConfig in measureConfigs)
+                    {
+                        AnalyticMeasureConfig measureConfig = itemConfig.Config;
+                        if (measureConfig == null)
+                            throw new NullReferenceException("measureConfig");
+                        AnalyticMeasure measure = new AnalyticMeasure
+                        {
+                            AnalyticMeasureConfigId = itemConfig.AnalyticItemConfigId,
+                            Config = measureConfig,
+                            Evaluator = DynamicTypeGenerator.GetMeasureEvaluator(itemConfig.AnalyticItemConfigId, measureConfig)
+                        };
+                        analyticMeasures.Add(itemConfig.Name, measure);
+                    }
+                    return analyticMeasures;
+                });
+            
         }
         public Dictionary<string, AnalyticJoin> GetJoins(int tableId)
         {

@@ -149,13 +149,27 @@ namespace Vanrise.Analytic.Data.SQL
             #endregion
 
             #region Add Measures Part
+            Func<AnalyticMeasure, IGetMeasureExpressionContext, string> getMeasureExpression = (measure, getMeasureExpressionContext) =>
+                {
+                    return !string.IsNullOrWhiteSpace(measure.Config.SQLExpression) ? measure.Config.SQLExpression : measure.Evaluator.GetMeasureExpression(getMeasureExpressionContext);
+                };
+
+
+            Func<string, IGetMeasureExpressionContext, string> getMeasureExpressionByMeasureName = (measureName, getMeasureExpressionContext) =>
+            {
+                AnalyticMeasure measure;
+                if (!this._measures.TryGetValue(measureName, out measure))
+                    throw new NullReferenceException(String.Format("measure. Name '{0}'", measureName));
+                return getMeasureExpression(measure, getMeasureExpressionContext);
+            };
+
             HashSet<string> addedMeasureColumns = new HashSet<string>();
             foreach (var measureName in input.Query.MeasureFields)
             {
                 AnalyticMeasure measure = _measures[measureName];
 
-                GetMeasureExpressionContext getMeasureExpressionContext = new GetMeasureExpressionContext();
-                string measureExpression = !string.IsNullOrWhiteSpace(measure.Config.SQLExpression) ? measure.Config.SQLExpression : measure.Evaluator.GetMeasureExpression(getMeasureExpressionContext);
+                GetMeasureExpressionContext getMeasureExpressionContext = new GetMeasureExpressionContext(getMeasureExpressionByMeasureName);
+                string measureExpression = getMeasureExpressionByMeasureName(measureName, getMeasureExpressionContext);
                 AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", measureExpression, GetMeasureColumnAlias(measure)));
 
                 if (measure.Config.JoinConfigNames != null)
