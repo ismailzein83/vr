@@ -70,9 +70,6 @@
     <Compile Include="Config\IMeasureEvaluator.cs" />
     <Compile Include="DimensionFilter.cs" />
     <Compile Include="DimensionValue.cs" />
-    <Compile Include="IMeasureValueExecutor.cs" />
-    <Compile Include="ItemConfigParameter.cs" />
-    <Compile Include="IMeasureValueEvaluatorContext.cs" />
     <Compile Include="MeasureValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WidgetDefinitionSetting.cs" />

@@ -49,8 +49,6 @@
     <Compile Include="AnalyticTableManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DynamicTypeGenerator.cs" />
-    <Compile Include="MeasureEvaluatorRuntimeType.cs" />
-    <Compile Include="MeasureValueEvaluatorContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

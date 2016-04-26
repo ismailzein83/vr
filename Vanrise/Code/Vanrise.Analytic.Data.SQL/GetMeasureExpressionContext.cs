@@ -13,7 +13,7 @@ namespace Vanrise.Analytic.Data.SQL
 
         public GetMeasureExpressionContext(Func<string, IGetMeasureExpressionContext, string> getMeasureExpression)
         {
-            if (_getMeasureExpression == null)
+            if (getMeasureExpression == null)
                 throw new ArgumentNullException("getMeasureExpression");
             _getMeasureExpression = getMeasureExpression;
         }
