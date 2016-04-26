@@ -47,8 +47,8 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
             //    hideremoveicon = "hideremoveicon";
 
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-whs-be-carrieraccount-selector getsuppliers on-ready="onCarrierAccountDirectiveReady" ' +
-                multipleselection + ' isrequired="ctrl.isrequired"></vr-whs-be-carrieraccount-selector></vr-columns>'
+            return '<vr-whs-be-carrieraccount-selector normal-col-num="{{ctrl.normalColNum}}" getsuppliers on-ready="onCarrierAccountDirectiveReady" ' +
+                multipleselection + ' isrequired="ctrl.isrequired"></vr-whs-be-carrieraccount-selector>'
         }
 
         function supplierSelector(ctrl, $scope) {
