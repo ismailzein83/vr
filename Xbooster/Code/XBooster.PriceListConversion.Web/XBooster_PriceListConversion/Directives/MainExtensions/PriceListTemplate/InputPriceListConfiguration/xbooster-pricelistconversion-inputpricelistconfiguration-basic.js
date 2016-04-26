@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InputpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService"];
+    InputpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService",'XBooster_PriceListConversion_CodeLayoutEnum'];
 
-    function InputpricelistconfigurationBasic(UtilsService, VRUIUtilsService) {
+    function InputpricelistconfigurationBasic(UtilsService, VRUIUtilsService, XBooster_PriceListConversion_CodeLayoutEnum) {
         return {
             restrict: "E",
             scope: {
@@ -35,17 +35,42 @@
             $scope.outPutFieldMappings;
             function initializeController() {
                 $scope.scopeModel = {};
+
+
+               $scope.scopeModel.codeLayouts=UtilsService.getArrayEnum(XBooster_PriceListConversion_CodeLayoutEnum);
                 $scope.scopeModel.dateTimeFormat = "yyyy/MM/dd";
                 $scope.scopeModel.onCodeListMappingReady = function (api) {
                     codeListAPI = api;
                     codeListMappingReadyPromiseDeferred.resolve();
                 }
-
+                $scope.scopeModel.onCodeLayoutSelectionChanged= function()
+                {
+                    if ($scope.scopeModel.selectedCodeLayout !=undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.CammaSeparated.value)
+                    {
+                        if ($scope.scopeModel.delimiterValue == undefined)
+                             $scope.scopeModel.delimiterValue = ',';
+                        $scope.scopeModel.showDelimiter = true;
+                    }
+                    else
+                    {
+                        $scope.scopeModel.delimiterValue = undefined;
+                        $scope.scopeModel.showDelimiter = false;
+                    }
+                }
                 $scope.scopeModel.onRateListMappingReady = function (api) {
                     rateListAPI = api;
                     rateListMappingReadyPromiseDeferred.resolve();
                 }
-
+                $scope.scopeModel.onCodeRangeValueChanged = function()
+                {
+                    if ($scope.scopeModel.hasCodeRange)
+                    {
+                        $scope.scopeModel.rangeSeparator = '-';
+                    }else
+                    {
+                        $scope.scopeModel.rangeSeparator = undefined;
+                    }
+                }
                 defineAPI();
             }
 
@@ -60,6 +85,10 @@
                         if (configDetails != undefined && configDetails.ExcelConversionSettings !=undefined)
                         {
                             $scope.scopeModel.dateTimeFormat = configDetails.ExcelConversionSettings.DateTimeFormat;
+                            $scope.scopeModel.hasCodeRange = configDetails.HasCodeRange;
+                            $scope.scopeModel.rangeSeparator = configDetails.RangeSeparator;
+                            $scope.scopeModel.delimiterValue = configDetails.Delimiter;
+                            $scope.scopeModel.selectedCodeLayout = UtilsService.getItemByVal($scope.scopeModel.codeLayouts, configDetails.CodeLayout, "value")
                         }
                      
                     }
@@ -125,6 +154,17 @@
                     var basicConfiguration = {
                         $type: "XBooster.PriceListConversion.MainExtensions.InputPriceListSettings.BasicInputPriceListSettings,XBooster.PriceListConversion.MainExtensions",
                         ExcelConversionSettings: obj,
+                        CodeLayout: $scope.scopeModel.selectedCodeLayout != undefined ? $scope.scopeModel.selectedCodeLayout.value : undefined,
+                        HasCodeRange: $scope.scopeModel.hasCodeRange,
+                      
+                    }
+                   
+                    if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.CammaSeparated.value)
+                    {
+                        basicConfiguration.Delimiter = $scope.scopeModel.delimiterValue;
+                    }
+                    if ($scope.scopeModel.hasCodeRange) {
+                        basicConfiguration.RangeSeparator = $scope.scopeModel.rangeSeparator;
                     }
                     return basicConfiguration;
                 }

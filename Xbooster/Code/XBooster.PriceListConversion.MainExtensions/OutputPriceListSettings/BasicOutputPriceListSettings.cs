@@ -54,16 +54,33 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
                                 fieldValueExecutionContext.Record = item;
                                 field.FieldValue.Execute(fieldValueExecutionContext);
                                 var fieldValue = fieldValueExecutionContext.FieldValue;
-                                if (fieldValueExecutionContext.FieldValue is DateTime)
-                                    fieldValue = ((DateTime)fieldValueExecutionContext.FieldValue).ToString(this.DateTimeFormat);
-                                workSheet.Cells[rowIndex, field.CellIndex].PutValue(fieldValue);
+                                if (fieldValue is List<string>)
+                                {
+                                    foreach (string fieldList in (List<string>)fieldValue)
+                                    {
+                                        foreach (var fieldMapping in table.FieldsMapping)
+                                        {
+                                            if (field !=fieldMapping)
+                                            {
+                                                 FieldValueExecutionContext fieldValueExecutionContext1 = new Business.FieldValueExecutionContext();
+                                                fieldValueExecutionContext1.Record = item;
+                                                fieldMapping.FieldValue.Execute(fieldValueExecutionContext1);
+                                                var fieldValueObj = fieldValueExecutionContext1.FieldValue;
+                                                if (fieldValueExecutionContext1.FieldValue is DateTime)
+                                                    fieldValueObj = ((DateTime)fieldValueExecutionContext.FieldValue).ToString(this.DateTimeFormat);
+
+                                                workSheet.Cells[rowIndex, fieldMapping.CellIndex].PutValue(fieldValueObj);
+                                            }
+                                        }
+                                        workSheet.Cells[rowIndex, field.CellIndex].PutValue(fieldList.Trim());
+                                        rowIndex++;
+                                    }
+                                }
                             }
 
 
                         }
                     }
-                   
-                    rowIndex++;
                  }
             }
             MemoryStream memoryStream = new MemoryStream();

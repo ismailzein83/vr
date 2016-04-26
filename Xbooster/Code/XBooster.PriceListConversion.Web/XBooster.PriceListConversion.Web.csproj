@@ -139,6 +139,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="web.config" />
+    <Content Include="XBooster_PriceListConversion\Constant\CodeLayoutEnum.js" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\InputPriceListConfiguration\Templates\BasicInputPriceListConfiguration.html" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\InputPriceListConfiguration\xbooster-pricelistconversion-inputpricelistconfiguration-basic.js" />
     <Content Include="XBooster_PriceListConversion\Directives\MainExtensions\PriceListTemplate\OutputFieldValue\Templates\PriceListFieldTemplate.html" />

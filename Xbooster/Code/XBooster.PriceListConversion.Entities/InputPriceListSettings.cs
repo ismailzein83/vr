@@ -11,6 +11,6 @@ namespace XBooster.PriceListConversion.Entities
     {
         public int ConfigId { get; set; }
 
-        public abstract ConvertedExcel Execute(IInputPriceListExecutionContext context);
+        public abstract PriceList Execute(IInputPriceListExecutionContext context);
     }
 }
