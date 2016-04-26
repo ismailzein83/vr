@@ -53,7 +53,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
-            List<SaleZone> saleZones = saleZoneManager.GetSaleZonesEffectiveAfter(inputArgument.SellingNumberPlanId, inputArgument.CountryId, inputArgument.MinimumDate);
+            IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesEffectiveAfter(inputArgument.SellingNumberPlanId, inputArgument.CountryId, inputArgument.MinimumDate);
             return new GetExistingZonesOutput()
             {
                 ExistingZoneEntities = saleZones

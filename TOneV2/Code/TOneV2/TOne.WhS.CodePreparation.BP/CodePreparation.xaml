@@ -102,7 +102,7 @@
           <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">new AsyncActivityStatus()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="scg:Dictionary(x:Int32, scg:IEnumerable(twbe:SaleCode))" Name="ZoneBySaleCodes" />
+      <Variable x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))" Name="SaleCodesByZoneId" />
       <Variable x:TypeArguments="twce:Changes" Name="Changes">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="twce:Changes">new Changes()</mca:CSharpValue>
@@ -151,7 +151,7 @@
       </If.Then>
       <If.Else>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-          <twcba1:GetChanges sap2010:WorkflowViewState.IdRef="GetChanges_2">
+          <twcba1:GetChanges sap2010:WorkflowViewState.IdRef="GetChanges_1">
             <twcba1:GetChanges.Changes>
               <OutArgument x:TypeArguments="twce:Changes">
                 <mca:CSharpReference x:TypeArguments="twce:Changes">Changes</mca:CSharpReference>
@@ -162,71 +162,71 @@
                 <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
               </InArgument>
             </twcba1:GetChanges.SellingNumberPlanId>
-            <twcba1:GetChanges.ZoneBySaleCodes>
-              <OutArgument x:TypeArguments="scg:Dictionary(x:Int32, scg:IEnumerable(twbe:SaleCode))">
-                <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int32, scg:IEnumerable(twbe:SaleCode))">ZoneBySaleCodes</mca:CSharpReference>
+            <twcba1:GetChanges.SaleCodesByZoneId>
+              <OutArgument x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))">
+                <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))">SaleCodesByZoneId</mca:CSharpReference>
               </OutArgument>
-            </twcba1:GetChanges.ZoneBySaleCodes>
+            </twcba1:GetChanges.SaleCodesByZoneId>
           </twcba1:GetChanges>
-          <twcba1:ProcessCodes sap2010:WorkflowViewState.IdRef="ProcessCodes_1">
-            <twcba1:ProcessCodes.Changes>
+          <twcba1:GetDataFromCodeChanges sap2010:WorkflowViewState.IdRef="GetDataFromCodeChanges_1">
+            <twcba1:GetDataFromCodeChanges.Changes>
               <InArgument x:TypeArguments="twce:Changes">
                 <mca:CSharpValue x:TypeArguments="twce:Changes">Changes</mca:CSharpValue>
               </InArgument>
-            </twcba1:ProcessCodes.Changes>
-            <twcba1:ProcessCodes.CodesToAdd>
+            </twcba1:GetDataFromCodeChanges.Changes>
+            <twcba1:GetDataFromCodeChanges.CodesToAdd>
               <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)">CodesToAdd</mca:CSharpReference>
               </OutArgument>
-            </twcba1:ProcessCodes.CodesToAdd>
-            <twcba1:ProcessCodes.CodesToClose>
+            </twcba1:GetDataFromCodeChanges.CodesToAdd>
+            <twcba1:GetDataFromCodeChanges.CodesToClose>
               <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">CodesToClose</mca:CSharpReference>
               </OutArgument>
-            </twcba1:ProcessCodes.CodesToClose>
-            <twcba1:ProcessCodes.CodesToMove>
+            </twcba1:GetDataFromCodeChanges.CodesToClose>
+            <twcba1:GetDataFromCodeChanges.CodesToMove>
               <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">CodesToMove</mca:CSharpReference>
               </OutArgument>
-            </twcba1:ProcessCodes.CodesToMove>
-            <twcba1:ProcessCodes.EffectiveDate>
+            </twcba1:GetDataFromCodeChanges.CodesToMove>
+            <twcba1:GetDataFromCodeChanges.EffectiveDate>
               <InArgument x:TypeArguments="s:DateTime">
                 <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate.Value</mca:CSharpValue>
               </InArgument>
-            </twcba1:ProcessCodes.EffectiveDate>
-            <twcba1:ProcessCodes.MinimumDate>
+            </twcba1:GetDataFromCodeChanges.EffectiveDate>
+            <twcba1:GetDataFromCodeChanges.MinimumDate>
               <OutArgument x:TypeArguments="s:DateTime">
                 <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
               </OutArgument>
-            </twcba1:ProcessCodes.MinimumDate>
-          </twcba1:ProcessCodes>
-          <twcba1:ProcessZones sap2010:WorkflowViewState.IdRef="ProcessZones_1">
-            <twcba1:ProcessZones.Changes>
+            </twcba1:GetDataFromCodeChanges.MinimumDate>
+          </twcba1:GetDataFromCodeChanges>
+          <twcba1:GetDataFromZoneChanges sap2010:WorkflowViewState.IdRef="GetDataFromZoneChanges_1">
+            <twcba1:GetDataFromZoneChanges.Changes>
               <InArgument x:TypeArguments="twce:Changes">
                 <mca:CSharpValue x:TypeArguments="twce:Changes">Changes</mca:CSharpValue>
               </InArgument>
-            </twcba1:ProcessZones.Changes>
-            <twcba1:ProcessZones.CodesToClose>
+            </twcba1:GetDataFromZoneChanges.Changes>
+            <twcba1:GetDataFromZoneChanges.CodesToClose>
               <InOutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">CodesToClose</mca:CSharpReference>
               </InOutArgument>
-            </twcba1:ProcessZones.CodesToClose>
-            <twcba1:ProcessZones.CodesToMove>
+            </twcba1:GetDataFromZoneChanges.CodesToClose>
+            <twcba1:GetDataFromZoneChanges.CodesToMove>
               <InOutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">CodesToMove</mca:CSharpReference>
               </InOutArgument>
-            </twcba1:ProcessZones.CodesToMove>
-            <twcba1:ProcessZones.MinimumDate>
+            </twcba1:GetDataFromZoneChanges.CodesToMove>
+            <twcba1:GetDataFromZoneChanges.MinimumDate>
               <InArgument x:TypeArguments="s:DateTime">
                 <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
               </InArgument>
-            </twcba1:ProcessZones.MinimumDate>
-            <twcba1:ProcessZones.ZoneBySaleCodes>
-              <InArgument x:TypeArguments="scg:Dictionary(x:Int32, scg:IEnumerable(twbe:SaleCode))">
-                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int32, scg:IEnumerable(twbe:SaleCode))">ZoneBySaleCodes</mca:CSharpValue>
+            </twcba1:GetDataFromZoneChanges.MinimumDate>
+            <twcba1:GetDataFromZoneChanges.SaleCodesByZoneId>
+              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))">SaleCodesByZoneId</mca:CSharpValue>
               </InArgument>
-            </twcba1:ProcessZones.ZoneBySaleCodes>
-          </twcba1:ProcessZones>
+            </twcba1:GetDataFromZoneChanges.SaleCodesByZoneId>
+          </twcba1:GetDataFromZoneChanges>
         </Sequence>
       </If.Else>
     </If>
@@ -638,14 +638,14 @@
         </InArgument>
       </twcba1:UpdateCodePreparationStateStatus.Status>
     </twcba1:UpdateCodePreparationStateStatus>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbIoBRgOHBQ4CAQFSC1LRAQIBV1cLV9EBAgFGXAtc1QECATVhC2HVAQIBJGYLZnACARNsC2xaAgECcAXtAQoDAeUM7gEF+QEgAwHCDPoBBY8CIwMB/QuQAgWWAi0DAesLlwIFogIYAwHIC6MCBa4CFAMBpQuvAgW1AiADAZILtgIFwQInAwHvCsICBcgCIAMB3ArJAgXkBBADAcMB5QQF6wQgAwGwAewEBfIEJQMBngHzBAX5BCADAYsB+gQFhQUvAgFocwtzWwMB5gx3CZYBJAMB+g6ZAQnrARQDAfcM9gEL9gGFAQMB1AzxAQvxAaYBAwHDDIICC4ICbwMBsQyMAguMAnsDAaAM/QEL/QFrAwGPDIcCC4cCbQMB/guTAguTAoUBAwHsC5oCC5oCsQEDAdoLnwILnwJ/AwHJC6sCC6sCdwMBtwumAgumAn0DAaYLsgILsgKFAQMBlAuvAmCvAn0DAZMLvgILvgJzAwGBC7kCC7kCggEDAfAKxQILxQKFAQMB3grCAmDCAokBAwHdCs0CB8MEEgMBsQLEBAfjBCgDAcQB6AQL6ASFAQMBsgHlBGDlBLsBAwGxAe8EC+8EYQMBnwH2BAv2BIUBAwGNAfMEYPMEkAEDAYwB/QQL/QRhAgF6ggULggXBAQIBaX8Pf3sDAdAPeg96dwMBvw+TAQ+TAWIDAa4PiQEPiQFsAwGdD44BD44BXQMBjA+EAQ+EAXkDAfsOmgELqgEfAwHGDqsBC8oBIQMB3w3LAQvqASEDAfgM0QIJuAQfAwHHArkECcIEEgMBsgLbBA3bBH4DAZ8CxwQNxwSEAQMBjQLgBA3gBGMDAfsB0QQN0QRyAwHpAcwEDcwEhAEDAdcB1gQN1gR+AwHFAZ0BEZ0BYgMB6Q6iARGiAWcDAdgOpwERpwGOAQMBxw64ARG4AX0DAbUOswERswF5AwGkDq4BEa4BWgMBkw7HARHHAWQDAYIOwgERwgFqAwHxDb0BEb0BewMB4A3YARHYAX0DAc4N0wER0wF5AwG9Dc4BEc4BWgMBrA3iARHiAVwDAZsN5wER5wGGAQMBig3dARHdAXsDAfkM1AIP1AJ+AwHJCtECtAHRArgBAwHICtECmAHRApwBAwHHCtsCDbYEGAMByALABDXABDkDAcYCvAQPvAR6AwGzAuYCD5MDGgMB5AiUAw+fAy0DAasIoAMPsAMtAwHWB7EDD98DLAMB2QXgAw/rAzEDAaAF7AMPnQQaAwG7A54ED6kEGAMBggOqBA+1BCoDAckC5wIR/AIrAwHWCf0CEZIDKwMB5QiXAxWXA30DAcgInAMVnAOTAQMBrAioAxWoA4MBAwGPCKMDFaMDfQMB8wetAxWtA4sBAwHXB80DFc0DewMBugfDAxXDA4EBAwGeB9cDFdcDewMBgge+AxW+A30DAeYGtAMVtAOBAQMBygbcAxXcA3sDAa4G0gMV0gOLAQMBkgbIAxXIA38DAfYFuQMVuQOBAQMB2gXjAxXjA3MDAb0F6AMV6ANzAwGhBe0DEfgDIwMB5wT5AxGEBCMDAa4EhQQRkAQjAwH1A5EEEZwEIwMBvAOmBBWmBHADAZ8DoQQVoQR0AwGDA7IEFbIEjwEDAeYCrQQVrQSzAgMBygLvAhfvAocBAwGrCvkCF/kCbQMBjwr0Ahf0AmIDAfMJ6gIX6gJlAwHXCY8DF48DbQMBugmFAxeFA4cBAwGeCYoDF4oDYgMBggmAAxeAA2UDAeYI9QMX9QOIAQMBhAXwAxfwA3UDAegEgQQXgQSIAQMBywT8Axf8A3UDAa8EjQQXjQSOAQMBkgSIBBeIBHsDAfYDmQQXmQSOAQMB2QOUBBeUBHsDAb0D</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbIkBRgOCBQ4CAQFSC1LRAQIBV1cLV9EBAgFGXAtc1QECATVhC2HVAQIBJGYLZnACARNsC2xaAgECcAXoAQoDAeUM6QEF9AEgAwHCDPUBBYoCIwMB/QuLAgWRAi0DAesLkgIFnQIYAwHIC54CBakCFAMBpQuqAgWwAiADAZILsQIFvAInAwHvCr0CBcMCIAMB3ArEAgXfBBADAcMB4AQF5gQgAwGwAecEBe0EJQMBngHuBAX0BCADAYsB9QQFgAUvAgFocwtzWwMB5gx3CZYBJAMB6Q6ZAQnmARQDAfcM8QEL8QGFAQMB1AzsAQvsAaYBAwHDDP0BC/0BbwMBsQyHAguHAnsDAaAM+AEL+AFrAwGPDIICC4ICbQMB/guOAguOAoUBAwHsC5UCC5UCsQEDAdoLmgILmgJ/AwHJC6YCC6YCdwMBtwuhAguhAn0DAaYLrQILrQKFAQMBlAuqAmCqAn0DAZMLuQILuQJzAwGBC7QCC7QCggEDAfAKwAILwAKFAQMB3gq9AmC9AokBAwHdCsgCB74EEgMBsQK/BAfeBCgDAcQB4wQL4wSFAQMBsgHgBGDgBLsBAwGxAeoEC+oEYQMBnwHxBAvxBIUBAwGNAe4EYO4EkAEDAYwB+AQL+ARhAgF6/QQL/QTBAQIBaX8Pf3sDAb8Peg96dwMBrg+TAQ+TAWIDAZ0PiQEPiQFsAwGMD44BD44BXQMB+w6EAQ+EAXkDAeoOmgELqgEfAwG1DqsBC8oBKwMBzg3LAQvlASsDAfgMzAIJswQfAwHHArQECb0EEgMBsgLWBA3WBH4DAZ8CwgQNwgSEAQMBjQLbBA3bBGMDAfsBzAQNzARyAwHpAccEDccEhAEDAdcB0QQN0QR+AwHFAZ0BEZ0BYgMB2A6iARGiAWcDAccOpwERpwGXAQMBtg64ARG4AX0DAaQOswERswF5AwGTDq4BEa4BWgMBgg7HARHHAWQDAfENwgERwgFqAwHgDb0BEb0BewMBzw3TARHTAX0DAb0NzgERzgFaAwGsDd0BEd0BXAMBmw3iARHiAY8BAwGKDdgBEdgBewMB+QzPAg/PAn4DAckKzAK0AcwCuAEDAcgKzAKYAcwCnAEDAccK1gINsQQYAwHIArsENbsEOQMBxgK3BA+3BHoDAbMC4QIPjgMaAwHkCI8DD5oDLQMBqwibAw+rAy0DAdYHrAMP2gMsAwHZBdsDD+YDMQMBoAXnAw+YBBoDAbsDmQQPpAQYAwGCA6UED7AEKgMByQLiAhH3AisDAdYJ+AIRjQMrAwHlCJIDFZIDfQMByAiXAxWXA5MBAwGsCKMDFaMDgwEDAY8IngMVngN9AwHzB6gDFagDiwEDAdcHyAMVyAN7AwG6B74DFb4DgQEDAZ4H0gMV0gN7AwGCB7kDFbkDfQMB5gavAxWvA4EBAwHKBtcDFdcDewMBrgbNAxXNA4sBAwGSBsMDFcMDfwMB9gW0AxW0A4EBAwHaBd4DFd4DcwMBvQXjAxXjA3MDAaEF6AMR8wMjAwHnBPQDEf8DIwMBrgSABBGLBCMDAfUDjAQRlwQjAwG8A6EEFaEEcAMBnwOcBBWcBHQDAYMDrQQVrQSPAQMB5gKoBBWoBLMCAwHKAuoCF+oChwEDAasK9AIX9AJtAwGPCu8CF+8CYgMB8wnlAhflAmUDAdcJigMXigNtAwG6CYADF4ADhwEDAZ4JhQMXhQNiAwGCCfsCF/sCZQMB5gjwAxfwA4gBAwGEBesDF+sDdQMB6AT8Axf8A4gBAwHLBPcDF/cDdQMBrwSIBBeIBI4BAwGSBIMEF4MEewMB9gOUBBeUBI4BAwHZA48EF48EewMBvQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="GetDataFromSource_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="GetChanges_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ProcessCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ProcessZones_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="GetChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="GetDataFromCodeChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="GetDataFromZoneChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="222,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

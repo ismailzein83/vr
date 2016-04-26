@@ -16,7 +16,7 @@ using Vanrise.Entities;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
 
-    public sealed class ProcessCodes : CodeActivity
+    public sealed class GetDataFromCodeChanges : CodeActivity
     {
 
         [RequiredArgument]
@@ -40,7 +40,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             Changes changes = Changes.Get(context);
-            DateTime startReading = DateTime.Now;
             CodeGroupManager codeGroupManager = new CodeGroupManager();
             List<CodeToAdd> codesToAdd = new List<CodeToAdd>();
             List<CodeToMove> codesToMove = new List<CodeToMove>();
@@ -87,10 +86,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     ZoneName = code.ZoneName,
                 });
             }
-
-
-            TimeSpan spent = DateTime.Now.Subtract(startReading);
-            context.WriteTrackingMessage(LogEntryType.Information, "Converting Data to Work Flow Stracture done and Takes: {0}", spent);
 
             CodesToAdd.Set(context, codesToAdd);
             CodesToMove.Set(context, codesToMove);

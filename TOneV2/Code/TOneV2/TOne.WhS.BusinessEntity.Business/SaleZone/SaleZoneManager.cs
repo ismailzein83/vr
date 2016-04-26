@@ -146,16 +146,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        public List<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        public IEnumerable<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
         {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
+            IEnumerable<SaleZone> allSaleZones = GetCachedSaleZones().Values;
+            return allSaleZones.FindAllRecords(item => item.SellingNumberPlanId == sellingNumberPlanId && item.CountryId == countryId && (!item.EED.HasValue || (item.EED.Value > minimumDate && item.EED > item.BED)));
         }
-
-        public List<SaleZone> GetEffectiveSaleZonesBySellingNumberPlan(int sellingNumberPlanId, DateTime minimumDate)
+        public IEnumerable<SaleZone> GetEffectiveSaleZonesBySellingNumberPlan(int sellingNumberPlanId, DateTime minimumDate)
         {
-            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            return dataManager.GetEffectiveSaleZonesBySellingNumberPlan(sellingNumberPlanId, minimumDate);
+            IEnumerable<SaleZone> allSaleZones = GetCachedSaleZones().Values;
+            return allSaleZones.FindAllRecords(item => item.SellingNumberPlanId == sellingNumberPlanId && (!item.EED.HasValue || (item.EED.Value > DateTime.Now && item.EED > item.BED)));
         }
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)

@@ -16,7 +16,7 @@ using Vanrise.Entities;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
 
-    public sealed class ProcessZones : CodeActivity
+    public sealed class GetDataFromZoneChanges : CodeActivity
     {
 
 
@@ -27,7 +27,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<DateTime> MinimumDate { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<int, IEnumerable<SaleCode>>> ZoneBySaleCodes { get; set; }
+        public InArgument<Dictionary<long, IEnumerable<SaleCode>>> SaleCodesByZoneId { get; set; }
 
         [RequiredArgument]
         public InOutArgument<IEnumerable<CodeToMove>> CodesToMove { get; set; }
@@ -40,25 +40,25 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             Changes changes = Changes.Get(context);
-            Dictionary<int, IEnumerable<SaleCode>> zoneBySaleCodes = ZoneBySaleCodes.Get(context);
+            Dictionary<long, IEnumerable<SaleCode>> saleCodesByZoneId = SaleCodesByZoneId.Get(context);
             List<CodeToMove> codesToMove = CodesToMove.Get(context).ToList();
             List<CodeToClose> codesToClose = CodesToClose.Get(context).ToList();
             DateTime minimumDate = MinimumDate.Get(context);
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             CodeGroupManager codeGroupManager = new CodeGroupManager();
-            string oldZoneName;
+
 
             foreach (RenamedZone renamedZone in changes.RenamedZones)
             {
-                oldZoneName = saleZoneManager.GetSaleZoneName((long)renamedZone.ZoneId);
-                IEnumerable<SaleCode> saleCodes = zoneBySaleCodes.GetRecord(renamedZone.ZoneId.Value);
+                string oldZoneName = saleZoneManager.GetSaleZoneName(renamedZone.ZoneId.Value);
+                IEnumerable<SaleCode> saleCodes = saleCodesByZoneId.GetRecord(renamedZone.ZoneId.Value);
 
                 foreach (SaleCode saleCode in saleCodes)
                 {
                     CodeToMove codeToMove = new CodeToMove();
                     CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(saleCode.Code);
-                    if (ValidateSaleCodeInRenamedZone(saleCode, changes))
+                    if (!CodeIsExcludedFromRenamedZoneAction(saleCode, changes))
                     {
                         codesToMove.Add(new CodeToMove
                         {
@@ -75,10 +75,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             foreach (DeletedZone deletedZone in changes.DeletedZones)
             {
-                IEnumerable<SaleCode> saleCodes = zoneBySaleCodes.GetRecord(deletedZone.ZoneId);
+                IEnumerable<SaleCode> saleCodes = saleCodesByZoneId.GetRecord(deletedZone.ZoneId);
                 foreach (SaleCode saleCode in saleCodes)
                 {
-                    if (ValidateSaleCodeInDeletedZone(saleCode, changes))
+                    if (!CodeIsExcludedFromCloseZoneAction(saleCode, changes))
                     {
                         CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(saleCode.Code);
                         codesToClose.Add(new CodeToClose
@@ -92,25 +92,21 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 }
             }
 
-                CodesToMove.Set(context, codesToMove);
+            CodesToMove.Set(context, codesToMove);
 
-                CodesToClose.Set(context, codesToClose);
+            CodesToClose.Set(context, codesToClose);
 
         }
 
 
-        private bool ValidateSaleCodeInRenamedZone(SaleCode saleCode, Changes changes)
+        private bool CodeIsExcludedFromRenamedZoneAction(SaleCode saleCode, Changes changes)
         {
-            if (!changes.NewCodes.Any(x => x.Code == saleCode.Code) && !changes.DeletedCodes.Any(x => x.Code == saleCode.Code))
-                return true;
-            return false;
+            return (changes.NewCodes.Any(x => x.Code == saleCode.Code) && changes.DeletedCodes.Any(x => x.Code == saleCode.Code));
         }
 
-        private bool ValidateSaleCodeInDeletedZone(SaleCode saleCode, Changes changes)
+        private bool CodeIsExcludedFromCloseZoneAction(SaleCode saleCode, Changes changes)
         {
-            if (!changes.NewCodes.Any(x => x.Code == saleCode.Code && x.ZoneId.HasValue && x.ZoneId.Value == saleCode.ZoneId) && !changes.DeletedCodes.Any(x => x.Code == saleCode.Code))
-                return true;
-            return false;
+            return (changes.NewCodes.Any(x => x.Code == saleCode.Code && x.ZoneId.HasValue && x.ZoneId.Value == saleCode.ZoneId) && changes.DeletedCodes.Any(x => x.Code == saleCode.Code));
         }
 
     }

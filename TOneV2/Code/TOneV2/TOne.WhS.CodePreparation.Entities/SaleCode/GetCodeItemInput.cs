@@ -9,7 +9,7 @@ namespace TOne.WhS.CodePreparation.Entities
     public class GetCodeItemInput
     {
         public int SellingNumberPlanId { get; set; }
-        public int? ZoneId { get; set; }
+        public long? ZoneId { get; set; }
         public string ZoneName { get; set; }
         public int CountryId { get; set; }
     }

@@ -96,8 +96,8 @@
     <Compile Include="GetImportedDataValidationRules.cs" />
     <Compile Include="PrepareExistingCodes.cs" />
     <Compile Include="PrepareExistingZones.cs" />
-    <Compile Include="ProcessZones.cs" />
-    <Compile Include="ProcessCodes.cs" />
+    <Compile Include="GetDataFromZoneChanges.cs" />
+    <Compile Include="GetDataFromCodeChanges.cs" />
     <Compile Include="ProcessCountryCodes.cs" />
     <Compile Include="ReserveIdForCodePreparation.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />

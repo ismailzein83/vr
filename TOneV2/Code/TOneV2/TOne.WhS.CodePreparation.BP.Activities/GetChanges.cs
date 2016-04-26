@@ -20,7 +20,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<int> SellingNumberPlanId { get; set; }
 
         [RequiredArgument]
-        public OutArgument<Dictionary<int, IEnumerable<SaleCode>>> ZoneBySaleCodes { get; set; }
+        public OutArgument<Dictionary<long, IEnumerable<SaleCode>>> SaleCodesByZoneId { get; set; }
 
         [RequiredArgument]
         public OutArgument<Changes> Changes { get; set; }
@@ -33,26 +33,27 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             CodePreparationManager codePreparationManager = new CodePreparationManager();
             Changes changes = codePreparationManager.GetChanges(sellingNumberPlanId);
 
+            HashSet<long> zoneIds = new HashSet<long>();
 
-            List<int> zoneIds = new List<int>();
-            zoneIds.AddRange(changes.DeletedZones.Select(x => x.ZoneId));
+            foreach (DeletedZone deletedZone in changes.DeletedZones)
+            {
+                zoneIds.Add(deletedZone.ZoneId);
+            }
 
-            if (changes.RenamedZones.Count > 0)
-                foreach (RenamedZone renamedZone in changes.RenamedZones)
-                {
-                    if (!zoneIds.Contains(renamedZone.ZoneId.Value))
-                        zoneIds.Add(renamedZone.ZoneId.Value);
-                }
+            foreach (RenamedZone renamedZone in changes.RenamedZones)
+            {
+                zoneIds.Add(renamedZone.ZoneId.Value);
+            }
 
-            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByZoneIDs(zoneIds, DateTime.Now);
-            Dictionary<int, IEnumerable<SaleCode>> zoneBySaleCodes = new Dictionary<int, IEnumerable<SaleCode>>();
+            List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByZoneIDs(zoneIds.ToList(), DateTime.Now);
+            Dictionary<long, IEnumerable<SaleCode>> saleCodesByZoneId = new Dictionary<long, IEnumerable<SaleCode>>();
 
             foreach (var zone in zoneIds)
             {
-                zoneBySaleCodes.Add(zone, saleCodes.FindAllRecords(x => x.ZoneId == zone));
+                saleCodesByZoneId.Add(zone, saleCodes.FindAllRecords(x => x.ZoneId == zone));
             }
 
-            ZoneBySaleCodes.Set(context, zoneBySaleCodes);
+            SaleCodesByZoneId.Set(context, saleCodesByZoneId);
             Changes.Set(context, changes);
         }
     }

@@ -57,11 +57,10 @@
 
 
         function loadSaleZoneSelector() {
-            //removing closed and pending closed zones and current zone
+            //removing current zone and closed, pending zones from to zones
             for (var i = 0; i < zoneItems.length ; i++) {
                 var zoneItem = zoneItems[i];
-                if (zoneItem.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && zoneItem.nodeName != zoneName)
-                    if (zoneItem.status == null || zoneItem.status != WhS_CP_ZoneItemStatusEnum.PendingClosed.value)
+                if (zoneItem.DraftStatus != WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value && zoneItem.nodeName != zoneName && zoneItem.status == null)
                       $scope.saleZones.push({ "Name": zoneItems[i].nodeName });
             }
         }
