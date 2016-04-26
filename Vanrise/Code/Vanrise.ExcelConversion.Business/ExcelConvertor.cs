@@ -15,7 +15,7 @@ namespace Vanrise.ExcelConversion.Business
     {
         #region Public Methods
 
-        public ConvertedExcel ConvertExcelFile(long fileId, ExcelConversionSettings conversionSettings)
+        public ConvertedExcel ConvertExcelFile(long fileId, ExcelConversionSettings conversionSettings, bool stopOnFirstEmptyRow)
         {
             ConvertedExcel convertedExcel = new ConvertedExcel
             {
@@ -34,7 +34,7 @@ namespace Vanrise.ExcelConversion.Business
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
             ConvertFields(conversionSettings, convertedExcel, workbook);
-            ConvertLists(conversionSettings, convertedExcel, workbook);
+            ConvertLists(conversionSettings, convertedExcel, workbook, stopOnFirstEmptyRow);
 
             return convertedExcel;
         }
@@ -59,40 +59,54 @@ namespace Vanrise.ExcelConversion.Business
             }
         }
 
-        private void ConvertLists(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, Workbook workbook)
+        private void ConvertLists(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, Workbook workbook, bool stopOnFirstEmptyRow)
         {
             if (conversionSettings.ListMappings != null)
             {
                 foreach (var listMapping in conversionSettings.ListMappings)
                 {
-                    ConvertedExcelList lst = new ConvertedExcelList
-                    {
-                        ListName = listMapping.ListName,
-                        Records = new List<ConvertedExcelRecord>()
-                    };
                     if (workbook.Worksheets.Count <= listMapping.SheetIndex)
                         throw new Exception(String.Format("List SheetIndex '{0}' is greater than max index in the workbook", listMapping.SheetIndex));
                     var workSheet = workbook.Worksheets[listMapping.SheetIndex];
                     int lastRowIndex = listMapping.LastRowIndex.HasValue && listMapping.LastRowIndex.Value < workSheet.Cells.Rows.Count ? listMapping.LastRowIndex.Value : (workSheet.Cells.Rows.Count - 1);
-                    for (int i = listMapping.FirstRowIndex; i <= lastRowIndex; i++)
-                    {
-                        var row = workSheet.Cells.Rows[i];
-                        var convertedRecord = new ConvertedExcelRecord { Fields = new ConvertedExcelFieldsByName() };
-                        lst.Records.Add(convertedRecord);
 
-                        foreach (var fldMapping in listMapping.FieldMappings)
-                        {
-                            ConvertedExcelField fld = new ConvertedExcelField
-                            {
-                                FieldName = fldMapping.FieldName,
-                                FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, workSheet, row)
-                            };
-                            convertedRecord.Fields.Add(fld);
-                        }
-                    }
-                    convertedExcel.Lists.Add(lst);
+                    BuildExceRecord(conversionSettings,convertedExcel, listMapping, workbook, workSheet, lastRowIndex, stopOnFirstEmptyRow);
                 }
             }
+        }
+
+        private void BuildExceRecord(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, ListMapping listMapping, Workbook workbook, Worksheet workSheet, int lastRowIndex, bool stopOnFirstEmptyRow)
+        {
+            ConvertedExcelList lst = new ConvertedExcelList
+            {
+                ListName = listMapping.ListName,
+                Records = new List<ConvertedExcelRecord>()
+            };
+            for (int i = listMapping.FirstRowIndex; i <= lastRowIndex; i++)
+            {
+                var row = workSheet.Cells.Rows[i];
+
+                if (stopOnFirstEmptyRow && CheckIsRowEmpty(workSheet, row))
+                {
+                    convertedExcel.Lists.Add(lst);
+                    return;
+                }
+                var convertedRecord = new ConvertedExcelRecord { Fields = new ConvertedExcelFieldsByName() };
+
+                lst.Records.Add(convertedRecord);
+                foreach (var fldMapping in listMapping.FieldMappings)
+                {
+                    ConvertedExcelField fld = new ConvertedExcelField
+                    {
+                        FieldName = fldMapping.FieldName,
+                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, workSheet, row)
+                    };
+                    convertedRecord.Fields.Add(fld);
+                }
+
+
+            }
+            convertedExcel.Lists.Add(lst);
         }
 
         private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, ExcelConversionSettings conversionSettings, Worksheet workSheet, Row row)
@@ -117,6 +131,19 @@ namespace Vanrise.ExcelConversion.Business
                 return fldValue;
         }
 
+        private bool CheckIsRowEmpty(Worksheet workSheet,Row row)
+        {
+            int maxdatacol = workSheet.Cells.MaxDataColumn +1 ;
+            for(var i=0; i<=maxdatacol; i++)
+            {
+                var cell = row.GetCellOrNull(i);
+                if(cell !=null && cell.Value !=null)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         #endregion
     }
 }

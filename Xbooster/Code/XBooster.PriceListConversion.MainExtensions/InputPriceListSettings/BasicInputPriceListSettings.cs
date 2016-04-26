@@ -28,7 +28,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
         public override PriceList Execute(IInputPriceListExecutionContext context)
         {
             ExcelConvertor excelConvertor = new ExcelConvertor();
-            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, this.ExcelConversionSettings);
+            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, this.ExcelConversionSettings,true);
             return ConvertToPriceListItem(convertedExcel);
         }
 
@@ -38,55 +38,41 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
 
         private PriceList ConvertToPriceListItem(ConvertedExcel convertedExcel)
         {
-            
-            Dictionary<string, decimal> rateByZone =  BuildRateByZone(convertedExcel);
-            Dictionary<string, List<string>> codesByZone = BuildCodesByZone(convertedExcel);
-            PriceList priceListItem = ConvertToPriceList(convertedExcel, rateByZone, codesByZone);
+
+            Dictionary<string, PriceListRate> rateByZone = BuildRateByZone(convertedExcel);
+            Dictionary<string, List<PriceListCode>> codesByZone = BuildCodesByZone(convertedExcel);
+            PriceList priceListItem = ConvertToPriceList(rateByZone, codesByZone);
             return priceListItem;
            
         }
-        private PriceList ConvertToPriceList(ConvertedExcel convertedExcel, Dictionary<string, decimal> rateByZone, Dictionary<string, List<string>> codesByZone)
+        private PriceList ConvertToPriceList(Dictionary<string, PriceListRate> rateByZone, Dictionary<string, List<PriceListCode>> codesByZone)
         {
             PriceList priceListItem = new Entities.PriceList();
             priceListItem.Records = new List<PriceListRecord>();
-            ConvertedExcelList convertedExcelList;
-            if (convertedExcel.Lists.TryGetValue("CodeList", out convertedExcelList))
+            foreach (var obj in codesByZone)
             {
-                foreach (var obj in convertedExcelList.Records)
+                PriceListRecord priceListRecord = new Entities.PriceListRecord();
+                priceListRecord.Zone = obj.Key;
+                List<PriceListCode> codes;
+                if (codesByZone.TryGetValue(priceListRecord.Zone, out codes))
                 {
-                    PriceListRecord priceListRecord = new Entities.PriceListRecord();
-                    ConvertedExcelField zoneField;
-
-                    if (obj.Fields.TryGetValue("Zone", out zoneField))
-                    {
-                        priceListRecord.Zone = zoneField.FieldValue.ToString();
-                    };
-                    List<string> codes;
-                    if (codesByZone.TryGetValue(priceListRecord.Zone, out codes))
-                    {
-                        priceListRecord.Codes = codes;
-                    };
-                    ConvertedExcelField bEDField;
-                    if (obj.Fields.TryGetValue("EffectiveDate", out bEDField))
-                    {
-                        DateTime result;
-                        DateTime.TryParse(bEDField.FieldValue.ToString(), out result);
-                        priceListRecord.EffectiveDate = result;
-                    };
-                    decimal rate;
-                    if (rateByZone.TryGetValue(priceListRecord.Zone, out rate))
-                    {
-                        priceListRecord.Rate = rate;
-                    }
-                    priceListItem.Records.Add(priceListRecord);
+                    priceListRecord.Codes = codes;
+                };
+                PriceListRate rate;
+                if (rateByZone.TryGetValue(priceListRecord.Zone, out rate))
+                {
+                    priceListRecord.Rate = rate.Rate;
+                    priceListRecord.RateEffectiveDate = rate.RateEffectiveDate;
                 }
-
+                priceListItem.Records.Add(priceListRecord);
             }
+
+    
             return priceListItem;
         }
-        private Dictionary<string, List<string>> BuildCodesByZone(ConvertedExcel convertedExcel)
+        private Dictionary<string, List<PriceListCode>> BuildCodesByZone(ConvertedExcel convertedExcel)
         {
-            Dictionary<string, List<string>> codesByZone = new Dictionary<string, List<string>>();
+            Dictionary<string, List<PriceListCode>> codesByZone = new Dictionary<string, List<PriceListCode>>();
             ConvertedExcelList CodeConvertedExcelList;
             if (convertedExcel.Lists.TryGetValue("CodeList", out CodeConvertedExcelList))
             {
@@ -94,48 +80,78 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                 {
                     ConvertedExcelField zoneField;
                     ConvertedExcelField codeField;
-
-
+                    ConvertedExcelField codeEffectiveDateField;
+                    DateTime? result = null;
+                    if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
+                    {
+                        DateTime outputResult;
+                        DateTime.TryParse(codeEffectiveDateField.FieldValue.ToString(), out outputResult);
+                        result = outputResult;
+                    };
                     if (obj.Fields.TryGetValue("Zone", out zoneField) && obj.Fields.TryGetValue("Code", out codeField))
                     {
-                        List<string> codes;
+
+
+                        List<PriceListCode> codes;
                         string code = codeField.FieldValue.ToString();
-                        var codesObj = code.Trim().Split(this.Delimiter).ToList();
-                        List<string> resolvedCodes = new List<string>();
-                        foreach (string codeValue in codesObj)
+                        List<PriceListCode> resolvedCodes = new List<PriceListCode>();
+                        if (this.CodeLayout == CodeLayout.CammaSeparated)
                         {
-                            if (this.HasCodeRange)
+                            var codesObj = code.Trim().Split(this.Delimiter).ToList();
+                            foreach (string codeValue in codesObj)
                             {
-                                var rangeCode = codeValue.Split(this.RangeSeparator);
-                                if (rangeCode.Length > 0)
+                                if (this.HasCodeRange)
                                 {
-                                    long firstCode;
-                                    long lastCode;
-                                    if (long.TryParse(rangeCode.FirstOrDefault(), out firstCode) && long.TryParse(rangeCode.LastOrDefault(), out lastCode))
+                                    var rangeCode = codeValue.Split(this.RangeSeparator);
+                                    if (rangeCode.Length > 0)
                                     {
-                                        while (firstCode <= lastCode)
+                                        long firstCode;
+                                        long lastCode;
+                                        if (long.TryParse(rangeCode.FirstOrDefault(), out firstCode) && long.TryParse(rangeCode.LastOrDefault(), out lastCode))
                                         {
-                                            string increasedCode = (firstCode++).ToString();
-                                            resolvedCodes.Add(increasedCode);
+                                            while (firstCode <= lastCode)
+                                            {
+                                                string increasedCode = (firstCode++).ToString();
+                                                resolvedCodes.Add(new PriceListCode
+                                                {
+                                                    Code = increasedCode,
+                                                    CodeEffectiveDate = result
+                                                });
+                                            }
                                         }
+                                        else
+                                        {
+                                            throw new NullReferenceException("Error While Parsing Code Range.");
+                                        }
+
                                     }
                                     else
                                     {
-                                        throw new NullReferenceException("Error While Parsing Code Range.");
+                                        resolvedCodes.Add(new PriceListCode
+                                        {
+                                            Code = codeValue,
+                                            CodeEffectiveDate = result
+                                        });
                                     }
-
                                 }
                                 else
                                 {
-                                    resolvedCodes.Add(codeValue);
+                                    resolvedCodes.Add(new PriceListCode
+                                    {
+                                        Code = codeValue,
+                                        CodeEffectiveDate = result
+                                    });
                                 }
                             }
-                            else
-                            {
-                                resolvedCodes.Add(codeValue);
-                            }
                         }
-
+                        else
+                        {
+                            resolvedCodes.Add(new PriceListCode
+                            {
+                                Code = code,
+                                CodeEffectiveDate = result
+                            });
+                        }
 
                         if (!codesByZone.TryGetValue(zoneField.FieldValue.ToString(), out codes))
                         {
@@ -152,26 +168,37 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
             }
             return codesByZone;
         }
-        private Dictionary<string, decimal> BuildRateByZone(ConvertedExcel convertedExcel)
+        private Dictionary<string, PriceListRate> BuildRateByZone(ConvertedExcel convertedExcel)
         {
             ConvertedExcelList RateConvertedExcelList;
-            Dictionary<string, decimal> rateByZone = new Dictionary<string, decimal>();
+            Dictionary<string, PriceListRate> rateByZone = new Dictionary<string, PriceListRate>();
             if (convertedExcel.Lists.TryGetValue("RateList", out RateConvertedExcelList))
             {
                 foreach (var obj in RateConvertedExcelList.Records)
                 {
                     ConvertedExcelField zoneField;
                     ConvertedExcelField rateField;
+                    ConvertedExcelField rateEffectiveDateField;
+                    DateTime? result = null;
+                    if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
+                    {
+                        DateTime outputResult;
+                        DateTime.TryParse(rateEffectiveDateField.FieldValue.ToString(), out outputResult);
+                        result = outputResult;
+                    };
                     if (obj.Fields.TryGetValue("Zone", out zoneField) && obj.Fields.TryGetValue("Rate", out rateField))
                     {
-                        decimal rate;
+                        PriceListRate rate;
                         if (!rateByZone.TryGetValue(zoneField.FieldValue.ToString(), out rate))
                         {
-                            rateByZone.Add(zoneField.FieldValue.ToString(), Convert.ToDecimal(rateField.FieldValue));
+                            rateByZone.Add(zoneField.FieldValue.ToString(), new PriceListRate{
+                                Rate = Convert.ToDecimal(rateField.FieldValue),
+                                RateEffectiveDate = result
+                            });
                         }
                         else
                         {
-                            if (rate == Convert.ToDecimal(rateField.FieldValue))
+                            if (rate.Rate == Convert.ToDecimal(rateField.FieldValue))
                             {
                                 continue;
 
@@ -186,6 +213,11 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                 }
             }
             return rateByZone;
+        }
+        private class PriceListRate
+        {
+            public decimal Rate { get; set; }
+            public DateTime? RateEffectiveDate { get; set; }
         }
         #endregion
 

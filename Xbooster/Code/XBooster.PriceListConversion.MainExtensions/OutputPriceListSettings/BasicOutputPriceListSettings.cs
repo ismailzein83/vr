@@ -32,56 +32,46 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
 
-           
-           
+
+
             foreach (var table in this.Tables)
             {
                 var workSheet = workbook.Worksheets[table.SheetIndex];
                 var rowIndex = table.RowIndex;
                 foreach (var item in context.Records)
                 {
-                    for (var i = 0; i <= workSheet.Cells.Rows[table.RowIndex].LastCell.Column ; i++)
+                    foreach (var code in item.Codes)
                     {
-                        foreach (var field in table.FieldsMapping)
+                        for (var i = 0; i <= workSheet.Cells.Rows[table.RowIndex].LastCell.Column; i++)
                         {
-                            if (this.RepeatOtherValues && i != field.CellIndex)
+                            foreach (var field in table.FieldsMapping)
                             {
-                                workSheet.Cells[rowIndex, i].PutValue(workSheet.Cells[table.RowIndex, i].Value);
-                            }
-                            else if (i == field.CellIndex)
-                            {
-                                FieldValueExecutionContext fieldValueExecutionContext = new Business.FieldValueExecutionContext();
-                                fieldValueExecutionContext.Record = item;
-                                field.FieldValue.Execute(fieldValueExecutionContext);
-                                var fieldValue = fieldValueExecutionContext.FieldValue;
-                                if (fieldValue is List<string>)
+                                if (this.RepeatOtherValues && i != field.CellIndex)
                                 {
-                                    foreach (string fieldList in (List<string>)fieldValue)
-                                    {
-                                        foreach (var fieldMapping in table.FieldsMapping)
-                                        {
-                                            if (field !=fieldMapping)
-                                            {
-                                                 FieldValueExecutionContext fieldValueExecutionContext1 = new Business.FieldValueExecutionContext();
-                                                fieldValueExecutionContext1.Record = item;
-                                                fieldMapping.FieldValue.Execute(fieldValueExecutionContext1);
-                                                var fieldValueObj = fieldValueExecutionContext1.FieldValue;
-                                                if (fieldValueExecutionContext1.FieldValue is DateTime)
-                                                    fieldValueObj = ((DateTime)fieldValueExecutionContext.FieldValue).ToString(this.DateTimeFormat);
-
-                                                workSheet.Cells[rowIndex, fieldMapping.CellIndex].PutValue(fieldValueObj);
-                                            }
-                                        }
-                                        workSheet.Cells[rowIndex, field.CellIndex].PutValue(fieldList.Trim());
-                                        rowIndex++;
-                                    }
+                                    workSheet.Cells[rowIndex, i].PutValue(workSheet.Cells[table.RowIndex, i].Value);
                                 }
+                                else if (i == field.CellIndex)
+                                {
+                                    FieldValueExecutionContext fieldValueExecutionContext = new Business.FieldValueExecutionContext();
+                                    fieldValueExecutionContext.EffectiveDate = code.CodeEffectiveDate;
+                                    fieldValueExecutionContext.Rate = item.Rate;
+                                    fieldValueExecutionContext.Zone = item.Zone;
+                                    fieldValueExecutionContext.Code = code.Code;
+
+                                    field.FieldValue.Execute(fieldValueExecutionContext);
+
+                                    var fieldValue = fieldValueExecutionContext.FieldValue;
+                                    if (fieldValueExecutionContext.FieldValue is DateTime)
+                                        fieldValue = ((DateTime)fieldValueExecutionContext.FieldValue).ToString(this.DateTimeFormat);
+                                    workSheet.Cells[rowIndex, field.CellIndex].PutValue(fieldValue);
+                                }
+                                
                             }
-
-
                         }
+                        rowIndex++;
                     }
-                 }
+                }
+
             }
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = workbook.SaveToStream();

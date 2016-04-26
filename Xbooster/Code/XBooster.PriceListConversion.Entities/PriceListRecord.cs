@@ -9,8 +9,13 @@ namespace XBooster.PriceListConversion.Entities
     public class PriceListRecord
     {
         public string Zone { get; set; }
-        public List<string> Codes { get; set; }
+        public List<PriceListCode> Codes { get; set; }
         public decimal Rate { get; set; }
-        public DateTime? EffectiveDate { get; set; }
+        public DateTime? RateEffectiveDate { get; set; }
+    }
+    public class PriceListCode
+    {
+        public string Code { get; set; }
+        public DateTime? CodeEffectiveDate { get; set; }
     }
 }

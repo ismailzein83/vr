@@ -8,7 +8,10 @@ namespace XBooster.PriceListConversion.Entities
 {
     public interface IFieldValueExecutionContext
     {
-        PriceListRecord Record { get;  }
+         string Zone { get; }
+         string Code  { get; }
+         decimal Rate { get; }
+         DateTime? EffectiveDate { get;  }
         Object FieldValue { set; }
     }
 }
