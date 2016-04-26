@@ -1350,6 +1350,9 @@ loader .outer-loader {
         border-radius: 0px 0px 4px 4px;
     }
     /* panel-vr-child */
+    .panel-vr-child> .panel-heading[expanded="false"] {
+        margin-bottom: 15px !important;
+    }
     .panel-vr.panel-vr-child > .panel-heading {
         background: transparent none repeat scroll 0% 0%;
         border-radius: 0px;
@@ -1363,7 +1366,6 @@ loader .outer-loader {
         padding: 4px 6px 4px 0px;
         margin-top: -17px;
     }
-
         .panel-vr.panel-vr-child > .panel-heading label {
             font-weight: bold;
             font-size: 12px;
