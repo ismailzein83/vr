@@ -62,7 +62,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder queryBuilder = new StringBuilder(@" IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
                                                               BEGIN 
                                                                 Select newtable.*  INTO #TEMPTABLE# FROM (#Query#) as newtable
-                                                                Order by newtable.BlockedAttempts desc
+                                                                
                                                               END");
             queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             queryBuilder.Replace("#Query#", queryData);
@@ -78,12 +78,11 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilterToQuery(whereBuilder);
             AddGroupingToQuery(groupByBuilder);
             queryBuilder.Append(String.Format(@"
-                    SELECT   #SELECTCOLUMNPART#
+                    SELECT   #SELECTCOLUMNPART# ,ROW_NUMBER() OVER (ORDER BY Count (*) DESC) AS RowNum
                     FROM [TOneWhS_CDR].[CDRInvalid]
                         WITH(NOLOCK ,INDEX(IX_CDRInvalid_Attempt)) WHERE ( SupplierID is NULL AND DurationInSeconds=0 AND  Attempt>= @FromDate AND (Attempt<= @ToDate OR @ToDate IS NULL))  
                         #WHEREPART#  
                         #GROUPBYPART# 
-                        
                         "));
 
             queryBuilder.Replace("#SELECTCOLUMNPART#", selectColumnBuilder.ToString());
