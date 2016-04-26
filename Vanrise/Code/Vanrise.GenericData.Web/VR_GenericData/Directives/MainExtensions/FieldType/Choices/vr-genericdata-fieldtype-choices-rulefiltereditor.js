@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypefieldChoiceeditor', ['VR_GenericData_ListRecordFilterOperatorEnum', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrGenericdataFieldtypeChoicesRulefiltereditor', ['VR_GenericData_ListRecordFilterOperatorEnum', 'UtilsService', 'VRUIUtilsService',
     function (VR_GenericData_ListRecordFilterOperatorEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -17,7 +17,7 @@ app.directive('vrGenericdataDatarecordtypefieldChoiceeditor', ['VR_GenericData_L
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Choices/Templates/DataRecordTypeFieldChoiceEditor.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Choices/Templates/ChoicesFieldTypeRuleFilterEditor.html"
 
         };
 
@@ -41,6 +41,7 @@ app.directive('vrGenericdataDatarecordtypefieldChoiceeditor', ['VR_GenericData_L
 
                 api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_ListRecordFilterOperatorEnum);
+                    $scope.selectedFilter = $scope.filters[0];
                     if (payload) {
                         selectedObj = payload.dataRecordTypeField;
                         if (payload.filterObj) {
@@ -54,12 +55,12 @@ app.directive('vrGenericdataDatarecordtypefieldChoiceeditor', ['VR_GenericData_L
                     return {
                         $type: "Vanrise.GenericData.Entities.NumberListRecordFilter, Vanrise.GenericData.Entities",
                         CompareOperator: $scope.selectedFilter.value,
-                        Values: choiceFilterEditorApi.getData().ChoiceIds
+                        Values: choiceFilterEditorApi.getData()
                     };
                 }
 
                 api.getExpression = function () {
-                    var ids = choiceFilterEditorApi.getData().ChoiceIds;
+                    var ids = choiceFilterEditorApi.getData();
                     var expression = $scope.selectedFilter.description + ' (' + ids[0];
                     if (ids.length > 1) {
                         for (var x = 1; x < ids.length; x++) {

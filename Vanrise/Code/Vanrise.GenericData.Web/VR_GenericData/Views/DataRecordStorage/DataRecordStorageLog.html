@@ -13,15 +13,25 @@
                     <vr-datetimepicker label="To" value="toDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
-            <vr-row>
-                <vr-columns width="normal" formname="formFilter">
-                    <label style="text-decoration:underline;cursor:pointer;" data-ng-click="addFilter()">Advanced Search</label>
-                    <!--<vr-button type="Add" data-onclick="addFilter" formname="formFilter"></vr-button>-->
-                </vr-columns>
-            </vr-row>
-            <vr-row ng-show="expression !=undefined">
-                <vr-columns width="fullrow"><vr-label>{{expression}}</vr-label></vr-columns>
-            </vr-row>
+
+            <vr-section title="Advanced Filter" collapsible>
+                <vr-row ng-show="expression !=undefined" removeline>
+                    <vr-columns width="fullrow"><vr-label isvalue>{{expression}}</vr-label></vr-columns>
+                </vr-row>
+                <vr-row removeline>
+                    <vr-columns width="1/4row" class="pull-right">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="addFilter()">
+                            <i class="glyphicon glyphicon-pencil"></i> Edit Filter
+                        </button>
+                    </vr-columns>
+
+                    <vr-columns width="1/4row" class="pull-right">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="resetFilter()">
+                            <i class="glyphicon glyphicon-remove"></i> Reset Filter
+                        </button>
+                    </vr-columns>
+                </vr-row>
+            </vr-section>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">

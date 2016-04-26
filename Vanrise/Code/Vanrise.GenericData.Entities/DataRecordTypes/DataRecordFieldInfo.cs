@@ -4,6 +4,6 @@
     {
         public DataRecordField Entity { get; set; }
 
-        public string FieldTypeEditor { get; set; }
+        public string RuleFilterEditor { get; set; }
     }
 }

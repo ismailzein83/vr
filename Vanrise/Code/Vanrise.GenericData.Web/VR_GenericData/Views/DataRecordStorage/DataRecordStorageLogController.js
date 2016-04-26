@@ -44,6 +44,11 @@
                 }
             };
 
+            $scope.resetFilter = function () {
+                $scope.expression = undefined;
+                filterObj = null;
+            }
+
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
             }

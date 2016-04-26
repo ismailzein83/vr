@@ -25,7 +25,7 @@
         }
 
         function defineScope() {
-            $scope.title = 'Filter Expression';
+            $scope.title = 'Advanced Filter';
             $scope.onGroupFilterReady = function (api) {
                 groupFilterAPI = api;
                 var payload = { dataRecordTypeId: dataRecordTypeId, context: context, filterObj: filterObj };

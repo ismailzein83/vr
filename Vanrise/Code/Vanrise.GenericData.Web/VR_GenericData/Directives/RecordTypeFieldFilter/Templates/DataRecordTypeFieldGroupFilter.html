@@ -1,42 +1,40 @@
 ﻿<vr-section title="Group" collapsible>
-    <vr-row>
+    <vr-row removeline>
         <vr-columns width="1/2row">
-            <!--<form class="btn-group group-conditions">
-                <label class="btn btn-xs btn-primary" ng-class="ctrl.condition == 'AND' ? 'active' : ''">
-                    <input type="radio" name="builder-basic_group_4_cond" value="AND" ng-click="ctrl.andSelected()" ng-checked="(ctrl.condition == 'And')"> AND
-                </label>
-                <label class="btn btn-xs btn-primary" ng-class="ctrl.condition == 'OR' ? 'active' : ''">
-                    <input type="radio" name="builder-basic_group_4_cond" value="OR" ng-click="ctrl.orSelected()" ng-checked="(ctrl.condition == 'Or')"> OR
-                </label>
-            </form>-->
             <vr-choices isradio selectedindex="ctrl.condition">
                 <vr-choice ng-repeat="condition in conditions">{{condition.description}}</vr-choice>
-                <!--<vr-choice>AND</vr-choice>
-                <vr-choice>OR</vr-choice>-->
             </vr-choices>
         </vr-columns>
         <vr-columns width="1/4row" class="pull-right">
-            <button type="button" class="btn btn-xs btn-success" data-add="group" ng-click="ctrl.addGroup()">
+            <button type="button" class="btn btn-xs" data-add="group" ng-click="ctrl.addGroup()" style="background-color:#6DA279;color:white;">
                 <i class="glyphicon glyphicon-plus-sign"></i> Add Group
             </button>
         </vr-columns>
 
         <vr-columns width="1/4row" class="pull-right">
-            <button type="button" class="btn btn-xs btn-success" data-add="rule" ng-click="ctrl.addRule()">
+            <button type="button" class="btn btn-xs" data-add="rule" ng-click="ctrl.addRule()" style="background-color:#6DA279;color:white;">
                 <i class="glyphicon glyphicon-plus"></i> Add Rule
             </button>
         </vr-columns>
     </vr-row>
 
-    <vr-row>
-        <vr-columns width="fullrow" ng-repeat="rule in ctrl.rules">
-            <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-rulefilter'" on-ready="rule.onRuleFilterReady"></vr-directivewrapper>
+    <vr-row removeline ng-repeat="rule in ctrl.rules">
+        <vr-columns width="fullrow">
+            <div style="display:inline-block;width:calc(100% - 18px);">
+                <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-rulefilter'" on-ready="rule.onRuleFilterReady"></vr-directivewrapper>
+            </div>
+
+            <i class="glyphicon glyphicon-remove hand-cursor" style="top: -14px;" ng-click="removeRule(rule)"></i>
+
         </vr-columns>
     </vr-row>
 
-    <vr-row>
-        <vr-columns width="fullrow" ng-repeat="group in ctrl.groups">
-            <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-groupfilter'" on-ready="group.onGroupFilterReady"></vr-directivewrapper>
+    <vr-row removeline ng-repeat="group in ctrl.groups">
+        <vr-columns width="fullrow">
+            <div style="display:inline-block;width:calc(100% - 18px);">
+                <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-groupfilter'" on-ready="group.onGroupFilterReady"></vr-directivewrapper>
+            </div>
+            <i class="glyphicon glyphicon-remove hand-cursor" style="top: -15px;" ng-click="removeGroup(group)"></i>
         </vr-columns>
     </vr-row>
 </vr-section>

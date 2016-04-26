@@ -39,14 +39,14 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                 };
                 ctrl.rules.push(rule);
             }
-            //ctrl.condition = 'And';
-            //ctrl.andSelected = function () {
-            //    ctrl.condition = 'And';
-            //}
+            $scope.removeRule = function (rule) { 
+                ctrl.rules.splice(ctrl.rules.indexOf(rule), 1);
+            }
 
-            //ctrl.orSelected = function () {
-            //    ctrl.condition = 'Or';
-            //}
+            $scope.removeGroup = function (group) {
+                ctrl.groups.splice(ctrl.groups.indexOf(group), 1);
+            }
+
             ctrl.addGroup = function () {
                 var group = {
                     onGroupFilterReady: function (api) {

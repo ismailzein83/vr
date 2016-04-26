@@ -41,7 +41,7 @@
                 FilterObj: filterObj
             };
 
-            var modalSettings = {};
+            var modalSettings = {width:'80%'};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onDataRecordFieldTypeFilterAdded = onDataRecordFieldTypeFilterAdded;

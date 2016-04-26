@@ -16,6 +16,6 @@
 
         public bool IsSupportedInGenericRule { get; set; }
 
-        public string FieldTypeEditor { get; set; }
+        public string RuleFilterEditor { get; set; }
     }
 }

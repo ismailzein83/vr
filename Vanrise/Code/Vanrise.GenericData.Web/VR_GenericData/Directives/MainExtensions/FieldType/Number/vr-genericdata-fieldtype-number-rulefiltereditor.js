@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypefieldDecimaleditor', ['VR_GenericData_NumberRecordFilterOperatorEnum', 'UtilsService',
+app.directive('vrGenericdataFieldtypeNumberRulefiltereditor', ['VR_GenericData_NumberRecordFilterOperatorEnum', 'UtilsService',
     function (VR_GenericData_NumberRecordFilterOperatorEnum, UtilsService) {
 
         var directiveDefinitionObject = {
@@ -17,7 +17,7 @@ app.directive('vrGenericdataDatarecordtypefieldDecimaleditor', ['VR_GenericData_
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Number/Templates/DataRecordTypeFieldDecimalEditor.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Number/Templates/NumberFieldTypeRuleFilterEditor.html"
 
         };
 
@@ -39,6 +39,7 @@ app.directive('vrGenericdataDatarecordtypefieldDecimaleditor', ['VR_GenericData_
 
                 api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_NumberRecordFilterOperatorEnum);
+                    $scope.selectedFilter = $scope.filters[0];
                     if (payload && payload.filterObj) {
                         filterObj = payload.filterObj;
                         dataRecordTypeField = payload.dataRecordTypeField;

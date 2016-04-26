@@ -38,7 +38,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             if (ctrl.selectionmode != 'single') {
                 defineScopeForMultiModes();
             }
-            
+
             if (ctrl.onReady != undefined) {
                 ctrl.onReady(getDirectiveAPI());
             }
@@ -54,7 +54,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
             };
 
             $scope.scopeModel.validateValue = function () {
-                
+
                 if ($scope.scopeModel.value == undefined || $scope.scopeModel.value == null || $scope.scopeModel.value == '') {
                     $scope.scopeModel.isAddButtonDisabled = true;
                     return null;
@@ -97,7 +97,11 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                         }
                     }
                     else {
-                        $scope.scopeModel.value = convertTimeToDate(fieldValue);
+                        if (fieldValue instanceof Date)
+                            $scope.scopeModel.value = fieldValue;
+                        else {
+                            $scope.scopeModel.value = convertTimeToDate(fieldValue);
+                        }
                     }
                 }
 

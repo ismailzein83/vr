@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypefieldBooleditor', ['VR_GenericData_StringRecordFilterOperatorEnum', 'UtilsService',
+app.directive('vrGenericdataFieldtypeBooleanRulefiltereditor', ['VR_GenericData_StringRecordFilterOperatorEnum', 'UtilsService',
     function (VR_GenericData_StringRecordFilterOperatorEnum, UtilsService) {
 
         var directiveDefinitionObject = {
@@ -17,7 +17,7 @@ app.directive('vrGenericdataDatarecordtypefieldBooleditor', ['VR_GenericData_Str
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Boolean/Templates/DataRecordTypeFieldBoolEditor.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Boolean/Templates/BooleanFieldTypeRuleFilterEditor.html"
         };
 
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {

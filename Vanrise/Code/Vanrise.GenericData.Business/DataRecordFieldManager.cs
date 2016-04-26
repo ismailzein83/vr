@@ -37,7 +37,7 @@ namespace Vanrise.GenericData.Business
             return new DataRecordFieldInfo()
             {
                 Entity = dataRecordField,
-                FieldTypeEditor = config != null ? config.FieldTypeEditor : null
+                RuleFilterEditor = config != null ? config.RuleFilterEditor : null
             };
         }
     }

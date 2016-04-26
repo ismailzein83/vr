@@ -10,21 +10,21 @@
 });
 
 app.constant('VR_GenericData_NumberRecordFilterOperatorEnum', {
-    Equals: { value: 0, description: 'Equals' },
-    NotEquals: { value: 1, description: 'Not Equals' },
-    Greater: { value: 2, description: 'Greater' },
-    GreaterOrEquals: { value: 3, description: 'Greater Or Equals' },
-    Less: { value: 4, description: 'Less' },
-    LessOrEquals: { value: 5, description: 'Less Or Equals' }
+    Equals: { value: 0, description: '=' },
+    NotEquals: { value: 1, description: '<>' },
+    Greater: { value: 2, description: '>' },
+    GreaterOrEquals: { value: 3, description: '>=' },
+    Less: { value: 4, description: '<' },
+    LessOrEquals: { value: 5, description: '<=' }
 });
 
 app.constant('VR_GenericData_DateTimeRecordFilterOperatorEnum', {
-    Equals: { value: 0, description: 'Equals' },
-    NotEquals: { value: 1, description: 'Not Equals' },
-    Greater: { value: 2, description: 'Greater' },
-    GreaterOrEquals: { value: 3, description: 'Greater Or Equals' },
-    Less: { value: 4, description: 'Less' },
-    LessOrEquals: { value: 5, description: 'Less Or Equals' }
+    Equals: { value: 0, description: '=' },
+    NotEquals: { value: 1, description: '<>' },
+    Greater: { value: 2, description: '>' },
+    GreaterOrEquals: { value: 3, description: '>=' },
+    Less: { value: 4, description: '<' },
+    LessOrEquals: { value: 5, description: '<=' }
 });
 
 app.constant('VR_GenericData_ListRecordFilterOperatorEnum', {
