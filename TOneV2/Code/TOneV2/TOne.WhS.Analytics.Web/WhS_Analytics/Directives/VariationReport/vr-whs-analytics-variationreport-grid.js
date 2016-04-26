@@ -88,8 +88,6 @@
                             $scope.scopeModel.sortByField = 'Average';
                             break;
                     }
-
-                    console.log($scope.scopeModel.sortByField);
                 }
 
                 function getDrillDownDefinitions(gridQuery) {
@@ -106,9 +104,19 @@
 
                     $scope.scopeModel.drillDownDimensionValues.length = 0;
 
-                    if (gridQuery.ReportType == WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value || gridQuery.ReportType == WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value) {
-                        $scope.scopeModel.drillDownDimensionValues.push(WhS_Analytics_VariationReportDimensionEnum.Zone.value);
-                        return;
+                    if (gridQuery.parentReportType != undefined) {
+                        switch (gridQuery.parentReportType) {
+                            case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
+                            case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
+                                return; // => gridQuery.ReportType = Zone
+                        }
+                    }
+
+                    switch (gridQuery.ReportType) {
+                        case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
+                        case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
+                            $scope.scopeModel.drillDownDimensionValues.push(WhS_Analytics_VariationReportDimensionEnum.Zone.value);
+                            return;
                     }
 
                     var currentReportDimensionValue = getDimensionValue(gridQuery.ReportType);
@@ -142,7 +150,8 @@
                                 ToDate: gridQuery.ToDate,
                                 TimePeriod: gridQuery.TimePeriod,
                                 NumberOfPeriods: gridQuery.NumberOfPeriods,
-                                DimensionFilters: dimensionFilters
+                                DimensionFilters: dimensionFilters,
+                                parentReportType: gridQuery.ReportType
                             };
 
                             return directiveAPI.load(directiveQuery);
