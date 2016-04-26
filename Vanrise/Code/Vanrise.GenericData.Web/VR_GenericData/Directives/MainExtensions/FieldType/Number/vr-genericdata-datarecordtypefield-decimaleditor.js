@@ -26,15 +26,24 @@ app.directive('vrGenericdataDatarecordtypefieldDecimaleditor', ['VR_GenericData_
                 defineAPI();
             }
             var numberFilterEditorApi;
+            var filterObj;
+            var dataRecordTypeField;
+
             $scope.onNumberFilterEditorReady = function (api) {
                 numberFilterEditorApi = api;
-                api.load();
+                var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Entity.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
+                api.load(payload);
             }
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
+                api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_NumberRecordFilterOperatorEnum);
+                    if (payload && payload.filterObj) {
+                        filterObj = payload.filterObj;
+                        dataRecordTypeField = payload.dataRecordTypeField;
+                        $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
+                    }
                 }
 
                 api.getData = function () {

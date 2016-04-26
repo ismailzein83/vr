@@ -35,9 +35,10 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericDataRecord/DataRecordTypeEditor.html', modalParameters, modalSettings);
         }
 
-        function addDataRecordTypeFieldFilter(dataRecordTypeId, onDataRecordFieldTypeFilterAdded) {
+        function addDataRecordTypeFieldFilter(dataRecordTypeId, filterObj, onDataRecordFieldTypeFilterAdded) {
             var modalParameters = {
-                DataRecordTypeId: dataRecordTypeId
+                DataRecordTypeId: dataRecordTypeId,
+                FilterObj: filterObj
             };
 
             var modalSettings = {};

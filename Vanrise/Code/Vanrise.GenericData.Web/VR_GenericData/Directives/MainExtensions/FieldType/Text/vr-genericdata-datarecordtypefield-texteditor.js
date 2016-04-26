@@ -26,15 +26,23 @@ app.directive('vrGenericdataDatarecordtypefieldTexteditor', ['VR_GenericData_Str
                 defineAPI();
             }
             var textFilterEditorApi;
+            var filterObj;
+            var dataRecordTypeField;
             $scope.onTextFilterEditorReady = function (api) {
                 textFilterEditorApi = api;
-                textFilterEditorApi.load();
+                var payload = { fieldType: dataRecordTypeField != undefined ? dataRecordTypeField.Entity.Type : null, fieldValue: filterObj != undefined ? filterObj.Value : null };
+                textFilterEditorApi.load(payload);
             }
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
+                api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_StringRecordFilterOperatorEnum);
+                    if (payload && payload.filterObj) {
+                        filterObj = payload.filterObj;
+                        dataRecordTypeField = payload.dataRecordTypeField;
+                        $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
+                    }
                 }
 
                 api.getData = function () {

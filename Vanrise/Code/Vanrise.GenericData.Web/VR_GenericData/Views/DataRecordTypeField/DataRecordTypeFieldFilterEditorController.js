@@ -6,7 +6,9 @@
 
     function DataRecordStorageFilterEditorController($scope, VRNavigationService, VR_GenericData_DataRecordFieldAPIService, UtilsService) {
 
-        $scope.dataRecordTypeId;
+        var dataRecordTypeId;
+        var filterObj;
+
         loadParameters();
         defineScope();
 
@@ -17,22 +19,22 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                $scope.dataRecordTypeId = parameters.DataRecordTypeId;
+                dataRecordTypeId = parameters.DataRecordTypeId;
+                filterObj= parameters.FilterObj;
             }
         }
 
         function defineScope() {
+            $scope.title = 'Filter Expression';
             $scope.onGroupFilterReady = function (api) {
                 groupFilterAPI = api;
-                var payload = { dataRecordTypeId: $scope.dataRecordTypeId, context: context };
+                var payload = { dataRecordTypeId: dataRecordTypeId, context: context, filterObj: filterObj };
                 loadContext().then(function () {
                     groupFilterAPI.load(payload);
                 });
             };
 
             $scope.save = function () {
-                var expression = groupFilterAPI.getExpression();
-                console.log(expression);
                 if ($scope.onDataRecordFieldTypeFilterAdded != undefined) {
                     $scope.onDataRecordFieldTypeFilterAdded(groupFilterAPI.getData(), groupFilterAPI.getExpression());
                 }
@@ -46,7 +48,7 @@
         }
 
         function loadContext() {
-            var obj = { DataRecordTypeId: $scope.dataRecordTypeId };
+            var obj = { DataRecordTypeId: dataRecordTypeId };
             var serializedFilter = UtilsService.serializetoJson(obj);
             return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
                 if (response != undefined)

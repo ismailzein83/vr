@@ -1,23 +1,28 @@
-﻿<div style="border:2px solid;">
+﻿<vr-section title="Group" collapsible>
     <vr-row>
         <vr-columns width="1/2row">
-            <form class="btn-group group-conditions">
+            <!--<form class="btn-group group-conditions">
                 <label class="btn btn-xs btn-primary" ng-class="ctrl.condition == 'AND' ? 'active' : ''">
-                    <input type="radio" name="builder-basic_group_4_cond" value="AND" ng-click="ctrl.andSelected()" checked> AND
+                    <input type="radio" name="builder-basic_group_4_cond" value="AND" ng-click="ctrl.andSelected()" ng-checked="(ctrl.condition == 'And')"> AND
                 </label>
                 <label class="btn btn-xs btn-primary" ng-class="ctrl.condition == 'OR' ? 'active' : ''">
-                    <input type="radio" name="builder-basic_group_4_cond" value="OR" ng-click="ctrl.orSelected()"> OR
+                    <input type="radio" name="builder-basic_group_4_cond" value="OR" ng-click="ctrl.orSelected()" ng-checked="(ctrl.condition == 'Or')"> OR
                 </label>
-            </form>
+            </form>-->
+            <vr-choices isradio selectedindex="ctrl.condition">
+                <vr-choice ng-repeat="condition in conditions">{{condition.description}}</vr-choice>
+                <!--<vr-choice>AND</vr-choice>
+                <vr-choice>OR</vr-choice>-->
+            </vr-choices>
         </vr-columns>
         <vr-columns width="1/4row" class="pull-right">
-            <button type="button" class="btn btn-xs btn-primary" data-add="group" ng-click="ctrl.addGroup()">
+            <button type="button" class="btn btn-xs btn-success" data-add="group" ng-click="ctrl.addGroup()">
                 <i class="glyphicon glyphicon-plus-sign"></i> Add Group
             </button>
         </vr-columns>
 
         <vr-columns width="1/4row" class="pull-right">
-            <button type="button" class="btn btn-xs btn-primary" data-add="rule" ng-click="ctrl.addRule()">
+            <button type="button" class="btn btn-xs btn-success" data-add="rule" ng-click="ctrl.addRule()">
                 <i class="glyphicon glyphicon-plus"></i> Add Rule
             </button>
         </vr-columns>
@@ -34,4 +39,4 @@
             <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-groupfilter'" on-ready="group.onGroupFilterReady"></vr-directivewrapper>
         </vr-columns>
     </vr-row>
-</div>
+</vr-section>

@@ -1338,9 +1338,12 @@ loader .outer-loader {
         border-bottom: transparent;
     }
 
-        .panel-vr > .panel-heading label {
-            font-weight: bold;
-        }
+   .panel-vr > .panel-heading[expanded="false"]{
+       border-bottom: 1px solid #ddd;
+   }
+    .panel-vr > .panel-heading label {
+        font-weight: bold;
+    }
 
     .panel-vr > .panel-body {
         border: 1px solid #ddd;

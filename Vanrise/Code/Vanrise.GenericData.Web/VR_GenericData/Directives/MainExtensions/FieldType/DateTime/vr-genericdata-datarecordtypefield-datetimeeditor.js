@@ -23,6 +23,7 @@ app.directive('vrGenericdataDatarecordtypefieldDatetimeeditor', ['VR_GenericData
 
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {
             $scope.date;
+            
             function initializeController() {
                 defineAPI();
             }
@@ -30,8 +31,12 @@ app.directive('vrGenericdataDatarecordtypefieldDatetimeeditor', ['VR_GenericData
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
+                api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_DateTimeRecordFilterOperatorEnum);
+                    if (payload && payload.filterObj) {
+                        $scope.date = payload.filterObj.Value;
+                        $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
+                    }
                 }
 
                 api.getData = function () {

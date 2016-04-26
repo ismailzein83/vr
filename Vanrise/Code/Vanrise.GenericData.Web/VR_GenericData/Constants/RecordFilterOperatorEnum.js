@@ -33,7 +33,7 @@ app.constant('VR_GenericData_ListRecordFilterOperatorEnum', {
 });
 
 app.constant('VR_GenericData_RecordQueryLogicalOperatorEnum', {
-    And: { value: 1, description: 'And' },
-    Or: { value: 2, description: 'Or' }
+    And: { value: 0, description: 'And' },
+    Or: { value: 1, description: 'Or' }
 });
 

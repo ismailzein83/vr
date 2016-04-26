@@ -24,10 +24,10 @@ app.directive('vrGenericdataDatarecordtypefieldChoiceeditor', ['VR_GenericData_L
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {
             var selectedObj;
             var choiceFilterEditorApi;
-
+            var filterObj;
             $scope.onChoiceFilterEditorReady = function (api) {
                 choiceFilterEditorApi = api;
-                var payload = { fieldType: selectedObj.Entity.Type };
+                var payload = { fieldType: selectedObj.Entity.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
                 api.load(payload);
             }
 
@@ -41,7 +41,13 @@ app.directive('vrGenericdataDatarecordtypefieldChoiceeditor', ['VR_GenericData_L
 
                 api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_ListRecordFilterOperatorEnum);
-                    selectedObj = payload;
+                    if (payload) {
+                        selectedObj = payload.dataRecordTypeField;
+                        if (payload.filterObj) {
+                            $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
+                            filterObj = payload.filterObj;
+                        }
+                    }
                 }
 
                 api.getData = function () {

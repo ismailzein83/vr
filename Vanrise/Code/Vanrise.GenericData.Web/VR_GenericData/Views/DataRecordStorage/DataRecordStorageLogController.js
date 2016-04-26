@@ -35,11 +35,13 @@
             };
 
             $scope.addFilter = function () {
-                var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
-                    filterObj = filter;
-                    $scope.expression = expression;
+                if ($scope.selectedDataRecordStorage) {
+                    var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
+                        filterObj = filter;
+                        $scope.expression = expression;
+                    }
+                    VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter($scope.selectedDataRecordStorage.DataRecordTypeId, filterObj, onDataRecordFieldTypeFilterAdded);
                 }
-                VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter($scope.selectedDataRecordStorage.DataRecordTypeId, onDataRecordFieldTypeFilterAdded);
             };
 
             $scope.validateTimeRange = function () {

@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Entities
         public RecordFilterGroup FilterGroup { get; set; }
     }
 
-    public enum RecordQueryLogicalOperator { And = 1, Or = 2 }
+    public enum RecordQueryLogicalOperator { And = 0, Or = 1 }
 
     public class RecordFilterGroup : RecordFilter
     {

@@ -24,9 +24,9 @@ app.directive('vrGenericdataDatarecordtypefieldBusinessentityeditor', ['VR_Gener
         function recordTypeFieldItemEditorCtor(ctrl, $scope, $attrs) {
             var businessEntityApi;
             var selectedObj;
-
+            var filterObj;
             $scope.onBusinessEntityReady = function (api) {
-                var payload = { fieldType: selectedObj.Entity.Type };
+                var payload = { fieldType: selectedObj.Entity.Type, fieldValue: filterObj != undefined ? filterObj.Values : null };
                 api.load(payload);
                 businessEntityApi = api;
             }
@@ -40,7 +40,13 @@ app.directive('vrGenericdataDatarecordtypefieldBusinessentityeditor', ['VR_Gener
 
                 api.load = function (payload) {
                     $scope.filters = UtilsService.getArrayEnum(VR_GenericData_ListRecordFilterOperatorEnum);
-                    selectedObj = payload;
+                    if (payload) {
+                        selectedObj = payload.dataRecordTypeField;
+                        if (payload.filterObj) {
+                            $scope.selectedFilter = UtilsService.getItemByVal($scope.filters, payload.filterObj.CompareOperator, 'value');
+                            filterObj = payload.filterObj;
+                        }
+                    }
                 }
 
                 api.getData = function () {

@@ -29,8 +29,10 @@ app.directive('vrGenericdataDatarecordtypefieldBooleditor', ['VR_GenericData_Str
             function defineAPI() {
                 var api = {};
 
-                api.load = function () {
-
+                api.load = function (payload) {
+                    if (payload && payload.filterObj) {
+                        $scope.isTrue = payload.filterObj.IsTrue;
+                    }
                 }
 
                 api.getData = function () {
