@@ -2,7 +2,7 @@
 
 namespace TOne.WhS.Analytics.Entities
 {
-    public class BlockedAttemptInput
+    public class BlockedAttemptQuery
     {
         public BlockedAttemptFilter Filter { get; set; }
         public DateTime From { get; set; }
