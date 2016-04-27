@@ -78,7 +78,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilterToQuery(whereBuilder);
             AddGroupingToQuery(groupByBuilder);
             queryBuilder.Append(String.Format(@"
-                    SELECT   #SELECTCOLUMNPART# ,ROW_NUMBER() OVER (ORDER BY Count (*) DESC) AS RowNum
+                    SELECT   #SELECTCOLUMNPART#
                     FROM [TOneWhS_CDR].[CDRInvalid]
                         WITH(NOLOCK ,INDEX(IX_CDRInvalid_Attempt)) WHERE ( SupplierID is NULL AND DurationInSeconds=0 AND  Attempt>= @FromDate AND (Attempt<= @ToDate OR @ToDate IS NULL))  
                         #WHEREPART#  
