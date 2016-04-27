@@ -64,6 +64,10 @@
     <Compile Include="RawCDR\RawCDRLogDetail.cs" />
     <Compile Include="RawCDR\RawCDRLog.cs" />
     <Compile Include="RawCDR\RawCDRInput.cs" />
+    <Compile Include="RepeatedNumber\RepeatedNumber.cs" />
+    <Compile Include="RepeatedNumber\RepeatedNumberDetail.cs" />
+    <Compile Include="RepeatedNumber\RepeatedNumberFilter.cs" />
+    <Compile Include="RepeatedNumber\RepeatedNumberInput.cs" />
     <Compile Include="VariationReport\TimePeriod.cs" />
     <Compile Include="VariationReport\VariationReportBigResult.cs" />
     <Compile Include="VariationReport\VariationReportQuery.cs" />

@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TOne.WhS.Analytics.Entities
+{
+    public class RepeatedNumberInput
+    {
+        public RepeatedNumberFilter Filter { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+        public int NRecords { get; set; }
+        public CDRType CDRType { get; set; }
+    }
+}
