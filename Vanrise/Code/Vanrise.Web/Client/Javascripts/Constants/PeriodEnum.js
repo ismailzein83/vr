@@ -20,10 +20,6 @@
             var diffToMonday = thisWeek.getDate() - day + (day === 0 ? -6 : 1);
             lastMonday = new Date(thisWeek.setDate(diffToMonday));
         }
-        var today = new Date();
-        console.log(today.getFullYear())
-        console.log(today.getMonth())
-        console.log(today.getDay())
         return {
             from: new Date(lastMonday.getFullYear(), lastMonday.getMonth(), lastMonday.getDate(), 00, 00, 00),
             to: new Date().getTime()
