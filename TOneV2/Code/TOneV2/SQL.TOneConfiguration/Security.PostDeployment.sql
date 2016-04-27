@@ -52,10 +52,11 @@ as (select * from (values
 ('VR_Sec/Group/AddGroup','VR_Sec_Group: Add'),
 ('VR_Sec/Group/UpdateGroup','VR_Sec_Group: Edit'),
 
-('VR_Sec/View/AddView',null),
-('VR_Sec/View/UpdateView',null),
+('VR_Sec/View/AddView','VR_Sec_View: Add'),
+('VR_Sec/View/UpdateView','VR_Sec_View: Edit'),
 ('VR_Sec/View/GetView',null),
 ('VR_Sec/View/DeleteView',null),
+('VR_Sec/View/GetFilteredViews','VR_Sec_View: View'),
 ('VR_Sec/View/GetFilteredDynamicViews',null),
 ('VR_Sec/View/UpdateViewsRank','VR_Sec_View: Edit'),
 
@@ -131,7 +132,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'VR_Sec_Users','Users',3,0,'["View", "Add", "Edit", "Reset Password"]'),
 (2,'VR_Sec_Group','Groups',3,0,'["View", "Add", "Edit"]'),
-(3,'VR_Sec_View','Ranking Page',3,0,'["Edit"]'),
+(3,'VR_Sec_View','Ranking Page',3,0,'["Add", "Edit"]'),
 (4,'VR_Sec_Permission','Permission',3,0,'["View", "Edit", "Delete", "AllowInheritance"]'),
 (5,'VR_Sec_BusinessEntity','Business Entity',3,0,'["View","Ranking","AddEntity","AddModule","EditEntity","EditModule"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -200,8 +201,9 @@ as (select * from (values
 (2,'Groups'					,'Groups'				,'#/view/Security/Views/Group/GroupManagement'				,2,'VR_Sec/Group/GetFilteredGroups'	,null,null,null,0,2),
 (3,'System Entities'		,'System Entities'		,'#/view/Security/Views/Permission/BusinessEntityManagement',2,'VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,0,3),
 (4,'System Entities Definition','System Entities Definition','#/view/Security/Views/BusinessEntity/BusinessEntityDefinitionManagement',2,'VR_Sec/BusinessEntityNode/GetEntityModules',null,null,null,0,4),
-(5,'Menu Management'		,'Menu Management'		,'#/view/Security/Views/Menu/MenuManagement'				,3,'VR_Sec/View/UpdateViewsRank'	,null,null,null,0,1),
-(6,'Organizational Charts'	,'Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'		,3,null								,null,null,null,0,25)
+(5,'Views','Views'			,'#/view/Security/Views/View/ViewManagement'										,3,'VR_Sec/View/GetFilteredViews'	,null,null,null,0,1),
+(6,'Menus','Menus'			,'#/view/Security/Views/Menu/MenuManagement'										,3,'VR_Sec/View/UpdateViewsRank'	,null,null,null,0,2),
+(7,'Organizational Charts'	,'Organizational Charts','#/view/Security/Views/OrgChart/OrgChartManagement'		,3,null								,null,null,null,0,25)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
