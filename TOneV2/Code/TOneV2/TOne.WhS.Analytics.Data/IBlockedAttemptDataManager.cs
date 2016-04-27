@@ -1,8 +1,9 @@
-﻿using TOne.WhS.Analytics.Entities;
+﻿using System.Collections.Generic;
+using TOne.WhS.Analytics.Entities;
 namespace TOne.WhS.Analytics.Data
 {
     public interface IBlockedAttemptDataManager : IDataManager
     {
-        Vanrise.Entities.BigResult<BlockedAttempt> GetBlockedAttemptData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptInput> input);
+        IEnumerable<BlockedAttempt> GetAllFilteredBlockedAttempts(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input);
     }
 }

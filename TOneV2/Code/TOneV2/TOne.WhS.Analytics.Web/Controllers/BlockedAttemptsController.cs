@@ -8,7 +8,7 @@ namespace TOne.WhS.Analytics.Web.Controllers
     {
         [HttpPost]
         [Route("GetBlockedAttemptsData")]
-        public object GetBlockedAttemptsData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptInput> input)
+        public object GetBlockedAttemptsData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)
         {
             BlockedAttemptsManager blockedAttemptsManager = new BlockedAttemptsManager();
             return GetWebResponse(input, blockedAttemptsManager.GetBlockedAttemptData(input));

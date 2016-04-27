@@ -1,8 +1,10 @@
-﻿using TOne.WhS.Analytics.Data;
+﻿using System.Collections.Generic;
+using TOne.WhS.Analytics.Data;
 using TOne.WhS.Analytics.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace TOne.WhS.Analytics.Business
 {
@@ -20,20 +22,14 @@ namespace TOne.WhS.Analytics.Business
             _saleZoneManager = new SaleZoneManager();
             _supplierZoneManager = new SupplierZoneManager();
         }
-        public Vanrise.Entities.IDataRetrievalResult<BlockedAttemptDetail> GetBlockedAttemptData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptInput> input)
+
+        public Vanrise.Entities.IDataRetrievalResult<BlockedAttemptDetail> GetBlockedAttemptData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)
         {
-            IBlockedAttemptDataManager _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBlockedAttemptDataManager>();
-            var blockedAttemptResult = _datamanager.GetBlockedAttemptData(input);
-            BigResult<BlockedAttemptDetail> blockedAttemptBigResultDetailMapper = new BigResult<BlockedAttemptDetail>
-            {
-                Data = blockedAttemptResult.Data.MapRecords(blockedAttemptDetailMapper),
-                ResultKey = blockedAttemptResult.ResultKey,
-                TotalCount = blockedAttemptResult.TotalCount
-            };
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, blockedAttemptBigResultDetailMapper);
+            return BigDataManager.Instance.RetrieveData(input, new BlockedAttemptRequestHandler());
         }
 
-        public BlockedAttemptDetail blockedAttemptDetailMapper(BlockedAttempt blockedAttempt)
+
+        public BlockedAttemptDetail BlockedAttemptDetailMapper(BlockedAttempt blockedAttempt)
         {
             BlockedAttemptDetail blockedAttemptDetail = new BlockedAttemptDetail
             {
@@ -43,6 +39,26 @@ namespace TOne.WhS.Analytics.Business
             };
             return blockedAttemptDetail;
         }
+
+
+        #region Private Classes
+
+        private class BlockedAttemptRequestHandler : BigDataRequestHandler<BlockedAttemptQuery, BlockedAttempt, BlockedAttemptDetail>
+        {
+            public override BlockedAttemptDetail EntityDetailMapper(BlockedAttempt entity)
+            {
+                BlockedAttemptsManager manager = new BlockedAttemptsManager();
+                return manager.BlockedAttemptDetailMapper(entity);
+            }
+
+            public override IEnumerable<BlockedAttempt> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)
+            {
+                IBlockedAttemptDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IBlockedAttemptDataManager>();
+                return dataManager.GetAllFilteredBlockedAttempts(input);
+            }
+        }
+
+        #endregion
 
     }
 

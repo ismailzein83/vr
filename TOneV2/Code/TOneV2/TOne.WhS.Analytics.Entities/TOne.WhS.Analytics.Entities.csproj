@@ -59,7 +59,7 @@
     <Compile Include="BlockedAttempt\BlockedAttempt.cs" />
     <Compile Include="BlockedAttempt\BlockedAttemptDetail.cs" />
     <Compile Include="BlockedAttempt\BlockedAttemptFilter.cs" />
-    <Compile Include="BlockedAttempt\BlockedAttemptInput.cs" />
+    <Compile Include="BlockedAttempt\BlockedAttemptQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawCDR\RawCDRLogDetail.cs" />
     <Compile Include="RawCDR\RawCDRLog.cs" />

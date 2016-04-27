@@ -12,62 +12,39 @@ namespace TOne.WhS.Analytics.Data.SQL
     {
 
         #region ctor/Local Variables
-        private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
         private BlockedAttemptFilter filter;
+
+        public BlockedAttemptDataManager()
+            : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneV2CDRDBConnString"))
+        {
+
+        }
 
         static BlockedAttemptDataManager()
         {
-            _columnMapper.Add("Entity.ID", "ID");
-            _columnMapper.Add("SwitchName", "SwitchID");
-            _columnMapper.Add("SaleZoneName", "SaleZoneID");
-            _columnMapper.Add("CustomerName", "CustomerID");
-            _columnMapper.Add("Entity.BlockedAttempts", "BlockedAttempts");
-            _columnMapper.Add("Entity.CGPN", "Caller Number");
-            _columnMapper.Add("Entity.CDPN", "Dialed Number");
-            _columnMapper.Add("Entity.FirstAttempt", "FirstAttempt");
-            _columnMapper.Add("Entity.LastAttempt", "LastAttempt");
-            _columnMapper.Add("Entity.ReleaseCode", "ReleaseCode");
-            _columnMapper.Add("Entity.ReleaseSource", "ReleaseSource");
-        }
-        public BlockedAttemptDataManager()
-            : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
-        {
-
         }
         #endregion
 
+
+
+
+
         #region Public Methods
-        public Vanrise.Entities.BigResult<BlockedAttempt> GetBlockedAttemptData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptInput> input)
+        public IEnumerable<BlockedAttempt> GetAllFilteredBlockedAttempts(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)
         {
             filter = input.Query.Filter;
 
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQueryText(CreateTempTableIfNotExists(tempTableName), (cmd) =>
+            return GetItemsText(GetSingleQuery(), BlockedAttemptMapper, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
                     cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.To)));
                 });
-            };
-            return RetrieveData(input, createTempTableAction, BlockedAttemptMapper, _columnMapper);
         }
 
         #endregion
 
         #region Private Methods
-        private string CreateTempTableIfNotExists(string tempTableName)
-        {
-            string queryData = GetSingleQuery();
-
-            StringBuilder queryBuilder = new StringBuilder(@" IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-                                                              BEGIN 
-                                                                Select newtable.*  INTO #TEMPTABLE# FROM (#Query#) as newtable
-                                                                
-                                                              END");
-            queryBuilder.Replace("#TEMPTABLE#", tempTableName);
-            queryBuilder.Replace("#Query#", queryData);
-            return queryBuilder.ToString();
-        }
         private string GetSingleQuery()
         {
             StringBuilder queryBuilder = new StringBuilder();

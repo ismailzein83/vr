@@ -41,14 +41,33 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Supplier\SourceSupplierSynchronizer.cs" />
+    <Compile Include="Supplier\SupplierManager.cs" />
+    <Compile Include="Supplier\SupplierSyncTaskAction.cs" />
+    <Compile Include="Supplier\SupplierSyncTaskActionArgument.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
-      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
-      <Name>TOne.BusinessEntity.Entities</Name>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">
+      <Project>{616524aa-3c88-43e4-87da-2e2f2410fdbe}</Project>
+      <Name>TOne.WhS.BusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.DBSync.Data\TOne.WhS.DBSync.Data.csproj">
       <Project>{93dd50d2-700d-442c-8ec2-c6e2b002c22d}</Project>
