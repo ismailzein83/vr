@@ -29,7 +29,7 @@ namespace XBooster.PriceListConversion.Business
             Func<PriceListTemplate, bool> filterExpression = (itm) =>
                  (itm.Type == Constants.OutputPriceListTemplate
                  && itm.UserId == _loggedInUserId
-                 && (input.Query.Name == null || itm.Name == input.Query.Name));
+                 && (input.Query.Name == null || itm.Name.ToLower().Contains(input.Query.Name.ToLower()) ));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, priceListTemplates.ToBigResult(input, filterExpression, PriceListTemplateDetailMapper));
         }

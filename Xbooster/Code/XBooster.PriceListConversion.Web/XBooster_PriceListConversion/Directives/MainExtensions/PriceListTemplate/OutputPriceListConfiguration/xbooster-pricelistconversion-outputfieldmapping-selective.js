@@ -121,7 +121,13 @@
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
-
+                api.isDateTime = function()
+                {
+                    if(directiveAPI != undefined && directiveAPI.isDateTime !=undefined)
+                    {
+                        return directiveAPI.isDateTime();
+                    }
+                }
                 api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

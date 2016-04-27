@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OutputfieldvaluePricelistfield.$inject = ["UtilsService"];
+    OutputfieldvaluePricelistfield.$inject = ["UtilsService","VR_ExcelConversion_FieldTypeEnum"];
 
-    function OutputfieldvaluePricelistfield(UtilsService) {
+    function OutputfieldvaluePricelistfield(UtilsService,VR_ExcelConversion_FieldTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -28,7 +28,7 @@
             this.initializeController = initializeController;
             var selectorAPI;
             function initializeController() {
-                $scope.outputFieldMappings = [{ fieldTitle: "Code", isRequired: true, type: "cell", fieldName: "Code" }, { fieldTitle: "Zone", isRequired: true, type: "cell", fieldName: "Zone" }, { fieldTitle: "Rate", isRequired: true, type: "cell", fieldName: "Rate" }, { fieldTitle: "Effective Date", isRequired: false, type: "cell", fieldName: "EffectiveDate" }]
+                $scope.outputFieldMappings = [{ fieldTitle: "Code", isRequired: true, type: "cell", fieldName: "Code", fieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { fieldTitle: "Zone", isRequired: true, type: "cell", fieldName: "Zone", fieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { fieldTitle: "Rate", isRequired: true, type: "cell", fieldName: "Rate", fieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }, { fieldTitle: "Effective Date", isRequired: false, type: "cell", fieldName: "EffectiveDate", fieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }]
 
                 ctrl.onSelectorReady = function (api) {
 
@@ -48,7 +48,12 @@
                     }
 
                 };
-
+                api.isDateTime = function()
+                {
+                    if ($scope.selectedOutputFieldMapping != undefined && $scope.selectedOutputFieldMapping.fieldType == VR_ExcelConversion_FieldTypeEnum.DateTime.value)
+                        return true;
+                    return false;
+                }
                 api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

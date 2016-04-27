@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OutputpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService"];
+    OutputpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService",'VR_ExcelConversion_FieldTypeEnum'];
 
-    function OutputpricelistconfigurationBasic(UtilsService, VRUIUtilsService) {
+    function OutputpricelistconfigurationBasic(UtilsService, VRUIUtilsService,VR_ExcelConversion_FieldTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -82,6 +82,23 @@
                 $scope.onOutPutReadyWoorkBook = function (api) {
                     outPutWorkBookAPI = api;
                 }
+
+                $scope.checkUsesOfEffectiveDate = function () {
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
+                    {
+                       
+                        for (var i = 0 ; i < ctrl.datasource.length; i++) {
+                            var item = ctrl.datasource[i];
+                            if (item.fieldMappingAPI != undefined && item.fieldMappingAPI.isDateTime != undefined && item.fieldMappingAPI.isDateTime())
+                            {
+                                    return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                }
+
                 defineAPI();
             }
 

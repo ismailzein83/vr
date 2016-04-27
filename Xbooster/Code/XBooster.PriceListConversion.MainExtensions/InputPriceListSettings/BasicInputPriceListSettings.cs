@@ -84,9 +84,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     DateTime? result = null;
                     if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
                     {
-                        DateTime outputResult;
-                        DateTime.TryParse(codeEffectiveDateField.FieldValue.ToString(), out outputResult);
-                        result = outputResult;
+                        result = (DateTime)codeEffectiveDateField.FieldValue;
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField) && obj.Fields.TryGetValue("Code", out codeField))
                     {
@@ -182,23 +180,22 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     DateTime? result = null;
                     if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
                     {
-                        DateTime outputResult;
-                        DateTime.TryParse(rateEffectiveDateField.FieldValue.ToString(), out outputResult);
-                        result = outputResult;
+                       result = (DateTime)rateEffectiveDateField.FieldValue;
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField) && obj.Fields.TryGetValue("Rate", out rateField))
                     {
                         PriceListRate rate;
                         if (!rateByZone.TryGetValue(zoneField.FieldValue.ToString(), out rate))
                         {
-                            rateByZone.Add(zoneField.FieldValue.ToString(), new PriceListRate{
-                                Rate = Convert.ToDecimal(rateField.FieldValue),
+                            rateByZone.Add(zoneField.FieldValue.ToString(), new PriceListRate
+                            {
+                                Rate = (decimal)rateField.FieldValue,
                                 RateEffectiveDate = result
                             });
                         }
                         else
                         {
-                            if (rate.Rate == Convert.ToDecimal(rateField.FieldValue))
+                            if (rate.Rate == (decimal)rateField.FieldValue)
                             {
                                 continue;
 

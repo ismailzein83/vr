@@ -56,7 +56,7 @@
                 }
 
                 $scope.scopeModel.onInputPriceListTemplateSelectionChanged = function (api) {
-                    if (inputPriceListTemplateAPI != undefined && !$scope.scopeModel.isLoading && inputConfigurationAPI !=undefined)
+                    if (inputPriceListTemplateAPI != undefined && !$scope.scopeModel.isLoading && inputConfigurationAPI != undefined && inputPriceListTemplateAPI.getSelectedIds() !=undefined)
                     {
                         $scope.scopeModel.isLoading = true;
                         getPriceListTemplate(inputPriceListTemplateAPI.getSelectedIds()).then(function (response) {

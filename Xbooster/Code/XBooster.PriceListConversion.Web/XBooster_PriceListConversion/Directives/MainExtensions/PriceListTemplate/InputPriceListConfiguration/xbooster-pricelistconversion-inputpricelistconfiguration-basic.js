@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InputpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService",'XBooster_PriceListConversion_CodeLayoutEnum'];
+    InputpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService",'XBooster_PriceListConversion_CodeLayoutEnum','VR_ExcelConversion_FieldTypeEnum'];
 
-    function InputpricelistconfigurationBasic(UtilsService, VRUIUtilsService, XBooster_PriceListConversion_CodeLayoutEnum) {
+    function InputpricelistconfigurationBasic(UtilsService, VRUIUtilsService, XBooster_PriceListConversion_CodeLayoutEnum,VR_ExcelConversion_FieldTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -36,6 +36,14 @@
             function initializeController() {
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.validate = function()
+                {
+                    if($scope.scopeModel.delimiterValue == $scope.scopeModel.rangeSeparator)
+                    {
+                        return "Range separator should not be the same as delimiter.";
+                    }
+                    return null;
+                }
 
                $scope.scopeModel.codeLayouts=UtilsService.getArrayEnum(XBooster_PriceListConversion_CodeLayoutEnum);
                 $scope.scopeModel.dateTimeFormat = "yyyy/MM/dd";
@@ -71,6 +79,38 @@
                         $scope.scopeModel.rangeSeparator = undefined;
                     }
                 }
+                $scope.scopeModel.checkUsesOfEffectiveDate = function ()
+                {
+                    if(codeListAPI !=undefined)
+                    {
+                        var codeListData = codeListAPI.getData();
+                        if(codeListData !=undefined && codeListData.FieldMappings !=undefined)
+                        {
+                            for(var i=0 ;i<codeListData.FieldMappings.length;i++)
+                            {
+                                var fieldMappingForCodeList = codeListData.FieldMappings[i];
+                                if (fieldMappingForCodeList.FieldType == VR_ExcelConversion_FieldTypeEnum.DateTime.value) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    if(rateListAPI !=undefined)
+                    {
+                        var rateListData = rateListAPI.getData();
+                        if (rateListData != undefined && rateListData.FieldMappings != undefined) {
+                            for (var i = 0 ; i < rateListData.FieldMappings.length; i++) {
+                                var fieldMappingForRateList = rateListData.FieldMappings[i];
+                                if (fieldMappingForRateList.FieldType == VR_ExcelConversion_FieldTypeEnum.DateTime.value)
+                                {
+                                    return true;
+                                }
+                                
+                            }
+                        }
+                    }
+                    return false;
+                }
                 defineAPI();
             }
 
@@ -101,7 +141,7 @@
                         rateListMappingReadyPromiseDeferred.promise.then(function () {
                             var payload = {
                                 context: getContext(),
-                                fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: false, type: "cell" }],
+                                fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
                                 listName: "RateList"
                             };
                             if (configDetails != undefined && configDetails.ExcelConversionSettings && configDetails.ExcelConversionSettings.ListMappings.length >0)
@@ -119,7 +159,7 @@
                         codeListMappingReadyPromiseDeferred.promise.then(function () {
                             var payload = {
                                 context: getContext(),
-                                fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell" }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell" }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: false, type: "cell" }],
+                                fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
                                 listName: "CodeList"
                             };
                             if (configDetails != undefined && configDetails.ExcelConversionSettings && configDetails.ExcelConversionSettings.ListMappings.length > 0) {
