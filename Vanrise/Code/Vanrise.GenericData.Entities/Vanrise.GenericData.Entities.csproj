@@ -62,6 +62,7 @@
     <Compile Include="DataRecords\DataRecord.cs" />
     <Compile Include="DataRecords\DataRecordColumn.cs" />
     <Compile Include="DataRecords\DataRecordDetailBigResult.cs" />
+    <Compile Include="DataRecords\DataRecordSearchPageSettings.cs" />
     <Compile Include="DataRecords\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />
     <Compile Include="DataRecords\DataRecordFieldValue.cs" />
