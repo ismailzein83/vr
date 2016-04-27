@@ -638,6 +638,18 @@
       <Project>{38ea7d60-7221-43ba-80a8-af46b874f819}</Project>
       <Name>TOne.WhS.CodePreparation.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.DBSync.Business\TOne.WhS.DBSync.Business.csproj">
+      <Project>{66a454c0-d24c-4378-942f-4b7bc0f1e05a}</Project>
+      <Name>TOne.WhS.DBSync.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.DBSync.Data.SQL\TOne.WhS.DBSync.Data.SQL.csproj">
+      <Project>{ddabf1cd-636e-47c1-a713-0ec00ab5f581}</Project>
+      <Name>TOne.WhS.DBSync.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.DBSync.Entities\TOne.WhS.DBSync.Entities.csproj">
+      <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
+      <Name>TOne.WhS.DBSync.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.BP.Activities\TOne.WhS.Routing.BP.Activities.csproj">
       <Project>{a28f67c0-6326-4830-8a1e-021f91a4236d}</Project>
       <Name>TOne.WhS.Routing.BP.Activities</Name>
