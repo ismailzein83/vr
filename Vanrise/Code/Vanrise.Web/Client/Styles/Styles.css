@@ -2019,6 +2019,11 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     white-space: nowrap;
 }
 
+vr-label[breakline] .vr-control-label {   
+    white-space: normal !important;
+}
+
+
 .permmesion-background {
     background: url("../../Client/Images/bichartpermission.jpg") center no-repeat;
     background-size: contain;
