@@ -22,7 +22,7 @@ app.directive("whsBeSourceswitchreaderTonev1", [function () {
                 }
             }
         },
-        templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceSwitcheReader/Templates/SourceSwitchReaderTOneV1.html"
+        templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceSwitchReader/Templates/SourceSwitchReaderTOneV1.html"
     };
 
     function DirectiveConstructor($scope, ctrl) {

@@ -75,4 +75,4 @@ function SwitchMigrateTemplateController($scope, UtilsService, VRUIUtilsService,
     }
    
 }
-appControllers.controller('QM_BE_SwitchMigrateTemplateController', SwitchMigrateTemplateController);
+appControllers.controller('Whs_BE_SwitchMigrateTemplateController', SwitchMigrateTemplateController);
