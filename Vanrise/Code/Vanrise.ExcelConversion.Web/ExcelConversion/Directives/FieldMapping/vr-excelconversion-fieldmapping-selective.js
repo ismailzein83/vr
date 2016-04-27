@@ -143,6 +143,8 @@
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.selectedTemplateConfig.TemplateConfigID;
+                            data.FieldName = fieldMapping !=undefined?fieldMapping.FieldName:undefined,
+                            data.FieldType= fieldMapping !=undefined?fieldMapping.FieldType:undefined
                         }
                     }
                     return data;

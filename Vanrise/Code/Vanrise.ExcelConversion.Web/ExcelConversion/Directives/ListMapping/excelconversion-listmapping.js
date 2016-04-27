@@ -156,7 +156,7 @@
                                 var fieldMappingData = fieldMapping.fieldMappingAPI.getData();
                                 if (fieldMappingData != undefined) {
                                     fieldMappingData.FieldName = fieldMapping.FieldName;
-                                    fieldMappingData.FieldType = 0;
+                                    fieldMappingData.FieldType = fieldMapping.FieldType;
                                     fieldMappings.push(fieldMappingData);
                                 }
 

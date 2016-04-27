@@ -125,7 +125,33 @@ namespace Vanrise.ExcelConversion.Business
                 if (fldValue is DateTime)
                     return fldValue;
                 else
-                    return DateTime.ParseExact(fldValue.ToString(), conversionSettings.DateTimeFormat, CultureInfo.CurrentCulture);
+                {
+                    DateTime result;
+                    if (DateTime.TryParseExact(fldValue.ToString(), conversionSettings.DateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        throw new Exception("Error While Parsing DateTime.");
+                    }
+                }
+            }
+            else if(fldMapping.FieldType == FieldType.Decimal)
+            {
+                if (fldValue is Decimal)
+                    return fldValue;
+                else
+                {
+                    Decimal result;
+                    if(Decimal.TryParse(fldValue.ToString(), out result))
+                    {
+                        return result;
+                    }else
+                    {
+                        throw new Exception("Error While Parsing Decimal.");
+                    }
+                }
             }
             else
                 return fldValue;

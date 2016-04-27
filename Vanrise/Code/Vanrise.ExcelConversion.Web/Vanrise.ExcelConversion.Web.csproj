@@ -128,6 +128,7 @@
     <Folder Include="ExcelConversion\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ExcelConversion\Constant\FieldTypeEnum.js" />
     <Content Include="ExcelConversion\Constant\ModuleConfig.js" />
     <Content Include="ExcelConversion\Directives\FieldMapping\vr-excelconversion-fieldmapping-selective.js" />
     <Content Include="ExcelConversion\Directives\ListMapping\excelconversion-listmapping.js" />
