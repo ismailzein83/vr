@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Whs_BE_SupplierAPIService',
-    function (UtilsService, VRUIUtilsService, VRNotificationService, Whs_BE_SupplierAPIService) {
+app.directive("whsBeSourceswitchreader", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService',
+    function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService) {
     
     var directiveDefinitionObject = {
         restrict: "E",
@@ -23,7 +23,7 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                 }
             }
         },
-        templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SourceSupplierReader.html"
+        templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceSwitchReader/Templates/SourceSwitchReader.html"
     };
 
     function DirectiveConstructor($scope, ctrl) {
@@ -51,9 +51,9 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                 if ($scope.selectedSourceTypeTemplate != undefined) {
                     if (sourceTemplateDirectiveAPI != undefined) {
                         schedulerTaskAction = {};
-                        schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.SupplierSyncTaskActionArgument, TOne.WhS.DBSync.Business",
-                        schedulerTaskAction.SourceSupplierReader = sourceTemplateDirectiveAPI.getData();
-                        schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                        schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.SwitchSyncTaskActionArgument, TOne.WhS.DBSync.Business",
+                        schedulerTaskAction.SourceSwitchReader = sourceTemplateDirectiveAPI.getData();
+                        schedulerTaskAction.SourceSwitchReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
                     }
                 }
                 console.log('schedulerTaskAction')
@@ -70,11 +70,11 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                 var promises = [];
                 var sourceConfigId;
 
-                if (payload != undefined && payload.data != undefined && payload.data.SourceSupplierReader != undefined) {
-                    sourceConfigId = payload.data.SourceSupplierReader.ConfigId;
+                if (payload != undefined && payload.data != undefined && payload.data.SourceSwitchReader != undefined) {
+                    sourceConfigId = payload.data.SourceSwitchReader.ConfigId;
                 }
 
-                var loadSupplierSourcePromise = Whs_BE_SupplierAPIService.GetSupplierSourceTemplates().then(function (response) {
+                var loadSwitchSourcePromise = WhS_BE_SwitchAPIService.GetSwitchSourceTemplates().then(function (response) {
                     
                     angular.forEach(response, function (item) {
                         $scope.sourceTypeTemplates.push(item);
@@ -84,7 +84,7 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                         $scope.selectedSourceTypeTemplate = UtilsService.getItemByVal($scope.sourceTypeTemplates, sourceConfigId, "TemplateConfigID");
 
                 });
-                promises.push(loadSupplierSourcePromise);
+                promises.push(loadSwitchSourcePromise);
 
                 if (sourceConfigId != undefined)
                 {
@@ -92,15 +92,15 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
 
                     var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
                     sourceDirectiveReadyPromiseDeferred.promise.then(function () {
-                        var sourceSupplierReaderPayload;
+                        var sourceSwitchReaderPayload;
 
-                        if (payload != undefined && payload.data != undefined && payload.data.SourceSupplierReader != undefined) {
-                            sourceSupplierReaderPayload = {
-                                connectionString: payload.data.SourceSupplierReader.ConnectionString
+                        if (payload != undefined && payload.data != undefined && payload.data.SourceSwitchReader != undefined) {
+                            sourceSwitchReaderPayload = {
+                                connectionString: payload.data.SourceSwitchReader.ConnectionString
                             };
                         }
 
-                        VRUIUtilsService.callDirectiveLoad(sourceTemplateDirectiveAPI, sourceSupplierReaderPayload, loadSourceTemplatePromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(sourceTemplateDirectiveAPI, sourceSwitchReaderPayload, loadSourceTemplatePromiseDeferred);
                     });
 
                     promises.push(loadSourceTemplatePromiseDeferred.promise);

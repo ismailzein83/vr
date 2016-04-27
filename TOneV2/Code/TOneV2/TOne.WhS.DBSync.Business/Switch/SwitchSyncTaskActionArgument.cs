@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SupplierSyncTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
+    public class SwitchSyncTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
-        public SourceSupplierReader SourceSupplierReader { get; set; }
+        public SourceSwitchReader SourceSwitchReader { get; set; }
     }
 }

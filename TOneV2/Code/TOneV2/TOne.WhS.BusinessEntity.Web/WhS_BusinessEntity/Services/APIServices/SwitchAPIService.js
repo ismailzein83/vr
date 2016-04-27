@@ -44,6 +44,9 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['DeleteSwitch']));
         }
 
+        function GetSwitchSourceTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSwitchSourceTemplates"));
+        }
 
         return ({
             GetFilteredSwitches: GetFilteredSwitches,
@@ -54,7 +57,8 @@
             GetSwitchesInfo: GetSwitchesInfo,
             HasUpdateSwitchPermission: HasUpdateSwitchPermission,
             HasAddSwitchPermission: HasAddSwitchPermission,
-            HasDeleteSwitchPermission: HasDeleteSwitchPermission
+            HasDeleteSwitchPermission: HasDeleteSwitchPermission,
+            GetSwitchSourceTemplates: GetSwitchSourceTemplates
         });
     }
 

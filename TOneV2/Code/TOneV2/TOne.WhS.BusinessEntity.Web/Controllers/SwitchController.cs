@@ -59,5 +59,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.DeleteSwitch(switchId);
         }
 
+        [HttpGet]
+        [Route("GetSwitchSourceTemplates")]
+        public List<TemplateConfig> GetSwitchSourceTemplates()
+        {
+            TOne.WhS.DBSync.Business.SwitchManager manager = new TOne.WhS.DBSync.Business.SwitchManager();
+            return manager.GetSwitchSourceTemplates();
+        }
+
     }
 }

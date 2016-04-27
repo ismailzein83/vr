@@ -1,6 +1,6 @@
-﻿SupplierSynchronizeTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'Whs_BE_SupplierAPIService'];
+﻿SwitchMigrateTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService'];
 
-function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsService, VRNotificationService, Whs_BE_SupplierAPIService) {
+function SwitchMigrateTemplateController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService) {
 
     var sourceTemplateDirectiveAPI;
     var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -21,9 +21,9 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
             if ($scope.selectedSourceTypeTemplate != undefined) {
                 if (sourceTemplateDirectiveAPI != undefined) {
                     schedulerTaskAction = {};
-                    schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.SupplierSyncTaskActionArgument, TOne.WhS.DBSync.Business",
-                    schedulerTaskAction.SourceSupplierReader = sourceTemplateDirectiveAPI.getData();
-                    schedulerTaskAction.SourceSupplierReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
+                    schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.SwitchSyncTaskActionArgument, TOne.WhS.DBSync.Business",
+                    schedulerTaskAction.SourceSwitchReader = sourceTemplateDirectiveAPI.getData();
+                    schedulerTaskAction.SourceSwitchReader.ConfigId = $scope.selectedSourceTypeTemplate.TemplateConfigID;
                 }
             }
             return schedulerTaskAction;
@@ -47,9 +47,9 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
          });
     }
     function loadSourceType() {
-        return Whs_BE_SupplierAPIService.GetSupplierSourceTemplates().then(function (response) {
-            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceSupplierReader != undefined)
-              sourceConfigId = $scope.schedulerTaskAction.data.SourceSupplierReader.ConfigId;
+        return WhS_BE_SwitchAPIService.GetSwitchSourceTemplates().then(function (response) {
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceSwitchReader != undefined)
+                sourceConfigId = $scope.schedulerTaskAction.data.SourceSwitchReader.ConfigId;
             angular.forEach(response, function (item) {
                 $scope.sourceTypeTemplates.push(item);
             });
@@ -64,9 +64,9 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
         var loadSourceTemplatePromiseDeferred = UtilsService.createPromiseDeferred();
         sourceDirectiveReadyPromiseDeferred.promise.then(function () {
             var payload;
-            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceSupplierReader != undefined)
+            if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceSwitchReader != undefined)
                 payload = {
-                    connectionString:$scope.schedulerTaskAction.data.SourceSupplierReader.ConnectionString
+                    connectionString: $scope.schedulerTaskAction.data.SourceSwitchReader.ConnectionString
                 };
             VRUIUtilsService.callDirectiveLoad(sourceTemplateDirectiveAPI, payload, loadSourceTemplatePromiseDeferred);
         });
@@ -75,4 +75,4 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
     }
    
 }
-appControllers.controller('QM_BE_SupplierSynchronizeTemplateController', SupplierSynchronizeTemplateController);
+appControllers.controller('QM_BE_SwitchMigrateTemplateController', SwitchMigrateTemplateController);

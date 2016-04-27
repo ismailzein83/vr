@@ -54,11 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="EntityMigration\SourceItemMigrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Supplier\SourceSupplierSynchronizer.cs" />
-    <Compile Include="Supplier\SupplierManager.cs" />
-    <Compile Include="Supplier\SupplierSyncTaskAction.cs" />
-    <Compile Include="Supplier\SupplierSyncTaskActionArgument.cs" />
+    <Compile Include="Switch\SourceSwitchSynchronizer.cs" />
+    <Compile Include="Switch\SwitchManager.cs" />
+    <Compile Include="Switch\SwitchSyncTaskAction.cs" />
+    <Compile Include="Switch\SwitchSyncTaskActionArgument.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">

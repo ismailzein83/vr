@@ -8,6 +8,6 @@ namespace TOne.WhS.DBSync.Business
 {
     public static class Constants
     {
-        public const string SourceSupplierReaderConfigType = "QM_BE_SourceSupplierReader";
+        public const string SourceSwitchReaderConfigType = "QM_BE_SourceSwitchReader";
     }
 }

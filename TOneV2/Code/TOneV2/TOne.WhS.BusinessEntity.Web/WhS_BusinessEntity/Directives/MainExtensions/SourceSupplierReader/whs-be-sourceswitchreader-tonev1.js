@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("qmBeSourcesupplierreaderTonev1", [function () {
+app.directive("whsBeSourceswitchreaderTonev1", [function () {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -22,7 +22,7 @@ app.directive("qmBeSourcesupplierreaderTonev1", [function () {
                 }
             }
         },
-        templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SourceSupplierReaderTOneV1.html"
+        templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceSwitcheReader/Templates/SourceSwitchReaderTOneV1.html"
     };
 
     function DirectiveConstructor($scope, ctrl) {
@@ -36,7 +36,7 @@ app.directive("qmBeSourcesupplierreaderTonev1", [function () {
 
             api.getData = function () {
                 return {
-                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SourceSuppliersReaders.SupplierTOneV1Reader, TOne.WhS.BusinessEntity.MainExtensions",
+                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SourceSwitchesReaders.SwitchTOneV1Reader, TOne.WhS.BusinessEntity.MainExtensions",
                     ConnectionString: $scope.connectionString
                 };
             };

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.DBSync.Entities
 {
-    public class SourceSupplier : Vanrise.Entities.EntitySynchronization.ISourceItem
+    public class SourceSwitch : Vanrise.Entities.EntitySynchronization.ISourceItem
     {
 
         public string SourceId
