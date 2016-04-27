@@ -12,8 +12,11 @@
     [Rank]        INT             NULL,
     [timestamp]   ROWVERSION      NULL,
     CONSTRAINT [PK_Views] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Module_View] FOREIGN KEY ([Module]) REFERENCES [sec].[Module] ([Id])
+    CONSTRAINT [FK_Module_View] FOREIGN KEY ([Module]) REFERENCES [sec].[Module] ([Id]),
+    CONSTRAINT [FK_View_ViewType] FOREIGN KEY ([Type]) REFERENCES [sec].[ViewType] ([ID])
 );
+
+
 
 
 
