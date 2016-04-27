@@ -7,6 +7,7 @@ using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Entities;
 namespace Vanrise.Analytic.Business
 {
     public class AnalyticTableManager
@@ -35,7 +36,56 @@ namespace Vanrise.Analytic.Business
         {
             var analyticTables = GetCachedAnalyticTables();
             return analyticTables.GetRecord(analyticTableId);
+        } 
+        public Vanrise.Entities.InsertOperationOutput<AnalyticTableDetail> AddAnalyticTable(AnalyticTable analyticTable)
+        {
+            InsertOperationOutput<AnalyticTableDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AnalyticTableDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int analyticTableId = -1;
+
+            IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();
+            bool insertActionSucc = dataManager.AddAnalyticTable(analyticTable, out analyticTableId);
+
+            if (insertActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                analyticTable.AnalyticTableId = analyticTableId;
+                insertOperationOutput.InsertedObject = AnalyticTableDetailMapper(analyticTable);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> UpdateAnalyticTable(AnalyticTable analyticTable)
+        {
+            IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();
+            bool updateActionSucc = dataManager.UpdateAnalyticTable(analyticTable);
+            UpdateOperationOutput<AnalyticTableDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = AnalyticTableDetailMapper(analyticTable);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
         #endregion
 
         #region Private Methods

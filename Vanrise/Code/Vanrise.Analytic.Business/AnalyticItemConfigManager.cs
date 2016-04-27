@@ -73,7 +73,6 @@ namespace Vanrise.Analytic.Business
             }
             return analyticJoins;
         }
-
         public IEnumerable<AnalyticDimensionConfigInfo> GetDimensionsInfo(AnalyticDimensionConfigInfoFilter filter)
         {
             if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
@@ -99,6 +98,44 @@ namespace Vanrise.Analytic.Business
             return measureConfigs;
         }
 
+
+        public Vanrise.Entities.IDataRetrievalResult<AnalyticDimensionConfigDetail> GetFilteredDimensions(Vanrise.Entities.DataRetrievalInput<AnalyticDimensionConfigQuery> input)
+        {
+            if(input.Query == null)
+            {
+                throw new NullReferenceException("GetFilteredDimensions");
+            }
+            var dimensions = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(input.Query.TableId, AnalyticItemType.Dimension);
+
+            Func<AnalyticItemConfig<AnalyticDimensionConfig>, bool> filterExpression = (prod) =>
+                 (true);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dimensions.ToBigResult(input, filterExpression, AnalyticDimensionConfigDetailMapper));
+        }
+        public Vanrise.Entities.IDataRetrievalResult<AnalyticMeasureConfigDetail> GetFilteredMeasures(Vanrise.Entities.DataRetrievalInput<AnalyticMeasureConfigQuery> input)
+        {
+            if (input.Query == null)
+            {
+                throw new NullReferenceException("GetFilteredMeasures");
+            }
+            var measures = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(input.Query.TableId, AnalyticItemType.Measure);
+
+            Func<AnalyticItemConfig<AnalyticMeasureConfig>, bool> filterExpression = (prod) =>
+                 (true);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, measures.ToBigResult(input, filterExpression, AnalyticMeasureConfigDetailMapper));
+        }
+        public Vanrise.Entities.IDataRetrievalResult<AnalyticJoinConfigDetail> GetFilteredJoins(Vanrise.Entities.DataRetrievalInput<AnalyticJoinConfigQuery> input)
+        {
+            if (input.Query == null)
+            {
+                throw new NullReferenceException("GetFilteredJoins");
+            }
+            var joins = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(input.Query.TableId, AnalyticItemType.Join);
+            Func<AnalyticItemConfig<AnalyticJoinConfig>, bool> filterExpression = (prod) =>
+                 (true);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, joins.ToBigResult(input, filterExpression, AnalyticJoinConfigDetailMapper));
+        }
         #endregion
 
         #region Private Methods
@@ -112,7 +149,16 @@ namespace Vanrise.Analytic.Business
                    return dataManager.GetItemConfigs<T>(tableId, itemType);
                });
         }
-
+        private Object GetAnalyticConfigByType(AnalyticItemType itemType)
+        {
+            switch (itemType)
+            {
+                case AnalyticItemType.Dimension: return typeof(AnalyticDimensionConfig);
+                case AnalyticItemType.Measure: return typeof(AnalyticMeasureConfig);
+                case AnalyticItemType.Join: return typeof(AnalyticJoinConfig);
+            }
+            return null;
+        }
         #endregion
 
         #region Private Classes
@@ -149,6 +195,36 @@ namespace Vanrise.Analytic.Business
                 AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
                 Name = analyticItemConfig.Name,
                 Title = analyticItemConfig.Title
+            };
+        }
+        AnalyticDimensionConfigDetail AnalyticDimensionConfigDetailMapper(AnalyticItemConfig<AnalyticDimensionConfig> analyticItemConfig)
+        {
+            return new AnalyticDimensionConfigDetail
+            {
+                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
+                Name = analyticItemConfig.Name,
+                Title = analyticItemConfig.Title,
+                Entity = analyticItemConfig.Config
+            };
+        }
+        AnalyticMeasureConfigDetail AnalyticMeasureConfigDetailMapper(AnalyticItemConfig<AnalyticMeasureConfig> analyticItemConfig)
+        {
+            return new AnalyticMeasureConfigDetail
+            {
+                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
+                Name = analyticItemConfig.Name,
+                Title = analyticItemConfig.Title,
+                Entity = analyticItemConfig.Config
+            };
+        }
+        AnalyticJoinConfigDetail AnalyticJoinConfigDetailMapper(AnalyticItemConfig<AnalyticJoinConfig> analyticItemConfig)
+        {
+            return new AnalyticJoinConfigDetail
+            {
+                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
+                Name = analyticItemConfig.Name,
+                Title = analyticItemConfig.Title,
+                Entity = analyticItemConfig.Config
             };
         }
         #endregion

@@ -30,6 +30,27 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticMeasureConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticMeasureConfigInfoFilter>(filter) : null;
             return manager.GetMeasuresInfo(serializedFilter);
         }
+        [HttpPost]
+        [Route("GetFilteredDimensions")]
+        public object GetFilteredDimensions(Vanrise.Entities.DataRetrievalInput<AnalyticDimensionConfigQuery> input)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return GetWebResponse(input, manager.GetFilteredDimensions(input));
+        }
+        [HttpPost]
+        [Route("GetFilteredMeasures")]
+        public object GetFilteredMeasures(Vanrise.Entities.DataRetrievalInput<AnalyticMeasureConfigQuery> input)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return GetWebResponse(input, manager.GetFilteredMeasures(input));
+        }
+        [HttpPost]
+        [Route("GetFilteredJoins")]
+        public object GetFilteredJoins(Vanrise.Entities.DataRetrievalInput<AnalyticJoinConfigQuery> input)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return GetWebResponse(input, manager.GetFilteredJoins(input));
+        }
 
     }
 }

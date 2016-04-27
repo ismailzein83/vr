@@ -16,10 +16,21 @@
                 filter: filter
             });
         }
-        
+        function GetFilteredDimensions(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredDimensions"), input);
+        }
+        function GetFilteredMeasures(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredMeasures"), input);
+        }
+        function GetFilteredJoins(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredJoins"), input);
+        }
         return ({
             GetDimensionsInfo: GetDimensionsInfo,
             GetMeasuresInfo: GetMeasuresInfo,
+            GetFilteredDimensions: GetFilteredDimensions,
+            GetFilteredMeasures: GetFilteredMeasures,
+            GetFilteredJoins: GetFilteredJoins
         });
     }
 

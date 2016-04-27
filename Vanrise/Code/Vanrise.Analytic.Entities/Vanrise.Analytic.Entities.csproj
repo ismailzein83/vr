@@ -52,13 +52,19 @@
     <Compile Include="AnalyticSummaryBigResult.cs" />
     <Compile Include="AnalyticTableDetail.cs" />
     <Compile Include="AnalyticTableQuery.cs" />
+    <Compile Include="Config\AnalyticItemConfigQuery.cs" />
     <Compile Include="Config\AnalyticTableInfoFilter.cs" />
     <Compile Include="Config\Dimension\AnalyticDimension.cs" />
     <Compile Include="Config\Dimension\AnalyticDimensionConfig.cs" />
+    <Compile Include="Config\Dimension\AnalyticDimensionConfigDetail.cs" />
     <Compile Include="Config\Dimension\AnalyticDimensionConfigInfo.cs" />
     <Compile Include="Config\Dimension\AnalyticDimensionConfigInfoFilter.cs" />
+    <Compile Include="Config\Dimension\AnalyticDimensionConfigQuery.cs" />
     <Compile Include="Config\Join\AnalyticJoin.cs" />
+    <Compile Include="Config\Join\AnalyticJoinConfigDetail.cs" />
+    <Compile Include="Config\Join\AnalyticJoinConfigQuery.cs" />
     <Compile Include="Config\Measure\AnalyticMeasure.cs" />
+    <Compile Include="Config\Measure\AnalyticMeasureConfigDetail.cs" />
     <Compile Include="Config\Measure\AnalyticMeasureConfigInfo.cs" />
     <Compile Include="Config\Measure\AnalyticMeasureConfigInfoFilter.cs" />
     <Compile Include="Config\AnalyticTable.cs" />
@@ -68,6 +74,7 @@
     <Compile Include="Config\Join\AnalyticJoinConfig.cs" />
     <Compile Include="Config\Measure\AnalyticMeasureConfig.cs" />
     <Compile Include="Config\IMeasureEvaluator.cs" />
+    <Compile Include="Config\Measure\AnalyticMeasureConfigQuery.cs" />
     <Compile Include="DimensionFilter.cs" />
     <Compile Include="DimensionValue.cs" />
     <Compile Include="MeasureValues.cs" />

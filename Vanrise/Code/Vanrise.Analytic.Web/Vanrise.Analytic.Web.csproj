@@ -97,9 +97,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Analytic\Constants\AnalyticItemTypeEnum.js" />
     <Content Include="Analytic\Constants\ModuleConfig.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-selector.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticMeasureGridTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-dimension-grid.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-join-grid.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-measure-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\Templates\AnalyticTableGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\vr-analytic-analytictable-grid.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Templates\GridWidgetDefinitionTemplate.html" />
@@ -111,6 +118,7 @@
     <Content Include="Analytic\Directives\Runtime\Grid\vr-analytic-datagrid-analyticrecords.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\SearchSettings\Templates\GenericSearchTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
+    <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
     <Content Include="Analytic\Services\AnalyticTableService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticAPIService.js" />
@@ -119,6 +127,8 @@
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportSettingsEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportSettingsEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticTableEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticTableEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticTableManagement.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticTableManagementController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticWidgetEditor.html" />

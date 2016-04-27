@@ -29,5 +29,27 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticTableManager manager = new AnalyticTableManager();
             return GetWebResponse(input, manager.GetFilteredAnalyticTables(input));
         }
+        [HttpGet]
+        [Route("GetTableById")]
+        public AnalyticTable GetTableById(int tableId)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.GetAnalyticTableById(tableId);
+        }
+        [HttpPost]
+        [Route("UpdateAnalyticTable")]
+        public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> UpdateAnalyticTable(AnalyticTable analyticTable)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.UpdateAnalyticTable(analyticTable);
+        }
+
+        [HttpPost]
+        [Route("AddAnalyticTable")]
+        public Vanrise.Entities.InsertOperationOutput<AnalyticTableDetail> AddAnalyticTable(AnalyticTable analyticTable)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.AddAnalyticTable(analyticTable);
+        }
     }
 }

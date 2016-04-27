@@ -17,12 +17,12 @@
                 modalScope.onAnalyticTableAdded = onAnalyticTableAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/Table/TableEditor.html', null, modalSettings);
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticTableEditor.html', null, modalSettings);
         }
 
-        function editAnalyticTable(userId, onAnalyticTableUpdated) {
+        function editAnalyticTable(tableId, onAnalyticTableUpdated) {
             var modalParameters = {
-                userId: userId
+                tableId: tableId
             };
 
             var modalSettings = {};
@@ -31,7 +31,7 @@
                 modalScope.onAnalyticTableUpdated = onAnalyticTableUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/Table/TableEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticTableEditor.html', modalParameters, modalSettings);
         }
 
     };

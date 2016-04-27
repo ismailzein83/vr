@@ -28,6 +28,21 @@ namespace Vanrise.Analytic.Data.SQL
             return GetItemsSP("[Analytic].[sp_AnalyticTable_GetAll]", AnalyticTableReader);
         }
 
+        public bool AddAnalyticTable(Entities.AnalyticTable analyticTable, out int analyticTableId)
+        {
+            object analyticTableID;
+
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Insert", out analyticTableID, analyticTable.Name, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
+            analyticTableId = (recordesEffected > 0) ? (int)analyticTableID : -1;
+
+            return (recordesEffected > 0);
+        }
+
+        public bool UpdateAnalyticTable(Entities.AnalyticTable analyticTable)
+        {
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Update", analyticTable.AnalyticTableId, analyticTable.Name, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
+            return (recordesEffected > 0);
+        }
         #endregion
 
 
