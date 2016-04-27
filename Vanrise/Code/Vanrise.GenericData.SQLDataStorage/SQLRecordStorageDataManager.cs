@@ -343,7 +343,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         private string BuildQuery(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, string tempTableName, string recordFilter)
         {
-            string dateTimeColumn = "DateTimeCol";
+            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
             string tableName = GetTableName();
 
             string recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" and {0} ", recordFilter) : string.Empty;

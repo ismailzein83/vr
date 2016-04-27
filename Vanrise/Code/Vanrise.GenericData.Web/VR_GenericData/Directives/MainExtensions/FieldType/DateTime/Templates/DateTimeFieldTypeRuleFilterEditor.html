@@ -1,8 +1,6 @@
-﻿<vr-columns width="1/2row">
+﻿<vr-columns width="normal">
     <vr-select label="Filter" datatextfield="description" datavaluefield="value"
                datasource="filters" selectedvalues="selectedFilter" isrequired="true"></vr-select>
 </vr-columns>
-<!--<vr-columns width="1/2row">-->
-    <!--<vr-datetimepicker label="Date" value="date" type="datetime" isrequired="true"></vr-datetimepicker>-->
-    <vr-genericdata-fieldtype-datetime-filtereditor on-ready="onDateFilterEditorReady" isrequired="true" selectionmode="single" normal-col-num="6"></vr-genericdata-fieldtype-datetime-filtereditor>
-<!--</vr-columns>-->
+
+<vr-genericdata-fieldtype-datetime-filtereditor on-ready="onDateFilterEditorReady" isrequired="true" selectionmode="single" normal-col-num="4"></vr-genericdata-fieldtype-datetime-filtereditor>

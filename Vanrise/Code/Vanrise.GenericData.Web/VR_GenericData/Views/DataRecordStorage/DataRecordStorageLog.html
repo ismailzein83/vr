@@ -3,7 +3,7 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" isrequired="true" selectedvalues="selectedDataRecordStorage"></vr-genericdata-datarecordstorage-selector>
+                    <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" isrequired="true" selectedvalues="selectedDataRecordStorage" onselectionchanged="onDataRecordStorageSelectorChanged"></vr-genericdata-datarecordstorage-selector>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-datetimepicker label="From" value="fromDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
@@ -16,17 +16,17 @@
 
             <vr-section title="Advanced Filter" collapsible>
                 <vr-row ng-show="expression !=undefined" removeline>
-                    <vr-columns width="fullrow"><vr-label isvalue>{{expression}}</vr-label></vr-columns>
+                    <vr-columns width="fullrow"><vr-label isvalue breakline>{{expression}}</vr-label></vr-columns>
                 </vr-row>
                 <vr-row removeline>
                     <vr-columns width="1/4row" class="pull-right">
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="addFilter()">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="addFilter()" ng-disabled="!selectedDataRecordStorage">
                             <i class="glyphicon glyphicon-pencil"></i> Edit Filter
                         </button>
                     </vr-columns>
 
                     <vr-columns width="1/4row" class="pull-right">
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="resetFilter()">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="resetFilter()" ng-disabled="expression ==undefined">
                             <i class="glyphicon glyphicon-remove"></i> Reset Filter
                         </button>
                     </vr-columns>

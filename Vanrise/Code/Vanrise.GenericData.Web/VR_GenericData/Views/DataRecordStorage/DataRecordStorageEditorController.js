@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    DataRecordStorageEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreConfigAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService'];
 
-    function DataRecordStorageEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function DataRecordStorageEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreConfigAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService) {
 
         var isEditMode;
 
@@ -22,6 +22,8 @@
         var dataRecordStorageId;
         var dataRecordStorageEntity;
 
+        var dateFieldSelectorAPI;
+
         loadParameters();
         defineScope();
         load();
@@ -36,6 +38,9 @@
             isEditMode = (dataRecordStorageId != undefined);
         }
         function defineScope() {
+            $scope.dataRecordTypeFields = [];
+
+
             $scope.settingsEditor;
 
             $scope.onDataRecordTypeSelectorReady = function (api) {
@@ -45,11 +50,14 @@
             $scope.onDataRecordTypeSelectionChanged = function (option) {
                 $scope.selectedDataRecordType = option;
                 typeSelectorChangeCount++;
+                loadDataRecordFields();
+
                 if ((isEditMode && typeSelectorChangeCount <= 2) || (!isEditMode && typeSelectorChangeCount <= 1)) {
                     return;
                 }
                 loadSettingsDirectiveFromScope();
             };
+
             $scope.onDataStoreSelectorReady = function (api) {
                 dataStoreSelectorAPI = api;
                 dataStoreSelectorReadyDeferred.resolve();
@@ -84,6 +92,10 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+
+            $scope.onDateFieldSelectorReady = function (api) {
+                dateFieldSelectorAPI = api;
+            }
         }
 
         function load() {
@@ -109,7 +121,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadDataStoreSelector, loadSettingsDirectiveOnPageLoad]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadDataStoreSelector, loadSettingsDirectiveOnPageLoad, loadDataRecordFields]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -145,7 +157,7 @@
             }
             function loadDataStoreSelector() {
                 var dataStoreSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                
+
                 dataStoreSelectorReadyDeferred.promise.then(function () {
                     var payload;
 
@@ -272,14 +284,45 @@
                 $scope.isLoading = false;
             });
         }
+
+        function loadDataRecordFields() {
+            $scope.selectedDataRecordTypeField = undefined;
+            $scope.dataRecordTypeFields.length = 0;
+
+            var obj = undefined;
+            if (dataRecordStorageEntity != undefined) {
+                obj = { DataRecordTypeId: dataRecordStorageEntity.DataRecordTypeId };
+            }
+            else if ($scope.selectedDataRecordType) {
+                obj = { DataRecordTypeId: $scope.selectedDataRecordType.DataRecordTypeId };
+            }
+
+            if (obj != undefined) {
+                var serializedFilter = UtilsService.serializetoJson(obj);
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
+                    if (response != undefined) {
+                        angular.forEach(response, function (item) {
+                            $scope.dataRecordTypeFields.push(item);
+                        });
+
+                        if (dataRecordStorageEntity != undefined) {
+                            $scope.selectedDataRecordTypeField = UtilsService.getItemByVal($scope.dataRecordTypeFields, dataRecordStorageEntity.Settings.DateTimeField, 'Entity.Name');
+                        }
+                    }
+                });
+            }
+        }
+
         function buildDataRecordStorageObjectFromScope() {
-            return {
+            var obj = {
                 DataRecordStorageId: dataRecordStorageId,
                 Name: $scope.name,
                 DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                 DataStoreId: dataStoreSelectorAPI.getSelectedIds(),
                 Settings: settingsDirectiveAPI.getData()
-            };
+            }
+            obj.Settings.DateTimeField = $scope.selectedDataRecordTypeField.Entity.Name;
+            return obj;
         }
     }
 

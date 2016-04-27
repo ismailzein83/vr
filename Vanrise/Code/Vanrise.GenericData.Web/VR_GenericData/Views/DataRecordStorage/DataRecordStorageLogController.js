@@ -44,6 +44,11 @@
                 }
             };
 
+            $scope.onDataRecordStorageSelectorChanged = function () {
+                $scope.expression = undefined;
+                filterObj = null;
+            }
+
             $scope.resetFilter = function () {
                 $scope.expression = undefined;
                 filterObj = null;

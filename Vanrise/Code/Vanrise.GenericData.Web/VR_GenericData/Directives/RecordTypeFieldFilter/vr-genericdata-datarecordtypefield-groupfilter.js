@@ -25,7 +25,11 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
             var dataRecordTypeId;
             var filterObj;
             var context;
-
+            ctrl.isValid = function () {
+                if (ctrl.groups.length == 0 && ctrl.rules.length == 0)
+                    return 'At least one item should be added';
+                return null;
+            }
             ctrl.addRule = function () {
                 var rule = {
                     onRuleFilterReady: function (api) {

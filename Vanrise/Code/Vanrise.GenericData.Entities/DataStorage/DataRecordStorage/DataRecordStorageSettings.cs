@@ -8,6 +8,6 @@ namespace Vanrise.GenericData.Entities
 {
     public class DataRecordStorageSettings
     {
-        public int ConfigId { get; set; }
+        public string DateTimeField { get; set; }
     }
 }

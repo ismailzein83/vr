@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (VR_GenericData_DataRecordTypeAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_ConditionEnum',
+    function (VR_GenericData_DataRecordTypeAPIService, UtilsService, VRUIUtilsService, VR_GenericData_ConditionEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -34,9 +34,10 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                 var payload = { dataRecordTypeField: $scope.dataRecordTypeField, filterObj: filterObj };
                 api.load(payload);
             }
-            $scope.onSelectorReady = function (api) {
-                var payload = { dataRecordTypeId: dataRecordTypeId };
-                api.load(payload);
+
+            $scope.onDataRecordTypeFieldFilterReady = function (api) {
+                dataRecordTypeFieldEditorApi = api;
+                api.load();
             }
 
             function initializeController() {
@@ -48,12 +49,18 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        
+                        $scope.conditions = UtilsService.getArrayEnum(VR_GenericData_ConditionEnum);
                         dataRecordTypeId = payload.dataRecordTypeId;
                         context = payload.context;
                         $scope.datasource = context.getFields();
                         filterObj = payload.filterObj;
 
                         if (filterObj) {
+                            $scope.selectedCondition = UtilsService.getItemByVal($scope.conditions, filterObj.$type, 'type');
+                            if (!$scope.selectedCondition) {
+                                $scope.selectedCondition = UtilsService.getItemByVal($scope.conditions, '', 'type');
+                            }
                             $scope.dataRecordTypeField = UtilsService.getItemByVal($scope.datasource, filterObj.FieldName, 'Entity.Name');
                         }
                     }

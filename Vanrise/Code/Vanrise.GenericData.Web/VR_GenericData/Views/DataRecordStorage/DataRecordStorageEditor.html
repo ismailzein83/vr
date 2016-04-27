@@ -14,6 +14,14 @@
                     </vr-genericdata-datarecordtype-selector>
                 </vr-columns>
                 <vr-columns width="1/3row">
+                    <vr-select label="Time Field" datasource="dataRecordTypeFields" selectedvalues="selectedDataRecordTypeField"
+                               datavaluefield="Entity.Name" datatextfield="Entity.Name" isrequired="true" hideremoveicon>
+                    </vr-select>
+
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/3row">
                     <vr-genericdata-datastore-selector on-ready="onDataStoreSelectorReady"
                                                        selectedvalues="selectedDataStore"
                                                        onselectionchanged="onDataStoreSelectionChanged"
