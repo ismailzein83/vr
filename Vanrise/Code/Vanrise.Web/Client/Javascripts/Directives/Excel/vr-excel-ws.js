@@ -19,7 +19,10 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                  colWidths:100,
                  mergeCells: scope.data.MergedCells,
                  height: 320,
-                 fillHandle:false 
+                 fillHandle: false,
+                 minCols: 20,
+                 minRows:20
+                
                 
             })
             var data = [];
