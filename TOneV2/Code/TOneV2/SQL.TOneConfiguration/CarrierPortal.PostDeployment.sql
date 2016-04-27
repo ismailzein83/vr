@@ -84,7 +84,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (2101,'CP_SupPriceList_Customer','Customer',1,0,'["View", "Add","Edit", "Assign/Unassign User"]'),
 (2102,'CP_SupPriceList_SupplierMapping','Supplier Mapping',1,0,'["View", "Add/Edit"]'),
-(2103,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Upload Pricelist"]')
+(2103,'CP_SupPriceList_PriceList','PriceList',1,0,'["View", "Upload Pricelist","Search"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
