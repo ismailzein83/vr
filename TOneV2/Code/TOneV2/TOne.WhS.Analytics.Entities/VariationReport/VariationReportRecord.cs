@@ -8,6 +8,8 @@ namespace TOne.WhS.Analytics.Entities
 {
     public class VariationReportRecord
     {
+        public VariationReportDimension? Dimension { get; set; }
+
         public Object DimensionId { get; set; }
 
         public string DimensionName { get; set; }

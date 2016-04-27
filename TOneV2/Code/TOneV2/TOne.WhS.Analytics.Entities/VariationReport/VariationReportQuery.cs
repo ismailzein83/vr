@@ -8,13 +8,15 @@ namespace TOne.WhS.Analytics.Entities
 {
     public class VariationReportQuery
     {
+        public VariationReportType? ParentReportType { get; set; }
+
+        public VariationReportType ReportType { get; set; }
+
         public DateTime ToDate { get; set; }
 
         public VariationReportTimePeriod TimePeriod { get; set; }
 
         public int NumberOfPeriods { get; set; }
-
-        public VariationReportType ReportType { get; set; }
 
         public List<VariationReportDimensionFilter> DimensionFilters { get; set; }
     }

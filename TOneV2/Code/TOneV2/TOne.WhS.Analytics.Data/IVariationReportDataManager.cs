@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,6 @@ namespace TOne.WhS.Analytics.Data
 {
     public interface IVariationReportDataManager : IDataManager
     {
-        VariationReportBigResult GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input);
+        IEnumerable<VariationReportRecord> GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input, DataTable timePeriodsTable);
     }
 }

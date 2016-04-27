@@ -16,7 +16,6 @@ namespace TOne.WhS.Analytics.Data.SQL
         #region Fields / Constructors
 
         VariationReportQuery _inputQuery;
-        string _dimensionTitle;
 
         static Dictionary<string, string> s_mapper;
 
@@ -30,41 +29,13 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Public Methods
 
-        public VariationReportBigResult GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input)
+        public IEnumerable<VariationReportRecord> GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input, DataTable timePeriodsTable)
         {
             _inputQuery = input.Query;
 
-            Action<string> createTempTableAction = (tempTableName) =>
+            return GetItemsText<VariationReportRecord>(GetVariationReportQuery(input.Query), VariationReportRecordMapper, (cmd) =>
             {
-                CreateTempTableIfNotExists(input, tempTableName);
-            };
-
-            BigResult<VariationReportRecord> bigResult = RetrieveData(input, createTempTableAction, VariationReportRecordMapper, s_mapper);
-
-            VariationReportBigResult variationReportBigResult = new VariationReportBigResult()
-            {
-                ResultKey = bigResult.ResultKey,
-                Data = bigResult.Data,
-                TotalCount = bigResult.TotalCount
-            };
-
-            variationReportBigResult.DimensionTitle = _dimensionTitle;
-            variationReportBigResult.TimePeriods = GetTimePeriodDefinitions(input);
-
-            return variationReportBigResult;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        void CreateTempTableIfNotExists(DataRetrievalInput<VariationReportQuery> input, string tempTableName)
-        {
-            ExecuteNonQueryText(GetTempTableQuery(input.Query, tempTableName), (cmd) =>
-            {
-                DataTable timePeriodsTable = BuildTimePeriodsTable(input);
                 var tableParameter = new SqlParameter("@TimePeriods", SqlDbType.Structured);
-
                 tableParameter.TypeName = "TOneWhS_Analytic.VariationReportTimePeriodType";
                 tableParameter.Value = timePeriodsTable;
                 cmd.Parameters.Add(tableParameter);
@@ -74,34 +45,34 @@ namespace TOne.WhS.Analytics.Data.SQL
             });
         }
 
-        #region Temp Table Query
+        #endregion
 
-        string GetTempTableQuery(VariationReportQuery query, string tempTableName)
+        #region Private Methods
+
+        #region Variation Report Query
+
+        string GetVariationReportQuery(VariationReportQuery query)
         {
-            var createTempTableQueryBuilder = new StringBuilder
-            (
-                @"IF NOT OBJECT_ID('#TEMP_TABLE_NAME#', N'U') IS NOT NULL
-                BEGIN
-                    #EXCHANGE_RATES_TABLE#
-                    #QUERY_PART#
-                END"
-            );
+            var variationReportQueryBuilder = new StringBuilder
+            (@"
+                #EXCHANGE_RATES_TABLE#
+                #QUERY_PART#
+            ");
 
-            createTempTableQueryBuilder.Replace("#EXCHANGE_RATES_TABLE#", GetExchangeRatesTable(query.ReportType));
+            variationReportQueryBuilder.Replace("#EXCHANGE_RATES_TABLE#", GetExchangeRatesTable(query));
 
             string queryPart = (query.ReportType == VariationReportType.InOutBoundMinutes || query.ReportType == VariationReportType.InOutBoundAmount) ?
                 GetMultiBoundQuery(query) :
-                GetSingleBoundQuery(query, null, "INTO #TEMP_TABLE_NAME#");
+                GetSingleBoundQuery(query, null, "#Result", true, true);
 
-            createTempTableQueryBuilder.Replace("#QUERY_PART#", queryPart);
-            createTempTableQueryBuilder.Replace("#TEMP_TABLE_NAME#", tempTableName);
+            variationReportQueryBuilder.Replace("#QUERY_PART#", queryPart);
 
-            return createTempTableQueryBuilder.ToString();
+            return variationReportQueryBuilder.ToString();
         }
 
-        string GetExchangeRatesTable(VariationReportType reportType)
+        string GetExchangeRatesTable(VariationReportQuery query)
         {
-            switch (reportType)
+            switch (query.ReportType)
             {
                 case VariationReportType.InBoundAmount:
                 case VariationReportType.OutBoundAmount:
@@ -140,7 +111,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 INTO #TotalResult
                 FROM #InResult InResult JOIN #OutResult OutResult ON InResult.DimensionId = OutResult.DimensionId
 
-                SELECT * INTO #TEMP_TABLE_NAME#
+                SELECT *
                 FROM (SELECT * FROM #InResult UNION ALL SELECT * FROM #OutResult UNION ALL SELECT * FROM #TotalResult) AS FinalResult
                 
                 ORDER BY FinalResult.DimensionId
@@ -150,9 +121,9 @@ namespace TOne.WhS.Analytics.Data.SQL
             VariationReportQuery outResultQuery;
             SetInOutResultQueries(query, out inResultQuery, out outResultQuery);
 
-            multiBoundQueryBuilder.Replace("#IN_BOUND_QUERY#", GetSingleBoundQuery(inResultQuery, " / In", "INTO #InResult"));
-            multiBoundQueryBuilder.Replace("#OUT_BOUND_QUERY#", GetSingleBoundQuery(outResultQuery, " / Out", "INTO #OutResult"));
-            multiBoundQueryBuilder.Replace("#TOTAL_RESULT_SUM_PART#", GetTotalResultSumPart(query.NumberOfPeriods));
+            multiBoundQueryBuilder.Replace("#IN_BOUND_QUERY#", GetSingleBoundQuery(inResultQuery, " / In", "#InResult", false, false));
+            multiBoundQueryBuilder.Replace("#OUT_BOUND_QUERY#", GetSingleBoundQuery(outResultQuery, " / Out", "#OutResult", false, false));
+            multiBoundQueryBuilder.Replace("#TOTAL_RESULT_SUM_PART#", GetTotalResultSumPart(query));
 
             return multiBoundQueryBuilder.ToString();
         }
@@ -181,10 +152,10 @@ namespace TOne.WhS.Analytics.Data.SQL
             outResultQuery.DimensionFilters = query.DimensionFilters;
         }
 
-        string GetTotalResultSumPart(int numberOfPeriods)
+        string GetTotalResultSumPart(VariationReportQuery query)
         {
             var totalResultSumPartBuilder = new StringBuilder();
-            for (int i = 0; i < numberOfPeriods; i++)
+            for (int i = 0; i < query.NumberOfPeriods; i++)
             {
                 totalResultSumPartBuilder.Append(String.Format(", InResult.Period{0}Sum - OutResult.Period{0}Sum AS Period{0}Sum", i + 1));
             }
@@ -195,11 +166,11 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Single Bound Query
 
-        string GetSingleBoundQuery(VariationReportQuery query, string dimensionSuffix, string intoPart)
+        string GetSingleBoundQuery(VariationReportQuery query, string dimensionSuffix, string intoTableName, bool selectFromIntoTable, bool withSummary)
         {
             var singleResultQueryBuilder = new StringBuilder
-            (
-                @"SELECT #TOP_PART#
+            (@"
+                SELECT #TOP_PART#
                     #DIMENTION_COLUMN_NAME# AS DimensionId
                     #DIMENSION_SUFFIX#
                     #AVERAGE_PART#
@@ -207,7 +178,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                     #PREVIOUS_PERIOD_PERCENTAGE_PART#
                     #SUM_PART#
 
-                #INTO_PART#
+                INTO #INTO_TABLE_NAME#
 
                 FROM TOneWhs_Analytic.BillingStats bs
                 #JOIN_PART#
@@ -215,91 +186,94 @@ namespace TOne.WhS.Analytics.Data.SQL
                 #WHERE_PART#
 
                 GROUP BY #DIMENTION_COLUMN_NAME#
-                #ORDER_BY_PART#"
-            );
+                #ORDER_BY_PART#
 
-            singleResultQueryBuilder.Replace("#TOP_PART#", GetTopPart(query.ReportType));
-            singleResultQueryBuilder.Replace("#DIMENTION_COLUMN_NAME#", GetDimentionColumnNameAndSetDimensionTitle(query.ReportType));
+                #SELECT_FROM_RESULT_PART#
+
+                #SUMMARY_PART#
+            ");
+
+            singleResultQueryBuilder.Replace("#TOP_PART#", GetTopPart(query));
+            singleResultQueryBuilder.Replace("#DIMENTION_COLUMN_NAME#", GetDimentionColumnName(query));
             singleResultQueryBuilder.Replace("#DIMENSION_SUFFIX#", String.Format(", '{0}' AS DimensionSuffix", dimensionSuffix));
 
-            singleResultQueryBuilder.Replace("#AVERAGE_PART#", GetAveragePart(query.ReportType, query.NumberOfPeriods));
-            singleResultQueryBuilder.Replace("#PERCENTAGE_PART#", GetPercentagePart(query.ReportType, query.NumberOfPeriods));
-            singleResultQueryBuilder.Replace("#PREVIOUS_PERIOD_PERCENTAGE_PART#", GetPreviousPeriodPercentagePart(query.ReportType, query.NumberOfPeriods));
+            singleResultQueryBuilder.Replace("#AVERAGE_PART#", GetAveragePart(query));
+            singleResultQueryBuilder.Replace("#PERCENTAGE_PART#", GetPercentagePart(query));
+            singleResultQueryBuilder.Replace("#PREVIOUS_PERIOD_PERCENTAGE_PART#", GetPreviousPeriodPercentagePart(query));
 
-            singleResultQueryBuilder.Replace("#SUM_PART#", GetSumPart(query.ReportType, query.NumberOfPeriods));
-            singleResultQueryBuilder.Replace("#INTO_PART#", intoPart);
+            singleResultQueryBuilder.Replace("#SUM_PART#", GetSumPart(query));
+            singleResultQueryBuilder.Replace("#INTO_TABLE_NAME#", intoTableName);
 
-            singleResultQueryBuilder.Replace("#JOIN_PART#", GetJoinPart(query.ReportType, query.NumberOfPeriods));
-            singleResultQueryBuilder.Replace("#WHERE_PART#", GetWherePart(query.DimensionFilters));
-            singleResultQueryBuilder.Replace("#ORDER_BY_PART#", GetOrderByPart(query.ReportType));
+            singleResultQueryBuilder.Replace("#JOIN_PART#", GetJoinPart(query));
+            singleResultQueryBuilder.Replace("#WHERE_PART#", GetWherePart(query));
+            singleResultQueryBuilder.Replace("#ORDER_BY_PART#", GetOrderByPart(query));
+
+            singleResultQueryBuilder.Replace("#SELECT_FROM_RESULT_PART#", (selectFromIntoTable) ? String.Format("SELECT * FROM {0}", intoTableName) : null);
+            singleResultQueryBuilder.Replace("#SUMMARY_PART#", null); // GetSummaryPart(query.NumberOfPeriods)
 
             return singleResultQueryBuilder.ToString();
         }
 
-        string GetTopPart(VariationReportType reportType)
+        string GetTopPart(VariationReportQuery query)
         {
-            return (reportType == VariationReportType.TopDestinationMinutes || reportType == VariationReportType.TopDestinationAmount) ? "TOP 5 " : null;
+            return null;
+            //return (reportType == VariationReportType.TopDestinationMinutes || reportType == VariationReportType.TopDestinationAmount) ? "TOP 5 " : null;
         }
 
-        string GetDimentionColumnNameAndSetDimensionTitle(VariationReportType reportType)
+        string GetDimentionColumnName(VariationReportQuery query)
         {
-            string dimensionColumnName;
-            switch (reportType)
+            string dimensionColumnName = null;
+            switch (query.ReportType)
             {
                 case VariationReportType.InBoundMinutes:
                 case VariationReportType.InBoundAmount:
                     dimensionColumnName = "CustomerID";
-                    _dimensionTitle = "Customer";
                     break;
                 case VariationReportType.OutBoundMinutes:
                 case VariationReportType.OutBoundAmount:
                     dimensionColumnName = "SupplierID";
-                    _dimensionTitle = "Supplier";
                     break;
                 case VariationReportType.TopDestinationMinutes:
                 case VariationReportType.TopDestinationAmount:
                     dimensionColumnName = "SaleZoneID";
-                    _dimensionTitle = "Sale Zone";
                     break;
-                default:
-                    throw new ArgumentException("reportType");
             }
             return dimensionColumnName;
         }
 
-        string GetAveragePart(VariationReportType reportType, int numberOfPeriods)
+        string GetAveragePart(VariationReportQuery query)
         {
-            return String.Format(", SUM({0}){1} / {2} AS Average", GetSumExpression(reportType), GetSumExpressionExtension(reportType), numberOfPeriods);
+            return String.Format(", SUM({0}){1} / {2} AS Average", GetSumExpression(query), GetSumExpressionExtension(query), query.NumberOfPeriods);
         }
 
-        string GetPercentagePart(VariationReportType reportType, int numberOfPeriods)
+        string GetPercentagePart(VariationReportQuery query)
         {
             return String.Format
             (
                 ", ((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) - (SUM({0}){1} / {2})) / dbo.ZeroToMax(SUM({0}){1} / {2}) * 100 AS Percentage",
-                GetSumExpression(reportType), GetSumExpressionExtension(reportType),
-                numberOfPeriods
+                GetSumExpression(query), GetSumExpressionExtension(query),
+                query.NumberOfPeriods
             );
         }
 
-        string GetPreviousPeriodPercentagePart(VariationReportType reportType, int numberOfPeriods)
+        string GetPreviousPeriodPercentagePart(VariationReportQuery query)
         {
-            return (numberOfPeriods > 1) ?
+            return (query.NumberOfPeriods > 1) ?
                 String.Format
                 (
                     @", ((SUM(CASE WHEN p1.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) - (SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END){1})) /
                         dbo.ZeroToMax(SUM(CASE WHEN p2.FromDate IS NOT NULL THEN {0} ELSE 0 END){1}) * 100 AS PreviousPeriodPercentage",
-                    GetSumExpression(reportType),
-                    GetSumExpressionExtension(reportType)
+                    GetSumExpression(query),
+                    GetSumExpressionExtension(query)
                 ) : null;
         }
 
-        string GetSumPart(VariationReportType reportType, int rowsCount)
+        string GetSumPart(VariationReportQuery query)
         {
             StringBuilder sumPartBuilder = new StringBuilder();
-            string sumExpression = GetSumExpression(reportType);
-            string sumExpressionExtension = GetSumExpressionExtension(reportType);
-            for (int i = 0; i < rowsCount; i++)
+            string sumExpression = GetSumExpression(query);
+            string sumExpressionExtension = GetSumExpressionExtension(query);
+            for (int i = 0; i < query.NumberOfPeriods; i++)
             {
                 sumPartBuilder.Append(String.Format(", SUM(CASE WHEN p{0}.FromDate IS NOT NULL THEN {1} ELSE 0 END){2} Period{0}Sum", i + 1, sumExpression, sumExpressionExtension));
             }
@@ -308,40 +282,93 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Sum Expression
 
-        string GetSumColumnName(VariationReportType reportType)
+        string GetSumColumnName(VariationReportQuery query)
         {
-            string sumColumnName;
-            switch (reportType)
+            string sumColumnName = null;
+
+            if (query.ParentReportType != null)
             {
-                case VariationReportType.InBoundMinutes:
-                case VariationReportType.TopDestinationMinutes:
-                    sumColumnName = "SaleDuration";
-                    break;
+                var parentReportType = (VariationReportType)query.ParentReportType;
 
-                case VariationReportType.OutBoundMinutes:
-                    sumColumnName = "CostDuration";
-                    break;
+                // Parent is a customer
+                if (parentReportType == VariationReportType.InBoundMinutes || parentReportType == VariationReportType.InBoundAmount)
+                {
+                    // Children are zones
+                    if (query.ReportType == VariationReportType.TopDestinationMinutes)
+                        sumColumnName = "SaleDuration";
+                    else if (query.ReportType == VariationReportType.TopDestinationAmount)
+                        sumColumnName = "SaleNets";
+                }
+                // Parent is a supplier
+                else if (parentReportType == VariationReportType.OutBoundMinutes || parentReportType == VariationReportType.OutBoundAmount)
+                {
+                    // Children are zones
+                    if (query.ReportType == VariationReportType.TopDestinationMinutes)
+                        sumColumnName = "CostDuration";
+                    else if (query.ReportType == VariationReportType.TopDestinationAmount)
+                        sumColumnName = "CostNets";
+                }
+                // Parent is a zone
+                else if (parentReportType == VariationReportType.TopDestinationMinutes || parentReportType == VariationReportType.TopDestinationAmount)
+                {
+                    // Children are customers or suppliers
+                    if (query.ReportType == VariationReportType.InBoundMinutes || query.ReportType == VariationReportType.OutBoundMinutes)
+                        sumColumnName = "SaleDuration";
+                    else if (query.ReportType == VariationReportType.InBoundAmount || query.ReportType == VariationReportType.OutBoundAmount)
+                        sumColumnName = "SaleNets";
+                }
+                // Parent is a customer or a supplier
+                else if (parentReportType == VariationReportType.InOutBoundMinutes || parentReportType == VariationReportType.InOutBoundAmount)
+                {
+                    // Children are zones
 
-                case VariationReportType.InBoundAmount:
-                case VariationReportType.TopDestinationAmount:
-                    sumColumnName = "SaleNets";
-                    break;
-
-                case VariationReportType.OutBoundAmount:
-                    sumColumnName = "CostNets";
-                    break;
-
-                default:
-                    throw new NotImplementedException();
+                    VariationReportDimension parentDimension = query.DimensionFilters.ElementAt(0).Dimension;
+                    
+                    if (parentDimension == VariationReportDimension.Customer)
+                    {
+                        if (query.ReportType == VariationReportType.TopDestinationMinutes)
+                            sumColumnName = "SaleDuration";
+                        else if (query.ReportType == VariationReportType.TopDestinationAmount)
+                            sumColumnName = "SaleNets";
+                    }
+                    else if (parentDimension == VariationReportDimension.Supplier)
+                    {
+                        if (query.ReportType == VariationReportType.TopDestinationMinutes)
+                            sumColumnName = "CostDuration";
+                        else if (query.ReportType == VariationReportType.TopDestinationAmount)
+                            sumColumnName = "CostNets";
+                    }
+                }
             }
+            else
+            {
+                switch (query.ReportType)
+                {
+                    case VariationReportType.InBoundMinutes:
+                    case VariationReportType.TopDestinationMinutes:
+                        sumColumnName = "SaleDuration";
+                        break;
+                    case VariationReportType.OutBoundMinutes:
+                        sumColumnName = "CostDuration";
+                        break;
+                    case VariationReportType.InBoundAmount:
+                    case VariationReportType.TopDestinationAmount:
+                        sumColumnName = "SaleNets";
+                        break;
+                    case VariationReportType.OutBoundAmount:
+                        sumColumnName = "CostNets";
+                        break;
+                }
+            }
+
             return sumColumnName;
         }
 
-        string GetSumExpression(VariationReportType reportType)
+        string GetSumExpression(VariationReportQuery query)
         {
-            string sumColumnName = GetSumColumnName(reportType);
+            string sumColumnName = GetSumColumnName(query);
             string sumExpression = sumColumnName;
-            switch (reportType)
+            switch (query.ReportType)
             {
                 case VariationReportType.InBoundAmount:
                 case VariationReportType.TopDestinationAmount:
@@ -354,10 +381,10 @@ namespace TOne.WhS.Analytics.Data.SQL
             return sumExpression;
         }
 
-        string GetSumExpressionExtension(VariationReportType reportType)
+        string GetSumExpressionExtension(VariationReportQuery query)
         {
             string sumExpressionExtension;
-            switch (reportType)
+            switch (query.ReportType)
             {
                 case VariationReportType.InBoundMinutes:
                 case VariationReportType.OutBoundMinutes:
@@ -373,10 +400,10 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #endregion
 
-        string GetJoinPart(VariationReportType reportType, int rowsCount)
+        string GetJoinPart(VariationReportQuery query)
         {
             StringBuilder joinPartBuilder = new StringBuilder();
-            switch (reportType)
+            switch (query.ReportType)
             {
                 case VariationReportType.InBoundAmount:
                 case VariationReportType.OutBoundAmount:
@@ -385,7 +412,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                     joinPartBuilder.Append(String.Format(" LEFT JOIN @ExchangeRates CER on bs.CostCurrency = CER.CurrencyID AND bs.CallDate >= CER.BED AND (CER.EED IS NULL OR bs.CallDate < CER.EED)"));
                     break;
             }
-            for (int i = 0; i < rowsCount; i++)
+            for (int i = 0; i < query.NumberOfPeriods; i++)
             {
                 joinPartBuilder.Append(String.Format(" LEFT JOIN @TimePeriods p{0} on bs.CallDate >= p{0}.FromDate AND bs.CallDate < p{0}.ToDate AND p{0}.PeriodIndex = {0}", i + 1));
             }
@@ -394,13 +421,13 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Where Part
 
-        string GetWherePart(IEnumerable<VariationReportDimensionFilter> dimensionFilters)
+        string GetWherePart(VariationReportQuery query)
         {
             var wherePartBuilder = new StringBuilder("WHERE bs.CallDate >= @SmallestFromDate AND CallDate < @LargestToDate");
-            if (dimensionFilters != null)
+            if (query.DimensionFilters != null)
             {
                 // The loop doesn't account for filter values that should be enclosed using single quotes
-                foreach (VariationReportDimensionFilter dimensionFilter in dimensionFilters)
+                foreach (VariationReportDimensionFilter dimensionFilter in query.DimensionFilters)
                     wherePartBuilder.Append(String.Format(" AND {0} IN ({1})", GetDimensionColumnName(dimensionFilter.Dimension), String.Join(",", dimensionFilter.FilterValues)));
             }
             return wherePartBuilder.ToString();
@@ -422,10 +449,10 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #endregion
 
-        string GetOrderByPart(VariationReportType reportType)
+        string GetOrderByPart(VariationReportQuery query)
         {
-            string orderByExpression = String.Format("ORDER BY SUM({0}) DESC", GetSumColumnName(reportType));
-            switch (reportType)
+            string orderByExpression = String.Format("ORDER BY SUM({0}) DESC", GetSumColumnName(query));
+            switch (query.ReportType)
             {
                 case VariationReportType.InBoundAmount:
                 case VariationReportType.OutBoundAmount:
@@ -436,77 +463,36 @@ namespace TOne.WhS.Analytics.Data.SQL
             return orderByExpression;
         }
 
+        #region Summary Part
+
+        string GetSummaryPart(VariationReportQuery query)
+        {
+            var summaryPartBuilder = new StringBuilder
+            (
+                @"SELECT SUM(Average) AS Average,
+                    (SUM(Period1Sum) - SUM(Average)) / dbo.ZeroToMax(SUM(Average)) * 100 AS Percentage,
+	                (SUM(Period1Sum) - SUM(Period2Sum)) / dbo.ZeroToMax(SUM(Period2Sum)) * 100 AS PreviousPeriodPercentage
+                    #PERIOD_SUMMARIES_PART#
+                    FROM #Result"
+            );
+
+            summaryPartBuilder.Replace("#PERIOD_SUMMARIES_PART#", GetPeriodSummariesPart(query));
+            return summaryPartBuilder.ToString();
+        }
+
+        string GetPeriodSummariesPart(VariationReportQuery query)
+        {
+            var periodSummariesPart = new StringBuilder();
+            for (int i = 0; i < query.NumberOfPeriods; i++)
+            {
+                periodSummariesPart.AppendFormat(", SUM(Period{0}Sum) AS Period{0}Sum", i + 1);
+            }
+            return periodSummariesPart.ToString();
+        }
+
         #endregion
 
         #endregion
-
-        #region Time Periods
-
-        DataTable BuildTimePeriodsTable(DataRetrievalInput<VariationReportQuery> input)
-        {
-            DataTable table = new DataTable();
-
-            table.Columns.Add("PeriodIndex", typeof(int));
-            table.Columns.Add("FromDate", typeof(DateTime));
-            table.Columns.Add("ToDate", typeof(DateTime));
-
-            table.BeginLoadData();
-
-            DateTime toDate = input.Query.ToDate.AddDays(1); // Add 1 day to include the ToDate in the result
-
-            for (int i = 0; i < input.Query.NumberOfPeriods; i++)
-            {
-                DataRow row = table.NewRow();
-                DateTime fromDate = GetFromDate(input.Query.TimePeriod, toDate);
-
-                row["PeriodIndex"] = i + 1;
-                row["FromDate"] = fromDate.Date;
-                row["ToDate"] = toDate.Date;
-
-                toDate = fromDate;
-                table.Rows.Add(row);
-            }
-
-            table.EndLoadData();
-            return table;
-        }
-
-        DateTime GetFromDate(VariationReportTimePeriod timePeriodType, DateTime toDate)
-        {
-            switch (timePeriodType)
-            {
-                case VariationReportTimePeriod.Daily:
-                    return toDate.AddDays(-1);
-                case VariationReportTimePeriod.Weekly:
-                    return toDate.AddDays(-7);
-                case VariationReportTimePeriod.Monthly:
-                    return toDate.AddDays(-30);
-            }
-            throw new ArgumentException("timePeriodType");
-        }
-
-        List<TimePeriod> GetTimePeriodDefinitions(DataRetrievalInput<VariationReportQuery> input)
-        {
-            DataTable timePeriodsTable = BuildTimePeriodsTable(input);
-
-            var timePeriodDefinitions = new List<TimePeriod>();
-
-            foreach (DataRow row in timePeriodsTable.Rows)
-            {
-                DateTime fromDate = Convert.ToDateTime(row["FromDate"]);
-                DateTime toDate = Convert.ToDateTime(row["ToDate"]);
-
-                timePeriodDefinitions.Add(new TimePeriod()
-                {
-                    PeriodDescription = (input.Query.TimePeriod == VariationReportTimePeriod.Daily) ?
-                        fromDate.ToShortDateString() : String.Format("{0} - {1}", fromDate.ToShortDateString(), toDate.AddDays(-1).ToShortDateString()),
-                    From = fromDate,
-                    To = toDate
-                });
-            }
-
-            return timePeriodDefinitions;
-        }
 
         #endregion
 

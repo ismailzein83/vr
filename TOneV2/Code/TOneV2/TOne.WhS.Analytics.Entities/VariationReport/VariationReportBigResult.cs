@@ -9,7 +9,11 @@ namespace TOne.WhS.Analytics.Entities
     public class VariationReportBigResult : Vanrise.Entities.BigResult<VariationReportRecord>
     {
         public VariationReportRecord Summary { get; set; }
+
         public string DimensionTitle { get; set; }
+
         public List<TimePeriod> TimePeriods { get; set; }
+
+        public List<VariationReportDimension> DrillDownDimensions { get; set; }
     }
 }

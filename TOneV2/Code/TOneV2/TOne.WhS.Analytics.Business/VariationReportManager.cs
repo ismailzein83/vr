@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using TOne.WhS.Analytics.Data;
 using TOne.WhS.Analytics.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Analytics.Business
@@ -17,7 +19,7 @@ namespace TOne.WhS.Analytics.Business
 
         CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
         SaleZoneManager _saleZoneManager = new SaleZoneManager();
-        
+
         #endregion
 
         #region Public Methods
@@ -25,12 +27,218 @@ namespace TOne.WhS.Analytics.Business
         public IDataRetrievalResult<VariationReportRecord> GetFilteredVariationReportRecords(Vanrise.Entities.DataRetrievalInput<VariationReportQuery> input)
         {
             ValidateVariationReportQuery(input.Query);
-            IVariationReportDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IVariationReportDataManager>();
-            VariationReportBigResult variationReportBigResult = dataManager.GetFilteredVariationReportRecords(input);
-            SetDimensionNames(input.Query.ReportType, variationReportBigResult.Data);
-            return DataRetrievalManager.Instance.ProcessResult(input, variationReportBigResult);
+            return BigDataManager.Instance.RetrieveData(input, new VariationReportRequestHandler(input.Query));
         }
-        
+
+        #endregion
+
+        #region Private Classes
+
+        class VariationReportRequestHandler : BigDataRequestHandler<VariationReportQuery, VariationReportRecord, VariationReportRecord>
+        {
+            #region Fields / Constructors
+
+            VariationReportQuery _query;
+            CarrierAccountManager _carrierAccountManager;
+            SaleZoneManager _saleZoneManager;
+            DataTable _timePeriodsTable;
+
+            public VariationReportRequestHandler(VariationReportQuery query)
+            {
+                _query = query;
+                _carrierAccountManager = new CarrierAccountManager();
+                _saleZoneManager = new SaleZoneManager();
+                _timePeriodsTable = BuildTimePeriodsTable();
+            }
+
+            #endregion
+
+            public override IDataRetrievalResult<VariationReportRecord> AllRecordsToDataResult(DataRetrievalInput<VariationReportQuery> input, IEnumerable<VariationReportRecord> allRecords)
+            {
+                var variationReportBigResult = new VariationReportBigResult();
+
+                BigResult<VariationReportRecord> bigResult = allRecords.ToBigResult(input, null, this.EntityDetailMapper);
+
+                variationReportBigResult.ResultKey = bigResult.ResultKey;
+                variationReportBigResult.Data = bigResult.Data;
+                variationReportBigResult.TotalCount = bigResult.TotalCount;
+
+                variationReportBigResult.DimensionTitle = GetDimensionTitle();
+                variationReportBigResult.TimePeriods = GetTimePeriodDefinitions();
+                variationReportBigResult.DrillDownDimensions = GetDrillDownDimensions();
+
+                return variationReportBigResult;
+            }
+
+            public override IEnumerable<VariationReportRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<VariationReportQuery> input)
+            {
+                IVariationReportDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IVariationReportDataManager>();
+                return dataManager.GetFilteredVariationReportRecords(input, _timePeriodsTable);
+            }
+
+            public override VariationReportRecord EntityDetailMapper(VariationReportRecord entity)
+            {
+                SetVariationReportRecordDimension(entity);
+
+                string entityName = (_query.ReportType == VariationReportType.TopDestinationMinutes || _query.ReportType == VariationReportType.TopDestinationAmount) ?
+                    _saleZoneManager.GetSaleZoneName((long)entity.DimensionId) :
+                    _carrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
+
+                entity.DimensionName = String.Format("{0}{1}", entityName, entity.DimensionSuffix);
+
+                return entity;
+            }
+
+            #region Private Methods
+
+            string GetDimensionTitle()
+            {
+                string dimensionTitle = null;
+                switch (_query.ReportType)
+                {
+                    case VariationReportType.InBoundMinutes:
+                    case VariationReportType.InBoundAmount:
+                        dimensionTitle = "Customer";
+                        break;
+                    case VariationReportType.OutBoundMinutes:
+                    case VariationReportType.OutBoundAmount:
+                    case VariationReportType.InOutBoundMinutes:
+                    case VariationReportType.InOutBoundAmount:
+                        dimensionTitle = "Supplier";
+                        break;
+                    case VariationReportType.TopDestinationMinutes:
+                    case VariationReportType.TopDestinationAmount:
+                        dimensionTitle = "Zone";
+                        break;
+                }
+                return dimensionTitle;
+            }
+
+            #region Time Periods
+
+            List<TimePeriod> GetTimePeriodDefinitions()
+            {
+                var timePeriodDefinitions = new List<TimePeriod>();
+
+                foreach (DataRow row in _timePeriodsTable.Rows)
+                {
+                    DateTime fromDate = Convert.ToDateTime(row["FromDate"]);
+                    DateTime toDate = Convert.ToDateTime(row["ToDate"]);
+
+                    timePeriodDefinitions.Add(new TimePeriod()
+                    {
+                        PeriodDescription = (_query.TimePeriod == VariationReportTimePeriod.Daily) ?
+                            fromDate.ToShortDateString() : String.Format("{0} - {1}", fromDate.ToShortDateString(), toDate.AddDays(-1).ToShortDateString()),
+                        From = fromDate,
+                        To = toDate
+                    });
+                }
+
+                return timePeriodDefinitions;
+            }
+
+            DataTable BuildTimePeriodsTable()
+            {
+                DataTable table = new DataTable();
+
+                table.Columns.Add("PeriodIndex", typeof(int));
+                table.Columns.Add("FromDate", typeof(DateTime));
+                table.Columns.Add("ToDate", typeof(DateTime));
+
+                table.BeginLoadData();
+
+                DateTime toDate = _query.ToDate.AddDays(1); // Add 1 day to include the ToDate in the result
+
+                for (int i = 0; i < _query.NumberOfPeriods; i++)
+                {
+                    DataRow row = table.NewRow();
+                    DateTime fromDate = GetFromDate(toDate);
+
+                    row["PeriodIndex"] = i + 1;
+                    row["FromDate"] = fromDate.Date;
+                    row["ToDate"] = toDate.Date;
+
+                    toDate = fromDate;
+                    table.Rows.Add(row);
+                }
+
+                table.EndLoadData();
+                return table;
+            }
+
+            DateTime GetFromDate(DateTime toDate)
+            {
+                var fromDate = new DateTime();
+                switch (_query.TimePeriod)
+                {
+                    case VariationReportTimePeriod.Daily:
+                        fromDate = toDate.AddDays(-1);
+                        break;
+                    case VariationReportTimePeriod.Weekly:
+                        fromDate = toDate.AddDays(-7);
+                        break;
+                    case VariationReportTimePeriod.Monthly:
+                        fromDate = toDate.AddDays(-30);
+                        break;
+                }
+                return fromDate;
+            }
+
+            #endregion
+
+            void SetVariationReportRecordDimension(VariationReportRecord variationReportRecord)
+            {
+                switch (_query.ReportType)
+                {
+                    case VariationReportType.InBoundMinutes:
+                    case VariationReportType.InBoundAmount:
+                        variationReportRecord.Dimension = VariationReportDimension.Customer;
+                        break;
+                    case VariationReportType.OutBoundMinutes:
+                    case VariationReportType.OutBoundAmount:
+                        variationReportRecord.Dimension = VariationReportDimension.Supplier;
+                        break;
+                    case VariationReportType.TopDestinationMinutes:
+                    case VariationReportType.TopDestinationAmount:
+                        variationReportRecord.Dimension = VariationReportDimension.Zone;
+                        break;
+                    default:
+                        switch (variationReportRecord.DimensionSuffix)
+                        {
+                            case " / In":
+                                variationReportRecord.Dimension = VariationReportDimension.Customer;
+                                break;
+                            case " / Out":
+                                variationReportRecord.Dimension = VariationReportDimension.Supplier;
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            List<VariationReportDimension> GetDrillDownDimensions()
+            {
+                var drillDownDimensions = new List<VariationReportDimension>();
+                if (_query.ParentReportType == null)
+                {
+                    switch (_query.ReportType)
+                    {
+                        case VariationReportType.TopDestinationMinutes:
+                        case VariationReportType.TopDestinationAmount:
+                            drillDownDimensions.Add(VariationReportDimension.Customer);
+                            drillDownDimensions.Add(VariationReportDimension.Supplier);
+                            break;
+                        default:
+                            drillDownDimensions.Add(VariationReportDimension.Zone);
+                            break;
+                    }
+                }
+                return (drillDownDimensions.Count > 0) ? drillDownDimensions : null;
+            }
+
+            #endregion
+        }
+
         #endregion
 
         #region Private Methods
@@ -47,26 +255,6 @@ namespace TOne.WhS.Analytics.Business
                 throw new ArgumentException(String.Format("query.NumberOfPeriods '{0}' is < 1"));
         }
 
-        void SetDimensionNames(VariationReportType reportType, IEnumerable<VariationReportRecord> reportRecords)
-        {
-            switch (reportType)
-            {
-                case VariationReportType.InBoundMinutes:
-                case VariationReportType.OutBoundMinutes:
-                case VariationReportType.InOutBoundMinutes:
-                case VariationReportType.InBoundAmount:
-                case VariationReportType.OutBoundAmount:
-                case VariationReportType.InOutBoundAmount:
-                    foreach (VariationReportRecord reportRecord in reportRecords)
-                        reportRecord.DimensionName = String.Format("{0} {1}", _carrierAccountManager.GetCarrierAccountName((int)reportRecord.DimensionId), reportRecord.DimensionSuffix);
-                    break;
-                default:
-                    foreach (VariationReportRecord reportRecord in reportRecords)
-                        reportRecord.DimensionName = String.Format("{0}{1}", _saleZoneManager.GetSaleZoneName((long)reportRecord.DimensionId), reportRecord.DimensionSuffix);
-                    break;
-            }
-        }
-        
         #endregion
     }
 }
