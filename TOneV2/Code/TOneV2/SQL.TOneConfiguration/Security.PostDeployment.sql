@@ -170,6 +170,25 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
+--[sec].[viewtype]---------------------------------0 to 100-----------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[Details])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(0,'VR_Sec_Default','Default','{"ViewTypeId":0,"Name":"VR_Sec_Default","Title":"Default","Editor":"/Client/Modules/Security/Views/Menu/ViewEditor.html","EnableAdd":false}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Details]))
+merge	[sec].[viewtype] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Details] = s.[Details]
+when not matched by target then
+	insert([ID],[Name],[Title],[Details])
+	values(s.[ID],s.[Name],s.[Title],s.[Details]);
+
 --[sec].[View]-----------------------------1 to 1000---------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------
 set nocount on;

@@ -30,6 +30,26 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
 set identity_insert [sec].[Module] off;
 
+--[sec].[viewtype]-----------------------101 to 200-------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[Details])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(101,'VR_GenericData_GenericRule','Generic Rule','{"ViewTypeId":2,"Name":"VR_GenericData_GenericRule","Title":"Generic Rule","Editor":"/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html","EnableAdd":false}'),
+(102,'VR_GenericData_GenericBusinessEntity','Business Entity','{"ViewTypeId":4,"Name":"VR_GenericData_GenericBusinessEntity","Title":"BusinessEntity","Editor":"/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html","EnableAdd":false}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Details]))
+merge	[sec].[viewtype] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Details] = s.[Details]
+when not matched by target then
+	insert([ID],[Name],[Title],[Details])
+	values(s.[ID],s.[Name],s.[Title],s.[Details]);
+
 --[sec].[View]-----------------------------3001 to 4000-------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 set nocount on;
