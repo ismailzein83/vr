@@ -11,22 +11,10 @@ namespace Vanrise.Analytic.Data.SQL
 {
     public class AnalyticDataManager : BaseSQLDataManager, IAnalyticDataManager
     {
-        public AnalyticSummaryBigResult<AnalyticRecord> GetFilteredAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        #region Public Methods
+        public IEnumerable<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-
-            Action<string> createTempTableIfNotExistsAction = (tempTableName) =>
-            {
-                string query = BuildAnalyticQuery(input, tempTableName, false);
-
-                ExecuteNonQueryText(query, (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
-                    cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.ToTime)));
-                    if (input.Query.CurrencyId.HasValue)
-                        cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
-                });
-            };
-
+            string query = BuildAnalyticQuery(input, false);
             Dictionary<string, string> columnsMappings = new Dictionary<string, string>();
             for (int i = 0; i < input.Query.DimensionFields.Count; i++)
             {
@@ -41,18 +29,25 @@ namespace Vanrise.Analytic.Data.SQL
                 var measure = _measures[measureName];
                 columnsMappings.Add(String.Format("MeasureValues.{0}", input.Query.MeasureFields[i]), GetMeasureColumnAlias(measure));
             }
-
-            var rslt = RetrieveData(input, createTempTableIfNotExistsAction, (reader) => AnalyticRecordMapper(reader, input.Query, false)
-            , columnsMappings, new AnalyticSummaryBigResult<AnalyticRecord>()) as AnalyticSummaryBigResult<AnalyticRecord>;
-            if (input.Query.WithSummary)
-                rslt.Summary = GetSummary(input);
-            return rslt;
+            return GetItemsText(query, (reader) => AnalyticRecordMapper(reader, input.Query, false), (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
+                cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.ToTime)));
+                if (input.Query.CurrencyId.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
+            });
         }
+        public AnalyticRecord GetAnalyticSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        {
+            return GetSummary(input);
+        }
+
+        #endregion
 
         #region Private Methods
         AnalyticRecord GetSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-            string query = BuildAnalyticQuery(input, "AnalyticSummaryTable", input.Query.WithSummary);
+            string query = BuildAnalyticQuery(input, input.Query.WithSummary);
             return GetItemText(query, reader => AnalyticRecordMapper(reader, input.Query, true), (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
@@ -63,7 +58,7 @@ namespace Vanrise.Analytic.Data.SQL
         }
 
         #region Query Builder
-        string BuildAnalyticQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, string tempTableName, bool isSummary)
+        string BuildAnalyticQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, bool isSummary)
         {
             StringBuilder selectPartBuilder = new StringBuilder();
             StringBuilder joinPartBuilder = new StringBuilder();
@@ -84,17 +79,6 @@ namespace Vanrise.Analytic.Data.SQL
                                                                 #FILTERPART#
 			                                                    #GROUPBYPART#");
 
-            #region MainQuery
-            StringBuilder queryBuilder = new StringBuilder(@"IF NOT OBJECT_ID('#TEMPTABLE#', N'U') IS NOT NULL
-	                                                        BEGIN
-                                                                ;WITH 
-                                                                --#CTEPART#
-                                                                AllResult AS( 
-                                                                    #SELECTBODYPART#
-                                                                    )
-                                                                SELECT * INTO #TEMPTABLE# FROM AllResult
-                                                            END ");
-            #endregion
 
             #region Adding Group Fields Part
             if (!isSummary)
@@ -204,7 +188,6 @@ namespace Vanrise.Analytic.Data.SQL
             selectBodyBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
             selectBodyBuilder.Replace("#FILTERPART#", filterPartBuilder.ToString());
             selectBodyBuilder.Replace("#EXCHANGEJOINPART#", "");
-            queryBuilder.Replace("#TEMPTABLE#", tempTableName);
             if (groupByPartBuilder.Length > 0)
                 selectBodyBuilder.Replace("#GROUPBYPART#", "GROUP BY " + groupByPartBuilder);
             else
@@ -212,7 +195,7 @@ namespace Vanrise.Analytic.Data.SQL
 
             #endregion
 
-            return isSummary ? selectBodyBuilder.ToString() : queryBuilder.Replace("#SELECTBODYPART#", selectBodyBuilder.ToString()).ToString();
+            return selectBodyBuilder.ToString();
         }
         string GetDimensionIdColumnAlias(AnalyticDimension dimension)
         {

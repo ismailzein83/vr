@@ -26,7 +26,30 @@ namespace Vanrise.Analytic.Business
             dataManager.Dimensions = analyticItemConfigManager.GetDimensions(table.AnalyticTableId);
             dataManager.Measures = analyticItemConfigManager.GetMeasures(table.AnalyticTableId);
             dataManager.Joins = analyticItemConfigManager.GetJoins(table.AnalyticTableId);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredAnalyticRecords(input));
+            var analyticRecords = BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler(dataManager));
+            AnalyticSummaryBigResult<AnalyticRecord> result = analyticRecords as AnalyticSummaryBigResult<AnalyticRecord>;
+            if (input.Query.WithSummary)
+                result.Summary = dataManager.GetAnalyticSummary(input);
+
+            return result;
+        }
+
+        private class AnalyticRecordRequestHandler : BigDataRequestHandler<AnalyticQuery, AnalyticRecord, AnalyticRecord>
+        {
+            IAnalyticDataManager _dataManager;
+            public AnalyticRecordRequestHandler(IAnalyticDataManager dataManager)
+            {
+                _dataManager = dataManager;
+            }
+            public override AnalyticRecord EntityDetailMapper(AnalyticRecord entity)
+            {
+                return entity;
+            }
+
+            public override IEnumerable<AnalyticRecord> RetrieveAllData(DataRetrievalInput<AnalyticQuery> input)
+            {
+                return _dataManager.GetAnalyticRecords(input);
+            }
         }
     }
 }
