@@ -132,7 +132,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'VR_Sec_Users','Users',3,0,'["View", "Add", "Edit", "Reset Password"]'),
 (2,'VR_Sec_Group','Groups',3,0,'["View", "Add", "Edit"]'),
-(3,'VR_Sec_View','Ranking Page',3,0,'["Add", "Edit"]'),
+(3,'VR_Sec_View','Ranking Page',3,0,'["View", "Add", "Edit"]'),
 (4,'VR_Sec_Permission','Permission',3,0,'["View", "Edit", "Delete", "AllowInheritance"]'),
 (5,'VR_Sec_BusinessEntity','Business Entity',3,0,'["View","Ranking","AddEntity","AddModule","EditEntity","EditModule"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

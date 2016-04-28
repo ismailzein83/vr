@@ -95,27 +95,6 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
---[sec].[BusinessEntityModule]-------------1301 to 1400---------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-set identity_insert [sec].[BusinessEntityModule] on;
-;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(1301,'BI',2,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[ParentId],[BreakInheritance]))
-merge	[sec].[BusinessEntityModule] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
-when not matched by target then
-	insert([Id],[Name],[ParentId],[BreakInheritance])
-	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
-set identity_insert [sec].[BusinessEntityModule] off;
-
 --[sec].[BusinessEntity]------------------3601 to 3900----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 set nocount on;
@@ -123,7 +102,7 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(3601,'VR_Sec_BI_Widget','VR_Sec_BI_Widget',1301,0,'["View","Add","Edit","Delete"]')
+(3601,'VR_Sec_Widget','VR_Sec_Widget',3,0,'["View","Add","Edit","Delete"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -143,10 +122,10 @@ set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('VR_Sec/Widget/GetFilteredWidgets','VR_Sec_BI_Widget:View'),
-('VR_Sec/Widget/AddWidget','VR_Sec_BI_Widget:Add'),
-('VR_Sec/Widget/UpdateWidget','VR_Sec_BI_Widget:Edit'),
-('VR_Sec/Widget/DeleteWidget','VR_Sec_BI_Widget:Delete')
+('VR_Sec/Widget/GetFilteredWidgets','VR_Sec_Widget:View'),
+('VR_Sec/Widget/AddWidget','VR_Sec_Widget:Add'),
+('VR_Sec/Widget/UpdateWidget','VR_Sec_Widget:Edit'),
+('VR_Sec/Widget/DeleteWidget','VR_Sec_Widget:Delete')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[systemaction] as t
