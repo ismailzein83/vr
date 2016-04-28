@@ -94,6 +94,9 @@
     <Folder Include="Analytic\Tables\" />
     <Folder Include="bp\Stored Procedures\" />
     <Folder Include="Analytic\Stored Procedures\" />
+    <Folder Include="cloud\" />
+    <Folder Include="cloud\Tables\" />
+    <Folder Include="cloud\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -313,6 +316,15 @@
     <Build Include="common\Stored Procedures\SP_ExtensionConfiguration_GetByType.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_GetAll.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticItemConfig_GetByTableIdAndItemType.sql" />
+    <Build Include="cloud\Tables\CloudApplicationUser.sql" />
+    <Build Include="cloud\Tables\CloudApplication.sql" />
+    <Build Include="cloud\Stored Procedures\sp_CloudApplicationUser_Insert.sql" />
+    <Build Include="cloud\Stored Procedures\sp_CloudApplicationUser_GetAll.sql" />
+    <Build Include="cloud\Stored Procedures\sp_CloudApplication_GetAll.sql" />
+    <Build Include="Security\cloud.sql" />
+    <Build Include="sec\Tables\CloudConnection.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_Update.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
