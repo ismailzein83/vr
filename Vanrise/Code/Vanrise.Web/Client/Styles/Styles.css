@@ -214,6 +214,10 @@
     padding: 3px 12px;
 }
 
+.vr-datagrid-celltext .form-control {
+    padding: 3px 3px;
+}
+
 textarea.form-control {
     height: auto;
 }
