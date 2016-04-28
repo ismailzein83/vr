@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,14 @@ namespace TOne.WhS.Analytics.Entities
     }
 
     public enum VariationReportDimension { Customer = 0, Supplier = 1, Zone = 2 }
+
+    public enum VariationReportRecordDimensionSuffix
+    {
+        None = 0,
+        In = 1,
+        Out = 2,
+        Total = 3
+    }
 
     public class VariationReportDimensionFilter
     {
