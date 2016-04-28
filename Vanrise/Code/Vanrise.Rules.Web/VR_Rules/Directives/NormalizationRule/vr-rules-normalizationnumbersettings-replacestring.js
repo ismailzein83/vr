@@ -48,7 +48,8 @@ app.directive("vrRulesNormalizationnumbersettingsReplacestring", [function () {
                 return {
                     $type: "Vanrise.Rules.Normalization.MainExtensions.ReplaceStringActionSettings, Vanrise.Rules.Normalization",
                     StringToReplace: ctrl.stringToReplace,
-                    NewString: ctrl.newString
+                    NewString: ctrl.newString,
+                    IgnoreCase: ctrl.ignoreCase
                 };
             }
 
@@ -56,6 +57,7 @@ app.directive("vrRulesNormalizationnumbersettingsReplacestring", [function () {
                 if (payload != undefined) {
                     ctrl.stringToReplace = payload.StringToReplace;
                     ctrl.newString = payload.NewString;
+                    ctrl.ignoreCase = payload.IgnoreCase;
                 }
             }
 
