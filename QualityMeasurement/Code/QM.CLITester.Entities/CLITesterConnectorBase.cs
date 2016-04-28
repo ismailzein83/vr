@@ -44,7 +44,7 @@ namespace QM.CLITester.Entities
         [Description("Not Completed")]
         NotCompleted = 0,
 
-        [Description("Succeeded")]
+        [Description("CLI Delivered")]
         Succeeded = 1,
 
         [Description("Partially Succeeded")]
@@ -53,7 +53,7 @@ namespace QM.CLITester.Entities
         [Description("Failed")]
         Failed = 3,
 
-        [Description("Call Failure")]
+        [Description("CLI Failure")]
         NotAnswered = 4,
 
         [Description("FAS")]
