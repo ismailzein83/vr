@@ -1,6 +1,6 @@
-﻿SwitchMigrateTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService'];
+﻿TOneV1MigrateTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService'];
 
-function SwitchMigrateTemplateController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService) {
+function TOneV1MigrateTemplateController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService) {
 
     var sourceTemplateDirectiveAPI;
     var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -66,7 +66,7 @@ function SwitchMigrateTemplateController($scope, UtilsService, VRUIUtilsService,
             var payload;
             if ($scope.schedulerTaskAction != undefined && $scope.schedulerTaskAction.data != undefined && $scope.schedulerTaskAction.data.SourceSwitchReader != undefined)
                 payload = {
-                    connectionString: $scope.schedulerTaskAction.data.SourceSwitchReader.ConnectionString
+                    connectionString: $scope.connectionString
                 };
             VRUIUtilsService.callDirectiveLoad(sourceTemplateDirectiveAPI, payload, loadSourceTemplatePromiseDeferred);
         });
@@ -75,4 +75,4 @@ function SwitchMigrateTemplateController($scope, UtilsService, VRUIUtilsService,
     }
    
 }
-appControllers.controller('Whs_BE_SwitchMigrateTemplateController', SwitchMigrateTemplateController);
+appControllers.controller('Whs_BE_TOneV1MigrateTemplateController', TOneV1MigrateTemplateController);

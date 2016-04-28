@@ -358,8 +358,8 @@
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\DBSync\Supplier\SchedulerTaskAction\SwitchMigrateTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Views\DBSync\Supplier\SchedulerTaskAction\SwitchMigrateTemplateController.js" />
+    <Content Include="WhS_BusinessEntity\Views\DBSync\Switch\SchedulerTaskAction\TOneV1MigrateTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Views\DBSync\Switch\SchedulerTaskAction\TOneV1MigrateTemplateController.js" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RateType\RateTypeManagement.html" />

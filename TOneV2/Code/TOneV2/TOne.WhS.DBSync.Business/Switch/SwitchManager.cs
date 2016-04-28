@@ -3,6 +3,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Data;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 
 namespace TOne.WhS.DBSync.Business
@@ -10,12 +11,12 @@ namespace TOne.WhS.DBSync.Business
     public class SwitchManager
     {
 
-        public void AddSwitchFromSource(Switch whsSwitch)
+        public void AddSwitchesFromSource(List<Switch> switches)
         {
-            ISwitchDataManager dataManager = TOne.WhS.DBSync.Data.BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            dataManager.InsertSwitchFromSource(whsSwitch);
+            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            dataManager.ApplySwitchesToDB(switches);
         }
-        public List<Vanrise.Entities.TemplateConfig> GetSwitchSourceTemplates()
+        public List<TemplateConfig> GetSwitchSourceTemplates()
         {
 
             TemplateConfigManager manager = new TemplateConfigManager();
