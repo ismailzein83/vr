@@ -646,6 +646,10 @@
       <Project>{ddabf1cd-636e-47c1-a713-0ec00ab5f581}</Project>
       <Name>TOne.WhS.DBSync.Data.SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.DBSync.Data\TOne.WhS.DBSync.Data.csproj">
+      <Project>{93dd50d2-700d-442c-8ec2-c6e2b002c22d}</Project>
+      <Name>TOne.WhS.DBSync.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.DBSync.Entities\TOne.WhS.DBSync.Entities.csproj">
       <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
       <Name>TOne.WhS.DBSync.Entities</Name>

@@ -14,18 +14,24 @@ namespace TestRuntime.Tasks
     {
         public void Execute()
         {
-            //BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-            //QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-             
-            var runtimeServices = new List<RuntimeService>();
-            //runtimeServices.Add(queueActivationService);
+            var switches = new List<TOne.WhS.BusinessEntity.Entities.Switch>();
+            switches.Add(new TOne.WhS.BusinessEntity.Entities.Switch { Name = "Switch 1", SwitchId = 4 });
+            TOne.WhS.DBSync.Data.SQL.SwitchDataManager switchManager = new TOne.WhS.DBSync.Data.SQL.SwitchDataManager();
 
-            //runtimeServices.Add(bpService);
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(schedulerService);
+            switchManager.MigrateSwitchesToDB(switches);
 
-            RuntimeHost host = new RuntimeHost(runtimeServices);
-            host.Start();
+            //////////////BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
+            //////////////QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
+
+            ////////////var runtimeServices = new List<RuntimeService>();
+            //////////////runtimeServices.Add(queueActivationService);
+
+            //////////////runtimeServices.Add(bpService);
+            ////////////SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
+            ////////////runtimeServices.Add(schedulerService);
+
+            ////////////RuntimeHost host = new RuntimeHost(runtimeServices);
+            ////////////host.Start();
 
         }
 

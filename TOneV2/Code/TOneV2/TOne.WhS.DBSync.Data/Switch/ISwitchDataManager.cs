@@ -6,6 +6,6 @@ namespace TOne.WhS.DBSync.Data
 {
     public interface ISwitchDataManager : IDataManager
     {
-        void ApplySwitchesToDB(List<Switch> switches);
+        void MigrateSwitchesToDB(List<Switch> switches);
     }
 }
