@@ -34,6 +34,15 @@ namespace TOne.WhS.BusinessEntity.Business
             var switchs = GetCachedSwitches();
             return switchs.MapRecords(SwitchInfoMapper);
         }
+        public string GetSwitchName(int switchId)
+        {
+            Switch switchObj = GetSwitch(switchId);
+
+            if (switchObj != null)
+                return switchObj.Name;
+
+            return null;
+        }
 
         public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch whsSwitch)
         {

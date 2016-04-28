@@ -127,6 +127,7 @@
     <Compile Include="Controllers\CDRController.cs" />
     <Compile Include="Controllers\GenericAnalyticController.cs" />
     <Compile Include="Controllers\RawCDRController.cs" />
+    <Compile Include="Controllers\RepeatedNumberController.cs" />
     <Compile Include="Controllers\VariationReportController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <Content Include="WhS_Analytics\Constant\GenericAnalyticDimensionEnum.js" />
     <Content Include="WhS_Analytics\Constant\GenericAnalyticMeasureEnum.js" />
     <Content Include="WhS_Analytics\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Analytics\Constant\PhoneNumberEnum.js" />
     <Content Include="WhS_Analytics\Constant\RawCDRLogWhereInfoEnum.js" />
     <Content Include="WhS_Analytics\Constant\VariationReportDimensionEnum.js" />
     <Content Include="WhS_Analytics\Constant\VariationReportTimePeriodEnum.js" />
@@ -171,12 +173,15 @@
     <Content Include="WhS_Analytics\Directives\Generic\vr-whs-analytics-genericsettings.js" />
     <Content Include="WhS_Analytics\Directives\RawCDR\Templates\RawCDRLogGridTemplate.html" />
     <Content Include="WhS_Analytics\Directives\RawCDR\vr-whs-analytics-rawcdrlog-grid.js" />
+    <Content Include="WhS_Analytics\Directives\RepeatedNumber\Templates\RepeatedNumberGridTemplate.html" />
+    <Content Include="WhS_Analytics\Directives\RepeatedNumber\vr-whs-analytics-repeatednumber-grid.js" />
     <Content Include="WhS_Analytics\Directives\VariationReport\Templates\VariationReportGridTemplate.html" />
     <Content Include="WhS_Analytics\Directives\VariationReport\vr-whs-analytics-variationreport-grid.js" />
     <Content Include="WhS_Analytics\Services\APIServices\BlockedAttemptsAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\CDRLogAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\GenericAnalyticAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\RawCDRLogAPIService.js" />
+    <Content Include="WhS_Analytics\Services\APIServices\RepeatedNumberAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\VariationReportAPIService.js" />
     <Content Include="WhS_Analytics\Services\GenericAnalyticService.js" />
     <Content Include="WhS_Analytics\Views\CarrierSummary.html" />
@@ -191,6 +196,8 @@
     <Content Include="WhS_Analytics\Views\RawCDR\RawCDRLogController.js" />
     <Content Include="WhS_Analytics\Views\RawCDR\RawCDRLogTemplate.html" />
     <Content Include="WhS_Analytics\Views\RawCDR\RawCDRLogTemplateController.js" />
+    <Content Include="WhS_Analytics\Views\RepeatedNumber\RepeatedNumber.html" />
+    <Content Include="WhS_Analytics\Views\RepeatedNumber\RepeatedNumberController.js" />
     <Content Include="WhS_Analytics\Views\TrafficAnalysis\BlockedAttempts.html" />
     <Content Include="WhS_Analytics\Views\TrafficAnalysis\BlockedAttemptsController.js" />
     <Content Include="WhS_Analytics\Views\VariationReport\VariationReport.html" />

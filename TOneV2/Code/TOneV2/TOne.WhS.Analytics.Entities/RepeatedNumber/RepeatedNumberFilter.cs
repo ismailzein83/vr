@@ -8,5 +8,6 @@ namespace TOne.WhS.Analytics.Entities
 {
     public class RepeatedNumberFilter
     {
+        public List<int> SwitchIds { get; set; }
     }
 }
