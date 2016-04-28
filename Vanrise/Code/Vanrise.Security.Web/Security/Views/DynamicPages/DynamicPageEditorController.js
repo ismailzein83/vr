@@ -266,6 +266,19 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
             }
 
         };
+
+        $scope.scopeModal.hasSaveViewPermission = function()
+        {
+            if (isEditMode) {
+                return VR_Sec_ViewAPIService.HasUpdateViewPermission();
+            }
+            else {
+                return VR_Sec_ViewAPIService.HasAddViewPermission();
+            }
+
+        }
+
+
     }
     
     function validateObjectBeforePreview()

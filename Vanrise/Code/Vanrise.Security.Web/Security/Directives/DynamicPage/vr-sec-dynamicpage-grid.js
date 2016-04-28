@@ -80,22 +80,27 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, User
             ctrl.menuActions = [
                 {
                     name: "Edit",
-                    permissions: "Root/Administration Module/Dynamic Pages:Edit",
-                    clicked: editDynamicPage
+                    clicked: editDynamicPage,
+                    haspermission: hasUpdateViewPermission
                 },
                 {
                     name: "Delete",
-                    permissions: "Root/Administration Module/Dynamic Pages:Delete",
-                    clicked: deleteDynamicPage
+                    clicked: deleteDynamicPage,
+                    haspermission: hasDeleteViewPermission
                 },
                 {
                     name: "Validate",
-                    permissions: "Root/Administration Module/Dynamic Pages:Validate",
-                    clicked: validate
+                    clicked: validate,
+
                 }];
 
         }
-
+        function hasUpdateViewPermission() {
+            return VR_Sec_ViewAPIService.HasUpdateViewPermission();
+        }
+        function hasDeleteViewPermission() {
+            return VR_Sec_ViewAPIService.HasDeleteViewPermission();
+        }
         function validate(dataItem) {
             var settings = {};
 

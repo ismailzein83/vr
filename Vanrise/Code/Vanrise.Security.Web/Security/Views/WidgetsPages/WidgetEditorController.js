@@ -68,6 +68,17 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
                 return addWidget();
         };
 
+
+        $scope.scopeModal.hasSaveWidgetPermission = function () {
+            if (isEditMode) {
+                return VR_Sec_WidgetAPIService.HasUpdateWidgetPermission();
+            }
+            else {
+                return VR_Sec_WidgetAPIService.HasAddWidgetPermission();
+            }
+
+        }
+
     }
 
     function buildWidgetObjFromScope() {

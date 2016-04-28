@@ -130,7 +130,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Validate" validationcontext="formDynamicPagesEditor" data-onclick="scopeModal.validate"></vr-button>
-                <vr-button type="Save" validationcontext="formDynamicPagesEditor" data-onclick="scopeModal.save"></vr-button>
+                <vr-button type="Save" validationcontext="formDynamicPagesEditor" haspermission="scopeModal.hasSaveViewPermission" data-onclick="scopeModal.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
             </div>
         </vr-actionbar>

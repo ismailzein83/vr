@@ -66,16 +66,21 @@ function (VRNotificationService, VR_Sec_WidgetAPIService, VR_Sec_WidgetService) 
         function defineMenuActions() {
             ctrl.menuActions = [{
                 name: "Edit",
-                permissions: "Root/Administration Module/Dynamic Pages:Edit",
-                clicked: editWidget
+                clicked: editWidget,
+                haspermission: hasUpdateWidgetPermission
             }, {
                 name: "Delete",
-                permissions: "Root/Administration Module/Dynamic Pages:Delete",
-                clicked: deleteWidget
+                clicked: deleteWidget,
+                haspermission: hasDeleteWidgetPermission
             }];
 
         }
-
+        function hasUpdateWidgetPermission() {
+            return VR_Sec_WidgetAPIService.HasUpdateWidgetPermission();
+        }
+        function hasDeleteWidgetPermission() {
+            return VR_Sec_WidgetAPIService.HasDeleteWidgetPermission();
+        }
         function editWidget(dataItem) {
             var onWidgetUpdated = function (updatedItem) {
                 gridAPI.itemUpdated(updatedItem);
