@@ -101,6 +101,12 @@
     <Content Include="Analytic\Constants\ModuleConfig.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-selector.js" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\DimensionEditorTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\JoinEditorTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\MeasureEditorTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-dimension-editor.js" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-join-editor.js" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticMeasureGridTemplate.html" />
@@ -125,6 +131,8 @@
     <Content Include="Analytic\Services\APIServices\AnalyticConfigurationAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemConfigAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportSettingsEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportSettingsEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticTableEditor.html" />
