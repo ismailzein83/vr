@@ -80,8 +80,8 @@ set identity_insert [sec].[View] on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(13001,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1301,'Root/Administration Module/Dynamic Pages:View',null,null,null,0,1),
-(13002,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',1301,'Root/Administration Module/Dynamic Pages:View',null,null,null,0,2)
+(13001,'Widgets','Widgets Management','#/view/Security/Views/WidgetsPages/WidgetManagement',1301,'VR_Sec/Widget/GetFilteredWidgets',null,null,null,0,1),
+(13002,'Pages','Dynamic Pages Management','#/view/Security/Views/DynamicPages/DynamicPageManagement',1301,'VR_Sec/View/GetFilteredViews & VR_Sec/View/GetFilteredDynamicViews',null,null,null,0,2)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -95,6 +95,27 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 set identity_insert [sec].[View] off;
 
+--[sec].[BusinessEntityModule]-------------1301 to 1400---------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [sec].[BusinessEntityModule] on;
+;with cte_data([Id],[Name],[ParentId],[BreakInheritance])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1301,'BI',2,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[ParentId],[BreakInheritance]))
+merge	[sec].[BusinessEntityModule] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]
+when not matched by target then
+	insert([Id],[Name],[ParentId],[BreakInheritance])
+	values(s.[Id],s.[Name],s.[ParentId],s.[BreakInheritance]);
+set identity_insert [sec].[BusinessEntityModule] off;
+
 --[sec].[BusinessEntity]------------------3601 to 3900----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 set nocount on;
@@ -102,7 +123,7 @@ set identity_insert [sec].[BusinessEntity] on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(3601,'BI Dynamic Pages','BI Dynamic Pages',2,1,'["View", "Add", "Edit", "Delete","Validate"]')
+(3601,'VR_Sec_BI_Widget','VR_Sec_BI_Widget',1301,0,'["View","Add","Edit","Delete"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -116,21 +137,24 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 set identity_insert [sec].[BusinessEntity] off;
 
---[sec].[Permission]--------------------------------------------------------------------------------
+--[sec].[systemaction]------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(0,'1',1,'3601','[{"Name":"View","Value":1}, {"Name":"Edit","Value":1}, {"Name":"Delete","Value":1}, {"Name":"Add","Value":1}, {"Name":"Validate","Value":1}]')
+('VR_Sec/Widget/GetFilteredWidgets','VR_Sec_BI_Widget:View'),
+('VR_Sec/Widget/AddWidget','VR_Sec_BI_Widget:Add'),
+('VR_Sec/Widget/UpdateWidget','VR_Sec_BI_Widget:Edit'),
+('VR_Sec/Widget/DeleteWidget','VR_Sec_BI_Widget:Delete')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
-merge	[sec].[Permission] as t
+)c([Name],[RequiredPermissions]))
+merge	[sec].[systemaction] as t
 using	cte_data as s
-on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
+on		1=1 and t.[Name] = s.[Name]
 when matched then
 	update set
-	[PermissionFlags] = s.[PermissionFlags]
+	[RequiredPermissions] = s.[RequiredPermissions]
 when not matched by target then
-	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
-	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+	insert([Name],[RequiredPermissions])
+	values(s.[Name],s.[RequiredPermissions]);
