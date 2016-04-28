@@ -16,11 +16,5 @@ namespace TOne.WhS.DBSync.Business
             ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
             dataManager.ApplySwitchesToDB(switches);
         }
-        public List<TemplateConfig> GetSwitchSourceTemplates()
-        {
-
-            TemplateConfigManager manager = new TemplateConfigManager();
-            return manager.GetTemplateConfigurations(Constants.SourceSwitchReaderConfigType);
-        }
     }
 }
