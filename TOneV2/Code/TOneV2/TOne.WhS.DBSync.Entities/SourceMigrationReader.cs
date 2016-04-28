@@ -3,7 +3,7 @@ using Vanrise.Entities.EntityMigrator;
 
 namespace TOne.WhS.DBSync.Entities
 {
-    public abstract class SourceSwitchReader : IMigrationSourceItemReader<SourceSwitch> 
+    public abstract class SourceMigrationReader : IMigrationSourceItemReader<SourceSwitch> 
     {
         public abstract IEnumerable<SourceSwitch> GetSourceItems();
     }

@@ -5,9 +5,9 @@ using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceSwitchMigrator : SourceItemMigrator<SourceSwitch, Switch, SourceSwitchReader>
+    public class SourceSwitchMigrator : SourceItemMigrator<SourceSwitch, Switch, SourceMigrationReader>
     {
-        public SourceSwitchMigrator(SourceSwitchReader sourceItemReader)
+        public SourceSwitchMigrator(SourceMigrationReader sourceItemReader)
             : base(sourceItemReader)
         {
 

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.DBSync.Entities;
 
-namespace TOne.WhS.DBSync.Business.SourceSwitchesReaders
+namespace TOne.WhS.DBSync.Business.SourceMigratorsReaders
 {
-    public class SwitchTOneV1Reader : SourceSwitchReader
+    public class MigratorTOneV1Reader : SourceMigrationReader
     {
         public string ConnectionString { get; set; }
 

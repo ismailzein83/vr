@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("whsBeSourceswitchreader", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService',
+app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService',
     function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService) {
 
         var directiveDefinitionObject = {
@@ -23,7 +23,7 @@ app.directive("whsBeSourceswitchreader", ['UtilsService', 'VRUIUtilsService', 'V
                     }
                 }
             },
-            templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceSwitchReader/Templates/SourceSwitchReader.html"
+            templateUrl: "/Client/Modules/Whs_BusinessEntity/Directives/MainExtensions/SourceMigrationReader/Templates/SourceMigrationReader.html"
         };
 
         function DirectiveConstructor($scope, ctrl) {
@@ -39,21 +39,17 @@ app.directive("whsBeSourceswitchreader", ['UtilsService', 'VRUIUtilsService', 'V
                 api.getData = function () {
                     var schedulerTaskAction;
                     schedulerTaskAction = {};
-                    schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.SwitchSyncTaskActionArgument, TOne.WhS.DBSync.Business",
-                    schedulerTaskAction.SourceSwitchReader = {
-                        $type: "TOne.WhS.DBSync.Business.SourceSwitchesReaders.SwitchTOneV1Reader, TOne.WhS.DBSync.Business",
+                    schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.MigrateSyncTaskActionArgument, TOne.WhS.DBSync.Business",
+                    schedulerTaskAction.SourceMigrationReader = {
+                        $type: "TOne.WhS.DBSync.Business.SourceMigratorsReaders.MigratorTOneV1Reader, TOne.WhS.DBSync.Business",
                         ConnectionString: $scope.connectionString
                     };
-                    console.log('schedulerTaskAction')
-                    console.log(schedulerTaskAction)
                     return schedulerTaskAction;
                 };
 
                 api.load = function (payload) {
-                    console.log('payload')
-                    console.log(payload)
                     if (payload != undefined && payload.data != undefined) {
-                        $scope.connectionString = payload.data.SourceSwitchReader.ConnectionString;
+                        $scope.connectionString = payload.data.SourceMigrationReader.ConnectionString;
                     }
                 }
 
