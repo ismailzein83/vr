@@ -10,7 +10,9 @@ namespace TOne.WhS.CodePreparation.Entities
     {
         New = 0,
         Delete = 1,
+        Undefined = 2,
         Replace = -1
+
     }
 
     public enum CodePreparationStatus
@@ -33,8 +35,8 @@ namespace TOne.WhS.CodePreparation.Entities
     public enum ValidationOutput
     {
         Success = 0,
-        ValidationError =1,
-        Failed=2
+        ValidationError = 1,
+        Failed = 2
     }
 
 }

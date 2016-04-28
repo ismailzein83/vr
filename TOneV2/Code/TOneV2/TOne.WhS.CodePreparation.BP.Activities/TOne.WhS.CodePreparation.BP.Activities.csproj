@@ -90,6 +90,7 @@
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="GetDataFromSource.cs" />
+    <Compile Include="StructureDataByCodes.cs" />
     <Compile Include="GetChanges.cs" />
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingZones.cs" />

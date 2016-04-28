@@ -108,6 +108,7 @@
           <mca:CSharpValue x:TypeArguments="twce:Changes">new Changes()</mca:CSharpValue>
         </Variable.Default>
       </Variable>
+      <Variable x:TypeArguments="scg:IEnumerable(twce:ImportedCode)" Name="ImportedCodes" />
     </Sequence.Variables>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -116,38 +117,68 @@
         </InArgument>
       </If.Condition>
       <If.Then>
-        <twcba1:GetDataFromSource sap2010:WorkflowViewState.IdRef="GetDataFromSource_2">
-          <twcba1:GetDataFromSource.CodesToAdd>
-            <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)">
-              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)">CodesToAdd</mca:CSharpReference>
-            </OutArgument>
-          </twcba1:GetDataFromSource.CodesToAdd>
-          <twcba1:GetDataFromSource.CodesToClose>
-            <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">
-              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">CodesToClose</mca:CSharpReference>
-            </OutArgument>
-          </twcba1:GetDataFromSource.CodesToClose>
-          <twcba1:GetDataFromSource.CodesToMove>
-            <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">
-              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">CodesToMove</mca:CSharpReference>
-            </OutArgument>
-          </twcba1:GetDataFromSource.CodesToMove>
-          <twcba1:GetDataFromSource.EffectiveDate>
-            <InArgument x:TypeArguments="s:DateTime">
-              <mca:CSharpValue x:TypeArguments="s:DateTime">(DateTime)Input.EffectiveDate</mca:CSharpValue>
-            </InArgument>
-          </twcba1:GetDataFromSource.EffectiveDate>
-          <twcba1:GetDataFromSource.FileId>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">(int)Input.FileId</mca:CSharpValue>
-            </InArgument>
-          </twcba1:GetDataFromSource.FileId>
-          <twcba1:GetDataFromSource.MinimumDate>
-            <OutArgument x:TypeArguments="s:DateTime">
-              <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
-            </OutArgument>
-          </twcba1:GetDataFromSource.MinimumDate>
-        </twcba1:GetDataFromSource>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="scg:IEnumerable(twce:ImportedData)" Name="ImportedData" />
+            <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedCodesZonesToValidate" />
+          </Sequence.Variables>
+          <twcba1:GetDataFromSource sap2010:WorkflowViewState.IdRef="GetDataFromSource_1">
+            <twcba1:GetDataFromSource.EffectiveDate>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate.Value</mca:CSharpValue>
+              </InArgument>
+            </twcba1:GetDataFromSource.EffectiveDate>
+            <twcba1:GetDataFromSource.FileId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.FileId.Value</mca:CSharpValue>
+              </InArgument>
+            </twcba1:GetDataFromSource.FileId>
+            <twcba1:GetDataFromSource.ImportedCodes>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twce:ImportedCode)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twce:ImportedCode)">ImportedCodes</mca:CSharpReference>
+              </OutArgument>
+            </twcba1:GetDataFromSource.ImportedCodes>
+            <twcba1:GetDataFromSource.MinimumDate>
+              <OutArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
+              </OutArgument>
+            </twcba1:GetDataFromSource.MinimumDate>
+          </twcba1:GetDataFromSource>
+          <vbw:ExecuteRules BusinessRulesKey="CP_ValidateCodesZones" sap2010:WorkflowViewState.IdRef="ExecuteRules_1">
+            <vbw:ExecuteRules.ImportedDataToValidate>
+              <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedCodes</mca:CSharpValue>
+              </InArgument>
+            </vbw:ExecuteRules.ImportedDataToValidate>
+          </vbw:ExecuteRules>
+          <twcba1:StructureDataByCodes sap2010:WorkflowViewState.IdRef="StructureDataByCodes_1">
+            <twcba1:StructureDataByCodes.CodesToAdd>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)">CodesToAdd</mca:CSharpReference>
+              </OutArgument>
+            </twcba1:StructureDataByCodes.CodesToAdd>
+            <twcba1:StructureDataByCodes.CodesToClose>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">CodesToClose</mca:CSharpReference>
+              </OutArgument>
+            </twcba1:StructureDataByCodes.CodesToClose>
+            <twcba1:StructureDataByCodes.CodesToMove>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">CodesToMove</mca:CSharpReference>
+              </OutArgument>
+            </twcba1:StructureDataByCodes.CodesToMove>
+            <twcba1:StructureDataByCodes.EffectiveDate>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+              </InArgument>
+            </twcba1:StructureDataByCodes.EffectiveDate>
+            <twcba1:StructureDataByCodes.ImportedCodes>
+              <InArgument x:TypeArguments="scg:IEnumerable(twce:ImportedCode)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twce:ImportedCode)">ImportedCodes</mca:CSharpValue>
+              </InArgument>
+            </twcba1:StructureDataByCodes.ImportedCodes>
+          </twcba1:StructureDataByCodes>
+        </Sequence>
       </If.Then>
       <If.Else>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
@@ -157,16 +188,16 @@
                 <mca:CSharpReference x:TypeArguments="twce:Changes">Changes</mca:CSharpReference>
               </OutArgument>
             </twcba1:GetChanges.Changes>
-            <twcba1:GetChanges.SellingNumberPlanId>
-              <InArgument x:TypeArguments="x:Int32">
-                <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
-              </InArgument>
-            </twcba1:GetChanges.SellingNumberPlanId>
             <twcba1:GetChanges.SaleCodesByZoneId>
               <OutArgument x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))">
                 <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))">SaleCodesByZoneId</mca:CSharpReference>
               </OutArgument>
             </twcba1:GetChanges.SaleCodesByZoneId>
+            <twcba1:GetChanges.SellingNumberPlanId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+              </InArgument>
+            </twcba1:GetChanges.SellingNumberPlanId>
           </twcba1:GetChanges>
           <twcba1:GetDataFromCodeChanges sap2010:WorkflowViewState.IdRef="GetDataFromCodeChanges_1">
             <twcba1:GetDataFromCodeChanges.Changes>
@@ -264,44 +295,6 @@
         </OutArgument>
       </twcba1:StructureDataByZones.ZonesToProcess>
     </twcba1:StructureDataByZones>
-    <twcba1:GetImportedDataValidationRules sap2010:WorkflowViewState.IdRef="GetImportedDataValidationRules_1">
-      <twcba1:GetImportedDataValidationRules.ImportedDataValidationRules>
-        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpReference>
-        </OutArgument>
-      </twcba1:GetImportedDataValidationRules.ImportedDataValidationRules>
-    </twcba1:GetImportedDataValidationRules>
-    <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_1">
-      <vbw:CombineLists.InputLists>
-        <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
-          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt; {CodesToAdd,CodesToMove, ZonesToProcess }</mca:CSharpValue>
-        </InArgument>
-      </vbw:CombineLists.InputLists>
-      <vbw:CombineLists.OutputList>
-        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpReference>
-        </OutArgument>
-      </vbw:CombineLists.OutputList>
-    </vbw:CombineLists>
-    <vbw:Validate sap2010:WorkflowViewState.IdRef="Validate_1">
-      <vbw:Validate.BusinessRules>
-        <InArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpValue>
-        </InArgument>
-      </vbw:Validate.BusinessRules>
-      <vbw:Validate.ImportedDataToValidate>
-        <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
-        </InArgument>
-      </vbw:Validate.ImportedDataToValidate>
-    </vbw:Validate>
-    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="Imported data is validated.">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-    </vbw:WriteTrackingMessage>
     <twcba1:StructureDataByCountries sap2010:WorkflowViewState.IdRef="StructureDataByCountries_1">
       <twcba1:StructureDataByCountries.CountriesToProcess>
         <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CountryToProcess)">
@@ -314,6 +307,39 @@
         </InArgument>
       </twcba1:StructureDataByCountries.ZonesToProcess>
     </twcba1:StructureDataByCountries>
+    <twcba1:GetImportedDataValidationRules sap2010:WorkflowViewState.IdRef="GetImportedDataValidationRules_1">
+      <twcba1:GetImportedDataValidationRules.ImportedDataValidationRules>
+        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpReference>
+        </OutArgument>
+      </twcba1:GetImportedDataValidationRules.ImportedDataValidationRules>
+    </twcba1:GetImportedDataValidationRules>
+    <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_1">
+      <vbw:CombineLists.InputLists>
+        <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
+          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt; {CodesToAdd,CodesToMove, ZonesToProcess,CountriesToProcess }</mca:CSharpValue>
+        </InArgument>
+      </vbw:CombineLists.InputLists>
+      <vbw:CombineLists.OutputList>
+        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpReference>
+        </OutArgument>
+      </vbw:CombineLists.OutputList>
+    </vbw:CombineLists>
+    <vbw:ExecuteRules BusinessRulesKey="CP_ValidateCountries" sap2010:WorkflowViewState.IdRef="ExecuteRules_2">
+      <vbw:ExecuteRules.ImportedDataToValidate>
+        <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
+        </InArgument>
+      </vbw:ExecuteRules.ImportedDataToValidate>
+    </vbw:ExecuteRules>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="Imported data is validated.">
+      <vbw:WriteTrackingMessage.Severity>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Severity>
+    </vbw:WriteTrackingMessage>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Ready to start processing imported data">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -638,11 +664,20 @@
         </InArgument>
       </twcba1:UpdateCodePreparationStateStatus.Status>
     </twcba1:UpdateCodePreparationStateStatus>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbIkBRgOCBQ4CAQFSC1LRAQIBV1cLV9EBAgFGXAtc1QECATVhC2HVAQIBJGYLZnACARNsC2xaAgECcAXoAQoDAeUM6QEF9AEgAwHCDPUBBYoCIwMB/QuLAgWRAi0DAesLkgIFnQIYAwHIC54CBakCFAMBpQuqAgWwAiADAZILsQIFvAInAwHvCr0CBcMCIAMB3ArEAgXfBBADAcMB4AQF5gQgAwGwAecEBe0EJQMBngHuBAX0BCADAYsB9QQFgAUvAgFocwtzWwMB5gx3CZYBJAMB6Q6ZAQnmARQDAfcM8QEL8QGFAQMB1AzsAQvsAaYBAwHDDP0BC/0BbwMBsQyHAguHAnsDAaAM+AEL+AFrAwGPDIICC4ICbQMB/guOAguOAoUBAwHsC5UCC5UCsQEDAdoLmgILmgJ/AwHJC6YCC6YCdwMBtwuhAguhAn0DAaYLrQILrQKFAQMBlAuqAmCqAn0DAZMLuQILuQJzAwGBC7QCC7QCggEDAfAKwAILwAKFAQMB3gq9AmC9AokBAwHdCsgCB74EEgMBsQK/BAfeBCgDAcQB4wQL4wSFAQMBsgHgBGDgBLsBAwGxAeoEC+oEYQMBnwHxBAvxBIUBAwGNAe4EYO4EkAEDAYwB+AQL+ARhAgF6/QQL/QTBAQIBaX8Pf3sDAb8Peg96dwMBrg+TAQ+TAWIDAZ0PiQEPiQFsAwGMD44BD44BXQMB+w6EAQ+EAXkDAeoOmgELqgEfAwG1DqsBC8oBKwMBzg3LAQvlASsDAfgMzAIJswQfAwHHArQECb0EEgMBsgLWBA3WBH4DAZ8CwgQNwgSEAQMBjQLbBA3bBGMDAfsBzAQNzARyAwHpAccEDccEhAEDAdcB0QQN0QR+AwHFAZ0BEZ0BYgMB2A6iARGiAWcDAccOpwERpwGXAQMBtg64ARG4AX0DAaQOswERswF5AwGTDq4BEa4BWgMBgg7HARHHAWQDAfENwgERwgFqAwHgDb0BEb0BewMBzw3TARHTAX0DAb0NzgERzgFaAwGsDd0BEd0BXAMBmw3iARHiAY8BAwGKDdgBEdgBewMB+QzPAg/PAn4DAckKzAK0AcwCuAEDAcgKzAKYAcwCnAEDAccK1gINsQQYAwHIArsENbsEOQMBxgK3BA+3BHoDAbMC4QIPjgMaAwHkCI8DD5oDLQMBqwibAw+rAy0DAdYHrAMP2gMsAwHZBdsDD+YDMQMBoAXnAw+YBBoDAbsDmQQPpAQYAwGCA6UED7AEKgMByQLiAhH3AisDAdYJ+AIRjQMrAwHlCJIDFZIDfQMByAiXAxWXA5MBAwGsCKMDFaMDgwEDAY8IngMVngN9AwHzB6gDFagDiwEDAdcHyAMVyAN7AwG6B74DFb4DgQEDAZ4H0gMV0gN7AwGCB7kDFbkDfQMB5gavAxWvA4EBAwHKBtcDFdcDewMBrgbNAxXNA4sBAwGSBsMDFcMDfwMB9gW0AxW0A4EBAwHaBd4DFd4DcwMBvQXjAxXjA3MDAaEF6AMR8wMjAwHnBPQDEf8DIwMBrgSABBGLBCMDAfUDjAQRlwQjAwG8A6EEFaEEcAMBnwOcBBWcBHQDAYMDrQQVrQSPAQMB5gKoBBWoBLMCAwHKAuoCF+oChwEDAasK9AIX9AJtAwGPCu8CF+8CYgMB8wnlAhflAmUDAdcJigMXigNtAwG6CYADF4ADhwEDAZ4JhQMXhQNiAwGCCfsCF/sCZQMB5gjwAxfwA4gBAwGEBesDF+sDdQMB6AT8Axf8A4gBAwHLBPcDF/cDdQMBrwSIBBeIBI4BAwGSBIMEF4MEewMB9gOUBBeUBI4BAwHZA48EF48EewMBvQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetDataFromSource_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="GetDataFromSource_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="StructureDataByCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="222,270">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="GetChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetDataFromCodeChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetDataFromZoneChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -656,11 +691,11 @@
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1462,420" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1462,22" />
+      <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="GetImportedDataValidationRules_1" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="1462,22" />
-      <sap2010:ViewStateData Id="Validate_1" sap:VirtualizedContainerService.HintSize="1462,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_2" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1462,22" />
-      <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="GetExistingZones_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_1" sap:VirtualizedContainerService.HintSize="200,40" />

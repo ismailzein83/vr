@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportedData\ImportedCode.cs" />
     <Compile Include="NewData\CodeToAdd.cs" />
     <Compile Include="NewData\CodeToClose.cs" />
     <Compile Include="NewData\CodeToMove.cs" />

@@ -60,12 +60,15 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(saleCode.Code);
                     if (!CodeIsExcludedFromRenamedZoneAction(saleCode, changes))
                     {
+                        if(Vanrise.Common.ExtensionMethods.VRLessThan(saleCode.EED,minimumDate))
+                            continue;
+
                         codesToMove.Add(new CodeToMove
                         {
                             Code = saleCode.Code,
                             CodeGroup = codeGroup,
-                            BED = minimumDate,
-                            EED = null,
+                            BED = saleCode.BED > minimumDate ? saleCode.BED : minimumDate,
+                            EED = saleCode.EED.HasValue ? saleCode.EED : null,
                             ZoneName = renamedZone.NewZoneName,
                             OldZoneName = oldZoneName
                         });
@@ -101,13 +104,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private bool CodeIsExcludedFromRenamedZoneAction(SaleCode saleCode, Changes changes)
         {
-            return (changes.NewCodes.Any(x => x.Code == saleCode.Code) && changes.DeletedCodes.Any(x => x.Code == saleCode.Code));
+            return (changes.NewCodes.Any(x => x.Code == saleCode.Code) && changes.DeletedCodes.Any(x => x.Code == saleCode.Code) );
         }
 
         private bool CodeIsExcludedFromCloseZoneAction(SaleCode saleCode, Changes changes)
         {
             return (changes.NewCodes.Any(x => x.Code == saleCode.Code && x.ZoneId.HasValue && x.ZoneId.Value == saleCode.ZoneId) && changes.DeletedCodes.Any(x => x.Code == saleCode.Code));
         }
+
 
     }
 }

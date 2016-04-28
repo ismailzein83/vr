@@ -5,21 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 
-namespace TOne.WhS.CodePreparation.Entities.Processing
+namespace TOne.WhS.CodePreparation.Entities
 {
-    public class CountryToProcess : IRuleTarget
+    public class ImportedCode : IRuleTarget
     {
-        public int CountryId { get; set; }
+        public string Code { get; set; }
 
-        public List<CodeToAdd> CodesToAdd { get; set; }
+        public string ZoneName { get; set; }
 
-        public List<CodeToMove> CodesToMove { get; set; }
+        public ImportType? Status { get; set; }
 
-        public List<CodeToClose> CodesToClose { get; set; }
+
 
         public object Key
         {
-            get { return this.CountryId; }
+            get { return this.ZoneName != string.Empty ? this.ZoneName : this.Code; }
         }
 
         public void SetExcluded()
@@ -29,7 +29,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         public string TargetType
         {
-            get { return "Country"; }
+            get { return "Code"; }
         }
     }
 }

@@ -12,8 +12,11 @@ using Aspose.Cells;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
 using TOne.WhS.CodePreparation.Entities;
+
+
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
+
     public sealed class GetDataFromSource : CodeActivity
     {
         [RequiredArgument]
@@ -23,19 +26,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<CodeToAdd>> CodesToAdd { get; set; }
-        
-        [RequiredArgument]
-        public OutArgument<IEnumerable<CodeToMove>> CodesToMove { get; set; }
-
-        [RequiredArgument]
-        public OutArgument<IEnumerable<CodeToClose>> CodesToClose { get; set; }
+        public OutArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
 
         [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
-           
             DateTime startReading = DateTime.Now;
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(FileId.Get(context));
@@ -46,136 +42,52 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             Worksheet worksheet = objExcel.Worksheets[0];
 
             int count = 1;
-            DateTime effectiveDate = EffectiveDate.Get(context);
 
-            DateTime minimumDate = effectiveDate;
+            DateTime minimumDate = EffectiveDate.Get(context);
 
-            BusinessEntity.Business.CodeGroupManager codeGroupManager = new BusinessEntity.Business.CodeGroupManager();
 
-            List<CodeToAdd> codesToAdd = new List<CodeToAdd>();
-            List<CodeToMove> codesToMove = new List<CodeToMove>();
-            List<CodeToClose> codesToClose = new List<CodeToClose>();
-            ImportedData importedData = new ImportedData();
-            importedData.NewCodes = new List<NewCode>();
-            importedData.DeletedCodes = new List<DeletedCode>();
+            List<ImportedCode> importedCodes = new List<ImportedCode>();
+
 
             while (count < worksheet.Cells.Rows.Count)
             {
-                //DateTime? bEDDateFromExcel = null;
-                //if (worksheet.Cells[count, 3].Value != null)
-                //    bEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 3].StringValue);
 
-                //DateTime? eEDDateFromExcel = null;
-                //if (worksheet.Cells[count, 4].Value != null)
-                //    eEDDateFromExcel = Convert.ToDateTime(worksheet.Cells[count, 4].StringValue);
+                string zoneName = worksheet.Cells[count, 0].StringValue.Trim();
+                string code = worksheet.Cells[count, 1].StringValue.Trim();
+                string status = worksheet.Cells[count, 2].StringValue.Trim();
 
-                //if (bEDDateFromExcel == null && effectiveDate != null)
-                //    bEDDateFromExcel = effectiveDate;
-
-                //if (minimumDate == DateTime.MinValue || bEDDateFromExcel < minimumDate)
-                //    minimumDate = (DateTime)bEDDateFromExcel;
-
-                string zoneName = worksheet.Cells[count, 0].StringValue;
-                string code = worksheet.Cells[count, 1].StringValue;
-                int value = Convert.ToInt16(worksheet.Cells[count, 2].StringValue);
-                ImportType status = (ImportType)value;
-
-
-                switch(status)
+                importedCodes.Add(new ImportedCode()
                 {
-                    case ImportType.New:
-                        importedData.NewCodes.Add(new NewCode
-                        {
-                            Code=code,
-                            Zone = zoneName,
-                            BED = effectiveDate,
-                            EED = null
-                        });  
-                        break;
-                    case ImportType.Delete:
-                        importedData.DeletedCodes.Add(new DeletedCode
-                        {
-                            Code=code,
-                            Zone = zoneName,
-                            BED = effectiveDate,
-                            EED = null
-                        });  
-                        break;
-                }
-                  count++;
-            }
-           
-            foreach(NewCode code in importedData.NewCodes)
-            {
-                TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code.Trim());
-                DeletedCode deletedCode=importedData.DeletedCodes.FirstOrDefault(x=>x.Code==code.Code);
-                if(deletedCode != null)
-                {
-                     codesToMove.Add(new CodeToMove
-                            {
-                                Code = code.Code,
-                                CodeGroup = codeGroup,
-                                BED = code.BED,
-                                EED = code.EED,
-                                ZoneName = code.Zone,
-                                OldZoneName = deletedCode.Zone
-                            });
-                }
-                else
-                {
-                     codesToAdd.Add(new CodeToAdd
-                            {
-                                Code = code.Code,
-                                CodeGroup = codeGroup,
-                                BED = code.BED,
-                                EED = code.EED,
-                                ZoneName = code.Zone,
-                            });
-                }
+                    Code = code,
+                    ZoneName = zoneName,
+                    Status = GetStatusFromFile(status)
 
-            }
-            foreach(DeletedCode code in importedData.DeletedCodes)
-            {
+                });
 
-                if(!codesToMove.Any(x=>x.Code==code.Code))
-                {    TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code.Trim());
-                     codesToClose.Add(new CodeToClose
-                            {
-                                Code = code.Code,
-                                CloseEffectiveDate = code.BED,
-                                ZoneName = code.Zone,
-                                CodeGroup = codeGroup
-                            });
-                }
+                count++;
             }
-               
+
+
             TimeSpan spent = DateTime.Now.Subtract(startReading);
             context.WriteTrackingMessage(LogEntryType.Information, "Finished reading {0} records from the excel file. It took: {1}.", worksheet.Cells.Rows.Count, spent);
 
-            CodesToAdd.Set(context, codesToAdd);
-            CodesToMove.Set(context, codesToMove);
-            CodesToClose.Set(context, codesToClose);
+
             MinimumDate.Set(context, minimumDate);
-        }
-        private class ImportedData
-        {
-            public List<NewCode> NewCodes { get; set; }
-            public List<DeletedCode> DeletedCodes { get; set; }
-        }
-        private class NewCode
-        {
-            public string Code { get; set; }
-            public string Zone { get; set; }
-            public DateTime BED { get; set; }
-            public DateTime? EED { get; set; }
-        }
-        private class DeletedCode
-        {
-            public string Code { get; set; }
-            public string Zone { get; set; }
-            public DateTime BED { get; set; }
-            public DateTime? EED { get; set; }
+            ImportedCodes.Set(context, importedCodes);
         }
 
+        ImportType? GetStatusFromFile(string status)
+        {
+            if (string.IsNullOrEmpty(status))
+                return null;
+
+            ImportType value = (ImportType)Convert.ToInt16(status);
+
+            if (value == ImportType.New || value == ImportType.Delete)
+                return value;
+            else
+                return ImportType.Undefined;
+
+        }
     }
 }
