@@ -18,6 +18,8 @@ namespace Vanrise.GenericData.SQLDataStorage
         DataRecordStorage _dataRecordStorage;
         SummaryTransformationDefinition _summaryTransformationDefinition;
 
+
+        List<string> Columns;
         DataRecordType _dataRecordType;
         DataRecordType DataRecordType
         {
@@ -301,71 +303,60 @@ namespace Vanrise.GenericData.SQLDataStorage
                 });
         }
 
-        public Vanrise.Entities.BigResult<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, out List<DataRecordColumn> columns)
+        public List<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
-            columns = BuildColumnsDefinitions();
-            Action<string> createTempTableAction = (tempTableName) =>
-                {
+            Columns = GetColumnNamesFromFieldNames(input.Query.Columns);
+            int parameterIndex = 0;
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            String recordFilter = BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
+            string query = BuildQuery(input, recordFilter);
 
-                    int parameterIndex = 0;
-                    Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-                    String recordFilter = BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
-                    string query = BuildQuery(input, tempTableName, recordFilter);
-                    ExecuteNonQueryText(query,
-                        (cmd) =>
-                        {
-                            cmd.Parameters.Add(new SqlParameter("@FromTime", ToDBNullIfDefault(input.Query.FromTime)));
-                            cmd.Parameters.Add(new SqlParameter("@ToTime", ToDBNullIfDefault(input.Query.ToTime)));
-                            foreach (var prm in parameterValues)
-                            {
-                                cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
-                            }
-                        });
-                };
-            return RetrieveData(input, createTempTableAction, DataRecordMapper);
+            return GetItemsText(query, DataRecordMapper, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@FromTime", ToDBNullIfDefault(input.Query.FromTime)));
+                    cmd.Parameters.Add(new SqlParameter("@ToTime", ToDBNullIfDefault(input.Query.ToTime)));
+                    foreach (var prm in parameterValues)
+                    {
+                        cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                    }
+                });
+
         }
 
-        private List<DataRecordColumn> BuildColumnsDefinitions()
-        {
-            List<DataRecordColumn> columnDefinitions = new List<DataRecordColumn>();
-
-            foreach (var column in _dataRecordStorageSettings.Columns)
-            {
-                DataRecordColumn item = new DataRecordColumn()
-                {
-                    Title = column.ValueExpression
-                };
-                columnDefinitions.Add(item);
-            }
-
-            return columnDefinitions;
-        }
-
-        private string BuildQuery(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, string tempTableName, string recordFilter)
+        private string BuildQuery(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, string recordFilter)
         {
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
             string tableName = GetTableName();
 
             string recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" and {0} ", recordFilter) : string.Empty;
-            StringBuilder str = new StringBuilder(string.Format(@"IF OBJECT_ID('{0}', N'U') IS NULL 
-                                                                BEGIN 
-                                                                    select * INTO {0} from {1} 
-                                                                    where (@FromTime is null or {2} >= @FromTime) 
-                                                                    and (@ToTime is null or {2} < @ToTime) 
-                                                                    {3}
-                                                                END", tempTableName, tableName, dateTimeColumn, recordFilterResult));
-            input.SortByColumnName = dateTimeColumn;
+            string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, input.Query.Direction == OrderDirection.Ascending ? "ASC" : "DESC");
+            StringBuilder str = new StringBuilder(string.Format(@"  select Top {0} {1} from {2} 
+                                                                    where (@FromTime is null or {3} >= @FromTime) 
+                                                                    and (@ToTime is null or {3} < @ToTime) 
+                                                                    {4} {5}", input.Query.LimitResult, string.Join<string>(",", GetColumnNamesFromFieldNames(input.Query.Columns)), tableName, dateTimeColumn, recordFilterResult, orderResult));
+            //input.SortByColumnName = dateTimeColumn;
             return str.ToString();
         }
 
         private DataRecord DataRecordMapper(IDataReader reader)
         {
+            DateTime recordTime = default(DateTime);
+            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
+
             Dictionary<string, Object> fieldValues = new Dictionary<string, object>();
             foreach (var column in _dataRecordStorageSettings.Columns)
             {
-                fieldValues.Add(column.ValueExpression, reader[column.ColumnName]);
+                if (Columns.Contains(column.ColumnName))
+                {
+                    var value = reader[column.ColumnName];
+                    if (string.Compare(dateTimeColumn, column.ColumnName, true) == 0)
+                    {
+                        recordTime = value != null ? (DateTime)value : default(DateTime);
+                    }
+                    fieldValues.Add(column.ValueExpression, value);
+                }
             }
-            return new DataRecord { FieldValues = fieldValues };
+            return new DataRecord { RecordTime = recordTime, FieldValues = fieldValues };
         }
 
         private string BuildRecordFilter(RecordFilterGroup filterGroup, ref int parameterIndex, Dictionary<string, Object> parameterValues)
@@ -565,6 +556,18 @@ namespace Vanrise.GenericData.SQLDataStorage
             if (column == null)
                 throw new NullReferenceException(String.Format("column. RecordStorageId '{0}'. FieldName '{1}'", -_dataRecordStorage.DataRecordStorageId, fieldName));
             return column.ColumnName;
+        }
+
+        List<string> GetColumnNamesFromFieldNames(List<string> fieldNames)
+        {
+            if (fieldNames == null || fieldNames.Count == 0)
+                return null;
+            List<string> result = new List<string>();
+            foreach (string fieldName in fieldNames)
+            {
+                result.Add(GetColumnNameFromFieldName(fieldName));
+            }
+            return result;
         }
     }
 }

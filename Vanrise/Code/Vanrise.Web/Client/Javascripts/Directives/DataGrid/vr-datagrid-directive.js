@@ -31,9 +31,9 @@
             if ($attrs.pagingtype != undefined)
                 pagingType = $scope.$parent.$eval($attrs.pagingtype);
                        
-            var defaultSortDirection;
-            if ($attrs.defaultsortdirection != undefined)
-                defaultSortDirection = $scope.$parent.$eval($attrs.defaultsortdirection);
+            //var defaultSortDirection;
+            //if ($attrs.defaultsortdirection != undefined)
+            //    defaultSortDirection = $scope.$parent.$eval($attrs.defaultsortdirection);
 
             ctrl.hideGridMenu = ($attrs.hidegridmenu != undefined);
 
@@ -100,7 +100,8 @@
             var dataGridObj = new DataGrid(ctrl, $scope, $attrs);
             dataGridObj.initializeController();
             if (retrieveDataFunction != undefined)
-                dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType, defaultSortDirection);
+                dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType);
+                //dataGridObj.defineRetrieveData(retrieveDataFunction, pagingType, defaultSortDirection);
 
             if (loadMoreDataFunction != undefined)
                 dataGridObj.definePagingOnScroll($scope, loadMoreDataFunction);
@@ -177,7 +178,7 @@
         var sortColumn;
         var isGridReady;
         var sortDirection;
-        var defaultSortDirection;
+        //var defaultSortDirection;
         var lastAddedColumnId = 0;
 
         function addColumn(col, columnIndex) {
@@ -1015,9 +1016,10 @@
         //    //ctrl.hideColumn(actionTypeColumn);
         //}
 
-        function defineRetrieveData(retrieveDataFunc, pagingType, defaultSortDirection_local) {
+        //function defineRetrieveData(retrieveDataFunc, pagingType, defaultSortDirection_local) {
+        function defineRetrieveData(retrieveDataFunc, pagingType) {
             retrieveDataFunction = retrieveDataFunc;
-            defaultSortDirection = defaultSortDirection_local;
+            //defaultSortDirection = defaultSortDirection_local;
 
             switch(pagingType)
             {
@@ -1038,6 +1040,10 @@
         function retrieveData(clearBeforeRetrieve, isExport, isSorting) {
             if (!isGridReady)
                 return;
+
+            var defaultSortDirection;
+            if (attrs.defaultsortdirection != undefined)
+                defaultSortDirection = scope.$parent.$eval(attrs.defaultsortdirection);
 
             var defaultSortByFieldName;
             if (attrs.defaultsortbyfieldname != undefined)

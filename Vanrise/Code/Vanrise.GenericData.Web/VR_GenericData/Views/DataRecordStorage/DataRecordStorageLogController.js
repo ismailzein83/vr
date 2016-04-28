@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogController.$inject = ['$scope', 'VRValidationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRModalService', 'VR_GenericData_DataRecordTypeService'];
+    DataRecordStorageLogController.$inject = ['$scope', 'VRValidationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRModalService', 'VR_GenericData_DataRecordTypeService', 'VR_Sec_ViewAPIService', 'VRNavigationService', 'VR_GenericData_OrderDirectionEnum'];
 
-    function DataRecordStorageLogController($scope, VRValidationService, UtilsService, VRUIUtilsService, VRNotificationService, VRModalService, VR_GenericData_DataRecordTypeService) {
+    function DataRecordStorageLogController($scope, VRValidationService, UtilsService, VRUIUtilsService, VRNotificationService, VRModalService, VR_GenericData_DataRecordTypeService, VR_Sec_ViewAPIService, VRNavigationService, VR_GenericData_OrderDirectionEnum) {
 
         var dataRecordStorageSelectorAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -14,9 +14,19 @@
         var filterObj;
         $scope.expression;
         $scope.selectedDataRecordStorage = undefined;
+        $scope.scopeModel = {};
+        var viewId;
+        var viewEntity;
 
         defineScope();
+        loadParameters();
         load();
+
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined && parameters != null)
+                viewId = parameters.viewId;
+        }
 
         function defineScope() {
             $scope.onDataRecordStorageSelectorReady = function (api) {
@@ -35,16 +45,16 @@
             };
 
             $scope.addFilter = function () {
-                if ($scope.selectedDataRecordStorage) {
-                    var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
-                        filterObj = filter;
-                        $scope.expression = expression;
-                    }
-                    VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter($scope.selectedDataRecordStorage.DataRecordTypeId, filterObj, onDataRecordFieldTypeFilterAdded);
+
+                var onDataRecordFieldTypeFilterAdded = function (filter, expression) {
+                    filterObj = filter;
+                    $scope.expression = expression;
                 }
+                VR_GenericData_DataRecordTypeService.addDataRecordTypeFieldFilter($scope.selectedDRSearchPageStorageSource.DataRecordTypeId, filterObj, onDataRecordFieldTypeFilterAdded);
+
             };
 
-            $scope.onDataRecordStorageSelectorChanged = function () {
+            $scope.onDRSearchPageStorageSourceChanged = function () {
                 $scope.expression = undefined;
                 filterObj = null;
             }
@@ -60,32 +70,58 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
-            UtilsService.waitMultipleAsyncOperations([loadDataRecordStorageSelector]).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
+            $scope.orderDirectionList = UtilsService.getArrayEnum(VR_GenericData_OrderDirectionEnum);
+            $scope.limit = 10000;
+            getView().then(function () {
+                loadAllControls();
+            }).catch(function () {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
             });
+        }
 
-            function loadDataRecordStorageSelector() {
-                var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+        function getView() {
+            return VR_Sec_ViewAPIService.GetView(viewId).then(function (viewEntityObj) {
+                viewEntity = viewEntityObj;
+                $scope.drSearchPageStorageSources = viewEntity.Settings.Sources;
+            });
+        }
 
-                dataRecordStorageSelectorReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, undefined, dataRecordStorageSelectorLoadDeferred);
-                });
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticData]).then(function () {
 
-                return dataRecordStorageSelectorLoadDeferred.promise;
-            }
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
+        }
+
+        function loadStaticData() {
+
         }
 
         function setGridQuery() {
             gridQuery = {
-                DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds(),
+                DataRecordStorageIds: $scope.selectedDRSearchPageStorageSource.RecordStorageIds,
                 FromTime: $scope.fromDate,
                 ToTime: $scope.toDate,
-                FilterGroup: filterObj
+                Columns: getColumns(),
+                FilterGroup: filterObj,
+                LimitResult: $scope.limit,
+                Direction: $scope.selectedOrderDirection.value,
+                sortDirection: $scope.selectedOrderDirection.sortDirection
             };
+        }
+        function getColumns() {
+            var columns = [];
+            for (var x = 0; x < $scope.selectedDRSearchPageStorageSource.GridColumns.length; x++) {
+                var currentColumn = $scope.selectedDRSearchPageStorageSource.GridColumns[x];
+                columns.push(currentColumn.FieldName);
+            }
+            return columns;
         }
     }
 

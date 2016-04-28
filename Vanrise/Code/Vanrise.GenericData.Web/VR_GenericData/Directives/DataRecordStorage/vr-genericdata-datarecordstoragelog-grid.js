@@ -31,7 +31,8 @@
             var gridAPI;
 
             function initializeController() {
-                ctrl.sortField = 'dummyData';
+                ctrl.sortField = 'DateTimeField';
+                ctrl.sortDirection = undefined;
                 ctrl.dataRecordStorageLogs = [];
                 ctrl.columns = [];
 
@@ -45,14 +46,7 @@
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_DataRecordStorageLogAPIService.GetFilteredDataRecordStorageLogs(dataRetrievalInput).then(function (response) {
-                        if (ctrl.columns.length == 0) {
-                            angular.forEach(response.Columns, function (column) {
-                                ctrl.columns.push(column);
-                            });
-                        }
-                        ctrl.showGrid = true;
                         onResponseReady(response);
-
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
@@ -64,6 +58,14 @@
 
                 api.loadGrid = function (query) {
                     ctrl.columns.length = 0;
+                    ctrl.sortDirection = query.sortDirection;
+
+                    angular.forEach(query.Columns, function (column) {
+                        ctrl.columns.push(column);
+                    });
+
+
+                    ctrl.showGrid = true;
                     return gridAPI.retrieveData(query);
                 };
 

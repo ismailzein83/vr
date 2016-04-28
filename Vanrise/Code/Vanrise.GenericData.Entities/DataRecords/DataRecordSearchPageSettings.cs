@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         public override string GetURL(Security.Entities.View view)
         {
-            return base.GetURL(view);
+            return String.Format("#/viewwithparams/VR_GenericData/Views/DataRecordStorage/DataRecordStorageLog/{{\"viewId\":\"{0}\"}}", view.ViewId);
         }
 
         public List<DRSearchPageStorageSource> Sources { get; set; }
@@ -20,6 +20,8 @@ namespace Vanrise.GenericData.Entities
     {
         public string Title { get; set; }
 
+        public int DataRecordTypeId { get; set; }
+        
         public List<int> RecordStorageIds { get; set; }
 
         public List<DRSearchPageGridColumn> GridColumns { get; set; }

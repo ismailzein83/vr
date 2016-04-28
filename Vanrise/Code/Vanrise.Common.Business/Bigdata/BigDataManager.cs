@@ -154,7 +154,8 @@ namespace Vanrise.Common.Business
         private CachedBigData RetrieveAllData<T, Q, R>(Vanrise.Entities.DataRetrievalInput<T> input, BigDataRequestHandler<T, Q, R> requestHandler)
         {
             CleanCacheIfNeeded();
-            var dataList = requestHandler.RetrieveAllData(input).ToList();
+            var result = requestHandler.RetrieveAllData(input);
+            var dataList = result != null ? result.ToList() : null;
             var recordsCount = dataList != null ? dataList.Count : 0;           
             var cachedBigData = new CachedBigData
             {

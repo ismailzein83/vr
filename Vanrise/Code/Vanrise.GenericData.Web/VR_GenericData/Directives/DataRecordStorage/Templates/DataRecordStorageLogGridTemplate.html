@@ -4,9 +4,9 @@
                  dataretrievalfunction="ctrl.dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
                  on-ready="ctrl.onGridReady"
-                 menuactions="ctrl.menuActions" defaultsortbyfieldname="ctrl.sortField">
-        <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.Title"
-                           field="'FieldValues.' + column.Title + '.Description'"
-                            tag="column" columnindex="$index"></vr-datagridcolumn>
+                 menuactions="ctrl.menuActions" defaultsortbyfieldname="'RecordTime'" defaultsortdirection="ctrl.sortDirection">
+        <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column"
+                           field="'FieldValues.' + column + '.Description'"
+                           tag="column" columnindex="$index"></vr-datagridcolumn>
     </vr-datagrid>
 </div>

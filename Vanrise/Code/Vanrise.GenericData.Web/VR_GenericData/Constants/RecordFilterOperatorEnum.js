@@ -38,7 +38,7 @@ app.constant('VR_GenericData_RecordQueryLogicalOperatorEnum', {
 });
 
 app.constant('VR_GenericData_ConditionEnum', {
-    Value: { description: 'Value', showDirective: true, editor: '', type: '' },
+    Condition: { description: 'Condition', showDirective: true, editor: '', type: '' },
     Empty: { description: 'Empty', showDirective: false, editor: 'vr-genericdata-datarecordtypefield-emptyfilter', type: 'Vanrise.GenericData.Entities.EmptyRecordFilter, Vanrise.GenericData.Entities' },
     NonEmpty: { description: 'Non Empty', showDirective: false, editor: 'vr-genericdata-datarecordtypefield-nonemptyfilter', type: 'Vanrise.GenericData.Entities.NonEmptyRecordFilter, Vanrise.GenericData.Entities' },
 });

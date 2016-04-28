@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Entities.DataStorage.DataRecordStorage;
@@ -16,43 +17,33 @@ namespace Vanrise.GenericData.Business
         #region Constructors/Fields
 
         DataStoreManager _dataStoreManager = new DataStoreManager();
-        
+
         #endregion
 
         #region Public Methods
 
         public Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
-            var dataRecordStorage = GetDataRecordStorage(input.Query.DataRecordStorageId);
+            if (input.Query.DataRecordStorageIds == null)
+                throw new NullReferenceException("input.Query.DataRecordStorageIds");
+
+            var dataRecordStorage = GetDataRecordStorage(input.Query.DataRecordStorageIds.First());
             if (dataRecordStorage == null)
-                throw new NullReferenceException(String.Format("dataRecordStorage Id '{0}'", input.Query.DataRecordStorageId));
-            if (dataRecordStorage.Settings == null)
-                throw new NullReferenceException(String.Format("dataRecordStorage.Settings Id '{0}'", input.Query.DataRecordStorageId));
+                throw new NullReferenceException(String.Format("dataRecordStorage. Id '{0}'", dataRecordStorage.DataRecordStorageId));
 
             var recordTypeManager = new DataRecordTypeManager();
-            var recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+            DataRecordType recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
             if (recordType == null)
                 throw new NullReferenceException(String.Format("recordType ID '{0}'", dataRecordStorage.DataRecordTypeId));
             if (recordType.Fields == null)
                 throw new NullReferenceException(String.Format("recordType.Fields ID '{0}'", dataRecordStorage.DataRecordTypeId));
 
-            var dataManager = GetStorageDataManager(dataRecordStorage);
-            if (dataManager == null)
-                throw new NullReferenceException(String.Format("dataManager. ID '{0}'", input.Query.DataRecordStorageId));
-
-            List<DataRecordColumn> columns;
-            var dataRecordsResult = dataManager.GetFilteredDataRecords(input, out columns);
-            if (dataRecordsResult == null)
-                return null;
-            Vanrise.GenericData.Entities.DataRecordDetailBigResult<DataRecordDetail> dataRecordDetailsResult = new Vanrise.GenericData.Entities.DataRecordDetailBigResult<DataRecordDetail>
+            if (input.SortByColumnName.Contains("FieldValues"))
             {
-                ResultKey = dataRecordsResult.ResultKey,
-                TotalCount = dataRecordsResult.TotalCount,
-                Columns = columns
-            };
-            if (dataRecordsResult.Data != null)
-                dataRecordDetailsResult.Data = dataRecordsResult.Data.MapRecords(itm => DataRecordDetailMapper(itm, recordType));
-            return DataRetrievalManager.Instance.ProcessResult(input, dataRecordDetailsResult);
+                string[] fieldValueproperty = input.SortByColumnName.Split('.');
+                input.SortByColumnName = string.Format(@"{0}[""{1}""].Description", fieldValueproperty[0], fieldValueproperty[1]);
+            }
+            return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler(recordType));
         }
 
         public IDataRecordDataManager GetStorageDataManager(int recordStorageId)
@@ -82,7 +73,7 @@ namespace Vanrise.GenericData.Business
             IEnumerable<DataRecordStorage> cachedDataRecordsStorage = GetCachedDataRecordStorages().Values;
             if (filter != null)
             {
-                cachedDataRecordsStorage=cachedDataRecordsStorage.Where(x => x.DataRecordTypeId == filter.DataRecordTypeId);
+                cachedDataRecordsStorage = cachedDataRecordsStorage.Where(x => x.DataRecordTypeId == filter.DataRecordTypeId);
             }
             return cachedDataRecordsStorage.MapRecords(DataRecordStorageInfoMapper);
         }
@@ -208,10 +199,67 @@ namespace Vanrise.GenericData.Business
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreDataRecordStoragesUpdated(ref _updateHandle) 
+                return _dataManager.AreDataRecordStoragesUpdated(ref _updateHandle)
                     |
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordTypeManager.CacheManager>().IsCacheExpired(ref _dataRecordTypeCacheLastCheck);
             }
+        }
+
+        private class DataRecordRequestHandler : BigDataRequestHandler<DataRecordQuery, DataRecord, DataRecordDetail>
+        {
+            DataRecordType RecordType;
+            public DataRecordRequestHandler(DataRecordType recordType)
+            {
+                RecordType = recordType;
+            }
+            public override DataRecordDetail EntityDetailMapper(DataRecord entity)
+            {
+                var dataRecordDetail = new DataRecordDetail() { RecordTime = entity.RecordTime, FieldValues = new Dictionary<string, DataRecordFieldValue>() };
+                foreach (var fld in RecordType.Fields)
+                {
+                    DataRecordFieldValue fldValueDetail = new DataRecordFieldValue();
+                    Object value;
+                    if (entity.FieldValues.TryGetValue(fld.Name, out value))
+                    {
+                        fldValueDetail.Value = value;
+                        fldValueDetail.Description = fld.Type.GetDescription(value);
+                    }
+                    dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
+                }
+                return dataRecordDetail;
+            }
+
+            public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
+            {
+                List<DataRecord> records = new List<DataRecord>();
+                foreach (int dataRecordStorageId in input.Query.DataRecordStorageIds)
+                {
+                    var result = GetDataRecords(input, dataRecordStorageId);
+                    if (result != null)
+                    {
+                        records.AddRange(result);
+                    }
+                }
+                return records.Count > 0 ? input.Query.Direction == OrderDirection.Ascending ? records.OrderBy(itm => itm.RecordTime).Take(input.Query.LimitResult) : records.OrderByDescending(itm => itm.RecordTime).Take(input.Query.LimitResult) : null;
+            }
+
+            private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, int dataRecordStorageId)
+            {
+                DataRecordStorageManager manager = new DataRecordStorageManager();
+                var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
+                if (dataRecordStorage == null)
+                    throw new NullReferenceException(String.Format("dataRecordStorage Id '{0}'", dataRecordStorageId));
+                if (dataRecordStorage.Settings == null)
+                    throw new NullReferenceException(String.Format("dataRecordStorage.Settings Id '{0}'", dataRecordStorageId));
+
+
+                var dataManager = manager.GetStorageDataManager(dataRecordStorage);
+                if (dataManager == null)
+                    throw new NullReferenceException(String.Format("dataManager. ID '{0}'", dataRecordStorageId));
+
+                return dataManager.GetFilteredDataRecords(input);
+            }
+
         }
 
         #endregion
@@ -234,24 +282,6 @@ namespace Vanrise.GenericData.Business
                 Name = dataRecordStorage.Name,
                 DataRecordTypeId = dataRecordStorage.DataRecordTypeId
             };
-        }
-
-
-        private DataRecordDetail DataRecordDetailMapper(DataRecord dataRecord, DataRecordType recordType)
-        {
-            var dataRecordDetail = new DataRecordDetail() { FieldValues = new Dictionary<string, DataRecordFieldValue>() };
-            foreach (var fld in recordType.Fields)
-            {
-                DataRecordFieldValue fldValueDetail = new DataRecordFieldValue();
-                Object value;
-                if (dataRecord.FieldValues.TryGetValue(fld.Name, out value))
-                {
-                    fldValueDetail.Value = value;
-                    fldValueDetail.Description = fld.Type.GetDescription(value);
-                }
-                dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
-            }
-            return dataRecordDetail;
         }
 
         #endregion

@@ -51,9 +51,11 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                     if (payload != undefined) {
                         
                         $scope.conditions = UtilsService.getArrayEnum(VR_GenericData_ConditionEnum);
+                        $scope.selectedCondition = $scope.conditions[0];
                         dataRecordTypeId = payload.dataRecordTypeId;
                         context = payload.context;
                         $scope.datasource = context.getFields();
+                        $scope.dataRecordTypeField = $scope.datasource[0];
                         filterObj = payload.filterObj;
 
                         if (filterObj) {

@@ -8,6 +8,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class DataRecordDetail
     {
+        public DateTime RecordTime { get; set; }
         public Dictionary<string, DataRecordFieldValue> FieldValues { get; set; }
     }
 }

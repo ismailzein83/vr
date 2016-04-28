@@ -117,7 +117,7 @@ namespace Vanrise.Common
             return dic.Values.Select(mappingExpression).ToList();
         }
 
-        public static IEnumerable<M> MapRecords<Q, T, M>(this Dictionary<Q,T> dic, Func<T, M> mappingExpression, Func<T, bool> filterExpression)
+        public static IEnumerable<M> MapRecords<Q, T, M>(this Dictionary<Q, T> dic, Func<T, M> mappingExpression, Func<T, bool> filterExpression)
         {
             if (dic == null)
                 return null;
@@ -154,12 +154,12 @@ namespace Vanrise.Common
         public static Vanrise.Entities.BigResult<Q> ToBigResult<T, Q>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input,
             Func<T, bool> filterExpression, Func<T, Q> mapper)
         {
-            IEnumerable<T> filteredResults = list.ApplyFiltering(filterExpression);
-            IEnumerable<Q> processedResults = filteredResults.Select(mapper).ApplySortingAndPaging(input).ToList();
+            IEnumerable<T> filteredResults = list != null ? list.ApplyFiltering(filterExpression) : null;
+            IEnumerable<Q> processedResults = filteredResults != null ? filteredResults.Select(mapper).ApplySortingAndPaging(input).ToList() : null;
 
             Vanrise.Entities.BigResult<Q> rslt = new Vanrise.Entities.BigResult<Q>
             {
-                TotalCount = filteredResults.Count(),
+                TotalCount = filteredResults != null ? filteredResults.Count() : 0,
                 Data = processedResults
             };
 
@@ -197,7 +197,7 @@ namespace Vanrise.Common
 
 
         }
-        
+
         public static IEnumerable<Q> MapRecords<T, Q>(this IEnumerable<T> list, Func<T, Q> mappingExpression)
         {
             if (list == null)
@@ -229,7 +229,7 @@ namespace Vanrise.Common
 
         private static IEnumerable<T> ApplySortingAndPaging<T>(this IEnumerable<T> list, Vanrise.Entities.DataRetrievalInput input)
         {
-            IPropValueReader propValueReader = GetPropValueReader<T>(input.SortByColumnName);         
+            IPropValueReader propValueReader = GetPropValueReader<T>(input.SortByColumnName);
             Func<T, Object> selector = x => propValueReader.GetPropertyValue(x);
 
             if (input.IsSortDescending)
@@ -243,7 +243,7 @@ namespace Vanrise.Common
                 list = list.ToList().Skip(input.FromRow.Value - 1).Take(pageSize);
             }
 
-            return list; 
+            return list;
         }
 
         static ConcurrentDictionary<string, IPropValueReader> s_cachedProbValueReaders = new ConcurrentDictionary<string, IPropValueReader>();
@@ -252,7 +252,7 @@ namespace Vanrise.Common
         {
             IPropValueReader propValueReader;
             string key = propertyPath;
-            if(!s_cachedProbValueReaders.TryGetValue(key, out propValueReader))
+            if (!s_cachedProbValueReaders.TryGetValue(key, out propValueReader))
             {
                 StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;
@@ -304,7 +304,7 @@ namespace Vanrise.Common
             Object GetPropertyValue(dynamic target);
         }
 
-        public static IEnumerable<Q> VRCast<Q>(this IEnumerable list) 
+        public static IEnumerable<Q> VRCast<Q>(this IEnumerable list)
         {
             if (list == null)
                 return null;
