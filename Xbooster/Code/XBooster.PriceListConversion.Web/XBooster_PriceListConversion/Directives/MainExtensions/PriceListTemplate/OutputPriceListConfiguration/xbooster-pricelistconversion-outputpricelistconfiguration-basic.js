@@ -231,17 +231,17 @@
                     {
                         var dataItems = [];
                         dataItems.push({
-                            id: ctrl.datasource.length + 1,
+                            id: dataItems.length + 1,
                             isRequired: validate,
                             item: { FieldValue: { FieldName: "Code", isDefaultData: true } }
                         });
                         dataItems.push({
-                            id: ctrl.datasource.length + 1,
+                            id: dataItems.length + 1,
                             isRequired: validate,
                             item: { FieldValue: { FieldName: "Zone", isDefaultData: true } }
                         });
                         dataItems.push({
-                            id: ctrl.datasource.length + 1,
+                            id: dataItems.length + 1,
                             isRequired: validate,
                             item: { FieldValue: { FieldName: "Rate", isDefaultData: true } }
                         });
