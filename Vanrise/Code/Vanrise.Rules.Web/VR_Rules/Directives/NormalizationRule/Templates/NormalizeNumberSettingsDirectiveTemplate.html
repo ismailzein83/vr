@@ -1,4 +1,4 @@
-﻿<div >
+﻿<div>
     <vr-row>
         <vr-columns width="1/3row">
             <vr-select label="Action Type"
@@ -21,16 +21,14 @@
     </vr-row>
 
     <vr-row>
-        <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective" >
+        <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
             <vr-validator validate="ctrl.isValid()">
                 <vr-datagrid datasource="ctrl.datasource"
                              on-ready="ctrl.onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu enabledraggablerow>
-                    <vr-datagridcolumn headertext="'Filter Type'" field="'name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn><vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper></vr-datagridcolumn>
-
+                    <vr-datagridcolumn headertext="'Filter Type'" field="'name'" widthfactor="2"></vr-datagridcolumn>
+                    <vr-datagridcolumn widthfactor="8"><vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-validator>
-
-</vr-columns>
+        </vr-columns>
     </vr-row>
 </div>
