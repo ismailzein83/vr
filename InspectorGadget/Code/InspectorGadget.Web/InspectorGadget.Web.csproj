@@ -361,6 +361,26 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PCap.Analytics.Business\PCap.Analytics.Business.csproj">
+      <Project>{3b00520f-fe74-4320-a379-2f112f599690}</Project>
+      <Name>PCap.Analytics.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PCap.Analytics.Data.SQL\PCap.Analytics.Data.SQL.csproj">
+      <Project>{70a52ed7-7d0a-48f1-ae00-ac581b0e945d}</Project>
+      <Name>PCap.Analytics.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PCap.Analytics.Data\PCap.Analytics.Data.csproj">
+      <Project>{f0dadcae-8b91-42dc-9c7a-083bb894c87e}</Project>
+      <Name>PCap.Analytics.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PCap.Analytics.Entities\PCap.Analytics.Entities.csproj">
+      <Project>{4be80fc0-c52e-48dc-80fb-a90a28e352c2}</Project>
+      <Name>PCap.Analytics.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PCap.Analytics.Web\PCap.Analytics.Web.csproj">
+      <Project>{4e0556b3-056d-4243-aaba-6c75d3dd3f12}</Project>
+      <Name>PCap.Analytics.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -23,9 +23,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InspectorGadget.Web", "Insp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{2FFBA43E-6075-4080-80D5-D47CCA3B2FE7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analytics", "Analytics", "{CFE4AF2A-CC49-4661-82A2-BF18676975AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCap.Analytics.Business", "PCap.Analytics.Business\PCap.Analytics.Business.csproj", "{3B00520F-FE74-4320-A379-2F112F599690}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCap.Analytics.Data", "PCap.Analytics.Data\PCap.Analytics.Data.csproj", "{F0DADCAE-8B91-42DC-9C7A-083BB894C87E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCap.Analytics.Data.SQL", "PCap.Analytics.Data.SQL\PCap.Analytics.Data.SQL.csproj", "{70A52ED7-7D0A-48F1-AE00-AC581B0E945D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCap.Analytics.Entities", "PCap.Analytics.Entities\PCap.Analytics.Entities.csproj", "{4BE80FC0-C52E-48DC-80FB-A90A28E352C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCap.Analytics.Web", "PCap.Analytics.Web\PCap.Analytics.Web.csproj", "{4E0556B3-056D-4243-AABA-6C75D3DD3F12}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -49,6 +61,26 @@ Global
 		SccProjectTopLevelParentUniqueName5 = InspectorGadget.sln
 		SccProjectName5 = Resources
 		SccLocalPath5 = Resources
+		SccProjectUniqueName6 = PCap.Analytics.Business\\PCap.Analytics.Business.csproj
+		SccProjectTopLevelParentUniqueName6 = InspectorGadget.sln
+		SccProjectName6 = PCap.Analytics.Business
+		SccLocalPath6 = PCap.Analytics.Business
+		SccProjectUniqueName7 = PCap.Analytics.Data\\PCap.Analytics.Data.csproj
+		SccProjectTopLevelParentUniqueName7 = InspectorGadget.sln
+		SccProjectName7 = PCap.Analytics.Data
+		SccLocalPath7 = PCap.Analytics.Data
+		SccProjectUniqueName8 = PCap.Analytics.Data.SQL\\PCap.Analytics.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName8 = InspectorGadget.sln
+		SccProjectName8 = PCap.Analytics.Data.SQL
+		SccLocalPath8 = PCap.Analytics.Data.SQL
+		SccProjectUniqueName9 = PCap.Analytics.Entities\\PCap.Analytics.Entities.csproj
+		SccProjectTopLevelParentUniqueName9 = InspectorGadget.sln
+		SccProjectName9 = PCap.Analytics.Entities
+		SccLocalPath9 = PCap.Analytics.Entities
+		SccProjectUniqueName10 = PCap.Analytics.Web\\PCap.Analytics.Web.csproj
+		SccProjectTopLevelParentUniqueName10 = InspectorGadget.sln
+		SccProjectName10 = PCap.Analytics.Web
+		SccLocalPath10 = PCap.Analytics.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +109,26 @@ Global
 		{2FFBA43E-6075-4080-80D5-D47CCA3B2FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FFBA43E-6075-4080-80D5-D47CCA3B2FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FFBA43E-6075-4080-80D5-D47CCA3B2FE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B00520F-FE74-4320-A379-2F112F599690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B00520F-FE74-4320-A379-2F112F599690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B00520F-FE74-4320-A379-2F112F599690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B00520F-FE74-4320-A379-2F112F599690}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0DADCAE-8B91-42DC-9C7A-083BB894C87E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0DADCAE-8B91-42DC-9C7A-083BB894C87E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0DADCAE-8B91-42DC-9C7A-083BB894C87E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0DADCAE-8B91-42DC-9C7A-083BB894C87E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A52ED7-7D0A-48F1-AE00-AC581B0E945D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A52ED7-7D0A-48F1-AE00-AC581B0E945D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A52ED7-7D0A-48F1-AE00-AC581B0E945D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A52ED7-7D0A-48F1-AE00-AC581B0E945D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BE80FC0-C52E-48DC-80FB-A90A28E352C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BE80FC0-C52E-48DC-80FB-A90A28E352C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BE80FC0-C52E-48DC-80FB-A90A28E352C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BE80FC0-C52E-48DC-80FB-A90A28E352C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E0556B3-056D-4243-AABA-6C75D3DD3F12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E0556B3-056D-4243-AABA-6C75D3DD3F12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E0556B3-056D-4243-AABA-6C75D3DD3F12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E0556B3-056D-4243-AABA-6C75D3DD3F12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,5 +139,11 @@ Global
 		{A4B0B4C8-65FC-447E-B1C6-F85B0B71D05F} = {11E0B749-48A3-429D-AAD2-F98CC8D26AB5}
 		{A0EA295A-E2C0-45AB-B3F6-7308D3E4F78D} = {E1048C00-3893-4464-9480-659EB29C4DE4}
 		{2FFBA43E-6075-4080-80D5-D47CCA3B2FE7} = {9E35B773-BA6C-4DD3-8034-429DCA309ED0}
+		{CFE4AF2A-CC49-4661-82A2-BF18676975AF} = {DDD2DAF5-2111-4742-8381-F99FF34CD12C}
+		{3B00520F-FE74-4320-A379-2F112F599690} = {CFE4AF2A-CC49-4661-82A2-BF18676975AF}
+		{F0DADCAE-8B91-42DC-9C7A-083BB894C87E} = {CFE4AF2A-CC49-4661-82A2-BF18676975AF}
+		{70A52ED7-7D0A-48F1-AE00-AC581B0E945D} = {CFE4AF2A-CC49-4661-82A2-BF18676975AF}
+		{4BE80FC0-C52E-48DC-80FB-A90A28E352C2} = {CFE4AF2A-CC49-4661-82A2-BF18676975AF}
+		{4E0556B3-056D-4243-AABA-6C75D3DD3F12} = {CFE4AF2A-CC49-4661-82A2-BF18676975AF}
 	EndGlobalSection
 EndGlobal

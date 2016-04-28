@@ -17,7 +17,8 @@ namespace InspectorGadget.Web
                 "~/Client/Modules/Queueing", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_GenericData", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/BI", "*.js", true));
+                "~/Client/Modules/BI", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/PCap_Analytics", "*.js", true));
         }
     }
 }
