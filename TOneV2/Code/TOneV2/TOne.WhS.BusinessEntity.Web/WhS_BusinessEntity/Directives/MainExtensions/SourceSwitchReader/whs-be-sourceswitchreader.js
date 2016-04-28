@@ -38,16 +38,20 @@ app.directive("whsBeSourceswitchreader", ['UtilsService', 'VRUIUtilsService', 'V
 
                 api.getData = function () {
                     var schedulerTaskAction;
-                        schedulerTaskAction = {};
-                        schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.SwitchSyncTaskActionArgument, TOne.WhS.DBSync.Business",
-                        schedulerTaskAction.SourceSwitchReader = {
-                            $type: "TOne.WhS.DBSync.Business.SourceSwitchesReaders.SwitchTOneV1Reader, TOne.WhS.DBSync.Business",
-                            ConnectionString: $scope.connectionString
-                        };
+                    schedulerTaskAction = {};
+                    schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.SwitchSyncTaskActionArgument, TOne.WhS.DBSync.Business",
+                    schedulerTaskAction.SourceSwitchReader = {
+                        $type: "TOne.WhS.DBSync.Business.SourceSwitchesReaders.SwitchTOneV1Reader, TOne.WhS.DBSync.Business",
+                        ConnectionString: $scope.connectionString
+                    };
+                    console.log('schedulerTaskAction')
+                    console.log(schedulerTaskAction)
                     return schedulerTaskAction;
                 };
 
                 api.load = function (payload) {
+                    console.log('payload')
+                    console.log(payload)
                     if (payload != undefined && payload.data != undefined) {
                         $scope.connectionString = payload.data.SourceSwitchReader.ConnectionString;
                     }
