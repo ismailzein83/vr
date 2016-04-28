@@ -11,6 +11,6 @@ namespace TOne.WhS.Analytics.Data
 {
     public interface IVariationReportDataManager : IDataManager
     {
-        IEnumerable<VariationReportRecord> GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input, DataTable timePeriodsTable);
+        IEnumerable<VariationReportRecord> GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input, IEnumerable<TimePeriod> timePeriods);
     }
 }

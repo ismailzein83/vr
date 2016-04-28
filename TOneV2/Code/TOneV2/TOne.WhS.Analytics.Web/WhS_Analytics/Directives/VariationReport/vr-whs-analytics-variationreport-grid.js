@@ -27,6 +27,7 @@
             var gridAPI;
             var gridQuery;
             var gridDrillDownTabsObj;
+            var reportTypeObjs;
 
             function initializeController() {
 
@@ -37,6 +38,8 @@
                 $scope.scopeModel.dimensionTitle;
                 $scope.scopeModel.timePeriodDefinitions = [];
                 $scope.scopeModel.drillDownDimensionValues = [];
+
+                reportTypeObjs = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTypeEnum);
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -73,7 +76,6 @@
                 };
 
                 $scope.scopeModel.showExpandIcon = function (dataItem) {
-                    console.log('bla');
                     return (dataItem.Dimension != null);
                 };
             }
@@ -104,8 +106,8 @@
                 }
             }
 
-            function setSortByField(reportType) {
-                switch (reportType) {
+            function setSortByField(reportTypeValue) {
+                switch (reportTypeValue) {
                     case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
                     case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
                         $scope.scopeModel.sortByField = 'DimensionName';
@@ -165,46 +167,12 @@
             }
             function getDrillDownReportTypeValue(drillDownDimensionValue) {
 
-                var currentReportTypeCategory = UtilsService.getEnum(WhS_Analytics_VariationReportTypeEnum, 'value', gridQuery.ReportType).category;
+                var currentReportTypeCategory = UtilsService.getItemByVal(reportTypeObjs, gridQuery.ReportType, 'value').category;
 
-                for (var propertyName in WhS_Analytics_VariationReportTypeEnum) {
-                    var reportTypeObj = WhS_Analytics_VariationReportTypeEnum[propertyName];
-                    if (reportTypeObj.category == currentReportTypeCategory && reportTypeObj.value != gridQuery.ReportType && reportTypeObj.dimensionValue == drillDownDimensionValue)
-                        return reportTypeObj.value;
-                }
-            }
-
-            function junkCode() {
-                function setDrillDownDimensionValues(gridQuery) {
-
-                    $scope.scopeModel.drillDownDimensionValues.length = 0;
-
-                    if (gridQuery.parentReportType != undefined) {
-                        switch (gridQuery.parentReportType) {
-                            case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
-                            case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
-                                return; // => gridQuery.ReportType = Zone
-                        }
-                    }
-
-                    switch (gridQuery.ReportType) {
-                        case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
-                        case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
-                            $scope.scopeModel.drillDownDimensionValues.push(WhS_Analytics_VariationReportDimensionEnum.Zone.value);
-                            return;
-                    }
-
-                    var currentReportDimensionValue = getDimensionValue(gridQuery.ReportType);
-                    var filterDimensionValues = (gridQuery.DimensionFilters != null) ? UtilsService.getPropValuesFromArray(gridQuery.DimensionFilters, 'Dimension') : [];
-
-                    for (var propertyName in WhS_Analytics_VariationReportDimensionEnum) {
-                        var dimensionValue = WhS_Analytics_VariationReportDimensionEnum[propertyName].value;
-                        if (dimensionValue != currentReportDimensionValue && !UtilsService.contains(filterDimensionValues, dimensionValue))
-                            $scope.scopeModel.drillDownDimensionValues.push(dimensionValue);
-                    }
-                }
-                function getDimensionValue(reportTypeValue) {
-                    return UtilsService.getEnum(WhS_Analytics_VariationReportTypeEnum, 'value', reportTypeValue).dimensionValue;
+                for (var i = 0; i < reportTypeObjs.length; i++) {
+                    var item = reportTypeObjs[i];
+                    if (item.category == currentReportTypeCategory && item.value != gridQuery.ReportType && item.dimensionValue == drillDownDimensionValue)
+                        return item.value;
                 }
             }
         }

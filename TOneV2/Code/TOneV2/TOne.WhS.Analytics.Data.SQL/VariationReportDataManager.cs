@@ -17,21 +17,15 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         VariationReportQuery _inputQuery;
 
-        static Dictionary<string, string> s_mapper;
-
-        static VariationReportDataManager()
-        {
-            s_mapper = new Dictionary<string, string>();
-            s_mapper.Add("DimensionName", "DimensionId");
-        }
-
         #endregion
 
         #region Public Methods
 
-        public IEnumerable<VariationReportRecord> GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input, DataTable timePeriodsTable)
+        public IEnumerable<VariationReportRecord> GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input, IEnumerable<TimePeriod> timePeriods)
         {
             _inputQuery = input.Query;
+
+            DataTable timePeriodsTable = GetTimePeriodsTable(timePeriods);
 
             return GetItemsText<VariationReportRecord>(GetVariationReportQuery(input.Query), VariationReportRecordMapper, (cmd) =>
             {
@@ -49,6 +43,29 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Private Methods
 
+        DataTable GetTimePeriodsTable(IEnumerable<TimePeriod> timePeriods)
+        {
+            DataTable table = new DataTable();
+
+            table.Columns.Add("PeriodIndex", typeof(int));
+            table.Columns.Add("FromDate", typeof(DateTime));
+            table.Columns.Add("ToDate", typeof(DateTime));
+
+            table.BeginLoadData();
+
+            for (int i = 0; i < timePeriods.Count(); i++)
+            {
+                DataRow row = table.NewRow();
+                row["PeriodIndex"] = i + 1;
+                row["FromDate"] = timePeriods.ElementAt(i).From;
+                row["ToDate"] = timePeriods.ElementAt(i).To;
+                table.Rows.Add(row);
+            }
+
+            table.EndLoadData();
+            return table;
+        }
+
         #region Variation Report Query
 
         string GetVariationReportQuery(VariationReportQuery query)
@@ -63,7 +80,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             string queryPart = (query.ReportType == VariationReportType.InOutBoundMinutes || query.ReportType == VariationReportType.InOutBoundAmount) ?
                 GetMultiBoundQuery(query) :
-                GetSingleBoundQuery(query, null, "#Result", true, true);
+                GetSingleBoundQuery(query, VariationReportRecordDimensionSuffix.None, "#Result", true, true);
 
             variationReportQueryBuilder.Replace("#QUERY_PART#", queryPart);
 
@@ -103,7 +120,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 #OUT_BOUND_QUERY#
 
                 SELECT InResult.DimensionId,
-                    ' / Total' AS DimensionSuffix,
+                    #TOTAL_DIMENSION_SUFFIX# AS DimensionSuffix,
                     InResult.Average - OutResult.Average Average,
                     InResult.Percentage - OutResult.Percentage Percentage,
                     InResult.PreviousPeriodPercentage - OutResult.PreviousPeriodPercentage PreviousPeriodPercentage
@@ -121,8 +138,9 @@ namespace TOne.WhS.Analytics.Data.SQL
             VariationReportQuery outResultQuery;
             SetInOutResultQueries(query, out inResultQuery, out outResultQuery);
 
-            multiBoundQueryBuilder.Replace("#IN_BOUND_QUERY#", GetSingleBoundQuery(inResultQuery, " / In", "#InResult", false, false));
-            multiBoundQueryBuilder.Replace("#OUT_BOUND_QUERY#", GetSingleBoundQuery(outResultQuery, " / Out", "#OutResult", false, false));
+            multiBoundQueryBuilder.Replace("#IN_BOUND_QUERY#", GetSingleBoundQuery(inResultQuery, VariationReportRecordDimensionSuffix.In, "#InResult", false, false));
+            multiBoundQueryBuilder.Replace("#OUT_BOUND_QUERY#", GetSingleBoundQuery(outResultQuery, VariationReportRecordDimensionSuffix.Out, "#OutResult", false, false));
+            multiBoundQueryBuilder.Replace("#TOTAL_DIMENSION_SUFFIX#", String.Format("{0}", (int)VariationReportRecordDimensionSuffix.Total));
             multiBoundQueryBuilder.Replace("#TOTAL_RESULT_SUM_PART#", GetTotalResultSumPart(query));
 
             return multiBoundQueryBuilder.ToString();
@@ -166,7 +184,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Single Bound Query
 
-        string GetSingleBoundQuery(VariationReportQuery query, string dimensionSuffix, string intoTableName, bool selectFromIntoTable, bool withSummary)
+        string GetSingleBoundQuery(VariationReportQuery query, VariationReportRecordDimensionSuffix dimensionSuffix, string intoTableName, bool selectFromIntoTable, bool withSummary)
         {
             var singleResultQueryBuilder = new StringBuilder
             (@"
@@ -195,7 +213,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             singleResultQueryBuilder.Replace("#TOP_PART#", GetTopPart(query));
             singleResultQueryBuilder.Replace("#DIMENTION_COLUMN_NAME#", GetDimentionColumnName(query));
-            singleResultQueryBuilder.Replace("#DIMENSION_SUFFIX#", String.Format(", '{0}' AS DimensionSuffix", dimensionSuffix));
+            singleResultQueryBuilder.Replace("#DIMENSION_SUFFIX#", String.Format(", {0} AS DimensionSuffix", (int)dimensionSuffix));
 
             singleResultQueryBuilder.Replace("#AVERAGE_PART#", GetAveragePart(query));
             singleResultQueryBuilder.Replace("#PERCENTAGE_PART#", GetPercentagePart(query));
@@ -511,7 +529,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             var variationReportRecord = new VariationReportRecord()
             {
                 DimensionId = (object)reader["DimensionId"],
-                DimensionSuffix = reader["DimensionSuffix"] as string,
+                DimensionSuffix = (VariationReportRecordDimensionSuffix)reader["DimensionSuffix"],
                 Average = (decimal)reader["Average"],
                 Percentage = Convert.ToDecimal((double)reader["Percentage"]),
                 PreviousPeriodPercentage = Convert.ToDecimal((double)reader["PreviousPeriodPercentage"])

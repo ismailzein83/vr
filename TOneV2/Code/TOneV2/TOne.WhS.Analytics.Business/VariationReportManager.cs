@@ -15,13 +15,6 @@ namespace TOne.WhS.Analytics.Business
 {
     public class VariationReportManager
     {
-        #region Fields
-
-        CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
-        SaleZoneManager _saleZoneManager = new SaleZoneManager();
-
-        #endregion
-
         #region Public Methods
 
         public IDataRetrievalResult<VariationReportRecord> GetFilteredVariationReportRecords(Vanrise.Entities.DataRetrievalInput<VariationReportQuery> input)
@@ -41,14 +34,14 @@ namespace TOne.WhS.Analytics.Business
             VariationReportQuery _query;
             CarrierAccountManager _carrierAccountManager;
             SaleZoneManager _saleZoneManager;
-            DataTable _timePeriodsTable;
+            List<TimePeriod> _timePeriods;
 
             public VariationReportRequestHandler(VariationReportQuery query)
             {
                 _query = query;
                 _carrierAccountManager = new CarrierAccountManager();
                 _saleZoneManager = new SaleZoneManager();
-                _timePeriodsTable = BuildTimePeriodsTable();
+                _timePeriods = GetTimePeriods();
             }
 
             #endregion
@@ -64,7 +57,7 @@ namespace TOne.WhS.Analytics.Business
                 variationReportBigResult.TotalCount = bigResult.TotalCount;
 
                 variationReportBigResult.DimensionTitle = GetDimensionTitle();
-                variationReportBigResult.TimePeriods = GetTimePeriodDefinitions();
+                variationReportBigResult.TimePeriods = _timePeriods;
                 variationReportBigResult.DrillDownDimensions = GetDrillDownDimensions();
 
                 return variationReportBigResult;
@@ -73,18 +66,19 @@ namespace TOne.WhS.Analytics.Business
             public override IEnumerable<VariationReportRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<VariationReportQuery> input)
             {
                 IVariationReportDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IVariationReportDataManager>();
-                return dataManager.GetFilteredVariationReportRecords(input, _timePeriodsTable);
+                return dataManager.GetFilteredVariationReportRecords(input, _timePeriods);
             }
 
             public override VariationReportRecord EntityDetailMapper(VariationReportRecord entity)
             {
                 SetVariationReportRecordDimension(entity);
 
-                string entityName = (_query.ReportType == VariationReportType.TopDestinationMinutes || _query.ReportType == VariationReportType.TopDestinationAmount) ?
+                entity.DimensionName = (_query.ReportType == VariationReportType.TopDestinationMinutes || _query.ReportType == VariationReportType.TopDestinationAmount) ?
                     _saleZoneManager.GetSaleZoneName((long)entity.DimensionId) :
                     _carrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
 
-                entity.DimensionName = String.Format("{0}{1}", entityName, entity.DimensionSuffix);
+                if (entity.DimensionSuffix != VariationReportRecordDimensionSuffix.None)
+                    entity.DimensionName = String.Format("{0}{1}", entity.DimensionName, String.Format(" / {0}", entity.DimensionSuffix));
 
                 return entity;
             }
@@ -116,54 +110,26 @@ namespace TOne.WhS.Analytics.Business
 
             #region Time Periods
 
-            List<TimePeriod> GetTimePeriodDefinitions()
+            List<TimePeriod> GetTimePeriods()
             {
-                var timePeriodDefinitions = new List<TimePeriod>();
+                var timePeriods = new List<TimePeriod>();
 
-                foreach (DataRow row in _timePeriodsTable.Rows)
+                DateTime toDate = _query.ToDate.Date.AddDays(1); // Ignore ToDate's time and add 1 day to include it in the result
+
+                for (int i = 0; i < _query.NumberOfPeriods; i++)
                 {
-                    DateTime fromDate = Convert.ToDateTime(row["FromDate"]);
-                    DateTime toDate = Convert.ToDateTime(row["ToDate"]);
-
-                    timePeriodDefinitions.Add(new TimePeriod()
+                    DateTime fromDate = GetFromDate(toDate);
+                    timePeriods.Add(new TimePeriod()
                     {
                         PeriodDescription = (_query.TimePeriod == VariationReportTimePeriod.Daily) ?
                             fromDate.ToShortDateString() : String.Format("{0} - {1}", fromDate.ToShortDateString(), toDate.AddDays(-1).ToShortDateString()),
                         From = fromDate,
                         To = toDate
                     });
-                }
-
-                return timePeriodDefinitions;
-            }
-
-            DataTable BuildTimePeriodsTable()
-            {
-                DataTable table = new DataTable();
-
-                table.Columns.Add("PeriodIndex", typeof(int));
-                table.Columns.Add("FromDate", typeof(DateTime));
-                table.Columns.Add("ToDate", typeof(DateTime));
-
-                table.BeginLoadData();
-
-                DateTime toDate = _query.ToDate.AddDays(1); // Add 1 day to include the ToDate in the result
-
-                for (int i = 0; i < _query.NumberOfPeriods; i++)
-                {
-                    DataRow row = table.NewRow();
-                    DateTime fromDate = GetFromDate(toDate);
-
-                    row["PeriodIndex"] = i + 1;
-                    row["FromDate"] = fromDate.Date;
-                    row["ToDate"] = toDate.Date;
-
                     toDate = fromDate;
-                    table.Rows.Add(row);
                 }
 
-                table.EndLoadData();
-                return table;
+                return timePeriods;
             }
 
             DateTime GetFromDate(DateTime toDate)
@@ -178,7 +144,7 @@ namespace TOne.WhS.Analytics.Business
                         fromDate = toDate.AddDays(-7);
                         break;
                     case VariationReportTimePeriod.Monthly:
-                        fromDate = toDate.AddDays(-30);
+                        fromDate = toDate.AddMonths(-1);
                         break;
                 }
                 return fromDate;
@@ -205,10 +171,10 @@ namespace TOne.WhS.Analytics.Business
                     default:
                         switch (variationReportRecord.DimensionSuffix)
                         {
-                            case " / In":
+                            case VariationReportRecordDimensionSuffix.In:
                                 variationReportRecord.Dimension = VariationReportDimension.Customer;
                                 break;
-                            case " / Out":
+                            case VariationReportRecordDimensionSuffix.Out:
                                 variationReportRecord.Dimension = VariationReportDimension.Supplier;
                                 break;
                         }
@@ -247,7 +213,7 @@ namespace TOne.WhS.Analytics.Business
         {
             if (!Enum.IsDefined(typeof(VariationReportType), query.ReportType))
                 throw new ArgumentException(String.Format("query.ReportType '{0}' is invalid", query.ReportType));
-            if (query.ToDate == null)
+            if (query.ToDate == default(DateTime))
                 throw new ArgumentNullException(String.Format("query.ToDate"));
             if (!Enum.IsDefined(typeof(VariationReportTimePeriod), query.TimePeriod))
                 throw new ArgumentException(String.Format("query.TimePeriod '{0}' is invalid", query.TimePeriod));
