@@ -41,8 +41,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BI.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -60,6 +71,7 @@
     <Compile Include="Switch\SwitchManager.cs" />
     <Compile Include="Switch\SwitchSyncTaskAction.cs" />
     <Compile Include="Switch\SwitchSyncTaskActionArgument.cs" />
+    <Compile Include="Switch\SwitchTOneV1Reader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">

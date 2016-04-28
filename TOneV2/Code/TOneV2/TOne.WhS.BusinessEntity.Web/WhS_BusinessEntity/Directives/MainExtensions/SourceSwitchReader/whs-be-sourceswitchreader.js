@@ -67,6 +67,9 @@ app.directive("whsBeSourceswitchreader", ['UtilsService', 'VRUIUtilsService', 'V
             };
 
             api.load = function (payload) {
+                console.log('payload')
+                console.log(payload)
+
                 var promises = [];
                 var sourceConfigId;
 

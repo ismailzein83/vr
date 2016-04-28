@@ -189,6 +189,10 @@
       <Project>{66a454c0-d24c-4378-942f-4b7bc0f1e05a}</Project>
       <Name>TOne.WhS.DBSync.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.DBSync.Entities\TOne.WhS.DBSync.Entities.csproj">
+      <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
+      <Name>TOne.WhS.DBSync.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />

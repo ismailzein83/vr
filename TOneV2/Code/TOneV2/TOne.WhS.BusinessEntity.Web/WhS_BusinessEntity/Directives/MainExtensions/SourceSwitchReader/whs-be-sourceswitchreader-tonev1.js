@@ -36,7 +36,7 @@ app.directive("whsBeSourceswitchreaderTonev1", [function () {
 
             api.getData = function () {
                 return {
-                    $type: "TOne.WhS.BusinessEntity.MainExtensions.SourceSwitchesReaders.SwitchTOneV1Reader, TOne.WhS.BusinessEntity.MainExtensions",
+                    $type: "TOne.WhS.DBSync.Business.SourceSwitchesReaders.SwitchTOneV1Reader, TOne.WhS.DBSync.Business",
                     ConnectionString: $scope.connectionString
                 };
             };

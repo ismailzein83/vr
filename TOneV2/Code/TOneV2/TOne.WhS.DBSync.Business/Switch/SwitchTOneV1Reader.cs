@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.DBSync.Entities;
 
-namespace TOne.WhS.BusinessEntity.MainExtensions.SourceSwitchesReaders
+namespace TOne.WhS.DBSync.Business.SourceSwitchesReaders
 {
     public class SwitchTOneV1Reader : SourceSwitchReader
     {

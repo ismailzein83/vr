@@ -76,7 +76,6 @@
     <Compile Include="SaleZoneGroups\AllExceptSaleZoneGroup.cs" />
     <Compile Include="SaleZoneGroups\SelectiveSaleZoneGroup.cs" />
     <Compile Include="SellingNumberPlan\SelectiveSellingNumberPlan.cs" />
-    <Compile Include="SourceSwitchesReaders\SwitchTOneV1Reader.cs" />
     <Compile Include="SupplierGroups\SelectiveSupplierGroup.cs" />
     <Compile Include="SuppliersWithZonesGroups\SelectiveSuppliersWithZonesGroup.cs" />
   </ItemGroup>
