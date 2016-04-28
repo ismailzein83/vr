@@ -7,6 +7,7 @@ using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
 
 namespace Vanrise.Analytic.Business
 {
@@ -26,12 +27,32 @@ namespace Vanrise.Analytic.Business
             dataManager.Dimensions = analyticItemConfigManager.GetDimensions(table.AnalyticTableId);
             dataManager.Measures = analyticItemConfigManager.GetMeasures(table.AnalyticTableId);
             dataManager.Joins = analyticItemConfigManager.GetJoins(table.AnalyticTableId);
+            if (input.SortByColumnName.Contains("MeasureValues"))
+            {
+                string[] measureProperty = input.SortByColumnName.Split('.');
+                input.SortByColumnName = string.Format(@"{0}[""{1}""]", measureProperty[0], measureProperty[1]);
+            }
             var analyticRecords = BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler(dataManager));
-            AnalyticSummaryBigResult<AnalyticRecord> result = analyticRecords as AnalyticSummaryBigResult<AnalyticRecord>;
-            if (input.Query.WithSummary)
-                result.Summary = dataManager.GetAnalyticSummary(input);
-
-            return result;
+            if (analyticRecords != null)
+            {
+                BigResult<AnalyticRecord> bigResult = analyticRecords as BigResult<AnalyticRecord>;
+                if (bigResult != null)
+                {
+                    var rslt = new AnalyticSummaryBigResult<AnalyticRecord>()
+                    {
+                        ResultKey = bigResult.ResultKey,
+                        Data = bigResult.Data,
+                        TotalCount = bigResult.TotalCount
+                    };
+                    if (input.Query.WithSummary)
+                        rslt.Summary = dataManager.GetAnalyticSummary(input);
+                    return rslt;
+                }
+                else
+                    return analyticRecords;
+            }
+            else
+                return null;
         }
 
         private class AnalyticRecordRequestHandler : BigDataRequestHandler<AnalyticQuery, AnalyticRecord, AnalyticRecord>

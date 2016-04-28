@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.Analytic.Data.SQL
 {
@@ -16,10 +17,15 @@ namespace Vanrise.Analytic.Data.SQL
         {
             string query = BuildAnalyticQuery(input, false);
             Dictionary<string, string> columnsMappings = new Dictionary<string, string>();
+            DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
+
+
+
             for (int i = 0; i < input.Query.DimensionFields.Count; i++)
             {
                 var dimensionName = input.Query.DimensionFields[i];
                 var dimension = _dimensions[dimensionName];
+
                 columnsMappings.Add(String.Format("DimensionValues[{0}].Name", i), GetDimensionNameColumnAlias(dimension));
             }
 
@@ -277,14 +283,22 @@ namespace Vanrise.Analytic.Data.SQL
                     {
                         var dimension = _dimensions[dimensionName];
                         object dimensionId = GetReaderValue<object>(reader, GetDimensionIdColumnAlias(dimension));
+                        string name = "";
                         if (dimensionId != null)
                         {
-                            record.DimensionValues[index] = new DimensionValue
-                            {
-                                Value = dimensionId,
-                                Name = reader[GetDimensionNameColumnAlias(dimension)] as string
-                            };
+
+                            if (string.IsNullOrEmpty(dimension.Config.NameColumn))
+                                name = dimension.Config.FieldType.GetDescription(dimensionId);
+                            else
+                                name = reader[GetDimensionNameColumnAlias(dimension)] as string;
                         }
+
+                        record.DimensionValues[index] = new DimensionValue
+                        {
+                            Value = dimensionId != null ? dimensionId : "",
+                            Name = name
+                        };
+
 
                         index++;
                     }
