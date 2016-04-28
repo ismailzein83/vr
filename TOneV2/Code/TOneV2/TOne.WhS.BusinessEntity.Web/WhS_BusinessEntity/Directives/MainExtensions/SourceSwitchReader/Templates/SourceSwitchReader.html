@@ -1,10 +1,5 @@
 ﻿<vr-row>
-    <vr-columns width="1/2row">
-        <vr-select datatextfield="Name" datavaluefield="TemplateConfigID" label="Source Type" datasource="sourceTypeTemplates" text="None"
-                   selectedvalues="selectedSourceTypeTemplate" isrequired="true">
-        </vr-select>
-    </vr-columns>
-    <vr-columns width="fullrow" vr-loader="isLoadingSourceTypeDirective" ng-if="selectedSourceTypeTemplate.Editor">
-        <vr-directivewrapper directive="selectedSourceTypeTemplate.Editor" on-ready="onSourceTypeDirectiveReady"></vr-directivewrapper>
+    <vr-columns width="fullrow">
+        <vr-textarea label="Connection String" value="connectionString" isrequired />
     </vr-columns>
 </vr-row>
