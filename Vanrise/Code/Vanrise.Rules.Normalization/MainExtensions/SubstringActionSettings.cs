@@ -19,8 +19,17 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 
         public override void Execute(INormalizeNumberActionContext context, NormalizeNumberTarget target)
         {
-            if (target.PhoneNumber.Length > this.StartIndex - 1)
-                target.PhoneNumber = target.PhoneNumber.Substring(this.StartIndex - 1, Math.Min(target.PhoneNumber.Length - this.StartIndex - 1, (this.Length != null && (int)this.Length <= target.PhoneNumber.Length) ? (int)this.Length : target.PhoneNumber.Length));
+            if (this.StartIndex >= 1 && this.StartIndex <= target.PhoneNumber.Length)
+            {
+                int maxValidSubStringLength = target.PhoneNumber.Length - this.StartIndex + 1; // +1 to include the first number in the max valid length
+                
+                target.PhoneNumber = (this.Length.HasValue && this.Length.Value <= maxValidSubStringLength) ?
+                    target.PhoneNumber.Substring(this.StartIndex - 1, this.Length.Value) :
+                    target.PhoneNumber = target.PhoneNumber.Substring(this.StartIndex - 1, maxValidSubStringLength);
+            }
+
+            //if (target.PhoneNumber.Length > this.StartIndex - 1)
+            //    target.PhoneNumber = target.PhoneNumber.Substring(this.StartIndex - 1, Math.Min(target.PhoneNumber.Length - this.StartIndex - 1, (this.Length != null && (int)this.Length <= target.PhoneNumber.Length) ? (int)this.Length : target.PhoneNumber.Length));
         }
     }
 }
