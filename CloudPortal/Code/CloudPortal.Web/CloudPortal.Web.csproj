@@ -216,6 +216,26 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CloudPortal.BusinessEntity.Business\CloudPortal.BusinessEntity.Business.csproj">
+      <Project>{97e215c1-87a2-4176-9691-fca05a8476f1}</Project>
+      <Name>CloudPortal.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudPortal.BusinessEntity.Data.SQL\CloudPortal.BusinessEntity.Data.SQL.csproj">
+      <Project>{a3e21b59-e55a-4bc0-a290-8a145a9512a8}</Project>
+      <Name>CloudPortal.BusinessEntity.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudPortal.BusinessEntity.Data\CloudPortal.BusinessEntity.Data.csproj">
+      <Project>{dbf21ce1-1e94-4c32-b506-0c4335225bd7}</Project>
+      <Name>CloudPortal.BusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudPortal.BusinessEntity.Entities\CloudPortal.BusinessEntity.Entities.csproj">
+      <Project>{88496758-888a-465a-876b-cc7ee144330f}</Project>
+      <Name>CloudPortal.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CloudPortal.BusinessEntity.Web.Internal\CloudPortal.BusinessEntity.Web.Internal.csproj">
+      <Project>{d2a7d5ba-36c1-4f8b-a6fd-d18973601ccd}</Project>
+      <Name>CloudPortal.BusinessEntity.Web.Internal</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
