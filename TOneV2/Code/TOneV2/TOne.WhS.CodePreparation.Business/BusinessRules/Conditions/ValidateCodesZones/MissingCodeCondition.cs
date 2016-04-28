@@ -18,9 +18,6 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
-
             ImportedCode importedData = context.Target as ImportedCode;
 
             return !string.IsNullOrEmpty(importedData.Code);

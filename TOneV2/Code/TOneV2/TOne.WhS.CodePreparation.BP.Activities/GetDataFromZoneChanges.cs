@@ -51,8 +51,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             foreach (RenamedZone renamedZone in changes.RenamedZones)
             {
-                string oldZoneName = saleZoneManager.GetSaleZoneName(renamedZone.ZoneId.Value);
-                IEnumerable<SaleCode> saleCodes = saleCodesByZoneId.GetRecord(renamedZone.ZoneId.Value);
+                string oldZoneName = saleZoneManager.GetSaleZoneName(renamedZone.ZoneId);
+                IEnumerable<SaleCode> saleCodes = saleCodesByZoneId.GetRecord(renamedZone.ZoneId);
 
                 foreach (SaleCode saleCode in saleCodes)
                 {
@@ -67,7 +67,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         {
                             Code = saleCode.Code,
                             CodeGroup = codeGroup,
-                            BED = saleCode.BED > minimumDate ? saleCode.BED : minimumDate,
+                            BED = Vanrise.Common.Utilities.Max(saleCode.BED,minimumDate),
                             EED = saleCode.EED.HasValue ? saleCode.EED : null,
                             ZoneName = renamedZone.NewZoneName,
                             OldZoneName = oldZoneName
@@ -104,7 +104,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private bool CodeIsExcludedFromRenamedZoneAction(SaleCode saleCode, Changes changes)
         {
-            return (changes.NewCodes.Any(x => x.Code == saleCode.Code) && changes.DeletedCodes.Any(x => x.Code == saleCode.Code) );
+            return (changes.NewCodes.Any(x => x.Code == saleCode.Code) || changes.DeletedCodes.Any(x => x.Code == saleCode.Code) );
         }
 
         private bool CodeIsExcludedFromCloseZoneAction(SaleCode saleCode, Changes changes)

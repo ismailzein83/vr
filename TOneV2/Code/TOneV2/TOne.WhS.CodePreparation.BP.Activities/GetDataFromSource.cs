@@ -80,14 +80,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             if (string.IsNullOrEmpty(status))
                 return null;
-
-            ImportType value = (ImportType)Convert.ToInt16(status);
-
-            if (value == ImportType.New || value == ImportType.Delete)
-                return value;
+            else if (status.Equals("N", StringComparison.InvariantCultureIgnoreCase) || status.Equals("0"))
+                return ImportType.New;
+            else if (status.Equals("D", StringComparison.InvariantCultureIgnoreCase) || status.Equals("1"))
+                return ImportType.Delete;
             else
-                return ImportType.Undefined;
-
+                return ImportType.Invalid;
         }
     }
 }

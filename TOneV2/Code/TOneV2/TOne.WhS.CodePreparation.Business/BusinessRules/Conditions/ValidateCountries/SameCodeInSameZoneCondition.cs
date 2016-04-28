@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.Business
 {
@@ -18,24 +19,23 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
-
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
 
-            foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
-            {
-                if (zoneToProcess.CodesToAdd.Where(x => x.Code == codeToAdd.Code).Count() > 1 
-                    || zoneToProcess.CodesToClose.Where(x => x.Code == codeToAdd.Code).Count() > 0)
-                    return false;
-            }
+            if (zoneToProcess.CodesToAdd.GroupBy(x => x.Code).Any(x => x.Count() > 1))
+                return false;
+
+            if (zoneToProcess.CodesToClose.GroupBy(x => x.Code).Any(x => x.Count() > 1))
+                return false;
+
+            if (zoneToProcess.CodesToMove.Any(x => x.ZoneName.Equals(x.OldZoneName, StringComparison.InvariantCultureIgnoreCase)))
+                return false;
 
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has same code more than one time", (target as ZoneToProcess).ZoneName);
+            return string.Format("Zone {0} has duplicate code", (target as ZoneToProcess).ZoneName);
         }
     }
 }

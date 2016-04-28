@@ -42,7 +42,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             foreach (RenamedZone renamedZone in changes.RenamedZones)
             {
-                zoneIds.Add(renamedZone.ZoneId.Value);
+                zoneIds.Add(renamedZone.ZoneId);
             }
 
             List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesByZoneIDs(zoneIds.ToList(), DateTime.Now);

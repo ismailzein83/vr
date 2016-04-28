@@ -9,7 +9,7 @@ namespace TOne.WhS.CodePreparation.Entities
     public class RenamedZone
     {
         public int CountryId { get; set; }
-        public long? ZoneId { get; set; }
+        public long ZoneId { get; set; }
         public string NewZoneName { get; set; }
     }
 }

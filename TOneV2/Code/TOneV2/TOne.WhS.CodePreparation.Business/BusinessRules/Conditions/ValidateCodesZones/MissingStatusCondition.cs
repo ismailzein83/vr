@@ -17,9 +17,6 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
-
             ImportedCode importedData = context.Target as ImportedCode;
 
             return importedData.Status != null;
@@ -27,7 +24,7 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("code {0} has a missing status", (target as ImportedCode).Code);
+            return string.Format("Code {0} has a missing status", (target as ImportedCode).Code);
         }
     }
 }

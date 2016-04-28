@@ -10,7 +10,7 @@ namespace TOne.WhS.CodePreparation.Entities
     {
         New = 0,
         Delete = 1,
-        Undefined = 2,
+        Invalid = 2,
         Replace = -1
 
     }

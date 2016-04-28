@@ -12,47 +12,30 @@ namespace TOne.WhS.CodePreparation.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            if (target as CodeToAdd != null)
-                return true;
-            else if (target as CodeToClose != null)
-                return true;
-            else
-                return false;
-
+            return (target as CodeToAdd != null || target as CodeToClose != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            if (context.Target == null)
-                throw new ArgumentNullException("Target");
+            var returnedResult = false;
 
             IRuleTarget target = context.Target;
+           
+            CodeToAdd codeToAdd = target as CodeToAdd;
+            CodeToClose codeToClose = target as CodeToClose;
 
-            var returnedResult = false;
-            if (target as CodeToAdd != null)
-            {
-                CodeToAdd code = target as CodeToAdd;
+            if (codeToAdd != null)
+                returnedResult = codeToAdd.CodeGroup != null;
 
-                if (code == null)
-                    return false;
+            else if (codeToClose != null)
+                returnedResult = codeToClose.CodeGroup != null;
 
-                returnedResult = code.CodeGroup != null;
-            }
-            else if (target as CodeToClose != null)
-            {
-                CodeToClose code = target as CodeToClose;
-
-                if (code == null)
-                    return false;
-
-                returnedResult = code.CodeGroup != null;
-            }
             return returnedResult;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} has no code group assigned", (target as CodeToAdd).Code);
+            return string.Format("Code {0} not assigned to a code group", (target as CodeToAdd).Code);
         }
     }
 }

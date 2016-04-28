@@ -266,8 +266,8 @@
             hideShowState(true);
 
             var zoneNode = getCurrentZoneNode();
-            var draftStatus = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value;
-            var icon = renamedZone.ZoneId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon;
+            var draftStatus = $scope.currentNode.nodeId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.value : WhS_CP_ZoneItemDraftStatusEnum.New.value;
+            var icon = $scope.currentNode.nodeId != null ? WhS_CP_ZoneItemDraftStatusEnum.Renamed.icon : WhS_CP_ZoneItemDraftStatusEnum.New.icon;
 
             $scope.currentNode.nodeName = renamedZone.NewZoneName;
             $scope.currentNode.DraftStatus = draftStatus;
