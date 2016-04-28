@@ -2,15 +2,7 @@
 
 app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_PermissionFlagEnum', '$cookies', 'VR_Sec_SecurityAPIService', function ($rootScope, UtilsService, VR_Sec_PermissionFlagEnum, $cookies, VR_Sec_SecurityAPIService) {
 
-    return ({
-        isAllowed: isAllowed,
-        createAccessCookie: createAccessCookie,
-        deleteAccessCookie: deleteAccessCookie,
-        getLoggedInUserInfo: getLoggedInUserInfo,
-        getUserToken: getUserToken,
-        IsAllowed: IsAllowed,
-        HasPermissionToActions: HasPermissionToActions
-    });
+   
 
     function IsAllowed(requiredPermissions) {
         return VR_Sec_SecurityAPIService.IsAllowed(requiredPermissions);
@@ -121,11 +113,36 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
 
     function createAccessCookie(userInfo) {
         //var expiresDate = new Date(new Date().getTime() + parseInt(30) * 1000 * 60 * 60 * 24);
-        $cookies.put('Vanrise_AccessCookie-' + location.port, userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
+        console.log(getAccessCookieName());
+        $cookies.put(getAccessCookieName(), userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
     }
 
     function getAccessCookie() {
-        return $cookies.get('Vanrise_AccessCookie-' + location.port);
+        return $cookies.get(getAccessCookieName());
+    }
+
+    function getAccessCookieName() {
+        return cookieName;
+    }
+
+    var cookieName = 'Vanrise_AccessCookie-' + location.origin;
+    function setAccessCookieName(value) {
+        if (value != undefined && value != '')
+            cookieName = value;
+    }
+
+    var loginURL = '/Security/Login';
+    function setLoginURL(value)
+    {
+        if (value != undefined && value != '')
+            loginURL = value;
+    }
+
+    function redirectToLoginPage()
+    {
+        if (location.pathname.indexOf('/Security/Login') < 0) {
+            window.location.href = loginURL + '?redirectTo=' + encodeURIComponent(window.location.href);
+        }
     }
 
     function getLoggedInUserInfo() {
@@ -145,6 +162,19 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
     }
 
     function deleteAccessCookie() {
-        $cookies.remove('Vanrise_AccessCookie-' + location.port);
+        $cookies.remove(getAccessCookieName());
     }
+
+    return ({
+        isAllowed: isAllowed,
+        createAccessCookie: createAccessCookie,
+        deleteAccessCookie: deleteAccessCookie,
+        getLoggedInUserInfo: getLoggedInUserInfo,
+        getUserToken: getUserToken,
+        IsAllowed: IsAllowed,
+        HasPermissionToActions: HasPermissionToActions,
+        setAccessCookieName: setAccessCookieName,
+        setLoginURL: setLoginURL,
+        redirectToLoginPage: redirectToLoginPage
+    });
 }]);

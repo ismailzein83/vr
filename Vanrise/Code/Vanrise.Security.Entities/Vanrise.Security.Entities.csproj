@@ -54,6 +54,10 @@
     <Compile Include="BusinessEntity\BusinessEntityNode.cs" />
     <Compile Include="BusinessEntity\BusinessEntityModule.cs" />
     <Compile Include="BusinessEntity\BusinessEntityQuery.cs" />
+    <Compile Include="Cloud\CloudApplicationIdentification.cs" />
+    <Compile Include="Cloud\CloudApplicationUser.cs" />
+    <Compile Include="Cloud\CloudAuthServer.cs" />
+    <Compile Include="Cloud\ICloudService.cs" />
     <Compile Include="ContextFactory.cs" />
     <Compile Include="Group\GroupFilter.cs" />
     <Compile Include="Group\GroupInfo.cs" />
@@ -104,6 +108,10 @@
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

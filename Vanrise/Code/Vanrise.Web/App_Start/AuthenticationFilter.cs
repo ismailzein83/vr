@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using Vanrise.Common;
+using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Web.App_Start
@@ -26,7 +27,8 @@ namespace Vanrise.Web.App_Start
                 {
                     try
                     {
-                        string decryptedToken = Common.Cryptography.Decrypt(encryptedToken, ConfigurationManager.AppSettings[Vanrise.Security.Business.SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
+                        string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
+                        string decryptedToken = Common.Cryptography.Decrypt(encryptedToken, decryptionKey);
                         if (decryptedToken != String.Empty)
                         {
                             SecurityToken securityToken = Serializer.Deserialize<SecurityToken>(decryptedToken);
@@ -37,6 +39,10 @@ namespace Vanrise.Web.App_Start
                             else if (securityToken.ExpiresAt < DateTime.Now)
                             {
                                 actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Token Expired");
+                            }
+                            else if(!(new CloudAuthServerManager()).HasAccessToCurrentApp(securityToken))
+                            {
+                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "You unauthorized to access this application");
                             }
                         }
                         else

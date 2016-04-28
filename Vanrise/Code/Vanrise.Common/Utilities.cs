@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,7 +60,8 @@ namespace Vanrise.Common
             List<Type> lst = new List<Type>();
             foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (Type t in assembly.GetTypes())
+
+                foreach (Type t in assembly.GetLoadableTypes())
                 {
                     if (baseType.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
                     {

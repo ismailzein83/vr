@@ -49,7 +49,7 @@ namespace Vanrise.BI.Business
                     {
                         foreach (BIConfiguration<BIConfigurationEntity> entity in entities)
                         {
-                            if (entity.Name == "Customer")
+                            if (entity.Configuration.BehaviorFQTN != null)
                             {
                                 customerColumnId = entity.Configuration.ColumnID;
                                 var myObject = (IDimensionBehavior)Activator.CreateInstance(Type.GetType(entity.Configuration.BehaviorFQTN));

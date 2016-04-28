@@ -49,14 +49,15 @@ namespace Vanrise.Security.Business
                 }
                 else
                 {
-                    SecurityToken userInfo = new SecurityToken
+                    SecurityToken securityToken = new SecurityToken
                     {
                         UserId = user.UserId,
                         IssuedAt = DateTime.Now,
                         ExpiresAt = DateTime.Now.AddMinutes(expirationPeriodInMinutes)
                     };
+                    AddTokenExtensions(securityToken);
 
-                    string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(userInfo), ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
+                    string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(securityToken), ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
                     authToken.Token = encrypted;
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
                     authenticationOperationOutput.AuthenticationObject = authToken;
@@ -72,6 +73,21 @@ namespace Vanrise.Security.Business
 
             return authenticationOperationOutput;
         }
+
+        private void AddTokenExtensions(SecurityToken securityToken)
+        {
+            securityToken.Extensions = new Dictionary<string, object>();
+            foreach(var type in Vanrise.Common.Utilities.GetAllImplementations<SecurityTokenExtensionBehavior>())
+            {
+                SecurityTokenExtensionBehavior behavior = Activator.CreateInstance(type) as SecurityTokenExtensionBehavior;
+                if (behavior == null)
+                    throw new Exception(String.Format("behaviorType '{0}' is not of type SecurityTokenExtensionBehavior", type));
+                var context = new SecurityTokenExtensionContext { Token = securityToken };
+                behavior.AddExtensionsToToken(context);
+            }
+        }
+
+        
 
         public bool IsAllowed(string requiredPermissions, int userId)
         {
@@ -124,6 +140,55 @@ namespace Vanrise.Security.Business
             }
 
             return updateOperationOutput;
+        }
+
+        public string GetCookieName()
+        {
+            var authServer = GetAuthServer();
+            if (authServer != null)
+            {
+                return authServer.Settings.AuthenticationCookieName;
+            }
+            else 
+                return ConfigurationManager.AppSettings["Sec_AuthCookieName"];
+        }
+
+        public string GetLoginURL()
+        {
+            var authServer = GetAuthServer();
+            if (authServer != null)
+            {
+                return authServer.Settings.OnlineURL;
+            }
+            else
+                return null;
+        }
+
+        public string GetTokenDecryptionKey()
+        {
+            var authServer = GetAuthServer();
+            if (authServer != null)
+            {
+                return authServer.Settings.TokenDecryptionKey;
+            }
+            else
+                return ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY];
+        }
+
+        CloudAuthServer GetAuthServer()
+        {
+            CloudAuthServerManager authServerManager = new CloudAuthServerManager();
+            var authServer = authServerManager.GetAuthServer();
+            if (authServer != null)
+            {
+                if (authServer.Settings == null)
+                    throw new NullReferenceException("authServer.Settings");
+                if (String.IsNullOrWhiteSpace(authServer.Settings.AuthenticationCookieName))
+                    throw new NullReferenceException("authServer.Settings.AuthenticationCookieName");
+                return authServer;
+            }
+            else
+                return null;
         }
 
         #endregion
@@ -189,7 +254,7 @@ namespace Vanrise.Security.Business
 
             return result;
         }
-        
+
         #endregion
 
         #region Pending Methods
@@ -260,6 +325,20 @@ namespace Vanrise.Security.Business
 
             return dictionary;
         }
+
+        #endregion
+        
+        #region Private Classes
+
+        public class SecurityTokenExtensionContext : ISecurityTokenExtensionContext
+        {
+            public SecurityToken Token
+            {
+                get;
+                set;
+            }
+        }
+
 
         #endregion
     }

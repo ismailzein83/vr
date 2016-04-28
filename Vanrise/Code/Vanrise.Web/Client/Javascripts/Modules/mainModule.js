@@ -2,8 +2,27 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
-        
+.controller('mainCtrl', function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $animate, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService) {
+    $rootScope.setCookieName = function (cookieName) {
+        if (cookieName != undefined && cookieName != '')
+            SecurityService.setAccessCookieName(cookieName);
+
+        var userInfo = SecurityService.getLoggedInUserInfo();
+
+        if (userInfo === undefined) {
+            SecurityService.redirectToLoginPage();
+            return;
+        }
+        $scope.userDisplayName = userInfo.UserDisplayName;
+    };
+
+    $rootScope.setLoginURL = function (loginURL) {
+        if (loginURL != undefined && loginURL != '') {
+            SecurityService.setLoginURL(loginURL);
+            BaseAPIService.setLoginURL(loginURL);
+        }
+    };
+    
     $rootScope.onValidationMessageShown = function (e) {      
         var self = angular.element(e.currentTarget);
         var selfHeight = $(self).height();
@@ -16,19 +35,14 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
         e.stopPropagation();
     };
     
-    var userInfo = SecurityService.getLoggedInUserInfo();
-    
-    if (userInfo === undefined) {
-        window.location.href = '/Security/Login';
-        return;
-    }
+   
 
     $('#dt1').datetimepicker();
     VR_Sec_PermissionAPIService.GetEffectivePermissions().then(function (response) {
         $rootScope.effectivePermissionsWrapper = response;
     }
     );
-    $scope.userDisplayName = userInfo.UserDisplayName;
+   
     
  
     Waves.displayEffect();
@@ -87,8 +101,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
     };
 
     $scope.logout = function () {
-        window.location.href = '/Security/Login';
         SecurityService.deleteAccessCookie();
+        SecurityService.redirectToLoginPage();
     }
 
     $scope.showMenu = function (e) {
@@ -335,8 +349,11 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
    
 });
 
-app.controller('loginCtrl', function loginCtrl($scope) {
-    
+app.controller('loginCtrl', function loginCtrl($scope, SecurityService) {
+    $scope.setCookieName = function (cookieName) {
+        if (cookieName != undefined && cookieName != '')
+            SecurityService.setAccessCookieName(cookieName);
+    };
 });
 
 angular.module('mainModule')

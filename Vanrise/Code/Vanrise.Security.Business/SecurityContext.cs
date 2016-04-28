@@ -68,10 +68,10 @@ namespace Vanrise.Security.Business
                 token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
             else if (HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME] != null) 
                 token =  HttpUtility.HtmlDecode(HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME]);
+            string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
+            string decryptedToken = Common.Cryptography.Decrypt(token, decryptionKey);
             
-            string decryptedKey = Common.Cryptography.Decrypt(token, ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
-            
-            return Common.Serializer.Deserialize<SecurityToken>(decryptedKey);
+            return Common.Serializer.Deserialize<SecurityToken>(decryptedToken);
         }
 
         #endregion

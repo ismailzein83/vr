@@ -14,7 +14,7 @@
     @Styles.Render("~/Content/Styles")
 
 </head>
-<body ng-controller="loginCtrl">
+<body ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';">
 
     @*<nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
         <div class="container">
@@ -23,7 +23,7 @@
             </div>
             <div id="navbar">
 
-            </div>/.nav-collapse 
+            </div>/.nav-collapse
         </div>
     </nav>*@
     <div class="main">

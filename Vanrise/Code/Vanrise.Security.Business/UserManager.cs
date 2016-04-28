@@ -77,12 +77,35 @@ namespace Vanrise.Security.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int userId = -1;
+            bool insertActionSucc;
+            var cloudServiceProxy = GetCloudServiceProxy();
+            if (cloudServiceProxy != null)
+            {
+                var output = cloudServiceProxy.AddUserToApplication(new AddUserToApplicationInput
+                    {
+                        Email = userObject.Email,
+                        Status = userObject.Status,
+                        Description = userObject.Description
+                    });
+                if(output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Succeeded)
+                {
+                    insertActionSucc = true;
+                    userObject = MapCloudUserToUser(output.OperationOutput.InsertedObject);
+                }
+                else
+                {
+                    insertActionSucc = false;
+                }
+            }
+            else
+            {
+                string defPassword = "123456";
+                string encryptedPassword = HashingUtility.ComputeHash(defPassword, "", null);
 
-            string defPassword = "123456";
-            string encryptedPassword = HashingUtility.ComputeHash(defPassword, "", null);
+                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                insertActionSucc = dataManager.AddUser(userObject, encryptedPassword, out userId);
 
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            bool insertActionSucc = dataManager.AddUser(userObject, encryptedPassword, out userId);
+            }           
 
             if (insertActionSucc)
             {
@@ -140,6 +163,7 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
+
 
         public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
@@ -202,24 +226,73 @@ namespace Vanrise.Security.Business
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",
                () =>
                {
-                   IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                   IEnumerable<User> users = dataManager.GetUsers();
+                   var cloudServiceProxy = GetCloudServiceProxy();
+                   IEnumerable<User> users;
+                   if (cloudServiceProxy != null)
+                   {
+                       GetApplicationUsersInput input = new GetApplicationUsersInput();
+                       var output = cloudServiceProxy.GetApplicationUsers(input);
+                       if (output != null && output.Users != null)
+                       {
+                           users = output.Users.Select(user => MapCloudUserToUser(user));
+                       }
+                       else
+                           users = null;
+                   }
+                   else
+                   {
+                       IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                       users = dataManager.GetUsers();
+                   }
                    return users.ToDictionary(kvp => kvp.UserId, kvp => kvp);
                });
         }
+
+        private User MapCloudUserToUser(CloudApplicationUser cloudApplicationUser)
+        {
+            return new User
+            {
+                UserId = cloudApplicationUser.User.UserId,
+                Email = cloudApplicationUser.User.Email,
+                Name = cloudApplicationUser.User.Name,
+                LastLogin = cloudApplicationUser.User.LastLogin,
+                Description = cloudApplicationUser.Description,
+                Status = cloudApplicationUser.Status
+            };
+        }
+
+        private ICloudService GetCloudServiceProxy()
+        {
+            var authServerManager = new CloudAuthServerManager();
+            var authServer = authServerManager.GetAuthServer();
+            if (authServer != null)
+                return new CloudServiceProxy(authServer);
+            else
+                return null;
+        }
+        
 
         #endregion
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IUserDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             object _updateHandle;
+            ICloudService _cloudServiceProxy = (new UserManager()).GetCloudServiceProxy();
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreUsersUpdated(ref _updateHandle);
+                if (_cloudServiceProxy != null)
+                {
+                    var output = _cloudServiceProxy.CheckApplicationUsersUpdated(new CheckApplicationUsersUpdatedInput { LastReceivedUpdateInfo = _updateHandle });
+                    if (output != null)
+                        _updateHandle = output.LastUpdateInfo;
+                    return output.Updated;
+                }
+                else
+                    return _dataManager.AreUsersUpdated(ref _updateHandle);
             }
         }
 

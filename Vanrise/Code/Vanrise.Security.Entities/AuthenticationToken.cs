@@ -21,10 +21,22 @@ namespace Vanrise.Security.Entities
 
     public class SecurityToken
     {
-        public int UserId { get; set; }
+        public int UserId { get; set; }        
 
         public DateTime IssuedAt { get; set; }
 
         public DateTime ExpiresAt { get; set; }
+
+        public Dictionary<string, Object> Extensions { get; set; }
+    }
+
+    public abstract class SecurityTokenExtensionBehavior
+    {
+        public abstract void AddExtensionsToToken(ISecurityTokenExtensionContext context);
+    }
+
+    public interface ISecurityTokenExtensionContext
+    {
+        SecurityToken Token { get; }
     }
 }

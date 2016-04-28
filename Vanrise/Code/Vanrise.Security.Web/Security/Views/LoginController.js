@@ -26,7 +26,10 @@
                 if (VRNotificationService.notifyOnUserAuthenticated(response)) {
                     var userInfo = JSON.stringify(response.AuthenticationObject);
                     SecurityService.createAccessCookie(userInfo);
-                    window.location.href = '/';
+                    if ($scope.redirectURL != undefined && $scope.redirectURL != '')
+                        window.location.href = $scope.redirectURL;
+                    else
+                        window.location.href = '/';
                 }
             });
         }

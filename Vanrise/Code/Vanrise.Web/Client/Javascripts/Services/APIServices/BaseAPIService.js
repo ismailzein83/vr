@@ -9,12 +9,27 @@ app.config(['$httpProvider', function ($httpProvider) {
         };
     });
 }]);
-app.service('BaseAPIService', function ($http, $q,$location, $rootScope, notify, DataRetrievalResultTypeEnum) {
+app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify, DataRetrievalResultTypeEnum, $injector) {
+
+    var loginURL = '/Security/Login';
+
+    function redirectToLoginPage() {
+        if (location.pathname.indexOf('/Security/Login') < 0) {
+            window.location.href = loginURL + '?redirectTo=' + encodeURIComponent(window.location.href);
+        }
+    }
 
     return ({
         get: get,
-        post: post
+        post: post,
+        setLoginURL: setLoginURL
     });
+
+    function setLoginURL(value) {
+        if (value != undefined && value != '')
+            loginURL = value;
+    }
+
 
     function get(url, params, options) {
         var deferred = $q.defer();
@@ -48,8 +63,8 @@ app.service('BaseAPIService', function ($http, $q,$location, $rootScope, notify,
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
-                if (status === 401 && location.pathname.indexOf('/Security/Login') < 0 )
-                    window.location.href = '/Security/Login';
+                if (status === 401)
+                    redirectToLoginPage();
 
                 console.log('');
                 console.log('Error Occured: ' + data.ExceptionMessage);
@@ -102,8 +117,8 @@ app.service('BaseAPIService', function ($http, $q,$location, $rootScope, notify,
             })
             .error(function (data, status, headers, config) {
 
-                if (status === 401 && location.pathname.indexOf('/Security/Login') < 0)
-                    window.location.href = '/Security/Login';
+                if (status === 401)
+                    redirectToLoginPage();
 
                 console.log('');
                 console.log('Error Occured: ' + data.ExceptionMessage);
