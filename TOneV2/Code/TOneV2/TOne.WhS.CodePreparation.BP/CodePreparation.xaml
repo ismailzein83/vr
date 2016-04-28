@@ -119,7 +119,6 @@
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
           <Sequence.Variables>
-            <Variable x:TypeArguments="scg:IEnumerable(twce:ImportedData)" Name="ImportedData" />
             <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedCodesZonesToValidate" />
           </Sequence.Variables>
           <twcba1:GetDataFromSource sap2010:WorkflowViewState.IdRef="GetDataFromSource_1">
