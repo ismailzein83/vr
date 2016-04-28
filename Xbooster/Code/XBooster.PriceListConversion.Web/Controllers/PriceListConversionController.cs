@@ -19,8 +19,16 @@ namespace XBooster.PriceListConversion.Web.Controllers
         public object ConvertAndDownloadPriceList(PriceListConversionInput priceListConversion)
         {
             PriceListConversionManager manager = new PriceListConversionManager();
-            byte[] bytes = manager.ConvertAndDownloadPriceList(priceListConversion);
-            return GetExcelResponse(bytes, "ConvertedExcel.xls");
+            try
+            {
+                byte[] bytes  = manager.ConvertAndDownloadPriceList(priceListConversion);
+                return GetExcelResponse(bytes, "ConvertedExcel.xls");
+            }
+            catch(Exception ex)
+            {
+                return GetExceptionResponse(ex);
+            }
+           
         }
     }
 }

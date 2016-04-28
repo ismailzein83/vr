@@ -29,10 +29,10 @@ namespace Vanrise.Web.Base
 
         protected object GetExcelResponse(Stream stream, string fileName)
         {
+
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             stream.Position = 0;
             response.Content = new StreamContent(stream);
-
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
@@ -40,12 +40,23 @@ namespace Vanrise.Web.Base
             };
             return response;
         }
-        protected object GetExcelResponse(byte[] bytes,string fileName)
+
+        protected object GetExcelResponse(byte[] bytes, string fileName)
         {
+           
             MemoryStream stream = new System.IO.MemoryStream();
             stream.Write(bytes, 0, bytes.Length);
             stream.Seek(0, System.IO.SeekOrigin.Begin);
-            return GetExcelResponse(stream,fileName);
+            return GetExcelResponse(stream, fileName);
         }
+
+        protected HttpResponseMessage GetExceptionResponse(Exception ex)
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.PreconditionFailed);
+            response.Content = new StringContent(ex.Message);
+            response.Content.Headers.Add("ExceptionMessage", ex.Message);
+            return response;
+        }
+      
     }
 }
