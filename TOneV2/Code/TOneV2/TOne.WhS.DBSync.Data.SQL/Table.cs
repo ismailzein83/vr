@@ -13,7 +13,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public string NamewithoutSchema { get; set; }
 
-        public string CreateTempTableQuery { get; set; }
+        public string CreateTableQuery { get; set; }
 
         public string Name
         {

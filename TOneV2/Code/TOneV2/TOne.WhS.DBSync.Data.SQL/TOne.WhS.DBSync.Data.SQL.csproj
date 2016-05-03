@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Currency\CurrencyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableManager.cs" />
     <Compile Include="Table.cs" />

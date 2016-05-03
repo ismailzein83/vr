@@ -16,7 +16,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void CreateTable(Table table)
         {
-            ExecuteNonQueryText(table.CreateTempTableQuery, (cmd) => { });
+            ExecuteNonQueryText(table.CreateTableQuery, (cmd) => { });
         }
 
         public void DropFK(TableKey fK)

@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Curency\SourceCurrency.cs" />
     <Compile Include="EntityMigration\IMigrationSourceItemReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Switch\SourceSwitch.cs" />

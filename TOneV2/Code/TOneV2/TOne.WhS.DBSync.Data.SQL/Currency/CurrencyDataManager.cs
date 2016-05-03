@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class SwitchDataManager : BaseSQLDataManager, ISwitchDataManager
+    public class CurrencyDataManager : BaseSQLDataManager, ICurrencyDataManager
     {
         readonly string[] columns = { "Name", "SourceID" };
 
-        public SwitchDataManager() :
+        public CurrencyDataManager() :
             base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneV2DBConnString"))
         {
 
         }
 
-        public void MigrateSwitchesToDB(List<Switch> switches)
+        public void MigrateCurrenciesToDB(List<Currency> currencies)
         {
             Table table = DefineTable();
 
@@ -23,7 +24,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             tableManager.DropandCreateTempTable(table); // Drop and Create Temp
 
-            ApplySwitchesToDB(switches, table); // Apply to Temp
+            ApplyCurrenciesToDB(currencies, table); // Apply to Temp
 
             tableManager.DropTable(table);
 
@@ -31,19 +32,19 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
 
-        private void ApplySwitchesToDB(List<Switch> switches, Table table)
+        private void ApplyCurrenciesToDB(List<Currency> currencies, Table table)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
-                foreach (var s in switches)
+                foreach (var c in currencies)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}", s.Name, s.SwitchId));
+                    wr.WriteLine(String.Format("{0}^{1}", c.Name, c.CurrencyId));
                 }
                 wr.Close();
             }
 
-            Object preparedSwitches = new BulkInsertInfo
+            Object preparedCurrencies = new BulkInsertInfo
             {
                 TableName = table.TempName,
                 DataFilePath = filePath,
@@ -53,14 +54,14 @@ namespace TOne.WhS.DBSync.Data.SQL
                 FieldSeparator = '^',
             };
 
-            InsertBulkToTable(preparedSwitches as BaseBulkInsertInfo);
+            InsertBulkToTable(preparedCurrencies as BaseBulkInsertInfo);
         }
 
         private static Table DefineTable()
         {
             Table table = new Table();
             table.Schema = "TOneWhS_BE";
-            table.NamewithoutSchema = "WalidSwitch";
+            table.NamewithoutSchema = "WalidCurrency";
             table.CreateTableQuery =
                 "CREATE TABLE " + table.TempName + "( " +
                 "[ID] [int] IDENTITY(1,1) NOT NULL, " +
@@ -70,7 +71,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
 
             var foreignKeys = new List<TableKey>();
-            foreignKeys.Add(new TableKey { KeyName = "FK_Trunk_Switch", TableName = "dbo.Trunk" });
+            foreignKeys.Add(new TableKey { KeyName = "FK_Trunk_Currency", TableName = "dbo.Trunk" });
 
             table.foreignKeys = foreignKeys;
             return table;
