@@ -10,6 +10,8 @@ namespace Vanrise.GenericData.Entities
     {
         public string Name { get; set; }
 
+        public string Title { get; set; }
+
         public DataRecordFieldType Type { get; set; }
     }
 }

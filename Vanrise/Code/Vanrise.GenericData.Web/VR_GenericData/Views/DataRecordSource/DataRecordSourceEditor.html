@@ -34,12 +34,14 @@
                     </div>
                 </vr-columns>
                 <vr-columns width="fullrow">
-                    <vr-validator validate="isFieldGridValid()">
-                        <vr-datagrid datasource="selectedFields" norowhighlightonclick="true"
-                                     ondeleterow="removeField" hidegridmenu>
-                            <vr-datagridcolumn headertext="'Field Name'" field="'Entity.Name'" disablesorting="true"></vr-datagridcolumn>
-                        </vr-datagrid>
-                    </vr-validator>
+                    <vr-section title="Grid Columns">
+                        <vr-validator validate="isFieldGridValid()">
+                            <vr-datagrid datasource="selectedFields" norowhighlightonclick="true"
+                                         ondeleterow="removeField" hidegridmenu>
+                                <vr-datagridcolumn headertext="'Field Name'" field="'Entity.Name'" disablesorting="true"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-validator>
+                    </vr-section>
                 </vr-columns>
             </vr-row>
 

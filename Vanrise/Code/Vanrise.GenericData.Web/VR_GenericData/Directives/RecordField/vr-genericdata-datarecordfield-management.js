@@ -35,7 +35,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                 ctrl.fieldTypeConfigs = [];
 
                 ctrl.isValid = function () {
-                    if (ctrl.datasource !=undefined && ctrl.datasource.length > 0)
+                    if (ctrl.datasource != undefined && ctrl.datasource.length > 0)
                         return null;
                     return "You Should Select at least one filter type ";
                 }
@@ -46,9 +46,9 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                         ctrl.datasource.push(dataRecordField);
                     }
 
-                    VR_GenericData_DataRecordFieldService.addDataRecordField(onDataRecordFieldAdded , ctrl.datasource);
+                    VR_GenericData_DataRecordFieldService.addDataRecordField(onDataRecordFieldAdded, ctrl.datasource);
                 };
-                
+
                 defineMenuActions();
                 defineAPI();
             }
@@ -61,9 +61,11 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
                         fields = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var currentItem = ctrl.datasource[i];
                             fields.push({
-                                Name: ctrl.datasource[i].Name,
-                                Type: ctrl.datasource[i].Type,
+                                Name: currentItem.Name,
+                                Type: currentItem.Type,
+                                Title: currentItem.Title
                             });
                         }
 
@@ -77,28 +79,26 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                 api.load = function (payload) {
 
                     return VR_GenericData_DataRecordFieldTypeConfigAPIService.GetDataRecordFieldTypes().then(function (response) {
-                            angular.forEach(response, function (item) {
-                                ctrl.fieldTypeConfigs.push(item);
-                            });
-                            if(payload != undefined)
-                            {
-                                if (payload.Fields && payload.Fields.length > 0) {
-                                    for (var i = 0; i < payload.Fields.length; i++) {
-                                        var dataItem = payload.Fields[i];
-                                        addNeededFields(dataItem);
-                                        ctrl.datasource.push(dataItem);
-                                    }
+                        angular.forEach(response, function (item) {
+                            ctrl.fieldTypeConfigs.push(item);
+                        });
+                        if (payload != undefined) {
+                            if (payload.Fields && payload.Fields.length > 0) {
+                                for (var i = 0; i < payload.Fields.length; i++) {
+                                    var dataItem = payload.Fields[i];
+                                    addNeededFields(dataItem);
+                                    ctrl.datasource.push(dataItem);
                                 }
                             }
-                        });
+                        }
+                    });
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
-            function addNeededFields(dataItem)
-            {
+            function addNeededFields(dataItem) {
                 var template = UtilsService.getItemByVal(ctrl.fieldTypeConfigs, dataItem.Type.ConfigId, "DataRecordFieldTypeConfigId");
                 dataItem.TypeDescription = template != undefined ? template.Name : "";
             }
@@ -126,7 +126,7 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     ctrl.datasource[index] = dataRecordField;
                 }
 
-                VR_GenericData_DataRecordFieldService.editDataRecordField(dataRecordFieldObj, onDataRecordFieldUpdated , ctrl.datasource);
+                VR_GenericData_DataRecordFieldService.editDataRecordField(dataRecordFieldObj, onDataRecordFieldUpdated, ctrl.datasource);
             }
 
             function deleteDataRecordField(dataRecordFieldObj) {
