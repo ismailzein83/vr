@@ -11,5 +11,6 @@ namespace QM.CLITester.Business
     {
         public CLITesterConnectorBase CLITestConnector { get; set; }
         public int MaximumRetryCount { get; set; }
+        public int TimeOut { get; set; }
     }
 }

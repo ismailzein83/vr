@@ -45,7 +45,19 @@ namespace QM.CLITester.Business
                 GetTestProgressOutput testProgressOutput = new GetTestProgressOutput();
                 try
                 {
-                    testProgressOutput = testProgressTaskActionArgument.CLITestConnector.GetTestProgress(getTestProgressContext);
+                    DateTime startTime = testCall.CreationDate;
+                    DateTime endTime = DateTime.Now;
+                    TimeSpan span = endTime.Subtract(startTime);
+
+                    if (span.TotalMinutes >= testProgressTaskActionArgument.TimeOut)
+                    {
+                        testProgressOutput.Result = GetTestProgressResult.FailedWithNoRetry;
+                        testProgressOutput.TestProgress = testCall.TestProgress;
+                        testProgressOutput.Measure = testCall.Measure;
+                        testProgressOutput.CallTestResult = CallTestResult.Failed;
+                    }
+                    else 
+                        testProgressOutput = testProgressTaskActionArgument.CLITestConnector.GetTestProgress(getTestProgressContext);
                 }
                 catch (Exception ex)
                 {

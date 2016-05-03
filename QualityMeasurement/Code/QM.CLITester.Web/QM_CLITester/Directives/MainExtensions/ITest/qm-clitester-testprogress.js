@@ -53,14 +53,18 @@ app.directive("qmClitesterTestprogress", ['UtilsService', 'VRUIUtilsService', 'Q
                 return {
                     $type: "QM.CLITester.Business.TestProgressTaskActionArgument, QM.CLITester.Business",
                     CLITestConnector: CLITestConnectorObj,
-                    MaximumRetryCount: $scope.maximumRetryCount
+                    MaximumRetryCount: $scope.maximumRetryCount,
+                    TimeOut: $scope.timeOut
                 };
             };
 
 
             api.load = function (payload) {
-                if (payload != undefined && payload.data != undefined)
+                if (payload != undefined && payload.data != undefined) {
                     $scope.maximumRetryCount = payload.data.MaximumRetryCount;
+                    $scope.timeOut = payload.data.TimeOut;
+                }
+                    
 
                 return Qm_CliTester_TestCallAPIService.GetTestProgressTemplates().then(function (response) {
                     if (payload != undefined && payload.data != undefined && payload.data.CLITestConnector != undefined)

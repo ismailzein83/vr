@@ -237,13 +237,13 @@ namespace QM.CLITester.iTestIntegration
                     }
                     testProgressOutput.Measure = resultTestProgress;
                     testProgressOutput.TestProgress = testProgress;
-                    if (testProgress.Result != "Processing")
+                    if (testProgress.Result != "Processing" && testProgress.Result != "Awaiting CLI Result")
                     {
                         testProgressOutput.Result = GetTestProgressResult.TestCompleted;
 
                         testProgressOutput.CallTestResult = (testProgress.Result == "CLI Failure") ? CallTestResult.Failed :
                             (testProgress.Result == "CLI Success") ? CallTestResult.Succeeded :
-                            (testProgress.Result == "Call Failure" || testProgress.Result == "Call Timeout") ? CallTestResult.NotAnswered :
+                            (testProgress.Result == "Call Failure" || testProgress.Result == "Call Timeout" || testProgress.Result == "No answer") ? CallTestResult.NotAnswered :
                             (testProgress.Result == "Terminated elsewhere") ? CallTestResult.Fas :
                             CallTestResult.PartiallySucceeded;
 
