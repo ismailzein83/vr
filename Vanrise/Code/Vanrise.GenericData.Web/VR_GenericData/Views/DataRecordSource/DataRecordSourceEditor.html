@@ -1,0 +1,56 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_DataRecordSourceEditorController" width="'40%'" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formDataRecordStorageEditor">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="scopeModal.title" label="Title" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
+                                                            selectedvalues="selectedDataRecordType"
+                                                            onselectionchanged="onDataRecordTypeSelectionChanged"
+                                                            isrequired="true"
+                                                            hideremoveicon>
+                    </vr-genericdata-datarecordtype-selector>
+                </vr-columns>
+
+                <vr-columns width="1/3row">
+                    <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" isrequired="true"
+                                                               selectedvalues="selectedDataRecordStorages" ismultipleselection>
+                    </vr-genericdata-datarecordstorage-selector>
+                </vr-columns>
+            </vr-row>
+
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDataRecordTypeField"
+                               datavaluefield="Entity.Name" datatextfield="Entity.Name" hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal">
+                    <div style="position: absolute; top: 25px;">
+                        <vr-button type="Add" data-onclick="addField" standalone vr-disabled="selectedDataRecordTypeField == undefined"></vr-button>
+                    </div>
+                </vr-columns>
+                <vr-columns width="fullrow">
+                    <vr-validator validate="isFieldGridValid()">
+                        <vr-datagrid datasource="selectedFields" norowhighlightonclick="true"
+                                     ondeleterow="removeField" hidegridmenu>
+                            <vr-datagridcolumn headertext="'Field Name'" field="'Entity.Name'" disablesorting="true"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDataRecordStorageEditor" data-onclick="saveDataRecordSource"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
