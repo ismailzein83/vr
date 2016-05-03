@@ -17,6 +17,7 @@
         $scope.selectedFields = [];
         $scope.dataRecordTypeFields = [];
         $scope.scopeModal = {};
+        var existingSources;
 
         loadParameters();
         defineScope();
@@ -24,9 +25,9 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined) {
                 dataRecordSource = parameters.DataRecordSource;
+                existingSources = parameters.ExistingSources;
             }
 
             isEditMode = (dataRecordSource != undefined);
@@ -37,7 +38,6 @@
             }
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
-                //api.load();
                 dataRecordTypeSelectorReadyDeferred.resolve();
             };
 
@@ -70,24 +70,47 @@
             }
 
             $scope.saveDataRecordSource = function () {
-                if (isEditMode) {
-                    return updateDataRecordSource();
+                if (validateData()) {
+                    if (isEditMode) {
+                        return updateDataRecordSource();
+                    }
+                    else {
+                        return saveDataRecordSource();
+                    }
                 }
                 else {
-                    return saveDataRecordSource();
+                    VRNotificationService.showWarning('Same Source Title Exists');
                 }
             }
         }
-
+        function validateData() {
+            if (!existingSources || existingSources.length == 0) {
+                return true;
+            }
+            if (existingSources.indexOf($scope.scopeModal.title.toLowerCase()) > -1) {
+                return false;
+            } else {
+                return true;
+            }
+        }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadDataRecordTypeSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle,setData, loadDataRecordTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
             });
         }
         function setTitle() {
+            if (isEditMode && dataRecordSource != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(dataRecordSource.Title, 'Record Source');
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor('Record Source');
+        }
 
+        function setData() {
+            if (dataRecordSource != undefined) {
+                $scope.scopeModal.title = dataRecordSource.Title;
+            }
         }
         function loadDataRecordTypeSelector() {
             var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -153,13 +176,25 @@
                 return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
                     if (response != undefined) {
                         angular.forEach(response, function (item) {
-                            $scope.dataRecordTypeFields.push(item);
+                            var found = false;
+                            if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
+                                for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
+                                    var currentColumn = dataRecordSource.GridColumns[x];
+                                    if (currentColumn.FieldName == item.Entity.Name) {
+                                        $scope.selectedFields.push(item);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!found) {
+                                $scope.dataRecordTypeFields.push(item);
+                            }
                         });
                     }
                 });
             }
         }
-
     }
 
     appControllers.controller('VR_GenericData_DataRecordSourceEditorController', DataRecordSourceEditorController);

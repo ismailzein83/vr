@@ -4,7 +4,7 @@
 <vr-columns width="fullrow">
     <vr-validator validate="ctrl.isSourceGridValid()">
         <vr-datagrid datasource="ctrl.sources" norowhighlightonclick="true"
-                     on-ready="onGridReady" ondeleterow="ctrl.removeSource" menuactions="ctrl.sourcesGridMenuActions" hidegridmenu>
+                     on-ready="ctrl.onGridReady" ondeleterow="ctrl.removeSource" menuactions="ctrl.sourcesGridMenuActions" hidegridmenu>
             <vr-datagridcolumn headertext="'Source Title'" field="'Title'" disablesorting="true"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-validator>

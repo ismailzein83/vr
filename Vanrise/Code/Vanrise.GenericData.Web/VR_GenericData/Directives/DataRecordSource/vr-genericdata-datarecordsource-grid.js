@@ -27,7 +27,7 @@
             this.initializeController = initializeController;
 
             var gridAPI;
-
+            var counter = 0;
             function initializeController() {
                 ctrl.sources = [];
                 ctrl.isSourceGridValid = function () {
@@ -46,9 +46,11 @@
 
                 ctrl.addSource = function () {
                     var onDataRecordSrouceAdded = function (sourceObj) {
+                        counter++;
+                        sourceObj.id = counter;
                         ctrl.sources.push(sourceObj);
                     }
-                    VR_GenericData_DataRecordSourceService.addDataRecordSource(onDataRecordSrouceAdded);
+                    VR_GenericData_DataRecordSourceService.addDataRecordSource(onDataRecordSrouceAdded, getSourceNames(null));
                 }
 
                 ctrl.removeSource = function (source) {
@@ -62,9 +64,14 @@
                 var api = {};
 
                 api.loadGrid = function (query) {
-
+                    if (query) {
+                        ctrl.sources = query.sources;
+                    }
                 };
 
+                api.getData = function () {
+                    return ctrl.sources;
+                }
                 return api;
             }
 
@@ -76,10 +83,32 @@
             }
             function editSource(source) {
                 var onDataRecordSrouceUpdated = function (sourceObj) {
-                    gridAPI.itemUpdated(sourceObj);
+                    for (var x = 0; x < ctrl.sources.length; x++) {
+                        var currentSource = ctrl.sources[x];
+                        if (currentSource.id == source.id) {
+                            ctrl.sources.splice(x, 1);
+                            sourceObj.id = source.id;
+                            ctrl.sources.push(sourceObj);
+                            ctrl.sources.sort(function (a, b) {
+                                return b.id - a.id;
+                            });
+                            break;
+                        }
+                    }
                 }
 
-                VR_GenericData_DataRecordSourceService.editDataRecordSource(source, onDataRecordSrouceUpdated);
+                VR_GenericData_DataRecordSourceService.editDataRecordSource(source, getSourceNames(source), onDataRecordSrouceUpdated);
+            }
+
+            function getSourceNames(excludedSource) {
+                var existingSources = [];
+                for (var x = 0; x < ctrl.sources.length; x++) {
+                    var currentSource = ctrl.sources[x];
+                    if (excludedSource == null || excludedSource.Title != currentSource.Title) {
+                        existingSources.push(currentSource.Title.toLowerCase());
+                    }
+                }
+                return existingSources;
             }
         }
     }

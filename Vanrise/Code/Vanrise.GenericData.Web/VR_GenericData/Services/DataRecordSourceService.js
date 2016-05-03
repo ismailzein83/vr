@@ -10,21 +10,24 @@
             editDataRecordSource: editDataRecordSource
         };
 
-        function addDataRecordSource(onDataRecordSourceAdded) {
+        function addDataRecordSource(onDataRecordSourceAdded, existingSources) {
+            var modalParameters = {
+                ExistingSources: existingSources
+            };
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onDataRecordSourceAdded = onDataRecordSourceAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordSource/DataRecordSourceEditor.html', undefined, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/DataRecordSource/DataRecordSourceEditor.html', modalParameters, modalSettings);
         }
 
-        function editDataRecordSource(dataRecordSource, onDataRecordSourceUpdated) {
+        function editDataRecordSource(dataRecordSource, existingSources, onDataRecordSourceUpdated) {
             var modalParameters = {
-                DataRecordSource: dataRecordSource
+                DataRecordSource: dataRecordSource,
+                ExistingSources: existingSources
             };
-
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {

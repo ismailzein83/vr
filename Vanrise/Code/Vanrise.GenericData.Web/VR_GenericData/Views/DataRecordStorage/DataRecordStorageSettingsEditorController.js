@@ -16,6 +16,8 @@
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
         var viewEntity;
+
+        var sourceAPI;
         loadParameters();
         defineScope();
 
@@ -42,7 +44,12 @@
             };
 
             $scope.onDataRecordSourceReady = function (api) {
-                api.loadGrid();
+                var payload;
+                if (viewEntity != undefined) {
+                    payload = { sources: viewEntity.Settings.Sources };
+                }
+                sourceAPI = api;
+                api.loadGrid(payload);
             }
 
             $scope.scopeModel.close = function () {
@@ -131,14 +138,24 @@
             function getView() {
                 return VR_Sec_ViewAPIService.GetView(viewId).then(function (viewEntityObj) {
                     viewEntity = viewEntityObj;
+
                 });
             }
         }
 
         function buildViewObjectFromScope() {
-
+            var viewSettings = {
+                $type: "Vanrise.GenericData.Entities.DataRecordSearchPageSettings, Vanrise.GenericData.Entities",
+                Sources: sourceAPI.getData()
+            };
             var view = {
-               
+                ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
+                Name: $scope.scopeModel.reportName,
+                Title: $scope.scopeModel.reportTitle,
+                ModuleId: $scope.scopeModel.selectedMenuItem.Id,
+                Settings: viewSettings,
+                Type: viewEntity != undefined ? viewEntity.Type : undefined,
+
             };
 
             return view;
@@ -146,11 +163,39 @@
 
 
         function insert() {
-            
+            $scope.scopeModel.isLoading = true;
+            var viewEntityObj = buildViewObjectFromScope();
+            viewEntityObj.ViewTypeName = viewTypeName;
+
+            return VR_Sec_ViewAPIService.AddView(viewEntityObj).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Record Search', response, 'Name')) {
+                    if ($scope.onViewAdded != undefined) {
+                        $scope.onViewAdded(response.InsertedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
         function update() {
-           
+            $scope.scopeModel.isLoading = true;
+            var viewEntityObj = buildViewObjectFromScope();
+            return VR_Sec_ViewAPIService.UpdateView(viewEntityObj).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Record Search', response, 'Name')) {
+                    if ($scope.onViewUpdated != undefined) {
+                        $scope.onViewUpdated(response.UpdatedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
         }
 
     }
