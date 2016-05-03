@@ -21,7 +21,7 @@
 
 
             $scope.uploadAccountStatuses = function () {
-                return Fzero_FraudAnalysis_AccountStatusAPIService.UploadAccountStatuses($scope.file.fileId).then(function (response) {
+                return Fzero_FraudAnalysis_AccountStatusAPIService.UploadAccountStatuses($scope.file.fileId, $scope.validTill).then(function (response) {
                     VRNotificationService.showInformation(response)
                 });
             }

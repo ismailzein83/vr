@@ -35,8 +35,14 @@
             );
         }
 
-        function UploadAccountStatuses(fileId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, "UploadAccountStatuses"), { fileId: fileId });
+        function UploadAccountStatuses(fileId, validTill) {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, "UploadAccountStatuses"),
+                {
+                    fileId: fileId,
+                    validTill: validTill
+                }
+
+                );
         }
 
         function HasAddAccountStatusPermission() {

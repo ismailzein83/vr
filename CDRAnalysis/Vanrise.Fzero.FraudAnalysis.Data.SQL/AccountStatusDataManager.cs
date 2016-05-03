@@ -47,6 +47,25 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public bool ApplyAccountStatuses(DataTable accountStatusDataTables, DateTime validTill)
+        {
+            int recordsAffected = 0;
+            if (accountStatusDataTables.Rows.Count > 0)
+            {
+                recordsAffected = ExecuteNonQuerySPCmd("[FraudAnalysis].[sp_AccountStatus_BulkUpdate]",
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@AccountStatus", SqlDbType.Structured);
+                           dtPrm.Value = accountStatusDataTables;
+                           cmd.Parameters.Add(dtPrm);
+                           cmd.Parameters.Add(new SqlParameter("@ValidTill", validTill));
+                       });
+            }
+
+            return (recordsAffected > 0);
+        }
+
         public List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatus> caseStatuses, List<string> numberPrefixes)
         {
             return GetItemsSP("[FraudAnalysis].[bp_AccountStatus_GetByNumberPrefixesAndStatuses]", (reader) =>

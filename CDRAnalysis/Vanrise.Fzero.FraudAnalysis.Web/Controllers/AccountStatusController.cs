@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Fzero.FraudAnalysis.Business;
@@ -42,10 +43,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
         [HttpGet]
         [Route("UploadAccountStatuses")]
-        public void UploadAccountStatuses(int fileID)
+        public string UploadAccountStatuses(int fileID, DateTime validTill)
         {
             AccountStatusManager manager = new AccountStatusManager();
-            manager.AddAccountStatuses(fileID);
+            return manager.AddAccountStatuses(fileID, validTill);
         }
 
 

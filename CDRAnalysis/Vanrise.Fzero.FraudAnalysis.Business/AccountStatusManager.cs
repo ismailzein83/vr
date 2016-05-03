@@ -18,7 +18,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return dataManager.GetAccountStatus(accountNumber);
         }
 
-        public void AddAccountStatuses(int fileId)
+        public string AddAccountStatuses(int fileId, DateTime validTill)
         {
             DataTable accountStatusDataTable = new DataTable();
             VRFileManager fileManager = new VRFileManager();
@@ -30,6 +30,14 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             wbk.CalculateFormula();
             if (wbk.Worksheets[0].Cells.MaxDataRow > -1 && wbk.Worksheets[0].Cells.MaxDataColumn > -1)
                 accountStatusDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
+
+            IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
+
+            bool applied = dataManager.ApplyAccountStatuses(accountStatusDataTable, validTill);
+            if (applied)
+                return "Uploaded Successfully";
+            else
+                return "Error Occured";
         }
 
         public Vanrise.Entities.InsertOperationOutput<AccountStatusDetail> AddAccountStatus(AccountStatus accountStatus)

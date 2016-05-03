@@ -22,7 +22,7 @@
             editMode = (accountNumber != undefined);
         }
         function defineScope() {
-
+            $scope.disableAccountNumber = editMode;
             $scope.accountNumber = accountNumber;
 
             $scope.saveAccountStatus = function () {
@@ -59,10 +59,8 @@
                 });
             }
             else {
-                $scope.title = UtilsService.buildTitleForAddEditor("Account Status");
-                $scope.isLoading = false;
+                loadAllControls();
             }
-
         }
 
         function getAccountStatus() {
@@ -83,7 +81,7 @@
 
         function setTitle() {
             if (editMode && accountStatusEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(accountStatusEntity.Name, "Account Status");
+                $scope.title = UtilsService.buildTitleForUpdateEditor(accountStatusEntity.AccountNumber, "Account Status");
             else
                 $scope.title = UtilsService.buildTitleForAddEditor("Account Status");
         }
