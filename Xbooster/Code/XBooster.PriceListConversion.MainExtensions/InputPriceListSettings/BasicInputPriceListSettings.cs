@@ -21,6 +21,8 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
         public char Delimiter { get; set; }
         public bool HasCodeRange { get; set; }
         public char RangeSeparator { get; set; }
+
+        public bool IsCommaDecimalSeparator { get; set; }
         #endregion
 
         #region Override
@@ -28,22 +30,19 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
         public override PriceList Execute(IInputPriceListExecutionContext context)
         {
             ExcelConvertor excelConvertor = new ExcelConvertor();
-            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, this.ExcelConversionSettings,true);
+            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(context.InputFileId, this.ExcelConversionSettings, true, this.IsCommaDecimalSeparator);
             return ConvertToPriceListItem(convertedExcel);
         }
-
         #endregion
 
         #region Private Methods
-
         private PriceList ConvertToPriceListItem(ConvertedExcel convertedExcel)
         {
-
             Dictionary<string, PriceListRate> rateByZone = BuildRateByZone(convertedExcel);
             Dictionary<string, List<PriceListCode>> codesByZone = BuildCodesByZone(convertedExcel);
+            ValidateCode(codesByZone);
             PriceList priceListItem = ConvertToPriceList(rateByZone, codesByZone);
             return priceListItem;
-           
         }
         private PriceList ConvertToPriceList(Dictionary<string, PriceListRate> rateByZone, Dictionary<string, List<PriceListCode>> codesByZone)
         {
@@ -86,42 +85,54 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     {
                         result = (DateTime)codeEffectiveDateField.FieldValue;
                     };
-                    if (obj.Fields.TryGetValue("Zone", out zoneField) && obj.Fields.TryGetValue("Code", out codeField))
+                    if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
 
-
-                        List<PriceListCode> codes;
-                        string code = codeField.FieldValue.ToString();
-                        List<PriceListCode> resolvedCodes = new List<PriceListCode>();
-                        if (this.CodeLayout == CodeLayout.CammaSeparated)
+                        if (obj.Fields.TryGetValue("Code", out codeField))
                         {
-                            var codesObj = code.Trim().Split(this.Delimiter).ToList();
-                            foreach (string codeValue in codesObj)
+
+                           
+                            List<PriceListCode> codes;
+                            string code = codeField.FieldValue.ToString();
+                            List<PriceListCode> resolvedCodes = new List<PriceListCode>();
+                            if (this.CodeLayout == CodeLayout.CammaSeparated)
                             {
-                                if (this.HasCodeRange)
+                                var codesObj = code.Trim().Split(this.Delimiter).ToList();
+                                foreach (string codeValue in codesObj)
                                 {
-                                    var rangeCode = codeValue.Split(this.RangeSeparator);
-                                    if (rangeCode.Length > 0)
+                                    if (this.HasCodeRange)
                                     {
-                                        long firstCode;
-                                        long lastCode;
-                                        if (long.TryParse(rangeCode.FirstOrDefault(), out firstCode) && long.TryParse(rangeCode.LastOrDefault(), out lastCode))
+                                        var rangeCode = codeValue.Split(this.RangeSeparator);
+                                        if (rangeCode.Length > 0)
                                         {
-                                            while (firstCode <= lastCode)
+                                            long firstCode;
+                                            long lastCode;
+                                            if (long.TryParse(rangeCode.FirstOrDefault(), out firstCode) && long.TryParse(rangeCode.LastOrDefault(), out lastCode))
                                             {
-                                                string increasedCode = (firstCode++).ToString();
-                                                resolvedCodes.Add(new PriceListCode
+                                                while (firstCode <= lastCode)
                                                 {
-                                                    Code = increasedCode,
-                                                    CodeEffectiveDate = result
-                                                });
+                                                    string increasedCode = (firstCode++).ToString();
+                                                    resolvedCodes.Add(new PriceListCode
+                                                    {
+                                                        Code = increasedCode,
+                                                        CodeEffectiveDate = result
+                                                    });
+                                                }
                                             }
+                                            else
+                                            {
+                                                throw new NullReferenceException("Invalid code due to a wrong range separator.");
+                                            }
+
                                         }
                                         else
                                         {
-                                            throw new NullReferenceException("Error While Parsing Code Range.");
+                                            resolvedCodes.Add(new PriceListCode
+                                            {
+                                                Code = codeValue,
+                                                CodeEffectiveDate = result
+                                            });
                                         }
-
                                     }
                                     else
                                     {
@@ -132,36 +143,34 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                                         });
                                     }
                                 }
-                                else
-                                {
-                                    resolvedCodes.Add(new PriceListCode
-                                    {
-                                        Code = codeValue,
-                                        CodeEffectiveDate = result
-                                    });
-                                }
                             }
-                        }
-                        else
-                        {
-                            resolvedCodes.Add(new PriceListCode
+                            else
                             {
-                                Code = code,
-                                CodeEffectiveDate = result
-                            });
-                        }
+                                resolvedCodes.Add(new PriceListCode
+                                {
+                                    Code = code,
+                                    CodeEffectiveDate = result
+                                });
+                            }
 
-                        if (!codesByZone.TryGetValue(zoneField.FieldValue.ToString(), out codes))
-                        {
-                            codesByZone.Add(zoneField.FieldValue.ToString(), resolvedCodes);
+                            if (!codesByZone.TryGetValue(zoneField.FieldValue.ToString(), out codes))
+                            {
+                                codesByZone.Add(zoneField.FieldValue.ToString(), resolvedCodes);
+                            }
+                            else
+                            {
+                                codes.AddRange(resolvedCodes);
+                                codesByZone[zoneField.FieldValue.ToString()] = codes;
+                            }
+
                         }
                         else
                         {
-                            codes.AddRange(resolvedCodes);
-                            codesByZone[zoneField.FieldValue.ToString()] = codes;
-                        }
+                            throw new Exception(string.Format("Zone {0} has no code defined.", zoneField.FieldValue));
+                        };
+                    }
 
-                    };
+
                 }
             }
             return codesByZone;
@@ -182,40 +191,69 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     {
                        result = (DateTime)rateEffectiveDateField.FieldValue;
                     };
-                    if (obj.Fields.TryGetValue("Zone", out zoneField) && obj.Fields.TryGetValue("Rate", out rateField))
+                    if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
                         PriceListRate rate;
-                        if (!rateByZone.TryGetValue(zoneField.FieldValue.ToString(), out rate))
+                        if (obj.Fields.TryGetValue("Rate", out rateField))
                         {
-                            rateByZone.Add(zoneField.FieldValue.ToString(), new PriceListRate
+                            if (!rateByZone.TryGetValue(zoneField.FieldValue.ToString(), out rate))
                             {
-                                Rate = (decimal)rateField.FieldValue,
-                                RateEffectiveDate = result
-                            });
-                        }
-                        else
-                        {
-                            if (rate.Rate == (decimal)rateField.FieldValue)
-                            {
-                                continue;
-
+                                rateByZone.Add(zoneField.FieldValue.ToString(), new PriceListRate
+                                {
+                                    Rate = (decimal)rateField.FieldValue,
+                                    RateEffectiveDate = result
+                                });
                             }
                             else
                             {
-                                throw new Exception(string.Format("Same zone {0} of different rate exists.", zoneField.FieldValue));
+                                if (rate.Rate == (decimal)rateField.FieldValue)
+                                {
+                                    continue;
+
+                                }
+                                else
+                                {
+                                    throw new Exception(string.Format("Zone {0} can have only one Rate.", zoneField.FieldValue));
+                                }
                             }
+                        }else
+                        {
+                            throw new Exception(string.Format("Zone {0} has no rate defined.", zoneField.FieldValue));
                         }
 
-                    };
+
+                    }
                 }
             }
             return rateByZone;
+        }
+
+        private void ValidateCode(Dictionary<string, List<PriceListCode>> codesByZone)
+        {
+            foreach(var zone in codesByZone)
+            {
+                var codes = zone.Value;
+                foreach(var zoneObj in codesByZone)
+                {
+                    if (zone.Key != zoneObj.Key)
+                    {
+                        var code = zoneObj.Value.FirstOrDefault(x => codes.Any(y => y.Code == x.Code));
+                        if(code != null)
+                        {
+                          throw new Exception(string.Format("Code {0} must be assigned to only one zone.", code.Code));
+
+                        }
+                    }
+                }
+            }
         }
         private class PriceListRate
         {
             public decimal Rate { get; set; }
             public DateTime? RateEffectiveDate { get; set; }
         }
+
+
         #endregion
 
     }

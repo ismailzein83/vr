@@ -196,7 +196,7 @@
                         ExcelConversionSettings: obj,
                         CodeLayout: $scope.scopeModel.selectedCodeLayout != undefined ? $scope.scopeModel.selectedCodeLayout.value : undefined,
                         HasCodeRange: $scope.scopeModel.hasCodeRange,
-                      
+                        IsCommaDecimalSeparator: $scope.scopeModel.isCommaDecimalSeparator
                     }
                    
                     if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.CammaSeparated.value)
