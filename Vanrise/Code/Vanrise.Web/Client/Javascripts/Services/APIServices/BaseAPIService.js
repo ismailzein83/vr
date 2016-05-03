@@ -35,7 +35,7 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
         var deferred = $q.defer();
 
         var urlParameters;
-        if (params)
+        if (params) 
             urlParameters = {
                 params: params,
             };
@@ -66,7 +66,7 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
                 if (status === 401)
                     redirectToLoginPage();
 
-                console.log('');
+                console.log(''); 
                 console.log('Error Occured: ' + data.ExceptionMessage);
                 console.log('');
                 console.log(data);
@@ -116,7 +116,7 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
-
+              
                 if (status === 401)
                     redirectToLoginPage();
 
@@ -125,7 +125,13 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
                 console.log('');
                 console.log(data);
                 notify.closeAll();
-                notify({ message: 'Error Occured while posting data!', classes: "alert alert-danger" });
+
+                var exceptionMessage = headers("ExceptionMessage");
+                if (exceptionMessage != undefined) {
+                    showErrorMessage(exceptionMessage)
+                } else {
+                    showErrorMessage('Error Occured while posting data!')
+                }
                 setTimeout(function () {
                     notify.closeAll();
                 }, 3000);
@@ -133,5 +139,10 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
             });
         return deferred.promise;
 
+    }
+
+    function showErrorMessage(message)
+    {
+        notify({ message: message, classes: "alert alert-danger" });
     }
 });
