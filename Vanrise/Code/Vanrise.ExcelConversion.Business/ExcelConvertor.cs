@@ -15,7 +15,7 @@ namespace Vanrise.ExcelConversion.Business
     {
         #region Public Methods
 
-        public ConvertedExcel ConvertExcelFile(long fileId, ExcelConversionSettings conversionSettings, bool stopOnFirstEmptyRow)
+        public ConvertedExcel ConvertExcelFile(long fileId, ExcelConversionSettings conversionSettings, bool stopOnFirstEmptyRow, bool isCommaDecimalSeparator)
         {
             ConvertedExcel convertedExcel = new ConvertedExcel
             {
@@ -33,8 +33,8 @@ namespace Vanrise.ExcelConversion.Business
             Workbook workbook = new Workbook(stream);
             Aspose.Cells.License license = new Aspose.Cells.License();
             license.SetLicense("Aspose.Cells.lic");
-            ConvertFields(conversionSettings, convertedExcel, workbook);
-            ConvertLists(conversionSettings, convertedExcel, workbook, stopOnFirstEmptyRow);
+            ConvertFields(conversionSettings, convertedExcel, workbook,isCommaDecimalSeparator);
+            ConvertLists(conversionSettings, convertedExcel, workbook, stopOnFirstEmptyRow,isCommaDecimalSeparator);
 
             return convertedExcel;
         }
@@ -43,7 +43,7 @@ namespace Vanrise.ExcelConversion.Business
 
         #region Private Methods
 
-        private void ConvertFields(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, Workbook workbook)
+        private void ConvertFields(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, Workbook workbook, bool isCommaDecimalSeparator)
         {
             if (conversionSettings.FieldMappings != null)
             {
@@ -52,14 +52,14 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, null, null)
+                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, null, null,isCommaDecimalSeparator)
                     };
                     convertedExcel.Fields.Add(fld);
                 }
             }
         }
 
-        private void ConvertLists(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, Workbook workbook, bool stopOnFirstEmptyRow)
+        private void ConvertLists(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, Workbook workbook, bool stopOnFirstEmptyRow, bool isCommaDecimalSeparator)
         {
             if (conversionSettings.ListMappings != null)
             {
@@ -70,12 +70,12 @@ namespace Vanrise.ExcelConversion.Business
                     var workSheet = workbook.Worksheets[listMapping.SheetIndex];
                     int lastRowIndex = listMapping.LastRowIndex.HasValue && listMapping.LastRowIndex.Value < workSheet.Cells.Rows.Count ? listMapping.LastRowIndex.Value : (workSheet.Cells.Rows.Count - 1);
 
-                    BuildExceRecord(conversionSettings,convertedExcel, listMapping, workbook, workSheet, lastRowIndex, stopOnFirstEmptyRow);
+                    BuildExceRecord(conversionSettings,convertedExcel, listMapping, workbook, workSheet, lastRowIndex, stopOnFirstEmptyRow,isCommaDecimalSeparator);
                 }
             }
         }
 
-        private void BuildExceRecord(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, ListMapping listMapping, Workbook workbook, Worksheet workSheet, int lastRowIndex, bool stopOnFirstEmptyRow)
+        private void BuildExceRecord(ExcelConversionSettings conversionSettings, ConvertedExcel convertedExcel, ListMapping listMapping, Workbook workbook, Worksheet workSheet, int lastRowIndex, bool stopOnFirstEmptyRow, bool isCommaDecimalSeparator)
         {
             ConvertedExcelList lst = new ConvertedExcelList
             {
@@ -99,7 +99,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, workSheet, row)
+                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings, workSheet, row,isCommaDecimalSeparator)
                     };
                     convertedRecord.Fields.Add(fld);
                 }
@@ -109,7 +109,7 @@ namespace Vanrise.ExcelConversion.Business
             convertedExcel.Lists.Add(lst);
         }
 
-        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, ExcelConversionSettings conversionSettings, Worksheet workSheet, Row row)
+        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, ExcelConversionSettings conversionSettings, Worksheet workSheet, Row row, bool isCommaDecimalSeparator)
         {
             GetFieldValueContext getFieldValueContext = new GetFieldValueContext
             {
@@ -133,7 +133,7 @@ namespace Vanrise.ExcelConversion.Business
                     }
                     else
                     {
-                        throw new Exception("Error While Parsing DateTime.");
+                        throw new Exception("Date is mapped to an invalid field.");
                     }
                 }
             }
@@ -144,12 +144,16 @@ namespace Vanrise.ExcelConversion.Business
                 else
                 {
                     Decimal result;
-                    if(Decimal.TryParse(fldValue.ToString(), out result))
+                    if (isCommaDecimalSeparator && Decimal.TryParse(fldValue.ToString().Replace(",", "."), out result))
+                    {
+                        return result;
+                    }
+                    else if (!isCommaDecimalSeparator && Decimal.TryParse(fldValue.ToString(), out result))
                     {
                         return result;
                     }else
                     {
-                        throw new Exception("Error While Parsing Decimal.");
+                        throw new Exception("Decimal is mapped to an invalid field.");
                     }
                 }
             }
