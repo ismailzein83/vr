@@ -144,12 +144,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FraudAnalysis\Directives\AccountStatus\Templates\AccountStatusGridTemplate.html" />
+    <Content Include="FraudAnalysis\Directives\AccountStatus\vr-cdr-fraudanalysis-accountstatus-grid.js" />
+    <Content Include="FraudAnalysis\Template\AccountStatusList.xls" />
     <None Include="Properties\PublishProfiles\New.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountCaseController.cs" />
     <Compile Include="Controllers\AccountCaseHistoryController.cs" />
+    <Compile Include="Controllers\AccountStatusController.cs" />
     <Compile Include="Controllers\NumberPrefixController.cs" />
     <Compile Include="Controllers\NumberProfileController.cs" />
     <Compile Include="Controllers\CDRController.cs" />
@@ -234,10 +238,12 @@
     <Content Include="FraudAnalysis\Directives\Strategy\Templates\StrategyGridTemplate.html" />
     <Content Include="FraudAnalysis\Services\APIServices\AccountCaseAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\AccountCaseHistoryAPIService.js" />
+    <Content Include="FraudAnalysis\Services\APIServices\AccountStatusAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\RelatedNumberAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\StrategyExecutionItemAPIService.js" />
     <Content Include="FraudAnalysis\Services\APIServices\NumberPrefixAPIService.js" />
+    <Content Include="FraudAnalysis\Services\AccountStatusService.js" />
     <Content Include="FraudAnalysis\Services\ParametersService.js" />
     <Content Include="FraudAnalysis\Services\StrategyService.js" />
     <Content Include="FraudAnalysis\Views\BPTask\BPTaskConfirmCancelStrategyonCaseCount.html" />
@@ -268,6 +274,12 @@
     <Content Include="FraudAnalysis\Views\Strategy\StrategyEditorController.js" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspiciousNumberDetails.html" />
     <Content Include="FraudAnalysis\Views\SuspiciousAnalysis\SuspiciousNumberDetailsController.js" />
+    <Content Include="FraudAnalysis\Views\AccountStatus\AccountStatusEditor.html" />
+    <Content Include="FraudAnalysis\Views\AccountStatus\AccountStatusEditorController.js" />
+    <Content Include="FraudAnalysis\Views\AccountStatus\AccountStatusManagement.html" />
+    <Content Include="FraudAnalysis\Views\AccountStatus\AccountStatusManagementController.js" />
+    <Content Include="FraudAnalysis\Views\AccountStatus\AccountStatusUploader.html" />
+    <Content Include="FraudAnalysis\Views\AccountStatus\AccountStatusUploaderController.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="AccountCaseHistory.cs" />
     <Compile Include="AssignCasesforItemsBatch.cs" />
+    <Compile Include="AccountStatusDetail.cs" />
+    <Compile Include="AccountStatusQuery.cs" />
     <Compile Include="CancellingStrategyExecutionBatch.cs" />
     <Compile Include="BusinessManagerFactory.cs" />
     <Compile Include="IBusinessManager.cs" />

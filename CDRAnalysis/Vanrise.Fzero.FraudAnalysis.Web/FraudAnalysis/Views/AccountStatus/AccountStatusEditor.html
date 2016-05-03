@@ -1,0 +1,24 @@
+﻿<div vr-modalcontent ng-controller="FraudAnalysis_AccountStatusEditorController" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formAccountStatusEditor">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="accountNumber" label="Account Number"></vr-textbox>
+                </vr-columns>
+
+                <vr-columns width="1/2row">
+                    <vr-datetimepicker label="Valid Till" value="validTill" type="dateTime"></vr-datetimepicker>
+                </vr-columns>
+
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" haspermission="hasSaveAccountStatusPermission" formname="formAccountStatusEditor" data-onclick="saveAccountStatus"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

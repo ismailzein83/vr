@@ -1,0 +1,11 @@
+﻿<vr-datagrid datasource="accountStatuses"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.AccountNumber">
+
+    <vr-datagridcolumn headertext="'Account Number'" field="'Entity.AccountNumber'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusName'" type="'Text'" ng-show="false"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Valid Till'" field="'Entity.ValidTill'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>
