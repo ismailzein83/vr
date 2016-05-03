@@ -14,7 +14,7 @@ using Vanrise.Common;
 using TOne.WhS.CodePreparation.Entities;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public sealed class StructureDataByCodes : CodeActivity
+    public sealed class GetDataFromImportedCodes : CodeActivity
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }

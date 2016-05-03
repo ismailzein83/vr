@@ -67,7 +67,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         {
                             Code = saleCode.Code,
                             CodeGroup = codeGroup,
-                            BED = Vanrise.Common.Utilities.Max(saleCode.BED,minimumDate),
+                            BED = Utilities.Max(saleCode.BED,minimumDate),
                             EED = saleCode.EED.HasValue ? saleCode.EED : null,
                             ZoneName = renamedZone.NewZoneName,
                             OldZoneName = oldZoneName

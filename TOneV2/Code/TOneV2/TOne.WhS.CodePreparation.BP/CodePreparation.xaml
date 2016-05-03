@@ -121,28 +121,28 @@
           <Sequence.Variables>
             <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedCodesZonesToValidate" />
           </Sequence.Variables>
-          <twcba1:GetDataFromSource sap2010:WorkflowViewState.IdRef="GetDataFromSource_1">
-            <twcba1:GetDataFromSource.EffectiveDate>
+          <twcba1:ReadFromSource sap2010:WorkflowViewState.IdRef="ReadFromSource_1">
+            <twcba1:ReadFromSource.EffectiveDate>
               <InArgument x:TypeArguments="s:DateTime">
                 <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate.Value</mca:CSharpValue>
               </InArgument>
-            </twcba1:GetDataFromSource.EffectiveDate>
-            <twcba1:GetDataFromSource.FileId>
+            </twcba1:ReadFromSource.EffectiveDate>
+            <twcba1:ReadFromSource.FileId>
               <InArgument x:TypeArguments="x:Int32">
                 <mca:CSharpValue x:TypeArguments="x:Int32">Input.FileId.Value</mca:CSharpValue>
               </InArgument>
-            </twcba1:GetDataFromSource.FileId>
-            <twcba1:GetDataFromSource.ImportedCodes>
+            </twcba1:ReadFromSource.FileId>
+            <twcba1:ReadFromSource.ImportedCodes>
               <OutArgument x:TypeArguments="scg:IEnumerable(twce:ImportedCode)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twce:ImportedCode)">ImportedCodes</mca:CSharpReference>
               </OutArgument>
-            </twcba1:GetDataFromSource.ImportedCodes>
-            <twcba1:GetDataFromSource.MinimumDate>
+            </twcba1:ReadFromSource.ImportedCodes>
+            <twcba1:ReadFromSource.MinimumDate>
               <OutArgument x:TypeArguments="s:DateTime">
                 <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
               </OutArgument>
-            </twcba1:GetDataFromSource.MinimumDate>
-          </twcba1:GetDataFromSource>
+            </twcba1:ReadFromSource.MinimumDate>
+          </twcba1:ReadFromSource>
           <vbw:ExecuteRules BusinessRulesKey="CP_ValidateCodesZones" sap2010:WorkflowViewState.IdRef="ExecuteRules_1">
             <vbw:ExecuteRules.ImportedDataToValidate>
               <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
@@ -150,33 +150,33 @@
               </InArgument>
             </vbw:ExecuteRules.ImportedDataToValidate>
           </vbw:ExecuteRules>
-          <twcba1:StructureDataByCodes sap2010:WorkflowViewState.IdRef="StructureDataByCodes_1">
-            <twcba1:StructureDataByCodes.CodesToAdd>
+          <twcba1:GetDataFromImportedCodes sap2010:WorkflowViewState.IdRef="GetDataFromImportedCodes_1">
+            <twcba1:GetDataFromImportedCodes.CodesToAdd>
               <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)">CodesToAdd</mca:CSharpReference>
               </OutArgument>
-            </twcba1:StructureDataByCodes.CodesToAdd>
-            <twcba1:StructureDataByCodes.CodesToClose>
+            </twcba1:GetDataFromImportedCodes.CodesToAdd>
+            <twcba1:GetDataFromImportedCodes.CodesToClose>
               <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToClose)">CodesToClose</mca:CSharpReference>
               </OutArgument>
-            </twcba1:StructureDataByCodes.CodesToClose>
-            <twcba1:StructureDataByCodes.CodesToMove>
+            </twcba1:GetDataFromImportedCodes.CodesToClose>
+            <twcba1:GetDataFromImportedCodes.CodesToMove>
               <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">
                 <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)">CodesToMove</mca:CSharpReference>
               </OutArgument>
-            </twcba1:StructureDataByCodes.CodesToMove>
-            <twcba1:StructureDataByCodes.EffectiveDate>
+            </twcba1:GetDataFromImportedCodes.CodesToMove>
+            <twcba1:GetDataFromImportedCodes.EffectiveDate>
               <InArgument x:TypeArguments="s:DateTime">
                 <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
               </InArgument>
-            </twcba1:StructureDataByCodes.EffectiveDate>
-            <twcba1:StructureDataByCodes.ImportedCodes>
+            </twcba1:GetDataFromImportedCodes.EffectiveDate>
+            <twcba1:GetDataFromImportedCodes.ImportedCodes>
               <InArgument x:TypeArguments="scg:IEnumerable(twce:ImportedCode)">
                 <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twce:ImportedCode)">ImportedCodes</mca:CSharpValue>
               </InArgument>
-            </twcba1:StructureDataByCodes.ImportedCodes>
-          </twcba1:StructureDataByCodes>
+            </twcba1:GetDataFromImportedCodes.ImportedCodes>
+          </twcba1:GetDataFromImportedCodes>
         </Sequence>
       </If.Then>
       <If.Else>
@@ -663,13 +663,13 @@
         </InArgument>
       </twcba1:UpdateCodePreparationStateStatus.Status>
     </twcba1:UpdateCodePreparationStateStatus>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxDb2RlUHJlcGFyYXRpb24ueGFtbJEBRgObBQ4CAQFSC1LRAQIBXFcLV9EBAgFKXAtc1QECAThhC2HVAQIBJmYLZnACARRsC2xaAgECcQWGAgoDAZoNhwIFkgIgAwH1DJMCBagCIwMBrAypAgW0AicDAYcMtQIFuwItAwH0C7wCBccCGAMBzwvIAgXOAhgDAbsLzwIF1QIgAwGnC9YCBdwCIAMBkwvdAgX4BBADAc4B+QQF/wQgAwG6AYAFBYYFJQMBpwGHBQWNBSADAZMBjgUFmQUvAgFudAt0WwMBmw14CbQBFAMBrQ+3AQmEAhQDAa0NjwILjwKFAQMBiA2KAguKAqYBAwH2DJsCC5sCbwMB4wylAgulAnsDAdEMlgILlgJrAwG/DKACC6ACbQMBrQyxAguxAnMDAZoMrAILrAKCAQMBiAy4Agu4AoUBAwH1C78CC78CxAEDAeILxAILxAJ/AwHQC8gCKMgCPgMBzgvLAgvLAncDAbwL0gIL0gKFAQMBqQvPAmDPAn0DAagL2QIL2QKFAQMBlQvWAmDWAokBAwGUC+ECB9cEEgMBwgLYBAf3BCgDAc8B/AQL/ASFAQMBvAH5BGD5BLsBAwG7AYMFC4MFYQMBqAGKBQuKBYUBAwGVAYcFYIcFkAEDAZQBkQULkQVhAwGBAZYFC5YFwQECAW98C5EBIwMBoxCSAQuYAR4DAY4QmQELswEtAwGuD7gBC8gBHwMB9g7JAQvoASsDAYkO6QELgwIrAwGuDeUCCcwEHwMB2QLNBAnWBBIDAcMC7wQN7wR+AwGvAtsEDdsEhAEDAZwC9AQN9ARjAwGJAuUEDeUEcgMB9gHgBA3gBIQBAwHjAeoEDeoEfgMB0AGOARGOAWQDAd0QfxF/agMByhCEARGEAWADAbcQiQERiQF+AwGkEJIBLpIBRQMBohCVARGVAXQDAY8QoQERoQF9AwH7D5wBEZwBeQMB6A+rARGrAVwDAdUPpgERpgF7AwHCD7ABEbABdgMBrw+7ARG7AWIDAZsPxQERxQFnAwGJD8ABEcABlwEDAfcO1gER1gF9AwHkDtEBEdEBeQMB0g7MARHMAVoDAcAO5QER5QFkAwGuDuABEeABagMBnA7bARHbAXsDAYoO8QER8QF9AwH3DewBEewBWgMB5Q37ARH7AVwDAdMNgAIRgAKPAQMBwQ32ARH2AXsDAa8N6AIP6AJ+AwH/CuUCtAHlArgBAwH+CuUCmAHlApwBAwH9Cu8CDcoEGAMB2gLUBDXUBDkDAdgC0AQP0AR6AwHEAvoCD6cDGgMBkgmoAw+zAy0DAdcItAMPxAMtAwH/B8UDD/MDLAMB+QX0Aw//AzEDAb4FgAQPsQQaAwHRA7IED70EGAMBlgO+BA/JBCoDAdsC+wIRkAMrAwGICpEDEaYDKwMBkwmrAxWrA30DAfUIsAMVsAOTAQMB2Ai8AxW8A4MBAwG6CLcDFbcDfQMBnQjBAxXBA4sBAwGACOEDFeEDewMB4gfXAxXXA4EBAwHFB+sDFesDewMBqAfSAxXSA30DAYsHyAMVyAOBAQMB7gbwAxXwA3sDAdEG5gMV5gOLAQMBtAbcAxXcA38DAZcGzQMVzQOBAQMB+gX3AxX3A3MDAdwF/AMV/ANzAwG/BYEEEYwEIwMBgwWNBBGYBCMDAcgEmQQRpAQjAwGNBKUEEbAEIwMB0gO6BBW6BHADAbQDtQQVtQR0AwGXA8YEFcYEjwEDAfkCwQQVwQSzAgMB3AKDAxeDA4cBAwHgCo0DF40DbQMBwwqIAxeIA2IDAaYK/gIX/gJlAwGJCqMDF6MDbQMB6wmZAxeZA4cBAwHOCZ4DF54DYgMBsQmUAxeUA2UDAZQJiQQXiQSIAQMBoQWEBBeEBHUDAYQFlQQXlQSIAQMB5gSQBBeQBHUDAckEoQQXoQSOAQMBqwScBBecBHsDAY4ErQQXrQSOAQMB8AOoBBeoBHsDAdMD</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GetDataFromSource_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ReadFromSource_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="StructureDataByCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="GetDataFromImportedCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="222,270">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

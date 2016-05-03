@@ -17,7 +17,7 @@ using TOne.WhS.CodePreparation.Entities;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
 
-    public sealed class GetDataFromSource : CodeActivity
+    public sealed class ReadFromSource : CodeActivity
     {
         [RequiredArgument]
         public InArgument<int> FileId { get; set; }

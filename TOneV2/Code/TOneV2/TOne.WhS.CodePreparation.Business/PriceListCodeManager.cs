@@ -212,7 +212,7 @@ namespace TOne.WhS.CodePreparation.Business
                     existingCode.ChangedCode = new ChangedCode
                     {
                         CodeId = existingCode.CodeEntity.SaleCodeId,
-                        EED = codeToClose.CloseEffectiveDate
+                        EED =Utilities.Max(codeToClose.CloseEffectiveDate, existingCode.BED)
                     };
                     codeToClose.ChangedExistingCodes.Add(existingCode);
                 }
