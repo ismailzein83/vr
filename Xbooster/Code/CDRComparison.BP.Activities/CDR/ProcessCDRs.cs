@@ -79,6 +79,9 @@ namespace CDRComparison.BP.Activities
                             var cdrs = cdrBatch.CDRs;
                             foreach (var cdr in cdrs)
                             {
+                                if (cdr.CDPN == null)
+                                    throw new NullReferenceException("CDPN is missing");
+
                                 if (currentCDPN == null)
                                     currentCDPN = cdr.CDPN;
 
