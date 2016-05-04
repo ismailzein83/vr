@@ -21,6 +21,6 @@ BEGIN
 		  ,sc.BED
 		  ,sc.EED
 	  FROM [TOneWhS_BE].SaleCode sc LEFT JOIN [TOneWhS_BE].SaleZone sz ON sc.ZoneID=sz.ID 
-	  Where  (sc.EED is null or sc.EED > @when) and sz.CountryID = @CountryId 
+	  Where  (sc.EED is null or (sc.EED > @when and sc.BED != sc.EED)) and sz.CountryID = @CountryId 
 	  and sz.SellingNumberPlanID=@SellingNumberPlanId
 END

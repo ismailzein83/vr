@@ -21,6 +21,6 @@ BEGIN
 			[EED]
 	FROM	[TOneWhS_BE].[SaleCode] sc
 	WHERE [ZoneID]=@ZoneID
-	   and (sc.EED is null or sc.EED > @when)
+	   and (sc.EED is null or ( sc.EED > @when and sc.EED != sc.BED))
         
 END
