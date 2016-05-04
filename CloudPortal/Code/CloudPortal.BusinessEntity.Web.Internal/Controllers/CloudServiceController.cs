@@ -18,7 +18,7 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
 
         [HttpPost]
         [Route("AddUserToApplication")]
-        [IsAnonymous]
+        [IsInternalAPI]
         public AddUserToApplicationOutput AddUserToApplication(AddUserToApplicationInput input)
         {
             var applicationIdentification = GetApplicationIdentification();
@@ -29,7 +29,7 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
 
         [HttpPost]
         [Route("CheckApplicationUsersUpdated")]
-        [IsAnonymous]
+        [IsInternalAPI]
         public CheckApplicationUsersUpdatedOuput CheckApplicationUsersUpdated(CheckApplicationUsersUpdatedInput input)
         {
             DateTime? lastCheckTime = default(DateTime?);
@@ -43,7 +43,7 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
 
         [HttpPost]
         [Route("GetApplicationUsers")]
-        [IsAnonymous]
+        [IsInternalAPI]
         public GetApplicationUsersOutput GetApplicationUsers(GetApplicationUsersInput input)
         {
             var applicationIdentification = GetApplicationIdentification();
@@ -55,7 +55,7 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
 
         CloudApplicationIdentification GetApplicationIdentification()
         {
-            var headerItem = HttpContext.Current.Request.Headers["Vanrise_CloudApplicationIdentification"];
+            var headerItem = HttpContext.Current.Request.Headers[CloudAuthServer.CLOUDSERVICE_HTTPHEADERNAME];
             if (headerItem == null)
                 throw new NullReferenceException("headerItem");
             CloudApplicationIdentification cloudApplicationIdentification = Vanrise.Common.Serializer.Deserialize<CloudApplicationIdentification>(headerItem);

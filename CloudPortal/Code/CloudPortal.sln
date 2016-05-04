@@ -35,9 +35,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudPortal.BusinessEntity.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudPortal.BusinessEntity.Data.SQL", "CloudPortal.BusinessEntity.Data.SQL\CloudPortal.BusinessEntity.Data.SQL.csproj", "{A3E21B59-E55A-4BC0-A290-8A145A9512A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudPortal.Web.Internal", "CloudPortal.Web.Internal\CloudPortal.Web.Internal.csproj", "{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -81,6 +83,10 @@ Global
 		SccProjectTopLevelParentUniqueName10 = CloudPortal.sln
 		SccProjectName10 = CloudPortal.BusinessEntity.Data.SQL
 		SccLocalPath10 = CloudPortal.BusinessEntity.Data.SQL
+		SccProjectUniqueName11 = CloudPortal.Web.Internal\\CloudPortal.Web.Internal.csproj
+		SccProjectTopLevelParentUniqueName11 = CloudPortal.sln
+		SccProjectName11 = CloudPortal.Web.Internal
+		SccLocalPath11 = CloudPortal.Web.Internal
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +135,10 @@ Global
 		{A3E21B59-E55A-4BC0-A290-8A145A9512A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3E21B59-E55A-4BC0-A290-8A145A9512A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3E21B59-E55A-4BC0-A290-8A145A9512A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +150,7 @@ Global
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
 		{E8846821-CC8D-42D6-A747-628732FE0BA8} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
+		{854085D1-E7A5-4E65-B2EF-5DF9A2AC08AA} = {D18171BD-5CF9-4484-9354-D6FDE71C0AF9}
 		{88496758-888A-465A-876B-CC7EE144330F} = {173B876E-356D-4ECB-824B-8B6E632A3462}
 		{97E215C1-87A2-4176-9691-FCA05A8476F1} = {173B876E-356D-4ECB-824B-8B6E632A3462}
 		{D2A7D5BA-36C1-4F8B-A6FD-D18973601CCD} = {173B876E-356D-4ECB-824B-8B6E632A3462}

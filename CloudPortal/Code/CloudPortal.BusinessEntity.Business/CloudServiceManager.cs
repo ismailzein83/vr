@@ -98,14 +98,14 @@ namespace CloudPortal.BusinessEntity.Business
         {
 
             DateTime? _userCacheLastCheck;
-            DateTime? _tenantUserCacheLastCheck;
+            DateTime? _applicationUserCacheLastCheck;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<UserManager.CacheManager>().IsCacheExpired(ref _userCacheLastCheck)
                 |
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CloudApplicationUserManager.CacheManager>().IsCacheExpired(ref _tenantUserCacheLastCheck);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CloudApplicationUserManager.CacheManager>().IsCacheExpired(ref _applicationUserCacheLastCheck);
             }
         }
 

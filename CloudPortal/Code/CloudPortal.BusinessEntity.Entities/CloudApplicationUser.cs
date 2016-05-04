@@ -13,6 +13,8 @@ namespace CloudPortal.BusinessEntity.Entities
 
         public int UserId { get; set; }
 
+        public bool IsApplicationOwner { get; set; }
+
         public CloudApplicationUserSettings Settings { get; set; }
     }
 

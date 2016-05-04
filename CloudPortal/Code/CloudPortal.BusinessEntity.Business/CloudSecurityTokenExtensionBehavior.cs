@@ -12,12 +12,19 @@ namespace CloudPortal.BusinessEntity.Business
     {
         public override void AddExtensionsToToken(ISecurityTokenExtensionContext context)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (context.Token == null)
+                throw new ArgumentNullException("context.Token");
             var appUserManager = new CloudApplicationUserManager();
             var userApps = appUserManager.GetUserApplications(context.Token.UserId);
             if(userApps != null && userApps.Count > 0)
             {
-                context.Token.Extensions.Add(CloudAuthServerManager.SecurityTokenAppIdsExtensionName, 
-                    userApps.Where(itm => itm.Settings != null && itm.Settings.Status == UserStatus.Active).Select(itm => itm.ApplicationId).ToList());
+                context.Token.AccessibleCloudApplications = new List<SecurityTokenCloudApplication>();
+                foreach (var appUser in userApps.Where(itm => itm.Settings != null && itm.Settings.Status == UserStatus.Active))
+                {
+                    context.Token.AccessibleCloudApplications.Add(new SecurityTokenCloudApplication { ApplicationId = appUser.ApplicationId });
+                }
             }            
         }
     }

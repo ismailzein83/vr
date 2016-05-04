@@ -12,5 +12,9 @@ namespace CloudPortal.BusinessEntity.Data
         bool AreApplicationsUpdated(ref object updateHandle);
 
         List<CloudApplication> GetAllApplications();
+
+        bool Insert(CloudApplicationToAdd cloudApplicationToAdd, Vanrise.Security.Entities.CloudApplicationIdentification appIdentification, out int applicationId);
+
+        void SetApplicationReady(int applicationId);
     }
 }

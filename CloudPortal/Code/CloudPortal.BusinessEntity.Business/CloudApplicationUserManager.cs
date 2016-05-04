@@ -50,6 +50,21 @@ namespace CloudPortal.BusinessEntity.Business
             return dataManager.AddApplicationUser(appUser);
         }
 
+        public void AddUserToApplication(int applicationId, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void AssignUserFullControlToApp(CloudApplication application, int userId)
+        {
+            CloudApplicationServiceProxy appServiceProxy = new CloudApplicationServiceProxy(application);
+            var assignUserFullControlInput = new Vanrise.Security.Entities.AssignUserFullControlInput
+            {
+                UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId()
+            };
+            var assignUserFullControlOutput = appServiceProxy.AssignUserFullControl(assignUserFullControlInput);
+        }
+
         #region Private Methods
 
         private List<CloudApplicationUser> GetApplicationUsers(int applicationId)

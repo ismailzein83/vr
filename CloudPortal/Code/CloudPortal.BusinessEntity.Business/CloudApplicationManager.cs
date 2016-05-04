@@ -10,6 +10,8 @@ namespace CloudPortal.BusinessEntity.Business
 {
     public class CloudApplicationManager
     {
+        #region Public Methods
+
         public CloudApplication GetApplicationByIdentification(Vanrise.Security.Entities.CloudApplicationIdentification applicationIdentification)
         {
             if (applicationIdentification == null)
@@ -18,6 +20,91 @@ namespace CloudPortal.BusinessEntity.Business
                 throw new ArgumentNullException("applicationIdentification.IdentificationKey");
             return GetAllApplicationsByIdentification().GetRecord(applicationIdentification.IdentificationKey);
         }
+
+        public Vanrise.Entities.InsertOperationOutput<CloudApplicationDetail> AddApplication(CloudApplicationToAdd cloudApplicationToAdd)
+        {
+            Vanrise.Security.Entities.CloudApplicationIdentification appIdentification = new Vanrise.Security.Entities.CloudApplicationIdentification
+            {
+                IdentificationKey = Guid.NewGuid().ToString()
+            };
+            ICloudApplicationDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICloudApplicationDataManager>();
+            int applicationId;
+            if(_dataManager.Insert(cloudApplicationToAdd, appIdentification, out applicationId))
+            {
+                CloudApplication cloudApplication = new CloudApplication
+                {
+                    CloudApplicationId = applicationId,
+                    Name = cloudApplicationToAdd.Name,
+                    Settings = cloudApplicationToAdd.Settings,
+                    ApplicationIdentification = appIdentification
+                };
+                
+                if (ConfigureAppAuthServer(appIdentification, cloudApplication))
+                {
+                    _dataManager.SetApplicationReady(applicationId);
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    CloudApplicationDetail appDetail = ApplicationDetailMapper(cloudApplication);
+                    //AddCurrentUserToApplication(cloudApplication);
+                    return new Vanrise.Entities.InsertOperationOutput<CloudApplicationDetail>
+                    {
+                        Result = Vanrise.Entities.InsertOperationResult.Succeeded,
+                        InsertedObject = appDetail
+                    };
+                }
+                else
+                {
+                    return new Vanrise.Entities.InsertOperationOutput<CloudApplicationDetail>
+                    {
+                        Result = Vanrise.Entities.InsertOperationResult.Failed,
+                        Message = "Application is already connected to Cloud",
+                        ShowExactMessage = true
+                    };
+                }
+            }
+            else
+            {
+                return new Vanrise.Entities.InsertOperationOutput<CloudApplicationDetail>
+                {
+                    Result = Vanrise.Entities.InsertOperationResult.SameExists
+                };
+            }
+        }
+
+        private void AddCurrentUserToApplication(CloudApplication cloudApplication)
+        {
+            CloudApplicationUserManager appUserManager = new CloudApplicationUserManager();
+            var userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            appUserManager.AddUserToApplication(cloudApplication.CloudApplicationId, userId);
+            appUserManager.AssignUserFullControlToApp(cloudApplication, userId);
+        }
+
+        private bool ConfigureAppAuthServer(Vanrise.Security.Entities.CloudApplicationIdentification appIdentification, CloudApplication cloudApplication)
+        {
+            var securityManager = new Vanrise.Security.Business.SecurityManager();
+            var parameterManager = new ParameterManager();
+            CloudApplicationServiceProxy appServiceProxy = new CloudApplicationServiceProxy(cloudApplication);
+            var configureInput = new Vanrise.Security.Entities.ConfigureAuthServerInput
+            {
+                ApplicationId = cloudApplication.CloudApplicationId,
+                ApplicationIdentification = appIdentification,
+                AuthenticationCookieName = securityManager.GetCookieName(),
+                TokenDecryptionKey = securityManager.GetTokenDecryptionKey(),
+                InternalURL = parameterManager.GetCloudPortalInternalURL(),
+                OnlineURL = parameterManager.GetCloudPortalOnlineURL()
+            };
+            var configureOutput = appServiceProxy.ConfigureAuthServer(configureInput);
+            return configureOutput != null && configureOutput.Result == Vanrise.Security.Entities.ConfigureAuthServerResult.Succeeded;
+        }
+
+        private CloudApplicationDetail ApplicationDetailMapper(CloudApplication cloudApplication)
+        {
+            return new CloudApplicationDetail
+            {
+                Entity = cloudApplication
+            };
+        }
+
+        #endregion
 
         #region Private Methods
 

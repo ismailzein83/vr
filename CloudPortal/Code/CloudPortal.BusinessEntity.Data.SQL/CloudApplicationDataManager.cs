@@ -43,5 +43,16 @@ namespace CloudPortal.BusinessEntity.Data.SQL
         }
 
         #endregion
+
+
+        public bool Insert(CloudApplicationToAdd cloudApplicationToAdd, Vanrise.Security.Entities.CloudApplicationIdentification appIdentification, out int applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetApplicationReady(int applicationId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

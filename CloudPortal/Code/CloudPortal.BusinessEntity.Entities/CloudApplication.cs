@@ -13,6 +13,8 @@ namespace CloudPortal.BusinessEntity.Entities
 
         public string Name { get; set; }
 
+        public int TypeId { get; set; }
+
         public CloudApplicationSettings Settings { get; set; }
 
         public CloudApplicationIdentification ApplicationIdentification { get; set; }
