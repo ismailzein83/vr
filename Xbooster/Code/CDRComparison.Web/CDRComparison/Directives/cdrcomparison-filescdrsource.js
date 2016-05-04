@@ -27,7 +27,6 @@
 
             var fileReaderSelectiveAPI;
             var cdrSourceContext;
-            var isCompressed;
             var sizeInMegaBytes;
 
             function initializeController() {
@@ -37,25 +36,14 @@
 
                     var fileSizeInMegaBytes = fileSizeInBytes * 0.000001;
                     var maxSize = (sizeInMegaBytes != null) ? sizeInMegaBytes : 5
-
-                    var nameParts = fileName.split('.');
-                    var fileExtension = nameParts[nameParts.length - 1];
                     
-                    if (fileSizeInMegaBytes <= maxSize) {
-                        isCompressed = isCompressedFormat(fileExtension);
+                    if (fileSizeInMegaBytes <= maxSize)
                         return true;
-                    }
-                    else if (isCompressedFormat(fileExtension)) {
-                        isCompressed = true;
+                    else if (isCompressedFormat(fileExtension))
                         return true;
-                    }
                     else {
                         VRNotificationService.showWarning("File '" + fileName + "' is > " + maxSize + " MB. Please upload a compressed version <= " + maxSize + " MB");
                         return false;
-                    }
-
-                    function isCompressedFormat(extension) {
-                        return (extension == 'zip' || extension == 'rar');
                     }
                 };
 
@@ -84,7 +72,6 @@
                     if (payload != undefined) {
                         cdrSourceContext = payload.cdrSourceContext;
                         fileReader = payload.FileReader;
-                        isCompressed = payload.IsCompressed; // It won't matter because it's reset when a file is uploaded
                     }
 
                     var loadFileReaderSelectivePromise = loadFileReaderSelective();
@@ -125,7 +112,7 @@
                     return {
                         $type: 'CDRComparison.Business.FileCDRSource, CDRComparison.Business',
                         FileId: $scope.scopeModel.file.fileId,
-                        IsCompressed: isCompressed,
+                        IsCompressed: isCompressedFormat(),
                         FileReader: fileReaderSelectiveAPI.getData()
                     };
                 };
@@ -133,6 +120,13 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+            }
+
+            function isCompressedFormat()
+            {
+                var nameParts = $scope.scopeModel.file.fileName.split('.');
+                var extension = nameParts[nameParts.length - 1];
+                return (extension == 'zip' || extension == 'rar');
             }
         }
     }
