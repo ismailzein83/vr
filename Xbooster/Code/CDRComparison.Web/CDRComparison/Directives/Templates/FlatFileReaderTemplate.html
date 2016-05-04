@@ -1,6 +1,6 @@
 ﻿<vr-row>
     <vr-columns colnum="{{flatFileCtrl.normalColNum}}">
-        <vr-textbox label="Delimiter" value="scopeModel.delimiter" isrequired="flatFileCtrl.isrequired"></vr-textbox>
+        <vr-textbox label="Delimiter" value="scopeModel.delimiter" isrequired="flatFileCtrl.isrequired" hint="{{scopeModel.delimiterHint}}"></vr-textbox>
     </vr-columns>
     <vr-columns colnum="{{flatFileCtrl.normalColNum}}" withemptyline>
         <vr-button type="Download" standalone="true" data-onclick="scopeModel.readSample" vr-disabled="scopeModel.disableReadSampleButton() || scopeModel.delimiter == undefined"></vr-button>

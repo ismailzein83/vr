@@ -13,7 +13,7 @@ namespace CDRComparison.MainExtensions
     {
         #region Properties
 
-        public char Delimiter { get; set; }
+        public string Delimiter { get; set; }
 
         public List<FlatFileFieldMapping> FieldMappings { get; set; }
 
@@ -39,9 +39,11 @@ namespace CDRComparison.MainExtensions
                     context.TryReadLine(out line);
             }
 
+            var delimiters = new string[1] { this.Delimiter };
+
             while (context.TryReadLine(out line))
             {
-                string[] fields = line.Split(this.Delimiter);
+                string[] fields = line.Split(delimiters, StringSplitOptions.None);
                 var cdr = new CDR
                 {
                     ExtraFields = new Dictionary<string, object>()
@@ -75,9 +77,12 @@ namespace CDRComparison.MainExtensions
 
             string line;
             int counter = 0;
+
+            var delimiters = new string[1] { this.Delimiter };
+
             while (context.TryReadLine(out line) && counter < 10)
             {
-                string[] data = line.Split(this.Delimiter);
+                string[] data = line.Split(delimiters, StringSplitOptions.None);
 
                 if (counter == 0)
                     sample.ColumnCount = data.Length;

@@ -40,6 +40,7 @@
             function initializeController() {
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.delimiterHint = 'Tab: \\t';
                 $scope.scopeModel.dateTimeFormat = 'yyyy-MM-dd HH:mm:ss.fff';
                 $scope.scopeModel.gridColumns = [];
                 $scope.scopeModel.sampleData = [];
