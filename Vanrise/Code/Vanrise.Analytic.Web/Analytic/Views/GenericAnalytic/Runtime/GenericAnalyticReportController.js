@@ -30,7 +30,7 @@
             $scope.scopeModel.todate = new Date();
             $scope.scopeModel.groupingDimentions = [];
             $scope.scopeModel.selectedGroupingDimentions = [];
-          
+            $scope.scopeModel.isGroupingRequired = false;
             $scope.search = function () {
                 if ($scope.scopeModel.widgets.length > 0)
                 {
@@ -86,6 +86,7 @@
 
             function loadFilters() {
                 var filterPromises = [];
+                $scope.scopeModel.isGroupingRequired = viewEntity.Settings.SearchSettings.IsRequiredGroupingDimensions;
                 if (viewEntity.Settings.SearchSettings.Filters != undefined)
                 {
                     for (var i = 0; i < viewEntity.Settings.SearchSettings.Filters.length; i++) {
@@ -231,7 +232,6 @@
                 FromTime: $scope.scopeModel.fromdate,
                 ToTime: $scope.scopeModel.todate
             };
-            console.log(query);
             return query;
         }
 
