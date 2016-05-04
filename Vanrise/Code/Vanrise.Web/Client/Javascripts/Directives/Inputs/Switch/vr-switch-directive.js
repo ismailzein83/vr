@@ -16,13 +16,16 @@ app.directive('vrSwitch', ['SecurityService', function (SecurityService) {
                     var selfHeight = $(self).height();
                     var selfOffset = $(self).offset();
                     var tooltip = self.parent().find('.tooltip-info')[0];
-                    $(tooltip).css({ display: 'block !important' });
+                    $(tooltip).css({ display: 'block' });
                     var innerTooltip = self.parent().find('.tooltip-inner')[0];
                     var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
-                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
-                }, 1)
+                    var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
+                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth });
+                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
+
+                }, 1);
             }
+
             if ($scope.value == undefined)
                 $scope.value = false;
         },

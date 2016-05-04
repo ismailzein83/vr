@@ -163,25 +163,23 @@
                     return !(controller.hidefilterbox === "" || controller.hidefilterbox);
                 }
 
-                function getInputeStyle() {
-                    return ($attrs.hint != undefined) ? {
-                        "display": "inline-block",
-                        "width": "calc(100% - 15px)",
-                        "margin-right": "-3px"
-                    } : {};
-                }
                 
-                function adjustTooltipPosition(e) {
+
+                
+
+                function  adjustTooltipPosition(e) {
                     setTimeout(function () {
                         var self = angular.element(e.currentTarget);
                         var selfHeight = $(self).height();
                         var selfOffset = $(self).offset();
                         var tooltip = self.parent().find('.tooltip-info')[0];
-                        $(tooltip).css({ display: 'block !important' });
+                        $(tooltip).css({ display: 'block' });
                         var innerTooltip = self.parent().find('.tooltip-inner')[0];
                         var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                        $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
-                        $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
+                        var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
+                        $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth });
+                        $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
+
                     }, 1);
                 }
 
@@ -293,7 +291,7 @@
                     isEnFilter: isEnFilter,
                     getdatasource: getdatasource,
                     withLocalFiter: withLocalFiter,
-                    getInputeStyle: getInputeStyle,
+                    //getInputeStyle: getInputeStyle,
                     adjustTooltipPosition: adjustTooltipPosition,
                     setdatasource: setdatasource,
                     onClickLi: onClickLi,
@@ -381,6 +379,7 @@
             controllerAs: 'ctrl',
             bindToController: true,
             compile: function (element, attrs) {
+               
 
                 function onLoad() {
 
@@ -466,6 +465,14 @@
                     pre: function ($scope, iElem, iAttrs) {
 
                         var ctrl = $scope.ctrl;
+
+                        var getInputeStyle = function () {
+                            var div = iElem.find('div[validator-section]')[0];
+                            if (iAttrs.hint != undefined) {
+                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "-3px" })
+                            };
+                        }
+                        getInputeStyle();
 
                         //baseDirService.addScopeValidationMethods(ctrl, iAttrs.id, formCtrl);
 

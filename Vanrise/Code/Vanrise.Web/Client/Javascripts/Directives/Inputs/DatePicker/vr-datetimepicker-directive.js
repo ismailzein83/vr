@@ -195,15 +195,13 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
 
             if ($attrs.hint != undefined)
                 ctrl.hint = $attrs.hint;
-            ctrl.getInputeStyle = function () {
-                return ($attrs.hint != undefined) ? {
-                    "display": "inline-block",
-                    "width": "calc(100% - 15px)",
-                    "margin-right": "1px"
-                } : {
-                    "width": "100%",
+            var getInputeStyle = function () {
+                var div = $element.find('div[validator-section]')[0];
+                if ($attrs.hint != undefined) {
+                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
                 };
             }
+            getInputeStyle();
 
             ctrl.adjustTooltipPosition = function (e) {
                 setTimeout(function () {
@@ -211,12 +209,14 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                     var selfHeight = $(self).height();
                     var selfOffset = $(self).offset();
                     var tooltip = self.parent().find('.tooltip-info')[0];
-                    $(tooltip).css({ display: 'block !important' });
+                    $(tooltip).css({ display: 'block' });
                     var innerTooltip = self.parent().find('.tooltip-inner')[0];
                     var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
-                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
-                }, 1)
+                    var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
+                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth });
+                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
+
+                }, 1);
             }
             $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == null)
@@ -347,11 +347,11 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', func
                  '<div   >'
                   + '<vr-validator validate="ctrl.validate()">'
                   + '<div id="divDatePicker" ng-mouseenter="showtd=true" ng-mouseleave="showtd=false"  ng-model="ctrl.value" class="input-group form-control" ng-style="ctrl.getInputeStyle()" style="border-radius: 4px;height: 26px;padding: 0px;display:block;">'
-                            + '<input class=" vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 24px;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                            + '<input class=" vr-date-input" ng-focus="ctrl.setDefaultDate()" placeholder="{{ctrl.placelHolder}}" ng-style="ctrl.getInputeStyle()" style="padding:0px 5px;height: 24px;width: 100%;"  ng-keyup="ctrl.updateModelOnKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                             + '<div  ng-show="showtd==true"  class="hand-cursor" style="max-width:' + 20 * n + 'px;position: absolute;z-index: 11;min-width: 20px;right: 0px;top:0px" >' + icontemplate + '</div>'
                       + '</div>'
                   + '</vr-validator>'
-                      +'<span ng-if="ctrl.hint!=undefined"  ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+                      +'<span ng-if="ctrl.hint!=undefined"  ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor" style="color:#337AB7;" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
                 + '</div>';
 
             //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
