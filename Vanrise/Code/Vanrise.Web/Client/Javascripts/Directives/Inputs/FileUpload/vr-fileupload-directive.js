@@ -102,7 +102,8 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 },
                 done: function (e, data) {
                     ctrl.value = {
-                        fileId: data.result.FileId
+                        fileId: data.result.FileId,
+                        fileName: data.result.Name
                     };
                     isInternalSetValue = true;        
                     $timeout(function () { $scope.complet = true }, 2000);
@@ -126,13 +127,15 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                         fileId: ctrl.value.fileId,
                         moduleName: getModuleName()
                     }).then(function (response) {
-                        if (response != null)
+                        if (response != null) {
+                            ctrl.value.fileName = response.Name;
                             ctrl.file = {
                                 name: response.Name,
                                 type: response.Extension,
                                 fileId: response.FileId,
                                 lastModifiedDate: response.lastModifiedDate
                             };
+                        }
                         else
                             ctrl.file = {};
                     });

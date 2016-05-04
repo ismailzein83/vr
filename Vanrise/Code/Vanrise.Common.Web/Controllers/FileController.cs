@@ -26,20 +26,20 @@ namespace Vanrise.Common.Web
             HttpResponseMessage result = null;
             var httpRequest = HttpContext.Current.Request;
 
-            if (httpRequest.Files.Count > 0 )
+            if (httpRequest.Files.Count > 0)
             {
                 HttpPostedFile postedFile = httpRequest.Files[0];
                 string[] nameastab = postedFile.FileName.Split('.');
-                
+
                 string moduleName = httpRequest.Headers["Module-Name"];
 
                 VRFile file = new VRFile()
                 {
-                    Content = ReadToEnd(postedFile.InputStream) ,
-                    Name = postedFile.FileName ,
-                    Extension = nameastab[nameastab.Length -1],
+                    Content = ReadToEnd(postedFile.InputStream),
+                    Name = postedFile.FileName,
+                    Extension = nameastab[nameastab.Length - 1],
                     ModuleName = moduleName,
-                    CreatedTime = DateTime.Now 
+                    CreatedTime = DateTime.Now
                 };
 
                 // VRFileManager sets the UserId property via SecurityContext
@@ -47,11 +47,12 @@ namespace Vanrise.Common.Web
                 VRFileManager manager = new VRFileManager(moduleName);
                 long id = manager.AddFile(file);
 
-                
-                result = Request.CreateResponse(HttpStatusCode.Created );
+
+                result = Request.CreateResponse(HttpStatusCode.Created);
                 return new FileUploadResult
                 {
-                    FileId = id
+                    FileId = id,
+                    Name = postedFile.FileName
                 };
             }
             else
@@ -62,12 +63,13 @@ namespace Vanrise.Common.Web
 
         [Route("DownloadFile")]
         [HttpGet]
-        public HttpResponseMessage DownloadFile(long fileId, string moduleName = null) {
+        public HttpResponseMessage DownloadFile(long fileId, string moduleName = null)
+        {
 
             VRFileManager manager = new VRFileManager(moduleName);
             VRFile file = manager.GetFile(fileId);
             byte[] bytes = file.Content;
-              
+
             MemoryStream memStreamRate = new System.IO.MemoryStream();
             memStreamRate.Write(bytes, 0, bytes.Length);
             memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
@@ -91,7 +93,7 @@ namespace Vanrise.Common.Web
 
             VRFileManager manager = new VRFileManager();
             VRFile file = manager.GetFile(fileId);
-          //  HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            //  HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
 
             if (file.Extension == "jpg" || file.Extension == "png" || file.Extension == "jpeg" || file.Extension == "bmp" || file.Extension == "gif")
             {
@@ -100,13 +102,13 @@ namespace Vanrise.Common.Web
                 string base64String = "data:image/" + file.Extension + ";base64," + Convert.ToBase64String(bytes);
                 return base64String;
 
-               
+
             }
             else
             {
                 return null;
             }
-          
+
 
         }
 
