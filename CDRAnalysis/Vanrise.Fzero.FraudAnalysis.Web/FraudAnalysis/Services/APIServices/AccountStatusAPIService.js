@@ -17,6 +17,13 @@
 
         }
 
+        function DeleteAccountStatus(accountNumber) {
+            return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, "DeleteAccountStatus"), {
+                accountNumber: accountNumber
+            });
+        }
+
+
         function UpdateAccountStatus(accountStatusObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, "UpdateAccountStatus"), accountStatusObject);
         }
@@ -35,11 +42,12 @@
             );
         }
 
-        function UploadAccountStatuses(fileId, validTill) {
+        function UploadAccountStatuses(fileId, validTill, reason) {
             return BaseAPIService.get(UtilsService.getServiceURL(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, "UploadAccountStatuses"),
                 {
                     fileId: fileId,
-                    validTill: validTill
+                    validTill: validTill,
+                    reason: reason
                 }
 
                 );
@@ -61,6 +69,10 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, ['UpdateAccountStatus']));
         }
 
+        function HasDeleteAccountStatusPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(CDRAnalysis_FA_ModuleConfig.moduleName, controllerName, ['DeleteAccountStatus']));
+        }
+
         return ({
             GetAccountStatusesData: GetAccountStatusesData,
             GetAccountStatus: GetAccountStatus,
@@ -71,7 +83,9 @@
             HasAddAccountStatusPermission: HasAddAccountStatusPermission,
             HasUploadAccountStatusPermission: HasUploadAccountStatusPermission,
             HasDownloadAccountStatusPermission: HasDownloadAccountStatusPermission,
-            HasEditAccountStatusPermission: HasEditAccountStatusPermission
+            HasEditAccountStatusPermission: HasEditAccountStatusPermission,
+            DeleteAccountStatus: DeleteAccountStatus,
+            HasDeleteAccountStatusPermission: HasDeleteAccountStatusPermission
         });
     }
 

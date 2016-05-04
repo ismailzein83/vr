@@ -52,7 +52,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             accountCaseHistoryManager.InsertAccountCaseHistory(caseID, userID, input.CaseStatus, input.Reason);
             AccountStatusManager accountStatusManager = new AccountStatusManager();
             if (input.CaseStatus == CaseStatus.ClosedFraud || input.CaseStatus == CaseStatus.ClosedWhiteList)
-                accountStatusManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill);
+                accountStatusManager.InsertOrUpdateAccountStatus(input.AccountNumber, input.CaseStatus, input.ValidTill, input.Reason, userID);
 
             StrategyExecutionItemManager strategyExecutionItemManager = new StrategyExecutionItemManager();
             strategyExecutionItemManager.LinkItemToCase(input.AccountNumber, caseID, input.CaseStatus);

@@ -26,29 +26,62 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             {
                 AccountNumber = reader["AccountNumber"] as string,
                 Status = GetReaderValue<CaseStatus>(reader, "Status"),
-                ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill")
-
+                ValidTill = GetReaderValue<DateTime?>(reader, "ValidTill"),
+                Source = GetReaderValue<AccountStatusSource>(reader, "Source"),
+                Reason = reader["Reason"] as string,
+                UserId = (int)reader["UserId"]
             };
 
             return accountStatus;
         }
 
-        private string GetSingleQuery()
+        private string GetSingleQuery(Vanrise.Entities.DataRetrievalInput<AccountStatusQuery> input)
         {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append(String.Format(@"
-                    SELECT   [AccountNumber] ,[Status]  ,[ValidTill]
+                    SELECT   [AccountNumber] ,[Status]  ,[ValidTill], [Reason], [Source], [UserId]
                         FROM [FraudAnalysis].[AccountStatus]
-                        WITH(NOLOCK) WHERE (AccountNumber like '%' + @AccountNumber + '%' and Status = @StatusID and ValidTill>= @FromDate AND (ValidTill<= @ToDate OR @ToDate IS NULL))  
+                        WITH(NOLOCK) #WHERE_CLAUSE#  
                         "));
+
+            queryBuilder.Replace("#WHERE_CLAUSE#", GetWhereClause(input.Query.AccountNumber, input.Query.Sources, input.Query.UserIds, input.Query.FromDate, input.Query.ToDate, input.Query.Status));
             return queryBuilder.ToString();
+        }
+
+        private string GetWhereClause(string accountNumber, List<AccountStatusSource> sources, List<int> userIds, DateTime fromDate, DateTime? toDate, CaseStatus status)
+        {
+            StringBuilder whereClause = new StringBuilder();
+            whereClause.Append("WHERE (ValidTill>= '" + fromDate + "' AND (ValidTill<= '" + toDate + "' OR '" + toDate + "' IS NULL))");
+
+            whereClause.Append(" AND Status = " + ((int)status).ToString());
+
+            if (accountNumber != null)
+                whereClause.Append(" AND AccountNumber like '%" + accountNumber + "%'");
+
+            if (sources != null && sources.Count > 0)
+                whereClause.Append(" AND Source IN (" + string.Join(",", GetAccountStatusSourceListAsIntList(sources)) + ")");
+
+            if (userIds != null && userIds.Count > 0)
+                whereClause.Append(" AND UserID IN (" + string.Join(",", userIds) + ")");
+
+            return whereClause.ToString();
+        }
+
+        private List<int> GetAccountStatusSourceListAsIntList(List<AccountStatusSource> items)
+        {
+            List<int> list = new List<int>();
+
+            foreach (AccountStatusSource item in items)
+                list.Add((int)item);
+
+            return list;
         }
 
         #endregion
 
         #region Public Methods
 
-        public bool ApplyAccountStatuses(DataTable accountStatusDataTables, DateTime validTill)
+        public bool ApplyAccountStatuses(DataTable accountStatusDataTables, DateTime validTill, string reason, int userId)
         {
             int recordsAffected = 0;
             if (accountStatusDataTables.Rows.Count > 0)
@@ -60,6 +93,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
                            dtPrm.Value = accountStatusDataTables;
                            cmd.Parameters.Add(dtPrm);
                            cmd.Parameters.Add(new SqlParameter("@ValidTill", validTill));
+                           cmd.Parameters.Add(new SqlParameter("@Source", (int)AccountStatusSource.ManualUpload));
+                           cmd.Parameters.Add(new SqlParameter("@Reason", reason));
+                           cmd.Parameters.Add(new SqlParameter("@UserId", userId));
                        });
             }
 
@@ -74,32 +110,33 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
             }, string.Join(",", caseStatuses.Select(itm => (int)itm)), numberPrefixes != null ? String.Join(",", numberPrefixes) : null);
         }
 
-        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
+        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, DateTime? validTill, string reason, int userId)
         {
-            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus, validTill);
+            int recordsAffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_InsertOrUpdate", accountNumber, caseStatus, validTill, reason, AccountStatusSource.CaseUpdate, userId);
             return (recordsAffected > 0);
         }
 
         public IEnumerable<AccountStatus> GetAccountStatusesData(Vanrise.Entities.DataRetrievalInput<AccountStatusQuery> input)
         {
-            return GetItemsText(GetSingleQuery(), AccountStatusMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromDate));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.ToDate)));
-                cmd.Parameters.Add(new SqlParameter("@AccountNumber", input.Query.AccountNumber));
-                cmd.Parameters.Add(new SqlParameter("@StatusID", (int)input.Query.Status));
-            });
+            return GetItemsText(GetSingleQuery(input), AccountStatusMapper, (cmd) => { });
         }
 
         public bool Update(AccountStatus accountStatus)
         {
-            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_Update", accountStatus.AccountNumber, accountStatus.ValidTill);
+            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_Update", accountStatus.AccountNumber, accountStatus.ValidTill, (int)accountStatus.Source, accountStatus.Reason, accountStatus.UserId);
             return (recordsEffected > 0);
         }
 
         public bool Insert(AccountStatus accountStatus)
         {
-            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_Insert", accountStatus.AccountNumber, (int)accountStatus.Status, accountStatus.ValidTill);
+            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_Insert", accountStatus.AccountNumber, (int)accountStatus.Status, accountStatus.ValidTill, (int)accountStatus.Source, accountStatus.Reason, accountStatus.UserId);
+
+            return (recordsEffected > 0);
+        }
+
+        public bool Delete(string number)
+        {
+            int recordsEffected = ExecuteNonQuerySP("FraudAnalysis.sp_AccountStatus_Delete", number);
 
             return (recordsEffected > 0);
         }

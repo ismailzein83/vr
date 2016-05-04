@@ -2,9 +2,9 @@
 
     "use strict";
 
-    accountStatusUploaderController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", 'VRNotificationService', 'UtilsService'];
+    accountStatusUploaderController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", 'VRNotificationService', 'UtilsService','VRValidationService'];
 
-    function accountStatusUploaderController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, VRNotificationService, UtilsService) {
+    function accountStatusUploaderController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, VRNotificationService, UtilsService, VRValidationService) {
 
         defineScope();
         load();
@@ -19,9 +19,12 @@
                 return Fzero_FraudAnalysis_AccountStatusAPIService.HasDownloadAccountStatusPermission();
             };
 
+            $scope.validateIsValidDate = function () {
+                return VRValidationService.validateTimeEqualorGreaterthanToday($scope.validTill);
+            }
 
             $scope.uploadAccountStatuses = function () {
-                return Fzero_FraudAnalysis_AccountStatusAPIService.UploadAccountStatuses($scope.file.fileId, $scope.validTill).then(function (response) {
+                return Fzero_FraudAnalysis_AccountStatusAPIService.UploadAccountStatuses($scope.file.fileId, $scope.validTill, $scope.reason).then(function (response) {
                     VRNotificationService.showInformation(response)
                 });
             }

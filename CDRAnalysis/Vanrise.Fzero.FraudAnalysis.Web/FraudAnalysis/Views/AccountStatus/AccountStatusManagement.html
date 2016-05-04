@@ -1,6 +1,16 @@
 ﻿<vr-panel ng-controller="FraudAnalysis_AccountStatusManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
+
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                    </vr-choices-filter>
+                </vr-columns>
+            </vr-row>
+
             <vr-row removeline>
 
                 <vr-columns width="normal">
@@ -14,6 +24,21 @@
                 <vr-columns width="normal">
                     <vr-textbox value="accountNumber" label="Account Number"></vr-textbox>
                 </vr-columns>
+
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-select label="Sources"
+                               datasource="sources"
+                               selectedvalues="selectedSources"
+                               datavaluefield="value"
+                               datatextfield="description"
+                               ismultipleselection>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns width="normal" ng-show="advancedSelected">
+                    <vr-sec-user-selector on-ready="onUserSelectorReady" ismultipleselection></vr-sec-user-selector>
+                </vr-columns>
+
             </vr-row>
         </div>
         <vr-row removeline>

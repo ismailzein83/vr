@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Data;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 
@@ -18,7 +19,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return dataManager.GetAccountStatus(accountNumber);
         }
 
-        public string AddAccountStatuses(int fileId, DateTime validTill)
+        public string AddAccountStatuses(int fileId, DateTime validTill, string reason)
         {
             DataTable accountStatusDataTable = new DataTable();
             VRFileManager fileManager = new VRFileManager();
@@ -32,8 +33,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
                 accountStatusDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
 
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
+            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
 
-            bool applied = dataManager.ApplyAccountStatuses(accountStatusDataTable, validTill);
+            bool applied = dataManager.ApplyAccountStatuses(accountStatusDataTable, validTill, reason, userId);
             if (applied)
                 return "Uploaded Successfully";
             else
@@ -42,6 +44,8 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public Vanrise.Entities.InsertOperationOutput<AccountStatusDetail> AddAccountStatus(AccountStatus accountStatus)
         {
+            accountStatus.Source = AccountStatusSource.ManualUpload;
+            accountStatus.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             Vanrise.Entities.InsertOperationOutput<AccountStatusDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountStatusDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -64,6 +68,9 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public Vanrise.Entities.UpdateOperationOutput<AccountStatusDetail> UpdateAccountStatus(AccountStatus accountStatus)
         {
+            accountStatus.Source = AccountStatusSource.ManualUpload;
+            accountStatus.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
 
             bool updateActionSucc = dataManager.Update(accountStatus);
@@ -84,16 +91,35 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             return updateOperationOutput;
         }
 
+
+        public DeleteOperationOutput<object> DeleteAccountStatus(string number)
+        {
+            DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
+            deleteOperationOutput.Result = DeleteOperationResult.InUse;
+
+            IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
+
+            bool deleted = dataManager.Delete(number);
+
+            if (deleted)
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
+
+            return deleteOperationOutput;
+        }
+
+
         public List<string> GetAccountNumbersByNumberPrefixAndStatuses(List<CaseStatus> caseStatuses, List<string> numberPrefixes)
         {
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
             return dataManager.GetAccountNumbersByNumberPrefixAndStatuses(caseStatuses, numberPrefixes);
         }
 
-        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, DateTime? validTill)
+        public bool InsertOrUpdateAccountStatus(string accountNumber, CaseStatus caseStatus, DateTime? validTill, string reason, int userId)
         {
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
-            return dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus, validTill);
+            return dataManager.InsertOrUpdateAccountStatus(accountNumber, caseStatus, validTill, reason, userId);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<AccountStatusDetail> GetAccountStatusesData(Vanrise.Entities.DataRetrievalInput<AccountStatusQuery> input)
@@ -103,10 +129,13 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
 
         public AccountStatusDetail AccountStatusDetailMapper(AccountStatus accountStatus)
         {
+            Vanrise.Security.Business.UserManager userManager = new Security.Business.UserManager();
             AccountStatusDetail accountStatusDetail = new AccountStatusDetail
             {
                 Entity = accountStatus,
-                StatusName = Utilities.GetEnumDescription(accountStatus.Status)
+                StatusName = Utilities.GetEnumDescription(accountStatus.Status),
+                SourceName = Utilities.GetEnumDescription(accountStatus.Source),
+                UserName = userManager.GetUserName(accountStatus.UserId)
             };
 
             return accountStatusDetail;

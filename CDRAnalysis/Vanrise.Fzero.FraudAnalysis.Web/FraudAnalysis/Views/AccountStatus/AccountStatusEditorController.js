@@ -2,9 +2,9 @@
 
     "use strict";
 
-    accountStatusEditorController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_CaseStatusEnum'];
+    accountStatusEditorController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_CaseStatusEnum', 'VRValidationService'];
 
-    function accountStatusEditorController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_CaseStatusEnum) {
+    function accountStatusEditorController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_CaseStatusEnum, VRValidationService) {
 
         var accountNumber;
         var editMode;
@@ -24,6 +24,10 @@
         function defineScope() {
             $scope.disableAccountNumber = editMode;
             $scope.accountNumber = accountNumber;
+
+            $scope.validateIsValidDate = function () {
+                return VRValidationService.validateTimeEqualorGreaterthanToday($scope.validTill);
+            }
 
             $scope.saveAccountStatus = function () {
                 if (editMode)
@@ -90,7 +94,8 @@
             var obj = {
                 AccountNumber: $scope.accountNumber,
                 ValidTill: $scope.validTill,
-                Status: CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value
+                Status: CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value,
+                Reason: $scope.reason
             };
             return obj;
         }
@@ -101,6 +106,7 @@
                 return;
 
             $scope.validTill = accountStatusEntity.ValidTill;
+            $scope.reason = accountStatusEntity.Reason;
         }
 
         function insertAccountStatus() {

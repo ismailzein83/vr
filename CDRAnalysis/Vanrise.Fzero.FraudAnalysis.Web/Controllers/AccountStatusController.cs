@@ -2,6 +2,7 @@
 using System.IO;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using Vanrise.Web.Base;
@@ -43,10 +44,10 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
 
         [HttpGet]
         [Route("UploadAccountStatuses")]
-        public string UploadAccountStatuses(int fileID, DateTime validTill)
+        public string UploadAccountStatuses(int fileID, DateTime validTill, string reason)
         {
             AccountStatusManager manager = new AccountStatusManager();
-            return manager.AddAccountStatuses(fileID, validTill);
+            return manager.AddAccountStatuses(fileID, validTill, reason);
         }
 
 
@@ -66,6 +67,15 @@ namespace Vanrise.Fzero.FraudAnalysis.Web.Controllers
         {
             AccountStatusManager manager = new AccountStatusManager();
             return manager.GetAccountStatus(accountNumber);
+        }
+
+
+        [HttpGet]
+        [Route("DeleteAccountStatus")]
+        public object DeleteAccountStatus(string accountNumber)
+        {
+            AccountStatusManager manager = new AccountStatusManager();
+            return manager.DeleteAccountStatus(accountNumber);
         }
 
 

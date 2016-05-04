@@ -27,7 +27,7 @@ namespace Vanrise.Fzero.DevRuntime.Tasks
             {
                 InputArguments = new Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyCasesProcessInput
                 {
-                  
+                   UserId=1
                 }
             };
             bpClient.CreateNewProcess(input);

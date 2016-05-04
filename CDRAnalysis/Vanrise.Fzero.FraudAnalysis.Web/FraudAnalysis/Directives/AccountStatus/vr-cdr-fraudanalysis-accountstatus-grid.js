@@ -67,8 +67,34 @@ function (UtilsService, VRNotificationService, Fzero_FraudAnalysis_AccountStatus
                 name: "Edit",
                 clicked: editAccountStatus,
                 haspermission: hasEditAccountStatusPermission
-            }];
+            }
+            ,
+
+            {
+                name: "Delete",
+                clicked: deleteAccountStatus,
+                haspermission: hasDeleteAccountStatusPermission
+            }
+
+
+            ];
         }
+
+
+        function hasDeleteAccountStatusPermission() {
+            return Fzero_FraudAnalysis_AccountStatusAPIService.HasDeleteAccountStatusPermission();
+        }
+
+        function deleteAccountStatus(accountStatusObj) {
+            var onAccountStatusDeleted = function (accountStatusObj) {
+                gridAPI.itemDeleted(accountStatusObj);
+            }
+
+            Fzero_FraudAnalysis_AccountStatusService.deleteAccountStatus(accountStatusObj, onAccountStatusDeleted);
+        }
+
+
+
 
         function hasEditAccountStatusPermission() {
             return Fzero_FraudAnalysis_AccountStatusAPIService.HasEditAccountStatusPermission();

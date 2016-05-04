@@ -2,10 +2,12 @@
 
     "use strict";
 
-    accountStatusManagementController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", "Fzero_FraudAnalysis_AccountStatusService", "CDRAnalysis_FA_CaseStatusEnum", "VRValidationService"];
+    accountStatusManagementController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", "Fzero_FraudAnalysis_AccountStatusService", "CDRAnalysis_FA_CaseStatusEnum", "VRValidationService", "CDRAnalysis_FA_AccountStatusSourceEnum", "UtilsService", "VRUIUtilsService"];
 
-    function accountStatusManagementController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, Fzero_FraudAnalysis_AccountStatusService, CDRAnalysis_FA_CaseStatusEnum, VRValidationService) {
+    function accountStatusManagementController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, Fzero_FraudAnalysis_AccountStatusService, CDRAnalysis_FA_CaseStatusEnum, VRValidationService, CDRAnalysis_FA_AccountStatusSourceEnum, UtilsService, VRUIUtilsService) {
         var gridAPI;
+        var userSelectorAPI;
+        var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
@@ -33,6 +35,11 @@
                 api.loadGrid(getQuery());
             }
 
+            $scope.onUserSelectorReady = function (api) {
+                userSelectorAPI = api;
+                userSelectorReadyDeferred.resolve();
+            };
+
             $scope.addNewAccountStatus = addNewAccountStatus;
             $scope.hasAddAccountStatusPermission = function () {
                 return Fzero_FraudAnalysis_AccountStatusAPIService.HasAddAccountStatusPermission();
@@ -49,6 +56,32 @@
         }
 
         function load() {
+            $scope.isLoading = true;
+            loadAllControls();
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticSelectors, loadUserSelector]).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+
+            function loadStaticSelectors() {
+                $scope.sources = UtilsService.getArrayEnum(CDRAnalysis_FA_AccountStatusSourceEnum);
+                $scope.selectedSources = [];
+            }
+
+            function loadUserSelector() {
+                var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                userSelectorReadyDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(userSelectorAPI, undefined, userSelectorLoadDeferred);
+                });
+
+                return userSelectorLoadDeferred.promise;
+            }
+
         }
 
         function getQuery() {
@@ -56,7 +89,9 @@
                 Status: CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value,
                 FromDate: $scope.fromDate,
                 ToDate: $scope.toDate,
-                AccountNumber: ($scope.accountNumber == undefined ? '' : $scope.accountNumber)
+                AccountNumber: ($scope.accountNumber == undefined ? '' : $scope.accountNumber),
+                UserIds: userSelectorAPI.getSelectedIds(),
+                Sources: ($scope.selectedSources.length > 0) ? UtilsService.getPropValuesFromArray($scope.selectedSources, "value") : null,
             };
             return query;
         }

@@ -8,7 +8,11 @@
                     </vr-columns>
                 </span>
                 <vr-columns width="1/2row">
-                    <vr-datetimepicker label="Valid Till" value="validTill" type="dateTime" isrequired  ></vr-datetimepicker>
+                    <vr-datetimepicker label="Valid Till" value="validTill" type="dateTime" customvalidate="validateIsValidDate()" isrequired></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns width="1/2row">
+                    <vr-textbox value="reason" label="Reason" isrequired></vr-textbox>
                 </vr-columns>
 
             </vr-row>

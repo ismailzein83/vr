@@ -1,11 +1,12 @@
 ﻿
-app.service('Fzero_FraudAnalysis_AccountStatusService', ['VRModalService', 'VRNotificationService', 'UtilsService',
-    function (VRModalService, VRNotificationService, UtilsService) {
+app.service('Fzero_FraudAnalysis_AccountStatusService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'Fzero_FraudAnalysis_AccountStatusAPIService',
+    function (VRModalService, VRNotificationService, UtilsService, Fzero_FraudAnalysis_AccountStatusAPIService) {
         var drillDownDefinitions = [];
         return ({
             editAccountStatus: editAccountStatus,
             addAccountStatus: addAccountStatus,
-            uploadAccountStatuses: uploadAccountStatuses
+            uploadAccountStatuses: uploadAccountStatuses,
+            deleteAccountStatus: deleteAccountStatus
 
         });
         function editAccountStatus(accountNumber, onAccountStatusUpdated) {
@@ -33,10 +34,26 @@ app.service('Fzero_FraudAnalysis_AccountStatusService', ['VRModalService', 'VRNo
             VRModalService.showModal('/Client/Modules/FraudAnalysis/Views/AccountStatus/AccountStatusEditor.html', parameters, settings);
         }
 
+        function deleteAccountStatus(accountStatusObj, onAccountStatusDeleted) {
+            VRNotificationService.showConfirmation()
+                .then(function (response) {
+                    if (response == true) {
+                        return Fzero_FraudAnalysis_AccountStatusAPIService.DeleteAccountStatus(accountStatusObj.Entity.AccountNumber)
+                        .then(function (deletionResponse) {
+                            if (VRNotificationService.notifyOnItemDeleted("AccountStatus", deletionResponse))
+                                onAccountStatusDeleted(accountStatusObj);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                });
+        }
+
         function uploadAccountStatuses() {
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Upload AccountStatuses";
+                modalScope.title = "Upload White List";
             };
             var parameters = {};
 

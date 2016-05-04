@@ -9,5 +9,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Entities
 
         public DateTime? ValidTill { get; set; }
 
+        public string Reason { get; set; }
+
+        public AccountStatusSource Source { get; set; }
+
+        public int UserId { get; set; }
+
     }
 }

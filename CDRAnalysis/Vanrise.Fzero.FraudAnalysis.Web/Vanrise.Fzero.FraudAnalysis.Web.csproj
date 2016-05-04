@@ -144,6 +144,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FraudAnalysis\Constants\AccountStatusSourceEnum.js" />
     <Content Include="FraudAnalysis\Directives\AccountStatus\Templates\AccountStatusGridTemplate.html" />
     <Content Include="FraudAnalysis\Directives\AccountStatus\vr-cdr-fraudanalysis-accountstatus-grid.js" />
     <Content Include="FraudAnalysis\Template\AccountStatusList.xls" />

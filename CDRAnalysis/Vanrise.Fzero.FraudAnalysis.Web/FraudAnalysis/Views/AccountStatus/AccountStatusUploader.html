@@ -2,13 +2,17 @@
     <vr-modalbody>
         <vr-form name="formAccountStatusEditor">
             <vr-row removeline>
-                <vr-columns width="1/2row">
+                <vr-columns width="1/4row">
                     <vr-label>Upload File</vr-label>
                     <vr-fileupload extension="xls,xlsx" value="file" isrequired> </vr-fileupload>
                 </vr-columns>
 
+                <vr-columns width="1/4row">
+                    <vr-datetimepicker label="Valid Till" value="validTill" type="dateTime" customvalidate="validateIsValidDate()" isrequired></vr-datetimepicker>
+                </vr-columns>
+
                 <vr-columns width="1/2row">
-                    <vr-datetimepicker label="Valid Till" value="validTill" type="dateTime" isrequired></vr-datetimepicker>
+                    <vr-textbox value="reason" label="Reason" isrequired></vr-textbox>
                 </vr-columns>
 
             </vr-row>
