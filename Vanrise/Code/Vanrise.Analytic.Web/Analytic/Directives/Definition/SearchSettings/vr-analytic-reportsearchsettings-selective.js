@@ -86,27 +86,27 @@
                 var api = {};
 
                 api.load = function (payload) {
-
+                    console.log(payload);
                     var promises = [];
                     var searchSettings;
                     if (payload != undefined) {
                         tableIds = payload.tableIds;
                         searchSettings = payload.searchSettings;
-                        if(searchSettings !=undefined)
-                        {
-                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                            var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                            directiveReadyDeferred.promise.then(function () {
-                                directiveReadyDeferred = undefined;
-                                var payloadDirective = {
-                                    searchSettings: searchSettings,
-                                    tableIds: tableIds
-                                };
+                        if ($scope.selectedTemplateConfig != undefined)
+                            $scope.selectedTemplateConfig = undefined;
 
-                                VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
-                            });
-                            promises.push(loadDirectivePromiseDeferred.promise);
-                        }
+                        directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                        var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        directiveReadyDeferred.promise.then(function () {
+                            directiveReadyDeferred = undefined;
+                            var payloadDirective = {
+                                searchSettings: searchSettings,
+                                tableIds: tableIds
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
+                        });
+                        promises.push(loadDirectivePromiseDeferred.promise);
                        
                     }
 

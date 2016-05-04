@@ -101,6 +101,7 @@
                     if(analyticItemConfigEntity !=undefined)
                     {
                         $scope.scopeModel.name = analyticItemConfigEntity.Name;
+                        $scope.scopeModel.title = analyticItemConfigEntity.Title;
                     }
                 }
             }
@@ -132,6 +133,7 @@
                 AnalyticItemConfigId: analyticItemConfigId,
                 TableId: analyticItemConfigEntity != undefined ? analyticItemConfigEntity.TableId : analyticTableId,
                 Name: $scope.scopeModel.name,
+                Title: $scope.scopeModel.title,
                 ItemType:itemconfigType,
                 Config: analyticItemConfigdetail
             };

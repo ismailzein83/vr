@@ -43,7 +43,7 @@
             $scope.scopeModel.onSearchSettingsDirectiveReady = function(api)
             {
                 searchSettingDirectiveAPI = api;
-                    var setLoader = function (value) { $scope.isLoadingDimensionDirective = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value };
                     var payload = {
                         tableIds: tableSelectorAPI.getSelectedIds()
                     }
@@ -56,6 +56,17 @@
                 tableSelectorReadyDeferred.resolve();
             }
 
+            $scope.scopeModel.onTableSelectionChanged = function()
+            {
+                if (searchSettingDirectiveAPI != undefined && tableSelectorAPI !=undefined)
+                {
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value };
+                    var payload = {
+                        tableIds: tableSelectorAPI.getSelectedIds()
+                    }
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, searchSettingDirectiveAPI, payload, setLoader,searchSettingReadyDeferred);
+                }
+            }
 
             $scope.scopeModel.SaveGenericBEEditor = function () {
                 if (isEditMode) {

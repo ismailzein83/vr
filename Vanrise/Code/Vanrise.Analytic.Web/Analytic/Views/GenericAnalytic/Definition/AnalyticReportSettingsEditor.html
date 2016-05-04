@@ -14,7 +14,7 @@
                                     <vr-textbox value="scopeModel.reportTitle" isrequired="true" label="Page Title" customvalidate="scopeModel.validate()"></vr-textbox>
                                 </vr-row>
                                 <vr-row>
-                                    <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTables" ismultipleselection></vr-analytic-table-selector>
+                                    <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTables" ismultipleselection onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
                                 </vr-row>
                             </vr-section>
                         </vr-columns>
@@ -35,7 +35,7 @@
 
                 </vr-tab>
                 <vr-tab header="'Search Settings'">
-                    <span ng-if="scopeModel.selectedTables !=undefined && scopeModel.selectedTables.length>0">
+                    <span ng-if="scopeModel.selectedTables !=undefined && scopeModel.selectedTables.length>0" vr-loader="scopeModel.isLoadingSearchSettingsDirective">
                         <vr-analytic-reportsearchsettings-selective on-ready="scopeModel.onSearchSettingsDirectiveReady" normal-col-num="3"></vr-analytic-reportsearchsettings-selective>
                     </span>
                 </vr-tab>

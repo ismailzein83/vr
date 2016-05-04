@@ -70,7 +70,7 @@
 
                     return VR_Analytic_AnalyticItemConfigAPIService.GetJoinsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
-
+                        ctrl.datasource.length = 0;
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
