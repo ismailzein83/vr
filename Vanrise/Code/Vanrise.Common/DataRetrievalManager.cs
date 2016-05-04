@@ -52,8 +52,7 @@ namespace Vanrise.Common
           
 
             Workbook wbk = new Workbook();
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+            Common.Utilities.ActivateAspose();
             wbk.Worksheets.Clear();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("Result");
             int rowIndex = 0;

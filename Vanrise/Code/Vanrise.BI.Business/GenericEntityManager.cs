@@ -200,8 +200,7 @@ namespace Vanrise.BI.Business
         public HttpResponseMessage ExportTopEntities(IEnumerable<EntityRecord> records, List<string> entities, string[] measureTypesNames)
         {
             Workbook wbk = new Workbook();
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+            Common.Utilities.ActivateAspose();
             wbk.Worksheets.Clear();
             Worksheet RateWorkSheet = wbk.Worksheets.Add("Top Entity Report");
             int Irow = 1;

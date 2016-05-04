@@ -31,8 +31,7 @@ namespace Vanrise.ExcelConversion.Business
                 throw new NullReferenceException(String.Format("file.Content '{0}'", fileId));
             MemoryStream stream = new MemoryStream(file.Content);
             Workbook workbook = new Workbook(stream);
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+            Common.Utilities.ActivateAspose();
             ConvertFields(conversionSettings, convertedExcel, workbook,isCommaDecimalSeparator);
             ConvertLists(conversionSettings, convertedExcel, workbook, stopOnFirstEmptyRow,isCommaDecimalSeparator);
 

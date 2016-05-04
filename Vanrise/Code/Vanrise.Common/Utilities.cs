@@ -87,5 +87,11 @@ namespace Vanrise.Common
             return date1 < date2 ? date1 : date2;
         }
 
+        public static void ActivateAspose()
+        {
+            
+            Aspose.Cells.License license = new Aspose.Cells.License();
+            license.SetLicense("Aspose.Cells.lic");
+        }
     }
 }
