@@ -349,6 +349,8 @@ namespace Vanrise.GenericData.SQLDataStorage
                 if (Columns.Contains(column.ColumnName))
                 {
                     var value = reader[column.ColumnName];
+                    if (value == DBNull.Value)
+                        value = null;
                     if (string.Compare(dateTimeColumn, column.ColumnName, true) == 0)
                     {
                         recordTime = value != null ? (DateTime)value : default(DateTime);

@@ -225,27 +225,35 @@ namespace Vanrise.Security.Business
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",
                () =>
-               {
-                   var cloudServiceProxy = GetCloudServiceProxy();
+               {                   
                    IEnumerable<User> users;
-                   if (cloudServiceProxy != null)
-                   {
-                       GetApplicationUsersInput input = new GetApplicationUsersInput();
-                       var output = cloudServiceProxy.GetApplicationUsers(input);
-                       if (output != null && output.Users != null)
-                       {
-                           users = output.Users.Select(user => MapCloudUserToUser(user));
-                       }
-                       else
-                           users = null;
-                   }
-                   else
+                   if(!TryGetUsersFromAuthServer(out users))                   
                    {
                        IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                        users = dataManager.GetUsers();
                    }
                    return users.ToDictionary(kvp => kvp.UserId, kvp => kvp);
                });
+        }
+
+        internal bool TryGetUsersFromAuthServer(out IEnumerable<User> users)
+        {
+            var cloudServiceProxy = GetCloudServiceProxy();
+            if (cloudServiceProxy != null)
+            {
+                GetApplicationUsersInput input = new GetApplicationUsersInput();
+                var output = cloudServiceProxy.GetApplicationUsers(input);
+                if (output != null && output.Users != null)
+                    users = output.Users.Select(user => MapCloudUserToUser(user));
+                else
+                    users = null;
+                return true;
+            }
+            else
+            {
+                users = null;
+                return false;
+            }
         }
 
         private User MapCloudUserToUser(CloudApplicationUser cloudApplicationUser)

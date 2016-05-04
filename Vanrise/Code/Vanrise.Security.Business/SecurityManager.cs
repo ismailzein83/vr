@@ -36,7 +36,7 @@ namespace Vanrise.Security.Business
                 authToken.UserName = user.Email;
                 authToken.UserDisplayName = user.Name;
                 authToken.ExpirationIntervalInMinutes = expirationPeriodInMinutes;
-
+                 
                 string loggedInUserPassword = manager.GetUserPassword(user.UserId);
 
                 if (user.Status == UserStatus.Inactive)
@@ -76,8 +76,7 @@ namespace Vanrise.Security.Business
 
         private void AddTokenExtensions(SecurityToken securityToken)
         {
-            securityToken.Extensions = new Dictionary<string, object>();
-            foreach(var type in Vanrise.Common.Utilities.GetAllImplementations<SecurityTokenExtensionBehavior>())
+            foreach (var type in Vanrise.Common.Utilities.GetAllImplementations<SecurityTokenExtensionBehavior>())
             {
                 SecurityTokenExtensionBehavior behavior = Activator.CreateInstance(type) as SecurityTokenExtensionBehavior;
                 if (behavior == null)
@@ -86,8 +85,6 @@ namespace Vanrise.Security.Business
                 behavior.AddExtensionsToToken(context);
             }
         }
-
-        
 
         public bool IsAllowed(string requiredPermissions, int userId)
         {
@@ -158,7 +155,7 @@ namespace Vanrise.Security.Business
             var authServer = GetAuthServer();
             if (authServer != null)
             {
-                return authServer.Settings.OnlineURL;
+                return String.Format("{0}/Security/Login", authServer.Settings.OnlineURL);
             }
             else
                 return null;
@@ -183,12 +180,30 @@ namespace Vanrise.Security.Business
             {
                 if (authServer.Settings == null)
                     throw new NullReferenceException("authServer.Settings");
-                if (String.IsNullOrWhiteSpace(authServer.Settings.AuthenticationCookieName))
-                    throw new NullReferenceException("authServer.Settings.AuthenticationCookieName");
                 return authServer;
             }
             else
                 return null;
+        }
+
+        public bool CheckTokenAccess(SecurityToken securityToken, out string errorMessage)
+        {
+            if (securityToken.ExpiresAt < DateTime.Now)
+            {
+                errorMessage = "Token Expired";
+                return false;
+            }
+            var authServer = GetAuthServer();
+            if(authServer != null)
+            {
+                if(securityToken.AccessibleCloudApplications == null || !securityToken.AccessibleCloudApplications.Any(app => app.ApplicationId == authServer.Settings.CurrentApplicationId))
+                {
+                    errorMessage = "You dont have access to this application";
+                    return false;
+                }
+            }
+            errorMessage = null;
+            return true;
         }
 
         #endregion
@@ -326,8 +341,8 @@ namespace Vanrise.Security.Business
             return dictionary;
         }
 
-        #endregion
-        
+        #endregion        
+
         #region Private Classes
 
         public class SecurityTokenExtensionContext : ISecurityTokenExtensionContext
@@ -338,8 +353,7 @@ namespace Vanrise.Security.Business
                 set;
             }
         }
-
-
+        
         #endregion
     }
 }

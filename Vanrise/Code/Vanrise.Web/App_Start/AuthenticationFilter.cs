@@ -13,9 +13,7 @@ namespace Vanrise.Web.App_Start
     {
         public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
-            Vanrise.Entities.IsAnonymousAttribute att = actionContext.ActionDescriptor.GetCustomAttributes<Vanrise.Entities.IsAnonymousAttribute>().FirstOrDefault();
-
-            if (att == null)
+            if (NeedsAuthentication(actionContext))
             {
                 string encryptedToken = HttpContext.Current.Request.Headers[Vanrise.Security.Business.SecurityContext.SECURITY_TOKEN_NAME];
 
@@ -29,20 +27,17 @@ namespace Vanrise.Web.App_Start
                     {
                         string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
                         string decryptedToken = Common.Cryptography.Decrypt(encryptedToken, decryptionKey);
+                        string errorMessage;
                         if (decryptedToken != String.Empty)
                         {
-                            SecurityToken securityToken = Serializer.Deserialize<SecurityToken>(decryptedToken);
-                            if (securityToken == null || securityToken.UserId <= 0)
+                            SecurityToken securityToken = Serializer.Deserialize<SecurityToken>(decryptedToken);                            
+                            if (securityToken == null)
                             {
-                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Identity");
+                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid token");
                             }
-                            else if (securityToken.ExpiresAt < DateTime.Now)
+                            else if (!(new SecurityManager()).CheckTokenAccess(securityToken, out errorMessage))
                             {
-                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Token Expired");
-                            }
-                            else if(!(new CloudAuthServerManager()).HasAccessToCurrentApp(securityToken))
-                            {
-                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "You unauthorized to access this application");
+                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, errorMessage);
                             }
                         }
                         else
@@ -50,14 +45,26 @@ namespace Vanrise.Web.App_Start
                             actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Token");
                         }
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        LoggerFactory.GetExceptionLogger().WriteException(ex);
                         actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Token");
                     }
                 }
             }
 
             base.OnAuthorization(actionContext);
+        }
+
+        private bool NeedsAuthentication(System.Web.Http.Controllers.HttpActionContext actionContext)
+        {
+            Vanrise.Entities.IsAnonymousAttribute isAnonymosAttribute = actionContext.ActionDescriptor.GetCustomAttributes<Vanrise.Entities.IsAnonymousAttribute>().FirstOrDefault();
+            if (isAnonymosAttribute != null)
+                return false;
+            Vanrise.Entities.IsInternalAPIAttribute isInternalAPI = actionContext.ActionDescriptor.GetCustomAttributes<Vanrise.Entities.IsInternalAPIAttribute>().FirstOrDefault();
+            if (isInternalAPI != null && ConfigurationManager.AppSettings["IsInternalAPIApplication"] == "true")
+                return false;
+            return true;
         }
     }
 }

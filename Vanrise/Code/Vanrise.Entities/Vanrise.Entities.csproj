@@ -67,6 +67,7 @@
     <Compile Include="Currency\CurrencyQuery.cs" />
     <Compile Include="Currency\Currency.cs" />
     <Compile Include="BigResult.cs" />
+    <Compile Include="CustomAttributes\IsInternalAPIAttribute.cs" />
     <Compile Include="DeleteOperationOutput.cs" />
     <Compile Include="EntitySynchronization\IItem.cs" />
     <Compile Include="EntitySynchronization\ISourceItem.cs" />

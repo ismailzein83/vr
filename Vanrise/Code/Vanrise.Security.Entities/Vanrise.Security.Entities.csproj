@@ -57,6 +57,7 @@
     <Compile Include="Cloud\CloudApplicationIdentification.cs" />
     <Compile Include="Cloud\CloudApplicationUser.cs" />
     <Compile Include="Cloud\CloudAuthServer.cs" />
+    <Compile Include="Cloud\ICloudApplicationService.cs" />
     <Compile Include="Cloud\ICloudService.cs" />
     <Compile Include="ContextFactory.cs" />
     <Compile Include="Group\GroupFilter.cs" />

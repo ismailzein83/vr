@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BusinessEntityDataManager.cs" />
     <Compile Include="BusinessEntityModuleDataManager.cs" />
+    <Compile Include="CloudAuthServerDataManager.cs" />
     <Compile Include="ModuleDataManager.cs" />
     <Compile Include="OrgChartDataManager.cs" />
     <Compile Include="OrgChartLinkedEntityDataManager.cs" />

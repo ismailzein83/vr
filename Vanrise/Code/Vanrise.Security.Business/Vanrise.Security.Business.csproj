@@ -63,6 +63,7 @@
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="BusinessEntityModuleManager.cs" />
     <Compile Include="BusinessEntityNodeManager.cs" />
+    <Compile Include="CloudApplicationServiceManager.cs" />
     <Compile Include="CloudAuthServerManager.cs" />
     <Compile Include="CloudServiceProxy.cs" />
     <Compile Include="Constants.cs" />

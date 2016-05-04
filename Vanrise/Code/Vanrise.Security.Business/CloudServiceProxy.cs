@@ -20,30 +20,13 @@ namespace Vanrise.Security.Business
                 throw new ArgumentNullException("authServer.Settings");
             this._authServer = authServer;
         }
+        
         private Q Post<T, Q>(string actionName, T request)
         {
             string actionPath = string.Format("/api/CloudPortal_BEInternal/CloudService/{0}", actionName);
-            using (var client = new HttpClient())
-            {
-                // New code:
-                client.BaseAddress = new Uri(this._authServer.Settings.InternalURL);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add(this._authServer.Settings.CloudServiceHTTPHeaderName, Vanrise.Common.Serializer.Serialize(this._authServer.ApplicationIdentification));
-                var responseTask = client.PostAsJsonAsync(actionPath, request);
-                responseTask.Wait();
-                if (responseTask.Exception != null)
-                    throw responseTask.Exception;
-                if(responseTask.Result.IsSuccessStatusCode)
-                {
-                    var rsltTask = responseTask.Result.Content.ReadAsAsync<Q>();
-                    rsltTask.Wait();
-                    if (rsltTask.Exception != null)
-                        throw rsltTask.Exception;
-                    return rsltTask.Result;
-                }
-            }
-            return default(Q);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add(CloudAuthServer.CLOUDSERVICE_HTTPHEADERNAME, Vanrise.Common.Serializer.Serialize(this._authServer.ApplicationIdentification));
+            return Vanrise.Common.VRWebAPIClient.Post<T, Q>(this._authServer.Settings.InternalURL, actionPath, request, headers);
         }
 
         public GetApplicationUsersOutput GetApplicationUsers(GetApplicationUsersInput input)

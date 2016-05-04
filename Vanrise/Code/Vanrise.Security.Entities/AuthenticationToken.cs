@@ -27,7 +27,12 @@ namespace Vanrise.Security.Entities
 
         public DateTime ExpiresAt { get; set; }
 
-        public Dictionary<string, Object> Extensions { get; set; }
+        public List<SecurityTokenCloudApplication> AccessibleCloudApplications { get; set; }
+    }
+
+    public class SecurityTokenCloudApplication
+    {
+        public int ApplicationId { get; set; }
     }
 
     public abstract class SecurityTokenExtensionBehavior

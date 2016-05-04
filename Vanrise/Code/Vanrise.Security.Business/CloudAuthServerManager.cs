@@ -3,32 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
 {
     public class CloudAuthServerManager
-    {
-        public const string SecurityTokenAppIdsExtensionName = "CloudAuthServer_TokenExtension";
-
-        public bool HasAccessToCurrentApp(SecurityToken securityToken)
-        {
-            var authServer = GetAuthServer();
-            if (authServer == null)
-                return true;
-            Object userApplicationIds;
-            if(securityToken.Extensions.TryGetValue(SecurityTokenAppIdsExtensionName, out userApplicationIds))
-            {
-                IEnumerable<int> applicationIds = userApplicationIds as IEnumerable<int>;
-                if (applicationIds != null && applicationIds.Contains(authServer.Settings.CurrentApplicationId))
-                    return true;
-            }
-            return false;
-        }
-
+    {        
         public CloudAuthServer GetAuthServer()
         {
-            return null;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAuthServer",
+                () =>
+                {
+                    ICloudAuthServerDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ICloudAuthServerDataManager>();
+                    return dataManager.GetAuthServer();
+                });
+            //return null;
             //if (System.Web.HttpContext.Current.Request.Url.Port != 8787)
             //{
             //    return new CloudAuthServer
@@ -40,9 +30,8 @@ namespace Vanrise.Security.Business
             //        Settings = new CloudAuthServerSettings
             //        {
             //            AuthenticationCookieName = "Cloud-AuthServer-CookieName",
-            //            CloudServiceHTTPHeaderName = "Vanrise_CloudApplicationIdentification",
             //            InternalURL = "http://localhost:8787",
-            //            OnlineURL = "http://localhost:8787/Security/Login",
+            //            OnlineURL = "http://localhost:8787",
             //            TokenDecryptionKey = "CloudSecretKey",
             //            CurrentApplicationId = 2
             //        }
@@ -51,5 +40,20 @@ namespace Vanrise.Security.Business
             //else
             //    return null;
         }
+
+        #region Private Classes
+
+        class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ICloudAuthServerDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<ICloudAuthServerDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.IsAuthServerUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
     }
 }
