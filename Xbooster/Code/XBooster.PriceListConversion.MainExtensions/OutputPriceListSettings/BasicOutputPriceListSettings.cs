@@ -28,9 +28,8 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
                 throw new NullReferenceException(String.Format("file.Content '{0}'", this.TemplateFileId));
             MemoryStream stream = new MemoryStream(file.Content);
             Workbook workbook = new Workbook(stream);
-            
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+
+            Vanrise.Common.Utilities.ActivateAspose();
            
             GenerateOutputExcel(context, workbook);
  
