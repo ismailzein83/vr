@@ -314,27 +314,3 @@ when not matched by target then
 	insert([ID],[Name],[Title],[FQTN],[Config])
 	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
 set identity_insert [bp].[BPDefinition] off;
-
---[FraudAnalysis].[CallClass]--------------------to be updated per client case----------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([Description],[NetType])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('ZAINIQ',1),
-('VAS',1),
-('INV',1),
-('INT',2),
-('KOREKTEL',0),
-('ASIACELL',0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Description],[NetType]))
-merge	[FraudAnalysis].[CallClass] as t
-using	cte_data as s
-on		1=1 and t.[Description] = s.[Description]
-when matched then
-	update set
-	[NetType] = s.[NetType]
-when not matched by target then
-	insert([Description],[NetType])
-	values(s.[Description],s.[NetType]);
