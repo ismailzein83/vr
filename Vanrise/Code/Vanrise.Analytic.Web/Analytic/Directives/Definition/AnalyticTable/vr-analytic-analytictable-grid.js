@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'UtilsService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic__AnalyticTypeEnum','VRUIUtilsService', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticTableService, UtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic__AnalyticTypeEnum, VRUIUtilsService) {
+app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'UtilsService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic__AnalyticTypeEnum', 'VRUIUtilsService','VR_Analytic_AnalyticItemConfigService' ,function (VRNotificationService, VRModalService, VR_Analytic_AnalyticTableService, UtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic__AnalyticTypeEnum, VRUIUtilsService, VR_Analytic_AnalyticItemConfigService) {
 
     var directiveDefinitionObject = {
 
@@ -30,10 +30,10 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
 
         function initializeController() {
             $scope.tables = [];
-
+            $scope.gridMenuActions = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
+                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
@@ -45,6 +45,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onAnalyticTableAdded = function (tableObj) {
+                        gridDrillDownTabs.setDrillDownExtensionObject(tableObj);
                         gridAPI.itemAdded(tableObj);
                     }
                     return directiveAPI;
@@ -74,53 +75,114 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editTable,
-                //haspermission: hasUpdateViewPermission // System Entities:Assign Permissions
             }];
         }
-        //function hasUpdateViewPermission() {
-        //    return VR_Sec_ViewAPIService.HasUpdateViewPermission();
-        //}
+
         function editTable(dataItem) {
             var onEditTable = function (tableObj) {
                 gridAPI.itemUpdated(tableObj);
             }
-
-
             VR_Analytic_AnalyticTableService.editAnalyticTable(dataItem.Entity.AnalyticTableId, onEditTable);
-
         }
 
         function getGridDrillDownDefinitions() {
-            return [{
-                title: "Dimensions",
-                directive: "vr-analytic-analyticconfig-dimension-grid",
-                loadDirective: function (dimensionGridAPI, tableItem) {
-                    var query = {
-                        TableId: tableItem.Entity.AnalyticTableId,
+            var drillDownDefinitions = [];
+            drillDownDefinitions.push(getDimensionDrillDownDefinition());
+            drillDownDefinitions.push(getMeasureDrillDownDefinition());
+            drillDownDefinitions.push(getJoinDrillDownDefinition());
+            return drillDownDefinitions;
+        }
+        function getDimensionDrillDownDefinition() {
+            var drillDownDefinition = {};
+            drillDownDefinition.title = "Dimensions";
+            drillDownDefinition.directive = "vr-analytic-analyticconfig-dimension-grid";
+            drillDownDefinition.loadDirective = function (dimensionGridAPI, tableItem) {
+                tableItem.dimensionGridAPI = dimensionGridAPI;
+                var query = {
+                    TableId: tableItem.Entity.AnalyticTableId,
+                    ItemType: VR_Analytic__AnalyticTypeEnum.Dimension.value
+                };
+                return dimensionGridAPI.loadGrid(query);
+            };
+
+            drillDownDefinition.parentMenuActions = [{
+                name: "Add Dimension",
+                clicked: function (tableItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(tableItem);
+
+                    var onDimensionAdded = function (dimensionObj) {
+                        if (tableItem.dimensionGridAPI != undefined) {
+                            tableItem.dimensionGridAPI.onAnalyticDimensionAdded(dimensionObj);
+                        }
                     };
-                    return dimensionGridAPI.loadGrid(query);
-                }
-            }, {
-                title: "Measures",
-                directive: "vr-analytic-analyticconfig-measure-grid",
-                loadDirective: function (measureGridAPI, tableItem) {
-                    var query = {
-                        TableId: tableItem.Entity.AnalyticTableId,
-                    };
-                    return measureGridAPI.loadGrid(query);
-                }
-            }, {
-                title: "Joins",
-                directive: "vr-analytic-analyticconfig-join-grid",
-                loadDirective: function (joinGridAPI, tableItem) {
-                    var query = {
-                        TableId: tableItem.Entity.AnalyticTableId,
-                    };
-                    return joinGridAPI.loadGrid(query);
-                }
+                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onDimensionAdded, tableItem.Entity.AnalyticTableId, VR_Analytic__AnalyticTypeEnum.Dimension.value);
+                },
             }];
+            return drillDownDefinition;
+        }
+        function getMeasureDrillDownDefinition() {
+            var drillDownDefinition = {};
+            drillDownDefinition.title = "Measures";
+            drillDownDefinition.directive = "vr-analytic-analyticconfig-measure-grid";
+            drillDownDefinition.loadDirective = function (measureGridAPI, tableItem) {
+                tableItem.measureGridAPI = measureGridAPI;
+
+                var query = {
+                    TableId: tableItem.Entity.AnalyticTableId,
+                    ItemType: VR_Analytic__AnalyticTypeEnum.Measure.value
+                };
+                return measureGridAPI.loadGrid(query);
+            };
+
+            drillDownDefinition.parentMenuActions = [{
+                name: "Add Measure",
+                clicked: function (tableItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(tableItem);
+
+                    var onMeasureAdded = function (measureObj) {
+                        if (tableItem.measureGridAPI != undefined) {
+                            tableItem.measureGridAPI.onAnalyticMeasureAdded(measureObj);
+                        }
+                    };
+                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onMeasureAdded, tableItem.Entity.AnalyticTableId, VR_Analytic__AnalyticTypeEnum.Measure.value);
+                },
+            }];
+            return drillDownDefinition;
+        }
+        function getJoinDrillDownDefinition() {
+            var drillDownDefinition = {};
+            drillDownDefinition.title = "Joins";
+            drillDownDefinition.directive = "vr-analytic-analyticconfig-join-grid";
+            drillDownDefinition.loadDirective = function (joinGridAPI, tableItem) {
+                tableItem.joinGridAPI = joinGridAPI;
+
+                var query = {
+                    TableId: tableItem.Entity.AnalyticTableId,
+                    ItemType: VR_Analytic__AnalyticTypeEnum.Join.value
+                };
+                return joinGridAPI.loadGrid(query);
+            };
+
+            drillDownDefinition.parentMenuActions = [{
+                name: "Add Join",
+                clicked: function (tableItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(tableItem);
+
+                    var onJoinAdded = function (joinObj) {
+                        if (tableItem.joinGridAPI != undefined) {
+                            tableItem.joinGridAPI.onAnalyticJoinAdded(joinObj);
+                        }
+                    };
+                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onJoinAdded, tableItem.Entity.AnalyticTableId, VR_Analytic__AnalyticTypeEnum.Join.value);
+                },
+            }];
+            return drillDownDefinition;
         }
     }
+
 
     return directiveDefinitionObject;
 

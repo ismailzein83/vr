@@ -26,7 +26,8 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
 
         var gridAPI;
         this.initializeController = initializeController;
-
+        var tableId;
+        var itemType;
         function initializeController() {
             $scope.joins = [];
 
@@ -40,6 +41,10 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
                     var directiveAPI = {};
 
                     directiveAPI.loadGrid = function (query) {
+                        if (query != undefined) {
+                            tableId = query.TableId;
+                            itemType = query.ItemType;
+                        }
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onAnalyticJoinAdded = function (joinObj) {
@@ -50,7 +55,7 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return VR_Analytic_AnalyticItemConfigAPIService.GetFilteredJoins(dataRetrievalInput)
+                return VR_Analytic_AnalyticItemConfigAPIService.GetFilteredAnalyticItemConfigs(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
@@ -74,7 +79,7 @@ app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRM
                 gridAPI.itemUpdated(joinObj);
             }
 
-            VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditJoin);
+            VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditJoin, tableId, itemType);
 
         }
 

@@ -26,7 +26,8 @@ app.directive("vrAnalyticAnalyticconfigDimensionGrid", ['VRNotificationService',
 
         var gridAPI;
         this.initializeController = initializeController;
-
+        var tableId;
+        var itemType;
         function initializeController() {
             $scope.dimensions = [];
 
@@ -40,6 +41,11 @@ app.directive("vrAnalyticAnalyticconfigDimensionGrid", ['VRNotificationService',
                     var directiveAPI = {};
 
                     directiveAPI.loadGrid = function (query) {
+                        if(query !=undefined)
+                        {
+                            tableId = query.TableId;
+                            itemType = query.ItemType;
+                        }
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onAnalyticDimensionAdded = function (dimensionObj) {
@@ -50,7 +56,7 @@ app.directive("vrAnalyticAnalyticconfigDimensionGrid", ['VRNotificationService',
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return VR_Analytic_AnalyticItemConfigAPIService.GetFilteredDimensions(dataRetrievalInput)
+                return VR_Analytic_AnalyticItemConfigAPIService.GetFilteredAnalyticItemConfigs(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
@@ -74,7 +80,7 @@ app.directive("vrAnalyticAnalyticconfigDimensionGrid", ['VRNotificationService',
                 gridAPI.itemUpdated(dimensionObj);
             }
 
-            VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditDimension);
+            VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditDimension, tableId, itemType);
 
         }
 

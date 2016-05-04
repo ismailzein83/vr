@@ -16,21 +16,37 @@
                 filter: filter
             });
         }
-        function GetFilteredDimensions(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredDimensions"), input);
+        function GetJoinsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetJoinsInfo"), {
+                filter: filter
+            });
         }
-        function GetFilteredMeasures(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredMeasures"), input);
+
+        function GetFilteredAnalyticItemConfigs(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredAnalyticItemConfigs"), input);
         }
-        function GetFilteredJoins(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredJoins"), input);
+
+        function GetAnalyticItemConfigsById(tableId, itemType, analyticItemConfigId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticItemConfigsById"), {
+                tableId: tableId,
+                itemType: itemType,
+                analyticItemConfigId: analyticItemConfigId
+            });
+        }
+        function AddAnalyticItemConfig(analyticItemConfig) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "AddAnalyticItemConfig"), analyticItemConfig);
+        }
+        function UpdateAnalyticItemConfig(analyticItemConfig) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "UpdateAnalyticItemConfig"), analyticItemConfig);
         }
         return ({
             GetDimensionsInfo: GetDimensionsInfo,
             GetMeasuresInfo: GetMeasuresInfo,
-            GetFilteredDimensions: GetFilteredDimensions,
-            GetFilteredMeasures: GetFilteredMeasures,
-            GetFilteredJoins: GetFilteredJoins
+            GetJoinsInfo: GetJoinsInfo,
+            GetFilteredAnalyticItemConfigs: GetFilteredAnalyticItemConfigs,
+            GetAnalyticItemConfigsById: GetAnalyticItemConfigsById,
+            AddAnalyticItemConfig: AddAnalyticItemConfig,
+            UpdateAnalyticItemConfig: UpdateAnalyticItemConfig
         });
     }
 

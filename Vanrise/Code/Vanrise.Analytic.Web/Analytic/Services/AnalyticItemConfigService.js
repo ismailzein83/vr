@@ -10,26 +10,38 @@
             editItemConfig: editItemConfig,
         });
 
-        function addItemConfig(onAnalyticItemConfigAdded) {
-            var modalSettings = {};
+
+
+        function addItemConfig(onAnalyticItemConfigAdded, analyticTableId, itemConfigType) {
+            var modalSettings = {
+            };
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onAnalyticItemConfigAdded = onAnalyticItemConfigAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticItemConfigEditor.html', null, modalSettings);
-        }
-
-        function editItemConfig(analyticItemConfigId, onAnalyticItemConfigUpdated) {
-            var modalParameters = {
-                analyticItemConfigId: analyticItemConfigId
+            var parameters = {
+                itemconfigType: itemConfigType,
+                analyticTableId: analyticTableId
             };
 
-            var modalSettings = {};
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticItemConfigEditor.html', parameters, modalSettings);
+        }
+
+
+        function editItemConfig(analyticItemConfigId, onAnalyticItemConfigUpdated, analyticTableId, itemConfigType) {
+            var modalParameters = {
+                    analyticItemConfigId: analyticItemConfigId,
+            itemconfigType: itemConfigType,
+            analyticTableId: analyticTableId
+        };
+
+            var modalSettings = {
+        };
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onAnalyticItemConfigUpdated = onAnalyticItemConfigUpdated;
-            };
+        };
 
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticItemConfigEditor.html', modalParameters, modalSettings);
         }

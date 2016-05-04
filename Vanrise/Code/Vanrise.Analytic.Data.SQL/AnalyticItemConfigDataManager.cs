@@ -27,6 +27,22 @@ namespace Vanrise.Analytic.Data.SQL
             return GetItemsSP("[Analytic].[sp_AnalyticItemConfig_GetByTableIdAndItemType]", AnalyticItemConfigReader<T>, tableId, (int)itemType);
         }
 
+
+        public bool AddAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig, out int analyticItemConfigId) where T:class
+        {
+            object analyticItemConfigID;
+
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticItemConfig_Insert", out analyticItemConfigID, analyticItemConfig.Name, analyticItemConfig.Title, analyticItemConfig.TableId, analyticItemConfig.ItemType, Vanrise.Common.Serializer.Serialize(analyticItemConfig.Config));
+            analyticItemConfigId = (recordesEffected > 0) ? (int)analyticItemConfigID : -1;
+
+            return (recordesEffected > 0);
+        }
+
+        public bool UpdateAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class
+        {
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticItemConfig_Update",analyticItemConfig.AnalyticItemConfigId, analyticItemConfig.Name, analyticItemConfig.Title, analyticItemConfig.TableId, analyticItemConfig.ItemType, Vanrise.Common.Serializer.Serialize(analyticItemConfig.Config));
+            return (recordesEffected > 0);
+        }
         #endregion
 
         #region Private Methods

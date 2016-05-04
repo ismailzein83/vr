@@ -8,6 +8,7 @@ using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Entities;
 namespace Vanrise.Analytic.Business
 {
     public class AnalyticItemConfigManager
@@ -97,49 +98,126 @@ namespace Vanrise.Analytic.Business
             }
             return measureConfigs;
         }
-
-
-        public Vanrise.Entities.IDataRetrievalResult<AnalyticDimensionConfigDetail> GetFilteredDimensions(Vanrise.Entities.DataRetrievalInput<AnalyticDimensionConfigQuery> input)
+        public IEnumerable<AnalyticJoinConfigInfo> GetJoinsInfo(AnalyticJoinConfigInfoFilter filter)
         {
-            if(input.Query == null)
+            if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)
+                throw new NullReferenceException("AnalyticJoinConfigInfoFilter");
+            List<AnalyticJoinConfigInfo> JoinConfigs = new List<AnalyticJoinConfigInfo>();
+            foreach (var tableId in filter.TableIds)
             {
-                throw new NullReferenceException("GetFilteredDimensions");
+                var joins = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, AnalyticItemType.Join);
+                JoinConfigs.AddRange(joins.MapRecords(AnalyticJoinConfigInfoMapper));
             }
-            var dimensions = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(input.Query.TableId, AnalyticItemType.Dimension);
-
-            Func<AnalyticItemConfig<AnalyticDimensionConfig>, bool> filterExpression = (prod) =>
-                 (true);
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dimensions.ToBigResult(input, filterExpression, AnalyticDimensionConfigDetailMapper));
+            return JoinConfigs;
         }
-        public Vanrise.Entities.IDataRetrievalResult<AnalyticMeasureConfigDetail> GetFilteredMeasures(Vanrise.Entities.DataRetrievalInput<AnalyticMeasureConfigQuery> input)
+
+        public Vanrise.Entities.IDataRetrievalResult<Object> GetFilteredAnalyticItemConfigs(Vanrise.Entities.DataRetrievalInput<AnalyticItemConfigQuery> input)
         {
             if (input.Query == null)
             {
-                throw new NullReferenceException("GetFilteredMeasures");
+                throw new ArgumentNullException("input.Query");
             }
-            var measures = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(input.Query.TableId, AnalyticItemType.Measure);
+            var itemConfigs = GetCachedAnalyticItemConfigsByItemType(input.Query.TableId, input.Query.ItemType);
 
-            Func<AnalyticItemConfig<AnalyticMeasureConfig>, bool> filterExpression = (prod) =>
+            Func<Object, bool> filterExpression = (prod) =>
                  (true);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, measures.ToBigResult(input, filterExpression, AnalyticMeasureConfigDetailMapper));
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, itemConfigs.ToBigResult(input,filterExpression));
         }
-        public Vanrise.Entities.IDataRetrievalResult<AnalyticJoinConfigDetail> GetFilteredJoins(Vanrise.Entities.DataRetrievalInput<AnalyticJoinConfigQuery> input)
-        {
-            if (input.Query == null)
-            {
-                throw new NullReferenceException("GetFilteredJoins");
-            }
-            var joins = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(input.Query.TableId, AnalyticItemType.Join);
-            Func<AnalyticItemConfig<AnalyticJoinConfig>, bool> filterExpression = (prod) =>
-                 (true);
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, joins.ToBigResult(input, filterExpression, AnalyticJoinConfigDetailMapper));
+        public Object GetAnalyticItemConfigsById(int tableId,AnalyticItemType itemType,int  analyticItemConfigId)
+        {
+            return GetCachedAnalyticItemConfigByItemType(tableId, itemType, analyticItemConfigId);
+        }
+
+
+        public Vanrise.Entities.InsertOperationOutput<AnalyticItemConfigDetail<T>> AddAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class
+        {
+            InsertOperationOutput<AnalyticItemConfigDetail<T>> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AnalyticItemConfigDetail<T>>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int analyticItemConfigId = -1;
+
+            IAnalyticItemConfigDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticItemConfigDataManager>();
+            bool insertActionSucc = false;
+            insertActionSucc = dataManager.AddAnalyticItemConfig(analyticItemConfig, out analyticItemConfigId);
+
+            if (insertActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                analyticItemConfig.AnalyticItemConfigId = analyticItemConfigId;
+                insertOperationOutput.InsertedObject = AnalyticConfigDetailMapper(analyticItemConfig);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<AnalyticItemConfigDetail<T>> UpdateAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class
+        {
+            IAnalyticItemConfigDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticItemConfigDataManager>();
+
+            bool updateActionSucc = false;
+            UpdateOperationOutput<AnalyticItemConfigDetail<T>> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AnalyticItemConfigDetail<T>>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+
+            updateOperationOutput.UpdatedObject = null;
+            updateActionSucc = dataManager.UpdateAnalyticItemConfig(analyticItemConfig);
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = AnalyticConfigDetailMapper(analyticItemConfig);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
         }
         #endregion
 
         #region Private Methods
 
+        private Object GetCachedAnalyticItemConfigByItemType(int tableId, AnalyticItemType itemType, int analyticItemConfigId)
+        {
+            Object data = null;
+            switch (itemType)
+            {
+                case AnalyticItemType.Dimension: data = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
+                case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
+                case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
+            }
+            return data;
+        }
+        private IEnumerable<Object> GetCachedAnalyticItemConfigsByItemType(int tableId, AnalyticItemType itemType)
+        {
+            IEnumerable<Object> data = null;
+            switch(itemType)
+            {
+                case AnalyticItemType.Dimension: data = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticDimensionConfig>); break;
+                case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticJoinConfig>); break;
+                case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticMeasureConfig>); break;
+            }
+           return data; 
+        }
+        AnalyticItemConfigDetail<T> AnalyticConfigDetailMapper<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class
+        {
+            return new AnalyticItemConfigDetail<T>
+            {
+                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
+                Name = analyticItemConfig.Name,
+                Entity = analyticItemConfig,
+                Title = analyticItemConfig.Title
+            };
+        }
         private IEnumerable<AnalyticItemConfig<T>> GetCachedAnalyticItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetCachedAnalyticItemConfigs_{0}_{1}", tableId, itemType),
@@ -149,16 +227,7 @@ namespace Vanrise.Analytic.Business
                    return dataManager.GetItemConfigs<T>(tableId, itemType);
                });
         }
-        private Object GetAnalyticConfigByType(AnalyticItemType itemType)
-        {
-            switch (itemType)
-            {
-                case AnalyticItemType.Dimension: return typeof(AnalyticDimensionConfig);
-                case AnalyticItemType.Measure: return typeof(AnalyticMeasureConfig);
-                case AnalyticItemType.Join: return typeof(AnalyticJoinConfig);
-            }
-            return null;
-        }
+      
         #endregion
 
         #region Private Classes
@@ -197,34 +266,13 @@ namespace Vanrise.Analytic.Business
                 Title = analyticItemConfig.Title
             };
         }
-        AnalyticDimensionConfigDetail AnalyticDimensionConfigDetailMapper(AnalyticItemConfig<AnalyticDimensionConfig> analyticItemConfig)
+        AnalyticJoinConfigInfo AnalyticJoinConfigInfoMapper(AnalyticItemConfig<AnalyticJoinConfig> analyticItemConfig)
         {
-            return new AnalyticDimensionConfigDetail
+            return new AnalyticJoinConfigInfo
             {
                 AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
                 Name = analyticItemConfig.Name,
-                Title = analyticItemConfig.Title,
-                Entity = analyticItemConfig.Config
-            };
-        }
-        AnalyticMeasureConfigDetail AnalyticMeasureConfigDetailMapper(AnalyticItemConfig<AnalyticMeasureConfig> analyticItemConfig)
-        {
-            return new AnalyticMeasureConfigDetail
-            {
-                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
-                Name = analyticItemConfig.Name,
-                Title = analyticItemConfig.Title,
-                Entity = analyticItemConfig.Config
-            };
-        }
-        AnalyticJoinConfigDetail AnalyticJoinConfigDetailMapper(AnalyticItemConfig<AnalyticJoinConfig> analyticItemConfig)
-        {
-            return new AnalyticJoinConfigDetail
-            {
-                AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
-                Name = analyticItemConfig.Name,
-                Title = analyticItemConfig.Title,
-                Entity = analyticItemConfig.Config
+                Title = analyticItemConfig.Title
             };
         }
         #endregion

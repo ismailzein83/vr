@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common;
 using Vanrise.Web.Base;
 
 namespace Vanrise.Analytic.Web.Controllers
@@ -30,27 +31,67 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticMeasureConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticMeasureConfigInfoFilter>(filter) : null;
             return manager.GetMeasuresInfo(serializedFilter);
         }
-        [HttpPost]
-        [Route("GetFilteredDimensions")]
-        public object GetFilteredDimensions(Vanrise.Entities.DataRetrievalInput<AnalyticDimensionConfigQuery> input)
+        [HttpGet]
+        [Route("GetJoinsInfo")]
+        public IEnumerable<AnalyticJoinConfigInfo> GetJoinsInfo(string filter)
         {
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
-            return GetWebResponse(input, manager.GetFilteredDimensions(input));
+            AnalyticJoinConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticJoinConfigInfoFilter>(filter) : null;
+            return manager.GetJoinsInfo(serializedFilter);
         }
         [HttpPost]
-        [Route("GetFilteredMeasures")]
-        public object GetFilteredMeasures(Vanrise.Entities.DataRetrievalInput<AnalyticMeasureConfigQuery> input)
+        [Route("GetFilteredAnalyticItemConfigs")]
+        public object GetFilteredAnalyticItemConfigs(Vanrise.Entities.DataRetrievalInput<AnalyticItemConfigQuery> input)
         {
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
-            return GetWebResponse(input, manager.GetFilteredMeasures(input));
+            return GetWebResponse(input, manager.GetFilteredAnalyticItemConfigs(input));
         }
-        [HttpPost]
-        [Route("GetFilteredJoins")]
-        public object GetFilteredJoins(Vanrise.Entities.DataRetrievalInput<AnalyticJoinConfigQuery> input)
+        [HttpGet]
+        [Route("GetAnalyticItemConfigsById")]
+        public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, int analyticItemConfigId)
         {
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
-            return GetWebResponse(input, manager.GetFilteredJoins(input));
+            return manager.GetAnalyticItemConfigsById(tableId, itemType, analyticItemConfigId);
         }
 
+        [HttpPost]
+        [Route("AddAnalyticItemConfig")]
+        public Object AddAnalyticItemConfig(AnalyticItemConfigInput analyticItemConfig)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            switch (analyticItemConfig.ItemType)
+            {
+                case AnalyticItemType.Dimension:
+                    var dimensionAnalyticItemConfig = Serializer.Deserialize<AnalyticItemConfig<AnalyticDimensionConfig>>(analyticItemConfig.AnalyticItemConfig);
+                    return manager.AddAnalyticItemConfig(dimensionAnalyticItemConfig);
+                case AnalyticItemType.Measure:
+                    var measureAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticMeasureConfig>>(analyticItemConfig.AnalyticItemConfig);
+                    return manager.AddAnalyticItemConfig(measureAnalyticItemConfigObj);
+                case AnalyticItemType.Join:
+                    var joinAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticJoinConfig>>(analyticItemConfig.AnalyticItemConfig);
+                    return manager.AddAnalyticItemConfig(joinAnalyticItemConfigObj);
+            }
+            return null;
+        }
+        [HttpPost]
+        [Route("UpdateAnalyticItemConfig")]
+        public Object UpdateAnalyticItemConfig(AnalyticItemConfigInput analyticItemConfig)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            switch (analyticItemConfig.ItemType)
+            {
+                case AnalyticItemType.Dimension:
+                    var dimensionAnalyticItemConfig = Serializer.Deserialize<AnalyticItemConfig<AnalyticDimensionConfig>>(analyticItemConfig.AnalyticItemConfig);
+                    return manager.UpdateAnalyticItemConfig(dimensionAnalyticItemConfig);
+                case AnalyticItemType.Measure:
+                    var measureAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticMeasureConfig>>(analyticItemConfig.AnalyticItemConfig);
+                    return manager.UpdateAnalyticItemConfig(measureAnalyticItemConfigObj);
+                case AnalyticItemType.Join:
+                    var joinAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticJoinConfig>>(analyticItemConfig.AnalyticItemConfig);
+                    return manager.UpdateAnalyticItemConfig(joinAnalyticItemConfigObj);
+            }
+            return null;
+        }
     }
+    
 }

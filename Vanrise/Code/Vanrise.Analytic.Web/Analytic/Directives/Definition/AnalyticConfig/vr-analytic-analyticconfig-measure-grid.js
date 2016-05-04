@@ -26,7 +26,8 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
 
         var gridAPI;
         this.initializeController = initializeController;
-
+        var tableId;
+        var itemType;
         function initializeController() {
             $scope.measures = [];
 
@@ -40,6 +41,10 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
                     var directiveAPI = {};
 
                     directiveAPI.loadGrid = function (query) {
+                        if (query != undefined) {
+                            tableId = query.TableId;
+                            itemType = query.ItemType;
+                        }
                         return gridAPI.retrieveData(query);
                     }
                     directiveAPI.onAnalyticMeasureAdded = function (measureObj) {
@@ -50,7 +55,7 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return VR_Analytic_AnalyticItemConfigAPIService.GetFilteredMeasures(dataRetrievalInput)
+                return VR_Analytic_AnalyticItemConfigAPIService.GetFilteredAnalyticItemConfigs(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
@@ -74,7 +79,7 @@ app.directive("vrAnalyticAnalyticconfigMeasureGrid", ['VRNotificationService', '
                 gridAPI.itemUpdated(measureObj);
             }
 
-            VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditMeasure);
+            VR_Analytic_AnalyticItemConfigService.editItemConfig(dataItem.Entity.AnalyticItemConfigId, onEditMeasure, tableId, itemType);
 
         }
 

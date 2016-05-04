@@ -1,1 +1,30 @@
-﻿
+﻿<div vr-modalcontent ng-controller="VR_Analytic_AnalyticItemConfigEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
+    <vr-modalbody maxheight="'600px'">
+        <vr-form validationcontext="analyticItemConfigEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModel.name" isrequired="true" label="Name" customvalidate="scopeModel.validate()"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-directivewrapper directive="scopeModel.selectedItemConfigType.editor" on-ready="scopeModel.onItemConfigTypeDirectiveReady"></vr-directivewrapper>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="analyticItemConfigEditorGroup" data-onclick="scopeModel.saveItemConfig"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>
