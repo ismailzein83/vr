@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ItemconfigMeasureEditorDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
+    ItemconfigMeasureEditorDirective.$inject = ['UtilsService', 'VRUIUtilsService','VR_Analytic_ExpressionTypeEnum'];
 
-    function ItemconfigMeasureEditorDirective(UtilsService, VRUIUtilsService) {
+    function ItemconfigMeasureEditorDirective(UtilsService, VRUIUtilsService,VR_Analytic_ExpressionTypeEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -36,6 +36,23 @@
             var joinReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
 
+                $scope.expressionType = UtilsService.getArrayEnum(VR_Analytic_ExpressionTypeEnum);
+                $scope.showSQLExpression = false;
+                $scope.showSQLExpressionMethod = false;
+                $scope.onExpressionTypeSelectionChanged = function()
+                {
+                    if($scope.selectedExpressionType !=undefined)
+                    {
+                      
+                        switch ($scope.selectedExpressionType.value)
+                        {
+                            case VR_Analytic_ExpressionTypeEnum.SQLExpression.value: $scope.showSQLExpression = true; $scope.showSQLExpressionMethod = false; break;
+                            case VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod.value: $scope.showSQLExpressionMethod = true; $scope.showSQLExpression = false; break;
+                        }
+
+                    }
+                }
+
                 $scope.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
@@ -57,8 +74,17 @@
                         tableId = payload.tableId;
                         configEntity = payload.ConfigEntity;
                         if (configEntity != undefined) {
+                            
                             $scope.sqlExpression = configEntity.SQLExpression;
                             $scope.sqlExpressionMethod = configEntity.GetSQLExpressionMethod;
+
+                            if( $scope.sqlExpression !=undefined)
+                            {
+                                $scope.selectedExpressionType =  VR_Analytic_ExpressionTypeEnum.SQLExpression;
+                            }else if ($scope.sqlExpressionMethod !=undefined)
+                            {
+                                $scope.selectedExpressionType = VR_Analytic_ExpressionTypeEnum.SQLExpressionMethod;
+                            }
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         joinReadyDeferred.promise.then(function () {
@@ -80,9 +106,9 @@
                     var joinConfigNames = joinSelectorAPI != undefined ? joinSelectorAPI.getSelectedIds() : undefined;
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticMeasureConfig ,Vanrise.Analytic.Entities",
-                        SQLExpression: $scope.sqlExpression,
+                        SQLExpression:$scope.showSQLExpression? $scope.sqlExpression:undefined,
                         JoinConfigNames:joinConfigNames,
-                        GetSQLExpressionMethod: $scope.sqlExpressionMethod,
+                        GetSQLExpressionMethod:$scope.showSQLExpressionMethod? $scope.sqlExpressionMethod:undefined,
                     };
                     return dimension;
                 }

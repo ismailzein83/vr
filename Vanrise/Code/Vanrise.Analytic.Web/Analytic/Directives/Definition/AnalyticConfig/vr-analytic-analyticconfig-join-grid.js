@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigService', 'UtilsService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic__AnalyticTypeEnum', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticItemConfigService, UtilsService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic__AnalyticTypeEnum) {
+app.directive("vrAnalyticAnalyticconfigJoinGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigService', 'UtilsService', 'VR_Analytic_AnalyticItemConfigAPIService', function (VRNotificationService, VRModalService, VR_Analytic_AnalyticItemConfigService, UtilsService, VR_Analytic_AnalyticItemConfigAPIService) {
 
     var directiveDefinitionObject = {
 

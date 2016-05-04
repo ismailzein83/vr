@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'UtilsService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic__AnalyticTypeEnum', 'VRUIUtilsService','VR_Analytic_AnalyticItemConfigService' ,function (VRNotificationService, VRModalService, VR_Analytic_AnalyticTableService, UtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic__AnalyticTypeEnum, VRUIUtilsService, VR_Analytic_AnalyticItemConfigService) {
+app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalService', 'VR_Analytic_AnalyticTableService', 'UtilsService', 'VR_Analytic_AnalyticTableAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRUIUtilsService','VR_Analytic_AnalyticItemConfigService' ,function (VRNotificationService, VRModalService, VR_Analytic_AnalyticTableService, UtilsService, VR_Analytic_AnalyticTableAPIService, VR_Analytic_AnalyticTypeEnum, VRUIUtilsService, VR_Analytic_AnalyticItemConfigService) {
 
     var directiveDefinitionObject = {
 
@@ -100,7 +100,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
                 tableItem.dimensionGridAPI = dimensionGridAPI;
                 var query = {
                     TableId: tableItem.Entity.AnalyticTableId,
-                    ItemType: VR_Analytic__AnalyticTypeEnum.Dimension.value
+                    ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value
                 };
                 return dimensionGridAPI.loadGrid(query);
             };
@@ -116,7 +116,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
                             tableItem.dimensionGridAPI.onAnalyticDimensionAdded(dimensionObj);
                         }
                     };
-                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onDimensionAdded, tableItem.Entity.AnalyticTableId, VR_Analytic__AnalyticTypeEnum.Dimension.value);
+                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onDimensionAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.Dimension.value);
                 },
             }];
             return drillDownDefinition;
@@ -130,7 +130,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
 
                 var query = {
                     TableId: tableItem.Entity.AnalyticTableId,
-                    ItemType: VR_Analytic__AnalyticTypeEnum.Measure.value
+                    ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value
                 };
                 return measureGridAPI.loadGrid(query);
             };
@@ -146,7 +146,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
                             tableItem.measureGridAPI.onAnalyticMeasureAdded(measureObj);
                         }
                     };
-                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onMeasureAdded, tableItem.Entity.AnalyticTableId, VR_Analytic__AnalyticTypeEnum.Measure.value);
+                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onMeasureAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.Measure.value);
                 },
             }];
             return drillDownDefinition;
@@ -160,7 +160,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
 
                 var query = {
                     TableId: tableItem.Entity.AnalyticTableId,
-                    ItemType: VR_Analytic__AnalyticTypeEnum.Join.value
+                    ItemType: VR_Analytic_AnalyticTypeEnum.Join.value
                 };
                 return joinGridAPI.loadGrid(query);
             };
@@ -176,7 +176,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRNotificationService', 'VRModalS
                             tableItem.joinGridAPI.onAnalyticJoinAdded(joinObj);
                         }
                     };
-                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onJoinAdded, tableItem.Entity.AnalyticTableId, VR_Analytic__AnalyticTypeEnum.Join.value);
+                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onJoinAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.Join.value);
                 },
             }];
             return drillDownDefinition;

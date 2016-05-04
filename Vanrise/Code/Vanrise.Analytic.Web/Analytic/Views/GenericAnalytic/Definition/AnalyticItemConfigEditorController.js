@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AnalyticItemConfigEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic__AnalyticTypeEnum','VR_Analytic_AnalyticItemConfigAPIService'];
+    AnalyticItemConfigEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','VR_Analytic_AnalyticTypeEnum','VR_Analytic_AnalyticItemConfigAPIService'];
 
-    function AnalyticItemConfigEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic__AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
+    function AnalyticItemConfigEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
 
         var isEditMode;
         var itemConfigDirectiveAPI;
@@ -118,11 +118,11 @@
 
         function getItemConfigType()
         {
-            for(var prop in VR_Analytic__AnalyticTypeEnum)
+            for(var prop in VR_Analytic_AnalyticTypeEnum)
             {
-                if(VR_Analytic__AnalyticTypeEnum[prop].value == itemconfigType)
+                if(VR_Analytic_AnalyticTypeEnum[prop].value == itemconfigType)
                 {
-                    $scope.scopeModel.selectedItemConfigType =  VR_Analytic__AnalyticTypeEnum[prop];
+                    $scope.scopeModel.selectedItemConfigType =  VR_Analytic_AnalyticTypeEnum[prop];
                 }
             }
         }
