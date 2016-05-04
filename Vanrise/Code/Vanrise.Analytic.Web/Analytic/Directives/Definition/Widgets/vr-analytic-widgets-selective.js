@@ -40,7 +40,7 @@
                 + ' <vr-textbox label="Title" value="scopeModel.widgetTitle" isrequired="true"></vr-textbox>'
               + ' </vr-columns>'
                + ' <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">'
-                + ' <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTable" hideremoveicon onselectionchanged="scopeModel.onSelectionTableChanged"></vr-analytic-table-selector>'
+                + ' <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTable" hideremoveicon onselectitem="scopeModel.onSelectionTableChanged"></vr-analytic-table-selector>'
               + ' </vr-columns>'
 
               + '<vr-columns colnum="{{searchSettingsCtrl.normalColNum}}" ng-if="scopeModel.selectedTable !=undefined">'

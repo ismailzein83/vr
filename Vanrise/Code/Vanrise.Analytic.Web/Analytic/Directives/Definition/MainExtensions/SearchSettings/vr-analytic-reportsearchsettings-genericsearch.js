@@ -117,6 +117,7 @@
                         if (payload.searchSettings != undefined)
                         {
                             $scope.scopeModel.isRequiredGroupingDimensions = payload.searchSettings.IsRequiredGroupingDimensions;
+                         
                             if(payload.searchSettings.GroupingDimensions !=undefined && payload.searchSettings.GroupingDimensions.length>0)
                             {
                                 selectedGroupingIds = [];

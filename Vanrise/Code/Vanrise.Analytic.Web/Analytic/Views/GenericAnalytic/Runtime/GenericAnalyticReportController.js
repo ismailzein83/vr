@@ -86,22 +86,29 @@
 
             function loadFilters() {
                 var filterPromises = [];
-                for (var i = 0; i < viewEntity.Settings.SearchSettings.Filters.length; i++) {
-                    var filterConfiguration = viewEntity.Settings.SearchSettings.Filters[i];
-                    var filter = getFilter(filterConfiguration);
-                    if (filter != undefined) {
-                        filterPromises.push(filter.directiveLoadDeferred.promise);
-                        $scope.scopeModel.filters.push(filter);
+                if (viewEntity.Settings.SearchSettings.Filters != undefined)
+                {
+                    for (var i = 0; i < viewEntity.Settings.SearchSettings.Filters.length; i++) {
+                        var filterConfiguration = viewEntity.Settings.SearchSettings.Filters[i];
+                        var filter = getFilter(filterConfiguration);
+                        if (filter != undefined) {
+                            filterPromises.push(filter.directiveLoadDeferred.promise);
+                            $scope.scopeModel.filters.push(filter);
+                        }
                     }
                 }
-                for (var i = 0; i < viewEntity.Settings.SearchSettings.GroupingDimensions.length; i++) {
-                    var groupingDimention = viewEntity.Settings.SearchSettings.GroupingDimensions[i];
-                    $scope.scopeModel.groupingDimentions.push(groupingDimention);
-                    if (groupingDimention.IsSelected)
-                    {
-                        $scope.scopeModel.selectedGroupingDimentions.push(groupingDimention);
+               
+                if (viewEntity.Settings.SearchSettings.GroupingDimensions != undefined)
+                {
+                    for (var i = 0; i < viewEntity.Settings.SearchSettings.GroupingDimensions.length; i++) {
+                        var groupingDimention = viewEntity.Settings.SearchSettings.GroupingDimensions[i];
+                        $scope.scopeModel.groupingDimentions.push(groupingDimention);
+                        if (groupingDimention.IsSelected) {
+                            $scope.scopeModel.selectedGroupingDimentions.push(groupingDimention);
+                        }
                     }
                 }
+                
                 return UtilsService.waitMultiplePromises(filterPromises);
 
                 function getFilter(filterConfiguration) {
@@ -180,20 +187,23 @@
 
         function getQuery(widgetPayload) {
             var dimensionFilters = [];
-            for (var i = 0; i < $scope.scopeModel.filters.length; i++)
+            if ($scope.scopeModel.filters != undefined)
             {
-                var filter = $scope.scopeModel.filters[i];
-                if (filter.directiveAPI.getData() != undefined)
-                {
-                    dimensionFilters.push({
-                        Dimension: filter.dimesnionName,
-                        FilterValues: filter.directiveAPI.getValuesAsArray()
-                    })
+                for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
+                    var filter = $scope.scopeModel.filters[i];
+                    if (filter.directiveAPI.getData() != undefined) {
+                        dimensionFilters.push({
+                            Dimension: filter.dimesnionName,
+                            FilterValues: filter.directiveAPI.getValuesAsArray()
+                        })
+                    }
+
                 }
-               
             }
+          
 
             var groupingDimensions = [];
+         
             if($scope.scopeModel.selectedGroupingDimentions !=undefined && $scope.scopeModel.selectedGroupingDimentions.length>0)
             {
                 for (var i = 0; i < $scope.scopeModel.selectedGroupingDimentions.length; i++) {
@@ -202,14 +212,16 @@
                 }
             }else
             {
-                for(var i=0;i<viewEntity.Settings.SearchSettings.GroupingDimensions.length;i++)
+                if (viewEntity.Settings.SearchSettings.GroupingDimensions != undefined)
                 {
-                    var groupDimension = viewEntity.Settings.SearchSettings.GroupingDimensions[i];
-                    if(groupDimension.IsSelected)
-                    {
-                        groupingDimensions.push({DimensionName:groupDimension.DimensionName});
+                    for (var i = 0; i < viewEntity.Settings.SearchSettings.GroupingDimensions.length; i++) {
+                        var groupDimension = viewEntity.Settings.SearchSettings.GroupingDimensions[i];
+                        if (groupDimension.IsSelected) {
+                            groupingDimensions.push({ DimensionName: groupDimension.DimensionName });
+                        }
                     }
                 }
+                
             }
             var query = {
                 Settings: widgetPayload,
@@ -219,6 +231,7 @@
                 FromTime: $scope.scopeModel.fromdate,
                 ToTime: $scope.scopeModel.todate
             };
+            console.log(query);
             return query;
         }
 
