@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Data.SQL;
-using Vanrise.GenericData.Business;
 
 namespace Vanrise.Analytic.Data.SQL
 {
@@ -16,25 +15,8 @@ namespace Vanrise.Analytic.Data.SQL
         public IEnumerable<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
             string query = BuildAnalyticQuery(input, false);
-            Dictionary<string, string> columnsMappings = new Dictionary<string, string>();
-            DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
 
 
-
-            for (int i = 0; i < input.Query.DimensionFields.Count; i++)
-            {
-                var dimensionName = input.Query.DimensionFields[i];
-                var dimension = _dimensions[dimensionName];
-
-                columnsMappings.Add(String.Format("DimensionValues[{0}].Name", i), GetDimensionNameColumnAlias(dimension));
-            }
-
-            for (int i = 0; i < input.Query.MeasureFields.Count; i++)
-            {
-                var measureName = input.Query.MeasureFields[i];
-                var measure = _measures[measureName];
-                columnsMappings.Add(String.Format("MeasureValues.{0}", input.Query.MeasureFields[i]), GetMeasureColumnAlias(measure));
-            }
             return GetItemsText(query, (reader) => AnalyticRecordMapper(reader, input.Query, false), (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
@@ -92,13 +74,6 @@ namespace Vanrise.Analytic.Data.SQL
                 {
                     AnalyticDimension groupDimension = this._dimensions[dimensionName];
 
-                    if (groupDimension.Config.GroupByColumns != null)
-                    {
-                        foreach (var column in groupDimension.Config.GroupByColumns)
-                        {
-                            AddColumnToStringBuilder(groupByPartBuilder, column);
-                        }
-                    }
                     if (groupDimension.Config.JoinConfigNames != null)
                     {
                         foreach (var join in groupDimension.Config.JoinConfigNames)
@@ -107,10 +82,16 @@ namespace Vanrise.Analytic.Data.SQL
                         }
                     }
                     if (!String.IsNullOrEmpty(groupDimension.Config.IdColumn))
+                    {
+                        AddColumnToStringBuilder(groupByPartBuilder, groupDimension.Config.IdColumn);
                         AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", groupDimension.Config.IdColumn, GetDimensionIdColumnAlias(groupDimension)));
+                    }
 
                     if (!String.IsNullOrEmpty(groupDimension.Config.NameColumn))
+                    {
+                        AddColumnToStringBuilder(groupByPartBuilder, groupDimension.Config.NameColumn);
                         AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", groupDimension.Config.NameColumn, GetDimensionNameColumnAlias(groupDimension)));
+                    }
 
                 }
             #endregion
