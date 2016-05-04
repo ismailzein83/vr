@@ -60,7 +60,7 @@ set identity_insert [sec].[Module] on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (901,'Fraud Analysis',null,null,'/images/menu-icons/other.png',11,0),
-(902,'Reports',null,null,'/images/menu-icons/busines intel.png',14,0),
+--(902,'Reports',null,null,'/images/menu-icons/busines intel.png',14,0),
 (903,'Network Infrastructure',null,1,null,30,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
@@ -86,9 +86,10 @@ as (select * from (values
 (9002,'Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement',901,'Fzero_FraudAnalysis/Strategy/GetFilteredStrategies',null,null,null,0,1),
 (9003,'Strategy Execution Log','Strategy Execution Log','#/view/FraudAnalysis/Views/StrategyExecution/StrategyExecutionManagement',901,'Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions',null,null,null,0,2),
 (9004,'Suspicious Numbers','Suspicious Numbers','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis',901,'Fzero_FraudAnalysis/AccountCase/GetFilteredAccountSuspicionSummaries',null,null,null,0,3),
-(9005,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',902,null,null,null,null,0,1),
-(9006,'Detected Lines Summary','Detected Lines Summary','#/view/FraudAnalysis/Views/Reports/BlockedLines',902,null,null,null,null,0,2),
-(9007,'Detected Lines Details','Detected Lines Details','#/view/FraudAnalysis/Views/Reports/LinesDetected',902,null,null,null,null,0,3),
+(9005,'White Numbers','White Numbers','#/view/FraudAnalysis/Views/AccountStatus/AccountStatusManagement',901,'Fzero_FraudAnalysis/AccountStatus/GetAccountStatusesData',null,null,null,0,4),
+--(9006,'Cases Productivity','Cases Productivity','#/view/FraudAnalysis/Views/Reports/CasesProductivity',902,null,null,null,null,0,1),
+--(9007,'Detected Lines Summary','Detected Lines Summary','#/view/FraudAnalysis/Views/Reports/BlockedLines',902,null,null,null,null,0,2),
+--(9008,'Detected Lines Details','Detected Lines Details','#/view/FraudAnalysis/Views/Reports/LinesDetected',902,null,null,null,null,0,3),
 (9008,'Switches','Switches','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchManagement',903,'PSTN_BE/Switch/GetFilteredSwitches',null,null,null,0,1),
 (9009,'Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkManagement',903,'PSTN_BE/Trunk/GetFilteredTrunks',null,null,null,0,2),
 (9010,'Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement',903,'PSTN_BE/SwitchBrand/GetFilteredBrands',null,null,null,0,3)
@@ -138,7 +139,8 @@ as (select * from (values
 (2402,'Normalization Rule','Normalization Rule',2,0,'["View","Add","Edit", "Delete"]'),
 (2403,'Strategy','Strategy',901,0,'["View","Add","Edit"]'),
 (2404,'Case Management','Case Management',901,0,'["View","Edit"]'),
-(2405,'Strategy Execution Log','Strategy Execution Log',901,0,'["View"]')
+(2405,'Strategy Execution Log','Strategy Execution Log',901,0,'["View"]'),
+(2406,'Fzero_FraudAnalysis_WhiteListManagement','White List Management',901,0,'["View", "Add", "Edit","Delete", "Download Template", "Upload"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -223,6 +225,13 @@ as (select * from (values
 ('Fzero_FraudAnalysis/Strategy/UpdateStrategy','Strategy:Edit'),
 ('Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions','Strategy Execution Log:View'),
 ('Fzero_FraudAnalysis/StrategyExecutionItem/GetFilteredDetailsByCaseID',null),
+('Fzero_FraudAnalysis/AccountStatus/GetAccountStatusesData','Fzero_FraudAnalysis_WhiteListManagement: View'),
+('Fzero_FraudAnalysis/AccountStatus/GetAccountStatus',null),
+('Fzero_FraudAnalysis/AccountStatus/UpdateAccountStatus','Fzero_FraudAnalysis_WhiteListManagement: Edit'),
+('Fzero_FraudAnalysis/AccountStatus/AddAccountStatus','Fzero_FraudAnalysis_WhiteListManagement: Add'),
+('Fzero_FraudAnalysis/AccountStatus/DownloadAccountStatusesTemplate','Fzero_FraudAnalysis_WhiteListManagement: Download Template'),
+('Fzero_FraudAnalysis/AccountStatus/UploadAccountStatuses','Fzero_FraudAnalysis_WhiteListManagement: Upload'),
+('Fzero_FraudAnalysis/AccountStatus/DeleteAccountStatus','Fzero_FraudAnalysis_WhiteListManagement: Delete'),
 ('PSTN_BE/NormalizationRule/AddRule','Normalization Rule:Add'),
 ('PSTN_BE/NormalizationRule/DeleteRule','Normalization Rule:Delete'),
 ('PSTN_BE/NormalizationRule/GetFilteredNormalizationRules','Normalization Rule:View'),
