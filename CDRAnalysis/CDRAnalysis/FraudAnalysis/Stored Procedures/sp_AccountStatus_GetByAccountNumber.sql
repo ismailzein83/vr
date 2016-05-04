@@ -13,9 +13,7 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	SELECT 
-		AccountNumber,
-		[Status],
-		ValidTill
+		AccountNumber, [Status],	ValidTill, Source, Reason, UserId
 		
 	FROM FraudAnalysis.AccountStatus WITH (NOLOCK)
 	

@@ -6,10 +6,13 @@
 -- =============================================
 CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_Update]
 	@AccountNumber VARCHAR(50),
-	@ValidTill DATETIME
+	@ValidTill DATETIME, 
+	@Source int,
+	@Reason varchar(max),
+	@UserId int
 AS
 BEGIN
 	UPDATE FraudAnalysis.AccountStatus
-	SET  ValidTill = @ValidTill
+	SET  ValidTill = @ValidTill, Source=@Source, Reason=@Reason, UserId=@UserId
 	WHERE AccountNumber = @AccountNumber
 END

@@ -7,18 +7,21 @@
 -- =============================================
 CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_BulkUpdate]
 	@AccountStatus [FraudAnalysis].AccountStatusType READONLY,
-	@ValidTill datetime
+	@ValidTill datetime, 
+	@Source int,
+	@Reason varchar(max),
+	@UserId int
 AS
 BEGIN
 	
 	UPDATE [FraudAnalysis].[AccountStatus] 
-	SET   AccountStatus.ValidTill = @ValidTill, AccountStatus.[Status]=4
+	SET   AccountStatus.ValidTill = @ValidTill, AccountStatus.[Status]=4, Source=@Source, Reason=@Reason, UserId = @UserId
 	FROM [FraudAnalysis].[AccountStatus] WITH(NOLOCK) inner join @AccountStatus as ac ON  AccountStatus.AccountNumber = ac.AccountNumber
 	
 
 	INSERT INTO [FraudAnalysis].[AccountStatus]
-    ([AccountNumber]   ,[Status]  ,[ValidTill])
-	SELECT  ac.[AccountNumber] , 4, @ValidTill
+    ([AccountNumber]   ,[Status]  ,[ValidTill], [Source], [Reason], [UserId])
+	SELECT  ac.[AccountNumber] , 4, @ValidTill , @Source, @Reason, @UserId
 	FROM    @AccountStatus as ac 
 	LEFT JOIN
 			[FraudAnalysis].[AccountStatus] WITH(NOLOCK)

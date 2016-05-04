@@ -177,5 +177,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountInfo_BulkUpdate.sql" />
     <Build Include="FraudAnalysis\User Defined Types\AccountStatusType.sql" />
     <Build Include="FraudAnalysis\User Defined Types\AccountInfoType.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_Delete.sql" />
   </ItemGroup>
 </Project>
