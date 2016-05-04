@@ -7,6 +7,12 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class TableManager : BaseSQLDataManager
     {
+        public TableManager() :
+            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
+        {
+
+        }
+
         public void DropandCreateTempTable(Table table)
         {
             DropTable(table); // Drop Temp Table

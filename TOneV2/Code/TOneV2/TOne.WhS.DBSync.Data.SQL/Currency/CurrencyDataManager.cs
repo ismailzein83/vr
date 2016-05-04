@@ -11,7 +11,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         readonly string[] columns = { "Name", "SourceID" };
 
         public CurrencyDataManager() :
-            base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneV2DBConnString"))
+            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
         {
 
         }
@@ -61,7 +61,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             Table table = new Table();
             table.Schema = "TOneWhS_BE";
-            table.NamewithoutSchema = "WalidCurrency";
+            table.NamewithoutSchema = "Currency";
             table.CreateTableQuery =
                 "CREATE TABLE " + table.TempName + "( " +
                 "[ID] [int] IDENTITY(1,1) NOT NULL, " +
