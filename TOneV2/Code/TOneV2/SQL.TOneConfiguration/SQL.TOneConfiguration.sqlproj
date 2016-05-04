@@ -316,9 +316,10 @@
     <Build Include="common\Stored Procedures\SP_ExtensionConfiguration_GetByType.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_GetAll.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticItemConfig_GetByTableIdAndItemType.sql" />
-    <Build Include="sec\Tables\CloudConnection.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_Update.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_Insert.sql" />
+    <Build Include="sec\Tables\CloudAuthServer.sql" />
+    <Build Include="sec\Stored Procedures\sp_CloudAuthServer_GetFirst.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
