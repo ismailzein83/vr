@@ -51,7 +51,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Data.SQL
         private string GetWhereClause(string accountNumber, List<AccountStatusSource> sources, List<int> userIds, DateTime fromDate, DateTime? toDate, CaseStatus status)
         {
             StringBuilder whereClause = new StringBuilder();
-            whereClause.Append("WHERE (ValidTill>= '" + fromDate + "' AND (ValidTill<= '" + toDate + "' OR '" + toDate + "' IS NULL))");
+
+            if (toDate.HasValue)
+                whereClause.Append("WHERE ValidTill Is NULL OR ValidTill >= '" + fromDate + "' AND ValidTill < '" + toDate + "'");
+            else
+                whereClause.Append("WHERE ValidTill Is NULL OR ValidTill >= '" + fromDate + "' ");
 
             whereClause.Append(" AND Status = " + ((int)status).ToString());
 
