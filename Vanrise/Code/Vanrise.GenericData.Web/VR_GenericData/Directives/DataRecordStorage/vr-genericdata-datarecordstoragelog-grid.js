@@ -48,7 +48,7 @@
                     return VR_GenericData_DataRecordStorageLogAPIService.GetFilteredDataRecordStorageLogs(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        VRNotificationService.notifyException(error, $scope);
                     });
                 };
             }

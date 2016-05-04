@@ -73,6 +73,8 @@
             $scope.scopeModel.isLoading = true;
 
             $scope.orderDirectionList = UtilsService.getArrayEnum(VR_GenericData_OrderDirectionEnum);
+            $scope.selectedOrderDirection = $scope.orderDirectionList[0];
+            $scope.fromDate = new Date();
             $scope.limit = 10000;
             getView().then(function () {
                 loadAllControls();
