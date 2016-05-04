@@ -1,4 +1,8 @@
 ﻿CREATE TYPE [FraudAnalysis].[StrategyExecutionItemType] AS TABLE (
-    [ID]                       BIGINT NOT NULL,
-    [SuspicionOccuranceStatus] INT    NOT NULL);
+    [ID]                       BIGINT       NULL,
+    [SuspicionOccuranceStatus] INT          NULL,
+    [CaseID]                   INT          NULL,
+    [AccountNumber]            VARCHAR (50) NULL);
+
+
 

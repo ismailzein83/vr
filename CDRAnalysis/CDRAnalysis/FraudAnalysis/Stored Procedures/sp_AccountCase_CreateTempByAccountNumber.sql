@@ -22,7 +22,7 @@ BEGIN
 			
 		INTO #RESULT
 			
-		FROM FraudAnalysis.AccountCase ac
+		FROM FraudAnalysis.AccountCase ac WITH (NOLOCK)
 		
 		WHERE ac.AccountNumber = @AccountNumber
 		

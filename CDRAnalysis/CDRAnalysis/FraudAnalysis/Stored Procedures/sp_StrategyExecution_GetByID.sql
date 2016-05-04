@@ -27,7 +27,7 @@ BEGIN
 	  ,[NumberofSuspicions]
       ,[ExecutionDuration]
       ,[Status]
-  FROM [FraudAnalysis].[StrategyExecution]
+  FROM [FraudAnalysis].[StrategyExecution]  WITH (NOLOCK)
 	
 	WHERE ID = @ID
 	

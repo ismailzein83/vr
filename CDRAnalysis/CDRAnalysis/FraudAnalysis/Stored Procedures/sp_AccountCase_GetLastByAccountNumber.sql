@@ -18,7 +18,7 @@ BEGIN
 		ValidTill,
 		CreatedTime
 		
-	FROM FraudAnalysis.AccountCase
+	FROM FraudAnalysis.AccountCase  WITH (NOLOCK)
 	
 	WHERE AccountNumber = @AccountNumber
 	

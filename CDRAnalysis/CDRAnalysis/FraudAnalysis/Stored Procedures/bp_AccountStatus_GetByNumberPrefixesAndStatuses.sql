@@ -27,7 +27,7 @@ DECLARE @NumberPrefixesTable TABLE (NumberPrefix VARCHAR(30));
 			END
 
 	SELECT accStatus.[AccountNumber]
-	FROM [FraudAnalysis].[AccountStatus] accStatus
+	FROM [FraudAnalysis].[AccountStatus] accStatus WITH (NOLOCK)
 	JOIN @NumberPrefixesTable numPrefixes ON accStatus.AccountNumber LIKE numPrefixes.NumberPrefix + '%'
 	WHERE	(@CaseStatusIDs is null or accStatus.[Status] in (SELECT CaseStatusID FROM @CaseStatusIDsTable)) 
 		AND (accStatus.validTill is null OR accStatus.validTill >= GETDATE())

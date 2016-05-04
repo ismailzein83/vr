@@ -1,28 +1,24 @@
 ﻿
 
+
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [FraudAnalysis].[sp_AccountCase_GetByCaseID]
-	@CaseID int
+CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_GetByAccountNumber]
+	@AccountNumber varchar(50)
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	SELECT 
-		ID AS CaseID,
 		AccountNumber,
-		UserID,
-		[Status] AS StatusID,
-		StatusUpdatedTime,
-		ValidTill,
-		CreatedTime
+		[Status],
+		ValidTill
 		
-	FROM FraudAnalysis.AccountCase WITH (NOLOCK)
+	FROM FraudAnalysis.AccountStatus WITH (NOLOCK)
 	
-	WHERE ID = @CaseID
+	WHERE AccountNumber = @AccountNumber
 	
-	ORDER BY CaseID DESC
 END

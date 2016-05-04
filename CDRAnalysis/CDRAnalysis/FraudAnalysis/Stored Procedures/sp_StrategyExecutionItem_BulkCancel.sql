@@ -3,12 +3,13 @@
 
 
 
+
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_BulkUpdate]
+CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_BulkCancel]
 	@StrategyExecutionItem [FraudAnalysis].StrategyExecutionItemType READONLY
 AS
 BEGIN
@@ -16,9 +17,9 @@ BEGIN
 	
 	UPDATE [FraudAnalysis].[StrategyExecutionItem] 
 	SET 
-		StrategyExecutionItem.CaseID = item.CaseID
+		StrategyExecutionItem.SuspicionOccuranceStatus = item.SuspicionOccuranceStatus
 
-	FROM [FraudAnalysis].[StrategyExecutionItem]  inner join @StrategyExecutionItem as item ON  StrategyExecutionItem.AccountNumber = item.AccountNumber and StrategyExecutionItem.CaseID is null
+	FROM [FraudAnalysis].[StrategyExecutionItem]  inner join @StrategyExecutionItem as item ON  StrategyExecutionItem.ID = item.ID
 	
 	
 END

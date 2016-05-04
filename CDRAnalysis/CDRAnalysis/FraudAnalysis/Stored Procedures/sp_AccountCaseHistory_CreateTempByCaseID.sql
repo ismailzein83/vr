@@ -12,16 +12,18 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	BEGIN
-		SELECT ID AS LogID,
-			UserID,
-			[Status] AS AccountCaseStatusID,
-			StatusTime,
-			Reason
+		
+		SELECT [ID]
+			  ,[CaseID]
+			  ,[UserID]
+			  ,[Status]
+			  ,[StatusTime]
+			  ,[Reason]
 			
 		INTO #RESULT
 		
-		FROM FraudAnalysis.AccountCaseHistory
-		
+		FROM [FraudAnalysis].[AccountCaseHistory]
+		WITH (NOLOCK)
 		WHERE CaseID = @CaseID
 		
 		DECLARE @sql VARCHAR(1000)

@@ -108,15 +108,9 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_Update.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetLastByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByAccountNumber.sql" />
-    <Build Include="FraudAnalysis\Tables\RelatedNumbers.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCaseHistory_CreateTempByCaseID.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_GetNamesByIDs.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempByFiltered.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumbers_SwapTableWithTemp.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumbers_GetRelatedNumbersByAccountNumber.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumbers_CreateTempTable.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NumberProfile_CreateTempByAccountNumber.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetStatusByAccountNumber.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
     <Build Include="PSTN_BE\Tables\SwitchTrunk.sql" />
     <Build Include="PSTN_BE\Tables\Switch.sql" />
@@ -151,15 +145,12 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_GetIsReady.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_GetAllReady.sql" />
     <Build Include="FraudAnalysis\Tables\AccountInfo.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetSummaryByCaseID.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountInfo_InsertOrUpdate.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountInfo_GetByAccountStatuses.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetByCaseID.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\bp_AccountStatus_GetByNumberPrefixesAndStatuses.sql" />
     <Build Include="FraudAnalysis\Tables\StrategyExecutionItem_1.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionItem_UpdateStatus.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionItem_GetByNULLCaseID.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionItem_DeleteByStrategyExecutionID.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionItem_CreateTempByCaseID.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecution_CreateTempByFilters.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetDetailsByID.sql" />
@@ -171,5 +162,20 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_BulkUpdate.sql" />
     <Build Include="FraudAnalysis\User Defined Types\StrategyExecutionItemType.sql" />
     <Build Include="FraudAnalysis\User Defined Types\AccountCaseType.sql" />
+    <Build Include="FraudAnalysis\Tables\RelatedNumber.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionItem_GetItemsAndCasesAndInfoByNULLCaseID.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_StrategyExecutionItem_BulkCancel.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumber_GetByNumberPrefix.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_RelatedNumber_GetByAccountNumber.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_UpdateSettingsAndUnLock.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_UnLock.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_CDRDatabase_TryGetWithLock.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_Update.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_Insert.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_GetByAccountNumber.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountStatus_BulkUpdate.sql" />
+    <Build Include="FraudAnalysis\Stored Procedures\sp_AccountInfo_BulkUpdate.sql" />
+    <Build Include="FraudAnalysis\User Defined Types\AccountStatusType.sql" />
+    <Build Include="FraudAnalysis\User Defined Types\AccountInfoType.sql" />
   </ItemGroup>
 </Project>

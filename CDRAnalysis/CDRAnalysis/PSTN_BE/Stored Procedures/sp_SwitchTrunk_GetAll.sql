@@ -10,7 +10,7 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	SELECT [ID]  ,[SwitchID]  ,[Symbol]   ,[Name]  ,[Direction]   ,[Type]    ,[LinkedToTrunkID]
-	FROM PSTN_BE.SwitchTrunk
+	FROM PSTN_BE.SwitchTrunk  WITH (NOLOCK)
 	
 	SET NOCOUNT OFF;
 END

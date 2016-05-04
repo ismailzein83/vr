@@ -20,7 +20,7 @@ BEGIN
       ,exItem.[CaseID]
       ,exItem.[SuspicionOccuranceStatus]
       ,exItem.[IMEIs]
-  FROM [FraudAnalysis].[StrategyExecutionItem] exItem
+  FROM [FraudAnalysis].[StrategyExecutionItem] exItem  WITH (NOLOCK)
   WHERE exItem.StrategyExecutionID = @ExecutionID
 
 --retrieve match cases and related execution items
@@ -33,8 +33,8 @@ BEGIN
       ,ac.[CreatedTime]
       ,ac.[Reason]
       INTO #AccountCases
-  FROM [FraudAnalysis].[AccountCase] ac
-  JOIN StrategyExecutionItem exItem ON ac.ID = exItem.CaseID
+  FROM [FraudAnalysis].[AccountCase] ac  WITH (NOLOCK)
+  JOIN StrategyExecutionItem exItem  WITH (NOLOCK) ON ac.ID = exItem.CaseID
   WHERE exItem.StrategyExecutionID = @ExecutionID
     
   SELECT * FROM #AccountCases
@@ -48,7 +48,7 @@ BEGIN
       ,exItem.[CaseID]
       ,exItem.[SuspicionOccuranceStatus]
       ,exItem.[IMEIs]
-  FROM [FraudAnalysis].[StrategyExecutionItem] exItem
+  FROM [FraudAnalysis].[StrategyExecutionItem] exItem  WITH (NOLOCK)
   JOIN #AccountCases ac on exItem.CaseID = ac.CaseID  
   
 END

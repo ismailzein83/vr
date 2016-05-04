@@ -21,7 +21,7 @@ BEGIN
 			
         INTO #Result
         
-		FROM FraudAnalysis.NumberProfile np
+		FROM FraudAnalysis.NumberProfile np WITH (NOLOCK)
 		
 		WHERE np.AccountNumber=@AccountNumber and (@FromDate is null or np.FromDate >=@FromDate )and  (@ToDate is null or np.ToDate<=@ToDate)
 		

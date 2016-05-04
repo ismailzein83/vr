@@ -7,7 +7,7 @@ BEGIN
       ,[Name]
       ,[OperatorTypeAllowed]
       ,[NumberPrecision]
-  FROM [FraudAnalysis].[Aggregate]
+  FROM [FraudAnalysis].[Aggregate]  WITH (NOLOCK)
 	
 	SET NOCOUNT OFF;
 END

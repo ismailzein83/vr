@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [FraudAnalysis].[sp_CDRDatabase_GetIsReady] 
+CREATE PROCEDURE [FraudAnalysis].[sp_CDRDatabase_UnLock] 
 	@FromTime datetime
 AS
 BEGIN
@@ -7,7 +7,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	
-	SELECT IsReady FROM FraudAnalysis.CDRDatabase  WITH (NOLOCK)
-	WHERE FromTime = @FromTime
-    
+	UPDATE FraudAnalysis.CDRDatabase
+	SET LockedByProcessID = NULL
+	WHERE FromTime = @FromTime    
 END

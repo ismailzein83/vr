@@ -11,6 +11,6 @@ BEGIN
       ,[Settings]
       ,[CreatedTime]
       ,[timestamp]
-  FROM [FraudAnalysis].[CDRDatabase]
+  FROM [FraudAnalysis].[CDRDatabase]  WITH (NOLOCK)
   where IsReady = 1
 END

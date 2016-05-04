@@ -57,7 +57,6 @@ BEGIN
 		and   (@UserIDs IS NULL OR exe.ExecutedBy IN (SELECT UserID FROM @UserIDsTable)OR exe.CancelledBy IN (SELECT UserID FROM @UserIDsTable))
 		and   (@StatusIDs IS NULL OR exe.[Status] IN (SELECT StatusID FROM @StatusIDsTable))
 			
-		ORDER BY exe.[ExecutionDate] DESC
 		
 		DECLARE @sql VARCHAR(1000)
 		SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

@@ -56,8 +56,8 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_CreateTempByFiltered]
 				
 			into #Result
 			
-			FROM FraudAnalysis.[Strategy] s
-			INNER JOIN FraudAnalysis.Period p ON p.ID = s.PeriodID
+			FROM FraudAnalysis.[Strategy] s  WITH (NOLOCK)
+			INNER JOIN FraudAnalysis.Period p  WITH (NOLOCK) ON p.ID = s.PeriodID
 			
 			WHERE (@Name IS NULL OR s.Name  LIKE '%' + @Name + '%' )
 			AND (@Description IS NULL OR s.Description  LIKE '%' + @Description + '%' )

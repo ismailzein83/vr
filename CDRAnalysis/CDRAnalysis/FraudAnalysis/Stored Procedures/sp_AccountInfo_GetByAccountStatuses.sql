@@ -19,7 +19,7 @@ BEGIN
 	SELECT accInfo.[AccountNumber] 
 	  ,accInfo.[InfoDetail]
 	  
-	FROM [FraudAnalysis].[AccountInfo] accInfo
-	LEFT JOIN FraudAnalysis.AccountStatus accStatus ON accInfo.AccountNumber = accStatus.AccountNumber
+	FROM [FraudAnalysis].[AccountInfo] accInfo  WITH (NOLOCK)
+	LEFT JOIN FraudAnalysis.AccountStatus accStatus  WITH (NOLOCK) ON accInfo.AccountNumber = accStatus.AccountNumber
 	WHERE accStatus.AccountNumber IS NULL OR @CaseStatusIDs IS NULL OR accStatus.[Status] IN (SELECT CaseStatusID FROM @CaseStatusIDsTable)
 END

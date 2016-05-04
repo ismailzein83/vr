@@ -14,7 +14,7 @@ BEGIN
       ,[MinValue]
       ,[MaxValue]
       ,[DecimalPrecision]
-  FROM [FraudAnalysis].[Filter]
+  FROM [FraudAnalysis].[Filter] WITH (NOLOCK)
 	
 	SET NOCOUNT OFF;
 END
