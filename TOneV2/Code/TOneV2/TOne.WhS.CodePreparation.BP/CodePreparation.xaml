@@ -73,7 +73,6 @@
       <Variable x:TypeArguments="scg:IEnumerable(twcep:CodeToMove)" Name="CodesToMove" />
       <Variable x:TypeArguments="s:DateTime" Name="MinimumDate" />
       <Variable x:TypeArguments="scg:IEnumerable(twcep:CountryToProcess)" Name="CountriesToProcess" />
-      <Variable x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)" Name="ImportedDataValidationRules" />
       <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedDataToValidate" />
       <Variable x:TypeArguments="scg:IEnumerable(twcep:CodeToAdd)" Name="CodesToAdd" />
       <Variable x:TypeArguments="scg:IEnumerable(twcep:ZoneToProcess)" Name="ZonesToProcess" />
@@ -181,23 +180,23 @@
       </If.Then>
       <If.Else>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
-          <twcba1:GetChanges sap2010:WorkflowViewState.IdRef="GetChanges_1">
-            <twcba1:GetChanges.Changes>
+          <twcba1:GetChangesFromView sap2010:WorkflowViewState.IdRef="GetChangesFromView_1">
+            <twcba1:GetChangesFromView.Changes>
               <OutArgument x:TypeArguments="twce:Changes">
                 <mca:CSharpReference x:TypeArguments="twce:Changes">Changes</mca:CSharpReference>
               </OutArgument>
-            </twcba1:GetChanges.Changes>
-            <twcba1:GetChanges.SaleCodesByZoneId>
+            </twcba1:GetChangesFromView.Changes>
+            <twcba1:GetChangesFromView.SaleCodesByZoneId>
               <OutArgument x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))">
                 <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int64, scg:IEnumerable(twbe:SaleCode))">SaleCodesByZoneId</mca:CSharpReference>
               </OutArgument>
-            </twcba1:GetChanges.SaleCodesByZoneId>
-            <twcba1:GetChanges.SellingNumberPlanId>
+            </twcba1:GetChangesFromView.SaleCodesByZoneId>
+            <twcba1:GetChangesFromView.SellingNumberPlanId>
               <InArgument x:TypeArguments="x:Int32">
                 <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
               </InArgument>
-            </twcba1:GetChanges.SellingNumberPlanId>
-          </twcba1:GetChanges>
+            </twcba1:GetChangesFromView.SellingNumberPlanId>
+          </twcba1:GetChangesFromView>
           <twcba1:GetDataFromCodeChanges sap2010:WorkflowViewState.IdRef="GetDataFromCodeChanges_1">
             <twcba1:GetDataFromCodeChanges.Changes>
               <InArgument x:TypeArguments="twce:Changes">
@@ -294,6 +293,25 @@
         </OutArgument>
       </twcba1:StructureDataByZones.ZonesToProcess>
     </twcba1:StructureDataByZones>
+    <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_1">
+      <vbw:CombineLists.InputLists>
+        <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
+          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt; {CodesToAdd,CodesToMove, ZonesToProcess}</mca:CSharpValue>
+        </InArgument>
+      </vbw:CombineLists.InputLists>
+      <vbw:CombineLists.OutputList>
+        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpReference>
+        </OutArgument>
+      </vbw:CombineLists.OutputList>
+    </vbw:CombineLists>
+    <vbw:ExecuteRules BusinessRulesKey="CP_ValidateZones" sap2010:WorkflowViewState.IdRef="ExecuteRules_2">
+      <vbw:ExecuteRules.ImportedDataToValidate>
+        <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
+        </InArgument>
+      </vbw:ExecuteRules.ImportedDataToValidate>
+    </vbw:ExecuteRules>
     <twcba1:StructureDataByCountries sap2010:WorkflowViewState.IdRef="StructureDataByCountries_1">
       <twcba1:StructureDataByCountries.CountriesToProcess>
         <OutArgument x:TypeArguments="scg:IEnumerable(twcep:CountryToProcess)">
@@ -306,29 +324,10 @@
         </InArgument>
       </twcba1:StructureDataByCountries.ZonesToProcess>
     </twcba1:StructureDataByCountries>
-    <twcba1:GetImportedDataValidationRules sap2010:WorkflowViewState.IdRef="GetImportedDataValidationRules_1">
-      <twcba1:GetImportedDataValidationRules.ImportedDataValidationRules>
-        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:BusinessRule)">ImportedDataValidationRules</mca:CSharpReference>
-        </OutArgument>
-      </twcba1:GetImportedDataValidationRules.ImportedDataValidationRules>
-    </twcba1:GetImportedDataValidationRules>
-    <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_1">
-      <vbw:CombineLists.InputLists>
-        <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
-          <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt; {CodesToAdd,CodesToMove, ZonesToProcess,CountriesToProcess }</mca:CSharpValue>
-        </InArgument>
-      </vbw:CombineLists.InputLists>
-      <vbw:CombineLists.OutputList>
-        <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpReference>
-        </OutArgument>
-      </vbw:CombineLists.OutputList>
-    </vbw:CombineLists>
-    <vbw:ExecuteRules BusinessRulesKey="CP_ValidateCountries" sap2010:WorkflowViewState.IdRef="ExecuteRules_2">
+    <vbw:ExecuteRules BusinessRulesKey="CP_ValidateCountries" sap2010:WorkflowViewState.IdRef="ExecuteRules_3">
       <vbw:ExecuteRules.ImportedDataToValidate>
         <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">CountriesToProcess</mca:CSharpValue>
         </InArgument>
       </vbw:ExecuteRules.ImportedDataToValidate>
     </vbw:ExecuteRules>
@@ -663,7 +662,7 @@
         </InArgument>
       </twcba1:UpdateCodePreparationStateStatus.Status>
     </twcba1:UpdateCodePreparationStateStatus>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -677,7 +676,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="GetChangesFromView_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetDataFromCodeChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetDataFromZoneChanges_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="222,270">
@@ -690,10 +689,10 @@
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1462,420" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1462,22" />
-      <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="1462,22" />
-      <sap2010:ViewStateData Id="GetImportedDataValidationRules_1" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="ExecuteRules_2" sap:VirtualizedContainerService.HintSize="1462,22" />
+      <sap2010:ViewStateData Id="StructureDataByCountries_1" sap:VirtualizedContainerService.HintSize="1462,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_3" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="GetExistingZones_1" sap:VirtualizedContainerService.HintSize="200,40" />

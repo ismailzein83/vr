@@ -91,7 +91,7 @@
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="ReadFromSource.cs" />
     <Compile Include="GetDataFromImportedCodes.cs" />
-    <Compile Include="GetChanges.cs" />
+    <Compile Include="GetChangesFromView.cs" />
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingZones.cs" />
     <Compile Include="GetImportedDataValidationRules.cs" />

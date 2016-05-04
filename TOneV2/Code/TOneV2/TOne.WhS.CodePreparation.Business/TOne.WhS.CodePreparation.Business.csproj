@@ -70,14 +70,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessRules\Conditions\ValidateCountries\SameCodeInSameZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountries\CodeGroupCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCountries\MultipleCountryCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingCodeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingStatusCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingZoneCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCountries\MultipleCountryCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\UndefinedStatusCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCodesZones\InvalidStatusCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountries\SameCodeInDifferentZoneCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCountries\SameCodeInSameZoneCondition.cs" />
     <Compile Include="ChangedSaleCodeManager.cs" />
     <Compile Include="ChangedSaleZoneManager.cs" />
     <Compile Include="CPSaleCodeManager.cs" />
@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessRules\Actions\" />
+    <Folder Include="BusinessRules\Conditions\ValidateZones\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -14,7 +14,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
-    public class GetChanges : CodeActivity
+    public class GetChangesFromView : CodeActivity
     {
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanId { get; set; }

@@ -8,7 +8,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.CodePreparation.Business
 {
-    public class UndefinedStatusCondition : BusinessRuleCondition
+    public class InvalidStatusCondition : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
