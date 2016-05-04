@@ -6,13 +6,14 @@ using CP.SupplierPricelist.Entities;
 using System.Data;
 using Vanrise.Common;
 using Vanrise.Entities;
+using System.Data.SqlClient;
 namespace CP.SupplierPricelist.Data.SQL
 {
     public class PriceListDataManager : BaseSQLDataManager, IPriceListDataManager
     {
         private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
 
-        
+
         static PriceListDataManager()
         {
             _mapper.Add("CustomerName", "CustomerID");
@@ -123,7 +124,7 @@ namespace CP.SupplierPricelist.Data.SQL
                     tempTableName,
                     input.Query.FromEffectiveOnDate,
                     input.Query.ToEffectiveOnDate,
-                    userId ,
+                    userId,
                     customersids,
                     carrierids,
                     types,
@@ -135,7 +136,7 @@ namespace CP.SupplierPricelist.Data.SQL
             if (input.SortByColumnName != null)
                 input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
 
-            return RetrieveData(input, createTempTableAction, PriceListMapper ,_mapper );
+            return RetrieveData(input, createTempTableAction, PriceListMapper, _mapper);
         }
 
         public List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses)
@@ -143,14 +144,29 @@ namespace CP.SupplierPricelist.Data.SQL
             string pricelistStatuIds = null;
             if (listStatuses != null && listStatuses.Any())
                 pricelistStatuIds = string.Join(",", Array.ConvertAll(listStatuses.ToArray(), value => (int)value));
-            return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]", PriceListMapper, pricelistStatuIds);
+
+            return GetItemsSPCmd("[CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]", PriceListMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@PriceListStatusIDs", SqlDbType.VarChar);
+                dtPrm.Value = pricelistStatuIds;
+                cmd.Parameters.Add(dtPrm);
+
+            });
         }
         public List<PriceList> GetPriceLists(List<PriceListStatus> listStatuses, int customerId)
         {
             string pricelistStatuIds = null;
             if (listStatuses != null && listStatuses.Any())
                 pricelistStatuIds = string.Join(",", Array.ConvertAll(listStatuses.ToArray(), value => (int)value));
-            return GetItemsSP("[CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]", PriceListMapper, pricelistStatuIds, customerId);
+            return GetItemsSPCmd("[CP_SupPriceList].[sp_PriceList_GetRequestedPriceList]", PriceListMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@PriceListStatusIDs", SqlDbType.VarChar);
+                dtPrm.Value = pricelistStatuIds;
+                cmd.Parameters.Add(dtPrm);
+                dtPrm = new SqlParameter("@CustomerId", SqlDbType.Int);
+                dtPrm.Value = customerId;
+                cmd.Parameters.Add(dtPrm);
+            });
         }
 
         public bool UpdatePriceListUpload(long id, int result, int status, object uploadInformation, int uploadRetryCount)
