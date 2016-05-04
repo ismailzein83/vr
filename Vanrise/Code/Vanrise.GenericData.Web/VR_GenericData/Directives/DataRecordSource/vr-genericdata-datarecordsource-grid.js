@@ -64,8 +64,17 @@
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    ctrl.sources.length = 0;
                     if (query) {
-                        ctrl.sources = query.sources;
+                        if (query.sources && query.sources.length > 0) {
+                            for (var y = 0; y < query.sources.length; y++) {
+                                counter++;
+                                var currentSource = query.sources[y];
+                                currentSource.id = counter;
+                                ctrl.sources.push(currentSource);
+                            }
+                        }
+                        //ctrl.sources = query.sources;
                     }
                 };
 

@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
-using System.Reflection;
-using System.Reflection.Emit;
 namespace Vanrise.GenericData.Business
 {
     public class DataRecordTypeManager : IDataRecordTypeManager
@@ -30,6 +27,18 @@ namespace Vanrise.GenericData.Business
             var dataRecordTypes = GetCachedDataRecordTypes();
             return dataRecordTypes.GetRecord(dataRecordTypeId);
         }
+
+        public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(int dataRecordTypeId)
+        {
+            List<DataRecordGridColumnAttribute> fields = new List<DataRecordGridColumnAttribute>();
+            DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
+            foreach (DataRecordField field in dataRecordType.Fields)
+            {
+                DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute() { Attribute = field.Type.GetGridColumnAttribute(), Name = field.Name };
+                fields.Add(attribute);
+            }
+            return fields;
+        }
         public List<DataRecordField> GetDataRecordTypeFields(int dataRecordTypeId)
         {
             var dataRecordType = GetDataRecordType(dataRecordTypeId);
@@ -43,7 +52,7 @@ namespace Vanrise.GenericData.Business
             DataRecordType dataRecordType = dataRecordTypes.GetRecord(dataRecordTypeId);
 
             if (dataRecordType != null)
-              return dataRecordType.Name;
+                return dataRecordType.Name;
 
             return null;
         }
@@ -59,8 +68,8 @@ namespace Vanrise.GenericData.Business
             {
                 return dataRecordTypes.MapRecords(DataRecordTypeInfoMapper);
             }
-           
-          
+
+
         }
         public Vanrise.Entities.InsertOperationOutput<DataRecordTypeDetail> AddDataRecordType(DataRecordType dataRecordType)
         {
@@ -167,7 +176,7 @@ namespace Vanrise.GenericData.Business
             return Serializer.Deserialize(serializedRecord, GetDataRecordRuntimeType(dataRecordTypeId));
         }
         #endregion
-      
+
         #region Private Methods
         private Dictionary<int, DataRecordType> GetCachedDataRecordTypes()
         {
@@ -179,13 +188,13 @@ namespace Vanrise.GenericData.Business
                    return dataRecordTypes.ToDictionary(kvp => kvp.DataRecordTypeId, kvp => kvp);
                });
         }
-        
+
         private Type GetOrCreateRuntimeType(DataRecordType dataRecordType)
         {
             string fullTypeName;
             var classDefinition = BuildClassDefinition(dataRecordType, out fullTypeName);
             CSharpCompilationOutput compilationOutput;
-            if(!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
+            if (!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
             {
                 StringBuilder errorsBuilder = new StringBuilder();
                 if (compilationOutput.ErrorMessages != null)
@@ -203,7 +212,7 @@ namespace Vanrise.GenericData.Business
         }
 
         private string BuildClassDefinition(DataRecordType dataRecordType, out string fullTypeName)
-        {            
+        {
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;
                 using System.Collections.Generic;
@@ -225,12 +234,12 @@ namespace Vanrise.GenericData.Business
 
             StringBuilder propertiesToSetSerializedBuilder = new StringBuilder();
             StringBuilder globalMembersBuilder = new StringBuilder();
-            foreach(var field in dataRecordType.Fields)
+            foreach (var field in dataRecordType.Fields)
             {
                 globalMembersBuilder.AppendFormat("public {0} {1};", TypeToString(field.Type.GetRuntimeType()), field.Name);
                 propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
             }
-  
+
             classDefinitionBuilder.Replace("#GLOBALMEMBERS#", globalMembersBuilder.ToString());
             classDefinitionBuilder.Replace("#PROPERTIESTOSETSERIALIZED#", propertiesToSetSerializedBuilder.ToString());
 
@@ -238,7 +247,7 @@ namespace Vanrise.GenericData.Business
             string className = "DataRecord";
             classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
             classDefinitionBuilder.Replace("#CLASSNAME#", className);
-            fullTypeName = String.Format("{0}.{1}", classNamespace, className);  
+            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
             return classDefinitionBuilder.ToString();
         }
@@ -305,14 +314,14 @@ namespace Vanrise.GenericData.Business
             DataRecordTypeDetail dataRecordTypeDetail = new DataRecordTypeDetail();
             dataRecordTypeDetail.Entity = dataRecordTypeObject;
             if (dataRecordTypeObject.ParentId != null)
-             dataRecordTypeDetail.ParentName = GetDataRecordTypeName((int)dataRecordTypeObject.ParentId);
+                dataRecordTypeDetail.ParentName = GetDataRecordTypeName((int)dataRecordTypeObject.ParentId);
             return dataRecordTypeDetail;
         }
         private DataRecordTypeInfo DataRecordTypeInfoMapper(DataRecordType dataRecordTypeObject)
         {
             DataRecordTypeInfo dataRecordTypeInfo = new DataRecordTypeInfo();
             dataRecordTypeInfo.DataRecordTypeId = dataRecordTypeObject.DataRecordTypeId;
-            dataRecordTypeInfo.Name =  dataRecordTypeObject.Name;
+            dataRecordTypeInfo.Name = dataRecordTypeObject.Name;
             return dataRecordTypeInfo;
         }
         #endregion

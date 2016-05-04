@@ -62,8 +62,21 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return true;
         }
-        
+
         #endregion
+
+        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()
+        {
+            string numberPrecision;
+            switch (DataType)
+            {
+                case FieldNumberDataType.Decimal: numberPrecision = ""; break;
+                case FieldNumberDataType.BigInt:
+                case FieldNumberDataType.Int:
+                default: numberPrecision = "NoDecimal"; break;
+            }
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Number", NumberPrecision = numberPrecision };
+        }
     }
 
     public enum FieldNumberDataType

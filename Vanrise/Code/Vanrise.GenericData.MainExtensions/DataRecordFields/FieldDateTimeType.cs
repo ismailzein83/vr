@@ -98,6 +98,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
 
         #endregion
+
+        public override GridColumnAttribute GetGridColumnAttribute()
+        {
+            string type;
+            switch (DataType)
+            {
+                case FieldDateTimeDataType.DateTime: type = "LongDatetime"; break;
+                case FieldDateTimeDataType.Date: type = "Date"; break;
+                default: type = "Datetime"; break;
+            }
+            return new Vanrise.Entities.GridColumnAttribute() { Type = type, NumberPrecision = "NoDecimal" };
+        }
     }
     public enum FieldDateTimeDataType
     {

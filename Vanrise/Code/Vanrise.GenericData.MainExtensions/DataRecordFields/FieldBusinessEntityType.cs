@@ -98,5 +98,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
 
         #endregion
+
+        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()
+        {
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
+        }
     }
 }

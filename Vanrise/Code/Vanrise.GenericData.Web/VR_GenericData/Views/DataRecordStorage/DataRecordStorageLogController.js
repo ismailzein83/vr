@@ -114,7 +114,8 @@
                 FilterGroup: filterObj,
                 LimitResult: $scope.limit,
                 Direction: $scope.selectedOrderDirection.value,
-                sortDirection: $scope.selectedOrderDirection.sortDirection
+                sortDirection: $scope.selectedOrderDirection.sortDirection,
+                DataRecordTypeId: $scope.selectedDRSearchPageStorageSource.DataRecordTypeId
             };
         }
     }

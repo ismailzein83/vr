@@ -51,5 +51,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return true;
         }
+
+        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()
+        {
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
+        }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -20,6 +17,14 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordFieldInfoFilter filter = !string.IsNullOrEmpty(serializedFilter) ? Vanrise.Common.Serializer.Deserialize<DataRecordFieldInfoFilter>(serializedFilter) : null;
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.GetDataRecordFieldsInfo(filter);
+        }
+
+        [HttpGet]
+        [Route("GetDataRecordAttributes")]
+        public List<DataRecordGridColumnAttribute> GetDataRecordAttributes(int dataRecordTypeId)
+        {
+            DataRecordTypeManager manager = new DataRecordTypeManager();
+            return manager.GetDataRecordAttributes(dataRecordTypeId);
         }
     }
 }

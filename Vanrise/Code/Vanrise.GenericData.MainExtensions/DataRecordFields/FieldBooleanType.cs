@@ -39,5 +39,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             IEnumerable<bool> boolValues = FieldTypeHelper.ConvertFieldValueToList<bool>(fieldValue);
             return (boolValues != null) ? boolValues.Contains(Convert.ToBoolean(filterValue)) : Convert.ToBoolean(fieldValue).CompareTo(Convert.ToBoolean(filterValue)) == 0;
         }
+
+        public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute()
+        {
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal" };
+        }
     }
 }

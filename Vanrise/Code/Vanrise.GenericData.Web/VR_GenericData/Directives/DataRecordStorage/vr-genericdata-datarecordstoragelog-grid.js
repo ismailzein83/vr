@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService'];
+    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService'];
 
-    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService) {
+    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -57,19 +57,35 @@
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    getDataRecordAttributes(query).then(function () {
+                        query.Columns = getColumnsName(query.GridColumns);
+                        return gridAPI.retrieveData(query);
+                    });
+                };
+
+                return api;
+            }
+
+            function getDataRecordAttributes(query) {
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordAttributes(query.DataRecordTypeId).then(function (attributes) {
                     ctrl.columns.length = 0;
                     ctrl.sortDirection = query.sortDirection;
 
                     angular.forEach(query.GridColumns, function (column) {
+                        for (var x = 0; x < attributes.length; x++) {
+                            var attribute = attributes[x];
+                            if (column.FieldName == attribute.Name) {
+                                column.type = attribute.Attribute.Type;
+                                column.numberprecision = attribute.Attribute.NumberPrecision;
+                                break;
+                            }
+                        }
                         ctrl.columns.push(column);
                     });
 
-                    query.Columns = getColumnsName(query.GridColumns);
                     ctrl.showGrid = true;
-                    return gridAPI.retrieveData(query);
-                };
 
-                return api;
+                });
             }
 
             function getColumnsName(gridColumns) {

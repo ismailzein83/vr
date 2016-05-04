@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -13,5 +9,11 @@ namespace Vanrise.GenericData.Entities
         public string Title { get; set; }
 
         public DataRecordFieldType Type { get; set; }
+    }
+
+    public class DataRecordGridColumnAttribute
+    {
+        public GridColumnAttribute Attribute { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -85,6 +85,7 @@
     <Compile Include="GenericDataRecord\DataRecordTypeDetail.cs" />
     <Compile Include="GenericDataRecord\DataRecordType.cs" />
     <Compile Include="GenericDataRecord\DataRecordTypeQuery.cs" />
+    <Compile Include="GridColumnAttribute.cs" />
     <Compile Include="IDateEffectiveSettings.cs" />
     <Compile Include="InsertOperationOutput.cs" />
     <Compile Include="IDataRetrievalResult.cs" />
