@@ -5,7 +5,7 @@
 AS
 BEGIN
 	DECLARE @PriceListStatusIDsTable TABLE (PriceListStatusID int)
-	if @PriceListStatusIDs !=null
+	if @PriceListStatusIDs is not null
 	begin
 	INSERT INTO @PriceListStatusIDsTable (PriceListStatusID)
 	select Convert(int, ParsedString) from [CP_SupPriceList].[ParseStringList](@PriceListStatusIDs)
