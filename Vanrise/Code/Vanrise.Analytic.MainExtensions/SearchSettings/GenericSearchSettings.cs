@@ -9,6 +9,7 @@ namespace Vanrise.Analytic.MainExtensions.SearchSettings
 {
     public class GenericSearchSettings : AnalyticReportSearchSettings
     {
+        public bool IsRequiredGroupingDimensions { get; set; }
         public List<GenericSearchSettingsDimension> GroupingDimensions { get; set; }
 
         public List<GenericSearchSettingsFilter> Filters { get; set; }

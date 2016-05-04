@@ -39,7 +39,7 @@
                 $scope.scopeModel.groupingDimensions = [];
                 $scope.scopeModel.isValidGroupingDimensions = function () {
 
-                    if ($scope.scopeModel.groupingDimensions.length > 0)
+                    if ($scope.scopeModel.groupingDimensions.length > 0 || !$scope.scopeModel.isRequiredGroupingDimensions)
                         return null;
                     return "At least one dimention should be selected.";
                 }
@@ -70,12 +70,12 @@
                     filterDimensionSelectorAPI = api;
                     filterDimensionReadyDeferred.resolve();
                 }
-                $scope.scopeModel.isValidFilterDimensions = function () {
+                //$scope.scopeModel.isValidFilterDimensions = function () {
 
-                    if ($scope.scopeModel.filterDimensions.length > 0)
-                        return null;
-                    return "At least one dimention should be selected.";
-                }
+                //    if ($scope.scopeModel.filterDimensions.length > 0)
+                //        return null;
+                // //   return "At least one dimention should be selected.";
+                //}
                 $scope.scopeModel.onSelectFilterDimensionItem = function (dimension) {
                     var dataItem = {
                         AnalyticItemConfigId: dimension.AnalyticItemConfigId,
@@ -116,6 +116,7 @@
                         var selectedFilterIds;
                         if (payload.searchSettings != undefined)
                         {
+                            $scope.scopeModel.isRequiredGroupingDimensions = payload.searchSettings.IsRequiredGroupingDimensions;
                             if(payload.searchSettings.GroupingDimensions !=undefined && payload.searchSettings.GroupingDimensions.length>0)
                             {
                                 selectedGroupingIds = [];
@@ -238,7 +239,8 @@
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.SearchSettings.GenericSearchSettings, Vanrise.Analytic.MainExtensions ",
                         GroupingDimensions: groupingDimensions,
-                        Filters: filterDimensions
+                        Filters: filterDimensions,
+                        IsRequiredGroupingDimensions:$scope.scopeModel.isRequiredGroupingDimensions
                     }
                     return data;
                 }

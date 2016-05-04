@@ -39,7 +39,7 @@
                 $scope.scopeModel.dimensions = [];
                 $scope.scopeModel.isValidDimensions = function () {
 
-                    if ($scope.scopeModel.dimensions.length > 0)
+                    if ($scope.scopeModel.dimensions.length > 0 || $scope.scopeModel.rootDimensionsFromSearch)
                         return null;
                     return "At least one dimention should be selected.";
                 }
