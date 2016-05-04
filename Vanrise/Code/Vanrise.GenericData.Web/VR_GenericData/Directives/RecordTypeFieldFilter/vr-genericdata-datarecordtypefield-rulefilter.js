@@ -75,7 +75,7 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                 }
 
                 api.getExpression = function () {
-                    return $scope.dataRecordTypeField.Entity.Name + ' ' + dataRecordTypeFieldEditorApi.getExpression();
+                    return $scope.dataRecordTypeField.Entity.Title + ' ' + dataRecordTypeFieldEditorApi.getExpression();
                 };
 
                 if (ctrl.onReady != null)

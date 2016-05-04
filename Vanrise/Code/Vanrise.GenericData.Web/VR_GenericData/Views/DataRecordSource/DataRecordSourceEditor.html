@@ -23,22 +23,20 @@
 
             <vr-row>
                 <vr-columns width="1/3row">
-                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDataRecordTypeField"
-                               datavaluefield="Entity.Name" datatextfield="Entity.Name" hideremoveicon>
+                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFields"
+                               datavaluefield="FieldName" datatextfield="FieldName" hideremoveicon ismultipleselection>
                     </vr-select>
                 </vr-columns>
 
-                <vr-columns width="normal">
-                    <div style="position: absolute; top: 25px;">
-                        <vr-button type="Add" data-onclick="addField" standalone vr-disabled="selectedDataRecordTypeField == undefined"></vr-button>
-                    </div>
-                </vr-columns>
                 <vr-columns width="fullrow">
                     <vr-section title="Grid Columns">
                         <vr-validator validate="isFieldGridValid()">
                             <vr-datagrid datasource="selectedFields" norowhighlightonclick="true"
                                          ondeleterow="removeField" hidegridmenu>
-                                <vr-datagridcolumn headertext="'Field Name'" field="'Entity.Name'" disablesorting="true"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
+                                    <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
+                                </vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-validator>
                     </vr-section>

@@ -60,16 +60,25 @@
                     ctrl.columns.length = 0;
                     ctrl.sortDirection = query.sortDirection;
 
-                    angular.forEach(query.Columns, function (column) {
+                    angular.forEach(query.GridColumns, function (column) {
                         ctrl.columns.push(column);
                     });
 
-
+                    query.Columns = getColumnsName(query.GridColumns);
                     ctrl.showGrid = true;
                     return gridAPI.retrieveData(query);
                 };
 
                 return api;
+            }
+
+            function getColumnsName(gridColumns) {
+                var columns = [];
+                for (var x = 0; x < gridColumns.length; x++) {
+                    var currentColumn = gridColumns[x];
+                    columns.push(currentColumn.FieldName);
+                }
+                return columns;
             }
         }
     }

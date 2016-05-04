@@ -30,5 +30,7 @@ namespace Vanrise.GenericData.Entities
     public class DRSearchPageGridColumn
     {
         public string FieldName { get; set; }
+
+        public string FieldTitle { get; set; }
     }
 }

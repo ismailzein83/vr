@@ -47,14 +47,14 @@
                 loadDataRecordFields(option);
             };
 
-            $scope.addField = function () {
-                $scope.selectedFields.push($scope.selectedDataRecordTypeField);
-                $scope.dataRecordTypeFields.splice($scope.dataRecordTypeFields.indexOf($scope.selectedDataRecordTypeField), 1);
-                $scope.selectedDataRecordTypeField = undefined;
-            }
+            //$scope.addField = function () {
+            //    $scope.selectedFields.push($scope.selectedDataRecordTypeField);
+            //    $scope.dataRecordTypeFields.splice($scope.dataRecordTypeFields.indexOf($scope.selectedDataRecordTypeField), 1);
+            //    $scope.selectedDataRecordTypeField = undefined;
+            //}
 
             $scope.removeField = function (field) {
-                $scope.dataRecordTypeFields.push(field);
+                //$scope.dataRecordTypeFields.push(field);
                 $scope.selectedFields.splice($scope.selectedFields.indexOf(field), 1);
             }
 
@@ -94,7 +94,7 @@
             }
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle,setData, loadDataRecordTypeSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, setData, loadDataRecordTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -150,7 +150,7 @@
             var columns = [];
             for (var x = 0; x < $scope.selectedFields.length; x++) {
                 var currentItem = $scope.selectedFields[x];
-                columns.push({ FieldName: currentItem.Entity.Name });
+                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle });
             }
             var obj = {
                 Title: $scope.scopeModal.title,
@@ -166,7 +166,7 @@
         }
 
         function loadDataRecordFields(option) {
-            $scope.selectedDataRecordTypeField = undefined;
+            //$scope.selectedDataRecordTypeField = undefined;
             $scope.dataRecordTypeFields.length = 0;
             $scope.selectedFields.length = 0;
             if (option != undefined) {
@@ -176,22 +176,25 @@
                 return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(serializedFilter).then(function (response) {
                     if (response != undefined) {
                         angular.forEach(response, function (item) {
-                            var found = false;
+                            //var found = false;
                             if (dataRecordSource != undefined && dataRecordSource.GridColumns) {
                                 for (var x = 0; x < dataRecordSource.GridColumns.length; x++) {
                                     var currentColumn = dataRecordSource.GridColumns[x];
                                     if (currentColumn.FieldName == item.Entity.Name) {
-                                        $scope.selectedFields.push(item);
-                                        found = true;
+                                        var obj = { FieldName: currentColumn.FieldName, FieldTitle: currentColumn.FieldTitle };
+                                        $scope.selectedFields.push(obj);
+                                        //found = true;
                                         break;
                                     }
                                 }
                             }
-                            if (!found) {
-                                $scope.dataRecordTypeFields.push(item);
-                            }
+                            //if (!found) {
+                            var obj = { FieldName: item.Entity.Name, FieldTitle: item.Entity.Title };
+                            $scope.dataRecordTypeFields.push(obj);
+                            //}
                         });
                     }
+                    dataRecordSource = undefined;
                 });
             }
         }

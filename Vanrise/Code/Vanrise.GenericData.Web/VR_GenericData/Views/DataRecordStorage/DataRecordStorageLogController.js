@@ -108,20 +108,12 @@
                 DataRecordStorageIds: $scope.selectedDRSearchPageStorageSource.RecordStorageIds,
                 FromTime: $scope.fromDate,
                 ToTime: $scope.toDate,
-                Columns: getColumns(),
+                GridColumns: $scope.selectedDRSearchPageStorageSource.GridColumns,
                 FilterGroup: filterObj,
                 LimitResult: $scope.limit,
                 Direction: $scope.selectedOrderDirection.value,
                 sortDirection: $scope.selectedOrderDirection.sortDirection
             };
-        }
-        function getColumns() {
-            var columns = [];
-            for (var x = 0; x < $scope.selectedDRSearchPageStorageSource.GridColumns.length; x++) {
-                var currentColumn = $scope.selectedDRSearchPageStorageSource.GridColumns[x];
-                columns.push(currentColumn.FieldName);
-            }
-            return columns;
         }
     }
 

@@ -5,8 +5,8 @@
                  pagingtype="'PagingOnScroll'"
                  on-ready="ctrl.onGridReady"
                  menuactions="ctrl.menuActions" defaultsortbyfieldname="'RecordTime'" defaultsortdirection="ctrl.sortDirection">
-        <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column"
-                           field="'FieldValues.' + column + '.Description'"
+        <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle"
+                           field="'FieldValues.' + column.FieldName + '.Description'"
                            tag="column" columnindex="$index"></vr-datagridcolumn>
     </vr-datagrid>
 </div>
