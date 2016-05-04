@@ -79,8 +79,7 @@ namespace TOne.Analytics.Business
             ////////////////////////////////
             Workbook wbk = new Workbook();
             wbk.Worksheets.RemoveAt("Sheet1");
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+            Vanrise.Common.Utilities.ActivateAspose();
 
             Style style = wbk.Styles[wbk.Styles.Add()];
             style.Font.Name = "Times New Roman";
@@ -733,8 +732,7 @@ namespace TOne.Analytics.Business
             ////////////////////////////////
             Workbook wbk = new Workbook();
             wbk.Worksheets.RemoveAt("Sheet1");
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+            Vanrise.Common.Utilities.ActivateAspose();
 
             Style style = wbk.Styles[wbk.Styles.Add()];
             style.Font.Name = "Times New Roman";

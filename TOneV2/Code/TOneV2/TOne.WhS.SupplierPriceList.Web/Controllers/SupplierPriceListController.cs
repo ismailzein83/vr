@@ -19,8 +19,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         {
             string obj = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ImportPriceListTemplatePath"]);
             Workbook workbook = new Workbook(obj);
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+            Vanrise.Common.Utilities.ActivateAspose();
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = workbook.SaveToStream();
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);

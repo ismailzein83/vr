@@ -129,8 +129,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             //Return Excel Result
             Workbook returnedExcel = new Workbook();
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+            Vanrise.Common.Utilities.ActivateAspose();
             returnedExcel.Worksheets.Clear();
             Worksheet RateWorkSheet = returnedExcel.Worksheets.Add("Result");
             int rowIndex = 0;

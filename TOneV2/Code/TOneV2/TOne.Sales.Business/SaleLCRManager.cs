@@ -125,8 +125,7 @@ namespace TOne.Sales.Business
             List<string> to = carrierProfile.BillingEmail.Split(new char[] { ',', ';' }).ToList();
             Workbook wbk = new Workbook();
             wbk.Worksheets.RemoveAt("Sheet1");
-            Aspose.Cells.License license = new Aspose.Cells.License();
-            license.SetLicense("Aspose.Cells.lic");
+            Vanrise.Common.Utilities.ActivateAspose();
             CreateRatesWorkSheet(wbk, "Price List.xls", newRates);
             MemoryStream stream = wbk.SaveToStream();
             stream.Seek(0, SeekOrigin.Begin);
