@@ -71,7 +71,7 @@ function (UtilsService, VRNotificationService, Fzero_FraudAnalysis_AccountStatus
             ,
 
             {
-                name: "Delete",
+                name: "Remove",
                 clicked: deleteAccountStatus,
                 haspermission: hasDeleteAccountStatusPermission
             }
