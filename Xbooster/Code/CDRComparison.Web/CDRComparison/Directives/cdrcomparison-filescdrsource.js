@@ -39,7 +39,7 @@
                     
                     if (fileSizeInMegaBytes <= maxSize)
                         return true;
-                    else if (isCompressedFormat(fileExtension))
+                    else if (isCompressedFormat(fileName))
                         return true;
                     else {
                         VRNotificationService.showWarning("File '" + fileName + "' is > " + maxSize + " MB. Please upload a compressed version <= " + maxSize + " MB");
@@ -122,9 +122,10 @@
                 }
             }
 
-            function isCompressedFormat()
+            function isCompressedFormat(fileName)
             {
-                var nameParts = $scope.scopeModel.file.fileName.split('.');
+                var finalFileName = (fileName != undefined) ? fileName : $scope.scopeModel.file.fileName;
+                var nameParts = finalFileName.split('.');
                 var extension = nameParts[nameParts.length - 1];
                 return (extension == 'zip' || extension == 'rar');
             }
