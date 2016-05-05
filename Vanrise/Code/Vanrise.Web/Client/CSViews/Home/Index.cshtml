@@ -84,7 +84,7 @@
 
                         <span ng-if="item.Childs.length > 0">
                             <span class="glyphicon " style="top: -4px; "><img ng-src="{{item.Icon}}" /></span>
-                            <span style="position: relative; top: 0px;">{{::item.Name}}</span>
+                            <span  class="vr-module-name">{{::item.Name}}</span>
                             <span class=" hand-cursor  toggel">
                                 <span ng-if="item.Childs.length>0" class="glyphicon " ng-class="menuItemsCurrent.Id == item.Id ?'glyphicon-chevron-up':'glyphicon-chevron-down'" style="font-size: 10px; top: 2px;"></span>
                             </span>

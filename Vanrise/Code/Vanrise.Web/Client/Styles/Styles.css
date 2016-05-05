@@ -22,7 +22,15 @@
     background: -moz-linear-gradient(bottom,#F0F0F0,#C5C5C5); /*Fx 3.6-15*/
     background: linear-gradient(to bottom, #F0F0F0, #C5C5C5); /*Standard*/
 }
-
+.vr-module-name{
+    position: relative;
+    top: 0px;
+    display: inline-block;
+    max-width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
 .vr-page-title {
     margin-left: 25px;
     font-weight: bold;
