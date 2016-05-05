@@ -60,7 +60,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(301,'VR_Sec_BI','BI','{"ViewTypeId":1,"Name":"VR_Sec_BI","Title":"Business Intelligence","Editor":"/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html","EnableAdd":true}')
+(301,'VR_Sec_BI','BI','{"ViewTypeId":301,"Name":"VR_Sec_BI","Title":"Business Intelligence","Editor":"/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html","EnableAdd":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Details]))
 merge	[sec].[viewtype] as t

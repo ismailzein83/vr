@@ -36,8 +36,9 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(101,'VR_GenericData_GenericRule','Generic Rule','{"ViewTypeId":2,"Name":"VR_GenericData_GenericRule","Title":"Generic Rule","Editor":"/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html","EnableAdd":false}'),
-(102,'VR_GenericData_GenericBusinessEntity','Business Entity','{"ViewTypeId":4,"Name":"VR_GenericData_GenericBusinessEntity","Title":"BusinessEntity","Editor":"/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html","EnableAdd":false}')
+(101,'VR_GenericData_GenericRule','Generic Rule','{"ViewTypeId":101,"Name":"VR_GenericData_GenericRule","Title":"Generic Rule","Editor":"/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html","EnableAdd":false}'),
+(102,'VR_GenericData_GenericBusinessEntity','Business Entity','{"ViewTypeId":102,"Name":"VR_GenericData_GenericBusinessEntity","Title":"BusinessEntity","Editor":"/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html","EnableAdd":false}'),
+(103,'VR_GenericData_RecordSearch','Record Search','{"ViewTypeId":103,"Name":"VR_GenericData_RecordSearch","Title":"Record Search","Editor":"/Client/Modules/VR_GenericData/Views/DataRecordStorage/DataRecordStorageSettingsEditor.html","EnableAdd":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Details]))
 merge	[sec].[viewtype] as t
