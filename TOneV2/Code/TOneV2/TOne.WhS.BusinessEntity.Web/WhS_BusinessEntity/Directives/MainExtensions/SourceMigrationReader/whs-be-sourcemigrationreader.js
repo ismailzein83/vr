@@ -39,17 +39,14 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 api.getData = function () {
                     var schedulerTaskAction;
                     schedulerTaskAction = {};
-                    schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.MigrateSyncTaskActionArgument, TOne.WhS.DBSync.Business",
-                    schedulerTaskAction.SourceMigrationReader = {
-                        $type: "TOne.WhS.DBSync.Business.SourceMigratorsReaders.MigratorTOneV1Reader, TOne.WhS.DBSync.Business",
-                        ConnectionString: $scope.connectionString
-                    };
+                    schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.MigrateSyncTaskActionArgument, TOne.WhS.DBSync.Business";
+                    schedulerTaskAction.ConnectionString = $scope.connectionString;
                     return schedulerTaskAction;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
-                        $scope.connectionString = payload.data.SourceMigrationReader.ConnectionString;
+                        $scope.connectionString = payload.data.ConnectionString;
                     }
                 }
 

@@ -9,6 +9,6 @@ namespace TOne.WhS.DBSync.Business
 {
     public class MigrateSyncTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
-        public SourceMigrationReader SourceMigrationReader { get; set; }
+        public string ConnectionString { get; set; }
     }
 }
