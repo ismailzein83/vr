@@ -12,15 +12,28 @@ namespace TOne.WhS.DBSync.Business
         {
             MigrateSyncTaskActionArgument migrateSyncTaskActionArgument = taskActionArgument as MigrateSyncTaskActionArgument;
 
-            MigratorTOneV1Reader migratorTOneV1Reader = new MigratorTOneV1Reader();
-            migratorTOneV1Reader.ConnectionString = migrateSyncTaskActionArgument.ConnectionString;
+            
+            // Create Source Switch Reader and Pass Connection string to it.
+            SourceSwitchMigratorReader sourceSwitchMigratorReader = new SourceSwitchMigratorReader();
+            sourceSwitchMigratorReader.ConnectionString = migrateSyncTaskActionArgument.ConnectionString;
 
-            SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(migratorTOneV1Reader);
+            // Create Source Switch Migrator and Migrate
+            SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(sourceSwitchMigratorReader);
             sourceSwitchMigrator.Migrate();
 
 
 
 
+            // Create Source Currency Reader and Pass Connection string to it.
+            SourceCurrencyMigratorReader sourceCurrencyMigratorReader = new SourceCurrencyMigratorReader();
+            sourceCurrencyMigratorReader.ConnectionString = migrateSyncTaskActionArgument.ConnectionString;
+
+            // Create Source Currency Migrator and Migrate
+            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(sourceCurrencyMigratorReader);
+            sourceCurrencyMigrator.Migrate();
+
+
+            
             Console.WriteLine("MigrationSyncTaskAction Executed");
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {

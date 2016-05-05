@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Entities.EntityMigrator;
 
 namespace TOne.WhS.DBSync.Business.SourceMigratorsReaders
 {
-    public class MigratorTOneV1Reader : SourceMigrationReader
+    public class SourceSwitchMigratorReader : IMigrationSourceItemReader<SourceSwitch> 
     {
         public string ConnectionString { get; set; }
 
-        public override IEnumerable<SourceSwitch> GetSourceItems()
+        public IEnumerable<SourceSwitch> GetSourceItems()
         {
             DataManager dataManager = new DataManager(this.ConnectionString);
             return dataManager.GetSourceSwitches();

@@ -66,12 +66,14 @@
   <ItemGroup>
     <Compile Include="EntityMigration\SourceItemMigrator.cs" />
     <Compile Include="Managers\CurrencyManager.cs" />
+    <Compile Include="Migrators\SourceCurrencyMigrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migrators\SourceSwitchMigrator.cs" />
     <Compile Include="Managers\SwitchManager.cs" />
     <Compile Include="MigrateSyncTaskAction.cs" />
     <Compile Include="MigrateSyncTaskActionArgument.cs" />
-    <Compile Include="MigratorTOneV1Reader.cs" />
+    <Compile Include="SourceCurrencyMigratorReader.cs" />
+    <Compile Include="SourceSwitchMigratorReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data\TOne.WhS.BusinessEntity.Data.csproj">

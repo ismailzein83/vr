@@ -8,7 +8,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class CurrencyDataManager : BaseSQLDataManager, ICurrencyDataManager
     {
-        readonly string[] columns = { "Name", "SourceID" };
+        readonly string[] columns = { "Symbol", "Name","SourceID" };
 
         public CurrencyDataManager() :
             base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
@@ -60,19 +60,17 @@ namespace TOne.WhS.DBSync.Data.SQL
         private static Table DefineTable()
         {
             Table table = new Table();
-            table.Schema = "TOneWhS_BE";
+            table.Schema = "Common";
             table.NamewithoutSchema = "Currency";
             table.CreateTableQuery =
-                "CREATE TABLE " + table.TempName + "( " +
+                "CREATE TABLE [common].[Currency]( " +
                 "[ID] [int] IDENTITY(1,1) NOT NULL, " +
-                "[Name] [varchar](50) NULL, " +
-                "[timestamp] [timestamp] NULL, " +
-                "[SourceID] [varchar](50) NULL) ";
+                "[Symbol] [nvarchar](10) NOT NULL, " +
+                "[Name] [nvarchar](255) NOT NULL, " +
+                "[timestamp] [timestamp] NULL " +
+                "[SourceID] [varchar](50) NULL ";
 
-
-            var foreignKeys = new List<TableKey>();
-            foreignKeys.Add(new TableKey { KeyName = "FK_Trunk_Currency", TableName = "dbo.Trunk" });
-
+            var foreignKeys = new List<TableKey>(); // no keys are foreign keys of other tables
             table.foreignKeys = foreignKeys;
             return table;
         }
