@@ -93,6 +93,10 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
 
                            
                             List<PriceListCode> codes;
+                            if (codeField.FieldValue == null)
+                            {
+                                throw new Exception(string.Format("Zone {0} has no code defined.", zoneField.FieldValue));
+                            }
                             string code = codeField.FieldValue.ToString();
                             List<PriceListCode> resolvedCodes = new List<PriceListCode>();
                             if (this.CodeLayout == CodeLayout.CammaSeparated)
@@ -196,6 +200,10 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                         PriceListRate rate;
                         if (obj.Fields.TryGetValue("Rate", out rateField))
                         {
+                            if (rateField.FieldValue == null)
+                            {
+                                throw new Exception(string.Format("Zone {0} has no rate defined.", zoneField.FieldValue));
+                            }
                             if (!rateByZone.TryGetValue(zoneField.FieldValue.ToString(), out rate))
                             {
                                 rateByZone.Add(zoneField.FieldValue.ToString(), new PriceListRate
