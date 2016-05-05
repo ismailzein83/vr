@@ -85,7 +85,6 @@
                         }
                         var getInputeStyle = function () {
                             var div = element.find('div[validator-section]')[0];
-                            console.log(div)
                             if (attrs.hint != undefined) {
                                 $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" })
                             };
