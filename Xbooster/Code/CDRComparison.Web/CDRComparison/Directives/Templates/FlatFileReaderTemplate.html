@@ -1,9 +1,12 @@
 ﻿<vr-row>
     <vr-columns colnum="{{flatFileCtrl.normalColNum}}">
-        <vr-textbox label="Delimiter" value="scopeModel.delimiter" isrequired="flatFileCtrl.isrequired" hint="{{scopeModel.delimiterHint}}"></vr-textbox>
+        <vr-switch label="Is Tab Delimited" value="scopeModel.isTabDelimited" isrequired="flatFileCtrl.isrequired"></vr-switch>
+    </vr-columns>
+    <vr-columns colnum="{{flatFileCtrl.normalColNum}}" ng-if="!scopeModel.isTabDelimited">
+        <vr-textbox label="Delimiter" value="scopeModel.delimiter" maxlength="1" isrequired="flatFileCtrl.isrequired"></vr-textbox>
     </vr-columns>
     <vr-columns colnum="{{flatFileCtrl.normalColNum}}" withemptyline>
-        <vr-button type="Download" standalone="true" data-onclick="scopeModel.readSample" vr-disabled="scopeModel.disableReadSampleButton() || scopeModel.delimiter == undefined"></vr-button>
+        <vr-button type="Download" standalone="true" data-onclick="scopeModel.readSample" vr-disabled="scopeModel.disableReadSampleButton() || (!scopeModel.isTabDelimited && scopeModel.delimiter == undefined)"></vr-button>
     </vr-columns>
 </vr-row>
 

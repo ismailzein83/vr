@@ -13,7 +13,9 @@ namespace CDRComparison.MainExtensions
     {
         #region Properties
 
-        public string Delimiter { get; set; }
+        public char? Delimiter { get; set; }
+
+        public bool IsTabDelimited { get; set; }
 
         public List<FlatFileFieldMapping> FieldMappings { get; set; }
 
@@ -39,11 +41,11 @@ namespace CDRComparison.MainExtensions
                     context.TryReadLine(out line);
             }
 
-            var delimiters = new string[1] { this.Delimiter };
+            char delimiter = (this.IsTabDelimited) ? '\t' : this.Delimiter.Value;
 
             while (context.TryReadLine(out line))
             {
-                string[] fields = line.Split(delimiters, StringSplitOptions.None);
+                string[] fields = line.Split(delimiter);
                 var cdr = new CDR
                 {
                     ExtraFields = new Dictionary<string, object>()
@@ -78,11 +80,11 @@ namespace CDRComparison.MainExtensions
             string line;
             int counter = 0;
 
-            var delimiters = new string[1] { this.Delimiter };
+            char delimiter = (this.IsTabDelimited) ? '\t' : this.Delimiter.Value;
 
             while (context.TryReadLine(out line) && counter < 10)
             {
-                string[] data = line.Split(delimiters, StringSplitOptions.None);
+                string[] data = line.Split(delimiter);
 
                 if (counter == 0)
                     sample.ColumnCount = data.Length;

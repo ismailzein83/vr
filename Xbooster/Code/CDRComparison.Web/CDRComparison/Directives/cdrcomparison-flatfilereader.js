@@ -40,7 +40,6 @@
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.delimiterHint = 'Tab: \\t';
                 $scope.scopeModel.dateTimeFormat = 'yyyy-MM-dd HH:mm:ss.fff';
                 $scope.scopeModel.gridColumns = [];
                 $scope.scopeModel.sampleData = [];
@@ -76,7 +75,7 @@
                 $scope.scopeModel.readSample = function () {
                     return readSample();
                 };
-
+                
                 $scope.scopeModel.validateSection = function () {
                     if ($scope.scopeModel.headerGridSource.length > 0)
                         return null;
@@ -121,7 +120,9 @@
                         cdrSourceContext = payload.cdrSourceContext;
                         fileCDRSourceContext = payload.fileCDRSourceContext;
 
+                        $scope.scopeModel.isTabDelimited = payload.IsTabDelimited;
                         $scope.scopeModel.delimiter = payload.Delimiter;
+
                         if (payload.DateTimeFormat != undefined)
                             $scope.scopeModel.dateTimeFormat = payload.DateTimeFormat;
                         if (payload.FirstRowIndex !=undefined)
@@ -142,7 +143,8 @@
                 api.getData = function () {
                     return {
                         $type: 'CDRComparison.MainExtensions.FlatFileReader, CDRComparison.MainExtensions',
-                        Delimiter: $scope.scopeModel.delimiter,
+                        IsTabDelimited: $scope.scopeModel.isTabDelimited,
+                        Delimiter: ($scope.scopeModel.isTabDelimited) ? null : $scope.scopeModel.delimiter,
                         FieldMappings: buildFieldMappings(),
                         DateTimeFormat: $scope.scopeModel.dateTimeFormat,
                         FirstRowIndex:$scope.scopeModel.firstRowHeader ? 1 : 0 
