@@ -320,6 +320,8 @@
     <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_Insert.sql" />
     <Build Include="sec\Tables\CloudAuthServer.sql" />
     <Build Include="sec\Stored Procedures\sp_CloudAuthServer_GetFirst.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_AnalyticItemConfig_Update.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_AnalyticItemConfig_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
