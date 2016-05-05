@@ -59,9 +59,10 @@
   <ItemGroup>
     <Compile Include="Currency\CurrencyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PKey.cs" />
     <Compile Include="TableManager.cs" />
     <Compile Include="Table.cs" />
-    <Compile Include="TableKey.cs" />
+    <Compile Include="FKey.cs" />
     <Compile Include="Switch\SwitchDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

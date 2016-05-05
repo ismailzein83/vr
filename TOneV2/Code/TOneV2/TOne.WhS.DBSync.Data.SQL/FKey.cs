@@ -5,7 +5,7 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class TableKey
+    public class FKey
     {
         public string TableName { get; set; }
         public string KeyName { get; set; }

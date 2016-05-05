@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.DBSync.Business.SourceMigratorsReaders;
-using TOne.WhS.DBSync.Entities;
 using Vanrise.Runtime.Entities;
 
 namespace TOne.WhS.DBSync.Business

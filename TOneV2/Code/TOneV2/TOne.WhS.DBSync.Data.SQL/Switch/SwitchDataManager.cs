@@ -8,30 +8,26 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class SwitchDataManager : BaseSQLDataManager, ISwitchDataManager
     {
         readonly string[] columns = { "Name", "SourceID" };
+        Table _table;
+        TableManager tableManager;
 
         public SwitchDataManager() :
             base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
         {
-
+            _table = DefineTable();
+            tableManager = new TableManager(_table);
         }
 
         public void MigrateSwitchesToDB(List<Switch> switches)
         {
-            Table table = DefineTable();
-
-            TableManager tableManager = new TableManager();
-
-            tableManager.DropandCreateTempTable(table); // Drop and Create Temp
-
-            ApplySwitchesToDB(switches, table); // Apply to Temp
-
-            tableManager.DropTable(table);
-
-            tableManager.RenameTablefromTemp(table); // Rename Temp table to be Table name
+            tableManager.DropandCreateTempTable(); // Drop and Create Temp
+            ApplySwitchesToDB(switches); // Apply to Temp
+            tableManager.DropTable();
+            tableManager.RenameTablefromTempandRestorePK(); // Rename Temp table to be Table name
         }
 
 
-        private void ApplySwitchesToDB(List<Switch> switches, Table table)
+        private void ApplySwitchesToDB(List<Switch> switches)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -45,7 +41,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedSwitches = new BulkInsertInfo
             {
-                TableName = table.TempName,
+                TableName = _table.TempName,
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -69,10 +65,15 @@ namespace TOne.WhS.DBSync.Data.SQL
                 "[SourceID] [varchar](50) NULL) ";
 
 
-            var foreignKeys = new List<TableKey>();
-            foreignKeys.Add(new TableKey { KeyName = "FK_Trunk_Switch", TableName = "dbo.Trunk" });
+            var foreignKeys = new List<FKey>();
+            foreignKeys.Add(new FKey { KeyName = "FK_Trunk_Switch", TableName = "dbo.Trunk" });
 
             table.foreignKeys = foreignKeys;
+
+
+            var primaryKey = new PKey { Fields = new List<string> { "ID" }, KeyName = "PK_Switch" };
+            table.primaryKey = primaryKey;
+
             return table;
         }
 

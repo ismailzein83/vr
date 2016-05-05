@@ -7,7 +7,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class Table
     {
-        public List<TableKey> foreignKeys { get; set; }
+        public PKey primaryKey { get; set; }
+        public List<FKey> foreignKeys { get; set; }
 
         public string Schema { get; set; }
 
