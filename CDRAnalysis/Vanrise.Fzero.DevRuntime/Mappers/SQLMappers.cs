@@ -55,6 +55,68 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
 
         # region SQL Mappers
+
+        public static Vanrise.Integration.Entities.MappingOutput NewNormalCDRMapping_SQL()
+        {
+            LogVerbose("Started");
+
+            var cdrs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
+
+            var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));            
+
+            IDataReader reader = importedData.Reader;
+
+            int rowCount = 0;
+            while (reader.Read())
+            {
+                var cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
+
+                cdr.CallType = Utils.GetReaderValue<Vanrise.Fzero.CDRImport.Entities.CallType>(reader, "Call_Type");
+                cdr.BTS = reader["BTS_Id"] != DBNull.Value ? reader["BTS_Id"].ToString() : null;
+                cdr.IMSI = reader["IMSI"] as string;
+                // cdr.CallClass = reader["Call_Class"] as string;
+                //  cdr.IsOnNet = Utils.GetReaderValue<Byte?>(reader, "IsOnNet");
+                // cdr.SubType = reader["Sub_Type"] as string;
+                cdr.IMEI = reader["IMEI"] as string;
+                cdr.Cell = reader["Cell_Id"] as string;
+                cdr.UpVolume = Utils.GetReaderValue<Decimal?>(reader, "Up_Volume");
+                cdr.DownVolume = Utils.GetReaderValue<Decimal?>(reader, "Down_Volume");
+                cdr.CellLatitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Latitude");
+                cdr.CellLongitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Longitude");
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime>(reader, "ConnectDateTime");
+                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, "DurationInSeconds");
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
+                // cdr.InTrunkSymbol = reader["In_Trunk"] as string;
+                // cdr.OutTrunkSymbol = reader["Out_Trunk"] as string;
+                // cdr.ServiceType = Utils.GetReaderValue<int?>(reader, "Service_Type");
+                cdr.ServiceVASName = reader["Service_VAS_Name"] as string;
+                cdr.ReleaseCode = reader["ReleaseCode"] as string;
+                cdr.Destination = reader["Destination"] as string;
+                cdr.MSISDN = reader["MSISDN"] as string;
+
+                importedData.LastImportedId = reader["ID"];
+
+                cdrs.Add(cdr);
+                rowCount++;
+                if (rowCount == 100000)
+                    break;
+
+            }
+            if (cdrs.Count > 0)
+            {
+                var batch = new Vanrise.Fzero.CDRImport.Entities.ImportedCDRBatch();
+                batch.CDRs = cdrs;
+                mappedBatches.Add("Map Normal CDRs", batch);
+                //mappedBatches.Add("Save Normal CDRs", batch);     
+            }
+            else
+                importedData.IsEmpty = true;
+            var result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
         public static Vanrise.Integration.Entities.MappingOutput StaggingCDRs_SQL()
         {
             LogVerbose("Started");
