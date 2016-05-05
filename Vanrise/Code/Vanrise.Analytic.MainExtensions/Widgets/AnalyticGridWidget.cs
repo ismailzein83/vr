@@ -14,6 +14,8 @@ namespace Vanrise.Analytic.MainExtensions.Widgets
         public List<AnalyticGridWidgetDimension> Dimensions { get; set; }
 
         public List<AnalyticGridWidgetMeasure> Measures { get; set; }
+
+        public bool WithSummary { get; set; }
     }
 
     public class AnalyticGridWidgetDimension

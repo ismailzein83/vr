@@ -89,11 +89,42 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    loadChartTypes();
+
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
                         var selectedDimensionIds;
                         var selectedMeasureIds;
+                        if (payload.widgetEntity != undefined) {
+                            $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearchSection;
+                            selectedDimensionIds = [];
+                            if (payload.widgetEntity.Dimensions != undefined && payload.widgetEntity.Dimensions.length > 0) {
+                                for (var i = 0; i < payload.widgetEntity.Dimensions.length; i++) {
+                                    var dimension = payload.widgetEntity.Dimensions[i];
+                                    selectedDimensionIds.push(dimension.DimensionName);
+                                    $scope.scopeModel.dimensions.push({
+                                        Name: dimension.DimensionName,
+                                        Title: dimension.Title,
+                                        IsRootDimension: dimension.IsRootDimension,
+                                    });
+                                }
+                            }
 
+                            selectedMeasureIds = [];
+                            if (payload.widgetEntity.Measures != undefined && payload.widgetEntity.Measures.length > 0) {
+                                for (var i = 0; i < payload.widgetEntity.Measures.length; i++) {
+                                    var measure = payload.widgetEntity.Measures[i];
+                                    selectedMeasureIds.push(measure.MeasureName);
+                                    $scope.scopeModel.measures.push({
+                                        Name: measure.MeasureName,
+                                        Title: measure.Title,
+                                    });
+                                }
+                            }
+
+                            setTopMeasure(payload.widgetEntity.TopMeasure);
+                            $scope.scopeModel.selectedChartType = UtilsService.getItemByVal($scope.scopeModel.chartTypes, payload.widgetEntity.ChartType, "value");
+                        }
                         var promises = [];
 
                         var loadDimensionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -123,7 +154,7 @@
 
 
                 };
-                loadChartTypes();
+
                 api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -137,7 +168,8 @@
                         Measures: getMeasures(),
                         Dimensions: getDimensions(),
                         TopRecords: $scope.scopeModel.topRecords,
-                        TopMeasure: $scope.scopeModel.topMeasure
+                        TopMeasure: $scope.scopeModel.topMeasure.Name,
+                        ChartType: $scope.scopeModel.selectedChartType.value
                     }
                     return data;
                 }
@@ -180,6 +212,10 @@
                         $scope.scopeModel.chartTypes.push(VR_ChartDefinitionTypeEnum[m]);
                     }
                     $scope.scopeModel.selectedChartType = $scope.scopeModel.chartTypes[0];
+                }
+
+                function setTopMeasure(measureName) {
+                    $scope.scopeModel.topMeasure = UtilsService.getItemByVal($scope.scopeModel.measures, measureName, "Name");
                 }
             }
         }

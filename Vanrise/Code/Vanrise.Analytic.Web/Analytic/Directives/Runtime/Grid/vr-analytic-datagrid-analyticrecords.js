@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService','VR_Analytic_AnalyticItemConfigAPIService',
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
     function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
 
         var directiveDefinitionObject = {
@@ -36,7 +36,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var drillDown;
             var fromTime;
             var toTime;
-            var isSummary;
 
             function initializeController() {
 
@@ -51,18 +50,15 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.load = function (payLoad) {
-                            if (payLoad.DimensionsConfig == undefined)
-                            {
+                            if (payLoad.DimensionsConfig == undefined) {
                                 var filter = {
                                     TableIds: [payLoad.TableId]
                                 }
                                 var promiseReadyDeferred = UtilsService.createPromiseDeferred();
 
                                 VR_Analytic_AnalyticItemConfigAPIService.GetDimensionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                                    if (response)
-                                    {
-                                        for(var i=0;i<response.length;i++)
-                                        {
+                                    if (response) {
+                                        for (var i = 0; i < response.length; i++) {
                                             ctrl.dimensionsConfig.push(response[i]);
                                         }
                                     }
@@ -87,20 +83,19 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                         .then(function (response) {
-                           
+
                             if (response && response.Data) {
                                 for (var i = 0; i < response.Data.length; i++) {
                                     drillDown.setDrillDownExtensionObject(response.Data[i]);
                                 }
-                                if (isSummary)
+                                if (dataRetrievalInput.Query.WithSummary)
                                     gridApi.setSummary(response.Summary);
                             }
                             onResponseReady(response);
                         });
                 };
 
-                function loadGrid(payLoad)
-                {
+                function loadGrid(payLoad) {
                     var filters = payLoad.DimensionFilters;
                     var queryFinalized = loadGridQuery(payLoad);
 
@@ -170,10 +165,9 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
 
                 function loadGridQuery(payLoad) {
-          
+
                     fromTime = payLoad.FromTime;
                     toTime = payLoad.ToTime;
-                    isSummary = $attrs.withsummary != undefined;
                     ctrl.groupingDimensions.length = 0;
                     ctrl.measures.length = 0;
                     ctrl.drillDownDimensions.length = 0;
@@ -181,15 +175,14 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     if (payLoad.Dimensions != undefined) {
                         ctrl.dimensions = payLoad.Dimensions;
                     }
-                    if (payLoad.DimensionsConfig != undefined)
-                    {
+                    if (payLoad.DimensionsConfig != undefined) {
                         ctrl.dimensionsConfig = payLoad.DimensionsConfig;
                     }
                     if (payLoad.DrillDownDimensions != undefined) {
                         for (var i = 0; i < payLoad.DrillDownDimensions.length; i++) {
                             ctrl.drillDownDimensions.push(payLoad.DrillDownDimensions[i]);
                         }
-                      
+
                     }
 
                     if (payLoad.Settings != undefined) {
@@ -198,16 +191,14 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             for (var i = 0; i < payLoad.Settings.Dimensions.length; i++) {
                                 var dimension = payLoad.Settings.Dimensions[i];
                                 var groupingDimension = UtilsService.getItemByVal(payLoad.GroupingDimensions, dimension.DimensionName, 'DimensionName');
-                                if (dimension.IsRootDimension || (payLoad.Settings.RootDimensionsFromSearchSection && groupingDimension != undefined))
-                                {
+                                if (dimension.IsRootDimension || (payLoad.Settings.RootDimensionsFromSearchSection && groupingDimension != undefined)) {
                                     ctrl.groupingDimensions.push(dimension);
 
                                 }
-                                else
-                                {
+                                else {
                                     ctrl.drillDownDimensions.push(dimension);
                                 }
-                                   
+
                             }
                         }
                         if (payLoad.Settings.Measures != undefined) {
@@ -226,7 +217,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             }
                         }
                     }
-                 
+
                     if (ctrl.groupingDimensions.length > 0)
                         ctrl.sortField = 'DimensionValues[0].Name';
                     else
@@ -239,7 +230,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         FromTime: fromTime,
                         ToTime: toTime,
                         Currency: payLoad.Currency,
-                        WithSummary: isSummary,
+                        WithSummary: payLoad.Settings == undefined ? false : payLoad.Settings.WithSummary,
                         TableId: payLoad.TableId
                     }
                     return queryFinalized;
@@ -248,23 +239,18 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 function applyDimensionRules() {
                     for (var i = 0; i < ctrl.dimensions.length; i++) {
                         var dimension = ctrl.dimensions[i];
-                        if (dimension != undefined)
-                        {
+                        if (dimension != undefined) {
                             var dimensionConfig = UtilsService.getItemByVal(ctrl.dimensionsConfig, dimension.DimensionName, 'Name');
-                            if (dimensionConfig != undefined && dimensionConfig.IsRequiredFromParent && dimensionConfig.ParentDimension != undefined)
-                            {
+                            if (dimensionConfig != undefined && dimensionConfig.IsRequiredFromParent && dimensionConfig.ParentDimension != undefined) {
                                 var groupingDimension = UtilsService.getItemByVal(ctrl.groupingDimensions, dimensionConfig.ParentDimension, 'DimensionName');
 
-                                if (groupingDimension == undefined)
-                                {
+                                if (groupingDimension == undefined) {
                                     var groupingDimensionIndex = UtilsService.getItemIndexByVal(ctrl.drillDownDimensions, dimensionConfig.Name, 'DimensionName');
                                     ctrl.drillDownDimensions.splice(groupingDimensionIndex, 1);
-                                } else if (ctrl.drillDownDimensions.indexOf(dimension) == -1)
-                                {
+                                } else if (ctrl.drillDownDimensions.indexOf(dimension) == -1) {
                                     ctrl.drillDownDimensions.push(dimension);
                                 }
-                            }else if(dimensionConfig.ParentDimension != undefined)
-                            {
+                            } else if (dimensionConfig.ParentDimension != undefined) {
                                 var groupingDimensionIndex = UtilsService.getItemIndexByVal(ctrl.drillDownDimensions, dimensionConfig.ParentDimension, 'DimensionName');
                                 ctrl.drillDownDimensions.splice(groupingDimensionIndex, 1);
                             }

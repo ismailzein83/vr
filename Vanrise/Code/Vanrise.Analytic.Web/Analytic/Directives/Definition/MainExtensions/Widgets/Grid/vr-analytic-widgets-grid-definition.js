@@ -21,7 +21,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/Widgets/Chart/Templates/GridWidgetDefinitionTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/Widgets/Grid/Templates/GridWidgetDefinitionTemplate.html"
 
         };
         function WidgetsGrid($scope, ctrl, $attrs) {
@@ -105,14 +105,12 @@
                         var tableIds = payload.tableIds;
                         var selectedDimensionIds;
                         var selectedMeasureIds;
-                        if (payload.widgetEntity != undefined)
-                        {
+                        if (payload.widgetEntity != undefined) {
                             $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearchSection;
+                            $scope.scopeModel.withSummary = payload.widgetEntity.WithSummary;
                             selectedDimensionIds = [];
-                            if(payload.widgetEntity.Dimensions !=undefined && payload.widgetEntity.Dimensions.length>0)
-                            {
-                                for(var i=0; i<payload.widgetEntity.Dimensions.length; i++)
-                                {
+                            if (payload.widgetEntity.Dimensions != undefined && payload.widgetEntity.Dimensions.length > 0) {
+                                for (var i = 0; i < payload.widgetEntity.Dimensions.length; i++) {
                                     var dimension = payload.widgetEntity.Dimensions[i];
                                     selectedDimensionIds.push(dimension.DimensionName);
                                     $scope.scopeModel.dimensions.push({
@@ -199,9 +197,10 @@
                     }
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.Widgets.AnalyticGridWidget, Vanrise.Analytic.MainExtensions ",
-                        RootDimensionsFromSearchSection:$scope.scopeModel.rootDimensionsFromSearch,
+                        RootDimensionsFromSearchSection: $scope.scopeModel.rootDimensionsFromSearch,
                         Dimensions: dimensions,
                         Measures: measures,
+                        WithSummary: $scope.scopeModel.withSummary
                     }
                     return data;
                 }

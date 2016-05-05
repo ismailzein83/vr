@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticChartTopRecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
+app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationService', 'Analytic_AnalyticService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService',
     function (UtilsService, VRNotificationService, Analytic_AnalyticService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService) {
 
         var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ app.directive("vrAnalyticChartTopRecords", ['UtilsService', 'VRNotificationServi
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var genericChart = new GenericChart($scope, ctrl, $attrs);
+                var genericChart = new AnalyticTopRecordsChart($scope, ctrl, $attrs);
                 genericChart.initializeController();
             },
             controllerAs: 'analyticchartctrl',
@@ -22,7 +22,11 @@ app.directive("vrAnalyticChartTopRecords", ['UtilsService', 'VRNotificationServi
         };
 
         function AnalyticTopRecordsChart($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
+            function initializeController() {
+
+            };
         }
 
         return directiveDefinitionObject;
