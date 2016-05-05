@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Widgets\AnalyticChartWidget.cs" />
     <Compile Include="Widgets\AnalyticGridWidget.cs" />
     <Compile Include="SearchSettings\GenericSearchSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

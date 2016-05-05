@@ -117,11 +117,15 @@
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-measure-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\Templates\AnalyticTableGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\vr-analytic-analytictable-grid.js" />
-    <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Templates\GridWidgetDefinitionTemplate.html" />
-    <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\vr-analytic-widgets-grid-definition.js" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Chart\Templates\ChartWidgetDefinitionTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Chart\vr-analytic-widgets-chart-definition.js" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Grid\Templates\GridWidgetDefinitionTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Grid\vr-analytic-widgets-grid-definition.js" />
     <Content Include="Analytic\Directives\Definition\SearchSettings\vr-analytic-reportsearchsettings-selective.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-table-selector.js" />
     <Content Include="Analytic\Directives\Definition\Widgets\vr-analytic-widgets-selective.js" />
+    <Content Include="Analytic\Directives\Runtime\Chart\Templates\AnalyticTopRecordsChart.html" />
+    <Content Include="Analytic\Directives\Runtime\Chart\vr-analytic-chart-toprecords.js" />
     <Content Include="Analytic\Directives\Runtime\Grid\Templates\AnalyticRecordsDataGrid.html" />
     <Content Include="Analytic\Directives\Runtime\Grid\vr-analytic-datagrid-analyticrecords.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\SearchSettings\Templates\GenericSearchTemplate.html" />
