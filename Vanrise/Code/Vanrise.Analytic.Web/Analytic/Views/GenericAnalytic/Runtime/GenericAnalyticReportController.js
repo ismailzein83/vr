@@ -135,8 +135,16 @@
                 function getFilter(filterConfiguration) {
                      var dimension = UtilsService.getItemByVal(dimensions, filterConfiguration.DimensionName, 'Name');
                     var filter;
-                    var filterEditor = UtilsService.getItemByVal(fieldTypes, filterConfiguration.FieldType.ConfigId, 'DataRecordFieldTypeConfigId').FilterEditor;
-
+                    var filterEditor;
+                    var fieldType;
+                    if(dimension !=undefined)
+                    {
+                        fieldType = UtilsService.getItemByVal(fieldTypes, dimension.Config.FieldType.ConfigId, 'DataRecordFieldTypeConfigId');
+                    }
+                    if (fieldType != undefined)
+                    {
+                        filterEditor = fieldType.FilterEditor;
+                    }
                     if (filterEditor == null) return filter;
 
                     filter = {};

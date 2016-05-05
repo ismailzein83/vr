@@ -27,9 +27,6 @@ namespace Vanrise.Analytic.MainExtensions.SearchSettings
         public string DimensionName { get; set; }
 
         public string Title { get; set; }
-
-        public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
-
         public bool IsRequired { get; set; }
     }
 }

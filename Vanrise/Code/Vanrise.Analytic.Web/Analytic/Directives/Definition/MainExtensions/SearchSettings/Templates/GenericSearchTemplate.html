@@ -31,9 +31,7 @@
         <vr-section title="Filters">
             <vr-row>
                 <vr-analytic-dimension-selector on-ready="scopeModel.onFilterDimensionSelectorDirectiveReady" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedFilterDimensions" onselectitem="    scopeModel.onSelectFilterDimensionItem" ondeselectitem="    scopeModel.onDeselectFilterDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="fullrow" >
+                <vr-columns width="2/3row" >
                     <vr-validator validate="scopeModel.isValidFilterDimensions()">
                         <vr-datagrid datasource="scopeModel.filterDimensions"
                                      on-ready="onGridReady" ondeleterow="scopeModel.removeFilterDimension" hidegridmenu enabledraggablerow="true" norowhighlightonclick="'true'">

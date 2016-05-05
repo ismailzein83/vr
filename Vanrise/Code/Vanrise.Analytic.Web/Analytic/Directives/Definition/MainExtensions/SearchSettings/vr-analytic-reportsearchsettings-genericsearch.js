@@ -82,12 +82,6 @@
                         Title: dimension.Title,
                         Name: dimension.Name,
                         IsRequired: false,
-                        onFieldTypeReady: function (api) {
-                            dataItem.fieldAPI = api;
-                            var setLoader = function (value) { $scope.isLoadingDimensionDirective = value };
-                            var payload;
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldAPI, payload, setLoader);
-                        }
                     };
                     $scope.scopeModel.filterDimensions.push(dataItem);
                 }
@@ -146,12 +140,9 @@
                                         Name: filterDimension.DimensionName,
                                         Title: filterDimension.Title,
                                         IsRequired: filterDimension.IsRequired,
-                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        loadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        payload: filterDimension.FieldType
                                     }
-                                    promises.push(dataItem.loadPromiseDeferred.promise);
-                                    addDataItemToFilterGrid(dataItem)
+                                    $scope.scopeModel.filterDimensions.push(dataItem);
+
                                 }
                             }
                         }
@@ -181,22 +172,6 @@
                         promises.push(loadFilterDirectivePromiseDeferred.promise);
 
                         return UtilsService.waitMultiplePromises(promises);
-                    }
-                    function addDataItemToFilterGrid(dataItem) {
-
-                        var dataItemPayload = dataItem.payload;
-
-                        dataItem.onFieldTypeReady = function (api) {
-                            dataItem.fieldAPI = api;
-                            dataItem.readyPromiseDeferred.resolve();
-                        };
-
-                        dataItem.readyPromiseDeferred.promise
-                            .then(function () {
-                                VRUIUtilsService.callDirectiveLoad(dataItem.fieldAPI, dataItemPayload, dataItem.loadPromiseDeferred);
-                            });
-
-                        $scope.scopeModel.filterDimensions.push(dataItem);
                     }
 
                 };
@@ -233,7 +208,6 @@
                                 DimensionName:filterDimension.Name,
                                 Title: filterDimension.Title,
                                 IsRequired: filterDimension.IsRequired,
-                                FieldType:filterDimension.fieldAPI!=undefined?filterDimension.fieldAPI.getData():undefined
                             });
                         }
                     }
