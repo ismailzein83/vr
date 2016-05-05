@@ -27,10 +27,11 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             var fileStream = new System.IO.MemoryStream(bytes);
             ExportTableOptions options = new ExportTableOptions();
             options.CheckMixedValueType = true;
-            Workbook wbk = new Workbook(fileStream);
-            wbk.CalculateFormula();
-            if (wbk.Worksheets[0].Cells.MaxDataRow > -1 && wbk.Worksheets[0].Cells.MaxDataColumn > -1)
-                accountStatusDataTable = wbk.Worksheets[0].Cells.ExportDataTableAsString(0, 0, wbk.Worksheets[0].Cells.MaxDataRow + 1, wbk.Worksheets[0].Cells.MaxDataColumn + 1);
+            Workbook woorkbook = new Workbook(fileStream);
+            Common.Utilities.ActivateAspose(); 
+            woorkbook.CalculateFormula();
+            if (woorkbook.Worksheets[0].Cells.MaxDataRow > -1 && woorkbook.Worksheets[0].Cells.MaxDataColumn > -1)
+                accountStatusDataTable = woorkbook.Worksheets[0].Cells.ExportDataTableAsString(0, 0, woorkbook.Worksheets[0].Cells.MaxDataRow + 1, woorkbook.Worksheets[0].Cells.MaxDataColumn + 1);
 
             IAccountStatusDataManager dataManager = FraudDataManagerFactory.GetDataManager<IAccountStatusDataManager>();
             int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
