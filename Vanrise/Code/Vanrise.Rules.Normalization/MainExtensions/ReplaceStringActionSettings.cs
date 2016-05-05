@@ -23,7 +23,7 @@ namespace Vanrise.Rules.Normalization.MainExtensions
         public override void Execute(INormalizeNumberActionContext context, NormalizeNumberTarget target)
         {
             target.PhoneNumber = (this.IgnoreCase) ?
-                Regex.Replace(target.PhoneNumber, this.StringToReplace, this.NewString, RegexOptions.IgnoreCase) :
+                Regex.Replace(target.PhoneNumber, (this.StringToReplace != null) ? this.StringToReplace : String.Empty, (this.NewString != null) ? this.NewString : String.Empty, RegexOptions.IgnoreCase) :
                 target.PhoneNumber.Replace(this.StringToReplace, this.NewString);
         }
     }
