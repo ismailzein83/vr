@@ -14,13 +14,16 @@ namespace Vanrise.Analytic.Data.SQL
         #region Public Methods
         public IEnumerable<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-            string query = BuildAnalyticQuery(input, false);
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            string query = BuildAnalyticQuery(input, false, parameterValues);
 
 
             return GetItemsText(query, (reader) => AnalyticRecordMapper(reader, input.Query, false), (cmd) =>
             {
-                cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
-                cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.ToTime)));
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                }
                 if (input.Query.CurrencyId.HasValue)
                     cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
             });
@@ -35,40 +38,31 @@ namespace Vanrise.Analytic.Data.SQL
         #region Private Methods
         AnalyticRecord GetSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-            string query = BuildAnalyticQuery(input, input.Query.WithSummary);
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            string query = BuildAnalyticQuery(input, input.Query.WithSummary, parameterValues);
             return GetItemText(query, reader => AnalyticRecordMapper(reader, input.Query, true), (cmd) =>
                 {
-                    cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.FromTime));
-                    cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(input.Query.ToTime)));
+                    foreach(var prm in parameterValues)
+                    {
+                        cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                    }
                     if (input.Query.CurrencyId.HasValue)
                         cmd.Parameters.Add(new SqlParameter("@Currency", input.Query.CurrencyId.Value));
                 });
         }
 
         #region Query Builder
-        string BuildAnalyticQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, bool isSummary)
+        string BuildAnalyticQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, bool isSummary, Dictionary<string, Object> parameterValues)
         {
             StringBuilder selectPartBuilder = new StringBuilder();
             StringBuilder joinPartBuilder = new StringBuilder();
             StringBuilder filterPartBuilder = new StringBuilder();
             StringBuilder groupByPartBuilder = new StringBuilder();
-            StringBuilder ctePartBuilder = new StringBuilder();
-
-            // List<string> lstCTEStatements = new List<string>();
+            
             HashSet<string> includeJoinConfigNames = new HashSet<string>();
-            //List<string> lstWhereStatement = new List<string>();
+            int parameterIndex = 0;
 
-            StringBuilder selectBodyBuilder = new StringBuilder(@"SELECT #TOPRECORDS# #SELECTPART#
-			                                                    FROM #TABLENAME# ant --WITH(NOLOCK ,INDEX(#TABLEINDEX#))
-                                                                #JOINPART#
-                                                                #EXCHANGEJOINPART#
-			                                                    WHERE
-			                                                   (FirstCDRAttempt >= @FromDate  AND  (FirstCDRAttempt <=@ToDate or @ToDate IS NULL))
-                                                                #FILTERPART#
-			                                                    #GROUPBYPART#");
-
-
-            #region Adding Group Fields Part
+            #region Building Group Fields Part
             if (!isSummary)
                 foreach (string dimensionName in input.Query.DimensionFields)
                 {
@@ -96,7 +90,7 @@ namespace Vanrise.Analytic.Data.SQL
                 }
             #endregion
 
-            #region Adding FilterPart
+            #region Building FilterPart
 
             if (input.Query.Filters != null)
             {
@@ -119,7 +113,7 @@ namespace Vanrise.Analytic.Data.SQL
 
             #endregion
 
-            #region Add Measures Part
+            #region Building Measures Part
             Func<AnalyticMeasure, IGetMeasureExpressionContext, string> getMeasureExpression = (measure, getMeasureExpressionContext) =>
                 {
                     return !string.IsNullOrWhiteSpace(measure.Config.SQLExpression) ? measure.Config.SQLExpression : measure.Evaluator.GetMeasureExpression(getMeasureExpressionContext);
@@ -154,7 +148,7 @@ namespace Vanrise.Analytic.Data.SQL
 
             #endregion
 
-            #region Adding JoinPart
+            #region Building JoinPart
 
 
             foreach (string joinName in includeJoinConfigNames)
@@ -168,22 +162,207 @@ namespace Vanrise.Analytic.Data.SQL
 
             #region Query Replacement
 
-            selectBodyBuilder.Replace("#TOPRECORDS#", string.Format("{0}", input.Query.TopRecords != null ? "TOP(" + input.Query.TopRecords + ") " : ""));
-            selectBodyBuilder.Replace("#TABLENAME#", _table.Settings.TableName);
-            selectBodyBuilder.Replace("#TABLEINDEX#", "");
-            selectBodyBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
-            selectBodyBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
-            selectBodyBuilder.Replace("#FILTERPART#", filterPartBuilder.ToString());
-            selectBodyBuilder.Replace("#EXCHANGEJOINPART#", "");
-            if (groupByPartBuilder.Length > 0)
-                selectBodyBuilder.Replace("#GROUPBYPART#", "GROUP BY " + groupByPartBuilder);
+            List<TimeRangeTableName> timePeriodTableNames = GetTimeRangeTableNames(input);
+
+            StringBuilder queryBuilder = new StringBuilder(@"SELECT #TOPRECORDS# #SELECTPART# FROM
+                                                                #QUERYBODY#
+                                                                #JOINPART#
+			                                                    #GROUPBYPART#");
+            
+            string filterPart = filterPartBuilder.ToString();
+            
+            if (timePeriodTableNames == null || timePeriodTableNames.Count == 0)
+                throw new NullReferenceException("timePeriodTableNames");
+            if(timePeriodTableNames.Count == 1)
+            {
+                queryBuilder.Replace("#QUERYBODY#", GetSingleTableQueryBody(timePeriodTableNames[0], filterPart, joinPartBuilder.ToString(), ref parameterIndex, parameterValues));
+                queryBuilder.Replace("#JOINPART#", "");
+            }
             else
-                selectBodyBuilder.Replace("#GROUPBYPART#", "");
+            {
+                StringBuilder tableUnionBuilder = new StringBuilder();
+                foreach(var timePeriodTable in timePeriodTableNames)
+                {
+                    if(tableUnionBuilder.Length > 0)
+                        tableUnionBuilder.AppendLine(" UNION ALL ");
+                    tableUnionBuilder.AppendLine(String.Format(" SELECT * FROM {0} ", GetSingleTableQueryBody(timePeriodTable, filterPart, "", ref parameterIndex, parameterValues)));
+                }
+                queryBuilder.Replace("#QUERYBODY#", String.Format("({0}) ant", tableUnionBuilder));
+                queryBuilder.Replace("#JOINPART#", joinPartBuilder.ToString());
+            }
+            queryBuilder.Replace("#TOPRECORDS#", string.Format("{0}", input.Query.TopRecords != null ? "TOP(" + input.Query.TopRecords + ") " : ""));
+            queryBuilder.Replace("#SELECTPART#", selectPartBuilder.ToString());
+            if (groupByPartBuilder.Length > 0)
+                queryBuilder.Replace("#GROUPBYPART#", "GROUP BY " + groupByPartBuilder);
+            else
+                queryBuilder.Replace("#GROUPBYPART#", "");
 
             #endregion
 
-            return selectBodyBuilder.ToString();
+            return queryBuilder.ToString();
         }
+
+        string GetSingleTableQueryBody(TimeRangeTableName timeRangeTableName, string filterPart, string joinPart, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            StringBuilder singleTableQueryBodyBuilder = new StringBuilder(@" #TABLENAME# ant WITH(NOLOCK)  
+                                                                              #JOINPART#                                                                
+			                                                                WHERE
+			                                                               (FirstCDRAttempt >= #FromTime#  AND  (FirstCDRAttempt <= #ToTime# or #ToTime# IS NULL))
+                                                                            #FILTERPART#");
+            singleTableQueryBodyBuilder.Replace("#TABLENAME#", timeRangeTableName.TableName);
+            singleTableQueryBodyBuilder.Replace("#FILTERPART#", filterPart);
+            singleTableQueryBodyBuilder.Replace("#JOINPART#", joinPart);
+            string fromTimePrm = GenerateParameterName(ref parameterIndex);
+            singleTableQueryBodyBuilder.Replace("#FromTime#", fromTimePrm);
+            parameterValues.Add(fromTimePrm, timeRangeTableName.FromTime);
+
+            string toTimePrm = GenerateParameterName(ref parameterIndex);
+            singleTableQueryBodyBuilder.Replace("#ToTime#", toTimePrm);
+            parameterValues.Add(toTimePrm, timeRangeTableName.ToTime);
+            return singleTableQueryBodyBuilder.ToString();
+        }
+
+        string GenerateParameterName(ref int parameterIndex)
+        {
+            return String.Format("@Prm_{0}", parameterIndex++);
+        }
+
+        private List<TimeRangeTableName> GetTimeRangeTableNames(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
+        {
+            List<TimeRangeTableName> tableNames = new List<TimeRangeTableName>();
+
+            var timeRange = new TimeRange
+            {
+                FromTime = input.Query.FromTime,
+                ToTime = input.Query.ToTime
+            };
+
+            var noTimeAllocationContext = new TimeRangeTableAllocationContext
+            {
+                TableName = this._table.Settings.TableName,
+                GetPeriodStart = (tr) => tr.FromTime,
+                RangeMinLength = TimeSpan.FromSeconds(0),
+                IncrementPeriod = (d, tr) => d.Add((tr.ToTime - d))
+            };
+            var hourlyAllocationContext = new TimeRangeTableAllocationContext
+            {
+                TableName = this._table.Settings.HourlyTableName,
+                GetPeriodStart = GetStartOfHour,
+                RangeMinLength = TimeSpan.FromHours(1),
+                IncrementPeriod = (d, tr) => d.AddHours(1),
+                NextTimeRangeAllocationContext = noTimeAllocationContext
+            };
+            var dailyAllocationContext = new TimeRangeTableAllocationContext
+            {
+                TableName = this._table.Settings.DailyTableName,
+                GetPeriodStart = GetStartOfDay,
+                RangeMinLength = TimeSpan.FromDays(1),
+                IncrementPeriod = (d, tr) => d.AddDays(1),
+                NextTimeRangeAllocationContext = hourlyAllocationContext
+            };
+            var weeklyAllocationContext = new TimeRangeTableAllocationContext
+            {
+                TableName = this._table.Settings.WeeklyTableName,
+                GetPeriodStart = GetStartOfWeek,
+                RangeMinLength = TimeSpan.FromDays(7),
+                IncrementPeriod = (d, tr) => d.AddDays(7),
+                NextTimeRangeAllocationContext = dailyAllocationContext
+            };
+            var monthlyAllocationContext = new TimeRangeTableAllocationContext
+            {
+                TableName = this._table.Settings.MonthlyTableName,
+                GetPeriodStart = GetStartOfMonth,
+                RangeMinLength = TimeSpan.FromDays(28),
+                IncrementPeriod = (d, tr) => d.AddMonths(1),
+                NextTimeRangeAllocationContext = weeklyAllocationContext
+            };
+
+            AllocatePeriodTables(timeRange, monthlyAllocationContext, tableNames);
+
+            return tableNames;
+        }
+
+        DateTime GetStartOfHour(TimeRange timeRange)
+        {
+            DateTime startTime = new DateTime(timeRange.FromTime.Year, timeRange.FromTime.Month, timeRange.FromTime.Day, timeRange.FromTime.Hour, 0, 0);
+            return startTime < timeRange.FromTime ? startTime.AddHours(1) : startTime;
+        }
+
+        DateTime GetStartOfDay(TimeRange timeRange)
+        {
+            DateTime startTime = new DateTime(timeRange.FromTime.Year, timeRange.FromTime.Month, timeRange.FromTime.Day, 0, 0, 0);
+            return startTime < timeRange.FromTime ? startTime.AddDays(1) : startTime;
+        }
+
+        DateTime GetStartOfWeek(TimeRange timeRange)
+        {
+            DateTime startTime = new DateTime(timeRange.FromTime.Year, 1,1);
+            for (var dt = startTime; dt < timeRange.ToTime; dt = dt.AddDays(7))
+            {
+                if (dt >= timeRange.FromTime)
+                    return dt;
+            }
+            return timeRange.ToTime;
+        }
+
+        DateTime GetStartOfMonth(TimeRange timeRange)
+        {
+            DateTime startTime = new DateTime(timeRange.FromTime.Year, timeRange.FromTime.Month, 1, 0, 0, 0);
+            return startTime < timeRange.FromTime ? startTime.AddMonths(1) : startTime;
+        }
+
+        void AllocatePeriodTables(TimeRange timeRange, TimeRangeTableAllocationContext context, List<TimeRangeTableName> tableNames)
+        {
+            List<TimeRange> notAllocatedRanges;
+            AllocatePeriodTables(timeRange, context.TableName, context.GetPeriodStart, context.RangeMinLength, context.IncrementPeriod, tableNames, out notAllocatedRanges);
+            if(context.NextTimeRangeAllocationContext != null && notAllocatedRanges != null && notAllocatedRanges.Count > 0 )
+            {
+                foreach(var subRange in notAllocatedRanges)
+                {
+                    AllocatePeriodTables(subRange, context.NextTimeRangeAllocationContext, tableNames);
+                }
+            }
+        }
+
+        void AllocatePeriodTables(TimeRange timeRange, string tableName, Func<TimeRange, DateTime> getPeriodStart, TimeSpan rangeMinLength, Func<DateTime, TimeRange, DateTime> incrementPeriod, List<TimeRangeTableName> tableNames, out List<TimeRange> notAllocatedRanges)
+        {
+            notAllocatedRanges = new List<TimeRange>();
+            if (!String.IsNullOrEmpty(tableName) && (timeRange.ToTime - timeRange.FromTime) >= rangeMinLength)
+            {
+                DateTime startTime = getPeriodStart(timeRange);
+                DateTime? allocatedRangeStart = null;
+                DateTime? allocatedRangeEnd = null;
+                for (DateTime dt = startTime; dt < timeRange.ToTime; dt = incrementPeriod(dt, timeRange))
+                {
+                    DateTime rangeEnd = incrementPeriod(dt, timeRange);
+                    if (rangeEnd <= timeRange.ToTime)
+                    {
+                        if (dt == startTime)//first range
+                            allocatedRangeStart = dt;
+                        allocatedRangeEnd = rangeEnd;
+                    }
+                }
+
+                if (allocatedRangeStart.HasValue)
+                {
+                    tableNames.Add(new TimeRangeTableName
+                    {
+                        TableName = tableName,
+                        FromTime = allocatedRangeStart.Value,
+                        ToTime = allocatedRangeEnd.Value
+                    });
+                    if (allocatedRangeStart.Value > timeRange.FromTime)
+                        notAllocatedRanges.Add(new TimeRange { FromTime = timeRange.FromTime, ToTime = allocatedRangeStart.Value });
+                    if (allocatedRangeEnd.Value < timeRange.ToTime)
+                        notAllocatedRanges.Add(new TimeRange { FromTime = allocatedRangeEnd.Value, ToTime = timeRange.ToTime });
+                }
+                else
+                    notAllocatedRanges.Add(timeRange);
+            }
+            else
+                notAllocatedRanges.Add(timeRange);
+        }
+
         string GetDimensionIdColumnAlias(AnalyticDimension dimension)
         {
             return String.Format("Dimension_{0}_Id", dimension.AnalyticDimensionConfigId);
@@ -332,6 +511,31 @@ namespace Vanrise.Analytic.Data.SQL
         protected override string GetConnectionString()
         {
             return _table.Settings.ConnectionString;
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        public class TimeRange
+        {
+            public DateTime FromTime { get; set; }
+
+            public DateTime ToTime { get; set; }
+        }
+
+        private class TimeRangeTableName : TimeRange
+        {
+            public string TableName { get; set; }
+        }
+
+        public class TimeRangeTableAllocationContext
+        {
+            public string TableName { get; set; }
+            public Func<TimeRange, DateTime> GetPeriodStart { get; set; }
+            public TimeSpan RangeMinLength { get; set; }
+            public Func<DateTime, TimeRange, DateTime> IncrementPeriod { get; set; }
+            public TimeRangeTableAllocationContext NextTimeRangeAllocationContext { get; set; }
         }
 
         #endregion

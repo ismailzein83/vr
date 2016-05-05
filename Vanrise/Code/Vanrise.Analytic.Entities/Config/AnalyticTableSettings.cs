@@ -11,5 +11,14 @@ namespace Vanrise.Analytic.Entities
         public string ConnectionString { get; set; }
 
         public string TableName { get; set; }
+
+        public string HourlyTableName { get; set; }
+
+        public string DailyTableName { get; set; }
+
+        public string WeeklyTableName { get; set; }
+
+        public string MonthlyTableName { get; set; }
+
     }
 }
