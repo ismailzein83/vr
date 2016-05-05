@@ -1,17 +1,19 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    genericAnalyticReportController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService','VR_Sec_ViewAPIService','VR_Analytic_AnalyticConfigurationAPIService','VR_GenericData_DataRecordFieldTypeConfigAPIService'];
+    genericAnalyticReportController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_Sec_ViewAPIService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_Analytic_AnalyticItemConfigAPIService'];
 
-    function genericAnalyticReportController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Sec_ViewAPIService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService) {
+    function genericAnalyticReportController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Sec_ViewAPIService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
         var viewId;
         var viewEntity;
         var fieldTypes = [];
+        var dimensions = [];
+        var measures = [];
         loadParameters();
         defineScope();
         load();
 
-      
+
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -32,10 +34,8 @@
             $scope.scopeModel.selectedGroupingDimentions = [];
             $scope.scopeModel.isGroupingRequired = false;
             $scope.search = function () {
-                if ($scope.scopeModel.widgets.length > 0)
-                {
-                    for (var i = 0; i < $scope.scopeModel.widgets.length ; i++)
-                    {
+                if ($scope.scopeModel.widgets.length > 0) {
+                    for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
                         var widget = $scope.scopeModel.widgets[i];
                         var setLoader = function (value) { $scope.isLoadingDimensionDirective = value };
                         var payload = getQuery(widget.settings);
@@ -50,13 +50,18 @@
         function load() {
             $scope.isLoading = true;
             return UtilsService.waitMultipleAsyncOperations([getView, getWidgetsTemplateConfigs, getFieldTypeConfigs]).then(function () {
-                loadAllControls()
+                UtilsService.waitMultipleAsyncOperations([loadDimensions, loadMeasures]).then(function () {
+                    loadAllControls()
+                }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
+
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadWidgets, loadFilters]).catch(function (error) {
+                return UtilsService.waitMultipleAsyncOperations([loadWidgets, loadFilters ]).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 }).finally(function () {
                     $scope.isLoading = false;
@@ -83,13 +88,28 @@
                 });
             }
 
-
+            function loadMeasures() {
+                var input = {
+                    TableIds: viewEntity.Settings.AnalyticTableIds,
+                    ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value,
+                }
+                return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
+                    measures = response;
+                });
+            }
+            function loadDimensions() {
+                var input = {
+                    TableIds: viewEntity.Settings.AnalyticTableIds,
+                    ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value,
+                }
+                return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
+                    dimensions = response;
+                });
+            }
             function loadFilters() {
-                console.log(viewEntity.Settings);
                 var filterPromises = [];
                 $scope.scopeModel.isGroupingRequired = viewEntity.Settings.SearchSettings.IsRequiredGroupingDimensions;
-                if (viewEntity.Settings.SearchSettings.Filters != undefined)
-                {
+                if (viewEntity.Settings.SearchSettings.Filters != undefined) {
                     for (var i = 0; i < viewEntity.Settings.SearchSettings.Filters.length; i++) {
                         var filterConfiguration = viewEntity.Settings.SearchSettings.Filters[i];
                         var filter = getFilter(filterConfiguration);
@@ -99,9 +119,8 @@
                         }
                     }
                 }
-               
-                if (viewEntity.Settings.SearchSettings.GroupingDimensions != undefined)
-                {
+
+                if (viewEntity.Settings.SearchSettings.GroupingDimensions != undefined) {
                     for (var i = 0; i < viewEntity.Settings.SearchSettings.GroupingDimensions.length; i++) {
                         var groupingDimention = viewEntity.Settings.SearchSettings.GroupingDimensions[i];
                         $scope.scopeModel.groupingDimentions.push(groupingDimention);
@@ -110,11 +129,11 @@
                         }
                     }
                 }
-                
+
                 return UtilsService.waitMultiplePromises(filterPromises);
 
                 function getFilter(filterConfiguration) {
-                    console.log(filterConfiguration);
+                     var dimension = UtilsService.getItemByVal(dimensions, filterConfiguration.DimensionName, 'Name');
                     var filter;
                     var filterEditor = UtilsService.getItemByVal(fieldTypes, filterConfiguration.FieldType.ConfigId, 'DataRecordFieldTypeConfigId').FilterEditor;
 
@@ -130,7 +149,7 @@
                         filter.directiveAPI = api;
                         var directivePayload = {
                             fieldTitle: filterConfiguration.Title,
-                            fieldType: filterConfiguration.FieldType
+                            fieldType:dimension !=undefined?dimension.Config.FieldType:undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(api, directivePayload, filter.directiveLoadDeferred);
                     };
@@ -139,8 +158,7 @@
                 }
             }
 
-            function loadWidgets()
-            {
+            function loadWidgets() {
                 var promises = [];
                 for (var i = 0; i < viewEntity.Settings.Widgets.length; i++) {
                     var widgetItem = {
@@ -151,9 +169,8 @@
                     promises.push(widgetItem.loadPromiseDeferred.promise);
                     addWidget(widgetItem);
                 }
-               
-                function addWidget(widgetItem)
-                {
+
+                function addWidget(widgetItem) {
                     var matchItem = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, widgetItem.payload.ConfigId, "ExtensionConfigurationId");
                     if (matchItem == null)
                         return;
@@ -167,22 +184,22 @@
                     var dataItemPayload = getQuery(widgetItem.payload);
 
                     widget.onDirectiveReady = function (api) {
-                     
+
                         widget.directiveAPI = api;
                         widgetItem.readyPromiseDeferred.resolve();
                     };
 
                     widgetItem.readyPromiseDeferred.promise
                         .then(function () {
-                            
-                           // widget.directiveAPI.loadGrid(dataItemPayload);
-                          //  widgetItem.loadPromiseDeferred.resolve();
 
-                           VRUIUtilsService.callDirectiveLoad(widget.directiveAPI, dataItemPayload, widgetItem.loadPromiseDeferred);
+                            // widget.directiveAPI.loadGrid(dataItemPayload);
+                            //  widgetItem.loadPromiseDeferred.resolve();
+
+                            VRUIUtilsService.callDirectiveLoad(widget.directiveAPI, dataItemPayload, widgetItem.loadPromiseDeferred);
                         });
                     $scope.scopeModel.widgets.push(widget);
                 }
-                
+
 
 
             }
@@ -190,8 +207,7 @@
 
         function getQuery(widgetPayload) {
             var dimensionFilters = [];
-            if ($scope.scopeModel.filters != undefined)
-            {
+            if ($scope.scopeModel.filters != undefined) {
                 for (var i = 0; i < $scope.scopeModel.filters.length; i++) {
                     var filter = $scope.scopeModel.filters[i];
                     if (filter.directiveAPI.getData() != undefined) {
@@ -203,20 +219,17 @@
 
                 }
             }
-          
+
 
             var groupingDimensions = [];
-         
-            if($scope.scopeModel.selectedGroupingDimentions !=undefined && $scope.scopeModel.selectedGroupingDimentions.length>0)
-            {
+
+            if ($scope.scopeModel.selectedGroupingDimentions != undefined && $scope.scopeModel.selectedGroupingDimentions.length > 0) {
                 for (var i = 0; i < $scope.scopeModel.selectedGroupingDimentions.length; i++) {
                     groupingDimensions.push({ DimensionName: $scope.scopeModel.selectedGroupingDimentions[i].DimensionName });
 
                 }
-            }else
-            {
-                if (viewEntity.Settings.SearchSettings.GroupingDimensions != undefined)
-                {
+            } else {
+                if (viewEntity.Settings.SearchSettings.GroupingDimensions != undefined) {
                     for (var i = 0; i < viewEntity.Settings.SearchSettings.GroupingDimensions.length; i++) {
                         var groupDimension = viewEntity.Settings.SearchSettings.GroupingDimensions[i];
                         if (groupDimension.IsSelected) {
@@ -224,12 +237,12 @@
                         }
                     }
                 }
-                
+
             }
             var query = {
                 Settings: widgetPayload,
                 DimensionFilters: dimensionFilters,
-                GroupingDimensions: groupingDimensions ,
+                GroupingDimensions: groupingDimensions,
                 TableId: widgetPayload.AnalyticTableId,
                 FromTime: $scope.scopeModel.fromdate,
                 ToTime: $scope.scopeModel.todate

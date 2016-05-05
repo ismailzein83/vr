@@ -92,6 +92,19 @@ namespace Vanrise.Analytic.Web.Controllers
             }
             return null;
         }
+
+        [HttpPost]
+        [Route("GetAnalyticItemConfigs")]
+        public IEnumerable<Object> GetAnalyticItemConfigs(AnalyticItemConfigFilterInput input)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return manager.GetAnalyticItemConfigs(input.TableIds, input.ItemType);
+        }
+
     }
-    
+    public class AnalyticItemConfigFilterInput
+    {
+        public List<int> TableIds { get; set; }
+        public AnalyticItemType ItemType { get; set; }
+    }
 }

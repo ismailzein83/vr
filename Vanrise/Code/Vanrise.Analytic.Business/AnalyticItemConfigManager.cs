@@ -205,14 +205,36 @@ namespace Vanrise.Analytic.Business
             switch (itemType)
             {
                 case AnalyticItemType.Dimension:
+                    List<AnalyticItemConfig<AnalyticDimensionConfig>> dimensions = new List<AnalyticItemConfig<AnalyticDimensionConfig>>();
+
                     foreach(int tableId in tableIds)
                     {
-                        data = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType); break;
-
+                        var obj = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType).ToList();
+                        RemoveCommonItemsInList(obj, dimensions);
+                        dimensions.AddRange(obj);
                     }
-                    
-                case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType); break;
-                case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType); break;
+                    data = dimensions;
+                    break; 
+                case AnalyticItemType.Join:
+                    List<AnalyticItemConfig<AnalyticJoinConfig>> joins = new List<AnalyticItemConfig<AnalyticJoinConfig>>();
+                    foreach(int tableId in tableIds)
+                    {
+                        var obj = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).ToList();
+                        RemoveCommonItemsInList(obj, joins);
+                        joins.AddRange(obj);
+                    }
+                    data = joins;
+                    break; 
+                case AnalyticItemType.Measure:
+                    List<AnalyticItemConfig<AnalyticMeasureConfig>> measures = new List<AnalyticItemConfig<AnalyticMeasureConfig>>();
+                    foreach(int tableId in tableIds)
+                    {
+                        var obj = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).ToList();
+                        RemoveCommonItemsInList(obj, measures);
+                        measures.AddRange(obj);
+                    }
+                    data = measures;
+                    break; 
             }
             return data;
         }
@@ -245,6 +267,18 @@ namespace Vanrise.Analytic.Business
                    IAnalyticItemConfigDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticItemConfigDataManager>();
                    return dataManager.GetItemConfigs<T>(tableId, itemType);
                });
+        }
+
+        private void RemoveCommonItemsInList<T>(List<AnalyticItemConfig<T>> mainItems,List<AnalyticItemConfig<T>> comparedList)
+        {
+            var commonItems = mainItems.Where(x => comparedList.Any(y => y.Name == x.Name));
+            if (commonItems != null)
+            {
+                foreach (var item in commonItems)
+                {
+                    mainItems.Remove(item);
+                }
+            }
         }
       
         #endregion
