@@ -303,9 +303,12 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
 
         public void LoadCDR(DateTime fromTime, DateTime toTime, string numberPrefix, Action<CDR> onCDRReady)
         {
+            string cdrTableName = GetCDRTableName(fromTime, numberPrefix, false);
+            if (cdrTableName == null)
+                return;
             string query = String.Format(@"SELECT {0} FROM {1} WITH(NOLOCK) 
                                             WHERE MSISDN LIKE '{2}%' AND [ConnectDateTime] >= @FromTime AND [ConnectDateTime] < @ToTime 
-                                            ORDER BY MSISDN", CDR_COLUMNS, GetCDRTableName(fromTime, numberPrefix, false), numberPrefix);
+                                            ORDER BY MSISDN", CDR_COLUMNS, cdrTableName, numberPrefix);
             ExecuteReaderText(query,
                 (reader) =>
                 {
@@ -356,7 +359,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
             cdr.DisconnectDateTime = GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
             cdr.CallClassId = GetReaderValue<int?>(reader, "CallClassID");
             cdr.IsOnNet = GetReaderValue<bool>(reader, "IsOnNet");
-            cdr.SubscriberType = GetReaderValue<SubscriberType?>(reader, "SubscriberTypeID");
+            cdr.SubscriberType = reader["SubscriberTypeID"] != DBNull.Value ? (SubscriberType)reader["SubscriberTypeID"] : default(SubscriberType?);
             cdr.IMEI = reader["IMEI"] as string;
             cdr.Cell = reader["Cell"] as string;
             cdr.UpVolume = GetReaderValue<Decimal?>(reader, "UpVolume");

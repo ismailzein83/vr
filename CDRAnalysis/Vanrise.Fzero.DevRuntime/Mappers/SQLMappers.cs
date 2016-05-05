@@ -62,8 +62,9 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
 
             var cdrs = new List<Vanrise.Fzero.CDRImport.Entities.CDR>();
 
-            var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));            
+            PSTN.BusinessEntity.Business.TrunkManager trunkManager = new PSTN.BusinessEntity.Business.TrunkManager();
 
+            var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data)); 
             IDataReader reader = importedData.Reader;
 
             int rowCount = 0;
@@ -71,28 +72,58 @@ namespace Vanrise.Fzero.DevRuntime.Tasks.Mappers
             {
                 var cdr = new Vanrise.Fzero.CDRImport.Entities.CDR();
 
-                cdr.CallType = Utils.GetReaderValue<Vanrise.Fzero.CDRImport.Entities.CallType>(reader, "Call_Type");
-                cdr.BTS = reader["BTS_Id"] != DBNull.Value ? reader["BTS_Id"].ToString() : null;
+                cdr.CallType = Utils.GetReaderValue<Vanrise.Fzero.CDRImport.Entities.CallType>(reader, "CallTypeID");
+                cdr.BTS = reader["BTS"].ToString();
                 cdr.IMSI = reader["IMSI"] as string;
-                // cdr.CallClass = reader["Call_Class"] as string;
-                //  cdr.IsOnNet = Utils.GetReaderValue<Byte?>(reader, "IsOnNet");
-                // cdr.SubType = reader["Sub_Type"] as string;
                 cdr.IMEI = reader["IMEI"] as string;
-                cdr.Cell = reader["Cell_Id"] as string;
-                cdr.UpVolume = Utils.GetReaderValue<Decimal?>(reader, "Up_Volume");
-                cdr.DownVolume = Utils.GetReaderValue<Decimal?>(reader, "Down_Volume");
-                cdr.CellLatitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Latitude");
-                cdr.CellLongitude = Utils.GetReaderValue<Decimal?>(reader, "Cell_Longitude");
+                cdr.Cell = reader["Cell"] as string;
+                cdr.UpVolume = Utils.GetReaderValue<Decimal?>(reader, "UpVolume");
+                cdr.DownVolume = Utils.GetReaderValue<Decimal?>(reader, "DownVolume");
+                cdr.CellLatitude = Utils.GetReaderValue<Decimal?>(reader, "CellLatitude");
+                cdr.CellLongitude = Utils.GetReaderValue<Decimal?>(reader, "CellLongitude");
                 cdr.ConnectDateTime = Utils.GetReaderValue<DateTime>(reader, "ConnectDateTime");
-                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, "DurationInSeconds");
+                cdr.DurationInSeconds = Utils.GetReaderValue<decimal>(reader, "DurationInSeconds");
                 cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime?>(reader, "DisconnectDateTime");
-                // cdr.InTrunkSymbol = reader["In_Trunk"] as string;
-                // cdr.OutTrunkSymbol = reader["Out_Trunk"] as string;
-                // cdr.ServiceType = Utils.GetReaderValue<int?>(reader, "Service_Type");
-                cdr.ServiceVASName = reader["Service_VAS_Name"] as string;
+                cdr.ServiceTypeId = Utils.GetReaderValue<int?>(reader, "ServiceTypeID");
+                cdr.ServiceVASName = reader["ServiceVASName"] as string;
                 cdr.ReleaseCode = reader["ReleaseCode"] as string;
                 cdr.Destination = reader["Destination"] as string;
                 cdr.MSISDN = reader["MSISDN"] as string;
+
+                Vanrise.Fzero.FraudAnalysis.Entities.CallClass callClass = Vanrise.Fzero.FraudAnalysis.Business.CallClassManager.GetCallClassByDesc(reader["CallClassName"] as string);
+                if (callClass != null)
+                    cdr.CallClassId = callClass.Id;
+
+                if (Utils.GetReaderValue<Byte?>(reader, "IsOnNet") == 1)
+                    cdr.IsOnNet = true;
+                else
+                    cdr.IsOnNet = false;
+
+                switch (reader["SubscriberTypeID"] as string)
+                {
+                    case "INROAMER":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.INROAMER;
+                        break;
+
+                    case "OUTROAMER":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.OUTROAMER;
+                        break;
+
+                    case "POSTPAID":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.POSTPAID;
+                        break;
+
+                    case "PREPAID":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.PREPAID;
+                        break;
+
+                    case "PREROAMER":
+                        cdr.SubscriberType = Vanrise.Fzero.CDRImport.Entities.SubscriberType.PREROAMER;
+                        break;
+                }
+
+                cdr.InTrunkId = trunkManager.GetTrunkIdBySymbol(reader["In_Trunk"] as string);
+                cdr.OutTrunkId = trunkManager.GetTrunkIdBySymbol(reader["Out_Trunk"] as string);
 
                 importedData.LastImportedId = reader["ID"];
 
