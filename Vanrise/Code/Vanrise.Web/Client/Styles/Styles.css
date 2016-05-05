@@ -2343,3 +2343,10 @@ vr-listitem div[class^="col"] {
     top: -3px;
     position: relative;
 }
+
+/*override handsontable readonly class*/
+
+.handsontable .htDimmed {
+    color: #333333 !important;
+}
+
