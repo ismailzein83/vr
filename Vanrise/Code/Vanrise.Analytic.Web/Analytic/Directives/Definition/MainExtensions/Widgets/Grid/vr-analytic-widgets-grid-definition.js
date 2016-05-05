@@ -21,7 +21,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/Widgets/Templates/GridWidgetDefinitionTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/Widgets/Chart/Templates/GridWidgetDefinitionTemplate.html"
 
         };
         function WidgetsGrid($scope, ctrl, $attrs) {
