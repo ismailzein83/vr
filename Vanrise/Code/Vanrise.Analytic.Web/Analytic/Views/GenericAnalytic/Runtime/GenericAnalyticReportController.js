@@ -85,6 +85,7 @@
 
 
             function loadFilters() {
+                console.log(viewEntity.Settings);
                 var filterPromises = [];
                 $scope.scopeModel.isGroupingRequired = viewEntity.Settings.SearchSettings.IsRequiredGroupingDimensions;
                 if (viewEntity.Settings.SearchSettings.Filters != undefined)
@@ -113,6 +114,7 @@
                 return UtilsService.waitMultiplePromises(filterPromises);
 
                 function getFilter(filterConfiguration) {
+                    console.log(filterConfiguration);
                     var filter;
                     var filterEditor = UtilsService.getItemByVal(fieldTypes, filterConfiguration.FieldType.ConfigId, 'DataRecordFieldTypeConfigId').FilterEditor;
 

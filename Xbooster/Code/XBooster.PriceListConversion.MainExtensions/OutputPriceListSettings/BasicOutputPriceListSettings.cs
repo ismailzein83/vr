@@ -72,18 +72,18 @@ namespace XBooster.PriceListConversion.MainExtensions.OutputPriceListSettings
         }
         private void FillCellDataForEachMappingField(OutputTable table, PriceListCode code,PriceListRecord item, Worksheet workSheet, int rowIndex, int? cellIndex)
         {
-            foreach (var field in table.FieldsMapping)
+            if (cellIndex != null && this.RepeatOtherValues && !table.FieldsMapping.Any(x => x.CellIndex == cellIndex))
             {
-                if (cellIndex != null && this.RepeatOtherValues && cellIndex != field.CellIndex)
-                {
-                    workSheet.Cells[rowIndex, (int)cellIndex].PutValue(workSheet.Cells[table.RowIndex, (int)cellIndex].Value);
-                }
-                else
+                workSheet.Cells[rowIndex, (int)cellIndex].PutValue(workSheet.Cells[table.RowIndex, (int)cellIndex].Value);
+            }
+            else
+            {
+                foreach (var field in table.FieldsMapping)
                 {
                     FillCellData(code, item, field, workSheet, rowIndex);
                 }
-
             }
+            
 
         }
         private void FillCellData(PriceListCode code, PriceListRecord item, OutputFieldMapping field, Worksheet workSheet, int rowIndex)

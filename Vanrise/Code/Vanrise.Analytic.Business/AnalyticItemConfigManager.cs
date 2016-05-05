@@ -111,26 +111,28 @@ namespace Vanrise.Analytic.Business
             return JoinConfigs;
         }
 
+       
+        public IEnumerable<Object> GetAnalyticItemConfigs(List<int> tableIds , AnalyticItemType itemType)
+        {
+         return GetCachedAnalyticItemConfigsByItemType(tableIds,itemType);
+        }
         public Vanrise.Entities.IDataRetrievalResult<Object> GetFilteredAnalyticItemConfigs(Vanrise.Entities.DataRetrievalInput<AnalyticItemConfigQuery> input)
         {
             if (input.Query == null)
             {
                 throw new ArgumentNullException("input.Query");
             }
-            var itemConfigs = GetCachedAnalyticItemConfigsByItemType(input.Query.TableId, input.Query.ItemType);
+            var itemConfigs = GetCachedAnalyticItemConfigsDetailByItemType(input.Query.TableId, input.Query.ItemType);
 
             Func<Object, bool> filterExpression = (prod) =>
                  (true);
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, itemConfigs.ToBigResult(input,filterExpression));
         }
-
         public Object GetAnalyticItemConfigsById(int tableId,AnalyticItemType itemType,int  analyticItemConfigId)
         {
             return GetCachedAnalyticItemConfigByItemType(tableId, itemType, analyticItemConfigId);
         }
-
-
         public Vanrise.Entities.InsertOperationOutput<AnalyticItemConfigDetail<T>> AddAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class
         {
             InsertOperationOutput<AnalyticItemConfigDetail<T>> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AnalyticItemConfigDetail<T>>();
@@ -157,7 +159,6 @@ namespace Vanrise.Analytic.Business
 
             return insertOperationOutput;
         }
-
         public Vanrise.Entities.UpdateOperationOutput<AnalyticItemConfigDetail<T>> UpdateAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class
         {
             IAnalyticItemConfigDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticItemConfigDataManager>();
@@ -197,7 +198,25 @@ namespace Vanrise.Analytic.Business
             }
             return data;
         }
-        private IEnumerable<Object> GetCachedAnalyticItemConfigsByItemType(int tableId, AnalyticItemType itemType)
+
+        private IEnumerable<Object> GetCachedAnalyticItemConfigsByItemType(List<int> tableIds, AnalyticItemType itemType)
+        {
+            IEnumerable<Object> data = null;
+            switch (itemType)
+            {
+                case AnalyticItemType.Dimension:
+                    foreach(int tableId in tableIds)
+                    {
+                        data = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType); break;
+
+                    }
+                    
+                case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType); break;
+                case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType); break;
+            }
+            return data;
+        }
+        private IEnumerable<Object> GetCachedAnalyticItemConfigsDetailByItemType(int tableId, AnalyticItemType itemType)
         {
             IEnumerable<Object> data = null;
             switch(itemType)

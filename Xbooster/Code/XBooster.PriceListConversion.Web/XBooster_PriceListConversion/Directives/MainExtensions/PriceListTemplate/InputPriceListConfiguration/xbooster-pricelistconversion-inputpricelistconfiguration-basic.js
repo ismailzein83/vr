@@ -40,6 +40,7 @@
                 {
                     if($scope.scopeModel.delimiterValue == $scope.scopeModel.rangeSeparator)
                     {
+
                         return "Range separator should not be the same as delimiter.";
                     }
                     return null;
