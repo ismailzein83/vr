@@ -16,6 +16,7 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                  rowHeaders: true,
                  colHeaders: true,
                  outsideClickDeselects: false,
+                 readOnly: attrs.allowedit == undefined,
                  colWidths:100,
                  mergeCells: scope.data.MergedCells,
                  height: 320,
