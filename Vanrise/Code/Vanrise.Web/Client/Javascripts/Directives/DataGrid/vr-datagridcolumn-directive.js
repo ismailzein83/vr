@@ -18,6 +18,7 @@
                     var widthFactor = iAttrs.widthfactor != undefined ? $scope.$eval(iAttrs.widthfactor) : undefined;
                     var enableHiding = iAttrs.enablehiding != undefined ? $scope.$eval(iAttrs.enablehiding) : undefined;
                     var isClickable = iAttrs.isclickable != undefined ? $scope.$eval(iAttrs.isclickable) : undefined;
+                    var expendableColumn = iAttrs.expendablecolumn != undefined ? true : undefined;
                     var onClicked = iAttrs.onclicked != undefined ? $scope.$eval(iAttrs.onclicked) : undefined;
                     var type = iAttrs.type != undefined ? $scope.$eval(iAttrs.type) : undefined;
                     var numberPrecision = iAttrs.numberprecision != undefined ? $scope.$eval(iAttrs.numberprecision) : undefined;
@@ -31,6 +32,7 @@
                         headerDescription:headerDescription,
                         field: field,
                         isFieldDynamic: isFieldDynamic,
+                        expendableColumn: expendableColumn,
                         summaryField: summaryField,
                         tooltipField: tooltipField,
                         widthFactor: widthFactor,

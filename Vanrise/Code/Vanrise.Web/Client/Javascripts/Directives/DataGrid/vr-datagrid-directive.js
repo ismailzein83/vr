@@ -1,4 +1,4 @@
-﻿app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile) {
+﻿app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService) {
 
     'use strict';
 
@@ -135,7 +135,8 @@
     var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{#CELLTOOLTIP#}}" >'
         + ''
       + '<a ng-if="#ISCLICKABLE#"  ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>'
-      + '<span ng-if="!#ISCLICKABLE#" ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="#CELLCLASS#"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</span>'
+      + '<a ng-if="#EXPENDABLECOLUMN#" ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onDescriptionClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>'
+      + '<span ng-if="!#ISCLICKABLE# && !#EXPENDABLECOLUMN#" ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="#CELLCLASS#"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</span>'
       + ''
    + '</div>';
 
@@ -195,7 +196,10 @@
                 tag: col.tag,
                 getcolor: col.getcolor,
                 rotateHeader: ctrl.rotateHeader,
-                nonHiddable: col.nonHiddable
+                nonHiddable: col.nonHiddable,
+                expendableColumn: col.expendableColumn
+
+
             };
             lastAddedColumnId++;
             colDef.columnId = lastAddedColumnId;
@@ -403,7 +407,19 @@
                 if (colDef.onClickedAttr != undefined)
                     colDef.onClickedAttr(dataItem, colDef);
             };
+            ctrl.onDescriptionClicked = function (colDef, dataItem) {
+                var modalSettings = {
+                    autoclose:true
+                };
 
+                modalSettings.onScopeReady = function (modalScope) {
+
+                    modalScope.value = ctrl.getCellValue(dataItem, colDef);
+                };
+
+                VRModalService.showModal("/Client/Javascripts/Directives/DataGrid/ExpendableColumnPopup.html", null, modalSettings);
+
+            };
             var lastSelectedRow;
             ctrl.onRowClicked = function (evnt) {
                 if (ctrl.norowhighlightonclick == undefined || !ctrl.norowhighlightonclick) {
@@ -478,6 +494,13 @@
                     else
                         return colDef.isClickableAttr;
                 }
+            };
+
+            ctrl.hasExpendableColumn = function (colDef) {
+                if (colDef == undefined || colDef.expendableColumn == undefined)
+                    return false;
+                else 
+                   return true
             };
 
             ctrl.getGridMenuActions = function () {
@@ -559,13 +582,17 @@
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "ctrl.getCellValue(dataItem, colDef)");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "ctrl.getCellTooltip(dataItem, colDef)");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "ctrl.getCellClass(dataItem, colDef)");
-                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", "ctrl.isColumnClickable(dataItem, colDef)"); 
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", "ctrl.isColumnClickable(dataItem, colDef)");
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#EXPENDABLECOLUMN#", "ctrl.hasExpendableColumn(colDef)");
+
                     }
                     else {
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::" + dataItemColumnPropertyPath + ".dataValue");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" + dataItemColumnPropertyPath + ".tooltip");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
                         cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
+                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#EXPENDABLECOLUMN#", dataItemColumnPropertyPath + ".expendableColumn");
+
                     }
                     cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
                     ctrl.rowHtml += '<div class="vr-datagrid-cell">'
@@ -751,6 +778,8 @@
                 colValuesObj.cellClass = ctrl.getCellClass(dataItem, colDef);
 
                 colValuesObj.isClickable = ctrl.isColumnClickable(dataItem, colDef);
+
+                colValuesObj.expendableColumn = ctrl.hasExpendableColumn(colDef);
 
                 if (dataItem.columnsValues == undefined)
                     dataItem.columnsValues = {};

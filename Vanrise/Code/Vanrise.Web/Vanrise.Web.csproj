@@ -215,6 +215,7 @@
     <Content Include="Client\Javascripts\Directives\Containers\vr-row-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-fieldset-directive.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-section-directive.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\ExpendableColumnPopup.html" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagrid.html" />
     <Content Include="Client\Javascripts\Directives\DataGrid\vr-datagridcell-directive.js" />
