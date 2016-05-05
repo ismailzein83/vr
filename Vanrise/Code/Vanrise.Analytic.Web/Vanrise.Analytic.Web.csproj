@@ -120,7 +120,6 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Chart\Templates\ChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Chart\vr-analytic-widgets-chart-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Grid\Templates\GridWidgetDefinitionTemplate.html" />
-    <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Grid\Templates\Templates\GridWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\Widgets\Grid\vr-analytic-widgets-grid-definition.js" />
     <Content Include="Analytic\Directives\Definition\SearchSettings\vr-analytic-reportsearchsettings-selective.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-table-selector.js" />
