@@ -57,33 +57,32 @@ namespace Vanrise.ExcelConversion.Business
                 eSheet.Name = sheet.Name;
                 int nbOfSheetColumns = 0;
                 int maxDataRow = sheet.Cells.MaxDataRow;
-                for (int j = 0; j <= 100 || j <= maxDataRow; j++)
+                for (int j = 0; j < 100 ; j++)
                 {
                     Row row = sheet.Cells.Rows[j]!=null ?(Row)sheet.Cells.Rows[j] :null;
-                    int maxdatacol = sheet.Cells.MaxDataColumn +1 ;
-                   
-                    if ( j<= maxDataRow)
+                    int maxdatacol = sheet.Cells.MaxDataColumn +1 ;                   
+                    
+                    ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
+                  
+                    int nbOfRowColumns = (row != null && row.LastCell!=null) ? row.LastCell.Column + 1 : 0;
+                    if (nbOfRowColumns > nbOfSheetColumns)
+                        nbOfSheetColumns = nbOfRowColumns;
+                    for (int colIndex = 0; colIndex < maxdatacol; colIndex++)
                     {
-                        ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
-                        eSheet.Rows.Add(eRow);
-                        int nbOfRowColumns = (row != null && row.LastCell!=null) ? row.LastCell.Column + 1 : 0;
-                        if (nbOfRowColumns > nbOfSheetColumns)
-                            nbOfSheetColumns = nbOfRowColumns;
-                        for (int colIndex = 0; colIndex < maxdatacol; colIndex++)
-                        {
-                            var cell = (row!=null)?row.GetCellOrNull(colIndex):null;
-                            ExcelCell eCell = new ExcelCell();
+                        var cell = (row!=null)?row.GetCellOrNull(colIndex):null;
+                        ExcelCell eCell = new ExcelCell();
                            
-                            eCell.Value = (cell != null)?cell.Value:null;
-                            eRow.Cells.Add(eCell);
+                        eCell.Value = (cell != null)?cell.Value:null;
+                        eRow.Cells.Add(eCell);
 
 
-                        }
                     }
-
+                   // if (j < maxDataRow)
+                       eSheet.Rows.Add(eRow);
 
                 }
                 eSheet.NumberOfColumns = nbOfSheetColumns;
+                eSheet.MaxDataRow = maxDataRow;
             }
 
             return ewb;
@@ -133,31 +132,28 @@ namespace Vanrise.ExcelConversion.Business
             ewb.Sheets.Add(eSheet);
             eSheet.Name = sheet.Name;
             int nbOfSheetColumns = 0;
+            int maxDataRow = sheet.Cells.MaxDataRow;
 
-            for (int j = Query.From; j <= Query.To; j++)
+            for (int j = Query.From; j < Query.To ; j++)
             {
-                Row row = (Row)sheet.Cells.Rows[j];
+                Row row = sheet.Cells.Rows[j] != null ? (Row)sheet.Cells.Rows[j] : null;
+                int maxdatacol = sheet.Cells.MaxDataColumn + 1;
 
-                if (row != null && !row.IsBlank)
+                ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
+                int nbOfRowColumns = (row != null && row.LastCell != null) ? row.LastCell.Column + 1 : 0;
+                if (nbOfRowColumns > nbOfSheetColumns)
+                    nbOfSheetColumns = nbOfRowColumns;
+                for (int colIndex = 0; colIndex < maxdatacol; colIndex++)
                 {
-                    ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
-                    eSheet.Rows.Add(eRow);
-                    int nbOfRowColumns = row.LastCell.Column + 1;
-                    if (nbOfRowColumns > nbOfSheetColumns)
-                        nbOfSheetColumns = nbOfRowColumns;
-                    for (int colIndex = 0; colIndex < nbOfRowColumns; colIndex++)
-                    {
-                        var cell = row.GetCellOrNull(colIndex);
-                        ExcelCell eCell = new ExcelCell();
-                        if (cell != null)
-                        {
-                            eCell.Value = cell.Value;
-                            eRow.Cells.Add(eCell);
+                    var cell = (row != null) ? row.GetCellOrNull(colIndex) : null;
+                    ExcelCell eCell = new ExcelCell();
 
-                        }
+                    eCell.Value = (cell != null) ? cell.Value : null;
+                    eRow.Cells.Add(eCell);
 
-                    }
+
                 }
+                    eSheet.Rows.Add(eRow);
 
 
             }

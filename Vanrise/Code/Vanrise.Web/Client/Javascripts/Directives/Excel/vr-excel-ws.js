@@ -44,12 +44,12 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
             }
             var loaderkey = "isloadingdatatab" + scope.index;
             function getPageInfo(startFromBeginning) {
-                var currentdatalength = api.getData().length + 1;
+                var currentdatalength = api.getData().length ;
                 var fromRow = startFromBeginning ? 1 : currentdatalength;
 
                 return {
                     fromRow: fromRow,
-                    toRow: fromRow + getPageSize() - 1
+                    toRow: fromRow + getPageSize() 
                 };
             }
             function fetchDataPageFromServer() {
@@ -81,7 +81,7 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
             var lastScrollTop;
             var gridBodyElement = $(elem.find(".wtHider"));
             $(elem).find('.wtHolder').on('scroll', function () {
-                if (scope.$parent[loaderkey] || lastpage)
+                if (scope.$parent[loaderkey] || lastpage || api.getData().length > scope.data.MaxDataRow)
                     return;
                 var scrollTop = $(this).scrollTop();
                 var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $(this).height());
@@ -99,21 +99,18 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
 
                             }
                             if (newdata.length > 0) {
-                                var mergeddata = api.getData();
-                                var index = mergeddata.length;
-                                for (var i = 0; i < newdata.length; i++) {
-                                    index++;
-                                    mergeddata[index] = newdata[i];
-                                }
+                                var mergeddata = api.getData();                               
+                                mergeddata = mergeddata.concat(newdata);
+
                                 api.loadData(mergeddata);
                             }
 
                         });
-                    }
-                        
-
+                    }                       
                 }
+
                 lastScrollTop = scrollTop;
+               
             });
             if (data.length > 0) {                
                 api.loadData(data);

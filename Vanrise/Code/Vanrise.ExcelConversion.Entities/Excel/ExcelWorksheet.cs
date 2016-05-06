@@ -12,6 +12,8 @@ namespace Vanrise.ExcelConversion.Entities
 
         public int NumberOfColumns { get; set; }
 
+        public int MaxDataRow { get; set; }
+
         public List<ExcelRow> Rows { get; set; }
 
         public List<MergedCell> MergedCells { get; set; }
