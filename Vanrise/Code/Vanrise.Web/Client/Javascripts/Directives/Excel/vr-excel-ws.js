@@ -20,9 +20,7 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
                  colWidths:100,
                  mergeCells: scope.data.MergedCells,
                  height: 320,
-                 fillHandle: false,
-                 minCols: 20,
-                 minRows:20
+                 fillHandle: false
                 
                 
             })
@@ -120,6 +118,21 @@ app.directive('vrExcelWs',["VR_ExcelConversion_ExcelAPIService", function (VR_Ex
             if (data.length > 0) {                
                 api.loadData(data);
                 
+            }
+            else {
+                api.loadData(buildFakeData());
+            }
+
+            function buildFakeData() {
+                var fakedata = [];
+                for (var i = 0; i < 20 ; i++) {
+                    fakedata[i] = [];
+                    for (var j = 0; j < 20; j++) {
+                        fakedata[i][j] = "";
+                    }
+
+                }
+                return fakedata;
             }
             var inter;
             scope.i = 0;
