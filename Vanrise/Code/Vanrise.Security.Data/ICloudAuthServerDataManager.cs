@@ -12,5 +12,9 @@ namespace Vanrise.Security.Data
         CloudAuthServer GetAuthServer();
         
         bool IsAuthServerUpdated(ref object updateHandle);
+
+        bool InsertCloudAuthServer(CloudAuthServer cloudAuthServer);
+
+        bool UpdateCloudAuthServer(CloudAuthServer cloudAuthServer);
     }
 }

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
 {
     public class CloudAuthServerManager
-    {        
+    {
         public CloudAuthServer GetAuthServer()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAuthServer",
@@ -18,27 +19,50 @@ namespace Vanrise.Security.Business
                     ICloudAuthServerDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ICloudAuthServerDataManager>();
                     return dataManager.GetAuthServer();
                 });
-            //return null;
-            //if (System.Web.HttpContext.Current.Request.Url.Port != 8787)
-            //{
-            //    return new CloudAuthServer
-            //    {
-            //        ApplicationIdentification = new CloudApplicationIdentification
-            //        {
-            //            IdentificationKey = "Application 1"
-            //        },
-            //        Settings = new CloudAuthServerSettings
-            //        {
-            //            AuthenticationCookieName = "Cloud-AuthServer-CookieName",
-            //            InternalURL = "http://localhost:8787",
-            //            OnlineURL = "http://localhost:8787",
-            //            TokenDecryptionKey = "CloudSecretKey",
-            //            CurrentApplicationId = 2
-            //        }
-            //    };
-            //}
-            //else
-            //    return null;
+        }
+
+        public InsertOperationOutput<CloudAuthServer> InsertCloudAuthServer(CloudAuthServer cloudAuthServer)
+        {
+            InsertOperationOutput<CloudAuthServer> insertOperationOutput = new InsertOperationOutput<CloudAuthServer>();
+            insertOperationOutput.Result = InsertOperationResult.Failed;
+            
+            ICloudAuthServerDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ICloudAuthServerDataManager>();
+
+            bool insertActionSucc = dataManager.InsertCloudAuthServer(cloudAuthServer);
+
+            if (insertActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<CloudAuthServer> UpdateCloudAuthServer(CloudAuthServer cloudAuthServer)
+        {
+            UpdateOperationOutput<CloudAuthServer> updateOperationOutput = new UpdateOperationOutput<CloudAuthServer>();
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+
+            ICloudAuthServerDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ICloudAuthServerDataManager>();
+
+            bool updateActionSucc = dataManager.UpdateCloudAuthServer(cloudAuthServer);
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+            }
+
+            return updateOperationOutput;
         }
 
         #region Private Classes

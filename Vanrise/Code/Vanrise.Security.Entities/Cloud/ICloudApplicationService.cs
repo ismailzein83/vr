@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Vanrise.Security.Entities
 {
     public interface ICloudApplicationService
@@ -15,7 +10,7 @@ namespace Vanrise.Security.Entities
         AssignUserFullControlOutput AssignUserFullControl(AssignUserFullControlInput input);
     }
 
-    public class ConfigureAuthServerInput
+    public class BaseAuthServerInput
     {
         public CloudApplicationIdentification ApplicationIdentification { get; set; }
 
@@ -29,6 +24,10 @@ namespace Vanrise.Security.Entities
 
         public string TokenDecryptionKey { get; set; }
     }
+    public class ConfigureAuthServerInput : BaseAuthServerInput
+    {
+
+    }
 
     public enum ConfigureAuthServerResult {  Succeeded = 0, Failed = 1}
 
@@ -37,14 +36,16 @@ namespace Vanrise.Security.Entities
         public ConfigureAuthServerResult Result { get; set; }
     }
 
-    public class UpdateAuthServerInput
+    public class UpdateAuthServerInput : BaseAuthServerInput
     {
-        
+
     }
+
+    public enum UpdateAuthServerResult { Succeeded = 0, Failed = 1 }
 
     public class UpdateAuthServerOutput
     {
-
+        public UpdateAuthServerResult Result { get; set; }
     }
 
     public class AssignUserFullControlInput

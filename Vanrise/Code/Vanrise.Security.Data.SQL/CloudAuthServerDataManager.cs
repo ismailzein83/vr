@@ -28,6 +28,22 @@ namespace Vanrise.Security.Data.SQL
             return base.IsDataUpdated("sec.[CloudAuthServer]", ref updateHandle);
         }
 
+        public bool InsertCloudAuthServer(CloudAuthServer cloudAuthServer)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_CloudAuthServer_Insert", Vanrise.Common.Serializer.Serialize(cloudAuthServer.Settings),
+                Vanrise.Common.Serializer.Serialize(cloudAuthServer.ApplicationIdentification));
+
+            return (recordesEffected > 0);
+        }
+
+        public bool UpdateCloudAuthServer(CloudAuthServer cloudAuthServer)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_CloudAuthServer_Update", Vanrise.Common.Serializer.Serialize(cloudAuthServer.Settings),
+                Vanrise.Common.Serializer.Serialize(cloudAuthServer.ApplicationIdentification));
+
+            return (recordesEffected > 0);
+        }
+
         #region Mappers
 
         CloudAuthServer CloudAuthServerMapper(IDataReader reader)
