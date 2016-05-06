@@ -12,7 +12,8 @@ namespace CloudPortal.Web
 
             bundles.Add(new ScriptBundle("~/bundles/ModulesJavascripts").IncludeDirectory(
                 "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Security", "*.js", true));
+                "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/CloudPortal_BEInternal", "*.js", true));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace CloudPortal.BusinessEntity.Business
 
         public ConfigureAuthServerOutput ConfigureAuthServer(ConfigureAuthServerInput input)
         {
-            return Post<ConfigureAuthServerInput, ConfigureAuthServerOutput>("ConfigureAuthServer", input); throw new NotImplementedException();
+            return Post<ConfigureAuthServerInput, ConfigureAuthServerOutput>("ConfigureAuthServer", input);
         }
 
         public UpdateAuthServerOutput UpdateAuthServer(UpdateAuthServerInput input)

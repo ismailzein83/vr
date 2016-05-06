@@ -49,8 +49,13 @@
     <Compile Include="ApplicationTenantRegistration.cs" />
     <Compile Include="CloudApplication.cs" />
     <Compile Include="CloudApplicationDetail.cs" />
+    <Compile Include="CloudApplicationQuery.cs" />
     <Compile Include="CloudApplicationToAdd.cs" />
-    <Compile Include="CloudApplicationType.cs" />
+    <Compile Include="CloudApplicationToUpdate.cs" />
+    <Compile Include="CloudApplicationType\CloudApplicationTypeFilter.cs" />
+    <Compile Include="CloudApplicationType\CloudApplicationTypeDetail.cs" />
+    <Compile Include="CloudApplicationType\CloudApplicationTypeQuery.cs" />
+    <Compile Include="CloudApplicationType\CloudApplicationType.cs" />
     <Compile Include="Company.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CloudApplicationUser.cs" />

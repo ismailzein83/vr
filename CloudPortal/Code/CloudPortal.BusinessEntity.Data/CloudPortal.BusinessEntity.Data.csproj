@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
+    <Compile Include="ICloudApplicationTypeDataManager.cs" />
     <Compile Include="ICloudApplicationDataManager.cs" />
     <Compile Include="ICloudApplicationUserDataManager.cs" />
     <Compile Include="IDataManager.cs" />

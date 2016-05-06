@@ -18,14 +18,44 @@ namespace CloudPortal.BusinessEntity.Data.SQL
 
         }
 
-        public bool AreApplicationsUpdated(ref object updateHandle)
+        public bool AreCloudApplicationsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("cloud.CloudApplication", ref updateHandle);
         }
 
-        public List<Entities.CloudApplication> GetAllApplications()
+        public List<Entities.CloudApplication> GetAllCloudApplications()
         {
             return GetItemsSP("cloud.sp_CloudApplication_GetAll", CloudApplicationMapper);
+        }
+
+        public bool AddCloudApplication(CloudApplicationToAdd cloudApplicationToAdd, Vanrise.Security.Entities.CloudApplicationIdentification appIdentification, out int cloudApplicationId)
+        {
+            object insertedId;
+
+            int recordesEffected = ExecuteNonQuerySP("cloud.sp_CloudApplication_Insert", out insertedId, cloudApplicationToAdd.Name, cloudApplicationToAdd.CloudApplicationTypeId,
+                Vanrise.Common.Serializer.Serialize(cloudApplicationToAdd.Settings), Vanrise.Common.Serializer.Serialize(appIdentification));
+
+            cloudApplicationId = recordesEffected > 0 ? (int)insertedId : -1;
+            return (recordesEffected > 0);
+        }
+
+        public bool UpdateCloudApplication(CloudApplicationToUpdate cloudApplicationToUpdate)
+        {
+
+            int recordesEffected = ExecuteNonQuerySP("cloud.sp_CloudApplication_Update", cloudApplicationToUpdate.CloudApplicationId, cloudApplicationToUpdate.CloudApplicationTypeId,
+                Vanrise.Common.Serializer.Serialize(cloudApplicationToUpdate.Settings));
+
+            return (recordesEffected > 0);
+        }
+
+        public void SetApplicationReady(int cloudApplicationId)
+        {
+            ExecuteNonQuerySP("cloud.sp_CloudApplication_SetReady", cloudApplicationId);
+        }
+
+        public void DeleteCloudApplication(int cloudApplicationId)
+        {
+            ExecuteNonQuerySP("cloud.sp_CloudApplication_Delete", cloudApplicationId);
         }
 
         #region Mappers
@@ -36,6 +66,7 @@ namespace CloudPortal.BusinessEntity.Data.SQL
             {
                 CloudApplicationId = (int)reader["ID"],
                 Name = reader["Name"] as string,
+                CloudApplicationTypeId = (int)reader["CloudApplicationTypeId"],
                 ApplicationIdentification = Serializer.Deserialize<Vanrise.Security.Entities.CloudApplicationIdentification>(reader["ApplicationIdentification"] as string),
                 Settings = Serializer.Deserialize<CloudApplicationSettings>(reader["Settings"] as string)
             };
@@ -43,16 +74,5 @@ namespace CloudPortal.BusinessEntity.Data.SQL
         }
 
         #endregion
-
-
-        public bool Insert(CloudApplicationToAdd cloudApplicationToAdd, Vanrise.Security.Entities.CloudApplicationIdentification appIdentification, out int applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetApplicationReady(int applicationId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

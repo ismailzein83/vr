@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace CloudPortal.BusinessEntity.Entities
 {
-    public class CloudApplicationToAdd
+    public class CloudApplicationQuery
     {
         public string Name { get; set; }
-
-        public int CloudApplicationTypeId { get; set; }
-
-        public CloudApplicationSettings Settings { get; set; }
     }
 }

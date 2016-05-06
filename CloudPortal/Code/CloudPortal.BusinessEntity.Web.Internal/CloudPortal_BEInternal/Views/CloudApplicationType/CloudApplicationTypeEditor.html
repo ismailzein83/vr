@@ -1,0 +1,18 @@
+﻿<div vr-modalcontent width="'50%'" ng-controller="CloudPortal_BEInternal_CloudApplicationTypeEditorController">
+    <vr-modalbody>
+        <vr-form name="formCreateProcessInput" vr-loader="isLoading">
+            <vr-row removeline>
+                <vr-columns width="1/3row">
+                    <vr-textbox label="Name" value="name" isrequired></vr-textbox>
+                </vr-columns>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="saveCloudApplicationType" formname="formCreateProcessInput"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

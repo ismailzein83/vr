@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloudApplicationTypeDataManager.cs" />
     <Compile Include="CloudApplicationDataManager.cs" />
     <Compile Include="CloudApplicationUserDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

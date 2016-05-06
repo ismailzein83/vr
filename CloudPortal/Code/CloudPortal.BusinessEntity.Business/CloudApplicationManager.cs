@@ -21,7 +21,7 @@ namespace CloudPortal.BusinessEntity.Business
             return GetAllApplicationsByIdentification().GetRecord(applicationIdentification.IdentificationKey);
         }
 
-        public Vanrise.Entities.InsertOperationOutput<CloudApplicationDetail> AddApplication(CloudApplicationToAdd cloudApplicationToAdd)
+        public Vanrise.Entities.InsertOperationOutput<CloudApplication> AddCloudApplication(CloudApplicationToAdd cloudApplicationToAdd)
         {
             Vanrise.Security.Entities.CloudApplicationIdentification appIdentification = new Vanrise.Security.Entities.CloudApplicationIdentification
             {
@@ -29,7 +29,7 @@ namespace CloudPortal.BusinessEntity.Business
             };
             ICloudApplicationDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICloudApplicationDataManager>();
             int applicationId;
-            if(_dataManager.Insert(cloudApplicationToAdd, appIdentification, out applicationId))
+            if (_dataManager.AddCloudApplication(cloudApplicationToAdd, appIdentification, out applicationId))
             {
                 CloudApplication cloudApplication = new CloudApplication
                 {
@@ -38,36 +38,120 @@ namespace CloudPortal.BusinessEntity.Business
                     Settings = cloudApplicationToAdd.Settings,
                     ApplicationIdentification = appIdentification
                 };
-                
-                if (ConfigureAppAuthServer(appIdentification, cloudApplication))
+                try
                 {
-                    _dataManager.SetApplicationReady(applicationId);
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                    CloudApplicationDetail appDetail = ApplicationDetailMapper(cloudApplication);
-                    //AddCurrentUserToApplication(cloudApplication);
-                    return new Vanrise.Entities.InsertOperationOutput<CloudApplicationDetail>
+                    if (ConfigureAppAuthServer(cloudApplication))
                     {
-                        Result = Vanrise.Entities.InsertOperationResult.Succeeded,
-                        InsertedObject = appDetail
-                    };
+                        _dataManager.SetApplicationReady(applicationId);
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                        return new Vanrise.Entities.InsertOperationOutput<CloudApplication>
+                        {
+                            Result = Vanrise.Entities.InsertOperationResult.Succeeded,
+                            InsertedObject = cloudApplication
+                        };
+                    }
+                    else
+                    {
+                        DeleteCloudApplication(applicationId);
+                        return new Vanrise.Entities.InsertOperationOutput<CloudApplication>
+                        {
+                            Result = Vanrise.Entities.InsertOperationResult.Failed,
+                            Message = "Application is already connected to Cloud",
+                            ShowExactMessage = true
+                        };
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return new Vanrise.Entities.InsertOperationOutput<CloudApplicationDetail>
+                    DeleteCloudApplication(applicationId);
+                    LoggerFactory.GetExceptionLogger().WriteException(ex);
+                    return new Vanrise.Entities.InsertOperationOutput<CloudApplication>
                     {
                         Result = Vanrise.Entities.InsertOperationResult.Failed,
-                        Message = "Application is already connected to Cloud",
+                        Message = "Couldn't connect to the Application",
                         ShowExactMessage = true
                     };
                 }
             }
             else
             {
-                return new Vanrise.Entities.InsertOperationOutput<CloudApplicationDetail>
+                return new Vanrise.Entities.InsertOperationOutput<CloudApplication>
                 {
                     Result = Vanrise.Entities.InsertOperationResult.SameExists
                 };
             }
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<CloudApplication> UpdateCloudApplication(CloudApplicationToUpdate cloudApplicationToUpdate)
+        {
+            ICloudApplicationDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICloudApplicationDataManager>();
+            var application = GetCloudApplication(cloudApplicationToUpdate.CloudApplicationId);
+
+            CloudApplication cloudApplication = new CloudApplication
+            {
+                CloudApplicationId = cloudApplicationToUpdate.CloudApplicationId,
+                Name = application.Name,
+                Settings = cloudApplicationToUpdate.Settings,
+                ApplicationIdentification = application.ApplicationIdentification
+            };
+            try
+            {
+                if (UpdateAppAuthServer(cloudApplication))
+                {
+                    _dataManager.UpdateCloudApplication(cloudApplicationToUpdate);
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    return new Vanrise.Entities.UpdateOperationOutput<CloudApplication>
+                    {
+                        Result = Vanrise.Entities.UpdateOperationResult.Succeeded,
+                        UpdatedObject = cloudApplication
+                    };
+                }
+                else
+                {
+                    return new Vanrise.Entities.UpdateOperationOutput<CloudApplication>
+                        {
+                            Result = Vanrise.Entities.UpdateOperationResult.Failed,
+                            Message = "Application not connected to Cloud",
+                            ShowExactMessage = true
+                        };
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
+                return new Vanrise.Entities.UpdateOperationOutput<CloudApplication>
+                {
+                    Result = Vanrise.Entities.UpdateOperationResult.Failed,
+                    Message = "Couldn't connect to the Application",
+                    ShowExactMessage = true
+                };
+
+            }
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<CloudApplicationDetail> GetFilteredCloudApplications(Vanrise.Entities.DataRetrievalInput<CloudApplicationQuery> input)
+        {
+            var allcloudApplications = GetCachedCloudApplications();
+
+            Func<CloudApplication, bool> filterExpression = (prod) =>
+                (input.Query == null || string.IsNullOrEmpty(input.Query.Name) || string.Compare(input.Query.Name, prod.Name, true) == 0);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allcloudApplications.ToBigResult(input, filterExpression, CloudApplicationDetailMapper));
+        }
+
+        public CloudApplication GetCloudApplication(int cloudApplicationId)
+        {
+            return GetCachedCloudApplications().First(itm => itm.CloudApplicationId == cloudApplicationId);
+        }
+
+        #endregion
+
+        #region Private Methods
+        private void DeleteCloudApplication(int cloudApplicationId)
+        {
+            ICloudApplicationDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICloudApplicationDataManager>();
+            _dataManager.DeleteCloudApplication(cloudApplicationId);
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
         private void AddCurrentUserToApplication(CloudApplication cloudApplication)
@@ -78,7 +162,25 @@ namespace CloudPortal.BusinessEntity.Business
             appUserManager.AssignUserFullControlToApp(cloudApplication, userId);
         }
 
-        private bool ConfigureAppAuthServer(Vanrise.Security.Entities.CloudApplicationIdentification appIdentification, CloudApplication cloudApplication)
+        private bool UpdateAppAuthServer(CloudApplication cloudApplication)
+        {
+            var securityManager = new Vanrise.Security.Business.SecurityManager();
+            var parameterManager = new ParameterManager();
+            CloudApplicationServiceProxy appServiceProxy = new CloudApplicationServiceProxy(cloudApplication);
+            var updateInput = new Vanrise.Security.Entities.UpdateAuthServerInput
+            {
+                ApplicationId = cloudApplication.CloudApplicationId,
+                ApplicationIdentification = cloudApplication.ApplicationIdentification,
+                AuthenticationCookieName = securityManager.GetCookieName(),
+                TokenDecryptionKey = securityManager.GetTokenDecryptionKey(),
+                InternalURL = parameterManager.GetCloudPortalInternalURL(),
+                OnlineURL = parameterManager.GetCloudPortalOnlineURL()
+            };
+            var updateOutput = appServiceProxy.UpdateAuthServer(updateInput);
+            return updateOutput != null && updateOutput.Result == Vanrise.Security.Entities.UpdateAuthServerResult.Succeeded;
+        }
+
+        private bool ConfigureAppAuthServer(CloudApplication cloudApplication)
         {
             var securityManager = new Vanrise.Security.Business.SecurityManager();
             var parameterManager = new ParameterManager();
@@ -86,7 +188,7 @@ namespace CloudPortal.BusinessEntity.Business
             var configureInput = new Vanrise.Security.Entities.ConfigureAuthServerInput
             {
                 ApplicationId = cloudApplication.CloudApplicationId,
-                ApplicationIdentification = appIdentification,
+                ApplicationIdentification = cloudApplication.ApplicationIdentification,
                 AuthenticationCookieName = securityManager.GetCookieName(),
                 TokenDecryptionKey = securityManager.GetTokenDecryptionKey(),
                 InternalURL = parameterManager.GetCloudPortalInternalURL(),
@@ -96,7 +198,7 @@ namespace CloudPortal.BusinessEntity.Business
             return configureOutput != null && configureOutput.Result == Vanrise.Security.Entities.ConfigureAuthServerResult.Succeeded;
         }
 
-        private CloudApplicationDetail ApplicationDetailMapper(CloudApplication cloudApplication)
+        private CloudApplicationDetail CloudApplicationDetailMapper(CloudApplication cloudApplication)
         {
             return new CloudApplicationDetail
             {
@@ -104,17 +206,13 @@ namespace CloudPortal.BusinessEntity.Business
             };
         }
 
-        #endregion
-
-        #region Private Methods
-
         private Dictionary<string, CloudApplication> GetAllApplicationsByIdentification()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllApplicationsByIdentification",
                 () =>
                 {
                     ICloudApplicationDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICloudApplicationDataManager>();
-                    List<CloudApplication> allApplications = _dataManager.GetAllApplications();
+                    List<CloudApplication> allApplications = _dataManager.GetAllCloudApplications();
                     if (allApplications == null)
                         return null;
                     else
@@ -133,21 +231,32 @@ namespace CloudPortal.BusinessEntity.Business
                 });
         }
 
+        private List<CloudApplication> GetCachedCloudApplications()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCloudApplications",
+            () =>
+            {
+                ICloudApplicationDataManager dataManager = BEDataManagerFactory.GetDataManager<ICloudApplicationDataManager>();
+                return dataManager.GetAllCloudApplications();
+            });
+        }
+
         #endregion
 
         #region Private Classes
 
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
 
-            ICloudApplicationDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICloudApplicationDataManager>();
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ICloudApplicationDataManager dataManager = BEDataManagerFactory.GetDataManager<ICloudApplicationDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreApplicationsUpdated(ref _updateHandle);
+                return dataManager.AreCloudApplicationsUpdated(ref _updateHandle);
             }
         }
+
 
         #endregion
     }
