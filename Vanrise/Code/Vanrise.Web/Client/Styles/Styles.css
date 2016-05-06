@@ -2035,7 +2035,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 }
 
 vr-label[breakline] .vr-control-label {   
-    white-space: normal !important;
+    white-space: pre-line !important;
 }
 
 
