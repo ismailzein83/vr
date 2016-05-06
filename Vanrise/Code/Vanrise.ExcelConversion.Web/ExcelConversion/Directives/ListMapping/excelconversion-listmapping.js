@@ -82,7 +82,8 @@
                         listMappingData = payload.listMappingData;
                         if (listMappingData != undefined)
                         {
-                            if (listMappingData.FirstRowIndex)
+                           
+                            if (listMappingData.FirstRowIndex !=undefined)
                             {
                                 ctrl.firstRowIndex = {
                                     row: listMappingData.FirstRowIndex,
@@ -90,7 +91,7 @@
                                     sheet: listMappingData.SheetIndex
                                 }
                             }
-                            if (listMappingData.LastRowIndex)
+                            if (listMappingData.LastRowIndex != undefined)
                             {
                                 ctrl.lastRowIndex = {
                                     row: listMappingData.LastRowIndex,
