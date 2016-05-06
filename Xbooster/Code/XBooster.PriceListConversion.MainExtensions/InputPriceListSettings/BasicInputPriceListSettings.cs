@@ -83,7 +83,8 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     DateTime? result = null;
                     if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
                     {
-                        result = (DateTime)codeEffectiveDateField.FieldValue;
+                        if (codeEffectiveDateField.FieldValue !=null)
+                         result = (DateTime)codeEffectiveDateField.FieldValue;
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
@@ -193,7 +194,8 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     DateTime? result = null;
                     if (obj.Fields.TryGetValue("EffectiveDate", out rateEffectiveDateField))
                     {
-                       result = (DateTime)rateEffectiveDateField.FieldValue;
+                        if (rateEffectiveDateField.FieldValue !=null)
+                          result = (DateTime)rateEffectiveDateField.FieldValue;
                     };
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
