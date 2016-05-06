@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Widgets\AnalyticChartWidget.cs" />
-    <Compile Include="Widgets\AnalyticGridWidget.cs" />
-    <Compile Include="SearchSettings\GenericSearchSettings.cs" />
+    <Compile Include="RealTimeReport\SearchSettings\RealTimeReportSearchSettings.cs" />
+    <Compile Include="RealTimeReport\Widgets\RealTimeChartWidget.cs" />
+    <Compile Include="History\Widgets\AnalyticChartWidget.cs" />
+    <Compile Include="History\Widgets\AnalyticGridWidget.cs" />
+    <Compile Include="History\SearchSettings\GenericSearchSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +60,7 @@
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

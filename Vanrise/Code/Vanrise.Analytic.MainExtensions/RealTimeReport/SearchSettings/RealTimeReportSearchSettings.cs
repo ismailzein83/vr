@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Analytic.Entities
+namespace Vanrise.Analytic.MainExtensions.RealTimeReport
 {
-    public abstract class AnalyticReportSettings
+    public class RealTimeReportSearchSettings 
     {
-        public int ConfigId { get; set; }
     }
 }

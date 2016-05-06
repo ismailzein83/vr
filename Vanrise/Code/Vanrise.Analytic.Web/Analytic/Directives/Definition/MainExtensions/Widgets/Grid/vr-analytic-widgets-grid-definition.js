@@ -196,7 +196,7 @@
                         }
                     }
                     var data = {
-                        $type: "Vanrise.Analytic.MainExtensions.Widgets.AnalyticGridWidget, Vanrise.Analytic.MainExtensions ",
+                        $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticGridWidget, Vanrise.Analytic.MainExtensions ",
                         RootDimensionsFromSearchSection: $scope.scopeModel.rootDimensionsFromSearch,
                         Dimensions: dimensions,
                         Measures: measures,

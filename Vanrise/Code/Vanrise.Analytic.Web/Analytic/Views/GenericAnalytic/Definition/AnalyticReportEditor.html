@@ -1,0 +1,26 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_AnalyticReportEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
+    <vr-modalbody maxheight="'600px'">
+        <vr-form validationcontext="analyticReportEditorGroup">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-columns width="1/3row">
+                        <vr-textbox value="scopeModel.reportName" label="Report Name" isrequired="true"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="1/3row">
+                        <vr-select label="Access Type" datasource="scopeModel.accessTypes" selectedvalues="scopeModel.selectedAccessType"
+                                   datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon></vr-columns>
+                </vr-tab>
+                <vr-directivewrapper ng-if="scopeModel.selectedAnalyticReportConfig !=undefined" directive="scopeModel.selectedAnalyticReportConfig.Editor" on-ready="scopeModel.onEditorDirectiveReady"></vr-directivewrapper>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="analyticReportEditorGroup" haspermission="scopeModel.hasSaveAnalyticReportPermission" data-onclick="scopeModel.saveAnalyticReport"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public abstract class AnalyticReportWidget
+    public abstract class AnalyticHistoryReportWidget
     {
         public int ConfigId { get; set; }
 

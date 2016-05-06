@@ -1,10 +1,10 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    genericAnalyticReportController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_Sec_ViewAPIService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_Analytic_AnalyticItemConfigAPIService'];
+    genericAnalyticReportController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_AnalyticReportAPIService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_Analytic_AnalyticItemConfigAPIService'];
 
-    function genericAnalyticReportController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Sec_ViewAPIService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
-        var viewId;
+    function genericAnalyticReportController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_AnalyticReportAPIService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService) {
+        var analyticReportId;
         var viewEntity;
         var fieldTypes = [];
         var dimensions = [];
@@ -19,7 +19,7 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != null) {
-                viewId = parameters.viewId;
+                analyticReportId = parameters.analyticReportId;
             }
         }
 
@@ -259,7 +259,7 @@
         }
 
         function getView() {
-            return VR_Sec_ViewAPIService.GetView(viewId).then(function (viewEntityObj) {
+            return VR_Analytic_AnalyticReportAPIService.GetAnalyticReportById(analyticReportId).then(function (viewEntityObj) {
                 viewEntity = viewEntityObj;
             });
         }

@@ -46,12 +46,19 @@
     <Compile Include="AnalyticQuery.cs" />
     <Compile Include="AnalyticRecord.cs" />
     <Compile Include="AnalyticReport\AnalyticReport.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportConfiguration.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportDetail.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportInfo.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportInfoFilter.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportQuery.cs" />
     <Compile Include="AnalyticReport\AnalyticReportSettings.cs" />
-    <Compile Include="AnalyticReport\AnalyticReportSearchSettings.cs" />
-    <Compile Include="AnalyticReport\AnalyticReportWidget.cs" />
-    <Compile Include="RealTimeReport\RealTimeReportInfo.cs" />
-    <Compile Include="RealTimeReport\RealTimeReportInfoFilter.cs" />
-    <Compile Include="RealTimeReport\RealTimeReportSettings.cs" />
+    <Compile Include="AnalyticReport\AnalyticReportViewSettings.cs" />
+    <Compile Include="AnalyticReport\History\AnalyticHistoryReportSearchSettings.cs" />
+    <Compile Include="AnalyticReport\History\AnalyticHistoryReportWidget.cs" />
+    <Compile Include="AnalyticReport\History\AnalyticHistoryReportSettings.cs" />
+    <Compile Include="AnalyticReport\RealTimeReport\RealTimeReportInfo.cs" />
+    <Compile Include="AnalyticReport\RealTimeReport\RealTimeReportInfoFilter.cs" />
+    <Compile Include="AnalyticReport\RealTimeReport\RealTimeReportSettings.cs" />
     <Compile Include="AnalyticSummaryBigResult.cs" />
     <Compile Include="AnalyticTableDetail.cs" />
     <Compile Include="AnalyticTableQuery.cs" />
@@ -83,8 +90,8 @@
     <Compile Include="DimensionValue.cs" />
     <Compile Include="MeasureValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RealTimeReport\RealTimeReport.cs" />
-    <Compile Include="RealTimeReport\RealTimeReportWidget.cs" />
+    <Compile Include="AnalyticReport\RealTimeReport\RealTimeReport.cs" />
+    <Compile Include="AnalyticReport\RealTimeReport\RealTimeReportWidget.cs" />
     <Compile Include="WidgetDefinitionSetting.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -212,7 +212,7 @@
                         }
                     }
                     var data = {
-                        $type: "Vanrise.Analytic.MainExtensions.SearchSettings.GenericSearchSettings, Vanrise.Analytic.MainExtensions ",
+                        $type: "Vanrise.Analytic.MainExtensions.History.SearchSettings.GenericSearchSettings, Vanrise.Analytic.MainExtensions ",
                         GroupingDimensions: groupingDimensions,
                         Filters: filterDimensions,
                         IsRequiredGroupingDimensions:$scope.scopeModel.isRequiredGroupingDimensions

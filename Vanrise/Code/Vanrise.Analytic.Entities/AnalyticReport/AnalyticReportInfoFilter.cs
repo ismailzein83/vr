@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public abstract class AnalyticReportSearchSettings
+    public class AnalyticReportInfoFilter
     {
-        public int ConfigId { get; set; }
+        public int TypeId { get; set; }
     }
 }

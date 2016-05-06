@@ -10,5 +10,7 @@ namespace Vanrise.Analytic.Business
     {
         public const string AnalyticReportSettingsConfigType = "Analytic_AnalyticReportSettings";
         public const string AnalyticWidgetsConfigType = "Analytic_AnalyticWidgetsSettings";
+
+        public const string AnalyticReportConfigType = "Analytic_AnalyticReportConfigType";
     }
 }

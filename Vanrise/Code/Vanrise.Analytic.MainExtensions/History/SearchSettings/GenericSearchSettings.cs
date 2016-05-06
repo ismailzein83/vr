@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 
-namespace Vanrise.Analytic.MainExtensions.SearchSettings
+namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
 {
-    public class GenericSearchSettings : AnalyticReportSearchSettings
+    public class GenericSearchSettings : AnalyticHistoryReportSearchSettings
     {
         public bool IsRequiredGroupingDimensions { get; set; }
         public List<GenericSearchSettingsDimension> GroupingDimensions { get; set; }

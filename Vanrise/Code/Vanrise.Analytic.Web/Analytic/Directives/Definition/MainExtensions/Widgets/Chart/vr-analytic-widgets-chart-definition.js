@@ -164,7 +164,7 @@
                 function getData() {
 
                     var data = {
-                        $type: "Vanrise.Analytic.MainExtensions.Widgets.AnalyticChartWidget, Vanrise.Analytic.MainExtensions ",
+                        $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticChartWidget, Vanrise.Analytic.MainExtensions ",
                         Measures: getMeasures(),
                         Dimensions: getDimensions(),
                         TopRecords: $scope.scopeModel.topRecords,

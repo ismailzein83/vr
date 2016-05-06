@@ -271,7 +271,7 @@
             }
 
             var viewSettings = {
-                $type: "Vanrise.Analytic.Entities.AnalyticReportSettings, Vanrise.Analytic.Entities",
+                $type: "Vanrise.Analytic.Entities.AnalyticHistoryReportSettings, Vanrise.Analytic.Entities",
                 AnalyticTableIds:tableSelectorAPI!=undefined?tableSelectorAPI.getSelectedIds():undefined,
                 SearchSettings: searchSettingDirectiveAPI != undefined ? searchSettingDirectiveAPI.getData() : undefined,
                 Widgets: widgets

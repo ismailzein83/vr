@@ -7,6 +7,7 @@ using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace Vanrise.Analytic.Business
 {
@@ -62,7 +63,6 @@ namespace Vanrise.Analytic.Business
 
             return insertOperationOutput;
         }
-
         public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> UpdateAnalyticTable(AnalyticTable analyticTable)
         {
             IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();
@@ -85,6 +85,8 @@ namespace Vanrise.Analytic.Business
 
             return updateOperationOutput;
         }
+
+
 
         #endregion
 

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 
-namespace Vanrise.Analytic.MainExtensions.Widgets
+namespace Vanrise.Analytic.MainExtensions.History.Widgets
 {
-    public class AnalyticChartWidget : AnalyticReportWidget
+    public class AnalyticChartWidget : AnalyticHistoryReportWidget
     {
         public List<AnalyticChartWidgetDimension> Dimensions { get; set; }
         public List<AnalyticChartWidgetMeasure> Measures { get; set; }

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 
-namespace Vanrise.Analytic.MainExtensions.Widgets
+namespace Vanrise.Analytic.MainExtensions.History.Widgets
 {
-    public class AnalyticGridWidget : AnalyticReportWidget
+    public class AnalyticGridWidget : AnalyticHistoryReportWidget
     {
         public bool RootDimensionsFromSearchSection { get; set; }
 
