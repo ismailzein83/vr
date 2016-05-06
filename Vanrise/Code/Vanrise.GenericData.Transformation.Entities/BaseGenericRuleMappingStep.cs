@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Vanrise.Common;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
@@ -19,7 +20,7 @@ namespace Vanrise.GenericData.Transformation.Entities
             where T : GenericRuleTarget
         {
             ruleTargetVariableName = context.GenerateUniqueMemberName("ruleTarget");
-            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new {1}();", ruleTargetVariableName, typeof(T).FullName);
+            context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new {1}();", ruleTargetVariableName,  CSharpCompiler.TypeToString(typeof(T)));
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1};", ruleTargetVariableName, this.EffectiveTime);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.TargetFieldValues = new Dictionary<string, object>();", ruleTargetVariableName);
 

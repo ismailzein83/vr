@@ -22,6 +22,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return (IsNullable) ? typeof(int?) : typeof(int);
         }
 
+        public override Type GetNonNullableRuntimeType()
+        {
+            return typeof(int);
+        }
+
         public override string GetDescription(object value)
         {
             if (value == null)

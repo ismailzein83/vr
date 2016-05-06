@@ -20,6 +20,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetRuntimeType()
         {
+            var type = GetNonNullableRuntimeType();
+            return (IsNullable) ? GetNullableType(type) : type;
+        }
+
+        public override Type GetNonNullableRuntimeType()
+        {
             BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
             BusinessEntityDefinition beDefinition = beDefinitionManager.GetBusinessEntityDefinition(BusinessEntityDefinitionId);
             if (beDefinition == null)
@@ -28,8 +34,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 throw new NullReferenceException("beDefinition.Settings");
             if (beDefinition.Settings.IdType == null)
                 throw new NullReferenceException("beDefinition.Settings.IdType");
-            Type type = Type.GetType(beDefinition.Settings.IdType);
-            return (IsNullable) ? GetNullableType(type) : type;
+            return Type.GetType(beDefinition.Settings.IdType);
         }
 
         public override string GetDescription(object value)

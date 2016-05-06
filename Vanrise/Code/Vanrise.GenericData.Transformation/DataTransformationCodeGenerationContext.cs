@@ -101,7 +101,7 @@ namespace Vanrise.GenericData.Transformation
 
                 if (recordType.DataRecordTypeId.HasValue)
                 {
-                    dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId.Value).FullName;
+                    dataRecordRuntimeType = CSharpCompiler.TypeToString(dataRecordTypeManager.GetDataRecordRuntimeType(recordType.DataRecordTypeId.Value));
                     if (recordType.IsArray)
                         (this as IDataTransformationCodeGenerationContext).AddGlobalMember(String.Format("public List<dynamic> {0} = new List<dynamic>();", recordType.RecordName));
                     else

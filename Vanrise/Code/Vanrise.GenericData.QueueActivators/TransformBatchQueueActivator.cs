@@ -38,19 +38,23 @@ namespace Vanrise.GenericData.QueueActivators
                 {
                     transformationContext.SetRecordValue(this.SourceRecordName, batchRecords);
                 });
-            foreach (var nextStageRecord in this.NextStagesRecords)
+            if (this.NextStagesRecords != null)
             {
-                var transformedList = transformationOutput.GetRecordValue(nextStageRecord.RecordName);
-                foreach (var stageName in nextStageRecord.NextStages)
+                foreach (var nextStageRecord in this.NextStagesRecords)
                 {
-                    var stage = context.GetStage(stageName);
-                    var stageQueueItemType = stage.QueueItemType as DataRecordBatchQueueItemType;
-                    if (stageQueueItemType == null)
-                        throw new Exception(String.Format("stage '{0}' QueueItemType is not of type DataRecordBatchQueueItemType", stageName));
-                    DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(transformedList, stageQueueItemType.BatchDescription);
-                    context.OutputItems.Add(stageName, transformedBatch);
+                    var transformedList = transformationOutput.GetRecordValue(nextStageRecord.RecordName);
+                    foreach (var stageName in nextStageRecord.NextStages)
+                    {
+                        var stage = context.GetStage(stageName);
+                        var stageQueueItemType = stage.QueueItemType as DataRecordBatchQueueItemType;
+                        if (stageQueueItemType == null)
+                            throw new Exception(String.Format("stage '{0}' QueueItemType is not of type DataRecordBatchQueueItemType", stageName));
+                        DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(transformedList, stageQueueItemType.BatchDescription);
+                        if (transformedBatch.GetRecordCount() > 0)
+                            context.OutputItems.Add(stageName, transformedBatch);
+                    }
+
                 }
-                
             }
         }
 

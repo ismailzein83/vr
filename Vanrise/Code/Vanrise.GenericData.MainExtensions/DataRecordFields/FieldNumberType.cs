@@ -18,10 +18,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetRuntimeType()
         {
+            var type = GetNonNullableRuntimeType();
+            return (IsNullable) ? GetNullableType(type) : type;
+        }
+
+        public override Type GetNonNullableRuntimeType()
+        {
             var attributeInfo = Utilities.GetEnumAttribute<FieldNumberDataType, FieldNumberDataTypeInfoAttribute>(this.DataType);
             if (attributeInfo == null)
                 throw new NullReferenceException("FieldNumberDataTypeInfoAttribute");
-            return (IsNullable) ? GetNullableType(attributeInfo.RuntimeType) : attributeInfo.RuntimeType;
+            return attributeInfo.RuntimeType;
         }
 
         public override string GetDescription(Object value)

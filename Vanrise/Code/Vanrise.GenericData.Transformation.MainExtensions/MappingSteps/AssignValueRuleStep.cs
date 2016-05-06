@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Transformation.Entities;
@@ -23,7 +24,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             if (mappingRuleSettingsDefinition == null)
                 throw new NullReferenceException("mappingSettings");
 
-            Type ruleValueRuntimeType = mappingRuleSettingsDefinition.FieldType.GetRuntimeType();
+            Type ruleValueRuntimeType = mappingRuleSettingsDefinition.FieldType.GetNonNullableRuntimeType();
             
             string ruleTargetVariableName;
             base.GenerateRuleTargetExecutionCode<GenericRuleTarget>(context, out ruleTargetVariableName);
@@ -35,7 +36,7 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = ({1})Convert.ChangeType({2}.Settings.Value, typeof({1}));",
-                this.Target, ruleValueRuntimeType.FullName, ruleVariableName);
+                this.Target, CSharpCompiler.TypeToString(ruleValueRuntimeType), ruleVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("}");
         }
     }

@@ -84,9 +84,14 @@ namespace Vanrise.GenericData.SQLDataStorage
                     {
                         if (columnIndex > 0)
                             recordFormatBuilder.Append("^");
-                        recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");
-                        if (columnSettings.SQLDataType.ToLower().Contains("decimal"))
+                        recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");                        
+                        string sqlDataType = columnSettings.SQLDataType.ToLower();
+                        if (sqlDataType.Contains("decimal"))
                             columnsValuesBuider.Append(String.Format(", Vanrise.Data.BaseDataManager.GetDecimalForBCP(record.{0})", columnSettings.ValueExpression));
+                        else if(sqlDataType == "bit")
+                            columnsValuesBuider.Append(String.Format(", record.{0} != null ? (record.{0} == true ? \"1\" : \"0\") : \"\"", columnSettings.ValueExpression));
+                        else if (sqlDataType == "datetime")
+                            columnsValuesBuider.Append(String.Format(", (record.{0} != null && record.{0} != default(DateTime)) ? record.{0} : \"\"", columnSettings.ValueExpression));
                         else
                             columnsValuesBuider.Append(String.Format(", record.{0}", columnSettings.ValueExpression));
                         columnIndex++;
@@ -135,7 +140,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == column.ValueExpression);
                 if (matchField == null)
                     throw new NullReferenceException("matchField");
-                builder.AppendLine(String.Format(@"dataRecord.{0} = GetReaderValue<{1}>(reader, ""{2}"");", matchField.Name, matchField.Type.GetRuntimeType().FullName, column.ColumnName));
+                builder.AppendLine(String.Format(@"dataRecord.{0} = GetReaderValue<{1}>(reader, ""{2}"");", matchField.Name, CSharpCompiler.TypeToString(matchField.Type.GetRuntimeType()), column.ColumnName));
             }
             return builder.ToString();
         }
@@ -159,7 +164,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == column.ValueExpression);
                 if (matchField == null)
                     throw new NullReferenceException("matchField");
-                dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof({1}));", column.ColumnName, matchField.Type.GetRuntimeType().FullName));
+                dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof({1}));", column.ColumnName, CSharpCompiler.TypeToString(matchField.Type.GetRuntimeType())));
                 dtRowsBuilder.AppendLine(String.Format(@"dr[""{0}""] = record.{1};", column.ColumnName, column.ValueExpression));
             }
             builder.Replace("#DTSCHEMA#", dtSchemaBuilder.ToString());

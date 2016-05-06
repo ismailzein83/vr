@@ -78,6 +78,44 @@ namespace Vanrise.Common
         {
             return String.Format("{0}.Gen_{1}", originalNamespace, Guid.NewGuid().ToString("N"));
         }
+
+        /// <summary>
+        /// This method takes a type and produces a proper full type name for it, expanding generics properly.
+        /// </summary>
+        /// <param name="type">
+        /// The type to produce the full type name for.
+        /// </param>
+        /// <returns>
+        /// The type name for <paramref name="type"/> as a string.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <para><paramref name="type"/> is <c>null</c>.</para>
+        /// </exception>
+        public static String TypeToString(Type type)
+        {
+            #region Parameter Validation
+
+            if (Object.ReferenceEquals(null, type))
+                throw new ArgumentNullException("type");
+
+            #endregion
+
+            if (type.IsGenericType)
+            {
+                if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    Type underlyingType = type.GetGenericArguments()[0];
+                    return String.Format("{0}?", TypeToString(underlyingType));
+                }
+                String baseName = type.FullName.Substring(0, type.FullName.IndexOf("`"));
+                return baseName + "<" + String.Join(", ", (from paramType in type.GetGenericArguments()
+                                                           select TypeToString(paramType)).ToArray()) + ">";
+            }
+            else
+            {
+                return type.FullName;
+            }
+        }
     }
 
     public class CSharpCompilationOutput

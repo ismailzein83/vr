@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Transformation.Entities;
 
 namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
@@ -17,7 +19,16 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
-            context.AddCodeToCurrentInstanceExecutionBlock("foreach(var {0} in {1})", this.IterationVariableName, this.ArrayVariableName);
+            string variableType = "var";
+            var arrayRecord = context.Records.FirstOrDefault(itm => itm.RecordName == this.ArrayVariableName);
+            if (arrayRecord != null && arrayRecord.DataRecordTypeId.HasValue)
+            {
+                DataRecordTypeManager recordTypeManager = new DataRecordTypeManager();
+                var arrayRuntimeType = recordTypeManager.GetDataRecordRuntimeType(arrayRecord.DataRecordTypeId.Value);
+                if (arrayRuntimeType != null)
+                    variableType = CSharpCompiler.TypeToString(arrayRuntimeType);
+            }
+            context.AddCodeToCurrentInstanceExecutionBlock("foreach({0} {1} in {2})", variableType, this.IterationVariableName, this.ArrayVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");
             context.GenerateStepsCode(this.Steps);
             context.AddCodeToCurrentInstanceExecutionBlock("}");     

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Transformation.Entities;
 
@@ -21,9 +22,9 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             if (runtimeType == null)
                 throw new NullReferenceException("runtimeType");
             if (!record.IsArray)
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = new {1}();", this.RecordName, runtimeType.FullName);
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = new {1}();", this.RecordName, CSharpCompiler.TypeToString(runtimeType));
             else
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = new List<{1}>();", this.RecordName, runtimeType.FullName);
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = new List<dynamic>();", this.RecordName);
         }
     }
 }
