@@ -146,12 +146,17 @@
 
                         return UtilsService.waitMultipleAsyncOperations([loadCDPNNormalizationRule, loadCGPNNormalizationRule]);
 
-                        function loadCDPNNormalizationRule() {
+                        function loadCDPNNormalizationRule()
+                        {
                             var cdpnNormalizationRuleLoadDeferred = UtilsService.createPromiseDeferred();
 
-                            var payload = (cdrSource != undefined && cdrSource.NormalizationRules != null) ?
-                                UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CDPN', 'FieldToNormalize') :
-                                { FieldToNormalize: 'CDPN' };
+                            var payload = { FieldToNormalize: 'CDPN' };
+
+                            if (cdrSource != undefined && cdrSource.NormalizationRules != null) {
+                                var cdpnNormalizationRule = UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CDPN', 'FieldToNormalize');
+                                if (cdpnNormalizationRule != null)
+                                    payload = cdpnNormalizationRule;
+                            }
 
                             VRUIUtilsService.callDirectiveLoad(cdpnNormalizationRuleDirectiveAPI, payload, cdpnNormalizationRuleLoadDeferred);
                             return cdpnNormalizationRuleLoadDeferred.promise;
@@ -159,9 +164,13 @@
                         function loadCGPNNormalizationRule() {
                             var cgpnNormalizationRuleLoadDeferred = UtilsService.createPromiseDeferred();
 
-                            var payload = (cdrSource != undefined && cdrSource.NormalizationRules != null) ?
-                                UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CGPN', 'FieldToNormalize') :
-                                { FieldToNormalize: 'CGPN' };
+                            var payload = { FieldToNormalize: 'CGPN' };
+
+                            if (cdrSource != undefined && cdrSource.NormalizationRules != null) {
+                                var cgpnNormalizationRule = UtilsService.getItemByVal(cdrSource.NormalizationRules, 'CGPN', 'FieldToNormalize');
+                                if (cgpnNormalizationRule != null)
+                                    payload = cgpnNormalizationRule;
+                            }
 
                             VRUIUtilsService.callDirectiveLoad(cgpnNormalizationRuleDirectiveAPI, payload, cgpnNormalizationRuleLoadDeferred);
                             return cgpnNormalizationRuleLoadDeferred.promise;
