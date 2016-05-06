@@ -49,11 +49,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Currency\ICurrencyDataManager.cs" />
-    <Compile Include="DBSyncDataManagerFactory.cs" />
-    <Compile Include="IDataManager.cs" />
+    <Compile Include="ICurrencyExchangeRateDataManager.cs" />
+    <Compile Include="ICurrencyDataManager.cs" />
+    <Compile Include="Common\DBSyncDataManagerFactory.cs" />
+    <Compile Include="Common\IDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Switch\ISwitchDataManager.cs" />
+    <Compile Include="ISwitchDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
@@ -64,6 +65,10 @@
       <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
       <Name>TOne.WhS.DBSync.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Currency\" />
+    <Folder Include="Switch\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

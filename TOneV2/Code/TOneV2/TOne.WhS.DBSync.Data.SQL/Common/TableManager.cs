@@ -16,15 +16,15 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void DropandCreateTempTable()
         {
-            DropTable(); // Drop Temp Table
+            DropTempTable(); // Drop Temp Table
 
             CreateTable();// Create Temp Table
         }
 
-        public void CreateTable()
+        private void CreateTable()
         {
             ExecuteNonQueryText(_table.CreateTableQuery, (cmd) => { });
-            
+
 
         }
 
@@ -44,30 +44,45 @@ namespace TOne.WhS.DBSync.Data.SQL
                 "sp_rename '" + _table.TempName + "' , '" + _table.NamewithoutSchema + "'";
             ExecuteNonQueryText(renameTable, (cmd) => { });
 
-            CreatePK(_table.primaryKey);
+            CreatePK();
         }
 
         public void DropTable()
         {
-            foreach (var fK in _table.foreignKeys)
-                DropFK(fK);
+            if (_table.relatedForeignKeys != null)
+                foreach (var fK in _table.relatedForeignKeys)
+                    DropFK(fK);
 
-            string dropTempTableIfExists =
+            string dropTableIfExists =
                 "IF object_id('" + _table.Name + "') is not null " +
                 "Begin " +
                 "drop table " + _table.Name + " " +
                 "End ";
+            ExecuteNonQueryText(dropTableIfExists, (cmd) => { });
+        }
+
+        private void DropTempTable()
+        {
+            string dropTempTableIfExists =
+                "IF object_id('" + _table.TempName + "') is not null " +
+                "Begin " +
+                "drop table " + _table.TempName + " " +
+                "End ";
             ExecuteNonQueryText(dropTempTableIfExists, (cmd) => { });
         }
 
-        private void CreatePK(PKey pK)
+
+        private void CreatePK()
         {
-            string dropFKIfExists =
-               "IF object_id('" + pK.KeyName + "') is null " +
-               "Begin " +
-               "Alter table " + _table.Name + " ADD CONSTRAINT " + pK.KeyName + " PRIMARY KEY CLUSTERED (" + String.Join(",", pK.Fields) + ") " +
-               "End ";
-            ExecuteNonQueryText(dropFKIfExists, (cmd) => { });
+            if (_table.primaryKey != null)
+            {
+                string dropFKIfExists =
+                 "IF object_id('" + _table.primaryKey.KeyName + "') is null " +
+                 "Begin " +
+                 "Alter table " + _table.Name + " ADD CONSTRAINT " + _table.primaryKey.KeyName + " PRIMARY KEY CLUSTERED (" + String.Join(",", _table.primaryKey.Fields) + ") " +
+                 "End ";
+                ExecuteNonQueryText(dropFKIfExists, (cmd) => { });
+            }
         }
 
     }

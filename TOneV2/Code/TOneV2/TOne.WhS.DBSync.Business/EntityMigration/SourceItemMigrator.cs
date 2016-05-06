@@ -29,7 +29,8 @@ namespace TOne.WhS.DBSync.Business.EntityMigrator
                 foreach (var sourceItem in sourceItems)
                 {
                     var item = BuildItemFromSource(sourceItem);
-                    itemsToAdd.Add(item);
+                    if (item != null)
+                        itemsToAdd.Add(item);
                 }
                 AddItems(itemsToAdd);
             }

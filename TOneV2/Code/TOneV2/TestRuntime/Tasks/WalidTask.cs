@@ -53,13 +53,24 @@ namespace TestRuntime.Tasks
 
 
 
-            // Create Source Currency Reader and Pass Connection string to it.
-            SourceCurrencyMigratorReader sourceCurrencyMigratorReader = new SourceCurrencyMigratorReader();
-            sourceCurrencyMigratorReader.ConnectionString = connectionString;
+            //// Create Source Currency Reader and Pass Connection string to it.
+            //SourceCurrencyMigratorReader sourceCurrencyMigratorReader = new SourceCurrencyMigratorReader();
+            //sourceCurrencyMigratorReader.ConnectionString = connectionString;
 
-            // Create Source Currency Migrator and Migrate
-            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(sourceCurrencyMigratorReader);
-            sourceCurrencyMigrator.Migrate();
+            //// Create Source Currency Migrator and Migrate
+            //SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(sourceCurrencyMigratorReader);
+            //sourceCurrencyMigrator.Migrate();
+
+
+
+
+            // Create Source CurrencyExchangeRate Reader and Pass Connection string to it.
+            SourceCurrencyExchangeRateMigratorReader sourceCurrencyExchangeRateMigratorReader = new SourceCurrencyExchangeRateMigratorReader();
+            sourceCurrencyExchangeRateMigratorReader.ConnectionString = connectionString;
+
+            // Create Source CurrencyExchangeRate Migrator and Migrate
+            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(sourceCurrencyExchangeRateMigratorReader);
+            sourceCurrencyExchangeRateMigrator.Migrate();
 
         }
 

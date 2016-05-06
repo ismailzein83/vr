@@ -32,6 +32,21 @@ namespace TOne.WhS.DBSync.Business
             sourceCurrencyMigrator.Migrate();
 
 
+
+
+
+            // Create Source CurrencyExchangeRate Reader and Pass Connection string to it.
+            SourceCurrencyExchangeRateMigratorReader sourceCurrencyExchangeRateMigratorReader = new SourceCurrencyExchangeRateMigratorReader();
+            sourceCurrencyExchangeRateMigratorReader.ConnectionString = migrateSyncTaskActionArgument.ConnectionString;
+
+            // Create Source CurrencyExchangeRate Migrator and Migrate
+            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(sourceCurrencyExchangeRateMigratorReader);
+            sourceCurrencyExchangeRateMigrator.Migrate();
+
+
+
+
+
             
             Console.WriteLine("MigrationSyncTaskAction Executed");
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()

@@ -6,41 +6,41 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CurrencyDataManager : BaseSQLDataManager, ICurrencyDataManager
+    public class CurrencyExchangeRateDataManager : BaseSQLDataManager, ICurrencyExchangeRateDataManager
     {
-        readonly string[] columns = { "Symbol", "Name", "SourceID" };
+        readonly string[] columns = { "CurrencyID", "Rate", "ExchangeDate", "SourceID" };
         Table _table;
         TableManager tableManager;
 
-        public CurrencyDataManager() :
+        public CurrencyExchangeRateDataManager() :
             base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
         {
             _table = DefineTable();
             tableManager = new TableManager(_table);
         }
 
-        public void MigrateCurrenciesToDB(List<Currency> currencies)
+        public void MigrateCurrencyExchangeRatesToDB(List<CurrencyExchangeRate> currencyExchangeRates)
         {
             tableManager.DropandCreateTempTable(); // Drop and Create Temp
-            ApplyCurrenciesToDB(currencies); // Apply to Temp
+            ApplyCurrencyExchangeRatesToDB(currencyExchangeRates); // Apply to Temp
             tableManager.DropTable();
             tableManager.RenameTablefromTempandRestorePK(); // Rename Temp table to be Table name
         }
 
 
-        private void ApplyCurrenciesToDB(List<Currency> currencies)
+        private void ApplyCurrencyExchangeRatesToDB(List<CurrencyExchangeRate> currencyExchangeRates)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
-                foreach (var c in currencies)
+                foreach (var c in currencyExchangeRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Symbol, c.Name, c.CurrencyId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", c.CurrencyId, c.Rate, c.ExchangeDate, c.CurrencyExchangeRateId));
                 }
                 wr.Close();
             }
 
-            Object preparedCurrencies = new BulkInsertInfo
+            Object preparedCurrencyExchangeRates = new BulkInsertInfo
             {
                 TableName = _table.TempName,
                 DataFilePath = filePath,
@@ -50,30 +50,25 @@ namespace TOne.WhS.DBSync.Data.SQL
                 FieldSeparator = '^',
             };
 
-            InsertBulkToTable(preparedCurrencies as BaseBulkInsertInfo);
+            InsertBulkToTable(preparedCurrencyExchangeRates as BaseBulkInsertInfo);
         }
 
         private static Table DefineTable()
         {
             Table table = new Table();
             table.Schema = "Common";
-            table.NamewithoutSchema = "Currency";
+            table.NamewithoutSchema = "CurrencyExchangeRate";
             table.CreateTableQuery =
                 "CREATE TABLE " + table.TempName + "( " +
-                "[ID] [int] IDENTITY(1,1) NOT NULL, " +
-                "[Symbol] [nvarchar](10) NOT NULL, " +
-                "[Name] [nvarchar](255) NOT NULL, " +
+                "[ID] [bigint] IDENTITY(1,1) NOT NULL, " +
+                "[CurrencyID] [int] NOT NULL, " +
+                "[Rate] [decimal](18, 5) NOT NULL, " +
+                "[ExchangeDate] [datetime] NOT NULL, " +
                 "[timestamp] [timestamp] NULL, " +
                 "[SourceID] [varchar](50) NULL) ";
 
-            var foreignKeys = new List<FKey>(); // no keys are foreign keys of other tables
-            foreignKeys.Add(new FKey { KeyName = "FK_CurrencyExchangeRate_Currency", TableName = "common.CurrencyExchangeRate" });
-            table.foreignKeys = foreignKeys;
-
-
-            var primaryKey = new PKey { Fields = new List<string> { "ID" }, KeyName = "PK_Currency" };
+            var primaryKey = new PKey { Fields = new List<string> { "ID" }, KeyName = "PK_CurrencyExchangeRate" };
             table.primaryKey = primaryKey;
-
 
             return table;
         }
