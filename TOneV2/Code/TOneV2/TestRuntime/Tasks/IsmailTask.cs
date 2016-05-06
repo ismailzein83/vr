@@ -62,7 +62,7 @@ namespace TestRuntime
 
             runtimeServices.Add(schedulerService);
             runtimeServices.Add(dsRuntimeService);
-            runtimeServices.Add(bigDataService);
+            //runtimeServices.Add(bigDataService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();

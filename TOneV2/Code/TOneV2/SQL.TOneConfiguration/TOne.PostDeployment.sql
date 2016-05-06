@@ -593,3 +593,28 @@ when not matched by target then
 	insert([ID],[Name],[BPDefintionId],[Settings])
 	values(s.[ID],s.[Name],s.[BPDefintionId],s.[Settings]);
 set identity_insert [bp].[BPBusinessRuleDefinition] off;
+
+--[genericdata].[BusinessEntityDefinition]-----------------1 to 1000------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [genericdata].[BusinessEntityDefinition] on;
+;with cte_data([ID],[Name],[Title],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,'WHS_BE_CarrierProfile', 'Carrier Profile','{"SelectorUIControl":"vr-whs-be-carrierprofile-selector","GroupSelectorUIControl":"","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.CarrierProfileManager, TOne.WhS.BusinessEntity.Business", "IdType": "System.Int32"}'),
+(2,'WHS_BE_Customer', 'Customer','{"SelectorUIControl":"vr-whs-be-customer-selector","GroupSelectorUIControl":"vr-whs-be-customergroup","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.CarrierAccountManager, TOne.WhS.BusinessEntity.Business", "IdType": "System.Int32"}'),
+(3,'WHS_BE_Supplier', 'Supplier','{"SelectorUIControl":"vr-whs-be-supplier-selector","GroupSelectorUIControl":"","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.CarrierAccountManager, TOne.WhS.BusinessEntity.Business", "IdType": "System.Int32"}'),
+(4,'WHS_BE_SaleZone', 'Sale Zone','{"SelectorUIControl":"vr-whs-be-salezone-selector","GroupSelectorUIControl":"vr-whs-be-salezonegroup","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.SaleZoneManager, TOne.WhS.BusinessEntity.Business","IdType":"System.Int64"}'),
+(5,'WHS_BE_CarrierAccount', 'Carrier Account','{"SelectorUIControl":"vr-whs-be-customer-selector","ManagerFQTN":"TOne.WhS.BusinessEntity.Business.CarrierAccountManager, TOne.WhS.BusinessEntity.Business", "IdType": "System.Int32"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Settings]))
+merge	[genericdata].[BusinessEntityDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
+set identity_insert [genericdata].[BusinessEntityDefinition] off;
