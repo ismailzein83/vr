@@ -66,7 +66,9 @@ namespace CDRComparison.BP.Activities
 
                     item.DurationInSec = (inputArgument.CDRSource.DurationTimeUnit == CDRSourceTimeUnitEnum.Minutes) ? (cdr.DurationInSec * 60) : cdr.DurationInSec;
                     NormalizeNumbers(item, cdpnNormalizationSettings, cgpnNormalizationSettings);
-                    
+
+                    ValidateOriginalAndNormalizedCDPNs(item);
+
                     list.Add(item);
                 }
                 var cdrBatch = new CDRBatch() { CDRs = list };
@@ -135,7 +137,18 @@ namespace CDRComparison.BP.Activities
             else
                 cdr.CGPN = cdr.OriginalCGPN;
         }
-        
+
+        void ValidateOriginalAndNormalizedCDPNs(CDR cdr)
+        {
+            if (String.IsNullOrEmpty(cdr.OriginalCDPN) || String.IsNullOrEmpty(cdr.CDPN))
+            {
+                if (cdr.IsPartnerCDR)
+                    throw new NullReferenceException("Partner CDRs contain null CDPN");
+                else
+                    throw new NullReferenceException("System CDRs contain null CDPN");
+            }
+        }
+
         #endregion
     }
 }
