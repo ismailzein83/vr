@@ -80,6 +80,8 @@
                         context = payload.context;
                         listName = payload.listName;
                         listMappingData = payload.listMappingData;
+                        ctrl.lastRowIndex = undefined;
+                        ctrl.firstRowIndex = undefined;
                         if (listMappingData != undefined)
                         {
                            
