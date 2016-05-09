@@ -6,29 +6,18 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CurrencyExchangeRateDataManager : BaseSQLDataManager, ICurrencyExchangeRateDataManager
+    public class CurrencyExchangeRateDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "CurrencyID", "Rate", "ExchangeDate", "SourceID" };
-        Table _table;
-        TableManager tableManager;
+        string _tempTableName;
 
-        public CurrencyExchangeRateDataManager() :
+        public CurrencyExchangeRateDataManager(string tableName) :
             base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
         {
-            _table = DefineTable();
-            tableManager = new TableManager(_table);
+            _tempTableName = tableName;
         }
 
-        public void MigrateCurrencyExchangeRatesToDB(List<CurrencyExchangeRate> currencyExchangeRates)
-        {
-            tableManager.DropandCreateTempTable(); // Drop and Create Temp
-            ApplyCurrencyExchangeRatesToDB(currencyExchangeRates); // Apply to Temp
-            tableManager.DropTable();
-            tableManager.RenameTablefromTempandRestorePK(); // Rename Temp table to be Table name
-        }
-
-
-        private void ApplyCurrencyExchangeRatesToDB(List<CurrencyExchangeRate> currencyExchangeRates)
+        public void ApplyCurrencyExchangeRatesToDB(List<CurrencyExchangeRate> currencyExchangeRates)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -42,7 +31,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedCurrencyExchangeRates = new BulkInsertInfo
             {
-                TableName = _table.TempName,
+                TableName = _tempTableName,
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -52,26 +41,5 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             InsertBulkToTable(preparedCurrencyExchangeRates as BaseBulkInsertInfo);
         }
-
-        private static Table DefineTable()
-        {
-            Table table = new Table();
-            table.Schema = "Common";
-            table.NamewithoutSchema = "CurrencyExchangeRate";
-            table.CreateTableQuery =
-                "CREATE TABLE " + table.TempName + "( " +
-                "[ID] [bigint] IDENTITY(1,1) NOT NULL, " +
-                "[CurrencyID] [int] NOT NULL, " +
-                "[Rate] [decimal](18, 5) NOT NULL, " +
-                "[ExchangeDate] [datetime] NOT NULL, " +
-                "[timestamp] [timestamp] NULL, " +
-                "[SourceID] [varchar](50) NULL) ";
-
-            var primaryKey = new PKey { Fields = new List<string> { "ID" }, KeyName = "PK_CurrencyExchangeRate" };
-            table.primaryKey = primaryKey;
-
-            return table;
-        }
-
     }
 }

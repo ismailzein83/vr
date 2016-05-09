@@ -5,29 +5,18 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class SwitchDataManager : BaseSQLDataManager, ISwitchDataManager
+    public class SwitchDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "Name", "SourceID" };
-        Table _table;
-        TableManager tableManager;
+        string _tempTableName;
 
-        public SwitchDataManager() :
+        public SwitchDataManager(string tableName) :
             base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
         {
-            _table = DefineTable();
-            tableManager = new TableManager(_table);
+            _tempTableName = tableName;
         }
 
-        public void MigrateSwitchesToDB(List<Switch> switches)
-        {
-            tableManager.DropandCreateTempTable(); // Drop and Create Temp
-            ApplySwitchesToDB(switches); // Apply to Temp
-            tableManager.DropTable();
-            tableManager.RenameTablefromTempandRestorePK(); // Rename Temp table to be Table name
-        }
-
-
-        private void ApplySwitchesToDB(List<Switch> switches)
+        public void ApplySwitchesToDB(List<Switch> switches)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -41,7 +30,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedSwitches = new BulkInsertInfo
             {
-                TableName = _table.TempName,
+                TableName = _tempTableName,
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -51,31 +40,5 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             InsertBulkToTable(preparedSwitches as BaseBulkInsertInfo);
         }
-
-        private static Table DefineTable()
-        {
-            Table table = new Table();
-            table.Schema = "TOneWhS_BE";
-            table.NamewithoutSchema = "Switch";
-            table.CreateTableQuery =
-                "CREATE TABLE " + table.TempName + "( " +
-                "[ID] [int] IDENTITY(1,1) NOT NULL, " +
-                "[Name] [varchar](50) NULL, " +
-                "[timestamp] [timestamp] NULL, " +
-                "[SourceID] [varchar](50) NULL) ";
-
-
-            var relatedForeignKeys = new List<FKey>();
-            relatedForeignKeys.Add(new FKey { KeyName = "FK_Trunk_Switch", TableName = "dbo.Trunk" });
-
-            table.relatedForeignKeys = relatedForeignKeys;
-
-
-            var primaryKey = new PKey { Fields = new List<string> { "ID" }, KeyName = "PK_Switch" };
-            table.primaryKey = primaryKey;
-
-            return table;
-        }
-
     }
 }
