@@ -268,15 +268,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.DBSync.Entities", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.DBSync.Business", "TOne.WhS.DBSync.Business\TOne.WhS.DBSync.Business.csproj", "{66A454C0-D24C-4378-942F-4B7BC0F1E05A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.DBSync.Data", "TOne.WhS.DBSync.Data\TOne.WhS.DBSync.Data.csproj", "{93DD50D2-700D-442C-8EC2-C6E2B002C22D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.DBSync.Data.SQL", "TOne.WhS.DBSync.Data.SQL\TOne.WhS.DBSync.Data.SQL.csproj", "{DDABF1CD-636E-47C1-A713-0EC00AB5F581}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 113
+		SccNumberOfProjects = 112
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = TestRuntime\\TestRuntime.csproj
 		SccProjectTopLevelParentUniqueName1 = TOneV2.sln
@@ -718,14 +716,10 @@ Global
 		SccProjectTopLevelParentUniqueName110 = TOneV2.sln
 		SccProjectName110 = TOne.WhS.DBSync.Business
 		SccLocalPath110 = TOne.WhS.DBSync.Business
-		SccProjectUniqueName111 = TOne.WhS.DBSync.Data\\TOne.WhS.DBSync.Data.csproj
+		SccProjectUniqueName111 = TOne.WhS.DBSync.Data.SQL\\TOne.WhS.DBSync.Data.SQL.csproj
 		SccProjectTopLevelParentUniqueName111 = TOneV2.sln
-		SccProjectName111 = TOne.WhS.DBSync.Data
-		SccLocalPath111 = TOne.WhS.DBSync.Data
-		SccProjectUniqueName112 = TOne.WhS.DBSync.Data.SQL\\TOne.WhS.DBSync.Data.SQL.csproj
-		SccProjectTopLevelParentUniqueName112 = TOneV2.sln
-		SccProjectName112 = TOne.WhS.DBSync.Data.SQL
-		SccLocalPath112 = TOne.WhS.DBSync.Data.SQL
+		SccProjectName111 = TOne.WhS.DBSync.Data.SQL
+		SccLocalPath111 = TOne.WhS.DBSync.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -4808,42 +4802,6 @@ Global
 		{66A454C0-D24C-4378-942F-4B7BC0F1E05A}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{66A454C0-D24C-4378-942F-4B7BC0F1E05A}.SingleImage|x64.ActiveCfg = Release|Any CPU
 		{66A454C0-D24C-4378-942F-4B7BC0F1E05A}.SingleImage|x86.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.CD_ROM|x64.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.CD_ROM|x86.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.DVD-5|x64.ActiveCfg = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.DVD-5|x86.ActiveCfg = Debug|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Optimized|Any CPU.Build.0 = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Optimized|x64.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Optimized|x86.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Release|x64.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.Release|x86.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.SingleImage|Any CPU.Build.0 = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.SingleImage|x64.ActiveCfg = Release|Any CPU
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D}.SingleImage|x86.ActiveCfg = Release|Any CPU
 		{DDABF1CD-636E-47C1-A713-0EC00AB5F581}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
 		{DDABF1CD-636E-47C1-A713-0EC00AB5F581}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{DDABF1CD-636E-47C1-A713-0EC00AB5F581}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
@@ -5011,7 +4969,6 @@ Global
 		{B64A7CBA-3D66-4C61-813B-F19DF288D069} = {94FF9777-F09D-4444-877F-3E1A773E0D0E}
 		{9E22928E-0CF2-459D-979F-3551145AD291} = {DC882316-8A22-4EFE-9012-F4F06D8B8E7D}
 		{66A454C0-D24C-4378-942F-4B7BC0F1E05A} = {DC882316-8A22-4EFE-9012-F4F06D8B8E7D}
-		{93DD50D2-700D-442C-8EC2-C6E2B002C22D} = {DC882316-8A22-4EFE-9012-F4F06D8B8E7D}
 		{DDABF1CD-636E-47C1-A713-0EC00AB5F581} = {DC882316-8A22-4EFE-9012-F4F06D8B8E7D}
 	EndGlobalSection
 EndGlobal

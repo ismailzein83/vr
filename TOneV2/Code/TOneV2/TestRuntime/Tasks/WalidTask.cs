@@ -1,35 +1,11 @@
-﻿using Microsoft.SqlServer;
-using Microsoft.SqlServer.Common;
-using Microsoft.SqlServer.Management.Adapters;
-using Microsoft.SqlServer.Management.Collector;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Dmf;
-using Microsoft.SqlServer.Management.Facets;
-using Microsoft.SqlServer.Management.Sdk;
-using Microsoft.SqlServer.Management.Sdk.Differencing;
-using Microsoft.SqlServer.Management.Sdk.Differencing.Impl;
-using Microsoft.SqlServer.Management.Sdk.Differencing.SPI;
+﻿using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Sdk.Sfc;
-using Microsoft.SqlServer.Management.Sdk.Sfc.Metadata;
 using Microsoft.SqlServer.Management.Smo;
-using Microsoft.SqlServer.Management.Smo.Agent;
-using Microsoft.SqlServer.Management.Smo.Broker;
-using Microsoft.SqlServer.Management.Smo.Internal;
-using Microsoft.SqlServer.Management.Smo.Mail;
-using Microsoft.SqlServer.Management.Smo.RegisteredServers;
-using Microsoft.SqlServer.Management.Smo.RegSvrEnum;
-using Microsoft.SqlServer.Management.Smo.SqlEnum;
-using Microsoft.SqlServer.Management.Smo.Wmi;
-using Microsoft.SqlServer.Management.Trace;
-using Microsoft.SqlServer.Management.Utility;
-using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 
 namespace TestRuntime.Tasks
 {
