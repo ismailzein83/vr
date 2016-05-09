@@ -67,7 +67,7 @@ namespace Vanrise.ExcelConversion.Business
                     if (workbook.Worksheets.Count <= listMapping.SheetIndex)
                         throw new Exception(String.Format("List SheetIndex '{0}' is greater than max index in the workbook", listMapping.SheetIndex));
                     var workSheet = workbook.Worksheets[listMapping.SheetIndex];
-                    int lastRowIndex = listMapping.LastRowIndex.HasValue && listMapping.LastRowIndex.Value < workSheet.Cells.Rows.Count ? listMapping.LastRowIndex.Value : (workSheet.Cells.Rows.Count - 1);
+                    int lastRowIndex = listMapping.LastRowIndex.HasValue && listMapping.LastRowIndex.Value <= workSheet.Cells.MaxDataRow ? listMapping.LastRowIndex.Value : (workSheet.Cells.MaxDataRow);
 
                     BuildExceRecord(conversionSettings,convertedExcel, listMapping, workbook, workSheet, lastRowIndex, stopOnFirstEmptyRow,isCommaDecimalSeparator);
                 }
@@ -132,7 +132,7 @@ namespace Vanrise.ExcelConversion.Business
                     }
                     else
                     {
-                        throw new Exception("Date is mapped to an invalid field.");
+                        throw new Exception(string.Format("{0} is mapped to an invalid field.", fldMapping.FieldName));
                     }
                 }
             }
@@ -152,7 +152,7 @@ namespace Vanrise.ExcelConversion.Business
                         return result;
                     }else
                     {
-                        throw new Exception("Decimal is mapped to an invalid field.");
+                        throw new Exception(string.Format("{0} is mapped to an invalid field.",fldMapping.FieldName));
                     }
                 }
             }
