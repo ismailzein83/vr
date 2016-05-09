@@ -36,430 +36,237 @@ namespace TestRuntime.Tasks
     public class WalidTask : ITask
     {
 
-        //private static Column CopyColumn(Table parent, Column sourceColumn)
-        //{
-        //    Column destinationColumn = new Column(parent, sourceColumn.Name, sourceColumn.DataType);
-        //    if (sourceColumn.Computed)
-        //    {
-        //        destinationColumn.Computed = true;
-        //        destinationColumn.ComputedText = sourceColumn.ComputedText;
-        //    }
-        //    if (sourceColumn.Identity)
-        //    {
-        //        destinationColumn.Identity = true;
-        //        destinationColumn.IdentityIncrement = sourceColumn.IdentityIncrement;
-        //        destinationColumn.IdentitySeed = sourceColumn.IdentitySeed;
-        //    }
-        //    destinationColumn.Default = sourceColumn.Default;
-        //    destinationColumn.Nullable = sourceColumn.Nullable;
-        //    return destinationColumn;
-        //}
-        //private static Index CopyIndex(Table parent, Index sourceIndex, string sourceTableName)
-        //{
-        //    Index destinationIndex = new Index(parent, sourceIndex.Name.Replace(sourceTableName, parent.Name));
-        //    destinationIndex.IndexKeyType = sourceIndex.IndexKeyType;
-        //    foreach (IndexedColumn sourceIndexedCol in sourceIndex.IndexedColumns)
-        //    {
-        //        destinationIndex.IndexedColumns.Add(new IndexedColumn(destinationIndex, sourceIndexedCol.Name, sourceIndexedCol.Descending));
-        //    }
-        //    return destinationIndex;
-        //}
-        //private static ForeignKey CopyForeignKeys(Table parent, ForeignKey sourceForeignKey, string sourceTableName)
-        //{
-        //    ForeignKey destinationForeignKey = new ForeignKey(parent, sourceForeignKey.Name.Replace(sourceTableName, parent.Name));
-        //    foreach (ForeignKeyColumn fkSourceCol in sourceForeignKey.Columns)
-        //        destinationForeignKey.Columns.Add(new ForeignKeyColumn(destinationForeignKey, fkSourceCol.Name, fkSourceCol.ReferencedColumn));
-        //    destinationForeignKey.DeleteAction = sourceForeignKey.DeleteAction;
-        //    destinationForeignKey.IsChecked = sourceForeignKey.IsChecked;
-        //    destinationForeignKey.IsEnabled = sourceForeignKey.IsEnabled;
-        //    destinationForeignKey.ReferencedTable = sourceForeignKey.ReferencedTable;
-        //    destinationForeignKey.ReferencedTableSchema = sourceForeignKey.ReferencedTableSchema;
-        //    destinationForeignKey.UpdateAction = sourceForeignKey.UpdateAction;
-        //    return destinationForeignKey;
-        //}
+        const string _Temp = "_Temp";
 
 
-
-
-        //public void Execute()
-        //{
-        //    //////////var switches = new List<TOne.WhS.BusinessEntity.Entities.Switch>();
-        //    //////////switches.Add(new TOne.WhS.BusinessEntity.Entities.Switch { Name = "Switch 1", SwitchId = 4 });
-        //    //////////TOne.WhS.DBSync.Data.SQL.SwitchDataManager switchManager = new TOne.WhS.DBSync.Data.SQL.SwitchDataManager();
-
-        //    //////////switchManager.MigrateSwitchesToDB(switches);
-
-        //    //////////BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
-        //    //////////QueueActivationService queueActivationService = new QueueActivationService() { Interval = new TimeSpan(0, 0, 2) };
-
-        //    ////////var runtimeServices = new List<RuntimeService>();
-        //    //////////runtimeServices.Add(queueActivationService);
-
-        //    //////////runtimeServices.Add(bpService);
-        //    ////////SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 2) };
-        //    ////////runtimeServices.Add(schedulerService);
-
-        //    ////////RuntimeHost host = new RuntimeHost(runtimeServices);
-        //    ////////host.Start();
-
-
-
-        //    string connectionString = "Server=192.168.110.185;Database=MVTSPro;User ID=development;Password=dev!123";
-
-
-
-        //    //// Create Source Switch Reader and Pass Connection string to it.
-        //    //SourceSwitchMigratorReader sourceSwitchMigratorReader = new SourceSwitchMigratorReader();
-        //    //sourceSwitchMigratorReader.ConnectionString = connectionString;
-
-        //    //// Create Source Switch Migrator and Migrate
-        //    //SourceSwitchMigrator sourceSwitchMigrator = new SourceSwitchMigrator(sourceSwitchMigratorReader);
-        //    //sourceSwitchMigrator.Migrate();
-
-
-
-
-        //    //// Create Source Currency Reader and Pass Connection string to it.
-        //    //SourceCurrencyMigratorReader sourceCurrencyMigratorReader = new SourceCurrencyMigratorReader();
-        //    //sourceCurrencyMigratorReader.ConnectionString = connectionString;
-
-        //    //// Create Source Currency Migrator and Migrate
-        //    //SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(sourceCurrencyMigratorReader);
-        //    //sourceCurrencyMigrator.Migrate();
-
-
-
-
-        //    //// Create Source CurrencyExchangeRate Reader and Pass Connection string to it.
-        //    //SourceCurrencyExchangeRateMigratorReader sourceCurrencyExchangeRateMigratorReader = new SourceCurrencyExchangeRateMigratorReader();
-        //    //sourceCurrencyExchangeRateMigratorReader.ConnectionString = connectionString;
-
-        //    //// Create Source CurrencyExchangeRate Migrator and Migrate
-        //    //SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(sourceCurrencyExchangeRateMigratorReader);
-        //    //sourceCurrencyExchangeRateMigrator.Migrate();
-
-
-
-        //    string serverstr = "192.168.110.185";
-        //    string user = "development";
-        //    string password = "dev!123";
-        //    ServerConnection conn = new ServerConnection(serverstr, user, password);
-        //    try
-        //    {
-
-
-
-        //        Server server = new Server(conn);
-        //        foreach (Database database in server.Databases)
-        //        {
-        //            if (database.Name == "TOneV2_Migration")
-        //            {
-        //                Table destinationTable = new Table();
-        //                Table table = new Table();
-
-        //                foreach (Column col in table.Columns)
-        //                    destinationTable.Columns.Add(CopyColumn(destinationTable, col));
-
-
-        //                foreach (Index index in table.Indexes)
-        //                    destinationTable.Indexes.Add(CopyIndex(destinationTable, index, table.Name));
-
-
-        //                foreach (ForeignKey fk in table.ForeignKeys)
-        //                    destinationTable.ForeignKeys.Add(CopyForeignKeys(destinationTable, fk, table.Name));
-
-
-        //                ScriptingOptions tableOptions = new Microsoft.SqlServer.Management.Smo.ScriptingOptions();
-        //                tableOptions.Indexes = false;
-        //                tableOptions.NoCollation = true;
-
-
-
-        //                Console.WriteLine("------- Create Table Statement ---------------");
-        //                System.Collections.Specialized.StringCollection sc = table.Script(tableOptions);
-        //                foreach (string st in sc)
-        //                {
-        //                    Console.WriteLine(st);
-        //                }
-
-        //                table.Drop();
-        //                table.Create();
-
-
-
-        //                Console.WriteLine("----------------------------------------------");
-
-
-
-
-
-        //                Console.WriteLine("------- Drop and Create PK Statement ---------------");
-
-        //                // object to hold the index script
-        //                StringCollection pk_script = new StringCollection();
-
-        //                Index pk = table.Indexes.Cast<Index>().SingleOrDefault(index => index.IndexKeyType == IndexKeyType.DriPrimaryKey);
-        //                if (pk != null)
-        //                {
-        //                    // script the index
-        //                    pk_script = pk.Script();
-        //                    pk.Drop();
-        //                    table.Alter();
-        //                }
-
-        //                // iterate through script StringCollection
-        //                foreach (String tsql in pk_script)
-        //                {
-        //                    database.ExecuteNonQuery(tsql);
-        //                    Console.WriteLine(tsql);
-        //                }
-        //                Console.WriteLine("----------------------------------------------");
-
-
-
-
-        //                Console.WriteLine("------- Drop and Create FK Statement ---------------");
-
-        //                // object to hold the index script
-        //                StringCollection fk_script = new StringCollection();
-
-        //                ForeignKeyCollection fks = table.ForeignKeys;
-        //                IndexCollection indexes = table.Indexes;
-        //                Index primaryKeys = table.Indexes.Cast<Index>().SingleOrDefault(x => x.IndexKeyType == IndexKeyType.DriPrimaryKey);
-        //                fks.drop
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //                //Connect to the local, default instance of SQL Server. 
-        //                Server srv;
-        //                srv = new Server();
-        //                //Reference the AdventureWorks2012 database. 
-        //                Database db;
-        //                db = srv.Databases["AdventureWorks2012"];
-        //                //Declare another Table object variable and reference the EmployeeDepartmentHistory table. 
-        //                Table tbea;
-        //                tbea = db.Tables["EmployeeDepartmentHistory", "HumanResources"];
-        //                //Define a Foreign Key object variable by supplying the EmployeeDepartmentHistory as the parent table and the foreign key name in the constructor. 
-        //                ForeignKey fk;
-        //                fk = new ForeignKey(tbea, "test_foreignkey");
-        //                //Add BusinessEntityID as the foreign key column. 
-        //                ForeignKeyColumn fkc;
-        //                fkc = new ForeignKeyColumn(fk, "BusinessEntityID", "BusinessEntityID");
-        //                fk.Columns.Add(fkc);
-        //                //Set the referenced table and schema. 
-        //                fk.ReferencedTable = "Employee";
-        //                fk.ReferencedTableSchema = "HumanResources";
-        //                //Create the foreign key on the instance of SQL Server. 
-        //                fk.Create();
-
-
-
-
-
-        //                //foreach (var i in fks)
-        //                //{
-        //                //    i.Drop()
-        //                //}
-
-        //                if (fk != null)
-        //                {
-        //                    // script the index
-        //                    fk_script = fk.Script();
-        //                    fk.Drop();
-        //                    table.Alter();
-        //                }
-
-        //                // iterate through script StringCollection
-        //                foreach (String tsql in fk_script)
-        //                {
-        //                    database.ExecuteNonQuery(tsql);
-        //                    Console.WriteLine(tsql);
-        //                }
-        //                Console.WriteLine("----------------------------------------------");
-
-
-
-
-        //            }
-
-
-        //        }
-        //    }
-        //    catch (Exception err)
-        //    {
-
-        //    }
-
-
-
-
-
-        //}
-
-
-        private static Table createTempTable(Table sourcetable)
+        private static string ScriptIndexes(Table sourceTable)
         {
-            Database db = sourcetable.Parent;
-            string schema = sourcetable.Schema;
-            Table copiedtable = new Table(db, sourcetable.Name + "Temp", schema);
-            Server server = sourcetable.Parent.Parent;
+            string script = string.Empty;
 
-            createColumns(sourcetable, copiedtable);
-
-            copiedtable.AnsiNullsStatus = sourcetable.AnsiNullsStatus;
-            copiedtable.QuotedIdentifierStatus = sourcetable.QuotedIdentifierStatus;
-            copiedtable.TextFileGroup = sourcetable.TextFileGroup;
-            copiedtable.FileGroup = sourcetable.FileGroup;
-
-
-            Table oldTable = server.Databases["TOne"].Tables["HospitalsTemp", "dbo"];
-            if (oldTable != null)
-                oldTable.Drop();
-
-
-            copiedtable.Create();
-
-
-
-
-
-
-
-            return copiedtable;
+            foreach (Index index in sourceTable.Indexes)
+            {
+                StringCollection sc = index.Script();
+                string[] strings = new string[sc.Count];
+                sc.CopyTo(strings, 0);
+                script = script + string.Join(" ", strings);
+            }
+            return script;
         }
 
-        private static void createColumns(Table sourcetable, Table copiedtable)
+
+        private static string ScriptFKs(Table sourceTable)
         {
-            Server server = sourcetable.Parent.Parent;
+            string script = string.Empty;
 
-            foreach (Column source in sourcetable.Columns)
+            foreach (ForeignKey fk in sourceTable.ForeignKeys)
             {
-                Column column = new Column(copiedtable, source.Name, source.DataType);
-                column.Collation = source.Collation;
-                column.Nullable = source.Nullable;
-                column.Computed = source.Computed;
-                column.ComputedText = source.ComputedText;
-                column.Default = source.Default;
-
-                if (source.DefaultConstraint != null)
-                {
-                    string tabname = copiedtable.Name;
-                    string constrname = source.DefaultConstraint.Name;
-                    column.AddDefaultConstraint(tabname + "_" + constrname);
-                    column.DefaultConstraint.Text = source.DefaultConstraint.Text;
-                }
-
-                column.IsPersisted = source.IsPersisted;
-                column.DefaultSchema = source.DefaultSchema;
-                column.RowGuidCol = source.RowGuidCol;
-
-                if (server.VersionMajor >= 10)
-                {
-                    column.IsFileStream = source.IsFileStream;
-                    column.IsSparse = source.IsSparse;
-                    column.IsColumnSet = source.IsColumnSet;
-                }
-
-                copiedtable.Columns.Add(column);
+                StringCollection sc = fk.Script();
+                string[] strings = new string[sc.Count];
+                sc.CopyTo(strings, 0);
+                script = script + string.Join(" ", strings);
             }
+            return script;
+        }
+
+
+        private static string ScriptTempTable(Table sourceTable)
+        {
+            ScriptingOptions so = new ScriptingOptions();
+            so.DriAllKeys = false;
+            string script = string.Empty;
+            StringCollection sc = sourceTable.Script(so);
+            string[] strings = new string[sc.Count];
+            sc.CopyTo(strings, 0);
+            script = script + string.Join(" ", strings);
+            script = script.Replace("[" + sourceTable.Schema + "].[" + sourceTable.Name + "]", "[" + sourceTable.Schema + "].[" + sourceTable.Name + _Temp + "]");
+            return script;
+        }
+
+        class DBForeignKey
+        {
+            public string ReferencedKey { get; set; }
+            public string ReferencedTable { get; set; }
+            public string ReferencedTableSchema { get; set; }
+        }
+
+        class DBTable
+        {
+            public string Name { get; set; }
+            public string Schema { get; set; }
+            public string Database { get; set; }
+            public string ScriptedIndexes { get; set; }
+            public string ScriptedFKs { get; set; }
+            public string ScriptedTempTable { get; set; }
+            public List<DBForeignKey> DBFKs { get; set; }
+            public Table Info { get; set; }
+
+            public bool DroppedOriginal { get; set; }
         }
 
         public void Execute()
         {
+            List<DBTable> dbTables = new List<DBTable>();
             string connString = "server=192.168.110.185;database=TOneV2_Migration;uid=development;password=dev!123;";
 
             ServerConnection serverConnection = null;
             using (SqlConnection sqlConnection = new SqlConnection(connString))
             {
-                sqlConnection.Open();
                 try
                 {
                     serverConnection = new ServerConnection(sqlConnection);
                     Server server = new Server(serverConnection);
                     serverConnection.BeginTransaction();
-                    Table sourceTable = server.Databases["TOneV2_Migration"].Tables["Country", "Common"];
-                    IndexCollection indexes = sourceTable.Indexes;
-                    ForeignKeyCollection foreignKeys = sourceTable.ForeignKeys;
-                    createTempTable(sourceTable);
+
+                    DefineTables(dbTables, server);
+                    CreateTempTables(dbTables, sqlConnection);
+                    FillTables(dbTables);
+                    DropOriginalTables(dbTables);
+
                     serverConnection.CommitTransaction();
                 }
-                catch
+                catch (Exception ex)
                 {
                     serverConnection.RollBackTransaction();
-                }
-                finally
-                {
-                    serverConnection.Disconnect();
-                    sqlConnection.Close();
-                    sqlConnection.Dispose();
+                    throw ex;
                 }
             }
 
 
+            using (SqlConnection sqlConnection = new SqlConnection(connString))
+            {
+                try
+                {
+                    serverConnection = new ServerConnection(sqlConnection);
+                    Server server = new Server(serverConnection);
+                    serverConnection.BeginTransaction();
 
+                    RenameTempTables(dbTables, server);
+                    CreateIndexes(dbTables, sqlConnection);
+                    CreateForeignKeys(dbTables, sqlConnection);
 
-            //string serverstr = "192.168.110.185";
-            //string user = "development";
-            //string password = "dev!123";
-            //ServerConnection conn = new ServerConnection(serverstr, user, password);
-            //try
-            //{
-            //    Server server = new Server(conn);
-
-            //    Database database = server.Databases.Cast<Database>().Where(x => x.Name == "TOneV2_Migration").FirstOrDefault();
-
-            //    if (database != null)
-            //    {
-            //        Table table = database.Tables.Cast<Table>().Where(x => x.Name == "Country").FirstOrDefault();
-            //        var foreignKeys = table.ForeignKeys;
-            //        var indexes = table.Indexes;
-
-
-            //        foreach (ForeignKey fk in foreignKeys)
-            //            table.ForeignKeys.Remove(fk);
-
-            //        foreach (Index index in indexes)
-            //            table.Indexes.Remove(index);
-
-            //        table.Name = table.Name + "Temp";
-
-            //        table.Drop();
-
-            //        table.Create();
-
-            //        table.Rename(table.Name.Replace("Temp", ""));
-
-
-            //        foreach (ForeignKey fk in foreignKeys)
-            //            table.ForeignKeys.Add(fk);
-
-            //        foreach (Index index in indexes)
-            //            table.Indexes.Add(index);
-
-
-            //        table.Alter();
-            //    }
-
-            //}
-            //catch
-            //{
-
-            //}
-
+                    serverConnection.CommitTransaction();
+                }
+                catch (Exception ex)
+                {
+                    serverConnection.RollBackTransaction();
+                    throw ex;
+                }
+            }
 
         }
 
+        private static void DropOriginalTables(List<DBTable> dbTables)
+        {
+            //Set Priority by References
+            foreach (DBTable table in dbTables)
+            {
+                table.DBFKs = new List<DBForeignKey>();
+                foreach (ForeignKey fk in table.Info.ForeignKeys)
+                {
+                    table.DBFKs.Add(new DBForeignKey { ReferencedKey = fk.ReferencedKey, ReferencedTable = fk.ReferencedTable, ReferencedTableSchema = fk.ReferencedTableSchema });
+                }
+            }
+            DropTables(dbTables);
+        }
+
+        private static void CreateForeignKeys(List<DBTable> dbTables, SqlConnection sqlConnection)
+        {
+            //Create Foreign Keys for Tables
+            foreach (DBTable table in dbTables)
+                ExecuteSql.ExecuteImmediate(table.ScriptedFKs, sqlConnection);
+        }
+
+        private static void CreateIndexes(List<DBTable> dbTables, SqlConnection sqlConnection)
+        {
+            //Create Indexes Keys for Tables
+            foreach (DBTable table in dbTables)
+                ExecuteSql.ExecuteImmediate(table.ScriptedIndexes, sqlConnection);
+        }
+
+        private static void RenameTempTables(List<DBTable> dbTables, Server server)
+        {
+            foreach (DBTable dbTable in dbTables)
+            {
+                DBTable dbTempTable = new DBTable();
+                dbTempTable.Name = dbTable.Name + _Temp;
+                dbTempTable.Schema = dbTable.Schema;
+                dbTempTable.Database = dbTable.Database;
+
+                Table tempTable = server.Databases[dbTempTable.Database].Tables[dbTempTable.Name, dbTempTable.Schema];
+                tempTable.Rename(tempTable.Name.Replace(_Temp, ""));
+            }
+        }
+
+        private static void FillTables(List<DBTable> dbTables)
+        {
+            //Fill Temp Tables
+            foreach (DBTable table in dbTables)
+            {
+
+            }
+        }
+
+
+        private static void CreateTempTables(List<DBTable> dbTables, SqlConnection sqlConnection)
+        {
+            // Create Temp Tables
+            foreach (DBTable table in dbTables)
+            {
+                ExecuteSql.ExecuteImmediate(table.ScriptedTempTable, sqlConnection);
+            }
+        }
+
+        private static void DefineTables(List<DBTable> dbTables, Server server)
+        {
+            dbTables.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneV2_Migration" });
+            dbTables.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneV2_Migration" });
+            dbTables.Add(new DBTable { Name = "CurrencyExchangeRateZone", Schema = "Common", Database = "TOneV2_Migration" });
+
+            foreach (DBTable table in dbTables)
+            {
+                Table sourceTable = GetTableReference(server, table);
+                table.Info = sourceTable;
+                table.ScriptedIndexes = ScriptIndexes(sourceTable);
+                table.ScriptedFKs = ScriptFKs(sourceTable);
+                table.ScriptedTempTable = ScriptTempTable(sourceTable);
+            }
+        }
+
+        private static void DropTables(List<DBTable> dbTables)
+        {
+            bool hasUnDropped = dbTables.Exists(x => x.DroppedOriginal == false);
+            if (hasUnDropped)
+            {
+                // Drop Original Tables
+                foreach (DBTable table in dbTables)
+                {
+                    bool isReferenced = false;
+
+                    foreach (DBTable otherTable in dbTables.Where(x => x.Name != table.Name))
+                    {
+                        if (otherTable.DBFKs.Exists(x => x.ReferencedTable == table.Name && x.ReferencedTableSchema == table.Schema))
+                        {
+                            isReferenced = true;
+                            break;
+                        }
+                    }
+
+
+                    if (!isReferenced)
+                    {
+                        table.Info.Drop();
+                        table.DroppedOriginal = true;
+                    }
+                }
+                DropTables(dbTables.Where(x => x.DroppedOriginal == false).ToList());
+            }
+        }
+
+        private static Table GetTableReference(Server server, DBTable dbTable)
+        {
+            Table sourceTable = server.Databases[dbTable.Database].Tables[dbTable.Name, dbTable.Schema];
+            return sourceTable;
+        }
 
 
     }
