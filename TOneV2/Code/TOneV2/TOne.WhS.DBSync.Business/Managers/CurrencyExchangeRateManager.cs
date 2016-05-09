@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TOne.WhS.DBSync.Data;
+using TOne.WhS.DBSync.Data.SQL;
 using Vanrise.Entities;
 
 
@@ -10,8 +10,8 @@ namespace TOne.WhS.DBSync.Business
 
         public void AddCurrencyExchangeRatesFromSource(List<CurrencyExchangeRate> currencyExchangeRates)
         {
-            ICurrencyExchangeRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ICurrencyExchangeRateDataManager>();
-            dataManager.MigrateCurrencyExchangeRatesToDB(currencyExchangeRates);
+            CurrencyExchangeRateDataManager dataManager = new CurrencyExchangeRateDataManager("CurrencyExchangeRate");
+            dataManager.ApplyCurrencyExchangeRatesToDB(currencyExchangeRates);
         }
     }
 }

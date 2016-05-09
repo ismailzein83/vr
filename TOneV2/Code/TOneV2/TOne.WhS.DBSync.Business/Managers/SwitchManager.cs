@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Data;
+using TOne.WhS.DBSync.Data.SQL;
 
 
 namespace TOne.WhS.DBSync.Business
@@ -10,8 +10,8 @@ namespace TOne.WhS.DBSync.Business
 
         public void AddSwitchesFromSource(List<Switch> switches)
         {
-            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            dataManager.MigrateSwitchesToDB(switches);
+            SwitchDataManager dataManager = new SwitchDataManager("Switch");
+            dataManager.ApplySwitchesToDB(switches);
         }
     }
 }

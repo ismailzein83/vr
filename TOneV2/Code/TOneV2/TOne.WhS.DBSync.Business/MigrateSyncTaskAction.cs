@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.DBSync.Business.SourceMigratorsReaders;
+using TOne.WhS.DBSync.Data.SQL;
 using Vanrise.Runtime.Entities;
+
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -11,7 +13,7 @@ namespace TOne.WhS.DBSync.Business
         {
             MigrateSyncTaskActionArgument migrateSyncTaskActionArgument = taskActionArgument as MigrateSyncTaskActionArgument;
 
-            
+
             // Create Source Switch Reader and Pass Connection string to it.
             SourceSwitchMigratorReader sourceSwitchMigratorReader = new SourceSwitchMigratorReader();
             sourceSwitchMigratorReader.ConnectionString = migrateSyncTaskActionArgument.ConnectionString;
@@ -44,10 +46,10 @@ namespace TOne.WhS.DBSync.Business
             sourceCurrencyExchangeRateMigrator.Migrate();
 
 
-
-
-
+            MigrationManager migrationManager = new MigrationManager();
+            migrationManager.ExecuteMigration();
             
+
             Console.WriteLine("MigrationSyncTaskAction Executed");
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {
@@ -55,5 +57,12 @@ namespace TOne.WhS.DBSync.Business
             };
             return output;
         }
+
+        
+
+
+
     }
+
+
 }
