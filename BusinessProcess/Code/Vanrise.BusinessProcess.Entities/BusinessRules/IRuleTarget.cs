@@ -12,7 +12,5 @@ namespace Vanrise.BusinessProcess.Entities
 
         string TargetType { get; }
 
-        void SetExcluded();
-
     }
 }

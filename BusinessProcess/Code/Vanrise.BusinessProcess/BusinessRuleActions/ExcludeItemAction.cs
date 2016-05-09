@@ -14,7 +14,7 @@ namespace Vanrise.BusinessProcess
             if (context.Target == null)
                 throw new ArgumentNullException("Target");
 
-            context.Target.SetExcluded();
+            //context.Target.SetExcluded(2);
         }
 
         public override ActionSeverity GetSeverity()
