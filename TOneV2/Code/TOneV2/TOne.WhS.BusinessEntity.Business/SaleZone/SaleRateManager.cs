@@ -49,6 +49,17 @@ namespace TOne.WhS.BusinessEntity.Business
             saleRateDetail.ZoneName = sz.GetSaleZone(saleRate.ZoneId).Name;
             return saleRateDetail;
         }
+
+        public SaleEntityZoneRate GetCachedCustomerZoneRate(int customerId, long saleZoneId, DateTime effectiveOn)
+        {
+            CustomerSellingProductManager customerSellingProductManager = new CustomerSellingProductManager();
+            CustomerSellingProduct customerSellingProduct = customerSellingProductManager.GetEffectiveSellingProduct(customerId, effectiveOn, false);
+            if (customerSellingProduct == null)
+                return null;
+            SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+            return customerZoneRateLocator.GetCustomerZoneRate(customerId, customerSellingProduct.SellingProductId, saleZoneId);
+        }
+
         public CallSale GetCallSale(int customerId, long saleZoneId, int durationInSeconds, DateTime effectiveOn)
         {
             CallSale callSale = null;

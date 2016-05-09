@@ -13,5 +13,13 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SalePriceListOwnerType Source { get; set; }
 
         public SalePriceList PriceList { get; set; }
+
+        public int EffectiveCurrencyId
+        {
+            get
+            {
+                return this.Rate.CurrencyId.HasValue ? this.Rate.CurrencyId.Value : this.PriceList.CurrencyId;
+            }
+        }
     }
 }

@@ -26,6 +26,13 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
             return dataManager.GetEffectiveSupplierRatesBySuppliers(effectiveOn, isEffectiveInFuture, supplierInfos);
         }
+
+        public SupplierZoneRate GetCachedSupplierZoneRate(int supplierId, long supplierZoneId, DateTime effectiveOn)
+        {
+            SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadWithCache(effectiveOn));
+            return supplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId);
+        }
+
         public CallCost GetCallCost(int supplierId, long supplierZoneId, int durationInSeconds, DateTime effectiveOn)
         {
             CallCost callSale = null;

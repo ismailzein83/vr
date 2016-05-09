@@ -227,6 +227,10 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SourceMigrationReader\Templates\SourceMigrationReader.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\Templates\SelectiveSuppliersWithZonesGroup.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SuppliersWithZonesGroups\vr-whs-be-supplierswithzonesgroup-selective.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\Templates\SupplierZoneRateStepPreviewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\Templates\SupplierZoneRateStepTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate-preview.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate.js" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\Templates\RateTypeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-rate-type-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RateType\vr-whs-be-ratetype-selector.js" />

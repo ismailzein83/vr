@@ -59,6 +59,9 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
@@ -78,6 +81,8 @@
     <Compile Include="SellingNumberPlan\SelectiveSellingNumberPlan.cs" />
     <Compile Include="SupplierGroups\SelectiveSupplierGroup.cs" />
     <Compile Include="SuppliersWithZonesGroups\SelectiveSuppliersWithZonesGroup.cs" />
+    <Compile Include="TransformationSteps\CustomerZoneRateStep.cs" />
+    <Compile Include="TransformationSteps\SupplierZoneRateStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
