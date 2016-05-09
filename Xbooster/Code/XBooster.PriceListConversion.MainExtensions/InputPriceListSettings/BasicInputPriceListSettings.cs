@@ -81,6 +81,13 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     ConvertedExcelField codeField;
                     ConvertedExcelField codeEffectiveDateField;
                     DateTime? result = null;
+                    ConvertedExcelField codeGroupField;
+                    string codeGroup = null;
+                    if (obj.Fields.TryGetValue("CodeGroup", out codeGroupField))
+                    {
+                        if (codeGroupField.FieldValue != null)
+                            codeGroup = codeGroupField.FieldValue.ToString().Trim();
+                    };
                     if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
                     {
                         if (codeEffectiveDateField.FieldValue !=null)
@@ -98,16 +105,17 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                             {
                                 throw new Exception(string.Format("Zone {0} has no code defined.", zoneField.FieldValue));
                             }
-                            string code = codeField.FieldValue.ToString();
+                            string code = codeField.FieldValue.ToString().Trim();
                             List<PriceListCode> resolvedCodes = new List<PriceListCode>();
                             if (this.CodeLayout == CodeLayout.CammaSeparated)
                             {
                                 var codesObj = code.Trim().Split(this.Delimiter).ToList();
                                 foreach (string codeValue in codesObj)
                                 {
+                                    string codeValueTrimmed = codeValue.Trim();
                                     if (this.HasCodeRange)
                                     {
-                                        var rangeCode = codeValue.Split(this.RangeSeparator);
+                                        var rangeCode = codeValueTrimmed.Split(this.RangeSeparator);
                                         if (rangeCode.Length > 0)
                                         {
                                             long firstCode;
@@ -116,10 +124,10 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                                             {
                                                 while (firstCode <= lastCode)
                                                 {
-                                                    string increasedCode = (firstCode++).ToString();
+                                                    string increasedCode = (firstCode++).ToString().Trim();
                                                     resolvedCodes.Add(new PriceListCode
                                                     {
-                                                        Code = increasedCode,
+                                                        Code = codeGroup != null ? string.Concat(codeGroup, increasedCode) : increasedCode,
                                                         CodeEffectiveDate = result
                                                     });
                                                 }
@@ -134,7 +142,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                                         {
                                             resolvedCodes.Add(new PriceListCode
                                             {
-                                                Code = codeValue,
+                                                Code = codeGroup != null ? string.Concat(codeGroup, codeValueTrimmed) : codeValueTrimmed,
                                                 CodeEffectiveDate = result
                                             });
                                         }
@@ -143,7 +151,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                                     {
                                         resolvedCodes.Add(new PriceListCode
                                         {
-                                            Code = codeValue,
+                                            Code = codeGroup != null ? string.Concat(codeGroup, codeValueTrimmed) : codeValueTrimmed,
                                             CodeEffectiveDate = result
                                         });
                                     }
@@ -153,7 +161,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                             {
                                 resolvedCodes.Add(new PriceListCode
                                 {
-                                    Code = code,
+                                    Code = codeGroup != null ? string.Concat(codeGroup, code) : code,
                                     CodeEffectiveDate = result
                                 });
                             }
