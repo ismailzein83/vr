@@ -46,6 +46,7 @@
     <Compile Include="MappingSteps\AddItemToArrayStep.cs" />
     <Compile Include="MappingSteps\AssignFieldStep.cs" />
     <Compile Include="MappingSteps\AssignValueRuleStep.cs" />
+    <Compile Include="MappingSteps\ExecuteTransformationStep.cs" />
     <Compile Include="MappingSteps\ForLoopStep.cs" />
     <Compile Include="MappingSteps\IfElseStep.cs" />
     <Compile Include="MappingSteps\InitializeRecordStep.cs" />

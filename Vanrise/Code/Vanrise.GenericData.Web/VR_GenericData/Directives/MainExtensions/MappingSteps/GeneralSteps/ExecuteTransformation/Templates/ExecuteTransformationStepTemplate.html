@@ -1,0 +1,18 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-genericdata-datatransformationdefinition-selector on-ready="onDataTransformationSelectorDirectiveReady" onselectionchanged="onDataTransformationSelectionChanged"></vr-genericdata-datatransformationdefinition-selector>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Mapping" vr-loader="isLoadingMappingData">
+            <vr-datagrid datasource="recordsMapping"
+                         hidegridmenu norowhighlightonclick="true">
+                <vr-datagridcolumn headertext="'Record Name'" type="'Text'" field="'Title'" widthfactor="7" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Mapping From'" type="'Text'" field="''" widthfactor="15" disablesorting>
+                    <vr-genericdata-expressionbuilder on-ready="dataItem.onSourceMappingReady" hidelabel label="From" isrequired="true"></vr-genericdata-expressionbuilder>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-section>
+    </vr-columns>
+</vr-row>
