@@ -18,11 +18,6 @@ namespace TOne.WhS.CodePreparation.Entities
             get { return this.Name; }
         }
 
-        public void SetExcluded()
-        {
-            throw new NotImplementedException();
-        }
-
         public string TargetType
         {
             get { return "Zone"; }

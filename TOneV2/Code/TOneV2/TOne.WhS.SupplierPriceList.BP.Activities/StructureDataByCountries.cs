@@ -28,9 +28,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (ImportedZone zone in importedZonesList)
             {
-                if(!zone.IsExcluded)
-                {
-                    ImportedCode includedCodeOneMatch = zone.ImportedCodes.Find(x => !x.IsExcluded);
+                
+                    ImportedCode includedCodeOneMatch = zone.ImportedCodes.FirstOrDefault();
                     if (includedCodeOneMatch == null)
                         continue;
 
@@ -45,16 +44,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         importedCountriesByCountryId.Add(countryId, importedCountry);
                     }
 
-                    IEnumerable<ImportedCode> includedCodes = zone.ImportedCodes.Where(x => !x.IsExcluded);
+                    IEnumerable<ImportedCode> includedCodes = zone.ImportedCodes;
                     foreach (ImportedCode code in includedCodes)
                         importedCountry.ImportedCodes.Add(code);
 
-                    IEnumerable<ImportedRate> includedRates = zone.ImportedRates.Where(x => !x.IsExcluded);
+                    IEnumerable<ImportedRate> includedRates = zone.ImportedRates;
                     foreach (ImportedRate rate in includedRates)
                         importedCountry.ImportedRates.Add(rate);
 
-                  
-                }
             }
 
             this.ImportedCountries.Set(context, importedCountriesByCountryId.Values);

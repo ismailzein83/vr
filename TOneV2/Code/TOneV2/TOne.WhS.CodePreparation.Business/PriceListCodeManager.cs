@@ -20,8 +20,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (var codeToAdd in context.CodesToAdd)
                 {
-                    if (codeToAdd.IsExcluded)
-                        continue;
+                   
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToAdd.Code, out matchExistingCodes))
                         CloseExistingOverlapedCodes(codeToAdd, matchExistingCodes);
@@ -33,8 +32,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (var codeToMove in context.CodesToMove)
                 {
-                    if (codeToMove.IsExcluded)
-                        continue;
+                    
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToMove.Code, out matchExistingCodes))
                         CloseExistingOverlapedCodes(codeToMove, matchExistingCodes);
@@ -46,8 +44,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (var codeToClose in context.CodesToClose)
                 {
-                    if (codeToClose.IsExcluded)
-                        continue;
+                    
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToClose.Code, out matchExistingCodes))
                         CloseExistingCodes(codeToClose, matchExistingCodes);

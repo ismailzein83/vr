@@ -15,24 +15,9 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public List<ImportedRate> ImportedRates { get; set; }
 
-        public bool IsExcluded { get; set; }
+       
 
         #region IRuleTarget Implementation
-
-        public void SetExcluded()
-        {
-            this.IsExcluded = true;
-
-            foreach (ImportedCode code in this.ImportedCodes)
-            {
-                code.SetExcluded();
-            }
-
-            foreach (ImportedRate rate in ImportedRates)
-            {
-                rate.SetExcluded();
-            }
-        }
 
         public object Key
         {

@@ -25,11 +25,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             get { return Code; }
         }
 
-        public void SetExcluded()
-        {
-            throw new NotImplementedException();
-        }
-
         public string TargetType
         {
             get { return "Code"; }

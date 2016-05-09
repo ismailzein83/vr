@@ -49,14 +49,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public RateProcessInfo ProcessInfo { get; set; }
 
-        public bool IsExcluded { get; set; }
-
         #region IRuleTarget Implementation
-
-        public void SetExcluded()
-        {
-            this.IsExcluded = true;
-        }
 
         public object Key
         {

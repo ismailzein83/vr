@@ -22,11 +22,6 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             get { return this.CountryId; }
         }
 
-        public void SetExcluded()
-        {
-            throw new NotImplementedException();
-        }
-
         public string TargetType
         {
             get { return "Country"; }

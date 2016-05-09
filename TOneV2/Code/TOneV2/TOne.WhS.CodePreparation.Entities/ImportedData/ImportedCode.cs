@@ -22,11 +22,6 @@ namespace TOne.WhS.CodePreparation.Entities
             get { return this.ZoneName != string.Empty ? this.ZoneName : this.Code; }
         }
 
-        public void SetExcluded()
-        {
-            throw new NotImplementedException();
-        }
-
         public string TargetType
         {
             get { return "Code"; }

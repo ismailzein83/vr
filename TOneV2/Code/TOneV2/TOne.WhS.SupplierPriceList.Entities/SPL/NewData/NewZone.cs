@@ -41,11 +41,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
             get { return Name; }
         }
 
-        public void SetExcluded()
-        {
-            throw new NotImplementedException();
-        }
-
         public string TargetType
         {
             get { return "NewZone"; }

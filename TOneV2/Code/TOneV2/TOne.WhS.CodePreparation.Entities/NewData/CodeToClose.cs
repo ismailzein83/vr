@@ -17,8 +17,6 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         public bool HasOverlapedCodesInOtherZone { get; set; }
 
-        public bool IsExcluded { get; set; }
-
 
         List<ExistingCode> _changedExistingCodes = new List<ExistingCode>();
 
@@ -33,11 +31,6 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         public object Key
         {
             get { return this.Code; }
-        }
-
-        public void SetExcluded()
-        {
-            this.IsExcluded = true;
         }
 
         public string TargetType

@@ -17,8 +17,6 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         public DateTime? EED { get; set; }
 
-        public bool IsExcluded { get; set; }
-
         public TOne.WhS.BusinessEntity.Entities.CodeGroup CodeGroup { get; set; }
 
         List<AddedCode> _addedCodes = new List<AddedCode>();
@@ -43,11 +41,6 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         public object Key
         {
             get { return this.Code; }
-        }
-
-        public void SetExcluded()
-        {
-            this.IsExcluded = true;
         }
 
         public string TargetType

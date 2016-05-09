@@ -24,11 +24,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             foreach (ZoneToProcess zone in zonesToProcess)
             {
-                if (!zone.IsExcluded)
-                {
-                    CodeToAdd includedCodeOneMatchToAdd = zone.CodesToAdd.Find(x => !x.IsExcluded);
-                    CodeToMove includedCodeOneMatchToMove = zone.CodesToMove.Find(x => !x.IsExcluded);
-                    CodeToClose includedCodeOneMatchToClose = zone.CodesToClose.Find(x => !x.IsExcluded);
+                    CodeToAdd includedCodeOneMatchToAdd = zone.CodesToAdd.FirstOrDefault();
+                    CodeToMove includedCodeOneMatchToMove = zone.CodesToMove.FirstOrDefault();
+                    CodeToClose includedCodeOneMatchToClose = zone.CodesToClose.FirstOrDefault();
                     int countryId;
                     if(includedCodeOneMatchToAdd !=null )
                     {
@@ -60,20 +58,18 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         countriesToProcessByCountryId.Add(countryId, countryToProcess);
                     }
 
-                    IEnumerable<CodeToAdd> codesToAdd = zone.CodesToAdd.Where(x => !x.IsExcluded);
+                    IEnumerable<CodeToAdd> codesToAdd = zone.CodesToAdd;
                     foreach (CodeToAdd code in codesToAdd)
                         countryToProcess.CodesToAdd.Add(code);
 
-                    IEnumerable<CodeToMove> codesToMove = zone.CodesToMove.Where(x => !x.IsExcluded);
+                    IEnumerable<CodeToMove> codesToMove = zone.CodesToMove;
                     foreach (CodeToMove code in codesToMove)
                         countryToProcess.CodesToMove.Add(code);
 
-                    IEnumerable<CodeToClose> codesToClose = zone.CodesToClose.Where(x => !x.IsExcluded);
+                    IEnumerable<CodeToClose> codesToClose = zone.CodesToClose;
                     foreach (CodeToClose code in codesToClose)
                         countryToProcess.CodesToClose.Add(code);
 
-
-                }
             }
 
             this.CountriesToProcess.Set(context, countriesToProcessByCountryId.Values);
