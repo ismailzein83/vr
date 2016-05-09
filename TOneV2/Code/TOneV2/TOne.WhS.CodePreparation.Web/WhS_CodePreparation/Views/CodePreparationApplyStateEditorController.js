@@ -2,28 +2,33 @@
 
     'use strict';
 
-    CodePreparationApplyStateEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'BusinessProcess_BPInstanceAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService'];
+    CodePreparationApplyStateEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'BusinessProcess_BPInstanceAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'WhS_CP_CodePrepAPIService'];
 
-    function CodePreparationApplyStateEditorController($scope, VRUIUtilsService, UtilsService, BusinessProcess_BPInstanceAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService) {
-        var parameters;
+    function CodePreparationApplyStateEditorController($scope, VRUIUtilsService, UtilsService, BusinessProcess_BPInstanceAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, WhS_CP_CodePrepAPIService) {
+        var sellingNumberPlanId;
 
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
-            parameters = VRNavigationService.getParameters($scope);
+            var parameters = VRNavigationService.getParameters($scope);
+            sellingNumberPlanId = parameters.SellingNumberPlanId;
         }
 
         function defineScope() {
+
+            $scope.effectiveDate = new Date();
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+
             $scope.applyState = function () {
 
                 var inputArguments = {
                     $type: "TOne.WhS.CodePreparation.BP.Arguments.CodePreparationInput, TOne.WhS.CodePreparation.BP.Arguments",
-                    SellingNumberPlanId: parameters.SellingNumberPlanId,
+                    SellingNumberPlanId: sellingNumberPlanId,
                     EffectiveDate: $scope.effectiveDate,
                     IsFromExcel: false
                 };
@@ -43,8 +48,36 @@
         }
 
         function load() {
-            $scope.title = UtilsService.buildTitleForUploadEditor("Apply Code Prepartion State")
+            $scope.isLoading = true;
+            loadAllControls();
         }
+
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadEffectiveDate])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
+        }
+
+
+        function setTitle() {
+            $scope.title = UtilsService.buildTitleForUploadEditor("Apply Code Prepartion State");
+        }
+
+
+        function loadEffectiveDate() {
+
+            return WhS_CP_CodePrepAPIService.GetEffectiveDateOffset(sellingNumberPlanId).then(function (offset) {
+                var effectiveDate= new Date();
+                effectiveDate.setDate(effectiveDate.getDate() + offset);
+                $scope.effectiveDate = effectiveDate;
+            })
+        }
+
     };
 
     appControllers.controller('WhS_CP_CodePreparationApplyStateEditorController', CodePreparationApplyStateEditorController);

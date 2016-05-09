@@ -71,6 +71,12 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, controllerName, "RenameZone"), input);
         }
 
+        function GetEffectiveDateOffset(sellingNumberPlanId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_CP_ModuleConfig.moduleName, controllerName, "GetEffectiveDateOffset"), {
+                sellingNumberPlanId: sellingNumberPlanId
+            });
+        }
+
         function UploadCodePreparationSheet(sellingNumberPlanId, onCodePreparationUpdated) {
             var settings = {
             };
@@ -114,7 +120,8 @@
             UploadCodePreparationSheet: UploadCodePreparationSheet,
             ApplyCodePreparationState: ApplyCodePreparationState,
             CloseZone: CloseZone,
-            RenameZone: RenameZone
+            RenameZone: RenameZone,
+            GetEffectiveDateOffset: GetEffectiveDateOffset
         });
     }
 

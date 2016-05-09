@@ -69,7 +69,8 @@
             for (var i = 0; i < $scope.zones.length; i++) {
                 result.push({
                     Name: $scope.zones[i].zone,
-                    CountryId: countryId
+                    CountryId: countryId,
+                    hasChanges: false
                 });
             }
 

@@ -39,6 +39,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             MemoryStream memStreamRate = new MemoryStream(bytes);
 
             Workbook objExcel = new Workbook(memStreamRate);
+            Vanrise.Common.Utilities.ActivateAspose(); 
             Worksheet worksheet = objExcel.Worksheets[0];
 
             int count = 1;

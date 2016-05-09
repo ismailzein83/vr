@@ -107,6 +107,12 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             CodePreparationManager manager = new CodePreparationManager();
             return GetWebResponse(input, manager.GetCodeItems(input));
         }
+        
+        [HttpGet]
+        [Route("GetEffectiveDateOffset")]
+        public int GetEffectiveDateOffset(int sellingNumberPlanId) {
+            return 7;
+        }
 
 
     }

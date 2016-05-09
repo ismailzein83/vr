@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Activities;
+using TOne.WhS.CodePreparation.Entities;
+
+namespace TOne.WhS.CodePreparation.BP.Activities
+{
+
+    public sealed class SetCPContext : CodeActivity
+    {
+
+        [RequiredArgument]
+        public InArgument<DateTime> EffectiveDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> SellingNumberPlanId { get; set; }
+        protected override void CacheMetadata(CodeActivityMetadata metadata)
+        {
+            metadata.AddDefaultExtensionProvider<ICPParametersContext>(() => new CPParametersContext());
+            base.CacheMetadata(metadata);
+        }
+
+        protected override void Execute(CodeActivityContext context)
+        {
+            CPParametersContext cpParametersContext = context.GetCPParameterContext() as CPParametersContext;
+            cpParametersContext.SellingNumberPlanId = SellingNumberPlanId.Get(context);
+            cpParametersContext.EffectiveDate = EffectiveDate.Get(context);
+        }
+    }
+
+    internal static class ContextExtensionMethods
+    {
+        public static ICPParametersContext GetCPParameterContext(this ActivityContext context)
+        {
+            var parameterContext = context.GetExtension<ICPParametersContext>();
+            if (parameterContext == null)
+                throw new NullReferenceException("parameterContext");
+            return parameterContext;
+        }
+    }
+
+
+    public class CPParametersContext : ICPParametersContext
+    {
+
+        int _sellingNumberPlanId;
+        DateTime _effectiveDate;
+
+        public DateTime EffectiveDate
+        {
+            get
+            {
+                return _effectiveDate;
+            }
+            set
+            {
+                _effectiveDate = value;
+            }
+        }
+
+        public int SellingNumberPlanId
+        {
+            get
+            {
+                return _sellingNumberPlanId;
+            }
+            set
+            {
+                _sellingNumberPlanId = value;
+            }
+        }
+    }
+}

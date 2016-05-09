@@ -89,6 +89,9 @@
     <Compile Include="ApplyChangedZonesToDB.cs" />
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
+    <Compile Include="GetExisitngRates.cs" />
+    <Compile Include="PrepareExistingRates.cs" />
+    <Compile Include="ProcessCountryRates.cs" />
     <Compile Include="ReadFromSource.cs" />
     <Compile Include="GetDataFromImportedCodes.cs" />
     <Compile Include="GetChangesFromView.cs" />
@@ -102,6 +105,7 @@
     <Compile Include="ProcessCountryCodes.cs" />
     <Compile Include="ReserveIdForCodePreparation.cs" />
     <Compile Include="ReserveIdsForNewEntities.cs" />
+    <Compile Include="SetCPContext.cs" />
     <Compile Include="StructureDataByCountries.cs" />
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />

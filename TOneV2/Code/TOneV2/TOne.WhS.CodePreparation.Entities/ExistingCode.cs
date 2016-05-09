@@ -61,6 +61,15 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             }
         }
 
+        List<ExistingRate> _existingRates = new List<ExistingRate>();
+        public List<ExistingRate> ExistingRates
+        {
+            get
+            {
+                return _existingRates;
+            }
+        }
+
         List<AddedCode> _addedCodes = new List<AddedCode>();
         public List<AddedCode> AddedCodes
         {
@@ -90,6 +99,30 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         }
     }
 
+    public class ExistingRate : Vanrise.Entities.IDateEffectiveSettings
+    {
+        public ExistingZone ParentZone { get; set; }
+
+        public BusinessEntity.Entities.SaleRate RateEntity { get; set; }
+
+        public ChangedRate ChangedRate { get; set; }
+
+        public DateTime BED
+        {
+            get { return RateEntity.BED; }
+        }
+
+        public DateTime? EED
+        {
+            get { return ChangedRate != null ? ChangedRate.EED : RateEntity.EED; }
+        }
+    }
+
+    public class ExistingRatesByZoneName : Dictionary<string, List<ExistingRate>>
+    {
+
+    }
+
     public class ExistingZonesByName : Dictionary<string, List<ExistingZone>>
     {
 
@@ -110,6 +143,13 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
     public class ChangedCode
     {
         public long CodeId { get; set; }
+
+        public DateTime EED { get; set; }
+    }
+
+    public class ChangedRate
+    {
+        public long RateId { get; set; }
 
         public DateTime EED { get; set; }
     }

@@ -50,7 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICPParametersContext.cs" />
     <Compile Include="ImportedData\ImportedCode.cs" />
+    <Compile Include="IProcessCountryRatesContext.cs" />
     <Compile Include="NewData\CodeToAdd.cs" />
     <Compile Include="NewData\CodeToClose.cs" />
     <Compile Include="NewData\CodeToMove.cs" />

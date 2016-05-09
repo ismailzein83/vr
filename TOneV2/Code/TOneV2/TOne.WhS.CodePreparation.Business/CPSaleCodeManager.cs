@@ -120,6 +120,7 @@ namespace TOne.WhS.CodePreparation.Business
                     CountryId = input.CountryId
                 };
                 existingChanges.NewCodes.Add(newCode);
+                existingChanges.NewZones.Where(x => x.Name.Equals(input.NewZoneName)).Select(x => x.hasChanges = true).ToList();
             }
 
 
@@ -244,6 +245,7 @@ namespace TOne.WhS.CodePreparation.Business
         {
             List<NewCode> newCodes = changes.NewCodes;
             List<DeletedCode> deletedCodes = changes.DeletedCodes;
+            List<NewZone> newZones = changes.NewZones;
 
             NewCodeOutput codeOutput = new NewCodeOutput();
             codeOutput.Result = ValidationOutput.Success;
@@ -266,6 +268,7 @@ namespace TOne.WhS.CodePreparation.Business
                 else if ((!allCodeItems.Any(item => item.Code == newCode.Code) && !newCodes.Any(item => item.Code == newCode.Code)) || deletedCodes.Any(x => x.Code == newCode.Code))
                 {
                     newCodes.Add(newCode);
+                    newZones.Where(x => x.Name.Equals(newCode.ZoneName, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.hasChanges = true).ToList();
                     codeOutput.CodeItems.Add(codeItem);
                 }
                 else
