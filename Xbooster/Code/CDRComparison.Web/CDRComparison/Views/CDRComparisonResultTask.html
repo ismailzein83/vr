@@ -4,8 +4,11 @@
             <vr-tabs>
                 <vr-tab header="'Summary'">
                     <vr-row>
-                        <vr-columns width="fullrow" dontload="true">
-                            <vr-label>Total CDRs: {{scopeModal.allCDRsCount}}</vr-label><br>
+                        <vr-columns width="1/2row" dontload="true">
+                            <vr-label>Total System CDRs: {{scopeModal.systemCDRsCount}}</vr-label><br>
+                        </vr-columns>
+                        <vr-columns width="1/2row" dontload="true">
+                            <vr-label>Total Partner CDRs: {{scopeModal.partnerCDRsCount}}</vr-label><br>
                         </vr-columns>
                         <vr-columns width="1/2row" dontload="true">
                             <vr-label>Missing CDRs from System: {{scopeModal.systemMissingCDRsCount}}</vr-label><br>

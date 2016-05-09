@@ -78,9 +78,15 @@ namespace CDRComparison.Data.SQL
             query.Replace("#TEMPTABLE#", this.TableName);
             ExecuteNonQueryText(query.ToString(), null);
         }
-        public int GetAllCDRsCount()
+        public int GetCDRsCount(bool? isPartner = null)
         {
-            object count = ExecuteScalarText(string.Format("SELECT COUNT(*) FROM {0}",this.TableName), null);
+            var queryBuilder = new StringBuilder(String.Format("SELECT COUNT(*) FROM {0}", this.TableName));
+            if (isPartner.HasValue)
+            {
+                string isPartnerCDRValue = (isPartner.Value) ? "1" : "0";
+                queryBuilder.Append(String.Format(" WHERE IsPartnerCDR = {0}", isPartnerCDRValue));
+            }
+            object count = ExecuteScalarText(queryBuilder.ToString(), null);
             return (int)count;
         }
         public Vanrise.Entities.BigResult<CDR> GetFilteredCDRs(Vanrise.Entities.DataRetrievalInput<CDRQuery> input)

@@ -126,7 +126,8 @@
             return CDRComparison_CDRComparisonAPIService.GetCDRComparisonSummary(tableKey).then(function (response) {
                 if (response)
                 {
-                    $scope.scopeModal.allCDRsCount = response.AllCDRsCount;
+                    $scope.scopeModal.systemCDRsCount = response.SystemCDRsCount;
+                    $scope.scopeModal.partnerCDRsCount = response.PartnerCDRsCount;
                     $scope.scopeModal.systemMissingCDRsCount = response.SystemMissingCDRsCount;
                     $scope.scopeModal.partnerMissingCDRsCount = response.PartnerMissingCDRsCount;
                     $scope.scopeModal.partialMatchCDRsCount = response.PartialMatchCDRsCount;

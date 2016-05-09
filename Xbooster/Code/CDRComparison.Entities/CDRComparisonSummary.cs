@@ -8,7 +8,8 @@ namespace CDRComparison.Entities
 {
     public class CDRComparisonSummary
     {
-        public int AllCDRsCount { get; set; }
+        public int SystemCDRsCount { get; set; }
+        public int PartnerCDRsCount { get; set; }
         public int SystemMissingCDRsCount { get; set; }
         public int PartnerMissingCDRsCount { get; set; }
         public int PartialMatchCDRsCount { get; set; }
