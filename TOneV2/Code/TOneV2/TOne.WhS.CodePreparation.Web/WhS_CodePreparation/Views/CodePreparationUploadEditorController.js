@@ -6,24 +6,31 @@
 
     function CodePrepartionUploadEditorController($scope, VRUIUtilsService, UtilsService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BusinessProcess_BPInstanceAPIService) {
         var fileID;
-        var parameters;
+        var sellingNumberPlanId;
 
         loadParameters();
+
         defineScope();
+
         load();
 
         function loadParameters() {
-            parameters = VRNavigationService.getParameters($scope);
+            var parameters = VRNavigationService.getParameters($scope);
+            sellingNumberPlanId = parameters.SellingNumberPlanId;
         }
+
         function defineScope() {
+
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+
             $scope.isUploadingComplete = false;
+
             $scope.upload = function () {
                 var inputArguments = {
                     $type: "TOne.WhS.CodePreparation.BP.Arguments.CodePreparationInput, TOne.WhS.CodePreparation.BP.Arguments",
-                    SellingNumberPlanId: parameters.SellingNumberPlanId,
+                    SellingNumberPlanId: sellingNumberPlanId,
                     FileId: $scope.zoneList.fileId,
                     EffectiveDate: $scope.effectiveDate,
                     IsFromExcel: true
@@ -47,9 +54,36 @@
             }
 
         }
+
         function load() {
+            $scope.isLoading = true;
+            loadAllControls();
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadEffectiveDate])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.isLoading = false;
+              });
+        }
+
+        function setTitle() {
             $scope.title = UtilsService.buildTitleForUploadEditor("Numbering Plan Sheet")
         }
+
+
+        function loadEffectiveDate() {
+
+            return WhS_CP_CodePrepAPIService.GetEffectiveDateOffset(sellingNumberPlanId).then(function (offset) {
+                var effectiveDate = new Date();
+                effectiveDate.setDate(effectiveDate.getDate() + offset);
+                $scope.effectiveDate = effectiveDate;
+            })
+        }
+
     };
 
     appControllers.controller('WhS_CP_CodePrepartionUploadEditorController', CodePrepartionUploadEditorController);

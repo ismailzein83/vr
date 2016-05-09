@@ -85,11 +85,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyChangedRatesToDB.cs" />
     <Compile Include="ApplyChangedCodesToDB.cs" />
     <Compile Include="ApplyChangedZonesToDB.cs" />
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="GetExisitngRates.cs" />
+    <Compile Include="PrepareChangedRatesForApply.cs" />
     <Compile Include="PrepareExistingRates.cs" />
     <Compile Include="ProcessCountryRates.cs" />
     <Compile Include="ReadFromSource.cs" />

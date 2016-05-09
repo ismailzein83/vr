@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangedSaleRateDataManager.cs" />
     <Compile Include="ChangedSaleCodeDataManager.cs" />
     <Compile Include="ChangedSaleZoneDataManager.cs" />
     <Compile Include="CodePreparationDataManager.cs" />

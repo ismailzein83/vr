@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodePrepDataManagerFactory.cs" />
+    <Compile Include="IChangedSaleRateDataManager.cs" />
     <Compile Include="IChangedSaleCodeDataManager.cs" />
     <Compile Include="IChangedSaleZoneDataManager.cs" />
     <Compile Include="ICodePreparationDataManager.cs" />
