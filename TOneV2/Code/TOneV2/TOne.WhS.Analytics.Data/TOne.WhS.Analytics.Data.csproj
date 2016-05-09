@@ -50,12 +50,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticsDataManagerFactory.cs" />
+    <Compile Include="IBillingStatisticDataManager.cs" />
     <Compile Include="IBlockedAttemptDataManager.cs" />
     <Compile Include="ICDRDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IGenericAnalyticDataManager.cs" />
     <Compile Include="IRawCDRDataManager.cs" />
     <Compile Include="IRepeatedNumberDataManager.cs" />
+    <Compile Include="IReportDefinitionDataManager.cs" />
     <Compile Include="IVariationReportDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
