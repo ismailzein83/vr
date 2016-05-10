@@ -113,7 +113,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                 notifyOnItemAction("error", msg, insertOperationOutput);
                 break;
             case InsertOperationResultEnum.SameExists.value:
-                if (keyProperty == null && keyProperty == undefined && keyProperty == "")
+                if (keyProperty == null || keyProperty == undefined || keyProperty == "")
                     keyProperty = "key";
                 var msg = itemType + " with the same " + keyProperty + " already exists";
                 notifyOnItemAction("warning", msg, insertOperationOutput);
@@ -153,7 +153,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                 notifyOnItemAction("error", msg, updateOperationOutput);
                 break;
             case UpdateOperationResultEnum.SameExists.value:
-                if (keyProperty == null && keyProperty == undefined && keyProperty == "")
+                if (keyProperty == null || keyProperty == undefined || keyProperty == "")
                     keyProperty = "key";
                 var msg = itemType + " with the same " + keyProperty + " already exists";
                 notifyOnItemAction("warning", msg, updateOperationOutput);
