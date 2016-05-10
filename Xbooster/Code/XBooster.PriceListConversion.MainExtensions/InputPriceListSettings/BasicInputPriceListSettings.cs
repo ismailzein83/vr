@@ -138,7 +138,10 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                                 var codesObj = code.Trim().Split(this.Delimiter).ToList();
                                 foreach (string codeValue in codesObj)
                                 {
+                       
                                     string codeValueTrimmed = codeValue.Trim();
+                                    if (codeValueTrimmed == string.Empty)
+                                        continue;
                                     if (this.HasCodeRange)
                                     {
                                         var rangeCode = codeValueTrimmed.Split(this.RangeSeparator);
