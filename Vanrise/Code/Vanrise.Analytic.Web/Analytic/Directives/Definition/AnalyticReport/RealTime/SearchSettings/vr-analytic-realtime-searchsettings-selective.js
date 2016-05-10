@@ -41,8 +41,8 @@
               + ' <vr-select on-ready="onSelectorReady"'
               + ' datasource="templateConfigs"'
               + ' selectedvalues="selectedTemplateConfig"'
-               + 'datavaluefield="TemplateConfigID"'
-              + ' datatextfield="Name"'
+               + 'datavaluefield="ExtensionConfigurationId"'
+              + ' datatextfield="Title"'
               + label
                + ' isrequired="searchSettingsCtrl.isrequired"'
               + 'hideremoveicon>'
@@ -109,20 +109,20 @@
                        
                     }
 
-                    var getAnalyticReportSettingsTemplateConfigsPromise = getAnalyticReportSettingsTemplateConfigs();
-                    promises.push(getAnalyticReportSettingsTemplateConfigsPromise);
+                    var getRealTimeReportSettingsTemplateConfigsPromise = getRealTimeReportSettingsTemplateConfigs();
+                    promises.push(getRealTimeReportSettingsTemplateConfigsPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
 
-                    function getAnalyticReportSettingsTemplateConfigs() {
-                        return VR_Analytic_AnalyticConfigurationAPIService.GetAnalyticReportSettingsTemplateConfigs().then(function (response) {
+                    function getRealTimeReportSettingsTemplateConfigs() {
+                        return VR_Analytic_AnalyticConfigurationAPIService.GetRealTimeReportSettingsTemplateConfigs().then(function (response) {
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.templateConfigs.push(response[i]);
                                 }
                                 if (searchSettings != undefined)
-                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, searchSettings.ConfigId, 'TemplateConfigID');
+                                    $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, searchSettings.ConfigId, 'ExtensionConfigurationId');
                                 else
                                     $scope.selectedTemplateConfig = $scope.templateConfigs[0];
                             }
@@ -144,7 +144,7 @@
 
                         data = directiveAPI.getData();
                         if (data != undefined) {
-                            data.ConfigId = $scope.selectedTemplateConfig.TemplateConfigID;
+                            data.ConfigId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
                         }
                     }
                     return data;
@@ -153,6 +153,6 @@
         }
     }
 
-    app.directive('vrAnalyticReportsearchsettingsSelective', ReportsearchsettingsSelective);
+    app.directive('vrAnalyticRealtimeSearchsettingsSelective', ReportsearchsettingsSelective);
 
 })(app);

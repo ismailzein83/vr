@@ -6,32 +6,25 @@
     function AnalyticConfigurationAPIService(BaseAPIService, VR_Analytic_ModuleConfig, UtilsService, SecurityService) {
         var controllerName = 'AnalyticConfiguration';
 
-        function GetDimensionsInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensionsInfo"));
-        }
-        function GetMeasuresInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasuresInfo"));
-        }
-        function GetAnalyticRecords(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticRecords"), input);
-        }
-
-        function GetFilteredRecords(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredRecords"), input);
-        }
         function GetAnalyticReportSettingsTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticReportSettingsTemplateConfigs"));
         }
         function GetWidgetsTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetWidgetsTemplateConfigs"));
         }
+        function GetRealTimeReportSettingsTemplateConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetRealTimeReportSettingsTemplateConfigs"));
+        }
+        function GetRealTimeWidgetsTemplateConfigs()
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetRealTimeWidgetsTemplateConfigs"));
+        }
         return ({
-            GetDimensionsInfo: GetDimensionsInfo,
-            GetMeasuresInfo: GetMeasuresInfo,
-            GetFilteredRecords: GetFilteredRecords,
-            GetAnalyticRecords: GetAnalyticRecords,
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
-            GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs
+            GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs,
+            GetRealTimeReportSettingsTemplateConfigs: GetRealTimeReportSettingsTemplateConfigs,
+            GetRealTimeWidgetsTemplateConfigs: GetRealTimeWidgetsTemplateConfigs
         });
     }
 

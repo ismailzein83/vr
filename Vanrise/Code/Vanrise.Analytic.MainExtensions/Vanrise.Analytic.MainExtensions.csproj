@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RealTimeReport\SearchSettings\RealTimeReportSearchSettings.cs" />
+    <Compile Include="RealTimeReport\SearchSettings\DefaultRealTimeReportSearch.cs" />
     <Compile Include="RealTimeReport\Widgets\RealTimeChartWidget.cs" />
     <Compile Include="History\Widgets\AnalyticChartWidget.cs" />
     <Compile Include="History\Widgets\AnalyticGridWidget.cs" />

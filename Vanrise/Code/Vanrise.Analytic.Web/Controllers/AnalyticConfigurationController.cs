@@ -17,7 +17,7 @@ namespace Vanrise.Analytic.Web.Controllers
 
         [HttpGet]
         [Route("GetAnalyticReportSettingsTemplateConfigs")]
-        public IEnumerable<TemplateConfig> GetAnalyticReportSettingsTemplateConfigs()
+        public IEnumerable<HistorySearchSetting> GetAnalyticReportSettingsTemplateConfigs()
         {
             AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
             return manager.GetAnalyticReportSettingsTemplateConfigs();
@@ -29,5 +29,22 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
             return manager.GetWidgetsTemplateConfigs();
         }
+
+        [HttpGet]
+        [Route("GetRealTimeReportSettingsTemplateConfigs")]
+        public IEnumerable<RealTimeSearchSetting> GetRealTimeReportSettingsTemplateConfigs()
+        {
+            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
+            return manager.GetRealTimeReportSettingsTemplateConfigs();
+        }
+        [HttpGet]
+        [Route("GetRealTimeWidgetsTemplateConfigs")]
+        public IEnumerable<RealTimeWidgetSetting> GetRealTimeWidgetsTemplateConfigs()
+        {
+            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
+            return manager.GetRealTimeWidgetsTemplateConfigs();
+        }
+
+        
     }
 }

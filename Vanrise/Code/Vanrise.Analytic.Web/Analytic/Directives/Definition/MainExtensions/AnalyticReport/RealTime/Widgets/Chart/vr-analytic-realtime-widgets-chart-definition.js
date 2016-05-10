@@ -21,7 +21,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/Widgets/Chart/Templates/ChartWidgetDefinitionTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/AnalyticReport/RealTime/Widgets/Chart/Templates/RealTimeChartWidgetDefinitionTemplate.html"
 
         };
         function WidgetsChart($scope, ctrl, $attrs) {
@@ -164,7 +164,7 @@
                 function getData() {
 
                     var data = {
-                        $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticChartWidget, Vanrise.Analytic.MainExtensions ",
+                        $type: "Vanrise.Analytic.MainExtensions.RealTimeReport.Widgets.RealTimeChartWidget, Vanrise.Analytic.MainExtensions ",
                         Measures: getMeasures(),
                         Dimensions: getDimensions(),
                         TopRecords: $scope.scopeModel.topRecords,
@@ -221,6 +221,6 @@
         }
     }
 
-    app.directive('vrAnalyticWidgetsChartDefinition', WidgetsChartDefinition);
+    app.directive('vrAnalyticRealtimeWidgetsChartDefinition', WidgetsChartDefinition);
 
 })(app);

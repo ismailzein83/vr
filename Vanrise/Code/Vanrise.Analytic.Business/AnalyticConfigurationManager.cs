@@ -11,16 +11,27 @@ namespace Vanrise.Analytic.Business
 {
     public class AnalyticConfigurationManager
     {
-        public IEnumerable<TemplateConfig> GetAnalyticReportSettingsTemplateConfigs()
+        public IEnumerable<HistorySearchSetting> GetAnalyticReportSettingsTemplateConfigs()
         {
-            var templateConfigManager = new TemplateConfigManager();
-            return templateConfigManager.GetTemplateConfigurations(Constants.AnalyticReportSettingsConfigType);
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<HistorySearchSetting>(Constants.AnalyticHistoryReportSettingsConfigType);
         }
         public IEnumerable<WidgetDefinitionSetting> GetWidgetsTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<WidgetDefinitionSetting>(Constants.AnalyticWidgetsConfigType);
         }
+
+        public IEnumerable<RealTimeSearchSetting> GetRealTimeReportSettingsTemplateConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<RealTimeSearchSetting>(Constants.RealTimeSearchConfigType);
+        }
+        public IEnumerable<RealTimeWidgetSetting> GetRealTimeWidgetsTemplateConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<RealTimeWidgetSetting>(Constants.RealTimeWidgetConfigType);
+        } 
     }
 }
  

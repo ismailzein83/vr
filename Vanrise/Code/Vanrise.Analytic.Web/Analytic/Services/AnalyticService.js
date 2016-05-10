@@ -8,7 +8,9 @@
         return ({
             OpenAnalyticReport: OpenAnalyticReport,
             addWidget: addWidget,
-            editWidget: editWidget
+            editWidget: editWidget,
+            editRealTimeWidget: editRealTimeWidget,
+            addRealTimeWidget: addRealTimeWidget
         });
 
         function OpenAnalyticReport() {
@@ -48,6 +50,34 @@
             };
 
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticWidgetEditor.html', modalParameters, modalSettings);
+        }
+
+
+        function addRealTimeWidget(onWidgetAdded, tableIds) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onWidgetAdded = onWidgetAdded;
+            };
+            var modalParameters = {
+                tableIds: tableIds
+            };
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/RealTimeWidgetEditor.html', modalParameters, modalSettings);
+        }
+
+        function editRealTimeWidget(widgetEntity, onWidgetUpdated, tableIds) {
+            var modalParameters = {
+                tableIds: tableIds,
+                widgetEntity: widgetEntity
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onWidgetUpdated = onWidgetUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/RealTimeWidgetEditor.html', modalParameters, modalSettings);
         }
     }
 

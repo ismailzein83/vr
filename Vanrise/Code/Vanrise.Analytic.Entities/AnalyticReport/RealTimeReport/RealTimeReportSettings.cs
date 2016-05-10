@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class RealTimeReportSettings
+    public class RealTimeReportSettings : AnalyticReportSettings
     {
+        public List<int> AnalyticTableIds { get; set; }
+        public RealTimeReportSearchSettings SearchSettings { get; set; }
         public List<RealTimeReportWidget> Widgets { get; set; }
 
     }

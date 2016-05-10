@@ -21,7 +21,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/SearchSettings/Templates/GenericSearchTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/Definition/MainExtensions/AnalyticReport/History/SearchSettings/Templates/GenericSearchTemplate.html"
 
         };
         function Genericsearch($scope, ctrl, $attrs) {

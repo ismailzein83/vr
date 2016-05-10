@@ -1,0 +1,23 @@
+﻿<vr-row >
+    <vr-columns width="fullrow">
+        <vr-section title="Filters">
+            <vr-row>
+                <vr-analytic-dimension-selector on-ready="scopeModel.onFilterDimensionSelectorDirectiveReady" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedFilterDimensions" onselectitem="    scopeModel.onSelectFilterDimensionItem" ondeselectitem="    scopeModel.onDeselectFilterDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
+                <vr-columns width="2/3row" >
+                    <vr-validator validate="scopeModel.isValidFilterDimensions()">
+                        <vr-datagrid datasource="scopeModel.filterDimensions"
+                                     on-ready="onGridReady" ondeleterow="scopeModel.removeFilterDimension" hidegridmenu enabledraggablerow="true" norowhighlightonclick="'true'">
+                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Title'" widthfactor="5" disablesorting="true">
+                                <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Required'" widthfactor="3" disablesorting="true">
+                                <vr-switch value="dataItem.IsRequired"></vr-switch>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>
