@@ -169,30 +169,30 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
     function validateTimeOffset(value) {
 
-                if (value == undefined) return null;
+        if (value == undefined) return null;
 
-                var offset = value.split(".");
+        var offset = value.split(".");
 
-                if (offset.length == 1) {
-                    var time = offset[0].split("-");
+        if (offset.length == 1) {
+            var time = offset[0].split("-");
 
-                    if (time.length == 1 && validateTime(time[0]))
-                        return null;
+            if (time.length == 1 && validateTime(time[0]))
+                return null;
 
-                    else if (time.length == 2 && time[0].length == 0 && validateTime(time[1]))
-                        return null;
-                }
-                else if (offset.length == 2) {
-                    var days = offset[0].split("-");
+            else if (time.length == 2 && time[0].length == 0 && validateTime(time[1]))
+                return null;
+        }
+        else if (offset.length == 2) {
+            var days = offset[0].split("-");
 
-                    if (days.length == 1 && validateInteger(days[0], 99) && validateTime(offset[1]))
-                        return null;
+            if (days.length == 1 && validateInteger(days[0], 99) && validateTime(offset[1]))
+                return null;
 
-                    else if (days.length == 2 && days[0].length == 0 && validateInteger(days[1], 99) && validateTime(offset[1]))
-                        return null;
-                }
+            else if (days.length == 2 && days[0].length == 0 && validateInteger(days[1], 99) && validateTime(offset[1]))
+                return null;
+        }
 
-                return "Format: DD.HH:MM:SS";
+        return "Format: DD.HH:MM:SS";
     }
 
     function validateInteger(integer, maxValue) {
@@ -369,8 +369,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
         return false;
     }
-    function getFilteredArrayFromArray(array,value,propName)
-    {
+    function getFilteredArrayFromArray(array, value, propName) {
         var filteredArray;
         if (array.length > 0) {
             filteredArray = [];
@@ -652,8 +651,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
     function areDateTimesEqual(first, second) {
         return (serializetoJson(first) == serializetoJson(second));
     }
-    function getTimeOffset(date1,date2)
-    {
+    function getTimeOffset(date1, date2) {
         var one_day = 1000 * 60 * 60 * 24;
 
         // Convert both dates to milliseconds
@@ -663,10 +661,10 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         // Calculate the difference in milliseconds
         var difference_ms = date2_ms - date1_ms;
         if (difference_ms < 0)
-            sign="-";
+            sign = "-";
         //take out milliseconds
         if (difference_ms < 0)
-            difference_ms = - difference_ms;
+            difference_ms = -difference_ms;
         difference_ms = difference_ms / 1000;
         var seconds = Math.floor(difference_ms % 60);
         difference_ms = difference_ms / 60;
@@ -674,7 +672,7 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         difference_ms = difference_ms / 60;
         var hours = Math.floor(difference_ms % 24);
         var days = Math.floor(difference_ms / 24);
- 
+
         var result = sign;
         if (hours < 10)
             result += "0" + hours;
@@ -692,6 +690,26 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
 
         return result;
     }
+
+    function trimRight(value, charlist) {
+        if (charlist === undefined)
+            charlist = "\s";
+
+        return value.replace(new RegExp("[" + charlist + "]+$"), "");
+    };
+
+    function trimLeft(value, charlist) {
+        if (charlist === undefined)
+            charlist = "\s";
+
+        return value.replace(new RegExp("^[" + charlist + "]+"), "");
+    };
+
+    function trim(value, charlist) {
+        value = trimLeft(value, charlist)
+        return trimRight(value, charlist);
+    };
+
     return ({
         replaceAll: replaceAll,
         waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -734,7 +752,10 @@ app.service('UtilsService', ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'Perio
         areDateTimesEqual: areDateTimesEqual,
         validateTimeOffset: validateTimeOffset,
         getTimeOffset: getTimeOffset,
-        getFilteredArrayFromArray: getFilteredArrayFromArray
+        getFilteredArrayFromArray: getFilteredArrayFromArray,
+        trimRight: trimRight,
+        trimLeft: trimLeft,
+        trim: trim
     });
 
 }]);

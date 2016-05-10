@@ -163,7 +163,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     return gridApi.retrieveData(queryFinalized);
                 }
 
-
                 function loadGridQuery(payLoad) {
 
                     fromTime = payLoad.FromTime;

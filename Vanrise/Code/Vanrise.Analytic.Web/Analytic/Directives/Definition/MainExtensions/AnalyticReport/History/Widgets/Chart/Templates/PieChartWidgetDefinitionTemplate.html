@@ -1,0 +1,12 @@
+﻿<vr-row>
+    <vr-columns width="1/2row" haschildcolumns>
+        <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorDirectiveReady" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedDimensions" onselectitem="    scopeModel.onSelectDimensionItem" ondeselectitem="    scopeModel.onDeselectDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
+    </vr-columns>
+
+    <vr-columns width="1/2row" haschildcolumns>
+        <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.Measure" onselectitem="    scopeModel.onSelectMeasureItem" ondeselectitem="    scopeModel.onDeselectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-numeric value="scopeModel.topRecords" type="number" label="Top Records" minvalue="1" maxvalue="100" isrequired="true"></vr-numeric>
+    </vr-columns>
+</vr-row>

@@ -129,7 +129,9 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-analyticreport-selector.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\Templates\AnalyticTableGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticTable\vr-analytic-analytictable-grid.js" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Chart\Templates\PieChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Chart\Templates\ChartWidgetDefinitionTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Chart\vr-analytic-widgets-piechart-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Chart\vr-analytic-widgets-chart-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Grid\Templates\GridWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Grid\vr-analytic-widgets-grid-definition.js" />
@@ -140,11 +142,9 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\SearchSettings\vr-analytic-analyticreport-realtime-searchsettings-defaultsearch.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\Templates\RealTimeChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-chart-definition.js" />
-    <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\Templates\HistoryAnalyticReportRuntimeTemplates.html" />
-    <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\vr-analytic-analyticreport-history-runtime.js" />
-    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\Templates\RealTimeAnalyticReportRuntimeTemplates.html" />
-    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RealTime\vr-analytic-analyticreport-realtime-runtime.js" />
+    <Content Include="Analytic\Directives\Runtime\Chart\Templates\AnalyticPieChart.html" />
     <Content Include="Analytic\Directives\Runtime\Chart\Templates\AnalyticTopRecordsChart.html" />
+    <Content Include="Analytic\Directives\Runtime\Chart\vr-analytic-piechart-toprecords.js" />
     <Content Include="Analytic\Directives\Runtime\Chart\vr-analytic-chart-toprecords.js" />
     <Content Include="Analytic\Directives\Runtime\Grid\Templates\AnalyticRecordsDataGrid.html" />
     <Content Include="Analytic\Directives\Runtime\Grid\vr-analytic-datagrid-analyticrecords.js" />
@@ -179,6 +179,8 @@
     <Content Include="Analytic\Views\GenericAnalytic\Definition\RealTimeWidgetEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReport.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReportController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Runtime\RealTimeReport.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Runtime\RealTimeReportController.js" />
     <Content Include="Analytic\Views\Reports\AnalyticReport.html" />
     <Content Include="Analytic\Views\Reports\AnalyticReportController.js" />
   </ItemGroup>
