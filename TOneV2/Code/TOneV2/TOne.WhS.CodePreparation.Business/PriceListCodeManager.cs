@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Entities.Processing;
+using Vanrise.BusinessProcess;
 using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.Business
@@ -12,15 +13,26 @@ namespace TOne.WhS.CodePreparation.Business
     {
         public void ProcessCountryCodes(IProcessCountryCodesContext context)
         {
-            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(context.ExistingZones);
-            ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(context.ExistingCodes);
             ZonesByName newAndExistingZones = new ZonesByName();
+            
+            context.NewAndExistingZones = newAndExistingZones;
+            context.NewCodes= ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones);
+            context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is AddedZone)).Select(itm => itm as AddedZone);
+            context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
+            context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
 
-            if (context.CodesToAdd != null)
+        }
+
+        public IEnumerable<AddedCode> ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
+        {
+            ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
+            ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
+
+            if (codesToAdd != null)
             {
-                foreach (var codeToAdd in context.CodesToAdd)
+                foreach (var codeToAdd in codesToAdd)
                 {
-                   
+
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToAdd.Code, out matchExistingCodes))
                         CloseExistingOverlapedCodes(codeToAdd, matchExistingCodes);
@@ -28,11 +40,11 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
 
-            if (context.CodesToMove != null)
+            if (codesToMove != null)
             {
-                foreach (var codeToMove in context.CodesToMove)
+                foreach (var codeToMove in codesToMove)
                 {
-                    
+
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToMove.Code, out matchExistingCodes))
                         CloseExistingOverlapedCodes(codeToMove, matchExistingCodes);
@@ -40,30 +52,26 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
 
-            if (context.CodesToClose != null)
+            if (codesToClose != null)
             {
-                foreach (var codeToClose in context.CodesToClose)
+                foreach (var codeToClose in codesToClose)
                 {
-                    
+
                     List<ExistingCode> matchExistingCodes;
                     if (existingCodesByCodeValue.TryGetValue(codeToClose.Code, out matchExistingCodes))
                         CloseExistingCodes(codeToClose, matchExistingCodes);
                 }
             }
 
-            List<AddedCode> addedCodes=context.CodesToAdd.SelectMany(itm => itm.AddedCodes).ToList();
-            foreach (AddedCode obj in context.CodesToMove.SelectMany(itm => itm.AddedCodes).ToList())
+            List<AddedCode> addedCodes = codesToAdd.SelectMany(itm => itm.AddedCodes).ToList();
+            foreach (AddedCode obj in codesToMove.SelectMany(itm => itm.AddedCodes).ToList())
             {
                 addedCodes.Add(obj);
             }
 
+            CloseZonesWithNoCodes(existingZones);
 
-            CloseZonesWithNoCodes(context.ExistingZones);
-            context.NewCodes = addedCodes;
-            context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is AddedZone)).Select(itm => itm as AddedZone);
-
-            context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
-            context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
+            return addedCodes;
         }
 
         private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones)
@@ -117,6 +125,7 @@ namespace TOne.WhS.CodePreparation.Business
                             ZoneId = existingZone.ZoneId,
                             EED = maxCodeEED.Value
                         };
+                        
                     }
                 }
             }

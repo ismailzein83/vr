@@ -23,6 +23,11 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         public List<CodeToMove> CodesToMove { get; set; }
 
         public List<CodeToClose> CodesToClose { get; set; }
+
+        public IEnumerable<AddedZone> AddedZones { get; set; }
+
+        public IEnumerable<ExistingZone> NewAndExistingZones { get; set; }
+
         public object Key
         {
             get { return this.ZoneName; }

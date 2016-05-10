@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.CodePreparation.Business;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.BusinessProcess;
@@ -33,6 +34,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public IEnumerable<ChangedZone> ChangedZones { get; set; }
 
+        public ZonesByName NewAndExistingZones { get; set; }
 
         public IEnumerable<AddedCode> NewCodes { get; set; }
 
@@ -55,6 +57,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<ZonesByName> NewAndExistingZones { get; set; }
 
         [RequiredArgument]
         public InOutArgument<IEnumerable<AddedZone>> NewZones { get; set; }
@@ -118,6 +122,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 NewZones = processCountryCodesContext.NewZones,
                 ChangedZones = processCountryCodesContext.ChangedZones,
+                NewAndExistingZones= processCountryCodesContext.NewAndExistingZones,
                 NewCodes = processCountryCodesContext.NewCodes,
                 ChangedCodes = processCountryCodesContext.ChangedCodes
             };
@@ -125,6 +130,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessCountryCodesOutput result)
         {
+            this.NewAndExistingZones.Set(context, result.NewAndExistingZones);
             this.NewZones.Set(context, result.NewZones);
             this.ChangedZones.Set(context, result.ChangedZones);
             this.NewCodes.Set(context, result.NewCodes);

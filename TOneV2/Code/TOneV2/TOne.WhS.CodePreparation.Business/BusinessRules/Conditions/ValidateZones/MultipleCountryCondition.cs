@@ -19,19 +19,24 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            
+
             ZoneToProcess zone = context.Target as ZoneToProcess;
 
             bool result = true;
+            bool resultOfCodeToAdd = true;
+            bool resultOfCodeToMove = true;
+
+            int? firstCodeToAddCountryId = null;
+            int? firstCodeToMoveCountryId = null;
 
             if (zone.CodesToAdd != null)
             {
                 var firstCode = zone.CodesToAdd.FirstOrDefault();
                 if (firstCode != null)
                 {
-                    int? firstCodeCountryId = firstCode.CodeGroup != null ? firstCode.CodeGroup.CountryId : (int?)null;
-                    Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup != null && firstCodeCountryId.HasValue && code.CodeGroup.CountryId != firstCodeCountryId.Value);
-                    result = !zone.CodesToAdd.Any(pred);
+                    firstCodeToAddCountryId = firstCode.CodeGroup.CountryId;
+                    Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup != null && code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
+                    resultOfCodeToAdd = !zone.CodesToAdd.Any(pred);
                 }
             }
 
@@ -41,15 +46,17 @@ namespace TOne.WhS.CodePreparation.Business
                 var firstCode = zone.CodesToMove.FirstOrDefault();
                 if (firstCode != null)
                 {
-                    int? firstCodeCountryId = firstCode.CodeGroup != null ? firstCode.CodeGroup.CountryId : (int?)null;
-                    Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup != null && firstCodeCountryId.HasValue && code.CodeGroup.CountryId != firstCodeCountryId.Value);
-                    result = !zone.CodesToMove.Any(pred);
+                    firstCodeToMoveCountryId = firstCode.CodeGroup.CountryId;
+                    Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup != null && code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
+                    resultOfCodeToMove = !zone.CodesToMove.Any(pred);
                 }
             }
 
-            return result;
-
-
+            if (firstCodeToAddCountryId != null && firstCodeToMoveCountryId != null)
+                result = firstCodeToAddCountryId == firstCodeToMoveCountryId;
+            
+            return resultOfCodeToAdd && resultOfCodeToMove && result;
+        
         }
 
         public override string GetMessage(IRuleTarget target)

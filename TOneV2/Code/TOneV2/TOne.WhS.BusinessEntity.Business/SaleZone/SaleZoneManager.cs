@@ -146,9 +146,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
-        public bool IsCountryHasSaleZones(int sellingNumberPlanId, int countryId, DateTime minimumDate)
+        public bool IsCountryEmpty(int sellingNumberPlanId, int countryId, DateTime minimumDate)
         {
-            return this.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate).Count() > 0;
+            IEnumerable<SaleZone> saleZones =this.GetSaleZonesEffectiveAfter(sellingNumberPlanId, countryId, minimumDate);
+            if (saleZones == null || saleZones.Count() == 0)
+                return true;
+            return false;
         }
 
         public IEnumerable<SaleZone> GetSaleZonesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)

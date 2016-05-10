@@ -58,16 +58,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         countriesToProcessByCountryId.Add(countryId, countryToProcess);
                     }
 
-                    IEnumerable<CodeToAdd> codesToAdd = zone.CodesToAdd;
-                    foreach (CodeToAdd code in codesToAdd)
+                    foreach (CodeToAdd code in zone.CodesToAdd)
                         countryToProcess.CodesToAdd.Add(code);
 
-                    IEnumerable<CodeToMove> codesToMove = zone.CodesToMove;
-                    foreach (CodeToMove code in codesToMove)
+                    foreach (CodeToMove code in zone.CodesToMove)
                         countryToProcess.CodesToMove.Add(code);
 
-                    IEnumerable<CodeToClose> codesToClose = zone.CodesToClose;
-                    foreach (CodeToClose code in codesToClose)
+                    foreach (CodeToClose code in zone.CodesToClose)
                         countryToProcess.CodesToClose.Add(code);
 
             }

@@ -19,6 +19,8 @@ namespace TOne.WhS.CodePreparation.Business
 
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
 
+        public ZonesByName NewAndExistingZones { get; set; }
+
         public IEnumerable<AddedCode> NewCodes{ get; set; }
 
         public IEnumerable<ChangedCode> ChangedCodes{ get; set; }

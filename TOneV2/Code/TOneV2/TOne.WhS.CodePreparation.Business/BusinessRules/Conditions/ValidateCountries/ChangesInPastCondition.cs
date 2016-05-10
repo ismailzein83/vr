@@ -10,7 +10,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.CodePreparation.Business
 {
-    public class ChangesForEmptyCountry : BusinessRuleCondition
+    public class ChangesInPastCondition : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
@@ -26,7 +26,7 @@ namespace TOne.WhS.CodePreparation.Business
             CountryToProcess country = context.Target as CountryToProcess;
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             
-            return !saleZoneManager.IsCountryHasSaleZones(cpContext.SellingNumberPlanId, country.CountryId , DateTime.Now );
+            return saleZoneManager.IsCountryEmpty(cpContext.SellingNumberPlanId, country.CountryId , DateTime.Now );
         }
 
         public override string GetMessage(IRuleTarget target)

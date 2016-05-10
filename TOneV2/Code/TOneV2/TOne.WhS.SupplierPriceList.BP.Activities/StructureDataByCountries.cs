@@ -44,12 +44,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         importedCountriesByCountryId.Add(countryId, importedCountry);
                     }
 
-                    IEnumerable<ImportedCode> includedCodes = zone.ImportedCodes;
-                    foreach (ImportedCode code in includedCodes)
+                    foreach (ImportedCode code in zone.ImportedCodes)
                         importedCountry.ImportedCodes.Add(code);
 
-                    IEnumerable<ImportedRate> includedRates = zone.ImportedRates;
-                    foreach (ImportedRate rate in includedRates)
+                    foreach (ImportedRate rate in zone.ImportedRates)
                         importedCountry.ImportedRates.Add(rate);
 
             }

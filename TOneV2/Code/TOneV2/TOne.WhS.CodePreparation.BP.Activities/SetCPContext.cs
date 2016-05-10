@@ -45,31 +45,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     public class CPParametersContext : ICPParametersContext
     {
 
-        int _sellingNumberPlanId;
-        DateTime _effectiveDate;
+        public DateTime EffectiveDate { get; set; }
 
-        public DateTime EffectiveDate
-        {
-            get
-            {
-                return _effectiveDate;
-            }
-            set
-            {
-                _effectiveDate = value;
-            }
-        }
-
-        public int SellingNumberPlanId
-        {
-            get
-            {
-                return _sellingNumberPlanId;
-            }
-            set
-            {
-                _sellingNumberPlanId = value;
-            }
-        }
+        public int SellingNumberPlanId { get; set; }
     }
 }

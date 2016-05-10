@@ -18,6 +18,8 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         IEnumerable<ExistingZone> ExistingZones { get; }
 
+        ZonesByName NewAndExistingZones { set; }
+
         IEnumerable<AddedCode> NewCodes { set; }
 
         IEnumerable<ChangedCode> ChangedCodes { set; }

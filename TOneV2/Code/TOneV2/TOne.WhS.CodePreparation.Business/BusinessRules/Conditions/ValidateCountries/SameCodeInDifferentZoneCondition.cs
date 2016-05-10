@@ -22,16 +22,22 @@ namespace TOne.WhS.CodePreparation.Business
         {
 
             CountryToProcess country = context.Target as CountryToProcess;
-            foreach (CodeToAdd codeToAdd in country.CodesToAdd)
+            if (country.CodesToAdd != null)
             {
-                if (country.CodesToAdd.FindRecord(x => x.Code == codeToAdd.Code && !x.ZoneName.Equals(codeToAdd.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
-                    return false;
+                foreach (CodeToAdd codeToAdd in country.CodesToAdd)
+                {
+                    if (country.CodesToAdd.FindRecord(x => x.Code == codeToAdd.Code && !x.ZoneName.Equals(codeToAdd.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                        return false;
+                }
             }
 
-            foreach (CodeToClose codeToClose in country.CodesToClose)
+            if (country.CodesToClose != null)
             {
-                if (country.CodesToClose.FindRecord(x => x.Code == codeToClose.Code && !x.ZoneName.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
-                    return false;
+                foreach (CodeToClose codeToClose in country.CodesToClose)
+                {
+                    if (country.CodesToClose.FindRecord(x => x.Code == codeToClose.Code && !x.ZoneName.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                        return false;
+                }
             }
 
             return true;

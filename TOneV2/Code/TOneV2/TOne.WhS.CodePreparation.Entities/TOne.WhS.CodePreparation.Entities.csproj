@@ -50,9 +50,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedZone.cs" />
+    <Compile Include="ChangedData\ChangedCode.cs" />
+    <Compile Include="ChangedData\ChangedRate.cs" />
+    <Compile Include="ChangedData\ChangedZone.cs" />
+    <Compile Include="AddedCode.cs" />
+    <Compile Include="ExistingRate.cs" />
+    <Compile Include="ExistingZone.cs" />
     <Compile Include="ICPParametersContext.cs" />
     <Compile Include="ImportedData\ImportedCode.cs" />
     <Compile Include="IProcessCountryRatesContext.cs" />
+    <Compile Include="IZone.cs" />
     <Compile Include="NewData\CodeToAdd.cs" />
     <Compile Include="NewData\CodeToClose.cs" />
     <Compile Include="NewData\CodeToMove.cs" />
