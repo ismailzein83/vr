@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [common].[sp_CurrencyExchangeRate_insert]
-    @Rate decimal(18,5),
+    @Rate decimal(20,10),
 	@CurrencyID int,
 	@ExchangeDate datetime,
 	@id INT OUT

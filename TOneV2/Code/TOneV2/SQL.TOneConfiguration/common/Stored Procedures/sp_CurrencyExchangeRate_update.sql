@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [common].[sp_CurrencyExchangeRate_update]
     @ID bigint,
-    @Rate decimal(18,5),
+    @Rate decimal(20,10),
 	@CurrencyID int ,
 	@ExchangeDate datetime
 	
