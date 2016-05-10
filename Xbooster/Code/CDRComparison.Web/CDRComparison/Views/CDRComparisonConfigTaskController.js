@@ -28,8 +28,8 @@
 
             $scope.scopeModel = {};
 
-            $scope.scopeModel.saveSystemConfig = true;
-            $scope.scopeModel.savePartnerConfig = true;
+            $scope.scopeModel.saveSystemConfig = false;
+            $scope.scopeModel.savePartnerConfig = false;
 
             $scope.scopeModel.isSystemConfigNameDisabled = false;
             $scope.scopeModel.isPartnerConfigNameDisabled = false;
