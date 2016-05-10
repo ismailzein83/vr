@@ -12,7 +12,7 @@ using XBooster.PriceListConversion.Entities;
 
 namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
 {
-    public enum CodeLayout { CodeOnEachRow = 0, CammaSeparated = 1 }
+    public enum CodeLayout { CodeOnEachRow = 0, Delimitedcode = 1 }
     public class BasicInputPriceListSettings : Entities.InputPriceListSettings
     {
         #region Properties
@@ -38,27 +38,32 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
         #region Private Methods
         private PriceList ConvertToPriceListItem(ConvertedExcel convertedExcel)
         {
+            Dictionary<string, string> zoneByZone = BuildZoneByZone(convertedExcel);
             Dictionary<string, PriceListRate> rateByZone = BuildRateByZone(convertedExcel);
             Dictionary<string, List<PriceListCode>> codesByZone = BuildCodesByZone(convertedExcel);
             ValidateCode(codesByZone);
-            PriceList priceListItem = ConvertToPriceList(rateByZone, codesByZone);
+            PriceList priceListItem = ConvertToPriceList(rateByZone, codesByZone, zoneByZone);
             return priceListItem;
         }
-        private PriceList ConvertToPriceList(Dictionary<string, PriceListRate> rateByZone, Dictionary<string, List<PriceListCode>> codesByZone)
+        private PriceList ConvertToPriceList(Dictionary<string, PriceListRate> rateByZone, Dictionary<string, List<PriceListCode>> codesByZone, Dictionary<string, string>  zoneByZone)
         {
             PriceList priceListItem = new Entities.PriceList();
             priceListItem.Records = new List<PriceListRecord>();
             foreach (var obj in codesByZone)
             {
                 PriceListRecord priceListRecord = new Entities.PriceListRecord();
-                priceListRecord.Zone = obj.Key;
+                string zoneName;
+                if (zoneByZone.TryGetValue(obj.Key, out zoneName))
+                {
+                    priceListRecord.Zone = zoneName;
+                }
                 List<PriceListCode> codes;
-                if (codesByZone.TryGetValue(priceListRecord.Zone, out codes))
+                if (codesByZone.TryGetValue(obj.Key, out codes))
                 {
                     priceListRecord.Codes = codes;
                 };
                 PriceListRate rate;
-                if (rateByZone.TryGetValue(priceListRecord.Zone, out rate))
+                if (rateByZone.TryGetValue(obj.Key, out rate))
                 {
                     priceListRecord.Rate = rate.Rate;
                     priceListRecord.RateEffectiveDate = rate.RateEffectiveDate;
@@ -68,6 +73,27 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
 
     
             return priceListItem;
+        }
+        private Dictionary<string, string> BuildZoneByZone(ConvertedExcel convertedExcel)
+        {
+            Dictionary<string, string> zoneByZone = new Dictionary<string, string>();
+            ConvertedExcelList CodeConvertedExcelList;
+            if (convertedExcel.Lists.TryGetValue("CodeList", out CodeConvertedExcelList))
+            {
+                foreach (var obj in CodeConvertedExcelList.Records)
+                {
+                    ConvertedExcelField zoneField;
+                    string zoneName;
+                    if (obj.Fields.TryGetValue("Zone", out zoneField))
+                    {
+                        if (!zoneByZone.TryGetValue(zoneField.FieldValue.ToString().ToLower(), out zoneName))
+                        {
+                            zoneByZone.Add(zoneField.FieldValue.ToString().ToLower(), zoneField.FieldValue.ToString());
+                        }   
+                    }
+                }
+            }
+            return zoneByZone;
         }
         private Dictionary<string, List<PriceListCode>> BuildCodesByZone(ConvertedExcel convertedExcel)
         {
@@ -107,7 +133,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                             }
                             string code = codeField.FieldValue.ToString().Trim();
                             List<PriceListCode> resolvedCodes = new List<PriceListCode>();
-                            if (this.CodeLayout == CodeLayout.CammaSeparated)
+                            if (this.CodeLayout == CodeLayout.Delimitedcode)
                             {
                                 var codesObj = code.Trim().Split(this.Delimiter).ToList();
                                 foreach (string codeValue in codesObj)
@@ -165,15 +191,15 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                                     CodeEffectiveDate = result
                                 });
                             }
-
-                            if (!codesByZone.TryGetValue(zoneField.FieldValue.ToString(), out codes))
+                            var zoneName = zoneField.FieldValue.ToString().ToLower();
+                            if (!codesByZone.TryGetValue(zoneName, out codes))
                             {
-                                codesByZone.Add(zoneField.FieldValue.ToString(), resolvedCodes);
+                                codesByZone.Add(zoneName, resolvedCodes);
                             }
                             else
                             {
                                 codes.AddRange(resolvedCodes);
-                                codesByZone[zoneField.FieldValue.ToString()] = codes;
+                                codesByZone[zoneName] = codes;
                             }
 
                         }
@@ -214,9 +240,11 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                             {
                                 throw new Exception(string.Format("Zone {0} has no rate defined.", zoneField.FieldValue));
                             }
-                            if (!rateByZone.TryGetValue(zoneField.FieldValue.ToString(), out rate))
+                            var zoneName = zoneField.FieldValue.ToString().ToLower();
+
+                            if (!rateByZone.TryGetValue(zoneName, out rate))
                             {
-                                rateByZone.Add(zoneField.FieldValue.ToString(), new PriceListRate
+                                rateByZone.Add(zoneName, new PriceListRate
                                 {
                                     Rate = (decimal)rateField.FieldValue,
                                     RateEffectiveDate = result

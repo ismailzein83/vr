@@ -54,7 +54,7 @@
                 }
                 $scope.scopeModel.onCodeLayoutSelectionChanged= function()
                 {
-                    if ($scope.scopeModel.selectedCodeLayout !=undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.CammaSeparated.value)
+                    if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.Delimitedcode.value)
                     {
                         if ($scope.scopeModel.delimiterValue == undefined)
                              $scope.scopeModel.delimiterValue = ',';
@@ -200,7 +200,7 @@
                         IsCommaDecimalSeparator: $scope.scopeModel.isCommaDecimalSeparator
                     }
                    
-                    if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.CammaSeparated.value)
+                    if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == XBooster_PriceListConversion_CodeLayoutEnum.Delimitedcode.value)
                     {
                         basicConfiguration.Delimiter = $scope.scopeModel.delimiterValue;
                     }
