@@ -13,7 +13,7 @@ namespace Vanrise.Entities
         public string Extension { get; set; }
         public bool IsUsed { get; set; }
         public string ModuleName { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public DateTime CreatedTime { get; set; }
     }
 

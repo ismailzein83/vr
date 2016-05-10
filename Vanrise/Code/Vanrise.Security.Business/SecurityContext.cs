@@ -44,6 +44,21 @@ namespace Vanrise.Security.Business
             return this.GetSecurityToken().UserId;
         }
 
+        public bool TryGetLoggedInUserId(out int? userId)
+        {
+            SecurityToken securityToken;
+            if (TryGetSecurityToken(out securityToken))
+            {
+                userId = securityToken.UserId;
+                return true;
+            }
+            else
+            {
+                userId = null;
+                return false;
+            }
+        }
+
         public bool IsAllowed(string requiredPermissions)
         {
             SecurityManager manager = new SecurityManager();
@@ -62,7 +77,19 @@ namespace Vanrise.Security.Business
 
         private SecurityToken GetSecurityToken()
         {
+            SecurityToken securityToken;
+            if (!TryGetSecurityToken(out securityToken))
+                throw new Exception("SecurityToken is not available in current context.");
+            return securityToken;
+        }
+
+        private bool TryGetSecurityToken(out SecurityToken securityToken)
+        {
             //TODO: handle the exception Key Not found in case the auth-toekn was null
+            
+            securityToken = null;
+            if(HttpContext.Current == null)
+                return false;           
             string token = null;
             if (HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME] != null)
                 token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
@@ -71,7 +98,8 @@ namespace Vanrise.Security.Business
             string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
             string decryptedToken = Common.Cryptography.Decrypt(token, decryptionKey);
             
-            return Common.Serializer.Deserialize<SecurityToken>(decryptedToken);
+            securityToken = Common.Serializer.Deserialize<SecurityToken>(decryptedToken);
+            return true;
         }
 
         #endregion

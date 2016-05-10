@@ -33,7 +33,9 @@ namespace Vanrise.Common.Business
 
         public long AddFile(VRFile file)
         {
-            file.UserId = SecurityContext.Current.GetLoggedInUserId();
+            int? userId;
+            if (SecurityContext.Current.TryGetLoggedInUserId(out userId))
+                file.UserId = userId;
             return _datamanager.AddFile(file);
         }
 
