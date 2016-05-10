@@ -47,8 +47,9 @@
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return WhS_Analytics_VariationReportAPIService.GetFilteredVariationReportRecords(dataRetrievalInput).then(function (response) {
-                        if (response != null) {
+                    return WhS_Analytics_VariationReportAPIService.GetFilteredVariationReportRecords(dataRetrievalInput).then(function (response)
+                    {
+                        if (response != null && response.Data != null) {
 
                             if (gridDrillDownTabsObj == undefined) {
                                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(getDrillDownDefinitions(response.DrillDownDimensions), gridAPI, undefined);
@@ -61,6 +62,9 @@
                                     gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                                 }
                             }
+
+                            if (response.Summary != null)
+                                response.Data.push(response.Summary);
 
                             if (response.TimePeriods != null) {
                                 $scope.scopeModel.timePeriodDefinitions.length = 0;
@@ -86,6 +90,7 @@
                 api.load = function (query) {
                     setSortByField(query.ReportType);
                     gridQuery = cloneGridQuery(query);
+                    console.log(gridQuery);
                     gridDrillDownTabsObj = undefined;
                     return gridAPI.retrieveData(query);
                 };
@@ -96,12 +101,12 @@
 
                 function cloneGridQuery(gridQueryObj) {
                     return {
-                        ParentReportType: gridQueryObj.ParentReportType,
                         ReportType: gridQueryObj.ReportType,
+                        ParentDimensions: gridQueryObj.ParentDimensions,
                         ToDate: gridQueryObj.ToDate,
                         TimePeriod: gridQueryObj.TimePeriod,
                         NumberOfPeriods: gridQueryObj.NumberOfPeriods,
-                        DimensionFilters: gridQueryObj.DimensionFilters
+                        GroupByProfile: gridQueryObj.GroupByProfile
                     };
                 }
             }
@@ -142,20 +147,20 @@
                     directive: 'vr-whs-analytics-variationreport-grid',
                     loadDirective: function (directiveAPI, dataItem) {
 
-                        var dimensionFilters = (gridQuery.DimensionFilters != null) ? UtilsService.cloneObject(gridQuery.DimensionFilters, true) : [];
+                        var parentDimensions = (gridQuery.ParentDimensions != null) ? UtilsService.cloneObject(gridQuery.ParentDimensions, true) : [];
 
-                        dimensionFilters.push({
+                        parentDimensions.push({
                             Dimension: dataItem.Dimension,
-                            FilterValues: [dataItem.DimensionId]
+                            Value: dataItem.DimensionId
                         });
 
                         var directiveQuery = {
-                            ParentReportType: gridQuery.ReportType,
                             ReportType: getDrillDownReportTypeValue(drillDownDimensionValue),
+                            ParentDimensions: parentDimensions,
                             ToDate: gridQuery.ToDate,
                             TimePeriod: gridQuery.TimePeriod,
                             NumberOfPeriods: gridQuery.NumberOfPeriods,
-                            DimensionFilters: dimensionFilters
+                            GroupByProfile: gridQuery.GroupByProfile
                         };
 
                         return directiveAPI.load(directiveQuery);

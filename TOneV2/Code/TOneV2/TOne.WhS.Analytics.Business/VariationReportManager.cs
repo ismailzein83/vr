@@ -33,6 +33,7 @@ namespace TOne.WhS.Analytics.Business
 
             VariationReportQuery _query;
             CarrierAccountManager _carrierAccountManager;
+            CarrierProfileManager _carrierProfileManager;
             SaleZoneManager _saleZoneManager;
             List<TimePeriod> _timePeriods;
 
@@ -40,13 +41,14 @@ namespace TOne.WhS.Analytics.Business
             {
                 _query = query;
                 _carrierAccountManager = new CarrierAccountManager();
+                _carrierProfileManager = new CarrierProfileManager();
                 _saleZoneManager = new SaleZoneManager();
                 _timePeriods = GetTimePeriods();
             }
 
             #endregion
 
-            public override IDataRetrievalResult<VariationReportRecord> AllRecordsToDataResult(DataRetrievalInput<VariationReportQuery> input, IEnumerable<VariationReportRecord> allRecords)
+            protected override BigResult<VariationReportRecord> AllRecordsToBigResult(DataRetrievalInput<VariationReportQuery> input, IEnumerable<VariationReportRecord> allRecords)
             {
                 var variationReportBigResult = new VariationReportBigResult();
 
@@ -59,6 +61,8 @@ namespace TOne.WhS.Analytics.Business
                 variationReportBigResult.DimensionTitle = GetDimensionTitle();
                 variationReportBigResult.TimePeriods = _timePeriods;
                 variationReportBigResult.DrillDownDimensions = GetDrillDownDimensions();
+
+                variationReportBigResult.Summary = GetSummary(bigResult.Data, input.Query.NumberOfPeriods);
 
                 return variationReportBigResult;
             }
@@ -75,7 +79,7 @@ namespace TOne.WhS.Analytics.Business
 
                 entity.DimensionName = (_query.ReportType == VariationReportType.TopDestinationMinutes || _query.ReportType == VariationReportType.TopDestinationAmount) ?
                     _saleZoneManager.GetSaleZoneName((long)entity.DimensionId) :
-                    _carrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
+                    (_query.GroupByProfile) ? _carrierProfileManager.GetCarrierProfileName((int)entity.DimensionId) : _carrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
 
                 if (entity.DimensionSuffix != VariationReportRecordDimensionSuffix.None)
                     entity.DimensionName = String.Format("{0}{1}", entity.DimensionName, String.Format(" / {0}", entity.DimensionSuffix));
@@ -158,6 +162,7 @@ namespace TOne.WhS.Analytics.Business
                 {
                     case VariationReportType.InBoundMinutes:
                     case VariationReportType.InBoundAmount:
+                    case VariationReportType.Profit:
                         variationReportRecord.Dimension = VariationReportDimension.Customer;
                         break;
                     case VariationReportType.OutBoundMinutes:
@@ -185,22 +190,69 @@ namespace TOne.WhS.Analytics.Business
             List<VariationReportDimension> GetDrillDownDimensions()
             {
                 var drillDownDimensions = new List<VariationReportDimension>();
-                if (_query.ParentReportType == null)
+                switch (_query.ReportType)
                 {
-                    switch (_query.ReportType)
-                    {
-                        case VariationReportType.TopDestinationMinutes:
-                        case VariationReportType.TopDestinationAmount:
+                    case VariationReportType.InOutBoundMinutes:
+                    case VariationReportType.InOutBoundAmount:
+                    case VariationReportType.Profit:
+                        drillDownDimensions.Add(VariationReportDimension.Zone);
+                        break;
+
+                    case VariationReportType.InBoundMinutes:
+                    case VariationReportType.InBoundAmount:
+                    case VariationReportType.OutBoundMinutes:
+                    case VariationReportType.OutBoundAmount:
+                        if (_query.ParentDimensions == null)
+                            drillDownDimensions.Add(VariationReportDimension.Zone);
+                        break;
+
+                    case VariationReportType.TopDestinationMinutes:
+                    case VariationReportType.TopDestinationAmount:
+                        if (_query.ParentDimensions == null)
+                        {
                             drillDownDimensions.Add(VariationReportDimension.Customer);
                             drillDownDimensions.Add(VariationReportDimension.Supplier);
-                            break;
-                        default:
-                            drillDownDimensions.Add(VariationReportDimension.Zone);
-                            break;
-                    }
+                        }
+                        else
+                        {
+                            ParentDimension directParentDimension = _query.ParentDimensions.ElementAt(_query.ParentDimensions.Count() - 1);
+                            if (directParentDimension.Dimension == VariationReportDimension.Customer)
+                                drillDownDimensions.Add(VariationReportDimension.Supplier);
+                        }
+                        break;
                 }
                 return (drillDownDimensions.Count > 0) ? drillDownDimensions : null;
             }
+
+            #region Summary
+
+            VariationReportRecord GetSummary(IEnumerable<VariationReportRecord> data, int numberOfPeriods)
+            {
+                var summary = new VariationReportRecord();
+                summary.TimePeriodValues = new List<decimal>();
+
+                for (int i = 0; i < numberOfPeriods; i++)
+                    summary.TimePeriodValues.Add(0);
+
+                foreach (VariationReportRecord record in data)
+                {
+                    summary.Average += record.Average;
+                    for (int i = 0; i < record.TimePeriodValues.Count; i++)
+                        summary.TimePeriodValues[i] += record.TimePeriodValues[i];
+                }
+
+                summary.Percentage = (summary.TimePeriodValues[0] - summary.Average) / GetDenominator(summary.Average) * 100;
+                summary.PreviousPeriodPercentage = (summary.TimePeriodValues[0] - summary.TimePeriodValues[1]) / GetDenominator(summary.Average) * 100;
+
+                return summary;
+            }
+
+            decimal GetDenominator(decimal average)
+            {
+                return (average > 0) ? average : Decimal.MaxValue;
+            }
+            
+            #endregion
 
             #endregion
         }

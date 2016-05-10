@@ -44,7 +44,8 @@
                 ReportType: $scope.scopeModel.selectedReportType.value,
                 ToDate: $scope.scopeModel.toDate,
                 TimePeriod: $scope.scopeModel.selectedPeriodType.value,
-                NumberOfPeriods: $scope.scopeModel.numberOfPeriods
+                NumberOfPeriods: $scope.scopeModel.numberOfPeriods,
+                GroupByProfile: $scope.scopeModel.groupByProfile
             };
         }
     }

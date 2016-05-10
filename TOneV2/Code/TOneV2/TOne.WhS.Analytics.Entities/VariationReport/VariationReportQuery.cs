@@ -9,9 +9,9 @@ namespace TOne.WhS.Analytics.Entities
 {
     public class VariationReportQuery
     {
-        public VariationReportType? ParentReportType { get; set; }
-
         public VariationReportType ReportType { get; set; }
+
+        public IEnumerable<ParentDimension> ParentDimensions { get; set; }
 
         public DateTime ToDate { get; set; }
 
@@ -19,7 +19,9 @@ namespace TOne.WhS.Analytics.Entities
 
         public int NumberOfPeriods { get; set; }
 
-        public List<VariationReportDimensionFilter> DimensionFilters { get; set; }
+        public bool GroupByProfile { get; set; }
+
+        //public List<VariationReportDimensionFilter> DimensionFilters { get; set; }
     }
 
     public enum VariationReportTimePeriod { Daily = 0, Weekly = 1, Monthly = 2 }
@@ -52,5 +54,12 @@ namespace TOne.WhS.Analytics.Entities
         public VariationReportDimension Dimension { get; set; }
 
         public List<Object> FilterValues { get; set; }
+    }
+
+    public class ParentDimension
+    {
+        public VariationReportDimension Dimension { get; set; }
+
+        public object Value { get; set; }
     }
 }
