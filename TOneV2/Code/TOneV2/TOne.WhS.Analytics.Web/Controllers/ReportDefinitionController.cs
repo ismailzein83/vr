@@ -8,15 +8,15 @@ using TOne.WhS.Analytics.Entities.BillingReport;
 
 namespace TOne.WhS.Analytics.Web.Controllers
 {
-    public class ReportDefintionController : ApiController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "ReportDefinition")]
+    public class ReportDefinitionController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
+        [Route("GetAllRDLCReportDefinition")]
         public List<RDLCReportDefinition> GetAllRDLCReportDefinition()
         {
             ReportDefinitionManager manager = new ReportDefinitionManager();
             return manager.GetAllRDLCReportDefinition();
         }
-
-
     }
 }

@@ -1,30 +1,40 @@
-﻿BillingReportsController.$inject = ['$scope', 'ReportAPIService', 'ZonesService', 'BillingStatisticsAPIService', 'MainService', 'BaseAPIService', 'UtilsService', 'AnalyticsService', 'SecurityService', 'VRUIUtilsService'];
+﻿BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'AnalyticsService', 'SecurityService', 'VRUIUtilsService', 'PeriodEnum'];
 
-function BillingReportsController($scope, ReportAPIService, ZonesService, BillingStatisticsAPIService, MainService, BaseAPIService, UtilsService, analyticsService, SecurityService, VRUIUtilsService) {
+function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService, analyticsService, SecurityService, VRUIUtilsService, PeriodEnum) {
 
     var currencySelectorAPI;
     var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var customerAccountDirectiveAPI;
+    var customerAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var supplierAccountDirectiveAPI;
+    var supplierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var timeRangeDirectiveAPI;
+    var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
     defineScope();
     load();
 
-    $scope.export = function () {
-        return BillingStatisticsAPIService.ExportCarrierProfile($scope.fromDate, $scope.toDate, $scope.params.top, $scope.params.customer.CarrierAccountID, $scope.params.selectedCurrency.CurrencyID, $scope.params.selectedCurrency.Name).then(function (response) {
-            UtilsService.downloadFile(response.data, response.headers);
-        });
-
-    };
-
     $scope.reportsTypes = [];
+
     $scope.optionsCustomers = [];
     $scope.optionsSuppliers = [];
-    $scope.reportsTypes = [];
     $scope.optionsCurrencies = [];
+
     $scope.periods = analyticsService.getPeriods();
     $scope.selectedPeriod = $scope.periods[1];
-    var selectedPeriod;
+    
+    $scope.onCustomerAccountDirectiveReady = function (api) {
+        customerAccountDirectiveAPI = api;
+        customerAccountReadyPromiseDeferred.resolve();
+    }
 
-
+    $scope.onSupplierAccountDirectiveReady = function (api) {
+        supplierAccountDirectiveAPI = api;
+        supplierAccountReadyPromiseDeferred.resolve();
+    }
 
     $scope.params = {
         groupByCustomer: false,
@@ -48,32 +58,18 @@ function BillingReportsController($scope, ReportAPIService, ZonesService, Billin
             $scope.fromDate = date.from;
             $scope.toDate = date.to;
         }
-
-    }
-    $scope.onValueChanged = function () {
-        if ($scope.selectedPeriod != selectedPeriod) {
-            var customize = {
-                value: -1,
-                description: "Customize"
-            }
-            selectedPeriod = $scope.selectedPeriod;
-            $scope.selectedPeriod = customize;
-        }
     }
 
-    $scope.customvalidateTestFrom = function (fromDate) {
-        return UtilsService.validateDates(fromDate, $scope.toDate);
-    };
-    $scope.customvalidateTestTo = function (toDate) {
-        return UtilsService.validateDates($scope.fromDate, toDate);
-    };
     function defineScope() {
+        $scope.fromDate;
+        $scope.toDate;
 
-        $scope.fromDate = '01/01/2013';
-        $scope.toDate = new Date();
-        $scope.optionsZones = function (filterText) {
-            return ZonesService.getSalesZones(filterText);
-        };
+        $scope.today = PeriodEnum.Today;
+
+        $scope.onTimeRangeDirectiveReady = function (api) {
+            timeRangeDirectiveAPI = api;
+            timeRangeReadyPromiseDeferred.resolve();
+        }
 
         $scope.onCurrencySelectReady = function (api) {
             currencySelectorAPI = api;
@@ -81,6 +77,8 @@ function BillingReportsController($scope, ReportAPIService, ZonesService, Billin
         }
 
         $scope.openReport = function () {
+            var customers = customerAccountDirectiveAPI.getSelectedIds();
+            var suppliers = supplierAccountDirectiveAPI.getSelectedIds();
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
             paramsurl += "&fromDate=" + $scope.dateToString($scope.fromDate);
@@ -94,14 +92,12 @@ function BillingReportsController($scope, ReportAPIService, ZonesService, Billin
             paramsurl += "&margin=" + $scope.params.margin;
             paramsurl += "&top=" + $scope.params.top;
             paramsurl += "&zone=" + (($scope.params.zones.length == 0) ? "" : getIdsList($scope.params.zones, 'ZoneId'));
-            paramsurl += "&customer=" + (($scope.params.selectedCustomers.length == 0) ? "" : getIdsList($scope.params.selectedCustomers, 'CarrierAccountID'));
-            paramsurl += "&supplier=" + (($scope.params.selectedSuppliers.length == 0) ? "" : getIdsList($scope.params.selectedSuppliers, 'CarrierAccountID'));
-            paramsurl += "&currency=" + (($scope.params.selectedCurrency == null) ? "USD" : $scope.params.selectedCurrency.CurrencyID);
+            paramsurl += "&customer=" + (customers == undefined) ? "" : customers;
+            paramsurl += "&supplier=" + (suppliers == undefined) ? "" : suppliers;
+            paramsurl += "&currency=" + currencySelectorAPI.getSelectedIds();
             paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" : encodeURIComponent($scope.params.selectedCurrency.Name));
             paramsurl += "&pageBreak=" + $scope.params.pageBreak;
-
             paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
-
 
             if (!$scope.reporttype.ParameterSettings.CustomerIdNotOptional)
                 window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
@@ -109,14 +105,12 @@ function BillingReportsController($scope, ReportAPIService, ZonesService, Billin
                 return $scope.export();
         }
         $scope.resetReportParams = function () {
-
             $scope.params = {
                 groupByCustomer: false,
                 selectedCustomers: [],
                 selectedSuppliers: [],
                 customer: null,
-                selectedCurrency: $scope.optionsCurrencies[getMainCurrencyIndex($scope.optionsCurrencies)],
-                // isCost: false,
+                selectedCurrency: "",
                 zones: [],
                 service: false,
                 commission: false,
@@ -130,11 +124,18 @@ function BillingReportsController($scope, ReportAPIService, ZonesService, Billin
     }
 
     function load() {
-        loadReportTypes();
-        loadCurrencySelector();
+        $scope.isLoading = true;
+        loadAllControls();
+    }
 
-       // loadCustomers();
-        //loadSuppliers();
+    function loadAllControls() {
+        return UtilsService.waitMultipleAsyncOperations([loadReportTypes, loadCurrencySelector, loadCustomers, loadSuppliers, loadTimeRangeSelector])
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoading = false;
+            });
     }
 
     function getIdsList(tab, attname) {
@@ -144,6 +145,7 @@ function BillingReportsController($scope, ReportAPIService, ZonesService, Billin
         return list.join(",");
 
     }
+
     function loadCurrencySelector() {
         var currencyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -153,33 +155,39 @@ function BillingReportsController($scope, ReportAPIService, ZonesService, Billin
             });
         return currencyLoadPromiseDeferred.promise;
     }
+
     function loadReportTypes() {
-        ReportAPIService.GetAllReportDefinition().then(function (response) {
+        ReportDefinitionAPIService.GetAllReportDefinition().then(function (response) {
             $scope.reportsTypes = response;
         });
     }
-    function getMainCurrencyIndex(Currencies) {
-        var index = -1;
-        for (var i = 0; i < Currencies.length ; i++)
-            if (Currencies[i].IsMainCurrency == "Y") {
-                index = i;
-                return index;
-            }
-        return index;
-    }
 
     function loadCustomers() {
-        CarrierAccountAPIService.GetCarriers(1, true).then(function (response) {
-            $scope.optionsCustomers = response;
+        var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+        customerAccountReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, undefined, loadCustomerAccountPromiseDeferred);
         });
+
+        return loadCustomerAccountPromiseDeferred.promise;
     }
-    //function loadSuppliers() {
-    //    CarrierAccountAPIService.GetCarriers(2,false).then(function (response) {
-    //        $scope.optionsSuppliers = response;
-    //    });
-    //}
+
+    function loadSuppliers() {
+        var loadSupplierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+        supplierAccountReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(supplierAccountDirectiveAPI, undefined, loadSupplierAccountPromiseDeferred);
+        });
+
+        return loadSupplierAccountPromiseDeferred.promise;
+    }
+
+    function loadTimeRangeSelector() {
+        var timeRangeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+        timeRangeReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, undefined, timeRangeLoadPromiseDeferred);
+        });
+        return timeRangeLoadPromiseDeferred.promise;
+    }
 
 };
-
 
 appControllers.controller('WhS_Analytics_BillingReportsController', BillingReportsController);

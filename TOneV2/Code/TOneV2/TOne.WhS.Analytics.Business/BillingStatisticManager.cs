@@ -20,15 +20,9 @@ namespace TOne.WhS.Analytics.Business
             _datamanager = AnalyticsDataManagerFactory.GetDataManager<IBillingStatisticDataManager>();
             _cmanager = new CarrierAccountManager();
         }
-        //public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, bool groupByCustomer)
-        //{
-
-        //    return GetZoneProfit(fromDate, toDate, null, null, groupByCustomer, null, null, "USD");
-        //}
-        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, int customerId, int supplierId, bool groupByCustomer, List<string> supplierIds, List<string> customerIds, string currencyId)
+        public List<ZoneProfitFormatted> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool groupByCustomer, List<string> supplierIds, List<string> customerIds, int currencyId)
         {
-            return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, currencyId));
-            //return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId, supplierId, groupByCustomer, supplierIds, customerIds, currencyId));
+            return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId, supplierId, currencyId));
         }
 
 

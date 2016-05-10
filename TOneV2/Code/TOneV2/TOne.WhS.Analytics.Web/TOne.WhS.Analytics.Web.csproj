@@ -44,7 +44,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.ReportViewer.WebForms\11.0.0.0__89845dcd8080cc91\Microsoft.ReportViewer.WebForms.DLL</HintPath>
@@ -112,6 +111,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -137,7 +140,7 @@
     <Compile Include="Controllers\GenericAnalyticController.cs" />
     <Compile Include="Controllers\RawCDRController.cs" />
     <Compile Include="Controllers\RepeatedNumberController.cs" />
-    <Compile Include="Controllers\ReportDefintionController.cs" />
+    <Compile Include="Controllers\ReportDefinitionController.cs" />
     <Compile Include="Controllers\VariationReportController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WhS_Analytics\Reports\Analytics\BillingReports.aspx.cs">
@@ -200,7 +203,7 @@
     <Content Include="WhS_Analytics\Services\APIServices\GenericAnalyticAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\RepeatedNumberAPIService.js" />
-    <Content Include="WhS_Analytics\Services\APIServices\ReportAPIService.js" />
+    <Content Include="WhS_Analytics\Services\APIServices\ReportDefinitionAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\VariationReportAPIService.js" />
     <Content Include="WhS_Analytics\Services\GenericAnalyticService.js" />
     <Content Include="WhS_Analytics\Views\BillingReport\BillingReport.html" />

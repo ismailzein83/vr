@@ -1,4 +1,4 @@
-﻿app.service('ReportAPIService', function (BaseAPIService) {
+﻿app.service('Old_ReportAPIService', function (BaseAPIService) {
 
     return ({
         GetAllReportDefinition: GetAllReportDefinition

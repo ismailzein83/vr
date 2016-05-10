@@ -9,24 +9,32 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 {
     public static class ReportHelpers
     {
-        public static string GetCarrierName(int id, string carrierAs)
+        public static string GetCarrierName(string id, string carrierAs)
         {
             string name = "multiple " + carrierAs;
             CarrierAccountManager _bemanager = new CarrierAccountManager();
-            //if (id.Split(',').Length > 1)
-            //{
-            //    name = "Multiple " + carrierAs;
-            //}
-            //else if (id == "")
-            //{
-            //    name = "All " + carrierAs;
-            //}
-            //else
-            //{
-            //    name = _bemanager.GetCarrierAccountName(id);
-            //}
-            name = _bemanager.GetCarrierAccountName(id);
+            if (id != null)
+            {
+                if (id.Split(',').Length > 1)
+                {
+                    name = "Multiple " + carrierAs;
+                }
+                else if (id == "")
+                {
+                    name = "All " + carrierAs;
+                }
+                else
+                {
+                    int carrierId = Convert.ToInt32(id);
+                    name = _bemanager.GetCarrierAccountName(carrierId);
+                }   
+            }
+            else
+            {
+                name = "All " + carrierAs;
+            }
             return name;
         }
+
     }
 }

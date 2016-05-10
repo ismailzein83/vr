@@ -12,19 +12,19 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
 
         public DateTime ToTime { get; set; }
 
-        public int CustomersId { get; set; }
+        public string CustomersId { get; set; }
 
-        public int SuppliersId { get; set; }
+        public string SuppliersId { get; set; }
 
         public bool GroupByCustomer { get; set; }
 
-        public int CustomerAMUId { get; set; }
+        public string CustomerAMUId { get; set; }
 
-        public int SupplierAMUId { get; set; }
+        public string SupplierAMUId { get; set; }
 
         public bool IsCost { get; set; }
 
-        public string CurrencyId { get; set; }
+        public int CurrencyId { get; set; }
 
         public string SupplierGroup { get; set; }
 

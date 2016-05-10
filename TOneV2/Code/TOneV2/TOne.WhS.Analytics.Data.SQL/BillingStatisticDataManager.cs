@@ -11,74 +11,25 @@ namespace TOne.WhS.Analytics.Data.SQL
 {
     partial class BillingStatisticDataManager : BaseTOneDataManager, IBillingStatisticDataManager
     {
-                #region ctor/Local Variables
-
-
+        #region ctor/Local Variables
         public BillingStatisticDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
         }
         #endregion
 
-        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string currencyId)
+        public List<ZoneProfit> GetZoneProfit(DateTime fromDate, DateTime toDate, string customerIds, string supplierIds, int currencyId)
         {
             return GetItemsSP("[TOneWhS_Billing].[SP_BillingRep_GetZoneProfitsV2]", (reader) => ZoneProfitMapper(reader),
                 fromDate,
                 toDate,
+                customerIds,
+                supplierIds,
                 currencyId
                 );
         }
 
-        public List<ZoneProfit> GetZoneProfitOld(DateTime fromDate, DateTime toDate, int customerId, int supplierId, bool groupByCustomer, List<string> supplierIds, List<string> customerIds, string currencyId)
-        {
-            string suppliersIds = null;
-            if (supplierIds != null && supplierIds.Count() > 0)
-                suppliersIds = string.Join<string>(",", supplierIds);
-            string customersIds = null;
-            if (customerIds != null && customerIds.Count() > 0)
-                customersIds = string.Join<string>(",", customerIds);
-
-            return GetItemsSP("[TOneWhS_Billing].[SP_BillingRep_GetZoneProfits]", (reader) => ZoneProfitMapper(reader, groupByCustomer),
-                fromDate,
-                toDate,
-                null,
-                null,
-                groupByCustomer,
-                null,
-                null,
-                currencyId
-                );
-            //return GetItemsSP("[TOneWhS_Billing].[SP_BillingRep_GetZoneProfits]", (reader) => ZoneProfitMapper(reader, groupByCustomer),
-            //    fromDate,
-            //    toDate,
-            //    customerId,
-            //    supplierId,
-            //    groupByCustomer,
-            //    customersIds,
-            //    suppliersIds,
-            //    currencyId
-            //    );
-        }
         #region PrivatMethods
-        private ZoneProfit ZoneProfitMapper(IDataReader reader, bool groupByCustomer)
-        {
-            ZoneProfit instance = new ZoneProfit
-            {
-                //CostZone = reader["CostZone"] as string,
-                //SaleZone = reader["SaleZone"] as string,
-                SupplierID = GetReaderValue<int>(reader, "SupplierID"),
-                Calls = GetReaderValue<int>(reader, "Calls"),
-                SaleDuration = GetReaderValue<decimal>(reader, "SaleDuration"),
-                SaleNet = GetReaderValue<double>(reader, "SaleNet"),
-                CostNet = GetReaderValue<double>(reader, "CostNet"),
-                CostDuration = GetReaderValue<decimal>(reader, "CostDuration"),
-                DurationNet = GetReaderValue<decimal>(reader, "DurationNet")
-            };
-            if (groupByCustomer)
-                instance.CustomerId = GetReaderValue<int>(reader, "CustomerID");
-
-            return instance;
-        }
         private ZoneProfit ZoneProfitMapper(IDataReader reader)
         {
             ZoneProfit instance = new ZoneProfit

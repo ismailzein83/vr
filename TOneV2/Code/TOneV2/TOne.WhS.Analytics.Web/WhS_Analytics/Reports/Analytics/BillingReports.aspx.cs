@@ -8,14 +8,14 @@ using System.Web.UI.WebControls;
 using TOne.WhS.Analytics.Business;
 using TOne.WhS.Analytics.Entities.BillingReport;
 using Microsoft.Reporting.WebForms;
-
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 namespace TOne.WhS.Analytics.Web.Reports.Analytics
 {
     public partial class BillingReports : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
             if (!IsPostBack)
             {
 
@@ -23,9 +23,14 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                 DateTime from = DateTime.ParseExact(Request.QueryString["fromDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 DateTime to = DateTime.ParseExact(Request.QueryString["toDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                //int customers = Convert.ToInt32(Request.QueryString["customer"]);// Request.QueryString["customer"];
-                //int suppliers = Convert.ToInt32(Request.QueryString["supplier"]); //Request.QueryString["supplier"];
-                string currency = Request.QueryString["currency"];
+                string customers = Request.QueryString["customer"];
+                string suppliers = Request.QueryString["supplier"];
+                int currencyId = Convert.ToInt32(Request.QueryString["currency"]);
+                
+                CurrencyManager currencyManager = new CurrencyManager();
+                Currency currency = new Currency();
+                currency = currencyManager.GetCurrency(currencyId);
+
 
                 bool groupByCustomer = (Request.QueryString["groupByCustomer"] != null) ? (Request.QueryString["groupByCustomer"] == "true") : false;
                 bool isCost = (Request.QueryString["isCost"] != null) ? (Request.QueryString["isCost"] == "true") : false;
@@ -36,11 +41,9 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
 
                 bool pageBreak = (Request.QueryString["pageBreak"] != null) ? (Request.QueryString["pageBreak"] == "true") : false;
 
-
                 int margin = (Request.QueryString["margin"] != null) ? Convert.ToInt32(Request.QueryString["margin"]) : 10;
                 int top = (Request.QueryString["top"] != null) ? Convert.ToInt32(Request.QueryString["top"]) : 10;
                 string zones = Request.QueryString["zone"];
-                string currencyDesc = Request.QueryString["currencyDesc"];
 
                 ReportDefinitionManager managerReport = new ReportDefinitionManager();
 
@@ -54,20 +57,19 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                 parameters.FromTime = from;
                 parameters.ToTime = to;
                 parameters.GroupByCustomer = groupByCustomer;
-                parameters.CustomersId = 0;//customers;
-                parameters.SuppliersId = 0;//suppliers;
+                parameters.CustomersId = customers;
+                parameters.SuppliersId = suppliers;
                 parameters.IsCost = isCost;
                 parameters.IsService = service;
                 parameters.IsCommission = commission;
                 parameters.GroupBySupplier = bySupplier;
-                parameters.CurrencyId = currency;
+                parameters.CurrencyId = currencyId;
                 parameters.Margin = margin;
                 parameters.ZonesId = zones;
                 parameters.IsExchange = isExchange;
                 parameters.Top = top;
-                parameters.CurrencyDescription = String.Format("[{0}] {1}", currency, currencyDesc);
+                parameters.CurrencyDescription = String.Format("[{0}] {1}", currency.Symbol , currency.Name);
                 parameters.PageBreak = pageBreak;
-
 
                 IReportGenerator r = rdlc.GetReportGenerator();
 
@@ -80,12 +82,9 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                 List<ReportParameter> BillingRDLCReportParameters = new List<ReportParameter>();
                 foreach (var p in r.GetRdlcReportParameters(parameters))
                 {
-
                     BillingRDLCReportParameters.Add(new ReportParameter(p.Key, p.Value.Value, p.Value.IsVisible));
-
                 }
                 ReportViewer1.LocalReport.SetParameters(BillingRDLCReportParameters.ToArray());
-
             }
         }
         protected override void Render(HtmlTextWriter writer)

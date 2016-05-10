@@ -9,7 +9,7 @@ using TOne.Entities;
 
 namespace TOne.Main.Web.Controllers
 {
-    public class ReportDefintionController : ApiController
+    public class ReportDefintionController_Old : ApiController
     {
         [HttpGet]
         public List<RDLCReportDefinition> GetAllRDLCReportDefinition()
