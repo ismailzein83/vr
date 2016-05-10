@@ -116,7 +116,7 @@ namespace Vanrise.Common.Data.SQL
                 Extension = reader["Extension"] as string,
                 IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
                 ModuleName = reader["ModuleName"] as string,
-                UserId = (int)reader["UserID"],
+                UserId = reader["UserID"] != DBNull.Value ? (int)reader["UserID"] : default(int?),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
             };
         }
