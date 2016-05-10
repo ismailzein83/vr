@@ -500,7 +500,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 (1,'Stop Execution Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":1, "Description":"Stop Execution Action", "Editor":"businessprocess-bp-business-rule-stop-execution-action"}'),
 (2,'Exclude Item Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":2, "Description":"Exclude Item Action", "Editor":"businessprocess-bp-business-rule-exclude-item-action"}'),
-(3,'Warning Item Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":3, "Description":"Warning Item Action", "Editor":"businessprocess-bp-business-rule-warning-item-action"}')
+(3,'Warning Item Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":3, "Description":"Warning Item Action", "Editor":"businessprocess-bp-business-rule-warning-item-action"}'),
+(4,'Information Action','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionType, Vanrise.BusinessProcess.Entities","BPBusinessRuleActionTypeId":4,"Description":"Information Action","Editor":"businessprocess-bp-business-rule-information-action"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Description],[Settings]))
 merge	[bp].[BPBusinessRuleActionType] as t
@@ -540,7 +541,11 @@ as (select * from (values
 (18,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (19,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
 (20,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
-(21,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}')
+(21,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
+(22,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.InformationAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":4}}'),
+(23,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
+(24,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":1}}'),
+(25,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.InformationAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":4}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([BusinessRuleDefinitionId],[Settings]))
 merge	[bp].[BPBusinessRuleAction] as t
@@ -580,7 +585,11 @@ as (select * from (values
 (18,'CP_ValidateZones',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Code Group Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.CodeGroupCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
 (19,'CP_ValidateZones',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Multiple Country Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.MultipleCountryCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
 (20,'CP_ValidateZones',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Zone has Same Code more than one time Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.SameCodeInSameZoneCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
-(21,'CP_ValidateCountries',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Same code in different zones  Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.SameCodeInDifferentZoneCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}')
+(21,'CP_ValidateCountries',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Same code in different zones  Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.SameCodeInDifferentZoneCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
+(22,'CP_ValidateUICodesZones',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Zone has no changes  Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.ZoneWithoutChangesCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[4]}'),
+(23,'CP_ValidateCountries',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Changes For Empty Country  Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.ChangesInPastCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
+(24,'CP_ValidateAfterProcessing',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Code Effective Before Zone Condition  Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.CodeEffectiveBeforeZoneCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[1]}'),
+(25,'CP_ValidateAfterProcessing',7,'{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"All Codes In Zone Closed  Rule","Condition":{"$type":"TOne.WhS.CodePreparation.Business.AllCodesInZoneClosedCondition, TOne.WhS.CodePreparation.Business"},"ActionTypes":[4]}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[BPDefintionId],[Settings]))
 merge	[bp].[BPBusinessRuleDefinition] as t
