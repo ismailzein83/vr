@@ -46,8 +46,8 @@ namespace Vanrise.Common.Data.SQL
             {
                 CurrencyId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                Symbol = reader["Symbol"] as string
-
+                Symbol = reader["Symbol"] as string,
+                SourceID = reader["SourceID"] as string,
             };
 
             return currency;
