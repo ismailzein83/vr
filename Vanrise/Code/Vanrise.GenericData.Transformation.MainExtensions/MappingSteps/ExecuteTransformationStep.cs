@@ -19,14 +19,14 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 
             foreach (var recordMapping in this.RecordsMapping)
             {
-                context.AddCodeToCurrentInstanceExecutionBlock(" context.SetRecordValue({0}, {1});", recordMapping.RecordName, recordMapping.Value);
+                context.AddCodeToCurrentInstanceExecutionBlock(" context.SetRecordValue(\"{0}\", {1});", recordMapping.RecordName, recordMapping.Value);
             }
 
             context.AddCodeToCurrentInstanceExecutionBlock("});");
 
             foreach (var recordMapping in this.RecordsMapping)
             {
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = executionOutput.GetRecordValue({1});", recordMapping.Value, recordMapping.RecordName);
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = executionOutput.GetRecordValue(\"{1}\");", recordMapping.Value, recordMapping.RecordName);
             }     
         }
     }
