@@ -13,7 +13,6 @@
     <form id="form1" runat="server">
     <div>
     <asp:scriptmanager runat="server"></asp:scriptmanager>
-        wer wer wrwe w e
     <rsweb:ReportViewer ID="ReportViewer1" runat="server" width="100%" height="100%" ShowPageNavigationControls="true" ></rsweb:ReportViewer>
     </div>
     </form>

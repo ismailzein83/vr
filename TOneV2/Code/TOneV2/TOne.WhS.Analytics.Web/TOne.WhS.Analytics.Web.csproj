@@ -137,6 +137,7 @@
     <Compile Include="Controllers\GenericAnalyticController.cs" />
     <Compile Include="Controllers\RawCDRController.cs" />
     <Compile Include="Controllers\RepeatedNumberController.cs" />
+    <Compile Include="Controllers\ReportDefintionController.cs" />
     <Compile Include="Controllers\VariationReportController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WhS_Analytics\Reports\Analytics\BillingReports.aspx.cs">
@@ -199,6 +200,7 @@
     <Content Include="WhS_Analytics\Services\APIServices\GenericAnalyticAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\RawCDRLogAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\RepeatedNumberAPIService.js" />
+    <Content Include="WhS_Analytics\Services\APIServices\ReportAPIService.js" />
     <Content Include="WhS_Analytics\Services\APIServices\VariationReportAPIService.js" />
     <Content Include="WhS_Analytics\Services\GenericAnalyticService.js" />
     <Content Include="WhS_Analytics\Views\BillingReport\BillingReport.html" />
