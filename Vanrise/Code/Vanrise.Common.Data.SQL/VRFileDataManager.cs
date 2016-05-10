@@ -102,7 +102,7 @@ namespace Vanrise.Common.Data.SQL
                 Content = GetReaderValue<byte[]>(reader, "Content"),
                 IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
                 ModuleName = reader["ModuleName"] as string,
-                UserId = (int)reader["UserID"],
+                UserId = reader["UserID"] != DBNull.Value ? (int)reader["UserID"] : default(int?),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
             };
         }
