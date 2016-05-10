@@ -52,6 +52,54 @@ namespace Vanrise.Common.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, filteredExchangeRates.ToBigResult(input, null, CurrencyExchangeRateDetailMapper));
         }
+        public Dictionary<string , ExchangeRateInfo> GetLastExchangeRate()
+        {
+            var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
+            var filteredExchangeRates = allCurrenciesExchangeRates.FindAllRecords((prod) => (DateTime.Now >= prod.ExchangeDate));
+
+            CurrencyManager manager = new CurrencyManager();
+            var allCurrencies = manager.GetCachedCurrencies();
+
+            Dictionary<string, ExchangeRateInfo> currencyExchangeRates = new Dictionary<string, ExchangeRateInfo>();
+
+            foreach (var ex in filteredExchangeRates.OrderByDescending(itm => itm.ExchangeDate))
+            {
+                var currency = allCurrencies[ex.CurrencyId];
+
+                if (!currencyExchangeRates.ContainsKey(currency.Symbol))
+                {
+                    currencyExchangeRates.Add(
+                        currency.Symbol,
+                        new ExchangeRateInfo()
+                        {
+                            Symbol = currency.Symbol,
+                            CurrencyId= currency.CurrencyId,
+                            ExchangeRate = ex
+                        }
+                    );
+                }
+            }
+
+            foreach(var currency in allCurrencies.Values)
+            {
+                if(!currencyExchangeRates.ContainsKey(currency.Symbol))
+                {
+                    currencyExchangeRates.Add(
+                        currency.Symbol,
+                        new ExchangeRateInfo()
+                        {
+                            Symbol = currency.Symbol,
+                            CurrencyId = currency.CurrencyId    
+                        }
+                    );
+                }
+            }
+
+            return currencyExchangeRates;
+
+
+        }
+
         public IEnumerable<CurrencyExchangeRate> GetAllCurrenciesExchangeRate()
         {
             var allExchangeRates = GetCachedCurrenciesExchangeRates();
@@ -95,6 +143,17 @@ namespace Vanrise.Common.Business
             }
 
             return insertOperationOutput;
+        }
+
+        public void InsertExchangeRates(List<CurrencyExchangeRate> exchangeRates)
+        {
+            ICurrencyExchangeRateDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyExchangeRateDataManager>();
+            foreach (var exchangeRate in exchangeRates)
+            {
+                int currencyExchangeRateId = -1;
+                bool insertActionSucc = dataManager.Insert(exchangeRate, out currencyExchangeRateId);
+
+            }
         }
         public Vanrise.Entities.UpdateOperationOutput<CurrencyExchangeRateDetail> UpdateCurrencyExchangeRate(CurrencyExchangeRate currencyExchangeRate)
         {
@@ -144,7 +203,21 @@ namespace Vanrise.Common.Business
 
             return currencyExchangeRateDetail;
         }
+        private CurrencyExchangeRateDetail CurrencyExchangeRateSymbolMapper(CurrencyExchangeRate currencyExchangeRate)
+        {
+            CurrencyExchangeRateDetail currencyExchangeRateDetail = new CurrencyExchangeRateDetail();
 
+            currencyExchangeRateDetail.Entity = currencyExchangeRate;
+
+            CurrencyManager manager = new CurrencyManager();
+            if (currencyExchangeRate.CurrencyId != null)
+            {
+                int currencyId = (int)currencyExchangeRate.CurrencyId;
+                currencyExchangeRateDetail.CurrencyName = manager.GetCurrency(currencyId).Name;
+            }
+
+            return currencyExchangeRateDetail;
+        }
         #endregion
     }
 }

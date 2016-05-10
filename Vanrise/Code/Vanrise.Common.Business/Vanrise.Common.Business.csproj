@@ -68,9 +68,14 @@
     <Compile Include="Country\CountryManager.cs" />
     <Compile Include="Country\SourceCountrySynchronizer.cs" />
     <Compile Include="CurrencyExchangeRateManager.cs" />
+    <Compile Include="ExchangeRateInfo.cs" />
+    <Compile Include="FxSauderCurrencyReader.cs" />
     <Compile Include="CurrencyManager.cs" />
     <Compile Include="EntitySynchronization\SourceItemSynchronizer.cs" />
+    <Compile Include="ExchangeRateTasks\ExchangeRateAction.cs" />
+    <Compile Include="ExchangeRateTasks\ExchangeRateActionActionArgument.cs" />
     <Compile Include="ExtensionConfigurationManager.cs" />
+    <Compile Include="FxSauderCurrency.cs" />
     <Compile Include="GenericConfig\GenericConfigurationManager.cs" />
     <Compile Include="GenericDataRecord\DataRecordFieldManager.cs" />
     <Compile Include="GenericDataRecord\DataRecordTypeManager.cs" />
@@ -122,6 +127,7 @@
       <Name>Vanrise.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
