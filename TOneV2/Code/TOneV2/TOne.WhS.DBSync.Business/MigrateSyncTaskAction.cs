@@ -46,8 +46,8 @@ namespace TOne.WhS.DBSync.Business
             sourceCurrencyExchangeRateMigrator.Migrate();
 
 
-            MigrationManager migrationManager = new MigrationManager();
-            migrationManager.ExecuteMigration();
+            //MigrationManager migrationManager = new MigrationManager();
+            //migrationManager.ExecuteMigration();
             
 
             Console.WriteLine("MigrationSyncTaskAction Executed");

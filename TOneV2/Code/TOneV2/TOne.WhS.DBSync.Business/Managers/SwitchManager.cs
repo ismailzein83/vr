@@ -10,7 +10,7 @@ namespace TOne.WhS.DBSync.Business
 
         public void AddSwitchesFromSource(List<Switch> switches)
         {
-            SwitchDataManager dataManager = new SwitchDataManager("Switch");
+            SwitchDataManager dataManager = new SwitchDataManager("Switch_Temp");
             dataManager.ApplySwitchesToDB(switches);
         }
     }

@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Data.SqlClient;
 using System.Linq;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -14,73 +15,70 @@ namespace TOne.WhS.DBSync.Data.SQL
     {
         const string _Temp = "_Temp";
         List<DBTable> _dbTables = new List<DBTable>();
+        ServerConnection serverConnection = null;
+        Server server;
 
         public MigrationManager()
         {
-            _dbTables.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneV2_Migration" });
-            _dbTables.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneV2_Migration" });
-            _dbTables.Add(new DBTable { Name = "CurrencyExchangeRateZone", Schema = "Common", Database = "TOneV2_Migration" });
-
+            serverConnection = new ServerConnection("192.168.110.185", "development", "dev!123");
+            server = new Server(serverConnection);
+            _dbTables.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneConfiguration" });
+            _dbTables.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneConfiguration" });
         }
 
-        public void ExecuteMigration()
+
+        public bool ExecuteMigrationPhase1()
         {
-            string connString = "server=192.168.110.185;database=TOneV2_Migration;uid=development;password=dev!123;";
-
-            ServerConnection serverConnection = ExecuteMigrationPhase1(connString);
-
-            serverConnection = ExecuteMigrationPhase2(connString, serverConnection);
-        }
-
-        private ServerConnection ExecuteMigrationPhase2(string connString, ServerConnection serverConnection)
-        {
-            using (SqlConnection sqlConnection = new SqlConnection(connString))
+            bool Executed = false;
+            try
             {
-                try
-                {
-                    serverConnection = new ServerConnection(sqlConnection);
-                    Server server = new Server(serverConnection);
-                    serverConnection.BeginTransaction();
-
-                    RenameTempTables(server);
-                    CreateIndexes(sqlConnection);
-                    CreateForeignKeys(sqlConnection);
-
-                    serverConnection.CommitTransaction();
-                }
-                catch (Exception ex)
-                {
-                    serverConnection.RollBackTransaction();
-                    throw ex;
-                }
+                serverConnection.BeginTransaction();
+                DefineTables();
+                CreateTempTables();
+                serverConnection.CommitTransaction();
+                Executed = true;
             }
-            return serverConnection;
+            catch
+            {
+                serverConnection.RollBackTransaction();
+            }
+            return Executed;
         }
 
-        private ServerConnection ExecuteMigrationPhase1(string connString)
+        public bool ExecuteMigrationPhase2()
         {
-            ServerConnection serverConnection = null;
-            using (SqlConnection sqlConnection = new SqlConnection(connString))
+            bool Executed = false;
+            try
             {
-                try
-                {
-                    serverConnection = new ServerConnection(sqlConnection);
-                    Server server = new Server(serverConnection);
-                    serverConnection.BeginTransaction();
-
-                    DefineTables(server);
-                    CreateTempTables(sqlConnection);
-                    FillTables();
-                    DropOriginalTables();
-                    serverConnection.CommitTransaction();
-                }
-                catch (Exception ex)
-                {
-                    serverConnection.RollBackTransaction();
-                    throw ex;
-                }
+                serverConnection.BeginTransaction();
+                DropOriginalTables();
+                serverConnection.CommitTransaction();
+                Executed = true;
             }
-            return serverConnection;
+            catch
+            {
+                serverConnection.RollBackTransaction();
+            }
+            return Executed;
+        }
+
+        public bool ExecuteMigrationPhase3()
+        {
+            bool Executed = false;
+            try
+            {
+                serverConnection.BeginTransaction();
+                RenameTempTables();
+                CreateIndexes();
+                CreateForeignKeys();
+                serverConnection.CommitTransaction();
+                Executed = true;
+            }
+            catch
+            {
+                serverConnection.RollBackTransaction();
+            }
+            return Executed;
         }
 
         private string ScriptIndexes(Table sourceTable)
@@ -138,21 +136,21 @@ namespace TOne.WhS.DBSync.Data.SQL
             DropTables();
         }
 
-        private void CreateForeignKeys(SqlConnection sqlConnection)
+        private void CreateForeignKeys()
         {
             //Create Foreign Keys for Tables
             foreach (DBTable table in _dbTables)
-                ExecuteSql.ExecuteImmediate(table.ScriptedFKs, sqlConnection);
+                server.ConnectionContext.ExecuteNonQuery(table.ScriptedFKs);
         }
 
-        private void CreateIndexes(SqlConnection sqlConnection)
+        private void CreateIndexes()
         {
             //Create Indexes Keys for Tables
             foreach (DBTable table in _dbTables)
-                ExecuteSql.ExecuteImmediate(table.ScriptedIndexes, sqlConnection);
+                server.ConnectionContext.ExecuteNonQuery(table.ScriptedIndexes);
         }
 
-        private void RenameTempTables(Server server)
+        private void RenameTempTables()
         {
             foreach (DBTable dbTable in _dbTables)
             {
@@ -166,29 +164,20 @@ namespace TOne.WhS.DBSync.Data.SQL
             }
         }
 
-        private void FillTables()
-        {
-            //Fill Temp Tables
-            foreach (DBTable table in _dbTables)
-            {
-
-            }
-        }
-
-        public void CreateTempTables(SqlConnection sqlConnection)
+        public void CreateTempTables()
         {
             // Create Temp Tables
             foreach (DBTable table in _dbTables)
             {
-                ExecuteSql.ExecuteImmediate(table.ScriptedTempTable, sqlConnection);
+                server.ConnectionContext.ExecuteNonQuery(table.ScriptedTempTable);
             }
         }
 
-        private void DefineTables(Server server)
+        private void DefineTables()
         {
             foreach (DBTable table in _dbTables)
             {
-                Table sourceTable = GetTableReference(server, table);
+                Table sourceTable = GetTableReference(table);
                 table.Info = sourceTable;
                 table.ScriptedIndexes = ScriptIndexes(sourceTable);
                 table.ScriptedFKs = ScriptFKs(sourceTable);
@@ -206,7 +195,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 {
                     bool isReferenced = false;
 
-                    foreach (DBTable otherTable in _dbTables.Where(x => x.Name != table.Name))
+                    foreach (DBTable otherTable in _dbTables.Where(x => x.Name != table.Name && !x.DroppedOriginal))
                     {
                         if (otherTable.DBFKs.Exists(x => x.ReferencedTable == table.Name && x.ReferencedTableSchema == table.Schema))
                         {
@@ -222,10 +211,11 @@ namespace TOne.WhS.DBSync.Data.SQL
                         table.DroppedOriginal = true;
                     }
                 }
+                DropTables();
             }
         }
 
-        private Table GetTableReference(Server server, DBTable dbTable)
+        private Table GetTableReference(DBTable dbTable)
         {
             Table sourceTable = server.Databases[dbTable.Database].Tables[dbTable.Name, dbTable.Schema];
             return sourceTable;

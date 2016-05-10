@@ -10,7 +10,7 @@ namespace TOne.WhS.DBSync.Business
 
         public void AddCurrenciesFromSource(List<Currency> currencies)
         {
-            CurrencyDataManager dataManager = new CurrencyDataManager("Currency");
+            CurrencyDataManager dataManager = new CurrencyDataManager("Currency_Temp");
             dataManager.ApplyCurrenciesToDB(currencies);
         }
     }
