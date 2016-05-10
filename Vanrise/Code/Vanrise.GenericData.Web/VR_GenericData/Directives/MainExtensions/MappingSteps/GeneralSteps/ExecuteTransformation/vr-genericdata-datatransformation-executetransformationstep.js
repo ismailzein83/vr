@@ -128,10 +128,13 @@ app.directive('vrGenericdataDatatransformationExecutetransformationstep', ['Util
                         for(var i=0;i< $scope.recordsMapping.length;i++)
                         {
                             var recordMapping = $scope.recordsMapping[i];
-                            recordsMapping.push({
-                                RecordName:recordMapping.FieldName,
-                                Value:recordMapping.directiveAPI  !=undefined?recordMapping.directiveAPI.getData():undefined
-                            });
+                            if (recordMapping.directiveAPI != undefined && recordMapping.directiveAPI.getData() != undefined) {
+                                recordsMapping.push({
+                                    RecordName: recordMapping.FieldName,
+                                    Value: recordMapping.directiveAPI != undefined ? recordMapping.directiveAPI.getData() : undefined
+                                });
+                            }
+                            
                         }
                     }
                     return {
