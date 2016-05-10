@@ -280,7 +280,7 @@ set identity_insert [bp].[BPTaskType] on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(10001,'Vanrise.Fzero.FraudAnalysis.MainExtensions.BPTaskDataConfirmCancelStrategyonCaseCount','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/FraudAnalysis/Views/BPTask/BPTaskConfirmCancelStrategyonCaseCount.html"}')
+(10001,'Vanrise.Fzero.FraudAnalysis.MainExtensions.BPTaskDataConfirmCancelStrategyonCaseCount','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/FraudAnalysis/Views/BPTask/BPTaskConfirmCancelStrategyonCaseCount.html","AutoOpenTask":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[bp].[BPTaskType] as t
