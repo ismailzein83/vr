@@ -37,12 +37,10 @@
                             OutputPriceListTemplateId: choosenPriceListTemplateObj != undefined ? choosenPriceListTemplateObj.pricelistTemplateId : undefined
                         }
                         return XBooster_PriceListConversion_PriceListConversionAPIService.ConvertAndDownloadPriceList(priceListConversion).then(function (response) {
-                            console.log(response);
                             UtilsService.downloadFile(response.data, response.headers);
                         }).finally(function () {
                             $scope.scopeModel.isLoading = false;;
                         }).catch(function (error) {
-                            console.log(error);
                         });
                     };
                     XBooster_PriceListConversion_PriceListTemplateService.openOutputPriceListTemplates(onOutputPriceListTemplateChoosen);
