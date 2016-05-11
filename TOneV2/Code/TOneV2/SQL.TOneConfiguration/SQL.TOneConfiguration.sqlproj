@@ -343,6 +343,7 @@
     <None Include="Xbooster.PostDeployment.sql" />
     <None Include="ExcelConversion.PostDeployment.sql" />
     <None Include="Analytic.PostDeployment.sql" />
+    <None Include="CloudPortal.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
