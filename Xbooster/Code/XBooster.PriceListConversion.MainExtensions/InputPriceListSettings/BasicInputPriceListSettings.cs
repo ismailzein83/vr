@@ -86,9 +86,9 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                     string zoneName;
                     if (obj.Fields.TryGetValue("Zone", out zoneField))
                     {
-                        if (!zoneByZone.TryGetValue(zoneField.FieldValue.ToString().ToLower(), out zoneName))
+                        if (!zoneByZone.TryGetValue(zoneField.FieldValue.ToString().Trim().ToLower(), out zoneName))
                         {
-                            zoneByZone.Add(zoneField.FieldValue.ToString().ToLower(), zoneField.FieldValue.ToString());
+                            zoneByZone.Add(zoneField.FieldValue.ToString().Trim().ToLower(), zoneField.FieldValue.ToString());
                         }   
                     }
                 }
@@ -194,7 +194,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                                     CodeEffectiveDate = result
                                 });
                             }
-                            var zoneName = zoneField.FieldValue.ToString().ToLower();
+                            var zoneName = zoneField.FieldValue.ToString().Trim().ToLower();
                             if (!codesByZone.TryGetValue(zoneName, out codes))
                             {
                                 codesByZone.Add(zoneName, resolvedCodes);
@@ -243,7 +243,7 @@ namespace XBooster.PriceListConversion.MainExtensions.InputPriceListSettings
                             {
                                 throw new Exception(string.Format("Zone {0} has no rate defined.", zoneField.FieldValue));
                             }
-                            var zoneName = zoneField.FieldValue.ToString().ToLower();
+                            var zoneName = zoneField.FieldValue.ToString().Trim().ToLower();
 
                             if (!rateByZone.TryGetValue(zoneName, out rate))
                             {
