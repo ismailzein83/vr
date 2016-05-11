@@ -62,7 +62,8 @@ namespace TOne.WhS.Analytics.Business
                 variationReportBigResult.TimePeriods = _timePeriods;
                 variationReportBigResult.DrillDownDimensions = GetDrillDownDimensions();
 
-                variationReportBigResult.Summary = GetSummary(bigResult.Data, input.Query.NumberOfPeriods);
+                if (input.Query.ParentDimensions == null)
+                    variationReportBigResult.Summary = GetSummary(bigResult.Data, input.Query.NumberOfPeriods);
 
                 return variationReportBigResult;
             }

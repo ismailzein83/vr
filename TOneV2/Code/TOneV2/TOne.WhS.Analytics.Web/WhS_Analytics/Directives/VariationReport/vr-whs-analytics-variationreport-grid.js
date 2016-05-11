@@ -63,8 +63,9 @@
                                 }
                             }
 
-                            if (response.Summary != null)
-                                response.Data.push(response.Summary);
+                            if (response.Summary != null) {
+                                gridAPI.setSummary(response.Summary);
+                            }
 
                             if (response.TimePeriods != null) {
                                 $scope.scopeModel.timePeriodDefinitions.length = 0;
