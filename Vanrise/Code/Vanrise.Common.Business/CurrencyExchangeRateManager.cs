@@ -52,7 +52,7 @@ namespace Vanrise.Common.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, filteredExchangeRates.ToBigResult(input, null, CurrencyExchangeRateDetailMapper));
         }
-        public Dictionary<string , ExchangeRateInfo> GetLastExchangeRate()
+        public Dictionary<string, ExchangeRateInfo> GetLastExchangeRate()
         {
             var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
             var filteredExchangeRates = allCurrenciesExchangeRates.FindAllRecords((prod) => (DateTime.Now >= prod.ExchangeDate));
@@ -73,23 +73,23 @@ namespace Vanrise.Common.Business
                         new ExchangeRateInfo()
                         {
                             Symbol = currency.Symbol,
-                            CurrencyId= currency.CurrencyId,
+                            CurrencyId = currency.CurrencyId,
                             ExchangeRate = ex
                         }
                     );
                 }
             }
 
-            foreach(var currency in allCurrencies.Values)
+            foreach (var currency in allCurrencies.Values)
             {
-                if(!currencyExchangeRates.ContainsKey(currency.Symbol))
+                if (!currencyExchangeRates.ContainsKey(currency.Symbol))
                 {
                     currencyExchangeRates.Add(
                         currency.Symbol,
                         new ExchangeRateInfo()
                         {
                             Symbol = currency.Symbol,
-                            CurrencyId = currency.CurrencyId    
+                            CurrencyId = currency.CurrencyId
                         }
                     );
                 }
@@ -123,6 +123,14 @@ namespace Vanrise.Common.Business
             var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
             return allCurrenciesExchangeRates.GetRecord(currencyExchangeRateId);
         }
+
+        public CurrencyExchangeRate GetCurrencyExchangeRateBySourceId(string sourceId)
+        {
+            var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
+            return allCurrenciesExchangeRates.FindRecord(x => x.SourceId == sourceId);
+        }
+
+
         public Vanrise.Entities.InsertOperationOutput<CurrencyExchangeRateDetail> AddCurrencyExchangeRate(CurrencyExchangeRate currencyExchangeRate)
         {
             Vanrise.Entities.InsertOperationOutput<CurrencyExchangeRateDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CurrencyExchangeRateDetail>();

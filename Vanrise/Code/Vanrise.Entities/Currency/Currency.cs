@@ -15,7 +15,7 @@ namespace Vanrise.Entities
 
         public string Symbol { get; set; }
 
-        public string SourceID { get; set; }
+        public string SourceId { get; set; }
 
         long IItem.ItemId
         {

@@ -17,7 +17,7 @@ namespace Vanrise.Entities
 
         public DateTime ExchangeDate { get; set; }
 
-        public string SourceID { get; set; }
+        public string SourceId { get; set; }
 
         long IItem.ItemId
         {

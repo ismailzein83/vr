@@ -50,7 +50,7 @@ namespace Vanrise.Common.Data.SQL
                 CurrencyId = (int)reader["CurrencyId"],
                 Rate = GetReaderValue<decimal>(reader,"Rate"),
                 ExchangeDate = GetReaderValue<DateTime>(reader, "ExchangeDate"),
-                SourceID = reader["SourceID"] as string,
+                SourceId = reader["SourceID"] as string,
 
             };
 
