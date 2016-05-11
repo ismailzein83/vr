@@ -78,10 +78,20 @@ namespace TOne.WhS.Analytics.Business
             {
                 SetVariationReportRecordDimension(entity);
 
-                entity.DimensionName = (_query.ReportType == VariationReportType.TopDestinationMinutes || _query.ReportType == VariationReportType.TopDestinationAmount) ?
-                    _saleZoneManager.GetSaleZoneName((long)entity.DimensionId) :
-                    (_query.GroupByProfile) ? _carrierProfileManager.GetCarrierProfileName((int)entity.DimensionId) : _carrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
-
+                switch (_query.ReportType)
+                {
+                    case VariationReportType.TopDestinationMinutes:
+                    case VariationReportType.TopDestinationAmount:
+                    case VariationReportType.TopDestinationProfit:
+                        entity.DimensionName = _saleZoneManager.GetSaleZoneName((long)entity.DimensionId);
+                        break;
+                    default:
+                        entity.DimensionName = (_query.GroupByProfile) ?
+                            _carrierProfileManager.GetCarrierProfileName((int)entity.DimensionId) :
+                            _carrierAccountManager.GetCarrierAccountName((int)entity.DimensionId);
+                        break;
+                }
+                
                 if (entity.DimensionSuffix != VariationReportRecordDimensionSuffix.None)
                     entity.DimensionName = String.Format("{0}{1}", entity.DimensionName, String.Format(" / {0}", entity.DimensionSuffix));
 
@@ -168,10 +178,12 @@ namespace TOne.WhS.Analytics.Business
                         break;
                     case VariationReportType.OutBoundMinutes:
                     case VariationReportType.OutBoundAmount:
+                    case VariationReportType.OutBoundProfit:
                         variationReportRecord.Dimension = VariationReportDimension.Supplier;
                         break;
                     case VariationReportType.TopDestinationMinutes:
                     case VariationReportType.TopDestinationAmount:
+                    case VariationReportType.TopDestinationProfit:
                         variationReportRecord.Dimension = VariationReportDimension.Zone;
                         break;
                     default:
@@ -197,6 +209,10 @@ namespace TOne.WhS.Analytics.Business
                     case VariationReportType.InOutBoundAmount:
                     case VariationReportType.Profit:
                         drillDownDimensions.Add(VariationReportDimension.Zone);
+                        break;
+
+                    case VariationReportType.TopDestinationProfit:
+                        drillDownDimensions.Add(VariationReportDimension.Supplier);
                         break;
 
                     case VariationReportType.InBoundMinutes:

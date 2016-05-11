@@ -91,7 +91,6 @@
                 api.load = function (query) {
                     setSortByField(query.ReportType);
                     gridQuery = cloneGridQuery(query);
-                    console.log(gridQuery);
                     gridDrillDownTabsObj = undefined;
                     return gridAPI.retrieveData(query);
                 };
@@ -140,7 +139,7 @@
                     drillDownTabDefinitions.push(getDrillDownDefinition($scope.scopeModel.drillDownDimensionValues[i]));
                 }
 
-                return drillDownTabDefinitions
+                return drillDownTabDefinitions;
             }
             function getDrillDownDefinition(drillDownDimensionValue) {
                 return {

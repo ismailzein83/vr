@@ -36,7 +36,9 @@ namespace TOne.WhS.Analytics.Entities
         OutBoundAmount = 5,
         InOutBoundAmount = 6,
         TopDestinationAmount = 7,
-        Profit = 8
+        Profit = 8,
+        OutBoundProfit = 9,
+        TopDestinationProfit = 10
     }
 
     public enum VariationReportDimension { Customer = 0, Supplier = 1, Zone = 2 }

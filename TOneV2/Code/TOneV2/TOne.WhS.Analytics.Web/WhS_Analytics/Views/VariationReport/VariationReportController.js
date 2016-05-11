@@ -14,7 +14,8 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.reportTypes = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTypeEnum);
+            var reportTypes = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTypeEnum);
+            $scope.scopeModel.reportTypes = UtilsService.getFilteredArrayFromArray(reportTypes, true, 'isVisible');
             $scope.scopeModel.selectedReportType = UtilsService.getEnum(WhS_Analytics_VariationReportTypeEnum, 'value', WhS_Analytics_VariationReportTypeEnum.InBoundMinutes.value);
 
             $scope.scopeModel.toDate = new Date('2016-01-04');

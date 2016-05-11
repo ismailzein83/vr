@@ -88,6 +88,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportType.InOutBoundAmount:
                 case VariationReportType.TopDestinationAmount:
                 case VariationReportType.Profit:
+                case VariationReportType.OutBoundProfit:
+                case VariationReportType.TopDestinationProfit:
                     return @"DECLARE @ExchangeRates TABLE
                     (
 	                    CurrencyID INT NOT NULL,
@@ -228,10 +230,12 @@ namespace TOne.WhS.Analytics.Data.SQL
 
                 case VariationReportType.OutBoundMinutes:
                 case VariationReportType.OutBoundAmount:
+                case VariationReportType.OutBoundProfit:
                     return groupByProfile ? "SupplierAccounts.CarrierProfileID" : "SupplierID";
 
                 case VariationReportType.TopDestinationMinutes:
                 case VariationReportType.TopDestinationAmount:
+                case VariationReportType.TopDestinationProfit:
                     return "SaleZoneID";
 
                 default:
@@ -271,21 +275,9 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Sum Expression
 
-        string GetSumAggregation(VariationReportType reportType, IEnumerable<ParentDimension> parentDimensions)
-        {
-            var sumAggregationBuilder = new StringBuilder();
-            
-            sumAggregationBuilder.AppendFormat("SUM({0})", GetSumArgument(reportType, parentDimensions));
-
-            if (IsDurationReport(reportType))
-                sumAggregationBuilder.Append(" / 60");
-            
-            return sumAggregationBuilder.ToString();
-        }
-
         string GetSumArgument(VariationReportType reportType, IEnumerable<ParentDimension> parentDimensions)
         {
-            if (reportType == VariationReportType.Profit)
+            if (reportType == VariationReportType.Profit || reportType == VariationReportType.OutBoundProfit || reportType == VariationReportType.TopDestinationProfit)
                 return "(SaleNets / ISNULL(SER.Rate, 1)) - (CostNets / ISNULL(CER.Rate, 1))";
 
             if (reportType == VariationReportType.InBoundMinutes)
@@ -321,6 +313,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportType.OutBoundAmount:
                 case VariationReportType.TopDestinationAmount:
                 case VariationReportType.Profit:
+                case VariationReportType.OutBoundProfit:
+                case VariationReportType.TopDestinationProfit:
                     return false;
                 default:
                     throw new ArgumentException("reportType");
@@ -338,6 +332,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportType.OutBoundAmount:
                 case VariationReportType.TopDestinationAmount:
                 case VariationReportType.Profit:
+                case VariationReportType.OutBoundProfit:
+                case VariationReportType.TopDestinationProfit:
                     joinPartBuilder.Append(String.Format(" LEFT JOIN @ExchangeRates SER on bs.SaleCurrency = SER.CurrencyID AND bs.CallDate >= SER.BED AND (SER.EED IS NULL OR bs.CallDate < SER.EED)"));
                     joinPartBuilder.Append(String.Format(" LEFT JOIN @ExchangeRates CER on bs.CostCurrency = CER.CurrencyID AND bs.CallDate >= CER.BED AND (CER.EED IS NULL OR bs.CallDate < CER.EED)"));
                     break;
@@ -362,14 +358,14 @@ namespace TOne.WhS.Analytics.Data.SQL
             {
                 // The loop doesn't account for filter values that should be enclosed using single quotes
                 foreach (ParentDimension parentDimension in parentDimensions)
-                    wherePartBuilder.AppendFormat(" AND {0} IN ({1})", GetParentDimensionName(parentDimension.Dimension, groupByProfile), parentDimension.Value);
+                    wherePartBuilder.AppendFormat(" AND {0} IN ({1})", GetDimensionName(parentDimension.Dimension, groupByProfile), parentDimension.Value);
             }
             return wherePartBuilder.ToString();
         }
 
-        string GetParentDimensionName(VariationReportDimension parentDimension, bool groupByProfile)
+        string GetDimensionName(VariationReportDimension dimension, bool groupByProfile)
         {
-            switch (parentDimension)
+            switch (dimension)
             {
                 case VariationReportDimension.Customer:
                     return groupByProfile ? "CustomerAccounts.CarrierProfileID" : "CustomerID";
@@ -378,7 +374,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 case VariationReportDimension.Zone:
                     return "SaleZoneID";
             }
-            throw new ArgumentException("parentDimension");
+            throw new ArgumentException("dimension");
         }
 
         #endregion
