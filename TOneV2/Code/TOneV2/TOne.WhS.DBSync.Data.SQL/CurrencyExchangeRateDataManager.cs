@@ -24,7 +24,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in currencyExchangeRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", c.CurrencyId, c.Rate, c.ExchangeDate, c.SourceID));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", c.CurrencyId, c.Rate, c.ExchangeDate, c.SourceId));
                 }
                 wr.Close();
             }

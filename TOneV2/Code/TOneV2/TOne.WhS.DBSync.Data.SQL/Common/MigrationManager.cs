@@ -52,26 +52,9 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 serverConnection.BeginTransaction();
                 DropOriginalTables();
-                serverConnection.CommitTransaction();
-                Executed = true;
-            }
-            catch
-            {
-                serverConnection.RollBackTransaction();
-            }
-            return Executed;
-        }
-
-        public bool ExecuteMigrationPhase3()
-        {
-            bool Executed = false;
-            try
-            {
-                serverConnection.BeginTransaction();
                 RenameTempTables();
                 CreateIndexes();
                 CreateForeignKeys();
-                server.Refresh();
                 serverConnection.CommitTransaction();
                 Executed = true;
             }
@@ -160,11 +143,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 dbTempTable.Name = dbTable.Name + _Temp;
                 dbTempTable.Schema = dbTable.Schema;
                 dbTempTable.Database = dbTable.Database;
-
-                server.Refresh();
-                //server.Databases[dbTempTable.Database].Refresh();
-                //server.Databases[dbTempTable.Database].Tables.Refresh();
-
+                server.Databases[dbTempTable.Database].Tables.Refresh();
                 Table tempTable = server.Databases[dbTempTable.Database].Tables[dbTempTable.Name, dbTempTable.Schema];
                 tempTable.Rename(tempTable.Name.Replace(_Temp, ""));
             }

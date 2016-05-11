@@ -31,15 +31,14 @@ namespace TOne.WhS.DBSync.Business
         protected override CurrencyExchangeRate BuildItemFromSource(SourceCurrencyExchangeRate sourceItem)
         {
             Vanrise.Common.Business.CurrencyManager currencyManager = new Vanrise.Common.Business.CurrencyManager();
-            var allCurrencies = currencyManager.GetAllCurrencies();
-            var currency = allCurrencies.Where(x => x.Symbol == sourceItem.CurrencyId).FirstOrDefault();
+            var currency = currencyManager.GetCurrencyBySourceId(sourceItem.CurrencyId);
             if (currency != null)
                 return new CurrencyExchangeRate
                 {
                     CurrencyId = currency.CurrencyId,
                     ExchangeDate = (sourceItem.ExchangeDate.HasValue ? sourceItem.ExchangeDate.Value : DateTime.Now),
                     Rate = (sourceItem.Rate.HasValue ? sourceItem.Rate.Value : Decimal.MinValue),
-                    SourceID = sourceItem.SourceId
+                    SourceId = sourceItem.SourceId
                 };
             else
                 return null;

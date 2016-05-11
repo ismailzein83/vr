@@ -32,7 +32,7 @@ namespace TOne.WhS.DBSync.Business
             {
                 Name = sourceItem.Name,
                 Symbol = sourceItem.Symbol,
-                SourceID = sourceItem.SourceId
+                SourceId = sourceItem.SourceId
             };
         }
     }

@@ -42,9 +42,6 @@ namespace TestRuntime.Tasks
             sourceCurrencyExchangeRateMigrator.Migrate();
 
             migrationManager.ExecuteMigrationPhase2();
-
-            migrationManager.ExecuteMigrationPhase3();
-
         }
     }
 }

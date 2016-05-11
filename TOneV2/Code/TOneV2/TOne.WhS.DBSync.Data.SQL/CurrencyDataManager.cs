@@ -23,7 +23,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in currencies)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Symbol, c.Name, c.SourceID));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Symbol, c.Name, c.SourceId));
                 }
                 wr.Close();
             }
