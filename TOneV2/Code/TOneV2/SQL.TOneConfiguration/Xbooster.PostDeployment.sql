@@ -16,8 +16,8 @@ set identity_insert [sec].[Module] on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1401,'CDR Tools',null,null,'/images/menu-icons/Purchase Area.png',4,0),
-(1402,'Supplier Rate Management',null,null,'/images/menu-icons/Purchase Area.png',5,0)
+(1401,'CDR Tools',null,null,'/images/menu-icons/CDR Compare Tool.png',4,0),
+(1402,'Supplier Rate Management',null,null,'/images/menu-icons/Supplier Rate Managment.png',5,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
