@@ -31,7 +31,8 @@ namespace TOne.WhS.DBSync.Business
             return new Currency
             {
                 Name = sourceItem.Name,
-                Symbol = sourceItem.Symbol
+                Symbol = sourceItem.Symbol,
+                SourceID = sourceItem.SourceId
             };
         }
     }

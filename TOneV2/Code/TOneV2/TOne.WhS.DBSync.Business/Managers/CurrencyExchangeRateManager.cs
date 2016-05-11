@@ -10,7 +10,7 @@ namespace TOne.WhS.DBSync.Business
 
         public void AddCurrencyExchangeRatesFromSource(List<CurrencyExchangeRate> currencyExchangeRates)
         {
-            CurrencyExchangeRateDataManager dataManager = new CurrencyExchangeRateDataManager("CurrencyExchangeRate_Temp");
+            CurrencyExchangeRateDataManager dataManager = new CurrencyExchangeRateDataManager("Common.CurrencyExchangeRate_Temp");
             dataManager.ApplyCurrencyExchangeRatesToDB(currencyExchangeRates);
         }
     }

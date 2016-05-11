@@ -22,8 +22,8 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             serverConnection = new ServerConnection("192.168.110.185", "development", "dev!123");
             server = new Server(serverConnection);
-            _dbTables.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneConfiguration" });
-            _dbTables.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneConfiguration" });
+            _dbTables.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneConfiguration_Migration" });
+            _dbTables.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneConfiguration_Migration" });
         }
 
 
@@ -71,6 +71,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 RenameTempTables();
                 CreateIndexes();
                 CreateForeignKeys();
+                server.Refresh();
                 serverConnection.CommitTransaction();
                 Executed = true;
             }
@@ -122,6 +123,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             return script;
         }
 
+
         private void DropOriginalTables()
         {
             //Set Priority by References
@@ -159,6 +161,10 @@ namespace TOne.WhS.DBSync.Data.SQL
                 dbTempTable.Schema = dbTable.Schema;
                 dbTempTable.Database = dbTable.Database;
 
+                server.Refresh();
+                //server.Databases[dbTempTable.Database].Refresh();
+                //server.Databases[dbTempTable.Database].Tables.Refresh();
+
                 Table tempTable = server.Databases[dbTempTable.Database].Tables[dbTempTable.Name, dbTempTable.Schema];
                 tempTable.Rename(tempTable.Name.Replace(_Temp, ""));
             }
@@ -167,9 +173,15 @@ namespace TOne.WhS.DBSync.Data.SQL
         public void CreateTempTables()
         {
             // Create Temp Tables
-            foreach (DBTable table in _dbTables)
+            foreach (DBTable dbTable in _dbTables)
             {
-                server.ConnectionContext.ExecuteNonQuery(table.ScriptedTempTable);
+                Database database = server.Databases[dbTable.Database];
+                bool tableExists = database.Tables.Contains(dbTable.Name + _Temp, dbTable.Schema);
+                if (tableExists)
+                {
+                    database.Tables[dbTable.Name + _Temp, dbTable.Schema].Drop();
+                }
+                server.ConnectionContext.ExecuteNonQuery(dbTable.ScriptedTempTable);
             }
         }
 

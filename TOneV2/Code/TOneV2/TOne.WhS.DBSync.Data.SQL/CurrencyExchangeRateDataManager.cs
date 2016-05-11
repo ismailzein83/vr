@@ -12,7 +12,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         string _tempTableName;
 
         public CurrencyExchangeRateDataManager(string tableName) :
-            base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
+            base(GetConnectionStringName("ConfigurationMigrationDBConnStringKey", "ConfigurationMigrationDBConnString"))
         {
             _tempTableName = tableName;
         }
@@ -24,7 +24,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in currencyExchangeRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", c.CurrencyId, c.Rate, c.ExchangeDate, c.CurrencyExchangeRateId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", c.CurrencyId, c.Rate, c.ExchangeDate, c.SourceID));
                 }
                 wr.Close();
             }

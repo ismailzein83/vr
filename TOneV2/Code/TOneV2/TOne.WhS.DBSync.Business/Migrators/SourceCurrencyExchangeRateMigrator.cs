@@ -39,7 +39,7 @@ namespace TOne.WhS.DBSync.Business
                     CurrencyId = currency.CurrencyId,
                     ExchangeDate = (sourceItem.ExchangeDate.HasValue ? sourceItem.ExchangeDate.Value : DateTime.Now),
                     Rate = (sourceItem.Rate.HasValue ? sourceItem.Rate.Value : Decimal.MinValue),
-                    CurrencyExchangeRateId = long.Parse(sourceItem.SourceId)
+                    SourceID = sourceItem.SourceId
                 };
             else
                 return null;

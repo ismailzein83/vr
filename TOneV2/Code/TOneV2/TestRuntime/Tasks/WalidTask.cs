@@ -41,7 +41,9 @@ namespace TestRuntime.Tasks
             SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(sourceCurrencyExchangeRateMigratorReader);
             sourceCurrencyExchangeRateMigrator.Migrate();
 
-            //migrationManager.ExecuteMigrationPhase2();
+            migrationManager.ExecuteMigrationPhase2();
+
+            migrationManager.ExecuteMigrationPhase3();
 
         }
     }

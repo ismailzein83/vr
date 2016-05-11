@@ -11,7 +11,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         readonly string[] columns = { "Symbol", "Name", "SourceID" };
         string _tempTableName;
         public CurrencyDataManager(string tableName) :
-            base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
+            base(GetConnectionStringName("ConfigurationMigrationDBConnStringKey", "ConfigurationMigrationDBConnString"))
         {
             _tempTableName = tableName;
         }
@@ -23,7 +23,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 foreach (var c in currencies)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Symbol, c.Name, c.CurrencyId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Symbol, c.Name, c.SourceID));
                 }
                 wr.Close();
             }
