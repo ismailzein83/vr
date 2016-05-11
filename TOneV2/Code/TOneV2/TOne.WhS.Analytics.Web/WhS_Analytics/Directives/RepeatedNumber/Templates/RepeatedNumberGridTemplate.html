@@ -1,18 +1,17 @@
 ﻿
-<div ng-show="ctrl.showGrid" vr-loader="ctrl.isLoadingGrid">
+<div ng-show="ctrl.showGrid">
     <vr-datagrid datasource="repeatedNumber"
                  on-ready="onGridReady"
                  dataretrievalfunction="dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
-                 menuactions="gridMenuActions"
                  idfield="Entity.Attempt"
                  defaultsortbyfieldname="'Entity.Attempt'"
                  defaultsortdirection="'DESC'">
-        <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Zone'" field="'SaleZoneName'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Attempts'" field="'Entity.Attempt'" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Minutes'" field="'Entity.DurationInMinutes'" type="'Number'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Phone Number'" field="'Entity.PhoneNumber'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn widthfactor="5" headertext="'Customer'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn widthfactor="5" headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn widthfactor="5" headertext="'Zone'" field="'SaleZoneName'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn widthfactor="5" headertext="'Attempts'" field="'Entity.Attempt'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn widthfactor="5" headertext="'Duration (min)'" field="'Entity.DurationInMinutes'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn widthfactor="5" headertext="'Phone Number'" field="'Entity.PhoneNumber'" type="'Text'"></vr-datagridcolumn>
     </vr-datagrid>
 </div>

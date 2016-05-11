@@ -33,7 +33,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
         #region Public Methods
 
-        public IEnumerable<RepeatedNumber> GetRepeatedNumberData(Vanrise.Entities.DataRetrievalInput<Entities.RepeatedNumberInput> input)
+        public IEnumerable<RepeatedNumber> GetAllFilteredRepeatedNumbers(Vanrise.Entities.DataRetrievalInput<Entities.RepeatedNumberQuery> input)
         {
             return GetItemsText(GetQuery(input.Query.Filter, input.Query.CDRType, input.Query.RepeatedMorethan), RepeatedNumberDataMapper, (cmd) =>
             {

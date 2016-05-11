@@ -12,6 +12,5 @@ namespace TOne.WhS.Analytics.Entities
         public String CustomerName { get; set; }
         public String SupplierName { get; set; }
         public String SaleZoneName { get; set; }
-        public String SwitchName { get; set; }
     }
 }

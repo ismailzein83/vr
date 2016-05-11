@@ -74,7 +74,7 @@
     <Compile Include="RepeatedNumber\RepeatedNumber.cs" />
     <Compile Include="RepeatedNumber\RepeatedNumberDetail.cs" />
     <Compile Include="RepeatedNumber\RepeatedNumberFilter.cs" />
-    <Compile Include="RepeatedNumber\RepeatedNumberInput.cs" />
+    <Compile Include="RepeatedNumber\RepeatedNumberQuery.cs" />
     <Compile Include="VariationReport\TimePeriod.cs" />
     <Compile Include="VariationReport\VariationReportBigResult.cs" />
     <Compile Include="VariationReport\VariationReportQuery.cs" />

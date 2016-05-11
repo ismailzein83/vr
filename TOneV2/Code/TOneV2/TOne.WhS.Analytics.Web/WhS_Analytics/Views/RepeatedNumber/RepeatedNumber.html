@@ -15,28 +15,22 @@
                 <vr-columns width="fullrow">
                     <vr-row>
 
-                        <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" label="From" value="fromDate" isrequired customvalidate="validateDateTime()"></vr-datetimepicker>
-                        </vr-columns>
-                        <vr-columns width="normal">
-                            <vr-datetimepicker type="dateTime" label="To" value="toDate" customvalidate="validateDateTime()"></vr-datetimepicker>
-                        </vr-columns>
+                        <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
 
                         <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-textbox type="number" value="nRecords" label="Repeated More than" isrequired></vr-textbox>
+                            <vr-textbox type="number" value="nRecords" label="Repeated More Than" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-whs-be-switch-selector on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
-                        </vr-columns>
+                        <span ng-show="advancedSelected">
+                            <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
+                        </span>
 
-                        <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-select datasource="CDROption" datatextfield="description" datavaluefield="value" selectedvalues="selectedCDROption" label="CDR Option" isrequired></vr-select>
-                        </vr-columns>
+                        <span ng-show="advancedSelected">
+                            <vr-whs-analytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady"></vr-whs-analytics-callstatus-selector>
+                        </span>
 
-                        <vr-columns width="normal" ng-show="advancedSelected">
-                            <vr-select datasource="PhoneNumber" datatextfield="description" datavaluefield="value" selectedvalues="selectedPhoneNumberOption" label="Phone Number" isrequired></vr-select>
-                        </vr-columns>
-
+                        <span ng-show="advancedSelected">
+                            <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady"></vr-whs-analytics-phonenumber-selector>
+                        </span>
                     </vr-row>
                 </vr-columns>
             </vr-row>
@@ -46,7 +40,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
 
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

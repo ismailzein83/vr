@@ -12,11 +12,11 @@ namespace TOne.WhS.Analytics.Web.Controllers
     public class WhS_RepeatedNumberController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpPost]
-        [Route("GetRepeatedNumberData")]
-        public Object GetRepeatedNumberData(Vanrise.Entities.DataRetrievalInput<RepeatedNumberInput> input)
+        [Route("GetAllFilteredRepeatedNumbers")]
+        public Object GetAllFilteredRepeatedNumbers(Vanrise.Entities.DataRetrievalInput<RepeatedNumberQuery> input)
         {
             RepeatedNumberManager manager = new RepeatedNumberManager();
-            return GetWebResponse(input, manager.GetRepeatedNumberData(input));
+            return GetWebResponse(input, manager.GetAllFilteredRepeatedNumbers(input));
         }
     }
 }

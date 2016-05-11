@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities
 {
-    public class RepeatedNumberInput
+    public class RepeatedNumberQuery
     {
         public RepeatedNumberFilter Filter { get; set; }
         public DateTime From { get; set; }

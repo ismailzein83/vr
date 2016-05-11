@@ -51,37 +51,34 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                ctrl.isLoadingGrid = true;
                 ctrl.showGrid = true;
-                return WhS_Analytics_RepeatedNumberAPIService.GetRepeatedNumberData(dataRetrievalInput)
+                return WhS_Analytics_RepeatedNumberAPIService.GetAllFilteredRepeatedNumbers(dataRetrievalInput)
                     .then(function (response) {
                         onResponseReady(response);
                     })
                     .finally(function () {
-                        ctrl.isLoadingGrid = false;
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
            
+            //$scope.gridMenuActions = [{
+            //    name: "CDRs",
+            //    clicked: function () {
+            //        var parameters = {
+            //            fromDate: UtilsService.cloneDateTime(ctrl.parameters.From),
+            //            toDate: UtilsService.cloneDateTime(ctrl.parameters.To),
+            //            customerIds: [],
+            //            saleZoneIds: [],
+            //            supplierIds: [],
+            //            switchIds: ctrl.parameters.Filter.SwitchIds,
+            //            supplierZoneIds: []
+            //        };
+            //        WhS_Analytics_GenericAnalyticService.showCdrLog(parameters);
 
-            $scope.gridMenuActions = [{
-                name: "CDRs",
-                clicked: function () {
-                    var parameters = {
-                        fromDate: UtilsService.cloneDateTime(ctrl.parameters.From),
-                        toDate: UtilsService.cloneDateTime(ctrl.parameters.To),
-                        customerIds: [],
-                        saleZoneIds: [],
-                        supplierIds: [],
-                        switchIds: ctrl.parameters.Filter.SwitchIds,
-                        supplierZoneIds: []
-                    };
-                    WhS_Analytics_GenericAnalyticService.showCdrLog(parameters);
-
-                }
-            }];
+            //    }
+            //}];
         }
     }
 

@@ -141,7 +141,8 @@ as (select * from (values
 (12035,'Traffic Monitor','Traffic Monitor','#/view/WhS_Analytics/Views/TrafficMonitor',1214,null,null,null,null,0,2),
 (12036,'Hourly Report','Hourly Report','#/view/WhS_Analytics/Views/HourlyReport',1214,null,null,null,null,0,3),
 (12037,'CDR Log','CDR Log','#/view/WhS_Analytics/Views/CDR/CDRLog',1214,null,null,null,null,0,4),
-(12038,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5)
+(12038,'Raw CDR Log','Raw CDR Log','#/view/WhS_Analytics/Views/RawCDR/RawCDRLog',1214,null,null,null,null,0,5),
+(12071,'Repeated Numbers','Repeated Numbers','#/view/WhS_Analytics/Views/RepeatedNumber/RepeatedNumber',1214,null,null,null,null,0,8)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -429,7 +430,8 @@ as (select * from (values
 ('WhS_Routing/RouteOptionRule/GetRule',null),
 ('WhS_Routing/RouteOptionRule/UpdateRule',null),
 ('WhS_Routing/RouteOptionRule/DeleteRule',null),
-('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null)
+('WhS_Routing/RouteOptionRule/GetRouteOptionRuleSettingsTemplates',null),
+('WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers','WhS_Analytics_RepeatedNumber: View')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))

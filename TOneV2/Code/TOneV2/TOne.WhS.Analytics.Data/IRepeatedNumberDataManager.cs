@@ -9,6 +9,6 @@ namespace TOne.WhS.Analytics.Data
 {
     public interface IRepeatedNumberDataManager : IDataManager
     {
-        IEnumerable<RepeatedNumber> GetRepeatedNumberData(Vanrise.Entities.DataRetrievalInput<RepeatedNumberInput> input);
+        IEnumerable<RepeatedNumber> GetAllFilteredRepeatedNumbers(Vanrise.Entities.DataRetrievalInput<RepeatedNumberQuery> input);
     }
 }

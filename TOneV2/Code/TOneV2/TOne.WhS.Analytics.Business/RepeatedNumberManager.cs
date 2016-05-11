@@ -16,16 +16,14 @@ namespace TOne.WhS.Analytics.Business
     public class RepeatedNumberManager
     {
         private readonly CarrierAccountManager _carrierAccountManager;
-        private readonly SwitchManager _switchManager;
         private readonly SaleZoneManager _saleZoneManager;
 
         public RepeatedNumberManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
-            _switchManager = new SwitchManager();
             _saleZoneManager = new SaleZoneManager();
         }
-        public Vanrise.Entities.IDataRetrievalResult<RepeatedNumberDetail> GetRepeatedNumberData(Vanrise.Entities.DataRetrievalInput<RepeatedNumberInput> input)
+        public Vanrise.Entities.IDataRetrievalResult<RepeatedNumberDetail> GetAllFilteredRepeatedNumbers(Vanrise.Entities.DataRetrievalInput<RepeatedNumberQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new RepeatedNumberRequestHandler());
         }
@@ -35,22 +33,20 @@ namespace TOne.WhS.Analytics.Business
             string customerName = _carrierAccountManager.GetCarrierAccountName(repeatedNumber.CustomerId);
             string supplierName = _carrierAccountManager.GetCarrierAccountName(repeatedNumber.SupplierId);
             string saleZoneName = _saleZoneManager.GetSaleZoneName(repeatedNumber.SaleZoneId);
-            string switchName = _switchManager.GetSwitchName(repeatedNumber.SwitchId);
 
             RepeatedNumberDetail repeatedNumberDetail = new RepeatedNumberDetail
             {
                 Entity = repeatedNumber,
                 CustomerName = customerName,
                 SupplierName = supplierName,
-                SaleZoneName = saleZoneName,
-                SwitchName = switchName,
+                SaleZoneName = saleZoneName
             };
             return repeatedNumberDetail;
         }
 
         #region Private Classes
 
-        private class RepeatedNumberRequestHandler : BigDataRequestHandler<RepeatedNumberInput, RepeatedNumber, RepeatedNumberDetail>
+        private class RepeatedNumberRequestHandler : BigDataRequestHandler<RepeatedNumberQuery, RepeatedNumber, RepeatedNumberDetail>
         {
             public override RepeatedNumberDetail EntityDetailMapper(RepeatedNumber entity)
             {
@@ -58,10 +54,10 @@ namespace TOne.WhS.Analytics.Business
                 return manager.RepeatedNumberDetailMapper(entity);
             }
 
-            public override IEnumerable<RepeatedNumber> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RepeatedNumberInput> input)
+            public override IEnumerable<RepeatedNumber> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RepeatedNumberQuery> input)
             {
                 IRepeatedNumberDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IRepeatedNumberDataManager>();
-                return dataManager.GetRepeatedNumberData(input);
+                return dataManager.GetAllFilteredRepeatedNumbers(input);
             }
         }
 

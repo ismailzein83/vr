@@ -166,6 +166,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WhS_Analytics\Directives\CallStatus\vr-whs-analytics-callstatus-selector.js" />
+    <Content Include="WhS_Analytics\Directives\PhoneNumber\vr-whs-analytics-phonenumber-selector.js" />
     <Content Include="WhS_Analytics\Reports\Analytics\BillingReports.aspx" />
     <Content Include="WhS_Analytics\Constant\BillingCDRMeasureEnum.js" />
     <Content Include="WhS_Analytics\Constant\BillingCDROptionMeasureEnum.js" />

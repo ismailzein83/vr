@@ -10,7 +10,8 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
             isdisabled: "=",
             onselectionchanged: '=',
             isrequired: "@",
-            selectedvalues: '='
+            selectedvalues: '=',
+            normalColNum: '@'
 
         },
         controller: function ($scope, $element, $attrs) {
@@ -53,11 +54,11 @@ function (WhS_BE_SwitchAPIService, UtilsService, VRUIUtilsService) {
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
-        var disabled = "";
-        return '<div  vr-loader="isLoadingDirective">'
+
+        return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
             + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SwitchId" '
         + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
-           + '</div>'
+           + '</vr-columns>';
     }
 
     function switchCtor(ctrl, $scope, $attrs) {

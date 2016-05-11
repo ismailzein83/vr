@@ -5,13 +5,13 @@
 
     function repeatedNumberAPIService(BaseAPIService, UtilsService, WhS_Analytics_ModuleConfig) {
 
-        function GetRepeatedNumberData(input) {
+        function GetAllFilteredRepeatedNumbers(input) {
 
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Analytics_ModuleConfig.moduleName, "RepeatedNumber", "GetRepeatedNumberData"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Analytics_ModuleConfig.moduleName, "RepeatedNumber", "GetAllFilteredRepeatedNumbers"), input);
         }
 
         return ({
-            GetRepeatedNumberData: GetRepeatedNumberData
+            GetAllFilteredRepeatedNumbers: GetAllFilteredRepeatedNumbers
         });
     }
 
