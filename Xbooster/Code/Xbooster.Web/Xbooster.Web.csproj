@@ -307,7 +307,6 @@
     <Content Include="Images\logoonheader.png" />
     <Content Include="Images\menu-icons\Administration.png" />
     <Content Include="Images\menu-icons\CDR Compare Tool.png" />
-    <Content Include="Images\menu-icons\Purchase Area.png" />
     <Content Include="Images\menu-icons\Supplier Rate Managment.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
