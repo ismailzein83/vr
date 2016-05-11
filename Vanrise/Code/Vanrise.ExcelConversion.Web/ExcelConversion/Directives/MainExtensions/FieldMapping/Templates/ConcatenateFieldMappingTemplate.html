@@ -12,7 +12,7 @@
     <vr-columns width="fullrow" vr-loader="concatenateFieldMappingCtrl.isLoadingDirective">
         <vr-validator validate="concatenateFieldMappingCtrl.isValid()">
             <vr-datagrid datasource="concatenateFieldMappingCtrl.datasource" norowhighlightonclick="true" hideheader="true"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="concatenateFieldMappingCtrl.removeField" hidegridmenu>
+                         on-ready="onGridReady"  ondeleterow="concatenateFieldMappingCtrl.removeField" hidegridmenu>
                 <vr-datagridcolumn field="'name'" widthfactor="5"></vr-datagridcolumn>
                 <vr-datagridcolumn widthfactor="15">
                     <vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady" />

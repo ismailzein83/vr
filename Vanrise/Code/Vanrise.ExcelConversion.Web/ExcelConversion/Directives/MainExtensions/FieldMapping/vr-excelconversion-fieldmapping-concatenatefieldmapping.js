@@ -44,7 +44,7 @@
 
 
                 ctrl.removeField = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
+                    var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
 
@@ -68,7 +68,6 @@
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                     };
                     ctrl.datasource.push(dataItem);
-
 
                     $scope.selectedTemplateConfig = undefined;
                 };
