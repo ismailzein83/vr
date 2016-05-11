@@ -11,16 +11,12 @@ namespace TOne.WhS.Analytics.Business
     public class BlockedAttemptsManager
     {
         private readonly CarrierAccountManager _carrierAccountManager;
-        private readonly SwitchManager _switchManager;
         private readonly SaleZoneManager _saleZoneManager;
-        private readonly SupplierZoneManager _supplierZoneManager;
 
         public BlockedAttemptsManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
-            _switchManager = new SwitchManager();
             _saleZoneManager = new SaleZoneManager();
-            _supplierZoneManager = new SupplierZoneManager();
         }
 
         public Vanrise.Entities.IDataRetrievalResult<BlockedAttemptDetail> GetBlockedAttemptData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)

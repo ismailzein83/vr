@@ -11,7 +11,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         readonly string[] columns = { "Symbol", "Name", "SourceID" };
         string _tempTableName;
         public CurrencyDataManager(string tableName) :
-            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
+            base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
             _tempTableName = tableName;
         }

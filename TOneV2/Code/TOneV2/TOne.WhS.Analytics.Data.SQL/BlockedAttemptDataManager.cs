@@ -16,7 +16,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         private BlockedAttemptFilter filter;
 
         public BlockedAttemptDataManager()
-            : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneV2CDRDBConnString"))
+            : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
         {
 
         }

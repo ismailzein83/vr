@@ -12,7 +12,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         string _tempTableName;
 
         public CurrencyExchangeRateDataManager(string tableName) :
-            base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
+            base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
             _tempTableName = tableName;
         }
