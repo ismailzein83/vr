@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Common.Business
 {
-    public class FxSauderCurrency
+    public class XigniteCurrency
     {
         public string Symbol { get; set; }
-
-        public string Name { get; set; }
 
         public decimal Rate { get; set; }
     }

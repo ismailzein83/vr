@@ -90,7 +90,7 @@ namespace Vanrise.Common.Business
         }
 
 
-        public List<FxSauderCurrency> Build()
+        public List<XigniteCurrency> Build()
         {
 
             bool status = false;
@@ -117,19 +117,18 @@ namespace Vanrise.Common.Business
 
         }
 
-        public List<FxSauderCurrency> BuildCurrencyExchangeList()
+        public List<XigniteCurrency> BuildCurrencyExchangeList()
         {
             try
             {
                               
-                List<FxSauderCurrency> updatedCurrencies = new List<FxSauderCurrency>();
+                List<XigniteCurrency> updatedCurrencies = new List<XigniteCurrency>();
                 foreach (Match matchingRow in regex.Matches(rawHtml))
                 {
                     updatedCurrencies.Add(
-                        new FxSauderCurrency()
+                        new XigniteCurrency()
                          {
                              Symbol = matchingRow.Groups[SymbolGroup].Value,
-                             Name = matchingRow.Groups[NameGroup].Value,
                              Rate = decimal.Parse(matchingRow.Groups[RateGroup].Value)
                          }
                     );

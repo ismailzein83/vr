@@ -154,6 +154,8 @@ namespace Vanrise.Common.Business
                 bool insertActionSucc = dataManager.Insert(exchangeRate, out currencyExchangeRateId);
 
             }
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
         }
         public Vanrise.Entities.UpdateOperationOutput<CurrencyExchangeRateDetail> UpdateCurrencyExchangeRate(CurrencyExchangeRate currencyExchangeRate)
         {

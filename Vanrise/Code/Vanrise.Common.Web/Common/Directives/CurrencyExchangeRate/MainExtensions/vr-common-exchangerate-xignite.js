@@ -28,7 +28,7 @@ app.directive("vrCommonExchangerateFxsauder", [function () {
     };
 
     function getDirectiveTemplateUrl() {
-        return "/Client/Modules/Common/Directives/CurrencyExchangeRate/MainExtensions/Templates/ExchangeRateFxSauderTemplate.html";
+        return "/Client/Modules/Common/Directives/CurrencyExchangeRate/MainExtensions/Templates/ExchangeRateXigniteTemplate.html";
     }
 
     function DirectiveConstructor($scope, ctrl) {
@@ -47,7 +47,8 @@ app.directive("vrCommonExchangerateFxsauder", [function () {
                 
                 return {   
                     $type: "Vanrise.Common.Business.ExchangeRateTasks.ExchangeRateTaskActionArgument, Vanrise.Common.Business",
-                    URL: $scope.url
+                    URL: $scope.url,
+                    Token:$scope.token
                 };
             };
 
@@ -55,6 +56,7 @@ app.directive("vrCommonExchangerateFxsauder", [function () {
             api.load = function (payload) {
                 if (payload != undefined && payload.data != undefined) {
                     $scope.url = payload.data.URL;
+                    $scope.token = payload.data.Token;
                 }
             }
 

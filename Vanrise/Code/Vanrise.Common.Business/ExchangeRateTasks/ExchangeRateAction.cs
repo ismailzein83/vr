@@ -18,10 +18,14 @@ namespace Vanrise.Common.Business.ExchangeRateTasks
             if (resultTaskActionArgument.URL == null)
                 throw new Exception("URL is empty ");
 
-            string SupplementaryExchangeRatesActualSiteUrl = resultTaskActionArgument.URL ;
-            FxSauderCurrencyReader CurrencyReader = new FxSauderCurrencyReader();
-            CurrencyReader.ExchangeRatesURL = SupplementaryExchangeRatesActualSiteUrl;
-            List<FxSauderCurrency> newRates = CurrencyReader.Build();
+            if (resultTaskActionArgument.Token == null)
+                throw new Exception("Token is empty ");
+            string baseUrl = resultTaskActionArgument.URL ;
+            string token = resultTaskActionArgument.Token;
+
+
+            XigniteCurrencyReader CurrencyReader = new XigniteCurrencyReader(baseUrl, token);
+            List<XigniteCurrency> newRates = CurrencyReader.GetRealTimeRates();
 
             CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
@@ -33,14 +37,18 @@ namespace Vanrise.Common.Business.ExchangeRateTasks
                 if (existingExchangeRate != null  )
                 {
 
-                    if (existingExchangeRate.ExchangeRate != null && ex.Rate != existingExchangeRate.ExchangeRate.Rate)
-                        ratesToInsert.Add(new CurrencyExchangeRate()
-                        {
-                            CurrencyId = existingExchangeRate.ExchangeRate.CurrencyId,
-                            Rate = ex.Rate,
-                            ExchangeDate = DateTime.Now
-                        });
-                    else
+                    if (existingExchangeRate.ExchangeRate != null)
+                    {
+                        if (ex.Rate != existingExchangeRate.ExchangeRate.Rate)
+                            ratesToInsert.Add(new CurrencyExchangeRate()
+                            {
+                                CurrencyId = existingExchangeRate.ExchangeRate.CurrencyId,
+                                Rate = ex.Rate,
+                                ExchangeDate = DateTime.Now
+                            });
+                    }
+                       
+                    else 
                         ratesToInsert.Add(new CurrencyExchangeRate()
                         {
                             CurrencyId = existingExchangeRate.CurrencyId,

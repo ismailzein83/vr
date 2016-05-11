@@ -173,8 +173,8 @@
     <Content Include="Common\Directives\Country\Templates\CountryGridTemplate.html" />
     <Content Include="Common\Directives\Country\vr-common-country-grid.js" />
     <Content Include="Common\Directives\Country\vr-common-country-selector.js" />
-    <Content Include="Common\Directives\CurrencyExchangeRate\MainExtensions\Templates\ExchangeRateFxSauderTemplate.html" />
-    <Content Include="Common\Directives\CurrencyExchangeRate\MainExtensions\vr-common-exchangerate-fxsauder.js" />
+    <Content Include="Common\Directives\CurrencyExchangeRate\MainExtensions\Templates\ExchangeRateXigniteTemplate.html" />
+    <Content Include="Common\Directives\CurrencyExchangeRate\MainExtensions\vr-common-exchangerate-xignite.js" />
     <Content Include="Common\Directives\CurrencyExchangeRate\Templates\CurrencyExchangeRateGridTemplate.html" />
     <Content Include="Common\Directives\CurrencyExchangeRate\vr-common-currencyexchangerate-grid.js" />
     <Content Include="Common\Directives\CurrencyExchangeRate\vr-common-currencyexchangerate-selector.js" />
