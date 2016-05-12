@@ -6,6 +6,7 @@
                     <vr-select label="Report Type"
                                datasource="scopeModel.reportTypes"
                                selectedvalues="scopeModel.selectedReportType"
+                               onselectionchanged="scopeModel.onReportTypeSelectionChanged"
                                datavaluefield="value"
                                datatextfield="description"
                                isrequired
@@ -29,6 +30,9 @@
                     <vr-textbox label="Number Of Periods" type="number" value="scopeModel.numberOfPeriods" minvalue="1" isrequired></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
+                    <vr-textbox label="Top" type="number" value="scopeModel.top" minvalue="1" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
                     <vr-switch label="Group By Profile" value="scopeModel.groupByProfile"></vr-switch>
                 </vr-columns>
             </vr-row>
@@ -43,6 +47,13 @@
         <vr-row ng-show="scopeModel.showGrid">
             <vr-columns width="fullrow" simplecol>
                 <vr-whs-analytics-variationreport-grid on-ready="scopeModel.onGridReady"></vr-whs-analytics-variationreport-grid>
+            </vr-columns>
+        </vr-row>
+        <vr-row ng-show="scopeModel.showChart">
+            <vr-columns width="fullrow">
+                <vr-section title="{{scopeModel.selectedReportType.description}}">
+                    <vr-chart on-ready="scopeModel.onChartReady"></vr-chart>
+                </vr-section>
             </vr-columns>
         </vr-row>
     </vr-form>
