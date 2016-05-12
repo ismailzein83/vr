@@ -77,6 +77,7 @@
                         $scope.scopeModel.name = tableEntity.Name;
                         $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
                         $scope.scopeModel.tableName = tableEntity.Settings.TableName;
+                        $scope.scopeModel.timeColumnName = tableEntity.Settings.TimeColumnName;
                     }
                 }
 
@@ -96,7 +97,8 @@
                 Name:  $scope.scopeModel.name ,
                 Settings:{
                     ConnectionString:  $scope.scopeModel.connectionString,
-                    TableName: $scope.scopeModel.tableName 
+                    TableName: $scope.scopeModel.tableName,
+                    TimeColumnName: $scope.scopeModel.timeColumnName
                 }
             }
             return table;

@@ -27,8 +27,6 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.measures = [];
-
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
@@ -51,10 +49,6 @@
                                 for (var i = 0; i < payload.widgetEntity.Measures.length; i++) {
                                     var measure = payload.widgetEntity.Measures[i];
                                     selectedMeasureIds.push(measure.MeasureName);
-                                    $scope.scopeModel.measures.push({
-                                        Name: measure.MeasureName,
-                                        Title: measure.Title,
-                                    });
                                 }
                             }
                         }
@@ -95,14 +89,12 @@
 
                 function getMeasures() {
                     var measures;
-                    if ($scope.scopeModel.measures != undefined && $scope.scopeModel.measures.length > 0) {
+                    if (measureSelectorAPI != undefined && measureSelectorAPI.getSelectedIds() !=undefined) {
                         measures = [];
-                        for (var i = 0; i < $scope.scopeModel.measures.length; i++) {
-                            var measure = $scope.scopeModel.measures[i];
-                            measures.push({
-                                MeasureName: measure.Name,
-                                Title: measure.Title,
-                            });
+                        var selectedIds = measureSelectorAPI.getSelectedIds();
+                        for (var i = 0; i < selectedIds.length; i++) {
+                            var measure = selectedIds[i];
+                            measures.push({ MeasureName: measure});
                         }
                     }
                     console.log(measures);
