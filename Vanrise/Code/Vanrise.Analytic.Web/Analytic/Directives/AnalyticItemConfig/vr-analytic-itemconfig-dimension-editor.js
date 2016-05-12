@@ -36,6 +36,10 @@
             var joinReadyDeferred = UtilsService.createPromiseDeferred();
             var parentDimensionSelectorAPI;
             var parentDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var requiredParentDimensionSelectorAPI;
+            var requiredParentDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+
             var fieldTypeAPI;
             var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -44,6 +48,11 @@
                 $scope.onParentDimensionSelectorDirectiveReady = function (api) {
                     parentDimensionSelectorAPI = api;
                     parentDimensionReadyDeferred.resolve();
+                }
+
+                $scope.onRequiredParentDimensionSelectorDirectiveReady = function (api) {
+                    requiredParentDimensionSelectorAPI = api;
+                    requiredParentDimensionReadyDeferred.resolve();
                 }
                 $scope.onJoinSelectorDirectiveReady = function (api) {
                     joinSelectorAPI = api;
@@ -74,7 +83,6 @@
                            
                             $scope.idColumn = configEntity.IdColumn;
                             $scope.nameColumn = configEntity.NameColumn;
-                            $scope.isRequiredFromParent = configEntity.IsRequiredFromParent;
                             $scope.currencySQLColumnName = configEntity.CurrencySQLColumnName;
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -92,12 +100,24 @@
                         parentDimensionReadyDeferred.promise.then(function () {
                             var payloadParentDirective = {
                                 filter: { TableIds: [tableId] },
-                                selectedIds: configEntity!=undefined?configEntity.ParentDimension:undefined
+                                selectedIds: configEntity != undefined ? configEntity.Parents : undefined
                             };
 
                             VRUIUtilsService.callDirectiveLoad(parentDimensionSelectorAPI, payloadParentDirective, loadParentDirectivePromiseDeferred);
                         });
                         promises.push(loadParentDirectivePromiseDeferred.promise);
+
+
+                        var loadRequiredParentDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        requiredParentDimensionReadyDeferred.promise.then(function () {
+                            var payloadRequiredParentDirective = {
+                                filter: { TableIds: [tableId] },
+                                selectedIds: configEntity != undefined ? configEntity.RequiredParentDimension : undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(requiredParentDimensionSelectorAPI, payloadRequiredParentDirective, loadRequiredParentDirectivePromiseDeferred);
+                        });
+                        promises.push(loadRequiredParentDirectivePromiseDeferred.promise);
 
 
                         var loadFieldTypePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -116,15 +136,16 @@
                 api.getData = function () {
                     var fieldType = fieldTypeAPI!=undefined?fieldTypeAPI.getData():undefined; 
                     var joinConfigNames  = joinSelectorAPI !=undefined?joinSelectorAPI.getSelectedIds():undefined;
-                    var parentDimension = parentDimensionSelectorAPI !=undefined?parentDimensionSelectorAPI.getSelectedIds():undefined;
-                    
+                    var parents = parentDimensionSelectorAPI != undefined ? parentDimensionSelectorAPI.getSelectedIds() : undefined;
+                    var requiredParentDimension = requiredParentDimensionSelectorAPI != undefined ? requiredParentDimensionSelectorAPI.getSelectedIds() : undefined;
+
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticDimensionConfig ,Vanrise.Analytic.Entities",
                         IdColumn : $scope.idColumn,
                         NameColumn:  $scope.nameColumn,
                         JoinConfigNames: joinConfigNames,
-                        ParentDimension:parentDimension,
-                        IsRequiredFromParent: $scope.isRequiredFromParent,
+                        Parents: parents,
+                        RequiredParentDimension: requiredParentDimension,
                         FieldType:fieldType,
                         CurrencySQLColumnName: $scope.currencySQLColumnName,
                      //   GroupByColumns: ,

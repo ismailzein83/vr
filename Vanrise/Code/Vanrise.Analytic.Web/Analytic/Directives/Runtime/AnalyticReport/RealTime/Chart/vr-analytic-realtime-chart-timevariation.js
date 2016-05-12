@@ -57,7 +57,6 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                             }
                             return VR_Analytic_AnalyticAPIService.GetTimeVariationAnalyticRecords(dataRetrievalInput)
                                 .then(function (response) {
-                                    console.log(response);
                                     renderCharts(response, payload.Settings.ChartType);
                                     ctrl.showlaoder = false;
                                 });
@@ -65,38 +64,30 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                             function renderCharts(response, chartType) {
                                 var chartData = new Array();
 
-                                //for (var m = 0; m < ctrl.measures.length; m++) {
-                                //    var measureObject = new Object();
-
-                                //    for (var i = 0; i < response.Data.length  ; i++) {
-                                //        var dimensionName = "";
-                                //        for (var d = 0; d < ctrl.groupingDimensions.length; d++) {
-                                //            dimensionName += response.Data[i].DimensionValues[d].Value + ", ";
-                                //        }
-                                //        dimensionName = UtilsService.trim(dimensionName, ", ");
-                                //        var chartRecord = UtilsService.getItemByVal(chartData, dimensionName, "DimensionValue");
-                                //        if (chartRecord == undefined) {
-                                //            chartRecord = {};
-                                //            chartRecord["DimensionValue"] = dimensionName;
-                                //            chartData.push(chartRecord);
-                                //        }
-                                //        chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName];
-                                //    }
-                                //}
+                                for (var m = 0; m < ctrl.measures.length; m++) {
+                                    var measureObject = new Object();
+                                    for (var i = 0; i < response.Data.length  ; i++) {
+                                        var chartRecord = {
+                                           Time : response.Data[i].Time,
+                                        };
+                                        chartData.push(chartRecord);
+                                        chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName];
+                                    }
+                                }
                                 var chartDefinition = {
                                     type: chartType,
                                     yAxisTitle: "Value"
                                 };
                                 var xAxisDefinition = {
                                     titlePath: "Time",
-                                    isDateTime: false
+                                    isDateTime: true
                                 };
 
                                 var seriesDefinitions = [];
                                 for (var i = 0; i < ctrl.measures.length; i++) {
                                     var measure = ctrl.measures[i];
                                     seriesDefinitions.push({
-                                        title: measure.Title,
+                                        title: measure.MeasureName,
                                         valuePath: measure.MeasureName
                                     });
                                 }
@@ -136,14 +127,13 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                 }
 
                 ctrl.sortField = 'MeasureValues.' + ctrl.measures[0].MeasureName;
-                console.log(ctrl.dimensions);
                 var queryFinalized = {
                     Filters: payLoad.DimensionFilters,
                     MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                     FromTime: fromTime,
                     ToTime: toTime,
                     TableId: payLoad.TableId,
-                    TimeGroupingUnit: 0,
+                    TimeGroupingUnit: payLoad.TimeGroupingUnit,
                 }
                 return queryFinalized;
             }

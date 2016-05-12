@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum','VRTimerService'];
+    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum','VRTimerService','VR_Analytic_TimeGroupingUnitEnum'];
 
-    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService) {
+    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum) {
         return {
             restrict: "E",
             scope: {
@@ -30,25 +30,29 @@
             var currentToDate = "06/05/2015 00:00:00";
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.timeGroupingUnits = UtilsService.getArrayEnum(VR_Analytic_TimeGroupingUnitEnum);
+
+                
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
                 $scope.scopeModel.fromdate = "01/01/2015 00:00:00";
                 $scope.scopeModel.todate = "06/05/2015 00:00:00";
 
-                $scope.search = function () {
-                    currentFromDate=$scope.scopeModel.fromdate ;
+                $scope.scopeModel.search = function () {
+                    currentFromDate=$scope.scopeModel.fromdate;
                     currentToDate = $scope.scopeModel.todate;
-                   // VRTimerService.unregisterJob(search);
+                    VRTimerService.unregisterJob(search);
                     VRTimerService.registerLowFreqJob(search);
-                 
+                    return search();
+                   // VRTimerService.unregisterJob(search);
                 };
 
                 defineAPI();
             }
+           
             function search()
             {
-
                 if ($scope.scopeModel.widgets.length > 0) {
                     var promiseDeffer = UtilsService.createPromiseDeferred();
                     for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
@@ -241,14 +245,13 @@
                     }
                 }
                 var query = {
-                    Dimensions: dimensions,
                     Measures:measures,
                     Settings: widgetPayload,
                     DimensionFilters: dimensionFilters,
                     TableId: widgetPayload.AnalyticTableId,
-                    GroupingDimensions: [{DimensionName:"DeliveredAttempts"}],
                     FromTime: currentFromDate,
-                    ToTime: currentToDate
+                    ToTime: currentToDate,
+                    TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit !=undefined?$scope.scopeModel.selectedTimeGroupingUnit.value:undefined
                 };
                 return query;
             }

@@ -82,7 +82,7 @@ namespace Vanrise.Analytic.Business
             foreach (var tableId in filter.TableIds)
             {
                 var dimensions = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, AnalyticItemType.Dimension);
-                dimensionConfigs.AddRange(dimensions.MapRecords(AnalyticDimensionConfigInfoMapper, x => (filter.HideIsRequiredFromParent== false || x.Config.IsRequiredFromParent != filter.HideIsRequiredFromParent)));
+                dimensionConfigs.AddRange(dimensions.MapRecords(AnalyticDimensionConfigInfoMapper, x => (filter.HideIsRequiredFromParent == false || (filter.HideIsRequiredFromParent == true && x.Config.RequiredParentDimension == null))));
             }
             return dimensionConfigs;
         }
@@ -306,8 +306,9 @@ namespace Vanrise.Analytic.Business
                 AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
                 Name = analyticItemConfig.Name,
                 Title = analyticItemConfig.Title,
-                IsRequiredFromParent = analyticItemConfig.Config.IsRequiredFromParent,
-                ParentDimension = analyticItemConfig.Config.ParentDimension,
+                RequiredParentDimension = analyticItemConfig.Config.RequiredParentDimension,
+                Parents = analyticItemConfig.Config.Parents,
+                Attribute = analyticItemConfig.Config.FieldType.GetGridColumnAttribute()
             };
         }
         AnalyticMeasureConfigInfo AnalyticMeasureConfigInfoMapper(AnalyticItemConfig<AnalyticMeasureConfig> analyticItemConfig)
@@ -316,7 +317,9 @@ namespace Vanrise.Analytic.Business
             {
                 AnalyticItemConfigId = analyticItemConfig.AnalyticItemConfigId,
                 Name = analyticItemConfig.Name,
-                Title = analyticItemConfig.Title
+                Title = analyticItemConfig.Title,
+                Attribute = analyticItemConfig.Config.FieldType.GetGridColumnAttribute()
+
             };
         }
         AnalyticJoinConfigInfo AnalyticJoinConfigInfoMapper(AnalyticItemConfig<AnalyticJoinConfig> analyticItemConfig)

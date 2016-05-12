@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Vanrise.Analytic.Data.SQL
             string query = BuildTimeVariationAnalyticQuery(input, false, parameterValues);
 
 
-            return GetItemsText(query, (reader) => TimeVariationAnalyticRecordMapper(reader, input.Query, false), (cmd) =>
+            return GetItemsText(query, (reader) => TimeVariationAnalyticRecordMapper(reader, input.Query, false,input.Query.TimeGroupingUnit), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
@@ -253,7 +254,7 @@ namespace Vanrise.Analytic.Data.SQL
             switch(timeGroupingUnit)
             {
                 case TimeGroupingUnit.Hour: selectPartBuilder.AppendFormat(" CONVERT(varchar(13), {0}, 121) as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(13), {0}, 121)", _table.Settings.TimeColumnName); break;
-                case TimeGroupingUnit.Minute: selectPartBuilder.AppendFormat(" CONVERT(varchar(16), {0}, 121)  as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(16), {0}, 121)", _table.Settings.TimeColumnName); break;
+                case TimeGroupingUnit.Day: selectPartBuilder.AppendFormat(" CONVERT(varchar(10), {0}, 121)  as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(10), {0}, 121)", _table.Settings.TimeColumnName); break;
             }
             return queryGrouping.ToString();
         }
@@ -525,10 +526,18 @@ namespace Vanrise.Analytic.Data.SQL
             return record;
         }
 
-        TimeVariationAnalyticRecord TimeVariationAnalyticRecordMapper(IDataReader reader, TimeVariationAnalyticQuery timeVariationAnalyticQuery, bool isSummary)
+        TimeVariationAnalyticRecord TimeVariationAnalyticRecordMapper(IDataReader reader, TimeVariationAnalyticQuery timeVariationAnalyticQuery, bool isSummary,TimeGroupingUnit timeGroupingUnit)
         {
             TimeVariationAnalyticRecord record = new TimeVariationAnalyticRecord();
-            record.Time = GetReaderValue<DateTime>(reader, "Date");
+            string dateTime = reader["Date"] as string;
+            DateTime dateTimeParsedValue = new DateTime();
+            switch(timeGroupingUnit)
+            {
+                case TimeGroupingUnit.Day: DateTime.TryParseExact(dateTime,"yyyy-MM-dd", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTimeParsedValue); break;
+                case TimeGroupingUnit.Hour: DateTime.TryParseExact(dateTime, "yyyy-MM-dd HH", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTimeParsedValue); break;
+            }
+            if (dateTimeParsedValue != default(DateTime))
+               record.Time = dateTimeParsedValue;
             record.MeasureValues = MeasureValuesMapper(reader, timeVariationAnalyticQuery.MeasureFields);
             return record;
         }

@@ -34,6 +34,9 @@
             this.initializeController = initializeController;
             var joinSelectorAPI;
             var joinReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var fieldTypeAPI;
+            var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
             function initializeController() {
 
                 $scope.expressionType = UtilsService.getArrayEnum(VR_Analytic_ExpressionTypeEnum);
@@ -57,6 +60,12 @@
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
                 }
+
+                $scope.onFieldTypeReady = function (api) {
+                    fieldTypeAPI = api;
+                    fieldTypeReadyDeferred.resolve();
+                }
+
 
                 defineAPI();
 
@@ -96,6 +105,17 @@
                         });
                         promises.push(loadJoinDirectivePromiseDeferred.promise);
 
+
+                        var loadFieldTypePromiseDeferred = UtilsService.createPromiseDeferred();
+                        fieldTypeReadyDeferred.promise.then(function () {
+                            var payloadFieldTypeDirective = configEntity != undefined ? configEntity.FieldType : undefined;
+
+                            VRUIUtilsService.callDirectiveLoad(fieldTypeAPI, payloadFieldTypeDirective, loadFieldTypePromiseDeferred);
+                        });
+                        promises.push(loadFieldTypePromiseDeferred.promise);
+                        return UtilsService.waitMultiplePromises(promises);
+
+
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
@@ -103,11 +123,13 @@
                 }
 
                 api.getData = function () {
+                    var fieldType = fieldTypeAPI != undefined ? fieldTypeAPI.getData() : undefined;
                     var joinConfigNames = joinSelectorAPI != undefined ? joinSelectorAPI.getSelectedIds() : undefined;
                     var dimension = {
                         $type: "Vanrise.Analytic.Entities.AnalyticMeasureConfig ,Vanrise.Analytic.Entities",
                         SQLExpression:$scope.showSQLExpression? $scope.sqlExpression:undefined,
-                        JoinConfigNames:joinConfigNames,
+                        JoinConfigNames: joinConfigNames,
+                        FieldType: fieldType,
                         GetSQLExpressionMethod:$scope.showSQLExpressionMethod? $scope.sqlExpressionMethod:undefined,
                     };
                     return dimension;

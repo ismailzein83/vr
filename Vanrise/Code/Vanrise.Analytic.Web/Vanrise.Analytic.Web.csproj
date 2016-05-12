@@ -102,6 +102,7 @@
     <Content Include="Analytic\Constants\AnalyticItemTypeEnum.js" />
     <Content Include="Analytic\Constants\ExpressionTypeEnum.js" />
     <Content Include="Analytic\Constants\ModuleConfig.js" />
+    <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-join-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-selector.js" />

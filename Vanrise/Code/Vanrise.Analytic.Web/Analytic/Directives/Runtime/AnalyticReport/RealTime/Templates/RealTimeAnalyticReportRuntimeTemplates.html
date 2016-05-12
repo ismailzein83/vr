@@ -4,6 +4,10 @@
             <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2" isrequired="filter.isRequired"></vr-directivewrapper>
         </span>
         <vr-columns colnum="2">
+            <vr-select datatextfield="description" datavaluefield="value" label="Grouping Unit"
+                       entityname="Grouping Unit" selectedvalues="scopeModel.selectedTimeGroupingUnit" datasource="scopeModel.timeGroupingUnits"></vr-select>
+        </vr-columns>
+        <vr-columns colnum="2">
             <vr-datetimepicker type="dateTime" label="From" value="scopeModel.fromdate" isrequired customvalidate="validateDateTime()"></vr-datetimepicker>
         </vr-columns>
         <vr-columns colnum="2">
@@ -14,7 +18,7 @@
 <vr-row removeline>
     <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
         <div transclude-to="buttons">
-            <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+            <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
         </div>
     </vr-actionbar>
 </vr-row>
