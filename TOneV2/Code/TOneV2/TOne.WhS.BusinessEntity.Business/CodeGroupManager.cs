@@ -275,8 +275,7 @@ namespace TOne.WhS.BusinessEntity.Business
             codeGroupDetail.Entity = codeGroup;
 
             CountryManager manager = new CountryManager();
-            Country country = manager.GetCountry(codeGroup.CountryId);
-            codeGroupDetail.CountryName = country != null ? country.Name : null;
+            codeGroupDetail.CountryName = manager.GetCountryName(codeGroup.CountryId);
 
             return codeGroupDetail;
         }
