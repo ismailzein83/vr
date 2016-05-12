@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html ng-app="mainModule">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/AngularExtensions")
+    @Styles.Render("~/Content/CodeMirrorStyle")
+    @*@Styles.Render("~/Content/Semantic")*@
+    @Styles.Render("~/Content/Styles")
+
+</head>
+<body ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';">
+
+    @*<nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
+        <div class="container">
+            <div class="navbar-header">
+                <img src="/Client/Images/logoonheader.png" class="minilogo" />
+            </div>
+            <div id="navbar">
+
+            </div>/.nav-collapse
+        </div>
+    </nav>*@
+    <div class="main">
+        <div ng-include="'/Client/Modules/Security/Views/Payment.html'"></div>
+    </div>
+
+</body>
+@Scripts.Render("~/bundles/helpers")
+@Scripts.Render("~/bundles/JQuery")
+@Scripts.Render("~/bundles/codemirror")
+@Scripts.Render("~/bundles/Angular")
+@Scripts.Render("~/bundles/CodemirrorDirective")
+@Scripts.Render("~/bundles/AngularExtensions")
+
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/highchart")
+@*@Scripts.Render("~/bundles/Semantic")*@
+@Scripts.Render("~/bundles/Javascripts")
+@Scripts.Render("~/bundles/ModulesJavascripts")
+@Scripts.Render("~/bundles/waves")
+
+
+</html>

@@ -175,6 +175,7 @@
     <Content Include="Client\Images\onebit_34.png" />
     <Content Include="Client\Images\support.png" />
     <Content Include="Client\Images\true.png" />
+    <Content Include="Client\Javascripts\Constants\HttpStatusCodeEnum.js" />
     <Content Include="Client\Javascripts\Constants\AuthenticateOperationResultEnum.js" />
     <Content Include="Client\Javascripts\Constants\ChartDefinitionTypeEnum.js" />
     <Content Include="Client\Javascripts\Constants\ColumnWidthEnum.js" />
@@ -1598,6 +1599,10 @@
   <ItemGroup>
     <Folder Include="Client\Libraries\Bower\codemirror\mode\rpm\changes\" />
     <Folder Include="Client\Modules\" />
+    <Folder Include="Client\Views\Payment\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Client\CSViews\Security\Payment.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
