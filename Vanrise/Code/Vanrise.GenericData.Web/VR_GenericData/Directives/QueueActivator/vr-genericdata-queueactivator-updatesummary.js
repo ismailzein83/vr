@@ -78,6 +78,12 @@
                     };
                 }
 
+                api.getQueueItemType = function () {
+                    return {
+                        $type: "Vanrise.GenericData.QueueActivators.GenericSummaryRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators"
+                    };
+                };
+
                 return api;
             }
         }

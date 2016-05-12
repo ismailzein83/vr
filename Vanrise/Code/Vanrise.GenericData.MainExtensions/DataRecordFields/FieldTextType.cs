@@ -13,6 +13,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public override Type GetRuntimeType()
         {
+            return GetNonNullableRuntimeType();
+        }
+
+        public override Type GetNonNullableRuntimeType()
+        {
             return typeof(string);
         }
 

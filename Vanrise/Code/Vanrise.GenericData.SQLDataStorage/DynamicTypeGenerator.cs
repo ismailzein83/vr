@@ -87,13 +87,25 @@ namespace Vanrise.GenericData.SQLDataStorage
                         recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");                        
                         string sqlDataType = columnSettings.SQLDataType.ToLower();
                         if (sqlDataType.Contains("decimal"))
-                            columnsValuesBuider.Append(String.Format(", Vanrise.Data.BaseDataManager.GetDecimalForBCP(record.{0})", columnSettings.ValueExpression));
-                        else if(sqlDataType == "bit")
+                        {
+                            int precision = 0;
+                            if(sqlDataType.Contains(","))
+                            {
+                                string[] parts = sqlDataType.Split(',');
+                                if(parts.Length == 2)
+                                {
+                                    string precisionPart = parts[1].Replace(")", "").Trim();
+                                    int.TryParse(precisionPart, out precision);
+                                }
+                            }
+                            columnsValuesBuider.Append(String.Format(", record.{0} != null ? Math.Round(record.{0}, {1}) : \"\"", columnSettings.ValueExpression, precision));
+                        }
+                        else if (sqlDataType == "bit")
                             columnsValuesBuider.Append(String.Format(", record.{0} != null ? (record.{0} == true ? \"1\" : \"0\") : \"\"", columnSettings.ValueExpression));
                         else if (sqlDataType == "datetime")
                             columnsValuesBuider.Append(String.Format(", (record.{0} != null && record.{0} != default(DateTime)) ? record.{0} : \"\"", columnSettings.ValueExpression));
                         else
-                            columnsValuesBuider.Append(String.Format(", record.{0}", columnSettings.ValueExpression));
+                            columnsValuesBuider.Append(String.Format(", record.{0} != null ? record.{0} : \"\"", columnSettings.ValueExpression));
                         columnIndex++;
                         if (columnNamesBuilder.Length > 0)
                             columnNamesBuilder.Append(", ");
@@ -164,8 +176,8 @@ namespace Vanrise.GenericData.SQLDataStorage
                 var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == column.ValueExpression);
                 if (matchField == null)
                     throw new NullReferenceException("matchField");
-                dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof({1}));", column.ColumnName, CSharpCompiler.TypeToString(matchField.Type.GetRuntimeType())));
-                dtRowsBuilder.AppendLine(String.Format(@"dr[""{0}""] = record.{1};", column.ColumnName, column.ValueExpression));
+                dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof({1}));", column.ColumnName, CSharpCompiler.TypeToString(matchField.Type.GetNonNullableRuntimeType())));
+                dtRowsBuilder.AppendLine(String.Format(@"dr[""{0}""] = record.{1} != null ? record.{1} : DBNull.Value;", column.ColumnName, column.ValueExpression));
             }
             builder.Replace("#DTSCHEMA#", dtSchemaBuilder.ToString());
             builder.Replace("#ROWBUILDER#", dtRowsBuilder.ToString());

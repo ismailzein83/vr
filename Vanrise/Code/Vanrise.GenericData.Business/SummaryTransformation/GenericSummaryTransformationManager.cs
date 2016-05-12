@@ -112,21 +112,12 @@ namespace Vanrise.GenericData.Business
             return this.GenericSummaryTransformer.GetItemKeyFromSummaryItem(summaryItem.DataRecord);
         }
 
-        protected override string GetSummaryItemKey(dynamic rawItem)
-        {
-            return this.GenericSummaryTransformer.GetItemKeyFromRawItem(rawItem);
-        }
-
         protected override void InsertItemsToDB(List<GenericSummaryItem> itemsToAdd)
         {
             var dataRecords = GetDataRecordsFromSummaryItems(itemsToAdd);
             this.SummaryRecordDataManager.InsertSummaryRecords(dataRecords);
         }
-
-        protected override void SetSummaryItemGroupingFields(GenericSummaryItem summaryItem, dynamic rawItem)
-        {
-            this.GenericSummaryTransformer.SetGroupingFields(summaryItem.DataRecord, rawItem);
-        }
+        
 
         protected override void UpdateItemsInDB(List<GenericSummaryItem> itemsToUpdate)
         {
@@ -134,17 +125,23 @@ namespace Vanrise.GenericData.Business
             this.SummaryRecordDataManager.UpdateSummaryRecords(dataRecords);
         }
 
-        protected override void UpdateSummaryItemFromRawItem(GenericSummaryItem summaryItem, dynamic rawItem)
+        protected override GenericSummaryItem CreateSummaryItemFromRawItem(dynamic rawItem)
         {
             var summaryFromRawSettings = this.SummaryTransformationDefinition.SummaryFromRawSettings;
             if (summaryFromRawSettings == null)
                 throw new NullReferenceException("summaryFromRawSettings");
-            this.DataTransformer.ExecuteDataTransformation(summaryFromRawSettings.TransformationDefinitionId,
+            var output = this.DataTransformer.ExecuteDataTransformation(summaryFromRawSettings.TransformationDefinitionId,
                 (context) =>
                 {
                     context.SetRecordValue(summaryFromRawSettings.RawRecordName, rawItem);
-                    context.SetRecordValue(summaryFromRawSettings.SymmaryRecordName, summaryItem.DataRecord);
                 });
+            var summaryDataRecord = output.GetRecordValue(summaryFromRawSettings.SymmaryRecordName);
+            if (summaryDataRecord == null)
+                throw new NullReferenceException("summaryDataRecord");
+            return new GenericSummaryItem
+            {
+                DataRecord = summaryDataRecord
+            };
         }
 
         protected override void UpdateSummaryItemFromSummaryItem(GenericSummaryItem existingItem, GenericSummaryItem newItem)
@@ -194,21 +191,6 @@ namespace Vanrise.GenericData.Business
             }
             else
                 return null;
-        }
-    }
-
-    
-    
-
-    public class SummaryBatchTimeInterval : SummaryTransformationBatchRangeRetrieval
-    {
-        public string RawTimeFieldName { get; set; }
-
-        public int IntervalInMinutes { get; set; }
-
-        public override void GetRawItemBatchTimeRange(dynamic rawItem, DateTime rawItemTime, out DateTime batchStart)
-        {
-            batchStart = new DateTime(rawItemTime.Year, rawItemTime.Month, rawItemTime.Day, rawItemTime.Hour, ((int)(rawItemTime.Minute / this.IntervalInMinutes)) * this.IntervalInMinutes, 0);
         }
     }
 }

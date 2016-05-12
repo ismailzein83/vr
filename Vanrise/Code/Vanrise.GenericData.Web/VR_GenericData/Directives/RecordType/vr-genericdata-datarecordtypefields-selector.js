@@ -10,7 +10,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
             ismultipleselection: "@",
             hideselectedvaluessection: '@',
             onselectionchanged: '=',
-            isrequired: '@',
+            isrequired: '=',
             isdisabled: "=",
             selectedvalues: "=",
             showaddbutton: '@',
@@ -51,9 +51,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
         if (attrs.isdisabled)
             disabled = "vr-disabled='true'"
 
-        var required = "";
-        if (attrs.isrequired != undefined)
-            required = "isrequired";
+        
 
         var hideselectedvaluessection = "";
         if (attrs.hideselectedvaluessection != undefined)
@@ -64,7 +62,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="Name"'
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="Name"'
                + 'entityname="Field" ' + label + '></vr-select>';
 
     }

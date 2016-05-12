@@ -154,7 +154,9 @@ namespace Vanrise.GenericData.Transformation
             var dataTransformationDefinition = GetDataTransformationDefinition(dataTransformationDefinitionId);
             if (dataTransformationDefinition != null)
             {
-                Func<DataTransformationRecordType, bool> filterExpression = (x) => (filter.DataRecordTypeIds == null || filter.DataRecordTypeIds.Count() == 0 || filter.DataRecordTypeIds.Contains(x.DataRecordTypeId.Value)
+                Func<DataTransformationRecordType, bool> filterExpression = (x) => 
+                    (filter.DataRecordTypeIds == null || filter.DataRecordTypeIds.Count() == 0 || 
+                    (x.DataRecordTypeId.HasValue && filter.DataRecordTypeIds.Contains(x.DataRecordTypeId.Value))
                     && (!filter.IsArray.HasValue || x.IsArray == filter.IsArray)
                     );
 

@@ -69,7 +69,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService',
                 api.load = function (payload) {
                     if (payload != undefined && payload.Choices != undefined && payload.Choices.length > 0) {
                         ctrl.values = payload.Choices;
-                        ctrl.isNullable = payload.IsNullable
+                        ctrl.isNullable = payload.IsNullable;
                     }
                 }
 

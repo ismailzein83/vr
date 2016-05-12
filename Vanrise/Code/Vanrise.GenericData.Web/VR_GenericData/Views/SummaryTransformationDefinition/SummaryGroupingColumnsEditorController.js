@@ -38,6 +38,7 @@
             $scope.scopeModal = {};
             $scope.selectedRawDataRecordTypeFields;
             $scope.selectedSummaryDataRecordTypeFields;
+           
 
             $scope.scopeModal.SaveColumnGroup = function () {
                 if (isEditMode) {
@@ -69,7 +70,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadRawDataRecordFieldTypeDirective, loadSummaryDataRecordFieldTypeDirective, setTitle])
+            return UtilsService.waitMultipleAsyncOperations([loadFilterBySection, loadRawFieldMappingSection, loadSummaryDataRecordFieldTypeDirective, setTitle])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -84,15 +85,38 @@
         }
         function setTitle() {
             if (isEditMode && keyFieldMappingEntity.RawFieldName != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(keyFieldMappingEntity.RawFieldName + ' - ' + keyFieldMappingEntity.SummaryFieldName, 'Columns Mapping');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(keyFieldMappingEntity.SummaryFieldName, 'Columns Mapping');
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Columns Mapping');
         }
 
-        function loadRawDataRecordFieldTypeDirective() {
+        function loadRawFieldMappingSection() {
+            $scope.scopeModal.rawFieldOptions = [{
+                value: "Field",
+                text: "Field"
+            },
+           {
+               value: "Expression",
+               text: "Expression"
+           }];
+            if (keyFieldMappingEntity != undefined) {
+                if(keyFieldMappingEntity.RawFieldName != undefined)
+                    $scope.scopeModal.selectedRawFieldOption = UtilsService.getItemByVal($scope.scopeModal.rawFieldOptions, "Field", "value");
+                else
+                {
+                    $scope.scopeModal.selectedRawFieldOption = UtilsService.getItemByVal($scope.scopeModal.rawFieldOptions, "Expression", "value");
+                    $scope.scopeModal.rawExpression = keyFieldMappingEntity.GetRawFieldExpression;
+                }
+
+            }
+            else
+                $scope.scopeModal.selectedRawFieldOption = UtilsService.getItemByVal($scope.scopeModal.rawFieldOptions, "Field", "value");
+
             var dataRawRecordFieldTypeDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             directiveRawReadyPromiseDeferred.promise.then(function () {
-                var payload = keyFieldMappingEntity != undefined ? { dataRecordTypeId: rawDataRecordTypeId, selectedIds: keyFieldMappingEntity.RawFieldName } : { dataRecordTypeId: rawDataRecordTypeId };
+                var payload = { dataRecordTypeId: rawDataRecordTypeId };
+                if (keyFieldMappingEntity != undefined)
+                    payload.selectedIds = keyFieldMappingEntity.RawFieldName;
                 VRUIUtilsService.callDirectiveLoad(directiveRawReadyAPI, payload, dataRawRecordFieldTypeDirectiveLoadPromiseDeferred);
             });
             return dataRawRecordFieldTypeDirectiveLoadPromiseDeferred.promise;
@@ -109,8 +133,11 @@
 
         function buildDataRecordFieldObjectObjFromScope() {
             var item = {};
-            item.RawFieldName = directiveRawReadyAPI.getSelectedIds();
             item.SummaryFieldName = directiveSummaryReadyAPI.getSelectedIds();
+            if ($scope.scopeModal.selectedRawFieldOption.value == "Field")
+                item.RawFieldName = directiveRawReadyAPI.getSelectedIds();
+            else
+                item.GetRawFieldExpression = $scope.scopeModal.rawExpression;
             return item;
         }
 

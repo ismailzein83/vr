@@ -19,7 +19,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetRuntimeType()
         {
-            return (IsNullable) ? typeof(int?) : typeof(int);
+            var type = GetNonNullableRuntimeType();
+            return (IsNullable) ? GetNullableType(type) : type;
         }
 
         public override Type GetNonNullableRuntimeType()

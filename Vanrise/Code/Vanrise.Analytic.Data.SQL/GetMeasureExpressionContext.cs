@@ -22,5 +22,11 @@ namespace Vanrise.Analytic.Data.SQL
         {
             return _getMeasureExpression(measureConfigName, this);
         }
+
+
+        public bool IsGroupingDimensionIncluded(string dimensionName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -13,10 +13,7 @@ namespace Vanrise.GenericData.Entities
 
         public abstract Type GetRuntimeType();
 
-        public virtual Type GetNonNullableRuntimeType()
-        {
-            return GetRuntimeType();
-        }
+        public abstract Type GetNonNullableRuntimeType();
 
         public abstract string GetDescription(Object value);
 

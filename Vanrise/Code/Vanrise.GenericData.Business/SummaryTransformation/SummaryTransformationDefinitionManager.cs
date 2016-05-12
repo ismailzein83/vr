@@ -129,7 +129,6 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-
         #endregion
 
         #region Mappers

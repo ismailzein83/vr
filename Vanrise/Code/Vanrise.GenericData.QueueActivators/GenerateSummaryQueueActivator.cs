@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.QueueActivators
             if (summaryRecordRuntimeType == null)
                 throw new NullReferenceException(String.Format("summaryRecordRuntimeType {0}", recordTypeId));
 
-            var summaryBatches = transformationManager.ConvertRawItemsToBatches(batchRecords, () => new GenericSummaryRecordBatch(), () => new GenericSummaryItem { DataRecord = Activator.CreateInstance(summaryRecordRuntimeType) });
+            var summaryBatches = transformationManager.ConvertRawItemsToBatches(batchRecords, () => new GenericSummaryRecordBatch());
             if (summaryBatches != null)
             {
                 foreach(var b in summaryBatches)

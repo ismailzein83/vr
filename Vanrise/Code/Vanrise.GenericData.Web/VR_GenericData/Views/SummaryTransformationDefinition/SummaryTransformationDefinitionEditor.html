@@ -96,8 +96,10 @@
                             <vr-validator validate="scopeModal.isValidColumnGrouping()">
                                 <vr-datagrid datasource="scopeModal.datasourceColumnGrouping" norowhighlightonclick="true" menuactions="gridMenuActionsColumnGrouping"
                                              enabledraggablerow="true" idegridmenu hidegridmenu>
-                                    <vr-datagridcolumn headertext="'Raw Item'" field="'RawFieldName'" disablesorting></vr-datagridcolumn>
                                     <vr-datagridcolumn headertext="'Summary Item'" field="'SummaryFieldName'" disablesorting></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Raw Mapping'" disablesorting>
+                                        {{dataItem.RawFieldName != undefined ? dataItem.RawFieldName : "Expression"}}
+                                    </vr-datagridcolumn>
                                 </vr-datagrid>
                             </vr-validator>
                         </vr-columns>

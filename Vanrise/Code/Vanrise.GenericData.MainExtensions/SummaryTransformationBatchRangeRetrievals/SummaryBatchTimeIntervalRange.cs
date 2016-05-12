@@ -17,7 +17,15 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override void GetRawItemBatchTimeRange(dynamic rawItem, DateTime rawItemTime, out DateTime batchStart)
         {
-            batchStart = new DateTime(rawItemTime.Year, rawItemTime.Month, rawItemTime.Day, rawItemTime.Hour, ((int)(rawItemTime.Minute / this.IntervalOffset)) * this.IntervalOffset, 0);
+            switch (this.IntervalType)
+            {
+                case SummaryBatchIntervalType.Minutes:
+                    batchStart = new DateTime(rawItemTime.Year, rawItemTime.Month, rawItemTime.Day, rawItemTime.Hour, ((int)(rawItemTime.Minute / this.IntervalOffset)) * this.IntervalOffset, 0);
+                    break;
+                default:
+                    throw new NotImplementedException();
+
+            }
         }
     }
 }

@@ -11,11 +11,7 @@ namespace Vanrise.GenericData.Business
     {
         DateTime GetRawItemTime(dynamic rawItem);
 
-        string GetItemKeyFromRawItem(dynamic rawItem);
-
         string GetItemKeyFromSummaryItem(dynamic summaryItem);
-
-        void SetGroupingFields(dynamic summaryItem, dynamic rawItem);
 
         void SetSummaryItemFieldsToDataRecord(GenericSummaryItem summaryItem);
 

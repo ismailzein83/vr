@@ -11,7 +11,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldBooleanType : DataRecordFieldType
     {
+        public bool IsNullable { get; set; }
+
         public override Type GetRuntimeType()
+        {
+            var type = GetNonNullableRuntimeType();
+            return (IsNullable) ? GetNullableType(type) : type;
+        }
+
+        public override Type GetNonNullableRuntimeType()
         {
             return typeof(bool);
         }

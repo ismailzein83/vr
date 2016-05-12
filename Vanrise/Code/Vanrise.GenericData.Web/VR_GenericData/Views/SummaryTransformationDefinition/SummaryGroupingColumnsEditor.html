@@ -3,21 +3,35 @@
         <vr-form validationcontext="columnGroupEditorGroup">
             <vr-row>
                 <vr-columns width="1/3row">
-                    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onRawDataRecordTypeFieldsSelectorReady"
-                                                                  selectedvalues="scopeModal.selectedRawDataRecordTypeFields"
-                                                                  isrequired="true"
-                                                                  label=" Raw Field"
-                                                                  hideremoveicon>
-                    </vr-genericdata-datarecordtypefields-selector>
-                </vr-columns>
-
-                <vr-columns width="1/3row">
                     <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onSummaryDataRecordTypeFieldsSelectorReady"
                                                                   selectedvalues="scopeModal.selectedSummaryDataRecordTypeFields"
                                                                   isrequired="true"
                                                                   label=" Summary Field"
                                                                   hideremoveicon>
                     </vr-genericdata-datarecordtypefields-selector>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-select label="Mapping Option"
+                               datasource="scopeModal.rawFieldOptions"
+                               selectedvalues="scopeModal.selectedRawFieldOption"
+                               datavaluefield="value"
+                               datatextfield="text" hidefilterbox hideremoveicon></vr-select>
+                </vr-columns>
+                <vr-columns width="1/3row" ng-show="(scopeModal.selectedRawFieldOption.value == 'Field')">
+                    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModal.onRawDataRecordTypeFieldsSelectorReady"
+                                                                  selectedvalues="scopeModal.selectedRawDataRecordTypeFields"
+                                                                  isrequired="(scopeModal.selectedRawFieldOption.value == 'Field')"
+                                                                  label="Raw Field"
+                                                                  hideremoveicon>
+                    </vr-genericdata-datarecordtypefields-selector>
+                </vr-columns>
+                <vr-columns width="2/3row" ng-show="(scopeModal.selectedRawFieldOption.value == 'Expression')">
+                    <vr-textarea value="scopeModal.rawExpression"
+                                 isrequired="(scopeModal.selectedRawFieldOption.value == 'Expression')"
+                                 label="Expression">
+                    </vr-textarea>
                 </vr-columns>
             </vr-row>
         </vr-form>

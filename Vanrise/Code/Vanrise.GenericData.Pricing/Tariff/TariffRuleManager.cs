@@ -16,7 +16,15 @@ namespace Vanrise.GenericData.Pricing
             if (tariffPricingRule != null)
                 tariffPricingRule.Settings.ApplyTariffRule(context);
             else
-                context.EffectiveRate = context.Rate;
+            {
+                var effectiveRate = context.Rate;
+                context.EffectiveRate = effectiveRate;
+                if (context.DurationInSeconds != null)
+                {
+                    context.EffectiveDurationInSeconds = context.DurationInSeconds;
+                    context.TotalAmount = effectiveRate * (context.DurationInSeconds.Value / 60);
+                }
+            }
         }
     }
 }

@@ -44,7 +44,8 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService','VR_GenericData_
                 api.load = function (payload) {
                     var dataTypeValue;
                     if (payload != undefined) {
-                        dataTypeValue = payload.DataType
+                        dataTypeValue = payload.DataType;
+                        ctrl.isNullable = payload.IsNullable;
                     }
 
                     ctrl.dateTimeDataTypes = UtilsService.getArrayEnum(VR_GenericData_DateTimeDataTypeEnum);
@@ -56,7 +57,8 @@ app.directive('vrGenericdataFieldtypeDatetime', ['UtilsService','VR_GenericData_
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldDateTimeType,Vanrise.GenericData.MainExtensions",
-                        DataType: ctrl.selectedDateTimeDataType.value
+                        DataType: ctrl.selectedDateTimeDataType.value,
+                        IsNullable: ctrl.isNullable
                     };
                 }
 

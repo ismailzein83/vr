@@ -25,7 +25,7 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         #region Public Methods
 
-        public IEnumerable<R> ConvertRawItemsToBatches(IEnumerable<T> items, Func<R> createSummaryBatchObj, Func<Q> createSummaryItemObj = null)
+        public IEnumerable<R> ConvertRawItemsToBatches(IEnumerable<T> items, Func<R> createSummaryBatchObj)
         {
             Dictionary<DateTime, SummaryBatchInProcess<Q>> batches = new Dictionary<DateTime, SummaryBatchInProcess<Q>>();
             
@@ -43,16 +43,14 @@ namespace Vanrise.Common.Business.SummaryTransformation
                     batches.Add(batchStart, batch);
                 }
 
-                string itemKey = GetSummaryItemKey(item);
-                Q summaryItem;
-                if (!batch.ItemsBySummaryKey.TryGetValue(itemKey, out summaryItem))
-                {
-                    summaryItem = createSummaryItemObj != null ? createSummaryItemObj() : Activator.CreateInstance<Q>();
-                    summaryItem.BatchStart = batch.BatchStart;
-                    SetSummaryItemGroupingFields(summaryItem, item);
+                Q summaryItem = CreateSummaryItemFromRawItem(item);
+                summaryItem.BatchStart = batch.BatchStart;
+                string itemKey = GetSummaryItemKey(summaryItem);
+                Q existingSummaryItem;
+                if (batch.ItemsBySummaryKey.TryGetValue(itemKey, out existingSummaryItem))
+                    UpdateSummaryItemFromSummaryItem(existingSummaryItem, summaryItem);
+                else
                     batch.ItemsBySummaryKey.Add(itemKey, summaryItem);
-                }
-                UpdateSummaryItemFromRawItem(summaryItem, item);
             }
             return batches.Values.Select(
                 itm =>
@@ -102,7 +100,9 @@ namespace Vanrise.Common.Business.SummaryTransformation
                 {
                     foreach(var itm in items)
                     {
-                        itemsByKey.Add(GetSummaryItemKey(itm), new SummaryItemInProcess<Q> { SummaryItem = itm });
+                        string itemKey = GetSummaryItemKey(itm);
+                        if (!itemsByKey.ContainsKey(itemKey))
+                            itemsByKey.Add(itemKey, new SummaryItemInProcess<Q> { SummaryItem = itm });
                     }
                 }
                 s_existingSummaryBatches.TryAdd(batchStart, itemsByKey);
@@ -125,13 +125,9 @@ namespace Vanrise.Common.Business.SummaryTransformation
 
         protected abstract void GetRawItemBatchTimeRange(T rawItem, out DateTime batchStart);
 
-        protected abstract void SetSummaryItemGroupingFields(Q summaryItem, T item);
-
-        protected abstract string GetSummaryItemKey(T rawItem);
-
         protected abstract string GetSummaryItemKey(Q summaryItem);
 
-        protected abstract void UpdateSummaryItemFromRawItem(Q summaryItem, T item);
+        protected abstract Q CreateSummaryItemFromRawItem(T item);
 
         protected abstract void UpdateSummaryItemFromSummaryItem(Q existingItem, Q newItem);
 

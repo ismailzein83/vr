@@ -16,7 +16,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public FieldDateTimeDataType DataType { get; set; }
 
+        public bool IsNullable { get; set; }
+
         public override Type GetRuntimeType()
+        {
+            var type = GetNonNullableRuntimeType();
+            return (IsNullable) ? GetNullableType(type) : type;
+        }
+
+        public override Type GetNonNullableRuntimeType()
         {
             var attributeInfo = Utilities.GetEnumAttribute<FieldDateTimeDataType, FieldDateTimeDataTypeInfoAttribute>(this.DataType);
             if (attributeInfo == null)

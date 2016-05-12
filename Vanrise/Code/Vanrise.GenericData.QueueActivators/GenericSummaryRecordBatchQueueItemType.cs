@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.QueueActivators
 {
-    public class GenericSummaryRecordBatchQueueItemType : Vanrise.Queueing.Entities.QueueExecutionFlowStageItemType
+    public class GenericSummaryRecordBatchQueueItemType : DataRecordBatchQueueItemType
     {
         public override Type GetQueueItemType()
         {

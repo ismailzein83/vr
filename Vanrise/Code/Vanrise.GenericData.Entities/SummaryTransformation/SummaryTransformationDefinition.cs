@@ -44,6 +44,11 @@ namespace Vanrise.GenericData.Entities
     {
         public string RawFieldName { get; set; }
 
+        /// <summary>
+        /// either RawFieldName or GetRawFieldExpression should have value. RawFieldName has more priority than GetRawFieldExpression
+        /// </summary>
+        public string GetRawFieldExpression { get; set; }
+
         public string SummaryFieldName { get; set; }
     }
 
