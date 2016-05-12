@@ -20,5 +20,6 @@ namespace Vanrise.Analytic.Entities
 
         public string MonthlyTableName { get; set; }
 
+        public string TimeColumnName { get; set; }
     }
 }

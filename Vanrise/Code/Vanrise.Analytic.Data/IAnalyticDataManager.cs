@@ -11,6 +11,7 @@ namespace Vanrise.Analytic.Data
     {
         IEnumerable<AnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
         AnalyticRecord GetAnalyticSummary(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input);
+        IEnumerable<TimeVariationAnalyticRecord> GetTimeVariationAnalyticRecords(Vanrise.Entities.DataRetrievalInput<TimeVariationAnalyticQuery> input);
         AnalyticTable Table { set; }
 
         Dictionary<string, AnalyticDimension> Dimensions { set; }

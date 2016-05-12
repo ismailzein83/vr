@@ -249,7 +249,13 @@ namespace Vanrise.Analytic.Data.SQL
 
         private string BuildQueryGrouping(StringBuilder selectPartBuilder, TimeGroupingUnit timeGroupingUnit)
         {
-            throw new NotImplementedException();
+            StringBuilder queryGrouping = new StringBuilder();
+            switch(timeGroupingUnit)
+            {
+                case TimeGroupingUnit.Hour: selectPartBuilder.AppendFormat(" CONVERT(varchar(13), {0}, 121) as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(13), {0}, 121)", _table.Settings.TimeColumnName); break;
+                case TimeGroupingUnit.Minute: selectPartBuilder.AppendFormat(" CONVERT(varchar(16), {0}, 121)  as [Date]", _table.Settings.TimeColumnName); queryGrouping.AppendFormat(" CONVERT(varchar(16), {0}, 121)", _table.Settings.TimeColumnName); break;
+            }
+            return queryGrouping.ToString();
         }
 
         string GetSingleTableQueryBody(TimeRangeTableName timeRangeTableName, string filterPart, string joinPart, ref int parameterIndex, Dictionary<string, Object> parameterValues)
@@ -257,8 +263,9 @@ namespace Vanrise.Analytic.Data.SQL
             StringBuilder singleTableQueryBodyBuilder = new StringBuilder(@" #TABLENAME# ant WITH(NOLOCK)  
                                                                               #JOINPART#                                                                
 			                                                                WHERE
-			                                                               (FirstCDRAttempt >= #FromTime#  AND  (FirstCDRAttempt <= #ToTime# or #ToTime# IS NULL))
+			                                                               (#TIMECOLUMNNAME# >= #FromTime#  AND  (#TIMECOLUMNNAME# <= #ToTime# or #ToTime# IS NULL))
                                                                             #FILTERPART#");
+            singleTableQueryBodyBuilder.Replace("#TIMECOLUMNNAME#", _table.Settings.TimeColumnName);
             singleTableQueryBodyBuilder.Replace("#TABLENAME#", timeRangeTableName.TableName);
             singleTableQueryBodyBuilder.Replace("#FILTERPART#", filterPart);
             singleTableQueryBodyBuilder.Replace("#JOINPART#", joinPart);
@@ -521,7 +528,7 @@ namespace Vanrise.Analytic.Data.SQL
         TimeVariationAnalyticRecord TimeVariationAnalyticRecordMapper(IDataReader reader, TimeVariationAnalyticQuery timeVariationAnalyticQuery, bool isSummary)
         {
             TimeVariationAnalyticRecord record = new TimeVariationAnalyticRecord();
-
+            record.Time = GetReaderValue<DateTime>(reader, "Date");
             record.MeasureValues = MeasureValuesMapper(reader, timeVariationAnalyticQuery.MeasureFields);
             return record;
         }

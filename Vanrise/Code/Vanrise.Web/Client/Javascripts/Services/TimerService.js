@@ -49,9 +49,15 @@
             });
         }
 
+        function registerLowFreqJob(callToBeExecuted)
+        {
+           return registerJob(callToBeExecuted)
+        }
+
         return ({
             registerJob: registerJob,
-            unregisterJob: unregisterJob
+            unregisterJob: unregisterJob,
+            registerLowFreqJob: registerLowFreqJob
         });
     }
     appControllers.service('VRTimerService', TimerService);

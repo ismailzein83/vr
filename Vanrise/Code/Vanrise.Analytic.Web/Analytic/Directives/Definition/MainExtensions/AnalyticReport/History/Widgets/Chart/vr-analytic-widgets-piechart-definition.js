@@ -46,34 +46,11 @@
                     dimensionSelectorAPI = api;
                     dimensionReadyDeferred.resolve();
                 }
-
-                $scope.scopeModel.onSelectDimensionItem = function (dimension) {
-                    var dataItem = {
-                        AnalyticItemConfigId: dimension.AnalyticItemConfigId,
-                        Title: dimension.Title,
-                        Name: dimension.Name
-                    };
-                    $scope.scopeModel.dimensions.push(dataItem);
-                }
-
-                $scope.scopeModel.onDeselectDimensionItem = function (dataItem) {
-                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.dimensions, dataItem.Name, 'Name');
-                    $scope.scopeModel.dimensions.splice(datasourceIndex, 1);
-                }
-
+         
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
                 }
-                $scope.scopeModel.onSelectMeasureItem = function (measure) {
-                    var dataItem = {
-                        AnalyticItemConfigId: measure.AnalyticItemConfigId,
-                        Title: measure.Title,
-                        Name: measure.Name,
-                    };
-                    $scope.scopeModel.measures.push(dataItem);
-                }
-
 
                 defineAPI();
             }

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum'];
+    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'Analytic_AnalyticService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldTypeConfigAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum','VRTimerService'];
 
-    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum) {
+    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, Analytic_AnalyticService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldTypeConfigAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService) {
         return {
             restrict: "E",
             scope: {
@@ -26,29 +26,44 @@
             var dimensions = [];
             var measures = [];
             var settings;
+            var currentFromDate = "01/01/2015 00:00:00";
+            var currentToDate = "06/05/2015 00:00:00";
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
-                $scope.scopeModel.fromdate = "01/01/2015";
-                $scope.scopeModel.todate = new Date();
+                $scope.scopeModel.fromdate = "01/01/2015 00:00:00";
+                $scope.scopeModel.todate = "06/05/2015 00:00:00";
+
                 $scope.search = function () {
-                    if ($scope.scopeModel.widgets.length > 0) {
-                        var promiseDeffer = UtilsService.createPromiseDeferred();
-                        for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
-                            var widget = $scope.scopeModel.widgets[i];
-                            var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value ? promiseDeffer.resolve() : undefined };
-                            var payload = getQuery(widget.settings);
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
-                        }
-                        return promiseDeffer.promise;
-                    }
+                    currentFromDate=$scope.scopeModel.fromdate ;
+                    currentToDate = $scope.scopeModel.todate;
+                   // VRTimerService.unregisterJob(search);
+                    VRTimerService.registerLowFreqJob(search);
+                 
                 };
 
                 defineAPI();
             }
+            function search()
+            {
 
+                if ($scope.scopeModel.widgets.length > 0) {
+                    var promiseDeffer = UtilsService.createPromiseDeferred();
+                    for (var i = 0; i < $scope.scopeModel.widgets.length ; i++) {
+                        var widget = $scope.scopeModel.widgets[i];
+                        var setLoader = function (value) { $scope.isLoadingDimensionDirective = value, !value ? promiseDeffer.resolve() : undefined };
+                        currentFromDate = new Date(currentFromDate);
+                        currentFromDate.setDate(currentFromDate.getDate() + 1);
+                        currentToDate = new Date(currentToDate);
+                        currentToDate.setDate(currentToDate.getDate() + 1);
+                        var payload = getQuery(widget.settings);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, widget.directiveAPI, payload, setLoader);
+                    }
+                    return promiseDeffer.promise;
+                }
+            }
             function defineAPI() {
                 var api = {};
 
@@ -232,8 +247,8 @@
                     DimensionFilters: dimensionFilters,
                     TableId: widgetPayload.AnalyticTableId,
                     GroupingDimensions: [{DimensionName:"DeliveredAttempts"}],
-                    FromTime: $scope.scopeModel.fromdate,
-                    ToTime: $scope.scopeModel.todate
+                    FromTime: currentFromDate,
+                    ToTime: currentToDate
                 };
                 return query;
             }
