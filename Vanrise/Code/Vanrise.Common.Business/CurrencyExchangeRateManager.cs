@@ -124,13 +124,6 @@ namespace Vanrise.Common.Business
             return allCurrenciesExchangeRates.GetRecord(currencyExchangeRateId);
         }
 
-        public CurrencyExchangeRate GetCurrencyExchangeRateBySourceId(string sourceId)
-        {
-            var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
-            return allCurrenciesExchangeRates.FindRecord(x => x.SourceId == sourceId);
-        }
-
-
         public Vanrise.Entities.InsertOperationOutput<CurrencyExchangeRateDetail> AddCurrencyExchangeRate(CurrencyExchangeRate currencyExchangeRate)
         {
             Vanrise.Entities.InsertOperationOutput<CurrencyExchangeRateDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CurrencyExchangeRateDetail>();

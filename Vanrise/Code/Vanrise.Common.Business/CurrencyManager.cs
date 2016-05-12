@@ -37,11 +37,7 @@ namespace Vanrise.Common.Business
             return currencies.GetRecord(currencyId);
         }
 
-        public Currency GetCurrencyBySourceId(string sourceId)
-        {
-            var currencies = GetCachedCurrencies();
-            return currencies.FindRecord(x=>x.SourceId== sourceId);
-        }
+        
 
         public Dictionary<int, Currency> GetCachedCurrencies()
         {

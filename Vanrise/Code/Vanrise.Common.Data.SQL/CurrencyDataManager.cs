@@ -39,15 +39,14 @@ namespace Vanrise.Common.Data.SQL
             return base.IsDataUpdated("common.Currency", ref updateHandle);
         }
 
-        #region privat methode
-        private Currency CurrencyMapper(IDataReader reader)
+        #region Mappers
+        public Currency CurrencyMapper(IDataReader reader)
         {
             Currency currency = new Currency
             {
                 CurrencyId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                Symbol = reader["Symbol"] as string,
-                SourceId = reader["SourceID"] as string,
+                Symbol = reader["Symbol"] as string
             };
 
             return currency;

@@ -41,17 +41,15 @@ namespace Vanrise.Common.Data.SQL
             return base.IsDataUpdated("common.CurrencyExchangeRate", ref updateHandle);
         }
 
-        #region private methode
-        private CurrencyExchangeRate CurrencyExchangeRateMapper(IDataReader reader)
+        #region Mappers
+        public CurrencyExchangeRate CurrencyExchangeRateMapper(IDataReader reader)
         {
             CurrencyExchangeRate currencyExchangeRate = new CurrencyExchangeRate
             {
                 CurrencyExchangeRateId = (long)reader["ID"],
                 CurrencyId = (int)reader["CurrencyId"],
                 Rate = GetReaderValue<decimal>(reader,"Rate"),
-                ExchangeDate = GetReaderValue<DateTime>(reader, "ExchangeDate"),
-                SourceId = reader["SourceID"] as string,
-
+                ExchangeDate = GetReaderValue<DateTime>(reader, "ExchangeDate")
             };
 
             return currencyExchangeRate;
