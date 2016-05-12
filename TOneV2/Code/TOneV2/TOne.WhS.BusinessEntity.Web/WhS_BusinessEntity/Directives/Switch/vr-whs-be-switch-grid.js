@@ -77,11 +77,6 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_S
                 name: "Edit",
                 clicked: editSwitch,
                 haspermission: hasUpdateSwitchPermission
-            },
-            {
-                name: "Delete",
-                clicked: deleteSwitch,
-                haspermission: hasDeleteSwitchPermission
             }
             ];
         }
