@@ -50,7 +50,7 @@
 
                 sellingNumberPlanItem.saleZoneGridAPI = directiveAPI;
                 var query = {
-                    SellingNumber: sellingNumberPlanItem.Entity.SellingNumberPlanId
+                    SellingNumberId: sellingNumberPlanItem.Entity.SellingNumberPlanId
                 };
 
                 return sellingNumberPlanItem.saleZoneGridAPI.loadGrid(query);
