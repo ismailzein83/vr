@@ -26,6 +26,7 @@
 
             var gridAPI;
             var gridQuery;
+            var firstResponse;
             var gridDrillDownTabsObj;
             var reportTypeObjs;
 
@@ -50,6 +51,10 @@
                     return WhS_Analytics_VariationReportAPIService.GetFilteredVariationReportRecords(dataRetrievalInput).then(function (response)
                     {
                         if (response != null && response.Data != null) {
+
+                            if (firstResponse == undefined) {
+                                firstResponse = response;
+                            }
 
                             if (gridDrillDownTabsObj == undefined) {
                                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(getDrillDownDefinitions(response.DrillDownDimensions), gridAPI, undefined);
@@ -92,7 +97,17 @@
                     setSortByField(query.ReportType);
                     gridQuery = cloneGridQuery(query);
                     gridDrillDownTabsObj = undefined;
+                    firstResponse = undefined;
                     return gridAPI.retrieveData(query);
+                };
+
+                api.getData = function () {
+                    return (firstResponse != undefined) ? {
+                        dimensionTitle: firstResponse.DimensionTitle,
+                        records: firstResponse.Data,
+                        timePeriods: firstResponse.TimePeriods,
+                        summary: firstResponse.Summary
+                    } : null;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
