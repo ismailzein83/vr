@@ -460,6 +460,10 @@
     <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.dll</HintPath>

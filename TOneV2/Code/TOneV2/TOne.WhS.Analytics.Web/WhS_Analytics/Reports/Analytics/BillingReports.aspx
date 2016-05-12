@@ -13,7 +13,7 @@
     <form id="form1" runat="server">
     <div>
     <asp:scriptmanager runat="server"></asp:scriptmanager>
-    <rsweb:ReportViewer ID="ReportViewer1" runat="server" width="100%" height="100%" ShowPageNavigationControls="true" ></rsweb:ReportViewer>
+    <rsweb:ReportViewer ID="ReportViewer1" runat="server" width="100%" height="100%" ShowPageNavigationControls="true" SizeToReportContent="True" ></rsweb:ReportViewer>
     </div>
     </form>
 </body>
