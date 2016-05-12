@@ -25,22 +25,56 @@ namespace TOne.WhS.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<CustomerSellingProductDetail> GetFilteredCustomerSellingProducts(Vanrise.Entities.DataRetrievalInput<CustomerSellingProductQuery> input)
         {
 
-            var allCustomerSellingProducts = GetCachedCustomerSellingProducts();
+            var allCustomerSellingProducts = GetEffectiveSellingProducts(input.Query.EffectiveDate);
 
             Func<CustomerSellingProduct, bool> filterExpression = (prod) =>
-                 (input.Query.EffectiveDate == null || (prod.BED < input.Query.EffectiveDate))
-                 &&
                  (input.Query.CustomersIds == null || input.Query.CustomersIds.Contains(prod.CustomerId))
                   &&
                  (input.Query.SellingProductsIds == null || input.Query.SellingProductsIds.Contains(prod.SellingProductId));
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCustomerSellingProducts.ToBigResult(input, filterExpression, CustomerSellingProductDetailMapper));
         }
+
+        private Dictionary<int, CustomerSellingProduct> GetEffectiveSellingProducts(DateTime? effectiveOn)
+        {
+            var allCustomerSellingProducts = GetCachedCustomerSellingProducts();
+
+            if (effectiveOn == null)
+                return allCustomerSellingProducts;
+
+            Dictionary<int, List<CustomerSellingProduct>> customerSellingProductsByCustomerId = new Dictionary<int, List<CustomerSellingProduct>>();
+
+            foreach (CustomerSellingProduct item in allCustomerSellingProducts.Values)
+            {
+                List<CustomerSellingProduct> customerSellingProducts = null;
+                customerSellingProductsByCustomerId.TryGetValue(item.CustomerId, out customerSellingProducts);
+                if(customerSellingProducts == null)
+                {
+                    customerSellingProducts = new List<CustomerSellingProduct>();
+                    customerSellingProductsByCustomerId.Add(item.CustomerId, customerSellingProducts);
+                }
+
+                customerSellingProducts.Add(item);
+            }
+
+            Dictionary<int, CustomerSellingProduct> filteredCustomerSellingProducts = new Dictionary<int, CustomerSellingProduct>();
+
+            foreach (KeyValuePair<int, List<CustomerSellingProduct>> kvp in customerSellingProductsByCustomerId)
+            {
+                CustomerSellingProduct effectiveCustomerSellingProduct = kvp.Value.OrderByDescending(x => x.BED).FirstOrDefault(x => effectiveOn.Value >= x.BED);
+                if (effectiveCustomerSellingProduct != null)
+                    filteredCustomerSellingProducts.Add(effectiveCustomerSellingProduct.CustomerSellingProductId, effectiveCustomerSellingProduct);
+            }
+
+            return filteredCustomerSellingProducts;
+        }
+
         public CustomerSellingProduct GetCustomerSellingProduct(int customerSellingProductId)
         {
             var customerSellingProducts = GetCachedCustomerSellingProducts();
             return customerSellingProducts.GetRecord(customerSellingProductId);
         }
+
         public CustomerSellingProduct GetEffectiveSellingProduct(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             string cacheName = String.Format("GetEffectiveSellingProduct_{0}_{1}_{2}", customerId, effectiveOn.HasValue ? effectiveOn.Value.Date : default(DateTime), isEffectiveInFuture);
