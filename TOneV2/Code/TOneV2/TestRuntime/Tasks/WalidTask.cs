@@ -19,7 +19,7 @@ namespace TestRuntime.Tasks
             //string ConnectionStringTOneV2 = "Server=192.168.110.185;Database=TOneV2_Migration;User ID=development;Password=dev!123";
 
             MigrationManager migrationManager = new MigrationManager();
-            migrationManager.ExecuteMigrationPhase1();
+            migrationManager.PrepareBeforeApplyingRecords();
 
             string ConnectionStringTOneV1 = "Server=192.168.110.185;Database=MVTSPro;User ID=development;Password=dev!123";
 
@@ -41,7 +41,7 @@ namespace TestRuntime.Tasks
             SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(sourceCurrencyExchangeRateMigratorReader);
             sourceCurrencyExchangeRateMigrator.Migrate();
 
-            migrationManager.ExecuteMigrationPhase2();
+            migrationManager.FinalizeMigration();
         }
     }
 }

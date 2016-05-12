@@ -6,31 +6,30 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class CurrencyDataManager : BaseSQLDataManager
+    public class CurrencyExchangeRateDBSyncDataManager : BaseSQLDataManager
     {
-        readonly string[] columns = { "Symbol", "Name", "SourceID" };
-        string _tempTableName;
-        public CurrencyDataManager(string tableName) :
+        readonly string[] columns = { "CurrencyID", "Rate", "ExchangeDate", "SourceID" };
+
+        public CurrencyExchangeRateDBSyncDataManager(string tableName) :
             base(GetConnectionStringName("ConfigurationMigrationDBConnStringKey", "ConfigurationMigrationDBConnString"))
         {
-            _tempTableName = tableName;
         }
 
-        public void ApplyCurrenciesToDB(List<Currency> currencies)
+        public void ApplyCurrencyExchangeRatesToTemp(List<CurrencyExchangeRate> currencyExchangeRates)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
             {
-                foreach (var c in currencies)
+                foreach (var c in currencyExchangeRates)
                 {
-                    wr.WriteLine(String.Format("{0}^{1}^{2}", c.Symbol, c.Name, c.SourceId));
+                    wr.WriteLine(String.Format("{0}^{1}^{2}^{3}", c.CurrencyId, c.Rate, c.ExchangeDate, c.SourceId));
                 }
                 wr.Close();
             }
 
-            Object preparedCurrencies = new BulkInsertInfo
+            Object preparedCurrencyExchangeRates = new BulkInsertInfo
             {
-                TableName = _tempTableName,
+                TableName = "[common].[CurrencyExchangeRate_Temp]",
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -38,7 +37,10 @@ namespace TOne.WhS.DBSync.Data.SQL
                 FieldSeparator = '^',
             };
 
-            InsertBulkToTable(preparedCurrencies as BaseBulkInsertInfo);
+            InsertBulkToTable(preparedCurrencyExchangeRates as BaseBulkInsertInfo);
         }
+
+
+
     }
 }

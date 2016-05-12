@@ -24,13 +24,13 @@ namespace TOne.WhS.DBSync.Business
 
         protected override void AddItems(List<CurrencyExchangeRate> itemsToAdd)
         {
-            CurrencyExchangeRateManager CurrencyExchangeRateManager = new CurrencyExchangeRateManager();
-            CurrencyExchangeRateManager.AddCurrencyExchangeRatesFromSource(itemsToAdd);
+            CurrencyExchangeRateDBSyncManager CurrencyExchangeRateManager = new CurrencyExchangeRateDBSyncManager();
+            CurrencyExchangeRateManager.ApplyCurrencyExchangeRatesToTemp(itemsToAdd);
         }
 
         protected override CurrencyExchangeRate BuildItemFromSource(SourceCurrencyExchangeRate sourceItem)
         {
-            Vanrise.Common.Business.CurrencyManager currencyManager = new Vanrise.Common.Business.CurrencyManager();
+            CurrencyDBSyncManager currencyManager = new CurrencyDBSyncManager();
             var currency = currencyManager.GetCurrencyBySourceId(sourceItem.CurrencyId);
             if (currency != null)
                 return new CurrencyExchangeRate

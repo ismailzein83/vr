@@ -5,18 +5,16 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class SwitchDataManager : BaseSQLDataManager
+    public class SwitchDBSyncDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "Name", "SourceID" };
-        string _tempTableName;
 
-        public SwitchDataManager(string tableName) :
+        public SwitchDBSyncDataManager() :
             base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
         {
-            _tempTableName = tableName;
         }
 
-        public void ApplySwitchesToDB(List<Switch> switches)
+        public void ApplySwitchesToTemp(List<Switch> switches)
         {
             string filePath = GetFilePathForBulkInsert();
             using (System.IO.StreamWriter wr = new System.IO.StreamWriter(filePath))
@@ -30,7 +28,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedSwitches = new BulkInsertInfo
             {
-                TableName = _tempTableName,
+                TableName = "[TOneWhS_BE].[Switch_Temp]",
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,

@@ -22,8 +22,8 @@ namespace TOne.WhS.DBSync.Business
 
         protected override void AddItems(List<Currency> itemsToAdd)
         {
-            CurrencyManager CurrencyManager = new CurrencyManager();
-            CurrencyManager.AddCurrenciesFromSource(itemsToAdd);
+            CurrencyDBSyncManager CurrencyManager = new CurrencyDBSyncManager();
+            CurrencyManager.ApplyCurrenciesToTemp(itemsToAdd);
         }
 
         protected override Currency BuildItemFromSource(SourceCurrency sourceItem)

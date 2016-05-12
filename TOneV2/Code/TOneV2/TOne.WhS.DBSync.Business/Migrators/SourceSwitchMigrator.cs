@@ -21,8 +21,8 @@ namespace TOne.WhS.DBSync.Business
 
         protected override void AddItems(List<Switch> itemsToAdd)
         {
-            SwitchManager switchManager = new SwitchManager();
-            switchManager.AddSwitchesFromSource(itemsToAdd);
+            SwitchDBSyncManager switchManager = new SwitchDBSyncManager();
+            switchManager.ApplySwitchesToTemp(itemsToAdd);
         }
 
         protected override Switch BuildItemFromSource(SourceSwitch sourceItem)

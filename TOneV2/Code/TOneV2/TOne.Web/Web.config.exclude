@@ -23,6 +23,9 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
+    <add key="MigrationServer" value="192.168.110.185"/>
+    <add key="MigrationServerUserID" value="development"/>
+    <add key="MigrationServerPassword" value="dev!123"/>
     <add name="TOneV2DBConnString" connectionString="Server=192.168.110.185;Database=TOneV2_Dev;User ID=Development;Password=dev!123"/>
     <add name="TOneV2MigrationDBConnString" connectionString="Server=192.168.110.185;Database=TOneV2_Migration;User ID=Development;Password=dev!123"/>
     <add name="TOneWhS_CDR_DBConnString" connectionString="Server=192.168.110.185;Database=TOneV2_CDR;User ID=Development;Password=dev!123"/>

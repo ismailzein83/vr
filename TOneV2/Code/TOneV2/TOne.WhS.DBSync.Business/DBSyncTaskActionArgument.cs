@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class MigrateSyncTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
+    public class DBSyncTaskActionArgument : Vanrise.Runtime.Entities.BaseTaskActionArgument
     {
         public string ConnectionString { get; set; }
     }

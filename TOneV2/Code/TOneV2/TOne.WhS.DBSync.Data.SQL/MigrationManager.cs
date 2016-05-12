@@ -4,6 +4,8 @@ using Microsoft.SqlServer.Management.Smo;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using TOne.WhS.DBSync.Entities;
@@ -11,7 +13,7 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class MigrationManager
+    public class MigrationManager : BaseSQLDataManager
     {
         const string _Temp = "_Temp";
         List<DBTable> _dbTables = new List<DBTable>();
@@ -20,14 +22,14 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public MigrationManager()
         {
-            serverConnection = new ServerConnection("192.168.110.185", "development", "dev!123");
+            serverConnection = new ServerConnection(ConfigurationManager.AppSettings["MigrationServer"], ConfigurationManager.AppSettings["MigrationServerUserID"], ConfigurationManager.AppSettings["MigrationServerPassword"]);
             server = new Server(serverConnection);
             _dbTables.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneConfiguration_Migration" });
             _dbTables.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneConfiguration_Migration" });
+            _dbTables.Add(new DBTable { Name = "Switch", Schema = "TOneWhS_BE", Database = "TOne_Migration" });
         }
 
-
-        public bool ExecuteMigrationPhase1()
+        public bool PrepareBeforeApplyingRecords()
         {
             bool Executed = false;
             try
@@ -45,7 +47,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             return Executed;
         }
 
-        public bool ExecuteMigrationPhase2()
+        public bool FinalizeMigration()
         {
             bool Executed = false;
             try
@@ -68,28 +70,28 @@ namespace TOne.WhS.DBSync.Data.SQL
         private string ScriptIndexes(Table sourceTable)
         {
             string script = string.Empty;
-
-            foreach (Index index in sourceTable.Indexes)
-            {
-                StringCollection sc = index.Script();
-                string[] strings = new string[sc.Count];
-                sc.CopyTo(strings, 0);
-                script = script + string.Join(" ", strings);
-            }
+            if (sourceTable.HasIndex)
+                foreach (Index index in sourceTable.Indexes)
+                {
+                    StringCollection sc = index.Script();
+                    string[] strings = new string[sc.Count];
+                    sc.CopyTo(strings, 0);
+                    script = script + string.Join(" ", strings);
+                }
             return script;
         }
 
         private string ScriptFKs(Table sourceTable)
         {
             string script = string.Empty;
-
-            foreach (ForeignKey fk in sourceTable.ForeignKeys)
-            {
-                StringCollection sc = fk.Script();
-                string[] strings = new string[sc.Count];
-                sc.CopyTo(strings, 0);
-                script = script + string.Join(" ", strings);
-            }
+            if (sourceTable.EnumForeignKeys().Rows.Count > 0)
+                foreach (ForeignKey fk in sourceTable.ForeignKeys)
+                {
+                    StringCollection sc = fk.Script();
+                    string[] strings = new string[sc.Count];
+                    sc.CopyTo(strings, 0);
+                    script = script + string.Join(" ", strings);
+                }
             return script;
         }
 
@@ -105,7 +107,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             script = script.Replace("[" + sourceTable.Schema + "].[" + sourceTable.Name + "]", "[" + sourceTable.Schema + "].[" + sourceTable.Name + _Temp + "]");
             return script;
         }
-
 
         private void DropOriginalTables()
         {
@@ -125,14 +126,16 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             //Create Foreign Keys for Tables
             foreach (DBTable table in _dbTables)
-                server.ConnectionContext.ExecuteNonQuery(table.ScriptedFKs);
+                if (table.ScriptedFKs != "")
+                    server.ConnectionContext.ExecuteNonQuery(table.ScriptedFKs);
         }
 
         private void CreateIndexes()
         {
             //Create Indexes Keys for Tables
             foreach (DBTable table in _dbTables)
-                server.ConnectionContext.ExecuteNonQuery(table.ScriptedIndexes);
+                if (table.ScriptedIndexes != "")
+                    server.ConnectionContext.ExecuteNonQuery(table.ScriptedIndexes);
         }
 
         private void RenameTempTables()
