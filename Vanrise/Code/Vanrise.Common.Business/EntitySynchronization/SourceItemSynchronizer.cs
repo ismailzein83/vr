@@ -31,16 +31,16 @@ namespace Vanrise.Common.Business.EntitySynchronization
             var sourceItems = _sourceItemReader.GetChangedItems(ref itemUpdateHandle);
             if (sourceItems != null)
             {
-                Dictionary<string, long> itemIdsBySourceId;
+                Dictionary<string, long> existingItemIdsBySourceId;
                 var sourceItemIds = sourceItems.Select(itm => itm.SourceId);
-                itemIdsBySourceId = GetExistingItemIds(sourceItemIds);
+                existingItemIdsBySourceId = GetExistingItemIds(sourceItemIds);
                 List<TItem> itemsToAdd = new List<TItem>();
                 List<TItem> itemsToUpdate = new List<TItem>();
                 foreach (var sourceItem in sourceItems)
                 {
                     var item = BuildItemFromSource(sourceItem);
                     long itemId;
-                    if (itemIdsBySourceId != null && sourceItem.SourceId != null && itemIdsBySourceId.TryGetValue(sourceItem.SourceId, out itemId))
+                    if (existingItemIdsBySourceId != null && sourceItem.SourceId != null && existingItemIdsBySourceId.TryGetValue(sourceItem.SourceId, out itemId))
                     {
                         item.ItemId = itemId;
                         itemsToUpdate.Add(item);
@@ -66,8 +66,11 @@ namespace Vanrise.Common.Business.EntitySynchronization
                         item.ItemId = startingId++;
                     }
                 }
+                HashSet<long> itemsToUpdateIds = itemsToUpdate.Select(itm => itm.ItemId).ToHashSet();
+                List<long> itemIdsToDelete = existingItemIdsBySourceId.Values.Where(existingId => !itemsToUpdateIds.Contains(existingId)).ToList();
                 UpdateItems(itemsToUpdate);
                 AddItems(itemsToAdd);
+                SetItemsDeleted(itemIdsToDelete);
                 UpdateItemUpdateHandle(itemUpdateHandle);
             }
         }
@@ -80,6 +83,8 @@ namespace Vanrise.Common.Business.EntitySynchronization
         protected abstract void AddItems(List<TItem> itemsToAdd);
 
         protected abstract void UpdateItems(List<TItem> itemsToUpdate);
+
+        protected abstract void SetItemsDeleted(List<long> itemIds);
 
         protected abstract TItem BuildItemFromSource(TSourceItem sourceItem);
 

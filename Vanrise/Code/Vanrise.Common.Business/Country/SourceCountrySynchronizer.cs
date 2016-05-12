@@ -34,6 +34,10 @@ namespace Vanrise.Common.Business
 
         }
 
+        protected override void SetItemsDeleted(List<long> itemIds)
+        {            
+        }
+
         protected override Country BuildItemFromSource(SourceCountry sourceItem)
         {
 
