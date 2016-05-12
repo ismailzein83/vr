@@ -82,6 +82,7 @@
     <Compile Include="CLITestTasks\TestCallTaskActionExecutionInfo.cs" />
     <Compile Include="CLITestTasks\TestProgressTaskAction.cs" />
     <Compile Include="CLITestTasks\TestProgressTaskActionArgument.cs" />
+    <Compile Include="ConnectorZoneInfoManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GetTestProgressContext.cs" />
     <Compile Include="InitiateTestContext.cs" />
