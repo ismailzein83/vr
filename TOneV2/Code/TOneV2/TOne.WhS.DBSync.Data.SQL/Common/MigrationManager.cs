@@ -1,12 +1,8 @@
 ﻿using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Sdk.Sfc;
 using Microsoft.SqlServer.Management.Smo;
-using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
@@ -20,13 +16,19 @@ namespace TOne.WhS.DBSync.Data.SQL
         ServerConnection serverConnection = null;
         Server server;
 
-        public MigrationManager()
+        public class MigrationCredentials
         {
-            serverConnection = new ServerConnection(ConfigurationManager.AppSettings["MigrationServer"], ConfigurationManager.AppSettings["MigrationServerUserID"], ConfigurationManager.AppSettings["MigrationServerPassword"]);
+            public string MigrationServer { get; set; }
+            public string MigrationServerUserID { get; set; }
+            public string MigrationServerPassword { get; set; }
+        }
+
+        #region Public Methods
+        public MigrationManager(MigrationCredentials migrationCredentials, List<DBTable> dbTables)
+        {
+            serverConnection = new ServerConnection(migrationCredentials.MigrationServer, migrationCredentials.MigrationServerUserID, migrationCredentials.MigrationServerPassword);
             server = new Server(serverConnection);
-            _dbTables.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneConfiguration_Migration" });
-            _dbTables.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneConfiguration_Migration" });
-            _dbTables.Add(new DBTable { Name = "Switch", Schema = "TOneWhS_BE", Database = "TOne_Migration" });
+            _dbTables = dbTables;
         }
 
         public bool PrepareBeforeApplyingRecords()
@@ -66,7 +68,9 @@ namespace TOne.WhS.DBSync.Data.SQL
             }
             return Executed;
         }
+        #endregion
 
+        #region Private Methods
         private string ScriptIndexes(Table sourceTable)
         {
             string script = string.Empty;
@@ -127,7 +131,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             //Create Foreign Keys for Tables
             foreach (DBTable table in _dbTables)
                 if (table.ScriptedFKs != "")
-                    server.ConnectionContext.ExecuteNonQuery(table.ScriptedFKs);
+                    server.Databases[table.Database].ExecuteNonQuery(table.ScriptedFKs);
         }
 
         private void CreateIndexes()
@@ -135,7 +139,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             //Create Indexes Keys for Tables
             foreach (DBTable table in _dbTables)
                 if (table.ScriptedIndexes != "")
-                    server.ConnectionContext.ExecuteNonQuery(table.ScriptedIndexes);
+                    server.Databases[table.Database].ExecuteNonQuery(table.ScriptedIndexes);
         }
 
         private void RenameTempTables()
@@ -163,7 +167,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                 {
                     database.Tables[dbTable.Name + _Temp, dbTable.Schema].Drop();
                 }
-                server.ConnectionContext.ExecuteNonQuery(dbTable.ScriptedTempTable);
+
+                database.ExecuteNonQuery(dbTable.ScriptedTempTable);
             }
         }
 
@@ -214,5 +219,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             Table sourceTable = server.Databases[dbTable.Database].Tables[dbTable.Name, dbTable.Schema];
             return sourceTable;
         }
+        #endregion
     }
 }

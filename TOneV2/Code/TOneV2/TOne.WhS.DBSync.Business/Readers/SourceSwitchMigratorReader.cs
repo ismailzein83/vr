@@ -1,42 +1,23 @@
 ﻿using System.Collections.Generic;
+using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities.EntityMigrator;
 
 namespace TOne.WhS.DBSync.Business.SourceMigratorsReaders
 {
-    public class SourceSwitchMigratorReader : IMigrationSourceItemReader<SourceSwitch> 
+    public class SourceSwitchMigratorReader : IMigrationSourceItemReader<SourceSwitch>
     {
-        public string ConnectionString { get; set; }
+        private string _ConnectionString;
+
+        public SourceSwitchMigratorReader(string connectionString)
+        {
+            _ConnectionString = connectionString;
+        }
 
         public IEnumerable<SourceSwitch> GetSourceItems()
         {
-            DataManager dataManager = new DataManager(this.ConnectionString);
+            SourceSwitchDataManager dataManager = new SourceSwitchDataManager(_ConnectionString);
             return dataManager.GetSourceSwitches();
-        }
-
-        private class DataManager : Vanrise.Data.SQL.BaseSQLDataManager
-        {
-            public DataManager(string connectionString)
-                : base(connectionString, false)
-            {
-            }
-
-            public List<SourceSwitch> GetSourceSwitches()
-            {
-                return GetItemsText(query_getSourceSwitches, SourceSwitchMapper, null);
-            }
-
-            private SourceSwitch SourceSwitchMapper(System.Data.IDataReader arg)
-            {
-                SourceSwitch sourceSwitch = new SourceSwitch()
-                {
-                    SourceId = arg["SwitchID"].ToString(),
-                    Name = arg["Name"].ToString()
-                };
-                return sourceSwitch;
-            }
-
-            const string query_getSourceSwitches = @"SELECT [SwitchID] ,[Name] FROM [dbo].[Switch]";
         }
     }
 }

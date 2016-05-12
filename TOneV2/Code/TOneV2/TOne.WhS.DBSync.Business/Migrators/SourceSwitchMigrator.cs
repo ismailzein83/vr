@@ -14,12 +14,12 @@ namespace TOne.WhS.DBSync.Business
 
         }
 
-        public override void Migrate()
+        public override void Migrate(List<DBTable> context)
         {
-            base.Migrate();
+            base.Migrate(context);
         }
 
-        protected override void AddItems(List<Switch> itemsToAdd)
+        protected override void AddItems(List<Switch> itemsToAdd, List<DBTable> context)
         {
             SwitchDBSyncManager switchManager = new SwitchDBSyncManager();
             switchManager.ApplySwitchesToTemp(itemsToAdd);

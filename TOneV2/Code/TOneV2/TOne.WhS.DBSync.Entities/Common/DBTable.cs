@@ -14,5 +14,6 @@ namespace TOne.WhS.DBSync.Entities
         public List<DBForeignKey> DBFKs { get; set; }
         public Table Info { get; set; }
         public bool DroppedOriginal { get; set; }
+        public List<object> Records { get; set; }
     }
 }

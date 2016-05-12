@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using TOne.WhS.DBSync.Business.SourceMigratorsReaders;
 using TOne.WhS.DBSync.Data.SQL;
+using TOne.WhS.DBSync.Entities;
 using Vanrise.Runtime.Entities;
 
 
@@ -11,34 +13,30 @@ namespace TOne.WhS.DBSync.Business
     {
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
-
             Console.WriteLine("Database Sync Task Action Started");
 
-            MigrationManager migrationManager = new MigrationManager();
+            List<DBTable> context = new List<DBTable>();
+            context.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneConfiguration_Migration" });
+            context.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneConfiguration_Migration" });
+            context.Add(new DBTable { Name = "Switch", Schema = "TOneWhS_BE", Database = "TOneV2_Migration" });
+
+            MigrationManager.MigrationCredentials migrationCredentials = new MigrationManager.MigrationCredentials();
+            migrationCredentials.MigrationServer = ConfigurationManager.AppSettings["MigrationServer"];
+            migrationCredentials.MigrationServerUserID = ConfigurationManager.AppSettings["MigrationServerUserID"];
+            migrationCredentials.MigrationServerPassword = ConfigurationManager.AppSettings["MigrationServerPassword"];
+
+            MigrationManager migrationManager = new MigrationManager(migrationCredentials, context);
             migrationManager.PrepareBeforeApplyingRecords();
 
             DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
 
+            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(new SourceCurrencyMigratorReader(dbSyncTaskActionArgument.ConnectionString));
+            sourceCurrencyMigrator.Migrate(context);
 
-            // Create Source Currency Reader and Pass Connection string to it.
-            SourceCurrencyMigratorReader sourceCurrencyMigratorReader = new SourceCurrencyMigratorReader();
-            sourceCurrencyMigratorReader.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
-
-            // Create Source Currency Migrator and Migrate
-            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(sourceCurrencyMigratorReader);
-            sourceCurrencyMigrator.Migrate();
-
-
-            // Create Source CurrencyExchangeRate Reader and Pass Connection string to it.
-            SourceCurrencyExchangeRateMigratorReader sourceCurrencyExchangeRateMigratorReader = new SourceCurrencyExchangeRateMigratorReader();
-            sourceCurrencyExchangeRateMigratorReader.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
-
-            // Create Source CurrencyExchangeRate Migrator and Migrate
-            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(sourceCurrencyExchangeRateMigratorReader);
-            sourceCurrencyExchangeRateMigrator.Migrate();
+            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(new SourceCurrencyExchangeRateMigratorReader(dbSyncTaskActionArgument.ConnectionString));
+            sourceCurrencyExchangeRateMigrator.Migrate(context);
 
             migrationManager.FinalizeMigration();
-
 
             Console.WriteLine("Database Sync Task Action Executed");
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
@@ -48,7 +46,7 @@ namespace TOne.WhS.DBSync.Business
             return output;
         }
 
-        
+
 
 
 

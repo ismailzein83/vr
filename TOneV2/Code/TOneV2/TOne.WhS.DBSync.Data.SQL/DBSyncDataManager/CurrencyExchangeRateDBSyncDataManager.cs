@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 

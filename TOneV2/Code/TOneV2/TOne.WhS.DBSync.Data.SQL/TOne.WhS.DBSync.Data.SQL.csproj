@@ -47,7 +47,6 @@
       <HintPath>..\Resources\DLLs\SQL\Microsoft.SqlServer.Smo.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -70,11 +69,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CurrencyExchangeRateDBSyncDataManager.cs" />
-    <Compile Include="CurrencyDBSyncDataManager.cs" />
-    <Compile Include="MigrationManager.cs" />
+    <Compile Include="DBSyncDataManager\CurrencyExchangeRateDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\CurrencyDBSyncDataManager.cs" />
+    <Compile Include="Common\MigrationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SwitchDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SwitchDBSyncDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceCurrencyDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceCurrencyExchangeRateDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceSwitchDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
@@ -86,9 +88,7 @@
       <Name>TOne.WhS.DBSync.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business.EntityMigrator
 {
@@ -20,7 +21,7 @@ namespace TOne.WhS.DBSync.Business.EntityMigrator
         {
             _migrationSourceItemReader = sourceItemReader;
         }
-        public virtual void Migrate()
+        public virtual void Migrate(List<DBTable> context)
         {
             var sourceItems = _migrationSourceItemReader.GetSourceItems();
             if (sourceItems != null)
@@ -32,11 +33,11 @@ namespace TOne.WhS.DBSync.Business.EntityMigrator
                     if (item != null)
                         itemsToAdd.Add(item);
                 }
-                AddItems(itemsToAdd);
+                AddItems(itemsToAdd, context);
             }
         }
 
-        protected abstract void AddItems(List<TItem> itemsToAdd);
+        protected abstract void AddItems(List<TItem> itemsToAdd, List<DBTable> context);
 
         protected abstract TItem BuildItemFromSource(TSourceItem sourceItem);
     }

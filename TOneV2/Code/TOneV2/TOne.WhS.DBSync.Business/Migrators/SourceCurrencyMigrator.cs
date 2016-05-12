@@ -9,21 +9,26 @@ namespace TOne.WhS.DBSync.Business
 {
     public class SourceCurrencyMigrator : SourceItemMigrator<SourceCurrency, Currency, SourceCurrencyMigratorReader>
     {
+
         public SourceCurrencyMigrator(SourceCurrencyMigratorReader sourceCurrencyMigratorReader)
             : base(sourceCurrencyMigratorReader)
         {
-
         }
 
-        public override void Migrate()
+
+
+        public override void Migrate(List<DBTable> context)
         {
-            base.Migrate();
+            base.Migrate(context);
         }
 
-        protected override void AddItems(List<Currency> itemsToAdd)
+        protected override void AddItems(List<Currency> itemsToAdd, List<DBTable> context)
         {
             CurrencyDBSyncManager CurrencyManager = new CurrencyDBSyncManager();
             CurrencyManager.ApplyCurrenciesToTemp(itemsToAdd);
+
+            //sourceCurrencyMigratorReader.Context.ta
+
         }
 
         protected override Currency BuildItemFromSource(SourceCurrency sourceItem)

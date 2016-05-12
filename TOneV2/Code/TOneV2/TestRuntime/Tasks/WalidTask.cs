@@ -4,11 +4,13 @@ using Microsoft.SqlServer.Management.Smo;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using TOne.WhS.DBSync.Business;
 using TOne.WhS.DBSync.Business.SourceMigratorsReaders;
 using TOne.WhS.DBSync.Data.SQL;
+using TOne.WhS.DBSync.Entities;
 
 namespace TestRuntime.Tasks
 {
@@ -16,30 +18,28 @@ namespace TestRuntime.Tasks
     {
         public void Execute()
         {
-            //string ConnectionStringTOneV2 = "Server=192.168.110.185;Database=TOneV2_Migration;User ID=development;Password=dev!123";
+            string ConnectionString = "Server=192.168.110.185;Database=MVTSPro;User ID=development;Password=dev!123";
 
-            MigrationManager migrationManager = new MigrationManager();
+            Console.WriteLine("Database Sync Task Action Started");
+
+            List<DBTable> context = new List<DBTable>();
+            context.Add(new DBTable { Name = "CurrencyExchangeRate", Schema = "Common", Database = "TOneConfiguration_Migration" });
+            context.Add(new DBTable { Name = "Currency", Schema = "Common", Database = "TOneConfiguration_Migration" });
+            context.Add(new DBTable { Name = "Switch", Schema = "TOneWhS_BE", Database = "TOneV2_Migration" });
+
+            MigrationManager.MigrationCredentials migrationCredentials = new MigrationManager.MigrationCredentials();
+            migrationCredentials.MigrationServer = ConfigurationManager.AppSettings["MigrationServer"];
+            migrationCredentials.MigrationServerUserID = ConfigurationManager.AppSettings["MigrationServerUserID"];
+            migrationCredentials.MigrationServerPassword = ConfigurationManager.AppSettings["MigrationServerPassword"];
+
+            MigrationManager migrationManager = new MigrationManager(migrationCredentials, context);
             migrationManager.PrepareBeforeApplyingRecords();
 
-            string ConnectionStringTOneV1 = "Server=192.168.110.185;Database=MVTSPro;User ID=development;Password=dev!123";
+            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(new SourceCurrencyMigratorReader(ConnectionString));
+            sourceCurrencyMigrator.Migrate(context);
 
-
-            // Create Source Currency Reader and Pass Connection string to it.
-            SourceCurrencyMigratorReader sourceCurrencyMigratorReader = new SourceCurrencyMigratorReader();
-            sourceCurrencyMigratorReader.ConnectionString = ConnectionStringTOneV1;
-
-            // Create Source Currency Migrator and Migrate
-            SourceCurrencyMigrator sourceCurrencyMigrator = new SourceCurrencyMigrator(sourceCurrencyMigratorReader);
-            sourceCurrencyMigrator.Migrate();
-
-
-            // Create Source CurrencyExchangeRate Reader and Pass Connection string to it.
-            SourceCurrencyExchangeRateMigratorReader sourceCurrencyExchangeRateMigratorReader = new SourceCurrencyExchangeRateMigratorReader();
-            sourceCurrencyExchangeRateMigratorReader.ConnectionString = ConnectionStringTOneV1;
-
-            // Create Source CurrencyExchangeRate Migrator and Migrate
-            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(sourceCurrencyExchangeRateMigratorReader);
-            sourceCurrencyExchangeRateMigrator.Migrate();
+            SourceCurrencyExchangeRateMigrator sourceCurrencyExchangeRateMigrator = new SourceCurrencyExchangeRateMigrator(new SourceCurrencyExchangeRateMigratorReader(ConnectionString));
+            sourceCurrencyExchangeRateMigrator.Migrate(context);
 
             migrationManager.FinalizeMigration();
         }

@@ -17,12 +17,12 @@ namespace TOne.WhS.DBSync.Business
 
         }
 
-        public override void Migrate()
+        public override void Migrate(List<DBTable> context)
         {
-            base.Migrate();
+            base.Migrate(context);
         }
 
-        protected override void AddItems(List<CurrencyExchangeRate> itemsToAdd)
+        protected override void AddItems(List<CurrencyExchangeRate> itemsToAdd, List<DBTable> context)
         {
             CurrencyExchangeRateDBSyncManager CurrencyExchangeRateManager = new CurrencyExchangeRateDBSyncManager();
             CurrencyExchangeRateManager.ApplyCurrencyExchangeRatesToTemp(itemsToAdd);
