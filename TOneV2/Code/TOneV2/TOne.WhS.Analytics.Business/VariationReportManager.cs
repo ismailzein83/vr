@@ -52,6 +52,9 @@ namespace TOne.WhS.Analytics.Business
             {
                 var variationReportBigResult = new VariationReportBigResult();
 
+                if (input.Query.ParentDimensions == null)
+                    variationReportBigResult.Summary = GetSummary(allRecords, input.Query.NumberOfPeriods);
+
                 BigResult<VariationReportRecord> bigResult = allRecords.ToBigResult(input, null, this.EntityDetailMapper);
 
                 variationReportBigResult.ResultKey = bigResult.ResultKey;
@@ -61,9 +64,6 @@ namespace TOne.WhS.Analytics.Business
                 variationReportBigResult.DimensionTitle = GetDimensionTitle();
                 variationReportBigResult.TimePeriods = _timePeriods;
                 variationReportBigResult.DrillDownDimensions = GetDrillDownDimensions();
-
-                if (input.Query.ParentDimensions == null)
-                    variationReportBigResult.Summary = GetSummary(bigResult.Data, input.Query.NumberOfPeriods);
 
                 return variationReportBigResult;
             }
