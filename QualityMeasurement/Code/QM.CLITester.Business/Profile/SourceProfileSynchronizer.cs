@@ -31,6 +31,10 @@ namespace QM.CLITester.Business
             }
         }
 
+        protected override void SetItemsDeleted(List<long> itemIds)
+        {
+        }
+
         protected override Profile BuildItemFromSource(SourceProfile sourceItem)
         {
             return new Profile

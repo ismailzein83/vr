@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectorZoneInfoManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Supplier\ApplyExtendedSupplierSettingsContext.cs" />
     <Compile Include="Supplier\SourceSupplierSynchronizer.cs" />

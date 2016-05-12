@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLITesterConnector.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="CountryITestReader.cs" />
     <Compile Include="InitiateTestInformation.cs" />
     <Compile Include="ITestExtendedSupplierSetting.cs" />

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QM.CLITester.Entities
+namespace QM.BusinessEntity.Entities
 {
-    public class ConnectorZoneInfo
+    public class ConnectorZoneInfoToUpdate
     {
         public string ConnectorZoneId { get; set; }
 
-        public Object ZoneInfo { get; set; }
+        public List<string> Codes { get; set; }
     }
 }

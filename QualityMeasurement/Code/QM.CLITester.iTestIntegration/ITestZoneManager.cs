@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QM.BusinessEntity.Business;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,14 @@ namespace QM.CLITester.iTestIntegration
 
         public ITestZone GetMatchZone(IEnumerable<string> codes)
         {
-            return null;
+            if (codes == null)
+                return null;
+            ConnectorZoneInfoManager zoneInfoManager = new ConnectorZoneInfoManager();
+            var zoneInfo = zoneInfoManager.GetLongestMatchZone(Constants.CONNECTOR_TYPE, codes);
+            if (zoneInfo != null)
+                return GetZone(zoneInfo.ConnectorZoneId);
+            else
+                return null;
         }
 
 

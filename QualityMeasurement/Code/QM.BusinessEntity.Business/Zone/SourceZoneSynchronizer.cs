@@ -70,6 +70,10 @@ namespace QM.BusinessEntity.Business
             }
         }
 
+        protected override void SetItemsDeleted(List<long> itemIds)
+        {
+        }
+
         protected override Zone BuildItemFromSource(SourceZone sourceItem)
         {
             Zone zone = new Zone

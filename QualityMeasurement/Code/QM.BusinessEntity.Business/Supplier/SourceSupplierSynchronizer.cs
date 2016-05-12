@@ -40,6 +40,10 @@ namespace QM.BusinessEntity.Business
             }
         }
 
+        protected override void SetItemsDeleted(List<long> itemIds)
+        {
+        }
+
         protected override Supplier BuildItemFromSource(SourceSupplier sourceItem)
         {
             return new Supplier
