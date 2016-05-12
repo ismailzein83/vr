@@ -114,7 +114,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 #IN_BOUND_QUERY#
                 #OUT_BOUND_QUERY#
 
-                SELECT InResult.DimensionId,
+                SELECT 0 OrderIndex,
+                    InResult.DimensionId AS DimensionId,
                     #TOTAL_DIMENSION_SUFFIX# AS DimensionSuffix,
                     InResult.Average - OutResult.Average Average,
                     InResult.Percentage - OutResult.Percentage Percentage,
@@ -123,8 +124,12 @@ namespace TOne.WhS.Analytics.Data.SQL
                 INTO #TotalResult
                 FROM #InResult InResult JOIN #OutResult OutResult ON InResult.DimensionId = OutResult.DimensionId
 
+                UPDATE #InResult SET OrderIndex = 0 WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)
+                UPDATE #OutResult SET OrderIndex = 0 WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)
+
                 SELECT *
                 FROM (SELECT * FROM #InResult UNION ALL SELECT * FROM #OutResult UNION ALL SELECT * FROM #TotalResult) AS FinalResult
+                ORDER BY OrderIndex, DimensionSuffix
             ");
 
             VariationReportQuery inResultQuery;
@@ -183,7 +188,8 @@ namespace TOne.WhS.Analytics.Data.SQL
         {
             var singleResultQueryBuilder = new StringBuilder
             (@"
-                SELECT #DIMENTION_COLUMN_NAME# AS DimensionId
+                SELECT #ORDER_INDEX_PART#
+                    #DIMENTION_COLUMN_NAME# AS DimensionId
                     #DIMENSION_SUFFIX#
                     #AVERAGE_PART#
                     #PERCENTAGE_PART#
@@ -199,6 +205,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                 GROUP BY #DIMENTION_COLUMN_NAME#
             ");
 
+            string orderIndex = (intoTableName != null) ? GetOrderIndexPart(query.ReportType) : null; // intoTableName != null indicates that the original report is an InOut one
+            singleResultQueryBuilder.Replace("#ORDER_INDEX_PART#", orderIndex);
             singleResultQueryBuilder.Replace("#DIMENTION_COLUMN_NAME#", GetGroupByColumnName(query.ReportType, query.GroupByProfile));
             singleResultQueryBuilder.Replace("#DIMENSION_SUFFIX#", String.Format(", {0} AS DimensionSuffix", (int)dimensionSuffix));
 
@@ -217,6 +225,31 @@ namespace TOne.WhS.Analytics.Data.SQL
             singleResultQueryBuilder.Replace("#WHERE_PART#", GetWherePart(query.ParentDimensions, query.GroupByProfile));
 
             return singleResultQueryBuilder.ToString();
+        }
+
+        string GetOrderIndexPart(VariationReportType reportType)
+        {
+            var orderIndexPartBuilder = new StringBuilder();
+            
+            // Since the original report type is InOutBound, reportType should be either InBound or OutBound
+            switch (reportType)
+            {
+                case VariationReportType.InBoundMinutes:
+                case  VariationReportType.InBoundAmount:
+                    orderIndexPartBuilder.Append("1");
+                    break;
+
+                case VariationReportType.OutBoundMinutes:
+                case VariationReportType.OutBoundAmount:
+                    orderIndexPartBuilder.Append("2");
+                    break;
+            }
+
+            if (orderIndexPartBuilder.Length == 0)
+                throw new ArgumentException("reportType");
+
+            orderIndexPartBuilder.Append(" AS OrderIndex,");
+            return orderIndexPartBuilder.ToString();
         }
 
         string GetGroupByColumnName(VariationReportType reportType, bool groupByProfile)
