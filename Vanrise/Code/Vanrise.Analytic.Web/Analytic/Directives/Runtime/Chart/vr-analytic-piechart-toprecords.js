@@ -58,17 +58,17 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                             }
                             return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
-                                    renderCharts(response, payload.Settings.ChartType);
+                                    renderCharts(response);
                                     ctrl.showlaoder = false;
                                 });
 
-                            function renderCharts(response, chartType) {
+                            function renderCharts(response) {
                                 var chartData = new Array();
 
                                 for (var m = 0; m < ctrl.measures.length; m++) {
                                     var measureObject = new Object();
 
-                                    for (var i = 0; i < response.Data.length - 912; i++) {
+                                    for (var i = 0; i < response.Data.length; i++) {
                                         var dimensionName = "";
                                         for (var d = 0; d < ctrl.groupingDimensions.length; d++) {
                                             dimensionName += response.Data[i].DimensionValues[d].Name + ", ";
@@ -84,22 +84,19 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                                     }
                                 }
                                 var chartDefinition = {
-                                    type: chartType,
+                                    type: "pie",
                                     yAxisTitle: "Value"
                                 };
-                                var xAxisDefinition = {
-                                    titlePath: "DimensionValue"
-                                };
-
                                 var seriesDefinitions = [];
                                 for (var i = 0; i < ctrl.measures.length; i++) {
                                     var measure = ctrl.measures[i];
                                     seriesDefinitions.push({
                                         title: measure.Title,
-                                        valuePath: measure.MeasureName
+                                        valuePath: measure.MeasureName,
+                                        titlePath: "DimensionValue"
                                     });
                                 }
-                                directiveAPI.renderChart(chartData, chartDefinition, seriesDefinitions, xAxisDefinition);
+                                directiveAPI.renderSingleDimensionChart(chartData, chartDefinition, seriesDefinitions);
                             }
                         };
                         return directiveAPI;
@@ -136,15 +133,13 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                             }
                         }
                     }
-                    if (payLoad.Settings.Measures != undefined) {
-                        for (var i = 0; i < payLoad.Settings.Measures.length; i++) {
-                            ctrl.measures.push(payLoad.Settings.Measures[i]);
-                        }
+                    if (payLoad.Settings.Measure != undefined) {
+                        ctrl.measures.push(payLoad.Settings.Measure);
                     }
                 }
                 else {
-                    for (var i = 0; i < payLoad.Measures.length; i++) {
-                        ctrl.measures.push(payLoad.Measures[i]);
+                    if (payLoad.Measure != undefined) {
+                        ctrl.measures.push(payLoad.Measure);
                     }
                     if (payLoad.GroupingDimensions != undefined) {
                         for (var i = 0; i < payLoad.GroupingDimensions.length; i++) {
@@ -164,7 +159,8 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                     FromTime: fromTime,
                     ToTime: toTime,
-                    TableId: payLoad.TableId
+                    TableId: payLoad.TableId,
+                    TopRecords: payLoad.Settings.TopRecords
                 }
                 return queryFinalized;
             }

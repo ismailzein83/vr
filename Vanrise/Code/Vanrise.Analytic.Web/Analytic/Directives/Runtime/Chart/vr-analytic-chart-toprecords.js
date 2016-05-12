@@ -68,7 +68,7 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                 for (var m = 0; m < ctrl.measures.length; m++) {
                                     var measureObject = new Object();
 
-                                    for (var i = 0; i < response.Data.length - 912; i++) {
+                                    for (var i = 0; i < response.Data.length; i++) {
                                         var dimensionName = "";
                                         for (var d = 0; d < ctrl.groupingDimensions.length; d++) {
                                             dimensionName += response.Data[i].DimensionValues[d].Name + ", ";
@@ -163,7 +163,8 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                     MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                     FromTime: fromTime,
                     ToTime: toTime,
-                    TableId: payLoad.TableId
+                    TableId: payLoad.TableId,
+                    TopRecords: payLoad.Settings.TopRecords
                 }
                 return queryFinalized;
             }

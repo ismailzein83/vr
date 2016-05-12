@@ -65,6 +65,14 @@
                     measureSelectorAPI = api;
                     measureReadyDeferred.resolve();
                 }
+                $scope.scopeModel.onSelectMeasureItem = function (measure) {
+                    var dataItem = {
+                        AnalyticItemConfigId: measure.AnalyticItemConfigId,
+                        Title: measure.Title,
+                        Name: measure.Name,
+                    };
+                    $scope.scopeModel.measures.push(dataItem);
+                }
 
 
                 defineAPI();
@@ -94,16 +102,9 @@
                                 }
                             }
 
-                            selectedMeasureIds = [];
-                            if (payload.widgetEntity.Measures != undefined && payload.widgetEntity.Measures.length > 0) {
-                                for (var i = 0; i < payload.widgetEntity.Measures.length; i++) {
-                                    var measure = payload.widgetEntity.Measures[i];
-                                    selectedMeasureIds.push(measure.MeasureName);
-                                    $scope.scopeModel.measures.push({
-                                        Name: measure.MeasureName,
-                                        Title: measure.Title,
-                                    });
-                                }
+
+                            if (payload.widgetEntity.Measure != undefined) {
+                                selectedMeasureIds = payload.widgetEntity.Measure.MeasureName;
                             }
                         }
                         var promises = [];
@@ -130,6 +131,17 @@
                         });
                         promises.push(loadMeasureDirectivePromiseDeferred.promise);
 
+
+                        var loadFilterDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
+                        filterReadyPromiseDeferred.promise.then(function () {
+                            var entityPayload = payload != undefined ? { entityNames: payload.EntityType, filter: payload.Filter } : undefined;
+                            filterReadyPromiseDeferred = undefined;
+                            VRUIUtilsService.callDirectiveLoad(filterDimensionAPI, entityPayload, loadFilterDimentionPromiseDeferred);
+
+                        });
+                        promises.push(loadFilterDimentionPromiseDeferred.promise);
+
+
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
@@ -148,7 +160,7 @@
                         $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticPieChartWidget, Vanrise.Analytic.MainExtensions ",
                         Dimensions: getDimensions(),
                         TopRecords: $scope.scopeModel.topRecords,
-                        Measure: getMeasure($scope.scopeModel.Measure.MeasureName)
+                        Measure: getMeasure($scope.scopeModel.Measure)
                     }
                     return data;
                 }
@@ -170,9 +182,11 @@
                     return dimensions;
                 }
 
-                function getMeasure(measureName) {
-                    var measure = UtilsService.getItemByVal($scope.scopeModel.measures, measureName, "Name");
-                    return measure;
+                function getMeasure(measure) {
+                    return {
+                        MeasureName: measure.Name,
+                        Title: measure.Title
+                    };
                 }
             }
         }

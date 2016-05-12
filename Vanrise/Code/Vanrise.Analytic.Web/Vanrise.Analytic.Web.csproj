@@ -185,8 +185,6 @@
     <Content Include="Analytic\Views\GenericAnalytic\Definition\RealTimeWidgetEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReport.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReportController.js" />
-    <Content Include="Analytic\Views\GenericAnalytic\Runtime\RealTimeReport.html" />
-    <Content Include="Analytic\Views\GenericAnalytic\Runtime\RealTimeReportController.js" />
     <Content Include="Analytic\Views\Reports\AnalyticReport.html" />
     <Content Include="Analytic\Views\Reports\AnalyticReportController.js" />
   </ItemGroup>
