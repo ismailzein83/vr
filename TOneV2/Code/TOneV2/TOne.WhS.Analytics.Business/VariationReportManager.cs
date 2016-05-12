@@ -259,7 +259,7 @@ namespace TOne.WhS.Analytics.Business
                 }
 
                 summary.Percentage = (summary.TimePeriodValues[0] - summary.Average) / GetDenominator(summary.Average) * 100;
-                summary.PreviousPeriodPercentage = (summary.TimePeriodValues[0] - summary.TimePeriodValues[1]) / GetDenominator(summary.Average) * 100;
+                summary.PreviousPeriodPercentage = (summary.TimePeriodValues[0] - summary.TimePeriodValues[1]) / GetDenominator(summary.TimePeriodValues[1]) * 100;
 
                 return summary;
             }
