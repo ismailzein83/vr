@@ -15,10 +15,16 @@ BEGIN
 
 	IF NOT EXISTS (SELECT TOP 1 NULL FROM summarytransformation.SummaryBatchLock WITH(NOLOCK) WHERE TypeID = @TypeID AND BatchStart = @BatchStart)
 	BEGIN
-		INSERT INTO summarytransformation.SummaryBatchLock 
-		(TypeID, BatchStart) 
-		SELECT @TypeID, @BatchStart 
-		WHERE NOT EXISTS (SELECT TOP 1 NULL FROM summarytransformation.SummaryBatchLock WHERE TypeID = @TypeID AND BatchStart = @BatchStart)
+		BEGIN TRY
+			INSERT INTO summarytransformation.SummaryBatchLock 
+			(TypeID, BatchStart) 
+			SELECT @TypeID, @BatchStart 
+			WHERE NOT EXISTS (SELECT TOP 1 NULL FROM summarytransformation.SummaryBatchLock WHERE TypeID = @TypeID AND BatchStart = @BatchStart)
+		END TRY
+		BEGIN CATCH
+			 
+		END CATCH
+		
 	END
 	
 	DECLARE @IsLocked bit
