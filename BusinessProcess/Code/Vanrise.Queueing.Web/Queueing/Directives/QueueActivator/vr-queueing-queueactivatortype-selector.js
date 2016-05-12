@@ -111,6 +111,14 @@
                     return data;
                 };
 
+                api.getQueueItemType = function () {
+                    if (wrapperDirectiveAPI.getQueueItemType != undefined)
+                        return wrapperDirectiveAPI.getQueueItemType();
+                    else
+                        return {
+                            $type: "Vanrise.GenericData.QueueActivators.DataRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators"
+                        };
+                }
 
                 return api;
             }

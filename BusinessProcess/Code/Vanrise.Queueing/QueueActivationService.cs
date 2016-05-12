@@ -144,7 +144,25 @@ namespace Vanrise.Queueing
             var batchStarts = batchPersistentQueue.GetAvailableBatchStarts();
             foreach (var batchStart in batchStarts)
             {
-                if (summaryBatchQueueActivator.TryLock(batchStart))
+                bool isLocked = false;
+                //unlocking the batch if it faces any problem while trying to lock it
+                try
+                {
+                    isLocked = summaryBatchQueueActivator.TryLock(batchStart);
+                }
+                catch
+                {
+                    try
+                    {
+                        summaryBatchQueueActivator.Unlock(batchStart);
+                    }
+                    catch
+                    {
+
+                    }
+                    throw;
+                }
+                if (isLocked)
                 {
                     bool batchesUpdated;
                     bool anyItemUpdated = false;

@@ -263,11 +263,11 @@
             executionFlowStage.MaximumConcurrentReaders = $scope.scopeModal.maximumConcurrentReaders;
             executionFlowStage.SourceStages = [];
             executionFlowStage.SourceStages = UtilsService.getPropValuesFromArray($scope.scopeModal.selectedSourceStages, "stageName");
-            executionFlowStage.QueueItemType = {
-                $type: "Vanrise.GenericData.QueueActivators.DataRecordBatchQueueItemType, Vanrise.GenericData.QueueActivators",
-                DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
-                BatchDescription: $scope.scopeModal.batchDescription
-            };
+
+            executionFlowStage.QueueItemType = queueActivatorConfigDirectiveReadyAPI.getQueueItemType();
+            executionFlowStage.QueueItemType.DataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+            executionFlowStage.QueueItemType.BatchDescription = $scope.scopeModal.batchDescription;
+
             executionFlowStage.QueueActivator = queueActivator;
             return executionFlowStage;
         }
