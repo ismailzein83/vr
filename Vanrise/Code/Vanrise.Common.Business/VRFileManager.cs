@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
-using Vanrise.Security.Business;
 
 namespace Vanrise.Common.Business
 {
@@ -34,7 +33,7 @@ namespace Vanrise.Common.Business
         public long AddFile(VRFile file)
         {
             int? userId;
-            if (SecurityContext.Current.TryGetLoggedInUserId(out userId))
+            if (Vanrise.Security.Entities.ContextFactory.GetContext().TryGetLoggedInUserId(out userId))
                 file.UserId = userId;
             return _datamanager.AddFile(file);
         }
@@ -61,7 +60,7 @@ namespace Vanrise.Common.Business
 
         public IDataRetrievalResult<VRFileInfo> GetFilteredRecentFiles(DataRetrievalInput<VRFileQuery> input)
         {
-            input.Query.UserId = SecurityContext.Current.GetLoggedInUserId();
+            input.Query.UserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             return DataRetrievalManager.Instance.ProcessResult(input, _datamanager.GetFilteredRecentFiles(input));
         }
 

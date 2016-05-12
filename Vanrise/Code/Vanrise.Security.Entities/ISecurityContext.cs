@@ -10,6 +10,8 @@ namespace Vanrise.Security.Entities
     {
         int GetLoggedInUserId();
 
+        bool TryGetLoggedInUserId(out int? userId);
+
         bool IsAllowed(string requiredPermissions);
 
         bool HasPermissionToActions(string systemActionNames);
