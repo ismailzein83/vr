@@ -138,10 +138,13 @@ app.service('SecurityService', ['$rootScope', 'UtilsService', 'VR_Sec_Permission
             loginURL = value;
     }
 
-    function redirectToLoginPage()
+    function redirectToLoginPage(withoutAutoRedirect)
     {
         if (location.pathname.indexOf('/Security/Login') < 0) {
-            window.location.href = loginURL + '?redirectTo=' + encodeURIComponent(window.location.href);
+            var url = loginURL;
+            if (!withoutAutoRedirect)
+                url += '?redirectTo=' + encodeURIComponent(window.location.href);
+            window.location.href = url;
         }
     }
 

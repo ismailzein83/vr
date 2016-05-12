@@ -102,7 +102,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
     $scope.logout = function () {
         SecurityService.deleteAccessCookie();
-        SecurityService.redirectToLoginPage();
+        SecurityService.redirectToLoginPage(true);
     }
 
     $scope.showMenu = function (e) {
