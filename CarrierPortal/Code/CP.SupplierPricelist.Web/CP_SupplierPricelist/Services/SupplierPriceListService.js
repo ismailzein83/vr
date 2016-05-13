@@ -12,11 +12,11 @@ app.service('CP_SupplierPricelist_SupplierPriceListService', ['LabelColorsEnum',
                 case cpSupplierPricelistStatusEnum.Completed.value:
                     return labelColorsEnum.Success.color;
                 case cpSupplierPricelistStatusEnum.UploadFailedWithRetry.value:
-                    return labelColorsEnum.Failed.color;
+                    return labelColorsEnum.WarningLevel2.color;
                 case cpSupplierPricelistStatusEnum.ResultFailedWithRetry.value:
                     return labelColorsEnum.WarningLevel2.color;
                 case cpSupplierPricelistStatusEnum.UploadFailedWithNoRetry.value:
-                    return labelColorsEnum.WarningLevel2.color;
+                    return labelColorsEnum.Failed.color;
                 case cpSupplierPricelistStatusEnum.ResultFailedWithNoRetry.value:
                     return labelColorsEnum.Failed.color;
                 case cpSupplierPricelistStatusEnum.UnderProcessing.value:
