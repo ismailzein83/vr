@@ -13,6 +13,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
+                hideremoveicon: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -73,7 +74,7 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="CurrencyId" '
-            + required + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+            + required + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Currency" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select>'
                + '</div>'
         }
 
@@ -93,16 +94,60 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+                api.load = function (payload)
+                {
+                    var promises = [];
+
                     var selectedIds;
+                    var selectSystemCurrency;
+                    
                     selectorAPI.clearDataSource();
 
-                    if (payload != undefined) {
+                    if (payload != undefined)
+                    {
                         selectedIds = payload.selectedIds;
+                        selectSystemCurrency = payload.selectSystemCurrency;
                     }
 
-                    return getAllCurrencies(attrs, ctrl, selectedIds);
-                }
+                    var getAllCurrenciesPromise = getAllCurrencies();
+                    promises.push(getAllCurrenciesPromise);
+
+                    if (selectedIds == undefined && selectSystemCurrency === true)
+                    {
+                        var systemCurrency;
+
+                        var getSystemCurrencyPromise = getSystemCurrency();
+                        promises.push(getSystemCurrencyPromise);
+
+                        UtilsService.waitMultiplePromises([getAllCurrenciesPromise, getSystemCurrencyPromise]).then(function ()
+                        {
+                            var systemCurrencyId = (attrs.ismultipleselection != undefined) ? [systemCurrency.CurrencyId] : systemCurrency.CurrencyId;
+                            VRUIUtilsService.setSelectedValues(systemCurrencyId, 'CurrencyId', attrs, ctrl);
+                        });
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+
+                    function getAllCurrencies()
+                    {
+                        return VRCommon_CurrencyAPIService.GetAllCurrencies().then(function (response)
+                        {
+                            if (response != null)
+                            {
+                                for (var i = 0; i < response.length; i++)
+                                    ctrl.datasource.push(response[i]);
+
+                                if (selectedIds != undefined)
+                                    VRUIUtilsService.setSelectedValues(selectedIds, 'CurrencyId', attrs, ctrl);
+                            }
+                        });
+                    }
+                    function getSystemCurrency() {
+                        return VRCommon_CurrencyAPIService.GetSystemCurrency().then(function (response) {
+                            systemCurrency = response;
+                        });
+                    }
+                };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('CurrencyId', attrs, ctrl);
@@ -112,7 +157,6 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
                     VRUIUtilsService.setSelectedValues(selectedIds, 'CurrencyId', attrs, ctrl);
                 }
 
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
@@ -120,16 +164,5 @@ app.directive('vrCommonCurrencySelector', ['VRCommon_CurrencyAPIService', 'VRCom
             this.initializeController = initializeController;
         }
 
-        function getAllCurrencies(attrs, ctrl, selectedIds) {
-            return VRCommon_CurrencyAPIService.GetAllCurrencies().then(function (response) {
-                angular.forEach(response, function (itm) {
-                    ctrl.datasource.push(itm);
-                });
-
-                if (selectedIds != undefined) {
-                    VRUIUtilsService.setSelectedValues(selectedIds, 'CurrencyId', attrs, ctrl);
-                }
-            });
-        }
         return directiveDefinitionObject;
     }]);

@@ -19,6 +19,10 @@
             });
         }
 
+        function GetSystemCurrency() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Currency", "GetSystemCurrency"));
+        }
+
         function AddCurrency(currencyObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "Currency", "AddCurrency"), currencyObject);
         }
@@ -31,7 +35,8 @@
         return ({
             GetFilteredCurrencies: GetFilteredCurrencies,
             GetAllCurrencies: GetAllCurrencies,
-            GetCurrency:GetCurrency,
+            GetCurrency: GetCurrency,
+            GetSystemCurrency: GetSystemCurrency,
             AddCurrency: AddCurrency,
             UpdateCurrency: UpdateCurrency
 
