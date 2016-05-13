@@ -7,6 +7,7 @@
     function VariationReportController($scope, WhS_Analytics_VariationReportTypeEnum, WhS_Analytics_VariationReportTimePeriodEnum, UtilsService) {
 
         var gridAPI;
+        var pageSize;
         var chartAPI;
 
         defineScope();
@@ -35,12 +36,20 @@
                 $scope.scopeModel.showChart = false;
             };
 
-            $scope.scopeModel.onGridReady = function (api) {
+            $scope.scopeModel.onGridReady = function (api)
+            {
                 gridAPI = api;
+                pageSize = api.getPageSize();
             };
 
             $scope.scopeModel.onChartReady = function (api) {
                 chartAPI = api;
+            };
+
+            $scope.scopeModel.validateTopFilter = function () {
+                if (pageSize == undefined) // Handle the case when/if this function executes before onGridReady in which case pageSize = undefined
+                    return null;
+                return ($scope.scopeModel.top > pageSize) ? ('Top <= ' + pageSize) : null;
             };
 
             $scope.scopeModel.search = function () {

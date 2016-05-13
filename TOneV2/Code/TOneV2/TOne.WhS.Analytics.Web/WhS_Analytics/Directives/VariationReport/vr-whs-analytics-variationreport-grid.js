@@ -93,11 +93,14 @@
             function defineAPI() {
                 var api = {};
 
-                api.load = function (query) {
+                api.load = function (query)
+                {
                     setSortByField(query.ReportType);
+
                     gridQuery = cloneGridQuery(query);
                     gridDrillDownTabsObj = undefined;
                     firstResponse = undefined;
+
                     return gridAPI.retrieveData(query);
                 };
 
@@ -108,6 +111,10 @@
                         timePeriods: firstResponse.TimePeriods,
                         summary: firstResponse.Summary
                     } : null;
+                };
+
+                api.getPageSize = function () {
+                    return gridAPI.getPageSize();
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
