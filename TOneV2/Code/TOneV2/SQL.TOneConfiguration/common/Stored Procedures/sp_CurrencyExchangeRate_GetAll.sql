@@ -11,5 +11,6 @@ BEGIN
       ,[Rate]
       ,[CurrencyID]
       ,[ExchangeDate]
+      ,[SourceID]
       from common.CurrencyExchangeRate
 END

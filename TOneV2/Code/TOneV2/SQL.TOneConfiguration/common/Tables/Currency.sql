@@ -3,6 +3,9 @@
     [Symbol]    NVARCHAR (10)  NOT NULL,
     [Name]      NVARCHAR (255) NOT NULL,
     [timestamp] ROWVERSION     NULL,
+    [SourceID]  VARCHAR (50)   NULL,
     CONSTRAINT [PK_Currency] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

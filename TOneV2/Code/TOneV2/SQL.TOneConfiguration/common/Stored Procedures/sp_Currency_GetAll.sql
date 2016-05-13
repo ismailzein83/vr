@@ -9,5 +9,6 @@ BEGIN
 	SELECT [ID]
       ,[Name]
       ,[Symbol]
+      ,[SourceID]
       from common.Currency
 END
