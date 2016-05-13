@@ -13,7 +13,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     public class GetExistingCodesInput
     {
         public int SellingNumberPlanId { get; set; }
-        public int CountryId { get; set; }
         public DateTime MinimumDate { get; set; }
     }
 
@@ -28,8 +27,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanID { get; set; }
-        [RequiredArgument]
-        public InArgument<int> CountryId { get; set; }
+        
         [RequiredArgument]
         public InOutArgument<IEnumerable<SaleCode>> ExistingCodeEntities { get; set; }
 
@@ -38,8 +36,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return new GetExistingCodesInput()
             {
                 MinimumDate = this.MinimumDate.Get(context),
-                SellingNumberPlanId = this.SellingNumberPlanID.Get(context),
-                CountryId = this.CountryId.Get(context)
+                SellingNumberPlanId = this.SellingNumberPlanID.Get(context)
+               
             };
         }
 
@@ -54,7 +52,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
 
             SaleCodeManager codeManager = new SaleCodeManager();
-            List<SaleCode> saleCodes = codeManager.GetSaleCodesEffectiveAfter(inputArgument.SellingNumberPlanId, inputArgument.CountryId, inputArgument.MinimumDate);
+            List<SaleCode> saleCodes = codeManager.GetSellingNumberPlanSaleCodes(inputArgument.SellingNumberPlanId, inputArgument.MinimumDate);
             return new GetExistingCodesOutput()
             {
                 ExistingCodeEntities = saleCodes

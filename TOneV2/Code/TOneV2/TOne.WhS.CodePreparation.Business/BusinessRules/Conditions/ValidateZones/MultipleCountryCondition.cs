@@ -25,9 +25,12 @@ namespace TOne.WhS.CodePreparation.Business
             bool result = true;
             bool resultOfCodeToAdd = true;
             bool resultOfCodeToMove = true;
+            bool resultOfCodeToClose = true;
 
             int? firstCodeToAddCountryId = null;
             int? firstCodeToMoveCountryId = null;
+            int? firstCodeToCloseCountryId = null;
+
 
             if (zone.CodesToAdd != null)
             {
@@ -35,7 +38,7 @@ namespace TOne.WhS.CodePreparation.Business
                 if (firstCode != null)
                 {
                     firstCodeToAddCountryId = firstCode.CodeGroup.CountryId;
-                    Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup != null && code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
+                    Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
                     resultOfCodeToAdd = !zone.CodesToAdd.Any(pred);
                 }
             }
@@ -47,15 +50,27 @@ namespace TOne.WhS.CodePreparation.Business
                 if (firstCode != null)
                 {
                     firstCodeToMoveCountryId = firstCode.CodeGroup.CountryId;
-                    Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup != null && code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
+                    Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
                     resultOfCodeToMove = !zone.CodesToMove.Any(pred);
                 }
             }
 
-            if (firstCodeToAddCountryId != null && firstCodeToMoveCountryId != null)
-                result = firstCodeToAddCountryId == firstCodeToMoveCountryId;
-            
-            return resultOfCodeToAdd && resultOfCodeToMove && result;
+            if (zone.CodesToClose != null)
+            {
+                var firstCode = zone.CodesToClose.FirstOrDefault();
+                if (firstCode != null)
+                {
+                    firstCodeToCloseCountryId = firstCode.CodeGroup.CountryId;
+                    Func<CodeToClose, bool> pred = new Func<CodeToClose, bool>((code) => code.CodeGroup.CountryId != firstCodeToCloseCountryId.Value);
+                    resultOfCodeToClose = !zone.CodesToClose.Any(pred);
+                }
+            }
+
+
+            if (firstCodeToAddCountryId != null && firstCodeToMoveCountryId != null && firstCodeToCloseCountryId != null)
+                result = (firstCodeToAddCountryId  == firstCodeToCloseCountryId) && (firstCodeToAddCountryId == firstCodeToMoveCountryId);
+
+            return resultOfCodeToAdd && resultOfCodeToMove && resultOfCodeToClose && result;
         
         }
 

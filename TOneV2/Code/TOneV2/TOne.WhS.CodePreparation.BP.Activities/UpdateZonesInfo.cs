@@ -23,7 +23,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ZoneToProcess> zonesToProcess = ZonesToProcess.Get(context);
-
+            
             IEnumerable<ExistingZone> existingZones = ExistingZones.Get(context);
             ZonesByName newAndExistingZones = NewAndExistingZones.Get(context);
 
@@ -34,11 +34,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 newAndExistingZones.TryGetValue(zoneToProcess.ZoneName, out addedZones);
                
                 if (addedZones != null)
-                    zoneToProcess.AddedZones = addedZones.FindAllRecords(item => item.Name.Equals(zoneToProcess.ZoneName, StringComparison.InvariantCultureIgnoreCase))
-                        .Select(itm => itm as AddedZone);
+                    zoneToProcess.AddedZones.AddRange(addedZones.Select(item => item as AddedZone));
                 
                 if (existingZones != null)
-                    zoneToProcess.NewAndExistingZones = existingZones.FindAllRecords(item => item.Name.Equals(zoneToProcess.ZoneName, StringComparison.InvariantCultureIgnoreCase));
+                    zoneToProcess.ExistingZones.AddRange(existingZones.FindAllRecords(item => item.Name.Equals(zoneToProcess.ZoneName, StringComparison.InvariantCultureIgnoreCase)));
             }
 
             ZonesToProcess.Set(context, zonesToProcess);

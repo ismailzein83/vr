@@ -69,7 +69,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             IEnumerable<SaleCode> existingCodeEntities = inputArgument.ExistingCodeEntities;
             Dictionary<long, ExistingZone> existingZonesByZoneId = inputArgument.ExistingZonesByZoneId;
 
-            IEnumerable<ExistingCode> existingCodes = existingCodeEntities.MapRecords((codeEntity) => ExistingCodeMapper(codeEntity, existingZonesByZoneId));
+            IEnumerable<ExistingCode> existingCodes = existingCodeEntities.Where(x => existingZonesByZoneId.ContainsKey(x.ZoneId)).MapRecords((codeEntity) => ExistingCodeMapper(codeEntity, existingZonesByZoneId));
+
             return new PrepareExistingCodesOutput()
             {
                 ExistingCodes = existingCodes

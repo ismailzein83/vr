@@ -20,7 +20,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         ZonesByName NewAndExistingZones { set; }
 
-        IEnumerable<AddedCode> NewCodes { set; }
+        IEnumerable<AddedCode> NewCodes { get; set; }
 
         IEnumerable<ChangedCode> ChangedCodes { set; }
 

@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
     public class PrepareExistingZonesInput
     {
         public IEnumerable<SaleZone> ExistingZoneEntities { get; set; }
+        public int CountryId { get; set; }
     }
 
     public class PrepareExistingZonesOutput
@@ -25,13 +27,17 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<SaleZone>> ExistingZoneEntities { get; set; }
 
         [RequiredArgument]
+        public InArgument<int> CountryId { get; set; }
+
+        [RequiredArgument]
         public InOutArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
 
         protected override PrepareExistingZonesInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new PrepareExistingZonesInput()
             {
-                ExistingZoneEntities = this.ExistingZoneEntities.Get(context)
+                ExistingZoneEntities = this.ExistingZoneEntities.Get(context),
+                CountryId = this.CountryId.Get(context)
             };
         }
 
@@ -45,8 +51,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         protected override PrepareExistingZonesOutput DoWorkWithResult(PrepareExistingZonesInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<SaleZone> existingZones = inputArgument.ExistingZoneEntities;
-
-            Dictionary<long, ExistingZone> existingZoneDic = existingZones.ToDictionary<BusinessEntity.Entities.SaleZone, long, ExistingZone>((zoneEntity) =>
+            int countryId = inputArgument.CountryId;
+             Dictionary<long, ExistingZone> existingZoneDic = existingZones.Where(item => item.CountryId == countryId).ToDictionary<BusinessEntity.Entities.SaleZone, long, ExistingZone>((zoneEntity) =>
                 zoneEntity.SaleZoneId, (zoneEntity) => new ExistingZone { ZoneEntity = zoneEntity });
 
             return new PrepareExistingZonesOutput()

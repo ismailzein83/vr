@@ -15,6 +15,8 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             CodesToAdd = new List<CodeToAdd>();
             CodesToMove = new List<CodeToMove>();
             CodesToClose = new List<CodeToClose>();
+            AddedZones = new List<AddedZone>();
+            ExistingZones = new List<ExistingZone>();
         }
         public string ZoneName { get; set; }
 
@@ -24,9 +26,9 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         public List<CodeToClose> CodesToClose { get; set; }
 
-        public IEnumerable<AddedZone> AddedZones { get; set; }
+        public List<AddedZone> AddedZones { get; set; }
 
-        public IEnumerable<ExistingZone> NewAndExistingZones { get; set; }
+        public List<ExistingZone> ExistingZones { get; set; }
 
         public object Key
         {

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.CodePreparation.Entities.Processing
 {
-    public class AddedZone : IZone
+    public class AddedZone : IZone , IRuleTarget
     {
         public long ZoneId { get; set; }
 
@@ -25,6 +26,16 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             {
                 return _addedCodes;
             }
+        }
+
+        public object Key
+        {
+            get { return this.Name; }
+        }
+
+        public string TargetType
+        {
+            get { return "Zone"; }
         }
     }
 }

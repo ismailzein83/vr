@@ -16,14 +16,19 @@ namespace TOne.WhS.CodePreparation.Business
             ZonesByName newAndExistingZones = new ZonesByName();
             
             context.NewAndExistingZones = newAndExistingZones;
-            context.NewCodes= ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones);
+            
+            ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones);
+            
+            context.NewCodes= context.CodesToAdd.SelectMany(itm => itm.AddedCodes);
+            context.NewCodes.Concat(context.CodesToAdd.SelectMany(itm => itm.AddedCodes));
+           
             context.NewZones = newAndExistingZones.SelectMany(itm => itm.Value.Where(izone => izone is AddedZone)).Select(itm => itm as AddedZone);
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
 
         }
 
-        public IEnumerable<AddedCode> ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
+       private void  ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             ExistingCodesByCodeValue existingCodesByCodeValue = StructureExistingCodesByCodeValue(existingCodes);
@@ -63,15 +68,9 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
 
-            List<AddedCode> addedCodes = codesToAdd.SelectMany(itm => itm.AddedCodes).ToList();
-            foreach (AddedCode obj in codesToMove.SelectMany(itm => itm.AddedCodes).ToList())
-            {
-                addedCodes.Add(obj);
-            }
-
             CloseZonesWithNoCodes(existingZones);
 
-            return addedCodes;
+           
         }
 
         private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones)

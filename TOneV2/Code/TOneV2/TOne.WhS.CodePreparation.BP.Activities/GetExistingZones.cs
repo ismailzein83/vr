@@ -13,7 +13,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     public class GetExistingZonesInput
     {
         public int SellingNumberPlanId { get; set; }
-        public int CountryId { get; set; }
         public DateTime MinimumDate { get; set; }
     }
     public class GetExistingZonesOutput
@@ -24,13 +23,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     {
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanID { get; set; }
-        [RequiredArgument]
-        public InArgument<int> CountryId { get; set; }
+
         [RequiredArgument]
         public InArgument<DateTime> MinimumDate { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<IEnumerable<SaleZone>> ExistingZoneEntities { get; set; }
+        public OutArgument<IEnumerable<SaleZone>> ExistingZoneEntities { get; set; }
 
         protected override GetExistingZonesInput GetInputArgument(AsyncCodeActivityContext context)
         {
@@ -38,14 +36,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 MinimumDate = this.MinimumDate.Get(context),
                 SellingNumberPlanId = this.SellingNumberPlanID.Get(context),
-                CountryId = this.CountryId.Get(context)
             };
         }
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
-            if (this.ExistingZoneEntities.Get(context) == null)
-                this.ExistingZoneEntities.Set(context, new List<SaleZone>());
+            //if (this.ExistingZoneEntities.Get(context) == null)
+            //    this.ExistingZoneEntities.Set(context, new List<SaleZone>());
             base.OnBeforeExecute(context, handle);
         }
 
@@ -53,7 +50,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
-            IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesEffectiveAfter(inputArgument.SellingNumberPlanId, inputArgument.CountryId, inputArgument.MinimumDate);
+            IEnumerable<SaleZone> saleZones = saleZoneManager.GetEffectiveSaleZonesBySellingNumberPlan(inputArgument.SellingNumberPlanId, inputArgument.MinimumDate);
             return new GetExistingZonesOutput()
             {
                 ExistingZoneEntities = saleZones

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using TOne.WhS.CodePreparation.Entities;
+using TOne.WhS.CodePreparation.Entities.Processing;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
@@ -48,5 +49,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public DateTime EffectiveDate { get; set; }
 
         public int SellingNumberPlanId { get; set; }
+
+
+        public Dictionary<string, ExistingZone> ExistingZonesByZoneName { get; set; }
     }
 }

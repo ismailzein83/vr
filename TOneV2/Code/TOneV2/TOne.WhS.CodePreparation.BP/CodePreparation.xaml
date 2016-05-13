@@ -116,6 +116,9 @@
       </Variable>
       <Variable x:TypeArguments="twcep:ZonesByName" Name="NewAndExistingZones" />
       <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="DataToValidateAfterProcessing" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleZone)" Name="ExistingZoneEntities" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleCode)" Name="ExistingCodeEntities" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleRate)" Name="ExistingRateEntities" />
     </Sequence.Variables>
     <twcba1:SetCPContext sap2010:WorkflowViewState.IdRef="SetCPContext_1">
       <twcba1:SetCPContext.EffectiveDate>
@@ -372,6 +375,66 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <twcba1:GetExistingZones Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingZones_1">
+        <twcba1:GetExistingZones.ExistingZoneEntities>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">ExistingZoneEntities</mca:CSharpReference>
+          </OutArgument>
+        </twcba1:GetExistingZones.ExistingZoneEntities>
+        <twcba1:GetExistingZones.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twcba1:GetExistingZones.MinimumDate>
+        <twcba1:GetExistingZones.SellingNumberPlanID>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+          </InArgument>
+        </twcba1:GetExistingZones.SellingNumberPlanID>
+      </twcba1:GetExistingZones>
+      <twcba1:GetExistingCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingCodes_1">
+        <twcba1:GetExistingCodes.ExistingCodeEntities>
+          <InOutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">ExistingCodeEntities</mca:CSharpReference>
+          </InOutArgument>
+        </twcba1:GetExistingCodes.ExistingCodeEntities>
+        <twcba1:GetExistingCodes.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twcba1:GetExistingCodes.MinimumDate>
+        <twcba1:GetExistingCodes.SellingNumberPlanID>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+          </InArgument>
+        </twcba1:GetExistingCodes.SellingNumberPlanID>
+      </twcba1:GetExistingCodes>
+      <twcba1:GetExistingRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingRates_1">
+        <twcba1:GetExistingRates.ExistingRateEntities>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">ExistingRateEntities</mca:CSharpReference>
+          </OutArgument>
+        </twcba1:GetExistingRates.ExistingRateEntities>
+        <twcba1:GetExistingRates.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twcba1:GetExistingRates.MinimumDate>
+        <twcba1:GetExistingRates.sellingNumberPlanId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
+          </InArgument>
+        </twcba1:GetExistingRates.sellingNumberPlanId>
+      </twcba1:GetExistingRates>
+    </Parallel>
+    <twcba1:PrepareZones Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareZones_1">
+      <twcba1:PrepareZones.ExistingZoneEntities>
+        <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">ExistingZoneEntities</mca:CSharpValue>
+        </InArgument>
+      </twcba1:PrepareZones.ExistingZoneEntities>
+    </twcba1:PrepareZones>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_4">
       <Parallel.Variables>
         <Variable x:TypeArguments="x:Int32" Name="ProcessingCountryCompleted" />
@@ -389,82 +452,21 @@
             </ActivityAction.Argument>
             <Sequence DisplayName="ProcessData" sap2010:WorkflowViewState.IdRef="Sequence_3">
               <Sequence.Variables>
-                <Variable x:TypeArguments="scg:Dictionary(x:Int64, twcep:ExistingZone)" Name="ExistingZonesByZoneId" />
                 <Variable x:TypeArguments="scg:IEnumerable(twcep:AddedCode)" Name="NewCodes" />
                 <Variable x:TypeArguments="scg:IEnumerable(twcep:AddedZone)" Name="NewZones" />
-                <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleZone)" Name="ExistingZoneEntities" />
-                <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleCode)" Name="ExistingCodeEntities" />
                 <Variable x:TypeArguments="scg:IEnumerable(twcep:ExistingCode)" Name="ExistingCodes" />
                 <Variable x:TypeArguments="scg:IEnumerable(twcep:ChangedCode)" Name="ChangedCodes" />
                 <Variable x:TypeArguments="scg:IEnumerable(twcep:ChangedZone)" Name="ChangedZones" />
-                <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleRate)" Name="ExistingRateEntities" />
                 <Variable x:TypeArguments="scg:IEnumerable(twcep:ExistingRate)" Name="ExistingRates" />
                 <Variable x:TypeArguments="scg:IEnumerable(twcep:ChangedRate)" Name="ChangedRates" />
+                <Variable x:TypeArguments="scg:Dictionary(x:Int64, twcep:ExistingZone)" Name="ExistingZonesByZoneId" />
               </Sequence.Variables>
-              <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
-                <twcba1:GetExistingZones Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingZones_1">
-                  <twcba1:GetExistingZones.CountryId>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">Country.CountryId</mca:CSharpValue>
-                    </InArgument>
-                  </twcba1:GetExistingZones.CountryId>
-                  <twcba1:GetExistingZones.ExistingZoneEntities>
-                    <InOutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">
-                      <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">ExistingZoneEntities</mca:CSharpReference>
-                    </InOutArgument>
-                  </twcba1:GetExistingZones.ExistingZoneEntities>
-                  <twcba1:GetExistingZones.MinimumDate>
-                    <InArgument x:TypeArguments="s:DateTime">
-                      <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
-                    </InArgument>
-                  </twcba1:GetExistingZones.MinimumDate>
-                  <twcba1:GetExistingZones.SellingNumberPlanID>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
-                    </InArgument>
-                  </twcba1:GetExistingZones.SellingNumberPlanID>
-                </twcba1:GetExistingZones>
-                <twcba1:GetExistingCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingCodes_1">
-                  <twcba1:GetExistingCodes.CountryId>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">Country.CountryId</mca:CSharpValue>
-                    </InArgument>
-                  </twcba1:GetExistingCodes.CountryId>
-                  <twcba1:GetExistingCodes.ExistingCodeEntities>
-                    <InOutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">
-                      <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleCode)">ExistingCodeEntities</mca:CSharpReference>
-                    </InOutArgument>
-                  </twcba1:GetExistingCodes.ExistingCodeEntities>
-                  <twcba1:GetExistingCodes.MinimumDate>
-                    <InArgument x:TypeArguments="s:DateTime">
-                      <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
-                    </InArgument>
-                  </twcba1:GetExistingCodes.MinimumDate>
-                  <twcba1:GetExistingCodes.SellingNumberPlanID>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
-                    </InArgument>
-                  </twcba1:GetExistingCodes.SellingNumberPlanID>
-                </twcba1:GetExistingCodes>
-                <twcba1:GetExistingRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingRates_1">
-                  <twcba1:GetExistingRates.ExistingRateEntities>
-                    <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">
-                      <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">ExistingRateEntities</mca:CSharpReference>
-                    </OutArgument>
-                  </twcba1:GetExistingRates.ExistingRateEntities>
-                  <twcba1:GetExistingRates.MinimumDate>
-                    <InArgument x:TypeArguments="s:DateTime">
-                      <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
-                    </InArgument>
-                  </twcba1:GetExistingRates.MinimumDate>
-                  <twcba1:GetExistingRates.sellingNumberPlanId>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">Input.SellingNumberPlanId</mca:CSharpValue>
-                    </InArgument>
-                  </twcba1:GetExistingRates.sellingNumberPlanId>
-                </twcba1:GetExistingRates>
-              </Parallel>
               <twcba1:PrepareExistingZones Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareExistingZones_1">
+                <twcba1:PrepareExistingZones.CountryId>
+                  <InArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpValue x:TypeArguments="x:Int32">Country.CountryId</mca:CSharpValue>
+                  </InArgument>
+                </twcba1:PrepareExistingZones.CountryId>
                 <twcba1:PrepareExistingZones.ExistingZoneEntities>
                   <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">
                     <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">ExistingZoneEntities</mca:CSharpValue>
@@ -596,7 +598,7 @@
               <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_2">
                 <vbw:CombineLists.InputLists>
                   <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
-                    <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt; { ZonesToProcess, ExistingZonesByZoneId.Values }</mca:CSharpValue>
+                    <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)">new List&lt;System.Collections.IEnumerable&gt; { ZonesToProcess, ExistingZonesByZoneId.Values, NewZones }</mca:CSharpValue>
                   </InArgument>
                 </vbw:CombineLists.InputLists>
                 <vbw:CombineLists.OutputList>
@@ -778,7 +780,7 @@
         </InArgument>
       </twcba1:UpdateCodePreparationStateStatus.Status>
     </twcba1:UpdateCodePreparationStateStatus>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -816,7 +818,8 @@
       <sap2010:ViewStateData Id="GetExistingZones_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1462,86" />
+      <sap2010:ViewStateData Id="PrepareZones_1" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="PrepareExistingZones_1" sap:VirtualizedContainerService.HintSize="1034,22" />
       <sap2010:ViewStateData Id="PrepareExistingCodes_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareExistingRates_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -834,7 +837,7 @@
       <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1034,86" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="1034,62" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1034,22" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1056,1060">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1056,934">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -842,29 +845,29 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="1086,1210" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="1086,1084" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1086,62" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="1108,1436">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="1108,1310">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,1436" />
-      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="1462,1482" />
+      <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,1310" />
+      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="1462,1356" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_1" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="1462,22" />
       <sap2010:ViewStateData Id="UpdateCodePreparationStateStatus_1" sap:VirtualizedContainerService.HintSize="1462,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1484,2934">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1484,2996">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="1524,3014" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.CodePreparation_1" sap:VirtualizedContainerService.HintSize="1524,3076" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

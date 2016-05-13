@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Entities.Processing;
-using Vanrise.Common;
 using Vanrise.BusinessProcess.Entities;
-using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.CodePreparation.Business
 {
-    public class AllCodesInZoneClosedCondition : BusinessRuleCondition
+    public class ClosePendingEffectiveCodeCondition : BusinessRuleCondition
     {
 
         public override bool ShouldValidate(IRuleTarget target)
@@ -22,13 +20,18 @@ namespace TOne.WhS.CodePreparation.Business
         {
 
             ExistingZone existingZone = context.Target as ExistingZone;
-            return !(existingZone.ChangedZone != null);
-               
+            foreach (ExistingCode existingCode in existingZone.ExistingCodes)
+            {
+                if (existingCode.ChangedCode != null && existingCode.BED > DateTime.Today)
+                    return false;
+            }
+
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("All codes in zone {0} are closed, zone {0} will be closed", (target as ExistingZone).ZoneEntity.Name);
+            return string.Format("Zone {0} has a pending effective code that can not be moved", (target as ExistingZone).ZoneEntity.Name);
         }
 
     }

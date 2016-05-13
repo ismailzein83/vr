@@ -26,7 +26,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (CodeToAdd codeToAdd in zone.CodesToAdd)
                 {
-                    if (zone.NewAndExistingZones.Any(item => item.BED > codeToAdd.BED))
+                    if (zone.ExistingZones.Any(item => item.BED > codeToAdd.BED))
                         return false;
                 }
 
@@ -37,7 +37,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 foreach (CodeToMove codeToMove in zone.CodesToMove)
                 {
-                    if (zone.NewAndExistingZones.Any(item => item.BED > codeToMove.BED))
+                    if (zone.ExistingZones.Any(item => item.BED > codeToMove.BED))
                         return false;
                 }
             }

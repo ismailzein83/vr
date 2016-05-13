@@ -93,6 +93,7 @@
     <Compile Include="GetExisitngRates.cs" />
     <Compile Include="PrepareChangedRatesForApply.cs" />
     <Compile Include="PrepareExistingRates.cs" />
+    <Compile Include="PrepareZones.cs" />
     <Compile Include="ProcessCountryRates.cs" />
     <Compile Include="ReadFromSource.cs" />
     <Compile Include="GetDataFromImportedCodes.cs" />
