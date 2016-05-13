@@ -14,6 +14,7 @@ namespace Vanrise.Analytic.Entities
         public string Currency { get; set; }
         public int? CurrencyId { get; set; }
         public List<string> DimensionFields { get; set; }
+        public List<string> ParentDimensions { get; set; }
         public List<string> MeasureFields { get; set; }
         public List<DimensionFilter> Filters { get; set; }
         public bool WithSummary { get; set; }

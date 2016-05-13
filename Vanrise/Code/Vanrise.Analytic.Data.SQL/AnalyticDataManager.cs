@@ -82,7 +82,10 @@ namespace Vanrise.Analytic.Data.SQL
             if (!isSummary)
                 groupByPart = BuildQueryGrouping(selectPartBuilder, input.Query.DimensionFields, includeJoinConfigNames);
             string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames);
-            BuildQueryMeasures(selectPartBuilder, input.Query.MeasureFields, includeJoinConfigNames);
+            List<string> allIncludedDimensions = new List<string>(input.Query.DimensionFields);
+            if (input.Query.ParentDimensions != null)
+                allIncludedDimensions.AddRange(input.Query.ParentDimensions);
+            BuildQueryMeasures(selectPartBuilder, allIncludedDimensions, input.Query.MeasureFields, includeJoinConfigNames);
             string joinPart = BuildQueryJoins(includeJoinConfigNames);
 
             StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime, input.Query.TopRecords,
@@ -101,7 +104,7 @@ namespace Vanrise.Analytic.Data.SQL
             if (!isSummary)
                 groupByPart = BuildQueryGrouping(selectPartBuilder, input.Query.TimeGroupingUnit);
             string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames);
-            BuildQueryMeasures(selectPartBuilder, input.Query.MeasureFields, includeJoinConfigNames);
+            BuildQueryMeasures(selectPartBuilder, input.Query.ParentDimensions, input.Query.MeasureFields, includeJoinConfigNames);
             string joinPart = BuildQueryJoins(includeJoinConfigNames);
 
             StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, input.Query.ToTime, null,
@@ -150,7 +153,7 @@ namespace Vanrise.Analytic.Data.SQL
             return joinPartBuilder.ToString();
         }
 
-        private void BuildQueryMeasures(StringBuilder selectPartBuilder, List<string> measureFields, HashSet<string> includeJoinConfigNames)
+        private void BuildQueryMeasures(StringBuilder selectPartBuilder, List<string> allIncludedDimensions, List<string> measureFields, HashSet<string> includeJoinConfigNames)
         {
             Func<AnalyticMeasure, IGetMeasureExpressionContext, string> getMeasureExpression = (measure, getMeasureExpressionContext) =>
             {
@@ -166,12 +169,14 @@ namespace Vanrise.Analytic.Data.SQL
                 return getMeasureExpression(measure, getMeasureExpressionContext);
             };
 
+            Func<string, bool> isGroupingDimensionIncluded = (dimensionName) => allIncludedDimensions != null && allIncludedDimensions.Contains(dimensionName);
+
             HashSet<string> addedMeasureColumns = new HashSet<string>();
             foreach (var measureName in measureFields)
             {
                 AnalyticMeasure measure = _measures[measureName];
 
-                GetMeasureExpressionContext getMeasureExpressionContext = new GetMeasureExpressionContext(getMeasureExpressionByMeasureName);
+                GetMeasureExpressionContext getMeasureExpressionContext = new GetMeasureExpressionContext(getMeasureExpressionByMeasureName, isGroupingDimensionIncluded);
                 string measureExpression = getMeasureExpressionByMeasureName(measureName, getMeasureExpressionContext);
                 AddColumnToStringBuilder(selectPartBuilder, String.Format("{0} AS {1}", measureExpression, GetMeasureColumnAlias(measure)));
 

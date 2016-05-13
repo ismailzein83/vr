@@ -16,6 +16,8 @@ namespace Vanrise.Analytic.Entities
 
         public TimeGroupingUnit TimeGroupingUnit { get; set; }
 
+        public List<string> ParentDimensions { get; set; }
+
         public int? CurrencyId { get; set; }
         public List<string> MeasureFields { get; set; }
         public List<DimensionFilter> Filters { get; set; }

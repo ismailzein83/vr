@@ -10,12 +10,16 @@ namespace Vanrise.Analytic.Data.SQL
     public class GetMeasureExpressionContext : IGetMeasureExpressionContext
     {
         Func<string, IGetMeasureExpressionContext, string> _getMeasureExpression;
+        Func<string, bool> _isGroupingDimensionIncluded;
 
-        public GetMeasureExpressionContext(Func<string, IGetMeasureExpressionContext, string> getMeasureExpression)
+        public GetMeasureExpressionContext(Func<string, IGetMeasureExpressionContext, string> getMeasureExpression, Func<string, bool> isGroupingDimensionIncluded)
         {
             if (getMeasureExpression == null)
                 throw new ArgumentNullException("getMeasureExpression");
+            if (isGroupingDimensionIncluded == null)
+                throw new ArgumentNullException("isGroupingDimensionIncluded");
             _getMeasureExpression = getMeasureExpression;
+            _isGroupingDimensionIncluded = isGroupingDimensionIncluded;
         }
 
         public string GetMeasureExpression(string measureConfigName)
@@ -26,7 +30,7 @@ namespace Vanrise.Analytic.Data.SQL
 
         public bool IsGroupingDimensionIncluded(string dimensionName)
         {
-            throw new NotImplementedException();
+            return _isGroupingDimensionIncluded(dimensionName);
         }
     }
 }

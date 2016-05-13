@@ -15,7 +15,7 @@ namespace Vanrise.Analytic.Entities
     {
         string GetMeasureExpression(string measureConfigName);
 
-        //bool IsGroupingDimensionIncluded(string dimensionName);
+        bool IsGroupingDimensionIncluded(string dimensionName);
     }
 
 }
