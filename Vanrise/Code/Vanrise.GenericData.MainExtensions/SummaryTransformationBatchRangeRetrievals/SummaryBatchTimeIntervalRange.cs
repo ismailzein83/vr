@@ -22,6 +22,9 @@ namespace Vanrise.GenericData.MainExtensions
                 case SummaryBatchIntervalType.Minutes:
                     batchStart = new DateTime(rawItemTime.Year, rawItemTime.Month, rawItemTime.Day, rawItemTime.Hour, ((int)(rawItemTime.Minute / this.IntervalOffset)) * this.IntervalOffset, 0);
                     break;
+                case SummaryBatchIntervalType.Days:
+                    batchStart = rawItemTime.Date;
+                    break;
                 default:
                     throw new NotImplementedException();
 
