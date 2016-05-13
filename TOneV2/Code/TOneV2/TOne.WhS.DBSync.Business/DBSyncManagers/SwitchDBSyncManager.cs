@@ -7,10 +7,15 @@ namespace TOne.WhS.DBSync.Business
 {
     public class SwitchDBSyncManager
     {
+        bool _UseTempTables;
+        public SwitchDBSyncManager(bool useTempTables)
+        {
+            _UseTempTables = useTempTables;
+        }
 
         public void ApplySwitchesToTemp(List<Switch> switches)
         {
-            SwitchDBSyncDataManager dataManager = new SwitchDBSyncDataManager();
+            SwitchDBSyncDataManager dataManager = new SwitchDBSyncDataManager(_UseTempTables);
             dataManager.ApplySwitchesToTemp(switches);
         }
     }

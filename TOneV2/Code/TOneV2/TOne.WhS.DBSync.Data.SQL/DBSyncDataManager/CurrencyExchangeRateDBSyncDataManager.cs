@@ -8,10 +8,11 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class CurrencyExchangeRateDBSyncDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "CurrencyID", "Rate", "ExchangeDate", "SourceID" };
-
-        public CurrencyExchangeRateDBSyncDataManager(string tableName) :
+        bool _UseTempTables;
+        public CurrencyExchangeRateDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("ConfigurationMigrationDBConnStringKey", "ConfigurationMigrationDBConnString"))
         {
+            _UseTempTables = useTempTables;
         }
 
         public void ApplyCurrencyExchangeRatesToTemp(List<CurrencyExchangeRate> currencyExchangeRates)
@@ -28,7 +29,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedCurrencyExchangeRates = new BulkInsertInfo
             {
-                TableName = "[common].[CurrencyExchangeRate_Temp]",
+                TableName = "[common].[CurrencyExchangeRate" + (_UseTempTables ? Constants._Temp : "") + "]",
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,

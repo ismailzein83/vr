@@ -10,9 +10,11 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class CurrencyDBSyncDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "Symbol", "Name", "SourceID" };
-        public CurrencyDBSyncDataManager() :
+        bool _UseTempTables;
+        public CurrencyDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("ConfigurationMigrationDBConnStringKey", "ConfigurationMigrationDBConnString"))
         {
+            _UseTempTables = useTempTables;
         }
 
         public void ApplyCurrenciesToTemp(List<Currency> currencies)
@@ -29,7 +31,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedCurrencies = new BulkInsertInfo
             {
-                TableName = "[common].[Currency_Temp]",
+                TableName = "[common].[Currency" + (_UseTempTables ? Constants._Temp : "") + "]",
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,
@@ -40,12 +42,9 @@ namespace TOne.WhS.DBSync.Data.SQL
             InsertBulkToTable(preparedCurrencies as BaseBulkInsertInfo);
         }
 
-        public Currency GetCurrencyBySourceId(string sourceId)
+        public List<Currency> GetCurrencies()
         {
-            return GetItemText("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM [common].[Currency_Temp] where SourceId = @SourceId ", CurrencyMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@SourceId", sourceId));
-            });
+            return GetItemsText("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM [common].[Currency" + (_UseTempTables ? Constants._Temp : "") + "] ", CurrencyMapper, cmd => { });
         }
 
         public Currency CurrencyMapper(IDataReader reader)

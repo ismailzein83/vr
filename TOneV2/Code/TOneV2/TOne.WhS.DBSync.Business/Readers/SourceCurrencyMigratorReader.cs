@@ -13,7 +13,6 @@ namespace TOne.WhS.DBSync.Business.SourceMigratorsReaders
         {
             _ConnectionString = connectionString;
         }
-
         public IEnumerable<SourceCurrency> GetSourceItems()
         {
             SourceCurrencyDataManager dataManager = new SourceCurrencyDataManager(_ConnectionString);

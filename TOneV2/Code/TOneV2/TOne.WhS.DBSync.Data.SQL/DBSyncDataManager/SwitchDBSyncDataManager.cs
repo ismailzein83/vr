@@ -8,10 +8,11 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class SwitchDBSyncDataManager : BaseSQLDataManager
     {
         readonly string[] columns = { "Name", "SourceID" };
-
-        public SwitchDBSyncDataManager() :
+        bool _UseTempTables;
+        public SwitchDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("TOneWhS_BE_MigrationDBConnStringKey", "TOneV2MigrationDBConnString"))
         {
+            _UseTempTables = useTempTables;
         }
 
         public void ApplySwitchesToTemp(List<Switch> switches)
@@ -28,7 +29,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
             Object preparedSwitches = new BulkInsertInfo
             {
-                TableName = "[TOneWhS_BE].[Switch_Temp]",
+                TableName = "[TOneWhS_BE].[Switch" + (_UseTempTables ? Constants._Temp : "") + "]",
                 DataFilePath = filePath,
                 ColumnNames = columns,
                 TabLock = true,

@@ -41,12 +41,14 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction = {};
                     schedulerTaskAction.$type = "TOne.WhS.DBSync.Business.DBSyncTaskActionArgument, TOne.WhS.DBSync.Business";
                     schedulerTaskAction.ConnectionString = $scope.connectionString;
+                    schedulerTaskAction.UseTempTables = ($scope.useTempTables == true) ? true : false;
                     return schedulerTaskAction;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                         $scope.connectionString = payload.data.ConnectionString;
+                        $scope.useTempTables = payload.data.UseTempTables;
                     }
                 }
 

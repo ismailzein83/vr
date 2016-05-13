@@ -29,7 +29,7 @@ namespace TOne.WhS.DBSync.Business.EntityMigrator
                 List<TItem> itemsToAdd = new List<TItem>();
                 foreach (var sourceItem in sourceItems)
                 {
-                    var item = BuildItemFromSource(sourceItem);
+                    var item = BuildItemFromSource(sourceItem, context);
                     if (item != null)
                         itemsToAdd.Add(item);
                 }
@@ -39,6 +39,6 @@ namespace TOne.WhS.DBSync.Business.EntityMigrator
 
         protected abstract void AddItems(List<TItem> itemsToAdd, List<DBTable> context);
 
-        protected abstract TItem BuildItemFromSource(TSourceItem sourceItem);
+        protected abstract TItem BuildItemFromSource(TSourceItem sourceItem, List<DBTable> context);
     }
 }

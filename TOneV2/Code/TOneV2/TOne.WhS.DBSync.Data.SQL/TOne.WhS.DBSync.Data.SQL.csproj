@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="DBSyncDataManager\CurrencyExchangeRateDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CurrencyDBSyncDataManager.cs" />
     <Compile Include="Common\MigrationManager.cs" />

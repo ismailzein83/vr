@@ -8,17 +8,23 @@ namespace TOne.WhS.DBSync.Business
     public class CurrencyDBSyncManager
     {
 
+        bool _UseTempTables;
+        public CurrencyDBSyncManager(bool useTempTables)
+        {
+            _UseTempTables = useTempTables;
+        }
+
         public void ApplyCurrenciesToTemp(List<Currency> currencies)
         {
-            CurrencyDBSyncDataManager dataManager = new CurrencyDBSyncDataManager();
+            CurrencyDBSyncDataManager dataManager = new CurrencyDBSyncDataManager(_UseTempTables);
             dataManager.ApplyCurrenciesToTemp(currencies);
         }
 
 
-        public Currency GetCurrencyBySourceId(string sourceId)
+        public List<Currency> GetCurrencies()
         {
-            CurrencyDBSyncDataManager dataManager = new CurrencyDBSyncDataManager();
-            return dataManager.GetCurrencyBySourceId(sourceId);
+            CurrencyDBSyncDataManager dataManager = new CurrencyDBSyncDataManager(_UseTempTables);
+            return dataManager.GetCurrencies();
         }
     }
 }

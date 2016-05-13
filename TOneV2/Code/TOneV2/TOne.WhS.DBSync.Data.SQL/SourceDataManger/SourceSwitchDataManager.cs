@@ -26,6 +26,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             return sourceSwitch;
         }
 
-        const string query_getSourceSwitches = @"SELECT [SwitchID] ,[Name] FROM [dbo].[Switch]";
+        const string query_getSourceSwitches = @"SELECT [SwitchID] ,[Name] FROM [dbo].[Switch] WITH (NOLOCK)";
     }
 }

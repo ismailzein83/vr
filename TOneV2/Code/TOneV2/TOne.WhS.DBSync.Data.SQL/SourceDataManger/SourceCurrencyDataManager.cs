@@ -27,6 +27,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             return sourceCurrency;
         }
 
-        const string query_getSourceCurrencies = @"SELECT [CurrencyID]  ,[Name]  FROM [dbo].[Currency]";
+        const string query_getSourceCurrencies = @"SELECT [CurrencyID]  ,[Name]  FROM [dbo].[Currency] WITH (NOLOCK)";
     }
 }

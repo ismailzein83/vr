@@ -45,6 +45,10 @@
     <Reference Include="Vanrise.BI.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
@@ -65,7 +69,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DBSyncLogger.cs" />
     <Compile Include="Common\SourceItemMigrator.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DBSyncManagers\CurrencyExchangeRateDBSyncManager.cs" />
     <Compile Include="DBSyncManagers\CurrencyDBSyncManager.cs" />
     <Compile Include="Migrators\SourceCurrencyExchangeRateMigrator.cs" />
