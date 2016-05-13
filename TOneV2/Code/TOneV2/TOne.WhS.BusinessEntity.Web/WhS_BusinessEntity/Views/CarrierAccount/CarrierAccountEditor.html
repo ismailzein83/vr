@@ -1,41 +1,41 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierAccountEditorController" vr-loader="scopeModal.isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierAccountEditorController" vr-loader="scopeModal.isLoading" width="'50%'">
     <vr-modalbody>
-        <vr-form name="formCarrierAccountEditor">
-            <vr-tabs>
-                <vr-tab header="'Definition'">
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
-                        </vr-columns>
-                        <span vr-disabled="scopeModal.disableCarrierProfile">
-                            <vr-whs-be-carrierprofile-selector normal-col-num="6" isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady">
-                            </vr-whs-be-carrierprofile-selector>
-                        </span>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.mask" label="Mask" isrequired></vr-textbox>
-                        </vr-columns>
-                        <vr-whs-be-activationstatus-selector normal-col-num="6" hideremoveicon="true" isrequired on-ready="scopeModal.onActivationStatusDirectiveReady">
-                        </vr-whs-be-activationstatus-selector>
-                        <span vr-disabled="scopeModal.disableCarrierAccountType">
-                            <vr-columns width="1/2row">
-                                <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Carrier Type" datasource="scopeModal.carrierAccountTypes"
-                                           selectedvalues="scopeModal.selectedCarrierAccountType" onselectionchanged="scopeModal.onCarrierTypeSelectionChanged" />
-                            </vr-columns>
-                        </span>
+        <vr-form name=" formcarrieraccounteditor">
+    <vr-tabs>
+        <vr-tab header="'Definition'">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModal.name" label="Suffix" isrequired></vr-textbox>
+                </vr-columns>
+                <span vr-disabled="scopeModal.disableCarrierProfile">
+                    <vr-whs-be-carrierprofile-selector normal-col-num="6" isrequired on-ready="scopeModal.onCarrierProfileDirectiveReady">
+                    </vr-whs-be-carrierprofile-selector>
+                </span>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModal.mask" label="Mask" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-whs-be-activationstatus-selector normal-col-num="6" hideremoveicon="true" isrequired on-ready="scopeModal.onActivationStatusDirectiveReady">
+                </vr-whs-be-activationstatus-selector>
+                <span vr-disabled="scopeModal.disableCarrierAccountType">
+                    <vr-columns width="1/2row">
+                        <vr-select hideremoveicon datatextfield="description" isrequired datavaluefield="value" label="Account Type" datasource="scopeModal.carrierAccountTypes"
+                                   selectedvalues="scopeModal.selectedCarrierAccountType" onselectionchanged="scopeModal.onCarrierTypeSelectionChanged" />
+                    </vr-columns>
+                </span>
 
-                        <span vr-loader="scopeModal.isLoadingSellingNumberPlan" ng-show="scopeModal.showSellingNumberPlan" vr-disabled="scopeModal.disableSellingNumberPlan">
-                            <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="scopeModal.onSellingNumberPlanDirectiveReady" isrequired="scopeModal.showSellingNumberPlan">
-                            </vr-whs-be-sellingnumberplan-selector>
-                        </span>
+                <span vr-loader="scopeModal.isLoadingSellingNumberPlan" ng-show="scopeModal.showSellingNumberPlan" vr-disabled="scopeModal.disableSellingNumberPlan">
+                    <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="scopeModal.onSellingNumberPlanDirectiveReady" isrequired="scopeModal.showSellingNumberPlan">
+                    </vr-whs-be-sellingnumberplan-selector>
+                </span>
 
-                        <vr-columns width="1/2row">
-                            <vr-common-currency-selector on-ready="scopeModal.onCurrencySelectorReady" isrequired></vr-common-currency-selector>
-                        </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-common-currency-selector on-ready="scopeModal.onCurrencySelectorReady" isrequired></vr-common-currency-selector>
+                </vr-columns>
 
-                    </vr-row>
-                </vr-tab>
-            </vr-tabs>
-        </vr-form>
+            </vr-row>
+        </vr-tab>
+    </vr-tabs>
+    </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">

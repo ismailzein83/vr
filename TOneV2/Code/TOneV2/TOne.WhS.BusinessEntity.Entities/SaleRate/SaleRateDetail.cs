@@ -12,6 +12,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string ZoneName { get; set; }
 
+        public string CurrencyName { get; set; }
+
 
     }
 }

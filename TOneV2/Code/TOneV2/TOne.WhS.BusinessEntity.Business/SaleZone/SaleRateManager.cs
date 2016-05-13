@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -44,9 +45,22 @@ namespace TOne.WhS.BusinessEntity.Business
         private SaleRateDetail SaleRateDetailMapper(SaleRate saleRate)
         {
             SaleZoneManager sz = new SaleZoneManager();
+            CurrencyManager currencyManager = new CurrencyManager();
+           
+            int currencyId;
+            if (saleRate.CurrencyId.HasValue)
+                currencyId = saleRate.CurrencyId.Value;
+            else
+            {
+                SalePriceListManager salePriceListManager = new SalePriceListManager();
+                SalePriceList priceList = salePriceListManager.GetPriceList(saleRate.PriceListId);
+                currencyId = priceList.CurrencyId;
+            }
+
             SaleRateDetail saleRateDetail = new SaleRateDetail();
             saleRateDetail.Entity = saleRate;
             saleRateDetail.ZoneName = sz.GetSaleZone(saleRate.ZoneId).Name;
+            saleRateDetail.CurrencyName = currencyManager.GetCurrencyName(currencyId);
             return saleRateDetail;
         }
 
@@ -101,6 +115,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return callSale;
         }
         #endregion
-        
+
     }
 }
