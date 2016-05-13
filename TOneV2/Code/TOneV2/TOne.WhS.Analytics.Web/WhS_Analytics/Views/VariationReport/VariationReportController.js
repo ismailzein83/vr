@@ -2,18 +2,25 @@
 
     'use strict';
 
-    VariationReportController.$inject = ['$scope', 'WhS_Analytics_VariationReportTypeEnum', 'WhS_Analytics_VariationReportTimePeriodEnum', 'UtilsService'];
+    VariationReportController.$inject = ['$scope', 'WhS_Analytics_VariationReportTypeEnum', 'WhS_Analytics_VariationReportTimePeriodEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function VariationReportController($scope, WhS_Analytics_VariationReportTypeEnum, WhS_Analytics_VariationReportTimePeriodEnum, UtilsService) {
+    function VariationReportController($scope, WhS_Analytics_VariationReportTypeEnum, WhS_Analytics_VariationReportTimePeriodEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+
+        var currencySelectorAPI;
+        var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var gridAPI;
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
         var pageSize;
+
         var chartAPI;
+        var chartReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
 
-        function defineScope() {
+        function defineScope()
+        {
             $scope.scopeModel = {};
 
             var reportTypes = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTypeEnum);
@@ -36,14 +43,21 @@
                 $scope.scopeModel.showChart = false;
             };
 
+            $scope.scopeModel.onCurrencySelectorReady = function (api) {
+                currencySelectorAPI = api;
+                currencySelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onGridReady = function (api)
             {
                 gridAPI = api;
                 pageSize = api.getPageSize();
+                gridReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onChartReady = function (api) {
                 chartAPI = api;
+                chartReadyDeferred.resolve();
             };
 
             $scope.scopeModel.validateTopFilter = function () {
@@ -54,15 +68,41 @@
 
             $scope.scopeModel.search = function () {
                 $scope.scopeModel.showGrid = true;
-                return loadAllControls();
+                return search();
             };
         }
 
-        function load() {
-            
+        function load()
+        {
+            $scope.scopeModel.isLoading = true;
+            loadAllControls();
         }
 
-        function loadAllControls() {
+        function loadAllControls()
+        {
+            var loadCurrencySelectorPromise = loadCurrencySelector();
+
+            return UtilsService.waitMultiplePromises([loadCurrencySelectorPromise, gridReadyDeferred.promise, chartReadyDeferred.promise]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+
+        function loadCurrencySelector()
+        {
+            var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            currencySelectorReadyDeferred.promise.then(function ()
+            {
+                var currencySelectorPayload = { selectSystemCurrency: true };
+                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadDeferred);
+            });
+
+            return currencySelectorLoadDeferred.promise;
+        }
+
+        function search() {
             var promises = [];
 
             var loadGridPromise = loadGrid();
