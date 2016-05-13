@@ -39,12 +39,12 @@ namespace Vanrise.Common.Business.ExchangeRateTasks
 
                     if (existingExchangeRate.ExchangeRate != null)
                     {
-                        if (ex.Rate != existingExchangeRate.ExchangeRate.Rate)
+                        if (ex.Rate != existingExchangeRate.ExchangeRate.Rate && existingExchangeRate.ExchangeRate.ExchangeDate.Date != DateTime.Now.Date)
                             ratesToInsert.Add(new CurrencyExchangeRate()
                             {
                                 CurrencyId = existingExchangeRate.ExchangeRate.CurrencyId,
                                 Rate = ex.Rate,
-                                ExchangeDate = DateTime.Now
+                                ExchangeDate = DateTime.Now.Date
                             });
                     }
                        
@@ -53,7 +53,7 @@ namespace Vanrise.Common.Business.ExchangeRateTasks
                         {
                             CurrencyId = existingExchangeRate.CurrencyId,
                             Rate = ex.Rate,
-                            ExchangeDate = DateTime.Now
+                            ExchangeDate = DateTime.Now.Date
                         });
                 }
                
