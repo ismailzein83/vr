@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Entities;
-
+﻿using System.Collections.Generic;
 namespace Vanrise.Security.Entities
 {
     public interface ICloudService
@@ -14,41 +8,17 @@ namespace Vanrise.Security.Entities
         CheckApplicationUsersUpdatedOuput CheckApplicationUsersUpdated(CheckApplicationUsersUpdatedInput input);
 
         AddUserToApplicationOutput AddUserToApplication(AddUserToApplicationInput input);
-    }
 
-    public class GetApplicationUsersInput
-    {
-    }
+        UpdateUserToApplicationOutput UpdateUserToApplication(UpdateUserToApplicationInput input);
 
-    public class GetApplicationUsersOutput
-    {
-        public List<CloudApplicationUser> Users { get; set; }
-    }
+        GetApplicationTenantsOutput GetApplicationTenants(GetApplicationTenantsInput input);
 
-    public class CheckApplicationUsersUpdatedInput
-    {
-        public object LastReceivedUpdateInfo { get; set; }
-    }
+        CheckApplicationTenantsUpdatedOuput CheckApplicationTenantsUpdated(CheckApplicationTenantsUpdatedInput input);
 
-    public class CheckApplicationUsersUpdatedOuput
-    {
-        public bool Updated { get; set; }
+        AddTenantToApplicationOutput AddTenantToApplication(AddTenantToApplicationInput input);
 
-        public object LastUpdateInfo { get; set; }
-    }
-
-    public class AddUserToApplicationInput
-    {
-        public string Email { get; set; }
-
-        public UserStatus Status { get; set; }
-
-        public string Description { get; set; }
-    }
-
-    public class AddUserToApplicationOutput
-    {
-        public InsertOperationOutput<CloudApplicationUser> OperationOutput { get; set; }
-
+        UpdateTenantToApplicationOutput UpdateTenantToApplication(UpdateTenantToApplicationInput input);
+        
+        List<CloudTenantOutput> GetCloudTenants(CloudTenantInput input);
     }
 }

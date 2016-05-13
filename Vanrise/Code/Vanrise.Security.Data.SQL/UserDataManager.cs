@@ -37,7 +37,7 @@ namespace Vanrise.Security.Data.SQL
         {
             object userID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, password, userObject.Email, userObject.Status, userObject.Description);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, password, userObject.Email, userObject.Status, userObject.Description, userObject.TenantId);
             insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
             return (recordesEffected > 0);
@@ -45,7 +45,7 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateUser(User userObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Status, userObject.Description);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Status, userObject.Description, userObject.TenantId);
             return (recordesEffected > 0);
         }
 
@@ -87,10 +87,11 @@ namespace Vanrise.Security.Data.SQL
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime?>(reader, "LastLogin"),
                 Status = (Entities.UserStatus)reader["Status"],
-                Description = reader["Description"] as string
+                Description = reader["Description"] as string,
+                TenantId = Convert.ToInt32(reader["TenantId"])
             };
         }
-        
+
         #endregion
     }
 }

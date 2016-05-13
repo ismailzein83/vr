@@ -186,11 +186,13 @@ namespace Vanrise.Security.Business
                 return null;
         }
 
-        public bool CheckTokenAccess(SecurityToken securityToken, out string errorMessage)
+        public bool CheckTokenAccess(SecurityToken securityToken, out string errorMessage, out InvalidAccess invalidAccess)
         {
+            
             if (securityToken.ExpiresAt < DateTime.Now)
             {
                 errorMessage = "Token Expired";
+                invalidAccess = InvalidAccess.TokenExpired;
                 return false;
             }
             var authServer = GetAuthServer();
@@ -199,10 +201,39 @@ namespace Vanrise.Security.Business
                 if(securityToken.AccessibleCloudApplications == null || !securityToken.AccessibleCloudApplications.Any(app => app.ApplicationId == authServer.Settings.CurrentApplicationId))
                 {
                     errorMessage = "You dont have access to this application";
+                    invalidAccess = InvalidAccess.UnauthorizeAccess;
+                    return false;
+                }
+
+                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+                UserManager userManager = new UserManager();
+                User currentUser = userManager.GetUserbyId(loggedInUserId);
+                if (!CheckTenantLicenseIfValid(currentUser.TenantId, authServer.Settings.CurrentApplicationId))
+                {
+                    errorMessage = "License Expired";
+                    invalidAccess = InvalidAccess.LicenseExpired;
                     return false;
                 }
             }
             errorMessage = null;
+            invalidAccess = InvalidAccess.None;
+            return true;
+        }
+
+        private bool CheckTenantLicenseIfValid(int tenantId, int applicationId)
+        {
+            TenantManager tenantManager = new TenantManager();
+            CloudTenantOutput output = tenantManager.GetCloudTenantOutput(tenantId, applicationId);
+            
+            if (output == null)
+                return false;
+
+            if (!output.LicenseExpiresOn.HasValue)
+                return true;
+
+            if (output.LicenseExpiresOn < DateTime.Now)
+                return false;
+            
             return true;
         }
 

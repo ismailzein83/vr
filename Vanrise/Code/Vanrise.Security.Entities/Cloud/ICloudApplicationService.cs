@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 namespace Vanrise.Security.Entities
 {
     public interface ICloudApplicationService
@@ -50,7 +51,7 @@ namespace Vanrise.Security.Entities
 
     public class AssignUserFullControlInput
     {
-        public int UserId { get; set; }
+        public List<int> UserIds { get; set; }
     }
 
     public class AssignUserFullControlOutput

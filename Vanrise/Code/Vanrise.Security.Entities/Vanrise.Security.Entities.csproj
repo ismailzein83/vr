@@ -55,6 +55,7 @@
     <Compile Include="BusinessEntity\BusinessEntityModule.cs" />
     <Compile Include="BusinessEntity\BusinessEntityQuery.cs" />
     <Compile Include="Cloud\CloudApplicationIdentification.cs" />
+    <Compile Include="Cloud\CloudApplicationTenant.cs" />
     <Compile Include="Cloud\CloudApplicationUser.cs" />
     <Compile Include="Cloud\CloudAuthServer.cs" />
     <Compile Include="Cloud\ICloudApplicationService.cs" />
@@ -82,7 +83,11 @@
     <Compile Include="Group\Group.cs" />
     <Compile Include="Group\GroupDetail.cs" />
     <Compile Include="SystemAction\SystemAction.cs" />
-    <Compile Include="Tenant.cs" />
+    <Compile Include="Tenant\Tenant.cs" />
+    <Compile Include="Tenant\TenantDetail.cs" />
+    <Compile Include="Tenant\TenantFilter.cs" />
+    <Compile Include="Tenant\TenantInfo.cs" />
+    <Compile Include="Tenant\TenantQuery.cs" />
     <Compile Include="UserGroup.cs" />
     <Compile Include="User\UserDetail.cs" />
     <Compile Include="User\User.cs" />

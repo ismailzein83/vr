@@ -9,13 +9,20 @@ app.config(['$httpProvider', function ($httpProvider) {
         };
     });
 }]);
-app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify, DataRetrievalResultTypeEnum, $injector) {
+app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify, DataRetrievalResultTypeEnum, $injector, HttpStatusCodeEnum) {
 
     var loginURL = '/Security/Login';
+    var paymnetURL = '/Security/Payment';
 
     function redirectToLoginPage() {
         if (location.pathname.indexOf('/Security/Login') < 0) {
             window.location.href = loginURL + '?redirectTo=' + encodeURIComponent(window.location.href);
+        }
+    }
+
+    function redirectToPaymentPage() {
+        if (location.pathname.indexOf('/Security/Payment') < 0) {
+            window.location.href = paymnetURL;
         }
     }
 
@@ -63,8 +70,9 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
                 deferred.resolve(returnedResponse);
             })
             .error(function (data, status, headers, config) {
-                if (status === 401)
-                    redirectToLoginPage();
+                //if (status === 401)
+                //    redirectToLoginPage();
+                checkHttpStatusCode(status);
 
                 console.log(''); 
                 console.log('Error Occured: ' + data.ExceptionMessage);
@@ -117,8 +125,9 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
             })
             .error(function (data, status, headers, config) {
               
-                if (status === 401)
-                    redirectToLoginPage();
+                //if (status === 401)
+                //    redirectToLoginPage();
+                checkHttpStatusCode(status);
 
                 console.log('');
                 console.log('Error Occured: ' + data.ExceptionMessage);
@@ -144,5 +153,14 @@ app.service('BaseAPIService', function ($http, $q, $location, $rootScope, notify
     function showErrorMessage(message)
     {
         notify({ message: message, classes: "alert alert-danger" });
+    }
+
+    function checkHttpStatusCode(status) {
+        if (HttpStatusCodeEnum.Unauthorized.value === status) {
+            redirectToLoginPage();
+        }
+        else if (HttpStatusCodeEnum.PaymentRequired.value === status) {
+            redirectToPaymentPage();
+        }
     }
 });

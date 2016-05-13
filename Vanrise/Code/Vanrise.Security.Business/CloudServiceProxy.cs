@@ -43,5 +43,38 @@ namespace Vanrise.Security.Business
         {
             return Post<AddUserToApplicationInput, AddUserToApplicationOutput>("AddUserToApplication", input);
         }
+
+        public UpdateUserToApplicationOutput UpdateUserToApplication(UpdateUserToApplicationInput input)
+        {
+            return Post<UpdateUserToApplicationInput, UpdateUserToApplicationOutput>("UpdateUserToApplication", input);
+        }
+
+        public GetApplicationTenantsOutput GetApplicationTenants(GetApplicationTenantsInput input)
+        {
+            return Post<GetApplicationTenantsInput, GetApplicationTenantsOutput>("GetApplicationTenants", input);
+        }
+
+
+        public CheckApplicationTenantsUpdatedOuput CheckApplicationTenantsUpdated(CheckApplicationTenantsUpdatedInput input)
+        {
+            return Post<CheckApplicationTenantsUpdatedInput, CheckApplicationTenantsUpdatedOuput>("CheckApplicationTenantsUpdated", input);
+        }
+
+        public AddTenantToApplicationOutput AddTenantToApplication(AddTenantToApplicationInput input)
+        {
+            return Post<AddTenantToApplicationInput, AddTenantToApplicationOutput>("AddTenantToApplication", input);
+        }
+
+
+        public UpdateTenantToApplicationOutput UpdateTenantToApplication(UpdateTenantToApplicationInput input)
+        {
+            return Post<UpdateTenantToApplicationInput, UpdateTenantToApplicationOutput>("UpdateTenantToApplication", input);
+        }
+
+
+        public List<CloudTenantOutput> GetCloudTenants(CloudTenantInput input)
+        {
+            return Post<CloudTenantInput, List<CloudTenantOutput>>("GetCloudTenants", input);
+        }
     }
 }

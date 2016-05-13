@@ -3,10 +3,10 @@
         <vr-form name="formUserEditor">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="email" label="Email" type="email" isrequired></vr-textbox>
+                    <vr-textbox value="email" label="Email" type="email" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                <vr-columns width="1/2row" ng-hide="hasAuthServer">
+                    <vr-textbox value="name" label="Name" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-textbox value="description" label="Description"></vr-textbox>
@@ -14,6 +14,10 @@
                 <vr-columns width="1/2row">
                     <vr-switch value="isActive" label="Active"></vr-switch>
                 </vr-columns>
+                <vr-columns width="1/2row" ng-show="showTenantSelector">
+                    <vr-sec-tenant-selector on-ready="onTenantSelectorReady" hideifnotneeded="hideTenantSelectorIfNotNeeded" isrequired="true" hideremoveicon vr-disabled="isInEditMode" customlabel="Tenant"></vr-sec-tenant-selector>
+                </vr-columns>
+                
             </vr-row>
         </vr-form>
     </vr-modalbody>

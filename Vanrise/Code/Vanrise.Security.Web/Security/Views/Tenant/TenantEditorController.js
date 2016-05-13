@@ -2,12 +2,12 @@
 
     'use strict';
 
-    UserEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VR_Sec_SecurityAPIService', 'VRUIUtilsService'];
+    TenantEditorController.$inject = ['$scope', 'VR_Sec_TenantAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VR_Sec_SecurityAPIService', 'VRUIUtilsService'];
 
-    function UserEditorController($scope, VR_Sec_UserAPIService, VRNotificationService, VRNavigationService, UtilsService, VR_Sec_SecurityAPIService, VRUIUtilsService) {
+    function TenantEditorController($scope, VR_Sec_TenantAPIService, VRNotificationService, VRNavigationService, UtilsService, VR_Sec_SecurityAPIService, VRUIUtilsService) {
         var isEditMode;
-        var userId;
-        var userEntity;
+        var tenantId;
+        var tenantEntity;
         var tenantSelectorAPI;
         var tenantReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -19,50 +19,44 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null)
-                userId = parameters.userId;
+                tenantId = parameters.tenantId;
 
-            isEditMode = (userId != undefined);
+            isEditMode = (tenantId != undefined);
         }
 
         function defineScope() {
-            $scope.showTenantSelector = true;
-
             $scope.save = function () {
                 if (isEditMode)
-                    return updateUser();
+                    return updateTenant();
                 else
-                    return insertUser();
+                    return insertTenant();
             };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
 
-            $scope.hasSaveUserPermission = function () {
+            $scope.hasSaveTenantPermission = function () {
                 if (isEditMode) {
-                    return VR_Sec_UserAPIService.HasUpdateUserPermission();
+                    return VR_Sec_TenantAPIService.HasUpdateTenantPermission();
                 }
                 else {
-                    return VR_Sec_UserAPIService.HasAddUserPermission();
+                    return VR_Sec_TenantAPIService.HasAddTenantPermission();
                 }
             };
 
             $scope.onTenantSelectorReady = function (api) {
                 tenantSelectorAPI = api;
                 tenantReadyPromiseDeferred.resolve();
-            };
-
-            $scope.hideTenantSelectorIfNotNeeded = function () {
-                $scope.showTenantSelector = false;
-            };
+            }
         }
         function load() {
             $scope.isLoading = true;
 
             if (isEditMode) {
-                getUser().then(function () {
+                getTenant().then(function () {
                     loadAllControls().finally(function () {
-                        userEntity = undefined;
+                        tenantEntity = undefined;
                     });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -74,9 +68,9 @@
             }
         }
 
-        function getUser() {
-            return VR_Sec_UserAPIService.GetUserbyId(userId).then(function (response) {
-                userEntity = response;
+        function getTenant() {
+            return VR_Sec_TenantAPIService.GetTenantbyId(tenantId).then(function (response) {
+                tenantEntity = response;
                 $scope.isInEditMode = true;
             });
         }
@@ -95,8 +89,8 @@
             var loadTenantPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var payload = undefined;
-            if (userEntity != undefined) {
-                payload = { selectedIds: userEntity.TenantId };
+            if (tenantEntity != undefined) {
+                payload = { selectedIds: tenantEntity.ParentTenantId, filter: { CanBeParentOfTenantId: tenantEntity.TenantId } };
             }
             tenantReadyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(tenantSelectorAPI, payload, loadTenantPromiseDeferred);
@@ -105,52 +99,46 @@
             return loadTenantPromiseDeferred.promise;
         }
 
+        function setTitle() {
+            if (isEditMode && tenantEntity != undefined)
+                $scope.title = UtilsService.buildTitleForUpdateEditor(tenantEntity.Name, 'Tenant');
+            else
+                $scope.title = UtilsService.buildTitleForAddEditor('Tenant');
+        }
+
+        function loadStaticData() {
+            
+            if (tenantEntity == undefined)
+                return;
+
+            $scope.name = tenantEntity.Name;
+        }
+
         function hasAuthServer() {
             return VR_Sec_SecurityAPIService.HasAuthServer().then(function (response) {
                 $scope.hasAuthServer = response;
             });
         }
 
-        function setTitle() {
-            if (isEditMode && userEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(userEntity.Name, 'User');
-            else
-                $scope.title = UtilsService.buildTitleForAddEditor('User');
-        }
-
-        function loadStaticData() {
-
-            if (userEntity == undefined)
-                return;
-
-            $scope.name = userEntity.Name;
-            $scope.email = userEntity.Email;
-            $scope.description = userEntity.Description;
-            $scope.isActive = userEntity.Status;
-        }
-
-        function buildUserObjFromScope() {
-            var userObject = {
-                UserId: (userId != null) ? userId : 0,
+        function buildTenantObjFromScope() {
+            var tenantObject = {
+                TenantId: (tenantId != null) ? tenantId : 0,
                 Name: $scope.name,
-                Email: $scope.email,
-                Description: $scope.description,
-                Status: $scope.isActive == false ? '0' : '1',
-                TenantId: tenantSelectorAPI.getSelectedIds()
+                ParentTenantId: tenantSelectorAPI.getSelectedIds()
             };
-            return userObject;
+            return tenantObject;
         }
 
-        function insertUser() {
+        function insertTenant() {
             $scope.isLoading = true;
 
-            var userObject = buildUserObjFromScope();
+            var tenantObject = buildTenantObjFromScope();
 
-            return VR_Sec_UserAPIService.AddUser(userObject)
+            return VR_Sec_TenantAPIService.AddTenant(tenantObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('User', response, 'Email')) {
-                    if ($scope.onUserAdded != undefined)
-                        $scope.onUserAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded('Tenant', response, 'Name')) {
+                    if ($scope.onTenantAdded != undefined)
+                        $scope.onTenantAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -161,15 +149,15 @@
 
         }
 
-        function updateUser() {
+        function updateTenant() {
             $scope.isLoading = true;
 
-            var userObject = buildUserObjFromScope();
+            var tenantObject = buildTenantObjFromScope();
 
-            return VR_Sec_UserAPIService.UpdateUser(userObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('User', response, 'Email')) {
-                    if ($scope.onUserUpdated != undefined)
-                        $scope.onUserUpdated(response.UpdatedObject);
+            return VR_Sec_TenantAPIService.UpdateTenant(tenantObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Tenant', response, 'Name')) {
+                    if ($scope.onTenantUpdated != undefined)
+                        $scope.onTenantUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -180,6 +168,6 @@
         }
     }
 
-    appControllers.controller('VR_Sec_UserEditorController', UserEditorController);
+    appControllers.controller('VR_Sec_TenantEditorController', TenantEditorController);
 
 })(appControllers);

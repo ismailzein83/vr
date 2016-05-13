@@ -8,6 +8,7 @@ using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using System.Linq;
 
 namespace Vanrise.Security.Business
 {
@@ -17,7 +18,7 @@ namespace Vanrise.Security.Business
 
         public IDataRetrievalResult<UserDetail> GetFilteredUsers(DataRetrievalInput<UserQuery> input)
         {
-            var allItems = GetCachedUsers();
+            var allItems = GetUsersByTenant();
 
             Func<User, bool> filterExpression = (itemObject) =>
                  (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
@@ -29,16 +30,23 @@ namespace Vanrise.Security.Business
 
         public IEnumerable<User> GetUsers()
         {
-            var users = GetCachedUsers();
+            var users = GetUsersByTenant();
             return users.Values;
         }
 
         public IEnumerable<UserInfo> GetUsersInfo(UserFilter filter)
         {
-            var users = GetCachedUsers();
+            Dictionary<int, User> users;
 
             if (filter != null)
             {
+                users = GetUsersByTenant(!filter.GetOnlyTenantUsers, filter.TenantId);
+
+                if (filter.Filters != null && filter.Filters.Count > 0 && users != null && users.Count > 0)
+                {
+                    users = FilterUsers(users, filter.Filters);
+                }
+
                 if (filter.EntityType != null && filter.EntityId != null)
                 {
                     PermissionManager permissionManager = new PermissionManager();
@@ -47,21 +55,36 @@ namespace Vanrise.Security.Business
                     IEnumerable<int> excludedUserIds = entityPermissions.MapRecords(permission => Convert.ToInt32(permission.HolderId), permission => permission.HolderType == HolderType.USER);
                     return users.MapRecords(UserInfoMapper, user => !excludedUserIds.Contains(user.UserId) || (filter.ExcludeInactive == true && user.Status == UserStatus.Active));
                 }
-
             }
-            return users.MapRecords(UserInfoMapper, user => (filter == null || (filter.ExcludeInactive == true && user.Status == UserStatus.Active)));
+            else
+                users = GetUsersByTenant();
+
+            return users.MapRecords(UserInfoMapper, user => (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == true && user.Status == UserStatus.Active)));
+        }
+
+        private Dictionary<int, User> FilterUsers(Dictionary<int, User> users, List<IUserFilter> filters)
+        {
+            Dictionary<int, User> validUsers = new Dictionary<int, User>();
+            foreach (KeyValuePair<int, User> user in users)
+            {
+                if (filters.Where(itm => itm.IsExcluded(user.Value)).Count() == 0)
+                {
+                    validUsers.Add(user.Key, user.Value);
+                }
+            }
+            return validUsers.Count > 0 ? validUsers : null;
         }
 
         public User GetUserbyId(int userId)
         {
-            var users = GetCachedUsers(); 
+            var users = GetCachedUsers();
             return users.GetRecord(userId);
         }
 
         public User GetUserbyEmail(string email)
         {
             var users = GetCachedUsers();
-            return users.FindRecord(x => string.Equals(x.Email,email,StringComparison.CurrentCultureIgnoreCase));
+            return users.FindRecord(x => string.Equals(x.Email, email, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public string GetUserPassword(int userId)
@@ -85,9 +108,10 @@ namespace Vanrise.Security.Business
                     {
                         Email = userObject.Email,
                         Status = userObject.Status,
-                        Description = userObject.Description
+                        Description = userObject.Description,
+                        TenantId = userObject.TenantId
                     });
-                if(output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Succeeded)
+                if (output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Succeeded)
                 {
                     insertActionSucc = true;
                     userObject = MapCloudUserToUser(output.OperationOutput.InsertedObject);
@@ -105,7 +129,7 @@ namespace Vanrise.Security.Business
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                 insertActionSucc = dataManager.AddUser(userObject, encryptedPassword, out userId);
 
-            }           
+            }
 
             if (insertActionSucc)
             {
@@ -124,12 +148,36 @@ namespace Vanrise.Security.Business
 
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(User userObject)
         {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            bool updateActionSucc = dataManager.UpdateUser(userObject);
             UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+
+            bool updateActionSucc;
+            var cloudServiceProxy = GetCloudServiceProxy();
+            if (cloudServiceProxy != null)
+            {
+                var output = cloudServiceProxy.UpdateUserToApplication(new UpdateUserToApplicationInput
+                {
+                    UserId = userObject.UserId,
+                    Status = userObject.Status,
+                    Description = userObject.Description,
+                    //TenantId = userObject.TenantId
+                });
+                if (output.OperationOutput != null && output.OperationOutput.Result == UpdateOperationResult.Succeeded)
+                {
+                    updateActionSucc = true;
+                }
+                else
+                {
+                    updateActionSucc = false;
+                }
+            }
+            else
+            {
+                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                updateActionSucc = dataManager.UpdateUser(userObject);
+            }
 
             if (updateActionSucc)
             {
@@ -206,7 +254,7 @@ namespace Vanrise.Security.Business
 
             List<string> names = new List<string>();
             List<int> filteredUserIds = (from a in userIds
-                                select a).Distinct().ToList();
+                                         select a).Distinct().ToList();
 
             foreach (int userId in filteredUserIds)
             {
@@ -221,13 +269,42 @@ namespace Vanrise.Security.Business
 
         #region Private Methods
 
+
+        private Dictionary<int, User> GetUsersByTenant(bool getRelatedTenantsUser = true, int? selectedTenantId = null)
+        {
+            UserManager userManager = new UserManager();
+            int? tenantId = null;
+            int? userId;
+            if (selectedTenantId.HasValue)
+            {
+                tenantId = selectedTenantId;
+            }
+            else if (SecurityContext.Current.TryGetLoggedInUserId(out userId))
+            {
+                User user = userManager.GetUserbyId(userId.Value);
+                tenantId = user.TenantId;
+            }
+
+            TenantManager tenantManager = new TenantManager();
+            List<int> relatedTenants = tenantManager.GetTenantsByTenantId(tenantId, getRelatedTenantsUser).Select(itm => itm.TenantId).ToList();
+
+            var cachedUsers = GetCachedUsers();
+
+            Dictionary<int, User> result = new Dictionary<int, User>();
+            foreach (KeyValuePair<int, User> userItem in cachedUsers)
+            {
+                if (relatedTenants.Contains(userItem.Value.TenantId))
+                    result.Add(userItem.Key, userItem.Value);
+            }
+            return result;
+        }
         private Dictionary<int, User> GetCachedUsers()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",
                () =>
-               {                   
+               {
                    IEnumerable<User> users;
-                   if(!TryGetUsersFromAuthServer(out users))                   
+                   if (!TryGetUsersFromAuthServer(out users))
                    {
                        IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                        users = dataManager.GetUsers();
@@ -265,7 +342,8 @@ namespace Vanrise.Security.Business
                 Name = cloudApplicationUser.User.Name,
                 LastLogin = cloudApplicationUser.User.LastLogin,
                 Description = cloudApplicationUser.Description,
-                Status = cloudApplicationUser.Status
+                Status = cloudApplicationUser.Status,
+                TenantId = cloudApplicationUser.User.TenantId
             };
         }
 
@@ -278,7 +356,7 @@ namespace Vanrise.Security.Business
             else
                 return null;
         }
-        
+
 
         #endregion
 

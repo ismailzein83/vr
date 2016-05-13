@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
+    public enum InvalidAccess { None = 0, TokenExpired = 1, UnauthorizeAccess = 2, LicenseExpired = 3 }
     public class AuthenticationToken
     {
         public string TokenName { get; set; }
@@ -21,7 +22,7 @@ namespace Vanrise.Security.Entities
 
     public class SecurityToken
     {
-        public int UserId { get; set; }        
+        public int UserId { get; set; }
 
         public DateTime IssuedAt { get; set; }
 

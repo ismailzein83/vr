@@ -11,7 +11,8 @@
             Authenticate: Authenticate,
             ChangePassword: ChangePassword,
             IsAllowed: IsAllowed,
-            HasPermissionToActions: HasPermissionToActions
+            HasPermissionToActions: HasPermissionToActions,
+            HasAuthServer: HasAuthServer
         });
 
         function Authenticate(credentialsObject) {
@@ -30,6 +31,10 @@
 
         function HasPermissionToActions(systemActionNames) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'HasPermissionToActions'), { systemActionNames: systemActionNames }, { useCache: true });
+        }
+
+        function HasAuthServer() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'HasAuthServer'));
         }
     }
 

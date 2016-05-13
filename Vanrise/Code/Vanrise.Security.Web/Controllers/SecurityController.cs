@@ -51,6 +51,14 @@ namespace Vanrise.Security.Web.Controllers
             return SecurityContext.Current.HasPermissionToActions(systemActionNames);
         }
 
+        [HttpGet]
+        [Route("HasAuthServer")]
+        public bool HasAuthServer()
+        {
+            CloudAuthServerManager manager = new CloudAuthServerManager();
+            return manager.HasAuthServer();
+        }
+
         public class CredentialsInput
         {
             public string Email { get; set; }

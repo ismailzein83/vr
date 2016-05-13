@@ -66,7 +66,33 @@ namespace Vanrise.Security.Business
 
         public AssignUserFullControlOutput AssignUserFullControl(AssignUserFullControlInput input)
         {
-            throw new NotImplementedException();
+            List<Vanrise.Security.Entities.Permission> permissions = new List<Vanrise.Security.Entities.Permission>();
+            BusinessEntityModuleManager manager = new BusinessEntityModuleManager();
+            BusinessEntityModule module = manager.GetBusinessEntityModules().First(itm => !itm.ParentId.HasValue || itm.ParentId.Value == 0);
+
+            foreach (int userId in input.UserIds)
+            {
+                var permission = new Vanrise.Security.Entities.Permission()
+                {
+                    EntityType = Vanrise.Security.Entities.EntityType.MODULE,
+                    EntityId = module.ModuleId.ToString(),
+                    HolderType = Vanrise.Security.Entities.HolderType.USER,
+                    HolderId = userId.ToString(),
+                    PermissionFlags = new List<Vanrise.Security.Entities.PermissionFlag>()
+                };
+                Vanrise.Security.Entities.PermissionFlag permissionFlag = new Vanrise.Security.Entities.PermissionFlag()
+                {
+                    Value = Vanrise.Security.Entities.Flag.ALLOW,
+                    Name = "Full Control"
+                };
+                permission.PermissionFlags.Add(permissionFlag);
+                permissions.Add(permission);
+            }
+
+            PermissionManager permissionManager = new PermissionManager();
+            permissionManager.UpdatePermissions(permissions);
+
+            return new AssignUserFullControlOutput();
         }
     }
 }

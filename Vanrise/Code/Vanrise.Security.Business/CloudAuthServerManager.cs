@@ -11,6 +11,10 @@ namespace Vanrise.Security.Business
 {
     public class CloudAuthServerManager
     {
+        public bool HasAuthServer()
+        {
+            return GetAuthServer() != null;
+        }
         public CloudAuthServer GetAuthServer()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAuthServer",

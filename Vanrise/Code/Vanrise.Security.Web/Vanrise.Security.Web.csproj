@@ -132,6 +132,9 @@
     <Content Include="Security\Directives\Group\Templates\GroupGrid.html" />
     <Content Include="Security\Directives\Group\vr-sec-group-grid.js" />
     <Content Include="Security\Directives\Group\vr-sec-group-selector.js" />
+    <Content Include="Security\Directives\Tenant\Templates\TenantsGrid.html" />
+    <Content Include="Security\Directives\Tenant\vr-sec-tenant-grid.js" />
+    <Content Include="Security\Directives\Tenant\vr-sec-tenant-selector.js" />
     <Content Include="Security\Directives\View\Templates\ViewGridTemplate.html" />
     <Content Include="Security\Directives\View\vr-sec-view-grid.js" />
     <Content Include="Security\Directives\OrgChart\Templates\OrgChartGrid.html" />
@@ -156,6 +159,7 @@
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionAPIService.js" />
     <Content Include="Security\Services\APIServices\GroupAPIService.js" />
+    <Content Include="Security\Services\APIServices\TenantAPIService.js" />
     <Content Include="Security\Services\APIServices\UsersAPIService.js" />
     <Content Include="Security\Services\APIServices\ViewAPIService.js" />
     <Content Include="Security\Services\APIServices\ViewTypeAPIService.js" />
@@ -169,6 +173,7 @@
     <Content Include="Security\Services\PermissionService.js" />
     <Content Include="Security\Services\SecurityService.js" />
     <Content Include="Security\Services\GroupService .js" />
+    <Content Include="Security\Services\TenantService.js" />
     <Content Include="Security\Services\ViewService.js" />
     <Content Include="Security\Services\UserService.js" />
     <Content Include="Security\Services\WidgetService.js" />
@@ -188,6 +193,8 @@
     <Content Include="Security\Views\Menu\MenuRankingEditorController.js" />
     <Content Include="Security\Views\Menu\ViewEditor.html" />
     <Content Include="Security\Views\Menu\ViewEditorController.js" />
+    <Content Include="Security\Views\Payment.html" />
+    <Content Include="Security\Views\PaymentController.js" />
     <Content Include="Security\Views\Permission\BusinessEntityEditor.html" />
     <Content Include="Security\Views\Permission\BusinessEntityEditorController.js" />
     <Content Include="Security\Views\Permission\BusinessEntityManagement.html" />
@@ -198,6 +205,10 @@
     <Content Include="Security\Views\DynamicPages\DynamicPageEditorController.js" />
     <Content Include="Security\Views\DynamicPages\DynamicPageManagement.html" />
     <Content Include="Security\Views\DynamicPages\DynamicPageManagementController.js" />
+    <Content Include="Security\Views\Tenant\TenantManagement.html" />
+    <Content Include="Security\Views\Tenant\TenantManagementController.js" />
+    <Content Include="Security\Views\Tenant\TenantEditor.html" />
+    <Content Include="Security\Views\Tenant\TenantEditorController.js" />
     <Content Include="Security\Views\User\EditProfile.html" />
     <Content Include="Security\Views\User\EditProfileController.js" />
     <Content Include="Security\Views\Login.html" />
@@ -228,6 +239,7 @@
     <Compile Include="Controllers\BusinessEntityNodeController.cs" />
     <Compile Include="Controllers\ModuleController.cs" />
     <Compile Include="Controllers\OrgChartController.cs" />
+    <Compile Include="Controllers\TenantController.cs" />
     <Compile Include="Controllers\ViewController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\MenuController.cs" />

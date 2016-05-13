@@ -9,7 +9,8 @@ app.directive('vrDatalist', [function () {
             maxitemsperrow: '@',
             datasource: '=',
             onremoveitem: '&',
-            autoremoveitem: '='
+            autoremoveitem: '=',
+            onitemclicked: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -28,6 +29,10 @@ app.directive('vrDatalist', [function () {
                     removeFunction(dataItem);
                 }
             }
+            $scope.ondataitemclicked = function (dataItem) {
+                if (typeof (ctrl.onitemclicked) == 'function')
+                    ctrl.onitemclicked(dataItem);
+            }
         },
         controllerAs: 'VRDatalistCtrl',
         bindToController: true,
@@ -35,8 +40,8 @@ app.directive('vrDatalist', [function () {
 
             return {
                 pre: function (scope, elem, attrs, ctrl) {
-                    scope.isDataListScope = true;                    
-                    scope.viewScope = scope.$parent;                    
+                    scope.isDataListScope = true;
+                    scope.viewScope = scope.$parent;
                     while (scope.viewScope.isDataListScope) {
                         scope.viewScope = scope.viewScope.$parent;
                     }
@@ -58,13 +63,18 @@ app.directive('vrDatalist', [function () {
             if (attrs.autoremoveitem != undefined || attrs.onremoveitem != undefined)
                 onRemoveAttr = 'onremove="VRDatalistCtrl.onInternalRemove(dataItem)"';
 
+            var onItemClickedAttr = '';
+            if (attrs.onitemclicked != undefined) {
+                onItemClickedAttr = 'ng-click="ondataitemclicked(dataItem)"';
+            }
+
             var template = '<vr-list maxitemsperrow="{{VRDatalistCtrl.maxitemsperrow}}">'
                             + '<div ng-sortable="VRDatalistCtrl.itemsSortable">'
                              + '<vr-listitem ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
                              + draggableIconTemplate
-                             + '<div style="width: ' + contentWidth + '; display:inline-block;">' + element.html() + '</div>'
+                             + '<div ' + onItemClickedAttr + ' style="width: ' + contentWidth + '; display:inline-block;">' + element.html() + '</div>'
                              + '</vr-listitem>'
-                            +'</div>'
+                            + '</div>'
                            + '</vr-list>';
             return template;
         }

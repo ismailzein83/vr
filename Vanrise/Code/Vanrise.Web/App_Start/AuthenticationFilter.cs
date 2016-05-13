@@ -25,19 +25,29 @@ namespace Vanrise.Web.App_Start
                 {
                     try
                     {
+                        InvalidAccess invalidAccess;
                         string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
                         string decryptedToken = Common.Cryptography.Decrypt(encryptedToken, decryptionKey);
                         string errorMessage;
                         if (decryptedToken != String.Empty)
                         {
-                            SecurityToken securityToken = Serializer.Deserialize<SecurityToken>(decryptedToken);                            
+                            SecurityToken securityToken = Serializer.Deserialize<SecurityToken>(decryptedToken);
                             if (securityToken == null)
                             {
                                 actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid token");
                             }
-                            else if (!(new SecurityManager()).CheckTokenAccess(securityToken, out errorMessage))
+                            else if (!(new SecurityManager()).CheckTokenAccess(securityToken, out errorMessage, out invalidAccess))
                             {
-                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, errorMessage);
+                                System.Net.HttpStatusCode httpStatusCode;
+                                switch (invalidAccess)
+                                {
+                                    case InvalidAccess.LicenseExpired: httpStatusCode = System.Net.HttpStatusCode.PaymentRequired; break;
+                                    case InvalidAccess.TokenExpired:
+                                    case InvalidAccess.UnauthorizeAccess:
+                                    default: httpStatusCode = System.Net.HttpStatusCode.Unauthorized; break;
+
+                                }
+                                actionContext.Response = Utils.CreateResponseMessage(httpStatusCode, errorMessage);
                             }
                         }
                         else
@@ -45,7 +55,7 @@ namespace Vanrise.Web.App_Start
                             actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Token");
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         LoggerFactory.GetExceptionLogger().WriteException(ex);
                         actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Token");
