@@ -91,7 +91,7 @@ namespace CDRComparison.MainExtensions
                 else if (data.Length != sample.ColumnCount)
                 {
                     sample.ColumnCount = 0;
-                    sample.ErrorMessage = String.Format("Row '{0}' has an invalid number of columns", counter + 1);
+                    sample.ErrorMessage = String.Format("Invalid file format", counter + 1);
                     return sample;
                 }
 
