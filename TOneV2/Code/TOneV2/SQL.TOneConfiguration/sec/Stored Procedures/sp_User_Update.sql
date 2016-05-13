@@ -3,7 +3,8 @@
 	@Name Nvarchar(255),
 	@Email Nvarchar(255),
 	@Status int,
-	@Description ntext
+	@Description ntext,
+	@TenantId int
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM sec.[User] WHERE ID != @ID AND Email = @Email)
@@ -12,7 +13,8 @@ BEGIN
 		SET Name = @Name,
 			Email = @Email,
 			[Status] = @Status,
-			[Description] = @Description
+			[Description] = @Description,
+			TenantId = @TenantId
 		WHERE ID = @ID
 	end
 END

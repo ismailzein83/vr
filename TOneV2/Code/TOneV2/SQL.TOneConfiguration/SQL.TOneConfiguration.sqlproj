@@ -326,6 +326,11 @@
     <Build Include="Analytic\Stored Procedures\sp_AnalyticReport_Update.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticReport_Insert.sql" />
     <Build Include="Analytic\Stored Procedures\sp_AnalyticReport_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_Tenant_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_Tenant_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_Tenant_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_CloudAuthServer_Update.sql" />
+    <Build Include="sec\Stored Procedures\sp_CloudAuthServer_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

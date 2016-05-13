@@ -87,7 +87,15 @@ as (select * from (values
 ('VR_Sec/Permission/GetHolderPermissions',null),
 ('VR_Sec/Permission/GetEffectivePermissions',null),
 ('VR_Sec/Permission/UpdatePermissions','VR_Sec_Permission: Edit'),
-('VR_Sec/Permission/DeletePermissions','VR_Sec_Permission: Delete')
+('VR_Sec/Permission/DeletePermissions','VR_Sec_Permission: Delete'),
+
+('VR_Sec/Tenants/GetFilteredTenants','VR_Sec_Tenants:View'),
+('VR_Sec/Tenants/GetTenantsInfo',null),
+('VR_Sec/Tenants/GetTenantbyId',null),
+('VR_Sec/Tenants/UpdateTenant','VR_Sec_Tenants:Edit'),
+('VR_Sec/Tenants/AddTenant','VR_Sec_Tenants:Add')
+
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -134,7 +142,9 @@ as (select * from (values
 (2,'VR_Sec_Group','Groups',3,0,'["View", "Add", "Edit"]'),
 (3,'VR_Sec_View','Ranking Page',3,0,'["View", "Add", "Edit"]'),
 (4,'VR_Sec_Permission','Permission',3,0,'["View", "Edit", "Delete", "AllowInheritance"]'),
-(5,'VR_Sec_BusinessEntity','Business Entity',3,0,'["View","Ranking","AddEntity","AddModule","EditEntity","EditModule"]')
+(5,'VR_Sec_BusinessEntity','Business Entity',3,0,'["View","Ranking","AddEntity","AddModule","EditEntity","EditModule"]'),
+(6,'VR_Sec_Tenants','Tenants',3,0,'["View", "Add", "Edit"]')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
