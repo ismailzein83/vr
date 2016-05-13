@@ -57,28 +57,38 @@ namespace Vanrise.ExcelConversion.Business
                 eSheet.Name = sheet.Name;
                 int nbOfSheetColumns = 0;
                 int maxDataRow = sheet.Cells.MaxDataRow;
-                for (int j = 0; j < 100 ; j++)
+                for (int j = 0; j < 100; j++)
                 {
-                    Row row = sheet.Cells.Rows[j]!=null ?(Row)sheet.Cells.Rows[j] :null;
-                    int maxdatacol = sheet.Cells.MaxDataColumn +1 ;                   
-                    
+                    Row row = sheet.Cells.Rows[j] != null ? (Row)sheet.Cells.Rows[j] : null;
+                    int maxdatacol = sheet.Cells.MaxDataColumn + 1;
+
                     ExcelRow eRow = new ExcelRow() { Cells = new List<ExcelCell>() };
-                  
-                    int nbOfRowColumns = (row != null && row.LastCell!=null) ? row.LastCell.Column + 1 : 0;
+
+                    int nbOfRowColumns = (row != null && row.LastCell != null) ? row.LastCell.Column + 1 : 0;
                     if (nbOfRowColumns > nbOfSheetColumns)
                         nbOfSheetColumns = nbOfRowColumns;
                     for (int colIndex = 0; colIndex < maxdatacol; colIndex++)
                     {
-                        var cell = (row!=null)?row.GetCellOrNull(colIndex):null;
+                        var cell = (row != null) ? row.GetCellOrNull(colIndex) : null;
                         ExcelCell eCell = new ExcelCell();
-                           
-                        eCell.Value = (cell != null)?cell.Value:null;
+                        if (cell != null)
+                        {
+                            if (cell.Type == CellValueType.IsDateTime)
+                            {
+                                eCell.Value = cell.StringValue;
+                            }
+                            else
+                                eCell.Value = cell.Value;
+                        }
+                        else
+                            eCell.Value = null;
+
                         eRow.Cells.Add(eCell);
 
 
                     }
-                   // if (j < maxDataRow)
-                       eSheet.Rows.Add(eRow);
+                    // if (j < maxDataRow)
+                    eSheet.Rows.Add(eRow);
 
                 }
                 eSheet.NumberOfColumns = nbOfSheetColumns;
@@ -88,6 +98,7 @@ namespace Vanrise.ExcelConversion.Business
             return ewb;
         }
 
+     
         public ExcelWorksheet ReadExcelFilePage(ExcelPageQuery Query)
         {
 
@@ -134,7 +145,7 @@ namespace Vanrise.ExcelConversion.Business
             int nbOfSheetColumns = 0;
             int maxDataRow = sheet.Cells.MaxDataRow;
 
-            for (int j = Query.From; j < Query.To ; j++)
+            for (int j = Query.From; j < Query.To; j++)
             {
                 Row row = sheet.Cells.Rows[j] != null ? (Row)sheet.Cells.Rows[j] : null;
                 int maxdatacol = sheet.Cells.MaxDataColumn + 1;
@@ -153,7 +164,7 @@ namespace Vanrise.ExcelConversion.Business
 
 
                 }
-                    eSheet.Rows.Add(eRow);
+                eSheet.Rows.Add(eRow);
 
 
             }
