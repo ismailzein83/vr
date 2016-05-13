@@ -7,7 +7,7 @@ using Vanrise.Entities.EntitySynchronization;
 
 namespace Vanrise.Entities
 {
-    public class Currency : Vanrise.Entities.EntitySynchronization.IItem
+    public class Currency 
     {
         public int CurrencyId { get; set; }
 
@@ -16,17 +16,6 @@ namespace Vanrise.Entities
         public string Symbol { get; set; }
 
         public string SourceId { get; set; }
-
-        long IItem.ItemId
-        {
-            get
-            {
-                return CurrencyId;
-            }
-            set
-            {
-                this.CurrencyId = (int)value;
-            }
-        }
+        
     }
 }

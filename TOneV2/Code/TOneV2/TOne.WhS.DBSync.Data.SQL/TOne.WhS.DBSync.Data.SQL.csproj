@@ -70,11 +70,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="DBSyncDataManager\CarrierAccountDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\CarrierProfileDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CurrencyExchangeRateDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CurrencyDBSyncDataManager.cs" />
     <Compile Include="Common\MigrationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DBSyncDataManager\SwitchDBSyncDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceCarrierAccountDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceCarrierProfileDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCurrencyDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCurrencyExchangeRateDataManager.cs" />
     <Compile Include="SourceDataManger\SourceSwitchDataManager.cs" />

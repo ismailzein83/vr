@@ -60,10 +60,11 @@
   <ItemGroup>
     <Compile Include="Common\DBTable.cs" />
     <Compile Include="Common\DBForeignKey.cs" />
+    <Compile Include="SourceCarrierAccount.cs" />
     <Compile Include="SourceCurrencyExchangeRate.cs" />
     <Compile Include="SourceCurrency.cs" />
-    <Compile Include="Common\IMigrationSourceItemReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceCarrierProfile.cs" />
     <Compile Include="SourceSwitch.cs" />
   </ItemGroup>
   <ItemGroup />

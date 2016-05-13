@@ -1,38 +1,55 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Business.EntityMigrator;
-using TOne.WhS.DBSync.Business.SourceMigratorsReaders;
+using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceSwitchMigrator : SourceItemMigrator<SourceSwitch, Switch, SourceSwitchMigratorReader>
+    public class SourceSwitchMigrator 
     {
-        bool _UseTempTables;
-        DBSyncLogger _Logger;
+        private string _ConnectionString;
+        private bool _UseTempTables;
+        private DBSyncLogger _Logger;
 
-        public SourceSwitchMigrator(SourceSwitchMigratorReader sourceSwitchMigratorReader, bool useTempTables, DBSyncLogger logger)
-            : base(sourceSwitchMigratorReader)
+        public SourceSwitchMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
         {
             _UseTempTables = useTempTables;
             _Logger = logger;
+            _ConnectionString = connectionString;
         }
 
 
-        public override void Migrate(List<DBTable> context)
+        public void Migrate(List<DBTable> context)
         {
             _Logger.WriteInformation("Migrating table 'Switch' started");
-            base.Migrate(context);
+            var sourceItems = GetSourceItems();
+            if (sourceItems != null)
+            {
+                List<Switch> itemsToAdd = new List<Switch>();
+                foreach (var sourceItem in sourceItems)
+                {
+                    var item = BuildItemFromSource(sourceItem, context);
+                    if (item != null)
+                        itemsToAdd.Add(item);
+                }
+                AddItems(itemsToAdd, context);
+            }
             _Logger.WriteInformation("Migrating table 'Switch' ended");
         }
 
-        protected override void AddItems(List<Switch> itemsToAdd, List<DBTable> context)
+        private void AddItems(List<Switch> itemsToAdd, List<DBTable> context)
         {
             SwitchDBSyncManager switchManager = new SwitchDBSyncManager(_UseTempTables);
             switchManager.ApplySwitchesToTemp(itemsToAdd);
         }
 
-        protected override Switch BuildItemFromSource(SourceSwitch sourceItem, List<DBTable> context)
+        private IEnumerable<SourceSwitch> GetSourceItems()
+        {
+            SourceSwitchDataManager dataManager = new SourceSwitchDataManager(_ConnectionString);
+            return dataManager.GetSourceSwitches();
+        }
+
+        private Switch BuildItemFromSource(SourceSwitch sourceItem, List<DBTable> context)
         {
             return new Switch
             {

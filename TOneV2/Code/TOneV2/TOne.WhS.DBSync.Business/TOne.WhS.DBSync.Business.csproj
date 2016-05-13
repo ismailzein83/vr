@@ -70,20 +70,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DBSyncLogger.cs" />
-    <Compile Include="Common\SourceItemMigrator.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DBSyncManagers\CarrierAccountDBSyncManager.cs" />
+    <Compile Include="DBSyncManagers\CarrierProfileDBSyncManager.cs" />
     <Compile Include="DBSyncManagers\CurrencyExchangeRateDBSyncManager.cs" />
     <Compile Include="DBSyncManagers\CurrencyDBSyncManager.cs" />
+    <Compile Include="Migrators\SourceCarrierAccountMigrator.cs" />
     <Compile Include="Migrators\SourceCurrencyExchangeRateMigrator.cs" />
+    <Compile Include="Migrators\SourceCarrierProfileMigrator.cs" />
     <Compile Include="Migrators\SourceCurrencyMigrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Migrators\SourceSwitchMigrator.cs" />
     <Compile Include="DBSyncManagers\SwitchDBSyncManager.cs" />
     <Compile Include="DBSyncTaskAction.cs" />
     <Compile Include="DBSyncTaskActionArgument.cs" />
-    <Compile Include="Readers\SourceCurrencyExchangeRateMigratorReader.cs" />
-    <Compile Include="Readers\SourceCurrencyMigratorReader.cs" />
-    <Compile Include="Readers\SourceSwitchMigratorReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data.SQL\TOne.WhS.BusinessEntity.Data.SQL.csproj">

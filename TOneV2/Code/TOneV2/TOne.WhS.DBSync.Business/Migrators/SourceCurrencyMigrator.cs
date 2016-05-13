@@ -1,35 +1,45 @@
 ﻿using System.Collections.Generic;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Business.EntityMigrator;
-using TOne.WhS.DBSync.Business.SourceMigratorsReaders;
+using System.Linq;
+using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Entities;
-using System.Linq;
 
 namespace TOne.WhS.DBSync.Business
 {
-    public class SourceCurrencyMigrator : SourceItemMigrator<SourceCurrency, Currency, SourceCurrencyMigratorReader>
+    public class SourceCurrencyMigrator 
     {
-        bool _UseTempTables;
-        DBSyncLogger _Logger;
+        private string _ConnectionString;
+        private bool _UseTempTables;
+        private DBSyncLogger _Logger;
 
-        public SourceCurrencyMigrator(SourceCurrencyMigratorReader sourceCurrencyMigratorReader, bool useTempTables, DBSyncLogger logger)
-            : base(sourceCurrencyMigratorReader)
+        public SourceCurrencyMigrator(string connectionString, bool useTempTables, DBSyncLogger logger)
         {
             _UseTempTables = useTempTables;
             _Logger = logger;
+            _ConnectionString = connectionString;
         }
 
 
 
-        public override void Migrate(List<DBTable> context)
+        public  void Migrate(List<DBTable> context)
         {
             _Logger.WriteInformation("Migrating table 'Currency' started");
-            base.Migrate(context);
+            var sourceItems = GetSourceItems();
+            if (sourceItems != null)
+            {
+                List<Currency> itemsToAdd = new List<Currency>();
+                foreach (var sourceItem in sourceItems)
+                {
+                    var item = BuildItemFromSource(sourceItem, context);
+                    if (item != null)
+                        itemsToAdd.Add(item);
+                }
+                AddItems(itemsToAdd, context);
+            }
             _Logger.WriteInformation("Migrating table 'Currency' ended");
         }
 
-        protected override void AddItems(List<Currency> itemsToAdd, List<DBTable> context)
+        private  void AddItems(List<Currency> itemsToAdd, List<DBTable> context)
         {
             CurrencyDBSyncManager CurrencyManager = new CurrencyDBSyncManager(_UseTempTables);
             CurrencyManager.ApplyCurrenciesToTemp(itemsToAdd);
@@ -38,7 +48,13 @@ namespace TOne.WhS.DBSync.Business
                 dbTableCurrency.Records = CurrencyManager.GetCurrencies();
         }
 
-        protected override Currency BuildItemFromSource(SourceCurrency sourceItem, List<DBTable> context)
+        private IEnumerable<SourceCurrency> GetSourceItems()
+        {
+            SourceCurrencyDataManager dataManager = new SourceCurrencyDataManager(_ConnectionString);
+            return dataManager.GetSourceCurrencies();
+        }
+
+        private  Currency BuildItemFromSource(SourceCurrency sourceItem, List<DBTable> context)
         {
             return new Currency
             {

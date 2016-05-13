@@ -16,6 +16,8 @@ namespace TOne.WhS.DBSync.Business
         public const string DB_TOneV2_Migration = "TOneV2_Migration";
         public const string Table_CurrencyExchangeRate = "CurrencyExchangeRate";
         public const string Table_Currency = "Currency";
+        public const string Table_CarrierProfile = "CarrierProfile";
+        public const string Table_CarrierAccount = "CarrierAccount";
         public const string Table_Switch = "Switch";
     }
 }

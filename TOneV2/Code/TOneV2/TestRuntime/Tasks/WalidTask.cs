@@ -1,17 +1,4 @@
-﻿using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Sdk.Sfc;
-using Microsoft.SqlServer.Management.Smo;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using TOne.WhS.DBSync.Business;
-using TOne.WhS.DBSync.Business.SourceMigratorsReaders;
-using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Entities;
-using Vanrise.Runtime;
+﻿using TOne.WhS.DBSync.Business;
 using Vanrise.Runtime.Entities;
 
 namespace TestRuntime.Tasks
