@@ -13,6 +13,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Name { get; set; }
 
         public CarrierProfileSettings Settings { get; set; }
+
+        public string SourceId { get; set; }
     }
     public class CarrierProfileSettings
     {
