@@ -61,6 +61,7 @@
     <Compile Include="BlockedAttemptDataManager.cs" />
     <Compile Include="CDRDataManager.cs" />
     <Compile Include="GenericAnalyticDataManager.cs" />
+    <Compile Include="GenericBillingDataManager.cs" />
     <Compile Include="Generic\AnalyticDimensionConfig.cs" />
     <Compile Include="Generic\AnalyticMeasureFieldConfig.cs" />
     <Compile Include="Generic\GenericAnalyticConfigManager.cs" />

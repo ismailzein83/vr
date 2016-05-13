@@ -46,13 +46,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingReport\BillingReportBigResult.cs" />
+    <Compile Include="BillingReport\BillingReportQuery.cs" />
+    <Compile Include="BillingReport\BillingReportRecord.cs" />
     <Compile Include="BillingReport\IReportGenerator.cs" />
     <Compile Include="BillingReport\RdlcParameter.cs" />
     <Compile Include="BillingReport\RDLCReportDefinition.cs" />
     <Compile Include="BillingReport\ReportParameters.cs" />
     <Compile Include="BillingReport\ReportParameterSettings.cs" />
-    <Compile Include="BillingReport\ZoneProfit.cs" />
-    <Compile Include="BillingReport\ZoneProfitFormatted.cs" />
+    <Compile Include="BillingReport\ZoneProfit\ZoneProfit.cs" />
+    <Compile Include="BillingReport\ZoneProfit\ZoneProfitFormatted.cs" />
+    <Compile Include="BillingReport\ZoneSummary\ZoneSummary.cs" />
+    <Compile Include="BillingReport\ZoneSummary\ZoneSummaryFormatted.cs" />
     <Compile Include="CDRLog\CDRLog.cs" />
     <Compile Include="CDRLog\CDRLogDetail.cs" />
     <Compile Include="CDRLog\CDRLogFilter.cs" />

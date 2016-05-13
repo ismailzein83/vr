@@ -29,6 +29,59 @@ namespace TOne.WhS.Analytics.Data.SQL
                 );
         }
 
+        public List<ZoneSummary> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, int currencyId, string supplierGroup, string customerGroup, List<string> customerIds, List<string> supplierIds, bool groupBySupplier, out double services)
+        {
+            List<ZoneSummary> lstZoneSummary = new List<ZoneSummary>();
+            double servicesFees = 0;
+            string suppliersIds = null;
+            if (supplierIds != null && supplierIds.Count > 0)
+                suppliersIds = string.Join<string>(",", supplierIds);
+            string customersIds = null;
+            if (customerIds != null && customerIds.Count > 0)
+                customersIds = string.Join<string>(",", customerIds);
+
+            ExecuteReaderSP("[TOneWhS_Billing].[SP_BillingRep_GetZoneSummary]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    lstZoneSummary.Add(new ZoneSummary
+                    {
+                        Zone = reader["Zone"] as string,
+                        Calls = GetReaderValue<int>(reader, "Calls"),
+                        Rate = GetReaderValue<double>(reader, "Rate"),
+                        DurationNet = GetReaderValue<decimal>(reader, "DurationNet"),
+                        DurationInSeconds = GetReaderValue<decimal>(reader, "DurationInSeconds"),
+                        RateType = GetReaderValue<byte>(reader, "RateType"),
+                        Net = GetReaderValue<double>(reader, "Net"),
+                        CommissionValue = GetReaderValue<double>(reader, "CommissionValue"),
+                        ExtraChargeValue = GetReaderValue<double>(reader, "ExtraChargeValue"),
+                        SupplierID = (groupBySupplier ? GetReaderValue<int?>(reader, "SupplierID") : null)
+                    });
+                }
+
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        servicesFees = GetReaderValue<double>(reader, "Services");
+                    }
+                }
+            },
+               fromDate,
+               toDate,
+               (customerId == null || customerId == "") ? null : customerId,
+               (supplierId == null || supplierId == "") ? null : supplierId,
+               isCost,
+               currencyId,
+               (supplierGroup == null || supplierGroup == "") ? null : supplierGroup,
+               (customerGroup == null || customerGroup == "") ? null : customerGroup,
+               customersIds,
+               suppliersIds,
+               groupBySupplier);
+            services = servicesFees;
+            return lstZoneSummary;
+        }
+
         #region PrivatMethods
         private ZoneProfit ZoneProfitMapper(IDataReader reader)
         {

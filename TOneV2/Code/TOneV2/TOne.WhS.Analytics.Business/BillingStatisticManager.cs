@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.Analytics.Data;
 using TOne.WhS.Analytics.Entities.BillingReport;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Analytics.Business
@@ -25,6 +26,10 @@ namespace TOne.WhS.Analytics.Business
             return FormatZoneProfits(_datamanager.GetZoneProfit(fromDate, toDate, customerId, supplierId, currencyId));
         }
 
+        public List<ZoneSummaryFormatted> GetZoneSummary(DateTime fromDate, DateTime toDate, string customerId, string supplierId, bool isCost, int currencyId, string supplierGroup, string customerGroup, List<string> customersIds, List<string> suppliersIds, bool groupBySupplier, out double services)
+        {
+            return FormatZoneSummaries(_datamanager.GetZoneSummary(fromDate, toDate, customerId, supplierId, isCost, currencyId, supplierGroup, customerGroup, customersIds, suppliersIds, groupBySupplier, out services));
+        }
 
         #region Private Methods
         private ZoneProfitFormatted FormatZoneProfit(ZoneProfit zoneProfit)
@@ -70,6 +75,49 @@ namespace TOne.WhS.Analytics.Business
                 }
             return models;
         }
+
+        private List<ZoneSummaryFormatted> FormatZoneSummaries(List<ZoneSummary> zoneSummaries)
+        {
+            List<ZoneSummaryFormatted> models = new List<ZoneSummaryFormatted>();
+            if (zoneSummaries != null)
+                foreach (var z in zoneSummaries)
+                {
+                    models.Add(FormatZoneSummary(z));
+                }
+            return models;
+        }
+
+        private ZoneSummaryFormatted FormatZoneSummary(ZoneSummary zoneSummary)
+        {
+            return new ZoneSummaryFormatted
+            {
+                Zone = zoneSummary.Zone,
+                SupplierID = (zoneSummary.SupplierID != null) ? _cmanager.GetCarrierAccountName(zoneSummary.SupplierID.Value) : null,
+
+                Calls = zoneSummary.Calls,
+
+                Rate = zoneSummary.Rate,
+                RateFormatted = FormatNumberDigitRate(zoneSummary.Rate),
+
+                DurationNet = zoneSummary.DurationNet,
+                DurationNetFormatted = FormatNumber(zoneSummary.DurationNet),
+
+                RateType = zoneSummary.RateType,
+                RateTypeFormatted = ((RateTypeEnum)zoneSummary.RateType).ToString(),
+
+                DurationInSeconds = zoneSummary.DurationInSeconds,
+                DurationInSecondsFormatted = FormatNumber(zoneSummary.DurationInSeconds),
+
+                Net = zoneSummary.Net,
+                NetFormatted = FormatNumberDigitRate(zoneSummary.Net),
+
+                CommissionValue = zoneSummary.CommissionValue,
+                CommissionValueFormatted = FormatNumber(zoneSummary.CommissionValue),
+
+                ExtraChargeValue = zoneSummary.ExtraChargeValue
+            };
+        }
+
         private string FormatNumberDigitRate(Decimal? number)
         {
             int precision = 4;//Digit Rate 
