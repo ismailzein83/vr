@@ -37,6 +37,7 @@
             };
             var parameters = {
                 CustomerSellingProductId: obj.CustomerSellingProductId,
+                CarrierAccountId: obj.CustomerId
             };
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductEditor.html', parameters, settings);

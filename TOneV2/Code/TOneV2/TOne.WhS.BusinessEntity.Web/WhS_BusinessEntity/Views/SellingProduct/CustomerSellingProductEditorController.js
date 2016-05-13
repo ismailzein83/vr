@@ -194,14 +194,7 @@
         function isCustomerAssignedToSellingProduct() {
             if ($scope.carrierAccountId != undefined) {
                 return WhS_BE_CustomerSellingProductAPIService.IsCustomerAssignedToSellingProduct($scope.carrierAccountId).then(function (response) {
-                    if (response) {
-                        $scope.showErrorMessage = true;
-                        $scope.isLoading = false;
-                    }
-                    else {
-                        $scope.showErrorMessage = false;
-                    }
-
+                    $scope.showErrorMessage = response && !isEditMode;
                 });
             }
         }
