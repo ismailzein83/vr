@@ -765,6 +765,13 @@
                     ctrl.updateItems.length = 0;
                 }
             };
+
+            gridApi.getPageSize = function () {
+                if (pagingOnScrollEnabled)
+                    return getPageSize();
+                else if (ctrl.showPager)
+                    return ctrl.pagerSettings.itemsPerPage;
+            };
         }
 
         function filldataItemColumnValues(dataItem, colDef) {
