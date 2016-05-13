@@ -65,11 +65,12 @@ namespace Vanrise.Common.Business
             List<XigniteCurrency> formatedCurrencies = new List<XigniteCurrency>();
             foreach (var rc in realTimeRates)
             {
-                formatedCurrencies.Add(new XigniteCurrency()
-                {
-                    Symbol = rc.QuoteCurrency,
-                    Rate = rc.Mid
-                });
+                if(rc.QuoteCurrency!=null)
+                    formatedCurrencies.Add(new XigniteCurrency()
+                    {
+                        Symbol = rc.QuoteCurrency,
+                        Rate = rc.Mid
+                    });
             }
             return formatedCurrencies;
         }
