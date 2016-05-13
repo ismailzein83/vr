@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities.EntitySynchronization;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class CarrierProfile
+    public class CarrierProfile: Vanrise.Entities.EntitySynchronization.IItem
     {
         public int CarrierProfileId { get; set; }
 
@@ -15,6 +16,17 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CarrierProfileSettings Settings { get; set; }
 
         public string SourceId { get; set; }
+         long IItem.ItemId
+        {
+            get
+            {
+                return CarrierProfileId;
+            }
+            set
+            {
+                this.CarrierProfileId = (int)value;
+            }
+        }
     }
     public class CarrierProfileSettings
     {
