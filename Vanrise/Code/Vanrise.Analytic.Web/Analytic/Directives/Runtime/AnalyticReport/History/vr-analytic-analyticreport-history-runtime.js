@@ -264,7 +264,7 @@
                 var query = {
                     Settings: widgetPayload,
                     DimensionFilters: dimensionFilters,
-                    GroupingDimensions: groupingDimensions,
+                    SelectedGroupingDimensions: groupingDimensions,
                     TableId: widgetPayload.AnalyticTableId,
                     FromTime: $scope.scopeModel.fromdate,
                     ToTime: $scope.scopeModel.todate
