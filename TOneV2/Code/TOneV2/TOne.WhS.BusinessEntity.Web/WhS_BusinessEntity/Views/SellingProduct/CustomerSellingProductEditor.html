@@ -3,12 +3,12 @@
         <vr-form name="formSellingProductEditor">
             <div ng-hide="showErrorMessage">
                 <vr-row>
-                    <vr-columns width="1/2row" vr-loader="isLoadingSellingProduct">
-                        <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" onselectionchanged="onSelectionChanged" selectedvalues="selectedSellingProduct" isdisabled="disableSellingProduct" isrequired="true"></vr-whs-be-sellingproduct-selector>
-                    </vr-columns>
-                    <vr-columns width="1/2row" vr-loader="isLoadingCustomers" ng-show="carrierAccountId!=undefined || selectedSellingProduct!=undefined">
-                        <vr-whs-be-carrieraccount-selector getcustomers on-ready="onCarrierAccountDirectiveReady" selectedvalues="selectedCustomers" isrequired="true" ismultipleselection isdisabled="disableCarrierAccount"></vr-whs-be-carrieraccount-selector>
-                    </vr-columns>
+                    <span vr-loader="isLoadingSellingProduct" vr-disabled="disableSellingProduct">
+                        <vr-whs-be-sellingproduct-selector on-ready="onSellingProductsDirectiveReady" normal-col-num="6" onselectionchanged="onSelectionChanged" selectedvalues="selectedSellingProduct" isrequired="true"></vr-whs-be-sellingproduct-selector>
+                    </span>
+                    <span vr-loader="isLoadingCustomers" vr-disabled="disableCarrierAccount" ng-show="carrierAccountId!=undefined || selectedSellingProduct!=undefined">
+                        <vr-whs-be-carrieraccount-selector getcustomers normal-col-num="6" on-ready="onCarrierAccountDirectiveReady" selectedvalues="selectedCustomers" isrequired="true" ismultipleselection></vr-whs-be-carrieraccount-selector>
+                    </span>
                     <vr-columns width="1/2row">
                         <vr-datetimepicker type="date" value="beginEffectiveDate" label="Effective On" customvalidate="validateEffectiveDate()" isrequired></vr-datetimepicker>
                     </vr-columns>

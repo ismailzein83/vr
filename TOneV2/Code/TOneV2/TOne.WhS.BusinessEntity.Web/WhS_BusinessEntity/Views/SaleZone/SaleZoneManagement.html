@@ -2,9 +2,9 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns width="normal">
-                    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberReady" isrequired="true"> </vr-whs-be-sellingnumberplan-selector>
-                </vr-columns>
+                
+                <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberReady" normal-col-num="2" isrequired="true"> </vr-whs-be-sellingnumberplan-selector>
+                
                 <vr-columns width="normal">
                     <vr-common-country-selector on-ready="onCountryReady" ismultipleselection></vr-common-country-selector>
                 </vr-columns>

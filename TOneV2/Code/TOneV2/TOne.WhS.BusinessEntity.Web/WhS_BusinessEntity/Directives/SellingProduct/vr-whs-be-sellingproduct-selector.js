@@ -7,11 +7,11 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
             scope: {
                 onReady: '=',
                 ismultipleselection: "@",
-                isdisabled:"=",
                 onselectionchanged: '=',
                 isrequired: "=",
                 selectedvalues:'=',
-                hideremoveicon: "@"
+                hideremoveicon: "@",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -55,17 +55,22 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
             }
 
            
-            return '<div  vr-loader="isLoadingDirective">'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="SellingProductId" '
-            + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"  vr-disabled="ctrl.isdisabled"></vr-select>'
-                + '</div>';
+            + ' label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"></vr-select>'
+                + '</vr-columns>';
         }
 
         function sellingProductCtor(ctrl, $scope, $attrs) {
 
+            var selectorApi;
+
             function initializeController() {
 
-                defineAPI();
+                ctrl.onSelectorReady = function (api) {
+                    selectorApi = api;
+                    defineAPI();
+                }
             }
 
             function defineAPI() {
@@ -74,6 +79,8 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                     return VRUIUtilsService.getIdSelectedIds('SellingProductId', $attrs, ctrl);
                 }
                 api.load = function (payload) {
+                    
+                    selectorApi.clearDataSource();
 
                     var selectedIds;
                     var filter;

@@ -12,7 +12,6 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             hideselectedvaluessection: '@',
             onselectionchanged: '=',
             isrequired: '=',
-            isdisabled: "=",
             selectedvalues: "=",
             hideremoveicon: "@",
             onselectitem: "=",
@@ -73,22 +72,28 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         if (attrs.ismultipleselection != undefined)
             ismultipleselection = "ismultipleselection";
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select isrequired="ctrl.isrequired" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
             + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + '></vr-select></vr-columns>'
     }
 
     function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {
 
+        var selectorApi;
+
         function initializeController() {
 
-            defineAPI();
+            ctrl.onSelectorReady = function (api) {
+                selectorApi = api;
+                defineAPI();
+            }
         }
 
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
-                
+                selectorApi.clearDataSource();
+
                 var filter;
                 var selectedIds;
                 if (payload != undefined) {

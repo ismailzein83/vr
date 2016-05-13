@@ -61,7 +61,7 @@
                 carrierAccountReadyPromiseDeferred.resolve();
             }
             $scope.onSelectionChanged = function () {
-                if (sellingProductDirectiveAPI != undefined && !isEditMode) {
+                if (sellingProductDirectiveAPI != undefined && !$scope.disableCarrierAccount) {
                     var setLoader = function (value) { $scope.isLoadingCustomers = value };
                     var payload = {
                         filter: { AssignableToSellingProductId: sellingProductDirectiveAPI.getSelectedIds() },
